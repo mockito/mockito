@@ -44,21 +44,6 @@ public class InvocationTest {
     }
     
     @Test
-    public void shouldNotEqualIfNumberOfArgsDiffer() throws SecurityException, NoSuchMethodException {
-        Object mock = new Object();
-
-        ExpectedInvocation invocationWithOneArg = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "" }),
-                null);
-        ExpectedInvocation invocationWithTwoArgs = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "", "" }),
-                null);
-
-        assertFalse(invocationWithOneArg.equals(null));
-        assertFalse(invocationWithOneArg.equals(invocationWithTwoArgs));
-    }
-
-    @Test
     public void shouldNotImplementHashCodeBecauseItsNotUsedWithMaps() {
         try {
             call.hashCode();
