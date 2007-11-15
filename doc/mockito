@@ -1,0 +1,47 @@
+***some REALLY random stuff that needs to be tidied up
+
+-nice mocks are nicer
+	nice mocks replay with empty collections and (if desired) empty objects if they have 'easy' constructors
+	no modes - all mocks are nice by default. to make sure no additional interaction occured you can call:
+
+	mockito.noOtherInteractions(mockDatabase);
+
+-no record() or replay(). I find it confusing. This is how I deal with mocks:
+
+  1. Mock returns value and you are interested in that value, then you stub this mock providing returned value. There is no need to verify whether mock was called or not because you only care about return value. Return value will take part in other calculations that will be asserted elsewhere effectively verifying the mock:
+
+	mockito.stub(mockCalculator.countArticles("Guardian")).toReturn(12);
+
+  2. Mock doesn't return value or returns something you don't care about. You are interested in verifying whether implementation interacted with that mock.
+
+	mockito.verify(mockDatabase).updateNumberOfArticles("Guardian", 12);
+
+There is no need for record() / replay() modes. mockitos are either stubs - then you have to stub them before method under test is called, or they are mocks - then you verify interactions after method under test was called.
+
+-test code is easier to read. there is a clear distinction between ordinary method calls and expectatoins.
+	Eg: this maybe genuine method call but also this maybe an expectation recorded on mock object. It depends whether someObject is a mock.
+
+	someObject.do();
+
+	In mockito you would have:
+
+	verify(someObject).do()
+
+-easy building class under test mocking constructors
+
+-simpler - you see exactly what failed on verifaction.
+Forget about:
+  Expectation failure on verify:
+    clear(): expected: 1, actual: 0
+
+You'll see exact line of code where verification failed
+
+
+-mocks unpredictable don't work if shared between threads - test easyMock
+
+-classical stubbing - if you stub method for given args - it always will replay in that manner. E.g. if mock is called few times with the same args and you want to return different result each time, then you'd better use EasyMock
+
+
+	
+
+-error messages need to be nicer 8-)

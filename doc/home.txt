@@ -1,0 +1,14 @@
+=Mockito=
+
+  * intuitive way of testing: setup-execute-assert.
+  * descriptive, refactorable, proven EasyMockish syntax.
+  * assert-what-you-want pattern allows creating more specific test methods concentrated on testing only selected behavior/interactions.
+
+I thought it's a shiny new idea but it's so hard to be inventive these days. Similar concept:
+
+  * [http://mocklib.sourceforge.net MockLib]
+  * [http://code.google.com/p/turtlemock turtlemock]
+
+It's definitely too late to reinvent the wheel. Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. Similar interface:
+
+  * [http://easymock.org EasyMock]
