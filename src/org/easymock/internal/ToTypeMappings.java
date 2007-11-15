@@ -18,21 +18,6 @@ import java.util.TreeSet;
 public class ToTypeMappings {
     
     @SuppressWarnings("unchecked")
-    protected static Map<Class, Object> emptyReturnValueToPrimitiveType = new HashMap<Class, Object>();
-
-    static {
-        emptyReturnValueToPrimitiveType.put(Void.TYPE, null);
-        emptyReturnValueToPrimitiveType.put(Boolean.TYPE, Boolean.FALSE);
-        emptyReturnValueToPrimitiveType.put(Byte.TYPE, new Byte((byte) 0));
-        emptyReturnValueToPrimitiveType.put(Short.TYPE, new Short((short) 0));
-        emptyReturnValueToPrimitiveType.put(Character.TYPE, new Character((char) 0));
-        emptyReturnValueToPrimitiveType.put(Integer.TYPE, new Integer(0));
-        emptyReturnValueToPrimitiveType.put(Long.TYPE, new Long(0));
-        emptyReturnValueToPrimitiveType.put(Float.TYPE, new Float(0));
-        emptyReturnValueToPrimitiveType.put(Double.TYPE, new Double(0));
-    }
-
-    @SuppressWarnings("unchecked")
     protected static Map<Class, Class> primitiveToWrapperType = new HashMap<Class, Class>();
 
     static {
@@ -47,10 +32,6 @@ public class ToTypeMappings {
     }
     
     public static Object emptyReturnValueFor(Class type) {
-        if (type.isPrimitive()) {
-            return emptyReturnValueToPrimitiveType.get(type);
-        }
-        
         return emptyReturnValueToType.get(type);
     }
     

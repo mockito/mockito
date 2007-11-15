@@ -8,8 +8,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
-import org.easymock.internal.EqualsMatcher;
-import org.easymock.internal.Invocation;
+import org.easymock.internal.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,29 +20,46 @@ public class InvocationTest {
 
     private Invocation nonEqualCall;
 
+    private Method dummyMethod;
+
     @Before
     public void setup() throws SecurityException, NoSuchMethodException {
         Object[] arguments1 = new Object[] { "" };
         Object[] arguments2 = new Object[] { "" };
         Object[] arguments3 = new Object[] { "X" };
-        Method m = Object.class.getMethod("equals",
+        dummyMethod = Object.class.getMethod("equals",
                 new Class[] { Object.class });
         Object mock = new Object();
-        call = new Invocation(mock, m, arguments1);
-        equalCall = new Invocation(mock, m, arguments2);
-        nonEqualCall = new Invocation(mock, m, arguments3);
+        call = new Invocation(mock, dummyMethod, arguments1);
+        equalCall = new Invocation(mock, dummyMethod, arguments2);
+        nonEqualCall = new Invocation(mock, dummyMethod, arguments3);
     }
 
     @Test
-    public void testEquals() {
+    public void shouldKnowIfIsEqualTo() {
         assertFalse(call.equals(null));
         assertFalse(call.equals(""));
         assertTrue(call.equals(equalCall));
         assertFalse(call.equals(nonEqualCall));
     }
+    
+    @Test
+    public void shouldNotEqualIfNumberOfArgsDiffer() throws SecurityException, NoSuchMethodException {
+        Object mock = new Object();
+
+        ExpectedInvocation invocationWithOneArg = new ExpectedInvocation(
+                new Invocation(mock, dummyMethod, new Object[] { "" }),
+                null);
+        ExpectedInvocation invocationWithTwoArgs = new ExpectedInvocation(
+                new Invocation(mock, dummyMethod, new Object[] { "", "" }),
+                null);
+
+        assertFalse(invocationWithOneArg.equals(null));
+        assertFalse(invocationWithOneArg.equals(invocationWithTwoArgs));
+    }
 
     @Test
-    public void testHashCode() {
+    public void shouldNotImplementHashCodeBecauseItsNotUsedWithMaps() {
         try {
             call.hashCode();
             fail();
@@ -53,24 +69,8 @@ public class InvocationTest {
     }
 
     @Test
-    public void testShouldDisplayMocksToStringIfValidJavaIdentifier()
+    public void shouldDisplayMocksToStringIfValidJavaIdentifier()
             throws SecurityException, NoSuchMethodException {
-        class ToString {
-            private final String name;
-
-            public ToString(String name) {
-                this.name = name;
-            }
-
-            @Override
-            public String toString() {
-                return name;
-            }
-
-            public void aMethod() {
-            }
-        }
-
         Method method = ToString.class.getMethod("aMethod", new Class[0]);
         Invocation invocation = new Invocation(new ToString("validJavaIdentifier"),
                 method, null);
@@ -83,5 +83,21 @@ public class InvocationTest {
 
         assertEquals(invocation.toString(new EqualsMatcher()), "aMethod()");
 
+    }
+    
+    class ToString {
+        private final String name;
+
+        public ToString(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        public void aMethod() {
+        }
     }
 }

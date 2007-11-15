@@ -11,8 +11,7 @@ import java.lang.reflect.Method;
 import org.easymock.MockControl;
 import org.easymock.internal.MockInvocationHandler;
 import org.easymock.internal.ObjectMethodsFilter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 public class ObjectMethodsTest {
     private MockControl<EmptyInterface> control;
@@ -76,6 +75,12 @@ public class ObjectMethodsTest {
         Method toString = Object.class.getMethod("toString", new Class[0]);
         assertEquals("EasyMock for " + MockedClass.class.toString(), filter
                 .invoke(new DummyProxy(), toString, new Object[0]));
+    }
+    
+    @Ignore
+    @Test
+    public void whatHappensWhenClassToMockIsAnonymous() throws Exception {
+        fail();
     }
 
 }
