@@ -1,0 +1,65 @@
+<project name="mockito" basedir=".">
+
+
+	<property name="target.dir" value="target" />
+	<property name="src.classes.dir" value="${target.dir}/classes" />
+	<property name="test.classes.dir" value="${target.dir}/test-classes" />
+	<property name="test.reports.dir" value="${target.dir}/reports/junit" />
+	<property name="lib.dir" value="lib" />
+
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+
+	<path id="test.compile.classpath">
+		<path refid="compile.classpath" />
+		<pathelement location="${src.classes.dir}" />
+	</path>
+
+	<path id="test.classpath">
+		<path refid="test.compile.classpath" />
+		<pathelement location="${test.classes.dir}"/>
+	</path>
+
+	<target name="prepare">
+		<mkdir dir="${src.classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+	</target>
+
+
+	<target name="clean" description="Cleans out the build directories">
+		<delete dir="${target.dir}" quiet="true" />
+	</target>
+
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="false" deprecation="true">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile.test" depends="compile" unless="test.skip">
+		<javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="false" deprecation="true">
+			<classpath refid="test.compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
+		<junit fork="true" forkmode="perBatch">
+			<formatter type="brief" usefile="false" />
+			<classpath refid="test.classpath" />
+
+			<batchtest todir="${test.reports.dir}">
+				<fileset dir="${test.classes.dir}" includes="**/*Test.class" />
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="all" depends="clean, compile, test" description="Performs a build and runs test" />
+
+	
+	<target name="package" description="Packages the artifacts">
+		<fail message="Packiging is missing"/>
+	</target>
+
+</project>
