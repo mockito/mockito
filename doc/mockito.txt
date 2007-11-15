@@ -29,6 +29,8 @@ There is no need for record() / replay() modes. mockitos are either stubs - then
 
 -easy building class under test mocking constructors
 
+over EasyMock:
+-mock's names are nicer - simple names
 -simpler - you see exactly what failed on verifaction.
 Forget about:
   Expectation failure on verify:

@@ -56,15 +56,15 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
     }
 
     private String mockToString(Object proxy) {
-        return (name != null) ? name : "EasyMock for " + mockType(proxy);
+        return (name != null) ? name : "Mock for " + mockType(proxy);
     }
 
     //TODO unit test it or check if tested properly
     private String mockType(Object proxy) {
 		if (proxy.getClass().getInterfaces().length == 2) {
-			return proxy.getClass().getInterfaces()[0].toString();
+			return proxy.getClass().getInterfaces()[0].getSimpleName();
 		} else {
-			return proxy.getClass().getSuperclass().toString();
+			return proxy.getClass().getSuperclass().getSimpleName();
 		}
 	}
 
