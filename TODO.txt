@@ -1,0 +1,6 @@
+Szczepan's TODO list:
+
+1. review ALL tests from EasyMock and leave only what's needed
+2. review ALL CODE from EasyMock and leave only what's needed
+3. resolve TODOs from code ;P
+

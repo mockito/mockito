@@ -34,6 +34,7 @@ public class CglibTest extends TestCase {
         assertNotSame(f1.getCallback(0), f2.getCallback(0));
     }
 
+    @SuppressWarnings("unchecked")
     private Factory createMock() throws Exception {
         MethodInterceptor interceptor = new MethodInterceptor() {
             public Object intercept(Object obj, Method method, Object[] args,
