@@ -71,7 +71,7 @@ public class StubbingWithThrowablesTest {
     }    
     
     @Test
-    public void shouldNotAllowSettingCheckedException() throws Exception {
+    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
         LinkedList list = mock(LinkedList.class);
         Exception checkedException = new Exception();
         

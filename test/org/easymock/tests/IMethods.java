@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface IMethods {
 
-    //TODO kill the index
+    //TODO kill the index, kill not used methods
     boolean booleanReturningMethod(int index);
 
     byte byteReturningMethod(int index);
