@@ -42,15 +42,15 @@ public class InvocationTest {
         assertFalse(call.equals(nonEqualCall));
     }
 
-//    @Test
-//    public void testHashCode() {
-//        try {
-//            call.hashCode();
-//            fail();
-//        } catch (UnsupportedOperationException expected) {
-//            assertEquals("hashCode() is not implemented", expected.getMessage());
-//        }
-//    }
+    @Test
+    public void testHashCode() {
+        try {
+            call.hashCode();
+            fail();
+        } catch (UnsupportedOperationException expected) {
+            assertEquals("hashCode() is not implemented", expected.getMessage());
+        }
+    }
 
     @Test
     public void testShouldDisplayMocksToStringIfValidJavaIdentifier()

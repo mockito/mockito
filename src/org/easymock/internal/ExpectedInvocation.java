@@ -67,7 +67,7 @@ public class ExpectedInvocation {
     }
 
     public int hashCode() {
-        return 1; //invocation.hashCode();
+        return 1;
     }
 
     public boolean matches(Invocation actual) {

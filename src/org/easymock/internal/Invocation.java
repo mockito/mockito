@@ -62,9 +62,9 @@ public class Invocation {
                 && this.equalArguments(other.arguments);
     }
 
-//    public int hashCode() {
-//        throw new UnsupportedOperationException("hashCode() is not implemented");
-//    }
+    public int hashCode() {
+        throw new UnsupportedOperationException("hashCode() is not implemented");
+    }
 
     private boolean equalArguments(Object[] arguments) {
         if (this.arguments.length != arguments.length) {
