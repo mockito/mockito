@@ -4,7 +4,6 @@
  */
 package org.easymock;
 
-import org.easymock.classextension.*;
 
 /**
  * Used to answer expected calls.

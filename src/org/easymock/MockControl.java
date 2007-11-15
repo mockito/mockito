@@ -6,8 +6,11 @@ package org.easymock;
 
 import static org.easymock.EasyMock.expect;
 
-import org.easymock.classextension.*;
-import org.easymock.internal.*;
+import org.easymock.internal.AlwaysMatcher;
+import org.easymock.internal.ArrayMatcher;
+import org.easymock.internal.EqualsMatcher;
+import org.easymock.internal.MocksControl;
+import org.easymock.internal.Range;
 
 /**
  * A <code>MockControl</code> object controls the behavior of its associated
