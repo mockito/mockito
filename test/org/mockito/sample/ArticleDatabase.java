@@ -1,4 +1,4 @@
-package org.mockito.vs.easymock;
+package org.mockito.sample;
 
 public class ArticleDatabase {
 

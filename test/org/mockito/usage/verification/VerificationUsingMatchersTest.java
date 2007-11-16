@@ -2,7 +2,7 @@
  * Copyright (c) 2001-2007 OFFIS, Tammo Freese.
  * This program is made available under the terms of the MIT License.
  */
-package org.easymock;
+package org.mockito.usage.verification;
 
 import static org.easymock.EasyMock.*;
 import static org.mockito.Matchers.*;
@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")  
 public class VerificationUsingMatchersTest {

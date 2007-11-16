@@ -1,9 +1,9 @@
-package org.mockito.vs.easymock;
+package org.mockito.sample;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class MockitoVsEasyMockTest {
+public class MockitoSampleTest {
     
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {

@@ -2,15 +2,15 @@
  * Copyright (c) 2001-2007 OFFIS, Tammo Freese.
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.usage;
+package org.mockito.usage.matchers;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-import org.easymock.IMethods;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class InvalidUseOfMatchersTest {

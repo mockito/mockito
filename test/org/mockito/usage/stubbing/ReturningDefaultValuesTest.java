@@ -2,16 +2,16 @@
  * Copyright (c) 2007 Szczepan Faber 
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.usage;
+package org.mockito.usage.stubbing;
 
 import static org.junit.Assert.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.easymock.IMethods;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class ReturningDefaultValuesTest {

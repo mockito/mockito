@@ -1,4 +1,4 @@
-package org.mockito.usage;
+package org.mockito.usage.verification;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;

@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Szczepan Faber 
  * This program is made available under the terms of the MIT License.
  */
-package org.easymock;
+package org.mockito.usage;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -13,6 +13,7 @@ import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.MockVerificationAssertionError;
 
+//TODO add stubbing with varargs
 public class UsingVarargsTest {
 
     private interface IVarArgs {

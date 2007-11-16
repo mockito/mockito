@@ -2,12 +2,13 @@
  * Copyright (c) 2007 Szczepan Faber 
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito;
+package org.mockito.usage;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ReplacingObjectMethodsTest {
 

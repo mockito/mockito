@@ -1,8 +1,9 @@
-package org.easymock;
+package org.mockito.usage.verification;
 
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.usage.IMethods;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package org.mockito.usage;
+package org.mockito.usage.verification;
 
 import static org.mockito.Mockito.*;
 

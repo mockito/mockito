@@ -1,4 +1,4 @@
-package org.mockito.usage;
+package org.mockito.usage.stubbing;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
