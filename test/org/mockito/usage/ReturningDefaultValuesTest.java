@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.easymock.tests.IMethods;
+import org.easymock.IMethods;
 import org.junit.Test;
 import org.mockito.Mockito;
 
