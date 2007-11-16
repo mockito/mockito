@@ -2,7 +2,7 @@ package org.mockito.usage;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
-import static org.mockito.util.Matchers.contains;
+import static org.mockito.util.JUnitMatchers.contains;
 
 import java.util.*;
 

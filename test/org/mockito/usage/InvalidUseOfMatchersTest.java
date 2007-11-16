@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 import org.easymock.IMethods;
 import org.junit.*;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
 
 @SuppressWarnings("unchecked")
@@ -45,19 +45,19 @@ public class InvalidUseOfMatchersTest {
         } catch (InvalidUseOfMatchersException e) {
         }
     }
-
+    
     @Test
     public void shouldScreamWhenMatchersAreInvalid() {
-        mock.simpleMethodWithArgument(not(eq("asd")));
+        mock.simpleMethodWithArgument(Matchers.not(eq("asd")));
         try {
-            mock.simpleMethodWithArgument(not("jkl"));
+            mock.simpleMethodWithArgument(Matchers.not("jkl"));
             fail();
         } catch (IllegalStateException e) {
             assertEquals("no matchers found.", e.getMessage());
         }
         
         try {
-            mock.simpleMethodWithArgument(or(eq("jkl"), "asd"));
+            mock.simpleMethodWithArgument(Matchers.or(eq("jkl"), "asd"));
             fail();
         } catch (IllegalStateException e) {
             assertEquals("2 matchers expected, 1 recorded.", e.getMessage());

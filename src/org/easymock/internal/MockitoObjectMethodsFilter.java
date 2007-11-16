@@ -8,7 +8,8 @@ import java.lang.reflect.Method;
 
 import org.mockito.MockAwareInvocationHandler;
 
-public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implements MockAwareInvocationHandler {
+//TODO rename
+public class MockitoObjectMethodsFilter<T extends MockAwareInvocationHandler> implements MockAwareInvocationHandler {
     private final Method equalsMethod;
 
     private final Method hashCodeMethod;
@@ -20,7 +21,7 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
     private final String name;
 
     @SuppressWarnings("unchecked")
-    public ObjectMethodsFilter(Class toMock, T delegate,
+    public MockitoObjectMethodsFilter(Class toMock, T delegate,
             String name) {
         if (name != null && !Invocation.isJavaIdentifier(name)) {
             throw new IllegalArgumentException(String.format("'%s' is not a valid Java identifier.", name));
@@ -59,7 +60,6 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
         return (name != null) ? name : "Mock for " + mockType(proxy);
     }
 
-    //TODO unit test it or check if tested properly
     private String mockType(Object proxy) {
 		if (proxy.getClass().getInterfaces().length == 2) {
 			return proxy.getClass().getInterfaces()[0].getSimpleName();

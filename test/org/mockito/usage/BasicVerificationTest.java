@@ -90,13 +90,4 @@ public class BasicVerificationTest {
         
         Mockito.verify(mock).add("test");
     }
-
-    @Test
-    public void easyMockNotVerify() throws Exception {
-        List mock = EasyMock.createMock(List.class);
-//        mock.clear();
-        EasyMock.replay(mock);
-        
-        EasyMock.verify(mock);
-    }
 }

@@ -7,7 +7,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-public class Matchers {
+public class JUnitMatchers {
 
     public static <T> Matcher<Collection<T>> contains(final T ... elements) {
         return new BaseMatcher<Collection<T>>() {

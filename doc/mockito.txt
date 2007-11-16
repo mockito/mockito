@@ -35,6 +35,7 @@ over EasyMock:
 -mock's names are nicer - simple names
 -no need to name mocks. you see the exact line of code where it failed. for verifyNoOtherInteractions() names are simple and clean anyway (previous point)
 -no comparator matcher (has anyone used it?)	 
+-exception messages are less verbose - one may think it's a downside but I found it rarely useful...
 
 -simpler - you see exactly what failed on verifaction.
 Forget about:

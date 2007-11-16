@@ -14,7 +14,7 @@ import org.easymock.internal.matchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConstraintsToStringTest {
+public class MatchersToStringTest {
     private StringBuffer buffer;
 
     @Before

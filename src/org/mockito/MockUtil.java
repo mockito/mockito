@@ -6,7 +6,7 @@ package org.mockito;
 
 import net.sf.cglib.proxy.*;
 
-import org.easymock.internal.ObjectMethodsFilter;
+import org.easymock.internal.MockitoObjectMethodsFilter;
 import org.easymock.internal.ClassProxyFactory.MockMethodInterceptor;
 import org.mockito.exceptions.NotAMockException;
 
@@ -19,11 +19,11 @@ public class MockUtil {
     
     @SuppressWarnings("unchecked")
     public static <T> MockitoControl<T> getControl(T mock) {
-        ObjectMethodsFilter<MockitoControl<T>> handler;
+        MockitoObjectMethodsFilter<MockitoControl<T>> handler;
 
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {
-                handler = (ObjectMethodsFilter) getInterceptor(mock)
+                handler = (MockitoObjectMethodsFilter) getInterceptor(mock)
                         .getHandler();
             } else {
                 throw new NotAMockException(mock);

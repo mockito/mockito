@@ -22,14 +22,14 @@ public final class ClassExtensionHelper {
     }
 
     public static MocksControl getControl(Object mock) {
-        ObjectMethodsFilter<MockInvocationHandler> handler;
+        MockitoObjectMethodsFilter<MockInvocationHandler> handler;
 
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {
-                handler = (ObjectMethodsFilter) getInterceptor(mock)
+                handler = (MockitoObjectMethodsFilter) getInterceptor(mock)
                         .getHandler();
             } else if (Proxy.isProxyClass(mock.getClass())) {
-                handler = (ObjectMethodsFilter) Proxy
+                handler = (MockitoObjectMethodsFilter) Proxy
                         .getInvocationHandler(mock);
             } else {
                 throw new RuntimeExceptionWrapper(new IllegalArgumentException(

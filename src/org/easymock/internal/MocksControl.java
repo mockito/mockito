@@ -34,7 +34,7 @@ public class MocksControl implements IMocksControl {
         try {
             state.assertRecordState();
             ClassProxyFactory<T> proxyFactory = new ClassProxyFactory<T>();
-            return proxyFactory.createProxy(toMock, new ObjectMethodsFilter(
+            return proxyFactory.createProxy(toMock, new MockitoObjectMethodsFilter(
                     toMock, new MockInvocationHandler(this), null));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
@@ -45,7 +45,7 @@ public class MocksControl implements IMocksControl {
         try {
             state.assertRecordState();
             ClassProxyFactory<T> proxyFactory = new ClassProxyFactory<T>();
-            return proxyFactory.createProxy(toMock, new ObjectMethodsFilter(
+            return proxyFactory.createProxy(toMock, new MockitoObjectMethodsFilter(
                     toMock, new MockInvocationHandler(this), name));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();

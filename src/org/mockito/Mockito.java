@@ -9,7 +9,7 @@ public class Mockito {
     public static <T> T mock(Class<T> classToMock) {
         try {
             ClassProxyFactory<T> proxyFactory = new ClassProxyFactory<T>();
-            return proxyFactory.createProxy(classToMock, new ObjectMethodsFilter<MockitoControl>(
+            return proxyFactory.createProxy(classToMock, new MockitoObjectMethodsFilter<MockitoControl>(
                     classToMock, new MockitoControl<T>(), null));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();

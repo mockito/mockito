@@ -12,7 +12,7 @@ import org.easymock.internal.matchers.*;
 import org.junit.Test;
 
 //TODO do we need matchers like GreaterThan - does it make any sense?
-public class CompareToTest {
+public class ComparableMatchersTest {
 
     @Test
     public void testNotComparable() {

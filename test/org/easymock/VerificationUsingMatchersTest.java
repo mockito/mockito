@@ -5,11 +5,12 @@
 package org.easymock;
 
 import static org.easymock.EasyMock.*;
+import static org.mockito.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 import org.junit.*;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.exceptions.MockVerificationAssertionError;
 
 @SuppressWarnings("unchecked")  
@@ -34,11 +35,11 @@ public class VerificationUsingMatchersTest {
         mock.oneArg(one);
         mock.oneArg(two);
         
-        verify(mock).oneArg(same(one));
+        verify(mock).oneArg(Matchers.same(one));
         verify(mock).oneArg(two);
         
         try {
-            verify(mock).oneArg(same(three));
+            verify(mock).oneArg(Matchers.same(three));
             fail();
         } catch (MockVerificationAssertionError e) {}
     }  

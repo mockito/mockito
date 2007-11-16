@@ -30,7 +30,7 @@ public class ClassProxyFactory<T> {
     @SuppressWarnings("unchecked")
     public T createProxy(Class<T> toMock, final MockAwareInvocationHandler handler) {
 
-        // Dirty trick to fix ObjectMethodsFilter
+        // Dirty trick to fix MockitoObjectMethodsFilter
         // It will replace the equals, hashCode, toString methods it kept that
         // are the ones
         // from Object.class by the correct ones since they might have been
@@ -121,7 +121,7 @@ public class ClassProxyFactory<T> {
 
     private void updateMethod(InvocationHandler objectMethodsFilter,
             Method correctMethod) {
-        Field methodField = retrieveField(ObjectMethodsFilter.class,
+        Field methodField = retrieveField(MockitoObjectMethodsFilter.class,
                 correctMethod.getName() + "Method");
         updateField(objectMethodsFilter, correctMethod, methodField);
     }
