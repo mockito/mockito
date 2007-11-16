@@ -30,7 +30,12 @@ There is no need for record() / replay() modes. mockitos are either stubs - then
 -easy building class under test mocking constructors
 
 over EasyMock:
+-deliberately removed IAnswer - if you need to return different results for different args then you should stub on the per-test basis.
+	this is the only way to have clean tests not cluttered with complicated mocky stuff.
 -mock's names are nicer - simple names
+-no need to name mocks. you see the exact line of code where it failed. for verifyNoOtherInteractions() names are simple and clean anyway (previous point)
+-no comparator matcher (has anyone used it?)	 
+
 -simpler - you see exactly what failed on verifaction.
 Forget about:
   Expectation failure on verify:

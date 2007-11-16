@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import org.easymock.internal.matchers.*;
 import org.junit.Test;
 
+//TODO do we need matchers like GreaterThan - does it make any sense?
 public class CompareToTest {
 
     @Test
@@ -63,15 +64,15 @@ public class CompareToTest {
         assertTrue(cmpEq.matches(new BigDecimal("5")));
     }
 
-    private void test(CompareTo<String> cmpTo, boolean lower, boolean higher,
+    private void test(CompareTo<String> compareTo, boolean lower, boolean higher,
             boolean equals, String name) {
 
-        assertEquals(lower, cmpTo.matches("a"));
-        assertEquals(equals, cmpTo.matches("b"));
-        assertEquals(higher, cmpTo.matches("c"));
+        assertEquals(lower, compareTo.matches("a"));
+        assertEquals(equals, compareTo.matches("b"));
+        assertEquals(higher, compareTo.matches("c"));
 
         StringBuffer sb = new StringBuffer();
-        cmpTo.appendTo(sb);
+        compareTo.appendTo(sb);
         assertEquals(name + "(b)", sb.toString());
     }
 }

@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+//TODO change this test so it asserts nice exception messages and method name is displayed 
 public class NameTest {
     @Test
     public void nameForMock() {
@@ -60,15 +61,4 @@ public class NameTest {
             assertEquals(expectedMessage, actualMessage);         
         }
     }
-    
-    @Test
-    public void shouldThrowIllegalArgumentExceptionIfNameIsNoValidJavaIdentifier() {
-        try {
-            createMock("no-valid-java-identifier", IMethods.class);
-            throw new AssertionError();
-        } catch (IllegalArgumentException expected) {
-            assertEquals("'no-valid-java-identifier' is not a valid Java identifier.", expected.getMessage());
-        }
-    }
-
 }

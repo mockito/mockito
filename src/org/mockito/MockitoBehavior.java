@@ -7,10 +7,10 @@ import org.mockito.exceptions.*;
 
 public class MockitoBehavior {
 
-    private List<MockitoInvocation> registeredInvocations = new LinkedList<MockitoInvocation>();
-    private Map<MockitoInvocation, Result> results = new HashMap<MockitoInvocation, Result>();
+    private List<InvocationWithMatchers> registeredInvocations = new LinkedList<InvocationWithMatchers>();
+    private Map<InvocationWithMatchers, Result> results = new HashMap<InvocationWithMatchers, Result>();
     
-    public void addInvocation(MockitoInvocation invocation) {
+    public void addInvocation(InvocationWithMatchers invocation) {
         this.registeredInvocations.add(invocation);
     }
 
@@ -36,10 +36,11 @@ public class MockitoBehavior {
 
     private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {
         int verifiedInvocations = 0;
-        for (MockitoInvocation registeredInvocation : registeredInvocations) {
-            if (expectedInvocation.matches(registeredInvocation)) {
+        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
+            MockitoInvocation invocation = registeredInvocation.getInvocation();
+            if (expectedInvocation.matches(invocation)) {
                 verifiedInvocations += 1;
-                registeredInvocation.markVerified();
+                invocation.markVerified();
             } else {
                 verifiedInvocations += 0;
             }
@@ -49,22 +50,24 @@ public class MockitoBehavior {
     }
 
     public void verifyNoMoreInteractions() {
-        for (MockitoInvocation registeredInvocation : registeredInvocations) {
-            if (!registeredInvocation.isVerified()) {
+        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
+            if (!registeredInvocation.getInvocation().isVerified()) {
                 throw new MockVerificationAssertionError();
             }
         }
     }
 
     public Object resultFor(MockitoInvocation invocation) throws Throwable {
-        if (results.get(invocation) == null) {
-            return ToTypeMappings.emptyReturnValueFor(invocation.getMethod().getReturnType());
-        } else {
-            return results.get(invocation).answer();
+        for (InvocationWithMatchers invocationWithMatchers : results.keySet()) {
+            if (invocationWithMatchers.matches(invocation)) {
+                return results.get(invocationWithMatchers).answer();
+            }
         }
+
+        return ToTypeMappings.emptyReturnValueFor(invocation.getMethod().getReturnType());
     }
 
     public MockitoInvocation lastInvocation() {
-        return registeredInvocations.get(registeredInvocations.size() - 1);
+        return registeredInvocations.get(registeredInvocations.size() - 1).getInvocation();
     }
 }

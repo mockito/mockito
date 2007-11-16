@@ -28,7 +28,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
         
         MockitoOperations.reportLastControlForStubbing(this);
         
-        behavior.addInvocation(invocation);
+        behavior.addInvocation(invocationWithMatchers);
         
         if (MockitoOperations.settingThrowableOnVoidMethodScenario()) {
             Throwable throwable = MockitoOperations.removeThrowableToBeSetOnVoidMethod();

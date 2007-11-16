@@ -6,6 +6,7 @@ import java.util.List;
 import org.easymock.IArgumentMatcher;
 import org.easymock.internal.*;
 
+//TODO kill this class and move verified to InvocationWithMatchers
 public class MockitoInvocation extends Invocation {
 
     private boolean verified;
