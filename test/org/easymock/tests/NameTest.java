@@ -1,7 +1,6 @@
-package org.easymock.tests2;
+package org.easymock.tests;
 
 import org.easymock.IMocksControl;
-import org.easymock.tests.IMethods;
 import org.junit.Test;
 
 import static org.easymock.EasyMock.*;

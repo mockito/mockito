@@ -12,7 +12,7 @@ public class MockitoOperations {
     private final static ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
     private final static ThreadLocal<Throwable> throwableToBeSetOnVoidMethod = new ThreadLocal<Throwable>();
 
-    public static synchronized void reportControlForStubbing(MockitoControl mockitoControl) {
+    public static synchronized void reportLastControlForStubbing(MockitoControl mockitoControl) {
         controlForStubbing.set(mockitoControl);
     }
 

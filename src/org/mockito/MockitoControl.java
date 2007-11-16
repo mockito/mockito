@@ -26,7 +26,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         }
         
-        MockitoOperations.reportControlForStubbing(this);
+        MockitoOperations.reportLastControlForStubbing(this);
         
         behavior.addInvocation(invocation);
         

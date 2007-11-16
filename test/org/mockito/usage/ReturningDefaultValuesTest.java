@@ -6,6 +6,7 @@ package org.mockito.usage;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.easymock.tests.IMethods;
@@ -16,10 +17,12 @@ import org.mockito.Mockito;
 public class ReturningDefaultValuesTest {
 
     @Test
-    public void shouldReturnAllKindsOfPrimitives() {
+    public void shouldReturnAllKindsOfPrimitives() throws Exception {
         IMethods mock = Mockito.mock(IMethods.class);
 
-        //this is mainly to prove that cglib enchanted thing works properly 
+        //this is mainly to prove that cglib-enchanted-thing works properly 
+        //and returns primitive value rather than throw NullPointerException
+        //If we used java.lang.reflect.Proxy NullPointerException will bang
         assertEquals((byte)0, mock.byteReturningMethod(12));
         assertEquals((short)0, mock.shortReturningMethod(12));
         assertEquals(0, mock.intReturningMethod(12));
