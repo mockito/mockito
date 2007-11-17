@@ -2,7 +2,6 @@ package org.mockito;
 
 import org.mockito.internal.LastArguments;
 import org.mockito.internal.matchers.*;
-import org.mockito.matchers.*;
 
 public class CrazyMatchers {
     

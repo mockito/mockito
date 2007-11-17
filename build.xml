@@ -1,6 +1,5 @@
 <project name="mockito" basedir="." default="all">
 
-
 	<property name="target.dir" value="target" />
 	<property name="src.classes.dir" value="${target.dir}/classes" />
 	<property name="test.classes.dir" value="${target.dir}/test-classes" />
@@ -26,11 +25,13 @@
 		<mkdir dir="${test.classes.dir}" />
 	</target>
 
-
 	<target name="clean" description="Cleans out the build directories">
-		<delete dir="${target.dir}" quiet="true" />
+		<delete includeemptydirs="true">
+			<fileset dir="${target.dir}" >
+				<exclude name="eclipse-*/**" />
+			</fileset>
+		</delete>
 	</target>
-
 	
 	<target name="compile" depends="prepare">
 		<javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="false" deprecation="true">
