@@ -4,7 +4,7 @@
  */
 package org.mockito.usage.matchers;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import org.junit.*;

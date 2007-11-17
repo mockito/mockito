@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 

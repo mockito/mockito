@@ -1,5 +1,4 @@
 package org.mockito.sample;
-import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 

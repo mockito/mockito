@@ -4,7 +4,7 @@ import org.mockito.exceptions.NotAMockMethodException;
 import org.mockito.hamcrest.*;
 import org.mockito.internal.*;
 
-public class Mockito {
+public class Mockito extends CoolMatchers {
 
     public static <T> T mock(Class<T> classToMock) {
         try {

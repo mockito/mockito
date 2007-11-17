@@ -4,7 +4,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.*;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -22,11 +21,11 @@ public class VerificationOnMultipleMocksUsingMatchersTest {
         map.put("test", 100);
         map.put("test two", 200);
         
-        verify(list).add(EasyMock.anyObject());
-        verify(list).add(EasyMock.anyInt(), EasyMock.eq("test two"));
+        verify(list).add(anyObject());
+        verify(list).add(anyInt(), eq("test two"));
         
-        verify(map).put(EasyMock.anyObject(), EasyMock.anyObject());
-        verify(map).put(EasyMock.eq("test two"), EasyMock.eq(200));
+        verify(map).put(anyObject(), anyObject());
+        verify(map).put(eq("test two"), eq(200));
         
         verifyNoMoreInteractions(list, map);
     }
@@ -48,7 +47,7 @@ public class VerificationOnMultipleMocksUsingMatchersTest {
         verify(list, 1).add("two");
         verify(list, 0).add("three");
         
-        verify(map, 2).put(EasyMock.anyObject(), EasyMock.anyInt());
+        verify(map, 2).put(anyObject(), anyInt());
         
         verifyNoMoreInteractions(list, map);
         verifyZeroInteractions(set);

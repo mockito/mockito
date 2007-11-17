@@ -4,10 +4,9 @@
  */
 package org.mockito.usage.verification;
 
-import static org.easymock.EasyMock.*;
 import static org.mockito.Matchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.*;
