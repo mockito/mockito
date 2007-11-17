@@ -6,5 +6,5 @@
 	<classpathentry kind="lib" path="lib/cglib-nodep-2.2_beta1.jar"/>
 	<classpathentry kind="lib" path="lib/objenesis-1.0.jar" sourcepath="/home/sfaber/installs/java libs/objenesis-1.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.4.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/eclipse-build"/>
 </classpath>
