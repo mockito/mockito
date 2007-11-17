@@ -1,10 +1,11 @@
-package org.easymock.internal;
+package org.mockito.internal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
+import org.easymock.internal.*;
 import org.junit.Test;
 
 public class ExpectedInvocationTest {

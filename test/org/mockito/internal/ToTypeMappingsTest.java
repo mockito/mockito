@@ -1,9 +1,10 @@
-package org.easymock.internal;
+package org.mockito.internal;
 
 import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.easymock.internal.ToTypeMappings;
 import org.junit.Test;
 
 public class ToTypeMappingsTest {

@@ -2,7 +2,7 @@
  * Copyright (c) 2003-2006 OFFIS, Henri Tremblay. 
  * This program is made available under the terms of the MIT License.
  */
-package org.easymock.classextension;
+package org.mockito.internal;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
