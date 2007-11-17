@@ -4,12 +4,13 @@
  */
 package org.mockito.usage.matchers;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.internal.MockitoState;
 import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -22,18 +23,15 @@ public class InvalidUseOfMatchersTest {
         mock = Mockito.mock(IMethods.class);
     }
 
-    @Ignore
     @Test
     public void shouldDetectWrongNumberOfMatchersWhenStubbing() {
         Mockito.stub(mock.threeArgumentMethod(1, "2", "3")).andReturn(null);
         try {
             Mockito.stub(mock.threeArgumentMethod(1, eq("2"), "3")).andReturn(null);
             fail();
-        } catch (InvalidUseOfMatchersException e) {
-        }
+        } catch (InvalidUseOfMatchersException e) {}
     }
     
-    @Ignore
     @Test
     public void shouldDetectStupidUseOfMatchersWhenVerifying() {
         mock.oneArg(true);
@@ -42,8 +40,7 @@ public class InvalidUseOfMatchersTest {
         try {
             Mockito.verify(mock).oneArg(true);
             fail();
-        } catch (InvalidUseOfMatchersException e) {
-        }
+        } catch (InvalidUseOfMatchersException e) {}
     }
     
     @Test
@@ -52,22 +49,31 @@ public class InvalidUseOfMatchersTest {
         try {
             mock.simpleMethodWithArgument(CrazyMatchers.not("jkl"));
             fail();
-        } catch (IllegalStateException e) {
-            assertEquals("no matchers found.", e.getMessage());
+        } catch (InvalidUseOfMatchersException e) {
+            assertEquals("\n" +
+                    "Read about matchers: http://code.google.com/p/mockito/matchers" +
+                    "\n" +
+            		"No matchers found.", e.getMessage());
         }
         
         try {
             mock.simpleMethodWithArgument(CrazyMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("2 matchers expected, 1 recorded.", e.getMessage());
+            assertEquals("\n" +
+            		"Read about matchers: http://code.google.com/p/mockito/matchers" +
+            		"\n" +
+            		"2 matchers expected, 1 recorded.", e.getMessage());
         }
         
         try {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("3 matchers expected, 1 recorded.", e.getMessage());
+            assertEquals("\n" +
+                    "Read about matchers: http://code.google.com/p/mockito/matchers" +
+                    "\n" +
+                    "3 matchers expected, 1 recorded.", e.getMessage());
         }
     }
 }

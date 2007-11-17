@@ -1,36 +1,75 @@
 package org.mockito.internal;
 
 import java.lang.reflect.*;
-import java.util.List;
+import java.util.*;
 
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.internal.matchers.*;
 
 public class MockitoControl<T> implements MockAwareInvocationHandler, InvocationHandler, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
     private MockitoBehavior behavior = new MockitoBehavior();
     private Object mock;
+    private final MockitoState mockitoState;
+    private final LastArguments lastArguments;
     
-    public MockitoControl() {}
+    public MockitoControl(MockitoState mockitoState, LastArguments lastArguments) {
+        this.mockitoState = mockitoState;
+        this.lastArguments = lastArguments;
+    }
+    
+    /**
+     * if user passed bare arguments, not matchers then create EqualsMatchers for every argument
+     */
+    private List<IArgumentMatcher> createEqualsMatchers(Invocation invocation,
+            List<IArgumentMatcher> matchers) {
+        if (matchers != null) {
+            return matchers;
+        }
+        List<IArgumentMatcher> result = new ArrayList<IArgumentMatcher>();
+        for (Object argument : invocation.getArguments()) {
+            result.add(new Equals(argument));
+        }
+        return result;
+    }
+
+    private void validateMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
+        if (matchers != null && matchers.size() != invocation.getArguments().length) {
+            throw new InvalidUseOfMatchersException(
+                    + invocation.getArguments().length
+                    + " matchers expected, " + matchers.size()
+                    + " recorded.");
+        }
+    }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        List<IArgumentMatcher> lastMatchers = LastArguments.pullMatchers();
-
         MockitoInvocation invocation = new MockitoInvocation(proxy, method, args);
-        InvocationWithMatchers invocationWithMatchers = new InvocationWithMatchers(invocation, lastMatchers);
+        List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
+        List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
+        InvocationWithMatchers invocationWithMatchers = new InvocationWithMatchers(invocation, processedMatchers);
         
-        if (MockitoOperations.mockVerificationScenario()) {
-            VerifyingMode verifyingMode = MockitoOperations.removeVerifyingMode();
+        if (mockitoState.mockVerificationScenario()) {
+            VerifyingMode verifyingMode = mockitoState.verifyingCompleted();
+
+            //have to validate matcher after verifyingMode flag is cleared - a bit smelly
+            validateMatchers(invocation, lastMatchers);
             
             behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
+        } else {
+            validateMatchers(invocation, lastMatchers);
         }
         
-        MockitoOperations.reportLastControlForStubbing(this);
+//        else if (mockitoState.mockStubbingScenario()) {
+//            mockitoState.stubbingCompleted();
+//        }
+        
+        mockitoState.reportLastControlForStubbing(this);
         
         behavior.addInvocation(invocationWithMatchers);
         
-        if (MockitoOperations.settingThrowableOnVoidMethodScenario()) {
-            Throwable throwable = MockitoOperations.removeThrowableToBeSetOnVoidMethod();
+        if (mockitoState.settingThrowableOnVoidMethodScenario()) {
+            Throwable throwable = mockitoState.removeThrowableToBeSetOnVoidMethod();
         
             andThrows(throwable);
             return null;
@@ -85,7 +124,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
 
     public MethodSelector<T> toThrow(Throwable throwable) {
         //TODO refactor so we don't use static state to keep the throwable
-        MockitoOperations.reportThrowableToBeSetOnVoidMethod(throwable);
+        mockitoState.reportThrowableToBeSetOnVoidMethod(throwable);
         return this;
     }
 

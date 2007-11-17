@@ -10,7 +10,12 @@ public class MockitoBehavior {
     private Map<InvocationWithMatchers, Result> results = new HashMap<InvocationWithMatchers, Result>();
     
     public void addInvocation(InvocationWithMatchers invocation) {
+        validateState();
         this.registeredInvocations.add(invocation);
+    }
+
+    private void validateState() {
+        
     }
 
     public void addResult(Result result) {

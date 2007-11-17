@@ -14,7 +14,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T geq(Comparable<T> value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<T>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<T>(value));
         return null;
     }
     
@@ -27,7 +27,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte geq(byte value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Byte>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Byte>(value));
         return 0;
     }
 
@@ -40,7 +40,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double geq(double value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Double>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Double>(value));
         return 0;
     }
 
@@ -53,7 +53,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float geq(float value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Float>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Float>(value));
         return 0;
     }
 
@@ -66,7 +66,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int geq(int value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Integer>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Integer>(value));
         return 0;
     }
 
@@ -79,7 +79,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long geq(long value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Long>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Long>(value));
         return 0;
     }
 
@@ -92,7 +92,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short geq(short value) {
-        LastArguments.reportMatcher(new GreaterOrEqual<Short>(value));
+        LastArguments.instance().reportMatcher(new GreaterOrEqual<Short>(value));
         return 0;
     }
 
@@ -105,7 +105,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T leq(Comparable<T> value) {
-        LastArguments.reportMatcher(new LessOrEqual<T>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<T>(value));
         return null;
     }
      
@@ -118,7 +118,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte leq(byte value) {
-        LastArguments.reportMatcher(new LessOrEqual<Byte>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Byte>(value));
         return 0;
     }
 
@@ -131,7 +131,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double leq(double value) {
-        LastArguments.reportMatcher(new LessOrEqual<Double>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Double>(value));
         return 0;
     }
 
@@ -144,7 +144,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float leq(float value) {
-        LastArguments.reportMatcher(new LessOrEqual<Float>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Float>(value));
         return 0;
     }
 
@@ -157,7 +157,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int leq(int value) {
-        LastArguments.reportMatcher(new LessOrEqual<Integer>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Integer>(value));
         return 0;
     }
 
@@ -170,7 +170,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long leq(long value) {
-        LastArguments.reportMatcher(new LessOrEqual<Long>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Long>(value));
         return 0;
     }
 
@@ -183,7 +183,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short leq(short value) {
-        LastArguments.reportMatcher(new LessOrEqual<Short>(value));
+        LastArguments.instance().reportMatcher(new LessOrEqual<Short>(value));
         return 0;
     }
 
@@ -196,7 +196,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T gt(Comparable<T> value) {
-        LastArguments.reportMatcher(new GreaterThan<T>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<T>(value));
         return null;
     }
     
@@ -209,7 +209,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte gt(byte value) {
-        LastArguments.reportMatcher(new GreaterThan<Byte>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Byte>(value));
         return 0;
     }
 
@@ -222,7 +222,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double gt(double value) {
-        LastArguments.reportMatcher(new GreaterThan<Double>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Double>(value));
         return 0;
     }
 
@@ -235,7 +235,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float gt(float value) {
-        LastArguments.reportMatcher(new GreaterThan<Float>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Float>(value));
         return 0;
     }
 
@@ -248,7 +248,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int gt(int value) {
-        LastArguments.reportMatcher(new GreaterThan<Integer>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Integer>(value));
         return 0;
     }
 
@@ -261,7 +261,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long gt(long value) {
-        LastArguments.reportMatcher(new GreaterThan<Long>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Long>(value));
         return 0;
     }
 
@@ -274,7 +274,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short gt(short value) {
-        LastArguments.reportMatcher(new GreaterThan<Short>(value));
+        LastArguments.instance().reportMatcher(new GreaterThan<Short>(value));
         return 0;
     }
 
@@ -287,7 +287,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T lt(Comparable<T> value) {
-        LastArguments.reportMatcher(new LessThan<T>(value));
+        LastArguments.instance().reportMatcher(new LessThan<T>(value));
         return null;
     }
     
@@ -300,7 +300,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte lt(byte value) {
-        LastArguments.reportMatcher(new LessThan<Byte>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Byte>(value));
         return 0;
     }
 
@@ -313,7 +313,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double lt(double value) {
-        LastArguments.reportMatcher(new LessThan<Double>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Double>(value));
         return 0;
     }
 
@@ -326,7 +326,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float lt(float value) {
-        LastArguments.reportMatcher(new LessThan<Float>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Float>(value));
         return 0;
     }
 
@@ -339,7 +339,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int lt(int value) {
-        LastArguments.reportMatcher(new LessThan<Integer>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Integer>(value));
         return 0;
     }
 
@@ -352,7 +352,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long lt(long value) {
-        LastArguments.reportMatcher(new LessThan<Long>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Long>(value));
         return 0;
     }
 
@@ -365,7 +365,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short lt(short value) {
-        LastArguments.reportMatcher(new LessThan<Short>(value));
+        LastArguments.instance().reportMatcher(new LessThan<Short>(value));
         return 0;
     }
     
@@ -378,7 +378,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static String contains(String substring) {
-        LastArguments.reportMatcher(new Contains(substring));
+        LastArguments.instance().reportMatcher(new Contains(substring));
         return null;
     }
 
@@ -392,7 +392,7 @@ public class CrazyMatchers {
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return false;
     }
 
@@ -406,7 +406,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte and(byte first, byte second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -420,7 +420,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static char and(char first, char second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -434,7 +434,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double and(double first, double second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -448,7 +448,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float and(float first, float second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -462,7 +462,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int and(int first, int second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -476,7 +476,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long and(long first, long second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -490,7 +490,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short and(short first, short second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return 0;
     }
 
@@ -506,7 +506,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
-        LastArguments.reportAnd(2);
+        LastArguments.instance().reportAnd(2);
         return null;
     }
 
@@ -520,7 +520,7 @@ public class CrazyMatchers {
      * @return <code>false</code>.
      */
     public static boolean or(boolean first, boolean second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return false;
     }
 
@@ -533,7 +533,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T cmpEq(Comparable<T> value) {
-        LastArguments.reportMatcher(new CompareEqual<T>(value));
+        LastArguments.instance().reportMatcher(new CompareEqual<T>(value));
         return null;
     }
 
@@ -548,7 +548,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T> T same(T value) {
-        LastArguments.reportMatcher(new Same(value));
+        LastArguments.instance().reportMatcher(new Same(value));
         return null;
     }
 
@@ -561,7 +561,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static String endsWith(String suffix) {
-        LastArguments.reportMatcher(new EndsWith(suffix));
+        LastArguments.instance().reportMatcher(new EndsWith(suffix));
         return null;
     }
 
@@ -574,7 +574,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static String startsWith(String prefix) {
-        LastArguments.reportMatcher(new StartsWith(prefix));
+        LastArguments.instance().reportMatcher(new StartsWith(prefix));
         return null;
     }
 
@@ -587,7 +587,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static String find(String regex) {
-        LastArguments.reportMatcher(new Find(regex));
+        LastArguments.instance().reportMatcher(new Find(regex));
         return null;
     }
 
@@ -602,7 +602,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T> T[] aryEq(T[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -615,7 +615,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static short[] aryEq(short[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -628,7 +628,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static long[] aryEq(long[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -641,7 +641,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static int[] aryEq(int[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -654,7 +654,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static float[] aryEq(float[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -667,7 +667,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static double[] aryEq(double[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -680,7 +680,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static char[] aryEq(char[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -693,7 +693,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static byte[] aryEq(byte[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -706,7 +706,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static boolean[] aryEq(boolean[] value) {
-        LastArguments.reportMatcher(new ArrayEquals(value));
+        LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
     }
 
@@ -720,7 +720,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return null;
     }
 
@@ -732,7 +732,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short not(short first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -744,7 +744,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int not(int first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -756,7 +756,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long not(long first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -768,7 +768,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float not(float first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return first;
     }
 
@@ -780,7 +780,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double not(double first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -792,7 +792,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static char not(char first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -804,7 +804,7 @@ public class CrazyMatchers {
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return false;
     }
 
@@ -816,7 +816,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte not(byte first) {
-        LastArguments.reportNot();
+        LastArguments.instance().reportNot();
         return 0;
     }
 
@@ -832,7 +832,7 @@ public class CrazyMatchers {
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return null;
     }
 
@@ -846,7 +846,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static short or(short first, short second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 
@@ -860,7 +860,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static long or(long first, long second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 
@@ -874,7 +874,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static int or(int first, int second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return first;
     }
 
@@ -888,7 +888,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static float or(float first, float second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 
@@ -902,7 +902,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static double or(double first, double second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 
@@ -916,7 +916,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static char or(char first, char second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 
@@ -930,7 +930,7 @@ public class CrazyMatchers {
      * @return <code>0</code>.
      */
     public static byte or(byte first, byte second) {
-        LastArguments.reportOr(2);
+        LastArguments.instance().reportOr(2);
         return 0;
     }
 }

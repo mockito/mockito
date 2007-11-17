@@ -1,6 +1,6 @@
 package org.mockito;
 
-import org.mockito.exceptions.NotAMockMethodException;
+import org.mockito.exceptions.MissingMethodInvocationException;
 import org.mockito.hamcrest.*;
 import org.mockito.internal.*;
 
@@ -9,33 +9,36 @@ public class Mockito extends Matchers {
     public static <T> T mock(Class<T> classToMock) {
         try {
             ClassProxyFactory<T> proxyFactory = new ClassProxyFactory<T>();
+            MockitoControl<T> mockitoControl = new MockitoControl<T>(MockitoState.instance(), LastArguments.instance());
             return proxyFactory.createProxy(classToMock, new MockitoObjectMethodsFilter<MockitoControl>(
-                    classToMock, new MockitoControl<T>(), null));
+                    classToMock, mockitoControl, null));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
         }
     }
 
     public static <T> MockitoExpectation<T> stub(T methodCallToStub) {
+//        MockitoState.instance().stubbingStarted();
+        
         //TODO increment number of stubs
-        //TODO stub has to be removed from MockitoOperations.controlToBeStubbed!!!!!!!
-        MockitoExpectation controlToStub = MockitoOperations.controlToBeStubbed();
+        //TODO stub has to be removed from MockitoState.instance().controlToBeStubbed!!!!!!!
+        MockitoExpectation controlToStub = MockitoState.instance().controlToBeStubbed();
         if (controlToStub == null) {
-            throw new NotAMockMethodException();
+            throw new MissingMethodInvocationException();
         }
         return controlToStub;
     }
     
     public static <T> T verify(T mock) {
         MockUtil.validateMock(mock);
-        MockitoOperations.reportVerifyingMode(VerifyingMode.anyTimes());
+        MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
         return mock;
     }
     
     public static <T> T verify(T mock, int exactNumberOfInvocations) {
         //TODO validate mock everywhere
         //TODO validate if there is unfinished stubbing
-        MockitoOperations.reportVerifyingMode(VerifyingMode.times(exactNumberOfInvocations));
+        MockitoState.instance().verifyingStarted(VerifyingMode.times(exactNumberOfInvocations));
         return mock;
     }
 
@@ -47,6 +50,12 @@ public class Mockito extends Matchers {
 
     public static void verifyZeroInteractions(Object ... mocks) {
          verifyNoMoreInteractions(mocks);   
+    }
+    
+    public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
+        //TODO validate mock
+//        MockitoState.instance().reportControlForStubbing(mockitoControl)
+        return MockUtil.getControl(mock);
     }
 
     public static <T> T assertInvoked(T mock) {
@@ -83,11 +92,5 @@ public class Mockito extends Matchers {
     
     public static <T> MockitoMatcher<T> zeroInteractions(T mock) {
         return new HasNoIvocationsMatcher<T>(mock);
-    }
-
-    public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
-        //TODO validate mock
-//        MockitoOperations.reportControlForStubbing(mockitoControl)
-        return MockUtil.getControl(mock);
     }
 }

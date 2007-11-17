@@ -1,13 +1,77 @@
+/*
+ * Copyright (c) 2001-2007 OFFIS, Tammo Freese.
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.internal.matchers.*;
 
-public class InvocationWithMatchers extends ExpectedInvocation {
+public class InvocationWithMatchers {
+
+    protected final Invocation invocation;
+
+    private final List<IArgumentMatcher> matchers;
 
     public InvocationWithMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
-        super(invocation, matchers);
+        this.invocation = invocation;
+        this.matchers = matchers;
+    }
+
+    public boolean equals(Object o) {
+        if (o == null || !this.getClass().equals(o.getClass()))
+            return false;
+
+        InvocationWithMatchers other = (InvocationWithMatchers) o;
+        return this.invocation.equals(other.invocation)
+                && ((this.matchers == null && other.matchers == null) || (this.matchers != null && this.matchers
+                        .equals(other.matchers)));
+    }
+
+    public int hashCode() {
+        return 1;
+    }
+
+    public boolean matches(Invocation actual) {
+        return this.invocation.getMock().equals(
+                actual.getMock())
+                && this.invocation.getMethod().equals(actual.getMethod())
+                && matches(actual.getArguments());
+    }
+
+    private boolean matches(Object[] arguments) {
+        if (arguments.length != matchers.size()) {
+            return false;
+        }
+        for (int i = 0; i < arguments.length; i++) {
+            if (!matchers.get(i).matches(arguments[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String toString() {
+        StringBuffer result = new StringBuffer();
+        result.append(invocation.getMockAndMethodName());
+        result.append("(");
+        for (Iterator<IArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
+            it.next().appendTo(result);
+            if (it.hasNext()) {
+                result.append(", ");
+            }
+        }
+        result.append(")");
+        return result.toString();
+    }
+
+    public Method getMethod() {
+        return invocation.getMethod();
     }
     
     public MockitoInvocation getInvocation() {

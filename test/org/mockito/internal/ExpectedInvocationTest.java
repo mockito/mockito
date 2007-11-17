@@ -14,7 +14,7 @@ public class ExpectedInvocationTest {
         Object[] args = new Object[] { "" };
         Method m = Object.class.getMethod("equals", new Class[] { Object.class });
         Invocation invocation = new Invocation(null, m, args);
-        assertThat(new ExpectedInvocation(invocation, null).hashCode(), equalTo(1));
+        assertThat(new InvocationWithMatchers(invocation, null).hashCode(), equalTo(1));
     }
     
     @Test
@@ -24,12 +24,10 @@ public class ExpectedInvocationTest {
         Method dummyMethod = Object.class.getMethod("equals",
                 new Class[] { Object.class });
 
-        ExpectedInvocation invocationWithOneArg = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "" }),
-                null);
-        ExpectedInvocation invocationWithTwoArgs = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "", "" }),
-                null);
+        InvocationWithMatchers invocationWithOneArg = new InvocationWithMatchers(
+                new Invocation(mock, dummyMethod, new Object[] { "" }), null);
+        InvocationWithMatchers invocationWithTwoArgs = new InvocationWithMatchers(
+                new Invocation(mock, dummyMethod, new Object[] { "", "" }), null);
 
         assertFalse(invocationWithOneArg.equals(null));
         assertFalse(invocationWithOneArg.equals(invocationWithTwoArgs));

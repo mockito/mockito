@@ -1,4 +1,4 @@
-package org.mockito.usage.stubbing;
+package org.mockito.usage.matchers;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
@@ -6,19 +6,12 @@ import static org.mockito.util.JUnitMatchers.contains;
 
 import java.util.*;
 
-import org.junit.*;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 @SuppressWarnings("unchecked")
 public class BasicStubbingTest {
 
-    private DummyInterface mock;
-
-    @Before
-    public void setup() {
-        mock = Mockito.mock(DummyInterface.class);
-    }
-    
     private interface DummyInterface {
         int getInt(String value);
         String getString(int argumentOne, String argumentTwo);
@@ -27,6 +20,8 @@ public class BasicStubbingTest {
     
     @Test
     public void shouldStubAllMethodsByDefault() throws Exception {
+        DummyInterface mock = Mockito.mock(DummyInterface.class);
+
         assertEquals(0, mock.getInt("test"));
         assertEquals(0, mock.getInt("testTwo"));
         
@@ -39,6 +34,8 @@ public class BasicStubbingTest {
     
     @Test
     public void shouldStubAndLetBeCalledAnyTimes() throws Exception {
+        DummyInterface mock = Mockito.mock(DummyInterface.class);
+        
         Mockito.stub(mock.getInt("14")).andReturn(14);
         
         assertThat(mock.getInt("14"), equalTo(14));
@@ -53,15 +50,5 @@ public class BasicStubbingTest {
         
         assertThat(mock.getString(10, "test"), equalTo("test"));
         assertThat(mock.getString(10, "test"), equalTo("test"));
-    }
-    
-    @Test
-    public void shouldEvaluateLatestStubbingFirst() throws Exception {
-        Mockito.stub(mock.getInt(Mockito.anyString())).andReturn(100);
-        Mockito.stub(mock.getInt("200 please")).andReturn(200);
-        
-        assertEquals(200, mock.getInt("200 please"));
-        assertEquals(100, mock.getInt("any"));
-        assertEquals("default behavior should return 0", 0, mock.getInt(null));
     }
 }

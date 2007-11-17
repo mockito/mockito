@@ -1,8 +1,8 @@
 package org.mockito.exceptions;
 
-public class NotAMockMethodException extends RuntimeException {
+public class MissingMethodInvocationException extends RuntimeException {
 
-    public NotAMockMethodException() {
+    public MissingMethodInvocationException() {
         super("stub() requires an argument which has to be a proper method call on a mock object");
     }
 }

@@ -11,7 +11,7 @@ public class Matchers {
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return false;
     }
 
@@ -21,7 +21,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static byte anyByte() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -31,7 +31,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static char anyChar() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -41,7 +41,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static int anyInt() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -51,7 +51,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static long anyLong() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -61,7 +61,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float anyFloat() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -71,7 +71,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double anyDouble() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -81,7 +81,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static short anyShort() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
         return 0;
     }
 
@@ -91,7 +91,12 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Object anyObject() {
-        LastArguments.reportMatcher(Any.ANY);
+        LastArguments.instance().reportMatcher(Any.ANY);
+        return null;
+    }
+    
+    public static String anyString() {
+        isA(String.class);
         return null;
     }
 
@@ -106,7 +111,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T isA(Class<T> clazz) {
-        LastArguments.reportMatcher(new InstanceOf(clazz));
+        LastArguments.instance().reportMatcher(new InstanceOf(clazz));
         return null;
     }
 
@@ -118,7 +123,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static boolean eq(boolean value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return false;
     }
 
@@ -130,7 +135,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static byte eq(byte value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -142,7 +147,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static char eq(char value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -154,7 +159,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double eq(double value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -166,7 +171,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float eq(float value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -178,7 +183,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static int eq(int value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -190,7 +195,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static long eq(long value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -202,7 +207,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static short eq(short value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return 0;
     }
 
@@ -214,7 +219,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T eq(T value) {
-        LastArguments.reportMatcher(new Equals(value));
+        LastArguments.instance().reportMatcher(new Equals(value));
         return null;
     }
 
@@ -224,7 +229,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Object isNull() {
-        LastArguments.reportMatcher(Null.NULL);
+        LastArguments.instance().reportMatcher(Null.NULL);
         return null;
     }
 
@@ -234,7 +239,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Object notNull() {
-        LastArguments.reportMatcher(NotNull.NOT_NULL);
+        LastArguments.instance().reportMatcher(NotNull.NOT_NULL);
         return null;
     }
 
@@ -247,7 +252,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String matches(String regex) {
-        LastArguments.reportMatcher(new Matches(regex));
+        LastArguments.instance().reportMatcher(new Matches(regex));
         return null;
     }
 
@@ -263,7 +268,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double eq(double value, double delta) {
-        LastArguments.reportMatcher(new EqualsWithDelta(value, delta));
+        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
 
@@ -279,7 +284,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float eq(float value, float delta) {
-        LastArguments.reportMatcher(new EqualsWithDelta(value, delta));
+        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
 }
