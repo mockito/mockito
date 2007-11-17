@@ -248,56 +248,6 @@ public class MockControl<T> {
     }
 
     /**
-     * Records that the mock object will by default allow the last method
-     * specified by a method call.
-     * 
-     * @exception IllegalStateException
-     *                if the mock object is in replay state, if no method was
-     *                called on the mock object before, or if the last method
-     *                called on the mock was no void method.
-     */
-    public void setDefaultVoidCallable() {
-        ((MocksControl) expectLastCall("method call on the mock needed before setting default void callable"))
-                .setLegacyDefaultVoidCallable();
-    }
-
-    /**
-     * Records that the mock object will by default allow the last method
-     * specified by a method call, and will react by throwing the provided
-     * Throwable.
-     * 
-     * @param throwable
-     *            throwable the throwable to be thrown
-     * @exception IllegalArgumentException
-     *                if the last method called on the mock cannot throw the
-     *                provided Throwable.
-     * @exception NullPointerException
-     *                if throwable is null.
-     * @exception IllegalStateException
-     *                if the mock object is in replay state, or if no method was
-     *                called on the mock object before.
-     */
-    public void setDefaultThrowable(Throwable throwable) {
-        ctrl.setLegacyDefaultThrowable(throwable);
-    }
-
-    /**
-     * Records that the mock object will by default allow the last method
-     * specified by a method call, and will react by returning the provided
-     * return value.
-     * 
-     * @param value
-     *            the return value.
-     * @throws IllegalStateException
-     *             if the mock object is in replay state, if no method was
-     *             called on the mock object before. or if the last method
-     *             called on the mock does not return <code>boolean</code>.
-     */
-    public void setDefaultReturnValue(Object value) {
-        ctrl.setLegacyDefaultReturnValue(value);
-    }
-
-    /**
      * Sets the ArgumentsMatcher for the last method called on the mock object.
      * The matcher must be set before any behavior for the method is defined.
      * 

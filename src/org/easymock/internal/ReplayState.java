@@ -7,7 +7,7 @@ package org.easymock.internal;
 import java.lang.reflect.Method;
 
 import org.easymock.ArgumentsMatcher;
-import org.easymock.IAnswer;
+import org.mockito.internal.*;
 
 public class ReplayState implements IMocksControlState {
 

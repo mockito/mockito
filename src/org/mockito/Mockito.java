@@ -1,8 +1,8 @@
 package org.mockito;
 
-import org.easymock.internal.*;
 import org.mockito.exceptions.NotAMockMethodException;
-import org.mockito.matchers.*;
+import org.mockito.hamcrest.*;
+import org.mockito.internal.*;
 
 public class Mockito {
 

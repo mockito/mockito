@@ -4,6 +4,8 @@
  */
 package org.easymock.internal;
 
+import org.mockito.internal.ExpectedInvocation;
+
 public class ExpectedInvocationAndResults {
     ExpectedInvocation expectedInvocation;
 

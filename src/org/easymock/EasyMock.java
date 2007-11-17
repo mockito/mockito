@@ -8,24 +8,12 @@ import java.lang.reflect.Proxy;
 import java.util.Comparator;
 
 import org.easymock.internal.ClassExtensionHelper;
-import org.easymock.internal.LastArguments;
 import org.easymock.internal.LastControl;
 import org.easymock.internal.MockInvocationHandler;
 import org.easymock.internal.MocksControl;
-import org.easymock.internal.MockitoObjectMethodsFilter;
-import org.easymock.internal.matchers.Any;
-import org.easymock.internal.matchers.Compare;
-import org.easymock.internal.matchers.Contains;
-import org.easymock.internal.matchers.Equals;
-import org.easymock.internal.matchers.EqualsWithDelta;
-import org.easymock.internal.matchers.GreaterOrEqual;
-import org.easymock.internal.matchers.GreaterThan;
-import org.easymock.internal.matchers.InstanceOf;
-import org.easymock.internal.matchers.LessOrEqual;
-import org.easymock.internal.matchers.LessThan;
-import org.easymock.internal.matchers.Matches;
-import org.easymock.internal.matchers.NotNull;
-import org.easymock.internal.matchers.Null;
+import org.mockito.internal.*;
+import org.mockito.internal.matchers.*;
+import org.mockito.matchers.*;
 
 public class EasyMock {
 

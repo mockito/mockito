@@ -5,9 +5,9 @@
 package org.easymock.internal;
 
 import org.easymock.ArgumentsMatcher;
-import org.easymock.IAnswer;
 import org.easymock.IExpectationSetters;
 import org.easymock.IMocksControl;
+import org.mockito.internal.*;
 
 public class MocksControl implements IMocksControl {
 
@@ -219,26 +219,6 @@ public class MocksControl implements IMocksControl {
     public void setLegacyMatcher(ArgumentsMatcher matcher) {
         try {
             state.setMatcher(null, matcher);
-        } catch (RuntimeExceptionWrapper e) {
-            throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
-        }
-    }
-
-    public void setLegacyDefaultReturnValue(Object value) {
-        try {
-            state.setDefaultReturnValue(value);
-        } catch (RuntimeExceptionWrapper e) {
-            throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
-        }
-    }
-
-    public void setLegacyDefaultVoidCallable() {
-        state.setDefaultVoidCallable();
-    }
-
-    public void setLegacyDefaultThrowable(Throwable throwable) {
-        try {
-            state.setDefaultThrowable(throwable);
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
         }

@@ -2,6 +2,7 @@ package org.mockito;
 
 import org.junit.Test;
 import org.mockito.*;
+import org.mockito.internal.*;
 
 import static org.junit.Assert.*;
 

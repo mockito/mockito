@@ -4,7 +4,7 @@
  */
 package org.easymock;
 
-import org.mockito.MockitoExpectation;
+import org.mockito.internal.*;
 
 /**
  * Allows setting expectations for an associated expected invocation.

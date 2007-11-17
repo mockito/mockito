@@ -6,10 +6,7 @@ package org.easymock.internal;
 
 import java.util.*;
 
-import org.easymock.IArgumentMatcher;
-import org.easymock.internal.matchers.And;
-import org.easymock.internal.matchers.Not;
-import org.easymock.internal.matchers.Or;
+import org.mockito.internal.matchers.*;
 
 public class LastControl {
     private static final ThreadLocal<MocksControl> threadToControl = new ThreadLocal<MocksControl>();

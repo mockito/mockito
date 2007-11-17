@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.easymock.ArgumentsMatcher;
 import org.easymock.MockControl;
+import org.mockito.internal.RuntimeExceptionWrapper;
 
 public class LegacyMatcherProvider {
 

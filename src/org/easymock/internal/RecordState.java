@@ -8,9 +8,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import org.easymock.ArgumentsMatcher;
-import org.easymock.IAnswer;
-import org.easymock.IArgumentMatcher;
 import org.easymock.MockControl;
+import org.mockito.internal.*;
+import org.mockito.internal.matchers.IArgumentMatcher;
 
 public class RecordState implements IMocksControlState {
 
@@ -88,32 +88,10 @@ public class RecordState implements IMocksControlState {
         lastInvocationUsed = true;
     }
 
-    public void setDefaultReturnValue(Object value) {
-        requireMethodCall("default return value");
-        value = convertNumberClassIfNeccessary(value);
-        requireAssignable(value);
-        if (lastResult != null) {
-            times(MocksControl.ONCE);
-        }
-        behavior.addStub(
-                lastInvocation.withMatcher(MockControl.ALWAYS_MATCHER), Result
-                        .createReturnResult(value));
-        lastInvocationUsed = true;
-    }
-
     public void asStub() {
         requireMethodCall("stub behavior");
         requireVoidMethod();
         behavior.addStub(lastInvocation, Result.createReturnResult(null));
-        lastInvocationUsed = true;
-    }
-
-    public void setDefaultVoidCallable() {
-        requireMethodCall("default void callable");
-        requireVoidMethod();
-        behavior.addStub(
-                lastInvocation.withMatcher(MockControl.ALWAYS_MATCHER), Result
-                        .createReturnResult(null));
         lastInvocationUsed = true;
     }
 
@@ -124,18 +102,6 @@ public class RecordState implements IMocksControlState {
             times(MocksControl.ONCE);
         }
         behavior.addStub(lastInvocation, Result.createThrowResult(throwable));
-        lastInvocationUsed = true;
-    }
-
-    public void setDefaultThrowable(Throwable throwable) {
-        requireMethodCall("default Throwable");
-        requireValidThrowable(throwable);
-        if (lastResult != null) {
-            times(MocksControl.ONCE);
-        }
-        behavior.addStub(
-                lastInvocation.withMatcher(MockControl.ALWAYS_MATCHER), Result
-                        .createThrowResult(throwable));
         lastInvocationUsed = true;
     }
 
@@ -218,7 +184,7 @@ public class RecordState implements IMocksControlState {
         }
         Class<?> returnedType = lastInvocation.getMethod().getReturnType();
         if (returnedType.isPrimitive()) {
-            returnedType = ToTypeMappings.primitiveToWrapperType.get(returnedType);
+            returnedType = null;//ToTypeMappings.primitiveToWrapperType.get(returnedType);
         }
         if (!returnedType.isAssignableFrom(returnValue.getClass())) {
             throw new RuntimeExceptionWrapper(new IllegalStateException(

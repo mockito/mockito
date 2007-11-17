@@ -1,7 +1,7 @@
 package org.mockito;
 
 import org.junit.Test;
-import org.mockito.VerifyingMode;
+import org.mockito.internal.VerifyingMode;
 
 import static org.junit.Assert.*;
 

@@ -7,7 +7,7 @@ package org.easymock.internal;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import org.mockito.MockAwareInvocationHandler;
+import org.mockito.internal.*;
 
 public class MockInvocationHandler implements InvocationHandler, MockAwareInvocationHandler {
 

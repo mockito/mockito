@@ -7,6 +7,8 @@ package org.easymock.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mockito.internal.*;
+
 public class UnorderedBehavior {
 
     private final List<ExpectedInvocationAndResults> results = new ArrayList<ExpectedInvocationAndResults>();

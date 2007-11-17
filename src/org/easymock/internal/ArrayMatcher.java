@@ -5,7 +5,7 @@
 package org.easymock.internal;
 
 import org.easymock.AbstractMatcher;
-import org.easymock.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.ArrayEquals;
 
 public class ArrayMatcher extends AbstractMatcher {
     public String argumentToString(Object argument) {

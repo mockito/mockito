@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 
 import org.easymock.internal.matchers.*;
 import org.junit.Test;
+import org.mockito.internal.matchers.*;
+import org.mockito.matchers.*;
 
 //TODO do we need matchers like GreaterThan - does it make any sense?
 public class ComparableMatchersTest {

@@ -5,9 +5,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import java.lang.reflect.Method;
 
-import org.easymock.internal.ClassProxyFactory;
 import org.junit.*;
-import org.mockito.MockAwareInvocationHandler;
 
 public class ClassProxyFactoryTest {
 

@@ -1,13 +1,14 @@
 package org.mockito;
 
-import org.easymock.internal.LastArguments;
-import org.easymock.internal.matchers.*;
+import org.mockito.internal.LastArguments;
+import org.mockito.internal.matchers.*;
+import org.mockito.matchers.*;
 
 public class Matchers {
     
     /**
      * Expects a comparable argument greater than or equal the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -20,7 +21,7 @@ public class Matchers {
     
     /**
      * Expects a byte argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -33,7 +34,7 @@ public class Matchers {
 
     /**
      * Expects a double argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -46,7 +47,7 @@ public class Matchers {
 
     /**
      * Expects a float argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -59,7 +60,7 @@ public class Matchers {
 
     /**
      * Expects an int argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -72,7 +73,7 @@ public class Matchers {
 
     /**
      * Expects a long argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -85,7 +86,7 @@ public class Matchers {
 
     /**
      * Expects a short argument greater than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -98,7 +99,7 @@ public class Matchers {
 
     /**
      * Expects a comparable argument less than or equal the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -111,7 +112,7 @@ public class Matchers {
      
     /**
      * Expects a byte argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -124,7 +125,7 @@ public class Matchers {
 
     /**
      * Expects a double argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -137,7 +138,7 @@ public class Matchers {
 
     /**
      * Expects a float argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -150,7 +151,7 @@ public class Matchers {
 
     /**
      * Expects an int argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -163,7 +164,7 @@ public class Matchers {
 
     /**
      * Expects a long argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -176,7 +177,7 @@ public class Matchers {
 
     /**
      * Expects a short argument less than or equal to the given value. For
-     * details, see the EasyMock documentation.
+     * details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -189,7 +190,7 @@ public class Matchers {
 
     /**
      * Expects a comparable argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -202,7 +203,7 @@ public class Matchers {
     
     /**
      * Expects a byte argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -215,7 +216,7 @@ public class Matchers {
 
     /**
      * Expects a double argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -228,7 +229,7 @@ public class Matchers {
 
     /**
      * Expects a float argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -241,7 +242,7 @@ public class Matchers {
 
     /**
      * Expects an int argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -254,7 +255,7 @@ public class Matchers {
 
     /**
      * Expects a long argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -267,7 +268,7 @@ public class Matchers {
 
     /**
      * Expects a short argument greater than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -280,7 +281,7 @@ public class Matchers {
 
     /**
      * Expects a comparable argument less than the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param value
      *            the given value.
@@ -293,7 +294,7 @@ public class Matchers {
     
     /**
      * Expects a byte argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -306,7 +307,7 @@ public class Matchers {
 
     /**
      * Expects a double argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -319,7 +320,7 @@ public class Matchers {
 
     /**
      * Expects a float argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -332,7 +333,7 @@ public class Matchers {
 
     /**
      * Expects an int argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -345,7 +346,7 @@ public class Matchers {
 
     /**
      * Expects a long argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -358,7 +359,7 @@ public class Matchers {
 
     /**
      * Expects a short argument less than the given value. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param value
      *            the given value.
@@ -371,7 +372,7 @@ public class Matchers {
     
     /**
      * Expects a string that contains the given substring. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param substring
      *            the substring.
@@ -526,7 +527,7 @@ public class Matchers {
 
     /**
      * Expects a comparable argument equals to the given value according to their
-     * compareTo method. For details, see the EasyMock documentation.
+     * compareTo method. For details, see the documentation.
      * 
      * @param value
      *            the given value.
@@ -539,7 +540,7 @@ public class Matchers {
 
     /**
      * Expects an Object that is the same as the given value. For details, see
-     * the EasyMock documentation.
+     * the documentation.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -554,7 +555,7 @@ public class Matchers {
 
     /**
      * Expects a string that ends with the given suffix. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param suffix
      *            the suffix.
@@ -567,7 +568,7 @@ public class Matchers {
 
     /**
      * Expects a string that starts with the given prefix. For details, see the
-     * EasyMock documentation.
+     * documentation.
      * 
      * @param prefix
      *            the prefix.
@@ -580,7 +581,7 @@ public class Matchers {
 
     /**
      * Expects a string that contains a substring that matches the given regular
-     * expression. For details, see the EasyMock documentation.
+     * expression. For details, see the documentation.
      * 
      * @param regex
      *            the regular expression.

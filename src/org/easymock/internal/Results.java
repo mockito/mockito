@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.internal.*;
+
 public class Results {
 
     private int callCount;

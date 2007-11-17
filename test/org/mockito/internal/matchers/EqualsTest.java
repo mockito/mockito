@@ -2,7 +2,6 @@ package org.mockito.internal.matchers;
 
 import static org.junit.Assert.*;
 
-import org.easymock.internal.matchers.Equals;
 import org.junit.Test;
 
 

@@ -4,7 +4,7 @@
  */
 package org.easymock.internal;
 
-import org.easymock.IAnswer;
+import org.mockito.internal.*;
 
 public interface IMocksControlState extends ILegacyMethods {
 

@@ -9,7 +9,8 @@ import java.lang.reflect.Proxy;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.easymock.internal.ClassProxyFactory.MockMethodInterceptor;
+import org.mockito.internal.*;
+import org.mockito.internal.ClassProxyFactory.MockMethodInterceptor;
 
 public final class ClassExtensionHelper {
 

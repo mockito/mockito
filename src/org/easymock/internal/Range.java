@@ -4,6 +4,8 @@
  */
 package org.easymock.internal;
 
+import org.mockito.internal.RuntimeExceptionWrapper;
+
 public class Range {
     private int minimum;
 

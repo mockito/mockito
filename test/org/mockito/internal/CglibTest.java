@@ -14,7 +14,6 @@ import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.easymock.ObjenesisClassInstantiator;
 import org.junit.Test;
 
 /**

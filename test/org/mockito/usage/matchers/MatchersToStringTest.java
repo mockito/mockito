@@ -9,10 +9,11 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.easymock.IArgumentMatcher;
 import org.easymock.internal.matchers.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.matchers.*;
+import org.mockito.matchers.*;
 
 public class MatchersToStringTest {
     private StringBuffer buffer;

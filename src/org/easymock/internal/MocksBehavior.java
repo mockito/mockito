@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.easymock.ArgumentsMatcher;
 import org.easymock.MockControl;
+import org.mockito.internal.*;
 
 public class MocksBehavior implements IMocksBehavior {
 
@@ -33,10 +34,6 @@ public class MocksBehavior implements IMocksBehavior {
 
     public void addExpected(ExpectedInvocation expected, Result result,
             Range count) {
-        if (legacyMatcherProvider != null) {
-            expected = expected.withMatcher(legacyMatcherProvider
-                    .getMatcher(expected.getMethod()));
-        }
         addBehaviorListIfNecessary(expected);
         lastBehaviorList().addExpected(expected, result, count);
     }
@@ -86,7 +83,7 @@ public class MocksBehavior implements IMocksBehavior {
         }
         throw new AssertionErrorWrapper(new AssertionError(
                 "\n  Unexpected method call "
-                        + actual.toString(MockControl.EQUALS_MATCHER) + ":"
+                        + actual.toString() + ":"
                         + errorMessage.toString()));
     }
 

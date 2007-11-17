@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import org.easymock.internal.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.Invocation;
 
 public class InvocationTest {
 
@@ -50,39 +51,6 @@ public class InvocationTest {
             fail();
         } catch (UnsupportedOperationException expected) {
             assertEquals("hashCode() is not implemented", expected.getMessage());
-        }
-    }
-
-    @Test
-    public void shouldDisplayMocksToStringIfValidJavaIdentifier()
-            throws SecurityException, NoSuchMethodException {
-        Method method = ToString.class.getMethod("aMethod", new Class[0]);
-        Invocation invocation = new Invocation(new ToString("validJavaIdentifier"),
-                method, null);
-
-        assertEquals(invocation.toString(new EqualsMatcher()),
-                "validJavaIdentifier.aMethod()");
-
-        invocation = new Invocation(new ToString("no-valid-java-identifier"),
-                method, null);
-
-        assertEquals(invocation.toString(new EqualsMatcher()), "aMethod()");
-
-    }
-    
-    class ToString {
-        private final String name;
-
-        public ToString(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public void aMethod() {
         }
     }
 }

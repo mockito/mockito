@@ -5,9 +5,4 @@
 package org.easymock.internal;
 
 public interface ILegacyMethods extends ILegacyMatcherMethods {
-    void setDefaultReturnValue(Object value);
-
-    void setDefaultThrowable(Throwable throwable);
-
-    void setDefaultVoidCallable();
 }
