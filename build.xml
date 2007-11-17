@@ -1,4 +1,4 @@
-<project name="mockito" basedir=".">
+<project name="mockito" basedir="." default="all">
 
 
 	<property name="target.dir" value="target" />
@@ -57,7 +57,6 @@
 
 	<target name="all" depends="clean, compile, test" description="Performs a build and runs test" />
 
-	
 	<target name="package" description="Packages the artifacts">
 		<fail message="Packiging is missing"/>
 	</target>

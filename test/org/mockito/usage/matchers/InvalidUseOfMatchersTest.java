@@ -48,16 +48,16 @@ public class InvalidUseOfMatchersTest {
     
     @Test
     public void shouldScreamWhenMatchersAreInvalid() {
-        mock.simpleMethodWithArgument(Matchers.not(eq("asd")));
+        mock.simpleMethodWithArgument(CrazyMatchers.not(eq("asd")));
         try {
-            mock.simpleMethodWithArgument(Matchers.not("jkl"));
+            mock.simpleMethodWithArgument(CrazyMatchers.not("jkl"));
             fail();
         } catch (IllegalStateException e) {
             assertEquals("no matchers found.", e.getMessage());
         }
         
         try {
-            mock.simpleMethodWithArgument(Matchers.or(eq("jkl"), "asd"));
+            mock.simpleMethodWithArgument(CrazyMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (IllegalStateException e) {
             assertEquals("2 matchers expected, 1 recorded.", e.getMessage());

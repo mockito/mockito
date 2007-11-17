@@ -4,7 +4,7 @@
  */
 package org.mockito.usage.verification;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.CrazyMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -35,11 +35,11 @@ public class VerificationUsingMatchersTest {
         mock.oneArg(one);
         mock.oneArg(two);
         
-        verify(mock).oneArg(Matchers.same(one));
+        verify(mock).oneArg(CrazyMatchers.same(one));
         verify(mock).oneArg(two);
         
         try {
-            verify(mock).oneArg(Matchers.same(three));
+            verify(mock).oneArg(CrazyMatchers.same(three));
             fail();
         } catch (MockVerificationAssertionError e) {}
     }  
