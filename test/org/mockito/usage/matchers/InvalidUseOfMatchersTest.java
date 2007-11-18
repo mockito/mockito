@@ -10,7 +10,7 @@ import static org.mockito.Matchers.eq;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
-import org.mockito.internal.MockitoState;
+import org.mockito.internal.*;
 import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -20,7 +20,13 @@ public class InvalidUseOfMatchersTest {
     
     @Before
     public void setUp() {
+        StateResetter.reset();
         mock = Mockito.mock(IMethods.class);
+    }
+    
+    @After
+    public void resetState() {
+        StateResetter.reset();
     }
 
     @Test
@@ -50,30 +56,36 @@ public class InvalidUseOfMatchersTest {
             mock.simpleMethodWithArgument(CrazyMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertEquals("\n" +
-                    "Read about matchers: http://code.google.com/p/mockito/matchers" +
+            assertEquals(
                     "\n" +
-            		"No matchers found.", e.getMessage());
+            		"No matchers found." +
+            		"\n" +
+                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+            		, e.getMessage());
         }
         
         try {
             mock.simpleMethodWithArgument(CrazyMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("\n" +
-            		"Read about matchers: http://code.google.com/p/mockito/matchers" +
-            		"\n" +
-            		"2 matchers expected, 1 recorded.", e.getMessage());
+            assertEquals(
+                    "\n" +
+            		"2 matchers expected, 1 recorded." +
+                    "\n" +
+                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+                    , e.getMessage());
         }
         
         try {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("\n" +
-                    "Read about matchers: http://code.google.com/p/mockito/matchers" +
+            assertEquals(
                     "\n" +
-                    "3 matchers expected, 1 recorded.", e.getMessage());
+                    "3 matchers expected, 1 recorded." +
+                    "\n" +
+                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+                    , e.getMessage());
         }
     }
 }

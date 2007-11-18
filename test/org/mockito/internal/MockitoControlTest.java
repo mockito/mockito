@@ -31,6 +31,6 @@ public class MockitoControlTest {
         } catch (InvalidUseOfMatchersException e) {
         }
         
-        assertFalse(state.mockVerificationScenario());
+        assertFalse(state.verificationScenario());
     }
 }

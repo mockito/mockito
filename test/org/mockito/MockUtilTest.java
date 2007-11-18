@@ -37,8 +37,18 @@ public class MockUtilTest {
         getControl("");
     }
     
+    @Test (expected=IllegalArgumentException.class)
+    public void shouldScreamWhenNullPassed() {
+        getControl(null);
+    }
+    
     @Test (expected=NotAMockException.class)
     public void shouldValidateMock() {
         validateMock("");
+    }
+    
+    @Test (expected=IllegalArgumentException.class)
+    public void shouldScreamWhenNullPassedToValidation() {
+        validateMock(null);
     }
 }

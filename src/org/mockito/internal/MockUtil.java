@@ -18,6 +18,10 @@ public class MockUtil {
     
     @SuppressWarnings("unchecked")
     public static <T> MockitoControl<T> getControl(T mock) {
+        if (mock == null) {
+            throw new IllegalArgumentException("Mock cannot be null");
+        }
+        
         MockitoObjectMethodsFilter<MockitoControl<T>> handler;
 
         try {

@@ -48,7 +48,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
         List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
         InvocationWithMatchers invocationWithMatchers = new InvocationWithMatchers(invocation, processedMatchers);
         
-        if (mockitoState.mockVerificationScenario()) {
+        if (mockitoState.verificationScenario()) {
             VerifyingMode verifyingMode = mockitoState.verifyingCompleted();
 
             //have to validate matcher after verifyingMode flag is cleared - a bit smelly
@@ -64,7 +64,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
 //            mockitoState.stubbingCompleted();
 //        }
         
-        mockitoState.reportLastControlForStubbing(this);
+        mockitoState.reportLastControl(this);
         
         behavior.addInvocation(invocationWithMatchers);
         

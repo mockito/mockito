@@ -1,9 +1,9 @@
 package org.mockito;
 
 import org.mockito.exceptions.MissingMethodInvocationException;
-import org.mockito.hamcrest.*;
 import org.mockito.internal.*;
 
+@SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
 
     public static <T> T mock(Class<T> classToMock) {
@@ -21,8 +21,7 @@ public class Mockito extends Matchers {
 //        MockitoState.instance().stubbingStarted();
         
         //TODO increment number of stubs
-        //TODO stub has to be removed from MockitoState.instance().controlToBeStubbed!!!!!!!
-        MockitoExpectation controlToStub = MockitoState.instance().controlToBeStubbed();
+        MockitoExpectation controlToStub = MockitoState.instance().removeControlToBeStubbed();
         if (controlToStub == null) {
             throw new MissingMethodInvocationException();
         }
@@ -36,13 +35,13 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock, int exactNumberOfInvocations) {
-        //TODO validate mock everywhere
-        //TODO validate if there is unfinished stubbing
+        MockUtil.validateMock(mock);
         MockitoState.instance().verifyingStarted(VerifyingMode.times(exactNumberOfInvocations));
         return mock;
     }
 
 	public static void verifyNoMoreInteractions(Object ... mocks) {
+	    MockitoState.instance().checkForUnfinishedVerification();
 	    for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyNoMoreInteractions();
         }
@@ -53,44 +52,7 @@ public class Mockito extends Matchers {
     }
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
-        //TODO validate mock
 //        MockitoState.instance().reportControlForStubbing(mockitoControl)
         return MockUtil.getControl(mock);
-    }
-
-    public static <T> T assertInvoked(T mock) {
-        return verify(mock);
-    }
-
-    public static <T> T assertInvoked(T mock, int exactNumberOfInvocations) {
-        return verify(mock, exactNumberOfInvocations);
-    }
-    
-    public static void assertNoMoreInteractions(Object ... mocks) {
-        verifyNoMoreInteractions(mocks);   
-    }
-
-    public static void assertZeroInteractions(Object ... mocks) {
-        verifyZeroInteractions(mocks);   
-    }
-
-    public static <T> T assertThat(MockitoMatcher<T> matcher) {
-        return verify(matcher.getMock());
-    }
-    
-    public static <T> MockitoMatcher<T> wasInvoked(T mock) {
-        return new WasInvokedMatcher<T>(mock);
-    }
-    
-    public static <T> MockitoMatcher<T> wasInvoked(T mock, int exactNumberOfInvocations) {
-        return new WasInvokedMatcher<T>(mock, exactNumberOfInvocations);
-    }
-    
-    public static <T> MockitoMatcher<T> noMoreInteractions(T mock) {
-        return new HasNoMoreIvocationsMatcher<T>(mock);
-    }
-    
-    public static <T> MockitoMatcher<T> zeroInteractions(T mock) {
-        return new HasNoIvocationsMatcher<T>(mock);
     }
 }

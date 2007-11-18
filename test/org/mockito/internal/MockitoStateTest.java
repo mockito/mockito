@@ -3,7 +3,7 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.*;
-import org.mockito.internal.*;
+import org.mockito.exceptions.UnfinishedVerificationException;
 
 public class MockitoStateTest {
 
@@ -16,20 +16,23 @@ public class MockitoStateTest {
     
     @Test
     public void shouldSwitchVerifyingMode() throws Exception {
+        assertFalse(mockitoState.verificationScenario());
+        
+        VerifyingMode mode = VerifyingMode.times(19);
+        
+        mockitoState.verifyingStarted(mode);
+        
+        assertTrue(mockitoState.verificationScenario());
+        
+        assertSame(mode, mockitoState.verifyingCompleted());
+    }
+    
+    @Test
+    public void shouldCheckIfVerificationWasFinished() throws Exception {
         mockitoState.verifyingStarted(VerifyingMode.anyTimes());
-        
-        assertTrue(mockitoState.mockVerificationScenario());
-        
-        mockitoState.verifyingStarted(null);
-        
-        assertFalse(mockitoState.mockVerificationScenario());
-        
-        mockitoState.verifyingStarted(VerifyingMode.times(100));
-        
-        assertTrue(mockitoState.mockVerificationScenario());
-        
-        assertEquals(100, mockitoState.verifyingCompleted().getExactNumberOfInvocations());
-        
-        assertFalse(mockitoState.mockVerificationScenario());
+        try {
+            mockitoState.verifyingStarted(VerifyingMode.anyTimes());
+            fail();
+        } catch (UnfinishedVerificationException e) {}
     }
 }
