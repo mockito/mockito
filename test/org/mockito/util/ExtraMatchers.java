@@ -1,16 +1,14 @@
 package org.mockito.util;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import org.hamcrest.*;
 
-public class JUnitMatchers {
+@SuppressWarnings("unchecked")
+public class ExtraMatchers {
 
-    public static <T> Matcher<Collection<T>> contains(final T ... elements) {
-        return new BaseMatcher<Collection<T>>() {
+    public static <T> Matcher<Collection> collectionContaining(final T ... elements) {
+        return new BaseMatcher<Collection>() {
 
             public boolean matches(Object collection) {
                 for (T element : elements) {

@@ -6,8 +6,8 @@ package org.mockito.internal;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
@@ -19,14 +19,14 @@ import org.junit.Test;
 /**
  * This test case is used to make sure that the way cglib is used is providing the expected behavior
  */
-public class CglibTest extends TestCase {
+public class CglibTest {
 
     /**
      * Check that an interceptor is used by only one instance of a class
      * @throws Exception
      */
-    @Test public void test() throws Exception {
-
+    @Test 
+    public void shouldCallbacksBeDifferent() throws Exception {
         Factory f1 = createMock();
         Factory f2 = createMock();
         

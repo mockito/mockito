@@ -12,54 +12,53 @@ import org.mockito.Mockito;
 
 public class ReplacingObjectMethodsTest {
 
-    /**
-     * Class overwrites object methods but implementation from Mockito will be called anyway.
-     */
-    public static class ClassToMockWithOverride {
-
-        public boolean equals(Object o) {
-            return false;
-        }
-
-        public int hashCode() {
-            return -1;
-        }
-
-        public String toString() {
-            return "super";
-        }
-    }
-    
-    public static class ClassWithAnotherOverride extends ClassToMockWithOverride {
-        
-        public String toString() {
-            return "super.super";
-        }
-    }
-
-    @Test 
-    public void testShouldReplaceObjectMethods() {
-        Object mock = Mockito.mock(ClassToMockWithOverride.class);
-        assertThat(mock, equalTo(mock));
-        assertThat(mock.hashCode(), not(equalTo(-1)));
-        assertThat(mock.toString(), not(equalTo("super")));
-    }
-    
-    @Test 
-    public void testShouldReplaceObjectMethodsWhenOverridden() {
-        Object mock = Mockito.mock(ClassToMockWithOverride.class);
-        assertThat(mock, equalTo(mock));
-        assertThat(mock.hashCode(), not(equalTo(-1)));
-        assertThat(mock.toString(), not(equalTo("super")));
-        assertThat(mock.toString(), not(equalTo("super.super")));
-    }
-    
     private interface DummyInterface {}
     private class DummyClass {}
-
+    
     @Test
     public void shouldProvideMockyImplementationOfToString() {
         assertEquals("Mock for DummyClass", Mockito.mock(DummyClass.class).toString());
         assertEquals("Mock for DummyInterface", Mockito.mock(DummyInterface.class).toString());
+    }
+    
+    @Test 
+    public void testShouldReplaceObjectMethods() {
+        Object mock = Mockito.mock(ObjectMethodsOverridden.class);
+        Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
+        
+        assertThat(mock, equalTo(mock));
+        assertThat(mock, not(equalTo(otherMock)));
+        
+        assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
+        
+        assertThat(mock.toString(), equalTo("Mock for ObjectMethodsOverridden"));
+    }
+    
+    @Test 
+    public void testShouldReplaceObjectMethodsWhenOverridden() {
+        Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
+        Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
+        
+        assertThat(mock, equalTo(mock));
+        assertThat(mock, not(equalTo(otherMock)));
+        
+        assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
+        
+        assertThat(mock.toString(), equalTo("Mock for ObjectMethodsOverriddenSubclass"));
+    }
+    
+    public static class ObjectMethodsOverridden {
+        public boolean equals(Object o) {
+            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+        }
+        public int hashCode() {
+            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+        }
+        public String toString() {
+            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+        }
+    }
+    
+    public static class ObjectMethodsOverriddenSubclass extends ObjectMethodsOverridden {
     }
 }

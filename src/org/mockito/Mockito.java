@@ -8,9 +8,9 @@ public class Mockito extends Matchers {
 
     public static <T> T mock(Class<T> classToMock) {
         try {
-            ClassProxyFactory<T> proxyFactory = new ClassProxyFactory<T>();
+            MockFactory<T> proxyFactory = new MockFactory<T>();
             MockitoControl<T> mockitoControl = new MockitoControl<T>(MockitoState.instance(), LastArguments.instance());
-            return proxyFactory.createProxy(classToMock, new MockitoObjectMethodsFilter<MockitoControl>(
+            return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockitoControl>(
                     classToMock, mockitoControl, null));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();

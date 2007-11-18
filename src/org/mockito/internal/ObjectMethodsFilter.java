@@ -6,10 +6,8 @@ package org.mockito.internal;
 
 import java.lang.reflect.Method;
 
-import org.mockito.internal.*;
-
-//TODO rename
-public class MockitoObjectMethodsFilter<T extends MockAwareInvocationHandler> implements MockAwareInvocationHandler {
+@SuppressWarnings("unchecked")
+public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implements MockAwareInvocationHandler {
     private final Method equalsMethod;
 
     private final Method hashCodeMethod;
@@ -21,7 +19,7 @@ public class MockitoObjectMethodsFilter<T extends MockAwareInvocationHandler> im
     private final String name;
 
     @SuppressWarnings("unchecked")
-    public MockitoObjectMethodsFilter(Class toMock, T delegate,
+    public ObjectMethodsFilter(Class toMock, T delegate,
             String name) {
         if (name != null && !Invocation.isJavaIdentifier(name)) {
             throw new IllegalArgumentException(String.format("'%s' is not a valid Java identifier.", name));
@@ -31,8 +29,7 @@ public class MockitoObjectMethodsFilter<T extends MockAwareInvocationHandler> im
             if (toMock.isInterface()) {
                 toMock = Object.class;
             }
-            equalsMethod = toMock.getMethod("equals",
-                    new Class[] { Object.class });
+            equalsMethod = toMock.getMethod("equals", new Class[] { Object.class });
             hashCodeMethod = toMock.getMethod("hashCode", (Class[]) null);
             toStringMethod = toMock.getMethod("toString", (Class[]) null);
         } catch (NoSuchMethodException e) {
@@ -42,7 +39,7 @@ public class MockitoObjectMethodsFilter<T extends MockAwareInvocationHandler> im
         this.name = name;
     }
 
-    public final Object invoke(Object proxy, Method method, Object[] args)
+    public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable {
         if (equalsMethod.equals(method)) {
             return Boolean.valueOf(proxy == args[0]);

@@ -24,7 +24,7 @@ public class MockitoStateTest {
         
         assertTrue(mockitoState.verificationScenario());
         
-        assertSame(mode, mockitoState.verifyingCompleted());
+        assertSame(mode, mockitoState.removeVerifyingMode());
     }
     
     @Test

@@ -7,7 +7,7 @@ package org.mockito.internal;
 import net.sf.cglib.proxy.*;
 
 import org.mockito.exceptions.NotAMockException;
-import org.mockito.internal.ClassProxyFactory.MockMethodInterceptor;
+import org.mockito.internal.MockFactory.MockMethodInterceptor;
 
 public class MockUtil {
     
@@ -22,11 +22,11 @@ public class MockUtil {
             throw new IllegalArgumentException("Mock cannot be null");
         }
         
-        MockitoObjectMethodsFilter<MockitoControl<T>> handler;
+        ObjectMethodsFilter<MockitoControl<T>> handler;
 
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {
-                handler = (MockitoObjectMethodsFilter) getInterceptor(mock)
+                handler = (ObjectMethodsFilter) getInterceptor(mock)
                         .getHandler();
             } else {
                 throw new NotAMockException(mock);

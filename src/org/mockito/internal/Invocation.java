@@ -12,10 +12,9 @@ import org.mockito.internal.matchers.ArrayEquals;
 
 public class Invocation {
 
+    private boolean verified;
     private final Object mock;
-
     private final Method method;
-
     private final Object[] arguments;
 
     public Invocation(Object mock, Method method, Object[] args) {
@@ -132,5 +131,13 @@ public class Invocation {
             }
         }
         return true;
+    }
+    
+    public void markVerified() {
+        verified = true;
+    }
+
+    public boolean isVerified() {
+        return verified;
     }
 }

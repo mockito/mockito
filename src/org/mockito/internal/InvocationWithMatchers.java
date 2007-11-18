@@ -5,17 +5,13 @@
 package org.mockito.internal;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import org.mockito.exceptions.InvalidUseOfMatchersException;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.IArgumentMatcher;
 
 public class InvocationWithMatchers {
 
     protected final Invocation invocation;
-
     private final List<IArgumentMatcher> matchers;
 
     public InvocationWithMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
@@ -74,7 +70,7 @@ public class InvocationWithMatchers {
         return invocation.getMethod();
     }
     
-    public MockitoInvocation getInvocation() {
-        return (MockitoInvocation) this.invocation;
+    public Invocation getInvocation() {
+        return this.invocation;
     }
 }

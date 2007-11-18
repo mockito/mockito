@@ -6,10 +6,10 @@ import java.util.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
-public class MockitoControl<T> implements MockAwareInvocationHandler, InvocationHandler, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
+public class MockitoControl<T> implements MockAwareInvocationHandler<T>, InvocationHandler, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
     private MockitoBehavior behavior = new MockitoBehavior();
-    private Object mock;
+    private T mock;
     private final MockitoState mockitoState;
     private final LastArguments lastArguments;
     
@@ -43,21 +43,18 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        MockitoInvocation invocation = new MockitoInvocation(proxy, method, args);
+        VerifyingMode verifyingMode = mockitoState.removeVerifyingMode();
+        
+        Invocation invocation = new Invocation(proxy, method, args);
         List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
+        validateMatchers(invocation, lastMatchers);
+
         List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
         InvocationWithMatchers invocationWithMatchers = new InvocationWithMatchers(invocation, processedMatchers);
         
-        if (mockitoState.verificationScenario()) {
-            VerifyingMode verifyingMode = mockitoState.verifyingCompleted();
-
-            //have to validate matcher after verifyingMode flag is cleared - a bit smelly
-            validateMatchers(invocation, lastMatchers);
-            
+        if (verifyingMode != null) {
             behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
-        } else {
-            validateMatchers(invocation, lastMatchers);
         }
         
 //        else if (mockitoState.mockStubbingScenario()) {
@@ -84,7 +81,6 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
 
     public void andReturn(T value) {
 //      TODO count number of andReturn vs number of stubbing
-//      TODO why do we need that in easy_Mock: value = convertNumberClassIfNeccessary(value);
         behavior.addResult(Result.createReturnResult(value));
     }
 
@@ -109,7 +105,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
     }
 
     private boolean isValidCheckedException(Throwable throwable) {
-        MockitoInvocation lastInvocation = behavior.lastInvocation();
+        Invocation lastInvocation = behavior.lastInvocation();
 
         Class<?>[] exceptions = lastInvocation.getMethod().getExceptionTypes();
         Class<?> throwableClass = throwable.getClass();
@@ -129,11 +125,10 @@ public class MockitoControl<T> implements MockAwareInvocationHandler, Invocation
     }
 
     public T on() {
-        // TODO check if mock can be of the type T
         return (T) mock;
     }
 
-    public void setMock(Object mock) {
+    public void setMock(T mock) {
         this.mock = mock;
     }
 }

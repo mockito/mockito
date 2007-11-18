@@ -41,7 +41,7 @@ public class MockitoBehavior {
     private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {
         int verifiedInvocations = 0;
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
-            MockitoInvocation invocation = registeredInvocation.getInvocation();
+            Invocation invocation = registeredInvocation.getInvocation();
             if (expectedInvocation.matches(invocation)) {
                 verifiedInvocations += 1;
                 invocation.markVerified();
@@ -61,7 +61,7 @@ public class MockitoBehavior {
         }
     }
 
-    public Object resultFor(MockitoInvocation invocation) throws Throwable {
+    public Object resultFor(Invocation invocation) throws Throwable {
         for (InvocationWithMatchers invocationWithMatchers : results.keySet()) {
             if (invocationWithMatchers.matches(invocation)) {
                 return results.get(invocationWithMatchers).answer();
@@ -71,7 +71,7 @@ public class MockitoBehavior {
         return ToTypeMappings.emptyReturnValueFor(invocation.getMethod().getReturnType());
     }
 
-    public MockitoInvocation lastInvocation() {
+    public Invocation lastInvocation() {
         return registeredInvocations.get(registeredInvocations.size() - 1).getInvocation();
     }
 }

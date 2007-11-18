@@ -2,7 +2,7 @@ package org.mockito.usage.matchers;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
-import static org.mockito.util.JUnitMatchers.contains;
+import static org.mockito.util.ExtraMatchers.collectionContaining;
 
 import java.util.*;
 
@@ -43,8 +43,8 @@ public class BasicStubbingTest {
         
         Mockito.stub(mock.getList()).andReturn(Arrays.asList("elementOne", "elementTwo"));
         
-        assertThat(mock.getList(), contains("elementOne", "elementTwo"));
-        assertThat(mock.getList(), contains("elementOne", "elementTwo"));
+        assertThat(mock.getList(), collectionContaining("elementOne", "elementTwo"));
+        assertThat(mock.getList(), collectionContaining("elementOne", "elementTwo"));
         
         Mockito.stub(mock.getString(10, "test")).andReturn("test");
         

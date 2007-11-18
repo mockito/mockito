@@ -49,7 +49,7 @@ public class MockitoState {
         return verifyingModeLocal.get() != null; 
     }
 
-    public synchronized VerifyingMode verifyingCompleted() {
+    public synchronized VerifyingMode removeVerifyingMode() {
         VerifyingMode verifyingMode = verifyingModeLocal.get();
         verifyingModeLocal.set(null);
         return verifyingMode;
@@ -67,10 +67,6 @@ public class MockitoState {
 
     public synchronized boolean settingThrowableOnVoidMethodScenario() {
         return throwableToBeSetOnVoidMethod.get() != null; 
-    }
-
-    public void validate() {
-        // TODO Auto-generated method stub
     }
 
 //    public void stubbingStarted() {
