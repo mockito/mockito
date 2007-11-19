@@ -13,7 +13,6 @@ import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.MockVerificationAssertionError;
 
-//TODO add stubbing with varargs
 public class UsingVarargsTest {
 
     private interface IVarArgs {
