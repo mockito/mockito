@@ -19,6 +19,8 @@ public class MockitoSampleTest {
         Mockito.verify(mockDatabase).updateNumberOfArticles("Guardian", 12);
         Mockito.verify(mockDatabase).updateNumberOfPolishArticles("Guardian", 5);
         Mockito.verify(mockDatabase).updateNumberOfEnglishArticles("Guardian", 7);
+        
+        Mockito.verifyNoMoreInteractions(mockDatabase);
     }
     
     @Test

@@ -45,7 +45,7 @@ public class NoMoreInteractionsVerificationTest {
     }
     
     @Test
-    public void shouldFailNoInteractionsVerification() throws Exception {
+    public void shouldFailZeroInteractionsVerification() throws Exception {
         List mock = mock(List.class);
 
         mock.clear();

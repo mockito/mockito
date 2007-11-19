@@ -9,9 +9,9 @@ public class Mockito extends Matchers {
     public static <T> T mock(Class<T> classToMock) {
         try {
             MockFactory<T> proxyFactory = new MockFactory<T>();
-            MockitoControl<T> mockitoControl = new MockitoControl<T>(MockitoState.instance(), LastArguments.instance());
-            return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockitoControl>(
-                    classToMock, mockitoControl, null));
+            MockControl<T> mockControl = new MockControl<T>(MockitoState.instance(), LastArguments.instance());
+            return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
+                    classToMock, mockControl));
         } catch (RuntimeExceptionWrapper e) {
             throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
         }
@@ -48,11 +48,14 @@ public class Mockito extends Matchers {
 	}
 
     public static void verifyZeroInteractions(Object ... mocks) {
-         verifyNoMoreInteractions(mocks);   
+        MockitoState.instance().checkForUnfinishedVerification();
+        for (Object mock : mocks) {
+            MockUtil.getControl(mock).verifyZeroInteractions();
+        }
     }
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
-//        MockitoState.instance().reportControlForStubbing(mockitoControl)
+//        MockitoState.instance().reportControlForStubbing(mockControl)
         return MockUtil.getControl(mock);
     }
 }

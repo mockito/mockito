@@ -7,7 +7,7 @@ public class MockitoState {
     
     static MockitoState INSTANCE = new MockitoState();
     
-    private final ThreadLocal<MockitoControl> lastControl = new ThreadLocal<MockitoControl>();
+    private final ThreadLocal<MockControl> lastControl = new ThreadLocal<MockControl>();
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
 //    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
 
@@ -17,12 +17,12 @@ public class MockitoState {
         return INSTANCE;
     }
     
-    public synchronized void reportLastControl(MockitoControl mockitoControl) {
-        lastControl.set(mockitoControl);
+    public synchronized void reportLastControl(MockControl mockControl) {
+        lastControl.set(mockControl);
     }
 
     public synchronized MockitoExpectation pullControlToBeStubbed() {
-        MockitoControl control = lastControl.get();
+        MockControl control = lastControl.get();
         lastControl.set(null);
         return control;
     }

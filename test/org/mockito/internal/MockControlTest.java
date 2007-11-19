@@ -7,7 +7,7 @@ import org.mockito.exceptions.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.Equals;
 
 @SuppressWarnings("unchecked")
-public class MockitoControlTest {
+public class MockControlTest {
     
     @Before
     @After
@@ -23,7 +23,7 @@ public class MockitoControlTest {
         lastArguments.reportMatcher(new Equals("test"));
         state.verifyingStarted(VerifyingMode.anyTimes());
         
-        MockitoControl control = new MockitoControl(state, lastArguments);
+        MockControl control = new MockControl(state, lastArguments);
 
         try {
             control.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});

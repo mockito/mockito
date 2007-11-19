@@ -17,12 +17,12 @@ public class MockUtil {
     }
     
     @SuppressWarnings("unchecked")
-    public static <T> MockitoControl<T> getControl(T mock) {
+    public static <T> MockControl<T> getControl(T mock) {
         if (mock == null) {
             throw new IllegalArgumentException("Mock cannot be null");
         }
         
-        ObjectMethodsFilter<MockitoControl<T>> handler;
+        ObjectMethodsFilter<MockControl<T>> handler;
 
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {

@@ -1,6 +1,6 @@
 package org.mockito.usage;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;

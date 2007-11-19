@@ -16,15 +16,8 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
 
     private final T delegate;
 
-    private final String name;
-
     @SuppressWarnings("unchecked")
-    public ObjectMethodsFilter(Class toMock, T delegate,
-            String name) {
-        if (name != null && !Invocation.isJavaIdentifier(name)) {
-            throw new IllegalArgumentException(String.format("'%s' is not a valid Java identifier.", name));
-            
-        }
+    public ObjectMethodsFilter(Class toMock, T delegate) {
         try {
             if (toMock.isInterface()) {
                 toMock = Object.class;
@@ -36,7 +29,6 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
             throw new RuntimeException("An Object method could not be found!");
         }
         this.delegate = delegate;
-        this.name = name;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args)
@@ -53,15 +45,15 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
         return delegate.invoke(proxy, method, args);
     }
 
-    private String mockToString(Object proxy) {
-        return (name != null) ? name : "Mock for " + mockType(proxy);
+    private String mockToString(Object mock) {
+        return "Mock for " + simpleName(mock);
     }
 
-    private String mockType(Object proxy) {
-		if (proxy.getClass().getInterfaces().length == 2) {
-			return proxy.getClass().getInterfaces()[0].getSimpleName();
+    public static String simpleName(Object mock) {
+		if (mock.getClass().getInterfaces().length == 2) {
+			return mock.getClass().getInterfaces()[0].getSimpleName();
 		} else {
-			return proxy.getClass().getSuperclass().getSimpleName();
+			return mock.getClass().getSuperclass().getSimpleName();
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.MockVerificationAssertionError;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest {
@@ -31,9 +32,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verify(mock).clear();
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Mock verification failed"));
-        }
+        } catch (MockVerificationAssertionError expected) {};
     }
 
     @Test
@@ -46,9 +45,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verify(mock).add("bar");
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Mock verification failed"));
-        }
+        } catch (MockVerificationAssertionError expected) {};
     }
 
     @Test
@@ -74,9 +71,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verifyNoMoreInteractions(mock);
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Mock verification failed"));
-        }
+        } catch (MockVerificationAssertionError expected) {};
     }
     
     @Test

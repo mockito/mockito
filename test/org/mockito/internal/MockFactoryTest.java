@@ -59,7 +59,7 @@ public class MockFactoryTest {
     
     private final class MockAwareStub extends ObjectMethodsFilter {
         public MockAwareStub() {
-            super(Object.class, null, null);
+            super(Object.class, null);
         }
 
         public void setMock(Object mock) {}

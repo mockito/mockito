@@ -6,16 +6,15 @@ import java.util.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
-public class MockitoControl<T> implements MockAwareInvocationHandler<T>, InvocationHandler, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
+public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
-    private final MockitoBehavior behavior = new MockitoBehavior();
+    private final MockitoBehavior<T> behavior = new MockitoBehavior<T>();
     private final MockitoState mockitoState;
     private final LastArguments lastArguments;
 
-    private T mock;
     private Throwable throwableToBeSetOnVoidMethod;
     
-    public MockitoControl(MockitoState mockitoState, LastArguments lastArguments) {
+    public MockControl(MockitoState mockitoState, LastArguments lastArguments) {
         this.mockitoState = mockitoState;
         this.lastArguments = lastArguments;
     }
@@ -79,6 +78,10 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
     public void verifyNoMoreInteractions() {
         behavior.verifyNoMoreInteractions();
     }
+    
+    public void verifyZeroInteractions() {
+        behavior.verifyZeroInteractions();
+    }
 
     public void andReturn(T value) {
 //      TODO count number of andReturn vs number of stubbing
@@ -125,10 +128,10 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
     }
 
     public T on() {
-        return (T) mock;
+        return (T) behavior.getMock();
     }
 
     public void setMock(T mock) {
-        this.mock = mock;
+        behavior.setMock(mock);
     }
 }

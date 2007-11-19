@@ -4,18 +4,15 @@ import java.util.*;
 
 import org.mockito.exceptions.*;
 
-public class MockitoBehavior {
+public class MockitoBehavior<T> {
 
+    private T mock;
+    
     private List<InvocationWithMatchers> registeredInvocations = new LinkedList<InvocationWithMatchers>();
     private Map<InvocationWithMatchers, Result> results = new HashMap<InvocationWithMatchers, Result>();
     
     public void addInvocation(InvocationWithMatchers invocation) {
-        validateState();
         this.registeredInvocations.add(invocation);
-    }
-
-    private void validateState() {
-        
     }
 
     public void addResult(Result result) {
@@ -33,7 +30,9 @@ public class MockitoBehavior {
             } 
         } else {
             if (actuallyInvoked == 0) {
-                throw new MockVerificationAssertionError();
+                throw new MockVerificationAssertionError(
+                        "\n" +
+                        "Not invoked: " + ObjectMethodsFilter.simpleName(mock) + "." + invocation.toString());
             }
         }
     }
@@ -54,9 +53,20 @@ public class MockitoBehavior {
     }
 
     public void verifyNoMoreInteractions() {
+        verifyNoMoreInteractions("No more interactions expected");
+    }
+    
+    public void verifyZeroInteractions() {
+        verifyNoMoreInteractions("Zero interactions expected");
+    }
+    
+    private void verifyNoMoreInteractions(String verificationErrorMessage) {
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
             if (!registeredInvocation.getInvocation().isVerified()) {
-                throw new MockVerificationAssertionError();
+                String mockName = ObjectMethodsFilter.simpleName(mock);
+                throw new MockVerificationAssertionError(
+                        "\n" +
+                        verificationErrorMessage + " on " + mockName + " but found: " + mockName + "." + registeredInvocation.toString());
             }
         }
     }
@@ -73,5 +83,13 @@ public class MockitoBehavior {
 
     public Invocation lastInvocation() {
         return registeredInvocations.get(registeredInvocations.size() - 1).getInvocation();
+    }
+
+    public T getMock() {
+        return mock;
+    }
+
+    public void setMock(T mock) {
+        this.mock = mock;
     }
 }
