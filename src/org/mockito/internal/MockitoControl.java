@@ -8,10 +8,12 @@ import org.mockito.internal.matchers.*;
 
 public class MockitoControl<T> implements MockAwareInvocationHandler<T>, InvocationHandler, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
-    private MockitoBehavior behavior = new MockitoBehavior();
-    private T mock;
+    private final MockitoBehavior behavior = new MockitoBehavior();
     private final MockitoState mockitoState;
     private final LastArguments lastArguments;
+
+    private T mock;
+    private Throwable throwableToBeSetOnVoidMethod;
     
     public MockitoControl(MockitoState mockitoState, LastArguments lastArguments) {
         this.mockitoState = mockitoState;
@@ -65,9 +67,9 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
         
         behavior.addInvocation(invocationWithMatchers);
         
-        Throwable throwable = mockitoState.pullThrowableToBeSetOnVoidMethod();
-        if (throwable != null) {
-            andThrows(throwable);
+        if (throwableToBeSetOnVoidMethod != null) {
+            andThrows(throwableToBeSetOnVoidMethod);
+            throwableToBeSetOnVoidMethod = null;
             return null;
         }
 
@@ -118,7 +120,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
     }
 
     public MethodSelector<T> toThrow(Throwable throwable) {
-        mockitoState.reportThrowableToBeSetOnVoidMethod(throwable);
+        throwableToBeSetOnVoidMethod = throwable;
         return this;
     }
 

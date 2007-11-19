@@ -4,8 +4,9 @@
  */
 package org.mockito.usage.matchers;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.CrazyMatchers.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.stub;
 
 import java.math.BigDecimal;
@@ -14,8 +15,6 @@ import java.util.HashMap;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.usage.IMethods;
-
-import static org.mockito.CrazyMatchers.*;
 
 @SuppressWarnings("unchecked")  
 public class MatchersTest {
@@ -359,14 +358,13 @@ public class MatchersTest {
     }
 
     @Test
-    //TODO how different is this one from matchesMatcher?
     public void findMatcher() {
         stub(mock.oneArg(CrazyMatchers.find("([a-z]+)\\d"))).andReturn("1");
 
         assertEquals("1", mock.oneArg("ab12"));
         assertEquals(null, mock.oneArg("12345"));
     }
-
+    
     @Test
     public void matchesMatcher() {
         stub(mock.oneArg(matches("[a-z]+\\d\\d"))).andReturn("1");

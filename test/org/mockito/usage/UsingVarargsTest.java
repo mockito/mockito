@@ -18,8 +18,9 @@ public class UsingVarargsTest {
 
     private interface IVarArgs {
         public void withStringVarargs(int value, String... s);
+        public String withStringVarargsReturningString(int value, String... s);
         public void withObjectVarargs(int value, Object... o);
-        public void withBooleanVarargs(int value, boolean... b);
+        public boolean withBooleanVarargs(int value, boolean... b);
     }
     
     IVarArgs mock;
@@ -27,6 +28,48 @@ public class UsingVarargsTest {
     @Before
     public void setup() {
         mock = Mockito.mock(IVarArgs.class);
+    }
+    
+    @Test
+    public void shouldStubStringVarargs() {
+        stub(mock.withStringVarargsReturningString(1)).andReturn("1");
+        stub(mock.withStringVarargsReturningString(2, "1", "2", "3")).andReturn("2");
+        
+        RuntimeException expected = new RuntimeException();
+        stubVoid(mock).toThrow(expected).on().withStringVarargs(3, "1", "2", "3", "4");
+
+        assertEquals("1", mock.withStringVarargsReturningString(1));
+        assertEquals(null, mock.withStringVarargsReturningString(2));
+        
+        assertEquals("2", mock.withStringVarargsReturningString(2, "1", "2", "3"));
+        assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2"));
+        assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2", "3", "4"));
+        assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2", "9999"));
+        
+        mock.withStringVarargs(3, "1", "2", "3", "9999");
+        mock.withStringVarargs(9999, "1", "2", "3", "4");
+        
+        try {
+            mock.withStringVarargs(3, "1", "2", "3", "4");
+            fail();
+        } catch (Exception e) {
+            assertEquals(expected, e);
+        }
+    }
+    
+    @Test
+    public void shouldStubBooleanVarargs() {
+        stub(mock.withBooleanVarargs(1)).andReturn(true);
+        stub(mock.withBooleanVarargs(1, true, false)).andReturn(true);
+        
+        assertEquals(true, mock.withBooleanVarargs(1));
+        assertEquals(false, mock.withBooleanVarargs(9999));
+        
+        assertEquals(true, mock.withBooleanVarargs(1, true, false));
+        assertEquals(false, mock.withBooleanVarargs(1, true, false, true));
+        assertEquals(false, mock.withBooleanVarargs(2, true, false));
+        assertEquals(false, mock.withBooleanVarargs(1, true));
+        assertEquals(false, mock.withBooleanVarargs(1, false, false));
     }
     
     @Test

@@ -7,9 +7,8 @@ public class MockitoState {
     
     static MockitoState INSTANCE = new MockitoState();
     
-    private final ThreadLocal<MockitoControl> controlForStubbing = new ThreadLocal<MockitoControl>();
+    private final ThreadLocal<MockitoControl> lastControl = new ThreadLocal<MockitoControl>();
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
-    private final ThreadLocal<Throwable> throwableToBeSetOnVoidMethod = new ThreadLocal<Throwable>();
 //    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
 
     MockitoState() {}
@@ -19,12 +18,12 @@ public class MockitoState {
     }
     
     public synchronized void reportLastControl(MockitoControl mockitoControl) {
-        controlForStubbing.set(mockitoControl);
+        lastControl.set(mockitoControl);
     }
 
     public synchronized MockitoExpectation pullControlToBeStubbed() {
-        MockitoControl control = controlForStubbing.get();
-        controlForStubbing.set(null);
+        MockitoControl control = lastControl.get();
+        lastControl.set(null);
         return control;
     }
     
@@ -43,19 +42,6 @@ public class MockitoState {
         VerifyingMode verifyingMode = verifyingModeLocal.get();
         verifyingModeLocal.set(null);
         return verifyingMode;
-    }
-
-    public synchronized void reportThrowableToBeSetOnVoidMethod(Throwable throwable) {
-        //TODO refactor so we don't use static state to keep the throwable. we 
-        //can set it directly to mockcontrol or something and keep this pseudo static class thinner
-        
-        throwableToBeSetOnVoidMethod.set(throwable);
-    }
-
-    public synchronized Throwable pullThrowableToBeSetOnVoidMethod() {
-        Throwable throwable = throwableToBeSetOnVoidMethod.get();
-        throwableToBeSetOnVoidMethod.set(null);
-        return throwable;
     }
 
 //    public void stubbingStarted() {
