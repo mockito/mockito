@@ -9,13 +9,33 @@ import org.junit.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
 
+/**
+ * invalid state happens if:
+ *    -unfinished stubbing
+ *    -unfinished stubVoid
+ *    -stubbing without actual method call
+ *    -verify without actual method call
+ *    
+ * we should aim to detect invalid state in following scenarios:
+ *    -on method call on mock
+ *    -on verify
+ *    -on verifyZeroInteractions
+ *    -on verifyNoMoreInteractions
+ *    -on stub
+ *    -on stubVoid
+ *    
+ * obviously we should consider if it is really important to cover all those naughty usage
+ */
 @SuppressWarnings("unchecked")
-public class MockitoExploitsTest {
+public class InvalidUsageTest {
     
+    private List mock;
+
     @Before
     @After
     public void resetState() {
         StateResetter.reset();
+        mock = mock(List.class);
     }
     
     @Test
@@ -31,8 +51,6 @@ public class MockitoExploitsTest {
     @Ignore
     @Test
     public void unfinishedStubbingDetectedOnVerify() {
-        List mock = mock(List.class);
-        
         stub(mock.add("test"));
         
         try {
@@ -44,8 +62,6 @@ public class MockitoExploitsTest {
     @Ignore
     @Test
     public void unfinishedStubbingDetectedWhenAnotherStubbingIsStarted() {
-        List mock = mock(List.class);
-        
         stub(mock.add("test"));
         
         try {
@@ -57,9 +73,18 @@ public class MockitoExploitsTest {
     @Ignore
     @Test
     public void unfinishedStubbingDetectedMockCalled() {
-        List mock = mock(List.class);
-        
         stub(mock.add("test"));
+        
+        try {
+            mock.clear();
+            fail();
+        } catch (UnfinishedStubbingException e) {}
+    }
+    
+    @Ignore
+    @Test
+    public void unfinishedStubbingVoid() {
+        stubVoid(mock);
         
         try {
             mock.clear();

@@ -16,7 +16,7 @@ public class MockitoControlTest {
     }
     
     @Test
-    public void shouldClearVerificationModeEvenWhenInvalidMatchers() throws Throwable {
+    public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockitoState state = MockitoState.instance(); 
         LastArguments lastArguments = LastArguments.instance();
         
@@ -31,6 +31,6 @@ public class MockitoControlTest {
         } catch (InvalidUseOfMatchersException e) {
         }
         
-        assertFalse(state.verificationScenario());
+        assertNull(state.pullVerifyingMode());
     }
 }

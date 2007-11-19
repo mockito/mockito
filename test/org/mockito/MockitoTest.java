@@ -32,7 +32,7 @@ public class MockitoTest {
         List mock = Mockito.mock(List.class);
         Mockito.stub(mock.add("test")).andReturn(true);
         
-        assertNull(MockitoState.instance().removeControlToBeStubbed());
+        assertNull(MockitoState.instance().pullControlToBeStubbed());
     }
     
     @Test(expected=NotAMockException.class)

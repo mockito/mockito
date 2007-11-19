@@ -16,15 +16,13 @@ public class MockitoStateTest {
     
     @Test
     public void shouldSwitchVerifyingMode() throws Exception {
-        assertFalse(mockitoState.verificationScenario());
+        assertNull(mockitoState.pullVerifyingMode());
         
         VerifyingMode mode = VerifyingMode.times(19);
         
         mockitoState.verifyingStarted(mode);
         
-        assertTrue(mockitoState.verificationScenario());
-        
-        assertSame(mode, mockitoState.removeVerifyingMode());
+        assertSame(mode, mockitoState.pullVerifyingMode());
     }
     
     @Test

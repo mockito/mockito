@@ -2,12 +2,6 @@ package org.mockito.internal;
 
 import org.mockito.exceptions.UnfinishedVerificationException;
 
-/**
- * state. therefore dangerous and may have nasty bugs.
- * TODO look at every method that changes state and make sure the state is cleared afterwards
- * 
- * @author sfaber
- */
 @SuppressWarnings("unchecked")
 public class MockitoState {
     
@@ -28,7 +22,7 @@ public class MockitoState {
         controlForStubbing.set(mockitoControl);
     }
 
-    public synchronized MockitoExpectation removeControlToBeStubbed() {
+    public synchronized MockitoExpectation pullControlToBeStubbed() {
         MockitoControl control = controlForStubbing.get();
         controlForStubbing.set(null);
         return control;
@@ -45,28 +39,23 @@ public class MockitoState {
         }
     }
 
-    public synchronized boolean verificationScenario() {
-        return verifyingModeLocal.get() != null; 
-    }
-
-    public synchronized VerifyingMode removeVerifyingMode() {
+    public synchronized VerifyingMode pullVerifyingMode() {
         VerifyingMode verifyingMode = verifyingModeLocal.get();
         verifyingModeLocal.set(null);
         return verifyingMode;
     }
 
     public synchronized void reportThrowableToBeSetOnVoidMethod(Throwable throwable) {
+        //TODO refactor so we don't use static state to keep the throwable. we 
+        //can set it directly to mockcontrol or something and keep this pseudo static class thinner
+        
         throwableToBeSetOnVoidMethod.set(throwable);
     }
 
-    public synchronized Throwable removeThrowableToBeSetOnVoidMethod() {
+    public synchronized Throwable pullThrowableToBeSetOnVoidMethod() {
         Throwable throwable = throwableToBeSetOnVoidMethod.get();
         throwableToBeSetOnVoidMethod.set(null);
         return throwable;
-    }
-
-    public synchronized boolean settingThrowableOnVoidMethodScenario() {
-        return throwableToBeSetOnVoidMethod.get() != null; 
     }
 
 //    public void stubbingStarted() {

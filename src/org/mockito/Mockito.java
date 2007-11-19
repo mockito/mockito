@@ -21,7 +21,7 @@ public class Mockito extends Matchers {
 //        MockitoState.instance().stubbingStarted();
         
         //TODO increment number of stubs
-        MockitoExpectation controlToStub = MockitoState.instance().removeControlToBeStubbed();
+        MockitoExpectation controlToStub = MockitoState.instance().pullControlToBeStubbed();
         if (controlToStub == null) {
             throw new MissingMethodInvocationException();
         }

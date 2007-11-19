@@ -43,7 +43,7 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        VerifyingMode verifyingMode = mockitoState.removeVerifyingMode();
+        VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
         
         Invocation invocation = new Invocation(proxy, method, args);
         List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
@@ -65,9 +65,8 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
         
         behavior.addInvocation(invocationWithMatchers);
         
-        if (mockitoState.settingThrowableOnVoidMethodScenario()) {
-            Throwable throwable = mockitoState.removeThrowableToBeSetOnVoidMethod();
-        
+        Throwable throwable = mockitoState.pullThrowableToBeSetOnVoidMethod();
+        if (throwable != null) {
             andThrows(throwable);
             return null;
         }
@@ -119,7 +118,6 @@ public class MockitoControl<T> implements MockAwareInvocationHandler<T>, Invocat
     }
 
     public MethodSelector<T> toThrow(Throwable throwable) {
-        //TODO refactor so we don't use static state to keep the throwable
         mockitoState.reportThrowableToBeSetOnVoidMethod(throwable);
         return this;
     }
