@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.exceptions.VerificationAssertionError;
 
 public class UsingVarargsTest {
 
@@ -82,7 +82,7 @@ public class UsingVarargsTest {
         try {
             verify(mock).withStringVarargs(2, "1", "2", "79", "4");
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
     }
 
     @Test
@@ -96,7 +96,7 @@ public class UsingVarargsTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
     }
 
     @Test
@@ -110,6 +110,6 @@ public class UsingVarargsTest {
         try {
             verify(mock).withBooleanVarargs(3, true, true, true, true);
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
     }
 }

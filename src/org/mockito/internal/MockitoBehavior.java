@@ -30,9 +30,9 @@ public class MockitoBehavior<T> {
             } 
         } else {
             if (actuallyInvoked == 0) {
-                throw new MockVerificationAssertionError(
+                throw VerificationAssertionError.createNotInvokedError(
                         "\n" +
-                        "Not invoked: " + ObjectMethodsFilter.simpleName(mock) + "." + invocation.toString());
+                        "Not invoked: " + invocation.toString());
             }
         }
     }
@@ -63,10 +63,10 @@ public class MockitoBehavior<T> {
     private void verifyNoMoreInteractions(String verificationErrorMessage) {
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
             if (!registeredInvocation.getInvocation().isVerified()) {
-                String mockName = ObjectMethodsFilter.simpleName(mock);
-                throw new MockVerificationAssertionError(
+                String mockName = Namer.nameForMock(mock);
+                throw VerificationAssertionError.createNoMoreInteractionsError(
                         "\n" +
-                        verificationErrorMessage + " on " + mockName + " but found: " + mockName + "." + registeredInvocation.toString());
+                        verificationErrorMessage + " on " + mockName + " but found: " + registeredInvocation.toString());
             }
         }
     }

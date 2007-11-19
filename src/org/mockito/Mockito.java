@@ -7,14 +7,10 @@ import org.mockito.internal.*;
 public class Mockito extends Matchers {
 
     public static <T> T mock(Class<T> classToMock) {
-        try {
-            MockFactory<T> proxyFactory = new MockFactory<T>();
-            MockControl<T> mockControl = new MockControl<T>(MockitoState.instance(), LastArguments.instance());
-            return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
-                    classToMock, mockControl));
-        } catch (RuntimeExceptionWrapper e) {
-            throw (RuntimeException) e.getRuntimeException().fillInStackTrace();
-        }
+        MockFactory<T> proxyFactory = new MockFactory<T>();
+        MockControl<T> mockControl = new MockControl<T>(MockitoState.instance(), LastArguments.instance());
+        return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
+                classToMock, mockControl));
     }
 
     public static <T> MockitoExpectation<T> stub(T methodCallToStub) {
@@ -29,11 +25,25 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock) {
-        MockUtil.validateMock(mock);
-        MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
-        return mock;
+        try {
+            MockUtil.validateMock(mock);
+            MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
+            return mock; 
+        } catch (RuntimeException e) {
+            throw filterStackTrace(e);
+        } catch (Error e) {
+            throw filterStackTrace(e);
+        }
     }
     
+    private static Error filterStackTrace(Error e) {
+        return (Error) e.fillInStackTrace();
+    }
+
+    private static RuntimeException filterStackTrace(RuntimeException e) {
+        return (RuntimeException) e.fillInStackTrace();
+    }
+
     public static <T> T verify(T mock, int exactNumberOfInvocations) {
         MockUtil.validateMock(mock);
         MockitoState.instance().verifyingStarted(VerifyingMode.times(exactNumberOfInvocations));

@@ -6,7 +6,8 @@ import static org.mockito.Mockito.*;
 import java.io.*;
 import java.util.LinkedList;
 
-import org.junit.Test;
+import org.junit.*;
+import org.mockito.exceptions.MockitoException;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithThrowablesTest {
@@ -78,7 +79,7 @@ public class StubbingWithThrowablesTest {
         try {
             stub(list.add("monkey island")).andThrows(checkedException);
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (MockitoException e) {
             assertEquals("Given checked exception is invalid for this method", e.getMessage());
         }
     }
@@ -90,16 +91,18 @@ public class StubbingWithThrowablesTest {
         try {
             stub(list.add("monkey island")).andThrows(null);
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (MockitoException e) {
             assertEquals("Cannot set null throwable", e.getMessage());
         }
     }    
     
+    @Ignore
     @Test
     public void shouldMixThrowablesAndReturnValuesOnDifferentMocks() throws Exception {
         
     }
     
+    @Ignore
     @Test
     public void shouldVerifyWhenStubbedWithThrowable() throws Exception {
         

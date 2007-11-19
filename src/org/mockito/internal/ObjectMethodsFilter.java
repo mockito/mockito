@@ -46,16 +46,8 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
     }
 
     private String mockToString(Object mock) {
-        return "Mock for " + simpleName(mock);
+        return "Mock for " + Namer.nameForMock(mock);
     }
-
-    public static String simpleName(Object mock) {
-		if (mock.getClass().getInterfaces().length == 2) {
-			return mock.getClass().getInterfaces()[0].getSimpleName();
-		} else {
-			return mock.getClass().getSuperclass().getSimpleName();
-		}
-	}
 
     public T getDelegate() {
         return delegate;

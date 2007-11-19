@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import net.sf.cglib.proxy.*;
 
-import org.mockito.exceptions.NotAMockException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.MockFactory.MockMethodInterceptor;
 
 public class MockUtil {
@@ -19,7 +19,7 @@ public class MockUtil {
     @SuppressWarnings("unchecked")
     public static <T> MockControl<T> getControl(T mock) {
         if (mock == null) {
-            throw new IllegalArgumentException("Mock cannot be null");
+            throw new MockitoException("Mock cannot be null");
         }
         
         ObjectMethodsFilter<MockControl<T>> handler;

@@ -1,9 +1,9 @@
 package org.mockito.internal;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.matchers.*;
 
 public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
@@ -96,15 +96,15 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     
     private void validateThrowable(Throwable throwable) {
         if (throwable == null) {
-            throw new IllegalArgumentException("Cannot set null throwable");
+            throw new MockitoException("Cannot set null throwable");
         }
 
         if (throwable instanceof RuntimeException || throwable instanceof Error) {
             return;
         }
     
-        if (! isValidCheckedException(throwable)) {
-            throw new IllegalArgumentException("Given checked exception is invalid for this method"); 
+        if (!isValidCheckedException(throwable)) {
+            throw new MockitoException("Given checked exception is invalid for this method"); 
         }
     }
 

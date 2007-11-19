@@ -1,6 +1,7 @@
 package org.mockito;
 
 import org.junit.Test;
+import org.mockito.exceptions.MockitoException;
 import org.mockito.internal.VerifyingMode;
 
 import static org.junit.Assert.*;
@@ -22,7 +23,7 @@ public class VerifyingModeTest {
         try {
             VerifyingMode.times(-50);
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (MockitoException e) {
             assertEquals("Negative value is not allowed here", e.getMessage());
         }
     }

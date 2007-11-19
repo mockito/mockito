@@ -1,13 +1,12 @@
 package org.mockito.usage.verification;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.exceptions.VerificationAssertionError;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest {
@@ -32,7 +31,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verify(mock).clear();
             fail();
-        } catch (MockVerificationAssertionError expected) {};
+        } catch (VerificationAssertionError expected) {};
     }
 
     @Test
@@ -45,7 +44,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verify(mock).add("bar");
             fail();
-        } catch (MockVerificationAssertionError expected) {};
+        } catch (VerificationAssertionError expected) {};
     }
 
     @Test
@@ -71,7 +70,7 @@ public class BasicVerificationTest {
         try {
             Mockito.verifyNoMoreInteractions(mock);
             fail();
-        } catch (MockVerificationAssertionError expected) {};
+        } catch (VerificationAssertionError expected) {};
     }
     
     @Test

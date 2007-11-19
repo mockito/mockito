@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.*;
-import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.exceptions.VerificationAssertionError;
 import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -41,7 +41,7 @@ public class VerificationUsingMatchersTest {
         try {
             verify(mock).oneArg(CrazyMatchers.same(three));
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
     }  
     
     @Test
@@ -51,21 +51,21 @@ public class VerificationUsingMatchersTest {
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
 
         mock.threeArgumentMethod(8, new Object(), "01234");
         
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
         
         mock.threeArgumentMethod(8, "", "no match");
 
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (MockVerificationAssertionError e) {}
+        } catch (VerificationAssertionError e) {}
         
         mock.threeArgumentMethod(8, "", "123");
         

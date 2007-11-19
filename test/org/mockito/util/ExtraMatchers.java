@@ -1,13 +1,28 @@
 package org.mockito.util;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 import org.hamcrest.*;
 
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
 
+    public static <T> Matcher<Throwable> firstMethodOnStackEqualsTo(final String method) {
+        return new BaseMatcher<Throwable>() {
+
+            private String firstMethodOnStack;
+
+            public boolean matches(Object throwable) {
+                firstMethodOnStack = ((Throwable) throwable).getStackTrace()[0].getMethodName();
+                return  firstMethodOnStack.equals(method);
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("first method expected to be: " + method + " but is: " + firstMethodOnStack);
+            }
+        };
+    }
+    
     public static <T> Matcher<Collection> collectionContaining(final T ... elements) {
         return new BaseMatcher<Collection>() {
 

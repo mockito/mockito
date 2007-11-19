@@ -4,8 +4,6 @@
  */
 package org.mockito.internal;
 
-import static java.lang.Character.*;
-
 import java.lang.reflect.Method;
 
 import org.mockito.internal.matchers.ArrayEquals;
@@ -95,44 +93,10 @@ public class Invocation {
     }
 
     public String getMockAndMethodName() {
-        String mockName = mock.toString();
-        String methodName = method.getName();
-        if (toStringIsDefined(mock) && isJavaIdentifier(mockName)) {
-            return mockName + "." + methodName;
-        } else {
-            return methodName;
-        }
+        String mockName = Namer.nameForMock(mock);
+        return mockName + "." + method.getName();
     }
 
-    private boolean toStringIsDefined(Object o) {
-        try {
-            o.getClass().getDeclaredMethod("toString", (Class[]) null)
-                    .getModifiers();
-            return true;
-        } catch (SecurityException ignored) {
-            
-            return false;
-            
-        } catch (NoSuchMethodException shouldNeverHappen) {
-            
-            throw new RuntimeException("The toString() method could not be found!");
-            
-        }
-    }
-
-    public static boolean isJavaIdentifier(String mockName) {
-        if (mockName.length() == 0 || mockName.indexOf(' ') > -1
-                || !Character.isJavaIdentifierStart(mockName.charAt(0))) {
-            return false;
-        }
-        for (char c : mockName.substring(1).toCharArray()) {
-            if (!isJavaIdentifierPart(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
     public void markVerified() {
         verified = true;
     }

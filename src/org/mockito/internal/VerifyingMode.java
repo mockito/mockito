@@ -1,6 +1,6 @@
 package org.mockito.internal;
 
-import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.exceptions.MockitoException;
 
 public class VerifyingMode {
 
@@ -17,7 +17,7 @@ public class VerifyingMode {
 
     public static VerifyingMode times(int exactNumberOfInvocations) {
         if (exactNumberOfInvocations < 0) {
-            throw new IllegalArgumentException("Negative value is not allowed here");
+            throw new MockitoException("Negative value is not allowed here");
         }
         return new VerifyingMode(exactNumberOfInvocations);
     }

@@ -67,7 +67,7 @@ public class InvalidUseOfMatchersTest {
         try {
             mock.simpleMethodWithArgument(CrazyMatchers.or(eq("jkl"), "asd"));
             fail();
-        } catch (IllegalStateException e) {
+        } catch (InvalidUseOfMatchersException e) {
             assertEquals(
                     "\n" +
             		"2 matchers expected, 1 recorded." +
@@ -79,7 +79,7 @@ public class InvalidUseOfMatchersTest {
         try {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
-        } catch (IllegalStateException e) {
+        } catch (InvalidUseOfMatchersException e) {
             assertEquals(
                     "\n" +
                     "3 matchers expected, 1 recorded." +

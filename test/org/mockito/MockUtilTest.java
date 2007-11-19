@@ -12,7 +12,7 @@ import java.util.*;
 import net.sf.cglib.proxy.*;
 
 import org.junit.Test;
-import org.mockito.exceptions.NotAMockException;
+import org.mockito.exceptions.*;
 
 public class MockUtilTest {
 
@@ -37,7 +37,7 @@ public class MockUtilTest {
         getControl("");
     }
     
-    @Test (expected=IllegalArgumentException.class)
+    @Test (expected=MockitoException.class)
     public void shouldScreamWhenNullPassed() {
         getControl(null);
     }
@@ -47,7 +47,7 @@ public class MockUtilTest {
         validateMock("");
     }
     
-    @Test (expected=IllegalArgumentException.class)
+    @Test (expected=MockitoException.class)
     public void shouldScreamWhenNullPassedToValidation() {
         validateMock(null);
     }

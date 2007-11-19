@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.MockVerificationAssertionError;
+import org.mockito.exceptions.VerificationAssertionError;
 import org.mockito.usage.IMethods;
 
 public class NiceMessagesWhenVerificationFailsTest {
@@ -21,7 +21,7 @@ public class NiceMessagesWhenVerificationFailsTest {
     public void shouldPrintMethodName() {
         try {
             verify(mock).simpleMethod();
-        } catch (MockVerificationAssertionError expected) {
+        } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -40,7 +40,7 @@ public class NiceMessagesWhenVerificationFailsTest {
     public void shouldPrintMethodNameAndArguments() {
         try {
             verify(mock).threeArgumentMethod(12, new SomeClass(), "some string");
-        } catch (MockVerificationAssertionError expected) {
+        } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -58,7 +58,7 @@ public class NiceMessagesWhenVerificationFailsTest {
         verify(mock).oneArg(true);
         try {
             verifyNoMoreInteractions(mock);
-        } catch (MockVerificationAssertionError expected) {
+        } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -74,7 +74,7 @@ public class NiceMessagesWhenVerificationFailsTest {
         
         try {
             verifyZeroInteractions(mock);
-        } catch (MockVerificationAssertionError expected) {
+        } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
