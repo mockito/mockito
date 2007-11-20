@@ -1,5 +1,7 @@
 package org.mockito;
 
+import java.util.*;
+
 import org.mockito.exceptions.*;
 import org.mockito.internal.*;
 
@@ -53,5 +55,16 @@ public class Mockito extends Matchers {
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
 //        MockitoState.instance().reportControlForStubbing(mockControl)
         return MockUtil.getControl(mock);
+    }
+
+    //TODO experimental in order syntax (I know is ugly)
+    public static <T> T verifyInOrder(T mock, int exactNumberOfInvocations) {
+        //TODO validate mocks
+        return mock;
+    }
+
+    public static <T> T verifyInOrder(T mock) {
+        //TODO validate mocks
+        return mock;
     }
 }
