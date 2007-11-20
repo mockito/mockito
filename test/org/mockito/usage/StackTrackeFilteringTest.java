@@ -1,15 +1,15 @@
-package org.mockito.usage.verification;
+package org.mockito.usage;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
-import org.mockito.usage.IMethods;
+import org.mockito.exceptions.*;
+
 import static org.mockito.util.ExtraMatchers.*;
 
-public class StackTrackeFilteringWhenVerificationFailsTest {
+public class StackTrackeFilteringTest {
     
     private IMethods mock;
 
@@ -26,7 +26,7 @@ public class StackTrackeFilteringWhenVerificationFailsTest {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("createNotInvokedError", unfilteredStackTrace[0].getMethodName());
+            assertEquals("verify", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -39,7 +39,7 @@ public class StackTrackeFilteringWhenVerificationFailsTest {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("createNoMoreInteractionsError", unfilteredStackTrace[0].getMethodName());
+            assertEquals("verifyNoMoreInteractions", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -52,7 +52,23 @@ public class StackTrackeFilteringWhenVerificationFailsTest {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyZeroInteractions"));
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("createNoMoreInteractionsError", unfilteredStackTrace[0].getMethodName());
+            assertEquals("verifyNoMoreInteractions", unfilteredStackTrace[0].getMethodName());
         }
     }
+    
+    @Test
+    public void shouldFilterStacktraceOnUnfinishedVerification() {
+        verify(mock);
+        try {
+            verify(mock).oneArg(true); 
+            fail();
+        } catch (MockitoException expected) {
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceOnUnfinishedVerification"));
+            
+            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
+            assertEquals("checkForUnfinishedVerification", unfilteredStackTrace[0].getMethodName());
+        }
+    }
+    
+    //TODO add all other stack filtering stuff
 }

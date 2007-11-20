@@ -1,6 +1,6 @@
 package org.mockito;
 
-import org.mockito.exceptions.MissingMethodInvocationException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.*;
 
 @SuppressWarnings("unchecked")
@@ -25,25 +25,11 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock) {
-        try {
-            MockUtil.validateMock(mock);
-            MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
-            return mock; 
-        } catch (RuntimeException e) {
-            throw filterStackTrace(e);
-        } catch (Error e) {
-            throw filterStackTrace(e);
-        }
+        MockUtil.validateMock(mock);
+        MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
+        return mock; 
     }
     
-    private static Error filterStackTrace(Error e) {
-        return (Error) e.fillInStackTrace();
-    }
-
-    private static RuntimeException filterStackTrace(RuntimeException e) {
-        return (RuntimeException) e.fillInStackTrace();
-    }
-
     public static <T> T verify(T mock, int exactNumberOfInvocations) {
         MockUtil.validateMock(mock);
         MockitoState.instance().verifyingStarted(VerifyingMode.times(exactNumberOfInvocations));

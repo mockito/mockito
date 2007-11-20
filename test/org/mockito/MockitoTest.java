@@ -66,7 +66,7 @@ public class MockitoTest {
         try {
             verify(mock).get(0);
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (MockitoException e) {}
     }
     
     @Test
@@ -75,7 +75,7 @@ public class MockitoTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (MockitoException e) {}
     }
     
     @Test
@@ -84,6 +84,6 @@ public class MockitoTest {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (MockitoException e) {}
     }
 }

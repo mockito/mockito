@@ -88,4 +88,15 @@ public class InvalidUseOfMatchersTest {
                     , e.getMessage());
         }
     }
+    
+    @Test
+    public void shouldFilterStackTraceDetectStupidUseOfMatchersWhenVerifying() {
+        mock.oneArg(true);
+        eq("that's the stupid way");
+        eq("of using matchers");
+        try {
+            Mockito.verify(mock).oneArg(true);
+            fail();
+        } catch (InvalidUseOfMatchersException e) {}
+    }
 }

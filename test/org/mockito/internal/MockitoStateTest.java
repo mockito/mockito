@@ -3,7 +3,7 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.*;
-import org.mockito.exceptions.UnfinishedVerificationException;
+import org.mockito.exceptions.MockitoException;
 
 public class MockitoStateTest {
 
@@ -31,6 +31,6 @@ public class MockitoStateTest {
         try {
             mockitoState.verifyingStarted(VerifyingMode.anyTimes());
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (MockitoException e) {}
     }
 }
