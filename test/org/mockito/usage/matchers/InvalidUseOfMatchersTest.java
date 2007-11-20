@@ -60,7 +60,7 @@ public class InvalidUseOfMatchersTest {
                     "\n" +
             		"No matchers found." +
             		"\n" +
-                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+                    "Read more: http://code.google.com/p/mockito/matchers"
             		, e.getMessage());
         }
         
@@ -72,7 +72,7 @@ public class InvalidUseOfMatchersTest {
                     "\n" +
             		"2 matchers expected, 1 recorded." +
                     "\n" +
-                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+                    "Read more: http://code.google.com/p/mockito/matchers"
                     , e.getMessage());
         }
         
@@ -84,19 +84,8 @@ public class InvalidUseOfMatchersTest {
                     "\n" +
                     "3 matchers expected, 1 recorded." +
                     "\n" +
-                    "Read about matchers: http://code.google.com/p/mockito/matchers"
+                    "Read more: http://code.google.com/p/mockito/matchers"
                     , e.getMessage());
         }
-    }
-    
-    @Test
-    public void shouldFilterStackTraceDetectStupidUseOfMatchersWhenVerifying() {
-        mock.oneArg(true);
-        eq("that's the stupid way");
-        eq("of using matchers");
-        try {
-            Mockito.verify(mock).oneArg(true);
-            fail();
-        } catch (InvalidUseOfMatchersException e) {}
     }
 }

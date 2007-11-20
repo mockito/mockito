@@ -35,11 +35,13 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     private void validateMatchers(Invocation invocation, List<IArgumentMatcher> matchers) throws InvalidUseOfMatchersException {
-        if (matchers != null && matchers.size() != invocation.getArguments().length) {
-            throw new InvalidUseOfMatchersException(
-                    + invocation.getArguments().length
-                    + " matchers expected, " + matchers.size()
-                    + " recorded.");
+        if (matchers != null) {
+            if (matchers.size() != invocation.getArguments().length) {
+                throw new InvalidUseOfMatchersException(
+                        + invocation.getArguments().length
+                        + " matchers expected, " + matchers.size()
+                        + " recorded.");
+            }
         }
     }
 

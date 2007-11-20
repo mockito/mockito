@@ -8,6 +8,6 @@ public class InvalidUseOfMatchersException extends MockitoException {
         super(  "\n" +
                 message +
                 "\n" +
-                "Read about matchers: http://code.google.com/p/mockito/matchers");
+                "Read more: http://code.google.com/p/mockito/matchers");
     }
 }
