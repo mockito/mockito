@@ -15,7 +15,7 @@ import org.mockito.internal.StateResetter;
  *    -unfinished stubVoid
  *    -stubbing without actual method call
  *    -verify without actual method call
- *    
+ *
  * we should aim to detect invalid state in following scenarios:
  *    -on method call on mock
  *    -on verify
@@ -23,12 +23,12 @@ import org.mockito.internal.StateResetter;
  *    -on verifyNoMoreInteractions
  *    -on stub
  *    -on stubVoid
- *    
+ *
  * obviously we should consider if it is really important to cover all those naughty usage
  */
 @SuppressWarnings("unchecked")
 public class InvalidUsageTest {
-    
+
     private List mock;
 
     @Before
@@ -37,55 +37,50 @@ public class InvalidUsageTest {
         StateResetter.reset();
         mock = mock(List.class);
     }
-    
-    @Test
+
+    @Test(expected=MissingMethodInvocationException.class)
     public void shouldDetectStubbingWithoutMethodCallOnMock() {
-        try {
-            stub("blah".contains("blah"));
-            fail();
-        } catch (MissingMethodInvocationException e) {
-            //cool
-        }
+        stub("blah".contains("blah"));
     }
-    
+
     @Ignore
     @Test
     public void unfinishedStubbingDetectedOnVerify() {
         stub(mock.add("test"));
-        
+
         try {
             verifyZeroInteractions(mock);
             fail();
         } catch (UnfinishedStubbingException e) {}
     }
-    
+
     @Ignore
     @Test
     public void unfinishedStubbingDetectedWhenAnotherStubbingIsStarted() {
         stub(mock.add("test"));
-        
+
         try {
             stub(mock.add("test")).andThrows(new Exception("ssdf"));
             fail();
         } catch (UnfinishedStubbingException e) {}
     }
-    
+
     @Ignore
     @Test
     public void unfinishedStubbingDetectedMockCalled() {
         stub(mock.add("test"));
-        
+
         try {
             mock.clear();
             fail();
         } catch (UnfinishedStubbingException e) {}
     }
-    
+
     @Ignore
     @Test
     public void unfinishedStubbingVoid() {
         stubVoid(mock);
-        
+
         try {
             mock.clear();
             fail();
