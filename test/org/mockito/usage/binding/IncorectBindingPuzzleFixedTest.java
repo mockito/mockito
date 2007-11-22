@@ -48,8 +48,11 @@ public class IncorectBindingPuzzleFixedTest {
             Mockito.verify(derivedMock).print(message);
         } catch (VerificationAssertionError error) {
             String expected = "\n" +
-            		"Not invoked: DerivedInterface.print(Message)" +
-            		"But found: DerivedInterface.print(BaseMessage)";
+            		"Failure on verify:" +
+            		"\n" +
+            		"Expected: DerivedInterface.print(Message)" +
+            		"\n" +
+            		"Actual: DerivedInterface.print(BaseMessage)";
             assertEquals(expected, error.getMessage());
         }
     }
