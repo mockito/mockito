@@ -62,13 +62,13 @@
 		<fail message="Packiging is missing"/>
 	</target>
 
-	<target name="pmd">
+	<target name="pmd" depends="prepare">
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath">
 		</taskdef>
 		
 		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules.xml">
 			<ruleset>Mockito</ruleset>
-			<formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" />
+			<formatter type="html" toFile="${target.dir}/pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" />
 			<fileset dir="src">
 				<include name="**/*.java" />
 			</fileset>
