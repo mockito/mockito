@@ -58,23 +58,4 @@ public class IncorectBindingPuzzleFixedTest {
             assertEquals(expected, error.getMessage());
         }
     }
-    
-    @Ignore
-    @Test
-    public void shouldReportNoMoreInteractionsProperly() throws Exception {
-        DerivedInterface derivedMock = Mockito.mock(DerivedInterface.class);
-        setMock(derivedMock);
-        Message message = new Message();
-        print(message);
-        try {
-            Mockito.verifyNoMoreInteractions(derivedMock);
-            fail();
-        } catch (VerificationAssertionError error) {
-            String expected = "\n" +
-            		"No more interactions expected on DerivedInterface." +
-            		"\n" +
-            		"Unexpected: DerivedInterface.print(BaseMessage)";
-            assertEquals(expected, error.getMessage());
-        }
-    }
 }
