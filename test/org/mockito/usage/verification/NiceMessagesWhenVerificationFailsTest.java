@@ -27,7 +27,9 @@ public class NiceMessagesWhenVerificationFailsTest {
                     "\n" +
             		"Failure on verify:" +
             		"\n" +
-            		"Not invoked: IMethods.simpleMethod()";
+            		"Expected: IMethods.simpleMethod()" +
+                    "\n" +
+                    "Actual: none";
             assertEquals(expectedMessage, actualMessage);         
         }
     }
@@ -48,7 +50,9 @@ public class NiceMessagesWhenVerificationFailsTest {
                     "\n" +
                     "Failure on verify:" +
                     "\n" +
-            		"Not invoked: IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")";
+            		"Expected: IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")" +
+            		"\n" +
+            		"Actual: none";
             assertEquals(expectedMessage, actualMessage);         
         }
     }

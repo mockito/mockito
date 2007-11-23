@@ -50,7 +50,10 @@ public class MockitoBehavior<T> {
                             "\n" +
                     		"Actual: " + actual;
                 } else {
-                    message += "Not invoked: " + expected;
+                    message += 
+                            "Expected: " + expected +
+                            "\n" +
+                            "Actual: none";
                 }
                 
                 throw new VerificationAssertionError(message);

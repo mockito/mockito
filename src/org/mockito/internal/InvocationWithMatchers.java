@@ -34,33 +34,10 @@ public class InvocationWithMatchers {
     }
 
     public boolean matches(Invocation actual) {
-        boolean methodsAreEqual = areMethodsEqual(actual.getMethod());
         return this.invocation.getMock().equals(
                 actual.getMock())
-                && methodsAreEqual
+                && this.invocation.getMethod().equals(actual.getMethod())
                 && matches(actual.getArguments());
-    }
-
-    private boolean areMethodsEqual(Method method) {
-        Method thisMethod = this.invocation.getMethod();
-        if (thisMethod.getDeclaringClass() != method.getDeclaringClass()
-            || thisMethod.getName() != method.getName() 
-            || !thisMethod.getReturnType().equals(method.getReturnType())) { 
-                return false;
-        }
-        
-        Class[] params1 = thisMethod.getParameterTypes();
-        Class[] params2 = method.getParameterTypes();
-        if (params1.length == params2.length) {
-            for (int i = 0; i < params1.length; i++) {
-            if (params1[i] != params2[i])
-                return false;
-            }
-            return true;
-        }
-    
-        return false;
-//        return this.invocation.getMethod().equals(actual.getMethod());
     }
 
     private boolean matches(Object[] arguments) {

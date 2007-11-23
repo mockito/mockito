@@ -45,6 +45,7 @@ public class IncorectBindingPuzzleFixedTest {
         print(message);
         try {
             Mockito.verify(derivedMock).print(message);
+            fail();
         } catch (VerificationAssertionError error) {
             String expected = 
                 "\n" +
