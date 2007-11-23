@@ -51,9 +51,9 @@ public class InvalidUseOfMatchersTest {
     
     @Test
     public void shouldScreamWhenMatchersAreInvalid() {
-        mock.simpleMethodWithArgument(CrazyMatchers.not(eq("asd")));
+        mock.simpleMethod(CrazyMatchers.not(eq("asd")));
         try {
-            mock.simpleMethodWithArgument(CrazyMatchers.not("jkl"));
+            mock.simpleMethod(CrazyMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertEquals(
@@ -65,7 +65,7 @@ public class InvalidUseOfMatchersTest {
         }
         
         try {
-            mock.simpleMethodWithArgument(CrazyMatchers.or(eq("jkl"), "asd"));
+            mock.simpleMethod(CrazyMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertEquals(

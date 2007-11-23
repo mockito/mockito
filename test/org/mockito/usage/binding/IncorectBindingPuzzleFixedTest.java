@@ -49,11 +49,11 @@ public class IncorectBindingPuzzleFixedTest {
         } catch (VerificationAssertionError error) {
             String expected = 
                 "\n" +
-        		"Failure on verify:" +
+        		"Invocation differs from actual:" +
         		"\n" +
         		"Expected: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
         		"\n" +
-        		"Actual: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
+        		"Actual:   DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
             
             assertEquals(expected, error.getMessage());
         }
@@ -68,9 +68,12 @@ public class IncorectBindingPuzzleFixedTest {
         print(message);
         try {
             Mockito.verifyNoMoreInteractions(derivedMock);
+            fail();
         } catch (VerificationAssertionError error) {
             String expected = "\n" +
-            		"No more interactions expected on DerivedInterface but found: DerivedInterface.print(BaseMessage)";
+            		"No more interactions expected on DerivedInterface." +
+            		"\n" +
+            		"Unexpected: DerivedInterface.print(BaseMessage)";
             assertEquals(expected, error.getMessage());
         }
     }

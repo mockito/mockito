@@ -34,26 +34,27 @@ public class MockitoBehavior<T> {
                 InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
                 String message = 
                     "\n" +
-                    "Failure on verify:" +
+                    "Invocation differs from actual:" +
                     "\n";
                 
                 String expected = invocation.toString();
                 if (similarInvocation != null) {
                     String actual = similarInvocation.toString();
                     if (expected.equals(actual)) {
-                        expected = invocation.toStringWithTypes();
-                        actual = similarInvocation.toStringWithTypes();
+                        expected = invocation.toStringWithArgumentTypes();
+                        actual = similarInvocation.toStringWithArgumentTypes();
                     }
                     
                     message += 
                             "Expected: " + expected +
                             "\n" +
-                    		"Actual: " + actual;
+                    		"Actual:   " + actual;
                 } else {
-                    message += 
-                            "Expected: " + expected +
+                    message = 
                             "\n" +
-                            "Actual: none";
+                            "Expected but not invoked:" +
+                            "\n" +    
+                            expected;
                 }
                 
                 throw new VerificationAssertionError(message);
@@ -69,12 +70,12 @@ public class MockitoBehavior<T> {
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
             String expectedMethodName = expectedInvocation.getMethod().getName();
             String registeredInvocationName = registeredInvocation.getMethod().getName();
-            if (expectedMethodName.equals(registeredInvocationName)) {
+            if (expectedMethodName.equals(registeredInvocationName) && !registeredInvocation.getInvocation().isVerified()) {
                 return registeredInvocation;
             }
         }
 
-        return registeredInvocations.size() > 0 ? registeredInvocations.get(0) : null;
+        return null;
     }
 
     private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {
@@ -106,7 +107,9 @@ public class MockitoBehavior<T> {
                 String mockName = Namer.nameForMock(mock);
                 throw new VerificationAssertionError(
                         "\n" +
-                        verificationErrorMessage + " on " + mockName + " but found: " + registeredInvocation.toString());
+                        verificationErrorMessage + " on " + mockName +
+                        "\n" +
+                        "Unexpected: " + registeredInvocation.toString());
             }
         }
     }

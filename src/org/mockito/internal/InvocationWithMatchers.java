@@ -74,7 +74,7 @@ public class InvocationWithMatchers {
         return this.invocation;
     }
 
-    public String toStringWithTypes() {
+    public String toStringWithArgumentTypes() {
         StringBuilder result = new StringBuilder();
         result.append(invocation.getMockAndMethodName());
         result.append("(");

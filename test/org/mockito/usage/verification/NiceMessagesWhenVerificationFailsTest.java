@@ -1,6 +1,6 @@
 package org.mockito.usage.verification;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
@@ -21,15 +21,14 @@ public class NiceMessagesWhenVerificationFailsTest {
     public void shouldPrintMethodName() {
         try {
             verify(mock).simpleMethod();
+            fail();
         } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-            		"Failure on verify:" +
+            		"Expected but not invoked:" +
             		"\n" +
-            		"Expected: IMethods.simpleMethod()" +
-                    "\n" +
-                    "Actual: none";
+            		"IMethods.simpleMethod()";
             assertEquals(expectedMessage, actualMessage);         
         }
     }
@@ -44,18 +43,107 @@ public class NiceMessagesWhenVerificationFailsTest {
     public void shouldPrintMethodNameAndArguments() {
         try {
             verify(mock).threeArgumentMethod(12, new SomeClass(), "some string");
+            fail();
         } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Failure on verify:" +
+                    "Expected but not invoked:" +
                     "\n" +
-            		"Expected: IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")" +
-            		"\n" +
-            		"Actual: none";
+            		"IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")";
             assertEquals(expectedMessage, actualMessage);         
         }
     }
+    
+    @Test
+    public void shouldPrintLastUnverifiedAsActualInvocation() {
+        mock.oneArg(true);
+        mock.simpleMethod();
+        
+        verify(mock).oneArg(true);
+        try {
+            verify(mock).twoArgumentMethod(1,2);
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "Expected but not invoked:" +
+                    "\n" +
+                    "IMethods.twoArgumentMethod(1, 2)";
+            
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }
+    
+    @Test
+    public void shouldPrintActualAndExpectedWhenTheDifferenceIsAboutArguments() {
+        mock.oneArg(true);
+        mock.twoArgumentMethod(1, 2);
+        
+        verify(mock).oneArg(true);
+        try {
+            verify(mock).twoArgumentMethod(1, 1000);
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "Invocation differs from actual:" +
+                    "\n" +
+                    "Expected: IMethods.twoArgumentMethod(1, 1000)" +
+                    "\n" +
+                    "Actual:   IMethods.twoArgumentMethod(1, 2)";
+            
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }
+    
+    @Test
+    public void shouldPrintActualAndExpectedWhenActualMethodNameAndExpectedMethodNameAreTheSame() {
+        mock.simpleMethod();
+        
+        try {
+            verify(mock).simpleMethod("test");
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "Invocation differs from actual:" +
+                    "\n" +
+                    "Expected: IMethods.simpleMethod(\"test\")" +
+                    "\n" +
+                    "Actual:   IMethods.simpleMethod()";
+            
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }    
+    
+    @Test
+    public void shouldPrintActualAndUnverifiedExpectedWhenTheDifferenceIsAboutArguments() {
+        mock.twoArgumentMethod(1, 1);
+        mock.twoArgumentMethod(2, 2);
+        mock.twoArgumentMethod(3, 3);
+        
+        verify(mock).twoArgumentMethod(1, 1);
+        verify(mock).twoArgumentMethod(2, 2);
+        try {
+            verify(mock).twoArgumentMethod(3, 1000);
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "Invocation differs from actual:" +
+                    "\n" +
+                    "Expected: IMethods.twoArgumentMethod(3, 1000)" +
+                    "\n" +
+                    "Actual:   IMethods.twoArgumentMethod(3, 3)";
+            
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }  
     
     @Test
     public void shouldPrintFirstUnexpectedInvocation() {
@@ -66,11 +154,14 @@ public class NiceMessagesWhenVerificationFailsTest {
         verify(mock).oneArg(true);
         try {
             verifyNoMoreInteractions(mock);
+            fail();
         } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-            		"No more interactions expected on IMethods but found: IMethods.oneArg(false)";
+            		"No more interactions expected on IMethods" +
+            		"\n" +
+            		"Unexpected: IMethods.oneArg(false)";
             assertEquals(expectedMessage, actualMessage);         
         }
     }
@@ -82,11 +173,14 @@ public class NiceMessagesWhenVerificationFailsTest {
         
         try {
             verifyZeroInteractions(mock);
+            fail();
         } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Zero interactions expected on IMethods but found: IMethods.twoArgumentMethod(1, 2)";
+                    "Zero interactions expected on IMethods" +
+                    "\n" +
+                    "Unexpected: IMethods.twoArgumentMethod(1, 2)";
             assertEquals(expectedMessage, actualMessage);         
         }
     }
