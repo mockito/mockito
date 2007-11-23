@@ -13,17 +13,9 @@ public class IncorectBindingPuzzleFixedTest {
         this.mock = mock;
     }
 
-    private class BaseMessage { 
-        public String toString() {
-            return "BaseMessageInstance";
-        }
-    }
+    private class BaseMessage {}
     
-    private class Message extends BaseMessage {
-        public String toString() {
-            return "MessageInstance";
-        }
-    }
+    private class Message extends BaseMessage {}
 
     private interface BaseInteface {
         public void print(BaseMessage message);
