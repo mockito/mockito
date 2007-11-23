@@ -15,13 +15,13 @@ public class IncorectBindingPuzzleFixedTest {
 
     private class BaseMessage { 
         public String toString() {
-            return "BaseMessage";
+            return "BaseMessageInstance";
         }
     }
     
     private class Message extends BaseMessage {
         public String toString() {
-            return "Message";
+            return "MessageInstance";
         }
     }
 
@@ -37,7 +37,6 @@ public class IncorectBindingPuzzleFixedTest {
         mock.print(message);
     }
 
-    @Ignore
     @Test
     public void overriddenInterfaceMethodNotWorking() throws Exception {
         DerivedInterface derivedMock = Mockito.mock(DerivedInterface.class);
@@ -47,12 +46,14 @@ public class IncorectBindingPuzzleFixedTest {
         try {
             Mockito.verify(derivedMock).print(message);
         } catch (VerificationAssertionError error) {
-            String expected = "\n" +
-            		"Failure on verify:" +
-            		"\n" +
-            		"Expected: DerivedInterface.print(Message)" +
-            		"\n" +
-            		"Actual: DerivedInterface.print(BaseMessage)";
+            String expected = 
+                "\n" +
+        		"Failure on verify:" +
+        		"\n" +
+        		"Expected: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
+        		"\n" +
+        		"Actual: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
+            
             assertEquals(expected, error.getMessage());
         }
     }

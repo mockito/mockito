@@ -30,11 +30,48 @@ public class MockitoBehavior<T> {
             } 
         } else {
             if (actuallyInvoked == 0) {
-                throw new VerificationAssertionError(
-                        "\n" +
-                        "Not invoked: " + invocation.toString());
+                //TODO this stuff is really hacked in, refactor, add more testing
+                InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
+                String message = 
+                    "\n" +
+                    "Failure on verify:" +
+                    "\n";
+                
+                String expected = invocation.toString();
+                if (similarInvocation != null) {
+                    String actual = similarInvocation.toString();
+                    if (expected.equals(actual)) {
+                        expected = invocation.toStringWithTypes();
+                        actual = similarInvocation.toStringWithTypes();
+                    }
+                    
+                    message += 
+                            "Expected: " + expected +
+                            "\n" +
+                    		"Actual: " + actual;
+                } else {
+                    message += "Not invoked: " + expected;
+                }
+                
+                throw new VerificationAssertionError(message);
             }
         }
+    }
+
+    /**
+     * gets first registered invocation with the same method name
+     * or just first invocation
+     */
+    private InvocationWithMatchers findSimilarInvocation(InvocationWithMatchers expectedInvocation) {
+        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
+            String expectedMethodName = expectedInvocation.getMethod().getName();
+            String registeredInvocationName = registeredInvocation.getMethod().getName();
+            if (expectedMethodName.equals(registeredInvocationName)) {
+                return registeredInvocation;
+            }
+        }
+
+        return registeredInvocations.size() > 0 ? registeredInvocations.get(0) : null;
     }
 
     private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {

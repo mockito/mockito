@@ -1,8 +1,9 @@
 ***some REALLY random stuff that needs to be tidied up
 
--nice mocks are nicer
-	nice mocks replay with empty collections and (if desired) empty objects if they have 'easy' constructors
-	no modes - all mocks are nice by default. to make sure no additional interaction occured you can call:
+ # Mockito mocks are ready to play. You don't have to record any behavior, you don't even have to stub it. 
+ Mock will record all operations and, for methods that return values, will return nulls, default primitives or empty collections.
+ 
+ # Assert what you want. It's up to you what behavior you want to verify.
 
 	mockito.noOtherInteractions(mockDatabase);
 

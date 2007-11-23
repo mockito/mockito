@@ -25,6 +25,8 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
+            		"Failure on verify:" +
+            		"\n" +
             		"Not invoked: IMethods.simpleMethod()";
             assertEquals(expectedMessage, actualMessage);         
         }
@@ -43,6 +45,8 @@ public class NiceMessagesWhenVerificationFailsTest {
         } catch (VerificationAssertionError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
+                    "\n" +
+                    "Failure on verify:" +
                     "\n" +
             		"Not invoked: IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")";
             assertEquals(expectedMessage, actualMessage);         

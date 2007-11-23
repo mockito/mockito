@@ -4,19 +4,13 @@
  */
 package org.mockito.usage.verification;
 
-import static org.junit.Assert.*;
-import static org.mockito.CrazyMatchers.*;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.*;
-
-import static org.mockito.Mockito.*;
-import org.mockito.exceptions.VerificationAssertionError;
-import org.mockito.usage.IMethods;
+import org.mockito.Mockito;
+import org.mockito.exceptions.*;
 
 @SuppressWarnings("unchecked")  
 public class VerificationInOrderTest {
@@ -39,7 +33,6 @@ public class VerificationInOrderTest {
         set.add("six");
     }
 
-    @Ignore
     @Test
     public void shouldVerifyInOrder() {
         Mockito.verifyInOrder(list).add("one");
@@ -49,7 +42,6 @@ public class VerificationInOrderTest {
         Mockito.verifyInOrder(set).add("six");
     } 
 
-    @Ignore
     @Test
     public void shouldVerifyInOrderWithExactNumberOfInvocations() {
         Mockito.verifyInOrder(list, 1).add("one");
@@ -58,4 +50,16 @@ public class VerificationInOrderTest {
         Mockito.verifyInOrder(map, 1).put("five", "five");
         Mockito.verifyInOrder(set, 1).add("six");
     }  
+    
+    @Ignore
+    @Test(expected = VerificationAssertionError.class)
+    public void shouldFailOnOrdinaryVerificationError() {
+        Mockito.verifyInOrder(list).add("xxx");
+    }
+    
+    @Ignore
+    @Test(expected = NumberOfInvocationsAssertionError.class)
+    public void shouldFailOnExactNumberOfInvocations() {
+        Mockito.verifyInOrder(list, 2).add("xxx");
+    }
 }

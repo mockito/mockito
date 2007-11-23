@@ -57,18 +57,16 @@ public class StackTrackeFilteringTest {
     }
     
     @Test
-    public void shouldFilterStacktraceOnUnfinishedVerification() {
+    public void shouldFilterStacktraceOnMockitoException() {
         verify(mock);
         try {
             verify(mock).oneArg(true); 
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceOnUnfinishedVerification"));
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceOnMockitoException"));
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
             assertEquals("checkForUnfinishedVerification", unfilteredStackTrace[0].getMethodName());
         }
     }
-    
-    //TODO add all other stack filtering stuff
 }
