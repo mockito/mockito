@@ -1,19 +1,25 @@
 package org.mockito.usage.verification;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mockito;
+import org.mockito.exceptions.NumberOfInvocationsAssertionError;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest {
 
+    private LinkedList mock;
+    
+    @Before
+    public void setup() {
+        mock = Mockito.mock(LinkedList.class); 
+    }
+    
     @Test
     public void shouldVerifyActualNumberOfInvocationsSmallerThanExpected() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
         mock.clear();
         mock.clear();
         mock.clear();
@@ -22,14 +28,18 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 100).clear();
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Expected to be invoked 100 times but was 3"));
+        } catch (NumberOfInvocationsAssertionError e) {
+            String expected = 
+                "\n" +
+                "LinkedList.clear()" +
+        		"\n" +
+        		"Expected 100 times but was 3";
+            assertEquals(expected, e.getMessage());
         }
     }
     
     @Test
     public void shouldVerifyActualNumberOfInvocationsLargerThanExpected() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
         mock.clear();
         mock.clear();
         mock.clear();
@@ -38,43 +48,42 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 1).clear();
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Expected to be invoked 1 times but was 3"));
+        } catch (NumberOfInvocationsAssertionError e) {
+            String expected = 
+                "\n" +
+                "LinkedList.clear()" +
+                "\n" +
+                "Expected 1 time but was 3";
+            assertEquals(expected, e.getMessage());
         }
     }
     
     @Test
     public void shouldVerifyProperlyIfMethodWasNotInvoked() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
-
         Mockito.verify(mock, 0).clear();
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Expected to be invoked 15 times but was 0"));
+        } catch (NumberOfInvocationsAssertionError e) {
+            assertTrue(e.getMessage().endsWith("Expected 15 times but was 0"));
         }
     }
     
     @Test
     public void shouldVerifyProperlyIfMethodWasInvokedOnce() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
-
         mock.clear();
         
         Mockito.verify(mock, 1).clear();
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (AssertionError error) {
-            assertThat(error.getMessage(), equalTo("Expected to be invoked 15 times but was 1"));
+        } catch (NumberOfInvocationsAssertionError e) {
+            assertTrue(e.getMessage().endsWith("Expected 15 times but was 1"));
         }
     }
     
     @Test
     public void shouldNotCountInStubbedInvocations() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
-        
         Mockito.stub(mock.add("test")).andReturn(false);
         Mockito.stub(mock.add("test")).andReturn(true);
         

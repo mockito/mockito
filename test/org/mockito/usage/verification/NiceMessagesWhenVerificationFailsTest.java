@@ -89,7 +89,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Invocation differs from actual:" +
+                    "Invocation differs from actual" +
                     "\n" +
                     "Expected: IMethods.twoArgumentMethod(1, 1000)" +
                     "\n" +
@@ -110,7 +110,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Invocation differs from actual:" +
+                    "Invocation differs from actual" +
                     "\n" +
                     "Expected: IMethods.simpleMethod(\"test\")" +
                     "\n" +
@@ -135,7 +135,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Invocation differs from actual:" +
+                    "Invocation differs from actual" +
                     "\n" +
                     "Expected: IMethods.twoArgumentMethod(3, 1000)" +
                     "\n" +

@@ -26,7 +26,7 @@ public class MockitoBehavior<T> {
             int expectedInvoked = verifyingMode.getExactNumberOfInvocations();
             
             if (actuallyInvoked != expectedInvoked) {
-                throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked);
+                throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, invocation);
             } 
         } else {
             if (actuallyInvoked == 0) {
@@ -34,7 +34,7 @@ public class MockitoBehavior<T> {
                 InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
                 String message = 
                     "\n" +
-                    "Invocation differs from actual:" +
+                    "Invocation differs from actual" +
                     "\n";
                 
                 String expected = invocation.toString();

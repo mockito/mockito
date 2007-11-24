@@ -31,7 +31,7 @@ public class ToTypeMappings {
         primitiveToWrapperType.put(Double.TYPE, Double.class);
     }
     
-    public static Object emptyReturnValueFor(Class type) {
+    public static Object emptyReturnValueFor(Class<?> type) {
         return emptyReturnValueToType.get(type);
     }
     

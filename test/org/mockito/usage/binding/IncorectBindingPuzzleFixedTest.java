@@ -41,7 +41,7 @@ public class IncorectBindingPuzzleFixedTest {
         } catch (VerificationAssertionError error) {
             String expected = 
                 "\n" +
-        		"Invocation differs from actual:" +
+        		"Invocation differs from actual" +
         		"\n" +
         		"Expected: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
         		"\n" +

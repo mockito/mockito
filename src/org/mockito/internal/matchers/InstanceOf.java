@@ -9,7 +9,7 @@ public class InstanceOf implements IArgumentMatcher {
 
     private final Class<?> clazz;
 
-    public InstanceOf(Class clazz) {
+    public InstanceOf(Class<?> clazz) {
         this.clazz = clazz;
     }
 

@@ -1,8 +1,6 @@
 package org.mockito;
 
-import java.util.*;
-
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.MissingMethodInvocationException;
 import org.mockito.internal.*;
 
 @SuppressWarnings("unchecked")
@@ -57,14 +55,10 @@ public class Mockito extends Matchers {
         return MockUtil.getControl(mock);
     }
 
-    //TODO experimental in order syntax (I know is ugly)
-    public static <T> T verifyInOrder(T mock, int exactNumberOfInvocations) {
-        //TODO validate mocks
-        return mock;
-    }
-
-    public static <T> T verifyInOrder(T mock) {
-        //TODO validate mocks
-        return mock;
+    public static StrictOrderVerifier strictOrderVerifier(Object ... mocks) {
+        for (Object mock : mocks) {
+            MockUtil.validateMock(mock);
+        }
+        return new StrictOrderVerifier();
     }
 }

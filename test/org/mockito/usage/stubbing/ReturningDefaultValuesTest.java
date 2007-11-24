@@ -6,7 +6,6 @@ package org.mockito.usage.stubbing;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.junit.Test;

@@ -4,13 +4,14 @@
  */
 package org.mockito.usage.verification;
 
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.Mockito;
 import org.mockito.exceptions.*;
+import org.mockito.internal.StrictOrderVerifier;
 
 @SuppressWarnings("unchecked")  
 public class VerificationInOrderTest {
@@ -18,6 +19,7 @@ public class VerificationInOrderTest {
     private LinkedList list;
     private HashMap map;
     private HashSet set;
+    private StrictOrderVerifier strictly;
 
     @Before
     public void setUp() {
@@ -31,35 +33,59 @@ public class VerificationInOrderTest {
         list.add("three and four");
         map.put("five", "five");
         set.add("six");
+        
+        strictly = strictOrderVerifier(list, map, set);
     }
-
+    
     @Test
     public void shouldVerifyInOrder() {
-        Mockito.verifyInOrder(list).add("one");
-        Mockito.verifyInOrder(map).put("one", "two");
-        Mockito.verifyInOrder(list).add("three and four");
-        Mockito.verifyInOrder(map).put("five", "five");
-        Mockito.verifyInOrder(set).add("six");
+        strictly.verify(list).add("one");
+        strictly.verify(map).put("two", "two");
+        strictly.verify(list).add("three and four");
+        strictly.verify(map).put("five", "five");
+        strictly.verify(set).add("six");
+        strictly.verifyNoMoreInteractions();
     } 
 
     @Test
     public void shouldVerifyInOrderWithExactNumberOfInvocations() {
-        Mockito.verifyInOrder(list, 1).add("one");
-        Mockito.verifyInOrder(map).put("one", "two");
-        Mockito.verifyInOrder(list, 2).add("three and four");
-        Mockito.verifyInOrder(map, 1).put("five", "five");
-        Mockito.verifyInOrder(set, 1).add("six");
+        strictly.verify(list, 1).add("one");
+        strictly.verify(map).put("two", "two");
+        strictly.verify(list, 2).add("three and four");
+        strictly.verify(map, 1).put("five", "five");
+        strictly.verify(set, 1).add("six");
+        strictly.verifyNoMoreInteractions();
     }  
     
-    @Ignore
     @Test(expected = VerificationAssertionError.class)
     public void shouldFailOnOrdinaryVerificationError() {
-        Mockito.verifyInOrder(list).add("xxx");
+        strictly.verify(list).add("xxx");
+    }
+    
+    @Test(expected = NumberOfInvocationsAssertionError.class)
+    public void shouldFailOnExactNumberOfInvocations() {
+        strictly.verify(list, 2).add("xxx");
     }
     
     @Ignore
-    @Test(expected = NumberOfInvocationsAssertionError.class)
-    public void shouldFailOnExactNumberOfInvocations() {
-        Mockito.verifyInOrder(list, 2).add("xxx");
+    @Test
+    public void shouldFailOnWrongOrder() {
+        strictly.verify(list, 1).add("one");
+        strictly.verify(map).put("two", "two");
+        try {
+            strictly.verify(map, 1).put("five", "five");
+            fail();
+        } catch (StrictVerificationError e) {
+//            String expected = "\n" +
+//                    "Expected next invocation:" +
+//                    "\n" +
+//                    "HashMap.put(\"five\", \"five\")" +
+//                    "\n" +
+//                  "Actual next invocation:" +
+//                  "\n" +
+//                  "LinkedList.add(\"three and four\")" +
+//                  "\n";
+//            assertEquals(expected, e.getMessage());
+        }
     }
 }

@@ -78,7 +78,7 @@ public class InvocationWithMatchers {
         StringBuilder result = new StringBuilder();
         result.append(invocation.getMockAndMethodName());
         result.append("(");
-        for (Class paramType : invocation.getMethod().getParameterTypes()) {
+        for (Class<?> paramType : invocation.getMethod().getParameterTypes()) {
             result.append(paramType);
             result.append(", ");
         }

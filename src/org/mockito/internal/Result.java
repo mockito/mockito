@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-
+@SuppressWarnings("unchecked")
 public class Result implements IAnswer {
 
     private IAnswer value;

@@ -60,6 +60,11 @@ public class MockitoTest {
         Mockito.stubVoid(notMock);
     }
     
+    @Test(expected=NotAMockException.class)
+    public void shouldValidateMockWhenEnablingStrictChecking() {
+        Mockito.strictOrderVerifier(notMock);
+    }
+    
     @Test
     public void shouldDetectUnfinishedVerification() {
         verify(mock);
