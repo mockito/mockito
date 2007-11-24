@@ -6,14 +6,14 @@ import org.mockito.exceptions.MockitoException;
 
 public class VerifyingMode {
 
-    private final Integer exactNumberOfInvocations;
+    private final Integer expectedNumberOfInvocations;
     private final List<Object> mocksToBeVerifiedInSequence;
 
-    private VerifyingMode(Integer exactNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
-        if (exactNumberOfInvocations != null && exactNumberOfInvocations.intValue() < 0) {
+    private VerifyingMode(Integer expectedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
+        if (expectedNumberOfInvocations != null && expectedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        this.exactNumberOfInvocations = exactNumberOfInvocations;
+        this.expectedNumberOfInvocations = expectedNumberOfInvocations;
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
     }
     
@@ -21,24 +21,24 @@ public class VerifyingMode {
         return new VerifyingMode(null, Collections.emptyList());
     }
 
-    public static VerifyingMode times(int exactNumberOfInvocations) {
-        return new VerifyingMode(exactNumberOfInvocations, Collections.emptyList());
+    public static VerifyingMode times(int expectedNumberOfInvocations) {
+        return new VerifyingMode(expectedNumberOfInvocations, Collections.emptyList());
     }
 
     public boolean numberOfInvocationsMatters() {
-        return exactNumberOfInvocations != null;
+        return expectedNumberOfInvocations != null;
     }
 
-    public int getExactNumberOfInvocations() {
-        return exactNumberOfInvocations;
+    public int getExpectedNumberOfInvocations() {
+        return (expectedNumberOfInvocations==null)? 1 : expectedNumberOfInvocations;
     }
 
     public List<Object> getAllMocksToBeVerifiedInSequence() {
         return mocksToBeVerifiedInSequence;
     }
 
-    public static VerifyingMode inSequence(int exactNumberOfInvocations, List<Object> mocks) {
-        return new VerifyingMode(exactNumberOfInvocations, mocks);
+    public static VerifyingMode inSequence(Integer expectedNumberOfInvocations, List<Object> mocks) {
+        return new VerifyingMode(expectedNumberOfInvocations, mocks);
     }
 
     public boolean orderOfInvocationsMatters() {

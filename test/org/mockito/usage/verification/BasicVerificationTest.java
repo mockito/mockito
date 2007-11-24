@@ -1,86 +1,117 @@
 package org.mockito.usage.verification;
 
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import java.util.*;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.*;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest {
 
-    @Test
-    public void shouldVerify() throws Exception {
-        List mock = Mockito.mock(List.class);
-
-        mock.clear();
-        Mockito.verify(mock).clear();
-
-        mock.add("test");
-        Mockito.verify(mock).add("test");
-
-        Mockito.verifyNoMoreInteractions(mock);
+    private List mock;
+    private List mockTwo;
+    
+    @Before public void setup() {
+        mock = Mockito.mock(List.class);
+        mockTwo = Mockito.mock(List.class);
     }
 
     @Test
-    public void shouldFailVerification() throws Exception {
-        List mock = Mockito.mock(List.class);
+    public void shouldVerify() throws Exception {
+        mock.clear();
+        verify(mock).clear();
 
-        try {
-            Mockito.verify(mock).clear();
-            fail();
-        } catch (VerificationAssertionError expected) {};
+        mock.add("test");
+        verify(mock).add("test");
+
+        verifyNoMoreInteractions(mock);
+    }
+
+    @Test(expected=VerificationAssertionError.class)
+    public void shouldFailVerification() throws Exception {
+        verify(mock).clear();
     }
 
     @Test
     public void shouldFailVerificationOnMethodArgument() throws Exception {
-        List mock = Mockito.mock(List.class);
         mock.clear();
         mock.add("foo");
 
-        Mockito.verify(mock).clear();
+        verify(mock).clear();
         try {
-            Mockito.verify(mock).add("bar");
+            verify(mock).add("bar");
             fail();
         } catch (VerificationAssertionError expected) {};
     }
 
+    @Ignore
     @Test
     public void shouldLetYouVerifyTheSameMethodAnyTimes() throws Exception {
-        List mock = Mockito.mock(List.class);
         mock.clear();
+        mock.clear();
+        
+        mockTwo.add("add");
 
-        Mockito.verify(mock).clear();
-        Mockito.verify(mock).clear();
-        Mockito.verify(mock).clear();
+        verify(mock, anyTimes).clear();
+        verify(mockTwo, anyTimes).add("add");
+        try {
+            verify(mockTwo, anyTimes).add("foo");
+        } catch (VerificationAssertionError e) {}
     }
 
     @Test
     public void shouldDetectRedundantInvocation() throws Exception {
-        List mock = Mockito.mock(List.class);
         mock.clear();
         mock.add("foo");
         mock.add("bar");
 
-        Mockito.verify(mock).clear();
-        Mockito.verify(mock).add("foo");
+        verify(mock).clear();
+        verify(mock).add("foo");
 
         try {
-            Mockito.verifyNoMoreInteractions(mock);
+            verifyNoMoreInteractions(mock);
             fail();
         } catch (VerificationAssertionError expected) {};
     }
     
     @Test
-    public void shouldVerifyStubbedMethods() throws Exception {
-        LinkedList mock = Mockito.mock(LinkedList.class);
+    public void shouldDetectWhenInvokedMoreThanOnce() throws Exception {
+        mock.add("foo");
+        mock.clear();
+        mock.clear();
         
-        Mockito.stub(mock.add("test")).andReturn(Boolean.FALSE);
+        verify(mock).add("foo");
+
+        try {
+            verify(mock).clear();
+            fail();
+        } catch (NumberOfInvocationsAssertionError e) {};
+    }
+
+    @Test
+    public void shouldLetVerifyAnyTimes() throws Exception {
+        mockTwo.add("foo");
+        mock.clear();
+        mock.clear();
+        
+        verify(mockTwo, anyTimes).add("foo");
+
+        try {
+            verify(mock).clear();
+            fail();
+        } catch (NumberOfInvocationsAssertionError e) {};
+    }
+    
+    @Test
+    public void shouldVerifyStubbedMethods() throws Exception {
+        stub(mock.add("test")).andReturn(Boolean.FALSE);
         
         mock.add("test");
         
-        Mockito.verify(mock).add("test");
+        verify(mock).add("test");
     }
 }

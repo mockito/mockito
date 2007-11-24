@@ -2,16 +2,25 @@ package org.mockito.usage.matchers;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.collectionContaining;
 
 import java.util.*;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mockito;
+import org.mockito.exceptions.VerificationAssertionError;
 
 @SuppressWarnings("unchecked")
 public class BasicStubbingTest {
 
+    private DummyInterface mock;
+
+    @Before
+    public void setup() {
+        mock = Mockito.mock(DummyInterface.class);
+    }
+    
     private interface DummyInterface {
         int getInt(String value);
         String getString(int argumentOne, String argumentTwo);
@@ -20,8 +29,6 @@ public class BasicStubbingTest {
     
     @Test
     public void shouldStubAllMethodsByDefault() throws Exception {
-        DummyInterface mock = Mockito.mock(DummyInterface.class);
-
         assertEquals(0, mock.getInt("test"));
         assertEquals(0, mock.getInt("testTwo"));
         
@@ -34,21 +41,31 @@ public class BasicStubbingTest {
     
     @Test
     public void shouldStubAndLetBeCalledAnyTimes() throws Exception {
-        DummyInterface mock = Mockito.mock(DummyInterface.class);
-        
-        Mockito.stub(mock.getInt("14")).andReturn(14);
+        stub(mock.getInt("14")).andReturn(14);
         
         assertThat(mock.getInt("14"), equalTo(14));
         assertThat(mock.getInt("14"), equalTo(14));
         
-        Mockito.stub(mock.getList()).andReturn(Arrays.asList("elementOne", "elementTwo"));
+        stub(mock.getList()).andReturn(Arrays.asList("elementOne", "elementTwo"));
         
         assertThat(mock.getList(), collectionContaining("elementOne", "elementTwo"));
         assertThat(mock.getList(), collectionContaining("elementOne", "elementTwo"));
         
-        Mockito.stub(mock.getString(10, "test")).andReturn("test");
+        stub(mock.getString(10, "test")).andReturn("test");
         
         assertThat(mock.getString(10, "test"), equalTo("test"));
         assertThat(mock.getString(10, "test"), equalTo("test"));
+    }
+    
+    @Test
+    public void shouldStubbingBeTreatedAsInteraction() throws Exception {
+        mock = Mockito.mock(DummyInterface.class);
+        
+        stub(mock.getInt("blah"));
+        
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (VerificationAssertionError e) {}
     }
 }

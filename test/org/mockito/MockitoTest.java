@@ -41,7 +41,7 @@ public class MockitoTest {
     }
     
     @Test(expected=NotAMockException.class)
-    public void shouldValidateMockWhenVerifyingWithExactNumberOfInvocations() {
+    public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
         Mockito.verify(notMock, 19);
     }
     

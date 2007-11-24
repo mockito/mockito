@@ -2,7 +2,6 @@ package org.mockito.exceptions;
 
 import org.mockito.internal.InvocationWithMatchers;
 
-
 public class NumberOfInvocationsAssertionError extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;

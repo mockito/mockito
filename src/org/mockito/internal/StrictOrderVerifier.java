@@ -9,11 +9,11 @@ public class StrictOrderVerifier {
     List<Object> mocks = new LinkedList<Object>();
     
     public <T> T verify(T mock) {
-        return Mockito.verify(mock);
+        return Mockito.verify(mock, VerifyingMode.inSequence(null, mocks));
     }
     
-    public <T> T verify(T mock, int exactNumberOfInvocations) {
-        return Mockito.verify(mock, VerifyingMode.inSequence(exactNumberOfInvocations, mocks));
+    public <T> T verify(T mock, int expectedNumberOfInvocations) {
+        return Mockito.verify(mock, VerifyingMode.inSequence(expectedNumberOfInvocations, mocks));
     }
 
     public void verifyNoMoreInteractions() {

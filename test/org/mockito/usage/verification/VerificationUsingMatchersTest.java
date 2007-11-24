@@ -36,7 +36,7 @@ public class VerificationUsingMatchersTest {
         mock.oneArg(two);
         
         verify(mock).oneArg(CrazyMatchers.same(one));
-        verify(mock).oneArg(two);
+        verify(mock, 2).oneArg(two);
         
         try {
             verify(mock).oneArg(CrazyMatchers.same(three));

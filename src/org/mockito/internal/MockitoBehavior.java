@@ -21,45 +21,43 @@ public class MockitoBehavior<T> {
 
     public void verify(InvocationWithMatchers invocation, VerifyingMode verifyingMode) {
         int actuallyInvoked = numberOfActualInvocations(invocation);
-        
-        if (verifyingMode.numberOfInvocationsMatters()) {
-            int expectedInvoked = verifyingMode.getExactNumberOfInvocations();
+        int expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+               
+        if (expectedInvoked == 1 && actuallyInvoked == 0) {
+            //TODO this stuff is really hacked in, refactor, add more testing
+            InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
+            String message = 
+                "\n" +
+                "Invocation differs from actual" +
+                "\n";
             
-            if (actuallyInvoked != expectedInvoked) {
-                throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, invocation);
-            } 
-        } else {
-            if (actuallyInvoked == 0) {
-                //TODO this stuff is really hacked in, refactor, add more testing
-                InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
-                String message = 
-                    "\n" +
-                    "Invocation differs from actual" +
-                    "\n";
-                
-                String expected = invocation.toString();
-                if (similarInvocation != null) {
-                    String actual = similarInvocation.toString();
-                    if (expected.equals(actual)) {
-                        expected = invocation.toStringWithArgumentTypes();
-                        actual = similarInvocation.toStringWithArgumentTypes();
-                    }
-                    
-                    message += 
-                            "Expected: " + expected +
-                            "\n" +
-                    		"Actual:   " + actual;
-                } else {
-                    message = 
-                            "\n" +
-                            "Expected but not invoked:" +
-                            "\n" +    
-                            expected;
+            String expected = invocation.toString();
+            if (similarInvocation != null) {
+                String actual = similarInvocation.toString();
+                if (expected.equals(actual)) {
+                    expected = invocation.toStringWithArgumentTypes();
+                    actual = similarInvocation.toStringWithArgumentTypes();
                 }
                 
-                throw new VerificationAssertionError(message);
+                message += 
+                        "Expected: " + expected +
+                        "\n" +
+                		"Actual:   " + actual;
+            } else {
+                message = 
+                        "\n" +
+                        "Expected but not invoked:" +
+                        "\n" +    
+                        expected;
             }
+            
+            throw new VerificationAssertionError(message);
         }
+        
+        if (actuallyInvoked != expectedInvoked) {
+            throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, invocation);
+        }
+
         
         if (verifyingMode.orderOfInvocationsMatters()) {
             checkOrderOfInvocations(invocation, verifyingMode);

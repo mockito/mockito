@@ -83,6 +83,21 @@ public class ExactNumberOfTimesVerificationTest {
     }
     
     @Test
+    public void shouldFailWhenExpectedNumberOfInvocationIsZero() throws Exception {
+        mock.clear();
+        
+        try {
+            Mockito.verify(mock, 0).clear();
+            fail();
+        } catch (NumberOfInvocationsAssertionError e) {}
+    }
+    
+    @Test
+    public void shouldVerifyWhenExpectedNumberOfInvocationIsZero() throws Exception {
+        Mockito.verify(mock, 0).clear();
+    }
+    
+    @Test
     public void shouldNotCountInStubbedInvocations() throws Exception {
         Mockito.stub(mock.add("test")).andReturn(false);
         Mockito.stub(mock.add("test")).andReturn(true);

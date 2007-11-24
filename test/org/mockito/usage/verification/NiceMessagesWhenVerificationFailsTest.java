@@ -184,4 +184,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             assertEquals(expectedMessage, actualMessage);         
         }
     }
+    
+    //TODO do we need nice message when expected number of invocations = 0?
+    
 }

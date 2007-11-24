@@ -24,7 +24,7 @@ public class NoMoreInteractionsVerificationTest {
     }
     
     @Test
-    public void shouldVerifyWhenExactNumberOfInvocationsUsed() throws Exception {
+    public void shouldVerifyWhenExpectedNumberOfInvocationsUsed() throws Exception {
         List mock = mock(List.class);
 
         mock.add("one");

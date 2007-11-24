@@ -24,7 +24,7 @@ public class VerificationOnMultipleMocksUsingMatchersTest {
         verify(list).add(anyObject());
         verify(list).add(anyInt(), eq("test two"));
         
-        verify(map).put(anyObject(), anyObject());
+        verify(map, 2).put(anyObject(), anyObject());
         verify(map).put(eq("test two"), eq(200));
         
         verifyNoMoreInteractions(list, map);

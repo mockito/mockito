@@ -39,7 +39,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
     public void shouldVerifyInOrder() {
         strictly.verify(list).add("one");
         strictly.verify(map).put("two", "two");
-        strictly.verify(list).add("three and four");
+        strictly.verify(list, 2).add("three and four");
         strictly.verify(map).put("five", "five");
         strictly.verify(set).add("six");
     } 

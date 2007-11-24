@@ -41,29 +41,19 @@ public class VerificationInOrderTest {
     public void shouldVerifyInOrder() {
         strictly.verify(list).add("one");
         strictly.verify(map).put("two", "two");
-        strictly.verify(list).add("three and four");
+        strictly.verify(list, 2).add("three and four");
         strictly.verify(map).put("five", "five");
         strictly.verify(set).add("six");
         strictly.verifyNoMoreInteractions();
     } 
 
-    @Test
-    public void shouldVerifyInOrderWithExactNumberOfInvocations() {
-        strictly.verify(list, 1).add("one");
-        strictly.verify(map).put("two", "two");
-        strictly.verify(list, 2).add("three and four");
-        strictly.verify(map, 1).put("five", "five");
-        strictly.verify(set, 1).add("six");
-        strictly.verifyNoMoreInteractions();
-    }  
-    
     @Test(expected = VerificationAssertionError.class)
     public void shouldFailOnOrdinaryVerificationError() {
         strictly.verify(list).add("xxx");
     }
     
     @Test(expected = NumberOfInvocationsAssertionError.class)
-    public void shouldFailOnExactNumberOfInvocations() {
+    public void shouldFailOnExpectedNumberOfInvocations() {
         strictly.verify(list, 2).add("xxx");
     }
     
@@ -72,19 +62,30 @@ public class VerificationInOrderTest {
         strictly.verify(list, 1).add("one");
         strictly.verify(map).put("two", "two");
         try {
+            strictly.verify(map).put("five", "five");
+            fail();
+        } catch (StrictVerificationError e) {}
+    }
+    
+    @Test
+    public void shouldFailOnWrongOrderWhenCheckingExpectedNumberOfInvocations() {
+        strictly.verify(list, 1).add("one");
+        strictly.verify(map).put("two", "two");
+        try {
             strictly.verify(map, 1).put("five", "five");
             fail();
-        } catch (StrictVerificationError e) {
-//            String expected = "\n" +
-//                    "Expected next invocation:" +
-//                    "\n" +
-//                    "HashMap.put(\"five\", \"five\")" +
-//                    "\n" +
-//                  "Actual next invocation:" +
-//                  "\n" +
-//                  "LinkedList.add(\"three and four\")" +
-//                  "\n";
-//            assertEquals(expected, e.getMessage());
-        }
+        } catch (StrictVerificationError e) {}
+    }
+    
+    @Ignore
+    @Test
+    public void shouldFailOnWrongOrderWhenCheckingExpectedNumberOfInvocations2() {
+        strictly.verify(list, 1).add("one");
+        strictly.verify(map).put("two", "two");
+        strictly.verify(list).add("three and four");
+        try {
+            strictly.verify(map, 1).put("five", "five");
+            fail();
+        } catch (StrictVerificationError e) {}
     }
 }

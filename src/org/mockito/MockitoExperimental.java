@@ -13,8 +13,8 @@ public class MockitoExperimental extends Mockito {
         return verify(mock);
     }
 
-    public static <T> T assertInvoked(T mock, int exactNumberOfInvocations) {
-        return verify(mock, exactNumberOfInvocations);
+    public static <T> T assertInvoked(T mock, int expectedNumberOfInvocations) {
+        return verify(mock, expectedNumberOfInvocations);
     }
     
     public static void assertNoMoreInteractions(Object ... mocks) {
@@ -33,8 +33,8 @@ public class MockitoExperimental extends Mockito {
         return new WasInvokedMatcher<T>(mock);
     }
     
-    public static <T> MockitoMatcher<T> wasInvoked(T mock, int exactNumberOfInvocations) {
-        return new WasInvokedMatcher<T>(mock, exactNumberOfInvocations);
+    public static <T> MockitoMatcher<T> wasInvoked(T mock, int expectedNumberOfInvocations) {
+        return new WasInvokedMatcher<T>(mock, expectedNumberOfInvocations);
     }
     
     public static <T> MockitoMatcher<T> noMoreInteractions(T mock) {

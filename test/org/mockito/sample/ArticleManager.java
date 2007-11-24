@@ -1,5 +1,7 @@
 package org.mockito.sample;
 
+import java.util.List;
+
 public class ArticleManager {
     
     private final ArticleCalculator calculator;
@@ -17,5 +19,14 @@ public class ArticleManager {
         database.updateNumberOfArticles(newspaper, articles);
         database.updateNumberOfPolishArticles(newspaper, polishArticles);
         database.updateNumberOfEnglishArticles(newspaper, articles - polishArticles);
+    }
+    
+    public void updateRelatedArticlesCounters(String newspaper) {
+        List<Article> articles = database.getArticlesFor("Guardian");
+        for (Article article : articles) {
+            int numberOfRelatedArticles = calculator.countNumberOfRelatedArticles(article);
+            article.setNumberOfRelatedArticles(numberOfRelatedArticles);
+            database.save(article);
+        }
     }
 }
