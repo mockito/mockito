@@ -25,14 +25,17 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock) {
-        MockUtil.validateMock(mock);
-        MockitoState.instance().verifyingStarted(VerifyingMode.anyTimes());
-        return mock; 
+        return verify(mock, VerifyingMode.anyTimes());
     }
     
     public static <T> T verify(T mock, int exactNumberOfInvocations) {
+        return verify(mock, VerifyingMode.times(exactNumberOfInvocations));
+    }
+    
+    //TODO should not be public
+    public static <T> T verify(T mock, VerifyingMode mode) {
         MockUtil.validateMock(mock);
-        MockitoState.instance().verifyingStarted(VerifyingMode.times(exactNumberOfInvocations));
+        MockitoState.instance().verifyingStarted(mode);
         return mock;
     }
 
@@ -56,9 +59,11 @@ public class Mockito extends Matchers {
     }
 
     public static StrictOrderVerifier strictOrderVerifier(Object ... mocks) {
+        StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
+            strictOrderVerifier.addMock(mock);
         }
-        return new StrictOrderVerifier();
+        return strictOrderVerifier;
     }
 }

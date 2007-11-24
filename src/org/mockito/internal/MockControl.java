@@ -53,9 +53,11 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         validateMatchers(invocation, lastMatchers);
 
         List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
+        
         InvocationWithMatchers invocationWithMatchers = new InvocationWithMatchers(invocation, processedMatchers);
         
         if (verifyingMode != null) {
+            //TODO shouldn't verify take only invocationWithMatchers.getInvocation(); ?
             behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         }
@@ -65,6 +67,8 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 //        }
         
         mockitoState.reportLastControl(this);
+        
+        invocationWithMatchers.setSequenceNumber(mockitoState.nextSequenceNumber());
         
         behavior.addInvocation(invocationWithMatchers);
         
@@ -135,5 +139,9 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     public void setMock(T mock) {
         behavior.setMock(mock);
+    }
+
+    public List<InvocationWithMatchers> getRegisteredInvocations() {
+        return behavior.getRegisteredInvocations();
     }
 }

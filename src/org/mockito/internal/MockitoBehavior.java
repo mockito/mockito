@@ -60,6 +60,40 @@ public class MockitoBehavior<T> {
                 throw new VerificationAssertionError(message);
             }
         }
+        
+        if (verifyingMode.orderOfInvocationsMatters()) {
+            checkOrderOfInvocations(invocation, verifyingMode);
+        }
+    }
+
+    private void checkOrderOfInvocations(InvocationWithMatchers actualInvocation, VerifyingMode verifyingMode) {
+        Set<InvocationWithMatchers> allInvocationsInOrder = new TreeSet<InvocationWithMatchers>(
+                new Comparator<InvocationWithMatchers>(){
+                    public int compare(InvocationWithMatchers o1, InvocationWithMatchers o2) {
+                        int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
+                        assert comparison != 0;
+                        return comparison;
+                    }});
+        
+        List<Object> allMocksToBeVerifiedInOrder = verifyingMode.getAllMocksToBeVerifiedInSequence();
+        for (Object mock : allMocksToBeVerifiedInOrder) {
+            List<InvocationWithMatchers> invocations = MockUtil.getControl(mock).getRegisteredInvocations();
+            allInvocationsInOrder.addAll(invocations);
+        }
+        
+        InvocationWithMatchers lastVerifiedInvocation = null;
+        for (InvocationWithMatchers registeredInvocation : allInvocationsInOrder) {
+            if (registeredInvocation.getInvocation().isVerified()) {
+                lastVerifiedInvocation = registeredInvocation;
+            } else {
+                break;
+            }
+        }
+        assert lastVerifiedInvocation != null;
+        
+        if (!lastVerifiedInvocation.matches(actualInvocation.getInvocation())) {
+            throw new StrictVerificationError();
+        }
     }
 
     /**
@@ -134,5 +168,9 @@ public class MockitoBehavior<T> {
 
     public void setMock(T mock) {
         this.mock = mock;
+    }
+
+    public List<InvocationWithMatchers> getRegisteredInvocations() {
+        return registeredInvocations;
     }
 }

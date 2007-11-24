@@ -13,12 +13,13 @@ public class InvocationWithMatchers {
 
     protected final Invocation invocation;
     private final List<IArgumentMatcher> matchers;
+    private int sequenceNumber;
 
     public InvocationWithMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
         this.invocation = invocation;
         this.matchers = matchers;
     }
-
+    
     public boolean equals(Object o) {
         if (o == null || !this.getClass().equals(o.getClass()))
             return false;
@@ -83,5 +84,13 @@ public class InvocationWithMatchers {
             result.append(", ");
         }
         return result.toString().replaceFirst(", ", "").concat(")");
+    }
+
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 }

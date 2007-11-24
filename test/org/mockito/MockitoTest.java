@@ -61,7 +61,7 @@ public class MockitoTest {
     }
     
     @Test(expected=NotAMockException.class)
-    public void shouldValidateMockWhenEnablingStrictChecking() {
+    public void shouldValidateMockWhenGettingStrictVerifier() {
         Mockito.strictOrderVerifier(notMock);
     }
     

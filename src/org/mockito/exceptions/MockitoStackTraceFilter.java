@@ -16,12 +16,12 @@ public class MockitoStackTraceFilter {
 
     public void filterStackTrace(HasFilterableStackTrace hasFilterableStackTrace) {
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(hasFilterableStackTrace.getStackTrace());
+        
         int lastToRemove = -1;
         int i = 0;
         for (StackTraceElement trace : unfilteredStackTrace) {
             if (this.isLastStackElementToRemove(trace)) {
                 lastToRemove = i;
-                break;
             }
             i++;
         }

@@ -67,7 +67,6 @@ public class VerificationInOrderTest {
         strictly.verify(list, 2).add("xxx");
     }
     
-    @Ignore
     @Test
     public void shouldFailOnWrongOrder() {
         strictly.verify(list, 1).add("one");

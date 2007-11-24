@@ -5,11 +5,13 @@ import org.mockito.exceptions.UnfinishedVerificationException;
 @SuppressWarnings("unchecked")
 public class MockitoState {
     
+    //TODO this has to be threaddy singleton
     static MockitoState INSTANCE = new MockitoState();
     
     private final ThreadLocal<MockControl> lastControl = new ThreadLocal<MockControl>();
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
-//    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
+    private final ThreadLocal<Integer> invocationSequenceNumber = new ThreadLocal<Integer>();
+//    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLoca<Object>();
 
     MockitoState() {}
     
@@ -32,7 +34,7 @@ public class MockitoState {
         verifyingModeLocal.set(verify);
     }
 
-    public void checkForUnfinishedVerification() {
+    public synchronized void checkForUnfinishedVerification() {
         if (verifyingModeLocal.get() != null) {
             throw new UnfinishedVerificationException();
         }
@@ -42,6 +44,17 @@ public class MockitoState {
         VerifyingMode verifyingMode = verifyingModeLocal.get();
         verifyingModeLocal.set(null);
         return verifyingMode;
+    }
+
+    public synchronized int nextSequenceNumber() {
+        if (invocationSequenceNumber.get() == null) {
+            invocationSequenceNumber.set(1);
+            return 1;
+        } else {
+            int next = invocationSequenceNumber.get() + 1;
+            invocationSequenceNumber.set(next);
+            return next;
+        }
     }
 
 //    public void stubbingStarted() {
