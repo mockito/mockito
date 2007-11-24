@@ -52,6 +52,7 @@ public class StubbingWithThrowablesTest {
         
         try {
             reader.read();
+            fail();
         } catch (Exception e) {
             assertEquals(ioException, e);
         }
@@ -66,6 +67,7 @@ public class StubbingWithThrowablesTest {
         
         try {
             mock.add("quake");
+            fail();
         } catch (Error e) {
             assertEquals(error, e);
         }
