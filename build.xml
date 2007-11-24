@@ -69,7 +69,7 @@
 		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules.xml">
 			<ruleset>Mockito</ruleset>
 			<formatter type="html" toFile="${target.dir}/pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" />
-			<fileset dir="src">
+			<fileset dir="test">
 				<include name="**/*.java" />
 			</fileset>
 		</pmd>
