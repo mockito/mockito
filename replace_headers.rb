@@ -1,3 +1,6 @@
+# Copyright (c) 2007 Mockito contributors 
+# This program is made available under the terms of the MIT License.
+
 require 'find'
 
 dirs = ["src","test"]
@@ -39,9 +42,8 @@ paths.each do |path|
       out = new_header + out
     end
   
-    puts out
-    #f.pos = 0                     
-    #f.print out
-    #f.truncate(f.pos)             
+    f.pos = 0           
+    f.print out
+    f.truncate(f.pos)             
   end
 end

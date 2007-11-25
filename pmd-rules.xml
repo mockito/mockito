@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+
+<!--
+ Copyright (c) 2007 Mockito contributors 
+ This program is made available under the terms of the MIT License.
+-->
+
 <ruleset name="Mockito" xmlns="http://pmd.sf.net/ruleset/1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
