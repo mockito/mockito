@@ -22,8 +22,7 @@ public class StrictOrderVerifier implements Strictly {
     }
 
     public void verifyNoMoreInteractions() {
-    //MockitoState.instance().checkForUnfinishedVerification();
-    //TODO not implemented yet
+        Mockito.verifyNoMoreInteractions(mocksToBeVerifiedInOrder.toArray());
     }
 
     public void addMockToBeVerifiedInOrder(Object mock) {

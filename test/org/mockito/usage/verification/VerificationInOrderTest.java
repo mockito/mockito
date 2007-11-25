@@ -44,7 +44,7 @@ public class VerificationInOrderTest {
         strictly.verify(list, 2).add("three and four");
         strictly.verify(map).put("five", "five");
         strictly.verify(set).add("six");
-        strictly.verifyNoMoreInteractions();
+        verifyNoMoreInteractions(list, map, set);
     } 
 
     @Test(expected = VerificationAssertionError.class)
@@ -87,4 +87,16 @@ public class VerificationInOrderTest {
             fail();
         } catch (StrictVerificationError e) {}
     }
+    
+    @Test
+    public void shouldFailOnVerifyNoMoreInteractions() {
+        strictly.verify(list).add("one");
+        strictly.verify(map).put("two", "two");
+        strictly.verify(list, 2).add("three and four");
+        strictly.verify(map).put("five", "five");
+        try {
+            verifyNoMoreInteractions(list, map, set);
+            fail();
+        } catch (VerificationAssertionError e) {}
+    } 
 }

@@ -50,8 +50,8 @@
 	</target>
 
 	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
-		<junit fork="true" forkmode="perBatch">
-			<formatter type="brief" toConsole="true" />
+		<junit fork="true" forkmode="perBatch" haltonfailure="true">
+			<formatter type="brief" />
 			<classpath refid="test.classpath" />
 
 			<batchtest todir="${test.reports.dir}">

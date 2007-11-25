@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.exceptions.MissingMethodInvocationException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.*;
 
 @SuppressWarnings("unchecked")
@@ -53,41 +53,45 @@ public class Mockito extends Matchers {
     }
 
 	/**
-	 * <pre>
-	 * Throws an AssertionError if any of given mocksToBeVerifiedInOrder has any unverified interaction.
-     * 
-     * Use this method after you verified all your mocksToBeVerifiedInOrder - to make sure that nothing 
-     * else was invoked on your mocksToBeVerifiedInOrder.
-     * 
+	 * Throws an AssertionError if any of given mocks has any unverified interaction.
+     * <p>
+     * Use this method after you verified all your mocks - to make sure that nothing 
+     * else was invoked on your mocks.
+     * <p>
      * It's a good pattern not to use this method in every test method.
-     * Sometimes test method focuses on different behavior/interaction 
-     * and it's not necessary to call verifyNoMoreInteractions()
-     * 
+     * Test methods should focus on different behavior/interaction 
+     * and it's not necessary to call verifyNoMoreInteractions() all the time
+     * <p>
      * Stubbed invocations are also treated as interactions.
-     * 
+     * <p>
      * Example:
-	 * 
-	 *    <code>
-	 *         //interactions
-	 *         mock.doSomething();
-	 *         mock.doSomethingUnexpected();
-	 *         
-	 *         //verification
-	 *         verify(mock).doSomething();
-	 *         
-	 *         //throws error: 'doSomethingUnexpected()' is unexpected
-	 *         verifyNoMoreInteractions(mock);
-	 *    </code>
+     * <pre>
+     *     //interactions
+     *     mock.doSomething();
+     *     mock.doSomethingUnexpected();
+     *     
+     *     //verification
+     *     verify(mock).doSomething();
+     *     
+     *     verifyNoMoreInteractions(mock);
+     *     //oups: 'doSomethingUnexpected()' is unexpected
 	 *</pre>
 	 *
-	 * @param mocksToBeVerifiedInOrder
+	 * @param mocks
 	 */
 	public static void verifyNoMoreInteractions(Object ... mocks) {
+	    assertMocksNotEmpty(mocks);
 	    MockitoState.instance().checkForUnfinishedVerification();
 	    for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyNoMoreInteractions();
         }
 	}
+
+    private static void assertMocksNotEmpty(Object[] mocks) {
+        if (mocks.length == 0) {
+            throw Exceptions.mocksHaveToBePassedAsArguments();
+        }
+    }
 
     public static void verifyZeroInteractions(Object ... mocks) {
         MockitoState.instance().checkForUnfinishedVerification();

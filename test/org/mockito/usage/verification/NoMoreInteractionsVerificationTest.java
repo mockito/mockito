@@ -41,10 +41,13 @@ public class NoMoreInteractionsVerificationTest {
     }
     
     @Test
-    public void shouldVerifyNoInteractions() throws Exception {
+    public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() throws Exception {
         List mock = mock(List.class);
 
         verifyNoMoreInteractions(mock);
+        verifyNoMoreInteractions(mock);
+        
+        verifyZeroInteractions(mock);
         verifyZeroInteractions(mock);
     }
     

@@ -4,7 +4,6 @@
  */
 package org.mockito.internal;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import net.sf.cglib.proxy.Factory;
 
@@ -19,7 +18,7 @@ public class MockFactoryTest {
         SomeInterface proxy = factory.createMock(SomeInterface.class, new MockAwareStub());
         
         Class superClass = proxy.getClass().getSuperclass();
-        assertThat(superClass, equalTo(Object.class));
+        assertEquals(Object.class, superClass);
     }
     
     @Test
@@ -28,14 +27,14 @@ public class MockFactoryTest {
         ClassWithoutConstructor proxy = factory.createMock(ClassWithoutConstructor.class, new MockAwareStub());
         
         Class superClass = proxy.getClass().getSuperclass();
-        assertThat(superClass, equalTo(ClassWithoutConstructor.class));
+        assertEquals(ClassWithoutConstructor.class, superClass);
     }
     
     @Test
     public void shouldCreateMockFromClassEvenWhenConstructorIsDodgy() throws Exception {
         MockFactory<ClassWithDodgyConstructor> factory = new MockFactory<ClassWithDodgyConstructor>();
         ClassWithDodgyConstructor mock = factory.createMock(ClassWithDodgyConstructor.class, new MockAwareStub());
-        assertThat(mock, notNullValue());
+        assertNotNull(mock);
     }
     
     @Test 

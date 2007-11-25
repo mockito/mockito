@@ -10,7 +10,5 @@ public interface Strictly {
 
     //TODO get rid of interface with int
     <T> T verify(T mock, int expectedNumberOfInvocations);
-
-    void verifyNoMoreInteractions();
-
+    
 }
