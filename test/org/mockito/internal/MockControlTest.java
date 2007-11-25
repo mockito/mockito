@@ -21,7 +21,7 @@ public class MockControlTest {
         LastArguments lastArguments = LastArguments.instance();
         
         lastArguments.reportMatcher(new Equals("test"));
-        state.verifyingStarted(VerifyingMode.anyTimes());
+        state.verifyingStarted(VerifyingMode.atLeastOnce());
         
         MockControl control = new MockControl(state, lastArguments);
 

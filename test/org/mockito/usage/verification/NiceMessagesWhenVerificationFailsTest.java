@@ -185,6 +185,22 @@ public class NiceMessagesWhenVerificationFailsTest {
         }
     }
     
+    @Test
+    public void shouldPrintMethodNameWhenVerifyingAtLeastOnce() throws Exception {
+        try {
+            verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                "\n" +
+                "Expected but not invoked:" +
+                "\n" +
+                "IMethods.twoArgumentMethod(1, 2)";
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }
+    
     //TODO do we need nice message when expected number of invocations = 0?
     
 }

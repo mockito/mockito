@@ -56,10 +56,10 @@ public class BasicVerificationTest {
         
         mockTwo.add("add");
 
-        verify(mock, anyTimes).clear();
-        verify(mockTwo, anyTimes).add("add");
+        verify(mock, atLeastOnce()).clear();
+        verify(mockTwo, atLeastOnce()).add("add");
         try {
-            verify(mockTwo, anyTimes).add("foo");
+            verify(mockTwo, atLeastOnce()).add("foo");
         } catch (VerificationAssertionError e) {}
     }
 
@@ -92,20 +92,6 @@ public class BasicVerificationTest {
         } catch (NumberOfInvocationsAssertionError e) {};
     }
 
-    @Test
-    public void shouldLetVerifyAnyTimes() throws Exception {
-        mockTwo.add("foo");
-        mock.clear();
-        mock.clear();
-        
-        verify(mockTwo, anyTimes).add("foo");
-
-        try {
-            verify(mock).clear();
-            fail();
-        } catch (NumberOfInvocationsAssertionError e) {};
-    }
-    
     @Test
     public void shouldVerifyStubbedMethods() throws Exception {
         stub(mock.add("test")).andReturn(Boolean.FALSE);

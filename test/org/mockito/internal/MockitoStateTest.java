@@ -27,9 +27,9 @@ public class MockitoStateTest {
     
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
-        mockitoState.verifyingStarted(VerifyingMode.anyTimes());
+        mockitoState.verifyingStarted(VerifyingMode.atLeastOnce());
         try {
-            mockitoState.verifyingStarted(VerifyingMode.anyTimes());
+            mockitoState.verifyingStarted(VerifyingMode.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
     }

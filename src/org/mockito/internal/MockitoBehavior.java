@@ -21,9 +21,10 @@ public class MockitoBehavior<T> {
 
     public void verify(InvocationWithMatchers invocation, VerifyingMode verifyingMode) {
         int actuallyInvoked = numberOfActualInvocations(invocation);
-        int expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        boolean atLeasOnce = verifyingMode.invokedAtLeastOnce();
                
-        if (expectedInvoked == 1 && actuallyInvoked == 0) {
+        if ((atLeasOnce || expectedInvoked == 1) && actuallyInvoked == 0) {
             //TODO this stuff is really hacked in, refactor, add more testing
             InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
             String message = 
@@ -54,7 +55,7 @@ public class MockitoBehavior<T> {
             throw new VerificationAssertionError(message);
         }
         
-        if (actuallyInvoked != expectedInvoked) {
+        if (!atLeasOnce && actuallyInvoked != expectedInvoked) {
             throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, invocation);
         }
 

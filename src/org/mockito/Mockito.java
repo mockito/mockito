@@ -6,10 +6,12 @@ import org.mockito.internal.*;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
 
-    public final static VerifyingMode anyTimes = VerifyingMode.anyTimes();
+    public static VerifyingMode atLeastOnce() {
+        return VerifyingMode.atLeastOnce();
+    }
     
-    public static VerifyingMode anyTimes() {
-        return anyTimes;
+    public static VerifyingMode times(int expectedNumerOfTimes) {
+        return VerifyingMode.atLeastOnce();
     }
     
     public static <T> T mock(Class<T> classToMock) {
@@ -31,9 +33,10 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock) {
-        return verify(mock, VerifyingMode.anyTimes());
+        return verify(mock, 1);
     }
     
+    //TODO make the interface consistent, it should be times(4) rather than int
     public static <T> T verify(T mock, int expectedNumberOfInvocations) {
         return verify(mock, VerifyingMode.times(expectedNumberOfInvocations));
     }
@@ -47,10 +50,10 @@ public class Mockito extends Matchers {
 
 	/**
 	 * <pre>
-	 * Throws an AssertionError if any of given mocks has any unverified interaction.
+	 * Throws an AssertionError if any of given mocksToBeVerifiedInOrder has any unverified interaction.
      * 
-     * Use this method after you verified all your mocks - to make sure that nothing 
-     * else was invoked on your mocks.
+     * Use this method after you verified all your mocksToBeVerifiedInOrder - to make sure that nothing 
+     * else was invoked on your mocksToBeVerifiedInOrder.
      * 
      * It's a good pattern not to use this method in every test method.
      * Sometimes test method focuses on different behavior/interaction 
@@ -73,7 +76,7 @@ public class Mockito extends Matchers {
 	 *    </code>
 	 *</pre>
 	 *
-	 * @param mocks
+	 * @param mocksToBeVerifiedInOrder
 	 */
 	public static void verifyNoMoreInteractions(Object ... mocks) {
 	    MockitoState.instance().checkForUnfinishedVerification();
@@ -94,11 +97,11 @@ public class Mockito extends Matchers {
         return MockUtil.getControl(mock);
     }
 
-    public static StrictOrderVerifier strictOrderVerifier(Object ... mocks) {
+    public static Strictly strictOrderVerifier(Object ... mocks) {
         StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
-            strictOrderVerifier.addMock(mock);
+            strictOrderVerifier.addMockToBeVerifiedInOrder(mock);
         }
         return strictOrderVerifier;
     }

@@ -10,8 +10,8 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.Strictly;
 import org.mockito.exceptions.*;
-import org.mockito.internal.StrictOrderVerifier;
 
 @SuppressWarnings("unchecked")  
 public class VerificationInOrderTest {
@@ -19,7 +19,7 @@ public class VerificationInOrderTest {
     private LinkedList list;
     private HashMap map;
     private HashSet set;
-    private StrictOrderVerifier strictly;
+    private Strictly strictly;
 
     @Before
     public void setUp() {
@@ -77,14 +77,13 @@ public class VerificationInOrderTest {
         } catch (StrictVerificationError e) {}
     }
     
-    @Ignore
     @Test
-    public void shouldFailOnWrongOrderWhenCheckingExpectedNumberOfInvocations2() {
+    public void shouldFailWhenPriorVerificationCalledAgain() {
         strictly.verify(list, 1).add("one");
         strictly.verify(map).put("two", "two");
-        strictly.verify(list).add("three and four");
+        strictly.verify(list, 2).add("three and four");
         try {
-            strictly.verify(map, 1).put("five", "five");
+            strictly.verify(list, 1).add("one");
             fail();
         } catch (StrictVerificationError e) {}
     }

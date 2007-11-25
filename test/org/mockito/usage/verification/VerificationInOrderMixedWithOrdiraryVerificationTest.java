@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.internal.StrictOrderVerifier;
+import org.mockito.Strictly;
 
 @SuppressWarnings("unchecked")  
 public class VerificationInOrderMixedWithOrdiraryVerificationTest {
@@ -17,7 +17,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
     private LinkedList list;
     private HashMap map;
     private HashSet set;
-    private StrictOrderVerifier strictly;
+    private Strictly strictly;
 
     @Before
     public void setUp() {

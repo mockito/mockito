@@ -1,4 +1,4 @@
-package org.mockito;
+package org.mockito.internal;
 
 import org.junit.Test;
 import org.mockito.exceptions.MockitoException;
@@ -6,16 +6,15 @@ import org.mockito.internal.VerifyingMode;
 
 import static org.junit.Assert.*;
 
-
 public class VerifyingModeTest {
 
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
-        VerifyingMode mode = VerifyingMode.anyTimes();
-        assertFalse(mode.numberOfInvocationsMatters());
+        VerifyingMode mode = VerifyingMode.atLeastOnce();
+        assertTrue(mode.invokedAtLeastOnce());
         
         mode = VerifyingMode.times(50);
-        assertTrue(mode.numberOfInvocationsMatters());
+        assertFalse(mode.invokedAtLeastOnce());
     }
     
     @Test

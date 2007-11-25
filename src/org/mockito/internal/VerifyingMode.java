@@ -17,31 +17,40 @@ public class VerifyingMode {
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
     }
     
-    public static VerifyingMode anyTimes() {
+    public static VerifyingMode atLeastOnce() {
         return new VerifyingMode(null, Collections.emptyList());
     }
 
     public static VerifyingMode times(int expectedNumberOfInvocations) {
         return new VerifyingMode(expectedNumberOfInvocations, Collections.emptyList());
     }
-
-    public boolean numberOfInvocationsMatters() {
-        return expectedNumberOfInvocations != null;
+    
+    /**
+     * <pre>
+     * Don't use VerifyingMode class directly. 
+     * 
+     * Use Mockito.atLeastOnce() and Mockito.times()
+     * </pre>
+     */
+    public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
+    
+    static VerifyingMode inOrder(Integer expectedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
+        return new VerifyingMode(expectedNumberOfInvocations, mocksToBeVerifiedInOrder);
     }
 
-    public int getExpectedNumberOfInvocations() {
-        return (expectedNumberOfInvocations==null)? 1 : expectedNumberOfInvocations;
+    boolean invokedAtLeastOnce() {
+        return expectedNumberOfInvocations == null;
     }
 
-    public List<Object> getAllMocksToBeVerifiedInSequence() {
+    Integer getExpectedNumberOfInvocations() {
+        return expectedNumberOfInvocations;
+    }
+
+    List<Object> getAllMocksToBeVerifiedInSequence() {
         return mocksToBeVerifiedInSequence;
     }
 
-    public static VerifyingMode inSequence(Integer expectedNumberOfInvocations, List<Object> mocks) {
-        return new VerifyingMode(expectedNumberOfInvocations, mocks);
-    }
-
-    public boolean orderOfInvocationsMatters() {
+    boolean orderOfInvocationsMatters() {
         return !mocksToBeVerifiedInSequence.isEmpty();
     }
 }
