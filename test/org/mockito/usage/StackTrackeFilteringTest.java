@@ -22,6 +22,7 @@ public class StackTrackeFilteringTest {
     public void shouldFilterStackTraceOnVerify() {
         try {
             verify(mock).simpleMethod();
+            fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
             
@@ -35,6 +36,7 @@ public class StackTrackeFilteringTest {
         mock.oneArg(true);
         try {
             verifyNoMoreInteractions(mock);
+            fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
             
@@ -48,6 +50,7 @@ public class StackTrackeFilteringTest {
         mock.oneArg(true);
         try {
             verifyZeroInteractions(mock);
+            fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyZeroInteractions"));
             

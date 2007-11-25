@@ -58,5 +58,5 @@ You'll see exact line of code where verification failed
 
 
 	
-
--error messages need to be nicer 8-)
+-think about merging in
+http://www.stephenduncanjr.com/projects/easymock-propertyutils

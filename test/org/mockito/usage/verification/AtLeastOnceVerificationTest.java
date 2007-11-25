@@ -1,6 +1,7 @@
 package org.mockito.usage.verification;
 
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class AtLeastOnceVerificationTest {
         verify(mockTwo, atLeastOnce()).add("add");
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
+            fail();
         } catch (VerificationAssertionError e) {}
     }
     

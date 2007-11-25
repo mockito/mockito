@@ -47,7 +47,7 @@
 
 	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
 		<junit fork="true" forkmode="perBatch">
-			<formatter type="brief" usefile="false" />
+			<formatter type="brief" toConsole="true" />
 			<classpath refid="test.classpath" />
 
 			<batchtest todir="${test.reports.dir}">
@@ -62,15 +62,24 @@
 		<fail message="Packiging is missing"/>
 	</target>
 
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath">
+	</taskdef>
+	
 	<target name="pmd" depends="prepare">
-		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath">
-		</taskdef>
-		
 		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules.xml">
 			<ruleset>Mockito</ruleset>
-			<formatter type="html" toFile="${target.dir}/pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" />
-			<fileset dir="test">
-				<include name="**/*.java" />
+			<formatter type="text" toConsole="true" linkPrefix="http://pmd.sourceforge.net/xref/" />
+			<fileset dir=".">
+				<include name="src/**/*.java" />
+				<include name="test/**/*.java" />
+			</fileset>
+		</pmd>
+		
+		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules-test-code.xml">
+			<ruleset>Mockito test code</ruleset>
+			<formatter type="text" toConsole="true" linkPrefix="http://pmd.sourceforge.net/xref/" />
+			<fileset dir=".">
+				<include name="test/**/*.java" />
 			</fileset>
 		</pmd>
 	</target>

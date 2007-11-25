@@ -15,7 +15,8 @@ public class BasicVerificationTest {
     private List mock;
     private List mockTwo;
     
-    @Before public void setup() {
+    @Before 
+    public void setup() {
         mock = Mockito.mock(List.class);
         mockTwo = Mockito.mock(List.class);
     }
@@ -50,7 +51,7 @@ public class BasicVerificationTest {
 
     @Ignore
     @Test
-    public void shouldLetYouVerifyTheSameMethodAnyTimes() throws Exception {
+    public void shouldLetVerifyTheSameMethodAnyTimes() throws Exception {
         mock.clear();
         mock.clear();
         
@@ -60,6 +61,7 @@ public class BasicVerificationTest {
         verify(mockTwo, atLeastOnce()).add("add");
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
+            fail();
         } catch (VerificationAssertionError e) {}
     }
 
