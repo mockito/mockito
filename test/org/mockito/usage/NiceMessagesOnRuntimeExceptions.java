@@ -5,7 +5,7 @@
 package org.mockito.usage;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.mockito.exceptions.MockitoException;
@@ -13,7 +13,7 @@ import org.mockito.exceptions.MockitoException;
 public class NiceMessagesOnRuntimeExceptions {
     
     @Test
-    public void shouldPrintThatRequiresArguments() {
+    public void shouldPrintThatRequiresArgumentsWhenVerifyingNoMoreInteractions() {
         try {
             verifyNoMoreInteractions();
             fail();
@@ -21,7 +21,23 @@ public class NiceMessagesOnRuntimeExceptions {
         catch (MockitoException e) {
             String expected = 
                     "\n" +
-                    "verifyNoMoreInteractions() requires arguments." +
+                    "Method requires arguments." +
+                    "\n" +
+                    "Pass mocks that should be verified.";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldPrintThatRequiresArgumentsWhenVerifyingZeroInteractions() {
+        try {
+            verifyZeroInteractions();
+            fail();
+        }
+        catch (MockitoException e) {
+            String expected = 
+                    "\n" +
+                    "Method requires arguments." +
                     "\n" +
                     "Pass mocks that should be verified.";
             assertEquals(expected, e.getMessage());

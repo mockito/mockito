@@ -94,6 +94,7 @@ public class Mockito extends Matchers {
     }
 
     public static void verifyZeroInteractions(Object ... mocks) {
+        assertMocksNotEmpty(mocks);
         MockitoState.instance().checkForUnfinishedVerification();
         for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyZeroInteractions();
