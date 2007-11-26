@@ -13,11 +13,11 @@ public class MockitoBehavior<T> {
     private T mock;
     
     private List<Invocation> registeredInvocations = new LinkedList<Invocation>();
-    private Map<InvocationWithMatchers, Result> results = new HashMap<InvocationWithMatchers, Result>();
+    private Map<ExpectedInvocation, Result> results = new HashMap<ExpectedInvocation, Result>();
 
-    private InvocationWithMatchers invocationForStubbing;
+    private ExpectedInvocation invocationForStubbing;
     
-    public void addInvocation(InvocationWithMatchers invocation) {
+    public void addInvocation(ExpectedInvocation invocation) {
         this.registeredInvocations.add(invocation.getInvocation());
         this.invocationForStubbing = invocation;
     }
@@ -28,14 +28,14 @@ public class MockitoBehavior<T> {
         this.results.put(invocationForStubbing, result);
     }
 
-    public void verify(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+    public void verify(ExpectedInvocation expected, VerifyingMode verifyingMode) {
         checkForMissingInvocation(expected, verifyingMode);
         checkOrderOfInvocations(expected, verifyingMode);
         checkForWrongNumberOfInvocations(expected, verifyingMode);        
         markInvocationsAsVerified(expected, verifyingMode);
     }
     
-    void markInvocationsAsVerified(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+    void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode verifyingMode) {
         int verifiedSoFar = 0;        
         for (Invocation invocation : registeredInvocations) {
             boolean shouldMarkAsVerified = 
@@ -47,7 +47,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private void checkForMissingInvocation(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+    private void checkForMissingInvocation(ExpectedInvocation expected, VerifyingMode verifyingMode) {
         int actuallyInvoked = numberOfActualInvocations(expected);
         Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
@@ -57,7 +57,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private void checkForWrongNumberOfInvocations(InvocationWithMatchers expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
+    private void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
         int actuallyInvoked = numberOfActualInvocations(expected);
         Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
@@ -67,7 +67,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private void reportMissingInvocationError(InvocationWithMatchers invocation) throws VerificationAssertionError {
+    private void reportMissingInvocationError(ExpectedInvocation invocation) throws VerificationAssertionError {
         //TODO refactor message building somewhere else...
         Invocation similarInvocation = findSimilarInvocation(invocation);
         String message = 
@@ -98,7 +98,7 @@ public class MockitoBehavior<T> {
         throw new VerificationAssertionError(message);
     }
 
-    private void checkOrderOfInvocations(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+    private void checkOrderOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) {
         if (!verifyingMode.orderOfInvocationsMatters()) {
             return;
         }
@@ -152,7 +152,7 @@ public class MockitoBehavior<T> {
      * gets first registered invocation with the same method name
      * or just first invocation
      */
-    private Invocation findSimilarInvocation(InvocationWithMatchers expectedInvocation) {
+    private Invocation findSimilarInvocation(ExpectedInvocation expectedInvocation) {
         for (Invocation registeredInvocation : registeredInvocations) {
             String expectedMethodName = expectedInvocation.getMethod().getName();
             String registeredInvocationName = registeredInvocation.getMethod().getName();
@@ -164,7 +164,7 @@ public class MockitoBehavior<T> {
         return null;
     }
 
-    private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {
+    private int numberOfActualInvocations(ExpectedInvocation expectedInvocation) {
         int verifiedInvocations = 0;
         for (Invocation registeredInvocation : registeredInvocations) {
             if (expectedInvocation.matches(registeredInvocation)) {
@@ -197,9 +197,9 @@ public class MockitoBehavior<T> {
     }
 
     public Object resultFor(Invocation invocation) throws Throwable {
-        for (InvocationWithMatchers invocationWithMatchers : results.keySet()) {
-            if (invocationWithMatchers.matches(invocation)) {
-                return results.get(invocationWithMatchers).answer();
+        for (ExpectedInvocation expectedInvocation : results.keySet()) {
+            if (expectedInvocation.matches(invocation)) {
+                return results.get(expectedInvocation).answer();
             }
         }
 
@@ -218,7 +218,7 @@ public class MockitoBehavior<T> {
         return registeredInvocations;
     }
 
-    public InvocationWithMatchers getInvocationForStubbing() {
+    public ExpectedInvocation getInvocationForStubbing() {
         return invocationForStubbing;
     }
 }

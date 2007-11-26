@@ -9,12 +9,12 @@ import java.util.*;
 
 import org.mockito.internal.matchers.IArgumentMatcher;
 
-public class InvocationWithMatchers {
+public class ExpectedInvocation {
 
     protected final Invocation invocation;
     private final List<IArgumentMatcher> matchers;
 
-    public InvocationWithMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
+    public ExpectedInvocation(Invocation invocation, List<IArgumentMatcher> matchers) {
         this.invocation = invocation;
         this.matchers = matchers;
     }
@@ -24,7 +24,7 @@ public class InvocationWithMatchers {
         if (o == null || !this.getClass().equals(o.getClass()))
             return false;
 
-        InvocationWithMatchers other = (InvocationWithMatchers) o;
+        ExpectedInvocation other = (ExpectedInvocation) o;
         return this.invocation.equals(other.invocation)
                 && ((this.matchers == null && other.matchers == null) || (this.matchers != null && this.matchers
                         .equals(other.matchers)));

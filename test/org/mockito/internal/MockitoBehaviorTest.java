@@ -23,8 +23,8 @@ public class MockitoBehaviorTest {
     @Ignore
     @Test
     public void shouldMarkVerifiedOnlyOneExecutionChunk() throws Exception {
-        InvocationWithMatchers toLowerCaseInvocation = new InvocationWithMatchers(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
-        InvocationWithMatchers toUpperCaseInvocation = new InvocationWithMatchers(new Invocation("mock", toUpperCase , new Object[] {}), Collections.EMPTY_LIST);
+        ExpectedInvocation toLowerCaseInvocation = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
+        ExpectedInvocation toUpperCaseInvocation = new ExpectedInvocation(new Invocation("mock", toUpperCase , new Object[] {}), Collections.EMPTY_LIST);
         
         behavior.addInvocation(toLowerCaseInvocation);
         behavior.addInvocation(toLowerCaseInvocation);
@@ -34,7 +34,7 @@ public class MockitoBehaviorTest {
         
         behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.inOrder(2, Arrays.asList(new Object())));
         
-        List<InvocationWithMatchers> invocations = behavior.getRegisteredInvocations();
+        List<ExpectedInvocation> invocations = behavior.getRegisteredInvocations();
         assertEquals(true, invocations.get(0).getInvocation().isVerified());
         assertEquals(true, invocations.get(1).getInvocation().isVerified());
         assertEquals(false, invocations.get(2).getInvocation().isVerified());

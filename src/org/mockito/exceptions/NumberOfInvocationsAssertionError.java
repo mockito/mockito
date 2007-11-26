@@ -4,13 +4,13 @@
  */
 package org.mockito.exceptions;
 
-import org.mockito.internal.InvocationWithMatchers;
+import org.mockito.internal.ExpectedInvocation;
 
 public class NumberOfInvocationsAssertionError extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public NumberOfInvocationsAssertionError(int expectedInvoked, int actuallyInvoked, InvocationWithMatchers invocation) {
+    public NumberOfInvocationsAssertionError(int expectedInvoked, int actuallyInvoked, ExpectedInvocation invocation) {
         super(  "\n" +
                 invocation.toString() +
         		"\n" +
