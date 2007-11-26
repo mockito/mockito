@@ -1,5 +1,9 @@
-# Copyright (c) 2007 Mockito contributors 
-# This program is made available under the terms of the MIT License.
+header = <<-eos
+/*
+ * Copyright (c) 2007 Mockito contributors 
+ * This program is made available under the terms of the MIT License.
+ */
+eos
 
 require 'find'
 
@@ -21,25 +25,17 @@ for dir in dirs
   end
 end
 
-new_header = 
-<<-eos
-/*
- * Copyright (c) 2007 Mockito contributors 
- * This program is made available under the terms of the MIT License.
- */
-eos
-
 paths.each do |path|
   File.open(path, 'r+') do |f|   
     out = ''
     f.each { |line| out << line }
   
-    header = Regexp.new('.*\*/.*package org\.', Regexp::MULTILINE)
+    current_hdr = Regexp.new('.*\*/.*package org\.', Regexp::MULTILINE)
   
-    if (out =~ header)     
-      out.gsub!(header, new_header + "package org.")
+    if (out =~ current_hdr)     
+      out.gsub!(current_hdr, header + "package org.")
     else 
-      out = new_header + out
+      out = header + out
     end
   
     f.pos = 0           
