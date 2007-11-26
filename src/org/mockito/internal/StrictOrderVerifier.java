@@ -20,6 +20,10 @@ public class StrictOrderVerifier implements Strictly {
     public <T> T verify(T mock, int expectedNumberOfInvocations) {
         return Mockito.verify(mock, VerifyingMode.inOrder(expectedNumberOfInvocations, mocksToBeVerifiedInOrder));
     }
+    
+    public <T> T verify(T mock, VerifyingMode verifyingMode) {
+        return Mockito.verify(mock, VerifyingMode.inOrder(verifyingMode.expectedCount(), mocksToBeVerifiedInOrder));
+    }
 
     public void verifyNoMoreInteractions() {
         Mockito.verifyNoMoreInteractions(mocksToBeVerifiedInOrder.toArray());

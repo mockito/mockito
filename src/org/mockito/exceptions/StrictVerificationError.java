@@ -11,4 +11,8 @@ public class StrictVerificationError extends MockitoAssertionError {
     public StrictVerificationError() {
         super("blah");
     }
+
+    public StrictVerificationError(String string) {
+        super(string);
+    }
 }

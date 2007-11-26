@@ -10,11 +10,11 @@ public class NumberOfInvocationsAssertionError extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public NumberOfInvocationsAssertionError(int expectedInvoked, int actuallyInvoked, ExpectedInvocation invocation) {
+    public NumberOfInvocationsAssertionError(int expectedCount, int actualCount, ExpectedInvocation expected) {
         super(  "\n" +
-                invocation.toString() +
+                expected.toString() +
         		"\n" +
-        		"Expected " + pluralize(expectedInvoked) + " but was " + actuallyInvoked);
+        		"Expected " + pluralize(expectedCount) + " but was " + actualCount);
     }
 
     private static String pluralize(int expectedInvoked) {

@@ -10,14 +10,14 @@ import org.mockito.exceptions.MockitoException;
 
 public class VerifyingMode {
 
-    private final Integer expectedNumberOfInvocations;
+    private final Integer expectedInvocationCount;
     private final List<Object> mocksToBeVerifiedInSequence;
 
     private VerifyingMode(Integer expectedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
         if (expectedNumberOfInvocations != null && expectedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        this.expectedNumberOfInvocations = expectedNumberOfInvocations;
+        this.expectedInvocationCount = expectedNumberOfInvocations;
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
     }
     
@@ -41,11 +41,11 @@ public class VerifyingMode {
     }
 
     boolean atLeastOnceMode() {
-        return expectedNumberOfInvocations == null;
+        return expectedInvocationCount == null;
     }
 
-    Integer getExpectedNumberOfInvocations() {
-        return expectedNumberOfInvocations;
+    Integer expectedCount() {
+        return expectedInvocationCount;
     }
 
     List<Object> getAllMocksToBeVerifiedInSequence() {
@@ -54,5 +54,9 @@ public class VerifyingMode {
 
     boolean orderOfInvocationsMatters() {
         return !mocksToBeVerifiedInSequence.isEmpty();
+    }
+
+    public boolean expectedCountIsZero() {
+        return expectedInvocationCount != null && expectedInvocationCount == 0;
     }
 }

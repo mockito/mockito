@@ -35,32 +35,40 @@ public class MockitoBehavior<T> {
         markInvocationsAsVerified(expected, verifyingMode);
     }
     
-    void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        int verifiedSoFar = 0;        
-        for (Invocation invocation : registeredInvocations) {
-            boolean shouldMarkAsVerified = 
-                verifyingMode.atLeastOnceMode() || 
-                verifyingMode.getExpectedNumberOfInvocations() > verifiedSoFar;
-            if (expected.matches(invocation) && shouldMarkAsVerified) {
-                invocation.markVerified();
-                verifiedSoFar++;
+    void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode mode) {
+        if (mode.expectedCountIsZero()) {
+            return;
+        }
+        
+        if (mode.orderOfInvocationsMatters()) {
+            List<InvocationChunk> chunks = getUnverifiedInvocationChunks(mode);
+            chunks.get(0).markAllInvocationsAsVerified();
+        } else {
+            for (Invocation invocation : registeredInvocations) {
+                if (expected.matches(invocation)) {
+                    invocation.markVerified();
+                }
             }
         }
     }
 
     private void checkForMissingInvocation(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        int actuallyInvoked = numberOfActualInvocations(expected);
-        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        int actualCount = numberOfActualInvocations(expected);
+        Integer expectedCount = verifyingMode.expectedCount();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
                
-        if ((atLeastOnce || expectedInvoked == 1) && actuallyInvoked == 0) {
+        if ((atLeastOnce || expectedCount == 1) && actualCount == 0) {
             reportMissingInvocationError(expected);
         }
     }
 
-    private void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
+    void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
+        if (verifyingMode.orderOfInvocationsMatters()) {
+            return;
+        }
+        
         int actuallyInvoked = numberOfActualInvocations(expected);
-        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        Integer expectedInvoked = verifyingMode.expectedCount();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
         
         if (!atLeastOnce && actuallyInvoked != expectedInvoked) {
@@ -99,29 +107,33 @@ public class MockitoBehavior<T> {
         throw new VerificationAssertionError(message);
     }
 
-    private void checkOrderOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        if (!verifyingMode.orderOfInvocationsMatters()) {
+    private void checkOrderOfInvocations(ExpectedInvocation expected, VerifyingMode mode) {
+        if (!mode.orderOfInvocationsMatters()) {
             return;
         }
         
-        Map<Invocation, Integer> sequenceOfInvocations = getSequenceOfInvocations(verifyingMode);
-        Invocation firstUnverifiedInvocation = null;
-        for (Invocation registered : sequenceOfInvocations.keySet()) {
-            if (!registered.isVerified()) {
-                firstUnverifiedInvocation = registered;
-            } else {
-                break;
-            }
-        }
-        //TODO cover this scenario firstUnverified == null
-        assert firstUnverifiedInvocation != null;
+        List<InvocationChunk> chunks = getUnverifiedInvocationChunks(mode);
         
-        if (!expected.matches(firstUnverifiedInvocation)) {
-            throw new StrictVerificationError();
+        if (mode.expectedCountIsZero() && !chunks.isEmpty() && expected.matches(chunks.get(0).getInvocation())) {
+            throw new NumberOfInvocationsAssertionError(0, chunks.get(0).getCount(), expected);
+        } else if (mode.expectedCountIsZero()) {
+            return;
+        }
+        
+        if (chunks.isEmpty()) {
+            throw new StrictVerificationError("everything was already verified");
+        }
+        
+        if (!expected.matches(chunks.get(0).getInvocation())) {
+            throw new StrictVerificationError("this is not expected here");
+        }
+        
+        if (!mode.atLeastOnceMode() && chunks.get(0).getCount() != mode.expectedCount()) {
+            throw new NumberOfInvocationsAssertionError(mode.expectedCount(), chunks.get(0).getCount(), expected);
         }
     }
 
-    private Map<Invocation, Integer> getSequenceOfInvocations(VerifyingMode verifyingMode) {
+    private List<InvocationChunk> getUnverifiedInvocationChunks(VerifyingMode verifyingMode) {
         Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
                 new Comparator<Invocation>(){
                     public int compare(Invocation o1, Invocation o2) {
@@ -136,17 +148,20 @@ public class MockitoBehavior<T> {
             allInvocationsInOrder.addAll(invocations);
         }
         
-        Map<Invocation, Integer> sequenceOfInvocations = new LinkedHashMap<Invocation, Integer>();
+        List<InvocationChunk> chunks = new LinkedList<InvocationChunk>();
         for (Invocation i : allInvocationsInOrder) {
-            if (sequenceOfInvocations.containsKey(i)) {
-                int currentCount = sequenceOfInvocations.get(i).intValue();
-                sequenceOfInvocations.put(i, currentCount + 1);
+            if (i.isVerified()) {
+                continue;
+            }
+            if (!chunks.isEmpty() 
+                    && chunks.get(chunks.size()-1).getInvocation().equals(i)) {
+                chunks.get(chunks.size()-1).add(i);
             } else {
-                sequenceOfInvocations.put(i, 1);
+                chunks.add(new InvocationChunk(i));
             }
         }
         
-        return sequenceOfInvocations;
+        return chunks;
     }
 
     /**

@@ -1,10 +1,12 @@
 package org.mockito.internal;
 
+import static org.junit.Assert.*;
+
 import java.lang.reflect.Method;
 import java.util.*;
 
 import org.junit.*;
-import static org.junit.Assert.*;
+import org.mockito.exceptions.NumberOfInvocationsAssertionError;
 
 @SuppressWarnings("unchecked")
 public class MockitoBehaviorTest {
@@ -35,20 +37,11 @@ public class MockitoBehaviorTest {
         behavior.addInvocation(toLowerCaseInvocationThree);
     }
     
-    @Test
-    public void shouldMarkTwoInvocationsAsVerified() throws Exception {
-        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(2));
-        
-        List<Invocation> invocations = behavior.getRegisteredInvocations();
-        assertEquals(true, invocations.get(0).isVerified());
-        assertEquals(true, invocations.get(1).isVerified());
-        assertEquals(false, invocations.get(2).isVerified());
-        assertEquals(false, invocations.get(3).isVerified());
-    }
+    //TODO use some of this test to create test for invocationsChunker
     
     @Test
-    public void shouldMarkAllThreeInvocationsAsVerified() throws Exception {
-        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(3));
+    public void shouldMarkAllInvocationsAsVerified() throws Exception {
+        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(2));
         
         List<Invocation> invocations = behavior.getRegisteredInvocations();
         assertEquals(true, invocations.get(0).isVerified());
@@ -66,5 +59,25 @@ public class MockitoBehaviorTest {
         assertEquals(true, invocations.get(1).isVerified());
         assertEquals(false, invocations.get(2).isVerified());
         assertEquals(true, invocations.get(3).isVerified());
+    }
+    
+    @Test
+    public void shouldNeverMarkInvocationsAsVerifiedIfExpectedCountIsZero() throws Exception {
+        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(0));
+        
+        List<Invocation> invocations = behavior.getRegisteredInvocations();
+        assertEquals(false, invocations.get(0).isVerified());
+        assertEquals(false, invocations.get(1).isVerified());
+        assertEquals(false, invocations.get(2).isVerified());
+        assertEquals(false, invocations.get(3).isVerified());
+    }
+    
+    @Test
+    public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
+        try {
+            behavior.checkForWrongNumberOfInvocations(toLowerCaseInvocation, VerifyingMode.inOrder(1, Arrays.asList(new Object())));
+        } catch (NumberOfInvocationsAssertionError e) {
+            fail();
+        }
     }
 }
