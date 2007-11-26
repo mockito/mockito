@@ -12,6 +12,7 @@ public class MockitoBehavior<T> {
 
     private T mock;
     
+    //TODO change this class to RegisteredInvocations that we can as about different stuff so Behavior can verify based on answers
     private List<Invocation> registeredInvocations = new LinkedList<Invocation>();
     private Map<ExpectedInvocation, Result> results = new HashMap<ExpectedInvocation, Result>();
 
@@ -169,11 +170,11 @@ public class MockitoBehavior<T> {
      * or just first invocation
      */
     private Invocation findSimilarInvocation(ExpectedInvocation expectedInvocation) {
-        for (Invocation registeredInvocation : registeredInvocations) {
+        for (Invocation registered : registeredInvocations) {
             String expectedMethodName = expectedInvocation.getMethod().getName();
-            String registeredInvocationName = registeredInvocation.getMethod().getName();
-            if (expectedMethodName.equals(registeredInvocationName) && !registeredInvocation.isVerified()) {
-                return registeredInvocation;
+            String registeredInvocationName = registered.getMethod().getName();
+            if (expectedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
+                return registered;
             }
         }
 
@@ -181,14 +182,14 @@ public class MockitoBehavior<T> {
     }
 
     private int numberOfActualInvocations(ExpectedInvocation expectedInvocation) {
-        int verifiedInvocations = 0;
+        int actual = 0;
         for (Invocation registeredInvocation : registeredInvocations) {
             if (expectedInvocation.matches(registeredInvocation)) {
-                verifiedInvocations++;
+                actual++;
             }
         }
 
-        return verifiedInvocations;
+        return actual;
     }
 
     public void verifyNoMoreInteractions() {
