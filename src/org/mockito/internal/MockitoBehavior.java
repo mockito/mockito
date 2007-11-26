@@ -30,7 +30,7 @@ public class MockitoBehavior<T> {
         markInvocationsAsVerified(expected, verifyingMode);
     }
     
-    private void markInvocationsAsVerified(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+    void markInvocationsAsVerified(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
         int verifiedSoFar = 0;        
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
             Invocation invocation = registeredInvocation.getInvocation();
