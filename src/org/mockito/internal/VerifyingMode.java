@@ -42,7 +42,7 @@ public class VerifyingMode {
         return new VerifyingMode(expectedNumberOfInvocations, mocksToBeVerifiedInOrder);
     }
 
-    boolean invokedAtLeastOnce() {
+    boolean atLeastOnceMode() {
         return expectedNumberOfInvocations == null;
     }
 

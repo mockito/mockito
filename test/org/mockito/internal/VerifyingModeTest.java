@@ -15,10 +15,10 @@ public class VerifyingModeTest {
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
         VerifyingMode mode = VerifyingMode.atLeastOnce();
-        assertTrue(mode.invokedAtLeastOnce());
+        assertTrue(mode.atLeastOnceMode());
         
         mode = VerifyingMode.times(50);
-        assertFalse(mode.invokedAtLeastOnce());
+        assertFalse(mode.atLeastOnceMode());
     }
     
     @Test

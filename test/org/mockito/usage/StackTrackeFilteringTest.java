@@ -31,7 +31,7 @@ public class StackTrackeFilteringTest {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("verify", unfilteredStackTrace[0].getMethodName());
+            assertEquals("reportMissingInvocationError", unfilteredStackTrace[0].getMethodName());
         }
     }
     

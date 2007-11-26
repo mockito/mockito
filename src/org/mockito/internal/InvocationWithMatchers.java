@@ -20,6 +20,7 @@ public class InvocationWithMatchers {
         this.matchers = matchers;
     }
     
+    //TODO add test that makes sure sequenceNumber doesnt take part in equals()
     public boolean equals(Object o) {
         if (o == null || !this.getClass().equals(o.getClass()))
             return false;

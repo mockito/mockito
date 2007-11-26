@@ -7,7 +7,7 @@ package org.mockito.usage;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.exceptions.MockitoException;
 
 public class NiceMessagesOnRuntimeExceptions {
@@ -42,5 +42,11 @@ public class NiceMessagesOnRuntimeExceptions {
                     "Pass mocks that should be verified.";
             assertEquals(expected, e.getMessage());
         }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldPrintThatStrictlyCannotBeCreatedWithoutMocks() {
+        fail();
     }
 }

@@ -23,53 +23,100 @@ public class MockitoBehavior<T> {
         this.results.put(registeredInvocations.remove(registeredInvocations.size()-1), result);
     }
 
-    public void verify(InvocationWithMatchers invocation, VerifyingMode verifyingMode) {
-        int actuallyInvoked = numberOfActualInvocations(invocation);
-        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
-        boolean atLeasOnce = verifyingMode.invokedAtLeastOnce();
-               
-        if ((atLeasOnce || expectedInvoked == 1) && actuallyInvoked == 0) {
-            //TODO this stuff is really hacked in, refactor, add more testing
-            InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
-            String message = 
-                "\n" +
-                "Invocation differs from actual" +
-                "\n";
-            
-            String expected = invocation.toString();
-            if (similarInvocation != null) {
-                String actual = similarInvocation.toString();
-                if (expected.equals(actual)) {
-                    expected = invocation.toStringWithArgumentTypes();
-                    actual = similarInvocation.toStringWithArgumentTypes();
-                }
-                
-                message += 
-                        "Expected: " + expected +
-                        "\n" +
-                		"Actual:   " + actual;
-            } else {
-                message = 
-                        "\n" +
-                        "Expected but not invoked:" +
-                        "\n" +    
-                        expected;
+    public void verify(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+        checkForMissingInvocation(expected, verifyingMode);
+        checkOrderOfInvocations(expected, verifyingMode);
+        checkForWrongNumberOfInvocations(expected, verifyingMode);        
+        markInvocationsAsVerified(expected, verifyingMode);
+    }
+    
+    private void markInvocationsAsVerified(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+        int verifiedSoFar = 0;        
+        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
+            Invocation invocation = registeredInvocation.getInvocation();
+            boolean shouldMarkAsVerified = 
+                verifyingMode.atLeastOnceMode() || verifyingMode.getExpectedNumberOfInvocations() >= verifiedSoFar;
+            if (expected.matches(invocation) && shouldMarkAsVerified) {
+                invocation.markVerified();
+                verifiedSoFar++;
             }
-            
-            throw new VerificationAssertionError(message);
-        }
-        
-        if (!atLeasOnce && actuallyInvoked != expectedInvoked) {
-            throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, invocation);
-        }
-
-        
-        if (verifyingMode.orderOfInvocationsMatters()) {
-            checkOrderOfInvocations(invocation, verifyingMode);
         }
     }
 
-    private void checkOrderOfInvocations(InvocationWithMatchers actualInvocation, VerifyingMode verifyingMode) {
+    private void checkForMissingInvocation(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+        int actuallyInvoked = numberOfActualInvocations(expected);
+        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        boolean atLeastOnce = verifyingMode.atLeastOnceMode();
+               
+        if ((atLeastOnce || expectedInvoked == 1) && actuallyInvoked == 0) {
+            reportMissingInvocationError(expected);
+        }
+    }
+
+    private void checkForWrongNumberOfInvocations(InvocationWithMatchers expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
+        int actuallyInvoked = numberOfActualInvocations(expected);
+        Integer expectedInvoked = verifyingMode.getExpectedNumberOfInvocations();
+        boolean atLeastOnce = verifyingMode.atLeastOnceMode();
+        
+        if (!atLeastOnce && actuallyInvoked != expectedInvoked) {
+            throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, expected);
+        }
+    }
+
+    private void reportMissingInvocationError(InvocationWithMatchers invocation) throws VerificationAssertionError {
+        //TODO refactor message building somewhere else...
+        InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
+        String message = 
+            "\n" +
+            "Invocation differs from actual" +
+            "\n";
+        
+        String expected = invocation.toString();
+        if (similarInvocation != null) {
+            String actual = similarInvocation.toString();
+            if (expected.equals(actual)) {
+                expected = invocation.toStringWithArgumentTypes();
+                actual = similarInvocation.toStringWithArgumentTypes();
+            }
+            
+            message += 
+                    "Expected: " + expected +
+                    "\n" +
+            		"Actual:   " + actual;
+        } else {
+            message = 
+                    "\n" +
+                    "Expected but not invoked:" +
+                    "\n" +    
+                    expected;
+        }
+        
+        throw new VerificationAssertionError(message);
+    }
+
+    private void checkOrderOfInvocations(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
+        if (!verifyingMode.orderOfInvocationsMatters()) {
+            return;
+        }
+        
+        Map<InvocationWithMatchers, Integer> sequenceOfInvocations = getSequenceOfInvocations(verifyingMode);
+        InvocationWithMatchers firstUnverifiedInvocation = null;
+        for (InvocationWithMatchers registered : sequenceOfInvocations.keySet()) {
+            if (!registered.getInvocation().isVerified()) {
+                firstUnverifiedInvocation = registered;
+            } else {
+                break;
+            }
+        }
+        //TODO cover this scenario firstUnverified == null
+        assert firstUnverifiedInvocation != null;
+        
+        if (!firstUnverifiedInvocation.matches(expected.getInvocation())) {
+            throw new StrictVerificationError();
+        }
+    }
+
+    private Map<InvocationWithMatchers, Integer> getSequenceOfInvocations(VerifyingMode verifyingMode) {
         Set<InvocationWithMatchers> allInvocationsInOrder = new TreeSet<InvocationWithMatchers>(
                 new Comparator<InvocationWithMatchers>(){
                     public int compare(InvocationWithMatchers o1, InvocationWithMatchers o2) {
@@ -84,19 +131,17 @@ public class MockitoBehavior<T> {
             allInvocationsInOrder.addAll(invocations);
         }
         
-        InvocationWithMatchers lastVerifiedInvocation = null;
-        for (InvocationWithMatchers registeredInvocation : allInvocationsInOrder) {
-            if (registeredInvocation.getInvocation().isVerified()) {
-                lastVerifiedInvocation = registeredInvocation;
+        Map<InvocationWithMatchers, Integer> sequenceOfInvocations = new LinkedHashMap<InvocationWithMatchers, Integer>();
+        for (InvocationWithMatchers i : allInvocationsInOrder) {
+            if (sequenceOfInvocations.containsKey(i)) {
+                int currentCount = sequenceOfInvocations.get(i).intValue();
+                sequenceOfInvocations.put(i, currentCount + 1);
             } else {
-                break;
+                sequenceOfInvocations.put(i, 1);
             }
         }
-        assert lastVerifiedInvocation != null;
         
-        if (!lastVerifiedInvocation.matches(actualInvocation.getInvocation())) {
-            throw new StrictVerificationError();
-        }
+        return sequenceOfInvocations;
     }
 
     /**
@@ -120,10 +165,7 @@ public class MockitoBehavior<T> {
         for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
             Invocation invocation = registeredInvocation.getInvocation();
             if (expectedInvocation.matches(invocation)) {
-                verifiedInvocations += 1;
-                invocation.markVerified();
-            } else {
-                verifiedInvocations += 0;
+                verifiedInvocations++;
             }
         }
 
