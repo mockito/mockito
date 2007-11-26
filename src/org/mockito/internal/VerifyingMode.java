@@ -30,11 +30,9 @@ public class VerifyingMode {
     }
     
     /**
-     * <pre>
      * Don't use VerifyingMode class directly. 
-     * 
+     * <p>
      * Use Mockito.atLeastOnce() and Mockito.times()
-     * </pre>
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     

@@ -39,7 +39,8 @@ public class MockitoBehavior<T> {
         int verifiedSoFar = 0;        
         for (Invocation invocation : registeredInvocations) {
             boolean shouldMarkAsVerified = 
-                verifyingMode.atLeastOnceMode() || verifyingMode.getExpectedNumberOfInvocations() >= verifiedSoFar;
+                verifyingMode.atLeastOnceMode() || 
+                verifyingMode.getExpectedNumberOfInvocations() > verifiedSoFar;
             if (expected.matches(invocation) && shouldMarkAsVerified) {
                 invocation.markVerified();
                 verifiedSoFar++;

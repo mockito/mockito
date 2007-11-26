@@ -9,35 +9,62 @@ import static org.junit.Assert.*;
 @SuppressWarnings("unchecked")
 public class MockitoBehaviorTest {
 
-    private Method toLowerCase;
-    private Method toUpperCase;
     private MockitoBehavior behavior;
+    private ExpectedInvocation toLowerCaseInvocation;
+    private ExpectedInvocation toUpperCaseInvocation;
+    private ExpectedInvocation toLowerCaseInvocationTwo;
+    private ExpectedInvocation toLowerCaseInvocationThree;
 
     @Before
     public void setup() throws Exception {
-        toLowerCase = String.class.getMethod("toLowerCase", new Class[] {});
-        toUpperCase = String.class.getMethod("toUpperCase", new Class[] {});
+        Method toLowerCase = String.class.getMethod("toLowerCase", new Class[] {});
+        Method toUpperCase = String.class.getMethod("toUpperCase", new Class[] {});
+        
+        toLowerCaseInvocation = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
+        toLowerCaseInvocationTwo = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
+        toLowerCaseInvocationThree = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
+        toUpperCaseInvocation = new ExpectedInvocation(new Invocation("mock", toUpperCase , new Object[] {}), Collections.EMPTY_LIST);
+        
         behavior = new MockitoBehavior();
-    }
-    
-    @Ignore
-    @Test
-    public void shouldMarkVerifiedOnlyOneExecutionChunk() throws Exception {
-        ExpectedInvocation toLowerCaseInvocation = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}), Collections.EMPTY_LIST);
-        ExpectedInvocation toUpperCaseInvocation = new ExpectedInvocation(new Invocation("mock", toUpperCase , new Object[] {}), Collections.EMPTY_LIST);
         
         behavior.addInvocation(toLowerCaseInvocation);
-        behavior.addInvocation(toLowerCaseInvocation);
+        behavior.addInvocation(toLowerCaseInvocationTwo);
         
         behavior.addInvocation(toUpperCaseInvocation);
-        behavior.addInvocation(toLowerCaseInvocation);
         
-        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.inOrder(2, Arrays.asList(new Object())));
+        behavior.addInvocation(toLowerCaseInvocationThree);
+    }
+    
+    @Test
+    public void shouldMarkTwoInvocationsAsVerified() throws Exception {
+        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(2));
         
-        List<ExpectedInvocation> invocations = behavior.getRegisteredInvocations();
-        assertEquals(true, invocations.get(0).getInvocation().isVerified());
-        assertEquals(true, invocations.get(1).getInvocation().isVerified());
-        assertEquals(false, invocations.get(2).getInvocation().isVerified());
-        assertEquals(false, invocations.get(3).getInvocation().isVerified());
+        List<Invocation> invocations = behavior.getRegisteredInvocations();
+        assertEquals(true, invocations.get(0).isVerified());
+        assertEquals(true, invocations.get(1).isVerified());
+        assertEquals(false, invocations.get(2).isVerified());
+        assertEquals(false, invocations.get(3).isVerified());
+    }
+    
+    @Test
+    public void shouldMarkAllThreeInvocationsAsVerified() throws Exception {
+        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.times(3));
+        
+        List<Invocation> invocations = behavior.getRegisteredInvocations();
+        assertEquals(true, invocations.get(0).isVerified());
+        assertEquals(true, invocations.get(1).isVerified());
+        assertEquals(false, invocations.get(2).isVerified());
+        assertEquals(true, invocations.get(3).isVerified());
+    }
+    
+    @Test
+    public void shouldMarkAllInvocationsAsVerifiedWhenAtLeastOnceIsUsed() throws Exception {
+        behavior.markInvocationsAsVerified(toLowerCaseInvocation, VerifyingMode.atLeastOnce());
+        
+        List<Invocation> invocations = behavior.getRegisteredInvocations();
+        assertEquals(true, invocations.get(0).isVerified());
+        assertEquals(true, invocations.get(1).isVerified());
+        assertEquals(false, invocations.get(2).isVerified());
+        assertEquals(true, invocations.get(3).isVerified());
     }
 }
