@@ -73,6 +73,7 @@ public class VerificationInOrderTest {
         strictly.verify(mockOne).simpleMethod(1);
         try {
             strictly.verify(mockOne).simpleMethod(1);
+            fail();
         } catch (StrictVerificationError e) {}
     }
     
@@ -85,6 +86,7 @@ public class VerificationInOrderTest {
         strictly.verify(mockOne).simpleMethod(4);
         try {
             strictly.verify(mockOne).simpleMethod(4);
+            fail();
         } catch (StrictVerificationError e) {}
     }
     

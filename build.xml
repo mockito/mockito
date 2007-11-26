@@ -21,7 +21,6 @@
 
 	<path id="test.classpath">
 		<path refid="test.compile.classpath" />
-		<path refid="compile.classpath" />
 		<pathelement location="${test.classes.dir}"/>
 	</path>
 
@@ -51,7 +50,7 @@
 	</target>
 
 	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
-		<junit fork="true" forkmode="perBatch" haltonfailure="true">
+		<junit fork="true" forkmode="once" haltonfailure="true">
 			<formatter type="brief" usefile="false" />
 			<classpath refid="test.classpath" />
 

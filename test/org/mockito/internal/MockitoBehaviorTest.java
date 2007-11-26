@@ -1,12 +1,11 @@
 package org.mockito.internal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.exceptions.NumberOfInvocationsAssertionError;
 
 @SuppressWarnings("unchecked")
 public class MockitoBehaviorTest {
@@ -74,10 +73,6 @@ public class MockitoBehaviorTest {
     
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
-        try {
-            behavior.checkForWrongNumberOfInvocations(toLowerCaseInvocation, VerifyingMode.inOrder(1, Arrays.asList(new Object())));
-        } catch (NumberOfInvocationsAssertionError e) {
-            fail();
-        }
+        behavior.checkForWrongNumberOfInvocations(toLowerCaseInvocation, VerifyingMode.inOrder(1, Arrays.asList(new Object())));
     }
 }
