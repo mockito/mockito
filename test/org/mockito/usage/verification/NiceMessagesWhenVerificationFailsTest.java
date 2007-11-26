@@ -207,4 +207,5 @@ public class NiceMessagesWhenVerificationFailsTest {
     
     //TODO do we need nice message when expected number of invocations = 0?
     
+    //TODO what happens if user uses a different matcher like Find(), those matchers print differently
 }

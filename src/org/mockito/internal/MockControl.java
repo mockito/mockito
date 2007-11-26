@@ -72,7 +72,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         
         mockitoState.reportLastControl(this);
         
-        invocationWithMatchers.setSequenceNumber(mockitoState.nextSequenceNumber());
+        invocation.setSequenceNumber(mockitoState.nextSequenceNumber());
         
         behavior.addInvocation(invocationWithMatchers);
         
@@ -119,7 +119,8 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     private boolean isValidCheckedException(Throwable throwable) {
-        Invocation lastInvocation = behavior.lastInvocation();
+        //TODO move validation logic to behavior, so that we don't need to expose getInvocationForStubbing()
+        Invocation lastInvocation = behavior.getInvocationForStubbing().getInvocation();
 
         Class<?>[] exceptions = lastInvocation.getMethod().getExceptionTypes();
         Class<?> throwableClass = throwable.getClass();
@@ -145,7 +146,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         behavior.setMock(mock);
     }
 
-    public List<InvocationWithMatchers> getRegisteredInvocations() {
+    public List<Invocation> getRegisteredInvocations() {
         return behavior.getRegisteredInvocations();
     }
 }

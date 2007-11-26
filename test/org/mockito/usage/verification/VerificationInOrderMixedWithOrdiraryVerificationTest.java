@@ -4,12 +4,11 @@
  */
 package org.mockito.usage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.Strictly;
 
 @SuppressWarnings("unchecked")  
 public class VerificationInOrderMixedWithOrdiraryVerificationTest {
@@ -17,7 +16,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
     private LinkedList list;
     private HashMap map;
     private HashSet set;
-    private Strictly strictly;
+//    private Strictly strictly;
 
     @Before
     public void setUp() {
@@ -32,7 +31,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         map.put("five", "five");
         set.add("six");
         
-        strictly = strictOrderVerifier(list, map, set);
+//        strictly = strictOrderVerifier(list, map, set);
     }
     
     @Test

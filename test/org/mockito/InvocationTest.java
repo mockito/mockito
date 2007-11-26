@@ -42,14 +42,4 @@ public class InvocationTest {
         assertTrue(call.equals(equalCall));
         assertFalse(call.equals(nonEqualCall));
     }
-    
-    @Test
-    public void shouldNotImplementHashCodeBecauseItsNotUsedWithMaps() {
-        try {
-            call.hashCode();
-            fail();
-        } catch (UnsupportedOperationException expected) {
-            assertEquals("hashCode() is not implemented", expected.getMessage());
-        }
-    }
 }

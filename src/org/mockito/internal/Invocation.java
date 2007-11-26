@@ -6,11 +6,13 @@ package org.mockito.internal;
 
 import java.lang.reflect.Method;
 
-import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.*;
 
 public class Invocation {
 
     private boolean verified;
+    private int sequenceNumber;
+    
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
@@ -59,7 +61,7 @@ public class Invocation {
     }
 
     public int hashCode() {
-        throw new UnsupportedOperationException("hashCode() is not implemented");
+        return 1;
     }
 
     private boolean equalArguments(Object[] arguments) {
@@ -96,6 +98,31 @@ public class Invocation {
         String mockName = Namer.nameForMock(mock);
         return mockName + "." + method.getName();
     }
+    
+    public String toString() {
+        //TODO separate unit test?
+        StringBuffer result = new StringBuffer();
+        result.append(getMockAndMethodName());
+        result.append("(");
+        for (Object arg : this.arguments) {
+            //TODO lil bit hacky way of using Equals matcher
+            new Equals(arg).appendTo(result);
+            result.append(", ");
+        }
+        return result.toString().replaceFirst(", $", "").concat(")");
+    }
+    
+    public String toStringWithArgumentTypes() {
+        //TODO separate unit test?
+        StringBuilder result = new StringBuilder();
+        result.append(getMockAndMethodName());
+        result.append("(");
+        for (Class<?> paramType : getMethod().getParameterTypes()) {
+            result.append(paramType);
+            result.append(", ");
+        } 
+        return result.toString().replaceFirst(", $", "").concat(")");
+    }
 
     public void markVerified() {
         verified = true;
@@ -103,5 +130,13 @@ public class Invocation {
 
     public boolean isVerified() {
         return verified;
+    }
+    
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 }

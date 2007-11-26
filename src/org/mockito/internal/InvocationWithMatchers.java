@@ -13,7 +13,6 @@ public class InvocationWithMatchers {
 
     protected final Invocation invocation;
     private final List<IArgumentMatcher> matchers;
-    private int sequenceNumber;
 
     public InvocationWithMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
         this.invocation = invocation;
@@ -74,24 +73,5 @@ public class InvocationWithMatchers {
     
     public Invocation getInvocation() {
         return this.invocation;
-    }
-
-    public String toStringWithArgumentTypes() {
-        StringBuilder result = new StringBuilder();
-        result.append(invocation.getMockAndMethodName());
-        result.append("(");
-        for (Class<?> paramType : invocation.getMethod().getParameterTypes()) {
-            result.append(paramType);
-            result.append(", ");
-        }
-        return result.toString().replaceFirst(", ", "").concat(")");
-    }
-
-    public Integer getSequenceNumber() {
-        return sequenceNumber;
-    }
-
-    public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
     }
 }

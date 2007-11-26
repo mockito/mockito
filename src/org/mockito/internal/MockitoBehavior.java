@@ -12,15 +12,20 @@ public class MockitoBehavior<T> {
 
     private T mock;
     
-    private List<InvocationWithMatchers> registeredInvocations = new LinkedList<InvocationWithMatchers>();
+    private List<Invocation> registeredInvocations = new LinkedList<Invocation>();
     private Map<InvocationWithMatchers, Result> results = new HashMap<InvocationWithMatchers, Result>();
+
+    private InvocationWithMatchers invocationForStubbing;
     
     public void addInvocation(InvocationWithMatchers invocation) {
-        this.registeredInvocations.add(invocation);
+        this.registeredInvocations.add(invocation.getInvocation());
+        this.invocationForStubbing = invocation;
     }
 
     public void addResult(Result result) {
-        this.results.put(registeredInvocations.remove(registeredInvocations.size()-1), result);
+        assert invocationForStubbing != null;
+        registeredInvocations.remove(invocationForStubbing.getInvocation());
+        this.results.put(invocationForStubbing, result);
     }
 
     public void verify(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
@@ -32,8 +37,7 @@ public class MockitoBehavior<T> {
     
     void markInvocationsAsVerified(InvocationWithMatchers expected, VerifyingMode verifyingMode) {
         int verifiedSoFar = 0;        
-        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
-            Invocation invocation = registeredInvocation.getInvocation();
+        for (Invocation invocation : registeredInvocations) {
             boolean shouldMarkAsVerified = 
                 verifyingMode.atLeastOnceMode() || verifyingMode.getExpectedNumberOfInvocations() >= verifiedSoFar;
             if (expected.matches(invocation) && shouldMarkAsVerified) {
@@ -65,7 +69,7 @@ public class MockitoBehavior<T> {
 
     private void reportMissingInvocationError(InvocationWithMatchers invocation) throws VerificationAssertionError {
         //TODO refactor message building somewhere else...
-        InvocationWithMatchers similarInvocation = findSimilarInvocation(invocation);
+        Invocation similarInvocation = findSimilarInvocation(invocation);
         String message = 
             "\n" +
             "Invocation differs from actual" +
@@ -75,7 +79,7 @@ public class MockitoBehavior<T> {
         if (similarInvocation != null) {
             String actual = similarInvocation.toString();
             if (expected.equals(actual)) {
-                expected = invocation.toStringWithArgumentTypes();
+                expected = invocation.getInvocation().toStringWithArgumentTypes();
                 actual = similarInvocation.toStringWithArgumentTypes();
             }
             
@@ -99,10 +103,10 @@ public class MockitoBehavior<T> {
             return;
         }
         
-        Map<InvocationWithMatchers, Integer> sequenceOfInvocations = getSequenceOfInvocations(verifyingMode);
-        InvocationWithMatchers firstUnverifiedInvocation = null;
-        for (InvocationWithMatchers registered : sequenceOfInvocations.keySet()) {
-            if (!registered.getInvocation().isVerified()) {
+        Map<Invocation, Integer> sequenceOfInvocations = getSequenceOfInvocations(verifyingMode);
+        Invocation firstUnverifiedInvocation = null;
+        for (Invocation registered : sequenceOfInvocations.keySet()) {
+            if (!registered.isVerified()) {
                 firstUnverifiedInvocation = registered;
             } else {
                 break;
@@ -111,15 +115,15 @@ public class MockitoBehavior<T> {
         //TODO cover this scenario firstUnverified == null
         assert firstUnverifiedInvocation != null;
         
-        if (!firstUnverifiedInvocation.matches(expected.getInvocation())) {
+        if (!expected.matches(firstUnverifiedInvocation)) {
             throw new StrictVerificationError();
         }
     }
 
-    private Map<InvocationWithMatchers, Integer> getSequenceOfInvocations(VerifyingMode verifyingMode) {
-        Set<InvocationWithMatchers> allInvocationsInOrder = new TreeSet<InvocationWithMatchers>(
-                new Comparator<InvocationWithMatchers>(){
-                    public int compare(InvocationWithMatchers o1, InvocationWithMatchers o2) {
+    private Map<Invocation, Integer> getSequenceOfInvocations(VerifyingMode verifyingMode) {
+        Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
+                new Comparator<Invocation>(){
+                    public int compare(Invocation o1, Invocation o2) {
                         int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
                         assert comparison != 0;
                         return comparison;
@@ -127,12 +131,12 @@ public class MockitoBehavior<T> {
         
         List<Object> allMocksToBeVerifiedInOrder = verifyingMode.getAllMocksToBeVerifiedInSequence();
         for (Object mock : allMocksToBeVerifiedInOrder) {
-            List<InvocationWithMatchers> invocations = MockUtil.getControl(mock).getRegisteredInvocations();
+            List<Invocation> invocations = MockUtil.getControl(mock).getRegisteredInvocations();
             allInvocationsInOrder.addAll(invocations);
         }
         
-        Map<InvocationWithMatchers, Integer> sequenceOfInvocations = new LinkedHashMap<InvocationWithMatchers, Integer>();
-        for (InvocationWithMatchers i : allInvocationsInOrder) {
+        Map<Invocation, Integer> sequenceOfInvocations = new LinkedHashMap<Invocation, Integer>();
+        for (Invocation i : allInvocationsInOrder) {
             if (sequenceOfInvocations.containsKey(i)) {
                 int currentCount = sequenceOfInvocations.get(i).intValue();
                 sequenceOfInvocations.put(i, currentCount + 1);
@@ -148,11 +152,11 @@ public class MockitoBehavior<T> {
      * gets first registered invocation with the same method name
      * or just first invocation
      */
-    private InvocationWithMatchers findSimilarInvocation(InvocationWithMatchers expectedInvocation) {
-        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
+    private Invocation findSimilarInvocation(InvocationWithMatchers expectedInvocation) {
+        for (Invocation registeredInvocation : registeredInvocations) {
             String expectedMethodName = expectedInvocation.getMethod().getName();
             String registeredInvocationName = registeredInvocation.getMethod().getName();
-            if (expectedMethodName.equals(registeredInvocationName) && !registeredInvocation.getInvocation().isVerified()) {
+            if (expectedMethodName.equals(registeredInvocationName) && !registeredInvocation.isVerified()) {
                 return registeredInvocation;
             }
         }
@@ -162,9 +166,8 @@ public class MockitoBehavior<T> {
 
     private int numberOfActualInvocations(InvocationWithMatchers expectedInvocation) {
         int verifiedInvocations = 0;
-        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
-            Invocation invocation = registeredInvocation.getInvocation();
-            if (expectedInvocation.matches(invocation)) {
+        for (Invocation registeredInvocation : registeredInvocations) {
+            if (expectedInvocation.matches(registeredInvocation)) {
                 verifiedInvocations++;
             }
         }
@@ -181,8 +184,8 @@ public class MockitoBehavior<T> {
     }
     
     private void verifyNoMoreInteractions(String verificationErrorMessage) {
-        for (InvocationWithMatchers registeredInvocation : registeredInvocations) {
-            if (!registeredInvocation.getInvocation().isVerified()) {
+        for (Invocation registeredInvocation : registeredInvocations) {
+            if (!registeredInvocation.isVerified()) {
                 String mockName = Namer.nameForMock(mock);
                 throw new VerificationAssertionError(
                         "\n" +
@@ -203,10 +206,6 @@ public class MockitoBehavior<T> {
         return ToTypeMappings.emptyReturnValueFor(invocation.getMethod().getReturnType());
     }
 
-    public Invocation lastInvocation() {
-        return registeredInvocations.get(registeredInvocations.size() - 1).getInvocation();
-    }
-
     public T getMock() {
         return mock;
     }
@@ -215,7 +214,11 @@ public class MockitoBehavior<T> {
         this.mock = mock;
     }
 
-    public List<InvocationWithMatchers> getRegisteredInvocations() {
+    public List<Invocation> getRegisteredInvocations() {
         return registeredInvocations;
+    }
+
+    public InvocationWithMatchers getInvocationForStubbing() {
+        return invocationForStubbing;
     }
 }
