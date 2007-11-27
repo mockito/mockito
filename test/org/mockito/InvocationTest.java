@@ -30,9 +30,9 @@ public class InvocationTest {
         dummyMethod = Object.class.getMethod("equals",
                 new Class[] { Object.class });
         Object mock = new Object();
-        call = new Invocation(mock, dummyMethod, arguments1);
-        equalCall = new Invocation(mock, dummyMethod, arguments2);
-        nonEqualCall = new Invocation(mock, dummyMethod, arguments3);
+        call = new Invocation(mock, dummyMethod, arguments1, 0);
+        equalCall = new Invocation(mock, dummyMethod, arguments2, 0);
+        nonEqualCall = new Invocation(mock, dummyMethod, arguments3, 0);
     }
 
     @Test

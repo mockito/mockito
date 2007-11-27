@@ -12,8 +12,7 @@ public class MockitoBehavior<T> {
 
     private T mock;
     
-    //TODO change this class to RegisteredInvocations that we can as about different stuff so Behavior can verify based on answers
-    private List<Invocation> registeredInvocations = new LinkedList<Invocation>();
+    private RegisteredInvocations registeredInvocations = new RegisteredInvocations(new AllInvocationsFinder());
     private Map<ExpectedInvocation, Result> results = new HashMap<ExpectedInvocation, Result>();
 
     private ExpectedInvocation invocationForStubbing;
@@ -25,7 +24,7 @@ public class MockitoBehavior<T> {
 
     public void addResult(Result result) {
         assert invocationForStubbing != null;
-        registeredInvocations.remove(invocationForStubbing.getInvocation());
+        registeredInvocations.removeLast();
         this.results.put(invocationForStubbing, result);
     }
 
@@ -33,28 +32,11 @@ public class MockitoBehavior<T> {
         checkForMissingInvocation(expected, verifyingMode);
         checkOrderOfInvocations(expected, verifyingMode);
         checkForWrongNumberOfInvocations(expected, verifyingMode);        
-        markInvocationsAsVerified(expected, verifyingMode);
+        registeredInvocations.markInvocationsAsVerified(expected, verifyingMode);
     }
     
-    void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode mode) {
-        if (mode.expectedCountIsZero()) {
-            return;
-        }
-        
-        if (mode.orderOfInvocationsMatters()) {
-            List<InvocationChunk> chunks = getUnverifiedInvocationChunks(mode);
-            chunks.get(0).markAllInvocationsAsVerified();
-        } else {
-            for (Invocation invocation : registeredInvocations) {
-                if (expected.matches(invocation)) {
-                    invocation.markVerified();
-                }
-            }
-        }
-    }
-
     private void checkForMissingInvocation(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        int actualCount = numberOfActualInvocations(expected);
+        int actualCount = registeredInvocations.countActual(expected);
         Integer expectedCount = verifyingMode.expectedCount();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
                
@@ -68,7 +50,7 @@ public class MockitoBehavior<T> {
             return;
         }
         
-        int actuallyInvoked = numberOfActualInvocations(expected);
+        int actuallyInvoked = registeredInvocations.countActual(expected);
         Integer expectedInvoked = verifyingMode.expectedCount();
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
         
@@ -79,7 +61,7 @@ public class MockitoBehavior<T> {
 
     private void reportMissingInvocationError(ExpectedInvocation invocation) throws VerificationAssertionError {
         //TODO refactor message building somewhere else...
-        Invocation similarInvocation = findSimilarInvocation(invocation);
+        Invocation similarInvocation = registeredInvocations.findSimilarInvocation(invocation);
         String message = 
             "\n" +
             "Invocation differs from actual" +
@@ -113,7 +95,7 @@ public class MockitoBehavior<T> {
             return;
         }
         
-        List<InvocationChunk> chunks = getUnverifiedInvocationChunks(mode);
+        List<InvocationChunk> chunks = registeredInvocations.unverifiedInvocationChunks(mode);
         
         if (mode.expectedCountIsZero() && !chunks.isEmpty() && expected.matches(chunks.get(0).getInvocation())) {
             throw new NumberOfInvocationsAssertionError(0, chunks.get(0).getCount(), expected);
@@ -134,64 +116,6 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private List<InvocationChunk> getUnverifiedInvocationChunks(VerifyingMode verifyingMode) {
-        Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
-                new Comparator<Invocation>(){
-                    public int compare(Invocation o1, Invocation o2) {
-                        int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
-                        assert comparison != 0;
-                        return comparison;
-                    }});
-        
-        List<Object> allMocksToBeVerifiedInOrder = verifyingMode.getAllMocksToBeVerifiedInSequence();
-        for (Object mock : allMocksToBeVerifiedInOrder) {
-            List<Invocation> invocations = MockUtil.getControl(mock).getRegisteredInvocations();
-            allInvocationsInOrder.addAll(invocations);
-        }
-        
-        List<InvocationChunk> chunks = new LinkedList<InvocationChunk>();
-        for (Invocation i : allInvocationsInOrder) {
-            if (i.isVerified()) {
-                continue;
-            }
-            if (!chunks.isEmpty() 
-                    && chunks.get(chunks.size()-1).getInvocation().equals(i)) {
-                chunks.get(chunks.size()-1).add(i);
-            } else {
-                chunks.add(new InvocationChunk(i));
-            }
-        }
-        
-        return chunks;
-    }
-
-    /**
-     * gets first registered invocation with the same method name
-     * or just first invocation
-     */
-    private Invocation findSimilarInvocation(ExpectedInvocation expectedInvocation) {
-        for (Invocation registered : registeredInvocations) {
-            String expectedMethodName = expectedInvocation.getMethod().getName();
-            String registeredInvocationName = registered.getMethod().getName();
-            if (expectedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
-                return registered;
-            }
-        }
-
-        return null;
-    }
-
-    private int numberOfActualInvocations(ExpectedInvocation expectedInvocation) {
-        int actual = 0;
-        for (Invocation registeredInvocation : registeredInvocations) {
-            if (expectedInvocation.matches(registeredInvocation)) {
-                actual++;
-            }
-        }
-
-        return actual;
-    }
-
     public void verifyNoMoreInteractions() {
         verifyNoMoreInteractions("No more interactions expected");
     }
@@ -201,7 +125,7 @@ public class MockitoBehavior<T> {
     }
     
     private void verifyNoMoreInteractions(String verificationErrorMessage) {
-        for (Invocation registeredInvocation : registeredInvocations) {
+        for (Invocation registeredInvocation : registeredInvocations.all()) {
             if (!registeredInvocation.isVerified()) {
                 String mockName = Namer.nameForMock(mock);
                 throw new VerificationAssertionError(
@@ -232,7 +156,7 @@ public class MockitoBehavior<T> {
     }
 
     public List<Invocation> getRegisteredInvocations() {
-        return registeredInvocations;
+        return registeredInvocations.all();
     }
 
     public ExpectedInvocation getInvocationForStubbing() {

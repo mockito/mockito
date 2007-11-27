@@ -52,7 +52,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
         
-        Invocation invocation = new Invocation(proxy, method, args);
+        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
         List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
@@ -71,8 +71,6 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 //        }
         
         mockitoState.reportLastControl(this);
-        
-        invocation.setSequenceNumber(mockitoState.nextSequenceNumber());
         
         behavior.addInvocation(expectedInvocation);
         

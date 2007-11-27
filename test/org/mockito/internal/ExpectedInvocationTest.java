@@ -17,7 +17,7 @@ public class ExpectedInvocationTest {
     public void shouldImplementHashcodeToBeHashMapsCitizen() throws Exception {
         Object[] args = new Object[] { "" };
         Method m = Object.class.getMethod("equals", new Class[] { Object.class });
-        Invocation invocation = new Invocation(null, m, args);
+        Invocation invocation = new Invocation(null, m, args, 0);
         assertThat(new ExpectedInvocation(invocation, null).hashCode(), equalTo(1));
     }
     
@@ -29,9 +29,9 @@ public class ExpectedInvocationTest {
                 new Class[] { Object.class });
 
         ExpectedInvocation invocationWithOneArg = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "" }), null);
+                new Invocation(mock, dummyMethod, new Object[] { "" }, 0), null);
         ExpectedInvocation invocationWithTwoArgs = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "", "" }), null);
+                new Invocation(mock, dummyMethod, new Object[] { "", "" }, 0), null);
 
         assertFalse(invocationWithOneArg.equals(null));
         assertFalse(invocationWithOneArg.equals(invocationWithTwoArgs));

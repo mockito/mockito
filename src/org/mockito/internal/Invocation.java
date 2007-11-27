@@ -11,16 +11,17 @@ import org.mockito.internal.matchers.*;
 public class Invocation {
 
     private boolean verified;
-    private int sequenceNumber;
     
+    private final int sequenceNumber;
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
 
-    public Invocation(Object mock, Method method, Object[] args) {
+    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
         this.mock = mock;
         this.method = method;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
+        this.sequenceNumber = sequenceNumber;
     }
 
     private static Object[] expandVarArgs(final boolean isVarArgs,
@@ -50,6 +51,7 @@ public class Invocation {
         return arguments;
     }
 
+    //TODO add test that makes sure sequenceNumber doesnt take part in equals()
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass()))
             return false;
@@ -134,9 +136,5 @@ public class Invocation {
     
     public Integer getSequenceNumber() {
         return sequenceNumber;
-    }
-
-    public void setSequenceNumber(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
     }
 }
