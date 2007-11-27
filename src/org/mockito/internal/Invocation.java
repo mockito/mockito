@@ -17,6 +17,8 @@ public class Invocation {
     private final Method method;
     private final Object[] arguments;
 
+    private boolean verifiedInOrder;
+
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
         this.mock = mock;
         this.method = method;
@@ -136,5 +138,14 @@ public class Invocation {
     
     public Integer getSequenceNumber() {
         return sequenceNumber;
+    }
+
+    public void markVerifiedInOrder() {
+        this.verifiedInOrder = true;
+        
+    }
+
+    public boolean isVerifiedInOrder() {
+        return verifiedInOrder;
     }
 }

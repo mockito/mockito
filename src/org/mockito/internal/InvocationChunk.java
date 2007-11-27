@@ -36,6 +36,7 @@ public class InvocationChunk {
 
     public void markAllInvocationsAsVerified() {
         for (Invocation invocation : invocations) {
+            invocation.markVerifiedInOrder();
             invocation.markVerified();
         }
     }

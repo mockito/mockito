@@ -51,7 +51,7 @@ public class RegisteredInvocations {
         
         List<InvocationChunk> chunks = new LinkedList<InvocationChunk>();
         for (Invocation i : allInvocationsInOrder) {
-            if (i.isVerified()) {
+            if (i.isVerifiedInOrder()) {
                 continue;
             }
             if (!chunks.isEmpty() 
@@ -65,10 +65,6 @@ public class RegisteredInvocations {
         return chunks;
     }
     
-    /**
-     * gets first registered invocation with the same method name
-     * or just first invocation
-     */
     public Invocation findSimilarInvocation(ExpectedInvocation expectedInvocation) {
         for (Invocation registered : registeredInvocations) {
             String expectedMethodName = expectedInvocation.getMethod().getName();
@@ -94,5 +90,14 @@ public class RegisteredInvocations {
 
     public List<Invocation> all() {
         return registeredInvocations;
+    }
+
+    public Invocation getFirstUnverified() {
+        for (Invocation registered : registeredInvocations) {
+            if (!registered.isVerified()) {
+                return registered;
+            }
+        }
+        return null;
     }
 }

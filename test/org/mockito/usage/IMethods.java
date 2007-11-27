@@ -53,6 +53,8 @@ public interface IMethods {
     public String throwsError(int count) throws Error;
 
     void simpleMethod();
+    
+    void differentMethod();
 
     void simpleMethod(String argument);
     

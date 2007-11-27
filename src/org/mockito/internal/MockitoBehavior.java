@@ -62,11 +62,8 @@ public class MockitoBehavior<T> {
     private void reportMissingInvocationError(ExpectedInvocation invocation) throws VerificationAssertionError {
         //TODO refactor message building somewhere else...
         Invocation similarInvocation = registeredInvocations.findSimilarInvocation(invocation);
-        String message = 
-            "\n" +
-            "Invocation differs from actual" +
-            "\n";
         
+        String message = null;
         String expected = invocation.toString();
         if (similarInvocation != null) {
             String actual = similarInvocation.toString();
@@ -75,7 +72,10 @@ public class MockitoBehavior<T> {
                 actual = similarInvocation.toStringWithArgumentTypes();
             }
             
-            message += 
+            message = 
+                    "\n" +
+                    "Invocation differs from actual" +
+                    "\n" +
                     "Expected: " + expected +
                     "\n" +
             		"Actual:   " + actual;
@@ -125,15 +125,14 @@ public class MockitoBehavior<T> {
     }
     
     private void verifyNoMoreInteractions(String verificationErrorMessage) {
-        for (Invocation registeredInvocation : registeredInvocations.all()) {
-            if (!registeredInvocation.isVerified()) {
-                String mockName = Namer.nameForMock(mock);
-                throw new VerificationAssertionError(
-                        "\n" +
-                        verificationErrorMessage + " on " + mockName +
-                        "\n" +
-                        "Unexpected: " + registeredInvocation.toString());
-            }
+        Invocation unverified = registeredInvocations.getFirstUnverified();
+        if (unverified != null) {
+            String mockName = Namer.nameForMock(mock);
+            throw new VerificationAssertionError(
+                    "\n" +
+                    verificationErrorMessage + " on " + mockName +
+                    "\n" +
+                    "Unexpected: " + unverified.toString());
         }
     }
 
