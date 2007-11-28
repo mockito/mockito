@@ -15,6 +15,8 @@ import org.mockito.exceptions.MockitoException;
 @SuppressWarnings("unchecked")
 public class InvalidUsageExceptionsTest {
     
+    //TODO merge with InvalidUsageTest
+    
     private LinkedList mock;
     private LinkedList mockTwo;
 
