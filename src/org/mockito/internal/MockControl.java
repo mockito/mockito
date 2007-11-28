@@ -103,7 +103,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     
     private void validateThrowable(Throwable throwable) {
         if (throwable == null) {
-            throw new MockitoException("Cannot set null throwable");
+            Exceptions.cannotStubWithNullThrowable();
         }
 
         if (throwable instanceof RuntimeException || throwable instanceof Error) {
@@ -111,7 +111,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         }
     
         if (!isValidCheckedException(throwable)) {
-            throw new MockitoException("Given checked exception is invalid for this method"); 
+            Exceptions.checkedExceptionInvalid(throwable);
         }
     }
 

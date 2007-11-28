@@ -11,7 +11,9 @@ public class Exceptions {
                 "\n" +
                 "Method requires arguments." +
                 "\n" +
-                "Pass mocks that should be verified.");
+                "Pass mocks that should be verified, e.g:" +
+                "\n" +
+                "verifyNoMoreInteractions(mockOne, mockTwo)");
     }
 
     public static void strictlyRequiresFamiliarMock() {
@@ -21,7 +23,7 @@ public class Exceptions {
                 "\n" +
                 "strictly = createStrictOrderVerifier(mockOne)" +
                 "\n" +
-                "so strictly can only verify mockOne");
+                "strictly.verify(mockOne).doStuff()");
     }
 
     public static void mocksHaveToBePassedWhenCreatingStrictly() {
@@ -29,6 +31,24 @@ public class Exceptions {
                 "\n" +
                 "Method requires arguments." +
                 "\n" +
-                "Pass mocks that require strict order verification.");
+                "Pass mocks that require strict order verification, e.g:" +
+                "\n" +
+                "createStrictOrderVerifier(mockOne, mockTwo)");
+    }
+
+    public static void checkedExceptionInvalid(Throwable t) {
+        throw new MockitoException(
+                "\n" +
+        		"Checked exception is invalid for this method" +
+        		"\n" +
+        		"Invalid: " + t);
+    }
+
+    public static void cannotStubWithNullThrowable() {
+        throw new MockitoException(
+                "\n" +
+                "Cannot stub with null throwable"                
+                );
+        
     }
 }

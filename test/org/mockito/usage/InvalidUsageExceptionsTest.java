@@ -4,52 +4,53 @@
  */
 package org.mockito.usage;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
+import java.util.LinkedList;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Strictly;
 import org.mockito.exceptions.MockitoException;
 
 @SuppressWarnings("unchecked")
 public class InvalidUsageExceptionsTest {
     
-    @Test
+    private LinkedList mock;
+    private LinkedList mockTwo;
+
+    @Before public void setup() {
+        mock = mock(LinkedList.class);
+        mockTwo = mock(LinkedList.class);
+    }
+    
+    @Test(expected=MockitoException.class)
     public void shouldRequireArgumentsWhenVerifyingNoMoreInteractions() {
-        try {
-            verifyNoMoreInteractions();
-            fail();
-        }
-        catch (MockitoException e) {}
+        verifyNoMoreInteractions();
     }
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldRequireArgumentsWhenVerifyingZeroInteractions() {
-        try {
-            verifyZeroInteractions();
-            fail();
-        }
-        catch (MockitoException e) {}
+        verifyZeroInteractions();
     }
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldNotCreateStrictlyWithoutMocks() {
-        try {
-            createStrictOrderVerifier();
-            fail();
-        } catch (MockitoException e) {}
+        createStrictOrderVerifier();
     }
     
-    @Test
-    public void shouldNotStrictlyVerifyUnfamilarMocks() {
-        List mockOne = mock(List.class);
-        List mockTwo = mock(List.class);
-        Strictly strictly = createStrictOrderVerifier(mockOne);
-        try {
-            strictly.verify(mockTwo).clear();
-            fail();
-        } catch (MockitoException e) {}
+    @Test(expected=MockitoException.class)
+    public void shouldNotVerifyStrictlyUnfamilarMocks() {
+        Strictly strictly = createStrictOrderVerifier(mock);
+        strictly.verify(mockTwo).clear();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
+        stub(mock.add("monkey island")).andThrows(new Exception());
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingNullThrowable() throws Exception {
+        stub(mock.add("monkey island")).andThrows(null);
     }
 }

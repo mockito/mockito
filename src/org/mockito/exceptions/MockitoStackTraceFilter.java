@@ -9,6 +9,7 @@ import java.util.*;
 public class MockitoStackTraceFilter {
     
     public boolean isLastStackElementToRemove(StackTraceElement e) {
+        //TODO change this logic so it filters everything from org.mockito and move org.mockito.usage to org.usingmockito
         boolean firstOnStackIsMockitoClass = e.getClassName().equals("org.mockito.Mockito");
         boolean firstOnStackIsMockObject = e.getClassName().contains("$$EnhancerByCGLIB$$");
         return firstOnStackIsMockitoClass || firstOnStackIsMockObject;

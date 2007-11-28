@@ -16,10 +16,14 @@ import org.mockito.exceptions.MockitoException;
 @SuppressWarnings("unchecked")
 public class StubbingWithThrowablesTest {
 
+    private LinkedList mock;
+
+    @Before public void setup() {
+        mock = mock(LinkedList.class);
+    }
+    
     @Test
     public void shouldStubWithThrowable() throws Exception {
-        LinkedList mock = mock(LinkedList.class);
-
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         stub(mock.add("throw")).andThrows(expected);
         
@@ -33,8 +37,6 @@ public class StubbingWithThrowablesTest {
     
     @Test
     public void shouldSetThrowableToVoidMethod() throws Exception {
-        LinkedList mock = mock(LinkedList.class);
-
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         
         stubVoid(mock).toThrow(expected).on().clear();
@@ -64,7 +66,6 @@ public class StubbingWithThrowablesTest {
     
     @Test
     public void shouldAllowSettingError() throws Exception {
-        LinkedList mock = mock(LinkedList.class);
         Error error = new Error();
         
         stub(mock.add("quake")).andThrows(error);
@@ -77,29 +78,14 @@ public class StubbingWithThrowablesTest {
         }
     }    
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        LinkedList list = mock(LinkedList.class);
-        Exception checkedException = new Exception();
-        
-        try {
-            stub(list.add("monkey island")).andThrows(checkedException);
-            fail();
-        } catch (MockitoException e) {
-            assertEquals("Given checked exception is invalid for this method", e.getMessage());
-        }
+        stub(mock.add("monkey island")).andThrows(new Exception());
     }
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        LinkedList list = mock(LinkedList.class);
-        
-        try {
-            stub(list.add("monkey island")).andThrows(null);
-            fail();
-        } catch (MockitoException e) {
-            assertEquals("Cannot set null throwable", e.getMessage());
-        }
+        stub(mock.add("monkey island")).andThrows(null);
     }    
     
     @Ignore

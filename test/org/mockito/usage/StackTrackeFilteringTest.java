@@ -37,6 +37,7 @@ public class StackTrackeFilteringTest {
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
             
+            //TODO get rid of following test: and move that testing to MockitoStackTraceFilterTest
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
             assertEquals("reportMissingInvocationError", unfilteredStackTrace[0].getMethodName());
         }
@@ -97,6 +98,39 @@ public class StackTrackeFilteringTest {
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
             assertEquals("checkOrderOfInvocations", unfilteredStackTrace[0].getMethodName());
+        }
+    }
+    
+    @Test
+    public void shouldFilterStacktraceWhenStrictlyThrowsMockitoException() {
+        try {
+            createStrictOrderVerifier();
+            fail();
+        } catch (MockitoException expected) {
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyThrowsMockitoException"));
+        }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldFilterStacktraceWhenStrictlyVerifies() {
+        try {
+            Strictly strictly = createStrictOrderVerifier(mock);
+            strictly.verify(null);
+            fail();
+        } catch (MockitoException expected) {
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifies"));
+        }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldNotAllowSettingInvalidCheckedException() {
+        try {
+            stub(mock.oneArg(true)).andThrows(new Exception());
+            fail();
+        } catch (MockitoException expected) {
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldNotAllowSettingInvalidCheckedException"));
         }
     }
 }
