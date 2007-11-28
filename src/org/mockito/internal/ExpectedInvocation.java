@@ -52,18 +52,9 @@ public class ExpectedInvocation {
         return true;
     }
 
+    //TODO separate unit test?
     public String toString() {
-        StringBuffer result = new StringBuffer();
-        result.append(invocation.getMockAndMethodName());
-        result.append("(");
-        for (Iterator<IArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
-            it.next().appendTo(result);
-            if (it.hasNext()) {
-                result.append(", ");
-            }
-        }
-        result.append(")");
-        return result.toString();
+        return invocation.toString(matchers);
     }
 
     public Method getMethod() {

@@ -23,10 +23,10 @@ public class RegisteredInvocationsTest {
 
     @Before
     public void setup() throws Exception {
-        simpleMethodInvocation = new InvocationBuilder().m("simpleMethod").s(1).toInvocation();
-        simpleMethodInvocationTwo = new InvocationBuilder().m("simpleMethod").s(2).toInvocation();
-        differentMethodInvocation = new InvocationBuilder().m("differentMethod").s(3).toInvocation();
-        simpleMethodInvocationThree = new InvocationBuilder().m("simpleMethod").s(4).toInvocation();
+        simpleMethodInvocation = new InvocationBuilder().method("simpleMethod").seq(1).toInvocation();
+        simpleMethodInvocationTwo = new InvocationBuilder().method("simpleMethod").seq(2).toInvocation();
+        differentMethodInvocation = new InvocationBuilder().method("differentMethod").seq(3).toInvocation();
+        simpleMethodInvocationThree = new InvocationBuilder().method("simpleMethod").seq(4).toInvocation();
         
         registered = new RegisteredInvocations(new InvocationsFinder() {
             public List<Invocation> allInvocationsInOrder(List<Object> mocks) {

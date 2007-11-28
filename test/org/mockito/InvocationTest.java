@@ -6,33 +6,20 @@ package org.mockito;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Method;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.internal.Invocation;
+import org.junit.*;
+import org.mockito.internal.*;
 
 public class InvocationTest {
 
     private Invocation call;
-
     private Invocation equalCall;
-
     private Invocation nonEqualCall;
-
-    private Method dummyMethod;
 
     @Before
     public void setup() throws SecurityException, NoSuchMethodException {
-        Object[] arguments1 = new Object[] { "" };
-        Object[] arguments2 = new Object[] { "" };
-        Object[] arguments3 = new Object[] { "X" };
-        dummyMethod = Object.class.getMethod("equals",
-                new Class[] { Object.class });
-        Object mock = new Object();
-        call = new Invocation(mock, dummyMethod, arguments1, 0);
-        equalCall = new Invocation(mock, dummyMethod, arguments2, 0);
-        nonEqualCall = new Invocation(mock, dummyMethod, arguments3, 0);
+        call = new InvocationBuilder().args("").seq(1).toInvocation();
+        equalCall = new InvocationBuilder().args("").seq(2).toInvocation();
+        nonEqualCall = new InvocationBuilder().args("X").seq(3).toInvocation();
     }
 
     @Test
@@ -41,5 +28,11 @@ public class InvocationTest {
         assertFalse(call.equals(""));
         assertTrue(call.equals(equalCall));
         assertFalse(call.equals(nonEqualCall));
+    }
+    
+    @Test
+    public void shouldEqualToNotConsiderSequenceNumber() {
+        assertTrue(call.getSequenceNumber() != equalCall.getSequenceNumber());
+        assertTrue(call.equals(equalCall));
     }
 }

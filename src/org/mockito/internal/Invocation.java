@@ -5,6 +5,7 @@
 package org.mockito.internal;
 
 import java.lang.reflect.Method;
+import java.util.*;
 
 import org.mockito.internal.matchers.*;
 
@@ -53,7 +54,6 @@ public class Invocation {
         return arguments;
     }
 
-    //TODO add test that makes sure sequenceNumber doesnt take part in equals()
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass()))
             return false;
@@ -104,13 +104,21 @@ public class Invocation {
     }
     
     public String toString() {
+        List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
+        for (Object arg : this.arguments) {
+            //TODO lil bit hacky way of using Equals matcher
+            matchers.add(new Equals(arg));
+        }
+        return toString(matchers);
+    }
+    
+    public String toString(List<IArgumentMatcher> matchers) {
         //TODO separate unit test?
         StringBuffer result = new StringBuffer();
         result.append(getMockAndMethodName());
         result.append("(");
-        for (Object arg : this.arguments) {
-            //TODO lil bit hacky way of using Equals matcher
-            new Equals(arg).appendTo(result);
+        for (IArgumentMatcher matcher : matchers) {
+            matcher.appendTo(result);
             result.append(", ");
         }
         return result.toString().replaceFirst(", $", "").concat(")");
