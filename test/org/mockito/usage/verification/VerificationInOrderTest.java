@@ -26,7 +26,7 @@ public class VerificationInOrderTest {
         mockTwo = mock(IMethods.class);
         mockThree = mock(IMethods.class);
         
-        strictly = strictOrderVerifier(mockOne, mockTwo, mockThree);
+        strictly = createStrictOrderVerifier(mockOne, mockTwo, mockThree);
 
         mockOne.simpleMethod(1);
         mockTwo.simpleMethod(2);

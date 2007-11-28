@@ -4,12 +4,12 @@
  */
 package org.mockito.usage.verification;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import static org.junit.Assert.*;
 import org.junit.*;
 import org.mockito.Strictly;
-import org.mockito.exceptions.MockitoException;
+import org.mockito.exceptions.*;
 import org.mockito.usage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -32,11 +32,32 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         mockThree.simpleMethod(3);
         mockThree.simpleMethod(4);
 
-        strictly = strictOrderVerifier(mockOne, mockThree);
+        strictly = createStrictOrderVerifier(mockOne, mockThree);
     }
     
     @Test
     public void shouldMixVerifyingInOrderAndNormalVerification() {
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        strictly.verify(mockThree).simpleMethod(3);
+        strictly.verify(mockThree).simpleMethod(4);
+        verify(mockTwo).simpleMethod(2);
+        
+        verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+    }
+    
+    @Test
+    public void shouldAllowOrdinarilyVerifyingStrictlyControlledMock() {
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+
+        verify(mockThree).simpleMethod(3);
+        verify(mockThree).simpleMethod(4);
+        verify(mockTwo).simpleMethod(2);
+        
+        verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+    }
+    
+    @Test
+    public void shouldAllowRedundantVerifications() {
         verify(mockOne, atLeastOnce()).simpleMethod(1);
         verify(mockTwo).simpleMethod(2);
         verify(mockThree).simpleMethod(3);
@@ -49,16 +70,54 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
     }
     
-    @Ignore
     @Test
-    public void shouldScreamWhenNotStrictMockPassedToStrictly() {
-        //TODO move to some nice messages exceptions test?
+    public void shouldFailOnNoMoreInteractions() {
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        strictly.verify(mockThree).simpleMethod(3);
+        strictly.verify(mockThree).simpleMethod(4);
+        
         try {
-            strictly.verify(mockTwo, atLeastOnce()).simpleMethod(1);
+            verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch(MockitoException e) {
-            String expected = "some meaningful message";
-            assertEquals(expected, e.getMessage());
-        }
+        } catch (VerificationAssertionError e) {}
+    }
+    
+    @Test
+    public void shouldFailOnNoMoreInteractionsOnStrictlyControlledMock() {
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        strictly.verify(mockThree).simpleMethod(3);
+        verify(mockTwo).simpleMethod(2);
+        
+        try {
+            verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+            fail();
+        } catch (VerificationAssertionError e) {}
+    }
+    
+    @Test
+    public void shouldFailOnWrongOrder() {
+        verify(mockTwo).simpleMethod(2);
+        verify(mockOne, atLeastOnce()).simpleMethod(1);
+
+        try {
+            strictly.verify(mockThree).simpleMethod(3);
+            fail();
+        } catch (StrictVerificationError e) {}
+    }
+    
+    @Test
+    public void shouldFailOnWrongOrderForLastInvocationIsTooEarly() {
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        verify(mockTwo).simpleMethod(2);
+        
+        try {
+            strictly.verify(mockThree).simpleMethod(4);
+            fail();
+        } catch (StrictVerificationError e) {}
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldScreamWhenNotStrictMockPassedToStrictly() {
+        strictly.verify(mockTwo, atLeastOnce()).simpleMethod(1);
     } 
 }

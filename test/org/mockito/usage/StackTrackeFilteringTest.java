@@ -8,8 +8,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.exceptions.*;
+import org.mockito.internal.StateResetter;
 
 import static org.mockito.util.ExtraMatchers.*;
 
@@ -17,8 +18,14 @@ public class StackTrackeFilteringTest {
     
     private IMethods mock;
 
+    @After
+    public void resetState() {
+        StateResetter.reset();
+    }
+    
     @Before
     public void setup() {
+        resetState();
         mock = Mockito.mock(IMethods.class);
     }
     
@@ -74,6 +81,22 @@ public class StackTrackeFilteringTest {
             
             StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
             assertEquals("checkForUnfinishedVerification", unfilteredStackTrace[0].getMethodName());
+        }
+    }
+    
+    @Test
+    public void shouldFilterStacktraceWhenStrictlyVerifying() {
+        Strictly strictly = createStrictOrderVerifier(mock);
+        mock.oneArg(true);
+        mock.oneArg(false);
+        try {
+            strictly.verify(mock).oneArg(false); 
+            fail();
+        } catch (StrictVerificationError expected) {
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifying"));
+            
+            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
+            assertEquals("checkOrderOfInvocations", unfilteredStackTrace[0].getMethodName());
         }
     }
 }

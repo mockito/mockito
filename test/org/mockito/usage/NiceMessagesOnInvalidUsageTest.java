@@ -7,10 +7,14 @@ package org.mockito.usage;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.*;
+import java.util.List;
+
+import org.junit.Test;
+import org.mockito.Strictly;
 import org.mockito.exceptions.MockitoException;
 
-public class NiceMessagesOnRuntimeExceptions {
+@SuppressWarnings("unchecked")
+public class NiceMessagesOnInvalidUsageTest {
     
     @Test
     public void shouldPrintThatRequiresArgumentsWhenVerifyingNoMoreInteractions() {
@@ -44,9 +48,29 @@ public class NiceMessagesOnRuntimeExceptions {
         }
     }
     
-    @Ignore
     @Test
     public void shouldPrintThatStrictlyCannotBeCreatedWithoutMocks() {
-        fail();
+        try {
+            createStrictOrderVerifier();
+            fail();
+        } catch (MockitoException e) {
+            String expected =  
+                "\n" +
+                "Method requires arguments." +
+                "\n" +
+                "Pass mocks that require strict order verification.";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldPrintThatStrictlyCannotVerifyUnfamilarMocks() {
+        List mockOne = mock(List.class);
+        List mockTwo = mock(List.class);
+        Strictly strictly = createStrictOrderVerifier(mockOne);
+        try {
+            strictly.verify(mockTwo).clear();
+            fail();
+        } catch (MockitoException e) {}
     }
 }

@@ -89,7 +89,7 @@ public class Mockito extends Matchers {
 
     private static void assertMocksNotEmpty(Object[] mocks) {
         if (mocks.length == 0) {
-            throw Exceptions.mocksHaveToBePassedAsArguments();
+            Exceptions.mocksHaveToBePassedAsArguments();
         }
     }
 
@@ -106,7 +106,10 @@ public class Mockito extends Matchers {
         return MockUtil.getControl(mock);
     }
 
-    public static Strictly strictOrderVerifier(Object ... mocks) {
+    public static Strictly createStrictOrderVerifier(Object ... mocks) {
+        if (mocks.length == 0) {
+            Exceptions.mocksHaveToBePassedWhenCreatingStrictly();
+        }
         StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
