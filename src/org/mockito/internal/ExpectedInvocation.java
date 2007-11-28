@@ -15,6 +15,7 @@ public class ExpectedInvocation {
     private final List<IArgumentMatcher> matchers;
 
     public ExpectedInvocation(Invocation invocation, List<IArgumentMatcher> matchers) {
+        //TODO let's not allow ExpectedInvocation to accept null matchers
         this.invocation = invocation;
         this.matchers = matchers;
     }
@@ -52,7 +53,6 @@ public class ExpectedInvocation {
         return true;
     }
 
-    //TODO separate unit test?
     public String toString() {
         return invocation.toString(matchers);
     }

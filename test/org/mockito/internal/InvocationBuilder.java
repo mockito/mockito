@@ -3,7 +3,7 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.usage.IMethods;
+import org.mockito.usage.*;
 
 @SuppressWarnings("unchecked")
 public class InvocationBuilder {
@@ -11,7 +11,9 @@ public class InvocationBuilder {
     private String methodName = "simpleMethod";
     private int sequenceNumber = 0;
     private Object[] args = new Object[] {};
+    private Object mock = "mock";
 
+    //TODO replace occurences of raw creation with builder
     public Invocation toInvocation() {
         Method method;
         List<Class> argTypes = new LinkedList<Class>();
@@ -22,9 +24,9 @@ public class InvocationBuilder {
         try {
             method = IMethods.class.getMethod(methodName, argTypes.toArray(new Class[argTypes.size()]));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("builder only creates invocations of IMethods interface", e);
         }
-        Invocation i = new Invocation("mock", method, args, sequenceNumber);
+        Invocation i = new Invocation(mock, method, args, sequenceNumber);
         return i;
     }
 
@@ -40,6 +42,11 @@ public class InvocationBuilder {
 
     public InvocationBuilder args(Object ... args) {
         this.args = args;
+        return this;
+    }
+
+    public InvocationBuilder mock(Object mock) {
+        this.mock = mock;
         return this;
     }
 }

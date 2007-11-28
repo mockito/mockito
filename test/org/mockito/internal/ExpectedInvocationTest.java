@@ -4,36 +4,57 @@
  */
 package org.mockito.internal;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Method;
+import java.util.*;
 
 import org.junit.Test;
+import org.mockito.internal.matchers.*;
 
+@SuppressWarnings("unchecked")
 public class ExpectedInvocationTest {
 
     @Test
-    public void shouldImplementHashcodeToBeHashMapsCitizen() throws Exception {
-        Object[] args = new Object[] { "" };
-        Method m = Object.class.getMethod("equals", new Class[] { Object.class });
-        Invocation invocation = new Invocation(null, m, args, 0);
-        assertThat(new ExpectedInvocation(invocation, null).hashCode(), equalTo(1));
+    public void shouldBeACitizenOfHashes() throws Exception {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
+        
+        Map map = new HashMap();
+        map.put(invocation, "one");
+        map.put(invocationTwo, "two");
+        
+        assertEquals(2, map.size());
     }
     
     @Test
-    public void shouldNotEqualIfNumberOfArgumentsDiffer() throws SecurityException, NoSuchMethodException {
-        Object mock = new Object();
+    public void shouldNotEqualIfNumberOfArgumentsDiffer() throws Exception {
+        ExpectedInvocation withOneArg = new ExpectedInvocation(new InvocationBuilder().args("test").toInvocation(), null);
+        ExpectedInvocation withTwoArgs = new ExpectedInvocation(new InvocationBuilder().args("test", 100).toInvocation(), null);
 
-        Method dummyMethod = Object.class.getMethod("equals",
-                new Class[] { Object.class });
+        assertFalse(withOneArg.equals(null));
+        assertFalse(withOneArg.equals(withTwoArgs));
+    }
+    
+    @Test
+    public void shouldEqualWhenMatchersEqual() throws Exception {
+        IArgumentMatcher m = new Equals(1);
+        IArgumentMatcher mTwo = new Equals(2);
+        ExpectedInvocation withMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
+        ExpectedInvocation withEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
+        ExpectedInvocation withoutEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(mTwo));
+        
+        assertTrue(withMatchers.equals(withEqualMatchers));
+        assertFalse(withMatchers.equals(withoutEqualMatchers));
+    }
+    
+    @Test
+    public void shouldToStringWithMatchers() throws Exception {
+        IArgumentMatcher m = NotNull.NOT_NULL;
+        ExpectedInvocation notNull = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
+        IArgumentMatcher mTwo = new Equals('x');
+        ExpectedInvocation equals = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(mTwo));
 
-        ExpectedInvocation invocationWithOneArg = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "" }, 0), null);
-        ExpectedInvocation invocationWithTwoArgs = new ExpectedInvocation(
-                new Invocation(mock, dummyMethod, new Object[] { "", "" }, 0), null);
-
-        assertFalse(invocationWithOneArg.equals(null));
-        assertFalse(invocationWithOneArg.equals(invocationWithTwoArgs));
+        assertEquals("Object.simpleMethod(notNull())", notNull.toString());
+        assertEquals("Object.simpleMethod('x')", equals.toString());
     }
 }

@@ -106,14 +106,13 @@ public class Invocation {
     public String toString() {
         List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
         for (Object arg : this.arguments) {
-            //TODO lil bit hacky way of using Equals matcher
             matchers.add(new Equals(arg));
         }
         return toString(matchers);
     }
     
+    //TODO don't use matchers to do printing args. there should be separate thing to print that stuff
     public String toString(List<IArgumentMatcher> matchers) {
-        //TODO separate unit test?
         StringBuffer result = new StringBuffer();
         result.append(getMockAndMethodName());
         result.append("(");
@@ -125,7 +124,6 @@ public class Invocation {
     }
     
     public String toStringWithArgumentTypes() {
-        //TODO separate unit test?
         StringBuilder result = new StringBuilder();
         result.append(getMockAndMethodName());
         result.append("(");

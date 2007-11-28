@@ -34,7 +34,7 @@ public class IncorectBindingPuzzleFixedTest {
     }
 
     @Test
-    public void overriddenInterfaceMethodNotWorking() throws Exception {
+    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetected() throws Exception {
         DerivedInterface derivedMock = Mockito.mock(DerivedInterface.class);
         setMock(derivedMock);
         Message message = new Message();
