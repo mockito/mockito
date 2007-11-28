@@ -4,11 +4,15 @@
 -->
 <project name="mockito" basedir="." default="all">
 
+	<property name="src.dir" value="src" />
+	<property name="test.src.dir" value="test" />
 	<property name="target.dir" value="target" />
 	<property name="src.classes.dir" value="${target.dir}/classes" />
 	<property name="test.classes.dir" value="${target.dir}/test-classes" />
 	<property name="test.reports.dir" value="${target.dir}/reports/junit" />
+
 	<property name="lib.dir" value="lib" />
+	<property name="ant.lib.dir" value="${lib.dir}/ant" />
 
 	<path id="compile.classpath">
 		<fileset dir="${lib.dir}" includes="*.jar" />
@@ -21,7 +25,11 @@
 
 	<path id="test.classpath">
 		<path refid="test.compile.classpath" />
-		<pathelement location="${test.classes.dir}"/>
+		<pathelement location="${test.classes.dir}" />
+	</path>
+
+	<path id="ant.classpath">
+		<fileset dir="${ant.lib.dir}" includes="*.jar" />
 	</path>
 
 	<target name="prepare">
@@ -31,7 +39,7 @@
 
 	<target name="clean" description="Cleans out the build directories">
 		<delete includeemptydirs="true">
-			<fileset dir="${target.dir}" >
+			<fileset dir="${target.dir}">
 				<exclude name="eclipse-*/**" />
 			</fileset>
 		</delete>
@@ -63,29 +71,27 @@
 	<target name="all" depends="clean, compile, test" description="Performs a build and runs test" />
 
 	<target name="package" description="Packages the artifacts">
-		<fail message="Packiging is missing"/>
+		<fail message="Packiging is missing" />
 	</target>
 
-	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="compile.classpath">
-	</taskdef>
-	
+
 	<target name="pmd" depends="prepare">
+
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+		
 		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules.xml">
 			<ruleset>Mockito</ruleset>
-			<formatter type="text" toConsole="true" linkPrefix="http://pmd.sourceforge.net/xref/" />
-			<fileset dir=".">
-				<include name="src/**/*.java" />
-				<include name="test/**/*.java" />
-			</fileset>
+			<formatter type="text" toConsole="true" />
+			
+            <fileset dir="${src.dir}">
+		            <include name="**/*.java" />
+		    </fileset>
+
+		    <fileset dir="${test.src.dir}">
+		    	  <include name="**/*.java" />
+		    </fileset>
 		</pmd>
-		
-		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules-test-code.xml">
-			<ruleset>Mockito test code</ruleset>
-			<formatter type="text" toConsole="true" linkPrefix="http://pmd.sourceforge.net/xref/" />
-			<fileset dir=".">
-				<include name="test/**/*.java" />
-			</fileset>
-		</pmd>
+
 	</target>
 
 </project>
