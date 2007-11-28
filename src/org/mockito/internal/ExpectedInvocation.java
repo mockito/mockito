@@ -15,7 +15,9 @@ public class ExpectedInvocation {
     private final List<IArgumentMatcher> matchers;
 
     public ExpectedInvocation(Invocation invocation, List<IArgumentMatcher> matchers) {
-        //TODO let's not allow ExpectedInvocation to accept null matchers
+        if (matchers == null) {
+            throw new IllegalArgumentException("matchers cannot be null");
+        }
         this.invocation = invocation;
         this.matchers = matchers;
     }
@@ -25,9 +27,7 @@ public class ExpectedInvocation {
             return false;
 
         ExpectedInvocation other = (ExpectedInvocation) o;
-        return this.invocation.equals(other.invocation)
-                && ((this.matchers == null && other.matchers == null) || (this.matchers != null && this.matchers
-                        .equals(other.matchers)));
+        return invocation.equals(other.invocation) && matchers.equals(other.matchers);
     }
 
     public int hashCode() {

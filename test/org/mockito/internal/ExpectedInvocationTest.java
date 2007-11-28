@@ -14,6 +14,11 @@ import org.mockito.internal.matchers.*;
 @SuppressWarnings("unchecked")
 public class ExpectedInvocationTest {
 
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldScreamWhenMatchersNull() throws Exception {
+        new ExpectedInvocation(new InvocationBuilder().toInvocation(), null);
+    }
+    
     @Test
     public void shouldBeACitizenOfHashes() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
@@ -28,8 +33,8 @@ public class ExpectedInvocationTest {
     
     @Test
     public void shouldNotEqualIfNumberOfArgumentsDiffer() throws Exception {
-        ExpectedInvocation withOneArg = new ExpectedInvocation(new InvocationBuilder().args("test").toInvocation(), null);
-        ExpectedInvocation withTwoArgs = new ExpectedInvocation(new InvocationBuilder().args("test", 100).toInvocation(), null);
+        ExpectedInvocation withOneArg = new ExpectedInvocation(new InvocationBuilder().args("test").toInvocation(), Collections.EMPTY_LIST);
+        ExpectedInvocation withTwoArgs = new ExpectedInvocation(new InvocationBuilder().args("test", 100).toInvocation(), Collections.EMPTY_LIST);
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));
