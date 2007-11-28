@@ -13,7 +13,6 @@ public class InvocationBuilder {
     private Object[] args = new Object[] {};
     private Object mock = "mock";
 
-    //TODO replace occurences of raw creation with builder
     public Invocation toInvocation() {
         Method method;
         List<Class> argTypes = new LinkedList<Class>();

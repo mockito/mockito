@@ -4,31 +4,23 @@
  */
 package org.mockito.internal;
 
-import java.lang.reflect.Method;
+import static org.junit.Assert.assertTrue;
+
 import java.util.*;
-import static org.junit.Assert.*;
-import org.junit.*;
+
+import org.junit.Test;
 
 @SuppressWarnings("unchecked")
 public class MockitoBehaviorTest {
 
-    private MockitoBehavior behavior;
-    private ExpectedInvocation toLowerCaseInvocation;
-
-    @Before
-    public void setup() throws Exception {
-        Method toLowerCase = String.class.getMethod("toLowerCase", new Class[] {});
-        
-        toLowerCaseInvocation = new ExpectedInvocation(new Invocation("mock", toLowerCase , new Object[] {}, 0), Collections.EMPTY_LIST);
-        
-        behavior = new MockitoBehavior();
-    }
-    
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
+        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation() , Collections.EMPTY_LIST);
+        MockitoBehavior behavior = new MockitoBehavior();
+        
         VerifyingMode inOrder = VerifyingMode.inOrder(1, Arrays.asList(new Object()));
         assertTrue(inOrder.orderOfInvocationsMatters());
         
-        behavior.checkForWrongNumberOfInvocations(toLowerCaseInvocation, inOrder);
+        behavior.checkForWrongNumberOfInvocations(invocation, inOrder);
     }
 }

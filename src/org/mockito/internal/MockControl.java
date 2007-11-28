@@ -61,7 +61,6 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         ExpectedInvocation expectedInvocation = new ExpectedInvocation(invocation, processedMatchers);
         
         if (verifyingMode != null) {
-            //TODO shouldn't verify take only invocationWithMatchers.getInvocation(); ?
             behavior.verify(expectedInvocation, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         }

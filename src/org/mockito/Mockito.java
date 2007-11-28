@@ -40,12 +40,10 @@ public class Mockito extends Matchers {
         return verify(mock, 1);
     }
     
-    //TODO make the interface consistent, it should be times(4) rather than int
     public static <T> T verify(T mock, int expectedNumberOfInvocations) {
         return verify(mock, VerifyingMode.times(expectedNumberOfInvocations));
     }
     
-    //TODO should not be public
     public static <T> T verify(T mock, VerifyingMode mode) {
         MockUtil.validateMock(mock);
         MockitoState.instance().verifyingStarted(mode);
