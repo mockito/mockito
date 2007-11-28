@@ -15,7 +15,7 @@ public class MockitoBehaviorTest {
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
-        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation() , Collections.EMPTY_LIST);
+        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation());
         MockitoBehavior behavior = new MockitoBehavior();
         
         VerifyingMode inOrder = VerifyingMode.inOrder(1, Arrays.asList(new Object()));

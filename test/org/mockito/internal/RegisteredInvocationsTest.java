@@ -5,7 +5,8 @@
 package org.mockito.internal;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.EMPTY_LIST;
+import static org.mockito.internal.VerifyingMode.*;
+import static java.util.Collections.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -51,14 +52,14 @@ public class RegisteredInvocationsTest {
                 return EMPTY_LIST;
             }});
         
-        registered.unverifiedInvocationChunks(VerifyingMode.inOrder(null, dummyMocks));
+        registered.unverifiedInvocationChunks(inOrder(null, dummyMocks));
         assertEquals("InvocationsFinder was asked", s.toString());
     }    
     
     @Test
     public void shouldGetUnverifiedInvocationChunks() throws Exception {
         Object mock = new Object();
-        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(VerifyingMode.inOrder(null, asList(mock)));
+        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
         assertEquals(3, chunks.size());
         
@@ -80,9 +81,9 @@ public class RegisteredInvocationsTest {
     public void shouldGetTwoUnverifiedInvocationChunks() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
         
-        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(VerifyingMode.inOrder(null, asList(mock)));
+        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
         assertEquals(2, chunks.size());
         
@@ -99,10 +100,10 @@ public class RegisteredInvocationsTest {
     public void shouldGetOneUnverifiedInvocationChunk() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), inOrder(null, asList(mock)));
         
-        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(VerifyingMode.inOrder(null, asList(mock)));
+        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
         assertEquals(1, chunks.size());
         
@@ -115,18 +116,18 @@ public class RegisteredInvocationsTest {
     public void shouldNotGetAnyInvocationChunks() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
         
-        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(VerifyingMode.inOrder(null, asList(mock)));
+        List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
         assertEquals(0, chunks.size());
     }
     
     @Test
     public void shouldMarkAllsimpleMethodAsVerified() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST),VerifyingMode.times(2));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation),times(2));
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -137,7 +138,7 @@ public class RegisteredInvocationsTest {
     
     @Test
     public void shouldMarkAllsimpleMethodAsVerifiedWhenAtLeastOnceIsUsed() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.atLeastOnce());
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), atLeastOnce());
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -148,7 +149,7 @@ public class RegisteredInvocationsTest {
     
     @Test
     public void shouldNeverMarkInvocationsAsVerifiedIfExpectedCountIsZero() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.times(0));
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), times(0));
         
         List<Invocation> invocations = registered.all();
         assertEquals(false, invocations.get(0).isVerified());
@@ -159,9 +160,9 @@ public class RegisteredInvocationsTest {
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromFirstChunk() throws Exception {
-        VerifyingMode mode = VerifyingMode.inOrder(null, Arrays.asList(new Object()));
+        VerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
         assertTrue(mode.orderOfInvocationsMatters());
-        registered.markInvocationsAsVerified(new ExpectedInvocation(null, EMPTY_LIST), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(null), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -175,12 +176,12 @@ public class RegisteredInvocationsTest {
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromSecondChunk() throws Exception {
-        VerifyingMode mode = VerifyingMode.inOrder(null, Arrays.asList(new Object()));
+        VerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
         assertTrue(mode.orderOfInvocationsMatters());
         
         Invocation doesntMatter = null;
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter, EMPTY_LIST), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter, EMPTY_LIST), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(2).isVerified());
@@ -191,13 +192,13 @@ public class RegisteredInvocationsTest {
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromThirdChunk() throws Exception {
-        VerifyingMode mode = VerifyingMode.inOrder(null, Arrays.asList(new Object()));
+        VerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
         assertTrue(mode.orderOfInvocationsMatters());
         
         Invocation doesntMatter = null;
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter, EMPTY_LIST), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter, EMPTY_LIST), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter, EMPTY_LIST), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(3).isVerified());
@@ -214,10 +215,10 @@ public class RegisteredInvocationsTest {
     public void shouldGetFirstUnverifiedInvocation() throws Exception {
         assertSame(simpleMethodInvocation, registered.getFirstUnverified());
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation, EMPTY_LIST), VerifyingMode.atLeastOnce());
+        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), atLeastOnce());
         assertSame(differentMethodInvocation, registered.getFirstUnverified());
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation, EMPTY_LIST), VerifyingMode.atLeastOnce());
+        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), atLeastOnce());
         assertNull(registered.getFirstUnverified());
     }
 }

@@ -5,6 +5,7 @@
 package org.mockito.internal;
 
 import static org.junit.Assert.*;
+import static java.util.Arrays.*;
 
 import java.util.*;
 
@@ -33,8 +34,8 @@ public class ExpectedInvocationTest {
     
     @Test
     public void shouldNotEqualIfNumberOfArgumentsDiffer() throws Exception {
-        ExpectedInvocation withOneArg = new ExpectedInvocation(new InvocationBuilder().args("test").toInvocation(), Collections.EMPTY_LIST);
-        ExpectedInvocation withTwoArgs = new ExpectedInvocation(new InvocationBuilder().args("test", 100).toInvocation(), Collections.EMPTY_LIST);
+        ExpectedInvocation withOneArg = new ExpectedInvocation(new InvocationBuilder().args("test").toInvocation());
+        ExpectedInvocation withTwoArgs = new ExpectedInvocation(new InvocationBuilder().args("test", 100).toInvocation());
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));
@@ -44,9 +45,9 @@ public class ExpectedInvocationTest {
     public void shouldEqualWhenMatchersEqual() throws Exception {
         IArgumentMatcher m = new Equals(1);
         IArgumentMatcher mTwo = new Equals(2);
-        ExpectedInvocation withMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
-        ExpectedInvocation withEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
-        ExpectedInvocation withoutEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(mTwo));
+        ExpectedInvocation withMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(m));
+        ExpectedInvocation withEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(m));
+        ExpectedInvocation withoutEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(mTwo));
         
         assertTrue(withMatchers.equals(withEqualMatchers));
         assertFalse(withMatchers.equals(withoutEqualMatchers));
@@ -55,9 +56,9 @@ public class ExpectedInvocationTest {
     @Test
     public void shouldToStringWithMatchers() throws Exception {
         IArgumentMatcher m = NotNull.NOT_NULL;
-        ExpectedInvocation notNull = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(m));
+        ExpectedInvocation notNull = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(m));
         IArgumentMatcher mTwo = new Equals('x');
-        ExpectedInvocation equals = new ExpectedInvocation(new InvocationBuilder().toInvocation(), Arrays.asList(mTwo));
+        ExpectedInvocation equals = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertEquals("Object.simpleMethod(notNull())", notNull.toString());
         assertEquals("Object.simpleMethod('x')", equals.toString());

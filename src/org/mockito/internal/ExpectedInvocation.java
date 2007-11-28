@@ -22,6 +22,10 @@ public class ExpectedInvocation {
         this.matchers = matchers;
     }
     
+    public ExpectedInvocation(Invocation invocation) {
+        this(invocation, Collections.<IArgumentMatcher>emptyList());
+    }
+    
     public boolean equals(Object o) {
         if (o == null || !this.getClass().equals(o.getClass()))
             return false;
