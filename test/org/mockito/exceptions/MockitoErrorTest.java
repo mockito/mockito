@@ -1,9 +1,8 @@
 package org.mockito.exceptions;
 
-import org.junit.*;
-import static org.mockito.util.ExtraMatchers.*;
-
 import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 public class MockitoErrorTest {
 

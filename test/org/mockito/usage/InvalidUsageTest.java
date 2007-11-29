@@ -7,9 +7,10 @@ package org.mockito.usage;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
+import java.util.*;
 
 import org.junit.*;
+import org.mockito.Strictly;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
 
@@ -33,14 +34,47 @@ import org.mockito.internal.StateResetter;
 @SuppressWarnings("unchecked")
 public class InvalidUsageTest {
 
-    private List mock;
+    private LinkedList mock;
+    private LinkedList mockTwo;
 
     @Before
     @After
     public void resetState() {
         StateResetter.reset();
-        mock = mock(List.class);
+        mock = mock(LinkedList.class);
+        mockTwo = mock(LinkedList.class);
     }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldRequireArgumentsWhenVerifyingNoMoreInteractions() {
+        verifyNoMoreInteractions();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldRequireArgumentsWhenVerifyingZeroInteractions() {
+        verifyZeroInteractions();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotCreateStrictlyWithoutMocks() {
+        createStrictOrderVerifier();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotVerifyStrictlyUnfamilarMocks() {
+        Strictly strictly = createStrictOrderVerifier(mock);
+        strictly.verify(mockTwo).clear();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
+        stub(mock.add("monkey island")).andThrows(new Exception());
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingNullThrowable() throws Exception {
+        stub(mock.add("monkey island")).andThrows(null);
+    }    
 
     @Test(expected=MissingMethodInvocationException.class)
     public void shouldDetectStubbingWithoutMethodCallOnMock() {
