@@ -36,10 +36,6 @@ public class StackTrackeFilteringTest {
             fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
-            
-            //TODO get rid of following test: and move that testing to MockitoStackTraceFilterTest
-            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("reportMissingInvocationError", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -51,9 +47,6 @@ public class StackTrackeFilteringTest {
             fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
-            
-            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("verifyNoMoreInteractions", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -65,9 +58,6 @@ public class StackTrackeFilteringTest {
             fail();
         } catch (VerificationAssertionError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyZeroInteractions"));
-            
-            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("verifyNoMoreInteractions", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -79,9 +69,6 @@ public class StackTrackeFilteringTest {
             fail();
         } catch (MockitoException expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceOnMockitoException"));
-            
-            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("checkForUnfinishedVerification", unfilteredStackTrace[0].getMethodName());
         }
     }
     
@@ -95,9 +82,6 @@ public class StackTrackeFilteringTest {
             fail();
         } catch (StrictVerificationError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifying"));
-            
-            StackTraceElement[] unfilteredStackTrace = expected.getUnfilteredStackTrace();
-            assertEquals("checkOrderOfInvocations", unfilteredStackTrace[0].getMethodName());
         }
     }
     
