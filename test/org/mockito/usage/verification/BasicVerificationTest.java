@@ -94,7 +94,7 @@ public class BasicVerificationTest {
         try {
             verify(mock).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {};
+        } catch (NumberOfInvocationsError e) {};
     }
 
     @Test

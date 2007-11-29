@@ -10,11 +10,10 @@ import org.mockito.exceptions.*;
 
 public class MockitoBehavior<T> {
 
-    private T mock;
-    
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations(new AllInvocationsFinder());
     private Map<ExpectedInvocation, Result> results = new HashMap<ExpectedInvocation, Result>();
 
+    private T mock;
     private ExpectedInvocation invocationForStubbing;
     
     public void addInvocation(ExpectedInvocation invocation) {
@@ -45,7 +44,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) throws NumberOfInvocationsAssertionError {
+    void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) {
         if (verifyingMode.orderOfInvocationsMatters()) {
             return;
         }
@@ -55,15 +54,15 @@ public class MockitoBehavior<T> {
         boolean atLeastOnce = verifyingMode.atLeastOnceMode();
         
         if (!atLeastOnce && actuallyInvoked != expectedInvoked) {
-            throw new NumberOfInvocationsAssertionError(expectedInvoked, actuallyInvoked, expected.toString());
+            Exceptions.numberOfInvocationsDiffers(expectedInvoked, actuallyInvoked, expected.toString());
         }
     }
 
-    private void reportMissingInvocationError(ExpectedInvocation wanted) throws VerificationError {
+    private void reportMissingInvocationError(ExpectedInvocation wanted) {
         Invocation actual = registeredInvocations.findSimilarInvocation(wanted);
         
         if (actual != null) {
-            reportDiscrepancy(wanted, actual, "Invocation differs from actual");
+            reportDiscrepancy(wanted, actual, Exceptions.REGULAR_DISCREPANCY);
         } else {
             Exceptions.wantedButNotInvoked(wanted.toString());
         }
@@ -88,7 +87,7 @@ public class MockitoBehavior<T> {
         List<InvocationChunk> chunks = registeredInvocations.unverifiedInvocationChunks(mode);
         
         if (mode.expectedCountIsZero() && !chunks.isEmpty() && wanted.matches(chunks.get(0).getInvocation())) {
-            throw new NumberOfInvocationsAssertionError(0, chunks.get(0).getCount(), wanted.toString());
+            Exceptions.numberOfInvocationsDiffers(0, chunks.get(0).getCount(), wanted.toString());
         } else if (mode.expectedCountIsZero()) {
             return;
         }
@@ -98,12 +97,11 @@ public class MockitoBehavior<T> {
         }
         
         if (!wanted.matches(chunks.get(0).getInvocation())) {
-            reportDiscrepancy(wanted, chunks.get(0).getInvocation(), "Strict order verification failed");
+            reportDiscrepancy(wanted, chunks.get(0).getInvocation(), Exceptions.STRICT_DISCREPANCY);
         }
         
         if (!mode.atLeastOnceMode() && chunks.get(0).getCount() != mode.expectedCount()) {
-//            Exceptions.numberOfInvocationsDiffers();
-            throw new NumberOfInvocationsAssertionError(mode.expectedCount(), chunks.get(0).getCount(), wanted.toString());
+            Exceptions.numberOfInvocationsDiffers(mode.expectedCount(), chunks.get(0).getCount(), wanted.toString());
         }
     }
 
@@ -115,15 +113,10 @@ public class MockitoBehavior<T> {
         verifyNoMoreInteractions("Zero interactions expected");
     }
     
-    private void verifyNoMoreInteractions(String verificationErrorMessage) {
+    private void verifyNoMoreInteractions(String message) {
         Invocation unverified = registeredInvocations.getFirstUnverified();
         if (unverified != null) {
-            String mockName = Namer.nameForMock(mock);
-            throw new VerificationError(
-                    "\n" +
-                    verificationErrorMessage + " on " + mockName +
-                    "\n" +
-                    "Unexpected: " + unverified.toString());
+            Exceptions.noMoreInteractionsWanted(unverified, message);
         }
     }
 

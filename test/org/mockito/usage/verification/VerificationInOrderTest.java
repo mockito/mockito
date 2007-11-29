@@ -90,12 +90,12 @@ public class VerificationInOrderTest {
         } catch (VerificationError e) {}
     }
     
-    @Test(expected=NumberOfInvocationsAssertionError.class)
+    @Test(expected=NumberOfInvocationsError.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationExpected() {
         strictly.verify(mockOne, 0).simpleMethod(1);
     }
     
-    @Test(expected=NumberOfInvocationsAssertionError.class)
+    @Test(expected=NumberOfInvocationsError.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationExpectedAgain() {
         strictly.verify(mockOne, 2).simpleMethod(1);
     }
@@ -106,7 +106,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockTwo, 3).simpleMethod(2);
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {}
+        } catch (NumberOfInvocationsError e) {}
     }
     
     @Test
@@ -115,7 +115,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockTwo, 0).simpleMethod(2);
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {}
+        } catch (NumberOfInvocationsError e) {}
     }    
     
     @Test
@@ -127,7 +127,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne, 0).simpleMethod(4);
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {}
+        } catch (NumberOfInvocationsError e) {}
     }
     
     @Test
@@ -139,7 +139,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne, 2).simpleMethod(4);
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {}
+        } catch (NumberOfInvocationsError e) {}
     }    
     
     /* ------------- */

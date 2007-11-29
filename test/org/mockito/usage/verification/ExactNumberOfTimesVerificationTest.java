@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.NumberOfInvocationsAssertionError;
+import org.mockito.exceptions.NumberOfInvocationsError;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest {
@@ -32,7 +32,7 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 100).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {
+        } catch (NumberOfInvocationsError e) {
             String expected = 
                 "\n" +
                 "LinkedList.clear()" +
@@ -52,7 +52,7 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 1).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {
+        } catch (NumberOfInvocationsError e) {
             String expected = 
                 "\n" +
                 "LinkedList.clear()" +
@@ -68,7 +68,7 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {
+        } catch (NumberOfInvocationsError e) {
             assertTrue(e.getMessage().endsWith("Expected 15 times but was 0"));
         }
     }
@@ -81,7 +81,7 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {
+        } catch (NumberOfInvocationsError e) {
             assertTrue(e.getMessage().endsWith("Expected 15 times but was 1"));
         }
     }
@@ -93,7 +93,7 @@ public class ExactNumberOfTimesVerificationTest {
         try {
             Mockito.verify(mock, 0).clear();
             fail();
-        } catch (NumberOfInvocationsAssertionError e) {}
+        } catch (NumberOfInvocationsError e) {}
     }
     
     @Test

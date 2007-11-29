@@ -163,7 +163,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-            		"No more interactions expected on IMethods" +
+            		"No more interactions expected" +
             		"\n" +
             		"Unexpected: IMethods.oneArg(false)";
             assertEquals(expectedMessage, actualMessage);         
@@ -182,7 +182,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Zero interactions expected on IMethods" +
+                    "Zero interactions expected" +
                     "\n" +
                     "Unexpected: IMethods.twoArgumentMethod(1, 2)";
             assertEquals(expectedMessage, actualMessage);         

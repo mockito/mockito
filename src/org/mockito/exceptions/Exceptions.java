@@ -4,13 +4,17 @@
  */
 package org.mockito.exceptions;
 
+import org.mockito.internal.Invocation;
 
 /**
- * All messages in one place makes it easier to tune 
- * and amend the text.
+ * All messages in one place makes it easier to tune and amend the text. 
+ * Once exception messages are sorted we can inline that stuff.
  */
 public class Exceptions {
     
+    public static final String STRICT_DISCREPANCY = "Strict order verification failed";
+    public static final String REGULAR_DISCREPANCY = "Invocation differs from actual";
+
     private static String join(String ... linesToBreak) {
         StringBuilder out = new StringBuilder("\n");
         for (String line : linesToBreak) {
@@ -18,6 +22,10 @@ public class Exceptions {
         }
         int lastBreak = out.lastIndexOf("\n");
         return out.replace(lastBreak, lastBreak+1, "").toString();
+    }
+
+    private static String pluralize(int number) {
+        return number == 1 ? "1 time" : number + " times";
     }
 
     public static void mocksHaveToBePassedAsArguments() {
@@ -70,6 +78,20 @@ public class Exceptions {
         throw new VerificationError(join(
                     "Wanted but not invoked:",
                     wanted        
+        ));
+    }
+
+    public static void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
+        throw new NumberOfInvocationsError(join(
+                wanted,
+                "Expected " + pluralize(wantedCount) + " but was " + actualCount
+        ));
+    }
+
+    public static void noMoreInteractionsWanted(Invocation unexpected, String message) {
+        throw new VerificationError(join(
+                message,
+                "Unexpected: " + unexpected.toString()
         ));
     }
 }
