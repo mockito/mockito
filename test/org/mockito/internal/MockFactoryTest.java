@@ -32,6 +32,11 @@ public class MockFactoryTest {
     
     @Test
     public void shouldCreateMockFromClassEvenWhenConstructorIsDodgy() throws Exception {
+        try {
+            new ClassWithDodgyConstructor();
+            fail();
+        } catch (Exception e) {};
+        
         MockFactory<ClassWithDodgyConstructor> factory = new MockFactory<ClassWithDodgyConstructor>();
         ClassWithDodgyConstructor mock = factory.createMock(ClassWithDodgyConstructor.class, new MockAwareStub());
         assertNotNull(mock);

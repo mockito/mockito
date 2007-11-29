@@ -48,6 +48,7 @@ public class ArrayEquals extends Equals {
     }
 
     public void appendTo(StringBuffer buffer) {
+        //TODO not tested
         if (getExpected() != null && getExpected().getClass().isArray()) {
             appendArray(createObjectArray(getExpected()), buffer);
         } else {
@@ -56,6 +57,7 @@ public class ArrayEquals extends Equals {
     }
 
     private void appendArray(Object[] array, StringBuffer buffer) {
+        //TODO not tested
         buffer.append("[");
         for (int i = 0; i < array.length; i++) {
             new Equals(array[i]).appendTo(buffer);

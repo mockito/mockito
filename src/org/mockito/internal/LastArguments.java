@@ -13,7 +13,6 @@ public class LastArguments {
     
     static LastArguments INSTANCE = new LastArguments();
     
-    private final ThreadLocal<Stack<Object[]>> threadToCurrentArguments = new ThreadLocal<Stack<Object[]>>();
     private final ThreadLocal<Stack<IArgumentMatcher>> threadToArgumentMatcherStack = new ThreadLocal<Stack<IArgumentMatcher>>();
 
     public static LastArguments instance() {
@@ -79,19 +78,5 @@ public class LastArguments {
         Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
         assertState(stack != null, missingMatchers());
         stack.push(new Or(popLastArgumentMatchers(count)));
-    }
-
-    public void pushCurrentArguments(Object[] args) {
-        Stack<Object[]> stack = threadToCurrentArguments.get();
-        if (stack == null) {
-            stack = new Stack<Object[]>();
-            threadToCurrentArguments.set(stack);
-        }
-        stack.push(args);
-    }
-
-    public void popCurrentArguments() {
-        Stack<Object[]> stack = threadToCurrentArguments.get();
-        stack.pop();
     }
 }

@@ -14,10 +14,6 @@ public class Mockito extends Matchers {
         return VerifyingMode.atLeastOnce();
     }
     
-    public static VerifyingMode times(int expectedNumerOfTimes) {
-        return VerifyingMode.atLeastOnce();
-    }
-    
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
         MockControl<T> mockControl = new MockControl<T>(MockitoState.instance(), LastArguments.instance());

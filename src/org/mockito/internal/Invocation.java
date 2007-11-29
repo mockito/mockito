@@ -92,6 +92,7 @@ public class Invocation {
     private boolean isPrimitiveParameter(int parameterPosition) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (method.isVarArgs()) {
+            //TODO not tested?
             parameterPosition = Math.min(parameterPosition,
                     parameterTypes.length - 1);
         }

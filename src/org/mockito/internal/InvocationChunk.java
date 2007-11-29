@@ -18,10 +18,6 @@ public class InvocationChunk {
         return invocations.get(0);
     }
 
-    public boolean isVerified() {
-        return getInvocation().isVerified();
-    }
-
     public int getCount() {
         return invocations.size();
     }
@@ -30,14 +26,14 @@ public class InvocationChunk {
         invocations.add(invocation);
     }
     
-    public String toString() {
-        return getInvocation() + " x " + getCount();
-    }
-
     public void markAllInvocationsAsVerified() {
         for (Invocation invocation : invocations) {
             invocation.markVerifiedInOrder();
             invocation.markVerified();
         }
+    }
+    
+    public String toString() {
+        return getInvocation() + " x " + getCount();
     }
 }
