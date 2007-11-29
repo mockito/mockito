@@ -81,7 +81,7 @@ public class NiceMessagesWhenVerificationFailsTest {
     }
     
     @Test
-    public void shouldPrintActualAndExpectedWhenTheDifferenceIsAboutArguments() {
+    public void shouldPrintActualAndWantedWhenTheDifferenceIsAboutArguments() {
         mock.oneArg(true);
         mock.twoArgumentMethod(1, 2);
         
@@ -104,7 +104,7 @@ public class NiceMessagesWhenVerificationFailsTest {
     }
     
     @Test
-    public void shouldPrintActualAndExpectedWhenActualMethodNameAndExpectedMethodNameAreTheSame() {
+    public void shouldPrintActualAndWantedWhenActualMethodNameAndWantedMethodNameAreTheSame() {
         mock.simpleMethod();
         
         try {
@@ -125,7 +125,7 @@ public class NiceMessagesWhenVerificationFailsTest {
     }    
     
     @Test
-    public void shouldPrintActualAndUnverifiedExpectedWhenTheDifferenceIsAboutArguments() {
+    public void shouldPrintActualAndUnverifiedWantedWhenTheDifferenceIsAboutArguments() {
         mock.twoArgumentMethod(1, 1);
         mock.twoArgumentMethod(2, 2);
         mock.twoArgumentMethod(3, 3);
@@ -163,7 +163,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-            		"No more interactions expected" +
+            		"No more interactions wanted" +
             		"\n" +
             		"Unexpected: IMethods.oneArg(false)";
             assertEquals(expectedMessage, actualMessage);         
@@ -182,7 +182,7 @@ public class NiceMessagesWhenVerificationFailsTest {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Zero interactions expected" +
+                    "Zero interactions wanted" +
                     "\n" +
                     "Unexpected: IMethods.twoArgumentMethod(1, 2)";
             assertEquals(expectedMessage, actualMessage);         
@@ -221,5 +221,5 @@ public class NiceMessagesWhenVerificationFailsTest {
         }
     }
     
-    //TODO do we need nice message when expected number of invocations = 0?
+    //TODO do we need nice message when wanted number of invocations = 0?
 }

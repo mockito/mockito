@@ -10,14 +10,14 @@ import org.mockito.exceptions.MockitoException;
 
 public class VerifyingMode {
 
-    private final Integer expectedInvocationCount;
+    private final Integer wantedInvocationCount;
     private final List<Object> mocksToBeVerifiedInSequence;
 
-    private VerifyingMode(Integer expectedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
-        if (expectedNumberOfInvocations != null && expectedNumberOfInvocations.intValue() < 0) {
+    private VerifyingMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
+        if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        this.expectedInvocationCount = expectedNumberOfInvocations;
+        this.wantedInvocationCount = wantedNumberOfInvocations;
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
     }
     
@@ -25,8 +25,8 @@ public class VerifyingMode {
         return new VerifyingMode(null, Collections.emptyList());
     }
 
-    public static VerifyingMode times(int expectedNumberOfInvocations) {
-        return new VerifyingMode(expectedNumberOfInvocations, Collections.emptyList());
+    public static VerifyingMode times(int wantedNumberOfInvocations) {
+        return new VerifyingMode(wantedNumberOfInvocations, Collections.emptyList());
     }
     
     /**
@@ -36,16 +36,16 @@ public class VerifyingMode {
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
-    static VerifyingMode inOrder(Integer expectedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
-        return new VerifyingMode(expectedNumberOfInvocations, mocksToBeVerifiedInOrder);
+    static VerifyingMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
+        return new VerifyingMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder);
     }
 
     boolean atLeastOnceMode() {
-        return expectedInvocationCount == null;
+        return wantedInvocationCount == null;
     }
 
-    Integer expectedCount() {
-        return expectedInvocationCount;
+    Integer wantedCount() {
+        return wantedInvocationCount;
     }
 
     List<Object> getAllMocksToBeVerifiedInSequence() {
@@ -56,7 +56,7 @@ public class VerifyingMode {
         return !mocksToBeVerifiedInSequence.isEmpty();
     }
 
-    public boolean expectedCountIsZero() {
-        return expectedInvocationCount != null && expectedInvocationCount == 0;
+    public boolean wantedCountIsZero() {
+        return wantedInvocationCount != null && wantedInvocationCount == 0;
     }
 }

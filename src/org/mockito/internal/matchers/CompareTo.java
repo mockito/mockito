@@ -6,10 +6,10 @@ package org.mockito.internal.matchers;
 
 
 public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMatcher {
-    private final Comparable<T> expected;
+    private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {
-        this.expected = value;
+        this.wanted = value;
     }
 
     @SuppressWarnings("unchecked")
@@ -19,11 +19,11 @@ public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMat
             return false;
         }
         
-        return matchResult(((Comparable) actual).compareTo(expected));
+        return matchResult(((Comparable) actual).compareTo(wanted));
     }
 
     public void appendTo(StringBuffer buffer) {
-        buffer.append(getName() + "(" + expected + ")");
+        buffer.append(getName() + "(" + wanted + ")");
     }
     
     protected abstract String getName();

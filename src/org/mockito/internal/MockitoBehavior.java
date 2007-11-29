@@ -27,34 +27,34 @@ public class MockitoBehavior<T> {
         this.results.put(invocationForStubbing, result);
     }
 
-    public void verify(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        checkOrderOfInvocations(expected, verifyingMode);
-        checkForMissingInvocation(expected, verifyingMode);
-        checkForWrongNumberOfInvocations(expected, verifyingMode);        
-        registeredInvocations.markInvocationsAsVerified(expected, verifyingMode);
+    public void verify(ExpectedInvocation wanted, VerifyingMode mode) {
+        checkOrderOfInvocations(wanted, mode);
+        checkForMissingInvocation(wanted, mode);
+        checkForWrongNumberOfInvocations(wanted, mode);        
+        registeredInvocations.markInvocationsAsVerified(wanted, mode);
     }
     
-    private void checkForMissingInvocation(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        int actualCount = registeredInvocations.countActual(expected);
-        Integer expectedCount = verifyingMode.expectedCount();
-        boolean atLeastOnce = verifyingMode.atLeastOnceMode();
+    private void checkForMissingInvocation(ExpectedInvocation wanted, VerifyingMode mode) {
+        int actualCount = registeredInvocations.countActual(wanted);
+        Integer wantedCount = mode.wantedCount();
+        boolean atLeastOnce = mode.atLeastOnceMode();
                
-        if ((atLeastOnce || expectedCount == 1) && actualCount == 0) {
-            reportMissingInvocationError(expected);
+        if ((atLeastOnce || wantedCount == 1) && actualCount == 0) {
+            reportMissingInvocationError(wanted);
         }
     }
 
-    void checkForWrongNumberOfInvocations(ExpectedInvocation expected, VerifyingMode verifyingMode) {
-        if (verifyingMode.orderOfInvocationsMatters()) {
+    void checkForWrongNumberOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
+        if (mode.orderOfInvocationsMatters()) {
             return;
         }
         
-        int actuallyInvoked = registeredInvocations.countActual(expected);
-        Integer expectedInvoked = verifyingMode.expectedCount();
-        boolean atLeastOnce = verifyingMode.atLeastOnceMode();
+        int actualCount = registeredInvocations.countActual(wanted);
+        Integer wantedCount = mode.wantedCount();
+        boolean atLeastOnce = mode.atLeastOnceMode();
         
-        if (!atLeastOnce && actuallyInvoked != expectedInvoked) {
-            Exceptions.numberOfInvocationsDiffers(expectedInvoked, actuallyInvoked, expected.toString());
+        if (!atLeastOnce && actualCount != wantedCount) {
+            Exceptions.numberOfInvocationsDiffers(wantedCount, actualCount, wanted.toString());
         }
     }
 
@@ -86,9 +86,9 @@ public class MockitoBehavior<T> {
         
         List<InvocationChunk> chunks = registeredInvocations.unverifiedInvocationChunks(mode);
         
-        if (mode.expectedCountIsZero() && !chunks.isEmpty() && wanted.matches(chunks.get(0).getInvocation())) {
+        if (mode.wantedCountIsZero() && !chunks.isEmpty() && wanted.matches(chunks.get(0).getInvocation())) {
             Exceptions.numberOfInvocationsDiffers(0, chunks.get(0).getCount(), wanted.toString());
-        } else if (mode.expectedCountIsZero()) {
+        } else if (mode.wantedCountIsZero()) {
             return;
         }
         
@@ -100,17 +100,17 @@ public class MockitoBehavior<T> {
             reportDiscrepancy(wanted, chunks.get(0).getInvocation(), Exceptions.STRICT_DISCREPANCY);
         }
         
-        if (!mode.atLeastOnceMode() && chunks.get(0).getCount() != mode.expectedCount()) {
-            Exceptions.numberOfInvocationsDiffers(mode.expectedCount(), chunks.get(0).getCount(), wanted.toString());
+        if (!mode.atLeastOnceMode() && chunks.get(0).getCount() != mode.wantedCount()) {
+            Exceptions.numberOfInvocationsDiffers(mode.wantedCount(), chunks.get(0).getCount(), wanted.toString());
         }
     }
 
     public void verifyNoMoreInteractions() {
-        verifyNoMoreInteractions("No more interactions expected");
+        verifyNoMoreInteractions("No more interactions wanted");
     }
     
     public void verifyZeroInteractions() {
-        verifyNoMoreInteractions("Zero interactions expected");
+        verifyNoMoreInteractions("Zero interactions wanted");
     }
     
     private void verifyNoMoreInteractions(String message) {
@@ -120,14 +120,14 @@ public class MockitoBehavior<T> {
         }
     }
 
-    public Object resultFor(Invocation invocation) throws Throwable {
-        for (ExpectedInvocation expectedInvocation : results.keySet()) {
-            if (expectedInvocation.matches(invocation)) {
-                return results.get(expectedInvocation).answer();
+    public Object resultFor(Invocation wanted) throws Throwable {
+        for (ExpectedInvocation i : results.keySet()) {
+            if (i.matches(wanted)) {
+                return results.get(i).answer();
             }
         }
 
-        return ToTypeMappings.emptyReturnValueFor(invocation.getMethod().getReturnType());
+        return ToTypeMappings.emptyReturnValueFor(wanted.getMethod().getReturnType());
     }
 
     public T getMock() {

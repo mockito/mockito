@@ -8,8 +8,6 @@ import org.mockito.hamcrest.*;
 
 /**
  * experimental assert-like syntax
- * 
- * @author Szczepan Faber
  */
 public class MockitoExperimental extends Mockito {
 
@@ -17,8 +15,8 @@ public class MockitoExperimental extends Mockito {
         return verify(mock);
     }
 
-    public static <T> T assertInvoked(T mock, int expectedNumberOfInvocations) {
-        return verify(mock, expectedNumberOfInvocations);
+    public static <T> T assertInvoked(T mock, int wantedNumberOfInvocations) {
+        return verify(mock, wantedNumberOfInvocations);
     }
     
     public static void assertNoMoreInteractions(Object ... mocks) {
@@ -37,8 +35,8 @@ public class MockitoExperimental extends Mockito {
         return new WasInvokedMatcher<T>(mock);
     }
     
-    public static <T> MockitoMatcher<T> wasInvoked(T mock, int expectedNumberOfInvocations) {
-        return new WasInvokedMatcher<T>(mock, expectedNumberOfInvocations);
+    public static <T> MockitoMatcher<T> wasInvoked(T mock, int wantedNumberOfInvocations) {
+        return new WasInvokedMatcher<T>(mock, wantedNumberOfInvocations);
     }
     
     public static <T> MockitoMatcher<T> noMoreInteractions(T mock) {

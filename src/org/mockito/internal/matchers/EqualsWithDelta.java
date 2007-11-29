@@ -6,24 +6,24 @@ package org.mockito.internal.matchers;
 
 
 public class EqualsWithDelta implements IArgumentMatcher {
-    private final Number expected;
+    private final Number wanted;
 
     private final Number delta;
 
     public EqualsWithDelta(Number value, Number delta) {
-        this.expected = value;
+        this.wanted = value;
         this.delta = delta;
     }
 
     public boolean matches(Object actual) {
         Number actualNumber = (Number) actual;
-        return expected.doubleValue() - delta.doubleValue() <= actualNumber
+        return wanted.doubleValue() - delta.doubleValue() <= actualNumber
                 .doubleValue()
-                && actualNumber.doubleValue() <= expected.doubleValue()
+                && actualNumber.doubleValue() <= wanted.doubleValue()
                         + delta.doubleValue();
     }
 
     public void appendTo(StringBuffer buffer) {
-        buffer.append("eq(" + expected + ", " + delta + ")");
+        buffer.append("eq(" + wanted + ", " + delta + ")");
     }
 }

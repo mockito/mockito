@@ -20,7 +20,7 @@ public class RegisteredInvocations {
     }
     
     public void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode mode) {
-        if (mode.expectedCountIsZero()) {
+        if (mode.wantedCountIsZero()) {
             return;
         }
         
@@ -65,11 +65,11 @@ public class RegisteredInvocations {
         return chunks;
     }
     
-    public Invocation findSimilarInvocation(ExpectedInvocation expectedInvocation) {
+    public Invocation findSimilarInvocation(ExpectedInvocation wanted) {
         for (Invocation registered : registeredInvocations) {
-            String expectedMethodName = expectedInvocation.getMethod().getName();
+            String wantedMethodName = wanted.getMethod().getName();
             String registeredInvocationName = registered.getMethod().getName();
-            if (expectedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
+            if (wantedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
                 return registered;
             }
         }
@@ -77,10 +77,10 @@ public class RegisteredInvocations {
         return null;
     }
     
-    public int countActual(ExpectedInvocation expectedInvocation) {
+    public int countActual(ExpectedInvocation wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : registeredInvocations) {
-            if (expectedInvocation.matches(registeredInvocation)) {
+            if (wanted.matches(registeredInvocation)) {
                 actual++;
             }
         }

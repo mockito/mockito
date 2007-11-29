@@ -58,10 +58,10 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
         List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
         
-        ExpectedInvocation expectedInvocation = new ExpectedInvocation(invocation, processedMatchers);
+        ExpectedInvocation invocationWithMatchers = new ExpectedInvocation(invocation, processedMatchers);
         
         if (verifyingMode != null) {
-            behavior.verify(expectedInvocation, verifyingMode);
+            behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         }
         
@@ -71,7 +71,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         
         mockitoState.reportLastControl(this);
         
-        behavior.addInvocation(expectedInvocation);
+        behavior.addInvocation(invocationWithMatchers);
         
         if (throwableToBeSetOnVoidMethod != null) {
             andThrows(throwableToBeSetOnVoidMethod);

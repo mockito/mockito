@@ -61,6 +61,7 @@ public class VerificationInOrderTest {
         strictly.verify(mockOne, 0).oneArg(false);
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, 2).simpleMethod(2);
+        strictly.verify(mockTwo, 0).simpleMethod(22);
         strictly.verify(mockThree).simpleMethod(3);
         strictly.verify(mockTwo).simpleMethod(2);
         strictly.verify(mockOne).simpleMethod(4);
@@ -91,17 +92,17 @@ public class VerificationInOrderTest {
     }
     
     @Test(expected=NumberOfInvocationsError.class)
-    public void shouldFailOnFirstMethodBecauseOneInvocationExpected() {
+    public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
         strictly.verify(mockOne, 0).simpleMethod(1);
     }
     
     @Test(expected=NumberOfInvocationsError.class)
-    public void shouldFailOnFirstMethodBecauseOneInvocationExpectedAgain() {
+    public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
         strictly.verify(mockOne, 2).simpleMethod(1);
     }
     
     @Test
-    public void shouldFailOnSecondMethodBecauseTwoInvocationsExpected() {
+    public void shouldFailOnSecondMethodBecauseTwoInvocationsWanted() {
         strictly.verify(mockOne, 1).simpleMethod(1);
         try {
             strictly.verify(mockTwo, 3).simpleMethod(2);
@@ -110,7 +111,7 @@ public class VerificationInOrderTest {
     }
     
     @Test
-    public void shouldFailOnSecondMethodBecauseTwoInvocationsExpectedAgain() {
+    public void shouldFailOnSecondMethodBecauseTwoInvocationsWantedAgain() {
         strictly.verify(mockOne, 1).simpleMethod(1);
         try {
             strictly.verify(mockTwo, 0).simpleMethod(2);
@@ -119,7 +120,7 @@ public class VerificationInOrderTest {
     }    
     
     @Test
-    public void shouldFailOnLastMethodBecauseOneInvocationExpected() {
+    public void shouldFailOnLastMethodBecauseOneInvocationWanted() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockThree, atLeastOnce()).simpleMethod(3);
@@ -131,7 +132,7 @@ public class VerificationInOrderTest {
     }
     
     @Test
-    public void shouldFailOnLastMethodBecauseOneInvocationExpectedAgain() {
+    public void shouldFailOnLastMethodBecauseOneInvocationWantedAgain() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockThree, atLeastOnce()).simpleMethod(3);
@@ -145,17 +146,17 @@ public class VerificationInOrderTest {
     /* ------------- */
     
     @Test(expected=VerificationError.class)
-    public void shouldFailOnFirstMethodBecauseDifferentArgsExpected() {
+    public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
         strictly.verify(mockOne).simpleMethod(100);
     }
     
     @Test(expected=VerificationError.class)
-    public void shouldFailOnFirstMethodBecauseDifferentMethodExpected() {
+    public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
         strictly.verify(mockOne).oneArg(true);
     }
     
     @Test
-    public void shouldFailOnSecondMethodBecauseDifferentArgsExpected() {
+    public void shouldFailOnSecondMethodBecauseDifferentArgsWanted() {
         strictly.verify(mockOne).simpleMethod(1);
         try {
             strictly.verify(mockTwo, 2).simpleMethod(-999);
@@ -164,7 +165,7 @@ public class VerificationInOrderTest {
     }
     
     @Test
-    public void shouldFailOnSecondMethodBecauseDifferentMethodExpected() {
+    public void shouldFailOnSecondMethodBecauseDifferentMethodWanted() {
         strictly.verify(mockOne, 1).simpleMethod(1);
         try {
             strictly.verify(mockTwo, 2).oneArg(true);
@@ -173,7 +174,7 @@ public class VerificationInOrderTest {
     }    
     
     @Test
-    public void shouldFailOnLastMethodBecauseDifferentArgsExpected() {
+    public void shouldFailOnLastMethodBecauseDifferentArgsWanted() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -185,7 +186,7 @@ public class VerificationInOrderTest {
     }
     
     @Test
-    public void shouldFailOnLastMethodBecauseDifferentMethodExpected() {
+    public void shouldFailOnLastMethodBecauseDifferentMethodWanted() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);

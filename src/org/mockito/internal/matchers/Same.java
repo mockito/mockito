@@ -7,28 +7,28 @@ package org.mockito.internal.matchers;
 
 public class Same implements IArgumentMatcher {
 
-    private final Object expected;
+    private final Object wanted;
 
-    public Same(Object expected) {
-        this.expected = expected;
+    public Same(Object wanted) {
+        this.wanted = wanted;
     }
 
     public boolean matches(Object actual) {
-        return expected == actual;
+        return wanted == actual;
     }
 
     public void appendTo(StringBuffer buffer) {
         buffer.append("same(");
         appendQuoting(buffer);
-        buffer.append(expected);
+        buffer.append(wanted);
         appendQuoting(buffer);
         buffer.append(")");
     }
 
     private void appendQuoting(StringBuffer buffer) {
-        if (expected instanceof String) {
+        if (wanted instanceof String) {
             buffer.append("\"");
-        } else if (expected instanceof Character) {
+        } else if (wanted instanceof Character) {
             buffer.append("'");
         }
     }

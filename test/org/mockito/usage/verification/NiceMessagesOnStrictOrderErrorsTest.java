@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.*;
-import org.mockito.exceptions.VerificationError;
+import org.mockito.exceptions.*;
 import org.mockito.usage.IMethods;
 
 public class NiceMessagesOnStrictOrderErrorsTest {
@@ -71,4 +71,22 @@ public class NiceMessagesOnStrictOrderErrorsTest {
             assertEquals(expectedMessage, actualMessage);         
         }
     }   
+    
+    @Test
+    public void shouldPrintWrongNumberOfInvocations() {
+        strictly.verify(one).simpleMethod(1);
+        strictly.verify(one).simpleMethod(11);
+        try {
+            strictly.verify(two, 1).simpleMethod(2);
+            fail();
+        } catch (NumberOfInvocationsError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "IMethods.simpleMethod(2)" +
+                    "\n" +
+                    "Wanted 1 time but was 2"; 
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }  
 }

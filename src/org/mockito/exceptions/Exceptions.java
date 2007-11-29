@@ -84,7 +84,7 @@ public class Exceptions {
     public static void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
         throw new NumberOfInvocationsError(join(
                 wanted,
-                "Expected " + pluralize(wantedCount) + " but was " + actualCount
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ));
     }
 

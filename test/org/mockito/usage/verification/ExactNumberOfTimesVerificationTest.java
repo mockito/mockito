@@ -23,7 +23,7 @@ public class ExactNumberOfTimesVerificationTest {
     }
     
     @Test
-    public void shouldVerifyActualNumberOfInvocationsSmallerThanExpected() throws Exception {
+    public void shouldVerifyActualNumberOfInvocationsSmallerThanWanted() throws Exception {
         mock.clear();
         mock.clear();
         mock.clear();
@@ -37,13 +37,13 @@ public class ExactNumberOfTimesVerificationTest {
                 "\n" +
                 "LinkedList.clear()" +
         		"\n" +
-        		"Expected 100 times but was 3";
+        		"Wanted 100 times but was 3";
             assertEquals(expected, e.getMessage());
         }
     }
     
     @Test
-    public void shouldVerifyActualNumberOfInvocationsLargerThanExpected() throws Exception {
+    public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() throws Exception {
         mock.clear();
         mock.clear();
         mock.clear();
@@ -57,7 +57,7 @@ public class ExactNumberOfTimesVerificationTest {
                 "\n" +
                 "LinkedList.clear()" +
                 "\n" +
-                "Expected 1 time but was 3";
+                "Wanted 1 time but was 3";
             assertEquals(expected, e.getMessage());
         }
     }
@@ -69,7 +69,7 @@ public class ExactNumberOfTimesVerificationTest {
             Mockito.verify(mock, 15).clear();
             fail();
         } catch (NumberOfInvocationsError e) {
-            assertTrue(e.getMessage().endsWith("Expected 15 times but was 0"));
+            assertTrue(e.getMessage().endsWith("Wanted 15 times but was 0"));
         }
     }
     
@@ -82,12 +82,12 @@ public class ExactNumberOfTimesVerificationTest {
             Mockito.verify(mock, 15).clear();
             fail();
         } catch (NumberOfInvocationsError e) {
-            assertTrue(e.getMessage().endsWith("Expected 15 times but was 1"));
+            assertTrue(e.getMessage().endsWith("Wanted 15 times but was 1"));
         }
     }
     
     @Test
-    public void shouldFailWhenExpectedNumberOfInvocationIsZero() throws Exception {
+    public void shouldFailWhenWantedNumberOfInvocationIsZero() throws Exception {
         mock.clear();
         
         try {
@@ -97,7 +97,7 @@ public class ExactNumberOfTimesVerificationTest {
     }
     
     @Test
-    public void shouldVerifyWhenExpectedNumberOfInvocationIsZero() throws Exception {
+    public void shouldVerifyWhenWantedNumberOfInvocationIsZero() throws Exception {
         Mockito.verify(mock, 0).clear();
     }
     

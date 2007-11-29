@@ -9,20 +9,20 @@ import java.util.Comparator;
 
 public class Compare<T> implements IArgumentMatcher {
 
-    private T expected;
+    private T wanted;
 
     private Comparator<T> comparator;
 
     private LogicalOperator operator;
 
-    public Compare(T expected, Comparator<T> comparator, LogicalOperator result) {
-        this.expected = expected;
+    public Compare(T wanted, Comparator<T> comparator, LogicalOperator result) {
+        this.wanted = wanted;
         this.comparator = comparator;
         this.operator = result;
     }
 
     public void appendTo(StringBuffer buffer) {
-        buffer.append(comparator + "(" + expected + ") " + operator.getSymbol()
+        buffer.append(comparator + "(" + wanted + ") " + operator.getSymbol()
                 + " 0");
     }
 
@@ -31,7 +31,7 @@ public class Compare<T> implements IArgumentMatcher {
         if(actual == null) {
             return false;
         }
-        return operator.matchResult(comparator.compare((T) actual, expected));
+        return operator.matchResult(comparator.compare((T) actual, wanted));
     }
 
 }

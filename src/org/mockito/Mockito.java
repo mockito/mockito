@@ -36,8 +36,8 @@ public class Mockito extends Matchers {
         return verify(mock, 1);
     }
     
-    public static <T> T verify(T mock, int expectedNumberOfInvocations) {
-        return verify(mock, VerifyingMode.times(expectedNumberOfInvocations));
+    public static <T> T verify(T mock, int wantedNumberOfInvocations) {
+        return verify(mock, VerifyingMode.times(wantedNumberOfInvocations));
     }
     
     public static <T> T verify(T mock, VerifyingMode mode) {

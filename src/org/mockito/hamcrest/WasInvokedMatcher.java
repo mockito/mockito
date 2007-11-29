@@ -9,15 +9,15 @@ import org.hamcrest.Description;
 
 public class WasInvokedMatcher<T> extends BaseMatcher<T> implements MockitoMatcher<T> {
     private final T mock;
-    private final int expectedNumberOfInvocations;
+    private final int wantedNumberOfInvocations;
 
     public WasInvokedMatcher(T mock) {
         this(mock, -1);
     }
     
-    public WasInvokedMatcher(T mock, int expectedNumberOfInvocations) {
+    public WasInvokedMatcher(T mock, int wantedNumberOfInvocations) {
         this.mock = mock;
-        this.expectedNumberOfInvocations = expectedNumberOfInvocations;
+        this.wantedNumberOfInvocations = wantedNumberOfInvocations;
     }
 
     public boolean matches(Object arg0) {
@@ -31,7 +31,7 @@ public class WasInvokedMatcher<T> extends BaseMatcher<T> implements MockitoMatch
         return mock;
     }
 
-    public int getExpectedNumberOfInvocations() {
-        return expectedNumberOfInvocations;
+    public int getWantedNumberOfInvocations() {
+        return wantedNumberOfInvocations;
     }
 }

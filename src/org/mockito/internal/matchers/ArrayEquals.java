@@ -9,39 +9,39 @@ import java.util.Arrays;
 
 public class ArrayEquals extends Equals {
 
-    public ArrayEquals(Object expected) {
-        super(expected);
+    public ArrayEquals(Object wanted) {
+        super(wanted);
     }
 
     public boolean matches(Object actual) {
-        Object expected = getExpected();
-        if (expected instanceof boolean[]
+        Object wanted = getWanted();
+        if (wanted instanceof boolean[]
                 && (actual == null || actual instanceof boolean[])) {
-            return Arrays.equals((boolean[]) expected, (boolean[]) actual);
-        } else if (expected instanceof byte[]
+            return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
+        } else if (wanted instanceof byte[]
                 && (actual == null || actual instanceof byte[])) {
-            return Arrays.equals((byte[]) expected, (byte[]) actual);
-        } else if (expected instanceof char[]
+            return Arrays.equals((byte[]) wanted, (byte[]) actual);
+        } else if (wanted instanceof char[]
                 && (actual == null || actual instanceof char[])) {
-            return Arrays.equals((char[]) expected, (char[]) actual);
-        } else if (expected instanceof double[]
+            return Arrays.equals((char[]) wanted, (char[]) actual);
+        } else if (wanted instanceof double[]
                 && (actual == null || actual instanceof double[])) {
-            return Arrays.equals((double[]) expected, (double[]) actual);
-        } else if (expected instanceof float[]
+            return Arrays.equals((double[]) wanted, (double[]) actual);
+        } else if (wanted instanceof float[]
                 && (actual == null || actual instanceof float[])) {
-            return Arrays.equals((float[]) expected, (float[]) actual);
-        } else if (expected instanceof int[]
+            return Arrays.equals((float[]) wanted, (float[]) actual);
+        } else if (wanted instanceof int[]
                 && (actual == null || actual instanceof int[])) {
-            return Arrays.equals((int[]) expected, (int[]) actual);
-        } else if (expected instanceof long[]
+            return Arrays.equals((int[]) wanted, (int[]) actual);
+        } else if (wanted instanceof long[]
                 && (actual == null || actual instanceof long[])) {
-            return Arrays.equals((long[]) expected, (long[]) actual);
-        } else if (expected instanceof short[]
+            return Arrays.equals((long[]) wanted, (long[]) actual);
+        } else if (wanted instanceof short[]
                 && (actual == null || actual instanceof short[])) {
-            return Arrays.equals((short[]) expected, (short[]) actual);
-        } else if (expected instanceof Object[]
+            return Arrays.equals((short[]) wanted, (short[]) actual);
+        } else if (wanted instanceof Object[]
                 && (actual == null || actual instanceof Object[])) {
-            return Arrays.equals((Object[]) expected, (Object[]) actual);
+            return Arrays.equals((Object[]) wanted, (Object[]) actual);
         } else {
             return super.matches(actual);
         }
@@ -49,8 +49,8 @@ public class ArrayEquals extends Equals {
 
     public void appendTo(StringBuffer buffer) {
         //TODO not tested
-        if (getExpected() != null && getExpected().getClass().isArray()) {
-            appendArray(createObjectArray(getExpected()), buffer);
+        if (getWanted() != null && getWanted().getClass().isArray()) {
+            appendArray(createObjectArray(getWanted()), buffer);
         } else {
             super.appendTo(buffer);
         }

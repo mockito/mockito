@@ -7,35 +7,35 @@ package org.mockito.internal.matchers;
 
 public class Equals implements IArgumentMatcher {
 
-    private final Object expected;
+    private final Object wanted;
 
-    public Equals(Object expected) {
-        this.expected = expected;
+    public Equals(Object wanted) {
+        this.wanted = wanted;
     }
 
     public boolean matches(Object actual) {
-        if (this.expected == null) {
+        if (this.wanted == null) {
             return actual == null;
         }
-        return expected.equals(actual);
+        return wanted.equals(actual);
     }
 
     public void appendTo(StringBuffer buffer) {
         appendQuoting(buffer);
-        buffer.append(expected);
+        buffer.append(wanted);
         appendQuoting(buffer);
     }
 
     private void appendQuoting(StringBuffer buffer) {
-        if (expected instanceof String) {
+        if (wanted instanceof String) {
             buffer.append("\"");
-        } else if (expected instanceof Character) {
+        } else if (wanted instanceof Character) {
             buffer.append("'");
         }
     }
 
-    protected final Object getExpected() {
-        return expected;
+    protected final Object getWanted() {
+        return wanted;
     }
 
     @Override
@@ -43,9 +43,9 @@ public class Equals implements IArgumentMatcher {
         if (o == null || !this.getClass().equals(o.getClass()))
             return false;
         Equals other = (Equals) o;
-        return this.expected == null && other.expected == null
-                || this.expected != null
-                && this.expected.equals(other.expected);
+        return this.wanted == null && other.wanted == null
+                || this.wanted != null
+                && this.wanted.equals(other.wanted);
     }
 
     @Override
