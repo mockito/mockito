@@ -79,7 +79,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -91,7 +91,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -102,7 +102,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         try {
             strictly.verify(mockThree).simpleMethod(3);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -113,7 +113,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
         try {
             strictly.verify(mockThree).simpleMethod(4);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test(expected=MockitoException.class)

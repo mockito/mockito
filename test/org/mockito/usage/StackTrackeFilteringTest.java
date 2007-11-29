@@ -34,7 +34,7 @@ public class StackTrackeFilteringTest {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
         }
     }
@@ -45,7 +45,7 @@ public class StackTrackeFilteringTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
@@ -56,7 +56,7 @@ public class StackTrackeFilteringTest {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
@@ -80,7 +80,7 @@ public class StackTrackeFilteringTest {
         try {
             strictly.verify(mock).oneArg(false); 
             fail();
-        } catch (StrictVerificationError expected) {
+        } catch (VerificationError expected) {
             assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifying"));
         }
     }
@@ -109,12 +109,12 @@ public class StackTrackeFilteringTest {
     
     @Ignore
     @Test
-    public void shouldNotAllowSettingInvalidCheckedException() {
+    public void shouldFilterStackTraceWhenThrowingExceptionFromControl() {
         try {
             stub(mock.oneArg(true)).andThrows(new Exception());
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldNotAllowSettingInvalidCheckedException"));
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnThrowingExceptionFromControl"));
         }
     }
 }

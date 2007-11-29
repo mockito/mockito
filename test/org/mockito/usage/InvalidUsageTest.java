@@ -105,7 +105,7 @@ public class InvalidUsageTest {
 
     @Ignore
     @Test
-    public void unfinishedStubbingDetectedMockCalled() {
+    public void unfinishedStubbingDetectedWhenMockCalled() {
         stub(mock.add("test"));
 
         try {

@@ -74,7 +74,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -87,7 +87,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test(expected=NumberOfInvocationsAssertionError.class)
@@ -144,12 +144,12 @@ public class VerificationInOrderTest {
     
     /* ------------- */
     
-    @Test(expected=VerificationAssertionError.class)
+    @Test(expected=VerificationError.class)
     public void shouldFailOnFirstMethodBecauseDifferentArgsExpected() {
         strictly.verify(mockOne).simpleMethod(100);
     }
     
-    @Test(expected=VerificationAssertionError.class)
+    @Test(expected=VerificationError.class)
     public void shouldFailOnFirstMethodBecauseDifferentMethodExpected() {
         strictly.verify(mockOne).oneArg(true);
     }
@@ -160,13 +160,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockTwo, 2).simpleMethod(-999);
             fail();
-        } catch (StrictVerificationError e) {}
-        //TODO those guys need tests around nice messages from exceptions and it's quite inconsistent
-        //when StrictVerificationError and when VerificationAssertionError is fired
-        //algorithm should be as follows:
-        //  1. check if according to order: mock and method matches -> StrictVerificationError
-        //  2. check method arguments -> VerificationAssertionError
-        //  3. check invocation count -> NumberOfInvocationsAssertionError
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -175,7 +169,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockTwo, 2).oneArg(true);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }    
     
     @Test
@@ -187,7 +181,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).simpleMethod(-666);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -199,17 +193,17 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).oneArg(false);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }    
     
     /* -------------- */
     
-    @Test(expected = StrictVerificationError.class)
+    @Test(expected = VerificationError.class)
     public void shouldFailWhenLastMethodCalledFirst() {
         strictly.verify(mockOne).simpleMethod(4);
     }
     
-    @Test(expected = StrictVerificationError.class)
+    @Test(expected = VerificationError.class)
     public void shouldFailWhenSecondMethodCalledFirst() {
         strictly.verify(mockTwo, 2).simpleMethod(2);
     }
@@ -221,7 +215,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -231,7 +225,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockTwo, 1).simpleMethod(2);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -240,7 +234,7 @@ public class VerificationInOrderTest {
         try {
             strictly.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (StrictVerificationError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -253,10 +247,10 @@ public class VerificationInOrderTest {
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     } 
     
-    @Test(expected=VerificationAssertionError.class)
+    @Test(expected=VerificationError.class)
     public void shouldFailOnVerifyZeroInteractions() {
         verifyZeroInteractions(mockOne);
     }

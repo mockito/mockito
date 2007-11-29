@@ -4,15 +4,14 @@
  */
 package org.mockito.exceptions;
 
-import org.mockito.internal.ExpectedInvocation;
 
 public class NumberOfInvocationsAssertionError extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public NumberOfInvocationsAssertionError(int expectedCount, int actualCount, ExpectedInvocation expected) {
+    public NumberOfInvocationsAssertionError(int expectedCount, int actualCount, String wanted) {
         super(  "\n" +
-                expected.toString() +
+                wanted +
         		"\n" +
         		"Expected " + pluralize(expectedCount) + " but was " + actualCount);
     }

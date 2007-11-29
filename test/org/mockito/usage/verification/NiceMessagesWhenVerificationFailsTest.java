@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.VerificationError;
 import org.mockito.usage.IMethods;
 
 public class NiceMessagesWhenVerificationFailsTest {
@@ -26,11 +26,11 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-            		"Expected but not invoked:" +
+            		"Wanted but not invoked:" +
             		"\n" +
             		"IMethods.simpleMethod()";
             assertEquals(expectedMessage, actualMessage);         
@@ -48,11 +48,11 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).threeArgumentMethod(12, new SomeClass(), "some string");
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Expected but not invoked:" +
+                    "Wanted but not invoked:" +
                     "\n" +
             		"IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")";
             assertEquals(expectedMessage, actualMessage);         
@@ -68,11 +68,11 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).twoArgumentMethod(1,2);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Expected but not invoked:" +
+                    "Wanted but not invoked:" +
                     "\n" +
                     "IMethods.twoArgumentMethod(1, 2)";
             
@@ -89,15 +89,15 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).twoArgumentMethod(1, 1000);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
                     "Invocation differs from actual" +
                     "\n" +
-                    "Expected: IMethods.twoArgumentMethod(1, 1000)" +
+                    "Wanted: IMethods.twoArgumentMethod(1, 1000)" +
                     "\n" +
-                    "Actual:   IMethods.twoArgumentMethod(1, 2)";
+                    "Actual: IMethods.twoArgumentMethod(1, 2)";
             
             assertEquals(expectedMessage, actualMessage);         
         }
@@ -110,15 +110,15 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
                     "Invocation differs from actual" +
                     "\n" +
-                    "Expected: IMethods.simpleMethod(\"test\")" +
+                    "Wanted: IMethods.simpleMethod(\"test\")" +
                     "\n" +
-                    "Actual:   IMethods.simpleMethod()";
+                    "Actual: IMethods.simpleMethod()";
             
             assertEquals(expectedMessage, actualMessage);         
         }
@@ -135,15 +135,15 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
                     "Invocation differs from actual" +
                     "\n" +
-                    "Expected: IMethods.twoArgumentMethod(3, 1000)" +
+                    "Wanted: IMethods.twoArgumentMethod(3, 1000)" +
                     "\n" +
-                    "Actual:   IMethods.twoArgumentMethod(3, 3)";
+                    "Actual: IMethods.twoArgumentMethod(3, 3)";
             
             assertEquals(expectedMessage, actualMessage);         
         }
@@ -159,7 +159,7 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -178,7 +178,7 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -194,11 +194,11 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                 "\n" +
-                "Expected but not invoked:" +
+                "Wanted but not invoked:" +
                 "\n" +
                 "IMethods.twoArgumentMethod(1, 2)";
             assertEquals(expectedMessage, actualMessage);         
@@ -210,11 +210,11 @@ public class NiceMessagesWhenVerificationFailsTest {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
             fail();
-        } catch (VerificationAssertionError expected) {
+        } catch (VerificationError expected) {
             String actualMessage = expected.getMessage();
             String expectedMessage = 
                 "\n" +
-                "Expected but not invoked:" +
+                "Wanted but not invoked:" +
                 "\n" +
                 "IMethods.twoArgumentMethod(<any>, 100)";
             assertEquals(expectedMessage, actualMessage);         

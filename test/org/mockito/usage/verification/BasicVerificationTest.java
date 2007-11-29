@@ -36,7 +36,7 @@ public class BasicVerificationTest {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected=VerificationAssertionError.class)
+    @Test(expected=VerificationError.class)
     public void shouldFailVerification() throws Exception {
         verify(mock).clear();
     }
@@ -50,12 +50,11 @@ public class BasicVerificationTest {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (VerificationAssertionError expected) {};
+        } catch (VerificationError expected) {};
     }
 
-    @Ignore
     @Test
-    public void shouldLetVerifyTheSameMethodAnyTimes() throws Exception {
+    public void shouldFailOnWrongMethod() throws Exception {
         mock.clear();
         mock.clear();
         
@@ -66,7 +65,7 @@ public class BasicVerificationTest {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
 
     @Test
@@ -81,7 +80,7 @@ public class BasicVerificationTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationAssertionError expected) {};
+        } catch (VerificationError expected) {};
     }
     
     @Test

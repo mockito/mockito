@@ -7,7 +7,7 @@ package org.mockito.usage.binding;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.VerificationError;
 
 public class IncorectBindingPuzzleFixedTest {
 
@@ -42,14 +42,14 @@ public class IncorectBindingPuzzleFixedTest {
         try {
             Mockito.verify(derivedMock).print(message);
             fail();
-        } catch (VerificationAssertionError error) {
+        } catch (VerificationError error) {
             String expected = 
                 "\n" +
         		"Invocation differs from actual" +
         		"\n" +
-        		"Expected: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
+        		"Wanted: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
         		"\n" +
-        		"Actual:   DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
+        		"Actual: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
             
             assertEquals(expected, error.getMessage());
         }

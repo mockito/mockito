@@ -13,7 +13,7 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class BasicStubbingTest {
@@ -70,6 +70,6 @@ public class BasicStubbingTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
 }

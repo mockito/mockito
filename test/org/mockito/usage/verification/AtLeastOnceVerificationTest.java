@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class AtLeastOnceVerificationTest {
@@ -36,10 +36,10 @@ public class AtLeastOnceVerificationTest {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (VerificationAssertionError e) {}
+        } catch (VerificationError e) {}
     }
     
-    @Test(expected=VerificationAssertionError.class)
+    @Test(expected=VerificationError.class)
     public void shouldFailIfMethodWasNotCalledAtAll() throws Exception {
         verify(mock, atLeastOnce()).add("foo");
     }

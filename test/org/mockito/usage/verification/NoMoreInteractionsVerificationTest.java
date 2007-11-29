@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.exceptions.VerificationAssertionError;
+import org.mockito.exceptions.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest {
@@ -60,7 +60,7 @@ public class NoMoreInteractionsVerificationTest {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationAssertionError e) {
+        } catch (VerificationError e) {
             //cool
         }
     }
@@ -74,7 +74,7 @@ public class NoMoreInteractionsVerificationTest {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationAssertionError e) {
+        } catch (VerificationError e) {
             //cool
         }
     }
@@ -95,7 +95,7 @@ public class NoMoreInteractionsVerificationTest {
         try {
             verifyZeroInteractions(map);
             fail();
-        } catch (VerificationAssertionError e) {
+        } catch (VerificationError e) {
             //cool
         }
     }

@@ -10,6 +10,15 @@ package org.mockito.exceptions;
  * and amend the text.
  */
 public class Exceptions {
+    
+    private static String join(String ... linesToBreak) {
+        StringBuilder out = new StringBuilder("\n");
+        for (String line : linesToBreak) {
+            out.append(line).append("\n");
+        }
+        int lastBreak = out.lastIndexOf("\n");
+        return out.replace(lastBreak, lastBreak+1, "").toString();
+    }
 
     public static void mocksHaveToBePassedAsArguments() {
         throw new MockitoException(join(
@@ -49,12 +58,18 @@ public class Exceptions {
         
     }
     
-    private static String join(String ... linesToBreak) {
-        StringBuilder out = new StringBuilder("\n");
-        for (String line : linesToBreak) {
-            out.append(line).append("\n");
-        }
-        int lastBreak = out.lastIndexOf("\n");
-        return out.replace(lastBreak, lastBreak+1, "").toString();
+    public static void wantedInvocationDiffersFromActual(String wanted, String actual, String message) {
+        throw new VerificationError(join(
+                    message,
+                    "Wanted: " + wanted,
+                    "Actual: " + actual
+                ));
+    }
+
+    public static void wantedButNotInvoked(String wanted) {
+        throw new VerificationError(join(
+                    "Wanted but not invoked:",
+                    wanted        
+        ));
     }
 }
