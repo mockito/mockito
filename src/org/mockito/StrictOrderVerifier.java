@@ -2,14 +2,14 @@
  * Copyright (c) 2007 Mockito contributors 
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal;
+package org.mockito;
 
 import java.util.*;
 
-import org.mockito.*;
 import org.mockito.exceptions.Exceptions;
+import org.mockito.internal.VerifyingMode;
 
-public class StrictOrderVerifier implements Strictly {
+class StrictOrderVerifier implements Strictly {
     
     List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
     

@@ -36,7 +36,7 @@ public class VerifyingMode {
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
-    static VerifyingMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
+    public static VerifyingMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
         return new VerifyingMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder);
     }
 
@@ -44,7 +44,7 @@ public class VerifyingMode {
         return wantedInvocationCount == null;
     }
 
-    Integer wantedCount() {
+    public Integer wantedCount() {
         return wantedInvocationCount;
     }
 
