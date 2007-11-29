@@ -205,7 +205,21 @@ public class NiceMessagesWhenVerificationFailsTest {
         }
     }
     
-    //TODO do we need nice message when expected number of invocations = 0?
+    @Test
+    public void shouldPrintMethodNicelyWhenMatcherUsed() throws Exception {
+        try {
+            verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
+            fail();
+        } catch (VerificationAssertionError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                "\n" +
+                "Expected but not invoked:" +
+                "\n" +
+                "IMethods.twoArgumentMethod(<any>, 100)";
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }
     
-    //TODO what happens if user uses a different matcher like Find(), those matchers print differently
+    //TODO do we need nice message when expected number of invocations = 0?
 }
