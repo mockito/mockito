@@ -73,7 +73,6 @@ public class ExtraMatchers {
                 for (Method m : clazz.getMethods()) {
                     if (m.isBridge()) {
                         if (m.getName().equals(methodName)) {
-                            System.out.println(m);
                             return true;
                         }
                     }
