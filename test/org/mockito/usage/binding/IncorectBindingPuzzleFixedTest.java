@@ -44,9 +44,9 @@ public class IncorectBindingPuzzleFixedTest {
                 "\n" +
         		"Invocation differs from actual" +
         		"\n" +
-                "Wanted: Sub.print(class java.lang.String)" +
+                "Wanted: Sub.say(class java.lang.String)" +
                 "\n" +
-                "Actual: Sub.print(class java.lang.Object)";
+                "Actual: Sub.say(class java.lang.Object)";
             
             assertEquals(expected, error.getMessage());
         }
@@ -66,9 +66,9 @@ public class IncorectBindingPuzzleFixedTest {
                 "\n" +
                 "Strict order verification failed" +
                 "\n" +
-                "Wanted: Sub.print(class java.lang.String)" +
+                "Wanted: Sub.say(class java.lang.String)" +
                 "\n" +
-                "Actual: Sub.print(class java.lang.Object)";
+                "Actual: Sub.say(class java.lang.Object)";
             
             assertEquals(expected, error.getMessage());
         }
