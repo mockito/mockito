@@ -56,7 +56,11 @@ public class ExpectedInvocation {
         }
         return true;
     }
-
+    
+    public String toStringWithSequenceNumber() {
+        return this.invocation.toStringWithSequenceNumber(matchers);
+    }
+    
     public String toString() {
         return invocation.toString(matchers);
     }

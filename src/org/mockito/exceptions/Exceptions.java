@@ -12,9 +12,6 @@ import org.mockito.internal.Invocation;
  */
 public class Exceptions {
     
-    public static final String STRICT_DISCREPANCY = "Strict order verification failed";
-    public static final String REGULAR_DISCREPANCY = "Invocation differs from actual";
-
     private static String join(String ... linesToBreak) {
         StringBuilder out = new StringBuilder("\n");
         for (String line : linesToBreak) {
@@ -66,12 +63,22 @@ public class Exceptions {
         
     }
     
-    public static void wantedInvocationDiffersFromActual(String wanted, String actual, String message) {
+    public static void wantedInvocationDiffersFromActual(String wanted, String actual) {
         throw new VerificationError(join(
-                    message,
-                    "Wanted: " + wanted,
-                    "Actual: " + actual
-                ));
+                "Invocation differs from actual",
+                "Wanted: " + wanted,
+                "Actual: " + actual
+            ));
+    }
+    
+
+    public static void strictlyWantedInvocationDiffersFromActual(String wanted, String actual) {
+        throw new VerificationError(join(
+                "Strict order verification failed",
+                "Wanted: " + wanted,
+                "Actual: " + actual
+            ));
+        
     }
 
     public static void wantedButNotInvoked(String wanted) {

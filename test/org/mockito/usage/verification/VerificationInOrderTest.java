@@ -255,4 +255,21 @@ public class VerificationInOrderTest {
     public void shouldFailOnVerifyZeroInteractions() {
         verifyZeroInteractions(mockOne);
     }
+    
+    @Test
+    public void shouldVerifySingleMockStrictly() {
+        mockOne = mock(IMethods.class);
+        strictly = createStrictOrderVerifier(mockOne);
+        
+        mockOne.simpleMethod(1);
+        mockOne.simpleMethod(2);
+        
+        verify(mockOne).simpleMethod(2);
+        verify(mockOne).simpleMethod(1);
+        
+        try {
+            strictly.verify(mockOne).simpleMethod(2);
+            fail();
+        } catch (VerificationError e) {}
+    } 
 }

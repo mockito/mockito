@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.*;
+import org.mockito.internal.StateResetter;
 import org.mockito.usage.IMethods;
 
 public class NiceMessagesOnStrictOrderErrorsTest {
@@ -89,4 +90,31 @@ public class NiceMessagesOnStrictOrderErrorsTest {
             assertEquals(expectedMessage, actualMessage);         
         }
     }  
+    
+    @Test
+    public void shouldPrintSequenceNumberWhenMocksAndMethodsAreTheSame() {
+        StateResetter.reset();
+        one = mock(IMethods.class);
+        two = mock(IMethods.class);
+        
+        one.simpleMethod();
+        two.simpleMethod();
+        
+        strictly = createStrictOrderVerifier(one, two);
+        
+        try {
+            strictly.verify(two).simpleMethod();
+            fail();
+        } catch (VerificationError expected) {
+            String actualMessage = expected.getMessage();
+            String expectedMessage = 
+                    "\n" +    
+                    "Strict order verification failed" +
+                    "\n" +
+                    "Wanted: IMethods#3.simpleMethod()" +
+                    "\n" +
+                    "Actual: IMethods#1.simpleMethod()"; 
+            assertEquals(expectedMessage, actualMessage);         
+        }
+    }
 }

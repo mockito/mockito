@@ -62,13 +62,13 @@ public class MockitoBehavior<T> {
         Invocation actual = registeredInvocations.findSimilarInvocation(wanted);
         
         if (actual != null) {
-            reportDiscrepancy(wanted, actual, Exceptions.REGULAR_DISCREPANCY);
+            reportDiscrepancy(wanted, actual);
         } else {
             Exceptions.wantedButNotInvoked(wanted.toString());
         }
     }
 
-    private void reportDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation, String message) {
+    private void reportDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation) {
         String wanted = wantedInvocation.toString();
         String actual = actualInvocation.toString();
         if (wanted.equals(actual)) {
@@ -76,7 +76,23 @@ public class MockitoBehavior<T> {
             actual = actualInvocation.toStringWithArgumentTypes();
         }
         
-        Exceptions.wantedInvocationDiffersFromActual(wanted, actual, message);
+        Exceptions.wantedInvocationDiffersFromActual(wanted, actual);
+    }
+    
+    private void reportStrictOrderDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation) {
+        String wanted = wantedInvocation.toString();
+        String actual = actualInvocation.toString();
+        boolean sameMocks = wantedInvocation.getInvocation().getMock().equals(actualInvocation.getMock());
+        boolean sameMethods = wanted.equals(actual);
+        if (sameMethods && !sameMocks) {
+            wanted = wantedInvocation.toStringWithSequenceNumber();
+            actual = actualInvocation.toStringWithSequenceNumber();
+        } else if (sameMethods) {
+            wanted = wantedInvocation.getInvocation().toStringWithArgumentTypes();
+            actual = actualInvocation.toStringWithArgumentTypes();
+        }
+        
+        Exceptions.strictlyWantedInvocationDiffersFromActual(wanted, actual);
     }
 
     private void checkOrderOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
@@ -97,7 +113,7 @@ public class MockitoBehavior<T> {
         }
         
         if (!wanted.matches(chunks.get(0).getInvocation())) {
-            reportDiscrepancy(wanted, chunks.get(0).getInvocation(), Exceptions.STRICT_DISCREPANCY);
+            reportStrictOrderDiscrepancy(wanted, chunks.get(0).getInvocation());
         }
         
         if (!mode.atLeastOnceMode() && chunks.get(0).getCount() != mode.wantedCount()) {

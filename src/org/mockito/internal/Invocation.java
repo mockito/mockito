@@ -99,23 +99,35 @@ public class Invocation {
         return parameterTypes[parameterPosition].isPrimitive();
     }
 
-    public String getMockAndMethodName() {
-        String mockName = Namer.nameForMock(mock);
-        return mockName + "." + method.getName();
+    private String getMockAndMethodName() {
+        return Namer.nameForMock(mock) + "." + method.getName();
     }
     
+    private String getMockAndMethodNameWithSeqenceNumber() {
+        return Namer.nameForMock(mock) + "#" + sequenceNumber + "." + method.getName();
+    }
+
     public String toString() {
+        List<IArgumentMatcher> matchers = argumentsToMatchers();
+        return toString(matchers);
+    }
+
+    private List<IArgumentMatcher> argumentsToMatchers() {
         List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
         for (Object arg : this.arguments) {
             matchers.add(new Equals(arg));
         }
-        return toString(matchers);
+        return matchers;
     }
     
-    //TODO don't use matchers to do printing args. there should be separate thing to print that stuff
     public String toString(List<IArgumentMatcher> matchers) {
+        return getMockAndMethodName() + getArgumentsString(matchers);
+    }
+
+    //TODO don't use matchers to do printing args. there should be separate thing to print that stuff
+    private String getArgumentsString(List<IArgumentMatcher> matchers) {
+        //TODO all StringBuffers need to be StringBuilders...
         StringBuffer result = new StringBuffer();
-        result.append(getMockAndMethodName());
         result.append("(");
         for (IArgumentMatcher matcher : matchers) {
             matcher.appendTo(result);
@@ -134,7 +146,7 @@ public class Invocation {
         } 
         return result.toString().replaceFirst(", $", "").concat(")");
     }
-
+    
     public void markVerified() {
         verified = true;
     }
@@ -154,5 +166,13 @@ public class Invocation {
 
     public boolean isVerifiedInOrder() {
         return verifiedInOrder;
+    }
+
+    public String toStringWithSequenceNumber() {
+        return toStringWithSequenceNumber(argumentsToMatchers());
+    }
+
+    public String toStringWithSequenceNumber(List<IArgumentMatcher> matchers) {
+        return getMockAndMethodNameWithSeqenceNumber() + getArgumentsString(matchers);
     }
 }
