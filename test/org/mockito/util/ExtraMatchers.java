@@ -4,6 +4,7 @@
  */
 package org.mockito.util;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 import org.hamcrest.*;
@@ -54,6 +55,35 @@ public class ExtraMatchers {
 
             public void describeTo(Description desc) {
                 desc.appendText("string doesn't match " + regexp);
+            }
+        };
+    }
+    
+    public static <T> Matcher<Object> hasBridgeMethod(final String methodName) {
+        return new BaseMatcher<Object>() {
+
+            public boolean matches(Object o) {
+                Class clazz = null;
+                if (o instanceof Class) {
+                    clazz = (Class) o;
+                } else {
+                    clazz = o.getClass();
+                }
+                
+                for (Method m : clazz.getMethods()) {
+                    if (m.isBridge()) {
+                        if (m.getName().equals(methodName)) {
+                            System.out.println(m);
+                            return true;
+                        }
+                    }
+                }
+                
+                return false; 
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("Bridge method: " + methodName + " not found!");
             }
         };
     }
