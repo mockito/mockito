@@ -5,17 +5,15 @@
 package org.mockito.usage.binding;
 
 import static org.junit.Assert.*;
-import org.junit.*;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+import org.mockito.Strictly;
 import org.mockito.exceptions.VerificationError;
 
 public class IncorectBindingPuzzleFixedTest {
 
     private BaseInteface mock;
-
-    private void setMock(DerivedInterface mock) {
-        this.mock = mock;
-    }
 
     private class BaseMessage {}
     
@@ -35,12 +33,12 @@ public class IncorectBindingPuzzleFixedTest {
 
     @Test
     public void shouldUseArgumentTypeWhenOverloadingPuzzleDetected() throws Exception {
-        DerivedInterface derivedMock = Mockito.mock(DerivedInterface.class);
-        setMock(derivedMock);
+        DerivedInterface derivedMock = mock(DerivedInterface.class);
+        mock = derivedMock;
         Message message = new Message();
         print(message);
         try {
-            Mockito.verify(derivedMock).print(message);
+            verify(derivedMock).print(message);
             fail();
         } catch (VerificationError error) {
             String expected = 
@@ -50,6 +48,29 @@ public class IncorectBindingPuzzleFixedTest {
         		"Wanted: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
         		"\n" +
         		"Actual: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
+            
+            assertEquals(expected, error.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByStrictly() throws Exception {
+        DerivedInterface derivedMock = mock(DerivedInterface.class);
+        mock = derivedMock;
+        Message message = new Message();
+        print(message);
+        Strictly strictly = createStrictOrderVerifier(mock);
+        try {
+            strictly.verify(derivedMock).print(message);
+            fail();
+        } catch (VerificationError error) {
+            String expected = 
+                "\n" +
+                "Strict order verification failed" +
+                "\n" +
+                "Wanted: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$Message)" +
+                "\n" +
+                "Actual: DerivedInterface.print(class org.mockito.usage.binding.IncorectBindingPuzzleFixedTest$BaseMessage)";
             
             assertEquals(expected, error.getMessage());
         }
