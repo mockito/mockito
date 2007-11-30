@@ -30,7 +30,6 @@ public class MockFactory<T> {
             public Object intercept(Object obj, Method method, Object[] args,
                     MethodProxy proxy) throws Throwable {
                 if (method.isBridge()) {
-                    //TODO still... why is this needed?
                     return proxy.invokeSuper(obj, args);
                 }
                 return handler.invoke(obj, method, args);

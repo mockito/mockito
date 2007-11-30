@@ -20,18 +20,28 @@ import org.junit.Test;
  */
 @SuppressWarnings("unchecked")
 public class BridgeMethodPuzzleTest {
-
-    class Super<T> {
+    
+    private class Super<T> {
         public String say(T t) {
             return "Super says: " + t;
         }
     }
-     
-    class Sub extends Super<String> {
+    
+    private class Sub extends Super<String> {
         @Override
         public String say(String t)  {
             return "Sub says: " + t;
         }
+    }
+
+    Super mock;
+    
+    private void setMockWithDownCast(Super mock) {
+        this.mock = mock;
+    }
+    
+    private void say(String string) {
+        mock.say(string);
     }
     
     @Test
@@ -47,20 +57,11 @@ public class BridgeMethodPuzzleTest {
     @Test
     public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
         //Super has following erasure: say(Object) which differs from Sub.say(String)
-        //mock has to detect it and do the polymorphic call: Sub.say(Object) 
-        Super s = mock(Sub.class);
-        
-        s.say("Hello");
-        
-        verify(s).say("Hello");
-    }
-    
-    @Test
-    public void shouldVerifyCorrectlyWhenBridgeMethodIsNotCalled() throws Exception {
-        //no problem here, no polymorphic call
+        //mock has to detect it and do the super.say()
+        //see MockFactory.java
         Sub s = mock(Sub.class);
-        
-        s.say("Hello");
+        setMockWithDownCast(s);
+        say("Hello");
         
         verify(s).say("Hello");
     }
