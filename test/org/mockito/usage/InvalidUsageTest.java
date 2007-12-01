@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Strictly;
-import org.mockito.exceptions.MockitoException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
 
 @SuppressWarnings("unchecked")
@@ -44,6 +44,11 @@ public class InvalidUsageTest {
     public void shouldNotStrictlyVerifyUnfamilarMocks() {
         Strictly strictly = createStrictOrderVerifier(mock);
         strictly.verify(mockTwo).simpleMethod();
+    }
+    
+    @Test(expected=MissingMethodInvocationException.class)
+    public void shouldReportMissingMethodInvocationWhenStubbing() {
+        stub("".toString()).andReturn("x");
     }
     
     @Test(expected=MockitoException.class)
