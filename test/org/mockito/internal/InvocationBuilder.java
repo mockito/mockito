@@ -3,7 +3,7 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.usage.*;
+import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class InvocationBuilder {
