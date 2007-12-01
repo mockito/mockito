@@ -16,7 +16,7 @@ public class Result implements IAnswer {
     public static Result createThrowResult(final Throwable throwable) {
         return new Result(new IAnswer<Object>() {
             public Object answer() throws Throwable {
-                throw throwable;
+                throw throwable.fillInStackTrace();
             }
         });
     }

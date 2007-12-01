@@ -56,6 +56,12 @@ You'll see exact line of code where verification failed
 
 -classical stubbing - if you stub method for given args - it always will replay in that manner. E.g. if mock is called few times with the same args and you want to return different result each time, then you'd better use EasyMock
 
+-known limitations:
+
+  cannot do this:
+  
+    stub(mock.add("1")).andThrows(new ExceptionThree());
+    stub(mock.add("1")).andThrows(new ExceptionFour());
 
 	
 -think about merging in

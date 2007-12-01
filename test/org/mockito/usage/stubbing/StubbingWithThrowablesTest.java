@@ -6,21 +6,24 @@ package org.mockito.usage.stubbing;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.firstMethodOnStackEqualsTo;
 
 import java.io.*;
-import java.util.LinkedList;
+import java.util.*;
 
 import org.junit.*;
 import org.mockito.exceptions.MockitoException;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"serial", "unchecked"})
 public class StubbingWithThrowablesTest {
 
     private LinkedList mock;
+    private Map mockTwo;
 
     @Before 
     public void setup() {
         mock = mock(LinkedList.class);
+        mockTwo = mock(HashMap.class);
     }
     
     @Test
@@ -47,6 +50,27 @@ public class StubbingWithThrowablesTest {
         } catch (Exception e) {
             assertEquals(expected, e);
         }
+    } 
+    
+    @Test
+    public void shouldLastStubbingVoidBeImportant() throws Exception {
+        stubVoid(mock).toThrow(new ExceptionOne()).on().clear();
+        stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
+        
+        try {
+            mock.clear();
+            fail();
+        } catch (ExceptionTwo e) {}
+    }
+    
+    @Test
+    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
+        stub(mock.get(1)).andThrows(new ExceptionOne());
+        
+        try {
+            stub(mock.get(1)).andThrows(new ExceptionTwo());
+            fail();
+        } catch (ExceptionOne e) {}
     }   
     
     @Test
@@ -88,15 +112,61 @@ public class StubbingWithThrowablesTest {
         stub(mock.add("monkey island")).andThrows(null);
     }    
     
-    @Ignore
     @Test
     public void shouldMixThrowablesAndReturnValuesOnDifferentMocks() throws Exception {
+        stub(mock.add("ExceptionOne")).andThrows(new ExceptionOne());
+        stub(mock.getLast()).andReturn("last");
+        stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
         
+        stubVoid(mockTwo).toThrow(new ExceptionThree()).on().clear();
+        stub(mockTwo.containsValue("ExceptionFour")).andThrows(new ExceptionFour());
+        stub(mockTwo.get("Are you there?")).andReturn("Yes!");
+
+        assertNull(mockTwo.get("foo"));
+        assertTrue(mockTwo.keySet().isEmpty());
+        assertEquals("Yes!", mockTwo.get("Are you there?"));
+        try {
+            mockTwo.clear();
+        } catch (ExceptionThree e) {}
+        try {
+            mockTwo.containsKey("ExceptionFour");
+        } catch (ExceptionFour e) {}
+        
+        assertNull(mock.getFirst());
+        assertEquals("last", mock.getLast());
+        try {
+            mock.add("ExceptionOne");
+        } catch (ExceptionOne e) {}
+        try {
+            mock.clear();
+        } catch (ExceptionTwo e) {}
     }
     
+    @Ignore
+    @Test
+    public void shouldDoTheStackTraceProperly() throws Exception {
+        stub(mock.add("ExceptionOne")).andThrows(new ExceptionOne());
+
+        try {
+            addObjectToMockedList("ExceptionOne");
+            fail();
+        } catch (ExceptionOne e) {
+            assertThat(e, firstMethodOnStackEqualsTo("addObjectToMockedList"));
+        }
+    }
+    
+    private void addObjectToMockedList(String string) {
+        mock.add("ExceptionOne");
+    }
+
     @Ignore
     @Test
     public void shouldVerifyWhenStubbedWithThrowable() throws Exception {
         
     }
+    
+    private class ExceptionOne extends RuntimeException {};
+    private class ExceptionTwo extends RuntimeException {};
+    private class ExceptionThree extends RuntimeException {};
+    private class ExceptionFour extends RuntimeException {};
 }

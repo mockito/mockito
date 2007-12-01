@@ -10,7 +10,7 @@ import java.util.*;
 import org.hamcrest.*;
 
 @SuppressWarnings("unchecked")
-public class ExtraMatchers {
+public class ExtraMatchers extends CoreMatchers {
 
     public static <T> Matcher<Throwable> firstMethodOnStackEqualsTo(final String method) {
         return new BaseMatcher<Throwable>() {

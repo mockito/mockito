@@ -51,8 +51,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (throwableToBeSetOnVoidMethod != null) {
-            Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
-            ExpectedInvocation invocationWithMatchers = expectedInvocation(invocation);
+            ExpectedInvocation invocationWithMatchers = expectedInvocation(proxy, method, args);
             //TODO this is a bit dodgy, we should set result directly on behavior and behavior should validate exception
             behavior.addInvocation(invocationWithMatchers);
             andThrows(throwableToBeSetOnVoidMethod);
@@ -63,28 +62,23 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
         mockitoState.validateState();
         
-        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
-        ExpectedInvocation invocationWithMatchers = expectedInvocation(invocation);
+        ExpectedInvocation invocationWithMatchers = expectedInvocation(proxy, method, args);
         
         if (verifyingMode != null) {
             behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         } 
         
-        mockitoState.reportControlForStubbing(this);
-
         behavior.addInvocation(invocationWithMatchers);
+
+        mockitoState.reportControlForStubbing(this);
         
-        if (throwableToBeSetOnVoidMethod != null) {
-            andThrows(throwableToBeSetOnVoidMethod);
-            throwableToBeSetOnVoidMethod = null;
-            return null;
-        }
-        
-        return behavior.resultFor(invocation);
+        return behavior.resultFor(invocationWithMatchers.getInvocation());
     }
 
-    private ExpectedInvocation expectedInvocation(Invocation invocation) {
+    private ExpectedInvocation expectedInvocation(Object proxy, Method method, Object[] args) {
+        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
+        
         List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
