@@ -28,7 +28,6 @@ import org.mockito.internal.StateResetter;
  *    -on verify on strictly
  *    -on stub
  *    -on stubVoid
- *
  */
 @SuppressWarnings("unchecked")
 public class InvalidStateDetectionTest {
@@ -48,20 +47,19 @@ public class InvalidStateDetectionTest {
         
         detects(new OnMethodCallOnMock(), mock, UnfinishedStubbingException.class);
         detects(new OnStub(), mock, UnfinishedStubbingException.class);
-//        detects(new OnStubVoid(), mock, expected);
+        detects(new OnStubVoid(), mock, UnfinishedStubbingException.class);
         detects(new OnVerify(), mock, UnfinishedStubbingException.class);
         detects(new OnStrictVerify(), mock, UnfinishedStubbingException.class);
         detects(new OnVerifyZeroInteractions(), mock, UnfinishedStubbingException.class);
         detects(new OnVerifyNoMoreInteractions(), mock, UnfinishedStubbingException.class);
     }
     
-    @Ignore
     @Test
     public void shouldDetectUnfinishedStubbingVoid() {
         stubVoid(mock);
         detects(new OnMethodCallOnMock(), mock, UnfinishedStubbingException.class);
         detects(new OnStub(), mock, UnfinishedStubbingException.class);
-//        detects(new OnStubVoid(), mock, expected);
+        detects(new OnStubVoid(), mock, UnfinishedStubbingException.class);
         detects(new OnVerify(), mock, UnfinishedStubbingException.class);
         detects(new OnStrictVerify(), mock, UnfinishedStubbingException.class);
         detects(new OnVerifyZeroInteractions(), mock, UnfinishedStubbingException.class);
@@ -71,9 +69,8 @@ public class InvalidStateDetectionTest {
     @Test
     public void shouldDetectUnfinishedVerification() {
         verify(mock);
-//        detects(new OnMethodCallOnMock(), mock, expected);
         detects(new OnStub(), mock, UnfinishedVerificationException.class);
-//        detects(new OnStubVoid(), mock, expected);
+        detects(new OnStubVoid(), mock, UnfinishedVerificationException.class);
         detects(new OnVerify(), mock, UnfinishedVerificationException.class);
         detects(new OnStrictVerify(), mock, UnfinishedVerificationException.class);
         detects(new OnVerifyZeroInteractions(), mock, UnfinishedVerificationException.class);
@@ -114,11 +111,11 @@ public class InvalidStateDetectionTest {
         }
     }
     
-//    private static class OnStubVoid implements DetectsInvalidState {
-//        public void detect(IMethods mock) {
-//            stubVoid(mock);
-//        }
-//    }
+    private static class OnStubVoid implements DetectsInvalidState {
+        public void detect(IMethods mock) {
+            stubVoid(mock);
+        }
+    }
     
     private static class OnMethodCallOnMock implements DetectsInvalidState {
         public void detect(IMethods mock) {

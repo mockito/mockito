@@ -53,7 +53,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         if (throwableToBeSetOnVoidMethod != null) {
             Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
             ExpectedInvocation invocationWithMatchers = expectedInvocation(invocation);
-            //TODO this is a bit dodgy, we should set result directly on behavior
+            //TODO this is a bit dodgy, we should set result directly on behavior and behavior should validate exception
             behavior.addInvocation(invocationWithMatchers);
             andThrows(throwableToBeSetOnVoidMethod);
             throwableToBeSetOnVoidMethod = null;
