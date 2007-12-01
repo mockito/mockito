@@ -4,6 +4,8 @@
  */
 package org.mockito.internal;
 
+import org.mockito.exceptions.*;
+
 @SuppressWarnings("unchecked")
 public class Result implements IAnswer {
 
@@ -16,7 +18,19 @@ public class Result implements IAnswer {
     public static Result createThrowResult(final Throwable throwable) {
         return new Result(new IAnswer<Object>() {
             public Object answer() throws Throwable {
-                throw throwable.fillInStackTrace();
+                MockitoStackTraceFilter filter = new MockitoStackTraceFilter();
+                final Throwable filtered = throwable.fillInStackTrace();
+                
+                filter.filterStackTrace(new HasFilterableStackTrace() {
+                    public StackTraceElement[] getStackTrace() {
+                        return filtered.getStackTrace();
+                    }
+                    public void setStackTrace(StackTraceElement[] stackTrace) {
+                        filtered.setStackTrace(stackTrace);
+                    }
+                });
+                
+                throw filtered;
             }
         });
     }

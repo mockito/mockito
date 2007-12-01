@@ -6,7 +6,6 @@ package org.mockitousage.stubbing;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.firstMethodOnStackEqualsTo;
 
 import java.io.*;
 import java.util.*;
@@ -142,23 +141,6 @@ public class StubbingWithThrowablesTest {
         } catch (ExceptionTwo e) {}
     }
     
-    @Ignore
-    @Test
-    public void shouldDoTheStackTraceProperly() throws Exception {
-        stub(mock.add("ExceptionOne")).andThrows(new ExceptionOne());
-
-        try {
-            addObjectToMockedList("ExceptionOne");
-            fail();
-        } catch (ExceptionOne e) {
-            assertThat(e, firstMethodOnStackEqualsTo("addObjectToMockedList"));
-        }
-    }
-    
-    private void addObjectToMockedList(String string) {
-        mock.add("ExceptionOne");
-    }
-
     @Ignore
     @Test
     public void shouldVerifyWhenStubbedWithThrowable() throws Exception {

@@ -6,13 +6,12 @@ package org.mockitousage;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.firstMethodOnStackEqualsTo;
 
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
-
-import static org.mockito.util.ExtraMatchers.*;
 
 public class StackTrackeFilteringTest {
     
@@ -95,7 +94,6 @@ public class StackTrackeFilteringTest {
         }
     }
     
-    @Ignore
     @Test
     public void shouldFilterStacktraceWhenStrictlyVerifies() {
         try {
@@ -107,14 +105,25 @@ public class StackTrackeFilteringTest {
         }
     }
     
-    @Ignore
     @Test
     public void shouldFilterStackTraceWhenThrowingExceptionFromControl() {
         try {
             stub(mock.oneArg(true)).andThrows(new Exception());
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnThrowingExceptionFromControl"));
+            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceWhenThrowingExceptionFromControl"));
+        }
+    }
+    
+    @Test
+    public void shouldShowProperExceptionStackTrace() throws Exception {
+        stub(mock.simpleMethod()).andThrows(new RuntimeException());
+
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (RuntimeException e) {
+            assertThat(e, firstMethodOnStackEqualsTo("shouldShowProperExceptionStackTrace"));
         }
     }
 }
