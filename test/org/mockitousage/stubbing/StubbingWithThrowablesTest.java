@@ -126,18 +126,22 @@ public class StubbingWithThrowablesTest {
         assertEquals("Yes!", mockTwo.get("Are you there?"));
         try {
             mockTwo.clear();
+            fail();
         } catch (ExceptionThree e) {}
         try {
-            mockTwo.containsKey("ExceptionFour");
+            mockTwo.containsValue("ExceptionFour");
+            fail();
         } catch (ExceptionFour e) {}
         
         assertNull(mock.getFirst());
         assertEquals("last", mock.getLast());
         try {
             mock.add("ExceptionOne");
+            fail();
         } catch (ExceptionOne e) {}
         try {
             mock.clear();
+            fail();
         } catch (ExceptionTwo e) {}
     }
     
