@@ -115,4 +115,11 @@ public class Exceptions {
                 "stub() requires an argument which has to be a proper method call on a mock object"
         ));
     }
+
+    public static void unfinishedVerificationException() {
+        throw new UnfinishedVerificationException(join(
+                "Previous verify(mock) doesn't have a method call.",
+                "Should be something like that: verify(mock).doSomething()"
+        ));
+    }
 }

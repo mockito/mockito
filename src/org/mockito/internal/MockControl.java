@@ -24,7 +24,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
     
     /**
-     * if user passed bare arguments, not matchers then create EqualsMatchers for every argument
+     * if user passed bare arguments then create EqualsMatcher for every argument
      */
     private List<IArgumentMatcher> createEqualsMatchers(Invocation invocation,
             List<IArgumentMatcher> matchers) {
@@ -50,6 +50,16 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (throwableToBeSetOnVoidMethod != null) {
+            Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
+            ExpectedInvocation invocationWithMatchers = expectedInvocation(invocation);
+            //TODO this is a bit dodgy, we should set result directly on behavior
+            behavior.addInvocation(invocationWithMatchers);
+            andThrows(throwableToBeSetOnVoidMethod);
+            throwableToBeSetOnVoidMethod = null;
+            return null;
+        }
+        
         VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
         mockitoState.validateState();
         

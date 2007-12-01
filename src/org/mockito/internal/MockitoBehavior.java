@@ -24,9 +24,9 @@ public class MockitoBehavior<T> {
     public void addResult(Result result) {
         assert invocationForStubbing != null;
         registeredInvocations.removeLast();
-        this.results.put(invocationForStubbing, result);
+        results.put(invocationForStubbing, result);
     }
-
+    
     public void verify(ExpectedInvocation wanted, VerifyingMode mode) {
         checkOrderOfInvocations(wanted, mode);
         checkForMissingInvocation(wanted, mode);

@@ -16,8 +16,6 @@ public class MockitoState {
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
     private final ThreadLocal<Integer> invocationSequenceNumber = new ThreadLocal<Integer>();
     private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
-//    private final ThreadLocal<Object> stubbingVoidModeLocal = new ThreadLocal<Object>();
-
 
     MockitoState() {}
     
@@ -38,12 +36,6 @@ public class MockitoState {
     public synchronized void verifyingStarted(VerifyingMode verify) {
         validateState();
         verifyingModeLocal.set(verify);
-    }
-
-    public synchronized void checkForUnfinishedVerification() {
-        if (verifyingModeLocal.get() != null) {
-            throw new UnfinishedVerificationException();
-        }
     }
 
     public synchronized VerifyingMode pullVerifyingMode() {
@@ -69,7 +61,10 @@ public class MockitoState {
     }
 
     public synchronized void validateState() {
-        checkForUnfinishedVerification();
+        if (verifyingModeLocal.get() != null) {
+            Exceptions.unfinishedVerificationException();
+        }
+        
         if (stubbingModeLocal.get() != null) {
             Exceptions.unfinishedStubbing();
         }
@@ -85,9 +80,4 @@ public class MockitoState {
                 ", invocationSequenceNumber: " + invocationSequenceNumber.get() +
                 ", stubbingModeLocal: " + stubbingModeLocal.get();
     }
-//
-//    public void stubbingVoidStarted() {
-//        validateState();
-//        stubbingVoidModeLocal.set(new Object());
-//    }
 }

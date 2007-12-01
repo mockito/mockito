@@ -95,6 +95,7 @@ public class Mockito extends Matchers {
     }
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
+        MockitoState.instance().stubbingStarted();
         return MockUtil.getControl(mock);
     }
 
