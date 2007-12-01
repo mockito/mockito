@@ -22,12 +22,11 @@ public class Mockito extends Matchers {
     }
 
     public static <T> MockitoExpectation<T> stub(T methodCallToStub) {
-//        MockitoState.instance().stubbingStarted();
+        MockitoState.instance().stubbingStarted();
         
-        //TODO increment number of stubs
         MockitoExpectation controlToStub = MockitoState.instance().pullControlToBeStubbed();
         if (controlToStub == null) {
-            throw new MissingMethodInvocationException();
+            Exceptions.missingMethodInvocation();
         }
         return controlToStub;
     }
@@ -75,7 +74,7 @@ public class Mockito extends Matchers {
 	 */
 	public static void verifyNoMoreInteractions(Object ... mocks) {
 	    assertMocksNotEmpty(mocks);
-	    MockitoState.instance().checkForUnfinishedVerification();
+	    MockitoState.instance().validateState();
 	    for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyNoMoreInteractions();
         }
@@ -89,14 +88,13 @@ public class Mockito extends Matchers {
 
     public static void verifyZeroInteractions(Object ... mocks) {
         assertMocksNotEmpty(mocks);
-        MockitoState.instance().checkForUnfinishedVerification();
+        MockitoState.instance().validateState();
         for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyZeroInteractions();
         }
     }
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
-//        MockitoState.instance().reportControlForStubbing(mockControl)
         return MockUtil.getControl(mock);
     }
 

@@ -5,6 +5,7 @@
 package org.mockito.usage;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IMethods {
 
@@ -52,7 +53,7 @@ public interface IMethods {
 
     public String throwsError(int count) throws Error;
 
-    void simpleMethod();
+    boolean simpleMethod();
     
     void differentMethod();
 
@@ -91,4 +92,6 @@ public interface IMethods {
     void varargsString(int i, String... string);
 
     void varargsObject(int i, Object... object);
+
+    List<String> listReturningMethod(Object ... objects);
 }

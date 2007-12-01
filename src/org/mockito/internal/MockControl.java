@@ -51,26 +51,18 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
+        mockitoState.validateState();
         
         Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
-        List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
-        validateMatchers(invocation, lastMatchers);
-
-        List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
-        
-        ExpectedInvocation invocationWithMatchers = new ExpectedInvocation(invocation, processedMatchers);
+        ExpectedInvocation invocationWithMatchers = expectedInvocation(invocation);
         
         if (verifyingMode != null) {
             behavior.verify(invocationWithMatchers, verifyingMode);
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
-        }
+        } 
         
-//        else if (mockitoState.mockStubbingScenario()) {
-//            mockitoState.stubbingCompleted();
-//        }
-        
-        mockitoState.reportLastControl(this);
-        
+        mockitoState.reportControlForStubbing(this);
+
         behavior.addInvocation(invocationWithMatchers);
         
         if (throwableToBeSetOnVoidMethod != null) {
@@ -78,8 +70,18 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
             throwableToBeSetOnVoidMethod = null;
             return null;
         }
-
+        
         return behavior.resultFor(invocation);
+    }
+
+    private ExpectedInvocation expectedInvocation(Invocation invocation) {
+        List<IArgumentMatcher> lastMatchers = lastArguments.pullMatchers();
+        validateMatchers(invocation, lastMatchers);
+
+        List<IArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
+        
+        ExpectedInvocation invocationWithMatchers = new ExpectedInvocation(invocation, processedMatchers);
+        return invocationWithMatchers;
     }
 
     public void verifyNoMoreInteractions() {
@@ -91,13 +93,13 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     public void andReturn(T value) {
-//      TODO count number of andReturn vs number of stubbing
+        mockitoState.stubbingCompleted();
         behavior.addResult(Result.createReturnResult(value));
     }
 
     public void andThrows(Throwable throwable) {
+        mockitoState.stubbingCompleted();
         validateThrowable(throwable);
-        //TODO count number of andReturn vs number of stubbing
         behavior.addResult(Result.createThrowResult(throwable));
     }
     

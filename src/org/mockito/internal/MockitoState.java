@@ -4,18 +4,20 @@
  */
 package org.mockito.internal;
 
-import org.mockito.exceptions.UnfinishedVerificationException;
+import org.mockito.exceptions.*;
 
 @SuppressWarnings("unchecked")
 public class MockitoState {
     
-    //TODO this has to be threaddy singleton
+    //TODO this has to be thready singleton
     static MockitoState INSTANCE = new MockitoState();
     
     private final ThreadLocal<MockControl> lastControl = new ThreadLocal<MockControl>();
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
     private final ThreadLocal<Integer> invocationSequenceNumber = new ThreadLocal<Integer>();
-//    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLoca<Object>();
+    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
+//    private final ThreadLocal<Object> stubbingVoidModeLocal = new ThreadLocal<Object>();
+
 
     MockitoState() {}
     
@@ -23,7 +25,7 @@ public class MockitoState {
         return INSTANCE;
     }
     
-    public synchronized void reportLastControl(MockControl mockControl) {
+    public synchronized void reportControlForStubbing(MockControl mockControl) {
         lastControl.set(mockControl);
     }
 
@@ -34,7 +36,7 @@ public class MockitoState {
     }
     
     public synchronized void verifyingStarted(VerifyingMode verify) {
-        checkForUnfinishedVerification();
+        validateState();
         verifyingModeLocal.set(verify);
     }
 
@@ -61,15 +63,31 @@ public class MockitoState {
         }
     }
 
-//    public void stubbingStarted() {
-//        stubbingModeLocal.set(new Object());
-//    }
+    public synchronized void stubbingStarted() {
+        validateState();
+        stubbingModeLocal.set(new Object());
+    }
 
-//    public boolean mockStubbingScenario() {
-//        return stubbingModeLocal.get() != null;
-//    }
+    public synchronized void validateState() {
+        checkForUnfinishedVerification();
+        if (stubbingModeLocal.get() != null) {
+            Exceptions.unfinishedStubbing();
+        }
+    }
 
-//    public void stubbingCompleted() {
-//        stubbingModeLocal.set(null);
+    public synchronized void stubbingCompleted() {
+        stubbingModeLocal.set(null);
+    }
+    
+    public String toString() {
+        return  "lastControl: " + lastControl.get() + 
+                ", verifyingMode: " + verifyingModeLocal.get() +
+                ", invocationSequenceNumber: " + invocationSequenceNumber.get() +
+                ", stubbingModeLocal: " + stubbingModeLocal.get();
+    }
+//
+//    public void stubbingVoidStarted() {
+//        validateState();
+//        stubbingVoidModeLocal.set(new Object());
 //    }
 }

@@ -4,8 +4,6 @@
  */
 package org.mockito.exceptions;
 
-import org.mockito.internal.Invocation;
-
 /**
  * All messages in one place makes it easier to tune and amend the text. 
  * Once exception messages are sorted we can inline that stuff.
@@ -95,10 +93,26 @@ public class Exceptions {
         ));
     }
 
-    public static void noMoreInteractionsWanted(Invocation unexpected, String message) {
+    public static void noMoreInteractionsWanted(String unexpected, String message) {
         throw new VerificationError(join(
                 message,
-                "Unexpected: " + unexpected.toString()
+                "Unexpected: " + unexpected
+        ));
+    }
+
+    public static void unfinishedStubbing() {
+        throw new UnfinishedStubbingException(join(
+                "Unifinished stubbing detected, e.g. toReturn() is missing",
+                "Examples of proper stubbing:",
+                "stub(mock.isOk()).toReturn(true);",
+                "stub(mock.isOk()).toThrow(exception);",
+                "stubVoid(mock).toThrow(exception).on().someMethod();"
+        ));
+    }
+
+    public static void missingMethodInvocation() {
+        throw new MissingMethodInvocationException(join(
+                "stub() requires an argument which has to be a proper method call on a mock object"
         ));
     }
 }

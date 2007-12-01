@@ -132,7 +132,7 @@ public class MockitoBehavior<T> {
     private void verifyNoMoreInteractions(String message) {
         Invocation unverified = registeredInvocations.getFirstUnverified();
         if (unverified != null) {
-            Exceptions.noMoreInteractionsWanted(unverified, message);
+            Exceptions.noMoreInteractionsWanted(unverified.toString(), message);
         }
     }
 

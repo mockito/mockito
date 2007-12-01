@@ -18,7 +18,8 @@ public class StubbingWithThrowablesTest {
 
     private LinkedList mock;
 
-    @Before public void setup() {
+    @Before 
+    public void setup() {
         mock = mock(LinkedList.class);
     }
     
@@ -40,7 +41,6 @@ public class StubbingWithThrowablesTest {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         
         stubVoid(mock).toThrow(expected).on().clear();
-        
         try {
             mock.clear();
             fail();
