@@ -77,6 +77,12 @@ public class InvalidStateDetectionTest {
         detects(new OnVerifyNoMoreInteractions(), mock, UnfinishedVerificationException.class);
     }
     
+    @Test
+    @Ignore
+    public void shouldCorrectStateAfterDetectingInvalidity() {
+        
+    }
+    
     private static interface DetectsInvalidState {
         void detect(IMethods mock);
     }

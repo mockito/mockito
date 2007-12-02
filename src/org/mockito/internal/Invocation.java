@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.mockito.internal.matchers.*;
@@ -115,7 +115,11 @@ public class Invocation {
     private List<IArgumentMatcher> argumentsToMatchers() {
         List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
         for (Object arg : this.arguments) {
-            matchers.add(new Equals(arg));
+            if (arg.getClass().isArray()) {
+                matchers.add(new ArrayEquals(arg));
+            } else {
+                matchers.add(new Equals(arg));
+            }
         }
         return matchers;
     }

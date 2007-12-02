@@ -5,6 +5,7 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
+import static org.mockito.CrazyMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
@@ -218,6 +219,60 @@ public class NiceMessagesWhenVerificationFailsTest {
                 "\n" +
                 "IMethods.twoArgumentMethod(<any>, 100)";
             assertEquals(expectedMessage, actualMessage);         
+        }
+    }
+    
+    @Test
+    public void shouldPrintMethodNicelyWhenMissingInvocationWithArrayMatcher() {
+        mock.oneArray(new boolean[] { true, false, false });
+        
+        try {
+            verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
+            fail();
+        } catch (VerificationError e) {
+            String expected = "\n" +
+                    "Invocation differs from actual" +
+                    "\n" +
+                    "Wanted: IMethods.oneArray([false, false, false])" +
+                    "\n" +
+                    "Actual: IMethods.oneArray([true, false, false])";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldPrintMethodNicelyWhenMissingInvocationWithVarargMatcher() {
+        mock.varargsString(10, "one", "two");
+        
+        try {
+            verify(mock).varargsString(10, "two", "one");
+            fail();
+        } catch (VerificationError e) {
+            String expected = "\n" +
+                    "Invocation differs from actual" +
+                    "\n" +
+                    "Wanted: IMethods.varargsString(10, \"two\", \"one\")" +
+                    "\n" +
+                    "Actual: IMethods.varargsString(10, \"one\", \"two\")";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldPrintMethodNicelyWhenMissingInvocationWithMatcher() {
+        mock.simpleMethod("foo");
+        
+        try {
+            verify(mock).simpleMethod(matches("burrito"));
+            fail();
+        } catch (VerificationError e) {
+            String expected = "\n" +
+                    "Invocation differs from actual" +
+                    "\n" +
+                    "Wanted: IMethods.simpleMethod(matches(\"burrito\"))" +
+                    "\n" +
+                    "Actual: IMethods.simpleMethod(\"foo\")";
+            assertEquals(expected, e.getMessage());
         }
     }
 }

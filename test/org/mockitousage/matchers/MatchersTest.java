@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.junit.*;
-import org.mockito.*;
+import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -59,15 +59,15 @@ public class MatchersTest {
     @Test
     public void orOverloaded() {
         stub(mock.oneArg(or(eq(false), eq(true)))).andReturn("0");
-        stub(mock.oneArg(CrazyMatchers.or(eq((byte) 1), eq((byte) 2)))).andReturn("1");
-        stub(mock.oneArg(CrazyMatchers.or(eq((char) 1), eq((char) 2)))).andReturn("2");
-        stub(mock.oneArg(CrazyMatchers.or(eq((double) 1), eq((double) 2)))).andReturn("3");
-        stub(mock.oneArg(CrazyMatchers.or(eq((float) 1), eq((float) 2)))).andReturn("4");
-        stub(mock.oneArg(CrazyMatchers.or(eq((int) 1), eq((int) 2)))).andReturn("5");
-        stub(mock.oneArg(CrazyMatchers.or(eq((long) 1), eq((long) 2)))).andReturn("6");
-        stub(mock.oneArg(CrazyMatchers.or(eq((short) 1), eq((short) 2)))).andReturn("7");
-        stub(mock.oneArg(CrazyMatchers.or(eq("asd"), eq("jkl")))).andReturn("8");
-        stub(mock.oneArg(CrazyMatchers.or(eq(this.getClass()), eq(Object.class)))).andReturn("9");
+        stub(mock.oneArg(or(eq((byte) 1), eq((byte) 2)))).andReturn("1");
+        stub(mock.oneArg(or(eq((char) 1), eq((char) 2)))).andReturn("2");
+        stub(mock.oneArg(or(eq((double) 1), eq((double) 2)))).andReturn("3");
+        stub(mock.oneArg(or(eq((float) 1), eq((float) 2)))).andReturn("4");
+        stub(mock.oneArg(or(eq((int) 1), eq((int) 2)))).andReturn("5");
+        stub(mock.oneArg(or(eq((long) 1), eq((long) 2)))).andReturn("6");
+        stub(mock.oneArg(or(eq((short) 1), eq((short) 2)))).andReturn("7");
+        stub(mock.oneArg(or(eq("asd"), eq("jkl")))).andReturn("8");
+        stub(mock.oneArg(or(eq(this.getClass()), eq(Object.class)))).andReturn("9");
 
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
@@ -90,16 +90,16 @@ public class MatchersTest {
 
     @Test
     public void notOverloaded() {
-        stub(mock.oneArg(CrazyMatchers.not(eq(false)))).andReturn("0");
-        stub(mock.oneArg(CrazyMatchers.not(eq((byte) 1)))).andReturn("1");
-        stub(mock.oneArg(CrazyMatchers.not(eq('a')))).andReturn("2");
-        stub(mock.oneArg(CrazyMatchers.not(eq((double) 1)))).andReturn("3");
-        stub(mock.oneArg(CrazyMatchers.not(eq((float) 1)))).andReturn("4");
-        stub(mock.oneArg(CrazyMatchers.not(eq((int) 1)))).andReturn("5");
-        stub(mock.oneArg(CrazyMatchers.not(eq((long) 1)))).andReturn("6");
-        stub(mock.oneArg(CrazyMatchers.not(eq((short) 1)))).andReturn("7");
-        stub(mock.oneArg(CrazyMatchers.not(contains("a")))).andReturn("8");
-        stub(mock.oneArg(CrazyMatchers.not(isA(Class.class)))).andReturn("9");
+        stub(mock.oneArg(not(eq(false)))).andReturn("0");
+        stub(mock.oneArg(not(eq((byte) 1)))).andReturn("1");
+        stub(mock.oneArg(not(eq('a')))).andReturn("2");
+        stub(mock.oneArg(not(eq((double) 1)))).andReturn("3");
+        stub(mock.oneArg(not(eq((float) 1)))).andReturn("4");
+        stub(mock.oneArg(not(eq((int) 1)))).andReturn("5");
+        stub(mock.oneArg(not(eq((long) 1)))).andReturn("6");
+        stub(mock.oneArg(not(eq((short) 1)))).andReturn("7");
+        stub(mock.oneArg(not(contains("a")))).andReturn("8");
+        stub(mock.oneArg(not(isA(Class.class)))).andReturn("9");
 
         assertEquals("0", mock.oneArg(true));
         assertEquals(null, mock.oneArg(false));
@@ -211,7 +211,7 @@ public class MatchersTest {
 
     @Test
     public void compareToMatcher() {
-        stub(mock.oneArg(CrazyMatchers.cmpEq(new BigDecimal("1.5")))).andReturn("0");
+        stub(mock.oneArg(cmpEq(new BigDecimal("1.5")))).andReturn("0");
 
         assertEquals("0", mock.oneArg(new BigDecimal("1.50")));
         assertEquals(null, mock.oneArg(new BigDecimal("1.51")));
@@ -248,16 +248,16 @@ public class MatchersTest {
 
     @Test
     public void arrayEqualsMatcher() {
-        stub(mock.oneArray(CrazyMatchers.aryEq(new boolean[] { true, false, false }))).andReturn("0");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new byte[] { 1 }))).andReturn("1");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new char[] { 1 }))).andReturn("2");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new double[] { 1 }))).andReturn("3");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new float[] { 1 }))).andReturn("4");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new int[] { 1 }))).andReturn("5");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new long[] { 1 }))).andReturn("6");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new short[] { 1 }))).andReturn("7");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new String[] { "Test" }))).andReturn("8");
-        stub(mock.oneArray(CrazyMatchers.aryEq(new Object[] { "Test", new Integer(4) }))).andReturn("9");
+        stub(mock.oneArray(aryEq(new boolean[] { true, false, false }))).andReturn("0");
+        stub(mock.oneArray(aryEq(new byte[] { 1 }))).andReturn("1");
+        stub(mock.oneArray(aryEq(new char[] { 1 }))).andReturn("2");
+        stub(mock.oneArray(aryEq(new double[] { 1 }))).andReturn("3");
+        stub(mock.oneArray(aryEq(new float[] { 1 }))).andReturn("4");
+        stub(mock.oneArray(aryEq(new int[] { 1 }))).andReturn("5");
+        stub(mock.oneArray(aryEq(new long[] { 1 }))).andReturn("6");
+        stub(mock.oneArray(aryEq(new short[] { 1 }))).andReturn("7");
+        stub(mock.oneArray(aryEq(new String[] { "Test" }))).andReturn("8");
+        stub(mock.oneArray(aryEq(new Object[] { "Test", new Integer(4) }))).andReturn("9");
 
         assertEquals("0", mock.oneArray(new boolean[] { true, false, false }));
         assertEquals("1", mock.oneArray(new byte[] { 1 }));
@@ -276,7 +276,7 @@ public class MatchersTest {
         assertEquals(null, mock.oneArray(new boolean[] { true, false }));
         assertEquals(null, mock.oneArray(new boolean[] { true, true, false }));
     }
-
+    
     @Test
     public void greaterOrEqualMatcher() {
         stub(mock.oneArg(geq(7))).andReturn(">= 7");
@@ -332,7 +332,7 @@ public class MatchersTest {
     @Test
     public void orMatcher() {
         stub(mock.oneArg(anyInt())).andReturn("other");
-        stub(mock.oneArg(CrazyMatchers.or(eq(7), eq(9)))).andReturn("7 or 9");
+        stub(mock.oneArg(or(eq(7), eq(9)))).andReturn("7 or 9");
 
         assertEquals("other", mock.oneArg(10));
         assertEquals("7 or 9", mock.oneArg(7));
@@ -342,7 +342,7 @@ public class MatchersTest {
     @Test
     public void nullMatcher() {
         stub(mock.threeArgumentMethod(eq(1), isNull(), eq(""))).andReturn("1");
-        stub(mock.threeArgumentMethod(eq(1), CrazyMatchers.not(isNull()), eq(""))).andReturn("2");
+        stub(mock.threeArgumentMethod(eq(1), not(isNull()), eq(""))).andReturn("2");
 
         assertEquals("1", mock.threeArgumentMethod(1, null, ""));
         assertEquals("2", mock.threeArgumentMethod(1, new Object(), ""));
@@ -351,7 +351,7 @@ public class MatchersTest {
     @Test
     public void notNullMatcher() {
         stub(mock.threeArgumentMethod(eq(1), notNull(), eq(""))).andReturn("1");
-        stub(mock.threeArgumentMethod(eq(1), CrazyMatchers.not(notNull()), eq(""))).andReturn("2");
+        stub(mock.threeArgumentMethod(eq(1), not(notNull()), eq(""))).andReturn("2");
 
         assertEquals("1", mock.threeArgumentMethod(1, new Object(), ""));
         assertEquals("2", mock.threeArgumentMethod(1, null, ""));
@@ -359,7 +359,7 @@ public class MatchersTest {
 
     @Test
     public void findMatcher() {
-        stub(mock.oneArg(CrazyMatchers.find("([a-z]+)\\d"))).andReturn("1");
+        stub(mock.oneArg(find("([a-z]+)\\d"))).andReturn("1");
 
         assertEquals("1", mock.oneArg("ab12"));
         assertEquals(null, mock.oneArg("12345"));
@@ -387,8 +387,8 @@ public class MatchersTest {
 
     @Test
     public void startsWithMatcher() {
-        stub(mock.oneArg(CrazyMatchers.startsWith("ab"))).andReturn("1");
-        stub(mock.oneArg(CrazyMatchers.startsWith("bc"))).andReturn("2");
+        stub(mock.oneArg(startsWith("ab"))).andReturn("1");
+        stub(mock.oneArg(startsWith("bc"))).andReturn("2");
 
         assertEquals("1", mock.oneArg("ab quake"));
         assertEquals("2", mock.oneArg("bc quake"));
@@ -397,8 +397,8 @@ public class MatchersTest {
 
     @Test
     public void endsWithMatcher() {
-        stub(mock.oneArg(CrazyMatchers.endsWith("ab"))).andReturn("1");
-        stub(mock.oneArg(CrazyMatchers.endsWith("bc"))).andReturn("2");
+        stub(mock.oneArg(endsWith("ab"))).andReturn("1");
+        stub(mock.oneArg(endsWith("bc"))).andReturn("2");
 
         assertEquals("1", mock.oneArg("xab"));
         assertEquals("2", mock.oneArg("xbc"));
@@ -436,8 +436,8 @@ public class MatchersTest {
         assertEquals(one, two);
         assertEquals(two, three);
 
-        stub(mock.oneArg(CrazyMatchers.same(one))).andReturn("1");
-        stub(mock.oneArg(CrazyMatchers.same(two))).andReturn("2");
+        stub(mock.oneArg(same(one))).andReturn("1");
+        stub(mock.oneArg(same(two))).andReturn("2");
 
         assertEquals("1", mock.oneArg(one));
         assertEquals("2", mock.oneArg(two));
