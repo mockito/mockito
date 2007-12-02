@@ -40,12 +40,13 @@ public class InvocationTest {
     }
     
     @Test
-    public void shouldBeACitizenOfHashes() {
+    public void shouldNotBeACitizenOfHashes() {
         Map map = new HashMap();
-        map.put(call, "one");
-        map.put(nonEqualCall, "two");
-        
-        assertEquals(2, map.size());
+        try {
+            map.put(call, "one");
+        } catch (RuntimeException e) {
+            assertEquals("hashCode() is not implemented", e.getMessage());
+        }
     }
     
     @Test

@@ -26,8 +26,8 @@ public class ExpectedInvocationTest {
         Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
         
         Map map = new HashMap();
-        map.put(invocation, "one");
-        map.put(invocationTwo, "two");
+        map.put(new ExpectedInvocation(invocation), "one");
+        map.put(new ExpectedInvocation(invocationTwo), "two");
         
         assertEquals(2, map.size());
     }
@@ -39,18 +39,6 @@ public class ExpectedInvocationTest {
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));
-    }
-    
-    @Test
-    public void shouldEqualWhenMatchersEqual() throws Exception {
-        IArgumentMatcher m = new Equals(1);
-        IArgumentMatcher mTwo = new Equals(2);
-        ExpectedInvocation withMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(m));
-        ExpectedInvocation withEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(m));
-        ExpectedInvocation withoutEqualMatchers = new ExpectedInvocation(new InvocationBuilder().toInvocation(), asList(mTwo));
-        
-        assertTrue(withMatchers.equals(withEqualMatchers));
-        assertFalse(withMatchers.equals(withoutEqualMatchers));
     }
     
     @Test

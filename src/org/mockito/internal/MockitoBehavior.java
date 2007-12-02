@@ -11,7 +11,7 @@ import org.mockito.exceptions.*;
 public class MockitoBehavior<T> {
 
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations(new AllInvocationsFinder());
-    private Map<ExpectedInvocation, Result> results = new HashMap<ExpectedInvocation, Result>();
+    private LinkedList<StubbedInvocation> stubbed = new LinkedList<StubbedInvocation>();
 
     private T mock;
     private ExpectedInvocation invocationForStubbing;
@@ -24,7 +24,7 @@ public class MockitoBehavior<T> {
     public void addResult(Result result) {
         assert invocationForStubbing != null;
         registeredInvocations.removeLast();
-        results.put(invocationForStubbing, result);
+        stubbed.addFirst(new StubbedInvocation(invocationForStubbing, result));
     }
     
     public void verify(ExpectedInvocation wanted, VerifyingMode mode) {
@@ -137,9 +137,9 @@ public class MockitoBehavior<T> {
     }
 
     public Object resultFor(Invocation wanted) throws Throwable {
-        for (ExpectedInvocation i : results.keySet()) {
-            if (i.matches(wanted)) {
-                return results.get(i).answer();
+        for (StubbedInvocation s : stubbed) {
+            if (s.matches(wanted)) {
+                return s.getResult().answer();
             }
         }
 

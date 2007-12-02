@@ -65,7 +65,7 @@ public class Invocation {
     }
 
     public int hashCode() {
-        return 1;
+        throw new RuntimeException("hashCode() is not implemented");
     }
 
     private boolean equalArguments(Object[] arguments) {

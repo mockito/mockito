@@ -12,7 +12,7 @@ import org.mockito.internal.matchers.IArgumentMatcher;
 public class ExpectedInvocation {
 
     protected final Invocation invocation;
-    private final List<IArgumentMatcher> matchers;
+    protected final List<IArgumentMatcher> matchers;
 
     public ExpectedInvocation(Invocation invocation, List<IArgumentMatcher> matchers) {
         if (matchers == null) {
@@ -24,18 +24,6 @@ public class ExpectedInvocation {
     
     public ExpectedInvocation(Invocation invocation) {
         this(invocation, Collections.<IArgumentMatcher>emptyList());
-    }
-    
-    public boolean equals(Object o) {
-        if (o == null || !this.getClass().equals(o.getClass()))
-            return false;
-
-        ExpectedInvocation other = (ExpectedInvocation) o;
-        return invocation.equals(other.invocation) && matchers.equals(other.matchers);
-    }
-
-    public int hashCode() {
-        return 1;
     }
 
     public boolean matches(Invocation actual) {
