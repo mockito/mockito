@@ -44,42 +44,104 @@ public class InvalidStateDetectionTest {
     @Test
     public void shouldDetectUnfinishedStubbing() {
         stub(mock.simpleMethod());
+        detects(new OnMethodCallOnMock(), UnfinishedStubbingException.class);
+
+        stub(mock.simpleMethod());
+        detects(new OnStub(), UnfinishedStubbingException.class);
         
-        detects(new OnMethodCallOnMock(), mock, UnfinishedStubbingException.class);
-        detects(new OnStub(), mock, UnfinishedStubbingException.class);
-        detects(new OnStubVoid(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerify(), mock, UnfinishedStubbingException.class);
-        detects(new OnStrictVerify(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerifyZeroInteractions(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerifyNoMoreInteractions(), mock, UnfinishedStubbingException.class);
+        stub(mock.simpleMethod());
+        detects(new OnStubVoid(), UnfinishedStubbingException.class);
+        
+        stub(mock.simpleMethod());
+        detects(new OnVerify(), UnfinishedStubbingException.class);
+        
+        stub(mock.simpleMethod());
+        detects(new OnStrictVerify(), UnfinishedStubbingException.class);
+        
+        stub(mock.simpleMethod());
+        detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
+        
+        stub(mock.simpleMethod());
+        detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
     }
     
     @Test
     public void shouldDetectUnfinishedStubbingVoid() {
         stubVoid(mock);
-        detects(new OnMethodCallOnMock(), mock, UnfinishedStubbingException.class);
-        detects(new OnStub(), mock, UnfinishedStubbingException.class);
-        detects(new OnStubVoid(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerify(), mock, UnfinishedStubbingException.class);
-        detects(new OnStrictVerify(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerifyZeroInteractions(), mock, UnfinishedStubbingException.class);
-        detects(new OnVerifyNoMoreInteractions(), mock, UnfinishedStubbingException.class);
+        detects(new OnMethodCallOnMock(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnStub(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnStubVoid(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnVerify(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnStrictVerify(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
     }
     
     @Test
     public void shouldDetectUnfinishedVerification() {
         verify(mock);
-        detects(new OnStub(), mock, UnfinishedVerificationException.class);
-        detects(new OnStubVoid(), mock, UnfinishedVerificationException.class);
-        detects(new OnVerify(), mock, UnfinishedVerificationException.class);
-        detects(new OnStrictVerify(), mock, UnfinishedVerificationException.class);
-        detects(new OnVerifyZeroInteractions(), mock, UnfinishedVerificationException.class);
-        detects(new OnVerifyNoMoreInteractions(), mock, UnfinishedVerificationException.class);
+        detects(new OnStub(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnStubVoid(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnVerify(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnStrictVerify(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnVerifyZeroInteractions(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
+    }
+    
+    @Test
+    public void shouldCorrectStateAfterDetectingUnfinishedStubbing() {
+        stubVoid(mock).toThrow(new RuntimeException());
+        
+        try {
+            stubVoid(mock).toThrow(new RuntimeException()).on().oneArg(true);
+            fail();
+        } catch (UnfinishedStubbingException e) {}
+        
+        stubVoid(mock).toThrow(new RuntimeException()).on().oneArg(true);
+        try {
+            mock.oneArg(true);
+            fail();
+        } catch (RuntimeException e) {}
+    }
+    
+    @Test
+    public void shouldCorrectStateAfterDetectingUnfinishedVerification() {
+        mock.simpleMethod();
+        verify(mock);
+        
+        try {
+            verify(mock).simpleMethod();
+            fail();
+        } catch (UnfinishedVerificationException e) {}
+        
+        verify(mock).simpleMethod();
     }
     
     @Test
     @Ignore
-    public void shouldCorrectStateAfterDetectingInvalidity() {
+    public void shouldDetectProblemsWithMatchers() {
         
     }
     
@@ -129,7 +191,7 @@ public class InvalidStateDetectionTest {
         }
     }
     
-    private void detects(DetectsInvalidState detector, IMethods mock, Class expected) {
+    private void detects(DetectsInvalidState detector, Class expected) {
         try {
             detector.detect(mock);
             fail("Should throw an exception");

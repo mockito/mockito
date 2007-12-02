@@ -43,21 +43,21 @@ public class ArrayEquals extends Equals {
                 && (actual == null || actual instanceof Object[])) {
             return Arrays.equals((Object[]) wanted, (Object[]) actual);
         } else {
+            //TODO not tested
             return super.matches(actual);
         }
     }
 
     public void appendTo(StringBuffer buffer) {
-        //TODO not tested
         if (getWanted() != null && getWanted().getClass().isArray()) {
             appendArray(createObjectArray(getWanted()), buffer);
         } else {
+            //TODO not tested
             super.appendTo(buffer);
         }
     }
 
     private void appendArray(Object[] array, StringBuffer buffer) {
-        //TODO not tested
         buffer.append("[");
         for (int i = 0; i < array.length; i++) {
             new Equals(array[i]).appendTo(buffer);

@@ -104,8 +104,8 @@ public class Exceptions {
         throw new UnfinishedStubbingException(join(
                 "Unifinished stubbing detected, e.g. toReturn() is missing",
                 "Examples of proper stubbing:",
-                "stub(mock.isOk()).toReturn(true);",
-                "stub(mock.isOk()).toThrow(exception);",
+                "stub(mock.isOk()).andReturn(true);",
+                "stub(mock.isOk()).andThrows(exception);",
                 "stubVoid(mock).toThrow(exception).on().someMethod();"
         ));
     }

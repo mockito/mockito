@@ -62,10 +62,12 @@ public class MockitoState {
 
     public synchronized void validateState() {
         if (verifyingModeLocal.get() != null) {
+            verifyingModeLocal.set(null);
             Exceptions.unfinishedVerificationException();
         }
         
         if (stubbingModeLocal.get() != null) {
+            stubbingModeLocal.set(null);
             Exceptions.unfinishedStubbing();
         }
     }
