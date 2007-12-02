@@ -9,15 +9,21 @@ import static org.mockito.Mockito.*;
 
 import java.util.*;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.exceptions.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest {
 
+    private LinkedList mock;
+    
+    @Before
+    public void setup() {
+        mock = mock(LinkedList.class);
+    }
+
     @Test
     public void shouldStubbingNotRegisterRedundantInteractions() throws Exception {
-        List mock = mock(List.class);
         stub(mock.add("one")).andReturn(true);
         stub(mock.add("two")).andReturn(true);
 
@@ -29,8 +35,6 @@ public class NoMoreInteractionsVerificationTest {
     
     @Test
     public void shouldVerifyWhenWantedNumberOfInvocationsUsed() throws Exception {
-        List mock = mock(List.class);
-
         mock.add("one");
         mock.add("one");
         mock.add("one");
@@ -42,8 +46,6 @@ public class NoMoreInteractionsVerificationTest {
     
     @Test
     public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() throws Exception {
-        List mock = mock(List.class);
-
         verifyNoMoreInteractions(mock);
         verifyNoMoreInteractions(mock);
         
@@ -53,30 +55,22 @@ public class NoMoreInteractionsVerificationTest {
     
     @Test
     public void shouldFailZeroInteractionsVerification() throws Exception {
-        List mock = mock(List.class);
-
         mock.clear();
         
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationError e) {
-            //cool
-        }
+        } catch (VerificationError e) {}
     }
     
     @Test
     public void shouldFailNoMoreInteractionsVerification() throws Exception {
-        List mock = mock(List.class);
-
         mock.clear();
         
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {
-            //cool
-        }
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -95,8 +89,6 @@ public class NoMoreInteractionsVerificationTest {
         try {
             verifyZeroInteractions(map);
             fail();
-        } catch (VerificationError e) {
-            //cool
-        }
+        } catch (VerificationError e) {}
     }
 }

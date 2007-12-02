@@ -25,7 +25,7 @@ public interface IMethods {
 
     double doubleReturningMethod(int index);
 
-    Object objectReturningMethod(int index);
+    Object objectReturningMethod(Object ... objects);
 
     String oneArg(boolean value);
 
@@ -57,7 +57,7 @@ public interface IMethods {
     
     void differentMethod();
 
-    void simpleMethod(String argument);
+    boolean simpleMethod(String argument);
     
     void simpleMethod(int argument);
     

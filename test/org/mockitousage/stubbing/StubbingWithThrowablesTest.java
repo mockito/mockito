@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.exceptions.MockitoException;
+import org.mockito.exceptions.*;
 
 @SuppressWarnings({"serial", "unchecked"})
 public class StubbingWithThrowablesTest {
@@ -145,10 +145,49 @@ public class StubbingWithThrowablesTest {
         } catch (ExceptionTwo e) {}
     }
     
-    @Ignore
     @Test
-    public void shouldVerifyWhenStubbedWithThrowable() throws Exception {
+    public void shouldStubbingWithThrowableBeVerifiable() {
+        stub(mock.size()).andThrows(new RuntimeException());
+        stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
+        try {
+            mock.size();
+            fail();
+        } catch (RuntimeException e) {}
+        
+        try {
+            mock.clone();
+            fail();
+        } catch (RuntimeException e) {}
+        
+        verify(mock).size();
+        verify(mock).clone();
+        verifyNoMoreInteractions(mock);
+    }
+    
+    @Test
+    public void shouldStubbingWithThrowableFailVerification() {
+        stub(mock.size()).andThrows(new RuntimeException());
+        stubVoid(mock).toThrow(new RuntimeException()).on().clone();
+        
+        verifyZeroInteractions(mock);
+        
+        mock.add("test");
+        
+        try {
+            verify(mock).size();
+            fail();
+        } catch (VerificationError e) {}
+        
+        try {
+            verify(mock).clone();
+            fail();
+        } catch (VerificationError e) {}
+        
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (VerificationError e) {}
     }
     
     private class ExceptionOne extends RuntimeException {};
