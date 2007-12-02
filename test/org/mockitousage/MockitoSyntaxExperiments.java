@@ -59,11 +59,4 @@ public class MockitoSyntaxExperiments {
         assertThat(noMoreInteractions(mock));
         assertThat(zeroInteractions(mock));
     }
-    
-    public void verifiesMocksInOrder() {
-//        verifyInOrder(new Ordering() { void sequence() {
-//            verify(mock).clear();
-//            verify(mock2).clear();
-//        }};);
-    }
 }

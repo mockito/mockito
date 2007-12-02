@@ -57,11 +57,11 @@ public interface IMethods {
     
     void differentMethod();
 
-    boolean simpleMethod(String argument);
+    String simpleMethod(String argument);
     
-    void simpleMethod(int argument);
+    String simpleMethod(int argument);
     
-    void simpleMethod(String argOne, Integer argTwo);
+    String simpleMethod(String argOne, Integer argTwo);
 
     Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree);
 
@@ -91,7 +91,7 @@ public interface IMethods {
 
     void varargsString(int i, String... string);
 
-    void varargsObject(int i, Object... object);
+    Object varargsObject(int i, Object... object);
 
     List<String> listReturningMethod(Object ... objects);
 }
