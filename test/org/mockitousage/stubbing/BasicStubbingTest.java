@@ -7,9 +7,6 @@ package org.mockitousage.stubbing;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.collectionContaining;
-
-import java.util.Arrays;
 
 import org.junit.*;
 import org.mockito.exceptions.VerificationError;
@@ -26,36 +23,6 @@ public class BasicStubbingTest {
     }
     
     @Test
-    public void shouldStubAllMethodsByDefault() throws Exception {
-        assertEquals(0, mock.intReturningMethod(1));
-        assertEquals(0, mock.intReturningMethod(100));
-        
-        assertNull(mock.objectReturningMethod(1));
-        assertNull(mock.objectReturningMethod(100));
-        
-        assertTrue(mock.listReturningMethod(1, 100).isEmpty());
-        assertTrue(mock.listReturningMethod().isEmpty());
-    }
-    
-    @Test
-    public void shouldStubAndLetBeCalledAnyTimes() throws Exception {
-        stub(mock.intReturningMethod(14)).andReturn(14);
-        
-        assertEquals(14, mock.intReturningMethod(14));
-        assertEquals(14, mock.intReturningMethod(14));
-        
-        stub(mock.listReturningMethod()).andReturn(Arrays.asList("elementOne", "elementTwo"));
-        
-        assertThat(mock.listReturningMethod(), collectionContaining("elementOne", "elementTwo"));
-        assertThat(mock.listReturningMethod(), collectionContaining("elementOne", "elementTwo"));
-        
-        stub(mock.objectReturningMethod(10)).andReturn("test");
-        
-        assertEquals("test", mock.objectReturningMethod(10));
-        assertEquals("test", mock.objectReturningMethod(10));
-    }
-    
-    @Test
     public void shouldEvaluateLatestStubbingFirst() throws Exception {
         stub(mock.objectReturningMethod(isA(Integer.class))).andReturn(100);
         stub(mock.objectReturningMethod(200)).andReturn(200);
@@ -63,6 +30,18 @@ public class BasicStubbingTest {
         assertEquals(200, mock.objectReturningMethod(200));
         assertEquals(100, mock.objectReturningMethod(666));
         assertEquals("default behavior should return null", null, mock.objectReturningMethod("blah"));
+    }
+    
+    @Test
+    public void shouldStubbingBeTreatedAsInteraction() throws Exception {
+        stub(mock.booleanReturningMethod(1)).andReturn(true);
+        
+        mock.booleanReturningMethod(1);
+        
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (VerificationError e) {}
     }
     
     @Test
