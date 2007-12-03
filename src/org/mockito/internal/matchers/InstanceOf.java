@@ -17,7 +17,7 @@ public class InstanceOf implements IArgumentMatcher {
         return (actual != null) && clazz.isAssignableFrom(actual.getClass());
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("isA(" + clazz.getName() + ")");
     }
 }

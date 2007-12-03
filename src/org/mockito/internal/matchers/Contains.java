@@ -18,7 +18,7 @@ public class Contains implements IArgumentMatcher {
                 && ((String) actual).indexOf(substring) >= 0;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("contains(\"" + substring + "\")");
     }
 }

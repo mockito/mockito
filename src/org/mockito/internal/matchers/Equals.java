@@ -20,13 +20,13 @@ public class Equals implements IArgumentMatcher {
         return wanted.equals(actual);
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         appendQuoting(buffer);
         buffer.append(wanted);
         appendQuoting(buffer);
     }
 
-    private void appendQuoting(StringBuffer buffer) {
+    private void appendQuoting(StringBuilder buffer) {
         if (wanted instanceof String) {
             buffer.append("\"");
         } else if (wanted instanceof Character) {

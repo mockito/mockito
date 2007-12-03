@@ -18,7 +18,7 @@ public class StartsWith implements IArgumentMatcher {
                 && ((String) actual).startsWith(prefix);
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("startsWith(\"" + prefix + "\")");
     }
 }

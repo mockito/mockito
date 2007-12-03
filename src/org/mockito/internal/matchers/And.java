@@ -25,7 +25,7 @@ public class And implements IArgumentMatcher {
         return true;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("and(");
         for (Iterator<IArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
             it.next().appendTo(buffer);

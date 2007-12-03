@@ -17,7 +17,7 @@ public class Not implements IArgumentMatcher {
         return !first.matches(actual);
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("not(");
         first.appendTo(buffer);
         buffer.append(")");

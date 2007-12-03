@@ -15,7 +15,9 @@ public class ArrayEquals extends Equals {
 
     public boolean matches(Object actual) {
         Object wanted = getWanted();
-        if (wanted instanceof boolean[]
+        if (wanted == null) {
+            return super.matches(actual);
+        } else if (wanted instanceof boolean[]
                 && (actual == null || actual instanceof boolean[])) {
             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
         } else if (wanted instanceof byte[]
@@ -43,21 +45,19 @@ public class ArrayEquals extends Equals {
                 && (actual == null || actual instanceof Object[])) {
             return Arrays.equals((Object[]) wanted, (Object[]) actual);
         } else {
-            //TODO not tested
-            return super.matches(actual);
+            throw new IllegalStateException("Something went really wrong. Arguments passed to ArrayEquals have to be an array!");
         }
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         if (getWanted() != null && getWanted().getClass().isArray()) {
             appendArray(createObjectArray(getWanted()), buffer);
         } else {
-            //TODO not tested
             super.appendTo(buffer);
         }
     }
 
-    private void appendArray(Object[] array, StringBuffer buffer) {
+    private void appendArray(Object[] array, StringBuilder buffer) {
         buffer.append("[");
         for (int i = 0; i < array.length; i++) {
             new Equals(array[i]).appendTo(buffer);

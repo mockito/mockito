@@ -103,8 +103,7 @@ public class Invocation {
 
     //TODO don't use matchers to do printing args. there should be separate thing to print that stuff
     private String getArgumentsString(List<IArgumentMatcher> matchers) {
-        //TODO all StringBuffers need to be StringBuilders...
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append("(");
         for (IArgumentMatcher matcher : matchers) {
             matcher.appendTo(result);

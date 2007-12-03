@@ -16,7 +16,7 @@ public class Null implements IArgumentMatcher {
         return actual == null;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("isNull()");
     }
 }

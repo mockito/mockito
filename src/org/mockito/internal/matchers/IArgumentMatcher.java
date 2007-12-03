@@ -31,5 +31,5 @@ public interface IArgumentMatcher {
      * 
      * @param buffer the buffer to which the string representation is appended.
      */
-    void appendTo(StringBuffer buffer);
+    void appendTo(StringBuilder buffer);
 }

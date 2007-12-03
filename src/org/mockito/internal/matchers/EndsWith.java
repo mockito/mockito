@@ -17,7 +17,7 @@ public class EndsWith implements IArgumentMatcher {
         return (actual instanceof String) && ((String) actual).endsWith(suffix);
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("endsWith(\"" + suffix + "\")");
     }
 }

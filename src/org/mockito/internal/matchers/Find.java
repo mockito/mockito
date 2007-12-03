@@ -20,7 +20,7 @@ public class Find implements IArgumentMatcher {
                 && Pattern.compile(regex).matcher((String) actual).find();
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("find(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")");
     }
 }

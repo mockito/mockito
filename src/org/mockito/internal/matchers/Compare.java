@@ -21,7 +21,7 @@ public class Compare<T> implements IArgumentMatcher {
         this.operator = result;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append(comparator + "(" + wanted + ") " + operator.getSymbol()
                 + " 0");
     }

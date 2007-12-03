@@ -70,7 +70,7 @@ public class ComparableMatchersTest {
         assertEquals(equals, compareTo.matches("b"));
         assertEquals(higher, compareTo.matches("c"));
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         compareTo.appendTo(sb);
         assertEquals(name + "(b)", sb.toString());
     }

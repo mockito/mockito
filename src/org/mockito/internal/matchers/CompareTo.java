@@ -22,7 +22,7 @@ public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMat
         return matchResult(((Comparable) actual).compareTo(wanted));
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append(getName() + "(" + wanted + ")");
     }
     

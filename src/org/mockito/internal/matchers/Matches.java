@@ -17,7 +17,7 @@ public class Matches implements IArgumentMatcher {
         return (actual instanceof String) && ((String) actual).matches(regex);
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\")
                 + "\")");
     }

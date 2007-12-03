@@ -17,7 +17,7 @@ public class Any implements IArgumentMatcher {
         return true;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("<any>");
     }
 }

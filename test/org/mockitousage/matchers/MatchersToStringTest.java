@@ -14,11 +14,11 @@ import org.junit.Test;
 import org.mockito.internal.matchers.*;
 
 public class MatchersToStringTest {
-    private StringBuffer buffer;
+    private StringBuilder buffer;
 
     @Before
     public void setup() {
-        buffer = new StringBuffer();
+        buffer = new StringBuilder();
     }
 
     @Test

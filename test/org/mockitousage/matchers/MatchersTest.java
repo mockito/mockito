@@ -7,13 +7,14 @@ package org.mockitousage.matchers;
 import static org.junit.Assert.*;
 import static org.mockito.CrazyMatchers.*;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
 import org.junit.*;
 import org.mockito.Mockito;
+import org.mockito.exceptions.VerificationError;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -247,6 +248,26 @@ public class MatchersTest {
     }
 
     @Test
+    public void shouldArrayEqualsDealWithNullArray() throws Exception {
+        Object[] nullArray = null;
+        stub(mock.oneArray(aryEq(nullArray))).andReturn("null");
+        
+        assertEquals("null", mock.oneArray(nullArray));
+        
+        mock = mock(IMethods.class);
+        
+        try {
+            verify(mock).oneArray(nullArray);
+        } catch (VerificationError e) {
+            String expected = "\n" +
+            		"Wanted but not invoked:" +
+            		"\n" +
+            		"IMethods.oneArray(null)";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+    
+    @Test
     public void arrayEqualsMatcher() {
         stub(mock.oneArray(aryEq(new boolean[] { true, false, false }))).andReturn("0");
         stub(mock.oneArray(aryEq(new byte[] { 1 }))).andReturn("1");
@@ -258,7 +279,7 @@ public class MatchersTest {
         stub(mock.oneArray(aryEq(new short[] { 1 }))).andReturn("7");
         stub(mock.oneArray(aryEq(new String[] { "Test" }))).andReturn("8");
         stub(mock.oneArray(aryEq(new Object[] { "Test", new Integer(4) }))).andReturn("9");
-
+        
         assertEquals("0", mock.oneArray(new boolean[] { true, false, false }));
         assertEquals("1", mock.oneArray(new byte[] { 1 }));
         assertEquals("2", mock.oneArray(new char[] { 1 }));

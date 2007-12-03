@@ -17,7 +17,7 @@ public class NotNull implements IArgumentMatcher {
         return actual != null;
     }
 
-    public void appendTo(StringBuffer buffer) {
+    public void appendTo(StringBuilder buffer) {
         buffer.append("notNull()");
     }
 }
