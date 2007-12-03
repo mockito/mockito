@@ -69,6 +69,12 @@ public class Invocation {
     }
 
     private boolean equalArguments(Object[] arguments) {
+        //TODO find out if the bottom code has any sense (it's easymock's legacy)
+        //and if we can replace it with Arrays.equals()
+        //e.g prove that we should treat the following as not equal calls for chunking evaluation        
+        //mock.add(new String("one"));
+        //mock.add("one");
+        
         if (this.arguments.length != arguments.length) {
             return false;
         }

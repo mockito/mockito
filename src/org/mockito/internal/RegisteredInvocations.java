@@ -53,13 +53,13 @@ public class RegisteredInvocations {
         List<Invocation> allInvocations = invocationsFinder.allInvocationsInOrder(allMocksToBeVerifiedInOrder);
         allInvocationsInOrder.addAll(allInvocations);
         
-        List<InvocationChunk> chunks = new LinkedList<InvocationChunk>();
+        LinkedList<InvocationChunk> chunks = new LinkedList<InvocationChunk>();
         for (Invocation i : allInvocationsInOrder) {
             if (i.isVerifiedInOrder()) {
                 continue;
             }
             if (!chunks.isEmpty() 
-                    && chunks.get(chunks.size()-1).getInvocation().equals(i)) {
+                    && chunks.getLast().getInvocation().equals(i)) {
                 chunks.get(chunks.size()-1).add(i);
             } else {
                 chunks.add(new InvocationChunk(i));
