@@ -101,7 +101,6 @@ public class Invocation {
         return getMockAndMethodName() + getArgumentsString(matchers);
     }
 
-    //TODO don't use matchers to do printing args. there should be separate thing to print that stuff
     private String getArgumentsString(List<IArgumentMatcher> matchers) {
         StringBuilder result = new StringBuilder();
         result.append("(");
