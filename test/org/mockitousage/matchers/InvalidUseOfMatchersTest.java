@@ -10,11 +10,12 @@ import static org.mockito.Matchers.eq;
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
-import org.mockito.internal.*;
+import org.mockito.internal.StateResetter;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class InvalidUseOfMatchersTest {
+public class InvalidUseOfMatchersTest extends RequiresValidState {
     
     private IMethods mock;
     

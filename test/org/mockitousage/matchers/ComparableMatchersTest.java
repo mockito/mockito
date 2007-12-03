@@ -10,8 +10,9 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.mockito.internal.matchers.*;
+import org.mockito.util.RequiresValidState;
 
-public class ComparableMatchersTest {
+public class ComparableMatchersTest extends RequiresValidState {
 
     @Test
     public void testNotComparable() {

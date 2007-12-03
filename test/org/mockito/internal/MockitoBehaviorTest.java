@@ -6,12 +6,13 @@ package org.mockito.internal;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.*;
+import java.util.Arrays;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class MockitoBehaviorTest {
+public class MockitoBehaviorTest extends RequiresValidState {
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {

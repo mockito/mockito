@@ -7,8 +7,9 @@ package org.mockito.exceptions;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
-public class MockitoErrorTest {
+public class MockitoErrorTest extends RequiresValidState {
 
     private void throwIt() {
         throw new MockitoException("boom");

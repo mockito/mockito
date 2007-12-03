@@ -5,16 +5,17 @@
 package org.mockito.internal;
 
 import static java.util.Arrays.asList;
-import static org.mockito.internal.VerifyingMode.*;
-import static java.util.Collections.*;
+import static java.util.Collections.EMPTY_LIST;
 import static org.junit.Assert.*;
+import static org.mockito.internal.VerifyingMode.*;
 
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class RegisteredInvocationsTest {
+public class RegisteredInvocationsTest extends RequiresValidState {
 
     private RegisteredInvocations registered;
     private Invocation simpleMethodInvocation;

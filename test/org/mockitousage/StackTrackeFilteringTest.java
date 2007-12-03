@@ -12,8 +12,9 @@ import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
+import org.mockito.util.RequiresValidState;
 
-public class StackTrackeFilteringTest {
+public class StackTrackeFilteringTest extends RequiresValidState {
     
     private IMethods mock;
 

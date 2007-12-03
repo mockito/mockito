@@ -4,22 +4,20 @@
  */
 package org.mockito.internal;
 
+import static org.junit.Assert.assertNotSame;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import static org.junit.Assert.*;
 
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.Factory;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
+import net.sf.cglib.proxy.*;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
 /**
  * This test case is used to make sure that the way cglib is used is providing the expected behavior
  */
-public class CglibTest {
+public class CglibTest extends RequiresValidState {
 
     /**
      * Check that an interceptor is used by only one instance of a class

@@ -10,9 +10,10 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.internal.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class InvocationTest {
+public class InvocationTest extends RequiresValidState {
 
     private Invocation call;
     private Invocation equalCall;

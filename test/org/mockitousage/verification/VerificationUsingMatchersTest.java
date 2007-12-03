@@ -4,17 +4,19 @@
  */
 package org.mockitousage.verification;
 
-import static org.mockito.CrazyMatchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.CrazyMatchers.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
 
 import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationUsingMatchersTest {
+public class VerificationUsingMatchersTest extends RequiresValidState {
     private IMethods mock;
 
     @Before

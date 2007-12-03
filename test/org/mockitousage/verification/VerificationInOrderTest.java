@@ -10,10 +10,11 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.Strictly;
 import org.mockito.exceptions.*;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationInOrderTest {
+public class VerificationInOrderTest extends RequiresValidState {
     
     private IMethods mockOne;
     private IMethods mockTwo;

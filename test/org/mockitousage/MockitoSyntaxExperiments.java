@@ -4,8 +4,10 @@
  */
 package org.mockitousage;
 
-import java.util.List;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoExperimental.*;
+
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockitoSyntaxExperiments {

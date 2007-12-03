@@ -12,9 +12,10 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.exceptions.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings({"serial", "unchecked"})
-public class StubbingWithThrowablesTest {
+public class StubbingWithThrowablesTest extends RequiresValidState {
 
     private LinkedList mock;
     private Map mockTwo;

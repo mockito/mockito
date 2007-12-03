@@ -7,14 +7,15 @@ package org.mockitousage.verification;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
-import java.util.*;
+import java.util.List;
 
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class BasicVerificationTest {
+public class BasicVerificationTest extends RequiresValidState {
 
     private List mock;
     private List mockTwo;

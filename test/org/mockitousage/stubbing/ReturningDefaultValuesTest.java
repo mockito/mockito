@@ -10,10 +10,11 @@ import java.util.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class ReturningDefaultValuesTest {
+public class ReturningDefaultValuesTest extends RequiresValidState {
 
     @Test
     public void shouldReturnAllKindsOfPrimitives() throws Exception {

@@ -4,16 +4,15 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.internal.matchers.*;
+import org.mockito.util.RequiresValidState;
 
-public class MatchersToStringTest {
+public class MatchersToStringTest extends RequiresValidState {
     private StringBuilder buffer;
 
     @Before

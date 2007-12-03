@@ -4,16 +4,17 @@
  */
 package org.mockitousage;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 
-public class UsingVarargsTest {
+public class UsingVarargsTest extends RequiresValidState {
 
     private interface IVarArgs {
         public void withStringVarargs(int value, String... s);

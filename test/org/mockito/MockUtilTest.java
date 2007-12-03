@@ -13,8 +13,9 @@ import net.sf.cglib.proxy.*;
 
 import org.junit.Test;
 import org.mockito.exceptions.*;
+import org.mockito.util.RequiresValidState;
 
-public class MockUtilTest {
+public class MockUtilTest extends RequiresValidState {
 
     @SuppressWarnings("unchecked")
     @Test 

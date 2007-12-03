@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
+import org.mockito.util.RequiresValidState;
 
 /**
  * invalid state happens if:
@@ -30,7 +31,7 @@ import org.mockito.internal.StateResetter;
  *    -on stubVoid
  */
 @SuppressWarnings("unchecked")
-public class InvalidStateDetectionTest {
+public class InvalidStateDetectionTest extends RequiresValidState {
 
     private IMethods mock;
 

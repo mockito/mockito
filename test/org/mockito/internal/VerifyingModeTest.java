@@ -4,13 +4,13 @@
  */
 package org.mockito.internal;
 
-import org.junit.Test;
-import org.mockito.exceptions.MockitoException;
-import org.mockito.internal.VerifyingMode;
-
 import static org.junit.Assert.*;
 
-public class VerifyingModeTest {
+import org.junit.Test;
+import org.mockito.exceptions.MockitoException;
+import org.mockito.util.RequiresValidState;
+
+public class VerifyingModeTest extends RequiresValidState {
 
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {

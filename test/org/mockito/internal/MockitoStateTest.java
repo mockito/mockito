@@ -8,8 +8,9 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 import org.mockito.exceptions.MockitoException;
+import org.mockito.util.RequiresValidState;
 
-public class MockitoStateTest {
+public class MockitoStateTest extends RequiresValidState {
 
     private MockitoState mockitoState;
 

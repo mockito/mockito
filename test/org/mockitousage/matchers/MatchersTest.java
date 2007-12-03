@@ -15,10 +15,11 @@ import java.util.HashMap;
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class MatchersTest {
+public class MatchersTest extends RequiresValidState {
     private IMethods mock;
 
     @Before

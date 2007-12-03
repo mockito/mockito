@@ -7,9 +7,10 @@ package org.mockito.internal.matchers;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
 
-public class EqualsTest {
+public class EqualsTest extends RequiresValidState {
     
     @Test
     public void shouldBeEqual() {

@@ -10,10 +10,11 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class BasicStubbingTest {
+public class BasicStubbingTest extends RequiresValidState {
 
     private IMethods mock;
 

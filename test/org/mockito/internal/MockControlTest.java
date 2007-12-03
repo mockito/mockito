@@ -9,9 +9,10 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.mockito.exceptions.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class MockControlTest {
+public class MockControlTest extends RequiresValidState {
     
     @Before
     @After

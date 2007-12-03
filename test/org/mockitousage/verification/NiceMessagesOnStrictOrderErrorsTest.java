@@ -11,9 +11,10 @@ import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
-public class NiceMessagesOnStrictOrderErrorsTest {
+public class NiceMessagesOnStrictOrderErrorsTest extends RequiresValidState {
     
     private IMethods one;
     private IMethods two;

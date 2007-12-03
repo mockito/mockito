@@ -9,8 +9,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.util.RequiresValidState;
 
-public class ReplacingObjectMethodsTest {
+public class ReplacingObjectMethodsTest extends RequiresValidState {
 
     private interface DummyInterface {}
     private class DummyClass {}

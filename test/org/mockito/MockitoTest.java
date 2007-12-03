@@ -11,9 +11,10 @@ import java.util.List;
 import org.junit.*;
 import org.mockito.exceptions.NotAMockException;
 import org.mockito.internal.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class MockitoTest {
+public class MockitoTest extends RequiresValidState {
 
     private String notMock;
 

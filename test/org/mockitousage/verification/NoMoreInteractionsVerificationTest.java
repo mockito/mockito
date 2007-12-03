@@ -11,9 +11,10 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class NoMoreInteractionsVerificationTest {
+public class NoMoreInteractionsVerificationTest extends RequiresValidState {
 
     private LinkedList mock;
     

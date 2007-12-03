@@ -6,15 +6,16 @@ package org.mockitousage.matchers;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.CrazyMatchers.startsWith;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationAndStubbingUsingMatchersTest {
+public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState {
     private IMethods one;
     private IMethods two;
     private IMethods three;

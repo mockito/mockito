@@ -10,9 +10,10 @@ import org.junit.*;
 import org.mockito.Strictly;
 import org.mockito.exceptions.*;
 import org.mockito.internal.StateResetter;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class InvalidUsageTest {
+public class InvalidUsageTest extends RequiresValidState {
 
     private IMethods mock;
     private IMethods mockTwo;

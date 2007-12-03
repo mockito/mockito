@@ -4,16 +4,17 @@
  */
 package org.mockito.internal;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
-import static java.util.Arrays.*;
 
 import java.util.*;
 
 import org.junit.Test;
 import org.mockito.internal.matchers.*;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class ExpectedInvocationTest {
+public class ExpectedInvocationTest extends RequiresValidState {
 
     @Test(expected=IllegalArgumentException.class)
     public void shouldScreamWhenMatchersNull() throws Exception {

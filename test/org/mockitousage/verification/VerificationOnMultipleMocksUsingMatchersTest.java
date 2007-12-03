@@ -4,15 +4,17 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class VerificationOnMultipleMocksUsingMatchersTest {
+public class VerificationOnMultipleMocksUsingMatchersTest extends RequiresValidState {
 
     @Test
     public void shouldVerifyUsingMatchers() throws Exception {

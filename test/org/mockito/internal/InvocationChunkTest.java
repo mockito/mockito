@@ -4,10 +4,12 @@
  */
 package org.mockito.internal;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-public class InvocationChunkTest {
+import org.junit.Test;
+import org.mockito.util.RequiresValidState;
+
+public class InvocationChunkTest extends RequiresValidState {
 
     @Test
     public void shouldMarkAllAsVerified() throws Exception {

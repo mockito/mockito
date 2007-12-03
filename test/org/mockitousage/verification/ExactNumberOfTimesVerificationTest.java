@@ -11,9 +11,10 @@ import java.util.LinkedList;
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.NumberOfInvocationsError;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class ExactNumberOfTimesVerificationTest {
+public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
 
     private LinkedList mock;
     

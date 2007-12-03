@@ -9,8 +9,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
-public class ToTypeMappingsTest {
+public class ToTypeMappingsTest extends RequiresValidState {
     
     @SuppressWarnings("unchecked")
     @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {

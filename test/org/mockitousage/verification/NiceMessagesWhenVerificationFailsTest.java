@@ -6,14 +6,16 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
 import static org.mockito.CrazyMatchers.aryEq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
-public class NiceMessagesWhenVerificationFailsTest {
+public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
     
     private IMethods mock;
 

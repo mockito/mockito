@@ -10,8 +10,9 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.Strictly;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 
-public class IncorectBindingPuzzleFixedTest {
+public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
     private Super mock;
     

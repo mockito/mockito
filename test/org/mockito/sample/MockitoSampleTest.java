@@ -3,13 +3,15 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.sample;
-import java.util.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
+import org.mockito.util.RequiresValidState;
 
-public class MockitoSampleTest {
+public class MockitoSampleTest extends RequiresValidState {
     
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {

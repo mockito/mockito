@@ -4,17 +4,18 @@
  */
 package org.mockitousage.verification;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 import java.util.List;
 
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.VerificationError;
+import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class AtLeastOnceVerificationTest {
+public class AtLeastOnceVerificationTest extends RequiresValidState {
 
     private List mock;
     private List mockTwo;
