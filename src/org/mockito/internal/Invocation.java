@@ -69,40 +69,7 @@ public class Invocation {
     }
 
     private boolean equalArguments(Object[] arguments) {
-        //TODO find out if the bottom code has any sense (it's easymock's legacy)
-        //and if we can replace it with Arrays.equals()
-        //e.g prove that we should treat the following as not equal calls for chunking evaluation        
-        //mock.add(new String("one"));
-        //mock.add("one");
-        
-        if (this.arguments.length != arguments.length) {
-            return false;
-        }
-        for (int i = 0; i < this.arguments.length; i++) {
-            Object myArgument = this.arguments[i];
-            Object otherArgument = arguments[i];
-
-            if (isPrimitiveParameter(i)) {
-                if (!myArgument.equals(otherArgument)) {
-                    return false;
-                }
-            } else {
-                if (myArgument != otherArgument) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean isPrimitiveParameter(int parameterPosition) {
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        if (method.isVarArgs()) {
-            //TODO not tested?
-            parameterPosition = Math.min(parameterPosition,
-                    parameterTypes.length - 1);
-        }
-        return parameterTypes[parameterPosition].isPrimitive();
+        return Arrays.equals(arguments, this.arguments);
     }
 
     private String getMockAndMethodName() {

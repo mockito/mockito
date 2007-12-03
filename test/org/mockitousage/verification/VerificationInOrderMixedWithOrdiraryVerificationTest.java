@@ -120,4 +120,42 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest {
     public void shouldScreamWhenNotStrictMockPassedToStrictly() {
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(1);
     } 
+    
+    @Test
+    public void shouldUseEqualsToVerifyMethodArguments() {
+        mockOne = mock(IMethods.class);
+        
+        String textOne = "test";
+        String textTwo = new String(textOne);
+        
+        assertEquals(textOne, textTwo);
+        assertNotSame(textOne, textTwo);
+        
+        mockOne.simpleMethod(textOne);
+        mockOne.simpleMethod(textTwo);
+        
+        verify(mockOne, 2).simpleMethod(textOne);
+        
+        strictly = createStrictOrderVerifier(mockOne);
+        strictly.verify(mockOne, 2).simpleMethod(textOne);
+    } 
+    
+    @Test
+    public void shouldUseEqualsToVerifyMethodVarargs() {
+        mockOne = mock(IMethods.class);
+        
+        String textOne = "test";
+        String textTwo = new String(textOne);
+        
+        assertEquals(textOne, textTwo);
+        assertNotSame(textOne, textTwo);
+        
+        mockOne.varargsObject(1, textOne, textOne);
+        mockOne.varargsObject(1, textTwo, textTwo);
+        
+        verify(mockOne, 2).varargsObject(1, textOne, textOne);
+        
+        strictly = createStrictOrderVerifier(mockOne);
+        strictly.verify(mockOne, 2).varargsObject(1, textOne, textOne);
+    } 
 }

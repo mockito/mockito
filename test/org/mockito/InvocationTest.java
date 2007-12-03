@@ -17,7 +17,7 @@ public class InvocationTest {
     private Invocation call;
     private Invocation equalCall;
     private Invocation nonEqualCall;
-    private Invocation newStringObjectShouldNotBeEqual;
+    private Invocation callWithNewStringInstance;
 
     @Before
     public void setup() throws SecurityException, NoSuchMethodException {
@@ -25,7 +25,7 @@ public class InvocationTest {
         equalCall       = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
         nonEqualCall    = new InvocationBuilder().args("X").mock("mock").seq(3).toInvocation();
         
-        newStringObjectShouldNotBeEqual    = new InvocationBuilder().args(new String(" ")).mock("mock").seq(4).toInvocation();
+        callWithNewStringInstance    = new InvocationBuilder().args(new String(" ")).mock("mock").seq(4).toInvocation();
     }
 
     @Test
@@ -34,7 +34,7 @@ public class InvocationTest {
         assertFalse(call.equals(""));
         assertTrue(call.equals(equalCall));
         assertFalse(call.equals(nonEqualCall));
-        assertFalse(call.equals(newStringObjectShouldNotBeEqual));
+        assertTrue(call.equals(callWithNewStringInstance));
     }
     
     @Test
