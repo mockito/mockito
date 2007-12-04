@@ -16,22 +16,15 @@ import org.mockito.util.RequiresValidState;
 @SuppressWarnings("unchecked")
 public class MockitoTest extends RequiresValidState {
 
-    private String notMock;
-
-    @Before
+    @Before @After
     public void setup() {
-        StateResetter.reset();
-        notMock = "i'm not a notMock";
-    }
-    
-    @After
-    public void resetState() {
         StateResetter.reset();
     }
     
     @Test
     public void shouldRemoveStubbedControlFromStateWhenStubbing() {
         List mock = Mockito.mock(List.class);
+//        System.out.println("[" + Thread.currentThread().getId() + "] - stubbing...");
         Mockito.stub(mock.add("test")).andReturn(true);
         
         assertNull(MockitoState.instance().pullControlToBeStubbed());
@@ -39,31 +32,31 @@ public class MockitoTest extends RequiresValidState {
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifying() {
-        Mockito.verify(notMock);
+        Mockito.verify("notMock");
     }
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
-        Mockito.verify(notMock, 19);
+        Mockito.verify("notMock", 19);
     }
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingNoMoreInteractions() {
-        Mockito.verifyNoMoreInteractions(notMock);
+        Mockito.verifyNoMoreInteractions("notMock");
     }
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingZeroInteractions() {
-        Mockito.verifyZeroInteractions(notMock);
+        Mockito.verifyZeroInteractions("notMock");
     }
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenStubbingVoid() {
-        Mockito.stubVoid(notMock);
+        Mockito.stubVoid("notMock");
     }
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenGettingStrictVerifier() {
-        Mockito.createStrictOrderVerifier(notMock);
+        Mockito.createStrictOrderVerifier("notMock");
     }
 }

@@ -16,7 +16,7 @@ public class Mockito extends Matchers {
     
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockControl<T> mockControl = new MockControl<T>(MockitoState.instance(), LastArguments.instance());
+        MockControl<T> mockControl = new MockControl<T>();
         return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
                 classToMock, mockControl));
     }

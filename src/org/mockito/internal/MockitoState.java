@@ -10,7 +10,8 @@ import org.mockito.exceptions.*;
 public class MockitoState {
     
     //TODO this has to be thready singleton
-    static MockitoState INSTANCE = new MockitoState();
+    //look how many synchronized stuff we can get rid off
+    private static MockitoState INSTANCE = new MockitoState();
     
     private final ThreadLocal<MockControl> lastControl = new ThreadLocal<MockControl>();
     private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
@@ -19,7 +20,7 @@ public class MockitoState {
 
     MockitoState() {}
     
-    public static MockitoState instance() {
+    public static synchronized MockitoState instance() {
         return INSTANCE;
     }
     
@@ -81,5 +82,15 @@ public class MockitoState {
                 ", verifyingMode: " + verifyingModeLocal.get() +
                 ", invocationSequenceNumber: " + invocationSequenceNumber.get() +
                 ", stubbingModeLocal: " + stubbingModeLocal.get();
+    }
+
+    synchronized static void setInstance(MockitoState mockitoState) {
+        INSTANCE = mockitoState;
+    }
+
+    synchronized void reset() {
+        stubbingModeLocal.set(null);
+        verifyingModeLocal.set(null);
+        invocationSequenceNumber.set(null);
     }
 }

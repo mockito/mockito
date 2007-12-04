@@ -22,20 +22,16 @@ public class MockControlTest extends RequiresValidState {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
-        MockitoState state = MockitoState.instance(); 
-        LastArguments lastArguments = LastArguments.instance();
+        LastArguments.instance().reportMatcher(new Equals("test"));
+        MockitoState.instance().verifyingStarted(VerifyingMode.atLeastOnce());
         
-        lastArguments.reportMatcher(new Equals("test"));
-        state.verifyingStarted(VerifyingMode.atLeastOnce());
-        
-        MockControl control = new MockControl(state, lastArguments);
+        MockControl control = new MockControl();
 
         try {
             control.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});
             fail();
-        } catch (InvalidUseOfMatchersException e) {
-        }
+        } catch (InvalidUseOfMatchersException e) {}
         
-        assertNull(state.pullVerifyingMode());
+        assertNull(MockitoState.instance().pullVerifyingMode());
     }
 }

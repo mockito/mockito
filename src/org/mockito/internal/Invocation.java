@@ -88,7 +88,8 @@ public class Invocation {
     private List<IArgumentMatcher> argumentsToMatchers() {
         List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
         for (Object arg : this.arguments) {
-            if (arg.getClass().isArray()) {
+            //TODO cover the arg == null scenario
+            if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));
             } else {
                 matchers.add(new Equals(arg));

@@ -17,4 +17,9 @@ public class StubbedInvocation extends ExpectedInvocation {
     public Result getResult() {
         return result;
     }
+    
+    @Override
+    public String toString() {
+        return super.toString() + " stubbed with: " + result.toString();
+    }
 }

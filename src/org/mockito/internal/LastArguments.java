@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import java.util.*;
 
-import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.exceptions.*;
 import org.mockito.internal.matchers.*;
 
 public class LastArguments {
@@ -15,7 +15,8 @@ public class LastArguments {
     
     private final ThreadLocal<Stack<IArgumentMatcher>> threadToArgumentMatcherStack = new ThreadLocal<Stack<IArgumentMatcher>>();
 
-    public static LastArguments instance() {
+    //does everything needs to be synchronized
+    public static synchronized LastArguments instance() {
         return INSTANCE;
     }
     
@@ -69,14 +70,33 @@ public class LastArguments {
 
     private void assertState(boolean toAssert, String message) {
         if (!toAssert) {
-            threadToArgumentMatcherStack.remove();
+            if (threadToArgumentMatcherStack.get() != null) 
+                threadToArgumentMatcherStack.get().clear();
             throw new InvalidUseOfMatchersException(message);
         }
     }
 
-    public void reportOr(int count) {
+    public synchronized void reportOr(int count) {
         Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
         assertState(stack != null, missingMatchers());
         stack.push(new Or(popLastArgumentMatchers(count)));
+    }
+
+    static synchronized void setInstance(LastArguments lastArguments) {
+        INSTANCE = lastArguments;
+    }
+
+    public synchronized void validateState() {
+        if (threadToArgumentMatcherStack.get() != null && !threadToArgumentMatcherStack.get().isEmpty()) {
+            threadToArgumentMatcherStack.get().clear();
+            throw new MockitoException("invalid arguments state");
+        }
+    }
+
+    //TODO crap, needs to be TL singleton
+    synchronized void reset() {
+        if (threadToArgumentMatcherStack.get() != null) {
+            threadToArgumentMatcherStack.get().clear();
+        }
     }
 }
