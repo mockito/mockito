@@ -12,9 +12,9 @@ public class MockitoState {
     private static ThreadLocal<MockitoState> INSTANCE = new ThreadLocal<MockitoState>();
         
     private MockControl lastControl;
-    private VerifyingMode verifyingModeLocal;
+    private VerifyingMode verifyingMode;
     private int invocationSequenceNumber = 1;
-    private boolean stubbingModeLocal = false;
+    private boolean stubbingInProgress = false;
 
     public static MockitoState instance() {
         if (INSTANCE.get() == null) {
@@ -35,12 +35,12 @@ public class MockitoState {
     
     public void verifyingStarted(VerifyingMode verify) {
         validateState();
-        verifyingModeLocal = verify;
+        verifyingMode = verify;
     }
 
     public VerifyingMode pullVerifyingMode() {
-        VerifyingMode temp = verifyingModeLocal;
-        verifyingModeLocal = null;
+        VerifyingMode temp = verifyingMode;
+        verifyingMode = null;
         return temp;
     }
 
@@ -50,35 +50,35 @@ public class MockitoState {
 
     public void stubbingStarted() {
         validateState();
-        stubbingModeLocal = true;
+        stubbingInProgress = true;
     }
 
     public void validateState() {
-        if (verifyingModeLocal != null) {
-            verifyingModeLocal = null;
+        if (verifyingMode != null) {
+            verifyingMode = null;
             Exceptions.unfinishedVerificationException();
         }
         
-        if (stubbingModeLocal) {
-            stubbingModeLocal = false;
+        if (stubbingInProgress) {
+            stubbingInProgress = false;
             Exceptions.unfinishedStubbing();
         }
     }
 
     public void stubbingCompleted() {
-        stubbingModeLocal = false;
+        stubbingInProgress = false;
     }
     
     public String toString() {
         return  "lastControl: " + lastControl + 
-                ", verifyingMode: " + verifyingModeLocal +
-                ", invocationSequenceNumber: " + invocationSequenceNumber +
-                ", stubbingModeLocal: " + stubbingModeLocal;
+        ", verifyingMode: " + verifyingMode +
+        ", invocationSequenceNumber: " + invocationSequenceNumber +
+        ", stubbingInProgress: " + stubbingInProgress;
     }
 
-    synchronized void reset() {
-        stubbingModeLocal = false;
-        verifyingModeLocal = null;
+    void reset() {
+        stubbingInProgress = false;
+        verifyingMode = null;
         invocationSequenceNumber = 1;
     }
 }

@@ -11,92 +11,74 @@ import org.mockito.internal.matchers.*;
 
 public class LastArguments {
     
-    static LastArguments INSTANCE = new LastArguments();
+    private static ThreadLocal<LastArguments> INSTANCE = new ThreadLocal<LastArguments>();
     
-    private final ThreadLocal<Stack<IArgumentMatcher>> threadToArgumentMatcherStack = new ThreadLocal<Stack<IArgumentMatcher>>();
+    private Stack<IArgumentMatcher> matcherStack = new Stack<IArgumentMatcher>();
 
-    //does everything needs to be synchronized
-    public static synchronized LastArguments instance() {
-        return INSTANCE;
-    }
-    
-    public synchronized void reportMatcher(IArgumentMatcher matcher) {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        if (stack == null) {
-            stack = new Stack<IArgumentMatcher>();
-            threadToArgumentMatcherStack.set(stack);
+    public static LastArguments instance() {
+        if (INSTANCE.get() == null) {
+            INSTANCE.set(new LastArguments()); 
         }
-        stack.push(matcher);
+        
+        return INSTANCE.get();
+    }
+    
+    public void reportMatcher(IArgumentMatcher matcher) {
+        matcherStack.push(matcher);
     }
 
-    public synchronized List<IArgumentMatcher> pullMatchers() {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        if (stack == null) {
+    public List<IArgumentMatcher> pullMatchers() {
+        if (matcherStack.isEmpty()) {
             return null;
         }
         
-        threadToArgumentMatcherStack.remove();
-        return new ArrayList<IArgumentMatcher>(stack);
+        ArrayList<IArgumentMatcher> matchers = new ArrayList<IArgumentMatcher>(matcherStack);
+        matcherStack.clear();
+        return matchers;
     }
 
-    public synchronized void reportAnd(int count) {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        assertState(stack != null, missingMatchers());
-        stack.push(new And(popLastArgumentMatchers(count)));
+    public void reportAnd(int count) {
+        assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
+        matcherStack.push(new And(popLastArgumentMatchers(count)));
     }
 
-    private String missingMatchers() {
-        return "No matchers found.";
-    }
-
-    public synchronized void reportNot() {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        assertState(stack != null, missingMatchers());
-        stack.push(new Not(popLastArgumentMatchers(1).get(0)));
+    public void reportNot() {
+        assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
+        matcherStack.push(new Not(popLastArgumentMatchers(1).get(0)));
     }
 
     private List<IArgumentMatcher> popLastArgumentMatchers(int count) {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        assertState(stack != null, missingMatchers());
-        assertState(stack.size() >= count,
-                "" + count + " matchers expected, " + stack.size() + " recorded.");
+        assertState(!matcherStack.isEmpty(), "No matchers found.");
+        assertState(matcherStack.size() >= count,
+                "" + count + " matchers expected, " + matcherStack.size() + " recorded.");
         List<IArgumentMatcher> result = new LinkedList<IArgumentMatcher>();
-        result.addAll(stack.subList(stack.size() - count, stack.size()));
+        result.addAll(matcherStack.subList(matcherStack.size() - count, matcherStack.size()));
         for (int i = 0; i < count; i++) {
-            stack.pop();
+            matcherStack.pop();
         }
         return result;
     }
 
     private void assertState(boolean toAssert, String message) {
         if (!toAssert) {
-            if (threadToArgumentMatcherStack.get() != null) 
-                threadToArgumentMatcherStack.get().clear();
+            reset();
             throw new InvalidUseOfMatchersException(message);
         }
     }
 
-    public synchronized void reportOr(int count) {
-        Stack<IArgumentMatcher> stack = threadToArgumentMatcherStack.get();
-        assertState(stack != null, missingMatchers());
-        stack.push(new Or(popLastArgumentMatchers(count)));
+    public void reportOr(int count) {
+        assertState(!matcherStack.isEmpty(), "No matchers found.");
+        matcherStack.push(new Or(popLastArgumentMatchers(count)));
     }
 
-    static synchronized void setInstance(LastArguments lastArguments) {
-        INSTANCE = lastArguments;
-    }
-
-    public synchronized void validateState() {
-        if (threadToArgumentMatcherStack.get() != null && !threadToArgumentMatcherStack.get().isEmpty()) {
-            threadToArgumentMatcherStack.get().clear();
-            throw new MockitoException("invalid arguments state");
+    public void validateState() {
+        if (!matcherStack.isEmpty()) {
+            reset();
+            throw new InvalidUseOfMatchersException("The way matchers were used is inapropriate!");
         }
     }
 
-    //TODO crap, needs to be TL singleton
-    synchronized void reset() {
-        if (threadToArgumentMatcherStack.get() != null) {
-            threadToArgumentMatcherStack.get().clear();
-        }
+    void reset() {
+        matcherStack.clear();
     }
 }

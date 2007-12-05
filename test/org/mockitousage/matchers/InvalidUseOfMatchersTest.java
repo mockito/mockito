@@ -59,7 +59,7 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
         } catch (InvalidUseOfMatchersException e) {
             assertEquals(
                     "\n" +
-            		"No matchers found." +
+            		"No matchers found for Not(?)." +
             		"\n" +
                     "Read more: http://code.google.com/p/mockito/matchers"
             		, e.getMessage());
