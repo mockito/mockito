@@ -1,6 +1,9 @@
 package org.mockitousage;
+import static org.junit.Assert.assertFalse;
+
 import java.util.*;
 
+import org.junit.Test;
 import org.junit.runner.*;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -14,10 +17,12 @@ import org.mockitousage.matchers.*;
 import org.mockitousage.stubbing.*;
 import org.mockitousage.verification.*;
 
-public class MultiThreadedRun {
+public class MultiThreadedTest {
     
-    private static class AllTestsRunner implements Runnable {
+    private static class AllTestsRunner extends Thread {
         
+        private boolean failed;
+
         public void run() {
             Result result = JUnitCore.runClasses(
                     MockitoSampleTest.class, 
@@ -71,25 +76,44 @@ public class MultiThreadedRun {
                     System.err.println(failures.size());
                     for (Failure failure : failures) {
                         System.err.println(failure.getTrace());
+                        failed = true;
                     }
                 }
         }
+
+        public boolean isFailed() {
+            return failed;
+        }
     }
     
-    public static void main(String[] args) throws Exception {
-        List<Thread> threads = new LinkedList<Thread>();
-        for(int i = 1 ; i <= 30 ; i++) {
-            threads.add(new Thread(new AllTestsRunner()));
+    @Test
+    public void shouldRunInMultipleThreads() throws Exception {
+        assertFalse("Run in multiple thread failed", runInMultipleThreads(4));
+    }
+    
+    public static boolean runInMultipleThreads(int numberOfThreads) throws Exception {
+        List<AllTestsRunner> threads = new LinkedList<AllTestsRunner>();
+        for(int i = 1 ; i <= numberOfThreads ; i++) {
+            threads.add(new AllTestsRunner());
         }
         
         for (Thread t : threads) {
             t.start();
         }
         
-        for (Thread t : threads) {
+        boolean failed = false;        
+        for (AllTestsRunner t : threads) {
             t.join();
+            failed = failed? true : t.isFailed();
         }
         
-        System.out.println("Finished!");
+        return failed;
+    }
+    
+    public static void main(String[] args) throws Exception {
+        int numberOfThreads = 100; 
+        runInMultipleThreads(numberOfThreads);
+        
+        System.out.println("Finished running tests in " + numberOfThreads + " threads");
     }
 }

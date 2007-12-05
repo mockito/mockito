@@ -4,93 +4,81 @@
  */
 package org.mockito.internal;
 
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.Exceptions;
 
 @SuppressWarnings("unchecked")
 public class MockitoState {
     
-    //TODO this has to be thready singleton
-    //look how many synchronized stuff we can get rid off
-    private static MockitoState INSTANCE = new MockitoState();
-    
-    private final ThreadLocal<MockControl> lastControl = new ThreadLocal<MockControl>();
-    private final ThreadLocal<VerifyingMode> verifyingModeLocal = new ThreadLocal<VerifyingMode>();
-    private final ThreadLocal<Integer> invocationSequenceNumber = new ThreadLocal<Integer>();
-    private final ThreadLocal<Object> stubbingModeLocal = new ThreadLocal<Object>();
+    private static ThreadLocal<MockitoState> INSTANCE = new ThreadLocal<MockitoState>();
+        
+    private MockControl lastControl;
+    private VerifyingMode verifyingModeLocal;
+    private int invocationSequenceNumber = 1;
+    private boolean stubbingModeLocal = false;
 
-    MockitoState() {}
-    
-    public static synchronized MockitoState instance() {
-        return INSTANCE;
-    }
-    
-    public synchronized void reportControlForStubbing(MockControl mockControl) {
-        lastControl.set(mockControl);
-    }
-
-    public synchronized MockitoExpectation pullControlToBeStubbed() {
-        MockControl control = lastControl.get();
-        lastControl.set(null);
-        return control;
-    }
-    
-    public synchronized void verifyingStarted(VerifyingMode verify) {
-        validateState();
-        verifyingModeLocal.set(verify);
-    }
-
-    public synchronized VerifyingMode pullVerifyingMode() {
-        VerifyingMode verifyingMode = verifyingModeLocal.get();
-        verifyingModeLocal.set(null);
-        return verifyingMode;
-    }
-
-    public synchronized int nextSequenceNumber() {
-        if (invocationSequenceNumber.get() == null) {
-            invocationSequenceNumber.set(1);
-            return 1;
-        } else {
-            int next = invocationSequenceNumber.get() + 1;
-            invocationSequenceNumber.set(next);
-            return next;
+    public static MockitoState instance() {
+        if (INSTANCE.get() == null) {
+            INSTANCE.set(new MockitoState());
         }
+        return INSTANCE.get();
+    }
+    
+    public void reportControlForStubbing(MockControl mockControl) {
+        lastControl = mockControl;
     }
 
-    public synchronized void stubbingStarted() {
+    public MockitoExpectation pullControlToBeStubbed() {
+        MockControl temp = lastControl;
+        lastControl = null;
+        return temp;
+    }
+    
+    public void verifyingStarted(VerifyingMode verify) {
         validateState();
-        stubbingModeLocal.set(new Object());
+        verifyingModeLocal = verify;
     }
 
-    public synchronized void validateState() {
-        if (verifyingModeLocal.get() != null) {
-            verifyingModeLocal.set(null);
+    public VerifyingMode pullVerifyingMode() {
+        VerifyingMode temp = verifyingModeLocal;
+        verifyingModeLocal = null;
+        return temp;
+    }
+
+    public int nextSequenceNumber() {
+        return invocationSequenceNumber++;
+    }
+
+    public void stubbingStarted() {
+        validateState();
+        stubbingModeLocal = true;
+    }
+
+    public void validateState() {
+        if (verifyingModeLocal != null) {
+            verifyingModeLocal = null;
             Exceptions.unfinishedVerificationException();
         }
         
-        if (stubbingModeLocal.get() != null) {
-            stubbingModeLocal.set(null);
+        if (stubbingModeLocal) {
+            stubbingModeLocal = false;
             Exceptions.unfinishedStubbing();
         }
     }
 
-    public synchronized void stubbingCompleted() {
-        stubbingModeLocal.set(null);
+    public void stubbingCompleted() {
+        stubbingModeLocal = false;
     }
     
     public String toString() {
-        return  "lastControl: " + lastControl.get() + 
-                ", verifyingMode: " + verifyingModeLocal.get() +
-                ", invocationSequenceNumber: " + invocationSequenceNumber.get() +
-                ", stubbingModeLocal: " + stubbingModeLocal.get();
-    }
-
-    synchronized static void setInstance(MockitoState mockitoState) {
-        INSTANCE = mockitoState;
+        return  "lastControl: " + lastControl + 
+                ", verifyingMode: " + verifyingModeLocal +
+                ", invocationSequenceNumber: " + invocationSequenceNumber +
+                ", stubbingModeLocal: " + stubbingModeLocal;
     }
 
     synchronized void reset() {
-        stubbingModeLocal.set(null);
-        verifyingModeLocal.set(null);
-        invocationSequenceNumber.set(null);
+        stubbingModeLocal = false;
+        verifyingModeLocal = null;
+        invocationSequenceNumber = 1;
     }
 }
