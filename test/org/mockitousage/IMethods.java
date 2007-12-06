@@ -59,6 +59,8 @@ public interface IMethods {
 
     String simpleMethod(String argument);
     
+    String simpleMethod(Object argument);
+    
     String simpleMethod(int argument);
     
     String simpleMethod(String argOne, Integer argTwo);
