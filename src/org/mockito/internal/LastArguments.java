@@ -61,7 +61,7 @@ public class LastArguments {
 
     private void assertState(boolean toAssert, String message) {
         if (!toAssert) {
-            reset();
+            matcherStack.clear();
             throw new InvalidUseOfMatchersException(message);
         }
     }
@@ -69,16 +69,5 @@ public class LastArguments {
     public void reportOr(int count) {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(count)));
-    }
-
-    public void validateState() {
-        if (!matcherStack.isEmpty()) {
-            reset();
-            throw new InvalidUseOfMatchersException("The way matchers were used is inapropriate!");
-        }
-    }
-
-    void reset() {
-        matcherStack.clear();
     }
 }

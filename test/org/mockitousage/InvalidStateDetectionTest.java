@@ -140,12 +140,6 @@ public class InvalidStateDetectionTest extends RequiresValidState {
         verify(mock).simpleMethod();
     }
     
-    @Test
-    @Ignore
-    public void shouldDetectProblemsWithMatchers() {
-        
-    }
-    
     private static interface DetectsInvalidState {
         void detect(IMethods mock);
     }

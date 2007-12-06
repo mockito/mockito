@@ -7,6 +7,5 @@ public class RequiresValidState {
 
     @Before public void requiresValidState() {
         MockitoState.instance().validateState();
-        LastArguments.instance().validateState();
     }
 }

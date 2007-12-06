@@ -258,7 +258,7 @@ public class MatchersTest extends RequiresValidState {
         mock = mock(IMethods.class);
         
         try {
-            verify(mock).oneArray(nullArray);
+            verify(mock).oneArray(aryEq(nullArray));
         } catch (VerificationError e) {
             String expected = "\n" +
             		"Wanted but not invoked:" +

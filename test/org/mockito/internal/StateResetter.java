@@ -8,6 +8,5 @@ public class StateResetter {
     
     public static void reset() {
         MockitoState.instance().reset();
-        LastArguments.instance().reset();
     }
 }
