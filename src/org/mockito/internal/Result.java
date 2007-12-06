@@ -21,7 +21,7 @@ public class Result implements IAnswer {
                 MockitoStackTraceFilter filter = new MockitoStackTraceFilter();
                 final Throwable filtered = throwable.fillInStackTrace();
                 
-                filter.filterStackTrace(new HasFilterableStackTrace() {
+                filter.filterStackTrace(new HasStackTrace() {
                     public StackTraceElement[] getStackTrace() {
                         return filtered.getStackTrace();
                     }

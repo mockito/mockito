@@ -6,7 +6,7 @@ package org.mockitousage;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.firstMethodOnStackEqualsTo;
+import static org.mockito.util.ExtraMatchers.hasFirstMethodInStackTrace;
 
 import org.junit.*;
 import org.mockito.*;
@@ -35,7 +35,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             verify(mock).simpleMethod();
             fail();
         } catch (VerificationError expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerify"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerify"));
         }
     }
     
@@ -46,7 +46,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (VerificationError expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
     
@@ -57,7 +57,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             verifyZeroInteractions(mock);
             fail();
         } catch (VerificationError expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceOnVerifyZeroInteractions"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
     
@@ -68,7 +68,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             verify(mock).oneArg(true); 
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceOnMockitoException"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceOnMockitoException"));
         }
     }
     
@@ -81,7 +81,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             strictly.verify(mock).oneArg(false); 
             fail();
         } catch (VerificationError expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifying"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));
         }
     }
     
@@ -91,7 +91,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             createStrictOrderVerifier();
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyThrowsMockitoException"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyThrowsMockitoException"));
         }
     }
     
@@ -102,7 +102,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             strictly.verify(null);
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStacktraceWhenStrictlyVerifies"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifies"));
         }
     }
     
@@ -112,7 +112,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             stub(mock.oneArg(true)).andThrows(new Exception());
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, firstMethodOnStackEqualsTo("shouldFilterStackTraceWhenThrowingExceptionFromControl"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromControl"));
         }
     }
     
@@ -124,7 +124,7 @@ public class StackTrackeFilteringTest extends RequiresValidState {
             mock.simpleMethod();
             fail();
         } catch (RuntimeException e) {
-            assertThat(e, firstMethodOnStackEqualsTo("shouldShowProperExceptionStackTrace"));
+            assertThat(e, hasFirstMethodInStackTrace("shouldShowProperExceptionStackTrace"));
         }
     }
 }

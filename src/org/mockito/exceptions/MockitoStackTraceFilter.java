@@ -14,8 +14,8 @@ public class MockitoStackTraceFilter {
         return fromMockObject || fromOrgMockito;
     }
 
-    public void filterStackTrace(HasFilterableStackTrace hasFilterableStackTrace) {
-        List<StackTraceElement> unfilteredStackTrace = Arrays.asList(hasFilterableStackTrace.getStackTrace());
+    public void filterStackTrace(HasStackTrace hasStackTrace) {
+        List<StackTraceElement> unfilteredStackTrace = Arrays.asList(hasStackTrace.getStackTrace());
         
         int lastToRemove = -1;
         int i = 0;
@@ -27,6 +27,6 @@ public class MockitoStackTraceFilter {
         }
         
         List<StackTraceElement> filtered = unfilteredStackTrace.subList(lastToRemove+1, unfilteredStackTrace.size() - 1);
-        hasFilterableStackTrace.setStackTrace(filtered.toArray(new StackTraceElement[]{}));
+        hasStackTrace.setStackTrace(filtered.toArray(new StackTraceElement[]{}));
     }
 }

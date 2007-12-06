@@ -7,6 +7,7 @@ package org.mockito.internal;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.mockito.exceptions.MockitoException;
 import org.mockito.internal.matchers.*;
 
 public class Invocation {
@@ -17,6 +18,7 @@ public class Invocation {
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
+    private final StackTraceElement[] stackTrace;
 
     private boolean verifiedInOrder;
 
@@ -25,6 +27,7 @@ public class Invocation {
         this.method = method;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
         this.sequenceNumber = sequenceNumber;
+        this.stackTrace = new MockitoException("just to get stack trace").getStackTrace();
     }
 
     private static Object[] expandVarArgs(final boolean isVarArgs,
@@ -149,5 +152,9 @@ public class Invocation {
 
     public String toStringWithSequenceNumber(List<IArgumentMatcher> matchers) {
         return getMockAndMethodNameWithSeqenceNumber() + getArgumentsString(matchers);
+    }
+
+    public StackTraceElement[] getStackTrace() {
+        return this.stackTrace;
     }
 }

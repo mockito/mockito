@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions;
 
-public interface HasFilterableStackTrace {
+public interface HasStackTrace {
     
     void setStackTrace(StackTraceElement[] stackTrace);
     

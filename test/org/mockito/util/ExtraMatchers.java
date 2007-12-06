@@ -12,18 +12,22 @@ import org.hamcrest.*;
 @SuppressWarnings("unchecked")
 public class ExtraMatchers extends CoreMatchers {
 
-    public static <T> Matcher<Throwable> firstMethodOnStackEqualsTo(final String method) {
+    public static <T> Matcher<Throwable> hasFirstMethodInStackTrace(final String method) {
+        return hasMethodInStackTraceAt(0, method);
+    }
+    
+    public static <T> Matcher<Throwable> hasMethodInStackTraceAt(final int stackTraceIndex, final String method) {
         return new BaseMatcher<Throwable>() {
 
-            private String firstMethodOnStack;
+            private String actualMethodAtIndex;
 
             public boolean matches(Object throwable) {
-                firstMethodOnStack = ((Throwable) throwable).getStackTrace()[0].getMethodName();
-                return  firstMethodOnStack.equals(method);
+                actualMethodAtIndex = ((Throwable) throwable).getStackTrace()[stackTraceIndex].getMethodName();
+                return  actualMethodAtIndex.equals(method);
             }
 
             public void describeTo(Description desc) {
-                desc.appendText("first method expected to be: " + method + " but is: " + firstMethodOnStack);
+                desc.appendText("Method of index: " + stackTraceIndex + " expected to be: " + method + " but is: " + actualMethodAtIndex);
             }
         };
     }
@@ -83,6 +87,27 @@ public class ExtraMatchers extends CoreMatchers {
 
             public void describeTo(Description desc) {
                 desc.appendText("Bridge method: " + methodName + " not found!");
+            }
+        };
+    }
+    
+    public static <T> Matcher<Collection> collectionContainingInOrder(final T ... elements) {
+        return new BaseMatcher<Collection>() {
+
+            public boolean matches(Object collection) {
+                Collection actual = (Collection)collection;
+                if (actual.size() != elements.length) {
+                    return false;
+                }
+                if (Collections.indexOfSubList((List<?>) actual, Arrays.asList(elements)) == -1) {
+                    return false;
+                }
+                
+                return true;
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("collection doesn't contain following elements in order: " + Arrays.toString(elements));
             }
         };
     }

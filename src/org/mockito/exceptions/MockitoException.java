@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions;
 
-public class MockitoException extends RuntimeException implements HasFilterableStackTrace {
+public class MockitoException extends RuntimeException implements HasStackTrace {
 
     private static final long serialVersionUID = 1L;
 

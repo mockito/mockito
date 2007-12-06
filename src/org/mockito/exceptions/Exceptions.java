@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions;
 
+import java.util.*;
+
 /**
  * All messages in one place makes it easier to tune and amend the text. 
  * Once exception messages are sorted we can inline that stuff.
@@ -61,12 +63,12 @@ public class Exceptions {
         
     }
     
-    public static void wantedInvocationDiffersFromActual(String wanted, String actual) {
-        throw new VerificationError(join(
+    public static VerificationError wantedInvocationDiffersFromActual(String wanted, String actual, List<StackTraceElement> invocationStackTrace) {
+        return new VerificationError(join(
                 "Invocation differs from actual",
-                "Wanted: " + wanted,
+                "Wanted: " + wanted,    
                 "Actual: " + actual
-            ));
+            ), invocationStackTrace);
     }
     
 
