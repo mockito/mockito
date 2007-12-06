@@ -49,6 +49,7 @@ public class InvocationTest extends RequiresValidState {
         Map map = new HashMap();
         try {
             map.put(call, "one");
+            fail();
         } catch (RuntimeException e) {
             assertEquals("hashCode() is not implemented", e.getMessage());
         }

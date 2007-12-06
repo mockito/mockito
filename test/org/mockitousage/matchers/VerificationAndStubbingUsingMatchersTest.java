@@ -4,7 +4,7 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.CrazyMatchers.startsWith;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -44,6 +44,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
        
         try {
             three.simpleMethod("test three again");
+            fail();
         } catch (RuntimeException e) {};
     }
     
@@ -54,6 +55,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
 
         try {
             one.oneArg(true);
+            fail();
         } catch (RuntimeException e) {}
 
         one.simpleMethod(100);
@@ -72,6 +74,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
         
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
+            fail();
         } catch (VerificationError e) {}
     }
 }

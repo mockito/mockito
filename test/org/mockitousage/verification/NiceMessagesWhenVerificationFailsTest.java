@@ -277,4 +277,15 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             assertEquals(expected, e.getMessage());
         }
     }
+    
+    @Test
+    public void shouldPrintNullArguments() throws Exception {
+        mock.simpleMethod(null, null);
+        try {
+            verify(mock).simpleMethod("test");
+            fail();
+        } catch (VerificationError e) {
+            assertTrue(e.getMessage().contains("simpleMethod(null, null)"));
+        }
+    }
 }
