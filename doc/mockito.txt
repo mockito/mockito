@@ -1,3 +1,11 @@
+stack traces stuff:
+
+M						EM
+wanted but not invoked	failure on verify
+wanted 1 but was 2		unexpected call (store the stack trace, and put it as second)
+differs from actual		unexpected call (store the stack trace, and put it as second)
+no more wanted			unexpected call (store the stack trace, and put it as second)
+
 ***some REALLY random stuff that needs to be tidied up
 
  # developer friendly

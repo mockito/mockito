@@ -11,9 +11,9 @@ import org.mockito.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.*;
 import org.mockito.internal.matchers.EqualsTest;
-import org.mockito.sample.MockitoSampleTest;
 import org.mockitousage.binding.*;
 import org.mockitousage.matchers.*;
+import org.mockitousage.sample.MockitoSampleTest;
 import org.mockitousage.stubbing.*;
 import org.mockitousage.verification.*;
 
