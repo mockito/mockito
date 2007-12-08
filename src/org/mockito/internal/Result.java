@@ -18,9 +18,10 @@ public class Result implements IAnswer {
     public static Result createThrowResult(final Throwable throwable) {
         return new Result(new IAnswer<Object>() {
             public Object answer() throws Throwable {
-                MockitoStackTraceFilter filter = new MockitoStackTraceFilter();
+                StackTraceFilter filter = new StackTraceFilter();
                 final Throwable filtered = throwable.fillInStackTrace();
                 
+                //TODO unit test?
                 filter.filterStackTrace(new HasStackTrace() {
                     public StackTraceElement[] getStackTrace() {
                         return filtered.getStackTrace();

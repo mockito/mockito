@@ -63,6 +63,19 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
+    public static <T> Matcher<String> contains(final String text) {
+        return new BaseMatcher<String>() {
+
+            public boolean matches(Object string) {
+                return ((String)string).contains(text); 
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("string doesn't contain " + text);
+            }
+        };
+    }
+    
     public static <T> Matcher<Object> hasBridgeMethod(final String methodName) {
         return new BaseMatcher<Object>() {
 
@@ -91,7 +104,7 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<Collection> collectionContainingInOrder(final T ... elements) {
+    public static <T> Matcher<Collection> collectionIsExactlyInOrder(final T ... elements) {
         return new BaseMatcher<Collection>() {
 
             public boolean matches(Object collection) {

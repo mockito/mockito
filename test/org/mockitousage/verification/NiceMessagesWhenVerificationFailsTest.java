@@ -5,7 +5,8 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
-import static org.mockito.CrazyMatchers.aryEq;
+import static org.mockito.util.ExtraMatchers.contains;
+import static org.mockito.CrazyMatchers.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -92,17 +93,24 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verify(mock).twoArgumentMethod(1, 1000);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
+        } catch (VerificationError e) {
+            String expected = 
                     "\n" +
                     "Invocation differs from actual" +
                     "\n" +
-                    "Wanted: IMethods.twoArgumentMethod(1, 1000)" +
+                    "Wanted invocation:" +
                     "\n" +
-                    "Actual: IMethods.twoArgumentMethod(1, 2)";
+                    "IMethods.twoArgumentMethod(1, 1000)";
             
-            assertEquals(expectedMessage, actualMessage);         
+            assertEquals(expected, e.getMessage());
+            
+            String expectedCause =
+                    "\n" +
+                    "Actual invocation:" +
+                    "\n" +
+                    "IMethods.twoArgumentMethod(1, 2)";
+            
+            assertEquals(expectedCause, e.getCause().getMessage());      
         }
     }
     
@@ -113,17 +121,9 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                    "\n" +
-                    "Invocation differs from actual" +
-                    "\n" +
-                    "Wanted: IMethods.simpleMethod(\"test\")" +
-                    "\n" +
-                    "Actual: IMethods.simpleMethod()";
-            
-            assertEquals(expectedMessage, actualMessage);         
+        } catch (VerificationError e) {
+            assertThat(e.getMessage(), contains("IMethods.simpleMethod(\"test\")"));
+            assertThat(e.getCause().getMessage(), contains("IMethods.simpleMethod()"));
         }
     }    
     
@@ -138,17 +138,9 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                    "\n" +
-                    "Invocation differs from actual" +
-                    "\n" +
-                    "Wanted: IMethods.twoArgumentMethod(3, 1000)" +
-                    "\n" +
-                    "Actual: IMethods.twoArgumentMethod(3, 3)";
-            
-            assertEquals(expectedMessage, actualMessage);         
+        } catch (VerificationError e) {
+            assertThat(e.getMessage(), contains("IMethods.twoArgumentMethod(3, 1000)"));
+            assertThat(e.getCause().getMessage(), contains("IMethods.twoArgumentMethod(3, 3)"));
         }
     }  
     
@@ -232,13 +224,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
         } catch (VerificationError e) {
-            String expected = "\n" +
-                    "Invocation differs from actual" +
-                    "\n" +
-                    "Wanted: IMethods.oneArray([false, false, false])" +
-                    "\n" +
-                    "Actual: IMethods.oneArray([true, false, false])";
-            assertEquals(expected, e.getMessage());
+            assertThat(e.getMessage(), contains("IMethods.oneArray([false, false, false])"));
+            assertThat(e.getCause().getMessage(), contains("IMethods.oneArray([true, false, false])"));
         }
     }
     
@@ -250,13 +237,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).varargsString(10, "two", "one");
             fail();
         } catch (VerificationError e) {
-            String expected = "\n" +
-                    "Invocation differs from actual" +
-                    "\n" +
-                    "Wanted: IMethods.varargsString(10, \"two\", \"one\")" +
-                    "\n" +
-                    "Actual: IMethods.varargsString(10, \"one\", \"two\")";
-            assertEquals(expected, e.getMessage());
+            assertThat(e.getMessage(), contains("IMethods.varargsString(10, \"two\", \"one\")"));
+            assertThat(e.getCause().getMessage(), contains("IMethods.varargsString(10, \"one\", \"two\")"));
         }
     }
     
@@ -268,13 +250,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).simpleMethod(matches("burrito"));
             fail();
         } catch (VerificationError e) {
-            String expected = "\n" +
-                    "Invocation differs from actual" +
-                    "\n" +
-                    "Wanted: IMethods.simpleMethod(matches(\"burrito\"))" +
-                    "\n" +
-                    "Actual: IMethods.simpleMethod(\"foo\")";
-            assertEquals(expected, e.getMessage());
+            assertThat(e.getMessage(), contains("IMethods.simpleMethod(matches(\"burrito\"))"));
+            assertThat(e.getCause().getMessage(), contains("IMethods.simpleMethod(\"foo\")"));
         }
     }
     
@@ -285,7 +262,7 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).simpleMethod("test");
             fail();
         } catch (VerificationError e) {
-            assertTrue(e.getMessage().contains("simpleMethod(null, null)"));
+            assertThat(e.getCause().getMessage(), contains("simpleMethod(null, null)"));
         }
     }
 }

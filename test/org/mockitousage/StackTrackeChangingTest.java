@@ -27,17 +27,16 @@ public class StackTrackeChangingTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldMergeInvocationStackTraceAndExceptionStackTrace() {
+    public void shouldShowActualInvocationAsExceptionCause() {
         simpleMethodOnAMock();
         try {
             verifySimpleMethodOnAMock();
             fail();
         } catch (VerificationError e) {
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
-            assertThat(e, hasMethodInStackTraceAt(1, "shouldMergeInvocationStackTraceAndExceptionStackTrace"));
-            assertThat(e, hasMethodInStackTraceAt(2, "_below_is_actual_invocation_stack_trace_"));
-            assertThat(e, hasMethodInStackTraceAt(3, "simpleMethodOnAMock"));
-            assertThat(e, hasMethodInStackTraceAt(4, "shouldMergeInvocationStackTraceAndExceptionStackTrace"));
+            assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
+            assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));
+            assertThat(e.getCause(), hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
         }
     }
 

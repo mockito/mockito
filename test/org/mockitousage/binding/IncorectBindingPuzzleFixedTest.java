@@ -45,11 +45,18 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
                 "\n" +
         		"Invocation differs from actual" +
         		"\n" +
-                "Wanted: Sub.say(class java.lang.String)" +
+                "Wanted invocation:" +
                 "\n" +
-                "Actual: Sub.say(class java.lang.Object)";
+                "Sub.say(class java.lang.String)";
             
             assertEquals(expected, error.getMessage());
+            
+            String expectedCause = 
+                "\n" +
+                "Actual invocation:" +
+                "\n" +
+                "Sub.say(class java.lang.Object)";
+            assertEquals(expectedCause, error.getCause().getMessage());
         }
     }
     

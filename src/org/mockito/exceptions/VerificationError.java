@@ -4,7 +4,6 @@
  */
 package org.mockito.exceptions;
 
-import java.util.*;
 
 public class VerificationError extends MockitoAssertionError {
 
@@ -14,7 +13,7 @@ public class VerificationError extends MockitoAssertionError {
         super(message);
     }
 
-    public VerificationError(String message, List<StackTraceElement> invocationStackTrace) {
-        super(message, invocationStackTrace);
+    public VerificationError(String message, Throwable cause) {
+        super(message, cause);
     }
 }

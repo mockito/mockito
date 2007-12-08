@@ -76,9 +76,7 @@ public class MockitoBehavior<T> {
             actual = actualInvocation.toStringWithArgumentTypes();
         }
         
-        List<StackTraceElement> elements = new LinkedList<StackTraceElement>(Arrays.asList(actualInvocation.getStackTrace()));
-        
-        throw Exceptions.wantedInvocationDiffersFromActual(wanted, actual, elements);
+        Exceptions.wantedInvocationDiffersFromActual(wanted, actual, actualInvocation.getStackTrace());
     }
     
     private void reportStrictOrderDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation) {

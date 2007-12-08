@@ -15,7 +15,7 @@ public class MockitoException extends RuntimeException implements HasStackTrace 
 
         unfilteredStackTrace = getStackTrace();
         
-        MockitoStackTraceFilter filter = new MockitoStackTraceFilter();
+        StackTraceFilter filter = new StackTraceFilter();
         filter.filterStackTrace(this);
     }
     

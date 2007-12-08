@@ -6,7 +6,7 @@ package org.mockito.exceptions;
 
 import java.util.*;
 
-public class MockitoStackTraceFilter {
+public class StackTraceFilter {
     
     public boolean isLastStackElementToRemove(StackTraceElement e) {
         boolean fromMockObject = e.getClassName().contains("$$EnhancerByCGLIB$$");

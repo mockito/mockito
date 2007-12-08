@@ -6,8 +6,6 @@ package org.mockito.internal;
 
 import java.util.*;
 
-import org.mockito.exceptions.MockitoException;
-
 public class RegisteredInvocations {
     
     private List<Invocation> registeredInvocations = new LinkedList<Invocation>();

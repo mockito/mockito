@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions;
 
-import java.util.*;
+import static org.mockito.exceptions.Strings.join;
 
 /**
  * All messages in one place makes it easier to tune and amend the text. 
@@ -12,15 +12,6 @@ import java.util.*;
  */
 public class Exceptions {
     
-    private static String join(String ... linesToBreak) {
-        StringBuilder out = new StringBuilder("\n");
-        for (String line : linesToBreak) {
-            out.append(line).append("\n");
-        }
-        int lastBreak = out.lastIndexOf("\n");
-        return out.replace(lastBreak, lastBreak+1, "").toString();
-    }
-
     private static String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
     }
@@ -63,22 +54,27 @@ public class Exceptions {
         
     }
     
-    public static VerificationError wantedInvocationDiffersFromActual(String wanted, String actual, List<StackTraceElement> invocationStackTrace) {
-        return new VerificationError(join(
+    public static void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
+            "Actual invocation:",
+            actual
+        ));
+        
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        
+        throw new VerificationError(join(
                 "Invocation differs from actual",
-                "Wanted: " + wanted,    
-                "Actual: " + actual
-            ), invocationStackTrace);
+                "Wanted invocation:",
+                wanted
+            ), cause);
     }
     
-
     public static void strictlyWantedInvocationDiffersFromActual(String wanted, String actual) {
         throw new VerificationError(join(
                 "Strict order verification failed",
                 "Wanted: " + wanted,
                 "Actual: " + actual
             ));
-        
     }
 
     public static void wantedButNotInvoked(String wanted) {

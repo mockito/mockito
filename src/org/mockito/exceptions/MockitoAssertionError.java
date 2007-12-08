@@ -4,8 +4,7 @@
  */
 package org.mockito.exceptions;
 
-import java.util.List;
-
+import java.util.Arrays;
 
 public class MockitoAssertionError extends AssertionError implements HasStackTrace {
 
@@ -17,15 +16,16 @@ public class MockitoAssertionError extends AssertionError implements HasStackTra
 
         unfilteredStackTrace = getStackTrace();
         
-        MockitoStackTraceFilter filter = new MockitoStackTraceFilter();
+        StackTraceFilter filter = new StackTraceFilter();
         filter.filterStackTrace(this);
     }
     
-    public MockitoAssertionError(String message, List<StackTraceElement> invocationStackTrace) {
+    public MockitoAssertionError(String message, Throwable cause) {
         this(message);
+        this.initCause(cause);
         
-        MockitoStackTraceMerger merger = new MockitoStackTraceMerger();
-        merger.merge(this, invocationStackTrace);
+        CommonStackTraceRemover remover = new CommonStackTraceRemover();
+        remover.remove(this, Arrays.asList(cause.getStackTrace()));
     }
 
     public StackTraceElement[] getUnfilteredStackTrace() {
