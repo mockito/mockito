@@ -5,7 +5,7 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
-import static org.mockito.util.ExtraMatchers.contains;
+import static org.mockito.util.ExtraMatchers.*;
 import static org.mockito.CrazyMatchers.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -64,27 +64,6 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldPrintLastUnverifiedAsActualInvocation() {
-        mock.oneArg(true);
-        mock.simpleMethod();
-        
-        verify(mock).oneArg(true);
-        try {
-            verify(mock).twoArgumentMethod(1,2);
-            fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                    "\n" +
-                    "Wanted but not invoked:" +
-                    "\n" +
-                    "IMethods.twoArgumentMethod(1, 2)";
-            
-            assertEquals(expectedMessage, actualMessage);         
-        }
-    }
-    
-    @Test
     public void shouldPrintActualAndWantedWhenTheDifferenceIsAboutArguments() {
         mock.oneArg(true);
         mock.twoArgumentMethod(1, 2);
@@ -122,10 +101,28 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).simpleMethod("test");
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getMessage(), contains("IMethods.simpleMethod(\"test\")"));
-            assertThat(e.getCause().getMessage(), contains("IMethods.simpleMethod()"));
+            assertThat(e, messageContains("IMethods.simpleMethod(\"test\")"));
+            assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
         }
     }    
+    
+    @Test
+    public void shouldTreatFirstUnverifiedInvocationAsActualInvocation() {
+        mock.oneArg(true);
+        mock.simpleMethod();
+        mock.differentMethod();
+        mock.twoArgumentMethod(1, 2);
+        
+        try {
+            verify(mock).oneArg(true);
+            verify(mock).differentMethod();
+            verify(mock).threeArgumentMethod(1, "2", "3");
+            fail();
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("IMethods.threeArgumentMethod(1, \"2\", \"3\")"));
+            assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
+        }
+    }  
     
     @Test
     public void shouldPrintActualAndUnverifiedWantedWhenTheDifferenceIsAboutArguments() {
@@ -139,8 +136,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getMessage(), contains("IMethods.twoArgumentMethod(3, 1000)"));
-            assertThat(e.getCause().getMessage(), contains("IMethods.twoArgumentMethod(3, 3)"));
+            assertThat(e, messageContains("IMethods.twoArgumentMethod(3, 1000)"));
+            assertThat(e, causeMessageContains("IMethods.twoArgumentMethod(3, 3)"));
         }
     }  
     
@@ -201,7 +198,7 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldPrintMethodNicelyWhenMatcherUsed() throws Exception {
+    public void shouldPrintMethodWhenMatcherUsed() throws Exception {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
             fail();
@@ -217,41 +214,41 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldPrintMethodNicelyWhenMissingInvocationWithArrayMatcher() {
+    public void shouldPrintMethodWhenMissingInvocationWithArrayMatcher() {
         mock.oneArray(new boolean[] { true, false, false });
         
         try {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getMessage(), contains("IMethods.oneArray([false, false, false])"));
-            assertThat(e.getCause().getMessage(), contains("IMethods.oneArray([true, false, false])"));
+            assertThat(e, messageContains("IMethods.oneArray([false, false, false])"));
+            assertThat(e, causeMessageContains("IMethods.oneArray([true, false, false])"));
         }
     }
     
     @Test
-    public void shouldPrintMethodNicelyWhenMissingInvocationWithVarargMatcher() {
+    public void shouldPrintMethodWhenMissingInvocationWithVarargMatcher() {
         mock.varargsString(10, "one", "two");
         
         try {
             verify(mock).varargsString(10, "two", "one");
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getMessage(), contains("IMethods.varargsString(10, \"two\", \"one\")"));
-            assertThat(e.getCause().getMessage(), contains("IMethods.varargsString(10, \"one\", \"two\")"));
+            assertThat(e, messageContains("IMethods.varargsString(10, \"two\", \"one\")"));
+            assertThat(e, causeMessageContains("IMethods.varargsString(10, \"one\", \"two\")"));
         }
     }
     
     @Test
-    public void shouldPrintMethodNicelyWhenMissingInvocationWithMatcher() {
+    public void shouldPrintMethodWhenMissingInvocationWithMatcher() {
         mock.simpleMethod("foo");
         
         try {
             verify(mock).simpleMethod(matches("burrito"));
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getMessage(), contains("IMethods.simpleMethod(matches(\"burrito\"))"));
-            assertThat(e.getCause().getMessage(), contains("IMethods.simpleMethod(\"foo\")"));
+            assertThat(e, messageContains("IMethods.simpleMethod(matches(\"burrito\"))"));
+            assertThat(e, causeMessageContains("IMethods.simpleMethod(\"foo\")"));
         }
     }
     
@@ -262,7 +259,7 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             verify(mock).simpleMethod("test");
             fail();
         } catch (VerificationError e) {
-            assertThat(e.getCause().getMessage(), contains("simpleMethod(null, null)"));
+            assertThat(e, causeMessageContains("simpleMethod(null, null)"));
         }
     }
 }

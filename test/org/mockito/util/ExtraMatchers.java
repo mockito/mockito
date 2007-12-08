@@ -50,28 +50,36 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<String> matches(final String regexp) {
+    public static <T> Matcher<String> containsString(final String text) {
         return new BaseMatcher<String>() {
-
             public boolean matches(Object string) {
-                return ((String)string).matches(regexp); 
+                return ((String)string).contains(text); 
             }
-
             public void describeTo(Description desc) {
-                desc.appendText("string doesn't match " + regexp);
+                desc.appendText("string doesn't contain " + text);
             }
         };
     }
     
-    public static <T> Matcher<String> contains(final String text) {
-        return new BaseMatcher<String>() {
-
-            public boolean matches(Object string) {
-                return ((String)string).contains(text); 
+    public static <T> Matcher<Throwable> messageContains(final String text) {
+        return new BaseMatcher<Throwable>() {
+            public boolean matches(Object throwable) {
+                return ((Throwable)throwable).getMessage().contains(text); 
             }
-
             public void describeTo(Description desc) {
-                desc.appendText("string doesn't contain " + text);
+                desc.appendText("exception's message doesn't contain " + text);
+            }
+        };
+    }
+    
+    public static <T> Matcher<Throwable> causeMessageContains(final String text) {
+        return new BaseMatcher<Throwable>() {
+            public boolean matches(Object throwable) {
+                Throwable cause = ((Throwable)throwable).getCause();
+                return cause == null? false : cause.getMessage().contains(text); 
+            }
+            public void describeTo(Description desc) {
+                desc.appendText("exception cause's message doesn't contain " + text);
             }
         };
     }

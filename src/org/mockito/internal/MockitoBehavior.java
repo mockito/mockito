@@ -59,7 +59,7 @@ public class MockitoBehavior<T> {
     }
 
     private void reportMissingInvocationError(ExpectedInvocation wanted) {
-        Invocation actual = registeredInvocations.findSimilarInvocation(wanted);
+        Invocation actual = registeredInvocations.findActualInvocation(wanted);
         
         if (actual != null) {
             reportDiscrepancy(wanted, actual);

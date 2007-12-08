@@ -69,18 +69,19 @@ public class RegisteredInvocations {
         return chunks;
     }
     
-    public Invocation findSimilarInvocation(ExpectedInvocation wanted) {
+    public Invocation findActualInvocation(ExpectedInvocation wanted) {
+        Invocation actualbyName = null;
         for (Invocation registered : registeredInvocations) {
             String wantedMethodName = wanted.getMethod().getName();
             String registeredInvocationName = registered.getMethod().getName();
             if (wantedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
-                return registered;
+                actualbyName = registered;
             }
         }
-
-        return null;
+        
+        return actualbyName != null ? actualbyName : getFirstUnverified();
     }
-    
+
     public int countActual(ExpectedInvocation wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : registeredInvocations) {
