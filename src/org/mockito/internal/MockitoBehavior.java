@@ -122,21 +122,19 @@ public class MockitoBehavior<T> {
     }
 
     public void verifyNoMoreInteractions() {
-        verifyNoMoreInteractions("No more interactions wanted");
+        Invocation unverified = registeredInvocations.getFirstUnverified();
+        if (unverified != null) {
+            Exceptions.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
+        }
     }
     
     public void verifyZeroInteractions() {
-        //TODO move message to exceptions
-        verifyNoMoreInteractions("Zero interactions wanted");
-    }
-    
-    private void verifyNoMoreInteractions(String message) {
         Invocation unverified = registeredInvocations.getFirstUnverified();
         if (unverified != null) {
-            Exceptions.noMoreInteractionsWanted(unverified.toString(), message, unverified.toString(), unverified.getStackTrace());
+            Exceptions.zeroInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }
     }
-
+    
     public Object resultFor(Invocation wanted) throws Throwable {
         for (StubbedInvocation s : stubbed) {
             if (s.matches(wanted)) {

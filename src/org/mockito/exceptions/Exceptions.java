@@ -98,18 +98,20 @@ public class Exceptions {
         ));
     }
     
+    public static void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+        UndesiredInvocation cause = buildCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
+        throw new VerificationError(join("No more interactions wanted"), cause);
+    }
+    
+    public static void zeroInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+        UndesiredInvocation cause = buildCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
+        throw new VerificationError(join("Zero interactions wanted"), cause);
+    }
 
-    public static void noMoreInteractionsWanted(String message, String undesired, String actual, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = new UndesiredInvocation(join(
-                "Undesired invocation:",
-                actual
-            ));
-            
+    private static UndesiredInvocation buildCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
+        UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-            
-        throw new VerificationError(join(
-                undesired
-        ), cause);
+        return cause;
     }
 
     public static void unfinishedStubbing() {
