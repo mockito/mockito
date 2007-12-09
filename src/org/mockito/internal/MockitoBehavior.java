@@ -12,22 +12,13 @@ import org.mockito.exceptions.parents.HasStackTrace;
 public class MockitoBehavior<T> {
 
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations(new AllInvocationsFinder());
-    private LinkedList<StubbedInvocation> stubbed = new LinkedList<StubbedInvocation>();
 
     private T mock;
-    private ExpectedInvocation invocationForStubbing;
     
     public void addInvocation(ExpectedInvocation invocation) {
         this.registeredInvocations.add(invocation.getInvocation());
-        this.invocationForStubbing = invocation;
     }
 
-    public void addResult(Result result) {
-        assert invocationForStubbing != null;
-        registeredInvocations.removeLast();
-        stubbed.addFirst(new StubbedInvocation(invocationForStubbing, result));
-    }
-    
     public void verify(ExpectedInvocation wanted, VerifyingMode mode) {
         checkOrderOfInvocations(wanted, mode);
         checkForMissingInvocation(wanted, mode);
@@ -140,16 +131,6 @@ public class MockitoBehavior<T> {
         }
     }
     
-    public Object resultFor(Invocation wanted) throws Throwable {
-        for (StubbedInvocation s : stubbed) {
-            if (s.matches(wanted)) {
-                return s.getResult().answer();
-            }
-        }
-
-        return ToTypeMappings.emptyReturnValueFor(wanted.getMethod().getReturnType());
-    }
-
     public T getMock() {
         return mock;
     }
@@ -162,7 +143,7 @@ public class MockitoBehavior<T> {
         return registeredInvocations.all();
     }
 
-    public ExpectedInvocation getInvocationForStubbing() {
-        return invocationForStubbing;
+    public void lastInvocationWasStubbed() {
+        registeredInvocations.removeLast();
     }
 }

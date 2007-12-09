@@ -7,14 +7,13 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.exceptions.*;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
 public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
     private final MockitoBehavior<T> behavior = new MockitoBehavior<T>();
-
+    private final Stubber stubber = new Stubber();
     private Throwable throwableToBeSetOnVoidMethod;
     
     /**
@@ -48,6 +47,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
             ExpectedInvocation invocationWithMatchers = expectedInvocation(proxy, method, args);
             //TODO this is a bit dodgy, we should set result directly on behavior and behavior should validate exception
             behavior.addInvocation(invocationWithMatchers);
+            stubber.setInvocationForPotentialStubbing(invocationWithMatchers);
             andThrows(throwableToBeSetOnVoidMethod);
             throwableToBeSetOnVoidMethod = null;
             return null;
@@ -63,11 +63,12 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
             return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
         } 
         
+        stubber.setInvocationForPotentialStubbing(invocationWithMatchers);
         behavior.addInvocation(invocationWithMatchers);
 
         MockitoState.instance().reportControlForStubbing(this);
         
-        return behavior.resultFor(invocationWithMatchers.getInvocation());
+        return stubber.resultFor(invocationWithMatchers.getInvocation());
     }
 
     private ExpectedInvocation expectedInvocation(Object proxy, Method method, Object[] args) {
@@ -92,44 +93,16 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     public void andReturn(T value) {
         MockitoState.instance().stubbingCompleted();
-        behavior.addResult(Result.createReturnResult(value));
+        behavior.lastInvocationWasStubbed();
+        stubber.addReturnValue(value);
     }
 
     public void andThrows(Throwable throwable) {
         MockitoState.instance().stubbingCompleted();
-        validateThrowable(throwable);
-        behavior.addResult(Result.createThrowResult(throwable));
+        behavior.lastInvocationWasStubbed();
+        stubber.addThrowable(throwable);
     }
     
-    private void validateThrowable(Throwable throwable) {
-        if (throwable == null) {
-            Exceptions.cannotStubWithNullThrowable();
-        }
-
-        if (throwable instanceof RuntimeException || throwable instanceof Error) {
-            return;
-        }
-    
-        if (!isValidCheckedException(throwable)) {
-            Exceptions.checkedExceptionInvalid(throwable);
-        }
-    }
-
-    private boolean isValidCheckedException(Throwable throwable) {
-        //TODO move validation logic to behavior, so that we don't need to expose getInvocationForStubbing()
-        Invocation lastInvocation = behavior.getInvocationForStubbing().getInvocation();
-
-        Class<?>[] exceptions = lastInvocation.getMethod().getExceptionTypes();
-        Class<?> throwableClass = throwable.getClass();
-        for (Class<?> exception : exceptions) {
-            if (exception.isAssignableFrom(throwableClass)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
     public MethodSelector<T> toThrow(Throwable throwable) {
         throwableToBeSetOnVoidMethod = throwable;
         return this;
