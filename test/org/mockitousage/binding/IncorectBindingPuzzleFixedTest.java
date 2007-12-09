@@ -5,6 +5,7 @@
 package org.mockitousage.binding;
 
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
@@ -69,16 +70,9 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         try {
             strictly.verify(sub).say("Hello");
             fail();
-        } catch (VerificationError error) {
-            String expected = 
-                "\n" +
-                "Strict order verification failed" +
-                "\n" +
-                "Wanted: Sub.say(class java.lang.String)" +
-                "\n" +
-                "Actual: Sub.say(class java.lang.Object)";
-            
-            assertEquals(expected, error.getMessage());
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("Sub.say(class java.lang.String)"));
+            assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }
     }
 }

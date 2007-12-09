@@ -5,10 +5,12 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.*;
+import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.verification.*;
 import org.mockito.internal.StateResetter;
 import org.mockito.util.RequiresValidState;
@@ -41,16 +43,26 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(one).simpleMethod(999);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
+        } catch (VerificationError e) {
+            String expected = 
                     "\n" +
                     "Strict order verification failed" +
                     "\n" +
-                    "Wanted: IMethods.simpleMethod(999)" + 
-            		"\n" +
-            		"Actual: IMethods.simpleMethod(1)";
-            assertEquals(expectedMessage, actualMessage);         
+                    "Wanted invocation:" +
+                    "\n" +
+                    "IMethods.simpleMethod(999)"; 
+            
+            assertEquals(expected, e.getMessage());
+            
+            assertEquals(e.getCause().getClass(), WantedDiffersFromActual.class);
+            
+            String expectedCause = 
+                "\n" +
+                "Actual invocation:" +
+                "\n" +
+                "IMethods.simpleMethod(1)";
+            
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }  
     
@@ -107,15 +119,8 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
             strictly.verify(two).simpleMethod();
             fail();
         } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                    "\n" +    
-                    "Strict order verification failed" +
-                    "\n" +
-                    "Wanted: IMethods#3.simpleMethod()" +
-                    "\n" +
-                    "Actual: IMethods#1.simpleMethod()"; 
-            assertEquals(expectedMessage, actualMessage);         
+            assertThat(expected, messageContains("IMethods#3.simpleMethod()"));
+            assertThat(expected, causeMessageContains("IMethods#1.simpleMethod()"));
         }
     }
 }

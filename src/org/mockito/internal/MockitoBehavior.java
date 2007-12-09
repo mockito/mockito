@@ -96,7 +96,7 @@ public class MockitoBehavior<T> {
             actual = actualInvocation.toStringWithArgumentTypes();
         }
         
-        Exceptions.strictlyWantedInvocationDiffersFromActual(wanted, actual);
+        Exceptions.strictlyWantedInvocationDiffersFromActual(wanted, actual, actualInvocation.getStackTrace());
     }
 
     //TODO Cyclomatic Complexity = 10 :|
