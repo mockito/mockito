@@ -24,4 +24,14 @@ public class MockitoBehaviorTest extends RequiresValidState {
         
         behavior.checkForWrongNumberOfInvocations(invocation, inOrder);
     }
+    
+    @Test
+    public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingAtLeastOnce() throws Exception {
+        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation());
+        MockitoBehavior behavior = new MockitoBehavior();
+        
+        VerifyingMode inOrder = VerifyingMode.atLeastOnce();
+        
+        behavior.checkForWrongNumberOfInvocations(invocation, inOrder);
+    }
 }

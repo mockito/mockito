@@ -6,6 +6,8 @@ package org.mockito.internal;
 
 import java.util.*;
 
+import org.mockito.exceptions.HasStackTrace;
+
 public class RegisteredInvocations {
     
     private List<Invocation> registeredInvocations = new LinkedList<Invocation>();
@@ -104,5 +106,15 @@ public class RegisteredInvocations {
             }
         }
         return null;
+    }
+
+    public HasStackTrace getLastInvocationStackTrace(ExpectedInvocation wanted) {
+        Invocation lastMatching = null;
+        for (Invocation registered : registeredInvocations) {
+            if (wanted.matches(registered)) {
+                lastMatching = registered;
+            }
+        }
+        return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 }

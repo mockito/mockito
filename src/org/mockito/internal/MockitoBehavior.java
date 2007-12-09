@@ -45,15 +45,18 @@ public class MockitoBehavior<T> {
     }
 
     void checkForWrongNumberOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
-        if (mode.orderOfInvocationsMatters()) {
+        if (mode.orderOfInvocationsMatters() || mode.atLeastOnceMode()) {
             return;
         }
         
         int actualCount = registeredInvocations.countActual(wanted);
         Integer wantedCount = mode.wantedCount();
-        boolean atLeastOnce = mode.atLeastOnceMode();
         
-        if (!atLeastOnce && actualCount != wantedCount) {
+        if (actualCount < wantedCount) {
+            HasStackTrace lastInvocationStackTrace = registeredInvocations.getLastInvocationStackTrace(wanted);
+            Exceptions.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocationStackTrace);
+        } else if (actualCount > wantedCount) {
+//            registeredInvocations.findFirstUndesiredInvocation(wanted, mode);
             Exceptions.numberOfInvocationsDiffers(wantedCount, actualCount, wanted.toString());
         }
     }

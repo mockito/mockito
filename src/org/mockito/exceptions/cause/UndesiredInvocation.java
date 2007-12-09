@@ -1,4 +1,6 @@
-package org.mockito.exceptions;
+package org.mockito.exceptions.cause;
+
+import org.mockito.exceptions.MockitoException;
 
 public class UndesiredInvocation extends MockitoException {
 

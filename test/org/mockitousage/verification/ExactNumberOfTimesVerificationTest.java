@@ -4,13 +4,15 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.util.ExtraMatchers.*;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.NumberOfInvocationsError;
+import org.mockito.exceptions.*;
+import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
@@ -40,6 +42,13 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         		"\n" +
         		"Wanted 100 times but was 3";
             assertEquals(expected, e.getMessage());
+            
+            assertEquals(TooLittleInvocations.class, e.getCause().getClass());
+            
+            String expectedCause = 
+                "\n" +
+                "Too little invocations:";
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
     
@@ -70,7 +79,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
             Mockito.verify(mock, 15).clear();
             fail();
         } catch (NumberOfInvocationsError e) {
-            assertTrue(e.getMessage().endsWith("Wanted 15 times but was 0"));
+            assertThat(e, messageContains("Wanted 15 times but was 0"));
         }
     }
     
@@ -83,7 +92,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
             Mockito.verify(mock, 15).clear();
             fail();
         } catch (NumberOfInvocationsError e) {
-            assertTrue(e.getMessage().endsWith("Wanted 15 times but was 1"));
+            assertThat(e, messageContains("Wanted 15 times but was 1"));
         }
     }
     
@@ -94,7 +103,9 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             Mockito.verify(mock, 0).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {}
+        } catch (NumberOfInvocationsError e) {
+            assertThat(e, messageContains("Wanted 0 times but was 1"));
+        }
     }
     
     @Test

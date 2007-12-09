@@ -53,7 +53,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     AtLeastOnceVerificationTest.class, 
                     BasicVerificationTest.class, 
                     ExactNumberOfTimesVerificationTest.class, 
-                    NiceMessagesWhenVerificationFailsTest.class, 
+                    DescriptiveMessagesWhenVerificationFailsTest.class, 
                     NoMoreInteractionsVerificationTest.class, 
                     VerificationInOrderMixedWithOrdiraryVerificationTest.class, 
                     VerificationInOrderTest.class, 
@@ -66,7 +66,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     MockitoTest.class,
                     InvalidUsageTest.class,
                     InvalidUseOfMatchersTest.class,
-                    NiceMessagesOnStrictOrderErrorsTest.class,
+                    DescriptiveMessagesOnStrictOrderErrorsTest.class,
                     InvalidStateDetectionTest.class,
                     StackTrackeFilteringTest.class
                 );

@@ -22,10 +22,12 @@ public class MockitoAssertionError extends AssertionError implements HasStackTra
     
     public MockitoAssertionError(String message, Throwable cause) {
         this(message);
-        this.initCause(cause);
-        
-        CommonStackTraceRemover remover = new CommonStackTraceRemover();
-        remover.remove(this, Arrays.asList(cause.getStackTrace()));
+
+        if (cause != null) {
+            this.initCause(cause);
+            CommonStackTraceRemover remover = new CommonStackTraceRemover();
+            remover.remove(this, Arrays.asList(cause.getStackTrace()));
+        }
     }
 
     public StackTraceElement[] getUnfilteredStackTrace() {

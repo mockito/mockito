@@ -11,4 +11,8 @@ public class NumberOfInvocationsError extends MockitoAssertionError {
     public NumberOfInvocationsError(String message) {
         super(message);
     }
+
+    public NumberOfInvocationsError(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -6,9 +6,10 @@ package org.mockito.exceptions;
 
 import static org.mockito.exceptions.Strings.join;
 
+import org.mockito.exceptions.cause.*;
+
 /**
  * All messages in one place makes it easier to tune and amend the text. 
- * Once exception messages are sorted we can inline that stuff.
  */
 public class Exceptions {
     
@@ -90,14 +91,20 @@ public class Exceptions {
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ));
     }
-
-    public static void noMoreInteractionsWanted(String unexpected, String message) {
-        throw new VerificationError(join(
-                message,
-                "Unexpected: " + unexpected
-        ));
-    }
     
+    public static void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+        TooLittleInvocations cause = null;
+        if (lastActualInvocationStackTrace != null) {
+            cause = new TooLittleInvocations(join("Too little invocations:"));
+            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
+        }
+        
+        throw new NumberOfInvocationsError(join(
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);  
+    }
+
     public static void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("No more interactions wanted"), cause);
@@ -136,5 +143,4 @@ public class Exceptions {
                 "Should be something like that: verify(mock).doSomething()"
         ));
     }
-
 }

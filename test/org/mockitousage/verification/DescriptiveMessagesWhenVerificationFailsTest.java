@@ -13,10 +13,11 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.*;
+import org.mockito.exceptions.cause.*;
 import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
-public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
+public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidState {
     
     private IMethods mock;
 
@@ -50,16 +51,10 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
     @Test
     public void shouldPrintMethodNameAndArguments() {
         try {
-            verify(mock).threeArgumentMethod(12, new SomeClass(), "some string");
+            verify(mock).threeArgumentMethod(12, new SomeClass(), "xx");
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                    "\n" +
-                    "Wanted but not invoked:" +
-                    "\n" +
-            		"IMethods.threeArgumentMethod(12, SomeClass instance, \"some string\")";
-            assertEquals(expectedMessage, actualMessage);         
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("IMethods.threeArgumentMethod(12, SomeClass instance, \"xx\")"));
         }
     }
     
@@ -200,14 +195,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
-                "\n" +
-                "Wanted but not invoked:" +
-                "\n" +
-                "IMethods.twoArgumentMethod(1, 2)";
-            assertEquals(expectedMessage, actualMessage);         
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("IMethods.twoArgumentMethod(1, 2)"));
         }
     }
     
