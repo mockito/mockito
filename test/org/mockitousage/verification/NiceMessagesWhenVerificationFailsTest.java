@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationError;
+import org.mockito.exceptions.*;
 import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
@@ -83,6 +83,8 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
             
             assertEquals(expected, e.getMessage());
             
+            assertEquals(e.getCause().getClass(), WantedDiffersFromActual.class);
+            
             String expectedCause =
                     "\n" +
                     "Actual invocation:" +
@@ -151,14 +153,20 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
+        } catch (VerificationError e) {
             String expectedMessage = 
                     "\n" +
-            		"No more interactions wanted" +
+            		"No more interactions wanted";
+            assertEquals(expectedMessage, e.getMessage());         
+
+            assertEquals(e.getCause().getClass(), UndesiredInvocation.class);
+            
+            String expectedCause =
             		"\n" +
-            		"Unexpected: IMethods.oneArg(false)";
-            assertEquals(expectedMessage, actualMessage);         
+            		"Undesired invocation:" +
+            		"\n" +
+            		"IMethods.oneArg(false)";
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
     
@@ -170,14 +178,20 @@ public class NiceMessagesWhenVerificationFailsTest extends RequiresValidState {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
-            String expectedMessage = 
+        } catch (VerificationError e) {
+            String expected = 
                     "\n" +
-                    "Zero interactions wanted" +
-                    "\n" +
-                    "Unexpected: IMethods.twoArgumentMethod(1, 2)";
-            assertEquals(expectedMessage, actualMessage);         
+                    "Zero interactions wanted";
+
+            assertEquals(e.getMessage(), expected);
+            
+            String expectedCause = 
+                "\n" +
+                "Undesired invocation:" +
+                "\n" +
+                "IMethods.twoArgumentMethod(1, 2)";
+            
+            assertEquals(e.getCause().getMessage(), expectedCause);         
         }
     }
     

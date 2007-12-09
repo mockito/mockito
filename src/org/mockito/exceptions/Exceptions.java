@@ -97,6 +97,20 @@ public class Exceptions {
                 "Unexpected: " + unexpected
         ));
     }
+    
+
+    public static void noMoreInteractionsWanted(String message, String undesired, String actual, HasStackTrace actualInvocationStackTrace) {
+        UndesiredInvocation cause = new UndesiredInvocation(join(
+                "Undesired invocation:",
+                actual
+            ));
+            
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+            
+        throw new VerificationError(join(
+                undesired
+        ), cause);
+    }
 
     public static void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
@@ -120,4 +134,5 @@ public class Exceptions {
                 "Should be something like that: verify(mock).doSomething()"
         ));
     }
+
 }

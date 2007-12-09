@@ -126,13 +126,14 @@ public class MockitoBehavior<T> {
     }
     
     public void verifyZeroInteractions() {
+        //TODO move message to exceptions
         verifyNoMoreInteractions("Zero interactions wanted");
     }
     
     private void verifyNoMoreInteractions(String message) {
         Invocation unverified = registeredInvocations.getFirstUnverified();
         if (unverified != null) {
-            Exceptions.noMoreInteractionsWanted(unverified.toString(), message);
+            Exceptions.noMoreInteractionsWanted(unverified.toString(), message, unverified.toString(), unverified.getStackTrace());
         }
     }
 
