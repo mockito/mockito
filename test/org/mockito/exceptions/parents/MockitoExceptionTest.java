@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors 
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.exceptions;
+package org.mockito.exceptions.parents;
 
 import static org.junit.Assert.*;
 

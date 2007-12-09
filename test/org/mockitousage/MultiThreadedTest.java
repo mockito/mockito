@@ -9,7 +9,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.*;
 import org.mockito.exceptions.*;
-import org.mockito.exceptions.parents.MockitoAssertionErrorTest;
+import org.mockito.exceptions.parents.*;
 import org.mockito.internal.*;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.util.RequiresValidState;
