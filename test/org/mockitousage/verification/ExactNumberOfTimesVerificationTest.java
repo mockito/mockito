@@ -35,7 +35,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             Mockito.verify(mock, 100).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {
+        } catch (TooLittleActualInvocationsError e) {
             String expected = 
                 "\n" +
                 "LinkedList.clear()" +
@@ -87,7 +87,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {
+        } catch (TooLittleActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 15 times but was 0"));
         }
     }
@@ -100,7 +100,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             Mockito.verify(mock, 15).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {
+        } catch (TooLittleActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 15 times but was 1"));
         }
     }

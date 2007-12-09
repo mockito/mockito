@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class ExceptionsTest {
 
-    @Test(expected=NumberOfInvocationsError.class)
+    @Test(expected=TooLittleActualInvocationsError.class)
     public void shouldLetPassingNullLastActualStackTrace() throws Exception {
         Exceptions.tooLittleActualInvocations(1, 2, "wanted", null);
     }

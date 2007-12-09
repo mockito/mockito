@@ -109,7 +109,7 @@ public class Exceptions {
             cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
         }
         
-        throw new NumberOfInvocationsError(join(
+        throw new TooLittleActualInvocationsError(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);  
