@@ -84,29 +84,6 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<Throwable> messageEquals(final String text) {
-        return new BaseMatcher<Throwable>() {
-            public boolean matches(Object throwable) {
-                return ((Throwable)throwable).getMessage().equals(text); 
-            }
-            public void describeTo(Description desc) {
-                desc.appendText("exception's message is not " + text);
-            }
-        };
-    }
-    
-    public static <T> Matcher<Throwable> causeMessageEquals(final String text) {
-        return new BaseMatcher<Throwable>() {
-            public boolean matches(Object throwable) {
-                Throwable cause = ((Throwable)throwable).getCause();
-                return cause == null? false : cause.getMessage().equals(text); 
-            }
-            public void describeTo(Description desc) {
-                desc.appendText("exception cause's message doesn't contain " + text);
-            }
-        };
-    }
-    
     public static <T> Matcher<Object> hasBridgeMethod(final String methodName) {
         return new BaseMatcher<Object>() {
 
