@@ -1,12 +1,14 @@
 package org.mockito.exceptions;
 
-import static org.junit.Assert.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.util.ExtraMatchers.collectionIsExactlyInOrder;
+
 import java.util.*;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
-public class StackTraceRemoverTest {
+public class StackTraceRemoverTest extends RequiresValidState {
 
     private StackTraceElement[] stackTrace;
     private List<StackTraceElement> causeStackTrace;

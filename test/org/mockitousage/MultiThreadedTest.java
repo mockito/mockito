@@ -11,13 +11,14 @@ import org.mockito.*;
 import org.mockito.exceptions.*;
 import org.mockito.internal.*;
 import org.mockito.internal.matchers.EqualsTest;
+import org.mockito.util.RequiresValidState;
 import org.mockitousage.binding.*;
 import org.mockitousage.matchers.*;
 import org.mockitousage.sample.MockitoSampleTest;
 import org.mockitousage.stubbing.*;
 import org.mockitousage.verification.*;
 
-public class MultiThreadedTest {
+public class MultiThreadedTest extends RequiresValidState {
     
     private static class AllTestsRunner extends Thread {
         

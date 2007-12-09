@@ -34,5 +34,29 @@
             ]]>
         </example>
     </rule>
+    
+    <rule name="TestClassShouldExtendRequiresValidState"
+        message="Test Class should extend RequiresValidSate to find state problems quickly"
+        class="net.sourceforge.pmd.rules.XPathRule">
 
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        /TypeDeclaration/ClassOrInterfaceDeclaration[ends-with(@Image, 'Test') and not(ExtendsList/ClassOrInterfaceType/@Image = 'RequiresValidState')]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+            	//good:
+                public class BasicVerificationTest extends RequiresValidState {
+                
+                //bad:
+                public class BasicVerificationTest {             
+            ]]>
+        </example>
+    </rule>    
+    
 </ruleset>
