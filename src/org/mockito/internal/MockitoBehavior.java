@@ -7,6 +7,7 @@ package org.mockito.internal;
 import java.util.*;
 
 import org.mockito.exceptions.*;
+import org.mockito.exceptions.parents.HasStackTrace;
 
 public class MockitoBehavior<T> {
 

@@ -9,6 +9,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.*;
 import org.mockito.exceptions.*;
+import org.mockito.exceptions.parents.MockitoAssertionErrorTest;
 import org.mockito.internal.*;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.util.RequiresValidState;
@@ -40,7 +41,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     InvocationTest.class, 
                     MockUtilTest.class, 
                     MockitoAssertionErrorTest.class, 
-                    MockitoErrorTest.class, 
+                    MockitoExceptionTest.class, 
                     BridgeMethodPuzzleTest.class, 
                     IncorectBindingPuzzleFixedTest.class, 
                     UsingVarargsTest.class, 

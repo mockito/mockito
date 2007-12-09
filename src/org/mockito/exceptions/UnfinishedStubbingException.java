@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions;
 
+import org.mockito.exceptions.parents.MockitoException;
+
 public class UnfinishedStubbingException extends MockitoException {
 
     private static final long serialVersionUID = 1L;

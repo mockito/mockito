@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import java.util.*;
 
-import org.mockito.exceptions.MockitoException;
+import org.mockito.exceptions.parents.MockitoException;
 
 public class VerifyingMode {
 

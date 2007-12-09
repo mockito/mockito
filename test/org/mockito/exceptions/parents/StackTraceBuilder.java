@@ -1,4 +1,4 @@
-package org.mockito.exceptions;
+package org.mockito.exceptions.parents;
 
 import java.util.*;
 

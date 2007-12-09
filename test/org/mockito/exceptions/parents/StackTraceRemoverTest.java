@@ -1,4 +1,4 @@
-package org.mockito.exceptions;
+package org.mockito.exceptions.parents;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.util.ExtraMatchers.collectionIsExactlyInOrder;
@@ -6,6 +6,7 @@ import static org.mockito.util.ExtraMatchers.collectionIsExactlyInOrder;
 import java.util.*;
 
 import org.junit.Test;
+import org.mockito.exceptions.parents.CommonStackTraceRemover;
 import org.mockito.util.RequiresValidState;
 
 public class StackTraceRemoverTest extends RequiresValidState {

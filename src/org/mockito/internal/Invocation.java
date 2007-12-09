@@ -7,7 +7,7 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.parents.*;
 import org.mockito.internal.matchers.*;
 
 public class Invocation {

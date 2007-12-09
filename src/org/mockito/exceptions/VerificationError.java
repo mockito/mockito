@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions;
 
+import org.mockito.exceptions.parents.MockitoAssertionError;
+
 
 public class VerificationError extends MockitoAssertionError {
 

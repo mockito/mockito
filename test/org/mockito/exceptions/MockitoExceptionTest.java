@@ -7,12 +7,13 @@ package org.mockito.exceptions;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.util.RequiresValidState;
 
-public class MockitoAssertionErrorTest extends RequiresValidState {
+public class MockitoExceptionTest extends RequiresValidState {
 
     private void throwIt() {
-        throw new MockitoAssertionError("boom");
+        throw new MockitoException("boom");
     }
     
     @Test
@@ -20,13 +21,8 @@ public class MockitoAssertionErrorTest extends RequiresValidState {
         try {
             throwIt();
             fail();
-        } catch (MockitoAssertionError e) {
+        } catch (MockitoException e) {
             assertEquals("throwIt", e.getUnfilteredStackTrace()[0].getMethodName());
         }
-    }
-    
-    @Test
-    public void shouldNotInitCauseWhenCauseIsNull() {
-        new MockitoAssertionError("test", null);
     }
 }

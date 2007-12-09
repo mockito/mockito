@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import java.util.*;
 
-import org.mockito.exceptions.HasStackTrace;
+import org.mockito.exceptions.parents.HasStackTrace;
 
 public class RegisteredInvocations {
     

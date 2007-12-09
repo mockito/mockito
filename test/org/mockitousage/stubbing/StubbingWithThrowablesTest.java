@@ -12,6 +12,7 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.exceptions.*;
+import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings({"serial", "unchecked"})

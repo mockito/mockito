@@ -1,6 +1,6 @@
 package org.mockito.exceptions.cause;
 
-import org.mockito.exceptions.MockitoException;
+import org.mockito.exceptions.parents.MockitoException;
 
 public class TooLittleInvocations extends MockitoException {
 

@@ -1,9 +1,10 @@
 package org.mockito.exceptions;
 
 import org.junit.Test;
+import org.mockito.util.RequiresValidState;
 
 
-public class ExceptionsTest {
+public class ExceptionsTest extends RequiresValidState {
 
     @Test(expected=TooLittleActualInvocationsError.class)
     public void shouldLetPassingNullLastActualStackTrace() throws Exception {

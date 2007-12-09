@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.parents.*;
 
 @SuppressWarnings("unchecked")
 public class Result implements IAnswer {
