@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
 public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {

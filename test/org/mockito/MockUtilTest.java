@@ -12,7 +12,7 @@ import java.util.*;
 import net.sf.cglib.proxy.*;
 
 import org.junit.Test;
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.util.RequiresValidState;
 

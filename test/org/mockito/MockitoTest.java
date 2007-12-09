@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 
 import org.junit.*;
-import org.mockito.exceptions.NotAMockException;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.*;
 import org.mockito.util.RequiresValidState;
 

@@ -1,7 +1,7 @@
 package org.mockito.util;
 
 import org.junit.Before;
-import org.mockito.internal.*;
+import org.mockito.internal.MockitoState;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require

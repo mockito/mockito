@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import net.sf.cglib.proxy.*;
 
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.MockFactory.MockMethodInterceptor;
 

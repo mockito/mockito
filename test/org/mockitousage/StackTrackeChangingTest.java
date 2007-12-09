@@ -10,7 +10,7 @@ import static org.mockito.util.ExtraMatchers.hasMethodInStackTraceAt;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.VerificationError;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockito.util.RequiresValidState;
 
 public class StackTrackeChangingTest extends RequiresValidState {

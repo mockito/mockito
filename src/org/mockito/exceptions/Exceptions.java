@@ -4,10 +4,12 @@
  */
 package org.mockito.exceptions;
 
-import static org.mockito.exceptions.Strings.join;
+import static org.mockito.exceptions.StringJoiner.join;
 
 import org.mockito.exceptions.cause.*;
+import org.mockito.exceptions.misusing.*;
 import org.mockito.exceptions.parents.*;
+import org.mockito.exceptions.verification.*;
 
 /**
  * All messages in one place makes it easier to tune and amend the text. 

@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.*;
 import org.mockito.internal.StateResetter;
 import org.mockito.util.RequiresValidState;
 

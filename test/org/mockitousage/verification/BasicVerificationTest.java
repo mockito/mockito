@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.verification.*;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")

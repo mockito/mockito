@@ -1,4 +1,4 @@
-package org.mockito.exceptions;
+package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.parents.MockitoAssertionError;
 

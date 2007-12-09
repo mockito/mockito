@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Strictly;
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.verification.*;
 import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 

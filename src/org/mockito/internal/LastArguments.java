@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import java.util.*;
 
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
 public class LastArguments {

@@ -1,6 +1,6 @@
 package org.mockito.exceptions;
 
-class Strings {
+class StringJoiner {
 
     static String join(String ... linesToBreak) {
         StringBuilder out = new StringBuilder("\n");

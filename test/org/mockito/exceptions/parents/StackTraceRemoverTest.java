@@ -6,7 +6,6 @@ import static org.mockito.util.ExtraMatchers.collectionIsExactlyInOrder;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.exceptions.parents.CommonStackTraceRemover;
 import org.mockito.util.RequiresValidState;
 
 public class StackTraceRemoverTest extends RequiresValidState {

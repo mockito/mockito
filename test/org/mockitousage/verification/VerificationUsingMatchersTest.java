@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.*;
 import org.mockito.*;
-import org.mockito.exceptions.VerificationError;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 

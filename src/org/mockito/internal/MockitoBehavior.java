@@ -99,6 +99,7 @@ public class MockitoBehavior<T> {
         Exceptions.strictlyWantedInvocationDiffersFromActual(wanted, actual);
     }
 
+    //TODO Cyclomatic Complexity = 10 :|
     private void checkOrderOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
         if (!mode.orderOfInvocationsMatters()) {
             return;

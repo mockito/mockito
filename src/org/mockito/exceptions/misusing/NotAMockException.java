@@ -2,15 +2,15 @@
  * Copyright (c) 2007 Mockito contributors 
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.exceptions;
+package org.mockito.exceptions.misusing;
 
 import org.mockito.exceptions.parents.MockitoException;
 
-public class MissingMethodInvocationException extends MockitoException {
+public class NotAMockException extends MockitoException {
 
     private static final long serialVersionUID = 1L;
 
-    public MissingMethodInvocationException(String message) {
-        super(message);
+    public NotAMockException(Object object) {
+        super("Not a mock: " + object.getClass().getName());
     }
 }

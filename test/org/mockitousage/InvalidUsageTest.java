@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.*;
 import org.mockito.Strictly;
-import org.mockito.exceptions.*;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.StateResetter;
 import org.mockito.util.RequiresValidState;

@@ -5,15 +5,15 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
-import static org.mockito.util.ExtraMatchers.*;
-import static org.mockito.CrazyMatchers.*;
+import static org.mockito.CrazyMatchers.aryEq;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.*;
 import org.mockito.exceptions.cause.*;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 

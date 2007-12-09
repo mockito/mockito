@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.*;
-import org.mockito.exceptions.VerificationError;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")

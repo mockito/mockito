@@ -4,15 +4,15 @@
  */
 package org.mockitousage.verification;
 
-import static org.mockito.util.ExtraMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.messageContains;
 
 import java.util.LinkedList;
 
 import org.junit.*;
 import org.mockito.Mockito;
-import org.mockito.exceptions.*;
 import org.mockito.exceptions.cause.*;
+import org.mockito.exceptions.verification.*;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")

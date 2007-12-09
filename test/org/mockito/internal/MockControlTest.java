@@ -7,7 +7,7 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.*;
-import org.mockito.exceptions.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.util.RequiresValidState;
 
