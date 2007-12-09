@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockito.exceptions.*;
-import org.mockito.exceptions.cause.TooLittleInvocations;
+import org.mockito.exceptions.cause.*;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
@@ -57,18 +57,27 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         mock.clear();
         mock.clear();
         mock.clear();
+        mock.clear();
 
-        Mockito.verify(mock, 3).clear();
+        Mockito.verify(mock, 4).clear();
         try {
             Mockito.verify(mock, 1).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {
+        } catch (TooManyActualInvocationsError e) {
             String expected = 
                 "\n" +
                 "LinkedList.clear()" +
                 "\n" +
-                "Wanted 1 time but was 3";
+                "Wanted 1 time but was 4";
             assertEquals(expected, e.getMessage());
+            
+            assertEquals(FirstUndesiredInvocation.class, e.getCause().getClass());
+            
+            String expectedCause = 
+                "\n" +
+                "First undesired invocation:";
+            
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
     
@@ -103,7 +112,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             Mockito.verify(mock, 0).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {
+        } catch (TooManyActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 0 times but was 1"));
         }
     }

@@ -12,6 +12,7 @@ import static org.mockito.internal.VerifyingMode.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.exceptions.HasStackTrace;
 import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
@@ -221,5 +222,26 @@ public class RegisteredInvocationsTest extends RequiresValidState {
         
         registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), atLeastOnce());
         assertNull(registered.getFirstUnverified());
+    }
+    
+    @Test
+    public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(0));
+        HasStackTrace expected = simpleMethodInvocation.getStackTrace();
+        assertSame(firstUndesired, expected);
+    }
+    
+    @Test
+    public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(1));
+        HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
+        assertSame(firstUndesired, expected);
+    }
+    
+    @Test
+    public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsTwo() throws Exception {
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(2));
+        HasStackTrace expected = simpleMethodInvocationThree.getStackTrace();
+        assertSame(firstUndesired, expected);
     }
 }

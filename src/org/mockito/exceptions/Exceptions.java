@@ -84,12 +84,22 @@ public class Exceptions {
                     wanted        
         ));
     }
-
+    
     public static void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
         throw new NumberOfInvocationsError(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ));
+    }
+
+    public static void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        FirstUndesiredInvocation cause = new FirstUndesiredInvocation(join("First undesired invocation:"));
+        cause.setStackTrace(firstUndesired.getStackTrace());
+        
+        throw new TooManyActualInvocationsError(join(
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
     }
     
     public static void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
@@ -106,16 +116,16 @@ public class Exceptions {
     }
 
     public static void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = buildCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
+        UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("No more interactions wanted"), cause);
     }
     
     public static void zeroInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = buildCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
+        UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("Zero interactions wanted"), cause);
     }
 
-    private static UndesiredInvocation buildCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
+    private static UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
         UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
         return cause;

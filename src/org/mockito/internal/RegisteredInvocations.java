@@ -117,4 +117,17 @@ public class RegisteredInvocations {
         }
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
+
+    public HasStackTrace getFirstUndesiredInvocationStackTrace(ExpectedInvocation wanted, VerifyingMode mode) {
+        int counter = 0;
+        for (Invocation registered : registeredInvocations) {
+            if (wanted.matches(registered)) {
+                counter++;
+                if (counter > mode.wantedCount()) {
+                    return registered.getStackTrace();
+                }
+            }
+        }
+        throw new IllegalArgumentException("There are no undesired invocations!");
+    }
 }

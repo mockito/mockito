@@ -53,11 +53,11 @@ public class MockitoBehavior<T> {
         Integer wantedCount = mode.wantedCount();
         
         if (actualCount < wantedCount) {
-            HasStackTrace lastInvocationStackTrace = registeredInvocations.getLastInvocationStackTrace(wanted);
-            Exceptions.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocationStackTrace);
+            HasStackTrace lastInvocation = registeredInvocations.getLastInvocationStackTrace(wanted);
+            Exceptions.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocation);
         } else if (actualCount > wantedCount) {
-//            registeredInvocations.findFirstUndesiredInvocation(wanted, mode);
-            Exceptions.numberOfInvocationsDiffers(wantedCount, actualCount, wanted.toString());
+            HasStackTrace firstUndesired = registeredInvocations.getFirstUndesiredInvocationStackTrace(wanted, mode);
+            Exceptions.tooManyActualInvocations(wantedCount, actualCount, wanted.toString(), firstUndesired);
         }
     }
 

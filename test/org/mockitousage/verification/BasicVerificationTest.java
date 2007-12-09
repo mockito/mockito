@@ -95,7 +95,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mock).clear();
             fail();
-        } catch (NumberOfInvocationsError e) {};
+        } catch (TooManyActualInvocationsError e) {};
     }
 
     @Test
