@@ -4,12 +4,11 @@
  */
 package org.mockito.internal;
 
-
-public class StubbedInvocation extends InvocationMatcher {
+public class StubbedInvocationMatcher extends InvocationMatcher {
 
     private final Result result;
 
-    public StubbedInvocation(InvocationMatcher invocation, Result result) {
+    public StubbedInvocationMatcher(InvocationMatcher invocation, Result result) {
         super(invocation.invocation, invocation.matchers);
         this.result = result;
     }

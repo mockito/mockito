@@ -19,23 +19,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class ToTypeMappings {
+public class EmptyReturnValues {
     
-    @SuppressWarnings("unchecked")
-    protected static Map<Class, Class> primitiveToWrapperType = new HashMap<Class, Class>();
-
-    static {
-        primitiveToWrapperType.put(Boolean.TYPE, Boolean.class);
-        primitiveToWrapperType.put(Byte.TYPE, Byte.class);
-        primitiveToWrapperType.put(Short.TYPE, Short.class);
-        primitiveToWrapperType.put(Character.TYPE, Character.class);
-        primitiveToWrapperType.put(Integer.TYPE, Integer.class);
-        primitiveToWrapperType.put(Long.TYPE, Long.class);
-        primitiveToWrapperType.put(Float.TYPE, Float.class);
-        primitiveToWrapperType.put(Double.TYPE, Double.class);
-    }
-    
-    public static Object emptyReturnValueFor(Class<?> type) {
+    public static Object emptyValueFor(Class<?> type) {
         return emptyReturnValueToType.get(type);
     }
     

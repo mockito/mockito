@@ -7,8 +7,12 @@ import org.mockito.exceptions.Exceptions;
 public class Stubber {
 
     private InvocationMatcher invocationForStubbing;
-    private LinkedList<StubbedInvocation> stubbed = new LinkedList<StubbedInvocation>();
+    private LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private Throwable throwableForVoidMethod;
+    
+    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
+        this.invocationForStubbing = invocation;
+    }
     
     public void addReturnValue(Object value) {
         MockitoState.instance().stubbingCompleted();
@@ -21,25 +25,33 @@ public class Stubber {
         addResult(Result.createThrowResult(throwable));
     }
 
-    public void addVoidMethodForThrowable(InvocationMatcher invocationWithMatchers) {
-        this.invocationForStubbing = invocationWithMatchers;
-        this.addThrowable(throwableForVoidMethod);
-        throwableForVoidMethod = null;
-    }
-    
     private void addResult(Result result) {
         assert invocationForStubbing != null;
-        stubbed.addFirst(new StubbedInvocation(invocationForStubbing, result));
+        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, result));
     }
-    
+
     public Object resultFor(Invocation wanted) throws Throwable {
-        for (StubbedInvocation s : stubbed) {
+        for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(wanted)) {
                 return s.getResult().answer();
             }
         }
 
-        return ToTypeMappings.emptyReturnValueFor(wanted.getMethod().getReturnType());
+        return EmptyReturnValues.emptyValueFor(wanted.getMethod().getReturnType());
+    }
+
+    public void addThrowableForVoidMethod(Throwable throwable) {
+        throwableForVoidMethod = throwable;
+    }
+
+    public boolean hasThrowableForVoidMethod() {
+        return throwableForVoidMethod != null;
+    }
+    
+    public void addVoidMethodForThrowable(InvocationMatcher voidMethodInvocationMatcher) {
+        invocationForStubbing = voidMethodInvocationMatcher;
+        addThrowable(throwableForVoidMethod);
+        throwableForVoidMethod = null;
     }
     
     private void validateThrowable(Throwable throwable) {
@@ -68,17 +80,5 @@ public class Stubber {
         }
         
         return false;
-    }
-
-    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
-        this.invocationForStubbing = invocation;
-    }
-
-    public void addThrowableForVoidMethod(Throwable throwable) {
-        throwableForVoidMethod = throwable;
-    }
-
-    public boolean hasThrowableForVoidMethod() {
-        return throwableForVoidMethod != null;
     }
 }

@@ -66,7 +66,7 @@ public class InvocationBuilder {
         return this;
     }
 
-    public InvocationMatcher toMatchingInvocation() {
+    public InvocationMatcher toInvocationMatcher() {
         return new InvocationMatcher(toInvocation());
     }
 }

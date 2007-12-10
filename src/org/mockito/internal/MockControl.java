@@ -27,7 +27,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         
         if (verifyingMode != null) {
             behavior.verify(invocationWithMatchers, verifyingMode);
-            return ToTypeMappings.emptyReturnValueFor(method.getReturnType());
+            return EmptyReturnValues.emptyValueFor(method.getReturnType());
         } 
         
         stubber.setInvocationForPotentialStubbing(invocationWithMatchers);

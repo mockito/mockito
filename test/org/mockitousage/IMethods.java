@@ -53,9 +53,9 @@ public interface IMethods {
 
     public String throwsError(int count) throws Error;
 
-    boolean simpleMethod();
+    String simpleMethod();
     
-    void differentMethod();
+    String differentMethod();
 
     String simpleMethod(String argument);
     
