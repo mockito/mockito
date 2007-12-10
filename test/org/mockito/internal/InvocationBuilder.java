@@ -65,4 +65,8 @@ public class InvocationBuilder {
         this.method = method;
         return this;
     }
+
+    public ExpectedInvocation toExpecteInvocation() {
+        return new ExpectedInvocation(toInvocation());
+    }
 }

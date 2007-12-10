@@ -8,14 +8,23 @@ public class Stubber {
 
     private ExpectedInvocation invocationForStubbing;
     private LinkedList<StubbedInvocation> stubbed = new LinkedList<StubbedInvocation>();
+    private Throwable throwableForVoidMethod;
     
     public void addReturnValue(Object value) {
+        MockitoState.instance().stubbingCompleted();
         addResult(Result.createReturnResult(value));
     }
     
     public void addThrowable(Throwable throwable) {
+        MockitoState.instance().stubbingCompleted();
         validateThrowable(throwable);
         addResult(Result.createThrowResult(throwable));
+    }
+
+    public void addVoidMethodForThrowable(ExpectedInvocation invocationWithMatchers) {
+        this.invocationForStubbing = invocationWithMatchers;
+        this.addThrowable(throwableForVoidMethod);
+        throwableForVoidMethod = null;
     }
     
     private void addResult(Result result) {
@@ -63,5 +72,13 @@ public class Stubber {
 
     public void setInvocationForPotentialStubbing(ExpectedInvocation invocation) {
         this.invocationForStubbing = invocation;
+    }
+
+    public void addThrowableForVoidMethod(Throwable throwable) {
+        throwableForVoidMethod = throwable;
+    }
+
+    public boolean hasThrowableForVoidMethod() {
+        return throwableForVoidMethod != null;
     }
 }

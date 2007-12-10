@@ -14,7 +14,6 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     private final MockitoBehavior<T> behavior = new MockitoBehavior<T>();
     private final Stubber stubber = new Stubber();
-    private Throwable throwableToBeSetOnVoidMethod;
     
     /**
      * if user passed bare arguments then create EqualsMatcher for every argument
@@ -43,13 +42,9 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (throwableToBeSetOnVoidMethod != null) {
+        if (stubber.hasThrowableForVoidMethod()) {
             ExpectedInvocation invocationWithMatchers = expectedInvocation(proxy, method, args);
-            //TODO this is a bit dodgy, we should set result directly on behavior and behavior should validate exception
-            behavior.addInvocation(invocationWithMatchers);
-            stubber.setInvocationForPotentialStubbing(invocationWithMatchers);
-            andThrows(throwableToBeSetOnVoidMethod);
-            throwableToBeSetOnVoidMethod = null;
+            stubber.addVoidMethodForThrowable(invocationWithMatchers);
             return null;
         }
         
@@ -92,19 +87,17 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
     }
 
     public void andReturn(T value) {
-        MockitoState.instance().stubbingCompleted();
         behavior.lastInvocationWasStubbed();
         stubber.addReturnValue(value);
     }
 
     public void andThrows(Throwable throwable) {
-        MockitoState.instance().stubbingCompleted();
         behavior.lastInvocationWasStubbed();
         stubber.addThrowable(throwable);
     }
     
     public MethodSelector<T> toThrow(Throwable throwable) {
-        throwableToBeSetOnVoidMethod = throwable;
+        stubber.addThrowableForVoidMethod(throwable);
         return this;
     }
 
