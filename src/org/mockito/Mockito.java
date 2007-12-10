@@ -18,7 +18,7 @@ public class Mockito extends Matchers {
     
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockControl<T> mockControl = new MockControl<T>(mockitoState);
+        MockControl<T> mockControl = new MockControl<T>(mockitoState, new MatchersBinder());
         return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
                 classToMock, mockControl));
     }
@@ -98,7 +98,6 @@ public class Mockito extends Matchers {
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
         MockControl<T> control = MockUtil.getControl(mock);
-        //TODO add test
         mockitoState.stubbingStarted();
         return control;
     }

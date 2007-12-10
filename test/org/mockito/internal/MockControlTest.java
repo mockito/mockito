@@ -6,29 +6,32 @@ package org.mockito.internal;
 
 import static org.junit.Assert.*;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.mockito.internal.matchers.Equals;
 
 @SuppressWarnings("unchecked")
 public class MockControlTest extends RequiresValidState {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
-        LastArguments.instance().reportMatcher(new Equals("test"));
-        
         MockitoStateImpl state = new MockitoStateImpl();
         state.verifyingStarted(VerifyingMode.atLeastOnce());
-        MockControl control = new MockControl(state);
+        MockControl control = new MockControl(state, new ExceptionThrowingBinder());
         
-        //TODO fix this test make it stub invocation factory with thrown exception
-
         try {
             control.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});
             fail();
         } catch (InvalidUseOfMatchersException e) {}
         
         assertNull(state.pullVerifyingMode());
+    }
+    
+    private class ExceptionThrowingBinder extends MatchersBinder {
+        @Override
+        public InvocationMatcher bindMatchers(Invocation invocation)
+                throws InvalidUseOfMatchersException {
+            throw new InvalidUseOfMatchersException("");
+        }
     }
 }

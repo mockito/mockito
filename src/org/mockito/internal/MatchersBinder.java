@@ -1,22 +1,13 @@
 package org.mockito.internal;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.*;
 
-public class InvocationMatcherFactory {
+public class MatchersBinder {
 
-    private final MockitoState mockitoState;
-
-    public InvocationMatcherFactory(MockitoState mockitoState) {
-        this.mockitoState = mockitoState;
-    }
-
-    public InvocationMatcher create(Object proxy, Method method, Object[] args) {
-        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
-        
+    public InvocationMatcher bindMatchers(Invocation invocation) throws InvalidUseOfMatchersException {
         List<IArgumentMatcher> lastMatchers = LastArguments.instance().pullMatchers();
         validateMatchers(invocation, lastMatchers);
 

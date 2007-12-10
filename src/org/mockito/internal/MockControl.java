@@ -11,18 +11,19 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
 
     private final MockitoBehavior<T> behavior = new MockitoBehavior<T>();
     private final Stubber stubber;
-    private final InvocationMatcherFactory invocationMatcherFactory;
+    private final MatchersBinder matchersBinder;
     private final MockitoState mockitoState;
     
-    public MockControl(MockitoState mockitoState) {
+    public MockControl(MockitoState mockitoState, MatchersBinder matchersBinder) {
         this.mockitoState = mockitoState;
-        invocationMatcherFactory = new InvocationMatcherFactory(mockitoState);
+        this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockitoState);
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (stubber.hasThrowableForVoidMethod()) {
-            InvocationMatcher invocationMatcher = invocationMatcherFactory.create(proxy, method, args);
+            Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
+            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
             stubber.addVoidMethodForThrowable(invocationMatcher);
             return null;
         }
@@ -30,7 +31,8 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
         mockitoState.validateState();
         
-        InvocationMatcher invocationWithMatchers = invocationMatcherFactory.create(proxy, method, args);
+        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
+        InvocationMatcher invocationWithMatchers = matchersBinder.bindMatchers(invocation);
         
         if (verifyingMode != null) {
             behavior.verify(invocationWithMatchers, verifyingMode);
