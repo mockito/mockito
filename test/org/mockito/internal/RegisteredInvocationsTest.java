@@ -83,7 +83,7 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     public void shouldGetTwoUnverifiedInvocationChunks() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), inOrder(null, asList(mock)));
         
         List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
@@ -102,8 +102,8 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     public void shouldGetOneUnverifiedInvocationChunk() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(differentMethodInvocation), inOrder(null, asList(mock)));
         
         List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
@@ -118,9 +118,9 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     public void shouldNotGetAnyInvocationChunks() throws Exception {
         Object mock = new Object();
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), inOrder(null, asList(mock)));
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(differentMethodInvocation), inOrder(null, asList(mock)));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), inOrder(null, asList(mock)));
         
         List<InvocationChunk> chunks = registered.unverifiedInvocationChunks(inOrder(null, asList(mock)));
         
@@ -129,7 +129,7 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAllsimpleMethodAsVerified() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation),times(2));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation),times(2));
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -140,7 +140,7 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAllsimpleMethodAsVerifiedWhenAtLeastOnceIsUsed() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), atLeastOnce());
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -151,7 +151,7 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     
     @Test
     public void shouldNeverMarkInvocationsAsVerifiedIfExpectedCountIsZero() throws Exception {
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), times(0));
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), times(0));
         
         List<Invocation> invocations = registered.all();
         assertEquals(false, invocations.get(0).isVerified());
@@ -164,7 +164,7 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     public void shouldMarkAsVerifedAllInvocationsFromFirstChunk() throws Exception {
         VerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
         assertTrue(mode.orderOfInvocationsMatters());
-        registered.markInvocationsAsVerified(new ExpectedInvocation(null), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(null), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(0).isVerified());
@@ -182,8 +182,8 @@ public class RegisteredInvocationsTest extends RequiresValidState {
         assertTrue(mode.orderOfInvocationsMatters());
         
         Invocation doesntMatter = null;
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(doesntMatter), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(2).isVerified());
@@ -198,9 +198,9 @@ public class RegisteredInvocationsTest extends RequiresValidState {
         assertTrue(mode.orderOfInvocationsMatters());
         
         Invocation doesntMatter = null;
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
-        registered.markInvocationsAsVerified(new ExpectedInvocation(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(doesntMatter), mode);
+        registered.markInvocationsAsVerified(new InvocationMatcher(doesntMatter), mode);
         
         List<Invocation> invocations = registered.all();
         assertEquals(true, invocations.get(3).isVerified());
@@ -217,30 +217,30 @@ public class RegisteredInvocationsTest extends RequiresValidState {
     public void shouldGetFirstUnverifiedInvocation() throws Exception {
         assertSame(simpleMethodInvocation, registered.getFirstUnverified());
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(simpleMethodInvocation), atLeastOnce());
+        registered.markInvocationsAsVerified(new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         assertSame(differentMethodInvocation, registered.getFirstUnverified());
         
-        registered.markInvocationsAsVerified(new ExpectedInvocation(differentMethodInvocation), atLeastOnce());
+        registered.markInvocationsAsVerified(new InvocationMatcher(differentMethodInvocation), atLeastOnce());
         assertNull(registered.getFirstUnverified());
     }
     
     @Test
     public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
-        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(0));
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerifyingMode.times(0));
         HasStackTrace expected = simpleMethodInvocation.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test
     public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
-        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(1));
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerifyingMode.times(1));
         HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test
     public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsTwo() throws Exception {
-        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new ExpectedInvocation(simpleMethodInvocation), VerifyingMode.times(2));
+        HasStackTrace firstUndesired = registered.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerifyingMode.times(2));
         HasStackTrace expected = simpleMethodInvocationThree.getStackTrace();
         assertSame(firstUndesired, expected);
     }

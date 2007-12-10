@@ -25,7 +25,7 @@ public class RegisteredInvocations {
         registeredInvocations.remove(registeredInvocations.size()-1);
     }
     
-    public void markInvocationsAsVerified(ExpectedInvocation expected, VerifyingMode mode) {
+    public void markInvocationsAsVerified(InvocationMatcher expected, VerifyingMode mode) {
         if (mode.wantedCountIsZero()) {
             return;
         }
@@ -71,7 +71,7 @@ public class RegisteredInvocations {
         return chunks;
     }
     
-    public Invocation findActualInvocation(ExpectedInvocation wanted) {
+    public Invocation findActualInvocation(InvocationMatcher wanted) {
         Invocation actualbyName = null;
         for (Invocation registered : registeredInvocations) {
             String wantedMethodName = wanted.getMethod().getName();
@@ -84,7 +84,7 @@ public class RegisteredInvocations {
         return actualbyName != null ? actualbyName : getFirstUnverified();
     }
 
-    public int countActual(ExpectedInvocation wanted) {
+    public int countActual(InvocationMatcher wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : registeredInvocations) {
             if (wanted.matches(registeredInvocation)) {
@@ -108,7 +108,7 @@ public class RegisteredInvocations {
         return null;
     }
 
-    public HasStackTrace getLastInvocationStackTrace(ExpectedInvocation wanted) {
+    public HasStackTrace getLastInvocationStackTrace(InvocationMatcher wanted) {
         Invocation lastMatching = null;
         for (Invocation registered : registeredInvocations) {
             if (wanted.matches(registered)) {
@@ -118,7 +118,7 @@ public class RegisteredInvocations {
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace getFirstUndesiredInvocationStackTrace(ExpectedInvocation wanted, VerifyingMode mode) {
+    public HasStackTrace getFirstUndesiredInvocationStackTrace(InvocationMatcher wanted, VerifyingMode mode) {
         int counter = 0;
         for (Invocation registered : registeredInvocations) {
             if (wanted.matches(registered)) {

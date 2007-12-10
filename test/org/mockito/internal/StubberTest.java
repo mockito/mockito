@@ -11,7 +11,7 @@ public class StubberTest extends RequiresValidState{
     @Test
     public void shouldFinishStubbingBeforeValidatingThrowable() throws Exception {
         Stubber s = new Stubber();
-        s.setInvocationForPotentialStubbing(new InvocationBuilder().toExpecteInvocation());
+        s.setInvocationForPotentialStubbing(new InvocationBuilder().toMatchingInvocation());
         
         MockitoState.instance().stubbingStarted();
         try {
@@ -20,5 +20,15 @@ public class StubberTest extends RequiresValidState{
         } catch (MockitoException e) {
             MockitoState.instance().validateState();
         }
+    }
+    
+    @Test
+    public void shouldFinishStubbingOnAddingReturnValue() throws Exception {
+        Stubber s = new Stubber();
+        s.setInvocationForPotentialStubbing(new InvocationBuilder().toMatchingInvocation());
+        
+        MockitoState.instance().stubbingStarted();
+        s.addReturnValue("test");
+        MockitoState.instance().validateState();
     }
 }

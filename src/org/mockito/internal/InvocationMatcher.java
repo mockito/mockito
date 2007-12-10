@@ -9,12 +9,12 @@ import java.util.*;
 
 import org.mockito.internal.matchers.IArgumentMatcher;
 
-public class ExpectedInvocation {
+public class InvocationMatcher {
 
     protected final Invocation invocation;
     protected final List<IArgumentMatcher> matchers;
 
-    public ExpectedInvocation(Invocation invocation, List<IArgumentMatcher> matchers) {
+    public InvocationMatcher(Invocation invocation, List<IArgumentMatcher> matchers) {
         if (matchers == null) {
             throw new IllegalArgumentException("matchers cannot be null");
         }
@@ -22,7 +22,7 @@ public class ExpectedInvocation {
         this.matchers = matchers;
     }
     
-    public ExpectedInvocation(Invocation invocation) {
+    public InvocationMatcher(Invocation invocation) {
         this(invocation, Collections.<IArgumentMatcher>emptyList());
     }
 

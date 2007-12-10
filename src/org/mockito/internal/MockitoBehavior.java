@@ -15,18 +15,18 @@ public class MockitoBehavior<T> {
 
     private T mock;
     
-    public void addInvocation(ExpectedInvocation invocation) {
+    public void addInvocation(InvocationMatcher invocation) {
         this.registeredInvocations.add(invocation.getInvocation());
     }
 
-    public void verify(ExpectedInvocation wanted, VerifyingMode mode) {
+    public void verify(InvocationMatcher wanted, VerifyingMode mode) {
         checkOrderOfInvocations(wanted, mode);
         checkForMissingInvocation(wanted, mode);
         checkForWrongNumberOfInvocations(wanted, mode);        
         registeredInvocations.markInvocationsAsVerified(wanted, mode);
     }
     
-    private void checkForMissingInvocation(ExpectedInvocation wanted, VerifyingMode mode) {
+    private void checkForMissingInvocation(InvocationMatcher wanted, VerifyingMode mode) {
         int actualCount = registeredInvocations.countActual(wanted);
         Integer wantedCount = mode.wantedCount();
         boolean atLeastOnce = mode.atLeastOnceMode();
@@ -36,7 +36,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    void checkForWrongNumberOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
+    void checkForWrongNumberOfInvocations(InvocationMatcher wanted, VerifyingMode mode) {
         if (mode.orderOfInvocationsMatters() || mode.atLeastOnceMode()) {
             return;
         }
@@ -53,7 +53,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private void reportMissingInvocationError(ExpectedInvocation wanted) {
+    private void reportMissingInvocationError(InvocationMatcher wanted) {
         Invocation actual = registeredInvocations.findActualInvocation(wanted);
         
         if (actual != null) {
@@ -63,7 +63,7 @@ public class MockitoBehavior<T> {
         }
     }
 
-    private void reportDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation) {
+    private void reportDiscrepancy(InvocationMatcher wantedInvocation, Invocation actualInvocation) {
         String wanted = wantedInvocation.toString();
         String actual = actualInvocation.toString();
         if (wanted.equals(actual)) {
@@ -74,7 +74,7 @@ public class MockitoBehavior<T> {
         Exceptions.wantedInvocationDiffersFromActual(wanted, actual, actualInvocation.getStackTrace());
     }
     
-    private void reportStrictOrderDiscrepancy(ExpectedInvocation wantedInvocation, Invocation actualInvocation) {
+    private void reportStrictOrderDiscrepancy(InvocationMatcher wantedInvocation, Invocation actualInvocation) {
         String wanted = wantedInvocation.toString();
         String actual = actualInvocation.toString();
         boolean sameMocks = wantedInvocation.getInvocation().getMock().equals(actualInvocation.getMock());
@@ -91,7 +91,7 @@ public class MockitoBehavior<T> {
     }
 
     //TODO Cyclomatic Complexity = 10 :|
-    private void checkOrderOfInvocations(ExpectedInvocation wanted, VerifyingMode mode) {
+    private void checkOrderOfInvocations(InvocationMatcher wanted, VerifyingMode mode) {
         if (!mode.orderOfInvocationsMatters()) {
             return;
         }

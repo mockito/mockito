@@ -5,11 +5,11 @@
 package org.mockito.internal;
 
 
-public class StubbedInvocation extends ExpectedInvocation {
+public class StubbedInvocation extends InvocationMatcher {
 
     private final Result result;
 
-    public StubbedInvocation(ExpectedInvocation invocation, Result result) {
+    public StubbedInvocation(InvocationMatcher invocation, Result result) {
         super(invocation.invocation, invocation.matchers);
         this.result = result;
     }

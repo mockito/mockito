@@ -66,7 +66,7 @@ public class InvocationBuilder {
         return this;
     }
 
-    public ExpectedInvocation toExpecteInvocation() {
-        return new ExpectedInvocation(toInvocation());
+    public InvocationMatcher toMatchingInvocation() {
+        return new InvocationMatcher(toInvocation());
     }
 }

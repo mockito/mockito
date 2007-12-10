@@ -29,7 +29,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     MockitoSampleTest.class, 
                     EqualsTest.class, 
                     CglibTest.class, 
-                    ExpectedInvocationTest.class, 
+                    InvocationMatcherTest.class, 
                     InvocationChunkTest.class, 
                     MockFactoryTest.class, 
                     MockitoBehaviorTest.class, 

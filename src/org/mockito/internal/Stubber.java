@@ -6,7 +6,7 @@ import org.mockito.exceptions.Exceptions;
 
 public class Stubber {
 
-    private ExpectedInvocation invocationForStubbing;
+    private InvocationMatcher invocationForStubbing;
     private LinkedList<StubbedInvocation> stubbed = new LinkedList<StubbedInvocation>();
     private Throwable throwableForVoidMethod;
     
@@ -21,7 +21,7 @@ public class Stubber {
         addResult(Result.createThrowResult(throwable));
     }
 
-    public void addVoidMethodForThrowable(ExpectedInvocation invocationWithMatchers) {
+    public void addVoidMethodForThrowable(InvocationMatcher invocationWithMatchers) {
         this.invocationForStubbing = invocationWithMatchers;
         this.addThrowable(throwableForVoidMethod);
         throwableForVoidMethod = null;
@@ -70,7 +70,7 @@ public class Stubber {
         return false;
     }
 
-    public void setInvocationForPotentialStubbing(ExpectedInvocation invocation) {
+    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
         this.invocationForStubbing = invocation;
     }
 

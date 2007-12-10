@@ -16,7 +16,7 @@ public class MockitoBehaviorTest extends RequiresValidState {
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
-        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation());
+        InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
         MockitoBehavior behavior = new MockitoBehavior();
         
         VerifyingMode inOrder = VerifyingMode.inOrder(1, Arrays.asList(new Object()));
@@ -27,7 +27,7 @@ public class MockitoBehaviorTest extends RequiresValidState {
     
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingAtLeastOnce() throws Exception {
-        ExpectedInvocation invocation = new ExpectedInvocation(new InvocationBuilder().toInvocation());
+        InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
         MockitoBehavior behavior = new MockitoBehavior();
         
         VerifyingMode inOrder = VerifyingMode.atLeastOnce();
