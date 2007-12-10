@@ -10,9 +10,8 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 
 import org.junit.*;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 
 public class UsingVarargsTest extends RequiresValidState {
 

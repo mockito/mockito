@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 import java.math.BigDecimal;
 
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.internal.matchers.*;
-import org.mockito.util.RequiresValidState;
 
 public class ComparableMatchersTest extends RequiresValidState {
 

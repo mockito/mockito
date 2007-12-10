@@ -3,50 +3,53 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.util.RequiresValidState;
 
 public class StubberTest extends RequiresValidState{
 
-    private Stubber s;
+    private Stubber stubber;
+    private MockitoStateImpl state;
     
     @Before
     public void setup() {
-        s = new Stubber();
-        s.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
-        MockitoState.instance().stubbingStarted();
+        state = new MockitoStateImpl();
+        state.stubbingStarted();
+        
+        stubber = new Stubber(state);
+        stubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
     }
 
     @Test
     public void shouldFinishStubbingBeforeValidatingThrowable() throws Exception {
         try {
-            s.addThrowable(new Exception());
+            stubber.addThrowable(new Exception());
             fail();
         } catch (MockitoException e) {
-            MockitoState.instance().validateState();
+            state.validateState();
         }
     }
     
     @Test
     public void shouldFinishStubbingOnAddingReturnValue() throws Exception {
-        s.addReturnValue("test");
-        MockitoState.instance().validateState();
+        stubber.addReturnValue("test");
+        state.validateState();
     }
     
     @Test
     public void shouldGetResultsForMethods() throws Throwable {
         Invocation simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
-        s.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        s.addReturnValue("simpleMethod");
+        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        stubber.addReturnValue("simpleMethod");
         
         Invocation differentMethod = new InvocationBuilder().method("differentMethod").toInvocation();
-        s.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
-        s.addThrowable(new IllegalStateException());
+        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
+        stubber.addThrowable(new IllegalStateException());
         
-        assertEquals("simpleMethod", s.resultFor(simpleMethod));
+        assertEquals("simpleMethod", stubber.resultFor(simpleMethod));
         
         try {
-            s.resultFor(differentMethod);
+            stubber.resultFor(differentMethod);
             fail();
         } catch (IllegalStateException e) {}
     }
@@ -54,11 +57,11 @@ public class StubberTest extends RequiresValidState{
     @Test
     public void shouldGetEmptyResultIfMethodsDontMatch() throws Throwable {
         Invocation simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
-        s.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        s.addReturnValue("simpleMethod");
+        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        stubber.addReturnValue("simpleMethod");
         
         Invocation differentMethod = new InvocationBuilder().method("differentMethod").toInvocation();
         
-        assertEquals(null, s.resultFor(differentMethod));
+        assertEquals(null, stubber.resultFor(differentMethod));
     }
 }

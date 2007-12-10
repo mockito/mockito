@@ -10,8 +10,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.util.RequiresValidState;
+import org.mockito.*;
 
 @SuppressWarnings("unchecked")
 public class VerificationOnMultipleMocksUsingMatchersTest extends RequiresValidState {

@@ -8,9 +8,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
-import org.mockito.Strictly;
+import org.mockito.*;
 import org.mockito.exceptions.verification.*;
-import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  

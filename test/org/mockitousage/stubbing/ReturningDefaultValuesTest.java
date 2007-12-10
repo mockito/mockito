@@ -9,8 +9,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.util.RequiresValidState;
+import org.mockito.*;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")

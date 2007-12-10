@@ -12,8 +12,6 @@ import org.junit.*;
 import org.mockito.*;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.internal.StateResetter;
-import org.mockito.util.RequiresValidState;
 
 public class StackTrackeFilteringTest extends RequiresValidState {
     

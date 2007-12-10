@@ -10,8 +10,8 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.internal.matchers.*;
-import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends RequiresValidState {

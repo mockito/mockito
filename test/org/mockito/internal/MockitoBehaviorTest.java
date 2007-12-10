@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.util.RequiresValidState;
+import org.mockito.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class MockitoBehaviorTest extends RequiresValidState {

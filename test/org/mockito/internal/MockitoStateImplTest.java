@@ -7,16 +7,16 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.util.RequiresValidState;
 
-public class MockitoStateTest extends RequiresValidState {
+public class MockitoStateImplTest extends RequiresValidState {
 
     private MockitoState mockitoState;
 
     @Before
     public void setup() {
-        mockitoState = new MockitoState();
+        mockitoState = new MockitoStateImpl();
     }
     
     @Test

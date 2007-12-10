@@ -9,8 +9,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.internal.matchers.*;
-import org.mockito.util.RequiresValidState;
 
 public class MatchersToStringTest extends RequiresValidState {
     private StringBuilder buffer;

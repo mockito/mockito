@@ -11,9 +11,9 @@ import java.io.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings({"serial", "unchecked"})
 public class StubbingWithThrowablesTest extends RequiresValidState {

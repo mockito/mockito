@@ -11,10 +11,9 @@ import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.*;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.exceptions.cause.*;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidState {

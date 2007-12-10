@@ -10,8 +10,8 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest extends RequiresValidState {

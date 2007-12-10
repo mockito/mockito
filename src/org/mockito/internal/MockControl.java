@@ -10,9 +10,16 @@ import java.util.List;
 public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
 
     private final MockitoBehavior<T> behavior = new MockitoBehavior<T>();
-    private final Stubber stubber = new Stubber();
-    private final InvocationMatcherFactory invocationMatcherFactory = new InvocationMatcherFactory();
+    private final Stubber stubber;
+    private final InvocationMatcherFactory invocationMatcherFactory;
+    private final MockitoState mockitoState;
     
+    public MockControl(MockitoState mockitoState) {
+        this.mockitoState = mockitoState;
+        invocationMatcherFactory = new InvocationMatcherFactory(mockitoState);
+        stubber = new Stubber(mockitoState);
+    }
+
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (stubber.hasThrowableForVoidMethod()) {
             InvocationMatcher invocationMatcher = invocationMatcherFactory.create(proxy, method, args);
@@ -20,8 +27,8 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
             return null;
         }
         
-        VerifyingMode verifyingMode = MockitoState.instance().pullVerifyingMode();
-        MockitoState.instance().validateState();
+        VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
+        mockitoState.validateState();
         
         InvocationMatcher invocationWithMatchers = invocationMatcherFactory.create(proxy, method, args);
         
@@ -33,7 +40,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         stubber.setInvocationForPotentialStubbing(invocationWithMatchers);
         behavior.addInvocation(invocationWithMatchers);
 
-        MockitoState.instance().reportControlForStubbing(this);
+        mockitoState.reportControlForStubbing(this);
         
         return stubber.resultFor(invocationWithMatchers.getInvocation());
     }

@@ -8,8 +8,14 @@ import org.mockito.internal.matchers.*;
 
 public class InvocationMatcherFactory {
 
+    private final MockitoState mockitoState;
+
+    public InvocationMatcherFactory(MockitoState mockitoState) {
+        this.mockitoState = mockitoState;
+    }
+
     public InvocationMatcher create(Object proxy, Method method, Object[] args) {
-        Invocation invocation = new Invocation(proxy, method, args, MockitoState.instance().nextSequenceNumber());
+        Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
         
         List<IArgumentMatcher> lastMatchers = LastArguments.instance().pullMatchers();
         validateMatchers(invocation, lastMatchers);

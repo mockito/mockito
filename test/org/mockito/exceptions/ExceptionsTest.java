@@ -1,8 +1,8 @@
 package org.mockito.exceptions;
 
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.util.RequiresValidState;
 
 
 public class ExceptionsTest extends RequiresValidState {

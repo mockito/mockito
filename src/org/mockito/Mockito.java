@@ -9,22 +9,24 @@ import org.mockito.internal.*;
 
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
-
+    
+    static MockitoState mockitoState = new ThreadSafeMockitoState();
+    
     public static VerifyingMode atLeastOnce() {
         return VerifyingMode.atLeastOnce();
     }
     
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockControl<T> mockControl = new MockControl<T>();
+        MockControl<T> mockControl = new MockControl<T>(mockitoState);
         return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
                 classToMock, mockControl));
     }
 
     public static <T> MockitoExpectation<T> stub(T methodCallToStub) {
-        MockitoState.instance().stubbingStarted();
+        mockitoState.stubbingStarted();
         
-        MockitoExpectation controlToStub = MockitoState.instance().pullControlToBeStubbed();
+        MockitoExpectation controlToStub = mockitoState.pullControlToBeStubbed();
         if (controlToStub == null) {
             Exceptions.missingMethodInvocation();
         }
@@ -41,7 +43,7 @@ public class Mockito extends Matchers {
     
     public static <T> T verify(T mock, VerifyingMode mode) {
         MockUtil.validateMock(mock);
-        MockitoState.instance().verifyingStarted(mode);
+        mockitoState.verifyingStarted(mode);
         return mock;
     }
 
@@ -74,7 +76,7 @@ public class Mockito extends Matchers {
 	 */
 	public static void verifyNoMoreInteractions(Object ... mocks) {
 	    assertMocksNotEmpty(mocks);
-	    MockitoState.instance().validateState();
+	    mockitoState.validateState();
 	    for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyNoMoreInteractions();
         }
@@ -88,15 +90,17 @@ public class Mockito extends Matchers {
 
     public static void verifyZeroInteractions(Object ... mocks) {
         assertMocksNotEmpty(mocks);
-        MockitoState.instance().validateState();
+        mockitoState.validateState();
         for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyZeroInteractions();
         }
     }
     
     public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
-        MockitoState.instance().stubbingStarted();
-        return MockUtil.getControl(mock);
+        MockControl<T> control = MockUtil.getControl(mock);
+        //TODO add test
+        mockitoState.stubbingStarted();
+        return control;
     }
 
     public static Strictly createStrictOrderVerifier(Object ... mocks) {

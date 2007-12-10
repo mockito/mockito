@@ -8,26 +8,18 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.junit.*;
+import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.*;
-import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest extends RequiresValidState {
 
-    @Before @After
-    public void setup() {
-        StateResetter.reset();
-    }
-    
     @Test
     public void shouldRemoveStubbedControlFromStateWhenStubbing() {
         List mock = Mockito.mock(List.class);
-//        System.out.println("[" + Thread.currentThread().getId() + "] - stubbing...");
         Mockito.stub(mock.add("test")).andReturn(true);
         
-        assertNull(MockitoState.instance().pullControlToBeStubbed());
+        assertNull(Mockito.mockitoState.pullControlToBeStubbed());
     }
     
     @Test(expected=NotAMockException.class)

@@ -7,7 +7,7 @@ package org.mockito.internal;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.mockito.util.RequiresValidState;
+import org.mockito.RequiresValidState;
 
 public class InvocationChunkTest extends RequiresValidState {
 

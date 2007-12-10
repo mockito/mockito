@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.util.RequiresValidState;
+import org.mockito.RequiresValidState;
 
 public class EmptyReturnValuesTest extends RequiresValidState {
     

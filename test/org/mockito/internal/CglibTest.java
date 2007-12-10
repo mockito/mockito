@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import net.sf.cglib.proxy.*;
 
 import org.junit.Test;
-import org.mockito.util.RequiresValidState;
+import org.mockito.RequiresValidState;
 
 /**
  * This test case is used to make sure that the way cglib is used is providing the expected behavior

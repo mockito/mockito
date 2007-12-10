@@ -8,8 +8,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.util.RequiresValidState;
+import org.mockito.*;
 
 public class ReplacingObjectMethodsTest extends RequiresValidState {
 

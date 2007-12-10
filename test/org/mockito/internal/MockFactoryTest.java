@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import net.sf.cglib.proxy.Factory;
 
 import org.junit.Test;
-import org.mockito.util.RequiresValidState;
+import org.mockito.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class MockFactoryTest extends RequiresValidState {

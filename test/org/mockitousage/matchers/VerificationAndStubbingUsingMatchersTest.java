@@ -10,8 +10,8 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  

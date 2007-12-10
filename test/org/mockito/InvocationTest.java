@@ -11,7 +11,6 @@ import java.util.*;
 
 import org.junit.*;
 import org.mockito.internal.*;
-import org.mockito.util.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")

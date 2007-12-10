@@ -9,9 +9,8 @@ import static org.mockito.util.ExtraMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.Strictly;
+import org.mockito.*;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.util.RequiresValidState;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 

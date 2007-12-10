@@ -7,8 +7,8 @@ package org.mockito.internal;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.util.RequiresValidState;
 
 public class VerifyingModeTest extends RequiresValidState {
 

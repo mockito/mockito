@@ -9,18 +9,23 @@ public class Stubber {
     private InvocationMatcher invocationForStubbing;
     private LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private Throwable throwableForVoidMethod;
+    private final MockitoState mockitoState;
     
+    public Stubber(MockitoState mockitoState) {
+        this.mockitoState = mockitoState;
+    }
+
     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
         this.invocationForStubbing = invocation;
     }
     
     public void addReturnValue(Object value) {
-        MockitoState.instance().stubbingCompleted();
+        mockitoState.stubbingCompleted();
         addResult(Result.createReturnResult(value));
     }
     
     public void addThrowable(Throwable throwable) {
-        MockitoState.instance().stubbingCompleted();
+        mockitoState.stubbingCompleted();
         validateThrowable(throwable);
         addResult(Result.createThrowResult(throwable));
     }

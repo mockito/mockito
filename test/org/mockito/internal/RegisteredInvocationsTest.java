@@ -12,8 +12,8 @@ import static org.mockito.internal.VerifyingMode.*;
 import java.util.*;
 
 import org.junit.*;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.HasStackTrace;
-import org.mockito.util.RequiresValidState;
 
 @SuppressWarnings("unchecked")
 public class RegisteredInvocationsTest extends RequiresValidState {

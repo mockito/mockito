@@ -8,8 +8,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.util.RequiresValidState;
+import org.mockito.*;
 
 public class MockitoSampleTest extends RequiresValidState {
     

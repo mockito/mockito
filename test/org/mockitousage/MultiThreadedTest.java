@@ -11,7 +11,6 @@ import org.mockito.*;
 import org.mockito.exceptions.parents.*;
 import org.mockito.internal.*;
 import org.mockito.internal.matchers.EqualsTest;
-import org.mockito.util.RequiresValidState;
 import org.mockitousage.binding.*;
 import org.mockitousage.matchers.*;
 import org.mockitousage.sample.MockitoSampleTest;
@@ -33,7 +32,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     InvocationChunkTest.class, 
                     MockFactoryTest.class, 
                     MockitoBehaviorTest.class, 
-                    MockitoStateTest.class, 
+                    MockitoStateImplTest.class, 
                     RegisteredInvocationsTest.class, 
                     EmptyReturnValuesTest.class, 
                     VerifyingModeTest.class, 
