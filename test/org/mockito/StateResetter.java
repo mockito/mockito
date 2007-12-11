@@ -7,6 +7,6 @@ package org.mockito;
 public class StateResetter {
     
     public static void reset() {
-        Mockito.mockitoState.reset();
+        Mockito.mockingProgress.reset();
     }
 }

@@ -13,31 +13,31 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
 
-public class MockitoStateImplTest extends RequiresValidState {
+public class MockingProgressImplTest extends RequiresValidState {
 
-    private MockitoState mockitoState;
+    private MockingProgress mockingProgress;
 
     @Before
     public void setup() {
-        mockitoState = new MockitoStateImpl();
+        mockingProgress = new MockingProgressImpl();
     }
     
     @Test
     public void shouldSwitchVerifyingMode() throws Exception {
-        assertNull(mockitoState.pullVerifyingMode());
+        assertNull(mockingProgress.pullVerifyingMode());
         
         OngoingVerifyingMode mode = OngoingVerifyingMode.times(19);
         
-        mockitoState.verifyingStarted(mode);
+        mockingProgress.verifyingStarted(mode);
         
-        assertSame(mode, mockitoState.pullVerifyingMode());
+        assertSame(mode, mockingProgress.pullVerifyingMode());
     }
     
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
-        mockitoState.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
+        mockingProgress.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
         try {
-            mockitoState.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
+            mockingProgress.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
     }

@@ -10,18 +10,18 @@ import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.MockitoStateImpl;
+import org.mockito.internal.state.MockingProgressImpl;
 import org.mockito.internal.stubbing.Stubber;
 
 public class StubberTest extends RequiresValidState{
 
     private Stubber stubber;
-    private MockitoStateImpl state;
+    private MockingProgressImpl state;
     private Invocation simpleMethod;
     
     @Before
     public void setup() {
-        state = new MockitoStateImpl();
+        state = new MockingProgressImpl();
         
         stubber = new Stubber(state);
         stubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());

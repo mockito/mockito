@@ -7,7 +7,7 @@ package org.mockito.internal.state;
 import org.mockito.exceptions.Exceptions;
 
 @SuppressWarnings("unchecked")
-public class MockitoStateImpl implements MockitoState {
+public class MockingProgressImpl implements MockingProgress {
     
     private OngoingStubbing ongoingStubbing;
     private OngoingVerifyingMode ongoingVerifyingMode;

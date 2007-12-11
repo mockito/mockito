@@ -7,15 +7,15 @@ package org.mockito.internal.state;
 
 
 @SuppressWarnings("unchecked")
-public class ThreadSafeMockitoState implements MockitoState {
+public class ThreadSafeMockingProgress implements MockingProgress {
     
-    private static ThreadLocal<MockitoState> mockitoState = new ThreadLocal<MockitoState>();
+    private static ThreadLocal<MockingProgress> mockingProgress = new ThreadLocal<MockingProgress>();
 
-    static MockitoState threadSafely() {
-        if (mockitoState.get() == null) {
-            mockitoState.set(new MockitoStateImpl());
+    static MockingProgress threadSafely() {
+        if (mockingProgress.get() == null) {
+            mockingProgress.set(new MockingProgressImpl());
         }
-        return mockitoState.get();
+        return mockingProgress.get();
     }
     
     public void reportStubable(OngoingStubbing ongoingStubbing) {

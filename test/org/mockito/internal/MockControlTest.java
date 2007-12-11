@@ -19,7 +19,7 @@ public class MockControlTest extends RequiresValidState {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
-        MockitoStateImpl state = new MockitoStateImpl();
+        MockingProgressImpl state = new MockingProgressImpl();
         state.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
         MockControl control = new MockControl(state, new ExceptionThrowingBinder());
         

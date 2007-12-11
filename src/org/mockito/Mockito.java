@@ -15,7 +15,7 @@ import org.mockito.internal.stubbing.VoidMethodStubable;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    static MockitoState mockitoState = new ThreadSafeMockitoState();
+    static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public static OngoingVerifyingMode atLeastOnce() {
         return OngoingVerifyingMode.atLeastOnce();
@@ -23,15 +23,15 @@ public class Mockito extends Matchers {
     
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockControl<T> mockControl = new MockControl<T>(mockitoState, new MatchersBinder());
+        MockControl<T> mockControl = new MockControl<T>(mockingProgress, new MatchersBinder());
         return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
                 classToMock, mockControl));
     }
 
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
-        mockitoState.stubbingStarted();
+        mockingProgress.stubbingStarted();
         
-        OngoingStubbing controlToStub = mockitoState.pullStubable();
+        OngoingStubbing controlToStub = mockingProgress.pullStubable();
         if (controlToStub == null) {
             Exceptions.missingMethodInvocation();
         }
@@ -48,7 +48,7 @@ public class Mockito extends Matchers {
     
     public static <T> T verify(T mock, OngoingVerifyingMode mode) {
         MockUtil.validateMock(mock);
-        mockitoState.verifyingStarted(mode);
+        mockingProgress.verifyingStarted(mode);
         return mock;
     }
 
@@ -81,7 +81,7 @@ public class Mockito extends Matchers {
 	 */
 	public static void verifyNoMoreInteractions(Object ... mocks) {
 	    assertMocksNotEmpty(mocks);
-	    mockitoState.validateState();
+	    mockingProgress.validateState();
 	    for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyNoMoreInteractions();
         }
@@ -95,7 +95,7 @@ public class Mockito extends Matchers {
 
     public static void verifyZeroInteractions(Object ... mocks) {
         assertMocksNotEmpty(mocks);
-        mockitoState.validateState();
+        mockingProgress.validateState();
         for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyZeroInteractions();
         }
@@ -103,7 +103,7 @@ public class Mockito extends Matchers {
     
     public static <T> VoidMethodStubable<T> stubVoid(T mock) {
         MockControl<T> control = MockUtil.getControl(mock);
-        mockitoState.stubbingStarted();
+        mockingProgress.stubbingStarted();
         return control;
     }
 

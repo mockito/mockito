@@ -5,17 +5,17 @@ import java.util.LinkedList;
 import org.mockito.exceptions.Exceptions;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.MockitoState;
+import org.mockito.internal.state.MockingProgress;
 
 public class Stubber {
 
     private InvocationMatcher invocationForStubbing;
     private LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private Throwable throwableForVoidMethod;
-    private final MockitoState mockitoState;
+    private final MockingProgress mockingProgress;
     
-    public Stubber(MockitoState mockitoState) {
-        this.mockitoState = mockitoState;
+    public Stubber(MockingProgress mockingProgress) {
+        this.mockingProgress = mockingProgress;
     }
 
     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
@@ -23,12 +23,12 @@ public class Stubber {
     }
     
     public void addReturnValue(Object value) {
-        mockitoState.stubbingCompleted();
+        mockingProgress.stubbingCompleted();
         addResult(Result.createReturnResult(value));
     }
     
     public void addThrowable(Throwable throwable) {
-        mockitoState.stubbingCompleted();
+        mockingProgress.stubbingCompleted();
         validateThrowable(throwable);
         addResult(Result.createThrowResult(throwable));
     }

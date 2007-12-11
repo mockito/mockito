@@ -1,30 +1,51 @@
 package org.mockitousage;
 import static org.junit.Assert.assertFalse;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
-import org.junit.runner.*;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import org.mockito.*;
-import org.mockito.exceptions.parents.*;
-import org.mockito.internal.*;
+import org.mockito.MockUtilTest;
+import org.mockito.MockitoTest;
+import org.mockito.RequiresValidState;
+import org.mockito.exceptions.parents.MockitoAssertionErrorTest;
+import org.mockito.exceptions.parents.MockitoExceptionTest;
+import org.mockito.internal.MockControlTest;
 import org.mockito.internal.creation.CglibTest;
 import org.mockito.internal.creation.MockFactoryTest;
 import org.mockito.internal.invocation.InvocationChunkTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.matchers.EqualsTest;
-import org.mockito.internal.state.MockitoStateImplTest;
+import org.mockito.internal.state.MockingProgressImplTest;
 import org.mockito.internal.state.OngoingVerifyingModeTest;
 import org.mockito.internal.stubbing.EmptyReturnValuesTest;
 import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.RegisteredInvocationsTest;
-import org.mockitousage.binding.*;
-import org.mockitousage.matchers.*;
+import org.mockitousage.binding.BridgeMethodPuzzleTest;
+import org.mockitousage.binding.IncorectBindingPuzzleFixedTest;
+import org.mockitousage.matchers.ComparableMatchersTest;
+import org.mockitousage.matchers.InvalidUseOfMatchersTest;
+import org.mockitousage.matchers.MatchersTest;
+import org.mockitousage.matchers.MatchersToStringTest;
+import org.mockitousage.matchers.VerificationAndStubbingUsingMatchersTest;
 import org.mockitousage.sample.MockitoSampleTest;
-import org.mockitousage.stubbing.*;
-import org.mockitousage.verification.*;
+import org.mockitousage.stubbing.BasicStubbingTest;
+import org.mockitousage.stubbing.ReturningDefaultValuesTest;
+import org.mockitousage.stubbing.StubbingWithThrowablesTest;
+import org.mockitousage.verification.AtLeastOnceVerificationTest;
+import org.mockitousage.verification.BasicVerificationTest;
+import org.mockitousage.verification.DescriptiveMessagesOnStrictOrderErrorsTest;
+import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
+import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
+import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
+import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest;
+import org.mockitousage.verification.VerificationInOrderTest;
+import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
+import org.mockitousage.verification.VerificationUsingMatchersTest;
 
 public class MultiThreadedTest extends RequiresValidState {
     
@@ -41,7 +62,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     InvocationChunkTest.class, 
                     MockFactoryTest.class, 
                     NumberOfInvocationsVerifierTest.class, 
-                    MockitoStateImplTest.class, 
+                    MockingProgressImplTest.class, 
                     RegisteredInvocationsTest.class, 
                     EmptyReturnValuesTest.class, 
                     OngoingVerifyingModeTest.class, 

@@ -10,6 +10,6 @@ public class RequiresValidState {
 
     @Before
     public void requiresValidState() {
-        Mockito.mockitoState.validateState();
+        Mockito.mockingProgress.validateState();
     }
 }
