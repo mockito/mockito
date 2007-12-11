@@ -8,30 +8,31 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class VerifyingRecorderTest extends RequiresValidState {
+public class NumberOfInvocationsVerifierTest extends RequiresValidState {
+
+    private NumberOfInvocationsVerifier verifier;
+    
+    @Before
+    public void setup() {
+        verifier = new NumberOfInvocationsVerifier();
+    }
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
-        InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
-        VerifyingRecorder behavior = new VerifyingRecorder();
-        
         VerifyingMode inOrder = VerifyingMode.inOrder(1, Arrays.asList(new Object()));
         assertTrue(inOrder.orderOfInvocationsMatters());
         
-        behavior.checkForWrongNumberOfInvocations(invocation, inOrder);
+        verifier.verify(null, null, inOrder);
     }
     
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingAtLeastOnce() throws Exception {
-        InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
-        VerifyingRecorder behavior = new VerifyingRecorder();
-        
         VerifyingMode inOrder = VerifyingMode.atLeastOnce();
         
-        behavior.checkForWrongNumberOfInvocations(invocation, inOrder);
+        verifier.verify(null, null, inOrder);
     }
 }

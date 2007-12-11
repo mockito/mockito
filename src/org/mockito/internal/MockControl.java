@@ -20,7 +20,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         this.mockitoState = mockitoState;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockitoState);
-        verifyingRecorder = new VerifyingRecorder<T>();
+        verifyingRecorder = new VerifyingRecorder<T>(new OrderOfInvocationsVerifier(), new MissingInvocationVerifier(), new NumberOfInvocationsVerifier());
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
