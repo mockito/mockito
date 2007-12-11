@@ -9,14 +9,20 @@ import java.util.*;
 import org.mockito.exceptions.*;
 import org.mockito.exceptions.parents.HasStackTrace;
 
-public class MockitoBehavior<T> {
+public class VerifyingRecorder<T> {
 
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations(new AllInvocationsFinder());
 
-    private T mock;
-    
-    public void addInvocation(InvocationMatcher invocation) {
+    public void recordInvocation(InvocationMatcher invocation) {
         this.registeredInvocations.add(invocation.getInvocation());
+    }
+    
+    public List<Invocation> getRegisteredInvocations() {
+        return registeredInvocations.all();
+    }
+
+    public void eraseLastInvocation() {
+        registeredInvocations.removeLast();
     }
 
     public void verify(InvocationMatcher wanted, VerifyingMode mode) {
@@ -129,21 +135,5 @@ public class MockitoBehavior<T> {
         if (unverified != null) {
             Exceptions.zeroInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }
-    }
-    
-    public T getMock() {
-        return mock;
-    }
-
-    public void setMock(T mock) {
-        this.mock = mock;
-    }
-
-    public List<Invocation> getRegisteredInvocations() {
-        return registeredInvocations.all();
-    }
-
-    public void lastInvocationWasStubbed() {
-        registeredInvocations.removeLast();
     }
 }

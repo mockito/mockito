@@ -12,12 +12,12 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 
 @SuppressWarnings("unchecked")
-public class MockitoBehaviorTest extends RequiresValidState {
+public class VerifyingRecorderTest extends RequiresValidState {
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingInOrder() throws Exception {
         InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
-        MockitoBehavior behavior = new MockitoBehavior();
+        VerifyingRecorder behavior = new VerifyingRecorder();
         
         VerifyingMode inOrder = VerifyingMode.inOrder(1, Arrays.asList(new Object()));
         assertTrue(inOrder.orderOfInvocationsMatters());
@@ -28,7 +28,7 @@ public class MockitoBehaviorTest extends RequiresValidState {
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingAtLeastOnce() throws Exception {
         InvocationMatcher invocation = new InvocationMatcher(new InvocationBuilder().toInvocation());
-        MockitoBehavior behavior = new MockitoBehavior();
+        VerifyingRecorder behavior = new VerifyingRecorder();
         
         VerifyingMode inOrder = VerifyingMode.atLeastOnce();
         
