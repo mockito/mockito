@@ -5,7 +5,10 @@
 package org.mockitousage;
 
 import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
 import java.util.List;
+
+import javax.swing.text.ChangedCharSetException;
 
 public interface IMethods {
 
@@ -88,6 +91,8 @@ public interface IMethods {
     String oneArray(short[] array);
 
     String oneArray(Object[] array);
+    
+    String canThrowException() throws ChangedCharSetException, CharacterCodingException; 
 
     String oneArray(String[] array);
 

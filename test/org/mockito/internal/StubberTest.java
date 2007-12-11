@@ -2,6 +2,8 @@ package org.mockito.internal;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.CharacterCodingException;
+
 import org.junit.*;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
@@ -10,18 +12,21 @@ public class StubberTest extends RequiresValidState{
 
     private Stubber stubber;
     private MockitoStateImpl state;
+    private Invocation simpleMethod;
     
     @Before
     public void setup() {
         state = new MockitoStateImpl();
-        state.stubbingStarted();
         
         stubber = new Stubber(state);
         stubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
+        
+        simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
     }
 
     @Test
     public void shouldFinishStubbingBeforeValidatingThrowable() throws Exception {
+        state.stubbingStarted();
         try {
             stubber.addThrowable(new Exception());
             fail();
@@ -32,31 +37,30 @@ public class StubberTest extends RequiresValidState{
     
     @Test
     public void shouldFinishStubbingOnAddingReturnValue() throws Exception {
+        state.stubbingStarted();
         stubber.addReturnValue("test");
         state.validateState();
     }
     
     @Test
     public void shouldGetResultsForMethods() throws Throwable {
-        Invocation simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         stubber.addReturnValue("simpleMethod");
         
         Invocation differentMethod = new InvocationBuilder().method("differentMethod").toInvocation();
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
-        stubber.addThrowable(new IllegalStateException());
+        stubber.addThrowable(new MyException());
         
         assertEquals("simpleMethod", stubber.resultFor(simpleMethod));
         
         try {
             stubber.resultFor(differentMethod);
             fail();
-        } catch (IllegalStateException e) {}
+        } catch (MyException e) {}
     }
     
     @Test
     public void shouldGetEmptyResultIfMethodsDontMatch() throws Throwable {
-        Invocation simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         stubber.addReturnValue("simpleMethod");
         
@@ -64,4 +68,41 @@ public class StubberTest extends RequiresValidState{
         
         assertEquals(null, stubber.resultFor(differentMethod));
     }
+    
+    @Test
+    public void shouldAddThrowableForVoidMethod() throws Throwable {
+        stubber.addThrowableForVoidMethod(new MyException());
+        stubber.addVoidMethodForThrowable(new InvocationMatcher(simpleMethod));
+        
+        try {
+            stubber.resultFor(simpleMethod);
+            fail();
+        } catch (MyException e) {};
+    }
+    
+    @Test
+    public void shouldValidateThrowableForVoidMethod() throws Throwable {
+        stubber.addThrowableForVoidMethod(new Exception());
+        
+        try {
+            stubber.addVoidMethodForThrowable(new InvocationMatcher(simpleMethod));
+            fail();
+        } catch (MockitoException e) {};
+    }
+    
+    @Test
+    public void shouldValidateNullThrowable() throws Throwable {
+        try {
+            stubber.addThrowable(null);
+            fail();
+        } catch (MockitoException e) {};
+    }
+    
+    @Test
+    public void shouldLetSettingProperCheckedException() throws Throwable {
+        stubber.setInvocationForPotentialStubbing(new InvocationBuilder().method("canThrowException").toInvocationMatcher());
+        stubber.addThrowable(new CharacterCodingException());
+    }
+    
+    @SuppressWarnings("serial") class MyException extends RuntimeException {};
 }
