@@ -6,7 +6,7 @@ import org.mockito.exceptions.Exceptions;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationChunk;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 
 public class OrderOfInvocationsVerifier implements Verifier {
 

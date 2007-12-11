@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import org.junit.*;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 
 @SuppressWarnings("unchecked")

@@ -12,7 +12,7 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.state.*;
+import org.mockito.internal.progress.*;
 
 @SuppressWarnings("unchecked")
 public class MockControlTest extends RequiresValidState {

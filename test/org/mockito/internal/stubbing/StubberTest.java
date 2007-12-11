@@ -10,7 +10,7 @@ import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.MockingProgressImpl;
+import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.stubbing.Stubber;
 
 public class StubberTest extends RequiresValidState{

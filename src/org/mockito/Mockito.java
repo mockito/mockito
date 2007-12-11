@@ -9,7 +9,7 @@ import org.mockito.internal.*;
 import org.mockito.internal.creation.MockFactory;
 import org.mockito.internal.creation.ObjectMethodsFilter;
 import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.state.*;
+import org.mockito.internal.progress.*;
 import org.mockito.internal.stubbing.VoidMethodStubable;
 
 @SuppressWarnings("unchecked")

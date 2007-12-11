@@ -7,7 +7,7 @@ package org.mockito;
 import java.util.*;
 
 import org.mockito.exceptions.Exceptions;
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 
 class StrictOrderVerifier implements Strictly {
     

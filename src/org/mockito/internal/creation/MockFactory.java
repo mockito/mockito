@@ -19,8 +19,6 @@ import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * Factory generating a mock for a class.
- * <p>
- * Note that this class is stateful
  */
 public class MockFactory<T> {
 

@@ -5,7 +5,7 @@
 package org.mockito;
 
 import org.mockito.internal.matchers.*;
-import org.mockito.internal.state.LastArguments;
+import org.mockito.internal.progress.LastArguments;
 
 public class CrazyMatchers {
     

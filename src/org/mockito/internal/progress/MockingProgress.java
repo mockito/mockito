@@ -1,8 +1,7 @@
-package org.mockito.internal.state;
+package org.mockito.internal.progress;
 
 
 
-//TODO name should be something like that: MockingState
 //TODO verificationMode instead verifying
 @SuppressWarnings("unchecked")
 public interface MockingProgress {

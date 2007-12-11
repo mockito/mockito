@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import static java.util.Arrays.asList;
 import static java.util.Collections.EMPTY_LIST;
 import static org.junit.Assert.*;
-import static org.mockito.internal.state.OngoingVerifyingMode.*;
+import static org.mockito.internal.progress.OngoingVerifyingMode.*;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationChunk;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 import org.mockito.internal.verification.RegisteredInvocations;
 
 @SuppressWarnings("unchecked")

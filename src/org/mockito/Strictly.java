@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 
 public interface Strictly {
 

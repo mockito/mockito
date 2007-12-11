@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.mockito.exceptions.Exceptions;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.MockingProgress;
+import org.mockito.internal.progress.MockingProgress;
 
 public class Stubber {
 

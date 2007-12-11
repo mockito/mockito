@@ -3,7 +3,7 @@ package org.mockito.internal.verification;
 import org.mockito.exceptions.Exceptions;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 
 public class NumberOfInvocationsVerifier implements Verifier {
 

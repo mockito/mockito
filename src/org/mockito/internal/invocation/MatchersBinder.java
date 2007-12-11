@@ -6,7 +6,7 @@ import java.util.List;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.IArgumentMatcher;
-import org.mockito.internal.state.LastArguments;
+import org.mockito.internal.progress.LastArguments;
 
 public class MatchersBinder {
 
