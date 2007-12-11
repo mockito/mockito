@@ -30,7 +30,7 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     @Test
     public void shouldStubWithThrowable() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
-        stub(mock.add("throw")).andThrows(expected);
+        stub(mock.add("throw")).andThrow(expected);
         
         try {
             mock.add("throw");
@@ -66,10 +66,10 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     
     @Test
     public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
-        stub(mock.get(1)).andThrows(new ExceptionOne());
+        stub(mock.get(1)).andThrow(new ExceptionOne());
         
         try {
-            stub(mock.get(1)).andThrows(new ExceptionTwo());
+            stub(mock.get(1)).andThrow(new ExceptionTwo());
             fail();
         } catch (ExceptionOne e) {}
     }   
@@ -79,7 +79,7 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
         Reader reader = mock(Reader.class);
         IOException ioException = new IOException();
         
-        stub(reader.read()).andThrows(ioException);
+        stub(reader.read()).andThrow(ioException);
         
         try {
             reader.read();
@@ -93,7 +93,7 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     public void shouldAllowSettingError() throws Exception {
         Error error = new Error();
         
-        stub(mock.add("quake")).andThrows(error);
+        stub(mock.add("quake")).andThrow(error);
         
         try {
             mock.add("quake");
@@ -105,22 +105,22 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        stub(mock.add("monkey island")).andThrows(new Exception());
+        stub(mock.add("monkey island")).andThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        stub(mock.add("monkey island")).andThrows(null);
+        stub(mock.add("monkey island")).andThrow(null);
     }    
     
     @Test
     public void shouldMixThrowablesAndReturnValuesOnDifferentMocks() throws Exception {
-        stub(mock.add("ExceptionOne")).andThrows(new ExceptionOne());
+        stub(mock.add("ExceptionOne")).andThrow(new ExceptionOne());
         stub(mock.getLast()).andReturn("last");
         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
         
         stubVoid(mockTwo).toThrow(new ExceptionThree()).on().clear();
-        stub(mockTwo.containsValue("ExceptionFour")).andThrows(new ExceptionFour());
+        stub(mockTwo.containsValue("ExceptionFour")).andThrow(new ExceptionFour());
         stub(mockTwo.get("Are you there?")).andReturn("Yes!");
 
         assertNull(mockTwo.get("foo"));
@@ -149,7 +149,7 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     
     @Test
     public void shouldStubbingWithThrowableBeVerifiable() {
-        stub(mock.size()).andThrows(new RuntimeException());
+        stub(mock.size()).andThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
         try {
@@ -169,7 +169,7 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
     
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.size()).andThrows(new RuntimeException());
+        stub(mock.size()).andThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
         verifyZeroInteractions(mock);

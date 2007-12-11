@@ -7,7 +7,7 @@ package org.mockito;
 import java.util.*;
 
 import org.mockito.exceptions.Exceptions;
-import org.mockito.internal.VerifyingMode;
+import org.mockito.internal.state.OngoingVerifyingMode;
 
 class StrictOrderVerifier implements Strictly {
     
@@ -18,14 +18,14 @@ class StrictOrderVerifier implements Strictly {
     }
     //TODO get rid of interface with int
     public <T> T verify(T mock, int wantedNumberOfInvocations) {
-        return this.verify(mock, VerifyingMode.inOrder(wantedNumberOfInvocations, mocksToBeVerifiedInOrder));
+        return this.verify(mock, OngoingVerifyingMode.inOrder(wantedNumberOfInvocations, mocksToBeVerifiedInOrder));
     }
     
-    public <T> T verify(T mock, VerifyingMode verifyingMode) {
+    public <T> T verify(T mock, OngoingVerifyingMode ongoingVerifyingMode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             Exceptions.strictlyRequiresFamiliarMock();
         }
-        return Mockito.verify(mock, VerifyingMode.inOrder(verifyingMode.wantedCount(), mocksToBeVerifiedInOrder));
+        return Mockito.verify(mock, OngoingVerifyingMode.inOrder(ongoingVerifyingMode.wantedCount(), mocksToBeVerifiedInOrder));
     }
 
     public void addMockToBeVerifiedInOrder(Object mock) {

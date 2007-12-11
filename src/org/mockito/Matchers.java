@@ -4,8 +4,8 @@
  */
 package org.mockito;
 
-import org.mockito.internal.LastArguments;
 import org.mockito.internal.matchers.*;
+import org.mockito.internal.state.LastArguments;
 
 public class Matchers {
     /**

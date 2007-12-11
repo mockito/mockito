@@ -53,11 +53,11 @@ public class InvalidUsageTest extends RequiresValidState {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        stub(mock.simpleMethod()).andThrows(new Exception());
+        stub(mock.simpleMethod()).andThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        stub(mock.simpleMethod()).andThrows(null);
+        stub(mock.simpleMethod()).andThrow(null);
     }    
 }

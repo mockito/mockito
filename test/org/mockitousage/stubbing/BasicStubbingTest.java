@@ -47,7 +47,7 @@ public class BasicStubbingTest extends RequiresValidState {
     
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.simpleMethod("one")).andThrows(new RuntimeException());
+        stub(mock.simpleMethod("one")).andThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
         
         verifyZeroInteractions(mock);

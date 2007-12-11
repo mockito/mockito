@@ -9,6 +9,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.state.*;
 
 @SuppressWarnings("unchecked")
 public class MockControlTest extends RequiresValidState {
@@ -16,7 +20,7 @@ public class MockControlTest extends RequiresValidState {
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockitoStateImpl state = new MockitoStateImpl();
-        state.verifyingStarted(VerifyingMode.atLeastOnce());
+        state.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
         MockControl control = new MockControl(state, new ExceptionThrowingBinder());
         
         try {

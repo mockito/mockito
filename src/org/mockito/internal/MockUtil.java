@@ -4,11 +4,13 @@
  */
 package org.mockito.internal;
 
-import net.sf.cglib.proxy.*;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.Factory;
 
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.internal.MockFactory.MockMethodInterceptor;
+import org.mockito.internal.creation.ObjectMethodsFilter;
+import org.mockito.internal.creation.MockFactory.MockMethodInterceptor;
 
 public class MockUtil {
     

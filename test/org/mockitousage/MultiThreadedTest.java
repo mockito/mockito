@@ -5,12 +5,21 @@ import java.util.*;
 
 import org.junit.Test;
 import org.junit.runner.*;
-import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.*;
 import org.mockito.exceptions.parents.*;
 import org.mockito.internal.*;
+import org.mockito.internal.creation.CglibTest;
+import org.mockito.internal.creation.MockFactoryTest;
+import org.mockito.internal.invocation.InvocationChunkTest;
+import org.mockito.internal.invocation.InvocationMatcherTest;
+import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.matchers.EqualsTest;
+import org.mockito.internal.state.MockitoStateImplTest;
+import org.mockito.internal.state.OngoingVerifyingModeTest;
+import org.mockito.internal.stubbing.EmptyReturnValuesTest;
+import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
+import org.mockito.internal.verification.RegisteredInvocationsTest;
 import org.mockitousage.binding.*;
 import org.mockitousage.matchers.*;
 import org.mockitousage.sample.MockitoSampleTest;
@@ -35,7 +44,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     MockitoStateImplTest.class, 
                     RegisteredInvocationsTest.class, 
                     EmptyReturnValuesTest.class, 
-                    VerifyingModeTest.class, 
+                    OngoingVerifyingModeTest.class, 
                     InvocationTest.class, 
                     MockUtilTest.class, 
                     MockitoAssertionErrorTest.class, 

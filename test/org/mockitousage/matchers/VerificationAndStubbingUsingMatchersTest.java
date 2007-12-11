@@ -31,7 +31,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
     public void shouldStubUsingMatchers() {
         stub(one.simpleMethod(2)).andReturn("2");
         stub(two.simpleMethod(anyString())).andReturn("any");
-        stub(three.simpleMethod(startsWith("test"))).andThrows(new RuntimeException());
+        stub(three.simpleMethod(startsWith("test"))).andThrow(new RuntimeException());
 
         assertEquals(null, one.simpleMethod(1));
         assertEquals("2", one.simpleMethod(2));

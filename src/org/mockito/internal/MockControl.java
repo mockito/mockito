@@ -7,7 +7,20 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExpectation<T>, VoidMethodExpectation<T>, MethodSelector<T> {
+import org.mockito.internal.creation.MockAwareInvocationHandler;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.state.MockitoState;
+import org.mockito.internal.state.OngoingStubbing;
+import org.mockito.internal.state.OngoingVerifyingMode;
+import org.mockito.internal.stubbing.EmptyReturnValues;
+import org.mockito.internal.stubbing.StubbedMethodSelector;
+import org.mockito.internal.stubbing.Stubber;
+import org.mockito.internal.stubbing.VoidMethodStubable;
+import org.mockito.internal.verification.VerifyingRecorder;
+
+public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
 
     private final VerifyingRecorder<T> verifyingRecorder;
     private final Stubber stubber;
@@ -20,7 +33,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         this.mockitoState = mockitoState;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockitoState);
-        verifyingRecorder = new VerifyingRecorder<T>(new OrderOfInvocationsVerifier(), new MissingInvocationVerifier(), new NumberOfInvocationsVerifier());
+        verifyingRecorder = new VerifyingRecorder<T>(new AllInvocationsFinder());
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -31,21 +44,21 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
             return null;
         }
         
-        VerifyingMode verifyingMode = mockitoState.pullVerifyingMode();
+        OngoingVerifyingMode ongoingVerifyingMode = mockitoState.pullVerifyingMode();
         mockitoState.validateState();
         
         Invocation invocation = new Invocation(proxy, method, args, mockitoState.nextSequenceNumber());
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
         
-        if (verifyingMode != null) {
-            verifyingRecorder.verify(invocationMatcher, verifyingMode);
+        if (ongoingVerifyingMode != null) {
+            verifyingRecorder.verify(invocationMatcher, ongoingVerifyingMode);
             return EmptyReturnValues.emptyValueFor(method.getReturnType());
         } 
         
         stubber.setInvocationForPotentialStubbing(invocationMatcher);
         verifyingRecorder.recordInvocation(invocationMatcher);
 
-        mockitoState.reportControlForStubbing(this);
+        mockitoState.reportStubable(this);
         
         return stubber.resultFor(invocationMatcher.getInvocation());
     }
@@ -63,12 +76,12 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, MockitoExp
         stubber.addReturnValue(value);
     }
 
-    public void andThrows(Throwable throwable) {
+    public void andThrow(Throwable throwable) {
         verifyingRecorder.eraseLastInvocation();
         stubber.addThrowable(throwable);
     }
     
-    public MethodSelector<T> toThrow(Throwable throwable) {
+    public StubbedMethodSelector<T> toThrow(Throwable throwable) {
         stubber.addThrowableForVoidMethod(throwable);
         return this;
     }

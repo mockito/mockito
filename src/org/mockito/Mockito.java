@@ -6,14 +6,19 @@ package org.mockito;
 
 import org.mockito.exceptions.*;
 import org.mockito.internal.*;
+import org.mockito.internal.creation.MockFactory;
+import org.mockito.internal.creation.ObjectMethodsFilter;
+import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.state.*;
+import org.mockito.internal.stubbing.VoidMethodStubable;
 
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
     static MockitoState mockitoState = new ThreadSafeMockitoState();
     
-    public static VerifyingMode atLeastOnce() {
-        return VerifyingMode.atLeastOnce();
+    public static OngoingVerifyingMode atLeastOnce() {
+        return OngoingVerifyingMode.atLeastOnce();
     }
     
     public static <T> T mock(Class<T> classToMock) {
@@ -23,10 +28,10 @@ public class Mockito extends Matchers {
                 classToMock, mockControl));
     }
 
-    public static <T> MockitoExpectation<T> stub(T methodCallToStub) {
+    public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
         mockitoState.stubbingStarted();
         
-        MockitoExpectation controlToStub = mockitoState.pullControlToBeStubbed();
+        OngoingStubbing controlToStub = mockitoState.pullStubable();
         if (controlToStub == null) {
             Exceptions.missingMethodInvocation();
         }
@@ -38,10 +43,10 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock, int wantedNumberOfInvocations) {
-        return verify(mock, VerifyingMode.times(wantedNumberOfInvocations));
+        return verify(mock, OngoingVerifyingMode.times(wantedNumberOfInvocations));
     }
     
-    public static <T> T verify(T mock, VerifyingMode mode) {
+    public static <T> T verify(T mock, OngoingVerifyingMode mode) {
         MockUtil.validateMock(mock);
         mockitoState.verifyingStarted(mode);
         return mock;
@@ -96,7 +101,7 @@ public class Mockito extends Matchers {
         }
     }
     
-    public static <T> VoidMethodExpectation<T> stubVoid(T mock) {
+    public static <T> VoidMethodStubable<T> stubVoid(T mock) {
         MockControl<T> control = MockUtil.getControl(mock);
         mockitoState.stubbingStarted();
         return control;
