@@ -26,15 +26,39 @@ public class InvocationMatcher {
     public InvocationMatcher(Invocation invocation) {
         this(invocation, Collections.<IArgumentMatcher>emptyList());
     }
-
-    public boolean matches(Invocation actual) {
-        return this.invocation.getMock().equals(
-                actual.getMock())
-                && this.invocation.getMethod().equals(actual.getMethod())
-                && matches(actual.getArguments());
+    
+    public Method getMethod() {
+        return invocation.getMethod();
+    }
+    
+    public Invocation getInvocation() {
+        return this.invocation;
+    }
+    
+    public List<IArgumentMatcher> getMatchers() {
+        return this.matchers;
     }
 
-    private boolean matches(Object[] arguments) {
+    public boolean matches(Invocation actual) {
+        return invocation.getMock().equals(actual.getMock())
+                && invocation.getMethod().equals(actual.getMethod())
+                && argumentsMatch(actual.getArguments());
+    }
+    
+    public boolean matchesButMocksAreDifferent(Invocation actual) {
+        return !invocation.getMock().equals(actual.getMock())
+            && invocation.getMethod().equals(actual.getMethod())
+            && argumentsMatch(actual.getArguments());
+    }
+    
+    public boolean matchesButNotMethodDeclaredClass(Invocation actual) {
+        return invocation.getMock().equals(actual.getMock())
+            && argumentsMatch(actual.getArguments())
+            && invocation.getMethod().getName().equals(actual.getMethod().getName())
+            && invocation.getMethod().getDeclaringClass() != actual.getMethod().getDeclaringClass();
+    }
+
+    private boolean argumentsMatch(Object[] arguments) {
         if (arguments.length != matchers.size()) {
             return false;
         }
@@ -46,23 +70,15 @@ public class InvocationMatcher {
         return true;
     }
     
-    public String toStringWithSequenceNumber() {
-        return this.invocation.toStringWithSequenceNumber(matchers);
-    }
-    
     public String toString() {
         return invocation.toString(matchers);
     }
-
-    public Method getMethod() {
-        return invocation.getMethod();
+    
+    public String toStringWithSequenceNumber() {
+        return invocation.toStringWithSequenceNumber(matchers);
     }
     
-    public Invocation getInvocation() {
-        return this.invocation;
-    }
-    
-    public List<IArgumentMatcher> getMatchers() {
-        return this.matchers;
+    public String toStringWithArgumentTypes() {
+        return invocation.toStringWithArgumentTypes();
     }
 }

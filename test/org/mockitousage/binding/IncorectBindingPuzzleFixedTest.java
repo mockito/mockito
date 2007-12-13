@@ -74,4 +74,18 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
             assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }
     }
+    
+    @Test
+    public void shouldUseArgumentTypeWhenMatcherUsed() throws Exception {
+        Sub sub = mock(Sub.class);
+        setMockWithDowncast(sub);
+        say("Hello world");
+        try {
+            verify(sub).say(CrazyMatchers.contains("world"));
+            fail();
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("Sub.say(class java.lang.String)"));
+            assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
+        }
+    }
 }

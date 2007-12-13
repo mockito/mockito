@@ -116,13 +116,12 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(two).simpleMethod();
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, messageContains("IMethods#3.simpleMethod()"));
-            assertThat(expected, causeMessageContains("IMethods#1.simpleMethod()"));
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("IMethods#3.simpleMethod()"));
+            assertThat(e, causeMessageContains("IMethods#1.simpleMethod()"));
         }
     }
     
-    @Ignore
     @Test
     public void shouldPrintSequenceNumberAndMatchersWhenMocksAndMethodsAreTheSame() {
         StateResetter.reset();

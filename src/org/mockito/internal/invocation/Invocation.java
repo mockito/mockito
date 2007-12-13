@@ -64,74 +64,6 @@ public class Invocation {
         return arguments;
     }
 
-    public boolean equals(Object o) {
-        if (o == null || !o.getClass().equals(this.getClass()))
-            return false;
-
-        Invocation other = (Invocation) o;
-
-        return this.mock.equals(other.mock) && this.method.equals(other.method)
-                && this.equalArguments(other.arguments);
-    }
-
-    public int hashCode() {
-        throw new RuntimeException("hashCode() is not implemented");
-    }
-
-    private boolean equalArguments(Object[] arguments) {
-        return Arrays.equals(arguments, this.arguments);
-    }
-
-    private String getMockAndMethodName() {
-        return MockNamer.nameForMock(mock) + "." + method.getName();
-    }
-    
-    private String getMockAndMethodNameWithSeqenceNumber() {
-        return MockNamer.nameForMock(mock) + "#" + sequenceNumber + "." + method.getName();
-    }
-
-    public String toString() {
-        List<IArgumentMatcher> matchers = argumentsToMatchers();
-        return toString(matchers);
-    }
-
-    private List<IArgumentMatcher> argumentsToMatchers() {
-        List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
-        for (Object arg : this.arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
-        }
-        return matchers;
-    }
-    
-    public String toString(List<IArgumentMatcher> matchers) {
-        return getMockAndMethodName() + getArgumentsString(matchers);
-    }
-
-    private String getArgumentsString(List<IArgumentMatcher> matchers) {
-        StringBuilder result = new StringBuilder();
-        result.append("(");
-        for (IArgumentMatcher matcher : matchers) {
-            matcher.appendTo(result);
-            result.append(", ");
-        }
-        return result.toString().replaceFirst(", $", "").concat(")");
-    }
-    
-    public String toStringWithArgumentTypes() {
-        StringBuilder result = new StringBuilder();
-        result.append(getMockAndMethodName());
-        result.append("(");
-        for (Class<?> paramType : getMethod().getParameterTypes()) {
-            result.append(paramType);
-            result.append(", ");
-        } 
-        return result.toString().replaceFirst(", $", "").concat(")");
-    }
-    
     public void markVerified() {
         verified = true;
     }
@@ -152,6 +84,36 @@ public class Invocation {
     public boolean isVerifiedInOrder() {
         return verifiedInOrder;
     }
+    
+    public HasStackTrace getStackTrace() {
+        return stackTrace;
+    }
+
+    public boolean equals(Object o) {
+        if (o == null || !o.getClass().equals(this.getClass()))
+            return false;
+
+        Invocation other = (Invocation) o;
+
+        return this.mock.equals(other.mock) && this.method.equals(other.method)
+                && this.equalArguments(other.arguments);
+    }
+
+    private boolean equalArguments(Object[] arguments) {
+        return Arrays.equals(arguments, this.arguments);
+    }
+
+    public int hashCode() {
+        throw new RuntimeException("hashCode() is not implemented");
+    }
+    
+    public String toString() {
+        return toString(argumentsToMatchers());
+    }
+
+    public String toString(List<IArgumentMatcher> matchers) {
+        return getMockAndMethodName() + getArgumentsString(matchers);
+    }
 
     public String toStringWithSequenceNumber() {
         return toStringWithSequenceNumber(argumentsToMatchers());
@@ -160,8 +122,45 @@ public class Invocation {
     public String toStringWithSequenceNumber(List<IArgumentMatcher> matchers) {
         return getMockAndMethodNameWithSeqenceNumber() + getArgumentsString(matchers);
     }
-
-    public HasStackTrace getStackTrace() {
-        return stackTrace;
+    
+    public String toStringWithArgumentTypes() {
+        StringBuilder result = new StringBuilder();
+        result.append(getMockAndMethodName());
+        result.append("(");
+        for (Class<?> paramType : getMethod().getParameterTypes()) {
+            result.append(paramType);
+            result.append(", ");
+        } 
+        return result.toString().replaceFirst(", $", "").concat(")");
+    }
+    
+    private String getMockAndMethodName() {
+        return MockNamer.nameForMock(mock) + "." + method.getName();
+    }
+    
+    private String getMockAndMethodNameWithSeqenceNumber() {
+        return MockNamer.nameForMock(mock) + "#" + sequenceNumber + "." + method.getName();
+    }
+    
+    private String getArgumentsString(List<IArgumentMatcher> matchers) {
+        StringBuilder result = new StringBuilder();
+        result.append("(");
+        for (IArgumentMatcher matcher : matchers) {
+            matcher.appendTo(result);
+            result.append(", ");
+        }
+        return result.toString().replaceFirst(", $", "").concat(")");
+    }
+    
+    private List<IArgumentMatcher> argumentsToMatchers() {
+        List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
+        for (Object arg : this.arguments) {
+            if (arg != null && arg.getClass().isArray()) {
+                matchers.add(new ArrayEquals(arg));
+            } else {
+                matchers.add(new Equals(arg));
+            }
+        }
+        return matchers;
     }
 }
