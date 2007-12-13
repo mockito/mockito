@@ -46,13 +46,13 @@
 	</target>
 
 	<target name="compile" depends="prepare">
-		<javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="false" deprecation="true">
+		<javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
 			<classpath refid="compile.classpath" />
 		</javac>
 	</target>
 
 	<target name="compile.test" depends="compile" unless="test.skip">
-		<javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="false" deprecation="true">
+		<javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
 			<classpath refid="test.compile.classpath" />
 		</javac>
 	</target>
@@ -61,6 +61,7 @@
 		<junit fork="true" forkmode="once" haltonfailure="true">
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />
+			<jvmarg value="-ea" />
 
 			<batchtest>
 				<fileset dir="${test.classes.dir}" includes="**/*Test.class" />
