@@ -24,9 +24,9 @@ public class InvocationsCalculatorTest extends RequiresValidState {
 
     @Before
     public void setup() throws Exception {
-        simpleMethodInvocation = new InvocationBuilder().method("simpleMethod").seq(1).toInvocation();
-        simpleMethodInvocationTwo = new InvocationBuilder().method("simpleMethod").seq(2).toInvocation();
-        differentMethodInvocation = new InvocationBuilder().method("differentMethod").seq(3).toInvocation();
+        simpleMethodInvocation = new InvocationBuilder().simpleMethod().seq(1).toInvocation();
+        simpleMethodInvocationTwo = new InvocationBuilder().simpleMethod().seq(2).toInvocation();
+        differentMethodInvocation = new InvocationBuilder().differentMethod().seq(3).toInvocation();
         calculator = new InvocationsCalculator(Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation));
     }
     

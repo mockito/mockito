@@ -51,11 +51,11 @@ public class InvocationMatcher {
             && argumentsMatch(actual.getArguments());
     }
     
-    public boolean matchesButNotMethodDeclaredClass(Invocation actual) {
+    public boolean matchesMockArgsAndMethodNameButMethodNotEqual(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
             && argumentsMatch(actual.getArguments())
             && invocation.getMethod().getName().equals(actual.getMethod().getName())
-            && invocation.getMethod().getDeclaringClass() != actual.getMethod().getDeclaringClass();
+            && !invocation.getMethod().equals(actual.getMethod());
     }
 
     private boolean argumentsMatch(Object[] arguments) {

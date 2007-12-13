@@ -30,7 +30,7 @@ public class BridgeMethodPuzzleTest extends RequiresValidState {
     private class Sub extends Super<String> {
         @Override
         public String say(String t)  {
-            return "Sub says: " + t;
+            return "Dummy says: " + t;
         }
     }
 
@@ -48,7 +48,7 @@ public class BridgeMethodPuzzleTest extends RequiresValidState {
     public void shouldHaveBridgeMethod() throws Exception {
         Super s = new Sub();
         
-        assertEquals("Sub says: Hello", s.say("Hello"));
+        assertEquals("Dummy says: Hello", s.say("Hello"));
         
         assertThat(Sub.class, hasBridgeMethod("say"));
         assertThat(s, hasBridgeMethod("say"));
@@ -56,7 +56,7 @@ public class BridgeMethodPuzzleTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
-        //Super has following erasure: say(Object) which differs from Sub.say(String)
+        //Super has following erasure: say(Object) which differs from Dummy.say(String)
         //mock has to detect it and do the super.say()
         //see MockFactory.java
         Sub s = mock(Sub.class);

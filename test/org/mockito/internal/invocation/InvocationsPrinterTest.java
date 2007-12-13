@@ -1,9 +1,9 @@
 package org.mockito.internal.invocation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
-import org.junit.Ignore;
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 
 public class InvocationsPrinterTest {
@@ -28,15 +28,46 @@ public class InvocationsPrinterTest {
         assertEquals("Object#2.simpleMethod()", printer.printActual());
     }
     
-    @Ignore
+    class Super {
+        void test(Object o) {};
+    }
+    
+    class Sub extends Super {
+        void test(String s) {};
+    }
+
     @Test
-    public void shouldPrintTypesWantedAndActualWhenInvocationIsTheSame() throws Exception {
-        fail("todo");
-        InvocationMatcher mockOneMethod = new InvocationBuilder().mock("mockOne").seq(1).toInvocationMatcher();
-        Invocation mockTwoMethod = new InvocationBuilder().mock("mockTwo").seq(2).toInvocation();
-        InvocationsPrinter printer = new InvocationsPrinter(mockOneMethod, mockTwoMethod);
+    public void shouldPrintSequenceNumbersWhenMatchesButMocksDifferent() throws Exception {
+        Method methodOne = Super.class.getDeclaredMethod("test", Object.class);
+        Method methodTwo = Sub.class.getDeclaredMethod("test", String.class);
         
-        assertEquals("Object#1.simpleMethod()", printer.printWanted());
-        assertEquals("Object#2.simpleMethod()", printer.printActual());
+        InvocationMatcher invocationOne = new InvocationBuilder().method(methodOne).toInvocationMatcher();
+        Invocation invocationTwo = new InvocationBuilder().method(methodTwo).toInvocation();
+        InvocationsPrinter printer = new InvocationsPrinter(invocationOne, invocationTwo);
+        
+        assertEquals(invocationOne.toString(), invocationTwo.toString());
+        
+        assertEquals("Object.test(class java.lang.Object)", printer.printWanted());
+        assertEquals("Object.test(class java.lang.String)", printer.printActual());
+    }
+    
+    class Dummy {
+        void test(String ... s) {};
+        void test(Object ... o) {};
+    }
+    
+    @Test
+    public void shouldPrintTypesWhenMockArgsAndMethodNameMatchButMethodNotEqual() throws Exception {
+        Method methodOne = Dummy.class.getDeclaredMethod("test", new Object[]{}.getClass());
+        Method methodTwo = Dummy.class.getDeclaredMethod("test", new String[]{}.getClass());
+        
+        InvocationMatcher invocationOne = new InvocationBuilder().method(methodOne).arg(new Object[]{}).toInvocationMatcher();
+        Invocation invocationTwo = new InvocationBuilder().method(methodTwo).arg(new String[]{}).toInvocation();
+        InvocationsPrinter printer = new InvocationsPrinter(invocationOne, invocationTwo);
+        
+        assertEquals(invocationOne.toString(), invocationTwo.toString());
+        
+        assertEquals("Object.test(class [Ljava.lang.Object;)", printer.printWanted());
+        assertEquals("Object.test(class [Ljava.lang.String;)", printer.printActual());
     }
 }

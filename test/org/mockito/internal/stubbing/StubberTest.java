@@ -26,7 +26,7 @@ public class StubberTest extends RequiresValidState{
         stubber = new Stubber(state);
         stubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
         
-        simpleMethod = new InvocationBuilder().method("simpleMethod").toInvocation();
+        simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
     }
 
     @Test
@@ -52,7 +52,7 @@ public class StubberTest extends RequiresValidState{
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         stubber.addReturnValue("simpleMethod");
         
-        Invocation differentMethod = new InvocationBuilder().method("differentMethod").toInvocation();
+        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         stubber.addThrowable(new MyException());
         
@@ -69,7 +69,7 @@ public class StubberTest extends RequiresValidState{
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         stubber.addReturnValue("simpleMethod");
         
-        Invocation differentMethod = new InvocationBuilder().method("differentMethod").toInvocation();
+        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         
         assertEquals(null, stubber.resultFor(differentMethod));
     }

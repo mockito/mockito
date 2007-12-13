@@ -24,10 +24,10 @@ public class InvocationsMarkerTest extends RequiresValidState {
 
     @Before
     public void setup() throws Exception {
-        simpleMethodInvocation = new InvocationBuilder().method("simpleMethod").seq(1).toInvocation();
-        simpleMethodInvocationTwo = new InvocationBuilder().method("simpleMethod").seq(2).toInvocation();
-        differentMethodInvocation = new InvocationBuilder().method("differentMethod").seq(3).toInvocation();
-        simpleMethodInvocationThree = new InvocationBuilder().method("simpleMethod").seq(4).toInvocation();
+        simpleMethodInvocation = new InvocationBuilder().simpleMethod().seq(1).toInvocation();
+        simpleMethodInvocationTwo = new InvocationBuilder().simpleMethod().seq(2).toInvocation();
+        differentMethodInvocation = new InvocationBuilder().differentMethod().seq(3).toInvocation();
+        simpleMethodInvocationThree = new InvocationBuilder().simpleMethod().seq(4).toInvocation();
         
         invocations = Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation, simpleMethodInvocationThree);
         

@@ -57,6 +57,11 @@ public class InvocationBuilder {
         this.args = args;
         return this;
     }
+    
+    public InvocationBuilder arg(Object o) {
+        this.args = new Object[] {o};
+        return this;
+    }
 
     public InvocationBuilder mock(Object mock) {
         this.mock = mock;

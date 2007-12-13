@@ -4,15 +4,26 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.CrazyMatchers.aryEq;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.util.ExtraMatchers.causeMessageContains;
+import static org.mockito.util.ExtraMatchers.messageContains;
 
-import org.junit.*;
-import org.mockito.*;
-import org.mockito.exceptions.cause.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
+import org.mockito.exceptions.cause.UndesiredInvocation;
+import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
@@ -262,6 +273,18 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
             fail();
         } catch (VerificationError e) {
             assertThat(e, causeMessageContains("simpleMethod(null, null)"));
+        }
+    }
+    
+    @Test
+    public void shouldPrintTypesWhenMethodSupposablyTheSame() throws Exception {
+        mock.varargs((Object[]) new Object[] {});
+        try {
+            verify(mock).varargs((String[]) new String[] {});
+            fail();
+        } catch(VerificationError e) {
+            assertThat(e, messageContains("IMethods.varargs(class [Ljava.lang.String;)"));
+            assertThat(e, causeMessageContains("IMethods.varargs(class [Ljava.lang.Object;)"));
         }
     }
 }

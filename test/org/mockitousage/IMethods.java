@@ -99,6 +99,10 @@ public interface IMethods {
     void varargsString(int i, String... string);
 
     Object varargsObject(int i, Object... object);
+    
+    void varargs(Object ... object);
+    
+    void varargs(String ... string);
 
     List<String> listReturningMethod(Object ... objects);
 }
