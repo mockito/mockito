@@ -44,7 +44,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         } catch (VerificationError e) {
             String expected = 
                     "\n" +
-                    "Strict order verification failed" +
+                    "Invocation differs from actual" +
                     "\n" +
                     "Wanted invocation:" +
                     "\n" +
@@ -91,8 +91,8 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(two, 1).simpleMethod(2);
             fail();
-        } catch (NumberOfInvocationsError expected) {
-            String actualMessage = expected.getMessage();
+        } catch (TooManyActualInvocationsError e) {
+            String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
                     "IMethods.simpleMethod(2)" +
@@ -119,6 +119,27 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         } catch (VerificationError expected) {
             assertThat(expected, messageContains("IMethods#3.simpleMethod()"));
             assertThat(expected, causeMessageContains("IMethods#1.simpleMethod()"));
+        }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldPrintSequenceNumberAndMatchersWhenMocksAndMethodsAreTheSame() {
+        StateResetter.reset();
+        one = mock(IMethods.class);
+        two = mock(IMethods.class);
+        
+        one.simpleMethod(1);
+        two.simpleMethod(1);
+        
+        strictly = createStrictOrderVerifier(one, two);
+        
+        try {
+            strictly.verify(two).simpleMethod(Mockito.anyInt());
+            fail();
+        } catch (VerificationError expected) {
+            assertThat(expected, messageContains("IMethods#3.simpleMethod(<any>)"));
+            assertThat(expected, causeMessageContains("IMethods#1.simpleMethod(1)"));
         }
     }
 }

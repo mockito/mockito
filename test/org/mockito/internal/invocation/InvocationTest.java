@@ -96,4 +96,15 @@ public class InvocationTest extends RequiresValidState {
         invocation = new InvocationBuilder().method(m).args((Object)null).toInvocation();
         assertEquals("Object.oneArray(null)", invocation.toString());
     }
+    
+    @Test
+    public void shouldMarkVerifiedWhenMarkedVerifiedInOrder() throws Exception {
+        assertFalse(invocation.isVerified());
+        assertFalse(invocation.isVerifiedInOrder());
+        
+        invocation.markVerifiedInOrder();
+        
+        assertTrue(invocation.isVerified());
+        assertTrue(invocation.isVerifiedInOrder());
+    }
 }

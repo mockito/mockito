@@ -1,0 +1,72 @@
+package org.mockito.internal.invocation;
+
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class InvocationsChunkerTest {
+
+    private InvocationsChunker chunker;
+    private Invocation simpleMethodInvocation;
+    private Invocation simpleMethodInvocationTwo;
+    private Invocation differentMethodInvocation;
+    private Invocation simpleMethodInvocationThree;
+
+    @Before
+    public void setup() throws Exception {
+        simpleMethodInvocation = new InvocationBuilder().method("simpleMethod").seq(1).toInvocation();
+        simpleMethodInvocationTwo = new InvocationBuilder().method("simpleMethod").seq(2).toInvocation();
+        differentMethodInvocation = new InvocationBuilder().method("differentMethod").seq(3).toInvocation();
+        simpleMethodInvocationThree = new InvocationBuilder().method("simpleMethod").seq(4).toInvocation();
+        
+        chunker = new InvocationsChunker(new InvocationsFinder() {
+            public List<Invocation> allInvocationsInOrder() {
+                return Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation, simpleMethodInvocationThree);
+            }});
+    }
+
+    @Test
+    public void shouldGetFirstUnverifiedInvocationChunk() throws Exception {
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+    }
+    
+    @Test
+    public void shouldGetSecondUnverifiedInvocationChunk() throws Exception {
+        simpleMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationTwo.markVerifiedInOrder();
+        
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        
+        assertThat(chunk, collectionHasExactlyInOrder(differentMethodInvocation));
+    }
+    
+    @Test
+    public void shouldGetThirdUnverifiedInvocationChunk() throws Exception {
+        simpleMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationTwo.markVerifiedInOrder();
+        differentMethodInvocation.markVerifiedInOrder();
+        
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        
+        assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocationThree));
+    }
+    
+    @Test
+    public void shouldNotGetInvocationsChunk() throws Exception {
+        simpleMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationTwo.markVerifiedInOrder();
+        differentMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationThree.markVerifiedInOrder();
+        
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        
+        assertTrue(chunk.isEmpty());
+    }
+}

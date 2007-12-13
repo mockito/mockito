@@ -5,11 +5,20 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
-import org.junit.*;
-import org.mockito.*;
-import org.mockito.exceptions.verification.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
+import org.mockito.Strictly;
+import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
+import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -91,12 +100,12 @@ public class VerificationInOrderTest extends RequiresValidState {
         } catch (VerificationError e) {}
     }
     
-    @Test(expected=NumberOfInvocationsError.class)
+    @Test(expected=TooManyActualInvocationsError.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
         strictly.verify(mockOne, 0).simpleMethod(1);
     }
     
-    @Test(expected=NumberOfInvocationsError.class)
+    @Test(expected=TooLittleActualInvocationsError.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
         strictly.verify(mockOne, 2).simpleMethod(1);
     }
@@ -107,7 +116,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, 3).simpleMethod(2);
             fail();
-        } catch (NumberOfInvocationsError e) {}
+        } catch (TooLittleActualInvocationsError e) {}
     }
     
     @Test
@@ -116,7 +125,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, 0).simpleMethod(2);
             fail();
-        } catch (NumberOfInvocationsError e) {}
+        } catch (TooManyActualInvocationsError e) {}
     }    
     
     @Test
@@ -128,7 +137,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, 0).simpleMethod(4);
             fail();
-        } catch (NumberOfInvocationsError e) {}
+        } catch (TooManyActualInvocationsError e) {}
     }
     
     @Test
@@ -140,7 +149,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, 2).simpleMethod(4);
             fail();
-        } catch (NumberOfInvocationsError e) {}
+        } catch (TooLittleActualInvocationsError e) {}
     }    
     
     /* ------------- */
@@ -161,7 +170,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, 2).simpleMethod(-999);
             fail();
-        } catch (VerificationError e) {}
+        } catch (TooLittleActualInvocationsError e) {}
     }
     
     @Test
@@ -170,7 +179,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, 2).oneArg(true);
             fail();
-        } catch (VerificationError e) {}
+        } catch (TooLittleActualInvocationsError e) {}
     }    
     
     @Test
@@ -204,7 +213,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         strictly.verify(mockOne).simpleMethod(4);
     }
     
-    @Test(expected = VerificationError.class)
+    @Test(expected = TooLittleActualInvocationsError.class)
     public void shouldFailWhenSecondMethodCalledFirst() {
         strictly.verify(mockTwo, 2).simpleMethod(2);
     }

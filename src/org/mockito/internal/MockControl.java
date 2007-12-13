@@ -33,7 +33,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockingProgress);
-        verifyingRecorder = new VerifyingRecorder<T>(new AllInvocationsFinder());
+        verifyingRecorder = new VerifyingRecorder<T>();
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -56,7 +56,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
         } 
         
         stubber.setInvocationForPotentialStubbing(invocationMatcher);
-        verifyingRecorder.recordInvocation(invocationMatcher);
+        verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());
 
         mockingProgress.reportStubable(this);
         

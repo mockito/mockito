@@ -145,8 +145,8 @@ public class Invocation {
     }
 
     public void markVerifiedInOrder() {
+        this.markVerified();
         this.verifiedInOrder = true;
-        
     }
 
     public boolean isVerifiedInOrder() {

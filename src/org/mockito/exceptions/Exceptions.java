@@ -59,15 +59,6 @@ public class Exceptions {
     }
     
     public static void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        wantedDiffersFromActual("Invocation differs from actual", wanted, actual, actualInvocationStackTrace);
-    }
-    
-    public static void strictlyWantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        wantedDiffersFromActual("Strict order verification failed", wanted, actual, actualInvocationStackTrace);
-    }
-
-    private static void wantedDiffersFromActual(String messageTopic, String wanted, String actual, HasStackTrace actualInvocationStackTrace)
-            throws VerificationError {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual
@@ -76,12 +67,12 @@ public class Exceptions {
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
         
         throw new VerificationError(join(
-                messageTopic,
+                "Invocation differs from actual",
                 "Wanted invocation:",
                 wanted
             ), cause);
     }
-
+    
     public static void wantedButNotInvoked(String wanted) {
         throw new VerificationError(join(
                     "Wanted but not invoked:",

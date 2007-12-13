@@ -16,6 +16,7 @@ class StrictOrderVerifier implements Strictly {
     public <T> T verify(T mock) {
         return this.verify(mock, 1);
     }
+    //TODO OngoingVerifyingMode should be interfaced so that 'ongoing' bit is hidden
     //TODO get rid of interface with int
     public <T> T verify(T mock, int wantedNumberOfInvocations) {
         return this.verify(mock, OngoingVerifyingMode.inOrder(wantedNumberOfInvocations, mocksToBeVerifiedInOrder));

@@ -9,10 +9,19 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.progress.OngoingVerifyingMode;
 
 public class AllInvocationsFinder implements InvocationsFinder {
+    
+    private final OngoingVerifyingMode mode;
 
-    public List<Invocation> allInvocationsInOrder(List<Object> mocks) {
+    //TODO name of invocations finder
+    public AllInvocationsFinder(OngoingVerifyingMode mode) {
+        this.mode = mode;
+    }
+
+    public List<Invocation> allInvocationsInOrder() {
+        List<Object> mocks = mode.getAllMocksToBeVerifiedInSequence();
         List<Invocation> allInvocations = new LinkedList<Invocation>();
         for (Object mock : mocks) {
             List<Invocation> invocationsOfSingleMock = MockUtil.getControl(mock).getRegisteredInvocations();

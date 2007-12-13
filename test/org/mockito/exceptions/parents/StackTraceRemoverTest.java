@@ -1,7 +1,7 @@
 package org.mockito.exceptions.parents;
 
 import static org.junit.Assert.assertThat;
-import static org.mockito.util.ExtraMatchers.collectionIsExactlyInOrder;
+import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
 
 import java.util.*;
 
@@ -45,7 +45,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("methodOne", "methodTwo", "methodThree", "commonMethodOne", "commonMethodTwo");
         setCauseStackTrace("actualOne", "actualTwo", "commonMethodOne", "commonMethodTwo");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionIsExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
                 "methodOne",
                 "methodTwo",
                 "methodThree"
@@ -57,7 +57,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("methodOne", "commonMethodOne", "commonMethodTwo", "commonMethodOne", "commonMethodTwo");
         setCauseStackTrace("actualOne", "commonMethodOne", "commonMethodTwo");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionIsExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
                 "methodOne",
                 "commonMethodOne",
                 "commonMethodTwo"
@@ -69,7 +69,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("methodOne", "commonMethodOne");
         setCauseStackTrace("actualOne", "commonMethodOne", "actualOne", "commonMethodOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionIsExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
                 "methodOne"
         ));
     }
@@ -79,7 +79,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("commonOne");
         setCauseStackTrace("commonOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionIsExactlyInOrder());
+        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder());
     }
     
     @Test
@@ -87,7 +87,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("one", "commonOne");
         setCauseStackTrace("two", "commonOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionIsExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
                 "one"
         ));
     }

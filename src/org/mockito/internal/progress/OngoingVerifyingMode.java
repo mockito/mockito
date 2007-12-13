@@ -53,11 +53,17 @@ public class OngoingVerifyingMode {
         return mocksToBeVerifiedInSequence;
     }
 
+//TODO name    
     public boolean orderOfInvocationsMatters() {
         return !mocksToBeVerifiedInSequence.isEmpty();
     }
 
     public boolean wantedCountIsZero() {
         return wantedInvocationCount != null && wantedInvocationCount == 0;
+    }
+    
+    @Override
+    public String toString() {
+        return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInSequence;
     }
 }

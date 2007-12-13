@@ -32,24 +32,6 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<Collection> collectionContaining(final T ... elements) {
-        return new BaseMatcher<Collection>() {
-
-            public boolean matches(Object collection) {
-                for (T element : elements) {
-                    if (((Collection)collection).contains(element) == false) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("collection doesn't containg one of: " + Arrays.toString(elements));
-            }
-        };
-    }
-    
     public static <T> Matcher<String> containsString(final String text) {
         return new BaseMatcher<String>() {
             public boolean matches(Object string) {
@@ -112,7 +94,25 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<Collection> collectionIsExactlyInOrder(final T ... elements) {
+    public static <T> Matcher<Collection> collectionHas(final T ... elements) {
+        return new BaseMatcher<Collection>() {
+
+            public boolean matches(Object collection) {
+                for (T element : elements) {
+                    if (((Collection)collection).contains(element) == false) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("collection doesn't containg one of: " + Arrays.toString(elements));
+            }
+        };
+    }
+    
+    public static <T> Matcher<Collection> collectionHasExactlyInOrder(final T ... elements) {
         return new BaseMatcher<Collection>() {
 
             public boolean matches(Object collection) {
