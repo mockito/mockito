@@ -10,9 +10,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.internal.progress.OngoingVerifyingMode;
 
-public class InvocationsMarkerTest {
+public class InvocationsMarkerTest extends RequiresValidState {
 
     private InvocationsMarker marker;
     private Invocation simpleMethodInvocation;

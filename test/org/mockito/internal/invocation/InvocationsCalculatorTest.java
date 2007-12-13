@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -14,7 +15,7 @@ import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.progress.OngoingVerifyingMode;
 
 
-public class InvocationsCalculatorTest {
+public class InvocationsCalculatorTest extends RequiresValidState {
     
     private InvocationsCalculator calculator;
     private Invocation simpleMethodInvocation;

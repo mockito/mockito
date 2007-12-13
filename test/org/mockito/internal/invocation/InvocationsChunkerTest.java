@@ -9,8 +9,9 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 
-public class InvocationsChunkerTest {
+public class InvocationsChunkerTest extends RequiresValidState {
 
     private InvocationsChunker chunker;
     private Invocation simpleMethodInvocation;

@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -23,7 +24,7 @@ import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.progress.OngoingVerifyingMode;
 
-public class VerifyingRecorderTest {
+public class VerifyingRecorderTest extends RequiresValidState {
     
     private VerifyingRecorder recorder;
     private VerifierStub verifier;
