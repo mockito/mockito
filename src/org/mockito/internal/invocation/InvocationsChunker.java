@@ -15,7 +15,7 @@ public class InvocationsChunker {
         this.finder = invocationsFinder;
     }
 
-    public List<Invocation> getFirstUnverifiedInvocationChunk() {
+    public List<Invocation> getFirstUnverifiedInvocationChunk(List<Object> mocks) {
         Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
                 new Comparator<Invocation>() {
                     public int compare(Invocation o1, Invocation o2) {
@@ -24,7 +24,7 @@ public class InvocationsChunker {
                         return comparison;
                     }});
         
-        List<Invocation> allInvocations = finder.allInvocationsInOrder();
+        List<Invocation> allInvocations = finder.allInvocationsInOrder(mocks);
         allInvocationsInOrder.addAll(allInvocations);
         
         LinkedList<Invocation> chunk = new LinkedList<Invocation>();

@@ -1,4 +1,4 @@
-package org.mockito.internal.verification;
+package org.mockito.internal.invocation;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -9,15 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculatorImpl;
+import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.progress.OngoingVerifyingMode;
 
 
-public class InvocationsCalculatorImplTest {
+public class InvocationsCalculatorTest {
     
-    private InvocationsCalculatorImpl calculator;
+    private InvocationsCalculator calculator;
     private Invocation simpleMethodInvocation;
     private Invocation simpleMethodInvocationTwo;
     private Invocation differentMethodInvocation;
@@ -27,7 +26,7 @@ public class InvocationsCalculatorImplTest {
         simpleMethodInvocation = new InvocationBuilder().method("simpleMethod").seq(1).toInvocation();
         simpleMethodInvocationTwo = new InvocationBuilder().method("simpleMethod").seq(2).toInvocation();
         differentMethodInvocation = new InvocationBuilder().method("differentMethod").seq(3).toInvocation();
-        calculator = new InvocationsCalculatorImpl(Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation));
+        calculator = new InvocationsCalculator(Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation));
     }
     
     @Test

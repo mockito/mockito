@@ -26,14 +26,14 @@ public class InvocationsChunkerTest {
         simpleMethodInvocationThree = new InvocationBuilder().method("simpleMethod").seq(4).toInvocation();
         
         chunker = new InvocationsChunker(new InvocationsFinder() {
-            public List<Invocation> allInvocationsInOrder() {
+            public List<Invocation> allInvocationsInOrder(List<Object> mocks) {
                 return Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation, simpleMethodInvocationThree);
             }});
     }
 
     @Test
     public void shouldGetFirstUnverifiedInvocationChunk() throws Exception {
-        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
     }
     
@@ -42,7 +42,7 @@ public class InvocationsChunkerTest {
         simpleMethodInvocation.markVerifiedInOrder();
         simpleMethodInvocationTwo.markVerifiedInOrder();
         
-        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
         assertThat(chunk, collectionHasExactlyInOrder(differentMethodInvocation));
     }
@@ -53,7 +53,7 @@ public class InvocationsChunkerTest {
         simpleMethodInvocationTwo.markVerifiedInOrder();
         differentMethodInvocation.markVerifiedInOrder();
         
-        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
         assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocationThree));
     }
@@ -65,7 +65,7 @@ public class InvocationsChunkerTest {
         differentMethodInvocation.markVerifiedInOrder();
         simpleMethodInvocationThree.markVerifiedInOrder();
         
-        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk();
+        List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
         assertTrue(chunk.isEmpty());
     }

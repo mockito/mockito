@@ -6,9 +6,7 @@ package org.mockito.internal.invocation;
 
 import java.util.List;
 
-
 public interface InvocationsFinder {
 
-    List<Invocation> allInvocationsInOrder();
-
+    List<Invocation> allInvocationsInOrder(List<Object> mocks);
 }

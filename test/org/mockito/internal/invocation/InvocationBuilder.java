@@ -71,4 +71,12 @@ public class InvocationBuilder {
     public InvocationMatcher toInvocationMatcher() {
         return new InvocationMatcher(toInvocation());
     }
+
+    public InvocationBuilder simpleMethod() {
+        return this.method("simpleMethod");
+    }
+    
+    public InvocationBuilder differentMethod() {
+        return this.method("differentMethod");
+    }
 }

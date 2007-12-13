@@ -5,11 +5,14 @@
 package org.mockito.internal;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 import org.mockito.internal.creation.MockAwareInvocationHandler;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.InvocationsChunker;
+import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
@@ -18,11 +21,14 @@ import org.mockito.internal.stubbing.EmptyReturnValues;
 import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubable;
+import org.mockito.internal.verification.MissingInvocationVerifier;
+import org.mockito.internal.verification.NumberOfInvocationsVerifier;
+import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 
 public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
 
-    private final VerifyingRecorder<T> verifyingRecorder;
+    private final VerifyingRecorder verifyingRecorder;
     private final Stubber stubber;
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
@@ -33,7 +39,15 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockingProgress);
-        verifyingRecorder = new VerifyingRecorder<T>();
+        
+        verifyingRecorder = createRecorder(); 
+    }
+
+    private VerifyingRecorder createRecorder() {
+        InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
+        InvocationsMarker marker = new InvocationsMarker();
+        List<Verifier> verifiers = Arrays.asList(new MissingInvocationVerifier(), new NumberOfInvocationsVerifier());
+        return new VerifyingRecorder(chunker, marker, verifiers);
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
