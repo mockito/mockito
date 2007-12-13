@@ -4,10 +4,18 @@
  */
 package org.mockitousage;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
+import org.mockito.StateResetter;
+import org.mockito.Strictly;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.parents.MockitoException;
 
@@ -18,11 +26,14 @@ public class InvalidUsageTest extends RequiresValidState {
     private IMethods mockTwo;
 
     @Before
+    public void setup() {
+        mock = mock(IMethods.class);
+        mockTwo = mock(IMethods.class);
+    }
+    
     @After
     public void resetState() {
         StateResetter.reset();
-        mock = mock(IMethods.class);
-        mockTwo = mock(IMethods.class);
     }
     
     @Test(expected=MockitoException.class)
@@ -48,6 +59,7 @@ public class InvalidUsageTest extends RequiresValidState {
     
     @Test(expected=MissingMethodInvocationException.class)
     public void shouldReportMissingMethodInvocationWhenStubbing() {
+        stub(mock.simpleMethod()).andReturn("this stubbing is required to make sure Stubable is pulled");
         stub("".toString()).andReturn("x");
     }
     

@@ -31,11 +31,11 @@ public class Mockito extends Matchers {
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
         mockingProgress.stubbingStarted();
         
-        OngoingStubbing controlToStub = mockingProgress.pullStubable();
-        if (controlToStub == null) {
+        OngoingStubbing stubable = mockingProgress.pullStubable();
+        if (stubable == null) {
             Exceptions.missingMethodInvocation();
         }
-        return controlToStub;
+        return stubable;
     }
     
     public static <T> T verify(T mock) {

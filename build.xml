@@ -59,7 +59,7 @@
 
 	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
 		<junit fork="true" forkmode="once" haltonfailure="true">
-			<formatter type="brief" usefile="false" />
+			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />
 
 			<batchtest>
@@ -73,7 +73,6 @@
 	<target name="package" description="Packages the artifacts">
 		<fail message="Packiging is missing" />
 	</target>
-
 
 	<target name="pmd" depends="prepare">
 
