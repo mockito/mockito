@@ -5,9 +5,9 @@
 package org.mockito.internal.invocation;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.internal.progress.OngoingVerifyingMode.atLeastOnce;
-import static org.mockito.internal.progress.OngoingVerifyingMode.inOrder;
-import static org.mockito.internal.progress.OngoingVerifyingMode.times;
+import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
+import static org.mockito.internal.progress.VerificationMode.inOrder;
+import static org.mockito.internal.progress.VerificationMode.times;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class InvocationsMarkerTest extends RequiresValidState {
 
@@ -76,7 +76,7 @@ public class InvocationsMarkerTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAsVerifedInOrderAllInvocationsFromChunk() throws Exception {
-        OngoingVerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
+        VerificationMode mode = inOrder(null, Arrays.asList(new Object()));
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         
@@ -88,7 +88,7 @@ public class InvocationsMarkerTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromThirdChunk() throws Exception {
-        OngoingVerifyingMode mode = inOrder(null, Arrays.asList(new Object()));
+        VerificationMode mode = inOrder(null, Arrays.asList(new Object()));
         
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);

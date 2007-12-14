@@ -22,7 +22,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class VerifyingRecorderTest extends RequiresValidState {
     
@@ -49,7 +49,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
     public void shouldMarkInvocationsAsVerified() {
         recorder.recordInvocation(simpleMethod);
         
-        OngoingVerifyingMode mode = OngoingVerifyingMode.atLeastOnce();
+        VerificationMode mode = VerificationMode.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
         assertThat(marker.invocations, collectionHasExactlyInOrder(simpleMethod));
@@ -61,7 +61,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
     public void shouldVerify() {
         recorder.recordInvocation(simpleMethod);
         
-        OngoingVerifyingMode mode = OngoingVerifyingMode.atLeastOnce();
+        VerificationMode mode = VerificationMode.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
         assertEquals(verifier.mode, mode);
@@ -73,7 +73,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
     public void shouldVerifyInOrder() {
         recorder.recordInvocation(simpleMethod);
         
-        OngoingVerifyingMode mode = OngoingVerifyingMode.inOrder(10, Arrays.<Object>asList("mock"));
+        VerificationMode mode = VerificationMode.inOrder(10, Arrays.<Object>asList("mock"));
         recorder.verify(differentMethod, mode);
         
         assertEquals(verifier.mode, mode);
@@ -84,8 +84,8 @@ public class VerifyingRecorderTest extends RequiresValidState {
     class InvocationsMarkerStub extends InvocationsMarker {
         private List<Invocation> invocations;
         private InvocationMatcher wanted;
-        private OngoingVerifyingMode mode;
-        @Override public void markInvocationsAsVerified(List<Invocation> invocations, InvocationMatcher wanted, OngoingVerifyingMode mode) {
+        private VerificationMode mode;
+        @Override public void markInvocationsAsVerified(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
             this.invocations = invocations;
             this.wanted = wanted;
             this.mode = mode;
@@ -97,8 +97,8 @@ public class VerifyingRecorderTest extends RequiresValidState {
     class VerifierStub implements Verifier {
         private InvocationsCalculator calculator;
         private InvocationMatcher wanted;
-        private OngoingVerifyingMode mode;
-        public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, OngoingVerifyingMode mode) {
+        private VerificationMode mode;
+        public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
             this.calculator = calculator;
             this.wanted = wanted;
             this.mode = mode;

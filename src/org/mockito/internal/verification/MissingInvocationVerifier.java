@@ -9,11 +9,11 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsPrinter;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class MissingInvocationVerifier implements Verifier {
 
-    public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, OngoingVerifyingMode mode) {
+    public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
         int actualCount = calculator.countActual(wanted);
         Integer wantedCount = mode.wantedCount();
         boolean atLeastOnce = mode.atLeastOnceMode();

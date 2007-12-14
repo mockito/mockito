@@ -6,11 +6,11 @@ package org.mockito.internal.verification;
 
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 
 public interface Verifier {
 
-    void verify(InvocationsCalculator calculator, InvocationMatcher wanted, OngoingVerifyingMode mode);
+    void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode);
     
 }

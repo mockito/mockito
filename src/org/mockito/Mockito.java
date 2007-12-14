@@ -17,8 +17,8 @@ public class Mockito extends Matchers {
     
     static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
-    public static OngoingVerifyingMode atLeastOnce() {
-        return OngoingVerifyingMode.atLeastOnce();
+    public static VerificationMode atLeastOnce() {
+        return VerificationMode.atLeastOnce();
     }
     
     public static <T> T mock(Class<T> classToMock) {
@@ -43,12 +43,12 @@ public class Mockito extends Matchers {
     }
     
     public static <T> T verify(T mock, int wantedNumberOfInvocations) {
-        return verify(mock, OngoingVerifyingMode.times(wantedNumberOfInvocations));
+        return verify(mock, VerificationMode.times(wantedNumberOfInvocations));
     }
     
-    public static <T> T verify(T mock, OngoingVerifyingMode mode) {
+    public static <T> T verify(T mock, VerificationMode mode) {
         MockUtil.validateMock(mock);
-        mockingProgress.verifyingStarted(mode);
+        mockingProgress.verificationStarted(mode);
         return mock;
     }
 

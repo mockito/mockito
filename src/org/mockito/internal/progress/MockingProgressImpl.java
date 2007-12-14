@@ -10,7 +10,7 @@ import org.mockito.exceptions.Exceptions;
 public class MockingProgressImpl implements MockingProgress {
     
     private OngoingStubbing ongoingStubbing;
-    private OngoingVerifyingMode ongoingVerifyingMode;
+    private VerificationMode verificationMode;
     private int invocationSequenceNumber = 1;
     private boolean stubbingInProgress = false;
 
@@ -24,14 +24,14 @@ public class MockingProgressImpl implements MockingProgress {
         return temp;
     }
     
-    public void verifyingStarted(OngoingVerifyingMode verify) {
+    public void verificationStarted(VerificationMode verify) {
         validateState();
-        ongoingVerifyingMode = verify;
+        verificationMode = verify;
     }
 
-    public OngoingVerifyingMode pullVerifyingMode() {
-        OngoingVerifyingMode temp = ongoingVerifyingMode;
-        ongoingVerifyingMode = null;
+    public VerificationMode pullVerificationMode() {
+        VerificationMode temp = verificationMode;
+        verificationMode = null;
         return temp;
     }
 
@@ -45,8 +45,8 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void validateState() {
-        if (ongoingVerifyingMode != null) {
-            ongoingVerifyingMode = null;
+        if (verificationMode != null) {
+            verificationMode = null;
             Exceptions.unfinishedVerificationException();
         }
         
@@ -62,14 +62,14 @@ public class MockingProgressImpl implements MockingProgress {
     
     public String toString() {
         return  "ongoingStubbing: " + ongoingStubbing + 
-        ", ongoingVerifyingMode: " + ongoingVerifyingMode +
+        ", verificationMode: " + verificationMode +
         ", invocationSequenceNumber: " + invocationSequenceNumber +
         ", stubbingInProgress: " + stubbingInProgress;
     }
 
     public void reset() {
         stubbingInProgress = false;
-        ongoingVerifyingMode = null;
+        verificationMode = null;
         invocationSequenceNumber = 1;
     }
 }

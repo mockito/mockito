@@ -26,12 +26,12 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         return threadSafely().pullStubable();
     }
     
-    public void verifyingStarted(OngoingVerifyingMode verify) {
-        threadSafely().verifyingStarted(verify);
+    public void verificationStarted(VerificationMode verify) {
+        threadSafely().verificationStarted(verify);
     }
 
-    public OngoingVerifyingMode pullVerifyingMode() {
-        return threadSafely().pullVerifyingMode();
+    public VerificationMode pullVerificationMode() {
+        return threadSafely().pullVerificationMode();
     }
 
     public int nextSequenceNumber() {

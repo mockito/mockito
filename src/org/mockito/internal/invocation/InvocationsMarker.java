@@ -6,13 +6,13 @@ package org.mockito.internal.invocation;
 
 import java.util.List;
 
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 //TODO name
 public class InvocationsMarker {
 
     public void markInvocationsAsVerified(List<Invocation> invocations,
-            InvocationMatcher wanted, OngoingVerifyingMode mode) {
+            InvocationMatcher wanted, VerificationMode mode) {
         if (mode.wantedCountIsZero()) {
             return;
         }

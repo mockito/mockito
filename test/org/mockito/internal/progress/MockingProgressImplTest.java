@@ -14,7 +14,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class MockingProgressImplTest extends RequiresValidState {
 
@@ -26,21 +26,23 @@ public class MockingProgressImplTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldSwitchVerifyingMode() throws Exception {
-        assertNull(mockingProgress.pullVerifyingMode());
+    public void shouldStartVerificationAndPullVerificationMode() throws Exception {
+        assertNull(mockingProgress.pullVerificationMode());
         
-        OngoingVerifyingMode mode = OngoingVerifyingMode.times(19);
+        VerificationMode mode = VerificationMode.times(19);
         
-        mockingProgress.verifyingStarted(mode);
+        mockingProgress.verificationStarted(mode);
         
-        assertSame(mode, mockingProgress.pullVerifyingMode());
+        assertSame(mode, mockingProgress.pullVerificationMode());
+        
+        assertNull(mockingProgress.pullVerificationMode());
     }
     
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
-        mockingProgress.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
+        mockingProgress.verificationStarted(VerificationMode.atLeastOnce());
         try {
-            mockingProgress.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
+            mockingProgress.verificationStarted(VerificationMode.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
     }

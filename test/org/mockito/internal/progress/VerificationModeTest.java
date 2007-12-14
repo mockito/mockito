@@ -9,23 +9,23 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
-public class OngoingVerifyingModeTest extends RequiresValidState {
+public class VerificationModeTest extends RequiresValidState {
 
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
-        OngoingVerifyingMode mode = OngoingVerifyingMode.atLeastOnce();
+        VerificationMode mode = VerificationMode.atLeastOnce();
         assertTrue(mode.atLeastOnceMode());
         
-        mode = OngoingVerifyingMode.times(50);
+        mode = VerificationMode.times(50);
         assertFalse(mode.atLeastOnceMode());
     }
     
     @Test
     public void shouldNotAllowCreatingModeWithNegativeNumberOfInvocations() throws Exception {
         try {
-            OngoingVerifyingMode.times(-50);
+            VerificationMode.times(-50);
             fail();
         } catch (MockitoException e) {
             assertEquals("Negative value is not allowed here", e.getMessage());

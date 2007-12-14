@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 @SuppressWarnings("unchecked")
 public class NumberOfInvocationsVerifierTest extends RequiresValidState {
@@ -20,8 +20,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldNotCheckForWrongNumberOfModificationsWhenVerifyingAtLeastOnce() throws Exception {
-        OngoingVerifyingMode inOrder = OngoingVerifyingMode.atLeastOnce();
+    public void shouldNotCheckForWrongNumberOfModificationsWhenAtLeastOnceVerification() throws Exception {
+        VerificationMode inOrder = VerificationMode.atLeastOnce();
         
         verifier.verify(null, null, inOrder);
     }

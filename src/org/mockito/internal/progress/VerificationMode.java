@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.mockito.exceptions.parents.MockitoException;
 
-public class OngoingVerifyingMode {
+public class VerificationMode {
 
     private final Integer wantedInvocationCount;
     private final List<Object> mocksToBeVerifiedInSequence;
 
-    private OngoingVerifyingMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
+    private VerificationMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
@@ -22,23 +22,23 @@ public class OngoingVerifyingMode {
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
     }
     
-    public static OngoingVerifyingMode atLeastOnce() {
-        return new OngoingVerifyingMode(null, Collections.emptyList());
+    public static VerificationMode atLeastOnce() {
+        return new VerificationMode(null, Collections.emptyList());
     }
 
-    public static OngoingVerifyingMode times(int wantedNumberOfInvocations) {
-        return new OngoingVerifyingMode(wantedNumberOfInvocations, Collections.emptyList());
+    public static VerificationMode times(int wantedNumberOfInvocations) {
+        return new VerificationMode(wantedNumberOfInvocations, Collections.emptyList());
     }
     
     /**
-     * Don't use OngoingVerifyingMode class directly. 
+     * Don't use VerificationMode class directly. 
      * <p>
      * Use Mockito.atLeastOnce() and Mockito.times()
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
-    public static OngoingVerifyingMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
-        return new OngoingVerifyingMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder);
+    public static VerificationMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
+        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder);
     }
 
     public boolean atLeastOnceMode() {

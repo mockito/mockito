@@ -16,7 +16,7 @@ import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 
 public class InvocationsCalculatorTest extends RequiresValidState {
@@ -49,25 +49,25 @@ public class InvocationsCalculatorTest extends RequiresValidState {
     
     @Test
     public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
-        HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), OngoingVerifyingMode.times(0));
+        HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(0));
         HasStackTrace expected = simpleMethodInvocation.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test
     public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
-        HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), OngoingVerifyingMode.times(1));
+        HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(1));
         HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenThereAreNoUndesiredInvocations() throws Exception {
-        calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), OngoingVerifyingMode.times(2));
+        calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(2));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenWantedInvocationsFigureIsBigger() throws Exception {
-        calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), OngoingVerifyingMode.times(100));
+        calculator.getFirstUndesiredInvocationStackTrace(new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(100));
     }
 }

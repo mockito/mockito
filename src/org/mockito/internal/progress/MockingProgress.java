@@ -4,9 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-
-
-//TODO verificationMode instead verifying
 @SuppressWarnings("unchecked")
 public interface MockingProgress {
 
@@ -14,9 +11,9 @@ public interface MockingProgress {
 
     OngoingStubbing pullStubable();
 
-    void verifyingStarted(OngoingVerifyingMode verifyingMode);
+    void verificationStarted(VerificationMode verificationMode);
 
-    OngoingVerifyingMode pullVerifyingMode();
+    VerificationMode pullVerificationMode();
 
     void stubbingStarted();
 

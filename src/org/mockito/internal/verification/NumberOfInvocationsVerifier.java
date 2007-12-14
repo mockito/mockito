@@ -8,11 +8,11 @@ import org.mockito.exceptions.Exceptions;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class NumberOfInvocationsVerifier implements Verifier {
 
-    public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, OngoingVerifyingMode mode) {
+    public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
         if (mode.atLeastOnceMode()) {
             return;
         }

@@ -16,7 +16,7 @@ import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.stubbing.EmptyReturnValues;
 import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
@@ -58,14 +58,14 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
             return null;
         }
         
-        OngoingVerifyingMode ongoingVerifyingMode = mockingProgress.pullVerifyingMode();
+        VerificationMode verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
         
         Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
         
-        if (ongoingVerifyingMode != null) {
-            verifyingRecorder.verify(invocationMatcher, ongoingVerifyingMode);
+        if (verificationMode != null) {
+            verifyingRecorder.verify(invocationMatcher, verificationMode);
             return EmptyReturnValues.emptyValueFor(method.getReturnType());
         } 
         

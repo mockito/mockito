@@ -13,7 +13,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class VerifyingRecorder {
 
@@ -40,7 +40,7 @@ public class VerifyingRecorder {
         return registeredInvocations;
     }
 
-    public void verify(InvocationMatcher wanted, OngoingVerifyingMode mode) {
+    public void verify(InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> invocations = getInvocationsForEvaluation(mode);
         InvocationsCalculator calculator = new InvocationsCalculator(invocations);
         
@@ -51,7 +51,7 @@ public class VerifyingRecorder {
         marker.markInvocationsAsVerified(invocations, wanted, mode);
     }
     
-    private List<Invocation> getInvocationsForEvaluation(OngoingVerifyingMode mode) {
+    private List<Invocation> getInvocationsForEvaluation(VerificationMode mode) {
         if (mode.orderOfInvocationsMatters()) {
             return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedInSequence());
         } else {
@@ -61,8 +61,8 @@ public class VerifyingRecorder {
     
     public void verifyNoMoreInteractions() {
         //TODO refactor to have single verify method
-        //TODO OngoingVerifyingMode.times(0) should be explicit
-        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(OngoingVerifyingMode.times(0)));
+        //TODO VerificationMode.times(0) should be explicit
+        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(VerificationMode.times(0)));
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {
@@ -71,8 +71,8 @@ public class VerifyingRecorder {
     }
     
     public void verifyZeroInteractions() {
-        //TODO OngoingVerifyingMode.times(0) should be explicit
-        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(OngoingVerifyingMode.times(0)));
+        //TODO VerificationMode.times(0) should be explicit
+        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(VerificationMode.times(0)));
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {

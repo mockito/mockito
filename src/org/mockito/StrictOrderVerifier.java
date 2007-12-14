@@ -7,7 +7,7 @@ package org.mockito;
 import java.util.*;
 
 import org.mockito.exceptions.Exceptions;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 class StrictOrderVerifier implements Strictly {
     
@@ -16,17 +16,17 @@ class StrictOrderVerifier implements Strictly {
     public <T> T verify(T mock) {
         return this.verify(mock, 1);
     }
-    //TODO OngoingVerifyingMode should be interfaced so that 'ongoing' bit is hidden
+    //TODO VerificationMode should be interfaced so that 'ongoing' bit is hidden
     //TODO get rid of interface with int
     public <T> T verify(T mock, int wantedNumberOfInvocations) {
-        return this.verify(mock, OngoingVerifyingMode.inOrder(wantedNumberOfInvocations, mocksToBeVerifiedInOrder));
+        return this.verify(mock, VerificationMode.inOrder(wantedNumberOfInvocations, mocksToBeVerifiedInOrder));
     }
     
-    public <T> T verify(T mock, OngoingVerifyingMode ongoingVerifyingMode) {
+    public <T> T verify(T mock, VerificationMode verificationMode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             Exceptions.strictlyRequiresFamiliarMock();
         }
-        return Mockito.verify(mock, OngoingVerifyingMode.inOrder(ongoingVerifyingMode.wantedCount(), mocksToBeVerifiedInOrder));
+        return Mockito.verify(mock, VerificationMode.inOrder(verificationMode.wantedCount(), mocksToBeVerifiedInOrder));
     }
 
     public void addMockToBeVerifiedInOrder(Object mock) {

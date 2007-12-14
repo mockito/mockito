@@ -20,7 +20,7 @@ public class MockControlTest extends RequiresValidState {
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockingProgressImpl state = new MockingProgressImpl();
-        state.verifyingStarted(OngoingVerifyingMode.atLeastOnce());
+        state.verificationStarted(VerificationMode.atLeastOnce());
         MockControl control = new MockControl(state, new ExceptionThrowingBinder());
         
         try {
@@ -28,7 +28,7 @@ public class MockControlTest extends RequiresValidState {
             fail();
         } catch (InvalidUseOfMatchersException e) {}
         
-        assertNull(state.pullVerifyingMode());
+        assertNull(state.pullVerificationMode());
     }
     
     private class ExceptionThrowingBinder extends MatchersBinder {

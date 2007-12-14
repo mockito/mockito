@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.parents.HasStackTrace;
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public class InvocationsCalculator {
 
@@ -61,7 +61,7 @@ public class InvocationsCalculator {
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace getFirstUndesiredInvocationStackTrace(InvocationMatcher wanted, OngoingVerifyingMode mode) {
+    public HasStackTrace getFirstUndesiredInvocationStackTrace(InvocationMatcher wanted, VerificationMode mode) {
         int counter = 0;
         for (Invocation registered : invocations) {
             if (wanted.matches(registered)) {

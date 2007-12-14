@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.progress.OngoingVerifyingMode;
+import org.mockito.internal.progress.VerificationMode;
 
 public interface Strictly {
 
@@ -13,6 +13,6 @@ public interface Strictly {
     //TODO get rid of interface with int
     <T> T verify(T mock, int wantedNumberOfInvocations);
     
-    <T> T verify(T mock, OngoingVerifyingMode ongoingVerifyingMode);
+    <T> T verify(T mock, VerificationMode verificationMode);
     
 }
