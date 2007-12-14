@@ -68,7 +68,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     public void shouldPrintWantedMethodWhenEverythingElseIsVerified() {
         strictly.verify(one).simpleMethod(1);
         strictly.verify(one).simpleMethod(11);
-        strictly.verify(two, 2).simpleMethod(2);
+        strictly.verify(two, times(2)).simpleMethod(2);
         strictly.verify(three).simpleMethod();
         try {
             strictly.verify(three).simpleMethod(999);
@@ -89,7 +89,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         strictly.verify(one).simpleMethod(1);
         strictly.verify(one).simpleMethod(11);
         try {
-            strictly.verify(two, 1).simpleMethod(2);
+            strictly.verify(two, times(1)).simpleMethod(2);
             fail();
         } catch (TooManyActualInvocationsError e) {
             String actualMessage = e.getMessage();

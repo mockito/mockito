@@ -16,12 +16,7 @@ import org.mockito.internal.stubbing.VoidMethodStubable;
 public class Mockito extends Matchers {
     
     private static final Reporter reporter = new Reporter();
-    
-    static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
-    
-    public static VerificationMode atLeastOnce() {
-        return VerificationMode.atLeastOnce();
-    }
+    static final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
@@ -89,17 +84,17 @@ public class Mockito extends Matchers {
         }
 	}
 
-    private static void assertMocksNotEmpty(Object[] mocks) {
-        if (mocks.length == 0) {
-            reporter.mocksHaveToBePassedAsArguments();
-        }
-    }
-
     public static void verifyZeroInteractions(Object ... mocks) {
         assertMocksNotEmpty(mocks);
         mockingProgress.validateState();
         for (Object mock : mocks) {
             MockUtil.getControl(mock).verifyZeroInteractions();
+        }
+    }
+    
+    private static void assertMocksNotEmpty(Object[] mocks) {
+        if (mocks.length == 0) {
+            reporter.mocksHaveToBePassedAsArguments();
         }
     }
     
@@ -119,5 +114,13 @@ public class Mockito extends Matchers {
             strictOrderVerifier.addMockToBeVerifiedStrictly(mock);
         }
         return strictOrderVerifier;
+    }
+    
+    public static VerificationMode atLeastOnce() {
+        return VerificationMode.atLeastOnce();
+    }
+    
+    public static VerificationMode times(int wantedNumberOfInvocations) {
+        return VerificationMode.times(wantedNumberOfInvocations);
     }
 }

@@ -19,12 +19,7 @@ class StrictOrderVerifier implements Strictly {
     }
     
     public <T> T verify(T mock) {
-        return this.verify(mock, 1);
-    }
-    
-    //TODO get rid of interface with int
-    public <T> T verify(T mock, int wantedNumberOfInvocations) {
-        return this.verify(mock, VerificationMode.strict(wantedNumberOfInvocations, mocksToBeVerifiedSrictly));
+        return this.verify(mock, VerificationMode.times(1));
     }
     
     public <T> T verify(T mock, VerificationMode verificationMode) {
