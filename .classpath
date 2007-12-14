@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/cglib-nodep-2.2_beta1.jar" sourcepath="lib/sources/cglib-src-2.2_beta1.jar"/>
-	<classpathentry kind="lib" path="lib/objenesis-1.0.jar" sourcepath="lib/sources/objenesis-1.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/run/cglib-nodep-2.2_beta1.jar"/>
+	<classpathentry kind="lib" path="lib/run/objenesis-1.0.jar"/>
 	<classpathentry kind="output" path="target/eclipse-classes"/>
 </classpath>

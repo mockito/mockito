@@ -12,15 +12,18 @@
 	<property name="test.reports.dir" value="${target.dir}/reports/junit" />
 
 	<property name="lib.dir" value="lib" />
-	<property name="ant.lib.dir" value="${lib.dir}/ant" />
+	<property name="lib.dir.build" value="${lib.dir}/build" />
+	<property name="lib.dir.run" value="${lib.dir}/run" />
+	<property name="lib.dir.test" value="${lib.dir}/test" />
 
 	<path id="compile.classpath">
-		<fileset dir="${lib.dir}" includes="*.jar" />
+		<fileset dir="${lib.dir.run}" includes="*.jar" />
 	</path>
 
 	<path id="test.compile.classpath">
 		<path refid="compile.classpath" />
 		<pathelement location="${src.classes.dir}" />
+		<fileset dir="${lib.dir.test}" includes="*.jar" />
 	</path>
 
 	<path id="test.classpath">
@@ -29,7 +32,7 @@
 	</path>
 
 	<path id="ant.classpath">
-		<fileset dir="${ant.lib.dir}" includes="*.jar" />
+		<fileset dir="${lib.dir.build}" includes="*.jar" />
 	</path>
 
 	<target name="prepare">
@@ -51,13 +54,13 @@
 		</javac>
 	</target>
 
-	<target name="compile.test" depends="compile" unless="test.skip">
+	<target name="compile.test" depends="compile">
 		<javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
 			<classpath refid="test.compile.classpath" />
 		</javac>
 	</target>
 
-	<target name="test" depends="compile.test" unless="test.skip" description="Executes the unit tests">
+	<target name="test" depends="compile.test, pmd" description="Executes the unit tests">
 		<junit fork="true" forkmode="once" haltonfailure="true">
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />
@@ -69,11 +72,7 @@
 		</junit>
 	</target>
 
-	<target name="all" depends="clean, compile, pmd, test" description="Performs a build and runs test" />
-
-	<target name="package" description="Packages the artifacts">
-		<fail message="Packiging is missing" />
-	</target>
+	<target name="all" depends="clean, compile, pmd, test, jar.all" description="Performs a build and runs test" />
 
 	<target name="pmd" depends="prepare">
 
@@ -92,6 +91,20 @@
 		    </fileset>
 		</pmd>
 
+	</target>
+		
+	<target name="jar.all" depends="test">
+	    <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath"/>
+	    <jarjar jarfile="${target.dir}/mockito-all.jar">
+	        <fileset dir="${src.classes.dir}" />
+	    	<fileset dir="${src.dir}" />
+	    	<fileset dir="${lib.dir.run}" excludes="*.jar" />
+	    	<zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
+	    	<zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
+	    		<exclude name="LICENSE"/>
+	    		<exclude name="NOTICE"/>
+	    	</zipfileset>
+	    </jarjar>
 	</target>
 
 </project>
