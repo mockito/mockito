@@ -9,13 +9,8 @@ package org.mockito.internal.stubbing;
  * @param <T> the type to return.
  */
 public interface IAnswer<T> {
+
     /**
-     * is called to answer an expected call. 
-     * The answer may be to return a value, or to throw an exception.
-     * The arguments of the call for which the answer is generated 
-     * are available via getCurrentArguments() - be careful
-     * here, using the arguments is not refactoring-safe.
-     * 
      * @return the value to be returned
      * @throws Throwable the throwable to be thrown
      */

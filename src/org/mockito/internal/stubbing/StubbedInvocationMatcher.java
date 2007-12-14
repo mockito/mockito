@@ -6,17 +6,18 @@ package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.InvocationMatcher;
 
+@SuppressWarnings("unchecked")
 public class StubbedInvocationMatcher extends InvocationMatcher {
 
-    private final Result result;
+    private final IAnswer result;
     
-    public StubbedInvocationMatcher(InvocationMatcher invocation, Result result) {
+    public StubbedInvocationMatcher(InvocationMatcher invocation, IAnswer result) {
         super(invocation.getInvocation(), invocation.getMatchers());
         this.result = result;
     }
 
-    public Result getResult() {
-        return result;
+    public Object answer() throws Throwable {
+        return result.answer();
     }
     
     @Override

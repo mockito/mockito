@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import java.util.LinkedList;
+import static org.mockito.internal.progress.VerificationMode.*;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
@@ -63,8 +64,7 @@ public class VerifyingRecorder {
     
     public void verifyNoMoreInteractions() {
         //TODO refactor to have single verify method
-        //TODO VerificationMode.times(0) should be explicit
-        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(VerificationMode.times(0)));
+        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(times(0)));
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {
@@ -74,7 +74,7 @@ public class VerifyingRecorder {
     
     public void verifyZeroInteractions() {
         //TODO VerificationMode.times(0) should be explicit
-        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(VerificationMode.times(0)));
+        InvocationsCalculator calculator1 = new InvocationsCalculator(getInvocationsForEvaluation(times(0)));
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {

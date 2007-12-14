@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import java.util.LinkedList;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.parents.StackTraceFilter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
@@ -36,7 +37,7 @@ public class Stubber {
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
         validateThrowable(throwable);
-        addResult(Result.createThrowResult(throwable));
+        addResult(Result.createThrowResult(throwable, new StackTraceFilter()));
     }
 
     private void addResult(Result result) {
@@ -47,7 +48,7 @@ public class Stubber {
     public Object resultFor(Invocation wanted) throws Throwable {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(wanted)) {
-                return s.getResult().answer();
+                return s.answer();
             }
         }
 
