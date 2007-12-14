@@ -161,7 +161,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         } catch (VerificationError e) {
             String expectedMessage = 
                     "\n" +
-            		"No more interactions wanted";
+            		"No interactions wanted";
             assertEquals(expectedMessage, e.getMessage());         
 
             assertEquals(e.getCause().getClass(), UndesiredInvocation.class);
@@ -186,7 +186,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         } catch (VerificationError e) {
             String expected = 
                     "\n" +
-                    "Zero interactions wanted";
+                    "No interactions wanted";
 
             assertEquals(e.getMessage(), expected);
             

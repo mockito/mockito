@@ -82,10 +82,6 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
         verifyingRecorder.verifyNoMoreInteractions();
     }
     
-    public void verifyZeroInteractions() {
-        verifyingRecorder.verifyZeroInteractions();
-    }
-
     public void andReturn(T value) {
         verifyingRecorder.eraseLastInvocation();
         stubber.addReturnValue(value);

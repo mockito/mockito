@@ -113,14 +113,9 @@ public class Reporter {
 
     public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
-        throw new VerificationError(join("No more interactions wanted"), cause);
+        throw new VerificationError(join("No interactions wanted"), cause);
     }
     
-    public void zeroInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
-        throw new VerificationError(join("Zero interactions wanted"), cause);
-    }
-
     private UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
         UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());

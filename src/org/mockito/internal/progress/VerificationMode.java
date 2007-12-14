@@ -10,32 +10,38 @@ import java.util.List;
 import org.mockito.exceptions.parents.MockitoException;
 
 public class VerificationMode {
-
+    
+    enum Verification { EXPLICIT, NO_MORE_WANTED };
+    
     private final Integer wantedInvocationCount;
     private final List<Object> mocksToBeVerifiedInSequence;
+    private final Verification verification;
     
-    //TODO messy
-
-    private VerificationMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
+    private VerificationMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence, Verification verification) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedInvocationCount = wantedNumberOfInvocations;
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
+        this.verification = verification;
     }
     
     public static VerificationMode atLeastOnce() {
-        return new VerificationMode(null, Collections.emptyList());
+        return new VerificationMode(null, Collections.emptyList(), Verification.EXPLICIT);
     }
 
     public static VerificationMode times(int wantedNumberOfInvocations) {
-        return new VerificationMode(wantedNumberOfInvocations, Collections.emptyList());
+        return new VerificationMode(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
     public static VerificationMode strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
-        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly);
+        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly, Verification.EXPLICIT);
     }
     
+    public static VerificationMode noMoreInteractions() {
+        return new VerificationMode(null, null, Verification.NO_MORE_WANTED);
+    }
+
     /**
      * Don't use VerificationMode class directly. 
      * <p>
