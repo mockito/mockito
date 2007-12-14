@@ -76,6 +76,10 @@ public class VerificationMode {
     public boolean missingMethodMode() {
         return isExplicit() && (atLeastOnceMode() || wantedInvocationCount == 1);
     }
+
+    public boolean exactNumberOfInvocationsMode() {
+        return !atLeastOnceMode() && isExplicit();
+    }
     
     @Override
     public String toString() {

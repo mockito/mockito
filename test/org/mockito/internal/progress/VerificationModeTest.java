@@ -4,13 +4,17 @@
  */
 package org.mockito.internal.progress;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
+import static org.mockito.internal.progress.VerificationMode.noMoreInteractions;
+import static org.mockito.internal.progress.VerificationMode.times;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.internal.progress.VerificationMode;
-import static org.mockito.internal.progress.VerificationMode.*;
 
 public class VerificationModeTest extends RequiresValidState {
 
@@ -42,5 +46,15 @@ public class VerificationModeTest extends RequiresValidState {
         assertFalse(noMoreInteractions().missingMethodMode());
         assertFalse(times(0).missingMethodMode());
         assertFalse(times(2).missingMethodMode());
+    }
+    
+    @Test
+    public void shouldKnowIfIsExactNumberOfInvocationsMode() throws Exception {
+        assertTrue(times(0).exactNumberOfInvocationsMode());
+        assertTrue(times(1).exactNumberOfInvocationsMode());
+        assertTrue(times(2).exactNumberOfInvocationsMode());
+        
+        assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
+        assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
     }
 }

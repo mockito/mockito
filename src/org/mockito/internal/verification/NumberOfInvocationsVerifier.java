@@ -28,7 +28,7 @@ public class NumberOfInvocationsVerifier implements Verifier {
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
-        if (mode.numberOfInvocationsMode()) {
+        if (!mode.exactNumberOfInvocationsMode()) {
             return;
         }
         
