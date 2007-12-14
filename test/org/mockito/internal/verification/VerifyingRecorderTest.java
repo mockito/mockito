@@ -23,6 +23,7 @@ import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeBuilder;
 
 public class VerifyingRecorderTest extends RequiresValidState {
     
@@ -73,7 +74,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
     public void shouldVerifyStrictly() {
         recorder.recordInvocation(simpleMethod);
         
-        VerificationMode mode = VerificationMode.strict(10, Arrays.<Object>asList("mock"));
+        VerificationMode mode = new VerificationModeBuilder().strict();
         recorder.verify(differentMethod, mode);
         
         assertEquals(verifier.mode, mode);

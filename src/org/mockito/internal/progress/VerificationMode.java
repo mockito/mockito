@@ -31,6 +31,10 @@ public class VerificationMode {
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return new VerificationMode(wantedNumberOfInvocations, Collections.emptyList());
     }
+
+    public static VerificationMode strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
+        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly);
+    }
     
     /**
      * Don't use VerificationMode class directly. 
@@ -39,10 +43,6 @@ public class VerificationMode {
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
-    public static VerificationMode strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
-        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly);
-    }
-
     public boolean atLeastOnceMode() {
         return wantedInvocationCount == null;
     }

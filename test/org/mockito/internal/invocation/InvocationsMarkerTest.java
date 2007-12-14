@@ -6,7 +6,6 @@ package org.mockito.internal.invocation;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
-import static org.mockito.internal.progress.VerificationMode.strict;
 import static org.mockito.internal.progress.VerificationMode.times;
 
 import java.util.Arrays;
@@ -16,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeBuilder;
 
 public class InvocationsMarkerTest extends RequiresValidState {
 
@@ -76,7 +76,7 @@ public class InvocationsMarkerTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAsVerifedStrictlyAllInvocationsFromChunk() throws Exception {
-        VerificationMode mode = strict(null, Arrays.asList(new Object()));
+        VerificationMode mode = new VerificationModeBuilder().strict();
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         
@@ -88,7 +88,7 @@ public class InvocationsMarkerTest extends RequiresValidState {
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromThirdChunk() throws Exception {
-        VerificationMode mode = strict(null, Arrays.asList(new Object()));
+        VerificationMode mode = new VerificationModeBuilder().strict();
         
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
