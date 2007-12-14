@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.Exceptions;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
@@ -18,6 +18,8 @@ import org.mockito.internal.progress.VerificationMode;
 public class VerifyingRecorder {
 
     private final LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
+    private final Reporter reporter = new Reporter();
+    
     private final InvocationsMarker marker;
     private final List<Verifier> verifiers;
     private final InvocationsChunker chunker;
@@ -66,7 +68,7 @@ public class VerifyingRecorder {
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {
-            Exceptions.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
+            reporter.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }
     }
     
@@ -76,7 +78,7 @@ public class VerifyingRecorder {
         InvocationsCalculator calculator = calculator1;
         Invocation unverified = calculator.getFirstUnverified();
         if (unverified != null) {
-            Exceptions.zeroInteractionsWanted(unverified.toString(), unverified.getStackTrace());
+            reporter.zeroInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }
     }
 }

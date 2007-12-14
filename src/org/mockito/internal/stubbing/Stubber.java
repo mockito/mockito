@@ -6,17 +6,19 @@ package org.mockito.internal.stubbing;
 
 import java.util.LinkedList;
 
-import org.mockito.exceptions.Exceptions;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
 
 public class Stubber {
 
-    private InvocationMatcher invocationForStubbing;
-    private LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
-    private Throwable throwableForVoidMethod;
+    private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
+    private final Reporter reporter = new Reporter();
     private final MockingProgress mockingProgress;
+    
+    private InvocationMatcher invocationForStubbing;
+    private Throwable throwableForVoidMethod;
     
     public Stubber(MockingProgress mockingProgress) {
         this.mockingProgress = mockingProgress;
@@ -68,7 +70,7 @@ public class Stubber {
     
     private void validateThrowable(Throwable throwable) {
         if (throwable == null) {
-            Exceptions.cannotStubWithNullThrowable();
+            reporter.cannotStubWithNullThrowable();
         }
 
         if (throwable instanceof RuntimeException || throwable instanceof Error) {
@@ -76,7 +78,7 @@ public class Stubber {
         }
     
         if (!isValidCheckedException(throwable)) {
-            Exceptions.checkedExceptionInvalid(throwable);
+            reporter.checkedExceptionInvalid(throwable);
         }
     }
 

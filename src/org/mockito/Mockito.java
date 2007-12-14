@@ -15,6 +15,8 @@ import org.mockito.internal.stubbing.VoidMethodStubable;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
+    private static final Reporter reporter = new Reporter();
+    
     static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public static VerificationMode atLeastOnce() {
@@ -33,7 +35,7 @@ public class Mockito extends Matchers {
         
         OngoingStubbing stubable = mockingProgress.pullStubable();
         if (stubable == null) {
-            Exceptions.missingMethodInvocation();
+            reporter.missingMethodInvocation();
         }
         return stubable;
     }
@@ -89,7 +91,7 @@ public class Mockito extends Matchers {
 
     private static void assertMocksNotEmpty(Object[] mocks) {
         if (mocks.length == 0) {
-            Exceptions.mocksHaveToBePassedAsArguments();
+            reporter.mocksHaveToBePassedAsArguments();
         }
     }
 
@@ -109,7 +111,7 @@ public class Mockito extends Matchers {
 
     public static Strictly createStrictOrderVerifier(Object ... mocks) {
         if (mocks.length == 0) {
-            Exceptions.mocksHaveToBePassedWhenCreatingStrictly();
+            reporter.mocksHaveToBePassedWhenCreatingStrictly();
         }
         StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {

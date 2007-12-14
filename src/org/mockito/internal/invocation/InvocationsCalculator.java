@@ -14,6 +14,8 @@ public class InvocationsCalculator {
 
     private List<Invocation> invocations = new LinkedList<Invocation>();
 
+    public InvocationsCalculator() {}
+    
     public InvocationsCalculator(List<Invocation> invocations) {
         this.invocations.addAll(invocations);
     }

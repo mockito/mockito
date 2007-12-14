@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.MockAwareInvocationHandler;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -46,7 +47,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
     private VerifyingRecorder createRecorder() {
         InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
         InvocationsMarker marker = new InvocationsMarker();
-        List<Verifier> verifiers = Arrays.asList(new MissingInvocationVerifier(), new NumberOfInvocationsVerifier());
+        List<Verifier> verifiers = Arrays.asList(new MissingInvocationVerifier(), new NumberOfInvocationsVerifier(new Reporter()));
         return new VerifyingRecorder(chunker, marker, verifiers);
     }
 

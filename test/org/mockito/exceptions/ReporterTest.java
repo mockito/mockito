@@ -8,11 +8,10 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 
-
-public class ExceptionsTest extends RequiresValidState {
+public class ReporterTest extends RequiresValidState {
 
     @Test(expected=TooLittleActualInvocationsError.class)
     public void shouldLetPassingNullLastActualStackTrace() throws Exception {
-        Exceptions.tooLittleActualInvocations(1, 2, "wanted", null);
+        new Reporter().tooLittleActualInvocations(1, 2, "wanted", null);
     }
 }

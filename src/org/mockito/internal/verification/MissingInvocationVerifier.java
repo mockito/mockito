@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.exceptions.Exceptions;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
@@ -12,6 +12,8 @@ import org.mockito.internal.invocation.InvocationsPrinter;
 import org.mockito.internal.progress.VerificationMode;
 
 public class MissingInvocationVerifier implements Verifier {
+    
+    private final Reporter reporter = new Reporter();
 
     public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
         int actualCount = calculator.countActual(wanted);
@@ -28,9 +30,9 @@ public class MissingInvocationVerifier implements Verifier {
         
         if (actual != null) {
             InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);
-            Exceptions.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), actual.getStackTrace());
+            reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), actual.getStackTrace());
         } else {
-            Exceptions.wantedButNotInvoked(wanted.toString());
+            reporter.wantedButNotInvoked(wanted.toString());
         }
     }
 }

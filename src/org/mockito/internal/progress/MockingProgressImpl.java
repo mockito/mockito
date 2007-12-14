@@ -4,10 +4,12 @@
  */
 package org.mockito.internal.progress;
 
-import org.mockito.exceptions.Exceptions;
+import org.mockito.exceptions.Reporter;
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
+    
+    private final Reporter reporter = new Reporter();
     
     private OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
@@ -47,12 +49,12 @@ public class MockingProgressImpl implements MockingProgress {
     public void validateState() {
         if (verificationMode != null) {
             verificationMode = null;
-            Exceptions.unfinishedVerificationException();
+            reporter.unfinishedVerificationException();
         }
         
         if (stubbingInProgress) {
             stubbingInProgress = false;
-            Exceptions.unfinishedStubbing();
+            reporter.unfinishedStubbing();
         }
     }
 

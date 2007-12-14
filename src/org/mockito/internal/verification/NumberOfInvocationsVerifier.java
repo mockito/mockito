@@ -4,13 +4,19 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.exceptions.Exceptions;
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.progress.VerificationMode;
 
 public class NumberOfInvocationsVerifier implements Verifier {
+    
+    private final Reporter reporter;
+
+    public NumberOfInvocationsVerifier(Reporter reporter) {
+        this.reporter = reporter;
+    }
 
     public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
         if (mode.atLeastOnceMode()) {
@@ -22,10 +28,10 @@ public class NumberOfInvocationsVerifier implements Verifier {
         
         if (actualCount < wantedCount) {
             HasStackTrace lastInvocation = calculator.getLastInvocationStackTrace(wanted);
-            Exceptions.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocation);
+            reporter.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocation);
         } else if (actualCount > wantedCount) {
             HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(wanted, mode);
-            Exceptions.tooManyActualInvocations(wantedCount, actualCount, wanted.toString(), firstUndesired);
+            reporter.tooManyActualInvocations(wantedCount, actualCount, wanted.toString(), firstUndesired);
         }
     }
 }

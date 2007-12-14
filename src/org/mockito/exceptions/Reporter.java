@@ -12,15 +12,16 @@ import org.mockito.exceptions.parents.*;
 import org.mockito.exceptions.verification.*;
 
 /**
- * All messages in one place makes it easier to tune and amend the text. 
+ * One of the key points of mocking library is proper verification/exception
+ * messages. All messages in one place makes it easier to tune and amend.
  */
-public class Exceptions {
+public class Reporter {
     
-    private static String pluralize(int number) {
+    private String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
     }
 
-    public static void mocksHaveToBePassedAsArguments() {
+    public void mocksHaveToBePassedAsArguments() {
         throw new MockitoException(join(
                 "Method requires arguments.",
                 "Pass mocks that should be verified, e.g:",
@@ -28,7 +29,7 @@ public class Exceptions {
                 ));
     }
 
-    public static void strictlyRequiresFamiliarMock() {
+    public void strictlyRequiresFamiliarMock() {
         throw new MockitoException(join(
                 "Strictly can only verify mocks that were passed in during creation of Strictly. E.g:",
                 "strictly = createStrictOrderVerifier(mockOne)",
@@ -36,7 +37,7 @@ public class Exceptions {
                 ));
     }
 
-    public static void mocksHaveToBePassedWhenCreatingStrictly() {
+    public void mocksHaveToBePassedWhenCreatingStrictly() {
         throw new MockitoException(join(
                 "Method requires arguments.",
                 "Pass mocks that require strict order verification, e.g:",
@@ -44,21 +45,21 @@ public class Exceptions {
                 ));
     }
 
-    public static void checkedExceptionInvalid(Throwable t) {
+    public void checkedExceptionInvalid(Throwable t) {
         throw new MockitoException(join(
         		"Checked exception is invalid for this method",
         		"Invalid: " + t
         		));
     }
 
-    public static void cannotStubWithNullThrowable() {
+    public void cannotStubWithNullThrowable() {
         throw new MockitoException(join(
                 "Cannot stub with null throwable"
                 ));
         
     }
     
-    public static void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+    public void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual
@@ -73,21 +74,21 @@ public class Exceptions {
             ), cause);
     }
     
-    public static void wantedButNotInvoked(String wanted) {
+    public void wantedButNotInvoked(String wanted) {
         throw new VerificationError(join(
                     "Wanted but not invoked:",
                     wanted        
         ));
     }
     
-    public static void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
+    public void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
         throw new NumberOfInvocationsError(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ));
     }
 
-    public static void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+    public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
         FirstUndesiredInvocation cause = new FirstUndesiredInvocation(join("First undesired invocation:"));
         cause.setStackTrace(firstUndesired.getStackTrace());
         
@@ -97,7 +98,7 @@ public class Exceptions {
         ), cause);
     }
     
-    public static void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+    public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
         TooLittleInvocations cause = null;
         if (lastActualInvocationStackTrace != null) {
             cause = new TooLittleInvocations(join("Too little invocations:"));
@@ -110,23 +111,23 @@ public class Exceptions {
         ), cause);  
     }
 
-    public static void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+    public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("No more interactions wanted"), cause);
     }
     
-    public static void zeroInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+    public void zeroInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("Zero interactions wanted"), cause);
     }
 
-    private static UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
+    private UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
         UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
         return cause;
     }
 
-    public static void unfinishedStubbing() {
+    public void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
                 "Unifinished stubbing detected, e.g. toReturn() is missing",
                 "Examples of proper stubbing:",
@@ -136,13 +137,13 @@ public class Exceptions {
         ));
     }
 
-    public static void missingMethodInvocation() {
+    public void missingMethodInvocation() {
         throw new MissingMethodInvocationException(join(
                 "stub() requires an argument which has to be a proper method call on a mock object"
         ));
     }
 
-    public static void unfinishedVerificationException() {
+    public void unfinishedVerificationException() {
         throw new UnfinishedVerificationException(join(
                 "Previous verify(mock) doesn't have a method call.",
                 "Should be something like that: verify(mock).doSomething()"
