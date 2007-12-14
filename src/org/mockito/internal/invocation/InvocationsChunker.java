@@ -18,6 +18,13 @@ public class InvocationsChunker {
         this.finder = invocationsFinder;
     }
 
+    /**
+     * chunk maybe empty, may have single invocation (usal case), or have
+     * multiple the same invocations
+     * 
+     * @param mocks
+     * @return
+     */
     public List<Invocation> getFirstUnverifiedInvocationChunk(List<Object> mocks) {
         Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         
