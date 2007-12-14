@@ -7,10 +7,11 @@ import static org.mockito.util.ExtraMatchers.*;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.exceptions.parents.StackTraceFilter;
 
-public class ResultTest {
+public class ResultTest extends RequiresValidState {
 
     @Test
     public void shouldCreateReturnResult() throws Throwable {
