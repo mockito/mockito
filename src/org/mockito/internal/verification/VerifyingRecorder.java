@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.progress.VerificationMode;
@@ -46,11 +45,9 @@ public class VerifyingRecorder {
     
     public void verify(InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> invocations = getInvocationsForEvaluation(mode);
-        //TODO should not construct calculator
-        InvocationsCalculator calculator = new InvocationsCalculator(invocations);
         
         for (Verifier verifier : verifiers) {
-            verifier.verify(calculator, wanted, mode);
+            verifier.verify(invocations, wanted, mode);
         }
         
         if (mode.isExplicit()) {

@@ -4,23 +4,17 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.internal.progress.VerificationMode;
 
+//TODO refactor to an object that holds Invocations and exposes some calculations
 public class InvocationsCalculator {
-
-    private List<Invocation> invocations = new LinkedList<Invocation>();
 
     public InvocationsCalculator() {}
     
-    public InvocationsCalculator(List<Invocation> invocations) {
-        this.invocations.addAll(invocations);
-    }
-
-    public int countActual(InvocationMatcher wanted) {
+    public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : invocations) {
             if (wanted.matches(registeredInvocation)) {
@@ -31,7 +25,7 @@ public class InvocationsCalculator {
         return actual;
     }
 
-    public Invocation findActualInvocation(InvocationMatcher wanted) {
+    public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation actualbyName = null;
         for (Invocation registered : invocations) {
             String wantedMethodName = wanted.getMethod().getName();
@@ -41,10 +35,10 @@ public class InvocationsCalculator {
             }
         }
         
-        return actualbyName != null ? actualbyName : getFirstUnverified();
+        return actualbyName != null ? actualbyName : getFirstUnverified(invocations);
     }
     
-    public Invocation getFirstUnverified() {
+    public Invocation getFirstUnverified(List<Invocation> invocations) {
         for (Invocation i : invocations) {
             if (!i.isVerified()) {
                 return i;
@@ -53,7 +47,7 @@ public class InvocationsCalculator {
         return null;
     }
     
-    public HasStackTrace getLastInvocationStackTrace(InvocationMatcher wanted) {
+    public HasStackTrace getLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation lastMatching = null;
         for (Invocation registered : invocations) {
             if (wanted.matches(registered)) {
@@ -63,7 +57,7 @@ public class InvocationsCalculator {
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace getFirstUndesiredInvocationStackTrace(InvocationMatcher wanted, VerificationMode mode) {
+    public HasStackTrace getFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         int counter = 0;
         for (Invocation registered : invocations) {
             if (wanted.matches(registered)) {
@@ -74,9 +68,5 @@ public class InvocationsCalculator {
             }
         }
         throw new IllegalArgumentException("There are no undesired invocations!");
-    }
-
-    public List<Invocation> getInvocations() {
-        return invocations;
     }
 }

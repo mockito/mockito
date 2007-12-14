@@ -20,7 +20,6 @@ import org.mockito.RequiresValidState;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.progress.VerificationMode;
@@ -68,7 +67,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
         
         assertEquals(verifierStub.mode, mode);
         assertSame(verifierStub.wanted, differentMethod);
-        assertThat(verifierStub.calculator.getInvocations(), collectionHasExactlyInOrder(simpleMethod));
+        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod));
     }
     
     @Test
@@ -80,7 +79,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
         
         assertEquals(verifierStub.mode, mode);
         assertEquals(verifierStub.wanted, differentMethod);
-        assertThat(verifierStub.calculator.getInvocations(), collectionHasExactlyInOrder(differentMethod.getInvocation()));
+        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(differentMethod.getInvocation()));
     }
     
     @Test
@@ -99,16 +98,16 @@ public class VerifyingRecorderTest extends RequiresValidState {
             this.wanted = wanted;
             this.mode = mode;
             
-            assertNotNull("marking should happen after verification", verifierStub.calculator);
+            assertNotNull("marking should happen after verification", verifierStub.invocations);
         }
     }
     
     class VerifierStub implements Verifier {
-        private InvocationsCalculator calculator;
+        private List<Invocation> invocations;
         private InvocationMatcher wanted;
         private VerificationMode mode;
-        public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
-            this.calculator = calculator;
+        public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+            this.invocations = invocations;
             this.wanted = wanted;
             this.mode = mode;
         }
