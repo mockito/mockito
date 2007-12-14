@@ -34,8 +34,13 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldNotCheckForWrongNumberOfModificationsWhenAtLeastOnceVerification() throws Exception {
+    public void shouldNeverVerifyWhenAtLeastOnceVerification() throws Exception {
         verifier.verify(null, null, atLeastOnce());
+    }
+    
+    @Test
+    public void shouldVerifyOnlyWhenModeIsExplicit() {
+        verifier.verify(null, null, VerificationMode.noMoreInteractions());
     }
 
     @Test

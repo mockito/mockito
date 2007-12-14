@@ -16,6 +16,10 @@ public class MissingInvocationVerifier implements Verifier {
     private final Reporter reporter = new Reporter();
 
     public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
+        if (!mode.isExplicit()) {
+            return;
+        }
+        
         int actualCount = calculator.countActual(wanted);
         Integer wantedCount = mode.wantedCount();
         boolean atLeastOnce = mode.atLeastOnceMode();

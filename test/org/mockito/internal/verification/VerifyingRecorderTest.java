@@ -6,6 +6,7 @@ package org.mockito.internal.verification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
@@ -28,19 +29,19 @@ import org.mockito.internal.progress.VerificationModeBuilder;
 public class VerifyingRecorderTest extends RequiresValidState {
     
     private VerifyingRecorder recorder;
-    private VerifierStub verifier;
-    private InvocationsMarkerStub marker;
-    private InvocationsChunkerStub chunker;
+    private VerifierStub verifierStub;
+    private InvocationsMarkerStub markerStub;
+    private InvocationsChunkerStub chunkerStub;
     
     private Invocation simpleMethod;
     private InvocationMatcher differentMethod;
     
     @Before
     public void setup() {
-        verifier = new VerifierStub();
-        marker = new InvocationsMarkerStub();
-        chunker = new InvocationsChunkerStub();
-        recorder = new VerifyingRecorder(chunker, marker, Arrays.<Verifier>asList(verifier));
+        verifierStub = new VerifierStub();
+        markerStub = new InvocationsMarkerStub();
+        chunkerStub = new InvocationsChunkerStub();
+        recorder = new VerifyingRecorder(chunkerStub, markerStub, Arrays.<Verifier>asList(verifierStub));
 
         simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
         differentMethod = new InvocationBuilder().differentMethod().toInvocationMatcher();
@@ -53,9 +54,9 @@ public class VerifyingRecorderTest extends RequiresValidState {
         VerificationMode mode = VerificationMode.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
-        assertThat(marker.invocations, collectionHasExactlyInOrder(simpleMethod));
-        assertEquals(marker.mode, mode);
-        assertEquals(marker.wanted, differentMethod);
+        assertThat(markerStub.invocations, collectionHasExactlyInOrder(simpleMethod));
+        assertEquals(markerStub.mode, mode);
+        assertEquals(markerStub.wanted, differentMethod);
     }
     
     @Test
@@ -65,9 +66,9 @@ public class VerifyingRecorderTest extends RequiresValidState {
         VerificationMode mode = VerificationMode.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
-        assertEquals(verifier.mode, mode);
-        assertSame(verifier.wanted, differentMethod);
-        assertThat(verifier.calculator.getInvocations(), collectionHasExactlyInOrder(simpleMethod));
+        assertEquals(verifierStub.mode, mode);
+        assertSame(verifierStub.wanted, differentMethod);
+        assertThat(verifierStub.calculator.getInvocations(), collectionHasExactlyInOrder(simpleMethod));
     }
     
     @Test
@@ -77,9 +78,16 @@ public class VerifyingRecorderTest extends RequiresValidState {
         VerificationMode mode = new VerificationModeBuilder().strict();
         recorder.verify(differentMethod, mode);
         
-        assertEquals(verifier.mode, mode);
-        assertEquals(verifier.wanted, differentMethod);
-        assertThat(verifier.calculator.getInvocations(), collectionHasExactlyInOrder(differentMethod.getInvocation()));
+        assertEquals(verifierStub.mode, mode);
+        assertEquals(verifierStub.wanted, differentMethod);
+        assertThat(verifierStub.calculator.getInvocations(), collectionHasExactlyInOrder(differentMethod.getInvocation()));
+    }
+    
+    @Test
+    public void shouldNotMarkInvocationsAsVerifiedWhenModeIsNotExplicit() {
+        VerificationMode mode = VerificationMode.noMoreInteractions();
+        recorder.verify(mode);
+        assertNull(markerStub.mode);
     }
     
     class InvocationsMarkerStub extends InvocationsMarker {
@@ -91,7 +99,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
             this.wanted = wanted;
             this.mode = mode;
             
-            assertNotNull("marking should happen after verification", verifier.calculator);
+            assertNotNull("marking should happen after verification", verifierStub.calculator);
         }
     }
     

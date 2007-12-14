@@ -39,7 +39,7 @@ public class VerificationMode {
     }
     
     public static VerificationMode noMoreInteractions() {
-        return new VerificationMode(null, null, Verification.NO_MORE_WANTED);
+        return new VerificationMode(null, Collections.emptyList(), Verification.NO_MORE_WANTED);
     }
 
     /**
@@ -72,5 +72,9 @@ public class VerificationMode {
     @Override
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInSequence;
+    }
+
+    public boolean isExplicit() {
+        return verification == Verification.EXPLICIT;
     }
 }

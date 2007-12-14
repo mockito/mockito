@@ -19,7 +19,7 @@ public class NumberOfInvocationsVerifier implements Verifier {
     }
 
     public void verify(InvocationsCalculator calculator, InvocationMatcher wanted, VerificationMode mode) {
-        if (mode.atLeastOnceMode()) {
+        if (mode.atLeastOnceMode() || !mode.isExplicit()) {
             return;
         }
         

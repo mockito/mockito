@@ -23,6 +23,7 @@ import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubable;
 import org.mockito.internal.verification.MissingInvocationVerifier;
+import org.mockito.internal.verification.NoMoreInvocationsVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
@@ -47,7 +48,10 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
     private VerifyingRecorder createRecorder() {
         InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
         InvocationsMarker marker = new InvocationsMarker();
-        List<Verifier> verifiers = Arrays.asList(new MissingInvocationVerifier(), new NumberOfInvocationsVerifier(new Reporter()));
+        List<Verifier> verifiers = Arrays.asList(
+                new MissingInvocationVerifier(), 
+                new NumberOfInvocationsVerifier(new Reporter()),
+                new NoMoreInvocationsVerifier());
         return new VerifyingRecorder(chunker, marker, verifiers);
     }
 
@@ -79,7 +83,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
     }
 
     public void verifyNoMoreInteractions() {
-        verifyingRecorder.verifyNoMoreInteractions();
+        verifyingRecorder.verify(VerificationMode.noMoreInteractions());
     }
     
     public void andReturn(T value) {

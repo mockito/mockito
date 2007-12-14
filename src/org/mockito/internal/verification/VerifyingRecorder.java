@@ -7,7 +7,6 @@ package org.mockito.internal.verification;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;
@@ -18,7 +17,6 @@ import org.mockito.internal.progress.VerificationMode;
 public class VerifyingRecorder {
 
     private final LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
-    private final Reporter reporter = new Reporter();
     
     private final InvocationsMarker marker;
     private final List<Verifier> verifiers;
@@ -42,6 +40,10 @@ public class VerifyingRecorder {
         return registeredInvocations;
     }
     
+    public void verify(VerificationMode mode) {
+        verify(null, mode);
+    }
+    
     public void verify(InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> invocations = getInvocationsForEvaluation(mode);
         //TODO should not construct calculator
@@ -51,7 +53,9 @@ public class VerifyingRecorder {
             verifier.verify(calculator, wanted, mode);
         }
         
-        marker.markInvocationsAsVerified(invocations, wanted, mode);
+        if (mode.isExplicit()) {
+            marker.markInvocationsAsVerified(invocations, wanted, mode);
+        }
     }
     
     private List<Invocation> getInvocationsForEvaluation(VerificationMode mode) {
@@ -59,14 +63,6 @@ public class VerifyingRecorder {
             return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedInSequence());
         } else {
             return registeredInvocations;
-        }
-    }
-    
-    public void verifyNoMoreInteractions() {
-        InvocationsCalculator calculator = new InvocationsCalculator(registeredInvocations);
-        Invocation unverified = calculator.getFirstUnverified();
-        if (unverified != null) {
-            reporter.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }
     }
 }
