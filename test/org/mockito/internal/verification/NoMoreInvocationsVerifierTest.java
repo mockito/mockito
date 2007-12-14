@@ -20,14 +20,12 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     private NoMoreInvocationsVerifier verifier;
     private InvocationsCalculatorStub calculator;
     private ReporterStub reporterStub;
-    private Invocation returnedByCalculator;
 
     @Before
     public void setup() {
         calculator = new InvocationsCalculatorStub();
         reporterStub = new ReporterStub();
         verifier = new NoMoreInvocationsVerifier(calculator, reporterStub);
-        returnedByCalculator = new InvocationBuilder().toInvocation();
     }
     
     @Test
@@ -37,27 +35,30 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldPassVerification() throws Exception {
-        returnedByCalculator = null;
+        calculator.invocationToReturn = null;
         verifier.verify(null, null, VerificationMode.noMoreInteractions());
     }
     
     @Test
     public void shouldReportError() throws Exception {
+        Invocation firstUnverified = new InvocationBuilder().toInvocation();
+        calculator.invocationToReturn = firstUnverified;
         List<Invocation> invocations = asList(new InvocationBuilder().toInvocation());
-        returnedByCalculator = new InvocationBuilder().toInvocation();
         
         verifier.verify(invocations, null, VerificationMode.noMoreInteractions());
         
         assertSame(invocations, calculator.invocations);
-        assertEquals(returnedByCalculator.toString(), reporterStub.undesired);
-        assertSame(returnedByCalculator.getStackTrace(), reporterStub.actualInvocationStackTrace);
+        
+        assertEquals(firstUnverified.toString(), reporterStub.undesired);
+        assertSame(firstUnverified.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
     class InvocationsCalculatorStub extends InvocationsCalculator {
         private List<Invocation> invocations;
+        private Invocation invocationToReturn;
         @Override public Invocation getFirstUnverified(List<Invocation> invocations) {
             this.invocations = invocations;
-            return returnedByCalculator;
+            return invocationToReturn;
         }
     }
     

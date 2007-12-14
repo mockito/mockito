@@ -28,12 +28,12 @@ public class NumberOfInvocationsVerifier implements Verifier {
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
-        if (mode.atLeastOnceMode() || !mode.isExplicit()) {
+        if (mode.numberOfInvocationsMode()) {
             return;
         }
         
         int actualCount = calculator.countActual(invocations, wanted);
-        Integer wantedCount = mode.wantedCount();
+        int wantedCount = mode.wantedCount();
         
         if (actualCount < wantedCount) {
             HasStackTrace lastInvocation = calculator.getLastInvocationStackTrace(invocations, wanted);

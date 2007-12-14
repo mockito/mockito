@@ -69,12 +69,16 @@ public class VerificationMode {
         return wantedInvocationCount != null && wantedInvocationCount == 0;
     }
     
+    public boolean isExplicit() {
+        return verification == Verification.EXPLICIT;
+    }
+    
+    public boolean missingMethodMode() {
+        return isExplicit() && (atLeastOnceMode() || wantedInvocationCount == 1);
+    }
+    
     @Override
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInSequence;
-    }
-
-    public boolean isExplicit() {
-        return verification == Verification.EXPLICIT;
     }
 }

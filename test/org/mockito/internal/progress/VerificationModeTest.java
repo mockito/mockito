@@ -10,25 +10,37 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.progress.VerificationMode;
+import static org.mockito.internal.progress.VerificationMode.*;
 
 public class VerificationModeTest extends RequiresValidState {
 
+    //TODO add non trivial tests
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
-        VerificationMode mode = VerificationMode.atLeastOnce();
+        VerificationMode mode = atLeastOnce();
         assertTrue(mode.atLeastOnceMode());
         
-        mode = VerificationMode.times(50);
+        mode = times(50);
         assertFalse(mode.atLeastOnceMode());
     }
     
     @Test
     public void shouldNotAllowCreatingModeWithNegativeNumberOfInvocations() throws Exception {
         try {
-            VerificationMode.times(-50);
+            times(-50);
             fail();
         } catch (MockitoException e) {
             assertEquals("Negative value is not allowed here", e.getMessage());
         }
+    }
+    
+    @Test
+    public void shouldKnowIfIsMissingMethodMode() throws Exception {
+        assertTrue(atLeastOnce().missingMethodMode());
+        assertTrue(times(1).missingMethodMode());
+        
+        assertFalse(noMoreInteractions().missingMethodMode());
+        assertFalse(times(0).missingMethodMode());
+        assertFalse(times(2).missingMethodMode());
     }
 }

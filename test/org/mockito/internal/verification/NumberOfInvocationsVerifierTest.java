@@ -29,12 +29,17 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     private NumberOfInvocationsVerifier verifier;
     private InvocationsCalculatorStub calculatorStub;
     private ReporterStub reporterStub;
+    private InvocationMatcher wanted;
+    private List<Invocation> invocations;
     
     @Before
     public void setup() {
         reporterStub = new ReporterStub();
         calculatorStub = new InvocationsCalculatorStub();
         verifier = new NumberOfInvocationsVerifier(reporterStub, calculatorStub);
+        
+        wanted = new InvocationBuilder().toInvocationMatcher();
+        invocations = asList(new InvocationBuilder().toInvocation());
     }
 
     @Test
@@ -44,72 +49,90 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyOnlyWhenModeIsExplicit() {
+        //TODO refactor to VM
         verifier.verify(null, null, VerificationMode.noMoreInteractions());
     }
 
     @Test
     public void shouldCountActualInvocations() throws Exception {
-        InvocationMatcher wanted = new InvocationBuilder().toInvocationMatcher();
-        verifier.verify(asList(wanted.getInvocation()), wanted, times(4));
-        assertSame(wanted, calculatorStub.wantedForCountingActual);
+        verifier.verify(invocations, wanted, times(4));
+        assertSame(wanted, calculatorStub.wanted);
+    }
+    
+    @Test
+    public void shouldAskCalculatorToCountActual() throws Exception {
+        VerificationMode mode = times(1);
+        calculatorStub.actualCountToReturn = 1;
+        verifier.verify(invocations, wanted, mode);
+        
+        assertSame(invocations, calculatorStub.invocations);
+        assertSame(wanted, calculatorStub.wanted);
     }
     
     @Test
     public void shouldReportTooLittleInvocations() throws Exception {
-        InvocationMatcher wanted = new InvocationBuilder().toInvocationMatcher();
         VerificationMode mode = times(10);
-        verifier.verify(asList(wanted.getInvocation()), wanted, mode);
+        calculatorStub.actualCountToReturn = 5;
+        MockitoException lastInvocation = new MockitoException("");
+        calculatorStub.invocationTraceToReturn = lastInvocation;
         
-        assertSame(wanted, calculatorStub.wantedForGettingTrace);
+        verifier.verify(invocations, wanted, mode);
+        
+        assertSame(invocations, calculatorStub.invocations);
+        assertSame(wanted, calculatorStub.wanted);
         
         assertEquals(5, reporterStub.actualCount);
         assertEquals(10, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
         
-        HasStackTrace fromCalculator = calculatorStub.lastInvocation;
-        assertSame(fromCalculator, reporterStub.stackTrace);
+        assertSame(lastInvocation, reporterStub.stackTrace);
     }
     
     @Test
     public void shouldReportTooManyInvocations() throws Exception {
-        InvocationMatcher wanted = new InvocationBuilder().toInvocationMatcher();
         VerificationMode mode = times(0);
-        verifier.verify(asList(wanted.getInvocation()), wanted, mode);
+        calculatorStub.actualCountToReturn = 5;
+        MockitoException firstUndesiredInvocation = new MockitoException("");
+        calculatorStub.invocationTraceToReturn = firstUndesiredInvocation;
         
-        assertSame(wanted, calculatorStub.wantedForGettingTrace);
+        verifier.verify(invocations, wanted, mode);
+        
+        assertSame(invocations, calculatorStub.invocations);
+        assertSame(wanted, calculatorStub.wanted);
+        
         assertSame(mode, calculatorStub.mode);
         
         assertEquals(5, reporterStub.actualCount);
         assertEquals(0, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
         
-        HasStackTrace fromCalculator = calculatorStub.firstUndesired;
-        assertSame(fromCalculator, reporterStub.stackTrace);
+        assertSame(firstUndesiredInvocation, reporterStub.stackTrace);
     }
     
     class InvocationsCalculatorStub extends InvocationsCalculator {
-        private final HasStackTrace firstUndesired = new MockitoException("");
-        private final HasStackTrace lastInvocation = new MockitoException("");
+        private HasStackTrace invocationTraceToReturn;
+        private int actualCountToReturn;
 
-        private InvocationMatcher wantedForCountingActual;
-        private InvocationMatcher wantedForGettingTrace;
+        private InvocationMatcher wanted;
         private VerificationMode mode;
+        private List<Invocation> invocations;
         @Override
         public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
-            this.wantedForCountingActual = wanted;
-            return 5;
+            this.invocations = invocations;
+            this.wanted = wanted;
+            return actualCountToReturn;
         }
         
         @Override public HasStackTrace getFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
-            wantedForGettingTrace = wanted;
+            this.wanted = wanted;
             this.mode = mode;
-            return firstUndesired;
+            return invocationTraceToReturn;
         }
         
         @Override
         public HasStackTrace getLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
-            wantedForGettingTrace = wanted;
-            return lastInvocation;
+            this.wanted = wanted;
+            return invocationTraceToReturn;
         }
     }
     
