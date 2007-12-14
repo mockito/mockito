@@ -18,57 +18,57 @@ import org.mockito.RequiresValidState;
 public class InvocationsChunkerTest extends RequiresValidState {
 
     private InvocationsChunker chunker;
-    private Invocation simpleMethodInvocation;
-    private Invocation simpleMethodInvocationTwo;
-    private Invocation differentMethodInvocation;
-    private Invocation simpleMethodInvocationThree;
+    private Invocation invocationOneChunkOne;
+    private Invocation invocationTwoChunkOne;
+    private Invocation differentInvocationChunkTwo;
+    private Invocation invocationThreeChunkThree;
 
     @Before
     public void setup() throws Exception {
-        simpleMethodInvocation = new InvocationBuilder().simpleMethod().seq(1).toInvocation();
-        simpleMethodInvocationTwo = new InvocationBuilder().simpleMethod().seq(2).toInvocation();
-        differentMethodInvocation = new InvocationBuilder().differentMethod().seq(3).toInvocation();
-        simpleMethodInvocationThree = new InvocationBuilder().simpleMethod().seq(4).toInvocation();
+        invocationOneChunkOne = new InvocationBuilder().simpleMethod().seq(1).toInvocation();
+        invocationTwoChunkOne = new InvocationBuilder().simpleMethod().seq(2).toInvocation();
+        differentInvocationChunkTwo = new InvocationBuilder().differentMethod().seq(3).toInvocation();
+        invocationThreeChunkThree = new InvocationBuilder().simpleMethod().seq(4).toInvocation();
         
         chunker = new InvocationsChunker(new InvocationsFinder() {
             public List<Invocation> allInvocationsInOrder(List<Object> mocks) {
-                return Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation, simpleMethodInvocationThree);
+                return Arrays.asList(invocationOneChunkOne, invocationTwoChunkOne, differentInvocationChunkTwo, invocationThreeChunkThree);
             }});
     }
 
     @Test
     public void shouldGetFirstUnverifiedInvocationChunk() throws Exception {
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
-        assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+        assertThat(chunk, collectionHasExactlyInOrder(invocationOneChunkOne, invocationTwoChunkOne));
     }
     
     @Test
     public void shouldGetSecondUnverifiedInvocationChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationTwo.markVerifiedStrictly();
+        invocationOneChunkOne.markVerifiedStrictly();
+        invocationTwoChunkOne.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
-        assertThat(chunk, collectionHasExactlyInOrder(differentMethodInvocation));
+        assertThat(chunk, collectionHasExactlyInOrder(differentInvocationChunkTwo));
     }
     
     @Test
     public void shouldGetThirdUnverifiedInvocationChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationTwo.markVerifiedStrictly();
-        differentMethodInvocation.markVerifiedStrictly();
+        invocationOneChunkOne.markVerifiedStrictly();
+        invocationTwoChunkOne.markVerifiedStrictly();
+        differentInvocationChunkTwo.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
-        assertThat(chunk, collectionHasExactlyInOrder(simpleMethodInvocationThree));
+        assertThat(chunk, collectionHasExactlyInOrder(invocationThreeChunkThree));
     }
     
     @Test
     public void shouldNotGetInvocationsChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationTwo.markVerifiedStrictly();
-        differentMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationThree.markVerifiedStrictly();
+        invocationOneChunkOne.markVerifiedStrictly();
+        invocationTwoChunkOne.markVerifiedStrictly();
+        differentInvocationChunkTwo.markVerifiedStrictly();
+        invocationThreeChunkThree.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         

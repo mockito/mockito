@@ -18,19 +18,16 @@ public class InvocationsChunker {
         this.finder = invocationsFinder;
     }
 
-    //TODO too big
     public List<Invocation> getFirstUnverifiedInvocationChunk(List<Object> mocks) {
-        Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
-                new Comparator<Invocation>() {
-                    public int compare(Invocation o1, Invocation o2) {
-                        int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
-                        assert comparison != 0;
-                        return comparison;
-                    }});
+        Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         
         List<Invocation> allInvocations = finder.allInvocationsInOrder(mocks);
         allInvocationsInOrder.addAll(allInvocations);
         
+        return firstUnverifiedChunk(allInvocationsInOrder);
+    }
+
+    private List<Invocation> firstUnverifiedChunk(Set<Invocation> allInvocationsInOrder) {
         LinkedList<Invocation> chunk = new LinkedList<Invocation>();
         for (Invocation i : allInvocationsInOrder) {
             if (i.isVerifiedStrictly()) {
@@ -47,5 +44,13 @@ public class InvocationsChunker {
         } 
 
         return chunk;
+    }
+    
+    private final class SequenceNumberComparator implements Comparator<Invocation> {
+        public int compare(Invocation o1, Invocation o2) {
+            int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
+            assert comparison != 0;
+            return comparison;
+        }
     }
 }
