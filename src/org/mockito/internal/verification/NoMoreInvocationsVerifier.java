@@ -14,9 +14,18 @@ import org.mockito.internal.progress.VerificationMode;
 
 public class NoMoreInvocationsVerifier implements Verifier {
 
-    private final Reporter reporter = new Reporter();
-    private final InvocationsCalculator calculator = new InvocationsCalculator();
+    private final Reporter reporter;
+    private final InvocationsCalculator calculator;
+
+    public NoMoreInvocationsVerifier() {
+        this(new InvocationsCalculator(), new Reporter());
+    }
     
+    public NoMoreInvocationsVerifier(InvocationsCalculator calculator, Reporter reporter) {
+        this.calculator = calculator;
+        this.reporter = reporter;
+    }
+
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         if (mode.isExplicit()) {
             return;

@@ -66,7 +66,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         assertEquals(10, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
         
-        assertSame(calculatorStub.lastInvocation, reporterStub.stackTrace);
+        HasStackTrace fromCalculator = calculatorStub.lastInvocation;
+        assertSame(fromCalculator, reporterStub.stackTrace);
     }
     
     @Test
@@ -82,7 +83,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         assertEquals(0, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
         
-        assertSame(calculatorStub.firstUndesired, reporterStub.stackTrace);
+        HasStackTrace fromCalculator = calculatorStub.firstUndesired;
+        assertSame(fromCalculator, reporterStub.stackTrace);
     }
     
     class InvocationsCalculatorStub extends InvocationsCalculator {
