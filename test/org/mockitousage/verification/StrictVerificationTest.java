@@ -22,7 +22,7 @@ import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationInOrderTest extends RequiresValidState {
+public class StrictVerificationTest extends RequiresValidState {
     
     private IMethods mockOne;
     private IMethods mockTwo;
@@ -46,7 +46,7 @@ public class VerificationInOrderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldVerifyInOrder() {
+    public void shouldVerifyStrictly() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, 2).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -56,7 +56,7 @@ public class VerificationInOrderTest extends RequiresValidState {
     } 
     
     @Test
-    public void shouldVerifyInOrderUsingAtLeastOnce() {
+    public void shouldVerifyStrictlyUsingAtLeastOnce() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -66,7 +66,7 @@ public class VerificationInOrderTest extends RequiresValidState {
     } 
     
     @Test
-    public void shouldVerifyInOrderWhenExpectingSomeInvocationsToBeCalledZeroTimes() {
+    public void shouldVerifyStrictlyWhenExpectingSomeInvocationsToBeCalledZeroTimes() {
         strictly.verify(mockOne, 0).oneArg(false);
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, 2).simpleMethod(2);

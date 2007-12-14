@@ -13,6 +13,7 @@ import org.mockito.internal.progress.VerificationMode;
 public class NumberOfInvocationsVerifierTest extends RequiresValidState {
 
     private NumberOfInvocationsVerifier verifier;
+    //TODO other tests
     
     @Before
     public void setup() {
@@ -21,8 +22,6 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
 
     @Test
     public void shouldNotCheckForWrongNumberOfModificationsWhenAtLeastOnceVerification() throws Exception {
-        VerificationMode inOrder = VerificationMode.atLeastOnce();
-        
-        verifier.verify(null, null, inOrder);
+        verifier.verify(null, null, VerificationMode.atLeastOnce());
     }
 }

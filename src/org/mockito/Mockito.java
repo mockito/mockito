@@ -114,7 +114,7 @@ public class Mockito extends Matchers {
         StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
-            strictOrderVerifier.addMockToBeVerifiedInOrder(mock);
+            strictOrderVerifier.addMockToBeVerifiedStrictly(mock);
         }
         return strictOrderVerifier;
     }

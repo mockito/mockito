@@ -44,8 +44,8 @@ import org.mockitousage.verification.DescriptiveMessagesOnStrictOrderErrorsTest;
 import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
 import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
 import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
-import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest;
-import org.mockitousage.verification.VerificationInOrderTest;
+import org.mockitousage.verification.StrictVerificationMixedWithOrdiraryVerificationTest;
+import org.mockitousage.verification.StrictVerificationTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
 import org.mockitousage.verification.VerificationUsingMatchersTest;
 
@@ -84,8 +84,8 @@ public class MultiThreadedTest extends RequiresValidState {
                     ExactNumberOfTimesVerificationTest.class, 
                     DescriptiveMessagesWhenVerificationFailsTest.class, 
                     NoMoreInteractionsVerificationTest.class, 
-                    VerificationInOrderMixedWithOrdiraryVerificationTest.class, 
-                    VerificationInOrderTest.class, 
+                    StrictVerificationMixedWithOrdiraryVerificationTest.class, 
+                    StrictVerificationTest.class, 
                     VerificationOnMultipleMocksUsingMatchersTest.class, 
                     VerificationUsingMatchersTest.class, 
                     MatchersTest.class,

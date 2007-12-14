@@ -44,8 +44,8 @@ public class InvocationsChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldGetSecondUnverifiedInvocationChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedInOrder();
-        simpleMethodInvocationTwo.markVerifiedInOrder();
+        simpleMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationTwo.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
@@ -54,9 +54,9 @@ public class InvocationsChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldGetThirdUnverifiedInvocationChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedInOrder();
-        simpleMethodInvocationTwo.markVerifiedInOrder();
-        differentMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationTwo.markVerifiedStrictly();
+        differentMethodInvocation.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         
@@ -65,10 +65,10 @@ public class InvocationsChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldNotGetInvocationsChunk() throws Exception {
-        simpleMethodInvocation.markVerifiedInOrder();
-        simpleMethodInvocationTwo.markVerifiedInOrder();
-        differentMethodInvocation.markVerifiedInOrder();
-        simpleMethodInvocationThree.markVerifiedInOrder();
+        simpleMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationTwo.markVerifiedStrictly();
+        differentMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationThree.markVerifiedStrictly();
         
         List<Invocation> chunk = chunker.getFirstUnverifiedInvocationChunk(null);
         

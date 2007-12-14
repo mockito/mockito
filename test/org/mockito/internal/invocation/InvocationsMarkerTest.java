@@ -6,7 +6,7 @@ package org.mockito.internal.invocation;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
-import static org.mockito.internal.progress.VerificationMode.inOrder;
+import static org.mockito.internal.progress.VerificationMode.strict;
 import static org.mockito.internal.progress.VerificationMode.times;
 
 import java.util.Arrays;
@@ -59,9 +59,9 @@ public class InvocationsMarkerTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldMarkAsVerifiedInOrderWhenVerificationIsNotInOrder() throws Exception {
+    public void shouldNotMarkAsVerifiedStrictlyWhenVerificationIsStrict() throws Exception {
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertEquals(false, simpleMethodInvocation.isVerifiedInOrder());
+        assertEquals(false, simpleMethodInvocation.isVerifiedStrictly());
     }
     
     @Test
@@ -75,26 +75,26 @@ public class InvocationsMarkerTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldMarkAsVerifedInOrderAllInvocationsFromChunk() throws Exception {
-        VerificationMode mode = inOrder(null, Arrays.asList(new Object()));
+    public void shouldMarkAsVerifedStrictlyAllInvocationsFromChunk() throws Exception {
+        VerificationMode mode = strict(null, Arrays.asList(new Object()));
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         
-        assertEquals(true, simpleMethodInvocation.isVerifiedInOrder());
-        assertEquals(true, simpleMethodInvocationTwo.isVerifiedInOrder());
-        assertEquals(true, differentMethodInvocation.isVerifiedInOrder());
-        assertEquals(true, simpleMethodInvocationThree.isVerifiedInOrder());
+        assertEquals(true, simpleMethodInvocation.isVerifiedStrictly());
+        assertEquals(true, simpleMethodInvocationTwo.isVerifiedStrictly());
+        assertEquals(true, differentMethodInvocation.isVerifiedStrictly());
+        assertEquals(true, simpleMethodInvocationThree.isVerifiedStrictly());
     }
     
     @Test
     public void shouldMarkAsVerifedAllInvocationsFromThirdChunk() throws Exception {
-        VerificationMode mode = inOrder(null, Arrays.asList(new Object()));
+        VerificationMode mode = strict(null, Arrays.asList(new Object()));
         
         Invocation doesntMatter = null;
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         marker.markInvocationsAsVerified(invocations, new InvocationMatcher(doesntMatter), mode);
         
-        assertEquals(true, simpleMethodInvocationThree.isVerifiedInOrder());
+        assertEquals(true, simpleMethodInvocationThree.isVerifiedStrictly());
     }
 }

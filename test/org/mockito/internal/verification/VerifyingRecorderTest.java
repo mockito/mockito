@@ -70,10 +70,10 @@ public class VerifyingRecorderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldVerifyInOrder() {
+    public void shouldVerifyStrictly() {
         recorder.recordInvocation(simpleMethod);
         
-        VerificationMode mode = VerificationMode.inOrder(10, Arrays.<Object>asList("mock"));
+        VerificationMode mode = VerificationMode.strict(10, Arrays.<Object>asList("mock"));
         recorder.verify(differentMethod, mode);
         
         assertEquals(verifier.mode, mode);

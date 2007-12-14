@@ -13,6 +13,8 @@ public class VerificationMode {
 
     private final Integer wantedInvocationCount;
     private final List<Object> mocksToBeVerifiedInSequence;
+    
+    //TODO messy
 
     private VerificationMode(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInSequence) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
@@ -37,8 +39,8 @@ public class VerificationMode {
      */
     public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
-    public static VerificationMode inOrder(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedInOrder) {
-        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder);
+    public static VerificationMode strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
+        return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly);
     }
 
     public boolean atLeastOnceMode() {
@@ -53,8 +55,7 @@ public class VerificationMode {
         return mocksToBeVerifiedInSequence;
     }
 
-//TODO name    
-    public boolean orderOfInvocationsMatters() {
+    public boolean isStrict() {
         return !mocksToBeVerifiedInSequence.isEmpty();
     }
 

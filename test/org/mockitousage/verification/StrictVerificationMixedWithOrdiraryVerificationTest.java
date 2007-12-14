@@ -14,7 +14,7 @@ import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationInOrderMixedWithOrdiraryVerificationTest extends RequiresValidState {
+public class StrictVerificationMixedWithOrdiraryVerificationTest extends RequiresValidState {
     
     private IMethods mockOne;
     private IMethods mockTwo;
@@ -37,7 +37,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends Requir
     }
     
     @Test
-    public void shouldMixVerifyingInOrderAndNormalVerification() {
+    public void shouldMixStrictVerificationAndNormalVerification() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         strictly.verify(mockThree).simpleMethod(3);
         strictly.verify(mockThree).simpleMethod(4);

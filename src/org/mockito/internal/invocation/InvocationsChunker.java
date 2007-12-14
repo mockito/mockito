@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-
 public class InvocationsChunker {
 
     private final InvocationsFinder finder;
@@ -19,6 +18,7 @@ public class InvocationsChunker {
         this.finder = invocationsFinder;
     }
 
+    //TODO too big
     public List<Invocation> getFirstUnverifiedInvocationChunk(List<Object> mocks) {
         Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(
                 new Comparator<Invocation>() {
@@ -33,7 +33,7 @@ public class InvocationsChunker {
         
         LinkedList<Invocation> chunk = new LinkedList<Invocation>();
         for (Invocation i : allInvocationsInOrder) {
-            if (i.isVerifiedInOrder()) {
+            if (i.isVerifiedStrictly()) {
                 continue;
             }
             

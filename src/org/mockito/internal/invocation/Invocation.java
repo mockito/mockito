@@ -18,16 +18,14 @@ import org.mockito.internal.matchers.IArgumentMatcher;
 
 public class Invocation {
 
-    private boolean verified;
-    
     private final int sequenceNumber;
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
+    private final HasStackTrace stackTrace;
 
-    private boolean verifiedInOrder;
-
-    private HasStackTrace stackTrace;
+    private boolean verified;
+    private boolean verifiedStrictly;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
         this.mock = mock;
@@ -76,13 +74,13 @@ public class Invocation {
         return sequenceNumber;
     }
 
-    public void markVerifiedInOrder() {
+    public void markVerifiedStrictly() {
         this.markVerified();
-        this.verifiedInOrder = true;
+        this.verifiedStrictly = true;
     }
 
-    public boolean isVerifiedInOrder() {
-        return verifiedInOrder;
+    public boolean isVerifiedStrictly() {
+        return verifiedStrictly;
     }
     
     public HasStackTrace getStackTrace() {

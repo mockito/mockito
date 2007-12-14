@@ -17,8 +17,8 @@ public class InvocationsMarker {
             return;
         }
 
-        if (mode.orderOfInvocationsMatters()) {
-            markVerifiedInOrder(invocations);
+        if (mode.isStrict()) {
+            markVerifiedStrictly(invocations);
         } else {
             markVerified(wanted, invocations);
         }
@@ -32,10 +32,9 @@ public class InvocationsMarker {
         }
     }
 
-    private void markVerifiedInOrder(List<Invocation> invocations) {
+    private void markVerifiedStrictly(List<Invocation> invocations) {
         for (Invocation i : invocations) {
-            i.markVerifiedInOrder();
+            i.markVerifiedStrictly();
         }
     }
-
 }

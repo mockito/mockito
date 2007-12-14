@@ -52,7 +52,7 @@ public class VerifyingRecorder {
     }
     
     private List<Invocation> getInvocationsForEvaluation(VerificationMode mode) {
-        if (mode.orderOfInvocationsMatters()) {
+        if (mode.isStrict()) {
             return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedInSequence());
         } else {
             return registeredInvocations;
