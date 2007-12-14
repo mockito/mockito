@@ -21,10 +21,18 @@ public class VerificationMode {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
+        assert mocksToBeVerifiedInSequence != null;
         this.wantedInvocationCount = wantedNumberOfInvocations;
         this.mocksToBeVerifiedInSequence = mocksToBeVerifiedInSequence;
         this.verification = verification;
     }
+    
+    /**
+     * Don't use VerificationMode class directly. 
+     * <p>
+     * Use Mockito.atLeastOnce() and Mockito.times()
+     */
+    public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
     
     public static VerificationMode atLeastOnce() {
         return new VerificationMode(null, Collections.emptyList(), Verification.EXPLICIT);
@@ -35,22 +43,12 @@ public class VerificationMode {
     }
 
     public static VerificationMode strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
+        assert !mocksToBeVerifiedStrictly.isEmpty();
         return new VerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedStrictly, Verification.EXPLICIT);
     }
     
     public static VerificationMode noMoreInteractions() {
         return new VerificationMode(null, Collections.emptyList(), Verification.NO_MORE_WANTED);
-    }
-
-    /**
-     * Don't use VerificationMode class directly. 
-     * <p>
-     * Use Mockito.atLeastOnce() and Mockito.times()
-     */
-    public static void dont_use_this_class_directly_instead_use_static_methods_on_Mockito() {}
-    
-    public boolean atLeastOnceMode() {
-        return wantedInvocationCount == null;
     }
 
     public Integer wantedCount() {
@@ -61,24 +59,28 @@ public class VerificationMode {
         return mocksToBeVerifiedInSequence;
     }
 
-    public boolean isStrict() {
-        return !mocksToBeVerifiedInSequence.isEmpty();
-    }
-
     public boolean wantedCountIsZero() {
         return wantedInvocationCount != null && wantedInvocationCount == 0;
     }
-    
-    public boolean isExplicit() {
+
+    public boolean atLeastOnceMode() {
+        return wantedInvocationCount == null && verification == Verification.EXPLICIT;
+    }
+
+    public boolean strictMode() {
+        return !mocksToBeVerifiedInSequence.isEmpty();
+    }
+
+    public boolean explicitMode() {
         return verification == Verification.EXPLICIT;
     }
     
     public boolean missingMethodMode() {
-        return isExplicit() && (atLeastOnceMode() || wantedInvocationCount == 1);
+        return explicitMode() && (atLeastOnceMode() || wantedInvocationCount == 1);
     }
 
     public boolean exactNumberOfInvocationsMode() {
-        return !atLeastOnceMode() && isExplicit();
+        return !atLeastOnceMode() && explicitMode();
     }
     
     @Override

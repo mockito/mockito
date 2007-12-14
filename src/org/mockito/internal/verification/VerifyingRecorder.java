@@ -50,13 +50,13 @@ public class VerifyingRecorder {
             verifier.verify(invocations, wanted, mode);
         }
         
-        if (mode.isExplicit()) {
+        if (mode.explicitMode()) {
             marker.markInvocationsAsVerified(invocations, wanted, mode);
         }
     }
     
     private List<Invocation> getInvocationsForEvaluation(VerificationMode mode) {
-        if (mode.isStrict()) {
+        if (mode.strictMode()) {
             return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedInSequence());
         } else {
             return registeredInvocations;

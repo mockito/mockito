@@ -17,7 +17,7 @@ public class InvocationsMarker {
             return;
         }
 
-        if (mode.isStrict()) {
+        if (mode.strictMode()) {
             markVerifiedStrictly(invocations);
         } else {
             markVerified(wanted, invocations);
