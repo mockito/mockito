@@ -40,7 +40,7 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
         mock.add("one");
         mock.add("one");
         
-        verify(mock, 3).add("one");
+        verify(mock, times(3)).add("one");
         
         verifyNoMoreInteractions(mock);
     }
@@ -84,7 +84,7 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
         
         map.put("one", 1);
         
-        verify(list, 2).add("one");
+        verify(list, times(2)).add("one");
         
         verifyNoMoreInteractions(list);
         try {

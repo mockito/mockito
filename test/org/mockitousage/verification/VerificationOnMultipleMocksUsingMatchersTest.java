@@ -29,7 +29,7 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends RequiresValidS
         verify(list).add(anyObject());
         verify(list).add(anyInt(), eq("test two"));
         
-        verify(map, 2).put(anyObject(), anyObject());
+        verify(map, times(2)).put(anyObject(), anyObject());
         verify(map).put(eq("test two"), eq(200));
         
         verifyNoMoreInteractions(list, map);
@@ -48,11 +48,11 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends RequiresValidS
         map.put("one", 1);
         map.put("one", 1);
         
-        verify(list, 2).add("one");
-        verify(list, 1).add("two");
-        verify(list, 0).add("three");
+        verify(list, times(2)).add("one");
+        verify(list, times(1)).add("two");
+        verify(list, times(0)).add("three");
         
-        verify(map, 2).put(anyObject(), anyInt());
+        verify(map, times(2)).put(anyObject(), anyInt());
         
         verifyNoMoreInteractions(list, map);
         verifyZeroInteractions(set);

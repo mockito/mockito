@@ -5,6 +5,7 @@
 package org.mockito;
 
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.times;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MockitoTest extends RequiresValidState {
     
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
-        Mockito.verify("notMock", 19);
+        Mockito.verify("notMock", times(19));
     }
     
     @Test(expected=NotAMockException.class)
