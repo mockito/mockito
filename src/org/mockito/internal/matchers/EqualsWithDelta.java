@@ -23,6 +23,7 @@ public class EqualsWithDelta implements IArgumentMatcher {
                         + delta.doubleValue();
     }
 
+    //TODO not tested
     public void appendTo(StringBuilder buffer) {
         buffer.append("eq(" + wanted + ", " + delta + ")");
     }

@@ -107,4 +107,21 @@
       </jarjar>
   </target>
 
+  <target name="javadoc">
+    <javadoc sourcepath="${src.dir}"
+             destdir="javadoc"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="Mockito API">
+      <doctitle><![CDATA[<h1>Mockito API</h1>]]></doctitle>
+      <!--
+      <group title="Group 1 Packages" packages="com.dummy.test.a*"/>
+      <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
+      <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:\tmp"/>
+      <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+      -->
+    </javadoc>
+  </target>
+  
 </project>

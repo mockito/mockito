@@ -45,7 +45,7 @@ public class ArrayEquals extends Equals {
                 && (actual == null || actual instanceof Object[])) {
             return Arrays.equals((Object[]) wanted, (Object[]) actual);
         } else {
-            throw new IllegalStateException("Something went really wrong. Arguments passed to ArrayEquals have to be an array or null!");
+            throw new IllegalArgumentException("Something went really wrong. Arguments passed to ArrayEquals have to be an array or null!");
         }
     }
 

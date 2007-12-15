@@ -15,14 +15,20 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.parents.HasStackTrace;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.exceptions.verification.NumberOfInvocationsError;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
 
 /**
+ * Reports verification and misusing errors.
+ * <p>
  * One of the key points of mocking library is proper verification/exception
- * messages. All messages in one place makes it easier to tune and amend.
+ * messages. All messages in one place makes it easier to tune and amend them.
+ * <p>
+ * Reporter can be injected and therefore is easily testable.
+ * <p>
+ * Generally, exception messages are full of line breaks to make them easy to
+ * read (xunit plugins take only fraction of screen on modern IDEs).
  */
 public class Reporter {
 
@@ -87,13 +93,6 @@ public class Reporter {
         throw new VerificationError(join(
                     "Wanted but not invoked:",
                     wanted
-        ));
-    }
-
-    public void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
-        throw new NumberOfInvocationsError(join(
-                wanted,
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ));
     }
 
