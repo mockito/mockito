@@ -9,7 +9,7 @@ import java.util.List;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationMode;
 
-//TODO refactor to an object that holds Invocations and exposes some calculations
+//TODO refactor name to something like analyzer
 public class InvocationsCalculator {
 
     public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
@@ -23,6 +23,7 @@ public class InvocationsCalculator {
         return actual;
     }
 
+    //TODO start all with find
     public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation actualbyName = null;
         for (Invocation registered : invocations) {
