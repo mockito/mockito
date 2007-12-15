@@ -109,7 +109,7 @@
 
   <target name="javadoc">
     <javadoc sourcepath="${src.dir}"
-             destdir="javadoc"
+             destdir="${target.dir}/javadoc"
              author="true"
              version="true"
              use="true"
