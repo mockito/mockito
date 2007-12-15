@@ -16,10 +16,16 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.progress.LastArguments;
 
+/**
+ * Argument matchers
+ * <p>
+ * TODO where is that documentation?
+ * Read more about matchers: http://code.google.com/p/mockito/matchers
+ */
 public class Matchers {
+
     /**
-     * Expects any boolean argument. For details, see the EasyMock
-     * documentation.
+     * any boolean argument.
      * 
      * @return <code>false</code>.
      */
@@ -29,7 +35,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any byte argument. For details, see the EasyMock documentation.
+     * any byte argument.
      * 
      * @return <code>0</code>.
      */
@@ -39,7 +45,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any char argument. For details, see the EasyMock documentation.
+     * any char argument.
      * 
      * @return <code>0</code>.
      */
@@ -49,7 +55,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any int argument. For details, see the EasyMock documentation.
+     * any int argument.
      * 
      * @return <code>0</code>.
      */
@@ -59,7 +65,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any long argument. For details, see the EasyMock documentation.
+     * any long argument.
      * 
      * @return <code>0</code>.
      */
@@ -69,7 +75,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any float argument. For details, see the EasyMock documentation.
+     * any float argument.
      * 
      * @return <code>0</code>.
      */
@@ -79,7 +85,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any double argument. For details, see the EasyMock documentation.
+     * any double argument.
      * 
      * @return <code>0</code>.
      */
@@ -89,7 +95,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any short argument. For details, see the EasyMock documentation.
+     * any short argument.
      * 
      * @return <code>0</code>.
      */
@@ -99,7 +105,7 @@ public class Matchers {
     }
 
     /**
-     * Expects any Object argument. For details, see the EasyMock documentation.
+     * any Object argument.
      * 
      * @return <code>null</code>.
      */
@@ -107,9 +113,9 @@ public class Matchers {
         LastArguments.instance().reportMatcher(Any.ANY);
         return null;
     }
-    
+
     /**
-     * Any String argument.
+     * any String argument.
      * 
      * @return <code>null</code>.
      */
@@ -119,8 +125,7 @@ public class Matchers {
     }
 
     /**
-     * Expects an object implementing the given class. For details, see the
-     * EasyMock documentation.
+     * Object argument that implements the given class. 
      * 
      * @param <T>
      *            the accepted type.
@@ -134,7 +139,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a boolean that is equal to the given value.
+     * boolean argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -146,7 +151,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a byte that is equal to the given value.
+     * byte argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -158,7 +163,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a char that is equal to the given value.
+     * char argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -170,7 +175,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a double that is equal to the given value.
+     * double argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -182,7 +187,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a float that is equal to the given value.
+     * float argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -194,7 +199,7 @@ public class Matchers {
     }
 
     /**
-     * Expects an int that is equal to the given value.
+     * int argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -206,7 +211,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a long that is equal to the given value.
+     * long argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -218,7 +223,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a short that is equal to the given value.
+     * short argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -230,7 +235,7 @@ public class Matchers {
     }
 
     /**
-     * Expects an Object that is equal to the given value.
+     * Object argument that is equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -240,10 +245,9 @@ public class Matchers {
         LastArguments.instance().reportMatcher(new Equals(value));
         return null;
     }
-    
+
     /**
-     * Expects an Object that is the same as the given value. For details, see
-     * the documentation.
+     * Object argument that is the same as the given value.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -257,7 +261,7 @@ public class Matchers {
     }
 
     /**
-     * Expects null.
+     * null argument.
      * 
      * @return <code>null</code>.
      */
@@ -267,7 +271,7 @@ public class Matchers {
     }
 
     /**
-     * Expects not null.
+     * not null argument.
      * 
      * @return <code>null</code>.
      */
@@ -275,9 +279,9 @@ public class Matchers {
         LastArguments.instance().reportMatcher(NotNull.NOT_NULL);
         return null;
     }
-    
+
     /**
-     * string that contains the given substring.
+     * String argument that contains the given substring.
      * 
      * @param substring
      *            the substring.
@@ -289,8 +293,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a string that matches the given regular expression. For details,
-     * see the EasyMock documentation.
+     * String argument that matches the given regular expression.
      * 
      * @param regex
      *            the regular expression.
@@ -300,10 +303,9 @@ public class Matchers {
         LastArguments.instance().reportMatcher(new Matches(regex));
         return null;
     }
-    
+
     /**
-     * Expects a string that ends with the given suffix. For details, see the
-     * documentation.
+     * String argument that ends with the given suffix.
      * 
      * @param suffix
      *            the suffix.
@@ -315,8 +317,7 @@ public class Matchers {
     }
 
     /**
-     * Expects a string that starts with the given prefix. For details, see the
-     * documentation.
+     * String argument that starts with the given prefix.
      * 
      * @param prefix
      *            the prefix.

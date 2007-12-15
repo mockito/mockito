@@ -16,6 +16,8 @@ import org.mockito.internal.progress.LastArguments;
 
 /**
  * Very rarely used matchers are kept here
+ * <p>
+ * Read more about matchers: http://code.google.com/p/mockito/matchers
  */
 public class AdditionalMatchers {
 
@@ -369,7 +371,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * string that contains a substring that matches the given regular
+     * String argument that contains a substring that matches the given regular
      * expression.
      * 
      * @param regex
@@ -382,8 +384,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * Object array that is equal to the given array, i.e. it has to have the
-     * same type, length, and each element has to be equal.
+     * Object array argument that is equal to the given array, i.e. it has to
+     * have the same type, length, and each element has to be equal.
      * 
      * @param <T>
      *            the type of the array, it is passed through to prevent casts.
@@ -397,8 +399,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * short array that is equal to the given array, i.e. it has to have the
-     * same length, and each element has to be equal.
+     * short array argument that is equal to the given array, i.e. it has to
+     * have the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -410,8 +412,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * long array that is equal to the given array, i.e. it has to have the same
-     * length, and each element has to be equal.
+     * long array argument that is equal to the given array, i.e. it has to have
+     * the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -423,8 +425,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * int array that is equal to the given array, i.e. it has to have the same
-     * length, and each element has to be equal.
+     * int array argument that is equal to the given array, i.e. it has to have
+     * the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -436,8 +438,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * float array that is equal to the given array, i.e. it has to have the
-     * same length, and each element has to be equal.
+     * float array argument that is equal to the given array, i.e. it has to
+     * have the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -449,8 +451,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * double array that is equal to the given array, i.e. it has to have the
-     * same length, and each element has to be equal.
+     * double array argument that is equal to the given array, i.e. it has to
+     * have the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -462,8 +464,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * char array that is equal to the given array, i.e. it has to have the same
-     * length, and each element has to be equal.
+     * char array argument that is equal to the given array, i.e. it has to have
+     * the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -475,8 +477,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * byte array that is equal to the given array, i.e. it has to have the same
-     * length, and each element has to be equal.
+     * byte array argument that is equal to the given array, i.e. it has to have
+     * the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -488,8 +490,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * boolean array that is equal to the given array, i.e. it has to have the
-     * same length, and each element has to be equal.
+     * boolean array argument that is equal to the given array, i.e. it has to
+     * have the same length, and each element has to be equal.
      * 
      * @param value
      *            the given array.
@@ -501,7 +503,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * boolean that matches both given matchers.
+     * boolean argument that matches both given matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -515,7 +517,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * byte that matches both given argument matchers.
+     * byte argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -529,7 +531,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * char that matches both given argument matchers.
+     * char argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -543,7 +545,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * double that matches both given argument matchers.
+     * double argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -557,7 +559,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * float that matches both given argument matchers.
+     * float argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -571,7 +573,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * int that matches both given argument matchers.
+     * int argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -585,7 +587,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * long that matches both given argument matchers.
+     * long argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -599,7 +601,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * short that matches both given argument matchers.
+     * short argument that matches both given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -613,7 +615,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * Object that matches both given argument matchers.
+     * Object argument that matches both given argument matchers.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -629,7 +631,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * boolean that matches any of the given argument matchers.
+     * boolean argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -643,7 +645,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * Object that matches any of the given argument matchers.
+     * Object argument that matches any of the given argument matchers.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -659,7 +661,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * short that matches any of the given argument matchers.
+     * short argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -673,7 +675,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * long that matches any of the given argument matchers.
+     * long argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -687,7 +689,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * int that matches any of the given argument matchers.
+     * int argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -701,7 +703,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * float that matches any of the given argument matchers.
+     * float argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -715,7 +717,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * double that matches any of the given argument matchers.
+     * double argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -729,7 +731,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * char that matches any of the given argument matchers.
+     * char argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -743,7 +745,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * byte that matches any of the given argument matchers.
+     * byte argument that matches any of the given argument matchers.
      * 
      * @param first
      *            placeholder for the first argument matcher.
@@ -757,7 +759,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * Object that does not match the given argument matcher.
+     * Object argument that does not match the given argument matcher.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -771,7 +773,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * short that does not match the given argument matcher.
+     * short argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -783,7 +785,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * int that does not match the given argument matcher.
+     * int argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -795,7 +797,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * long that does not match the given argument matcher.
+     * long argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -807,7 +809,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * float that does not match the given argument matcher.
+     * float argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -819,7 +821,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * double that does not match the given argument matcher.
+     * double argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -831,7 +833,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * char that does not match the given argument matcher.
+     * char argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -843,7 +845,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * boolean that does not match the given argument matcher.
+     * boolean argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -855,7 +857,7 @@ public class AdditionalMatchers {
     }
 
     /**
-     * byte that does not match the given argument matcher.
+     * byte argument that does not match the given argument matcher.
      * 
      * @param first
      *            placeholder for the argument matcher.
@@ -867,8 +869,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * double that has an absolute difference to the given value that is less
-     * than the given delta details.
+     * double argument that has an absolute difference to the given value that
+     * is less than the given delta details.
      * 
      * @param value
      *            the given value.
@@ -882,8 +884,8 @@ public class AdditionalMatchers {
     }
 
     /**
-     * float that has an absolute difference to the given value that is less
-     * than the given delta details.
+     * float argument that has an absolute difference to the given value that is
+     * less than the given delta details.
      * 
      * @param value
      *            the given value.
