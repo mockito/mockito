@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest extends RequiresValidState {

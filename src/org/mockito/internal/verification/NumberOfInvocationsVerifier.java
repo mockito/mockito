@@ -10,21 +10,21 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationMode;
 
 public class NumberOfInvocationsVerifier implements Verifier {
     
     private final Reporter reporter;
-    private final InvocationsCalculator calculator;
+    private final InvocationsAnalyzer analyzer;
 
     public NumberOfInvocationsVerifier() {
-        this(new Reporter(), new InvocationsCalculator());
+        this(new Reporter(), new InvocationsAnalyzer());
     }
     
-    NumberOfInvocationsVerifier(Reporter reporter, InvocationsCalculator calculator) {
+    NumberOfInvocationsVerifier(Reporter reporter, InvocationsAnalyzer analyzer) {
         this.reporter = reporter;
-        this.calculator = calculator;
+        this.analyzer = analyzer;
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
@@ -32,14 +32,14 @@ public class NumberOfInvocationsVerifier implements Verifier {
             return;
         }
         
-        int actualCount = calculator.countActual(invocations, wanted);
+        int actualCount = analyzer.countActual(invocations, wanted);
         int wantedCount = mode.wantedCount();
         
         if (actualCount < wantedCount) {
-            HasStackTrace lastInvocation = calculator.getLastInvocationStackTrace(invocations, wanted);
+            HasStackTrace lastInvocation = analyzer.getLastInvocationStackTrace(invocations, wanted);
             reporter.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocation);
         } else if (actualCount > wantedCount) {
-            HasStackTrace firstUndesired = calculator.getFirstUndesiredInvocationStackTrace(invocations, wanted, mode);
+            HasStackTrace firstUndesired = analyzer.getFirstUndesiredInvocationStackTrace(invocations, wanted, mode);
             reporter.tooManyActualInvocations(wantedCount, actualCount, wanted.toString(), firstUndesired);
         }
     }

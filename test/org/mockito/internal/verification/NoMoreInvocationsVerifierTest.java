@@ -17,20 +17,20 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationMode;
 
 public class NoMoreInvocationsVerifierTest extends RequiresValidState {
 
     private NoMoreInvocationsVerifier verifier;
-    private InvocationsCalculatorStub calculator;
+    private InvocationsAnalyzerStub analyzer;
     private ReporterStub reporterStub;
 
     @Before
     public void setup() {
-        calculator = new InvocationsCalculatorStub();
+        analyzer = new InvocationsAnalyzerStub();
         reporterStub = new ReporterStub();
-        verifier = new NoMoreInvocationsVerifier(calculator, reporterStub);
+        verifier = new NoMoreInvocationsVerifier(analyzer, reporterStub);
     }
     
     @Test
@@ -40,25 +40,25 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldPassVerification() throws Exception {
-        calculator.invocationToReturn = null;
+        analyzer.invocationToReturn = null;
         verifier.verify(null, null, VerificationMode.noMoreInteractions());
     }
     
     @Test
     public void shouldReportError() throws Exception {
         Invocation firstUnverified = new InvocationBuilder().toInvocation();
-        calculator.invocationToReturn = firstUnverified;
+        analyzer.invocationToReturn = firstUnverified;
         List<Invocation> invocations = asList(new InvocationBuilder().toInvocation());
         
         verifier.verify(invocations, null, VerificationMode.noMoreInteractions());
         
-        assertSame(invocations, calculator.invocations);
+        assertSame(invocations, analyzer.invocations);
         
         assertEquals(firstUnverified.toString(), reporterStub.undesired);
         assertSame(firstUnverified.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
-    class InvocationsCalculatorStub extends InvocationsCalculator {
+    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private List<Invocation> invocations;
         private Invocation invocationToReturn;
         @Override public Invocation getFirstUnverified(List<Invocation> invocations) {

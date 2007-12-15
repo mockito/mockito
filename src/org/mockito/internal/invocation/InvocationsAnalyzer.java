@@ -9,8 +9,10 @@ import java.util.List;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationMode;
 
-//TODO refactor name to something like analyzer
-public class InvocationsCalculator {
+/**
+ * Provides handful of methods to search and count invocations
+ */
+public class InvocationsAnalyzer {
 
     public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
         int actual = 0;

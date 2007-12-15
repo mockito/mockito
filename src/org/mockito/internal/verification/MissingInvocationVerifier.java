@@ -9,21 +9,21 @@ import java.util.List;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.invocation.InvocationsPrinter;
 import org.mockito.internal.progress.VerificationMode;
 
 public class MissingInvocationVerifier implements Verifier {
     
     private final Reporter reporter;
-    private final InvocationsCalculator calculator;
+    private final InvocationsAnalyzer analyzer;
     
     public MissingInvocationVerifier() {
-        this(new InvocationsCalculator(), new Reporter());
+        this(new InvocationsAnalyzer(), new Reporter());
     }
     
-    public MissingInvocationVerifier(InvocationsCalculator calculator, Reporter reporter) {
-        this.calculator = calculator;
+    public MissingInvocationVerifier(InvocationsAnalyzer analyzer, Reporter reporter) {
+        this.analyzer = analyzer;
         this.reporter = reporter;
     }
 
@@ -32,14 +32,14 @@ public class MissingInvocationVerifier implements Verifier {
             return;
         }
         
-        int actualCount = calculator.countActual(invocations, wanted);
+        int actualCount = analyzer.countActual(invocations, wanted);
         if (actualCount == 0) {
             reportMissingInvocationError(invocations, wanted);
         }
     }
     
     private void reportMissingInvocationError(List<Invocation> invocations, InvocationMatcher wanted) {
-        Invocation actual = calculator.findActualInvocation(invocations, wanted);
+        Invocation actual = analyzer.findActualInvocation(invocations, wanted);
         
         if (actual != null) {
             InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);

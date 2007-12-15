@@ -9,20 +9,20 @@ import java.util.List;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationMode;
 
 public class NoMoreInvocationsVerifier implements Verifier {
 
     private final Reporter reporter;
-    private final InvocationsCalculator calculator;
+    private final InvocationsAnalyzer analyzer;
 
     public NoMoreInvocationsVerifier() {
-        this(new InvocationsCalculator(), new Reporter());
+        this(new InvocationsAnalyzer(), new Reporter());
     }
     
-    public NoMoreInvocationsVerifier(InvocationsCalculator calculator, Reporter reporter) {
-        this.calculator = calculator;
+    public NoMoreInvocationsVerifier(InvocationsAnalyzer analyzer, Reporter reporter) {
+        this.analyzer = analyzer;
         this.reporter = reporter;
     }
 
@@ -31,7 +31,7 @@ public class NoMoreInvocationsVerifier implements Verifier {
             return;
         }
 
-        Invocation unverified = calculator.getFirstUnverified(invocations);
+        Invocation unverified = analyzer.getFirstUnverified(invocations);
         if (unverified != null) {
             reporter.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }

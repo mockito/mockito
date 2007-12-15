@@ -20,13 +20,13 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationMode;
 
 public class MissingInvocationVerifierTest extends RequiresValidState {
 
     private MissingInvocationVerifier verifier;
-    private InvocationsCalculatorStub calculatorStub;
+    private InvocationsAnalyzerStub analyzerStub;
     private ReporterStub reporterStub;
     
     private InvocationMatcher wanted;
@@ -34,9 +34,9 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
 
     @Before
     public void setup() {
-        calculatorStub = new InvocationsCalculatorStub();
+        analyzerStub = new InvocationsAnalyzerStub();
         reporterStub = new ReporterStub();
-        verifier = new MissingInvocationVerifier(calculatorStub, reporterStub);
+        verifier = new MissingInvocationVerifier(analyzerStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -48,37 +48,37 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldAskCalculatorForActualNumberOfInvocations() {
-        calculatorStub.actualCountToReturn = 1;
+    public void shouldAskAnalyzerForActualNumberOfInvocations() {
+        analyzerStub.actualCountToReturn = 1;
         verifier.verify(invocations, wanted, atLeastOnce());
         
-        assertSame(invocations, calculatorStub.invocations);
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(invocations, analyzerStub.invocations);
+        assertSame(wanted, analyzerStub.wanted);
     }
     
     @Test
     public void shouldPassBecauseActualInvocationFound() {
-        calculatorStub.actualCountToReturn = 1;
+        analyzerStub.actualCountToReturn = 1;
         verifier.verify(invocations, wanted, atLeastOnce());
     }
     
     @Test
-    public void shouldAskCalculatorForActualInvocationAndReportWantedButNotInvoked() {
-        calculatorStub.actualCountToReturn = 0;
-        calculatorStub.actualInvocationToReturn = null;
+    public void shouldAskAnalyzerForActualInvocationAndReportWantedButNotInvoked() {
+        analyzerStub.actualCountToReturn = 0;
+        analyzerStub.actualInvocationToReturn = null;
         verifier.verify(invocations, wanted, VerificationMode.atLeastOnce());
         
-        assertSame(invocations, calculatorStub.invocations);
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(invocations, analyzerStub.invocations);
+        assertSame(wanted, analyzerStub.wanted);
         
         assertEquals(wanted.toString(), reporterStub.wanted);
     }
     
     @Test
     public void shouldReportWantedInvocationDiffersFromActual() {
-        calculatorStub.actualCountToReturn = 0;
+        analyzerStub.actualCountToReturn = 0;
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
-        calculatorStub.actualInvocationToReturn = actualInvocation;
+        analyzerStub.actualInvocationToReturn = actualInvocation;
         verifier.verify(invocations, wanted, VerificationMode.atLeastOnce());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
@@ -86,7 +86,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
-    class InvocationsCalculatorStub extends InvocationsCalculator {
+    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private List<Invocation> invocations;
         private InvocationMatcher wanted;
         private int actualCountToReturn;

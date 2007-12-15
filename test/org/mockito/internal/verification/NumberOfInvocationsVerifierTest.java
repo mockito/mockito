@@ -21,13 +21,13 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsCalculator;
+import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationMode;
 
 public class NumberOfInvocationsVerifierTest extends RequiresValidState {
 
     private NumberOfInvocationsVerifier verifier;
-    private InvocationsCalculatorStub calculatorStub;
+    private InvocationsAnalyzerStub analyzerStub;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private List<Invocation> invocations;
@@ -35,8 +35,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     @Before
     public void setup() {
         reporterStub = new ReporterStub();
-        calculatorStub = new InvocationsCalculatorStub();
-        verifier = new NumberOfInvocationsVerifier(reporterStub, calculatorStub);
+        analyzerStub = new InvocationsAnalyzerStub();
+        verifier = new NumberOfInvocationsVerifier(reporterStub, analyzerStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -50,30 +50,30 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     @Test
     public void shouldCountActualInvocations() throws Exception {
         verifier.verify(invocations, wanted, times(4));
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(wanted, analyzerStub.wanted);
     }
     
     @Test
-    public void shouldAskCalculatorToCountActual() throws Exception {
+    public void shouldAskAnalyzerToCountActual() throws Exception {
         VerificationMode mode = times(1);
-        calculatorStub.actualCountToReturn = 1;
+        analyzerStub.actualCountToReturn = 1;
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, calculatorStub.invocations);
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(invocations, analyzerStub.invocations);
+        assertSame(wanted, analyzerStub.wanted);
     }
     
     @Test
     public void shouldReportTooLittleInvocations() throws Exception {
         VerificationMode mode = times(10);
-        calculatorStub.actualCountToReturn = 5;
+        analyzerStub.actualCountToReturn = 5;
         MockitoException lastInvocation = new MockitoException("");
-        calculatorStub.invocationTraceToReturn = lastInvocation;
+        analyzerStub.invocationTraceToReturn = lastInvocation;
         
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, calculatorStub.invocations);
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(invocations, analyzerStub.invocations);
+        assertSame(wanted, analyzerStub.wanted);
         
         assertEquals(5, reporterStub.actualCount);
         assertEquals(10, reporterStub.wantedCount);
@@ -85,16 +85,16 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     @Test
     public void shouldReportTooManyInvocations() throws Exception {
         VerificationMode mode = times(0);
-        calculatorStub.actualCountToReturn = 5;
+        analyzerStub.actualCountToReturn = 5;
         MockitoException firstUndesiredInvocation = new MockitoException("");
-        calculatorStub.invocationTraceToReturn = firstUndesiredInvocation;
+        analyzerStub.invocationTraceToReturn = firstUndesiredInvocation;
         
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, calculatorStub.invocations);
-        assertSame(wanted, calculatorStub.wanted);
+        assertSame(invocations, analyzerStub.invocations);
+        assertSame(wanted, analyzerStub.wanted);
         
-        assertSame(mode, calculatorStub.mode);
+        assertSame(mode, analyzerStub.mode);
         
         assertEquals(5, reporterStub.actualCount);
         assertEquals(0, reporterStub.wantedCount);
@@ -103,7 +103,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         assertSame(firstUndesiredInvocation, reporterStub.stackTrace);
     }
     
-    class InvocationsCalculatorStub extends InvocationsCalculator {
+    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private HasStackTrace invocationTraceToReturn;
         private int actualCountToReturn;
 
