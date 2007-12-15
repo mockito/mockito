@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Mockito contributors 
+ * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.creation;
@@ -54,13 +54,13 @@ public class MockFactory<T> {
                         sc, true));
             }
         };
-        
+
         if (toMock.isInterface()) {
-			enhancer.setInterfaces(new Class[] { toMock });
-		} else {
-			enhancer.setSuperclass(toMock);
-		}
-        
+            enhancer.setInterfaces(new Class[] { toMock });
+        } else {
+            enhancer.setSuperclass(toMock);
+        }
+
         enhancer.setCallbackType(interceptor.getClass());
 
         Class mockClass = enhancer.createClass();
@@ -81,7 +81,7 @@ public class MockFactory<T> {
         // allow class instantiation without calling a constructor.
         // Fortunatly, the "magic code" is also called in getCallback which is
         // why I'm calling it here mock.getCallback(0);
-        
+
         mock.getCallback(0);
 
         handler.setMock(mock);

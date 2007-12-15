@@ -88,8 +88,9 @@ public class Invocation {
     }
 
     public boolean equals(Object o) {
-        if (o == null || !o.getClass().equals(this.getClass()))
+        if (o == null || !o.getClass().equals(this.getClass())) {
             return false;
+        }
 
         Invocation other = (Invocation) o;
 

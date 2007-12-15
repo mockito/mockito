@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class MockitoAssertionError extends AssertionError implements HasStackTrace {
 
     private static final long serialVersionUID = 1L;
-    protected StackTraceElement[] unfilteredStackTrace;
+    private StackTraceElement[] unfilteredStackTrace;
 
     public MockitoAssertionError(String message) {
         super(message);

@@ -20,7 +20,7 @@ public class MockitoTest extends RequiresValidState {
         List mock = Mockito.mock(List.class);
         Mockito.stub(mock.add("test")).andReturn(true);
         
-        assertNull(Mockito.mockingProgress.pullStubable());
+        assertNull(Mockito.MOCKING_PROGRESS.pullStubable());
     }
     
     @Test(expected=NotAMockException.class)

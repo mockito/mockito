@@ -4,14 +4,24 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.*;
-import static org.mockito.util.ExtraMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.util.ExtraMatchers.causeMessageContains;
+import static org.mockito.util.ExtraMatchers.messageContains;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
+import org.mockito.StateResetter;
+import org.mockito.Strictly;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
-import org.mockito.exceptions.verification.*;
+import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidState {

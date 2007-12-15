@@ -123,18 +123,18 @@ public class MultiThreadedTest extends RequiresValidState {
     
     public static boolean runInMultipleThreads(int numberOfThreads) throws Exception {
         List<AllTestsRunner> threads = new LinkedList<AllTestsRunner>();
-        for(int i = 1 ; i <= numberOfThreads ; i++) {
+        for (int i = 1; i <= numberOfThreads; i++) {
             threads.add(new AllTestsRunner());
         }
-        
+
         for (Thread t : threads) {
             t.start();
         }
-        
-        boolean failed = false;        
+
+        boolean failed = false;
         for (AllTestsRunner t : threads) {
             t.join();
-            failed = failed? true : t.isFailed();
+            failed = failed ? true : t.isFailed();
         }
         
         return failed;

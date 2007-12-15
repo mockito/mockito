@@ -17,7 +17,7 @@ import org.mockito.internal.matchers.Or;
 
 public class LastArguments {
     
-    private static ThreadLocal<LastArguments> INSTANCE = new ThreadLocal<LastArguments>();
+    private static final ThreadLocal<LastArguments> INSTANCE = new ThreadLocal<LastArguments>();
     
     private Stack<IArgumentMatcher> matcherStack = new Stack<IArgumentMatcher>();
 

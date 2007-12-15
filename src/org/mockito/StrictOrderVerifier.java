@@ -4,7 +4,8 @@
  */
 package org.mockito;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.progress.VerificationMode;

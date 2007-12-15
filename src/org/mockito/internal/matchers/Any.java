@@ -9,9 +9,7 @@ public class Any implements IArgumentMatcher {
 
     public static final Any ANY = new Any();    
     
-    private Any() {
-        
-    }
+    private Any() {}
     
     public boolean matches(Object actual) {
         return true;

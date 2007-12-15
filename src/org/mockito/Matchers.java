@@ -4,7 +4,13 @@
  */
 package org.mockito;
 
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.Any;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.EqualsWithDelta;
+import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.internal.matchers.Matches;
+import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.matchers.Null;
 import org.mockito.internal.progress.LastArguments;
 
 public class Matchers {

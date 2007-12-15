@@ -4,7 +4,8 @@
  */
 package org.mockito.internal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
@@ -12,7 +13,8 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.progress.*;
+import org.mockito.internal.progress.MockingProgressImpl;
+import org.mockito.internal.progress.VerificationMode;
 
 @SuppressWarnings("unchecked")
 public class MockControlTest extends RequiresValidState {
@@ -33,8 +35,7 @@ public class MockControlTest extends RequiresValidState {
     
     private class ExceptionThrowingBinder extends MatchersBinder {
         @Override
-        public InvocationMatcher bindMatchers(Invocation invocation)
-                throws InvalidUseOfMatchersException {
+        public InvocationMatcher bindMatchers(Invocation invocation) {
             throw new InvalidUseOfMatchersException("");
         }
     }

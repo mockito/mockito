@@ -5,10 +5,9 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")

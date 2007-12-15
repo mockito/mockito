@@ -1,6 +1,8 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.util.List;
 
@@ -13,7 +15,6 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationsCalculator;
 import org.mockito.internal.progress.VerificationMode;
-import static org.junit.Assert.*;
 
 public class NoMoreInvocationsVerifierTest extends RequiresValidState {
 

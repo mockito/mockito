@@ -4,18 +4,19 @@
  */
 package org.mockito.internal.stubbing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.nio.charset.CharacterCodingException;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.stubbing.Stubber;
 
 public class StubberTest extends RequiresValidState{
 
@@ -86,7 +87,7 @@ public class StubberTest extends RequiresValidState{
         try {
             stubber.resultFor(simpleMethod);
             fail();
-        } catch (MyException e) {};
+        } catch (MyException e) {}
     }
     
     @Test
@@ -96,7 +97,7 @@ public class StubberTest extends RequiresValidState{
         try {
             stubber.addVoidMethodForThrowable(new InvocationMatcher(simpleMethod));
             fail();
-        } catch (MockitoException e) {};
+        } catch (MockitoException e) {}
     }
     
     @Test
@@ -104,7 +105,7 @@ public class StubberTest extends RequiresValidState{
         try {
             stubber.addThrowable(null);
             fail();
-        } catch (MockitoException e) {};
+        } catch (MockitoException e) {}
     }
     
     @Test

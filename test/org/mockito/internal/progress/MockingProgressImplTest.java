@@ -12,9 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.parents.MockitoException;
-import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.progress.VerificationMode;
 
 public class MockingProgressImplTest extends RequiresValidState {
 

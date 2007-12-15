@@ -5,15 +5,17 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.NotNull;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends RequiresValidState {

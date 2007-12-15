@@ -4,13 +4,14 @@
  */
 package org.mockito.internal.creation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
 import net.sf.cglib.proxy.Factory;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.creation.MockFactory;
-import org.mockito.internal.creation.ObjectMethodsFilter;
 
 @SuppressWarnings("unchecked")
 public class MockFactoryTest extends RequiresValidState {
@@ -38,7 +39,7 @@ public class MockFactoryTest extends RequiresValidState {
         try {
             new ClassWithDodgyConstructor();
             fail();
-        } catch (Exception e) {};
+        } catch (Exception e) {}
         
         MockFactory<ClassWithDodgyConstructor> factory = new MockFactory<ClassWithDodgyConstructor>();
         ClassWithDodgyConstructor mock = factory.createMock(ClassWithDodgyConstructor.class, new MockAwareStub());

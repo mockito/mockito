@@ -4,12 +4,16 @@
  */
 package org.mockito;
 
-import static org.junit.Assert.*;
-import static org.mockito.internal.MockUtil.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.MockUtil.getControl;
+import static org.mockito.internal.MockUtil.validateMock;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.sf.cglib.proxy.*;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.NoOp;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;

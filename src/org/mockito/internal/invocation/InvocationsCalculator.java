@@ -12,8 +12,6 @@ import org.mockito.internal.progress.VerificationMode;
 //TODO refactor to an object that holds Invocations and exposes some calculations
 public class InvocationsCalculator {
 
-    public InvocationsCalculator() {}
-    
     public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : invocations) {

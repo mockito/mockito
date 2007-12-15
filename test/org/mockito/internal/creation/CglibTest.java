@@ -9,20 +9,23 @@ import static org.junit.Assert.assertNotSame;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import net.sf.cglib.proxy.*;
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.Factory;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.creation.ObjenesisClassInstantiator;
 
 /**
- * This test case is used to make sure that the way cglib is used is providing the expected behavior
+ * This test case is used to make sure that the way cglib is used is providing the expected behavior.
  */
 public class CglibTest extends RequiresValidState {
 
     /**
      * Check that an interceptor is used by only one instance of a class
-     * @throws Exception
+     * @throws Exception.
      */
     @Test 
     public void shouldCallbacksBeDifferent() throws Exception {

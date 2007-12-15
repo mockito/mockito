@@ -5,12 +5,15 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings("unchecked")

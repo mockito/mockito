@@ -4,7 +4,17 @@
  */
 package org.mockito;
 
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.CompareEqual;
+import org.mockito.internal.matchers.Contains;
+import org.mockito.internal.matchers.EndsWith;
+import org.mockito.internal.matchers.Find;
+import org.mockito.internal.matchers.GreaterOrEqual;
+import org.mockito.internal.matchers.GreaterThan;
+import org.mockito.internal.matchers.LessOrEqual;
+import org.mockito.internal.matchers.LessThan;
+import org.mockito.internal.matchers.Same;
+import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.progress.LastArguments;
 
 public class CrazyMatchers {

@@ -7,7 +7,8 @@ package org.mockito.exceptions.parents;
 import static org.junit.Assert.assertThat;
 import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;

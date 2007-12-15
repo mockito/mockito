@@ -20,7 +20,7 @@ public class InvocationsChunker {
 
     /**
      * chunk maybe empty, may have single invocation (usal case), or have
-     * multiple the same invocations
+     * multiple the same invocations.
      * 
      * @param mocks
      * @return

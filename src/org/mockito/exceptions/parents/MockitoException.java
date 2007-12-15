@@ -9,7 +9,7 @@ public class MockitoException extends RuntimeException implements HasStackTrace 
 
     private static final long serialVersionUID = 1L;
 
-    protected StackTraceElement[] unfilteredStackTrace;
+    private StackTraceElement[] unfilteredStackTrace;
 
     public MockitoException(String message) {
         super(message);

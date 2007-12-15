@@ -4,22 +4,28 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.ArrayList;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class UsingVarargsTest extends RequiresValidState {
 
     private interface IVarArgs {
-        public void withStringVarargs(int value, String... s);
-        public String withStringVarargsReturningString(int value, String... s);
-        public void withObjectVarargs(int value, Object... o);
-        public boolean withBooleanVarargs(int value, boolean... b);
+        void withStringVarargs(int value, String... s);
+        String withStringVarargsReturningString(int value, String... s);
+        void withObjectVarargs(int value, Object... o);
+        boolean withBooleanVarargs(int value, boolean... b);
     }
     
     IVarArgs mock;

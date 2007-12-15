@@ -5,13 +5,19 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.List;
 
-import org.junit.*;
-import org.mockito.*;
-import org.mockito.exceptions.verification.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
+import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest extends RequiresValidState {
@@ -50,7 +56,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (VerificationError expected) {};
+        } catch (VerificationError expected) {}
     }
 
     @Test
@@ -80,7 +86,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError expected) {};
+        } catch (VerificationError expected) {}
     }
     
     @Test
@@ -94,7 +100,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mock).clear();
             fail();
-        } catch (TooManyActualInvocationsError e) {};
+        } catch (TooManyActualInvocationsError e) {}
     }
 
     @Test

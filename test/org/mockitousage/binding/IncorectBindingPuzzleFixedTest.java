@@ -1,31 +1,38 @@
 /*
- * Copyright (c) 2007 Mockito contributors 
+ * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.binding;
 
-import static org.junit.Assert.*;
-import static org.mockito.util.ExtraMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.util.ExtraMatchers.causeMessageContains;
+import static org.mockito.util.ExtraMatchers.messageContains;
 
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.CrazyMatchers;
+import org.mockito.RequiresValidState;
+import org.mockito.Strictly;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
     private Super mock;
-    
+
     private void setMockWithDowncast(Super mock) {
         this.mock = mock;
     }
 
     private interface Super {
-        public void say(Object message);
+        void say(Object message);
     }
 
     private interface Sub extends Super {
-        public void say(String message);
+        void say(String message);
     }
 
     private void say(Object message) {
@@ -41,17 +48,17 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
             verify(sub).say("Hello");
             fail();
         } catch (VerificationError error) {
-            String expected = 
+            String expected =
                 "\n" +
-        		"Invocation differs from actual" +
-        		"\n" +
+                "Invocation differs from actual" +
+                "\n" +
                 "Wanted invocation:" +
                 "\n" +
                 "Sub.say(class java.lang.String)";
-            
+
             assertEquals(expected, error.getMessage());
-            
-            String expectedCause = 
+
+            String expectedCause =
                 "\n" +
                 "Actual invocation:" +
                 "\n" +
@@ -59,7 +66,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
             assertEquals(expectedCause, error.getCause().getMessage());
         }
     }
-    
+
     @Test
     public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByStrictly() throws Exception {
         Sub sub = mock(Sub.class);
@@ -74,7 +81,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
             assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }
     }
-    
+
     @Test
     public void shouldUseArgumentTypeWhenMatcherUsed() throws Exception {
         Sub sub = mock(Sub.class);

@@ -6,11 +6,26 @@ package org.mockitousage.matchers;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.And;
+import org.mockito.internal.matchers.Any;
+import org.mockito.internal.matchers.Contains;
+import org.mockito.internal.matchers.EndsWith;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.Find;
+import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.Matches;
+import org.mockito.internal.matchers.Not;
+import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.matchers.Null;
+import org.mockito.internal.matchers.Or;
+import org.mockito.internal.matchers.Same;
+import org.mockito.internal.matchers.StartsWith;
 
 public class MatchersToStringTest extends RequiresValidState {
     private StringBuilder buffer;

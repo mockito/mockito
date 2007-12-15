@@ -3,12 +3,15 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.sample;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 
 public class MockitoSampleTest extends RequiresValidState {
     

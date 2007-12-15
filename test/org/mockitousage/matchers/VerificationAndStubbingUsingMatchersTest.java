@@ -4,12 +4,20 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.CrazyMatchers.startsWith;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
@@ -45,7 +53,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
         try {
             three.simpleMethod("test three again");
             fail();
-        } catch (RuntimeException e) {};
+        } catch (RuntimeException e) {}
     }
     
     @Test

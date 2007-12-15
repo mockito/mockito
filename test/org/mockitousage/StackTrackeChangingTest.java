@@ -4,12 +4,15 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.util.ExtraMatchers.hasMethodInStackTraceAt;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class StackTrackeChangingTest extends RequiresValidState {

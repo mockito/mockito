@@ -1,23 +1,55 @@
 /*
- * Copyright (c) 2007 Mockito contributors 
+ * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
-import static org.mockito.CrazyMatchers.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+import static org.mockito.CrazyMatchers.and;
+import static org.mockito.CrazyMatchers.aryEq;
+import static org.mockito.CrazyMatchers.cmpEq;
+import static org.mockito.CrazyMatchers.contains;
+import static org.mockito.CrazyMatchers.endsWith;
+import static org.mockito.CrazyMatchers.find;
+import static org.mockito.CrazyMatchers.geq;
+import static org.mockito.CrazyMatchers.gt;
+import static org.mockito.CrazyMatchers.leq;
+import static org.mockito.CrazyMatchers.lt;
+import static org.mockito.CrazyMatchers.not;
+import static org.mockito.CrazyMatchers.or;
+import static org.mockito.CrazyMatchers.same;
+import static org.mockito.CrazyMatchers.startsWith;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyByte;
+import static org.mockito.Matchers.anyChar;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyShort;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
-@SuppressWarnings("unchecked")  
+@SuppressWarnings("unchecked")
 public class MatchersTest extends RequiresValidState {
     private IMethods mock;
 
@@ -25,7 +57,7 @@ public class MatchersTest extends RequiresValidState {
     public void setUp() {
         mock = Mockito.mock(IMethods.class);
     }
-    
+
     @Test
     public void andOverloaded() {
         stub(mock.oneArg(and(eq(false), eq(false)))).andReturn("0");
@@ -41,7 +73,7 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("0", mock.oneArg(false));
         assertEquals(null, mock.oneArg(true));
-        
+
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals("2", mock.oneArg('a'));
         assertEquals("3", mock.oneArg((double) 1));
@@ -49,12 +81,12 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("5", mock.oneArg((int) 1));
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
-        
+
         assertEquals("8", mock.oneArg("abcde"));
         assertEquals(null, mock.oneArg("aaaaa"));
-        
+
         assertEquals("9", mock.oneArg(Object.class));
-        
+
     }
 
     @Test
@@ -72,7 +104,7 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
-        
+
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals("2", mock.oneArg((char) 1));
         assertEquals("3", mock.oneArg((double) 2));
@@ -80,11 +112,11 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("5", mock.oneArg((int) 2));
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
-        
+
         assertEquals("8", mock.oneArg("jkl"));
         assertEquals("8", mock.oneArg("asd"));
         assertEquals(null, mock.oneArg("asdjkl"));
-        
+
         assertEquals("9", mock.oneArg(Object.class));
         assertEquals(null, mock.oneArg(String.class));
     }
@@ -104,7 +136,7 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("0", mock.oneArg(true));
         assertEquals(null, mock.oneArg(false));
-        
+
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals("2", mock.oneArg('b'));
         assertEquals("3", mock.oneArg((double) 2));
@@ -113,7 +145,7 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("6", mock.oneArg((long) 2));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("8", mock.oneArg("bcde"));
-        
+
         assertEquals("9", mock.oneArg(new Object()));
         assertEquals(null, mock.oneArg(Class.class));
     }
@@ -130,13 +162,13 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals(null, mock.oneArg((byte) 2));
-        
+
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("7", mock.oneArg((short) 0));
         assertEquals("4", mock.oneArg((float) -5));
         assertEquals("5", mock.oneArg((int) -2));
         assertEquals("6", mock.oneArg((long) -3));
-        
+
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("1.1")));
     }
@@ -153,13 +185,13 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("1", mock.oneArg((byte) 0));
         assertEquals(null, mock.oneArg((byte) 1));
-        
+
         assertEquals("3", mock.oneArg((double) 0));
         assertEquals("7", mock.oneArg((short) 0));
         assertEquals("4", mock.oneArg((float) -4));
         assertEquals("5", mock.oneArg((int) -34));
         assertEquals("6", mock.oneArg((long) -6));
-        
+
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("23")));
     }
@@ -176,13 +208,13 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals(null, mock.oneArg((byte) 0));
-        
+
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("4", mock.oneArg((float) 3));
         assertEquals("5", mock.oneArg((int) 4));
         assertEquals("6", mock.oneArg((long) 5));
-        
+
         assertEquals("8", mock.oneArg(new BigDecimal("1.00")));
         assertEquals(null, mock.oneArg(new BigDecimal("0.9")));
     }
@@ -199,13 +231,13 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals(null, mock.oneArg((byte) 1));
-        
+
         assertEquals("3", mock.oneArg((double) 2));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("4", mock.oneArg((float) 3));
         assertEquals("5", mock.oneArg((int) 2));
         assertEquals("6", mock.oneArg((long) 5));
-        
+
         assertEquals("8", mock.oneArg(new BigDecimal("1.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("0.9")));
     }
@@ -233,7 +265,7 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
-        
+
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals("2", mock.oneArg((char) 1));
         assertEquals("3", mock.oneArg((double) 1));
@@ -242,7 +274,7 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
         assertEquals("8", mock.oneArg("Test"));
-        
+
         assertEquals("9", mock.oneArg(new Object()));
         assertEquals("9", mock.oneArg(new HashMap()));
     }
@@ -251,23 +283,23 @@ public class MatchersTest extends RequiresValidState {
     public void shouldArrayEqualsDealWithNullArray() throws Exception {
         Object[] nullArray = null;
         stub(mock.oneArray(aryEq(nullArray))).andReturn("null");
-        
+
         assertEquals("null", mock.oneArray(nullArray));
-        
+
         mock = mock(IMethods.class);
-        
+
         try {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
         } catch (VerificationError e) {
             String expected = "\n" +
-            		"Wanted but not invoked:" +
-            		"\n" +
-            		"IMethods.oneArray(null)";
+                    "Wanted but not invoked:" +
+                    "\n" +
+                    "IMethods.oneArray(null)";
             assertEquals(expected, e.getMessage());
         }
     }
-    
+
     @Test
     public void arrayEqualsMatcher() {
         stub(mock.oneArray(aryEq(new boolean[] { true, false, false }))).andReturn("0");
@@ -280,7 +312,7 @@ public class MatchersTest extends RequiresValidState {
         stub(mock.oneArray(aryEq(new short[] { 1 }))).andReturn("7");
         stub(mock.oneArray(aryEq(new String[] { "Test" }))).andReturn("8");
         stub(mock.oneArray(aryEq(new Object[] { "Test", new Integer(4) }))).andReturn("9");
-        
+
         assertEquals("0", mock.oneArray(new boolean[] { true, false, false }));
         assertEquals("1", mock.oneArray(new byte[] { 1 }));
         assertEquals("2", mock.oneArray(new char[] { 1 }));
@@ -291,14 +323,14 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("7", mock.oneArray(new short[] { 1 }));
         assertEquals("8", mock.oneArray(new String[] { "Test" }));
         assertEquals("9", mock.oneArray(new Object[] { "Test", new Integer(4) }));
-        
+
         assertEquals(null, mock.oneArray(new Object[] { "Test", new Integer(999) }));
         assertEquals(null, mock.oneArray(new Object[] { "Test", new Integer(4), "x" }));
-        
+
         assertEquals(null, mock.oneArray(new boolean[] { true, false }));
         assertEquals(null, mock.oneArray(new boolean[] { true, true, false }));
     }
-    
+
     @Test
     public void greaterOrEqualMatcher() {
         stub(mock.oneArg(geq(7))).andReturn(">= 7");
@@ -386,7 +418,7 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("1", mock.oneArg("ab12"));
         assertEquals(null, mock.oneArg("12345"));
     }
-    
+
     @Test
     public void matchesMatcher() {
         stub(mock.oneArg(matches("[a-z]+\\d\\d"))).andReturn("1");
@@ -444,7 +476,7 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("3", mock.oneArg(0.91F));
         assertEquals("3", mock.oneArg(1.09F));
         assertEquals("4", mock.oneArg(2.1F));
-        
+
         assertEquals(null, mock.oneArg(2.2F));
     }
 

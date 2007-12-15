@@ -4,13 +4,21 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.CompareEqual;
+import org.mockito.internal.matchers.CompareTo;
+import org.mockito.internal.matchers.GreaterOrEqual;
+import org.mockito.internal.matchers.GreaterThan;
+import org.mockito.internal.matchers.LessOrEqual;
+import org.mockito.internal.matchers.LessThan;
 
 public class ComparableMatchersTest extends RequiresValidState {
 

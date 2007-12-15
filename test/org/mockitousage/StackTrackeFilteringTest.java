@@ -4,12 +4,22 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.util.ExtraMatchers.hasFirstMethodInStackTrace;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
+import org.mockito.StateResetter;
+import org.mockito.Strictly;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
 

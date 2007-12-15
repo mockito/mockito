@@ -4,7 +4,9 @@
  */
 package org.mockito.exceptions.parents;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class CommonStackTraceRemover {
@@ -13,7 +15,7 @@ public class CommonStackTraceRemover {
         List<StackTraceElement> exceptionsPart = null;
         List<StackTraceElement> exceptionsTrace = Arrays.asList(hasStackTrace.getStackTrace());
         int length = exceptionsTrace.size();
-        for(int i=0 ; i<length; i++) {
+        for (int i = 0; i < length; i++) {
             List<StackTraceElement> subList = exceptionsTrace.subList(i, length);
             int lastStartingIndexOfSubList = Collections.lastIndexOfSubList(causeStackTrace, subList);
             if (lastStartingIndexOfSubList == -1) {

@@ -4,107 +4,107 @@
 -->
 <project name="mockito" basedir="." default="all">
 
-	<property name="src.dir" value="src" />
-	<property name="test.src.dir" value="test" />
-	<property name="target.dir" value="target" />
-	<property name="src.classes.dir" value="${target.dir}/classes" />
-	<property name="test.classes.dir" value="${target.dir}/test-classes" />
-	<property name="test.reports.dir" value="${target.dir}/reports/junit" />
+  <property name="src.dir" value="src" />
+  <property name="test.src.dir" value="test" />
+  <property name="target.dir" value="target" />
+  <property name="src.classes.dir" value="${target.dir}/classes" />
+  <property name="test.classes.dir" value="${target.dir}/test-classes" />
+  <property name="test.reports.dir" value="${target.dir}/reports/junit" />
 
-	<property name="lib.dir" value="lib" />
-	<property name="lib.dir.build" value="${lib.dir}/build" />
-	<property name="lib.dir.run" value="${lib.dir}/run" />
-	<property name="lib.dir.test" value="${lib.dir}/test" />
+  <property name="lib.dir" value="lib" />
+  <property name="lib.dir.build" value="${lib.dir}/build" />
+  <property name="lib.dir.run" value="${lib.dir}/run" />
+  <property name="lib.dir.test" value="${lib.dir}/test" />
 
-	<path id="compile.classpath">
-		<fileset dir="${lib.dir.run}" includes="*.jar" />
-	</path>
+  <path id="compile.classpath">
+    <fileset dir="${lib.dir.run}" includes="*.jar" />
+  </path>
 
-	<path id="test.compile.classpath">
-		<path refid="compile.classpath" />
-		<pathelement location="${src.classes.dir}" />
-		<fileset dir="${lib.dir.test}" includes="*.jar" />
-	</path>
+  <path id="test.compile.classpath">
+    <path refid="compile.classpath" />
+    <pathelement location="${src.classes.dir}" />
+    <fileset dir="${lib.dir.test}" includes="*.jar" />
+  </path>
 
-	<path id="test.classpath">
-		<path refid="test.compile.classpath" />
-		<pathelement location="${test.classes.dir}" />
-	</path>
+  <path id="test.classpath">
+    <path refid="test.compile.classpath" />
+    <pathelement location="${test.classes.dir}" />
+  </path>
 
-	<path id="ant.classpath">
-		<fileset dir="${lib.dir.build}" includes="*.jar" />
-	</path>
+  <path id="ant.classpath">
+    <fileset dir="${lib.dir.build}" includes="*.jar" />
+  </path>
 
-	<target name="prepare">
-		<mkdir dir="${src.classes.dir}" />
-		<mkdir dir="${test.classes.dir}" />
-	</target>
+  <target name="prepare">
+    <mkdir dir="${src.classes.dir}" />
+    <mkdir dir="${test.classes.dir}" />
+  </target>
 
-	<target name="clean" description="Cleans out the build directories">
-		<delete includeemptydirs="true">
-			<fileset dir="${target.dir}">
-				<exclude name="eclipse-*/**" />
-			</fileset>
-		</delete>
-	</target>
+  <target name="clean" description="Cleans out the build directories">
+    <delete includeemptydirs="true">
+      <fileset dir="${target.dir}">
+        <exclude name="eclipse-*/**" />
+      </fileset>
+    </delete>
+  </target>
 
-	<target name="compile" depends="prepare">
-		<javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
-			<classpath refid="compile.classpath" />
-		</javac>
-	</target>
+  <target name="compile" depends="prepare">
+    <javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
+      <classpath refid="compile.classpath" />
+    </javac>
+  </target>
 
-	<target name="compile.test" depends="compile">
-		<javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
-			<classpath refid="test.compile.classpath" />
-		</javac>
-	</target>
+  <target name="compile.test" depends="compile">
+    <javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
+      <classpath refid="test.compile.classpath" />
+    </javac>
+  </target>
 
-	<target name="test" depends="compile.test, pmd" description="Executes the unit tests">
-		<junit fork="true" forkmode="once" haltonfailure="true">
-			<formatter type="plain" usefile="false" />
-			<classpath refid="test.classpath" />
-			<jvmarg value="-ea" />
+  <target name="test" depends="compile.test, pmd" description="Executes the unit tests">
+    <junit fork="true" forkmode="once" haltonfailure="true">
+      <formatter type="plain" usefile="false" />
+      <classpath refid="test.classpath" />
+      <jvmarg value="-ea" />
 
-			<batchtest>
-				<fileset dir="${test.classes.dir}" includes="**/*Test.class" />
-			</batchtest>
-		</junit>
-	</target>
+      <batchtest>
+        <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
+      </batchtest>
+    </junit>
+  </target>
 
-	<target name="all" depends="clean, compile, pmd, test, jar.all" description="Performs a build and runs test" />
+  <target name="all" depends="clean, compile, pmd, test, jar.all" description="Performs a build and runs test" />
 
-	<target name="pmd" depends="prepare">
+  <target name="pmd" depends="prepare">
 
-		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
-		
-		<pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="pmd-rules.xml">
-			<ruleset>Mockito</ruleset>
-			<formatter type="text" toConsole="true" />
-			
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+    
+    <pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="conf/pmd-rules.xml">
+      <ruleset>Mockito</ruleset>
+      <formatter type="text" toConsole="true" />
+      
             <fileset dir="${src.dir}">
-		            <include name="**/*.java" />
-		    </fileset>
+                <include name="**/*.java" />
+        </fileset>
 
-		    <fileset dir="${test.src.dir}">
-		    	  <include name="**/*.java" />
-		    </fileset>
-		</pmd>
+        <fileset dir="${test.src.dir}">
+            <include name="**/*.java" />
+        </fileset>
+    </pmd>
 
-	</target>
-		
-	<target name="jar.all" depends="test">
-	    <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath"/>
-	    <jarjar jarfile="${target.dir}/mockito-all.jar">
-	        <fileset dir="${src.classes.dir}" />
-	    	<fileset dir="${src.dir}" />
-	    	<fileset dir="${lib.dir.run}" excludes="*.jar" />
-	    	<zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
-	    	<zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
-	    		<exclude name="LICENSE"/>
-	    		<exclude name="NOTICE"/>
-	    	</zipfileset>
-	    </jarjar>
-	</target>
+  </target>
+    
+  <target name="jar.all" depends="test">
+      <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath"/>
+      <jarjar jarfile="${target.dir}/mockito-all.jar">
+          <fileset dir="${src.classes.dir}" />
+        <fileset dir="${src.dir}" />
+        <fileset dir="${lib.dir.run}" excludes="*.jar" />
+        <zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
+        <zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
+          <exclude name="LICENSE"/>
+          <exclude name="NOTICE"/>
+        </zipfileset>
+      </jarjar>
+  </target>
 
 </project>

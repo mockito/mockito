@@ -24,7 +24,7 @@ public class InvocationTest extends RequiresValidState {
     private Invocation invocation;
 
     @Before
-    public void setup() throws SecurityException, NoSuchMethodException {
+    public void setup() throws Exception {
         invocation = new InvocationBuilder().args(" ").mock("mock").toInvocation();
     }
 
@@ -80,20 +80,20 @@ public class InvocationTest extends RequiresValidState {
     
     @Test
     public void shouldPrintNull() {
-        invocation = new InvocationBuilder().args((String)null).toInvocation();
+        invocation = new InvocationBuilder().args((String) null).toInvocation();
         assertEquals("Object.simpleMethod(null)", invocation.toString());
     }
     
     @Test
     public void shouldPrintArray() {
-        invocation = new InvocationBuilder().method("oneArray").args(new int[] {1,2,3}).toInvocation();
+        invocation = new InvocationBuilder().method("oneArray").args(new int[] { 1, 2, 3 }).toInvocation();
         assertEquals("Object.oneArray([1, 2, 3])", invocation.toString());
     }
     
     @Test
     public void shouldPrintNullIfArrayIsNull() throws Exception {
         Method m = IMethods.class.getMethod("oneArray", Object[].class);
-        invocation = new InvocationBuilder().method(m).args((Object)null).toInvocation();
+        invocation = new InvocationBuilder().method(m).args((Object) null).toInvocation();
         assertEquals("Object.oneArray(null)", invocation.toString());
     }
     

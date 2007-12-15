@@ -26,7 +26,7 @@ public class EmptyReturnValues {
     }
     
     @SuppressWarnings("unchecked")
-    protected static Map<Class, Object> emptyReturnValueToType = new HashMap<Class, Object>();
+    private static Map<Class, Object> emptyReturnValueToType = new HashMap<Class, Object>();
     
     static {
         emptyReturnValueToType.put(Collection.class, new LinkedList<Object>());

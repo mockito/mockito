@@ -4,7 +4,8 @@
  */
 package org.mockito.exceptions.parents;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class StackTraceBuilder {
     
@@ -18,7 +19,7 @@ public class StackTraceBuilder {
     public StackTraceElement[] toStackTrace() {
         StackTraceElement[] trace = new StackTraceElement[methods.length];
         
-        for (int i = 0 ; i < methods.length ; i++) {
+        for (int i = 0; i < methods.length; i++) {
             trace[i] = new StackTraceElement("DummyClass", methods[i], "DummyClass.java", 100);
         }
         

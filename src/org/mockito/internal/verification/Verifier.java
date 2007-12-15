@@ -11,7 +11,5 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationMode;
 
 public interface Verifier {
-
-    abstract void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode);
-    
+    void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode);
 }

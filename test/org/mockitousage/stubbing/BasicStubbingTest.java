@@ -4,11 +4,18 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;

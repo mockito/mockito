@@ -14,7 +14,7 @@ import org.mockito.internal.progress.LastArguments;
 
 public class MatchersBinder {
 
-    public InvocationMatcher bindMatchers(Invocation invocation) throws InvalidUseOfMatchersException {
+    public InvocationMatcher bindMatchers(Invocation invocation) {
         List<IArgumentMatcher> lastMatchers = LastArguments.instance().pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
@@ -24,11 +24,11 @@ public class MatchersBinder {
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(Invocation invocation, List<IArgumentMatcher> matchers) throws InvalidUseOfMatchersException {
+    private void validateMatchers(Invocation invocation, List<IArgumentMatcher> matchers) {
         if (matchers != null) {
             if (matchers.size() != invocation.getArguments().length) {
                 throw new InvalidUseOfMatchersException(
-                        + invocation.getArguments().length
+                        invocation.getArguments().length
                         + " matchers expected, " + matchers.size()
                         + " recorded.");
             }
@@ -36,7 +36,7 @@ public class MatchersBinder {
     }
     
     /**
-     * if user passed bare arguments then create EqualsMatcher for every argument
+     * if user passed bare arguments then create EqualsMatcher for every argument.
      */
     private List<IArgumentMatcher> createEqualsMatchers(Invocation invocation,
             List<IArgumentMatcher> matchers) {

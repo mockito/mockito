@@ -1,22 +1,31 @@
 /*
- * Copyright (c) 2007 Mockito contributors 
+ * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.exceptions;
 
 import static org.mockito.exceptions.StringJoiner.join;
 
-import org.mockito.exceptions.cause.*;
-import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.parents.*;
-import org.mockito.exceptions.verification.*;
+import org.mockito.exceptions.cause.FirstUndesiredInvocation;
+import org.mockito.exceptions.cause.TooLittleInvocations;
+import org.mockito.exceptions.cause.UndesiredInvocation;
+import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.parents.HasStackTrace;
+import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.verification.NumberOfInvocationsError;
+import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
+import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.VerificationError;
 
 /**
  * One of the key points of mocking library is proper verification/exception
  * messages. All messages in one place makes it easier to tune and amend.
  */
 public class Reporter {
-    
+
     private String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
     }
@@ -47,40 +56,40 @@ public class Reporter {
 
     public void checkedExceptionInvalid(Throwable t) {
         throw new MockitoException(join(
-        		"Checked exception is invalid for this method",
-        		"Invalid: " + t
-        		));
+                "Checked exception is invalid for this method",
+                "Invalid: " + t
+                ));
     }
 
     public void cannotStubWithNullThrowable() {
         throw new MockitoException(join(
                 "Cannot stub with null throwable"
                 ));
-        
+
     }
-    
+
     public void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual
             ));
-            
+
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        
+
         throw new VerificationError(join(
                 "Invocation differs from actual",
                 "Wanted invocation:",
                 wanted
             ), cause);
     }
-    
+
     public void wantedButNotInvoked(String wanted) {
         throw new VerificationError(join(
                     "Wanted but not invoked:",
-                    wanted        
+                    wanted
         ));
     }
-    
+
     public void numberOfInvocationsDiffers(int wantedCount, int actualCount, String wanted) {
         throw new NumberOfInvocationsError(join(
                 wanted,
@@ -91,31 +100,31 @@ public class Reporter {
     public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
         FirstUndesiredInvocation cause = new FirstUndesiredInvocation(join("First undesired invocation:"));
         cause.setStackTrace(firstUndesired.getStackTrace());
-        
+
         throw new TooManyActualInvocationsError(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
     }
-    
+
     public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
         TooLittleInvocations cause = null;
         if (lastActualInvocationStackTrace != null) {
             cause = new TooLittleInvocations(join("Too little invocations:"));
             cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
         }
-        
+
         throw new TooLittleActualInvocationsError(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);  
+        ), cause);
     }
 
     public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
         throw new VerificationError(join("No interactions wanted"), cause);
     }
-    
+
     private UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
         UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());

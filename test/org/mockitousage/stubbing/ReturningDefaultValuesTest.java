@@ -4,12 +4,16 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -22,8 +26,8 @@ public class ReturningDefaultValuesTest extends RequiresValidState {
         //this is mainly to prove that cglib-enchanted-thing works properly 
         //and returns primitive value rather than throw NullPointerException
         //If we used java.lang.reflect.Proxy NullPointerException will bang
-        assertEquals((byte)0, mock.byteReturningMethod(12));
-        assertEquals((short)0, mock.shortReturningMethod(12));
+        assertEquals((byte) 0, mock.byteReturningMethod(12));
+        assertEquals((short) 0, mock.shortReturningMethod(12));
         assertEquals(0, mock.intReturningMethod(12));
         assertEquals(0L, mock.intReturningMethod(12));
         assertEquals(0.0F, mock.floatReturningMethod(12), 0.0F);

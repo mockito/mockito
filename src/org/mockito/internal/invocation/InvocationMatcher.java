@@ -12,8 +12,8 @@ import org.mockito.internal.matchers.IArgumentMatcher;
 
 public class InvocationMatcher {
 
-    protected final Invocation invocation;
-    protected final List<IArgumentMatcher> matchers;
+    private final Invocation invocation;
+    private final List<IArgumentMatcher> matchers;
 
     public InvocationMatcher(Invocation invocation, List<IArgumentMatcher> matchers) {
         if (matchers == null) {

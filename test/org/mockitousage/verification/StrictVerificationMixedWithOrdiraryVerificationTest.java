@@ -4,11 +4,20 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
+import org.mockito.Strictly;
 import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
