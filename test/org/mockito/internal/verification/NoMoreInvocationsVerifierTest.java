@@ -61,7 +61,7 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private List<Invocation> invocations;
         private Invocation invocationToReturn;
-        @Override public Invocation getFirstUnverified(List<Invocation> invocations) {
+        @Override public Invocation findFirstUnverified(List<Invocation> invocations) {
             this.invocations = invocations;
             return invocationToReturn;
         }

@@ -31,7 +31,7 @@ public class NoMoreInvocationsVerifier implements Verifier {
             return;
         }
 
-        Invocation unverified = analyzer.getFirstUnverified(invocations);
+        Invocation unverified = analyzer.findFirstUnverified(invocations);
         if (unverified != null) {
             reporter.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
         }

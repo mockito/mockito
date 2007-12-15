@@ -117,14 +117,14 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
             return actualCountToReturn;
         }
         
-        @Override public HasStackTrace getFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+        @Override public HasStackTrace findFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
             this.wanted = wanted;
             this.mode = mode;
             return invocationTraceToReturn;
         }
         
         @Override
-        public HasStackTrace getLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
+        public HasStackTrace findLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
             this.wanted = wanted;
             return invocationTraceToReturn;
         }

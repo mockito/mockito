@@ -14,6 +14,7 @@ import org.mockito.internal.progress.VerificationMode;
  */
 public class InvocationsAnalyzer {
 
+    //TODO add missing tests
     public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
         int actual = 0;
         for (Invocation registeredInvocation : invocations) {
@@ -25,7 +26,6 @@ public class InvocationsAnalyzer {
         return actual;
     }
 
-    //TODO start all with find
     public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation actualbyName = null;
         for (Invocation registered : invocations) {
@@ -36,10 +36,10 @@ public class InvocationsAnalyzer {
             }
         }
         
-        return actualbyName != null ? actualbyName : getFirstUnverified(invocations);
+        return actualbyName != null ? actualbyName : findFirstUnverified(invocations);
     }
     
-    public Invocation getFirstUnverified(List<Invocation> invocations) {
+    public Invocation findFirstUnverified(List<Invocation> invocations) {
         for (Invocation i : invocations) {
             if (!i.isVerified()) {
                 return i;
@@ -48,7 +48,7 @@ public class InvocationsAnalyzer {
         return null;
     }
     
-    public HasStackTrace getLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
+    public HasStackTrace findLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation lastMatching = null;
         for (Invocation registered : invocations) {
             if (wanted.matches(registered)) {
@@ -58,7 +58,7 @@ public class InvocationsAnalyzer {
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace getFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public HasStackTrace findFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         int counter = 0;
         for (Invocation registered : invocations) {
             if (wanted.matches(registered)) {

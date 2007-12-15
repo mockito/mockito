@@ -35,39 +35,39 @@ public class InvocationsAnalyzerTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldGetFirstUnverifiedInvocation() throws Exception {
-        assertSame(simpleMethodInvocation, analyzer.getFirstUnverified(invocations));
+    public void shouldFindFirstUnverifiedInvocation() throws Exception {
+        assertSame(simpleMethodInvocation, analyzer.findFirstUnverified(invocations));
         
         simpleMethodInvocationTwo.markVerified();
         simpleMethodInvocation.markVerified();
         
-        assertSame(differentMethodInvocation, analyzer.getFirstUnverified(invocations));
+        assertSame(differentMethodInvocation, analyzer.findFirstUnverified(invocations));
         
         differentMethodInvocation.markVerified();
-        assertNull(analyzer.getFirstUnverified(invocations));
+        assertNull(analyzer.findFirstUnverified(invocations));
     }
     
     @Test
-    public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
-        HasStackTrace firstUndesired = analyzer.getFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(0));
+    public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
+        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(0));
         HasStackTrace expected = simpleMethodInvocation.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test
-    public void shouldGetFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
-        HasStackTrace firstUndesired = analyzer.getFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(1));
+    public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
+        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(1));
         HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenThereAreNoUndesiredInvocations() throws Exception {
-        analyzer.getFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(2));
+        analyzer.findFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(2));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenWantedInvocationsFigureIsBigger() throws Exception {
-        analyzer.getFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(100));
+        analyzer.findFirstUndesiredInvocationStackTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(100));
     }
 }
