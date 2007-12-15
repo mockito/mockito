@@ -12,8 +12,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.base.CommonStackTraceRemover;
-import org.mockito.exceptions.base.HasStackTrace;
 
 public class StackTraceRemoverTest extends RequiresValidState {
 
