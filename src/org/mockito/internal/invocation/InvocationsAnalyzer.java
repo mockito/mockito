@@ -14,11 +14,10 @@ import org.mockito.internal.progress.VerificationMode;
  */
 public class InvocationsAnalyzer {
 
-    //TODO add missing tests
     public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
         int actual = 0;
-        for (Invocation registeredInvocation : invocations) {
-            if (wanted.matches(registeredInvocation)) {
+        for (Invocation invocation : invocations) {
+            if (wanted.matches(invocation)) {
                 actual++;
             }
         }
@@ -28,11 +27,12 @@ public class InvocationsAnalyzer {
 
     public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation actualbyName = null;
-        for (Invocation registered : invocations) {
+        for (Invocation invocation : invocations) {
             String wantedMethodName = wanted.getMethod().getName();
-            String registeredInvocationName = registered.getMethod().getName();
-            if (wantedMethodName.equals(registeredInvocationName) && !registered.isVerified()) {
-                actualbyName = registered;
+            String currentMethodName = invocation.getMethod().getName();
+            if (wantedMethodName.equals(currentMethodName) && !invocation.isVerified()) {
+                actualbyName = invocation;
+                break;
             }
         }
         
@@ -48,23 +48,23 @@ public class InvocationsAnalyzer {
         return null;
     }
     
-    public HasStackTrace findLastInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted) {
+    public HasStackTrace findLastMatchingInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation lastMatching = null;
-        for (Invocation registered : invocations) {
-            if (wanted.matches(registered)) {
-                lastMatching = registered;
+        for (Invocation invocation : invocations) {
+            if (wanted.matches(invocation)) {
+                lastMatching = invocation;
             }
         }
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace findFirstUndesiredInvocationStackTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         int counter = 0;
-        for (Invocation registered : invocations) {
-            if (wanted.matches(registered)) {
+        for (Invocation invocation : invocations) {
+            if (wanted.matches(invocation)) {
                 counter++;
                 if (counter > mode.wantedCount()) {
-                    return registered.getStackTrace();
+                    return invocation.getStackTrace();
                 }
             }
         }
