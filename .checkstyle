@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fileset-config file-format-version="1.2.0" simple-config="true">
-    <fileset name="all" enabled="true" check-config-name="mockito" local="false">
-        <file-match-pattern match-pattern="." include-pattern="true"/>
+<fileset-config file-format-version="1.2.0" simple-config="false">
+    <fileset name="test-code" enabled="true" check-config-name="mockito-test-code" local="false">
+        <file-match-pattern match-pattern="^test/.*java$" include-pattern="true"/>
+    </fileset>
+    <fileset name="code" enabled="true" check-config-name="mockito" local="false">
+        <file-match-pattern match-pattern="^src/.*java$" include-pattern="true"/>
     </fileset>
 </fileset-config>
