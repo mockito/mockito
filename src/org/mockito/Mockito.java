@@ -5,7 +5,7 @@
 package org.mockito;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.MockControl;
+import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockUtil;
 import org.mockito.internal.creation.MockFactory;
 import org.mockito.internal.creation.ObjectMethodsFilter;
@@ -24,9 +24,9 @@ public class Mockito extends Matchers {
 
     public static <T> T mock(Class<T> classToMock) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockControl<T> mockControl = new MockControl<T>(MOCKING_PROGRESS, new MatchersBinder());
-        return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockControl>(
-                classToMock, mockControl));
+        MockHandler<T> mockHandler = new MockHandler<T>(MOCKING_PROGRESS, new MatchersBinder());
+        return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockHandler>(
+                classToMock, mockHandler));
     }
 
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
@@ -80,7 +80,7 @@ public class Mockito extends Matchers {
         assertMocksNotEmpty(mocks);
         MOCKING_PROGRESS.validateState();
         for (Object mock : mocks) {
-            MockUtil.getControl(mock).verifyNoMoreInteractions();
+            MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
         }
     }
 
@@ -95,9 +95,9 @@ public class Mockito extends Matchers {
     }
 
     public static <T> VoidMethodStubable<T> stubVoid(T mock) {
-        MockControl<T> control = MockUtil.getControl(mock);
+        MockHandler<T> handler = MockUtil.getMockHandler(mock);
         MOCKING_PROGRESS.stubbingStarted();
-        return control;
+        return handler;
     }
 
     public static Strictly createStrictOrderVerifier(Object ... mocks) {

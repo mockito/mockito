@@ -116,12 +116,12 @@ public class StackTrackeFilteringTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFilterStackTraceWhenThrowingExceptionFromControl() {
+    public void shouldFilterStackTraceWhenThrowingExceptionFromMockHandler() {
         try {
             stub(mock.oneArg(true)).andThrow(new Exception());
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromControl"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromMockHandler"));
         }
     }
     

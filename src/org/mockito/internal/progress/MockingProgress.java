@@ -9,6 +9,7 @@ public interface MockingProgress {
 
     void reportStubable(OngoingStubbing ongoingStubbing);
 
+    //TODO stubabble
     OngoingStubbing pullStubable();
 
     void verificationStarted(VerificationMode verificationMode);

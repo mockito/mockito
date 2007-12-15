@@ -27,7 +27,12 @@ import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 
-public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
+/**
+ * Invocation handler set on mock objects.
+ *
+ * @param <T> type of mock object to handle
+ */
+public class MockHandler<T> implements MockAwareInvocationHandler<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
 
     private final VerifyingRecorder verifyingRecorder;
     private final Stubber stubber;
@@ -36,7 +41,7 @@ public class MockControl<T> implements MockAwareInvocationHandler<T>, OngoingStu
     
     private T mock;
     
-    public MockControl(MockingProgress mockingProgress, MatchersBinder matchersBinder) {
+    public MockHandler(MockingProgress mockingProgress, MatchersBinder matchersBinder) {
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockingProgress);

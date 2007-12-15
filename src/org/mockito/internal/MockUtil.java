@@ -20,12 +20,12 @@ public class MockUtil {
     }
     
     @SuppressWarnings("unchecked")
-    public static <T> MockControl<T> getControl(T mock) {
+    public static <T> MockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
             throw new MockitoException("Mock cannot be null");
         }
         
-        ObjectMethodsFilter<MockControl<T>> handler;
+        ObjectMethodsFilter<MockHandler<T>> handler;
 
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {
@@ -42,6 +42,6 @@ public class MockUtil {
     }
     
     public static void validateMock(Object mock) {
-        getControl(mock);
+        getMockHandler(mock);
     }
 }

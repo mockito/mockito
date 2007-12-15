@@ -17,16 +17,16 @@ import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.progress.VerificationMode;
 
 @SuppressWarnings("unchecked")
-public class MockControlTest extends RequiresValidState {
+public class MockHandlerTest extends RequiresValidState {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockingProgressImpl state = new MockingProgressImpl();
         state.verificationStarted(VerificationMode.atLeastOnce());
-        MockControl control = new MockControl(state, new ExceptionThrowingBinder());
+        MockHandler handler = new MockHandler(state, new ExceptionThrowingBinder());
         
         try {
-            control.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});
+            handler.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});
             fail();
         } catch (InvalidUseOfMatchersException e) {}
         

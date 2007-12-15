@@ -6,7 +6,7 @@ package org.mockito;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import static org.mockito.internal.MockUtil.getControl;
+import static org.mockito.internal.MockUtil.getMockHandler;
 import static org.mockito.internal.MockUtil.validateMock;
 
 import java.util.ArrayList;
@@ -23,28 +23,28 @@ public class MockUtilTest extends RequiresValidState {
 
     @SuppressWarnings("unchecked")
     @Test 
-    public void shouldGetControl() {
+    public void shouldGetHandler() {
         List mock = Mockito.mock(List.class);
-        assertNotNull(getControl(mock));
+        assertNotNull(getMockHandler(mock));
     }
 
     @Test 
     public void shouldScreamWhenEnhancedButNotAMockPassed() {
         Object o = Enhancer.create(ArrayList.class, NoOp.INSTANCE);
         try {
-            getControl(o);
+            getMockHandler(o);
             fail();
         } catch (NotAMockException e) {}
     }
 
     @Test (expected=NotAMockException.class)
     public void shouldScreamWhenNotAMockPassed() {
-        getControl("");
+        getMockHandler("");
     }
     
     @Test (expected=MockitoException.class)
     public void shouldScreamWhenNullPassed() {
-        getControl(null);
+        getMockHandler(null);
     }
     
     @Test (expected=NotAMockException.class)

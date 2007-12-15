@@ -17,7 +17,7 @@ import org.mockito.MockitoTest;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
-import org.mockito.internal.MockControlTest;
+import org.mockito.internal.MockHandlerTest;
 import org.mockito.internal.creation.CglibTest;
 import org.mockito.internal.creation.MockFactoryTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
@@ -91,7 +91,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     MatchersTest.class,
                     ReplacingObjectMethodsTest.class,
                     //below are tests that mess up the state
-                    MockControlTest.class,
+                    MockHandlerTest.class,
                     MockitoTest.class,
                     InvalidUsageTest.class,
                     InvalidUseOfMatchersTest.class,

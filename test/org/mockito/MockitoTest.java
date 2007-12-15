@@ -16,7 +16,7 @@ import org.mockito.exceptions.misusing.NotAMockException;
 public class MockitoTest extends RequiresValidState {
 
     @Test
-    public void shouldRemoveStubbedControlFromStateWhenStubbing() {
+    public void shouldRemoveStubableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
         Mockito.stub(mock.add("test")).andReturn(true);
         
