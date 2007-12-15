@@ -52,7 +52,7 @@ public class Mockito extends Matchers {
     /**
      * Throws an AssertionError if any of given mocks has any unverified interaction.
      * <p>
-     * Use this method after you verified all your mocks - to make sure that nothing
+     * Use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
      * <p>
      * It's a good pattern not to use this method in every test method.
