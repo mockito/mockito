@@ -21,6 +21,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class StackTrackeFilteringTest extends RequiresValidState {
@@ -54,8 +55,8 @@ public class StackTrackeFilteringTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
+        } catch (NoInteractionsWantedError e) {
+            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
     
@@ -65,8 +66,8 @@ public class StackTrackeFilteringTest extends RequiresValidState {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
+        } catch (NoInteractionsWantedError e) {
+            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
     

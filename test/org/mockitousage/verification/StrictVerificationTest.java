@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
@@ -258,10 +259,10 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     } 
     
-    @Test(expected=VerificationError.class)
+    @Test(expected=NoInteractionsWantedError.class)
     public void shouldFailOnVerifyZeroInteractions() {
         verifyZeroInteractions(mockOne);
     }

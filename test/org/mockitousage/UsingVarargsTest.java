@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class UsingVarargsTest extends RequiresValidState {
@@ -102,7 +103,7 @@ public class UsingVarargsTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
 
     @Test

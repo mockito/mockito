@@ -19,6 +19,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings("unchecked")
@@ -69,7 +70,7 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
     
     @Test
@@ -79,7 +80,7 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
     
     @Test
@@ -98,6 +99,6 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
         try {
             verifyZeroInteractions(map);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
 }

@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
@@ -49,7 +50,7 @@ public class BasicStubbingTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
     
     @Test
@@ -74,6 +75,6 @@ public class BasicStubbingTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {}
+        } catch (NoInteractionsWantedError e) {}
     }
 }

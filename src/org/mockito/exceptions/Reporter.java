@@ -15,6 +15,7 @@ import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
@@ -121,7 +122,7 @@ public class Reporter {
 
     public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
-        throw new VerificationError(join("No interactions wanted"), cause);
+        throw new NoInteractionsWantedError(join("No interactions wanted"), cause);
     }
 
     private UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {

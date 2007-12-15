@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
@@ -158,7 +159,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (VerificationError e) {
+        } catch (NoInteractionsWantedError e) {
             String expectedMessage =
                     "\n" +
                     "No interactions wanted";
@@ -183,7 +184,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (VerificationError e) {
+        } catch (NoInteractionsWantedError e) {
             String expected =
                     "\n" +
                     "No interactions wanted";
