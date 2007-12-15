@@ -4,41 +4,10 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
-import static org.mockito.CrazyMatchers.and;
-import static org.mockito.CrazyMatchers.aryEq;
-import static org.mockito.CrazyMatchers.cmpEq;
-import static org.mockito.CrazyMatchers.contains;
-import static org.mockito.CrazyMatchers.endsWith;
-import static org.mockito.CrazyMatchers.find;
-import static org.mockito.CrazyMatchers.geq;
-import static org.mockito.CrazyMatchers.gt;
-import static org.mockito.CrazyMatchers.leq;
-import static org.mockito.CrazyMatchers.lt;
-import static org.mockito.CrazyMatchers.not;
-import static org.mockito.CrazyMatchers.or;
-import static org.mockito.CrazyMatchers.same;
-import static org.mockito.CrazyMatchers.startsWith;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyByte;
-import static org.mockito.Matchers.anyChar;
-import static org.mockito.Matchers.anyDouble;
-import static org.mockito.Matchers.anyFloat;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyShort;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Matchers.matches;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -87,9 +56,8 @@ public class MatchersTest extends RequiresValidState {
         assertEquals(null, mock.oneArg("aaaaa"));
 
         assertEquals("9", mock.oneArg(Object.class));
-
     }
-
+    
     @Test
     public void orOverloaded() {
         stub(mock.oneArg(or(eq(false), eq(true)))).andReturn("0");

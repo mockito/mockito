@@ -4,20 +4,13 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
-import static org.mockito.CrazyMatchers.and;
-import static org.mockito.CrazyMatchers.contains;
-import static org.mockito.CrazyMatchers.geq;
-import static org.mockito.CrazyMatchers.leq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.CrazyMatchers;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerificationError;
@@ -45,11 +38,11 @@ public class VerificationUsingMatchersTest extends RequiresValidState {
         mock.oneArg(one);
         mock.oneArg(two);
         
-        verify(mock).oneArg(CrazyMatchers.same(one));
+        verify(mock).oneArg(same(one));
         verify(mock, times(2)).oneArg(two);
         
         try {
-            verify(mock).oneArg(CrazyMatchers.same(three));
+            verify(mock).oneArg(same(three));
             fail();
         } catch (VerificationError e) {}
     }  

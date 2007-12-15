@@ -5,12 +5,15 @@
 package org.mockito;
 
 import org.mockito.internal.matchers.Any;
+import org.mockito.internal.matchers.Contains;
+import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.EqualsWithDelta;
 import org.mockito.internal.matchers.InstanceOf;
 import org.mockito.internal.matchers.Matches;
 import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.matchers.Null;
+import org.mockito.internal.matchers.Same;
+import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.progress.LastArguments;
 
 public class Matchers {
@@ -106,7 +109,7 @@ public class Matchers {
     }
     
     /**
-     * Argument should be any String.
+     * Any String argument.
      * 
      * @return <code>null</code>.
      */
@@ -237,6 +240,21 @@ public class Matchers {
         LastArguments.instance().reportMatcher(new Equals(value));
         return null;
     }
+    
+    /**
+     * Expects an Object that is the same as the given value. For details, see
+     * the documentation.
+     * 
+     * @param <T>
+     *            the type of the object, it is passed through to prevent casts.
+     * @param value
+     *            the given value.
+     * @return <code>null</code>.
+     */
+    public static <T> T same(T value) {
+        LastArguments.instance().reportMatcher(new Same(value));
+        return null;
+    }
 
     /**
      * Expects null.
@@ -257,6 +275,18 @@ public class Matchers {
         LastArguments.instance().reportMatcher(NotNull.NOT_NULL);
         return null;
     }
+    
+    /**
+     * string that contains the given substring.
+     * 
+     * @param substring
+     *            the substring.
+     * @return <code>null</code>.
+     */
+    public static String contains(String substring) {
+        LastArguments.instance().reportMatcher(new Contains(substring));
+        return null;
+    }
 
     /**
      * Expects a string that matches the given regular expression. For details,
@@ -270,36 +300,30 @@ public class Matchers {
         LastArguments.instance().reportMatcher(new Matches(regex));
         return null;
     }
-
+    
     /**
-     * Expects a double that has an absolute difference to the given value that
-     * is less than the given delta. For details, see the EasyMock
+     * Expects a string that ends with the given suffix. For details, see the
      * documentation.
      * 
-     * @param value
-     *            the given value.
-     * @param delta
-     *            the given delta.
-     * @return <code>0</code>.
+     * @param suffix
+     *            the suffix.
+     * @return <code>null</code>.
      */
-    public static double eq(double value, double delta) {
-        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+    public static String endsWith(String suffix) {
+        LastArguments.instance().reportMatcher(new EndsWith(suffix));
+        return null;
     }
 
     /**
-     * Expects a float that has an absolute difference to the given value that
-     * is less than the given delta. For details, see the EasyMock
+     * Expects a string that starts with the given prefix. For details, see the
      * documentation.
      * 
-     * @param value
-     *            the given value.
-     * @param delta
-     *            the given delta.
-     * @return <code>0</code>.
+     * @param prefix
+     *            the prefix.
+     * @return <code>null</code>.
      */
-    public static float eq(float value, float delta) {
-        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+    public static String startsWith(String prefix) {
+        LastArguments.instance().reportMatcher(new StartsWith(prefix));
+        return null;
     }
 }

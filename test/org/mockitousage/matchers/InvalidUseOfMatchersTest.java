@@ -11,7 +11,7 @@ import static org.mockito.Matchers.eq;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.CrazyMatchers;
+import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
@@ -56,9 +56,9 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
 
     @Test
     public void shouldScreamWhenMatchersAreInvalid() {
-        mock.simpleMethod(CrazyMatchers.not(eq("asd")));
+        mock.simpleMethod(AdditionalMatchers.not(eq("asd")));
         try {
-            mock.simpleMethod(CrazyMatchers.not("jkl"));
+            mock.simpleMethod(AdditionalMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertEquals(
@@ -70,7 +70,7 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
         }
 
         try {
-            mock.simpleMethod(CrazyMatchers.or(eq("jkl"), "asd"));
+            mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertEquals(

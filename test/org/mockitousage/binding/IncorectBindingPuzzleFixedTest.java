@@ -4,17 +4,12 @@
  */
 package org.mockitousage.binding;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.createStrictOrderVerifier;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.util.ExtraMatchers.causeMessageContains;
-import static org.mockito.util.ExtraMatchers.messageContains;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Test;
-import org.mockito.CrazyMatchers;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.verification.VerificationError;
@@ -88,7 +83,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         setMockWithDowncast(sub);
         say("Hello world");
         try {
-            verify(sub).say(CrazyMatchers.contains("world"));
+            verify(sub).say(contains("world"));
             fail();
         } catch (VerificationError e) {
             assertThat(e, messageContains("Sub.say(class java.lang.String)"));

@@ -6,22 +6,21 @@ package org.mockito;
 
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.CompareEqual;
-import org.mockito.internal.matchers.Contains;
-import org.mockito.internal.matchers.EndsWith;
+import org.mockito.internal.matchers.EqualsWithDelta;
 import org.mockito.internal.matchers.Find;
 import org.mockito.internal.matchers.GreaterOrEqual;
 import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
-import org.mockito.internal.matchers.Same;
-import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.progress.LastArguments;
 
-public class CrazyMatchers {
-    
+/**
+ * Very rarely used matchers are kept here
+ */
+public class AdditionalMatchers {
+
     /**
-     * Expects a comparable argument greater than or equal the given value. For details, see
-     * the documentation.
+     * argument greater than or equal the given value.
      * 
      * @param value
      *            the given value.
@@ -31,10 +30,9 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new GreaterOrEqual<T>(value));
         return null;
     }
-    
+
     /**
-     * Expects a byte argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * byte argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -46,8 +44,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * double argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -59,8 +56,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * float argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -72,8 +68,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * int argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -85,8 +80,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * long argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -98,8 +92,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short argument greater than or equal to the given value. For
-     * details, see the documentation.
+     * short argument greater than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -111,8 +104,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a comparable argument less than or equal the given value. For details, see
-     * the documentation.
+     * comparable argument less than or equal the given value details.
      * 
      * @param value
      *            the given value.
@@ -122,10 +114,9 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new LessOrEqual<T>(value));
         return null;
     }
-     
+
     /**
-     * Expects a byte argument less than or equal to the given value. For
-     * details, see the documentation.
+     * byte argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -137,8 +128,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double argument less than or equal to the given value. For
-     * details, see the documentation.
+     * double argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -150,8 +140,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float argument less than or equal to the given value. For
-     * details, see the documentation.
+     * float argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -163,8 +152,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int argument less than or equal to the given value. For
-     * details, see the documentation.
+     * int argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -176,8 +164,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long argument less than or equal to the given value. For
-     * details, see the documentation.
+     * long argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -189,8 +176,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short argument less than or equal to the given value. For
-     * details, see the documentation.
+     * short argument less than or equal to the given value.
      * 
      * @param value
      *            the given value.
@@ -202,8 +188,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a comparable argument greater than the given value. For details, see
-     * the documentation.
+     * comparable argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -213,10 +198,9 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new GreaterThan<T>(value));
         return null;
     }
-    
+
     /**
-     * Expects a byte argument greater than the given value. For details, see
-     * the documentation.
+     * byte argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -228,8 +212,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double argument greater than the given value. For details, see
-     * the documentation.
+     * double argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -241,8 +224,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float argument greater than the given value. For details, see
-     * the documentation.
+     * float argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -254,8 +236,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int argument greater than the given value. For details, see
-     * the documentation.
+     * int argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -267,8 +248,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long argument greater than the given value. For details, see
-     * the documentation.
+     * long argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -280,8 +260,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short argument greater than the given value. For details, see
-     * the documentation.
+     * short argument greater than the given value.
      * 
      * @param value
      *            the given value.
@@ -293,8 +272,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a comparable argument less than the given value. For details, see
-     * the documentation.
+     * comparable argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -304,10 +282,9 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new LessThan<T>(value));
         return null;
     }
-    
+
     /**
-     * Expects a byte argument less than the given value. For details, see the
-     * documentation.
+     * byte argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -319,8 +296,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double argument less than the given value. For details, see the
-     * documentation.
+     * double argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -332,8 +308,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float argument less than the given value. For details, see the
-     * documentation.
+     * float argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -345,8 +320,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int argument less than the given value. For details, see the
-     * documentation.
+     * int argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -358,8 +332,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long argument less than the given value. For details, see the
-     * documentation.
+     * long argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -371,8 +344,7 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short argument less than the given value. For details, see the
-     * documentation.
+     * short argument less than the given value.
      * 
      * @param value
      *            the given value.
@@ -382,11 +354,10 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new LessThan<Short>(value));
         return 0;
     }
-    
 
     /**
-     * Expects a comparable argument equals to the given value according to their
-     * compareTo method. For details, see the documentation.
+     * comparable argument equals to the given value according to their
+     * compareTo method.
      * 
      * @param value
      *            the given value.
@@ -396,10 +367,10 @@ public class CrazyMatchers {
         LastArguments.instance().reportMatcher(new CompareEqual<T>(value));
         return null;
     }
-    
+
     /**
-     * Expects a string that contains a substring that matches the given regular
-     * expression. For details, see the documentation.
+     * string that contains a substring that matches the given regular
+     * expression.
      * 
      * @param regex
      *            the regular expression.
@@ -411,13 +382,13 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an Object array that is equal to the given array, i.e. it has to
-     * have the same type, length, and each element has to be equal.
+     * Object array that is equal to the given array, i.e. it has to have the
+     * same type, length, and each element has to be equal.
      * 
      * @param <T>
      *            the type of the array, it is passed through to prevent casts.
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static <T> T[] aryEq(T[] value) {
@@ -426,11 +397,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * short array that is equal to the given array, i.e. it has to have the
+     * same length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static short[] aryEq(short[] value) {
@@ -439,11 +410,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * long array that is equal to the given array, i.e. it has to have the same
+     * length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static long[] aryEq(long[] value) {
@@ -452,11 +423,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * int array that is equal to the given array, i.e. it has to have the same
+     * length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static int[] aryEq(int[] value) {
@@ -465,11 +436,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * float array that is equal to the given array, i.e. it has to have the
+     * same length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static float[] aryEq(float[] value) {
@@ -478,11 +449,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * double array that is equal to the given array, i.e. it has to have the
+     * same length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static double[] aryEq(double[] value) {
@@ -491,11 +462,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a char array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * char array that is equal to the given array, i.e. it has to have the same
+     * length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static char[] aryEq(char[] value) {
@@ -504,11 +475,11 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a byte array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * byte array that is equal to the given array, i.e. it has to have the same
+     * length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static byte[] aryEq(byte[] value) {
@@ -517,182 +488,169 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a boolean array that is equal to the given array, i.e. it has to
-     * have the same length, and each element has to be equal.
+     * boolean array that is equal to the given array, i.e. it has to have the
+     * same length, and each element has to be equal.
      * 
      * @param value
-     *            the given arry.
+     *            the given array.
      * @return <code>null</code>.
      */
     public static boolean[] aryEq(boolean[] value) {
         LastArguments.instance().reportMatcher(new ArrayEquals(value));
         return null;
-    }    
+    }
 
     /**
-     * Expects a string that contains the given substring. For details, see the
-     * documentation.
-     * 
-     * @param substring
-     *            the substring.
-     * @return <code>null</code>.
-     */
-    public static String contains(String substring) {
-        LastArguments.instance().reportMatcher(new Contains(substring));
-        return null;
-    }
-    
-    /**
-     * Expects a boolean that matches both given expectations.
+     * boolean that matches both given matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
         LastArguments.instance().reportAnd(2);
         return false;
     }
-    
+
     /**
-     * Expects a byte that matches both given expectations.
+     * byte that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static byte and(byte first, byte second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects a char that matches both given expectations.
+     * char that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static char and(char first, char second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects a double that matches both given expectations.
+     * double that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static double and(double first, double second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects a float that matches both given expectations.
+     * float that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static float and(float first, float second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects an int that matches both given expectations.
+     * int that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static int and(int first, int second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects a long that matches both given expectations.
+     * long that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static long and(long first, long second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects a short that matches both given expectations.
+     * short that matches both given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static short and(short first, short second) {
         LastArguments.instance().reportAnd(2);
         return 0;
     }
-    
+
     /**
-     * Expects an Object that matches both given expectations.
+     * Object that matches both given argument matchers.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
         LastArguments.instance().reportAnd(2);
         return null;
     }
-    
+
     /**
-     * Expects a boolean that matches one of the given expectations.
+     * boolean that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>false</code>.
      */
     public static boolean or(boolean first, boolean second) {
         LastArguments.instance().reportOr(2);
         return false;
     }
-    
+
     /**
-     * Expects an Object that matches one of the given expectations.
+     * Object that matches any of the given argument matchers.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
@@ -701,12 +659,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short that matches one of the given expectations.
+     * short that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static short or(short first, short second) {
@@ -715,12 +673,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long that matches one of the given expectations.
+     * long that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static long or(long first, long second) {
@@ -729,12 +687,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int that matches one of the given expectations.
+     * int that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static int or(int first, int second) {
@@ -743,12 +701,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float that matches one of the given expectations.
+     * float that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static float or(float first, float second) {
@@ -757,12 +715,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double that matches one of the given expectations.
+     * double that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static double or(double first, double second) {
@@ -771,12 +729,12 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a char that matches one of the given expectations.
+     * char that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static char or(char first, char second) {
@@ -785,67 +743,26 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a byte that matches one of the given expectations.
+     * byte that matches any of the given argument matchers.
      * 
      * @param first
-     *            placeholder for the first expectation.
+     *            placeholder for the first argument matcher.
      * @param second
-     *            placeholder for the second expectation.
+     *            placeholder for the second argument matcher.
      * @return <code>0</code>.
      */
     public static byte or(byte first, byte second) {
         LastArguments.instance().reportOr(2);
         return 0;
-    }    
-    
-    /**
-     * Expects an Object that is the same as the given value. For details, see
-     * the documentation.
-     * 
-     * @param <T>
-     *            the type of the object, it is passed through to prevent casts.
-     * @param value
-     *            the given value.
-     * @return <code>null</code>.
-     */
-    public static <T> T same(T value) {
-        LastArguments.instance().reportMatcher(new Same(value));
-        return null;
     }
 
     /**
-     * Expects a string that ends with the given suffix. For details, see the
-     * documentation.
-     * 
-     * @param suffix
-     *            the suffix.
-     * @return <code>null</code>.
-     */
-    public static String endsWith(String suffix) {
-        LastArguments.instance().reportMatcher(new EndsWith(suffix));
-        return null;
-    }
-
-    /**
-     * Expects a string that starts with the given prefix. For details, see the
-     * documentation.
-     * 
-     * @param prefix
-     *            the prefix.
-     * @return <code>null</code>.
-     */
-    public static String startsWith(String prefix) {
-        LastArguments.instance().reportMatcher(new StartsWith(prefix));
-        return null;
-    }
-
-    /**
-     * Expects an Object that does not match the given expectation.
+     * Object that does not match the given argument matcher.
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
@@ -854,10 +771,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a short that does not match the given expectation.
+     * short that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static short not(short first) {
@@ -866,10 +783,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects an int that does not match the given expectation.
+     * int that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static int not(int first) {
@@ -878,10 +795,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a long that does not match the given expectation.
+     * long that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static long not(long first) {
@@ -890,10 +807,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a float that does not match the given expectation.
+     * float that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static float not(float first) {
@@ -902,10 +819,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a double that does not match the given expectation.
+     * double that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static double not(double first) {
@@ -914,10 +831,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a char that does not match the given expectation.
+     * char that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static char not(char first) {
@@ -926,10 +843,10 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a boolean that does not match the given expectation.
+     * boolean that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
@@ -938,14 +855,44 @@ public class CrazyMatchers {
     }
 
     /**
-     * Expects a byte that does not match the given expectation.
+     * byte that does not match the given argument matcher.
      * 
      * @param first
-     *            placeholder for the expectation.
+     *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static byte not(byte first) {
         LastArguments.instance().reportNot();
+        return 0;
+    }
+
+    /**
+     * double that has an absolute difference to the given value that is less
+     * than the given delta details.
+     * 
+     * @param value
+     *            the given value.
+     * @param delta
+     *            the given delta.
+     * @return <code>0</code>.
+     */
+    public static double eq(double value, double delta) {
+        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
+        return 0;
+    }
+
+    /**
+     * float that has an absolute difference to the given value that is less
+     * than the given delta details.
+     * 
+     * @param value
+     *            the given value.
+     * @param delta
+     *            the given delta.
+     * @return <code>0</code>.
+     */
+    public static float eq(float value, float delta) {
+        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
 }
