@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.parents.HasStackTrace;
-import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;

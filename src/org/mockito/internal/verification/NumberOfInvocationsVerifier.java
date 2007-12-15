@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.parents.HasStackTrace;
+import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsCalculator;

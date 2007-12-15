@@ -14,7 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.parents.HasStackTrace;
+import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationMode;
 
 

@@ -7,7 +7,7 @@ package org.mockito.internal.stubbing;
 import java.util.LinkedList;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.parents.StackTraceFilter;
+import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;

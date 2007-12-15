@@ -24,7 +24,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings({"serial", "unchecked"})

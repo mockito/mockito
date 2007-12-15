@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions.cause;
 
-import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.base.MockitoException;
 
 public class FirstUndesiredInvocation extends MockitoException {
 

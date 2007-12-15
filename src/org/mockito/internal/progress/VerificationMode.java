@@ -7,7 +7,7 @@ package org.mockito.internal.progress;
 import java.util.Collections;
 import java.util.List;
 
-import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.base.MockitoException;
 
 public class VerificationMode {
     

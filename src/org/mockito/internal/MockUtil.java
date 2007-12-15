@@ -7,8 +7,8 @@ package org.mockito.internal;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.internal.creation.ObjectMethodsFilter;
 import org.mockito.internal.creation.MockFactory.MockMethodInterceptor;
 

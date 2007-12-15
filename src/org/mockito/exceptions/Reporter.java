@@ -6,6 +6,8 @@ package org.mockito.exceptions;
 
 import static org.mockito.exceptions.StringJoiner.join;
 
+import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.cause.FirstUndesiredInvocation;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
@@ -13,8 +15,6 @@ import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.parents.HasStackTrace;
-import org.mockito.exceptions.parents.MockitoException;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;

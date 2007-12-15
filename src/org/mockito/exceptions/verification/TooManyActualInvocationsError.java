@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions.verification;
 
-import org.mockito.exceptions.parents.MockitoAssertionError;
+import org.mockito.exceptions.base.MockitoAssertionError;
 
 public class TooManyActualInvocationsError extends MockitoAssertionError {
 

@@ -6,7 +6,7 @@ package org.mockito.internal.invocation;
 
 import java.util.List;
 
-import org.mockito.exceptions.parents.HasStackTrace;
+import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationMode;
 
 //TODO refactor to an object that holds Invocations and exposes some calculations

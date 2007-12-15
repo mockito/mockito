@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.exceptions.parents.HasStackTraceThrowableWrapper;
-import org.mockito.exceptions.parents.StackTraceFilter;
+import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
+import org.mockito.exceptions.base.StackTraceFilter;
 
 @SuppressWarnings("unchecked")
 public class Result implements IAnswer {

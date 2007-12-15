@@ -20,7 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
 import org.mockito.Strictly;
-import org.mockito.exceptions.parents.MockitoException;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.VerificationError;
 
 public class StackTrackeFilteringTest extends RequiresValidState {

@@ -14,8 +14,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.parents.HasStackTrace;
-import org.mockito.exceptions.parents.StackTraceFilter;
+import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.exceptions.base.StackTraceFilter;
 
 public class ResultTest extends RequiresValidState {
 

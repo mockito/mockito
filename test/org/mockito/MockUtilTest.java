@@ -16,8 +16,8 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.exceptions.parents.MockitoException;
 
 public class MockUtilTest extends RequiresValidState {
 

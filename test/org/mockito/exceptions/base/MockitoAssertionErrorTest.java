@@ -2,18 +2,19 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.exceptions.parents;
+package org.mockito.exceptions.base;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.base.MockitoAssertionError;
 
-public class MockitoExceptionTest extends RequiresValidState {
+public class MockitoAssertionErrorTest extends RequiresValidState {
 
     private void throwIt() {
-        throw new MockitoException("boom");
+        throw new MockitoAssertionError("boom");
     }
     
     @Test
@@ -21,8 +22,13 @@ public class MockitoExceptionTest extends RequiresValidState {
         try {
             throwIt();
             fail();
-        } catch (MockitoException e) {
+        } catch (MockitoAssertionError e) {
             assertEquals("throwIt", e.getUnfilteredStackTrace()[0].getMethodName());
         }
+    }
+    
+    @Test
+    public void shouldNotInitCauseWhenCauseIsNull() {
+        new MockitoAssertionError("test", null);
     }
 }

@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
 import org.mockito.Strictly;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
-import org.mockito.exceptions.parents.MockitoException;
 
 @SuppressWarnings("unchecked")
 public class InvalidUsageTest extends RequiresValidState {
