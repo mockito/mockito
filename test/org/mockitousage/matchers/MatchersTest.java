@@ -29,7 +29,7 @@ import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyShort;
+import static org.mockito.Matchers.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Matchers.isNull;
@@ -249,6 +249,15 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("0", mock.oneArg(new BigDecimal("1.50")));
         assertEquals(null, mock.oneArg(new BigDecimal("1.51")));
     }
+    
+    @Test
+    public void anyStringMatcher() {
+        stub(mock.oneArg(anyString())).andReturn("1");
+        
+        assertEquals("1", mock.oneArg(""));
+        assertEquals("1", mock.oneArg("any string"));
+        assertEquals(null, mock.oneArg(null));
+    }
 
     @Test
     public void anyMatcher() {
@@ -262,7 +271,7 @@ public class MatchersTest extends RequiresValidState {
         stub(mock.oneArg(anyShort())).andReturn("7");
         stub(mock.oneArg((String) anyObject())).andReturn("8");
         stub(mock.oneArg(anyObject())).andReturn("9");
-
+        
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
 

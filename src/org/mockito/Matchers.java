@@ -105,6 +105,11 @@ public class Matchers {
         return null;
     }
     
+    /**
+     * Argument should be any String.
+     * 
+     * @return <code>null</code>.
+     */
     public static String anyString() {
         isA(String.class);
         return null;
