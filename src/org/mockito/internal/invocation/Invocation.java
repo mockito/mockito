@@ -16,6 +16,14 @@ import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.IArgumentMatcher;
 
+/**
+ * Method call on a mock object. 
+ * <p>
+ * Contains sequence number which should be
+ * globally unique and is used for strict order verification.
+ * <p>
+ * Contains stack trace of invocation
+ */
 public class Invocation {
 
     private final int sequenceNumber;
@@ -111,7 +119,11 @@ public class Invocation {
     }
 
     public String toString(List<IArgumentMatcher> matchers) {
-        return getMockAndMethodName() + getArgumentsString(matchers);
+        String mockName = MockNamer.nameForMock(mock);
+        String methodName = method.getName();
+        String arguments = getArgumentsString(matchers);
+        
+        return mockName + "." + methodName + arguments;
     }
 
     public String toStringWithSequenceNumber() {
@@ -119,26 +131,22 @@ public class Invocation {
     }
 
     public String toStringWithSequenceNumber(List<IArgumentMatcher> matchers) {
-        return getMockAndMethodNameWithSeqenceNumber() + getArgumentsString(matchers);
+        String mockName = MockNamer.nameForMock(mock);
+        String methodName = method.getName();
+        String arguments = getArgumentsString(matchers);
+        
+        return mockName + "#" + sequenceNumber + "." + methodName + arguments;
     }
     
     public String toStringWithArgumentTypes() {
         StringBuilder result = new StringBuilder();
-        result.append(getMockAndMethodName());
+        result.append((MockNamer.nameForMock(mock) + "." + method.getName()));
         result.append("(");
         for (Class<?> paramType : getMethod().getParameterTypes()) {
             result.append(paramType);
             result.append(", ");
         } 
         return result.toString().replaceFirst(", $", "").concat(")");
-    }
-    
-    private String getMockAndMethodName() {
-        return MockNamer.nameForMock(mock) + "." + method.getName();
-    }
-    
-    private String getMockAndMethodNameWithSeqenceNumber() {
-        return MockNamer.nameForMock(mock) + "#" + sequenceNumber + "." + method.getName();
     }
     
     private String getArgumentsString(List<IArgumentMatcher> matchers) {
