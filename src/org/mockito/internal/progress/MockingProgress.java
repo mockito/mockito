@@ -7,9 +7,9 @@ package org.mockito.internal.progress;
 @SuppressWarnings("unchecked")
 public interface MockingProgress {
 
-    void reportStubable(OngoingStubbing ongoingStubbing);
+    void reportStubbable(OngoingStubbing ongoingStubbing);
 
-    OngoingStubbing pullStubable();
+    OngoingStubbing pullStubbable();
 
     void verificationStarted(VerificationMode verificationMode);
 

@@ -59,7 +59,7 @@ public class InvalidUsageTest extends RequiresValidState {
     
     @Test(expected=MissingMethodInvocationException.class)
     public void shouldReportMissingMethodInvocationWhenStubbing() {
-        stub(mock.simpleMethod()).andReturn("this stubbing is required to make sure Stubable is pulled");
+        stub(mock.simpleMethod()).andReturn("this stubbing is required to make sure Stubbable is pulled");
         stub("".toString()).andReturn("x");
     }
     

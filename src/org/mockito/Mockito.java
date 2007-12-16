@@ -11,7 +11,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
-import org.mockito.internal.stubbing.VoidMethodStubable;
+import org.mockito.internal.stubbing.VoidMethodStubbable;
 
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -26,11 +26,11 @@ public class Mockito extends Matchers {
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
         MOCKING_PROGRESS.stubbingStarted();
 
-        OngoingStubbing stubable = MOCKING_PROGRESS.pullStubable();
-        if (stubable == null) {
+        OngoingStubbing stubbable = MOCKING_PROGRESS.pullStubbable();
+        if (stubbable == null) {
             REPORTER.missingMethodInvocation();
         }
-        return stubable;
+        return stubbable;
     }
 
     public static <T> T verify(T mock) {
@@ -88,7 +88,7 @@ public class Mockito extends Matchers {
         }
     }
 
-    public static <T> VoidMethodStubable<T> stubVoid(T mock) {
+    public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
         MockHandler<T> handler = MockUtil.getMockHandler(mock);
         MOCKING_PROGRESS.stubbingStarted();
         return handler;

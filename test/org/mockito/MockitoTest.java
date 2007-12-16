@@ -16,11 +16,11 @@ import org.mockito.exceptions.misusing.NotAMockException;
 public class MockitoTest extends RequiresValidState {
 
     @Test
-    public void shouldRemoveStubableFromProgressAfterStubbing() {
+    public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
         Mockito.stub(mock.add("test")).andReturn(true);
         
-        assertNull(Mockito.MOCKING_PROGRESS.pullStubable());
+        assertNull(Mockito.MOCKING_PROGRESS.pullStubbable());
     }
     
     @Test(expected=NotAMockException.class)

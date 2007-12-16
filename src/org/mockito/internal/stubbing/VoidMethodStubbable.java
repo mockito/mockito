@@ -4,9 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
-
-
-public interface VoidMethodStubable<T> {
+public interface VoidMethodStubbable<T> {
 
     StubbedMethodSelector<T> toThrow(Throwable throwable);
 

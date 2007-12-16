@@ -18,12 +18,12 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         return mockingProgress.get();
     }
     
-    public void reportStubable(OngoingStubbing ongoingStubbing) {
-        threadSafely().reportStubable(ongoingStubbing);
+    public void reportStubbable(OngoingStubbing ongoingStubbing) {
+        threadSafely().reportStubbable(ongoingStubbing);
     }
 
-    public OngoingStubbing pullStubable() {
-        return threadSafely().pullStubable();
+    public OngoingStubbing pullStubbable() {
+        return threadSafely().pullStubbable();
     }
     
     public void verificationStarted(VerificationMode verify) {
