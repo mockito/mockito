@@ -1,6 +1,6 @@
 header = <<-eos
 /*
- * Copyright (c) 2007 Mockito contributors    
+ * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 eos
@@ -10,17 +10,16 @@ require 'find'
 dirs = ["src","test"]
 
 paths = []
-excludes = [".svn"]
 for dir in dirs
   Find.find(dir) do |path|
     if FileTest.directory?(path)
-      if excludes.include?(File.basename(path))
+      if File.basename(path) == '.svn'
         Find.prune
       else
         next
       end
     else
-      paths << path
+      paths << path if path !~ /\.html$/
     end
   end
 end
