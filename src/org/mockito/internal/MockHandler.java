@@ -8,7 +8,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import org.mockito.internal.creation.MockAwareInvocationHandler;
+import net.sf.cglib.proxy.MethodProxy;
+
+import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsChunker;
@@ -32,7 +34,7 @@ import org.mockito.internal.verification.VerifyingRecorder;
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> implements MockAwareInvocationHandler<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
+public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<T>, VoidMethodStubable<T>, StubbedMethodSelector<T> {
 
     private final VerifyingRecorder verifyingRecorder;
     private final Stubber stubber;
@@ -59,7 +61,7 @@ public class MockHandler<T> implements MockAwareInvocationHandler<T>, OngoingStu
         return new VerifyingRecorder(chunker, marker, verifiers);
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (stubber.hasThrowableForVoidMethod()) {
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);

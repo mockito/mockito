@@ -69,7 +69,7 @@ public class MockFactoryTest extends RequiresValidState {
         }
     };
     
-    private final class MockAwareStub extends ObjectMethodsFilter {
+    private final class MockAwareStub extends MethodInterceptorFilter {
         public MockAwareStub() {
             super(Object.class, null);
         }

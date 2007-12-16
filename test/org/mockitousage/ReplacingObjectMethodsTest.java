@@ -52,13 +52,13 @@ public class ReplacingObjectMethodsTest extends RequiresValidState {
     
     public static class ObjectMethodsOverridden {
         public boolean equals(Object o) {
-            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+            throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
         }
         public int hashCode() {
-            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+            throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
         }
         public String toString() {
-            throw new RuntimeException("Should not be called. ObjectMethodsFilter provides implementation");
+            throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
         }
     }
     

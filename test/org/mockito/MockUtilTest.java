@@ -6,8 +6,7 @@ package org.mockito;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import static org.mockito.internal.MockUtil.getMockHandler;
-import static org.mockito.internal.MockUtil.validateMock;
+import static org.mockito.internal.MockUtil.*;
 
 import java.util.ArrayList;
 import java.util.List;

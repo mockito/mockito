@@ -7,9 +7,6 @@ package org.mockito;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockUtil;
-import org.mockito.internal.creation.MockFactory;
-import org.mockito.internal.creation.ObjectMethodsFilter;
-import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -23,10 +20,7 @@ public class Mockito extends Matchers {
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
 
     public static <T> T mock(Class<T> classToMock) {
-        MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockHandler<T> mockHandler = new MockHandler<T>(MOCKING_PROGRESS, new MatchersBinder());
-        return proxyFactory.createMock(classToMock, new ObjectMethodsFilter<MockHandler>(
-                classToMock, mockHandler));
+        return MockUtil.createMock(classToMock, MOCKING_PROGRESS);
     }
 
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {

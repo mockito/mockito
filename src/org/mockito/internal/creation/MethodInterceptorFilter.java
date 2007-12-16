@@ -6,19 +6,19 @@ package org.mockito.internal.creation;
 
 import java.lang.reflect.Method;
 
+import net.sf.cglib.proxy.MethodProxy;
 
 @SuppressWarnings("unchecked")
-public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implements MockAwareInvocationHandler {
+public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements MockAwareInterceptor {
+    
     private final Method equalsMethod;
-
     private final Method hashCodeMethod;
-
     private final Method toStringMethod;
 
     private final T delegate;
 
     @SuppressWarnings("unchecked")
-    public ObjectMethodsFilter(Class toMock, T delegate) {
+    public MethodInterceptorFilter(Class toMock, T delegate) {
         try {
             if (toMock.isInterface()) {
                 toMock = Object.class;
@@ -32,18 +32,21 @@ public class ObjectMethodsFilter<T extends MockAwareInvocationHandler> implement
         this.delegate = delegate;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args)
+    public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
             throws Throwable {
+        if (method.isBridge()) {
+            return methodProxy.invokeSuper(proxy, args);
+        }
+        
         if (equalsMethod.equals(method)) {
             return Boolean.valueOf(proxy == args[0]);
-        }
-        if (hashCodeMethod.equals(method)) {
+        } else if (hashCodeMethod.equals(method)) {
             return new Integer(System.identityHashCode(proxy));
-        }
-        if (toStringMethod.equals(method)) {
+        } else if (toStringMethod.equals(method)) {
             return mockToString(proxy);
         }
-        return delegate.invoke(proxy, method, args);
+        
+        return delegate.intercept(proxy, method, args, null);
     }
 
     private String mockToString(Object mock) {

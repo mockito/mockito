@@ -26,7 +26,7 @@ public class MockHandlerTest extends RequiresValidState {
         MockHandler handler = new MockHandler(state, new ExceptionThrowingBinder());
         
         try {
-            handler.invoke(null, String.class.getDeclaredMethod("toString"), new Object[]{});
+            handler.intercept(null, String.class.getDeclaredMethod("toString"), new Object[]{}, null);
             fail();
         } catch (InvalidUseOfMatchersException e) {}
         
