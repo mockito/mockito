@@ -24,6 +24,15 @@ public class VerificationUsingMatchersTest extends RequiresValidState {
     public void setUp() {
         mock = Mockito.mock(IMethods.class);
     }
+    
+    @Test
+    public void shouldVerifyExactNumberOfInvocationsUsingMatcher() {
+        mock.simpleMethod(1);
+        mock.simpleMethod(2);
+        mock.simpleMethod(3);
+        
+        verify(mock, times(3)).simpleMethod(anyInt());
+    }
 
     @Test
     public void shouldVerifyUsingSameMatcher() {

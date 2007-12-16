@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.progress;
 
+//TODO document exposed interfaces
 public interface OngoingStubbing<T> {
 
     void andReturn(T value);
