@@ -303,10 +303,13 @@ public class Mockito extends Matchers {
 
     /**
      * Verifies that no interactions happened on given mocks.
+     * <pre>
+     *   verifyZeroInteractions(mockOne, mockTwo);
+     * </pre>
+     * 
      * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
      * the first one is more explicit and can read better.
      * <p>
-     * 
      * See examples {@link Mockito}
      * 
      * @param mocks to be verified
