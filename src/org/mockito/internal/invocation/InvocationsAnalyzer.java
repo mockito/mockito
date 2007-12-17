@@ -7,7 +7,7 @@ package org.mockito.internal.invocation;
 import java.util.List;
 
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 /**
  * Provides handful of methods to search and count invocations
@@ -58,7 +58,7 @@ public class InvocationsAnalyzer {
         return lastMatching != null ? lastMatching.getStackTrace() : null;
     }
 
-    public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         int counter = 0;
         for (Invocation invocation : invocations) {
             if (wanted.matches(invocation)) {

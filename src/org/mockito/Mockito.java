@@ -11,6 +11,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 
 /**
@@ -251,7 +252,7 @@ public class Mockito extends Matchers {
      * See examples {@link Mockito}
      * 
      * @param mock to be verified
-     * @param mode - times(x) or atLeastOnce()
+     * @param mode times(x) or atLeastOnce()
      * 
      * @return mock object itself
      */
@@ -329,7 +330,7 @@ public class Mockito extends Matchers {
      * See examples {@link Mockito}
      * 
      * @param mock to stub
-     * @return
+     * @return stubbable object that allows stubbing with throwable
      */
     public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
         MockHandler<T> handler = MockUtil.getMockHandler(mock);
@@ -376,7 +377,7 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode atLeastOnce() {
-        return VerificationMode.atLeastOnce();
+        return VerificationModeImpl.atLeastOnce();
     }
 
     /**
@@ -392,6 +393,6 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode times(int wantedNumberOfInvocations) {
-        return VerificationMode.times(wantedNumberOfInvocations);
+        return VerificationModeImpl.times(wantedNumberOfInvocations);
     }
 }

@@ -53,9 +53,9 @@ public interface Strictly {
      * See examples {@link Mockito}
      * 
      * @param mock to be verified
-     * @param mode - times(x) or atLeastOnce()
+     * @param mode times(x) or atLeastOnce()
      * 
      * @return mock object itself
      */
-    <T> T verify(T mock, VerificationMode verificationMode);
+    <T> T verify(T mock, VerificationMode mode);
 }

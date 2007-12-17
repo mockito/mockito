@@ -9,20 +9,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
-import static org.mockito.internal.progress.VerificationMode.noMoreInteractions;
-import static org.mockito.internal.progress.VerificationMode.strict;
-import static org.mockito.internal.progress.VerificationMode.times;
+import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
+import static org.mockito.internal.progress.VerificationModeImpl.noMoreInteractions;
+import static org.mockito.internal.progress.VerificationModeImpl.strict;
+import static org.mockito.internal.progress.VerificationModeImpl.times;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.MockitoException;
 
-public class VerificationModeTest extends RequiresValidState {
+public class VerificationModeImplTest extends RequiresValidState {
 
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
-        VerificationMode mode = atLeastOnce();
+        VerificationModeImpl mode = atLeastOnce();
         assertTrue(mode.atLeastOnceMode());
         
         mode = times(50);

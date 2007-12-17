@@ -30,7 +30,7 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         threadSafely().verificationStarted(verify);
     }
 
-    public VerificationMode pullVerificationMode() {
+    public VerificationModeImpl pullVerificationMode() {
         return threadSafely().pullVerificationMode();
     }
 

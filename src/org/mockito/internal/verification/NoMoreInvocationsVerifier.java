@@ -10,7 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class NoMoreInvocationsVerifier implements Verifier {
 
@@ -26,7 +26,7 @@ public class NoMoreInvocationsVerifier implements Verifier {
         this.reporter = reporter;
     }
 
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         if (mode.explicitMode()) {
             return;
         }

@@ -14,7 +14,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 @SuppressWarnings("unchecked")
 public class MockHandlerTest extends RequiresValidState {
@@ -22,7 +22,7 @@ public class MockHandlerTest extends RequiresValidState {
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockingProgressImpl state = new MockingProgressImpl();
-        state.verificationStarted(VerificationMode.atLeastOnce());
+        state.verificationStarted(VerificationModeImpl.atLeastOnce());
         MockHandler handler = new MockHandler(state, new ExceptionThrowingBinder());
         
         try {

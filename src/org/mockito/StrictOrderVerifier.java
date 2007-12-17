@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 class StrictOrderVerifier implements Strictly {
     
@@ -20,13 +21,14 @@ class StrictOrderVerifier implements Strictly {
     }
     
     public <T> T verify(T mock) {
-        return this.verify(mock, VerificationMode.times(1));
+        return this.verify(mock, VerificationModeImpl.times(1));
     }
     
-    public <T> T verify(T mock, VerificationMode verificationMode) {
+    public <T> T verify(T mock, VerificationMode mode) {
         if (!mocksToBeVerifiedSrictly.contains(mock)) {
             reporter.strictlyRequiresFamiliarMock();
         }
-        return Mockito.verify(mock, VerificationMode.strict(verificationMode.wantedCount(), mocksToBeVerifiedSrictly));
+        Integer wantedCount = ((VerificationModeImpl) mode).wantedCount();
+        return Mockito.verify(mock, VerificationModeImpl.strict(wantedCount, mocksToBeVerifiedSrictly));
     }
 }

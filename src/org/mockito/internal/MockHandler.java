@@ -18,7 +18,7 @@ import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.EmptyReturnValues;
 import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
@@ -69,7 +69,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
             return null;
         }
         
-        VerificationMode verificationMode = mockingProgress.pullVerificationMode();
+        VerificationModeImpl verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
         
         Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
@@ -89,7 +89,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
     }
 
     public void verifyNoMoreInteractions() {
-        verifyingRecorder.verify(VerificationMode.noMoreInteractions());
+        verifyingRecorder.verify(VerificationModeImpl.noMoreInteractions());
     }
     
     public void andReturn(T value) {

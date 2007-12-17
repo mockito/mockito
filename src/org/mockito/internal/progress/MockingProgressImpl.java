@@ -12,7 +12,7 @@ public class MockingProgressImpl implements MockingProgress {
     private final Reporter reporter = new Reporter();
     
     private OngoingStubbing ongoingStubbing;
-    private VerificationMode verificationMode;
+    private VerificationModeImpl verificationMode;
     private int invocationSequenceNumber = 1;
     private boolean stubbingInProgress = false;
 
@@ -28,11 +28,11 @@ public class MockingProgressImpl implements MockingProgress {
     
     public void verificationStarted(VerificationMode verify) {
         validateState();
-        verificationMode = verify;
+        verificationMode = (VerificationModeImpl) verify;
     }
 
-    public VerificationMode pullVerificationMode() {
-        VerificationMode temp = verificationMode;
+    public VerificationModeImpl pullVerificationMode() {
+        VerificationModeImpl temp = verificationMode;
         verificationMode = null;
         return temp;
     }

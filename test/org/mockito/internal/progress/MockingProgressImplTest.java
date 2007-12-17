@@ -26,7 +26,7 @@ public class MockingProgressImplTest extends RequiresValidState {
     public void shouldStartVerificationAndPullVerificationMode() throws Exception {
         assertNull(mockingProgress.pullVerificationMode());
         
-        VerificationMode mode = VerificationMode.times(19);
+        VerificationModeImpl mode = VerificationModeImpl.times(19);
         
         mockingProgress.verificationStarted(mode);
         
@@ -37,9 +37,9 @@ public class MockingProgressImplTest extends RequiresValidState {
     
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
-        mockingProgress.verificationStarted(VerificationMode.atLeastOnce());
+        mockingProgress.verificationStarted(VerificationModeImpl.atLeastOnce());
         try {
-            mockingProgress.verificationStarted(VerificationMode.atLeastOnce());
+            mockingProgress.verificationStarted(VerificationModeImpl.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
     }

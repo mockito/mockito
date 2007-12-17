@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class InvocationsAnalyzerTest extends RequiresValidState {
     
@@ -50,26 +50,26 @@ public class InvocationsAnalyzerTest extends RequiresValidState {
     
     @Test
     public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
-        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(0));
+        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(0));
         HasStackTrace expected = simpleMethodInvocation.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test
     public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
-        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(1));
+        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(1));
         HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
         assertSame(firstUndesired, expected);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenThereAreNoUndesiredInvocations() throws Exception {
-        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(2));
+        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(2));
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void shouldBreakWhenWantedInvocationsFigureIsBigger() throws Exception {
-        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationMode.times(100));
+        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(100));
     }
     
     @Test

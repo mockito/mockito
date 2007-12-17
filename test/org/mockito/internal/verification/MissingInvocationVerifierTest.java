@@ -7,8 +7,8 @@ package org.mockito.internal.verification;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
-import static org.mockito.internal.progress.VerificationMode.noMoreInteractions;
+import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
+import static org.mockito.internal.progress.VerificationModeImpl.noMoreInteractions;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class MissingInvocationVerifierTest extends RequiresValidState {
 
@@ -66,7 +66,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     public void shouldAskAnalyzerForActualInvocationAndReportWantedButNotInvoked() {
         analyzerStub.actualCountToReturn = 0;
         analyzerStub.actualInvocationToReturn = null;
-        verifier.verify(invocations, wanted, VerificationMode.atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertSame(invocations, analyzerStub.invocations);
         assertSame(wanted, analyzerStub.wanted);
@@ -79,7 +79,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         analyzerStub.actualCountToReturn = 0;
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
         analyzerStub.actualInvocationToReturn = actualInvocation;
-        verifier.verify(invocations, wanted, VerificationMode.atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
         assertEquals(actualInvocation.toString(), reporterStub.actual);

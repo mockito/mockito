@@ -11,7 +11,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.invocation.InvocationsPrinter;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class MissingInvocationVerifier implements Verifier {
     
@@ -27,7 +27,7 @@ public class MissingInvocationVerifier implements Verifier {
         this.reporter = reporter;
     }
 
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         if (!mode.missingMethodMode()) {
             return;
         }

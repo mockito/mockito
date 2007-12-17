@@ -7,8 +7,8 @@ package org.mockito.internal.verification;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.internal.progress.VerificationMode.atLeastOnce;
-import static org.mockito.internal.progress.VerificationMode.times;
+import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
+import static org.mockito.internal.progress.VerificationModeImpl.times;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class NumberOfInvocationsVerifierTest extends RequiresValidState {
 
@@ -55,7 +55,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldAskAnalyzerToCountActual() throws Exception {
-        VerificationMode mode = times(1);
+        VerificationModeImpl mode = times(1);
         analyzerStub.actualCountToReturn = 1;
         verifier.verify(invocations, wanted, mode);
         
@@ -65,7 +65,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldReportTooLittleInvocations() throws Exception {
-        VerificationMode mode = times(10);
+        VerificationModeImpl mode = times(10);
         analyzerStub.actualCountToReturn = 5;
         MockitoException lastInvocation = new MockitoException("");
         analyzerStub.invocationTraceToReturn = lastInvocation;
@@ -84,7 +84,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldReportTooManyInvocations() throws Exception {
-        VerificationMode mode = times(0);
+        VerificationModeImpl mode = times(0);
         analyzerStub.actualCountToReturn = 5;
         MockitoException firstUndesiredInvocation = new MockitoException("");
         analyzerStub.invocationTraceToReturn = firstUndesiredInvocation;
@@ -108,7 +108,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         private int actualCountToReturn;
 
         private InvocationMatcher wanted;
-        private VerificationMode mode;
+        private VerificationModeImpl mode;
         private List<Invocation> invocations;
         @Override
         public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
@@ -117,7 +117,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
             return actualCountToReturn;
         }
         
-        @Override public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+        @Override public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
             this.wanted = wanted;
             this.mode = mode;
             return invocationTraceToReturn;

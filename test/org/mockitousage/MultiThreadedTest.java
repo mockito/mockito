@@ -24,7 +24,7 @@ import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
-import org.mockito.internal.progress.VerificationModeTest;
+import org.mockito.internal.progress.VerificationModeImplTest;
 import org.mockito.internal.stubbing.EmptyReturnValuesTest;
 import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
@@ -65,7 +65,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     NumberOfInvocationsVerifierTest.class, 
                     MockingProgressImplTest.class, 
                     EmptyReturnValuesTest.class, 
-                    VerificationModeTest.class, 
+                    VerificationModeImplTest.class, 
                     InvocationTest.class, 
                     MockUtilTest.class, 
                     MockitoAssertionErrorTest.class, 

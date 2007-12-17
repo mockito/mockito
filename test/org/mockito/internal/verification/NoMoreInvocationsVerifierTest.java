@@ -18,7 +18,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class NoMoreInvocationsVerifierTest extends RequiresValidState {
 
@@ -35,13 +35,13 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldNeverVerifyWhenVerificationIsExplicit() throws Exception {
-        verifier.verify(null, null, VerificationMode.atLeastOnce());
+        verifier.verify(null, null, VerificationModeImpl.atLeastOnce());
     }
     
     @Test
     public void shouldPassVerification() throws Exception {
         analyzer.invocationToReturn = null;
-        verifier.verify(null, null, VerificationMode.noMoreInteractions());
+        verifier.verify(null, null, VerificationModeImpl.noMoreInteractions());
     }
     
     @Test
@@ -50,7 +50,7 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
         analyzer.invocationToReturn = firstUnverified;
         List<Invocation> invocations = asList(new InvocationBuilder().toInvocation());
         
-        verifier.verify(invocations, null, VerificationMode.noMoreInteractions());
+        verifier.verify(invocations, null, VerificationModeImpl.noMoreInteractions());
         
         assertSame(invocations, analyzer.invocations);
         

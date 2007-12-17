@@ -11,7 +11,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsChunker;
 import org.mockito.internal.invocation.InvocationsMarker;
-import org.mockito.internal.progress.VerificationMode;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorder {
 
@@ -39,11 +39,11 @@ public class VerifyingRecorder {
         return registeredInvocations;
     }
     
-    public void verify(VerificationMode mode) {
+    public void verify(VerificationModeImpl mode) {
         verify(null, mode);
     }
     
-    public void verify(InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(InvocationMatcher wanted, VerificationModeImpl mode) {
         List<Invocation> invocations = getInvocationsForEvaluation(mode);
         
         for (Verifier verifier : verifiers) {
@@ -55,9 +55,9 @@ public class VerifyingRecorder {
         }
     }
     
-    private List<Invocation> getInvocationsForEvaluation(VerificationMode mode) {
+    private List<Invocation> getInvocationsForEvaluation(VerificationModeImpl mode) {
         if (mode.strictMode()) {
-            return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedInSequence());
+            return chunker.getFirstUnverifiedInvocationChunk(mode.getAllMocksToBeVerifiedStrictly());
         } else {
             return registeredInvocations;
         }
