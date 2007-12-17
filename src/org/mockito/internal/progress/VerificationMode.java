@@ -7,8 +7,19 @@ package org.mockito.internal.progress;
 import java.util.Collections;
 import java.util.List;
 
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 
+/**
+ * Allows verifying that certain behavior happened at least once or exact number of times. E.g:
+ * <pre>
+ *   verify(mock, times(5)).someMethod("should be called five times");
+ *   
+ *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
+ * </pre>
+ * 
+ * See examples {@link Mockito}
+ */
 public class VerificationMode {
     
     enum Verification { EXPLICIT, NO_MORE_WANTED };
@@ -28,6 +39,7 @@ public class VerificationMode {
     }
     
     /**
+     * TODO think about interfacing this class so it's not exposed
      * Don't use VerificationMode class directly. 
      * <p>
      * Use Mockito.atLeastOnce() and Mockito.times()

@@ -139,24 +139,24 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * See more {@link Mockito.verifyNoMoreInteractions}
+ * See more {@link Mockito#verifyNoMoreInteractions}
  * 
  * <h3>Strict order verification</h3>
  * 
  * <pre>
- *   List mockOne = mock(List.class);
- *   List mockTwo = mock(List.class);
+ *   List firstMock = mock(List.class);
+ *   List secondMock = mock(List.class);
  *   
  *   //using mocks
- *   mockOne.add("one");
- *   mockTwo.add("two");
+ *   firstMock.add("one");
+ *   secondMock.add("two");
  *   
  *   //create strict verifier 
- *   Strictly strictly = createStrictOrderVerifier(mockOne, mockTwo);
+ *   Strictly strictly = createStrictOrderVerifier(firstMock, secondMock);
  *   
- *   //following will make sure that mockOne was called before mockTwo
- *   strictly.verify(mockOne).add("one");
- *   strictly.verify(mockTwo).add("two");
+ *   //following will make sure that firstMock was called before secondMock
+ *   strictly.verify(firstMock).add("should be called first");
+ *   strictly.verify(secondMock).add("should be called second");
  * </pre>
  * 
  * <p>
@@ -202,7 +202,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs with return value or exception, e.g:
+     * Stubs with return value or exception. E.g:
      * <pre>
      *   stub(mock.countElements()).andReturn(10);
      *   
@@ -212,7 +212,7 @@ public class Mockito extends Matchers {
      * See examples {@link Mockito}
      * 
      * @param methodCallToStub
-     * @return
+     * @return OngoingStubbing object to set stubbed value/exception
      */
     @SuppressWarnings("unchecked")
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
@@ -226,33 +226,34 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior, e.g:
+     * Verifies certain behavior. E.g:
      * <pre>
      *   verify(mock).someMethod("some arg");
      * </pre>
      * 
      * See examples {@link Mockito}
      * 
-     * @param mock
-     * @return
+     * @param mock to be verified
+     * @return mock object itself
      */
     public static <T> T verify(T mock) {
         return verify(mock, times(1));
     }
 
     /**
-     * Verifies certain behavior happened exact number of times, e.g:
+     * Verifies certain behavior happened at least once or exact number of times. E.g:
      * <pre>
-     *   verify(mock, times(5)).someMethod("one");
+     *   verify(mock, times(5)).someMethod("should be called five times");
      *   
-     *   verify(mock, atLeastOnce()).someMethod("two");
+     *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
      * </pre>
      * 
      * See examples {@link Mockito}
      * 
-     * @param mock
-     * @param mode
-     * @return
+     * @param mock to be verified
+     * @param mode - times(x) or atLeastOnce()
+     * 
+     * @return mock object itself
      */
     public static <T> T verify(T mock, VerificationMode mode) {
         MockUtil.validateMock(mock);
@@ -320,9 +321,9 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs void method with exception, e.g:
+     * Stubs void method with exception. E.g:
      * <pre>
-     *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
+     *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
      * </pre>
      * 
      * See examples {@link Mockito}
@@ -338,11 +339,19 @@ public class Mockito extends Matchers {
 
     /**
      * Creates strict verifier that allows verifying mocks in order.
-     * <p>
+     * 
+     * <pre>
+     *   Strictly strictly = createStrictOrderVerifier(firstMock, secondMock);
+     *   
+     *   strictly.verify(firstMock).add("should be called first");
+     *   strictly.verify(secondMock).add("should be called second");
+     * </pre>
+     *
      * See examples {@link Mockito}
      * 
-     * @param mocks to verified in strict order
-     * @return
+     * @param mocks to be verified in strict order
+     * 
+     * @return verifier object to be used to verify strictly
      */
     public static Strictly createStrictOrderVerifier(Object... mocks) {
         if (mocks.length == 0) {
@@ -357,21 +366,21 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Allows at-least-once verification, e.g:
+     * Allows at-least-once verification. E.g:
      * <pre>
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
      * 
      * See examples {@link Mockito}
      * 
-     * @return
+     * @return verification mode
      */
     public static VerificationMode atLeastOnce() {
         return VerificationMode.atLeastOnce();
     }
 
     /**
-     * Allows exact number of invocations verification, e.g:
+     * Allows exact number of invocations verification. E.g:
      * <pre>
      *   verify(mock, times(2)).someMethod("some arg");
      * </pre>
@@ -379,7 +388,8 @@ public class Mockito extends Matchers {
      * See examples {@link Mockito}
      * 
      * @param wantedNumberOfInvocations wanted number of invocations 
-     * @return
+     * 
+     * @return verification mode
      */
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return VerificationMode.times(wantedNumberOfInvocations);
