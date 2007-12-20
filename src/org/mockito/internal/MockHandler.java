@@ -28,6 +28,7 @@ import org.mockito.internal.verification.NoMoreInvocationsVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
+import org.mockito.internal.verification.WrongOrderOfInvocationsVerifier;
 
 /**
  * Invocation handler set on mock objects.
@@ -49,16 +50,6 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
         stubber = new Stubber(mockingProgress);
         
         verifyingRecorder = createRecorder(); 
-    }
-
-    private VerifyingRecorder createRecorder() {
-        InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
-        InvocationsMarker marker = new InvocationsMarker();
-        List<Verifier> verifiers = Arrays.asList(
-                new MissingInvocationVerifier(), 
-                new NumberOfInvocationsVerifier(),
-                new NoMoreInvocationsVerifier());
-        return new VerifyingRecorder(chunker, marker, verifiers);
     }
 
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -117,5 +108,16 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
 
     public List<Invocation> getRegisteredInvocations() {
         return verifyingRecorder.getRegisteredInvocations();
+    }
+    
+    private VerifyingRecorder createRecorder() {
+        InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
+        InvocationsMarker marker = new InvocationsMarker();
+        List<Verifier> verifiers = Arrays.asList(
+                new MissingInvocationVerifier(),
+                new WrongOrderOfInvocationsVerifier(),
+                new NumberOfInvocationsVerifier(),
+                new NoMoreInvocationsVerifier());
+        return new VerifyingRecorder(chunker, marker, verifiers);
     }
 }

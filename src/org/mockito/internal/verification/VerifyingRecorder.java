@@ -15,7 +15,7 @@ import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorder {
 
-    private final LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
+    private LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
     
     private final InvocationsMarker marker;
     private final List<Verifier> verifiers;

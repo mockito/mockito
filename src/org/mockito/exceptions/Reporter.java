@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions;
 
-import static org.mockito.exceptions.StringJoiner.join;
+import static org.mockito.exceptions.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
@@ -19,6 +19,7 @@ import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.WrongOrderVerificationError;
 
 /**
  * Reports verification and misusing errors.
@@ -152,5 +153,14 @@ public class Reporter {
                 "Previous verify(mock) doesn't have a method call.",
                 "Should be something like that: verify(mock).doSomething()"
         ));
+    }
+
+    public void wrongOrderOfInvocations(HasStackTrace actual) {
+        RuntimeException cause = new RuntimeException();
+        cause.setStackTrace(actual.getStackTrace());
+        
+        throw new WrongOrderVerificationError(join(
+                "Wrong order."
+        ), cause);
     }
 }

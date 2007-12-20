@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.base.HasStackTrace;
@@ -69,5 +70,19 @@ public class InvocationsAnalyzer {
             }
         }
         throw new IllegalArgumentException("There are no undesired invocations!");
+    }
+
+    public List<Invocation> findFirstMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted) {
+        List<Invocation> chunk = new LinkedList<Invocation>();
+        
+        for (Invocation i : invocations) {
+            if (wanted.matches(i)) {
+                chunk.add(i);
+            } else if (!chunk.isEmpty()) {
+                break;
+            }
+        }
+        
+        return chunk;
     }
 }

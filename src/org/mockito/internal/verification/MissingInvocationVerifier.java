@@ -32,6 +32,10 @@ public class MissingInvocationVerifier implements Verifier {
             return;
         }
         
+        //get list of actual invocations
+        //if list is empty report
+        //if not mark as verified
+        
         int actualCount = analyzer.countActual(invocations, wanted);
         if (actualCount == 0) {
             reportMissingInvocationError(invocations, wanted);

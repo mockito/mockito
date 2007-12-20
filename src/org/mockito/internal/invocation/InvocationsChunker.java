@@ -17,6 +17,25 @@ public class InvocationsChunker {
     public InvocationsChunker(InvocationsFinder invocationsFinder) {
         this.finder = invocationsFinder;
     }
+    
+    public List<Invocation> getAllUnverifiedInvocations(List<Object> mocks) {
+        Set<Invocation> allInvocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
+        
+        List<Invocation> allInvocations = finder.allInvocationsInOrder(mocks);
+        allInvocationsInOrder.addAll(allInvocations);
+        
+        LinkedList<Invocation> chunk = new LinkedList<Invocation>();
+        for (Invocation i : allInvocationsInOrder) {
+            if (i.isVerifiedStrictly()) {
+                chunk.clear();
+                continue;
+            }
+            
+            chunk.add(i);
+        } 
+
+        return chunk;
+    }
 
     /**
      * chunk maybe empty, may have single invocation (usal case), or have

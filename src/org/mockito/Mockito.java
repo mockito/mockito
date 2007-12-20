@@ -209,6 +209,8 @@ public class Mockito extends Matchers {
      *   
      *   stub(mock.countElements()).andThrow(new RuntimeException());
      * </pre>
+     * <p>
+     * Trying to stub void method? Look here: {@link Mockito#stubVoid}
      * 
      * See examples in javadoc for{@link Mockito#stub}
      * 

@@ -32,6 +32,10 @@ public class NumberOfInvocationsVerifier implements Verifier {
             return;
         }
         
+        //get list of actual invocations (first matching chunk if strictly)
+        //if list size differs report
+        //if not mark as verified
+        
         int actualCount = analyzer.countActual(invocations, wanted);
         int wantedCount = mode.wantedCount();
         
