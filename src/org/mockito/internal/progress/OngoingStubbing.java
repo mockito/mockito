@@ -15,7 +15,7 @@ import org.mockito.Mockito;
  * stub(mock.countElements()).andThrow(new RuntimeException());
  * </pre>
  * 
- * See examples {@link Mockito#stub}
+ * See examples in javadoc for {@link Mockito#stub}
  */
 public interface OngoingStubbing<T> {
 
@@ -25,7 +25,7 @@ public interface OngoingStubbing<T> {
      * stub(mock.countElements()).andReturn(10);
      * </pre>
      * 
-     * See examples {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param stubbed return value
      */
@@ -40,7 +40,7 @@ public interface OngoingStubbing<T> {
      * If throwable is a checked exception then it has to 
      * match one of the checked exceptions of method signature.
      * 
-     * See examples {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param throwable to be thrown on method invocation
      */

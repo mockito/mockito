@@ -10,6 +10,6 @@ import org.mockito.Mockito;
  *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
  * </pre>
  * 
- * See examples {@link Mockito#verify(Object, VerificationMode)}
+ * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
  */
 public interface VerificationMode {}

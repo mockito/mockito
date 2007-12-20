@@ -13,7 +13,7 @@ import org.mockito.Mockito;
  * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
  * </pre>
  * 
- * See examples {@link Mockito#stubVoid}
+ * See examples in javadoc for {@link Mockito#stubVoid}
  */
 public interface StubbedMethodSelector<T> {
 
@@ -27,7 +27,7 @@ public interface StubbedMethodSelector<T> {
      * If throwable is a checked exception then it has to match one of the
      * checked exceptions of method signature.
      * <p>
-     * See examples {@link Mockito#stubVoid}
+     * See examples in javadoc for {@link Mockito#stubVoid}
      * 
      * @return mock object itself
      */
