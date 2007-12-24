@@ -190,15 +190,4 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
             fail();
         } catch (NoInteractionsWantedError e) {}
     }
-    
-    @Test
-    public void shouldAllowOneTimeOnMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo, mockThree);
-
-        strictly.verify(mockTwo).simpleMethod(2);
-        try {
-            verifyNoMoreInteractions(mockTwo);
-            fail();
-        } catch (NoInteractionsWantedError e) {}
-    }
 }
