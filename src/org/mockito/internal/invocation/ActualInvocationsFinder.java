@@ -23,7 +23,8 @@ public class ActualInvocationsFinder {
 
     public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         if (mode.strictMode()) {
-            return strictlyMatching(invocations, wanted, mode); 
+            List<Invocation> unverified = new InvocationsAnalyzer().removeUntilLastStrictlyVerified(invocations);
+            return strictlyMatching(unverified, wanted, mode); 
         } else {
             return nonStrictlyMatching(invocations, wanted);
         }
@@ -34,7 +35,8 @@ public class ActualInvocationsFinder {
         List<ObjectsChunk<Invocation>> chunks = chunker.chunk(invocations, new MatchesWantedSeer(wanted));
         List<Invocation> firstMatching = new LinkedList<Invocation>(); 
         for(ObjectsChunk<Invocation> chunk : chunks) {
-            if (!wanted.matches(chunk.getObject())) {
+            boolean wantedMatchesActual = wanted.matches(chunk.getObject());
+            if (!wantedMatchesActual) {
                 continue;
             }
             
@@ -58,14 +60,6 @@ public class ActualInvocationsFinder {
             }
         }
         return actual;
-    }
-    
-    public List<Invocation> findStrictlyUnverifiedInvocations(List<Invocation> invocations, InvocationMatcher wanted,
-            VerificationModeImpl mode) {
-        //TODO test or merge with strictlyMatching
-        List<Invocation> unverified = new InvocationsAnalyzer().removeUntilLastStrictlyVerified(invocations);
-        
-        return this.findInvocations(unverified, wanted, mode);
     }
     
     private final class MatchesWantedSeer implements Chunker.ChunkSeer<Invocation> {

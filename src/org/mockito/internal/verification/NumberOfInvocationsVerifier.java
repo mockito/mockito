@@ -36,10 +36,6 @@ public class NumberOfInvocationsVerifier implements Verifier {
         }
         
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
-        if (mode.strictMode()) {
-            //TODO test it
-            actualInvocations = finder.findStrictlyUnverifiedInvocations(invocations, wanted, mode);
-        }
         
         int actualCount = actualInvocations.size();
         int wantedCount = mode.wantedCount();

@@ -26,4 +26,9 @@ public class ObjectsChunk<T> {
     public void addObject(T object) {
         objects.add(object);
     }
+    
+    @Override
+    public String toString() {
+        return "Chunk size: " + getSize() + ", objects: " + objects;
+    }
 }

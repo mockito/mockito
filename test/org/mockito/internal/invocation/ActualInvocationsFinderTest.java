@@ -39,6 +39,26 @@ public class ActualInvocationsFinderTest extends RequiresValidState {
         actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation), atLeastOnce());
         assertThat(actual, collectionHasExactlyInOrder(differentMethodInvocation));
     }
+    
+    @Test
+    public void shouldSearchOnlyAfterLastStrictlyVerified() throws Exception {
+        simpleMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationTwo.markVerifiedStrictly();
+        
+        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().strict());
+        assertTrue(actual.isEmpty());
+    }
+    
+    @Test
+    public void shouldSearchAndFindOnlyAfterLastStrictlyVerified() throws Exception {
+        differentMethodInvocation.markVerifiedStrictly();
+        
+        Invocation lastInvocation = new InvocationBuilder().simpleMethod().toInvocation();
+        invocations.add(lastInvocation);
+        
+        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().strict());
+        assertThat(actual, collectionHasExactlyInOrder(lastInvocation));
+    }
 
     @Test
     public void shouldFindLastInvocationWhenModeIsOneTimeStrictly() throws Exception {
