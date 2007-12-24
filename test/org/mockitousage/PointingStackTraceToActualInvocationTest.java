@@ -10,14 +10,13 @@ import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 public class PointingStackTraceToActualInvocationTest extends RequiresValidState {
     
@@ -29,26 +28,22 @@ public class PointingStackTraceToActualInvocationTest extends RequiresValidState
         mock = Mockito.mock(IMethods.class);
         mockTwo = Mockito.mock(IMethods.class);
         
-        firstChunk();
-        secondChunk();
-        thirdChunk();
-        fourthChunk();
+        first();
+        second();
+        third();
+        fourth();
     }
 
-    private void firstChunk() {
-        mock.simpleMethod(1);
+    private void first() {
         mock.simpleMethod(1);
     }
-    private void secondChunk() {
-        mockTwo.simpleMethod(2);
+    private void second() {
         mockTwo.simpleMethod(2);
     }
-    private void thirdChunk() {
-        mock.simpleMethod(3);
+    private void third() {
         mock.simpleMethod(3);
     }
-    private void fourthChunk() {
-        mockTwo.simpleMethod(4);
+    private void fourth() {
         mockTwo.simpleMethod(4);
     }
     
@@ -56,13 +51,13 @@ public class PointingStackTraceToActualInvocationTest extends RequiresValidState
         Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
         
         strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        strictly.verify(mockTwo).simpleMethod(anyInt());
         
         try {
             strictly.verify(mock).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
+        } catch (InvocationDiffersFromActual e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
         }
     }
     
@@ -73,59 +68,88 @@ public class PointingStackTraceToActualInvocationTest extends RequiresValidState
         try {
             strictly.verify(mockTwo).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+        } catch (InvocationDiffersFromActual e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("second"));
         }
     }
     
     @Test
     public void shouldPointToUnverifiedInvocation() {
         Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
-        strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        strictly.verify(mockTwo).simpleMethod(anyInt());
         
         try {
             strictly.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
+        } catch (InvocationDiffersFromActual e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourth"));
         }
     }
     
-    @Ignore
     @Test
     public void shouldPointToTooManyInvocationsChunk() {
         Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
         
         try {
-            strictly.verify(mockTwo).simpleMethod(anyInt());
+            strictly.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
-        } catch (TooManyActualInvocationsError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("firstChunk"));
+        } catch (TooManyActualInvocations e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("second"));
         }
     }
     
-    @Ignore
     @Test
-    public void shouldPointToTooLittleInvocationsUnverifiChunk() {
+    public void shouldPointToTooLittleInvocationsUnverifiedChunk() {
         Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly.verify(mockTwo).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mockTwo).simpleMethod(anyInt());
+            strictly.verify(mockTwo, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (TooLittleActualInvocationsError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("firstChunk"));
+        } catch (TooLittleActualInvocations e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourth"));
         }
     }
     
     @Test
-    public void shouldFilterStackTraceOnVerify() {
-        verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        
+    public void shouldPointToActualInvocationOnVerificationError() {
         try {
-            verify(mockTwo).simpleMethod(999);
+            verify(mock).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+        } catch (InvocationDiffersFromActual e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
         }
     }
+    
+    @Test
+    public void shouldPointToUnverifiedActualInvocationOnVerificationError() {
+        verify(mock, atLeastOnce()).simpleMethod(1);
+        try {
+            verify(mock, atLeastOnce()).simpleMethod(999);
+            fail();
+        } catch (InvocationDiffersFromActual e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
+        }
+    }   
+    
+    @Test
+    public void shouldPointToTooLittleInvocationsChunkOnError() {
+        verify(mock, atLeastOnce()).simpleMethod(1);
+        try {
+            verify(mock, times(3)).simpleMethod(3);
+            fail();
+        } catch (TooLittleActualInvocations e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
+        }
+    }   
+    
+    @Test
+    public void shouldPointToTooManyInvocationsChunkOnError() {
+        try {
+            verify(mock, times(0)).simpleMethod(1);
+            fail();
+        } catch (TooManyActualInvocations e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
+        }
+    }   
 }
