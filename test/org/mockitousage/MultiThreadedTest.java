@@ -97,7 +97,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     InvalidUseOfMatchersTest.class,
                     DescriptiveMessagesOnStrictOrderErrorsTest.class,
                     InvalidStateDetectionTest.class,
-                    StackTrackeFilteringTest.class
+                    StackTraceFilteringTest.class
                 );
                 
                 if (!result.wasSuccessful()) {

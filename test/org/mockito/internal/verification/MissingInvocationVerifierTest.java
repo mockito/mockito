@@ -8,7 +8,6 @@ import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.invocation.ActualInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -93,28 +91,6 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         assertEquals(wanted.toString(), reporterStub.wanted);
         assertEquals(actualInvocation.toString(), reporterStub.actual);
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
-    }
-    
-    @Test
-    public void shouldMarkAsVerified() {
-        Invocation invocation = new InvocationBuilder().toInvocation();
-        Invocation invocationTwo = new InvocationBuilder().toInvocation();
-        finderStub.actualToReturn.add(invocation);
-        finderStub.actualToReturn.add(invocationTwo);
-        
-        verifier.verify(invocations, wanted, atLeastOnce());
-        assertTrue(invocation.isVerified());
-        assertTrue(invocationTwo.isVerified());
-    }
-    
-    class ActualInvocationsFinderStub extends ActualInvocationsFinder {
-        private final List<Invocation> actualToReturn = new LinkedList<Invocation>();
-        private List<Invocation> invocations;
-        @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
-                VerificationModeImpl mode) {
-            this.invocations = invocations;
-            return actualToReturn;
-        }
     }
     
     class InvocationsAnalyzerStub extends InvocationsAnalyzer {

@@ -97,6 +97,6 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (TooLittleActualInvocationsError e) {}
+        } catch (VerificationError e) {}
     }
 }

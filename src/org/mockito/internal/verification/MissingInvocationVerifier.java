@@ -38,17 +38,8 @@ public class MissingInvocationVerifier implements Verifier {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         
         if (actualInvocations.size() == 0) {
-            //TODO add test to check that invocations are passed here, not actual...
             Invocation similar = analyzer.findSimilarInvocation(invocations, wanted, mode);
             reportMissingInvocationError(wanted, similar);
-        }
-        
-        for (Invocation invocation : actualInvocations) {
-            invocation.markVerified();
-            //TODO dodgy!
-            if (mode.strictMode() && mode.atLeastOnceMode()) {
-                invocation.markVerifiedStrictly();
-            }
         }
     }
 

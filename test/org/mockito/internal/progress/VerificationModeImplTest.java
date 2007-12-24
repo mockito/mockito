@@ -43,10 +43,10 @@ public class VerificationModeImplTest extends RequiresValidState {
     public void shouldKnowIfIsMissingMethodMode() throws Exception {
         assertTrue(atLeastOnce().missingMethodMode());
         assertTrue(times(1).missingMethodMode());
+        assertTrue(times(10).missingMethodMode());
         
         assertFalse(noMoreInteractions().missingMethodMode());
         assertFalse(times(0).missingMethodMode());
-        assertFalse(times(2).missingMethodMode());
     }
     
     @Test
@@ -58,15 +58,6 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
         assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
     }
-    
-//    @Test
-//    public void shouldKnowIfWantedCountIsZero() throws Exception {
-//        assertTrue(times(0).wantedCountIsZero());
-//        
-//        assertFalse(times(1).wantedCountIsZero());
-//        assertFalse(times(2).wantedCountIsZero());
-//        assertFalse(atLeastOnce().wantedCountIsZero());
-//    }
     
     @Test
     public void shouldKnowIfIsStrict() throws Exception {
@@ -103,5 +94,25 @@ public class VerificationModeImplTest extends RequiresValidState {
         
         assertTrue(atLeastOnce().matchesActualCount(1));
         assertTrue(atLeastOnce().matchesActualCount(100));
+    }
+    
+    @Test
+    public void shouldKnowIfTooLittleActualInvocations() throws Exception {
+        assertTrue(times(1).tooLittleActualInvocations(0));
+        assertTrue(times(100).tooLittleActualInvocations(99));
+        
+        assertFalse(times(0).tooLittleActualInvocations(0));
+        assertFalse(times(1).tooLittleActualInvocations(1));
+        assertFalse(times(1).tooLittleActualInvocations(2));
+    }
+    
+    @Test
+    public void shouldKnowIfTooManyActualInvocations() throws Exception {
+        assertTrue(times(0).tooManyActualInvocations(1));
+        assertTrue(times(99).tooManyActualInvocations(100));
+        
+        assertFalse(times(0).tooManyActualInvocations(0));
+        assertFalse(times(1).tooManyActualInvocations(1));
+        assertFalse(times(2).tooManyActualInvocations(1));
     }
 }

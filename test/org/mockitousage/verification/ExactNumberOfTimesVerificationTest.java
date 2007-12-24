@@ -6,6 +6,7 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.VerificationError;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
@@ -24,7 +26,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
 
     @Before
     public void setup() {
-        mock = Mockito.mock(LinkedList.class);
+        mock = mock(LinkedList.class);
     }
 
     @Test
@@ -32,9 +34,9 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         mock.clear();
         mock.clear();
 
-        Mockito.verify(mock, times(2)).clear();
+        verify(mock, times(2)).clear();
         try {
-            Mockito.verify(mock, times(100)).clear();
+            verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 100 times but was 2"));
@@ -46,9 +48,9 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         mock.clear();
         mock.clear();
 
-        Mockito.verify(mock, times(2)).clear();
+        verify(mock, times(2)).clear();
         try {
-            Mockito.verify(mock, times(1)).clear();
+            verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
@@ -57,12 +59,12 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldDetectActualInvocationsCountIsMoreThanZero() throws Exception {
-        Mockito.verify(mock, times(0)).clear();
+        verify(mock, times(0)).clear();
         try {
-            Mockito.verify(mock, times(15)).clear();
+            verify(mock, times(15)).clear();
             fail();
-        } catch (TooLittleActualInvocationsError e) {
-            assertThat(e, messageContains("Wanted 15 times but was 0"));
+        } catch (VerificationError e) {
+            assertThat(e, messageContains("Wanted but not invoked"));
         }
     }
 
@@ -71,7 +73,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         mock.clear();
 
         try {
-            Mockito.verify(mock, times(0)).clear();
+            verify(mock, times(0)).clear();
             fail();
         } catch (TooManyActualInvocationsError e) {
             assertThat(e, messageContains("Wanted 0 times but was 1"));
@@ -80,18 +82,18 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldPassWhenMethodsActuallyNotCalled() throws Exception {
-        Mockito.verify(mock, times(0)).clear();
-        Mockito.verify(mock, times(0)).add("yes, I wasn't called");
+        verify(mock, times(0)).clear();
+        verify(mock, times(0)).add("yes, I wasn't called");
     }
 
     @Test
     public void shouldNotCountInStubbedInvocations() throws Exception {
-        Mockito.stub(mock.add("test")).andReturn(false);
-        Mockito.stub(mock.add("test")).andReturn(true);
+        stub(mock.add("test")).andReturn(false);
+        stub(mock.add("test")).andReturn(true);
 
         mock.add("test");
         mock.add("test");
 
-        Mockito.verify(mock, times(2)).add("test");
+        verify(mock, times(2)).add("test");
     }
 }

@@ -24,7 +24,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.VerificationError;
 
-public class StackTrackeFilteringTest extends RequiresValidState {
+public class StackTraceFilteringTest extends RequiresValidState {
     
     private IMethods mock;
 

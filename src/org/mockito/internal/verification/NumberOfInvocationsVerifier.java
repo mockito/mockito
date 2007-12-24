@@ -38,25 +38,14 @@ public class NumberOfInvocationsVerifier implements Verifier {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         
         int actualCount = actualInvocations.size();
-        int wantedCount = mode.wantedCount();
-        
-        //TODO less/more methods on mode
-        if (actualCount < wantedCount) {
+        if (mode.tooLittleActualInvocations(actualCount)) {
             //TODO I want a functional test that proves that correct stack trace is provided for cause for both strictly and ordinary verification
             HasStackTrace lastInvocation = analyzer.findLastMatchingInvocationTrace(actualInvocations, wanted);
-            reporter.tooLittleActualInvocations(wantedCount, actualCount, wanted.toString(), lastInvocation);
-        } else if (actualCount > wantedCount) {
+            reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
+        } else if (mode.tooManyActualInvocations(actualCount)) {
             //TODO I want a functional test that proves that correct stack trace is provided for cause for both strictly and ordinary verification
             HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(actualInvocations, wanted, mode);
-            reporter.tooManyActualInvocations(wantedCount, actualCount, wanted.toString(), firstUndesired);
-        }
-        
-        //TODO duplicated
-        for (Invocation invocation : actualInvocations) {
-            invocation.markVerified();
-            if (mode.strictMode()) {
-                invocation.markVerifiedStrictly();
-            }
+            reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
         }
     }
 }

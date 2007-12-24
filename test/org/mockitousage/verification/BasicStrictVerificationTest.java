@@ -166,7 +166,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(-999);
             fail();
-        } catch (TooLittleActualInvocationsError e) {}
+        } catch (VerificationError e) {}
     }
     
     @Test
@@ -175,7 +175,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).oneArg(true);
             fail();
-        } catch (TooLittleActualInvocationsError e) {}
+        } catch (VerificationError e) {}
     }    
     
     @Test

@@ -8,7 +8,6 @@ import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,7 +16,6 @@ import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.ActualInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -116,18 +114,6 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         assertEquals(wanted.toString(), reporterStub.wanted);
     }
     
-    @Test
-    public void shouldMarkAsVerified() {
-        Invocation invocation = new InvocationBuilder().toInvocation();
-        Invocation invocationTwo = new InvocationBuilder().toInvocation();
-        finderStub.actualToReturn.add(invocation);
-        finderStub.actualToReturn.add(invocationTwo);
-        
-        verifier.verify(invocations, wanted, times(2));
-        assertTrue(invocation.isVerified());
-        assertTrue(invocationTwo.isVerified());
-    }
-    
     class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private HasStackTrace invocationTraceToReturn;
         private List<Invocation> invocations;
@@ -138,13 +124,6 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         @Override public HasStackTrace findLastMatchingInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted) {
             this.invocations = invocations;
             return invocationTraceToReturn;
-        }
-    }
-    
-    class ActualInvocationsFinderStub extends ActualInvocationsFinder {
-        private final List<Invocation> actualToReturn = new LinkedList<Invocation>();
-        @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-            return actualToReturn;
         }
     }
     
