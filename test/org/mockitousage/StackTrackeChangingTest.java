@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 public class StackTrackeChangingTest extends RequiresValidState {
     
@@ -33,7 +33,7 @@ public class StackTrackeChangingTest extends RequiresValidState {
         try {
             verifySimpleMethodOnAMock();
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
             assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
             assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));

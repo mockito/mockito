@@ -4,14 +4,9 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.createStrictOrderVerifier;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.util.ExtraMatchers.hasFirstMethodInStackTrace;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,8 +16,8 @@ import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 public class StackTraceFilteringTest extends RequiresValidState {
     
@@ -44,8 +39,8 @@ public class StackTraceFilteringTest extends RequiresValidState {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerify"));
+        } catch (WantedButNotInvoked e) {
+            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerify"));
         }
     }
     
@@ -55,7 +50,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {
+        } catch (NoInteractionsWanted e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
@@ -66,7 +61,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {
+        } catch (NoInteractionsWanted e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
@@ -92,8 +87,8 @@ public class StackTraceFilteringTest extends RequiresValidState {
         try {
             strictly.verify(mock).oneArg(true);
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));
+        } catch (WantedButNotInvoked e) {
+            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));
         }
     }
     

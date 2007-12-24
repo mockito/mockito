@@ -6,18 +6,16 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
@@ -38,7 +36,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocationsError e) {
+        } catch (TooLittleActualInvocations e) {
             assertThat(e, messageContains("Wanted 100 times but was 2"));
         }
     }
@@ -52,7 +50,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             verify(mock, times(1)).clear();
             fail();
-        } catch (TooManyActualInvocationsError e) {
+        } catch (TooManyActualInvocations e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
         }
     }
@@ -63,9 +61,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             verify(mock, times(15)).clear();
             fail();
-        } catch (VerificationError e) {
-            assertThat(e, messageContains("Wanted but not invoked"));
-        }
+        } catch (WantedButNotInvoked e) {}
     }
 
     @Test
@@ -75,7 +71,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
         try {
             verify(mock, times(0)).clear();
             fail();
-        } catch (TooManyActualInvocationsError e) {
+        } catch (TooManyActualInvocations e) {
             assertThat(e, messageContains("Wanted 0 times but was 1"));
         }
     }

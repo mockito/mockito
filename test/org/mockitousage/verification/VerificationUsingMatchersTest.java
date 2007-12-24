@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -53,7 +54,7 @@ public class VerificationUsingMatchersTest extends RequiresValidState {
         try {
             verify(mock).oneArg(same(three));
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }  
     
     @Test
@@ -63,21 +64,21 @@ public class VerificationUsingMatchersTest extends RequiresValidState {
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
 
         mock.threeArgumentMethod(8, new Object(), "01234");
         
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         mock.threeArgumentMethod(8, "", "no match");
 
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         mock.threeArgumentMethod(8, "", "123");
         

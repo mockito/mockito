@@ -4,11 +4,8 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -16,9 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest extends RequiresValidState {
@@ -43,7 +41,7 @@ public class BasicVerificationTest extends RequiresValidState {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected=VerificationError.class)
+    @Test(expected=WantedButNotInvoked.class)
     public void shouldFailVerification() throws Exception {
         verify(mock).clear();
     }
@@ -57,7 +55,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (VerificationError expected) {}
+        } catch (InvocationDiffersFromActual expected) {}
     }
 
     @Test
@@ -72,7 +70,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
 
     @Test
@@ -87,7 +85,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
@@ -101,7 +99,7 @@ public class BasicVerificationTest extends RequiresValidState {
         try {
             verify(mock).clear();
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
 
     @Test

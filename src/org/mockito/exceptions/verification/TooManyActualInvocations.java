@@ -6,19 +6,11 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
-//TODO WantedButNotInvoked
-/**
- * Verification failed
- */
-public class VerificationError extends MockitoAssertionError {
+public class TooManyActualInvocations extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public VerificationError(String message) {
-        super(message);
-    }
-
-    public VerificationError(String message, Throwable cause) {
+    public TooManyActualInvocations(String message, Throwable cause) {
         super(message, cause);
     }
 }

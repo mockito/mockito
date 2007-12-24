@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -75,6 +75,6 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
 }

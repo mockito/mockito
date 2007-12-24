@@ -6,14 +6,11 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
-/**
- * No interactions wanted. See exception's cause for location of undesired invocation.
- */
-public class NoInteractionsWantedError extends MockitoAssertionError {
+public class TooLittleActualInvocations extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
-
-    public NoInteractionsWantedError(String message, Throwable cause) {
+    
+    public TooLittleActualInvocations(String message, Throwable cause) {
         super(message, cause);
     }
 }

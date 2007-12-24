@@ -45,13 +45,7 @@ public class InvocationMatcher {
                 && argumentsMatch(actual.getArguments());
     }
     
-    public boolean matchesButMocksAreDifferent(Invocation actual) {
-        return !invocation.getMock().equals(actual.getMock())
-            && invocation.getMethod().equals(actual.getMethod())
-            && argumentsMatch(actual.getArguments());
-    }
-    
-    public boolean matchesMockArgsAndMethodNameButMethodNotEqual(Invocation actual) {
+    public boolean differsWithArgumentTypes(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
             && argumentsMatch(actual.getArguments())
             && invocation.getMethod().getName().equals(actual.getMethod().getName())

@@ -4,6 +4,7 @@
  */
 package org.mockitousage.matchers;
 
+import static org.mockito.util.ExtraMatchers.messageContains;
 import static org.junit.Assert.*;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.*;
@@ -16,8 +17,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
+
 
 @SuppressWarnings("unchecked")
 public class MatchersTest extends RequiresValidState {
@@ -269,7 +271,7 @@ public class MatchersTest extends RequiresValidState {
         try {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
-        } catch (VerificationError e) {
+        } catch (WantedButNotInvoked e) {
             String expected = "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -456,6 +458,16 @@ public class MatchersTest extends RequiresValidState {
         assertEquals("4", mock.oneArg(2.1F));
 
         assertEquals(null, mock.oneArg(2.2F));
+    }
+    
+    @Test
+    public void deltaMatcherPrintsItself() {
+        try {
+            verify(mock).oneArg(eq(1.0D, 0.1D));
+            fail();
+        } catch (WantedButNotInvoked e) {
+            assertThat(e, messageContains("eq(1.0, 0.1)"));
+        }
     }
 
     @Test

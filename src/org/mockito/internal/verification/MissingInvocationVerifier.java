@@ -45,11 +45,10 @@ public class MissingInvocationVerifier implements Verifier {
 
     private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
         if (similar != null) {
-            //TODO I want a functional test that proves that correct stack trace is provided for cause for both strictly and ordinary verification
             InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
             reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
         } else {
-            //TODO I really want a cause here, something like: "wanted after..."
+            //TODO For strictly, I really want a cause here, something like: "wanted after..." for strictly... :D
             reporter.wantedButNotInvoked(wanted.toString());
         }
     }

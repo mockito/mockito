@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.Mockito;
-
 /**
  * Stubs void method with exception. E.g:
  * 

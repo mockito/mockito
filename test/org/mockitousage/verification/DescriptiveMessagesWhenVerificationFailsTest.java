@@ -4,19 +4,11 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.AdditionalMatchers.aryEq;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.matches;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.util.ExtraMatchers.causeMessageContains;
-import static org.mockito.util.ExtraMatchers.messageContains;
+import static org.junit.Assert.*;
+import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +16,9 @@ import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidState {
@@ -42,8 +35,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
+        } catch (WantedButNotInvoked e) {
+            String actualMessage = e.getMessage();
             String expectedMessage =
                     "\n" +
                     "Wanted but not invoked:" +
@@ -64,7 +57,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).threeArgumentMethod(12, new SomeClass(), "xx");
             fail();
-        } catch (VerificationError e) {
+        } catch (WantedButNotInvoked e) {
             assertThat(e, messageContains("IMethods.threeArgumentMethod(12, SomeClass instance, \"xx\")"));
         }
     }
@@ -78,7 +71,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).twoArgumentMethod(1, 1000);
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             String expected =
                     "\n" +
                     "Invocation differs from actual" +
@@ -108,7 +101,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.simpleMethod(\"test\")"));
             assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
         }
@@ -126,7 +119,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
             verify(mock).differentMethod();
             verify(mock).threeArgumentMethod(1, "2", "3");
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.threeArgumentMethod(1, \"2\", \"3\")"));
             assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
         }
@@ -143,7 +136,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.twoArgumentMethod(3, 1000)"));
             assertThat(e, causeMessageContains("IMethods.twoArgumentMethod(3, 3)"));
         }
@@ -159,7 +152,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {
+        } catch (NoInteractionsWanted e) {
             String expectedMessage =
                     "\n" +
                     "No interactions wanted";
@@ -184,7 +177,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {
+        } catch (NoInteractionsWanted e) {
             String expected =
                     "\n" +
                     "No interactions wanted";
@@ -206,7 +199,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
-        } catch (VerificationError e) {
+        } catch (WantedButNotInvoked e) {
             assertThat(e, messageContains("IMethods.twoArgumentMethod(1, 2)"));
         }
     }
@@ -216,8 +209,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
+        } catch (WantedButNotInvoked e) {
+            String actualMessage = e.getMessage();
             String expectedMessage =
                 "\n" +
                 "Wanted but not invoked:" +
@@ -234,7 +227,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.oneArray([false, false, false])"));
             assertThat(e, causeMessageContains("IMethods.oneArray([true, false, false])"));
         }
@@ -247,7 +240,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).varargsString(10, "two", "one");
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.varargsString(10, \"two\", \"one\")"));
             assertThat(e, causeMessageContains("IMethods.varargsString(10, \"one\", \"two\")"));
         }
@@ -260,7 +253,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).simpleMethod(matches("burrito"));
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.simpleMethod(matches(\"burrito\"))"));
             assertThat(e, causeMessageContains("IMethods.simpleMethod(\"foo\")"));
         }
@@ -272,7 +265,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, causeMessageContains("simpleMethod(null, null)"));
         }
     }
@@ -283,7 +276,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
         try {
             verify(mock).varargs((String[]) new String[] {});
             fail();
-        } catch(VerificationError e) {
+        } catch(InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.varargs(class [Ljava.lang.String;)"));
             assertThat(e, causeMessageContains("IMethods.varargs(class [Ljava.lang.Object;)"));
         }

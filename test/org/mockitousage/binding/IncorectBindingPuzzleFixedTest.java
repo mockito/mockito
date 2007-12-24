@@ -12,7 +12,7 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
@@ -42,7 +42,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         try {
             verify(sub).say("Hello");
             fail();
-        } catch (VerificationError error) {
+        } catch (InvocationDiffersFromActual error) {
             String expected =
                 "\n" +
                 "Invocation differs from actual" +
@@ -71,7 +71,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         try {
             strictly.verify(sub).say("Hello");
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("Sub.say(class java.lang.String)"));
             assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }
@@ -85,7 +85,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         try {
             verify(sub).say(contains("world"));
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("Sub.say(class java.lang.String)"));
             assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }

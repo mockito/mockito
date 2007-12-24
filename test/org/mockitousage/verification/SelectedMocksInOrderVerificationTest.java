@@ -11,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -87,7 +88,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).differentMethod();
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
     } 
     
     @Test
@@ -98,7 +99,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     } 
 
     @Test
@@ -126,7 +127,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
     
     @Test
@@ -136,7 +137,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
     
     @Test
@@ -146,7 +147,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (TooLittleActualInvocationsError e) {}
+        } catch (TooLittleActualInvocations e) {}
     }
     
     @Test
@@ -156,7 +157,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
     
     @Test
@@ -177,7 +178,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mockThree);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
@@ -188,6 +189,6 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
 }

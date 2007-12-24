@@ -11,10 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -95,7 +96,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
     }
     
-    @Test(expected=VerificationError.class)
+    @Test(expected=InvocationDiffersFromActual.class)
     public void shouldFailOnWrongMethodCalledOnMockTwo() {
         strictly.verify(mockTwo, atLeastOnce()).differentMethod();
     }
@@ -108,7 +109,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             verify(mockOne, times(0)).simpleMethod(1);
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
     
     @Test
@@ -117,7 +118,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockThree, times(0)).simpleMethod(3);
             fail();
-        } catch (TooManyActualInvocationsError e) {}
+        } catch (TooManyActualInvocations e) {}
     }
     
     @Test
@@ -126,7 +127,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
@@ -134,7 +135,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(0)).simpleMethod(2);
             fail();
-        } catch(TooManyActualInvocationsError e) {}
+        } catch(TooManyActualInvocations e) {}
     }
     
     @Test
@@ -142,7 +143,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(3)).simpleMethod(2);
             fail();
-        } catch(TooLittleActualInvocationsError e) {}
+        } catch(TooLittleActualInvocations e) {}
     }
     
     @Test
@@ -174,7 +175,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
     
     @Test
@@ -183,7 +184,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
     
     @Test
@@ -192,6 +193,6 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
 }

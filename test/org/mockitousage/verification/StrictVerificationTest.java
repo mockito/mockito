@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -49,7 +49,7 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     } 
     
     @Test
@@ -60,7 +60,7 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.differentMethod()"));
             assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
         }
@@ -79,7 +79,7 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
     
     @Test
@@ -97,6 +97,6 @@ public class StrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
 }

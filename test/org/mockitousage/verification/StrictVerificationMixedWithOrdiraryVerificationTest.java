@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -82,7 +82,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
@@ -94,7 +94,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test

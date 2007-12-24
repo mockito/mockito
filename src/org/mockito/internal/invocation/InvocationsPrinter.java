@@ -9,9 +9,8 @@ public class InvocationsPrinter {
     private final String wanted;
     private final String actual;
 
-    //TODO use it in other situations also!
     public InvocationsPrinter(InvocationMatcher wantedInvocation, Invocation actualInvocation) {
-        if (wantedInvocation.matchesMockArgsAndMethodNameButMethodNotEqual(actualInvocation)) {
+        if (wantedInvocation.differsWithArgumentTypes(actualInvocation)) {
             wanted = wantedInvocation.toStringWithArgumentTypes();
             actual = actualInvocation.toStringWithArgumentTypes();
         } else {

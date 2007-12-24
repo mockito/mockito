@@ -17,8 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 public class UsingVarargsTest extends RequiresValidState {
 
@@ -89,7 +89,7 @@ public class UsingVarargsTest extends RequiresValidState {
         try {
             verify(mock).withStringVarargs(2, "1", "2", "79", "4");
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
     }
 
     @Test
@@ -103,7 +103,7 @@ public class UsingVarargsTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
 
     @Test
@@ -117,6 +117,6 @@ public class UsingVarargsTest extends RequiresValidState {
         try {
             verify(mock).withBooleanVarargs(3, true, true, true, true);
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
     }
 }

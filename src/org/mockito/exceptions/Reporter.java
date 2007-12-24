@@ -14,10 +14,11 @@ import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 /**
  * Reports verification and misusing errors.
@@ -82,7 +83,7 @@ public class Reporter {
 
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
 
-        throw new VerificationError(join(
+        throw new InvocationDiffersFromActual(join(
                 "Invocation differs from actual",
                 "Wanted invocation:",
                 wanted
@@ -90,7 +91,7 @@ public class Reporter {
     }
 
     public void wantedButNotInvoked(String wanted) {
-        throw new VerificationError(join(
+        throw new WantedButNotInvoked(join(
                     "Wanted but not invoked:",
                     wanted
         ));
@@ -100,7 +101,7 @@ public class Reporter {
         UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
         cause.setStackTrace(firstUndesired.getStackTrace());
 
-        throw new TooManyActualInvocationsError(join(
+        throw new TooManyActualInvocations(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
@@ -113,7 +114,7 @@ public class Reporter {
             cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
         }
 
-        throw new TooLittleActualInvocationsError(join(
+        throw new TooLittleActualInvocations(join(
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
@@ -126,7 +127,7 @@ public class Reporter {
         ));
         
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        throw new NoInteractionsWantedError(join("No interactions wanted"), cause);
+        throw new NoInteractionsWanted(join("No interactions wanted"), cause);
     }
 
     public void unfinishedStubbing() {

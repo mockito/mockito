@@ -17,8 +17,8 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -50,7 +50,7 @@ public class BasicStubbingTest extends RequiresValidState {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
@@ -65,16 +65,16 @@ public class BasicStubbingTest extends RequiresValidState {
         try {
             verify(mock).simpleMethod("one");
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         try {
             verify(mock).simpleMethod("two");
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
 }

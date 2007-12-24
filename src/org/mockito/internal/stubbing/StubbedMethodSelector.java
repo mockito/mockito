@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.Mockito;
-
 /**
  * Chooses void method for stubbing with throwable. E.g:
  * 

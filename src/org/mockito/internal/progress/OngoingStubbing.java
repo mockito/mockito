@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-import org.mockito.Mockito;
-
 /**
  * Stubs with return value or exception. E.g:
  * 

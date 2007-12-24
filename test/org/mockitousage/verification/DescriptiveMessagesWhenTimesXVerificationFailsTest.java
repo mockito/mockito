@@ -15,8 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
 
 @SuppressWarnings("unchecked")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends RequiresValidState {
@@ -38,7 +38,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends Requires
         try {
             Mockito.verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocationsError e) {
+        } catch (TooLittleActualInvocations e) {
             String expected =
                 "\n" +
                 "LinkedList.clear()" +
@@ -66,7 +66,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends Requires
         try {
             Mockito.verify(mock, times(1)).clear();
             fail();
-        } catch (TooManyActualInvocationsError e) {
+        } catch (TooManyActualInvocations e) {
             String expected =
                 "\n" +
                 "LinkedList.clear()" +

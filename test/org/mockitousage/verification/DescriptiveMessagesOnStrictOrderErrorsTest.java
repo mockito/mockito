@@ -6,7 +6,6 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +15,10 @@ import org.mockito.Strictly;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
-import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
-import org.mockito.exceptions.verification.TooManyActualInvocationsError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidState {
@@ -50,7 +50,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(one).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
+        } catch (InvocationDiffersFromActual e) {
             String expected = 
                     "\n" +
                     "Invocation differs from actual" +
@@ -82,7 +82,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(three).simpleMethod(999);
             fail();
-        } catch (VerificationError e) {
+        } catch (WantedButNotInvoked e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -100,7 +100,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocationsError e) {
+        } catch (TooManyActualInvocations e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -119,20 +119,12 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     }  
     
     @Test
-    public void shouldPrintThatWasNotInvokedAfter() {
+    public void shouldPrintThatWantedButNotInvoked() {
         strictly.verify(two, atLeastOnce()).simpleMethod(2);
         try {
             strictly.verify(one).simpleMethod(1);
             fail();
-        } catch (VerificationError e) {
-            //TODO refactor to WantedButNotInvoked
-            assertThat(e, messageContains("Wanted but not invoked"));
-            //TODO what about a feature to show after which line we expect this thing:
-//            String expectedCause = 
-//                "\n" +
-//                "Not invoked after:";
-//            assertEquals(expectedCause, e.getCause().getMessage());
-        }
+        } catch (WantedButNotInvoked e) {}
     }  
     
     @Test
@@ -146,7 +138,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocationsError e) {
+        } catch (TooManyActualInvocations e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -174,7 +166,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (TooLittleActualInvocationsError e) {
+        } catch (TooLittleActualInvocations e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +

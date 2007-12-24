@@ -4,9 +4,8 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
 public class AtLeastOnceVerificationTest extends RequiresValidState {
@@ -39,10 +38,10 @@ public class AtLeastOnceVerificationTest extends RequiresValidState {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (VerificationError e) {}
+        } catch (WantedButNotInvoked e) {}
     }
     
-    @Test(expected=VerificationError.class)
+    @Test(expected=WantedButNotInvoked.class)
     public void shouldFailIfMethodWasNotCalledAtAll() throws Exception {
         verify(mock, atLeastOnce()).add("foo");
     }

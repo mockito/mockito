@@ -25,8 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 @SuppressWarnings({"serial", "unchecked"})
 public class StubbingWithThrowablesTest extends RequiresValidState {
@@ -192,17 +192,17 @@ public class StubbingWithThrowablesTest extends RequiresValidState {
         try {
             verify(mock).size();
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         try {
             verify(mock).clone();
             fail();
-        } catch (VerificationError e) {}
+        } catch (InvocationDiffersFromActual e) {}
         
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWantedError e) {}
+        } catch (NoInteractionsWanted e) {}
     }
     
     private class ExceptionOne extends RuntimeException {};
