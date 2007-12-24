@@ -4,11 +4,9 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.times;
-import static org.mockito.util.ExtraMatchers.messageContains;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
 
@@ -16,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.cause.FirstUndesiredInvocation;
-import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 
@@ -32,63 +28,35 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldVerifyActualNumberOfInvocationsSmallerThanWanted() throws Exception {
-        mock.clear();
+    public void shouldDetectTooLittleActualInvocations() throws Exception {
         mock.clear();
         mock.clear();
 
-        Mockito.verify(mock, times(3)).clear();
+        Mockito.verify(mock, times(2)).clear();
         try {
             Mockito.verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocationsError e) {
-            String expected =
-                "\n" +
-                "LinkedList.clear()" +
-                "\n" +
-                "Wanted 100 times but was 3";
-            assertEquals(expected, e.getMessage());
-
-            assertEquals(TooLittleInvocations.class, e.getCause().getClass());
-
-            String expectedCause =
-                "\n" +
-                "Too little invocations:";
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertThat(e, messageContains("Wanted 100 times but was 2"));
         }
     }
 
     @Test
-    public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() throws Exception {
-        mock.clear();
-        mock.clear();
+    public void shouldDetectTooManyActualInvocations() throws Exception {
         mock.clear();
         mock.clear();
 
-        Mockito.verify(mock, times(4)).clear();
+        Mockito.verify(mock, times(2)).clear();
         try {
             Mockito.verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocationsError e) {
-            String expected =
-                "\n" +
-                "LinkedList.clear()" +
-                "\n" +
-                "Wanted 1 time but was 4";
-            assertEquals(expected, e.getMessage());
-
-            assertEquals(FirstUndesiredInvocation.class, e.getCause().getClass());
-
-            String expectedCause =
-                "\n" +
-                "First undesired invocation:";
-
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertThat(e, messageContains("Wanted 1 time but was 2"));
         }
     }
 
     @Test
-    public void shouldVerifyProperlyIfMethodWasNotInvoked() throws Exception {
+    public void shouldDetectActualInvocationsCountIsMoreThanZero() throws Exception {
         Mockito.verify(mock, times(0)).clear();
         try {
             Mockito.verify(mock, times(15)).clear();
@@ -99,20 +67,7 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldVerifyProperlyIfMethodWasInvokedOnce() throws Exception {
-        mock.clear();
-
-        Mockito.verify(mock, times(1)).clear();
-        try {
-            Mockito.verify(mock, times(15)).clear();
-            fail();
-        } catch (TooLittleActualInvocationsError e) {
-            assertThat(e, messageContains("Wanted 15 times but was 1"));
-        }
-    }
-
-    @Test
-    public void shouldFailWhenWantedNumberOfInvocationIsZero() throws Exception {
+    public void shouldDetectActuallyCalledOnce() throws Exception {
         mock.clear();
 
         try {
@@ -124,8 +79,9 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldVerifyWhenWantedNumberOfInvocationIsZero() throws Exception {
+    public void shouldPassWhenMethodsActuallyNotCalled() throws Exception {
         Mockito.verify(mock, times(0)).clear();
+        Mockito.verify(mock, times(0)).add("yes, I wasn't called");
     }
 
     @Test

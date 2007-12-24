@@ -23,16 +23,6 @@ public class InvocationsPrinterTest extends RequiresValidState{
         assertEquals("Object.differentMethod()", printer.printActual());
     }
     
-    @Test
-    public void shouldPrintSequenceNumberWhenInvocationMatchesButMocksAreDifferent() throws Exception {
-        InvocationMatcher mockOneMethod = new InvocationBuilder().mock("mockOne").seq(1).toInvocationMatcher();
-        Invocation mockTwoMethod = new InvocationBuilder().mock("mockTwo").seq(2).toInvocation();
-        InvocationsPrinter printer = new InvocationsPrinter(mockOneMethod, mockTwoMethod);
-        
-        assertEquals("Object#1.simpleMethod()", printer.printWanted());
-        assertEquals("Object#2.simpleMethod()", printer.printActual());
-    }
-    
     class Super {
         void test(Object o) {};
     }

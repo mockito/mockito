@@ -4,20 +4,32 @@
  */
 package org.mockito.internal;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationsFinder;
 
 public class AllInvocationsFinder implements InvocationsFinder {
     
-    public List<Invocation> allInvocationsInOrder(List<Object> mocks) {
-        List<Invocation> allInvocations = new LinkedList<Invocation>();
+    public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
+        Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
-            List<Invocation> invocationsOfSingleMock = MockUtil.getMockHandler(mock).getRegisteredInvocations();
-            allInvocations.addAll(invocationsOfSingleMock);
+            List<Invocation> fromSingleMock = MockUtil.getMockHandler(mock).getRegisteredInvocations();
+            invocationsInOrder.addAll(fromSingleMock);
         }
-        return allInvocations;
+        
+        return new LinkedList<Invocation>(invocationsInOrder);
+    }
+
+    private final class SequenceNumberComparator implements Comparator<Invocation> {
+        public int compare(Invocation o1, Invocation o2) {
+            int comparison = o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
+            assert comparison != 0 : "sequence number has to be globally unique";
+            return comparison;
+        }
     }
 }

@@ -4,14 +4,10 @@
  */
 package org.mockito.internal.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -20,17 +16,14 @@ import org.mockito.RequiresValidState;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsChunker;
-import org.mockito.internal.invocation.InvocationsMarker;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.progress.VerificationModeBuilder;
+import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorderTest extends RequiresValidState {
     
     private VerifyingRecorder recorder;
     private VerifierStub verifierStub;
-    private InvocationsMarkerStub markerStub;
-    private InvocationsChunkerStub chunkerStub;
     
     private Invocation simpleMethod;
     private InvocationMatcher differentMethod;
@@ -38,24 +31,13 @@ public class VerifyingRecorderTest extends RequiresValidState {
     @Before
     public void setup() {
         verifierStub = new VerifierStub();
-        markerStub = new InvocationsMarkerStub();
-        chunkerStub = new InvocationsChunkerStub();
-        recorder = new VerifyingRecorder(chunkerStub, markerStub, Arrays.<Verifier>asList(verifierStub));
+        recorder = new VerifyingRecorder(new InvocationsFinder() {
+            public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
+                return asList(simpleMethod, differentMethod.getInvocation());
+            }}, asList(verifierStub));
 
         simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
         differentMethod = new InvocationBuilder().differentMethod().toInvocationMatcher();
-    }
-    
-    @Test
-    public void shouldMarkInvocationsAsVerified() {
-        recorder.recordInvocation(simpleMethod);
-        
-        VerificationModeImpl mode = VerificationModeImpl.atLeastOnce();
-        recorder.verify(differentMethod, mode);
-        
-        assertThat(markerStub.invocations, collectionHasExactlyInOrder(simpleMethod));
-        assertEquals(markerStub.mode, mode);
-        assertEquals(markerStub.wanted, differentMethod);
     }
     
     @Test
@@ -65,41 +47,17 @@ public class VerifyingRecorderTest extends RequiresValidState {
         VerificationModeImpl mode = VerificationModeImpl.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
-        assertEquals(verifierStub.mode, mode);
+        assertSame(verifierStub.mode, mode);
         assertSame(verifierStub.wanted, differentMethod);
         assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod));
     }
     
     @Test
     public void shouldVerifyStrictly() {
-        recorder.recordInvocation(simpleMethod);
+        VerificationModeImpl strictMode = new VerificationModeBuilder().strict();
+        recorder.verify(differentMethod, strictMode);
         
-        VerificationModeImpl mode = new VerificationModeBuilder().strict();
-        recorder.verify(differentMethod, mode);
-        
-        assertEquals(verifierStub.mode, mode);
-        assertEquals(verifierStub.wanted, differentMethod);
-        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(differentMethod.getInvocation()));
-    }
-    
-    @Test
-    public void shouldNotMarkInvocationsAsVerifiedWhenModeIsNotExplicit() {
-        VerificationModeImpl mode = VerificationModeImpl.noMoreInteractions();
-        recorder.verify(mode);
-        assertNull(markerStub.mode);
-    }
-    
-    class InvocationsMarkerStub extends InvocationsMarker {
-        private List<Invocation> invocations;
-        private InvocationMatcher wanted;
-        private VerificationModeImpl mode;
-        @Override public void markInvocationsAsVerified(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-            this.invocations = invocations;
-            this.wanted = wanted;
-            this.mode = mode;
-            
-            assertNotNull("marking should happen after verification", verifierStub.invocations);
-        }
+        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
     }
     
     class VerifierStub implements Verifier {
@@ -110,15 +68,6 @@ public class VerifyingRecorderTest extends RequiresValidState {
             this.invocations = invocations;
             this.wanted = wanted;
             this.mode = mode;
-        }
-    }
-    
-    class InvocationsChunkerStub extends InvocationsChunker {
-        public InvocationsChunkerStub() {
-            super(null);
-        }
-        @Override public List<Invocation> getFirstUnverifiedInvocationChunk(List<Object> mocks) {
-            return Arrays.asList(differentMethod.getInvocation());
         }
     }
 }

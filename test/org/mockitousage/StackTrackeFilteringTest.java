@@ -87,8 +87,10 @@ public class StackTrackeFilteringTest extends RequiresValidState {
         Strictly strictly = createStrictOrderVerifier(mock);
         mock.oneArg(true);
         mock.oneArg(false);
+        
+        strictly.verify(mock).oneArg(false); 
         try {
-            strictly.verify(mock).oneArg(false); 
+            strictly.verify(mock).oneArg(true);
             fail();
         } catch (VerificationError expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));

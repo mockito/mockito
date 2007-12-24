@@ -4,22 +4,19 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.createStrictOrderVerifier;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.util.ExtraMatchers.causeMessageContains;
-import static org.mockito.util.ExtraMatchers.messageContains;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.StateResetter;
 import org.mockito.Strictly;
+import org.mockito.exceptions.cause.TooLittleInvocations;
+import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
@@ -41,13 +38,15 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         one.simpleMethod(11);
         two.simpleMethod(2);
         two.simpleMethod(2);
-        three.simpleMethod();
+        three.simpleMethod(3);
         
         strictly = createStrictOrderVerifier(one, two, three);
     }
     
     @Test
     public void shouldPrintStrictVerificationError() {
+        strictly.verify(one, atLeastOnce()).simpleMethod(1);
+        
         try {
             strictly.verify(one).simpleMethod(999);
             fail();
@@ -68,29 +67,29 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
                 "\n" +
                 "Actual invocation:" +
                 "\n" +
-                "IMethods.simpleMethod(1)";
+                "IMethods.simpleMethod(11)";
             
             assertEquals(expectedCause, e.getCause().getMessage());
         }
     }  
     
     @Test
-    public void shouldPrintWantedMethodWhenEverythingElseIsVerified() {
+    public void shouldPrintMethodThatWasNotInvoked() {
         strictly.verify(one).simpleMethod(1);
         strictly.verify(one).simpleMethod(11);
         strictly.verify(two, times(2)).simpleMethod(2);
-        strictly.verify(three).simpleMethod();
+        strictly.verify(three).simpleMethod(3);
         try {
             strictly.verify(three).simpleMethod(999);
             fail();
-        } catch (VerificationError expected) {
-            String actualMessage = expected.getMessage();
+        } catch (VerificationError e) {
+            String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
                     "IMethods.simpleMethod(999)"; 
-            assertEquals(expectedMessage, actualMessage);         
+            assertEquals(expectedMessage, actualMessage);     
         }
     }   
     
@@ -108,47 +107,89 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
                     "IMethods.simpleMethod(2)" +
                     "\n" +
                     "Wanted 1 time but was 2"; 
-            assertEquals(expectedMessage, actualMessage);         
+            assertEquals(expectedMessage, actualMessage);      
+            
+            assertEquals(UndesiredInvocation.class, e.getCause().getClass());
+
+            String expectedCause =
+                "\n" +
+                "Undesired invocation:";
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }  
     
     @Test
-    public void shouldPrintSequenceNumberWhenMocksAndMethodsAreTheSame() {
-        StateResetter.reset();
-        one = mock(IMethods.class);
-        two = mock(IMethods.class);
-        
-        one.simpleMethod();
-        two.simpleMethod();
-        
-        strictly = createStrictOrderVerifier(one, two);
-        
+    public void shouldPrintThatWasNotInvokedAfter() {
+        strictly.verify(two, atLeastOnce()).simpleMethod(2);
         try {
-            strictly.verify(two).simpleMethod();
+            strictly.verify(one).simpleMethod(1);
             fail();
         } catch (VerificationError e) {
-            assertThat(e, messageContains("IMethods#3.simpleMethod()"));
-            assertThat(e, causeMessageContains("IMethods#1.simpleMethod()"));
+            //TODO refactor to WantedButNotInvoked
+            assertThat(e, messageContains("Wanted but not invoked"));
+            //TODO what about a feature to show after which line we expect this thing:
+//            String expectedCause = 
+//                "\n" +
+//                "Not invoked after:";
+//            assertEquals(expectedCause, e.getCause().getMessage());
+        }
+    }  
+    
+    @Test
+    public void shouldPrintUndesiredInvocation() {
+        two.simpleMethod(2);
+        two.simpleMethod(2);
+        two.simpleMethod(2);
+        
+        strictly.verify(three, atLeastOnce()).simpleMethod(3);
+        
+        try {
+            strictly.verify(two, times(2)).simpleMethod(2);
+            fail();
+        } catch (TooManyActualInvocationsError e) {
+            String actualMessage = e.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "IMethods.simpleMethod(2)" +
+                    "\n" +
+                    "Wanted 2 times but was 3";
+            assertEquals(expectedMessage, actualMessage);
+            
+            assertEquals(e.getCause().getClass(), UndesiredInvocation.class);
+            
+            String expectedCause = 
+                "\n" +
+                "Undesired invocation:";
+            
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
     
     @Test
-    public void shouldPrintSequenceNumberAndMatchersWhenMocksAndMethodsAreTheSame() {
-        StateResetter.reset();
-        one = mock(IMethods.class);
-        two = mock(IMethods.class);
+    public void shouldPrintTooLittleInvocations() {
+        two.simpleMethod(2);
         
-        one.simpleMethod(1);
-        two.simpleMethod(1);
-        
-        strictly = createStrictOrderVerifier(one, two);
+        strictly.verify(three, atLeastOnce()).simpleMethod(3);
         
         try {
-            strictly.verify(two).simpleMethod(Mockito.anyInt());
+            strictly.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (VerificationError expected) {
-            assertThat(expected, messageContains("IMethods#3.simpleMethod(<any>)"));
-            assertThat(expected, causeMessageContains("IMethods#1.simpleMethod(1)"));
+        } catch (TooLittleActualInvocationsError e) {
+            String actualMessage = e.getMessage();
+            String expectedMessage = 
+                    "\n" +
+                    "IMethods.simpleMethod(2)" +
+                    "\n" +
+                    "Wanted 2 times but was 1";
+            assertEquals(expectedMessage, actualMessage);
+            
+            assertEquals(e.getCause().getClass(), TooLittleInvocations.class);
+            
+            String expectedCause = 
+                "\n" +
+                "Too little invocations:";
+            
+            assertEquals(expectedCause, e.getCause().getMessage());
         }
-    }
+    }   
 }

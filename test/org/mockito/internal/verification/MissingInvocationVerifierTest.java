@@ -4,12 +4,11 @@
  */
 package org.mockito.internal.verification;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
-import static org.mockito.internal.progress.VerificationModeImpl.noMoreInteractions;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
+import static org.mockito.internal.progress.VerificationModeImpl.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,6 +16,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.invocation.ActualInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -26,7 +26,9 @@ import org.mockito.internal.progress.VerificationModeImpl;
 public class MissingInvocationVerifierTest extends RequiresValidState {
 
     private MissingInvocationVerifier verifier;
+    
     private InvocationsAnalyzerStub analyzerStub;
+    private ActualInvocationsFinderStub finderStub;
     private ReporterStub reporterStub;
     
     private InvocationMatcher wanted;
@@ -36,7 +38,8 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     public void setup() {
         analyzerStub = new InvocationsAnalyzerStub();
         reporterStub = new ReporterStub();
-        verifier = new MissingInvocationVerifier(analyzerStub, reporterStub);
+        finderStub = new ActualInvocationsFinderStub();
+        verifier = new MissingInvocationVerifier(analyzerStub, finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -48,37 +51,43 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldAskAnalyzerForActualNumberOfInvocations() {
-        analyzerStub.actualCountToReturn = 1;
-        verifier.verify(invocations, wanted, atLeastOnce());
+    public void shouldAskFinderForActualInvocations() {
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
+        VerificationModeImpl mode = atLeastOnce();
+        verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, analyzerStub.invocations);
-        assertSame(wanted, analyzerStub.wanted);
+        assertSame(invocations, finderStub.invocations);
     }
     
     @Test
     public void shouldPassBecauseActualInvocationFound() {
-        analyzerStub.actualCountToReturn = 1;
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         verifier.verify(invocations, wanted, atLeastOnce());
     }
     
     @Test
-    public void shouldAskAnalyzerForActualInvocationAndReportWantedButNotInvoked() {
-        analyzerStub.actualCountToReturn = 0;
-        analyzerStub.actualInvocationToReturn = null;
+    public void shouldAskAnalyzerForSimilarInvocation() {
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertSame(invocations, analyzerStub.invocations);
-        assertSame(wanted, analyzerStub.wanted);
+    }
+    
+    @Test
+    public void shouldReportWantedButNotInvoked() {
+        assertTrue(finderStub.actualToReturn.isEmpty());
+        analyzerStub.similarToReturn = null;
+        
+        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
     }
     
     @Test
     public void shouldReportWantedInvocationDiffersFromActual() {
-        analyzerStub.actualCountToReturn = 0;
+        assertTrue(finderStub.actualToReturn.isEmpty());
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
-        analyzerStub.actualInvocationToReturn = actualInvocation;
+        analyzerStub.similarToReturn = actualInvocation;
+        
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
@@ -86,20 +95,35 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
-    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
+    @Test
+    public void shouldMarkAsVerified() {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        Invocation invocationTwo = new InvocationBuilder().toInvocation();
+        finderStub.actualToReturn.add(invocation);
+        finderStub.actualToReturn.add(invocationTwo);
+        
+        verifier.verify(invocations, wanted, atLeastOnce());
+        assertTrue(invocation.isVerified());
+        assertTrue(invocationTwo.isVerified());
+    }
+    
+    class ActualInvocationsFinderStub extends ActualInvocationsFinder {
+        private final List<Invocation> actualToReturn = new LinkedList<Invocation>();
         private List<Invocation> invocations;
-        private InvocationMatcher wanted;
-        private int actualCountToReturn;
-        private Invocation actualInvocationToReturn;
-        @Override public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
+        @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
+                VerificationModeImpl mode) {
             this.invocations = invocations;
-            this.wanted = wanted;
-            return actualCountToReturn;
+            return actualToReturn;
         }
-        @Override public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
+    }
+    
+    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
+        private Invocation similarToReturn;
+        private List<Invocation> invocations;
+
+        @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
             this.invocations = invocations;
-            this.wanted = wanted;
-            return actualInvocationToReturn;
+            return similarToReturn;
         }
     }
     

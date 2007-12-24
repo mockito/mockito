@@ -8,7 +8,19 @@ import java.util.Arrays;
 
 public class VerificationModeBuilder {
 
+    private Integer times;
+
     public VerificationModeImpl strict() {
-        return VerificationModeImpl.strict(null, Arrays.asList(new Object()));
+        return VerificationModeImpl.strict(times, Arrays.asList(new Object()));
+    }
+
+    public VerificationModeBuilder times(int times) {
+        this.times = times;
+        return this;
+    }
+
+    public VerificationModeBuilder atLeastOnce() {
+        times = null;
+        return this;
     }
 }

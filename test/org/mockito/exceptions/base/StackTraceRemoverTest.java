@@ -4,8 +4,8 @@
  */
 package org.mockito.exceptions.base;
 
-import static org.junit.Assert.assertThat;
-import static org.mockito.util.ExtraMatchers.collectionHasExactlyInOrder;
+import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class StackTraceRemoverTest extends RequiresValidState {
         setStackTrace("commonOne");
         setCauseStackTrace("commonOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder());
+        assertTrue(methodsOnTraceAfterRemoving.isEmpty());
     }
     
     @Test

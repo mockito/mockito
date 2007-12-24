@@ -4,12 +4,11 @@
  */
 package org.mockito.internal.verification;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
-import static org.mockito.internal.progress.VerificationModeImpl.times;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
+import static org.mockito.internal.progress.VerificationModeImpl.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -18,6 +17,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.invocation.ActualInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -31,12 +31,14 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private List<Invocation> invocations;
+    private ActualInvocationsFinderStub finderStub;
     
     @Before
     public void setup() {
         reporterStub = new ReporterStub();
         analyzerStub = new InvocationsAnalyzerStub();
-        verifier = new NumberOfInvocationsVerifier(reporterStub, analyzerStub);
+        finderStub = new ActualInvocationsFinderStub();
+        verifier = new NumberOfInvocationsVerifier(reporterStub, analyzerStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -48,85 +50,101 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldCountActualInvocations() throws Exception {
-        verifier.verify(invocations, wanted, times(4));
-        assertSame(wanted, analyzerStub.wanted);
-    }
-    
-    @Test
-    public void shouldAskAnalyzerToCountActual() throws Exception {
-        VerificationModeImpl mode = times(1);
-        analyzerStub.actualCountToReturn = 1;
+    public void shouldReportTooLittleActual() throws Exception {
+        VerificationModeImpl mode = times(100);
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
+        
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, analyzerStub.invocations);
-        assertSame(wanted, analyzerStub.wanted);
+        assertEquals(1, reporterStub.actualCount);
+        assertEquals(100, reporterStub.wantedCount);
+        assertEquals(wanted.toString(), reporterStub.wanted);
     }
-    
+
     @Test
-    public void shouldReportTooLittleInvocations() throws Exception {
-        VerificationModeImpl mode = times(10);
-        analyzerStub.actualCountToReturn = 5;
+    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+        VerificationModeImpl mode = times(100);
         MockitoException lastInvocation = new MockitoException("");
         analyzerStub.invocationTraceToReturn = lastInvocation;
         
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, analyzerStub.invocations);
-        assertSame(wanted, analyzerStub.wanted);
-        
-        assertEquals(5, reporterStub.actualCount);
-        assertEquals(10, reporterStub.wantedCount);
-        assertEquals(wanted.toString(), reporterStub.wanted);
-        
         assertSame(lastInvocation, reporterStub.stackTrace);
     }
     
     @Test
-    public void shouldReportTooManyInvocations() throws Exception {
+    public void shouldAskAnalyzerWithActualInvocationsWhenTooLittleActual() throws Exception {
+        VerificationModeImpl mode = times(100);
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
+        
+        verifier.verify(invocations, wanted, mode);
+        
+        assertSame(finderStub.actualToReturn, analyzerStub.invocations);
+    }
+    
+    @Test
+    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
         VerificationModeImpl mode = times(0);
-        analyzerStub.actualCountToReturn = 5;
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         MockitoException firstUndesiredInvocation = new MockitoException("");
         analyzerStub.invocationTraceToReturn = firstUndesiredInvocation;
         
         verifier.verify(invocations, wanted, mode);
         
-        assertSame(invocations, analyzerStub.invocations);
-        assertSame(wanted, analyzerStub.wanted);
+        assertSame(firstUndesiredInvocation, reporterStub.stackTrace);
+    }
+    
+    @Test
+    public void shouldAskAnalyzerWithActualInvocationsWhenTooManyActual() throws Exception {
+        VerificationModeImpl mode = times(0);
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        assertSame(mode, analyzerStub.mode);
+        verifier.verify(invocations, wanted, mode);
         
-        assertEquals(5, reporterStub.actualCount);
+        assertSame(finderStub.actualToReturn, analyzerStub.invocations);
+    }
+    
+    @Test
+    public void shouldReportTooManyActual() throws Exception {
+        VerificationModeImpl mode = times(0);
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
+        
+        verifier.verify(invocations, wanted, mode);
+        
+        assertEquals(1, reporterStub.actualCount);
         assertEquals(0, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
+    }
+    
+    @Test
+    public void shouldMarkAsVerified() {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        Invocation invocationTwo = new InvocationBuilder().toInvocation();
+        finderStub.actualToReturn.add(invocation);
+        finderStub.actualToReturn.add(invocationTwo);
         
-        assertSame(firstUndesiredInvocation, reporterStub.stackTrace);
+        verifier.verify(invocations, wanted, times(2));
+        assertTrue(invocation.isVerified());
+        assertTrue(invocationTwo.isVerified());
     }
     
     class InvocationsAnalyzerStub extends InvocationsAnalyzer {
         private HasStackTrace invocationTraceToReturn;
-        private int actualCountToReturn;
-
-        private InvocationMatcher wanted;
-        private VerificationModeImpl mode;
         private List<Invocation> invocations;
-        @Override
-        public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
-            this.invocations = invocations;
-            this.wanted = wanted;
-            return actualCountToReturn;
-        }
-        
         @Override public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-            this.wanted = wanted;
-            this.mode = mode;
+            this.invocations = invocations;
             return invocationTraceToReturn;
         }
-        
-        @Override
-        public HasStackTrace findLastMatchingInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted) {
-            this.wanted = wanted;
+        @Override public HasStackTrace findLastMatchingInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted) {
+            this.invocations = invocations;
             return invocationTraceToReturn;
+        }
+    }
+    
+    class ActualInvocationsFinderStub extends ActualInvocationsFinder {
+        private final List<Invocation> actualToReturn = new LinkedList<Invocation>();
+        @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+            return actualToReturn;
         }
     }
     

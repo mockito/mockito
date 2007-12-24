@@ -8,7 +8,6 @@ import static org.mockito.exceptions.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.cause.FirstUndesiredInvocation;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
@@ -19,7 +18,6 @@ import org.mockito.exceptions.verification.NoInteractionsWantedError;
 import org.mockito.exceptions.verification.TooLittleActualInvocationsError;
 import org.mockito.exceptions.verification.TooManyActualInvocationsError;
 import org.mockito.exceptions.verification.VerificationError;
-import org.mockito.exceptions.verification.WrongOrderVerificationError;
 
 /**
  * Reports verification and misusing errors.
@@ -99,7 +97,7 @@ public class Reporter {
     }
 
     public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
-        FirstUndesiredInvocation cause = new FirstUndesiredInvocation(join("First undesired invocation:"));
+        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
         cause.setStackTrace(firstUndesired.getStackTrace());
 
         throw new TooManyActualInvocationsError(join(
@@ -122,14 +120,13 @@ public class Reporter {
     }
 
     public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = buildUndesiredInvocationCause(actualInvocationStackTrace, "Undesired invocation:", undesired);
-        throw new NoInteractionsWantedError(join("No interactions wanted"), cause);
-    }
-
-    private UndesiredInvocation buildUndesiredInvocationCause(HasStackTrace actualInvocationStackTrace, String ... messageLines) {
-        UndesiredInvocation cause = new UndesiredInvocation(join(messageLines));
+        UndesiredInvocation cause = new UndesiredInvocation(join(
+                "Undesired invocation:", 
+                undesired
+        ));
+        
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        return cause;
+        throw new NoInteractionsWantedError(join("No interactions wanted"), cause);
     }
 
     public void unfinishedStubbing() {
@@ -153,14 +150,5 @@ public class Reporter {
                 "Previous verify(mock) doesn't have a method call.",
                 "Should be something like that: verify(mock).doSomething()"
         ));
-    }
-
-    public void wrongOrderOfInvocations(HasStackTrace actual) {
-        RuntimeException cause = new RuntimeException();
-        cause.setStackTrace(actual.getStackTrace());
-        
-        throw new WrongOrderVerificationError(join(
-                "Wrong order."
-        ), cause);
     }
 }

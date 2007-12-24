@@ -74,10 +74,6 @@ public class InvocationMatcher {
         return invocation.toString(matchers);
     }
     
-    public String toStringWithSequenceNumber() {
-        return invocation.toStringWithSequenceNumber(matchers);
-    }
-    
     public String toStringWithArgumentTypes() {
         return invocation.toStringWithArgumentTypes();
     }

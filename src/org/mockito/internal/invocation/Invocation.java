@@ -126,18 +126,6 @@ public class Invocation {
         return mockName + "." + methodName + arguments;
     }
 
-    public String toStringWithSequenceNumber() {
-        return toStringWithSequenceNumber(argumentsToMatchers());
-    }
-
-    public String toStringWithSequenceNumber(List<IArgumentMatcher> matchers) {
-        String mockName = MockNamer.nameForMock(mock);
-        String methodName = method.getName();
-        String arguments = getArgumentsString(matchers);
-        
-        return mockName + "#" + sequenceNumber + "." + methodName + arguments;
-    }
-    
     public String toStringWithArgumentTypes() {
         StringBuilder result = new StringBuilder();
         result.append((MockNamer.nameForMock(mock) + "." + method.getName()));

@@ -59,14 +59,14 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
     }
     
-    @Test
-    public void shouldKnowIfWantedCountIsZero() throws Exception {
-        assertTrue(times(0).wantedCountIsZero());
-        
-        assertFalse(times(1).wantedCountIsZero());
-        assertFalse(times(2).wantedCountIsZero());
-        assertFalse(atLeastOnce().wantedCountIsZero());
-    }
+//    @Test
+//    public void shouldKnowIfWantedCountIsZero() throws Exception {
+//        assertTrue(times(0).wantedCountIsZero());
+//        
+//        assertFalse(times(1).wantedCountIsZero());
+//        assertFalse(times(2).wantedCountIsZero());
+//        assertFalse(atLeastOnce().wantedCountIsZero());
+//    }
     
     @Test
     public void shouldKnowIfIsStrict() throws Exception {
@@ -85,5 +85,23 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(times(0).atLeastOnceMode());
         assertFalse(times(2).atLeastOnceMode());
         assertFalse(noMoreInteractions().atLeastOnceMode());
+    }
+    
+    @Test
+    public void shouldKnowIfMatchesActualInvocationCount() throws Exception {
+        assertFalse(times(1).matchesActualCount(0));
+        assertFalse(times(1).matchesActualCount(2));
+        assertFalse(times(100).matchesActualCount(200));
+        
+        assertTrue(times(1).matchesActualCount(1));
+        assertTrue(times(100).matchesActualCount(100));
+    }
+    
+    @Test
+    public void shouldKnowIfMatchesActualInvocationCountWhenAtLeastOnceMode() throws Exception {
+        assertFalse(atLeastOnce().matchesActualCount(0));
+        
+        assertTrue(atLeastOnce().matchesActualCount(1));
+        assertTrue(atLeastOnce().matchesActualCount(100));
     }
 }

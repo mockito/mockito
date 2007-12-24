@@ -1,0 +1,45 @@
+package org.mockito.internal;
+
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
+import org.mockito.internal.invocation.Invocation;
+import org.mockitousage.IMethods;
+
+public class AllInvocationsFinderTest extends RequiresValidState {
+    
+    private AllInvocationsFinder finder;
+    private IMethods mockTwo;
+    private IMethods mockOne;
+
+    @Before
+    public void setup() {
+        finder = new AllInvocationsFinder();
+        mockOne = mock(IMethods.class);
+        mockTwo = mock(IMethods.class);
+    }
+    
+    @Test
+    public void shouldGetAllInvocationsInOrder() throws Exception {
+        mockOne.simpleMethod(100);
+        mockTwo.simpleMethod(200);
+        mockOne.simpleMethod(300);
+        
+        List<Invocation> invocations = finder.getAllInvocations(asList(mockOne, mockTwo));
+        
+        assertEquals(3, invocations.size());
+        assertArgumentEquals(100, invocations.get(0));
+        assertArgumentEquals(200, invocations.get(1));
+        assertArgumentEquals(300, invocations.get(2));
+    }
+
+    private void assertArgumentEquals(Object argumentValue, Invocation invocation) {
+        assertEquals(argumentValue, invocation.getArguments()[0]);
+    }
+}

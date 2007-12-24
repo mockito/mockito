@@ -15,34 +15,33 @@ import org.mockito.internal.progress.VerificationModeImpl;
  */
 public class InvocationsAnalyzer {
 
-    public int countActual(List<Invocation> invocations, InvocationMatcher wanted) {
-        int actual = 0;
-        for (Invocation invocation : invocations) {
-            if (wanted.matches(invocation)) {
-                actual++;
-            }
-        }
-
-        return actual;
-    }
-
-    public Invocation findActualInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
-        Invocation actualbyName = null;
-        for (Invocation invocation : invocations) {
+    public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        List<Invocation> unverified = removeUntilLastStrictlyVerified(invocations);
+        
+        for (Invocation invocation : unverified) {
             String wantedMethodName = wanted.getMethod().getName();
             String currentMethodName = invocation.getMethod().getName();
-            if (wantedMethodName.equals(currentMethodName) && !invocation.isVerified()) {
-                actualbyName = invocation;
-                break;
+            
+            boolean methodNameEquals = wantedMethodName.equals(currentMethodName);
+            boolean isUnverified = !invocation.isVerified();
+            boolean mockIsTheSame = wanted.getInvocation().getMock() == invocation.getMock();
+            
+            if (methodNameEquals && isUnverified && mockIsTheSame ) {
+                return invocation;
             }
         }
         
-        return actualbyName != null ? actualbyName : findFirstUnverified(invocations);
+        return findFirstUnverified(unverified, wanted.getInvocation().getMock());
     }
     
     public Invocation findFirstUnverified(List<Invocation> invocations) {
+        return findFirstUnverified(invocations, null);
+    }
+    
+    Invocation findFirstUnverified(List<Invocation> invocations, Object mock) {
         for (Invocation i : invocations) {
-            if (!i.isVerified()) {
+            boolean mockIsValid = mock == null || mock == i.getMock();
+            if (!i.isVerified() && mockIsValid) {
                 return i;
             }
         }
@@ -71,18 +70,16 @@ public class InvocationsAnalyzer {
         }
         throw new IllegalArgumentException("There are no undesired invocations!");
     }
-
-    public List<Invocation> findFirstMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> chunk = new LinkedList<Invocation>();
-        
+    
+    List<Invocation> removeUntilLastStrictlyVerified(List<Invocation> invocations) {
+        List<Invocation> unverified = new LinkedList<Invocation>();
         for (Invocation i : invocations) {
-            if (wanted.matches(i)) {
-                chunk.add(i);
-            } else if (!chunk.isEmpty()) {
-                break;
+            if (i.isVerifiedStrictly()) {
+                unverified.clear();
+            } else {
+                unverified.add(i);
             }
         }
-        
-        return chunk;
+        return unverified;
     }
 }

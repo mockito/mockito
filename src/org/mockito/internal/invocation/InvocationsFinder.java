@@ -8,5 +8,11 @@ import java.util.List;
 
 public interface InvocationsFinder {
 
-    List<Invocation> allInvocationsInOrder(List<Object> mocks);
+    /**
+     * gets all invocations from mocks. Invocations are ordered earlier first. 
+     * 
+     * @param mocks
+     * @return
+     */
+    List<Invocation> getAllInvocations(List<? extends Object> mocks);
 }

@@ -4,15 +4,8 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.createStrictOrderVerifier;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +13,6 @@ import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWantedError;
-import org.mockito.exceptions.verification.VerificationError;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -106,25 +98,18 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
     }
     
     @Test
-    public void shouldFailOnWrongOrder() {
+    public void shouldAllowOneMethodVerifiedStrictly() {
         verify(mockTwo).simpleMethod(2);
         verify(mockOne, atLeastOnce()).simpleMethod(1);
 
-        try {
-            strictly.verify(mockThree).simpleMethod(3);
-            fail();
-        } catch (VerificationError e) {}
+        strictly.verify(mockThree).simpleMethod(3);
     }
     
     @Test
-    public void shouldFailOnWrongOrderForLastInvocationIsTooEarly() {
+    public void shouldAllowLastInvocationEarly() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         verify(mockTwo).simpleMethod(2);
-        
-        try {
-            strictly.verify(mockThree).simpleMethod(4);
-            fail();
-        } catch (VerificationError e) {}
+        strictly.verify(mockThree).simpleMethod(4);
     }
     
     @Test(expected=MockitoException.class)

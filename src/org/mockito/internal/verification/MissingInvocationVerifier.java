@@ -7,6 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.invocation.ActualInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
@@ -17,13 +18,15 @@ public class MissingInvocationVerifier implements Verifier {
     
     private final Reporter reporter;
     private final InvocationsAnalyzer analyzer;
+    private final ActualInvocationsFinder finder;
     
     public MissingInvocationVerifier() {
-        this(new InvocationsAnalyzer(), new Reporter());
+        this(new InvocationsAnalyzer(), new ActualInvocationsFinder(), new Reporter());
     }
     
-    public MissingInvocationVerifier(InvocationsAnalyzer analyzer, Reporter reporter) {
+    public MissingInvocationVerifier(InvocationsAnalyzer analyzer, ActualInvocationsFinder finder, Reporter reporter) {
         this.analyzer = analyzer;
+        this.finder = finder;
         this.reporter = reporter;
     }
 
@@ -32,23 +35,37 @@ public class MissingInvocationVerifier implements Verifier {
             return;
         }
         
-        //get list of actual invocations
-        //if list is empty report
-        //if not mark as verified
+        List<Invocation> actualInvocations;
+        if (mode.strictMode()) {
+            //TODO test it
+            //TODO push it to findInvocations
+            actualInvocations = finder.findStrictlyUnverifiedInvocations(invocations, wanted, mode);
+        } else {
+            actualInvocations = finder.findInvocations(invocations, wanted, mode);
+        }
         
-        int actualCount = analyzer.countActual(invocations, wanted);
-        if (actualCount == 0) {
-            reportMissingInvocationError(invocations, wanted);
+        if (actualInvocations.size() == 0) {
+            //TODO add test to check that invocations are passed here, not actual...
+            Invocation similar = analyzer.findSimilarInvocation(invocations, wanted, mode);
+            reportMissingInvocationError(wanted, similar);
+        }
+        
+        for (Invocation invocation : actualInvocations) {
+            invocation.markVerified();
+            //TODO dodgy!
+            if (mode.strictMode() && mode.atLeastOnceMode()) {
+                invocation.markVerifiedStrictly();
+            }
         }
     }
-    
-    private void reportMissingInvocationError(List<Invocation> invocations, InvocationMatcher wanted) {
-        Invocation actual = analyzer.findActualInvocation(invocations, wanted);
-        
-        if (actual != null) {
-            InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);
-            reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), actual.getStackTrace());
+
+    private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
+        if (similar != null) {
+            //TODO I want a functional test that proves that correct stack trace is provided for cause for both strictly and ordinary verification
+            InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
+            reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
         } else {
+            //TODO I really want a cause here, something like: "wanted after..."
             reporter.wantedButNotInvoked(wanted.toString());
         }
     }

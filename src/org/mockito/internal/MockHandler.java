@@ -13,8 +13,6 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsChunker;
-import org.mockito.internal.invocation.InvocationsMarker;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
@@ -28,7 +26,6 @@ import org.mockito.internal.verification.NoMoreInvocationsVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
-import org.mockito.internal.verification.WrongOrderOfInvocationsVerifier;
 
 /**
  * Invocation handler set on mock objects.
@@ -111,13 +108,10 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
     }
     
     private VerifyingRecorder createRecorder() {
-        InvocationsChunker chunker = new InvocationsChunker(new AllInvocationsFinder());
-        InvocationsMarker marker = new InvocationsMarker();
         List<Verifier> verifiers = Arrays.asList(
                 new MissingInvocationVerifier(),
-                new WrongOrderOfInvocationsVerifier(),
                 new NumberOfInvocationsVerifier(),
                 new NoMoreInvocationsVerifier());
-        return new VerifyingRecorder(chunker, marker, verifiers);
+        return new VerifyingRecorder(new AllInvocationsFinder(), verifiers);
     }
 }
