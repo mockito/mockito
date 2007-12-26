@@ -27,7 +27,6 @@ public class StrictlyNumberOfInvocationsVerifier implements Verifier {
         this.reporter = reporter;
     }
 
-    //TODO tests! - do you like the message?
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         if (!mode.strictMode()) {
             return;
