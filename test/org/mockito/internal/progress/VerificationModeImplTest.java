@@ -49,16 +49,6 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(times(0).missingMethodMode());
     }
     
-//    @Test
-//    public void shouldKnowIfIsExactNumberOfInvocationsMode() throws Exception {
-//        assertTrue(times(0).exactNumberOfInvocationsMode());
-//        assertTrue(times(1).exactNumberOfInvocationsMode());
-//        assertTrue(times(2).exactNumberOfInvocationsMode());
-//        
-//        assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
-//        assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
-//    }
-    
     @Test
     public void shouldKnowIfIsStrict() throws Exception {
         assertTrue(strict(1, asList(new Object())).strictMode());
@@ -123,5 +113,15 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(times(1).wantedCountIsZero());
         assertFalse(times(20).wantedCountIsZero());
         assertFalse(atLeastOnce().wantedCountIsZero());
+    }
+    
+    @Test
+    public void shouldKnowIfExactNumberOfInvocationsMode() throws Exception {
+        assertTrue(times(0).exactNumberOfInvocationsMode());
+        assertTrue(times(1).exactNumberOfInvocationsMode());
+        assertTrue(atLeastOnce().exactNumberOfInvocationsMode());
+        
+        assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
+        assertFalse(strict(1, asList(new Object())).exactNumberOfInvocationsMode());
     }
 }

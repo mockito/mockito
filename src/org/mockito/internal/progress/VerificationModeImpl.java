@@ -57,20 +57,24 @@ public class VerificationModeImpl implements VerificationMode {
         return mocksToBeVerifiedStrictly;
     }
 
-    public boolean atLeastOnceMode() {
+    boolean atLeastOnceMode() {
         return wantedInvocationCount == null && verification == Verification.EXPLICIT;
-    }
-
-    public boolean strictMode() {
-        return !mocksToBeVerifiedStrictly.isEmpty();
     }
 
     public boolean explicitMode() {
         return verification == Verification.EXPLICIT;
     }
     
+    public boolean strictMode() {
+        return !mocksToBeVerifiedStrictly.isEmpty();
+    }
+    
     public boolean missingMethodMode() {
         return explicitMode() && (atLeastOnceMode() || wantedInvocationCount > 0);
+    }
+    
+    public boolean exactNumberOfInvocationsMode() {
+        return !strictMode() && explicitMode();
     }
 
     public boolean matchesActualCount(int actualCount) {
@@ -96,5 +100,4 @@ public class VerificationModeImpl implements VerificationMode {
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedStrictly;
     }
-
 }

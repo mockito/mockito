@@ -53,30 +53,6 @@ public class InvocationsAnalyzerTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsZero() throws Exception {
-        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(0));
-        HasStackTrace expected = simpleMethodInvocation.getStackTrace();
-        assertSame(firstUndesired, expected);
-    }
-    
-    @Test
-    public void shouldFindFirstUndesiredWhenWantedNumberOfTimesIsOne() throws Exception {
-        HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeImpl.times(1));
-        HasStackTrace expected = simpleMethodInvocationTwo.getStackTrace();
-        assertSame(firstUndesired, expected);
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldBreakWhenThereAreNoUndesiredInvocations() throws Exception {
-        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), times(2));
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldBreakWhenWantedInvocationsFigureIsBigger() throws Exception {
-        analyzer.findFirstUndesiredInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation), times(100));
-    }
-    
-    @Test
     public void shouldFindSimilarInvocationByName() throws Exception {
         Invocation found = analyzer.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         assertSame(found, simpleMethodInvocation);
@@ -127,20 +103,4 @@ public class InvocationsAnalyzerTest extends RequiresValidState {
         Invocation found = analyzer.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         assertNotSame(onDifferentMock, found);
     }  
-    
-    @Test
-    public void shouldFindLastMatchingInvocationTrace() throws Exception {
-        HasStackTrace found = analyzer.findLastMatchingInvocationTrace(invocations, new InvocationMatcher(simpleMethodInvocation));
-        assertSame(simpleMethodInvocationTwo.getStackTrace(), found);
-        
-        found = analyzer.findLastMatchingInvocationTrace(invocations, new InvocationMatcher(differentMethodInvocation));
-        assertSame(differentMethodInvocation.getStackTrace(), found);
-    }
-    
-    @Test
-    public void shouldNotFindLastMatchingInvocationTrace() throws Exception {
-        InvocationMatcher doesntMatch = new InvocationBuilder().otherMethod().toInvocationMatcher();
-        HasStackTrace found = analyzer.findLastMatchingInvocationTrace(invocations, doesntMatch);
-        assertNull(found);
-    }
 }

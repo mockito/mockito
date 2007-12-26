@@ -57,16 +57,23 @@ public class StrictVerifier implements Verifier {
         int actualCount = chunk.size();
         
         if (mode.tooLittleActualInvocations(actualCount)) {
-            HasStackTrace lastInvocation = analyzer.findLastMatchingInvocationTrace(chunk, wanted);
+            HasStackTrace lastInvocation = getLastSafely(chunk);
             reporter.strictlyTooLittleActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
         } else if (mode.tooManyActualInvocations(actualCount)) {
-            HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(chunk, wanted, mode);
+            HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
             reporter.strictlyTooManyActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
         }
         
-        //TODO not tested
         for (Invocation i : chunk) {
             i.markVerifiedStrictly();
+        }
+    }
+    
+    private HasStackTrace getLastSafely(List<Invocation> actualInvocations) {
+        if (actualInvocations.isEmpty()) {
+            return null;
+        } else {
+            return actualInvocations.get(actualInvocations.size() - 1).getStackTrace();
         }
     }
 }

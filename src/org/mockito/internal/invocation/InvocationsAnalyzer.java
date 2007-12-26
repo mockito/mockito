@@ -46,35 +46,6 @@ public class InvocationsAnalyzer {
         return null;
     }
     
-    // 1 222  33
-    // v vvvv
-    //     ^ - last matching
-    public HasStackTrace findLastMatchingInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted) {
-        Invocation lastMatching = null;
-        for (Invocation invocation : invocations) {
-            if (wanted.matches(invocation)) {
-                lastMatching = invocation;
-            }
-        }
-        return lastMatching != null ? lastMatching.getStackTrace() : null;
-    }
-
-    // 1 222  33
-    // v vv
-    //     ^ - first undesired
-    public HasStackTrace findFirstUndesiredInvocationTrace(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        int counter = 0;
-        for (Invocation invocation : invocations) {
-            if (wanted.matches(invocation)) {
-                counter++;
-                if (counter > mode.wantedCount()) {
-                    return invocation.getStackTrace();
-                }
-            }
-        }
-        throw new IllegalArgumentException("There are no undesired invocations!");
-    }
-    
     public List<Invocation> removeUntilLastStrictlyVerified(List<Invocation> invocations) {
         List<Invocation> unverified = new LinkedList<Invocation>();
         for (Invocation i : invocations) {
