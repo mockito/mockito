@@ -33,7 +33,7 @@ public class StrictlyNumberOfInvocationsVerifier implements Verifier {
             return;
         }
         
-        List<Invocation> chunk = finder.findFirstStrictlyUnverified(invocations, wanted);
+        List<Invocation> chunk = finder.findFirstUnverifiedChunk(invocations, wanted);
         
         boolean noMatchFound = chunk.size() == 0 || !wanted.matches(chunk.get(0));
         if (mode.wantedCountIsZero() && noMatchFound) {

@@ -4,9 +4,8 @@
  */
 package org.mockito.internal.verification;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -17,20 +16,19 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class NoMoreInvocationsVerifierTest extends RequiresValidState {
 
     private NoMoreInvocationsVerifier verifier;
-    private InvocationsAnalyzerStub analyzer;
+    private ActualInvocationsFinderStub finder;
     private ReporterStub reporterStub;
 
     @Before
     public void setup() {
-        analyzer = new InvocationsAnalyzerStub();
+        finder = new ActualInvocationsFinderStub();
         reporterStub = new ReporterStub();
-        verifier = new NoMoreInvocationsVerifier(analyzer, reporterStub);
+        verifier = new NoMoreInvocationsVerifier(finder, reporterStub);
     }
     
     @Test
@@ -40,31 +38,22 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldPassVerification() throws Exception {
-        analyzer.invocationToReturn = null;
+        finder.firstUnverifiedToReturn = null;
         verifier.verify(null, null, VerificationModeImpl.noMoreInteractions());
     }
     
     @Test
     public void shouldReportError() throws Exception {
         Invocation firstUnverified = new InvocationBuilder().toInvocation();
-        analyzer.invocationToReturn = firstUnverified;
+        finder.firstUnverifiedToReturn = firstUnverified;
         List<Invocation> invocations = asList(new InvocationBuilder().toInvocation());
         
         verifier.verify(invocations, null, VerificationModeImpl.noMoreInteractions());
         
-        assertSame(invocations, analyzer.invocations);
+        assertSame(invocations, finder.invocations);
         
         assertEquals(firstUnverified.toString(), reporterStub.undesired);
         assertSame(firstUnverified.getStackTrace(), reporterStub.actualInvocationStackTrace);
-    }
-    
-    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
-        private List<Invocation> invocations;
-        private Invocation invocationToReturn;
-        @Override public Invocation findFirstUnverified(List<Invocation> invocations) {
-            this.invocations = invocations;
-            return invocationToReturn;
-        }
     }
     
     class ReporterStub extends Reporter {

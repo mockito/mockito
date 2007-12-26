@@ -34,7 +34,7 @@ public class StrictlyMissingInvocationVerifier implements Verifier {
             return;
         }
         
-        List<Invocation> chunk = finder.findFirstStrictlyUnverified(invocations, wanted);
+        List<Invocation> chunk = finder.findFirstUnverifiedChunk(invocations, wanted);
         
         if (chunk.size() == 0) {
             reporter.strictlyWantedButNotInvoked(wanted.toString());

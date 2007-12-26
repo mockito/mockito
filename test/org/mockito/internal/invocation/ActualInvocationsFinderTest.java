@@ -1,5 +1,6 @@
 package org.mockito.internal.invocation;
 
+import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 import static org.mockito.util.ExtraMatchers.*;
@@ -40,39 +41,117 @@ public class ActualInvocationsFinderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFindFirstStrictlyUnverified() throws Exception {
-        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+    public void shouldFindFirstUnverifiedChunk() throws Exception {
+        List<Invocation> unverified = finder.findFirstUnverifiedChunk(invocations, new InvocationMatcher(simpleMethodInvocation));
         
         assertThat(unverified, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
     }
     
     @Test
-    public void shouldFindFirstStrictlyUnverifiedAndSkipVerified() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        
-        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
-        
-        assertThat(unverified, collectionHasExactlyInOrder(simpleMethodInvocationTwo));
-    }
-    
-    @Test
-    public void shouldFindFirstStrictlyUnverifiedAndSkipTwoVerifiedInvocations() throws Exception {
+    public void shouldFindFirstChunkAndSkipVerifiedInvocations() throws Exception {
         simpleMethodInvocation.markVerifiedStrictly();
         simpleMethodInvocationTwo.markVerifiedStrictly();
         
-        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+        List<Invocation> unverified = finder.findFirstUnverifiedChunk(invocations, new InvocationMatcher(simpleMethodInvocation));
         
         assertThat(unverified, collectionHasExactlyInOrder(differentMethodInvocation));
     }
     
     @Test
-    public void shouldFindFirstStrictlyUnverifiedAndSkipAllInvocations() throws Exception {
+    public void shouldFindFirstChunkAndSkipAllInvocations() throws Exception {
         simpleMethodInvocation.markVerifiedStrictly();
         simpleMethodInvocationTwo.markVerifiedStrictly();
         differentMethodInvocation.markVerifiedStrictly();
         
-        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+        List<Invocation> unverified = finder.findFirstUnverifiedChunk(invocations, new InvocationMatcher(simpleMethodInvocation));
         
         assertTrue(unverified.isEmpty());
     }
+    
+    @Test
+    public void shouldFindAllInvocationsBecauseAllMatch() throws Exception {
+        List<Invocation> unverified = finder.findFirstUnverifiedChunk(
+                asList(simpleMethodInvocation, simpleMethodInvocationTwo), new InvocationMatcher(simpleMethodInvocation));
+        
+        assertThat(unverified, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+    }
+    
+    @Test
+    public void shouldReturnFirstUnverifiedInvocationIfNoMatchesFound() throws Exception {
+        List<Invocation> unverified = finder.findFirstUnverifiedChunk(
+                asList(differentMethodInvocation), new InvocationMatcher(simpleMethodInvocation));
+        
+        assertThat(unverified, collectionHasExactlyInOrder(differentMethodInvocation));
+    }
+    
+    @Test
+    public void shouldFindFirstUnverifiedInvocation() throws Exception {
+        assertSame(simpleMethodInvocation, finder.findFirstUnverified(invocations));
+        
+        simpleMethodInvocationTwo.markVerified();
+        simpleMethodInvocation.markVerified();
+        
+        assertSame(differentMethodInvocation, finder.findFirstUnverified(invocations));
+        
+        differentMethodInvocation.markVerified();
+        assertNull(finder.findFirstUnverified(invocations));
+    }
+    
+    @Test
+    public void shouldFindFirstUnverifiedInvocationOnMock() throws Exception {
+        assertSame(simpleMethodInvocation, finder.findFirstUnverified(invocations, simpleMethodInvocation.getMock()));
+        assertNull(finder.findFirstUnverified(invocations, "different mock"));
+    }
+    
+    @Test
+    public void shouldFindSimilarInvocationByName() throws Exception {
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertSame(found, simpleMethodInvocation);
+    }
+    
+    @Test
+    public void shouldFindSimilarUnverifiedInvocationByName() throws Exception {
+        simpleMethodInvocation.markVerified();
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertSame(found, simpleMethodInvocationTwo);
+    }
+    
+    @Test
+    public void shouldFindSimilarInvocationByGettingFirstUnverified() throws Exception {
+        simpleMethodInvocation.markVerified();
+        simpleMethodInvocationTwo.markVerified();
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertSame(found, differentMethodInvocation);
+    }
+    
+    @Test
+    public void shouldNotFindSimilarInvocationBecauseAllAreVerified() throws Exception {
+        simpleMethodInvocation.markVerified();
+        simpleMethodInvocationTwo.markVerified();
+        differentMethodInvocation.markVerified();
+        
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertNull(found);
+    }
+    
+    @Test
+    public void shouldLookForSimilarInvocationsOnlyOnTheSameMock() throws Exception {
+        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
+        invocations.addFirst(onDifferentMock);
+        
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertNotSame(onDifferentMock, found);
+    }    
+    
+    @Test
+    public void shouldReturnLastUnverifiedFromTheSameMockOnly() throws Exception {
+        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
+        invocations.addFirst(onDifferentMock);
+
+        simpleMethodInvocation.markVerified();
+        simpleMethodInvocationTwo.markVerified();
+        
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        assertNotSame(onDifferentMock, found);
+    }  
 }

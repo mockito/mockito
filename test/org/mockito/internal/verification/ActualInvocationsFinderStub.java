@@ -13,11 +13,25 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 class ActualInvocationsFinderStub extends ActualInvocationsFinder {
+    
+    Invocation similarToReturn;
     final List<Invocation> actualToReturn = new LinkedList<Invocation>();
     List<Invocation> invocations;
+    Invocation firstUnverifiedToReturn;
+
     @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
             VerificationModeImpl mode) {
         this.invocations = invocations;
         return actualToReturn;
+    }
+    
+    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        this.invocations = invocations;
+        return similarToReturn;
+    }
+    
+    @Override public Invocation findFirstUnverified(List<Invocation> invocations) {
+        this.invocations = invocations;
+        return firstUnverifiedToReturn;
     }
 }

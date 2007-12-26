@@ -18,14 +18,12 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsAnalyzer;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class MissingInvocationVerifierTest extends RequiresValidState {
 
     private MissingInvocationVerifier verifier;
     
-    private InvocationsAnalyzerStub analyzerStub;
     private ActualInvocationsFinderStub finderStub;
     private ReporterStub reporterStub;
     
@@ -34,10 +32,9 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
 
     @Before
     public void setup() {
-        analyzerStub = new InvocationsAnalyzerStub();
         reporterStub = new ReporterStub();
         finderStub = new ActualInvocationsFinderStub();
-        verifier = new MissingInvocationVerifier(analyzerStub, finderStub, reporterStub);
+        verifier = new MissingInvocationVerifier(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -67,13 +64,13 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     public void shouldAskAnalyzerForSimilarInvocation() {
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
-        assertSame(invocations, analyzerStub.invocations);
+        assertSame(invocations, finderStub.invocations);
     }
     
     @Test
     public void shouldReportWantedButNotInvoked() {
         assertTrue(finderStub.actualToReturn.isEmpty());
-        analyzerStub.similarToReturn = null;
+        finderStub.similarToReturn = null;
         
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
@@ -84,23 +81,13 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     public void shouldReportWantedInvocationDiffersFromActual() {
         assertTrue(finderStub.actualToReturn.isEmpty());
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
-        analyzerStub.similarToReturn = actualInvocation;
+        finderStub.similarToReturn = actualInvocation;
         
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
         assertEquals(actualInvocation.toString(), reporterStub.actual);
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
-    }
-    
-    class InvocationsAnalyzerStub extends InvocationsAnalyzer {
-        private Invocation similarToReturn;
-        private List<Invocation> invocations;
-
-        @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-            this.invocations = invocations;
-            return similarToReturn;
-        }
     }
     
     class ReporterStub extends Reporter {
