@@ -33,7 +33,7 @@ public class StrictVerifier implements Verifier {
 
     //TODO tests! - do you like the message?
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.explicitMode() || !mode.strictMode()) {
+        if (!mode.strictMode()) {
             return;
         }
         

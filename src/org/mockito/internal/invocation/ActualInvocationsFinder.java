@@ -42,16 +42,4 @@ public class ActualInvocationsFinder {
         }
         return unverified;
     }
-    
-    private final class MatchingBasedDistributor implements Chunker.ChunksDistributor<Invocation> {
-        private final InvocationMatcher wanted;
-        
-        public MatchingBasedDistributor(InvocationMatcher wanted) {
-            this.wanted = wanted;
-        }
-        
-        public boolean isSameChunk(Invocation previous, Invocation current) {
-            return wanted.matches(previous) && wanted.matches(current);
-        }
-    }
 }

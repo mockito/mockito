@@ -66,7 +66,7 @@ public class VerificationModeImpl implements VerificationMode {
     }
     
     public boolean strictMode() {
-        return !mocksToBeVerifiedStrictly.isEmpty();
+        return !mocksToBeVerifiedStrictly.isEmpty() && explicitMode();
     }
     
     public boolean missingMethodMode() {
