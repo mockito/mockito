@@ -29,6 +29,7 @@ public class MockitoSampleTest extends RequiresValidState {
         
         verify(mockDatabase).updateNumberOfArticles("Guardian", 12);
         verify(mockDatabase).updateNumberOfPolishArticles("Guardian", 5);
+//        verify(mockDatabase).updateNumberOfEnglishArticles("Guardianx", 7);
         verify(mockDatabase).updateNumberOfEnglishArticles("Guardian", 7);
         
         verifyNoMoreInteractions(mockDatabase);
@@ -110,5 +111,6 @@ public class MockitoSampleTest extends RequiresValidState {
         
         strictly.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
         strictly.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
+//      strictly.verify(mockDatabase, atLeastOnce()).save(null);
     }
 }
