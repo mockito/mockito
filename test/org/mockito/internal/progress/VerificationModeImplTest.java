@@ -49,15 +49,15 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(times(0).missingMethodMode());
     }
     
-    @Test
-    public void shouldKnowIfIsExactNumberOfInvocationsMode() throws Exception {
-        assertTrue(times(0).exactNumberOfInvocationsMode());
-        assertTrue(times(1).exactNumberOfInvocationsMode());
-        assertTrue(times(2).exactNumberOfInvocationsMode());
-        
-        assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
-        assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
-    }
+//    @Test
+//    public void shouldKnowIfIsExactNumberOfInvocationsMode() throws Exception {
+//        assertTrue(times(0).exactNumberOfInvocationsMode());
+//        assertTrue(times(1).exactNumberOfInvocationsMode());
+//        assertTrue(times(2).exactNumberOfInvocationsMode());
+//        
+//        assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
+//        assertFalse(atLeastOnce().exactNumberOfInvocationsMode());
+//    }
     
     @Test
     public void shouldKnowIfIsStrict() throws Exception {
@@ -114,5 +114,14 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertFalse(times(0).tooManyActualInvocations(0));
         assertFalse(times(1).tooManyActualInvocations(1));
         assertFalse(times(2).tooManyActualInvocations(1));
+    }
+    
+    @Test
+    public void shouldKnowIfWantedCountIsZero() throws Exception {
+        assertTrue(times(0).wantedCountIsZero());
+        
+        assertFalse(times(1).wantedCountIsZero());
+        assertFalse(times(20).wantedCountIsZero());
+        assertFalse(atLeastOnce().wantedCountIsZero());
     }
 }

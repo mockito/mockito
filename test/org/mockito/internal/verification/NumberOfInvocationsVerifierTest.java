@@ -20,6 +20,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsAnalyzer;
+import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class NumberOfInvocationsVerifierTest extends RequiresValidState {
@@ -43,8 +44,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldNeverVerifyWhenNotModeIsNotExactNumberOfInvocationsMode() throws Exception {
-        verifier.verify(null, null, atLeastOnce());
+    public void shouldNeverVerifyWhenNotModeIsStrict() throws Exception {
+        verifier.verify(null, null, new VerificationModeBuilder().strict());
     }
     
     @Test
@@ -112,6 +113,17 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         assertEquals(1, reporterStub.actualCount);
         assertEquals(0, reporterStub.wantedCount);
         assertEquals(wanted.toString(), reporterStub.wanted);
+    }
+    
+    @Test
+    public void shouldMarkInvocationsAsVerified() throws Exception {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        finderStub.actualToReturn.add(invocation);
+        assertFalse(invocation.isVerified());
+        
+        verifier.verify(invocations, wanted, atLeastOnce());
+        
+        assertTrue(invocation.isVerified());
     }
     
     class InvocationsAnalyzerStub extends InvocationsAnalyzer {

@@ -12,10 +12,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -81,7 +78,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -94,15 +91,15 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
-    @Test(expected=TooManyActualInvocations.class)
+    @Test(expected=StrictVerificationFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
         strictly.verify(mockOne, times(0)).simpleMethod(1);
     }
     
-    @Test(expected=TooLittleActualInvocations.class)
+    @Test(expected=StrictVerificationFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
         strictly.verify(mockOne, times(2)).simpleMethod(1);
     }
@@ -113,7 +110,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(3)).simpleMethod(2);
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -122,7 +119,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(0)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }    
     
     @Test
@@ -134,7 +131,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, times(0)).simpleMethod(4);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -146,17 +143,17 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne, times(2)).simpleMethod(4);
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }    
     
     /* ------------- */
     
-    @Test(expected=InvocationDiffersFromActual.class)
+    @Test(expected=StrictVerificationFailure.class)
     public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
         strictly.verify(mockOne).simpleMethod(100);
     }
     
-    @Test(expected=InvocationDiffersFromActual.class)
+    @Test(expected=StrictVerificationFailure.class)
     public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
         strictly.verify(mockOne).oneArg(true);
     }
@@ -167,7 +164,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(-999);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -176,7 +173,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).oneArg(true);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     }    
     
     @Test
@@ -188,7 +185,7 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).simpleMethod(-666);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -200,42 +197,42 @@ public class BasicStrictVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).oneArg(false);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     }    
     
     /* -------------- */
     
-    @Test
-    public void shouldPassSingleMethodFromTheMiddleOfSequence() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenLastMethodVerifiedFirst() {
         strictly.verify(mockOne).simpleMethod(4);
     }
     
-    @Test
-    public void shouldPassSingleMethodUsingTimesMode() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenMiddleMethodVerifiedFirst() {
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
     }
     
-    @Test
-    public void shouldPassSingleMethodUsingAtLeastOnceMode() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenMiddleMethodVerifiedFirstInAtLeastOnceMode() {
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
     }
     
-    @Test
-    public void shouldPassIfSomeMethodsFromTheMiddleAreLeftOut() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenSomeMiddleMethodsAreLeftOut() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
         strictly.verify(mockOne).simpleMethod(4);
     }
     
-    @Test
-    public void shouldPassUsingAtLeastOnceIfSomeMethodsFromTheMiddleAreLeftOut() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenSomeMiddleMethodsInAtLeastOnceModeAreLeftOut() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
     }
     
-    @Test
-    public void shouldAllowLastMethodEarly() {
+    @Test(expected=StrictVerificationFailure.class)
+    public void shouldFailWhenLastMethodIsTooEarly() {
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockOne).simpleMethod(4);
     }

@@ -11,48 +11,7 @@ import org.mockito.internal.progress.VerificationModeImpl;
 
 public class ActualInvocationsFinder {
 
-    private final Chunker chunker;
-    
-    public ActualInvocationsFinder() {
-        this(new Chunker());
-    }
-    
-    ActualInvocationsFinder(Chunker chunker) {
-        this.chunker = chunker;
-    }
-
     public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (mode.strictMode()) {
-            List<Invocation> unverified = new InvocationsAnalyzer().removeUntilLastStrictlyVerified(invocations);
-            return strictlyMatching(unverified, wanted, mode); 
-        } else {
-            return nonStrictlyMatching(invocations, wanted);
-        }
-    }
-
-    private List<Invocation> strictlyMatching(List<Invocation> invocations, InvocationMatcher wanted,
-            VerificationModeImpl mode) {
-        List<ObjectsChunk<Invocation>> chunks = chunker.chunk(invocations, new MatchesWantedSeer(wanted));
-        List<Invocation> firstMatching = new LinkedList<Invocation>(); 
-        for(ObjectsChunk<Invocation> chunk : chunks) {
-            boolean wantedMatchesActual = wanted.matches(chunk.getObject());
-            if (!wantedMatchesActual) {
-                continue;
-            }
-            
-            if (firstMatching.isEmpty()) {
-                firstMatching.addAll(chunk.getObjects());
-            }
-                
-            boolean chunkSizeMatches = mode.matchesActualCount(chunk.getSize());
-            if (chunkSizeMatches) {
-                return chunk.getObjects();
-            }
-        }
-        return firstMatching;
-    }
-
-    private List<Invocation> nonStrictlyMatching(List<Invocation> invocations, InvocationMatcher wanted) {
         List<Invocation> actual = new LinkedList<Invocation>();
         for (Invocation i : invocations) {
             if (wanted.matches(i)) {
@@ -61,11 +20,33 @@ public class ActualInvocationsFinder {
         }
         return actual;
     }
-    
-    private final class MatchesWantedSeer implements Chunker.ChunkSeer<Invocation> {
-        private final InvocationMatcher wanted;
 
-        public MatchesWantedSeer(InvocationMatcher wanted) {
+    public List<Invocation> findFirstStrictlyUnverified(List<Invocation> invocations, InvocationMatcher wanted) {
+        List<Invocation> unverified = new LinkedList<Invocation>();
+        //TODO refactor
+        for (Invocation i : invocations) {
+            if (i.isVerifiedStrictly()) {
+                continue;
+            }
+            
+            if (wanted.matches(i)) {
+                unverified.add(i);
+                continue;
+            }
+            
+            if (unverified.isEmpty()) {
+                unverified.add(i);
+            }
+            
+            break;
+        }
+        return unverified;
+    }
+    
+    private final class MatchingBasedDistributor implements Chunker.ChunksDistributor<Invocation> {
+        private final InvocationMatcher wanted;
+        
+        public MatchingBasedDistributor(InvocationMatcher wanted) {
             this.wanted = wanted;
         }
         

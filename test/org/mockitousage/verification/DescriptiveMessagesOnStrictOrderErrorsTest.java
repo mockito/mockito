@@ -5,6 +5,7 @@
 package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -15,10 +16,7 @@ import org.mockito.Strictly;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidState {
@@ -44,16 +42,16 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     }
     
     @Test
-    public void shouldPrintStrictVerificationError() {
+    public void shouldPrintStrictErrorAndShowBothWantedAndActual() {
         strictly.verify(one, atLeastOnce()).simpleMethod(1);
         
         try {
             strictly.verify(one).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (StrictVerificationFailure e) {
             String expected = 
                     "\n" +
-                    "Invocation differs from actual" +
+                    "Strict verification failure" +
                     "\n" +
                     "Wanted invocation:" +
                     "\n" +
@@ -82,9 +80,11 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         try {
             strictly.verify(three).simpleMethod(999);
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (StrictVerificationFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
+                    "\n" +
+                    "Strict verification failure" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -94,15 +94,17 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     }   
     
     @Test
-    public void shouldPrintWrongNumberOfInvocations() {
+    public void shouldPrintTooManyInvocations() {
         strictly.verify(one).simpleMethod(1);
         strictly.verify(one).simpleMethod(11);
         try {
             strictly.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (StrictVerificationFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
+                    "\n" +
+                    "Strict verification failure" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +
@@ -119,56 +121,21 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     }  
     
     @Test
-    public void shouldPrintThatWantedButNotInvoked() {
-        strictly.verify(two, atLeastOnce()).simpleMethod(2);
-        try {
-            strictly.verify(one).simpleMethod(1);
-            fail();
-        } catch (WantedButNotInvoked e) {}
-    }  
-    
-    @Test
-    public void shouldPrintUndesiredInvocation() {
-        two.simpleMethod(2);
-        two.simpleMethod(2);
-        two.simpleMethod(2);
-        
-        strictly.verify(three, atLeastOnce()).simpleMethod(3);
-        
-        try {
-            strictly.verify(two, times(2)).simpleMethod(2);
-            fail();
-        } catch (TooManyActualInvocations e) {
-            String actualMessage = e.getMessage();
-            String expectedMessage = 
-                    "\n" +
-                    "IMethods.simpleMethod(2)" +
-                    "\n" +
-                    "Wanted 2 times but was 3";
-            assertEquals(expectedMessage, actualMessage);
-            
-            assertEquals(e.getCause().getClass(), UndesiredInvocation.class);
-            
-            String expectedCause = 
-                "\n" +
-                "Undesired invocation:";
-            
-            assertEquals(expectedCause, e.getCause().getMessage());
-        }
-    }
-    
-    @Test
     public void shouldPrintTooLittleInvocations() {
         two.simpleMethod(2);
         
+        strictly.verify(one, atLeastOnce()).simpleMethod(anyInt());
+        strictly.verify(two, times(2)).simpleMethod(2);
         strictly.verify(three, atLeastOnce()).simpleMethod(3);
         
         try {
             strictly.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (StrictVerificationFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
+                    "\n" +
+                    "Strict verification failure" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +

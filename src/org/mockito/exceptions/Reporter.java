@@ -14,10 +14,11 @@ import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 /**
@@ -75,6 +76,7 @@ public class Reporter {
 
     }
 
+    //TODO refactor to wanted but not invoked with wanted and actual
     public void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
@@ -89,9 +91,32 @@ public class Reporter {
                 wanted
             ), cause);
     }
+    
+    public void strictVerificationFailed(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
+                "Actual invocation:",
+                actual
+            ));
+
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
+                "Wanted invocation:",
+                wanted
+            ), cause);
+    }
 
     public void wantedButNotInvoked(String wanted) {
         throw new WantedButNotInvoked(join(
+                    "Wanted but not invoked:",
+                    wanted
+        ));
+    }
+    
+    public void strictlyWantedButNotInvoked(String wanted) {
+        throw new StrictVerificationFailure(join(
+                    "Strict verification failure",
                     "Wanted but not invoked:",
                     wanted
         ));
@@ -106,6 +131,18 @@ public class Reporter {
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
     }
+    
+    //TODO duplicated
+    public void strictlyTooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
+        cause.setStackTrace(firstUndesired.getStackTrace());
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }    
 
     public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
         TooLittleInvocations cause = null;
@@ -115,6 +152,20 @@ public class Reporter {
         }
 
         throw new TooLittleActualInvocations(join(
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+    
+    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+        TooLittleInvocations cause = null;
+        if (lastActualInvocationStackTrace != null) {
+            cause = new TooLittleInvocations(join("Too little invocations:"));
+            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
+        }
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);

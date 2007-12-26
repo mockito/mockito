@@ -48,7 +48,6 @@ public class MissingInvocationVerifier implements Verifier {
             InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
             reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
         } else {
-            //TODO For strictly, I really want a cause here, something like: "wanted after..." for strictly... :D
             reporter.wantedButNotInvoked(wanted.toString());
         }
     }

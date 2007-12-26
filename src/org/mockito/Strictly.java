@@ -19,7 +19,6 @@ import org.mockito.internal.progress.VerificationMode;
  * See examples {@link Mockito#createStrictOrderVerifier(Object...)}
  */
 public interface Strictly {
-
     /**
      * Verifies mock object strictly in order. E.g:
      * 

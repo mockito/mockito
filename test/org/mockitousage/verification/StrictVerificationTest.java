@@ -13,8 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -45,24 +44,23 @@ public class StrictVerificationTest extends RequiresValidState {
         verify(mockOne).simpleMethod(2);
         verify(mockOne).simpleMethod(1);
         
-        strictly.verify(mockOne).simpleMethod(2);
         try {
-            strictly.verify(mockOne).simpleMethod(1);
+            strictly.verify(mockOne).simpleMethod(2);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (StrictVerificationFailure e) {}
     } 
     
     @Test
-    public void shouldCausePointToMockOne() {
+    public void shouldMessagesPointToProperMethod() {
         mockTwo.differentMethod();
         mockOne.simpleMethod();
         
         try {
             strictly.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e, messageContains("IMethods.differentMethod()"));
-            assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
+            assertThat(e, causeMessageContains("IMethods.differentMethod()"));
         }
     }
     
@@ -75,11 +73,12 @@ public class StrictVerificationTest extends RequiresValidState {
         mockOne.simpleMethod();
         
         strictly.verify(mockOne, atLeastOnce()).simpleMethod();
+        strictly.verify(mockTwo).differentMethod();
         strictly.verify(mockOne, times(2)).simpleMethod();
         try {
             strictly.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -93,10 +92,11 @@ public class StrictVerificationTest extends RequiresValidState {
         verify(mockOne, times(4)).simpleMethod(anyInt());
         
         strictly.verify(mockOne, times(2)).simpleMethod(anyInt());
+        strictly.verify(mockTwo).differentMethod();
         strictly.verify(mockOne, times(2)).simpleMethod(anyInt());
         try {
             strictly.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (StrictVerificationFailure e) {}
     }
 }

@@ -8,16 +8,21 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
+import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
+/**
+ * ignored since Relaxed strict verification is not implemented (too complex to bother).
+ */
+@Ignore
 @SuppressWarnings("unchecked")  
 public class RelaxedStrictVerificationTest extends RequiresValidState {
     

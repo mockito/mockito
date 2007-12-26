@@ -21,10 +21,10 @@ import org.mockito.internal.stubbing.EmptyReturnValues;
 import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
-import org.mockito.internal.verification.MarkingVerifier;
 import org.mockito.internal.verification.MissingInvocationVerifier;
 import org.mockito.internal.verification.NoMoreInvocationsVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
+import org.mockito.internal.verification.StrictVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 
@@ -110,9 +110,9 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
     
     private VerifyingRecorder createRecorder() {
         List<Verifier> verifiers = Arrays.asList(
+                new StrictVerifier(),
                 new MissingInvocationVerifier(),
                 new NumberOfInvocationsVerifier(),
-                new MarkingVerifier(),
                 new NoMoreInvocationsVerifier());
         return new VerifyingRecorder(new AllInvocationsFinder(), verifiers);
     }

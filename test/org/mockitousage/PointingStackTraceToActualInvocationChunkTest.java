@@ -14,19 +14,23 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
-public class PointingStackTraceToActualChunkTest extends RequiresValidState {
+//TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
+public class PointingStackTraceToActualInvocationChunkTest extends RequiresValidState {
     
     private IMethods mock;
     private IMethods mockTwo;
+    private Strictly strictly;
 
     @Before
     public void setup() {
         mock = Mockito.mock(IMethods.class);
         mockTwo = Mockito.mock(IMethods.class);
+        strictly = createStrictOrderVerifier(mock, mockTwo);
         
         firstChunk();
         secondChunk();
@@ -51,66 +55,67 @@ public class PointingStackTraceToActualChunkTest extends RequiresValidState {
         mockTwo.simpleMethod(4);
     }
     
+    @Test
     public void shouldPointStackTraceToActualInvocation() {
-        Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
-        
         strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
         
         try {
             strictly.verify(mock).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
         }
     }
     
     @Test
     public void shouldPointToActualInvocation() {
-        Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
             strictly.verify(mockTwo).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
         }
     }
     
     @Test
     public void shouldPointToUnverifiedInvocation() {
-        Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
             strictly.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
         }
     }
     
     @Test
     public void shouldPointToTooManyInvocationsChunk() {
-        Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
             strictly.verify(mockTwo).simpleMethod(anyInt());
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
         }
     }
     
     @Test
     public void shouldPointToTooLittleInvocationsUnverifiedChunk() {
-        Strictly strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
             strictly.verify(mockTwo, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
         }
     }

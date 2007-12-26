@@ -17,6 +17,7 @@ import org.mockito.StateResetter;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 public class StackTraceFilteringTest extends RequiresValidState {
@@ -83,11 +84,10 @@ public class StackTraceFilteringTest extends RequiresValidState {
         mock.oneArg(true);
         mock.oneArg(false);
         
-        strictly.verify(mock).oneArg(false); 
         try {
-            strictly.verify(mock).oneArg(true);
+            strictly.verify(mock).oneArg(false); 
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (StrictVerificationFailure e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));
         }
     }

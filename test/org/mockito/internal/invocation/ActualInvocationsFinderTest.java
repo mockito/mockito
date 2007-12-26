@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.internal.progress.VerificationModeBuilder;
 
 
 public class ActualInvocationsFinderTest extends RequiresValidState {
@@ -41,62 +40,39 @@ public class ActualInvocationsFinderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldSearchOnlyAfterLastStrictlyVerified() throws Exception {
+    public void shouldFindFirstStrictlyUnverified() throws Exception {
+        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+        
+        assertThat(unverified, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+    }
+    
+    @Test
+    public void shouldFindFirstStrictlyUnverifiedAndSkipVerified() throws Exception {
+        simpleMethodInvocation.markVerifiedStrictly();
+        
+        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+        
+        assertThat(unverified, collectionHasExactlyInOrder(simpleMethodInvocationTwo));
+    }
+    
+    @Test
+    public void shouldFindFirstStrictlyUnverifiedAndSkipTwoVerifiedInvocations() throws Exception {
         simpleMethodInvocation.markVerifiedStrictly();
         simpleMethodInvocationTwo.markVerifiedStrictly();
         
-        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().strict());
-        assertTrue(actual.isEmpty());
+        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
+        
+        assertThat(unverified, collectionHasExactlyInOrder(differentMethodInvocation));
     }
     
     @Test
-    public void shouldSearchAndFindOnlyAfterLastStrictlyVerified() throws Exception {
+    public void shouldFindFirstStrictlyUnverifiedAndSkipAllInvocations() throws Exception {
+        simpleMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocationTwo.markVerifiedStrictly();
         differentMethodInvocation.markVerifiedStrictly();
         
-        Invocation lastInvocation = new InvocationBuilder().simpleMethod().toInvocation();
-        invocations.add(lastInvocation);
+        List<Invocation> unverified = finder.findFirstStrictlyUnverified(invocations, new InvocationMatcher(simpleMethodInvocation));
         
-        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().strict());
-        assertThat(actual, collectionHasExactlyInOrder(lastInvocation));
-    }
-
-    @Test
-    public void shouldFindLastInvocationWhenModeIsOneTimeStrictly() throws Exception {
-        Invocation lastSimpleMethodInvocation = new InvocationBuilder().toInvocation();
-        invocations.add(lastSimpleMethodInvocation);
-        
-        List<Invocation> actual = finder.findInvocations(
-                invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().times(1).strict());
-        assertThat(actual, collectionHasExactlyInOrder(lastSimpleMethodInvocation));
-    }
-    
-    @Test
-    public void shouldFindFirstTwoInvocationsWhenModeIsTwoTimesStrictly() throws Exception {
-        Invocation lastSimpleMethodInvocation = new InvocationBuilder().toInvocation();
-        invocations.add(lastSimpleMethodInvocation);
-        
-        List<Invocation> actual = finder.findInvocations(
-                invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().times(2).strict());
-        assertThat(actual, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
-    }
-    
-    @Test
-    public void shouldFindFirstMatchingChunkWhenWantedCountDoesNotMatch() throws Exception {
-        Invocation lastSimpleMethodInvocation = new InvocationBuilder().toInvocation();
-        invocations.add(lastSimpleMethodInvocation);
-        
-        List<Invocation> actual = finder.findInvocations(
-                invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().times(20).strict());
-        assertThat(actual, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
-    }
-    
-    @Test
-    public void shouldFindFirstTwoInvocationsWhenModeIsAtLeastOnceStrictly() throws Exception {
-        Invocation lastSimpleMethodInvocation = new InvocationBuilder().toInvocation();
-        invocations.add(lastSimpleMethodInvocation);
-        
-        List<Invocation> actual = finder.findInvocations(
-                invocations, new InvocationMatcher(simpleMethodInvocation), new VerificationModeBuilder().atLeastOnce().strict());
-        assertThat(actual, collectionHasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+        assertTrue(unverified.isEmpty());
     }
 }

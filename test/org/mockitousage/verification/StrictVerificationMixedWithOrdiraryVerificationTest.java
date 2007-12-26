@@ -13,6 +13,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -102,14 +103,17 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         verify(mockTwo).simpleMethod(2);
         verify(mockOne, atLeastOnce()).simpleMethod(1);
 
-        strictly.verify(mockThree).simpleMethod(3);
+        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
     }
     
     @Test
-    public void shouldAllowLastInvocationEarly() {
+    public void shouldFailOnLastInvocationTooEarly() {
         strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
         verify(mockTwo).simpleMethod(2);
-        strictly.verify(mockThree).simpleMethod(4);
+        try {
+            strictly.verify(mockThree).simpleMethod(4);
+            fail();
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test(expected=MockitoException.class)

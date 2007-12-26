@@ -14,7 +14,7 @@ public class Chunker {
      * <p>
      * if objects are [1,1,2,1,1] then there are 3 chunks: [1,1] [2] [1,1]
      */
-    public <T> List<ObjectsChunk<T>> chunk(List<T> objects, ChunkSeer<T> chunkSeer) {
+    public <T> List<ObjectsChunk<T>> chunk(List<T> objects, ChunksDistributor<T> distributor) {
         LinkedList<ObjectsChunk<T>> chunks = new LinkedList<ObjectsChunk<T>>();
         T previous = null;
         for (T current : objects) {
@@ -24,7 +24,7 @@ public class Chunker {
                 continue;
             } 
             
-            if (chunkSeer.isSameChunk(previous, current)) {
+            if (distributor.isSameChunk(previous, current)) {
                 chunks.getLast().addObject(current);
             } else {
                 chunks.add(new ObjectsChunk<T>(current));
@@ -36,7 +36,7 @@ public class Chunker {
         return chunks;
     }
     
-    static interface ChunkSeer<T> {
+    static interface ChunksDistributor<T> {
         boolean isSameChunk(T previous, T current);
     }
 }

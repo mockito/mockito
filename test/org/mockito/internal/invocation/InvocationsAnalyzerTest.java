@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class InvocationsAnalyzerTest extends RequiresValidState {
@@ -128,29 +127,6 @@ public class InvocationsAnalyzerTest extends RequiresValidState {
         Invocation found = analyzer.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         assertNotSame(onDifferentMock, found);
     }  
-    
-    @Test
-    public void shouldLookForSimilarOnlyAfterLastStrictlyVerified() throws Exception {
-        VerificationModeImpl mode = new VerificationModeBuilder().strict();
-        
-        simpleMethodInvocationTwo.markVerifiedStrictly();
-        
-        Invocation found = analyzer.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), mode);
-        assertSame(differentMethodInvocation, found);
-    }
-    
-    @Test
-    public void shouldFindSimilarAfterLastStrictlyVerified() throws Exception {
-        VerificationModeImpl mode = new VerificationModeBuilder().strict();
-        
-        Invocation lastInvocation = new InvocationBuilder().simpleMethod().toInvocation();
-        invocations.add(lastInvocation);
-        
-        simpleMethodInvocationTwo.markVerifiedStrictly();
-        
-        Invocation found = analyzer.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), mode);
-        assertSame(found, lastInvocation);
-    }
     
     @Test
     public void shouldFindLastMatchingInvocationTrace() throws Exception {

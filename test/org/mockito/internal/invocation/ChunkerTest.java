@@ -17,7 +17,7 @@ import org.mockito.RequiresValidState;
 
 public class ChunkerTest extends RequiresValidState {
 
-    private final class EqualitySeer implements Chunker.ChunkSeer<Integer> {
+    private final class EqualityBasedDistributor implements Chunker.ChunksDistributor<Integer> {
         public boolean isSameChunk(Integer previous, Integer current) {
             return previous.equals(current);
         }
@@ -32,7 +32,7 @@ public class ChunkerTest extends RequiresValidState {
 
     @Test
     public void shouldChunkObjectLists() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 2, 3), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 2, 3), new EqualityBasedDistributor());
         assertEquals(3, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1));
         assertThat(chunked.get(1).getObjects(), collectionHasExactlyInOrder(2));
@@ -41,7 +41,7 @@ public class ChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldChunkObjectListsAndFindDuplicates() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 1, 2, 2, 3, 3, 3, 3), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 1, 2, 2, 3, 3, 3, 3), new EqualityBasedDistributor());
         assertEquals(3, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1, 1, 1));
         assertThat(chunked.get(1).getObjects(), collectionHasExactlyInOrder(2, 2));
@@ -50,7 +50,7 @@ public class ChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldChunkWhenDuplicatesOnEdges() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 2, 3, 3), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 2, 3, 3), new EqualityBasedDistributor());
         assertEquals(3, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1, 1));
         assertThat(chunked.get(1).getObjects(), collectionHasExactlyInOrder(2));
@@ -59,7 +59,7 @@ public class ChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldChunkWhenDuplicatesInTheMiddle() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 2, 2, 3), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 2, 2, 3), new EqualityBasedDistributor());
         assertEquals(3, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1));
         assertThat(chunked.get(1).getObjects(), collectionHasExactlyInOrder(2, 2));
@@ -68,7 +68,7 @@ public class ChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldNotMergeDuplicatesThatAreNotConsecutive() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 2, 1, 1, 1), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1, 2, 1, 1, 1), new EqualityBasedDistributor());
         assertEquals(3, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1, 1));
         assertThat(chunked.get(1).getObjects(), collectionHasExactlyInOrder(2));
@@ -77,21 +77,21 @@ public class ChunkerTest extends RequiresValidState {
     
     @Test
     public void shouldCreateSingleChunkForOneElementList() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1), new EqualityBasedDistributor());
         assertEquals(1, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1));
     }
     
     @Test
     public void shouldCreateSingleChunkOfSizeTwo() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(asList(1, 1), new EqualityBasedDistributor());
         assertEquals(1, chunked.size());
         assertThat(chunked.get(0).getObjects(), collectionHasExactlyInOrder(1, 1));
     }
     
     @Test
     public void shouldCreateEmptyChunks() throws Exception {
-        List<ObjectsChunk<Integer>> chunked = chunker.chunk(Collections.<Integer>emptyList(), new EqualitySeer());
+        List<ObjectsChunk<Integer>> chunked = chunker.chunk(Collections.<Integer>emptyList(), new EqualityBasedDistributor());
         assertEquals(0, chunked.size());
     }
 }

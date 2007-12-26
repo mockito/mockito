@@ -31,7 +31,8 @@ public class NumberOfInvocationsVerifier implements Verifier {
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.exactNumberOfInvocationsMode()) {
+        //TODO push to mode
+        if (mode.strictMode() || !mode.explicitMode()) {
             return;
         }
         
@@ -44,6 +45,10 @@ public class NumberOfInvocationsVerifier implements Verifier {
         } else if (mode.tooManyActualInvocations(actualCount)) {
             HasStackTrace firstUndesired = analyzer.findFirstUndesiredInvocationTrace(actualInvocations, wanted, mode);
             reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
+        }
+        
+        for (Invocation i : actualInvocations) {
+            i.markVerified();
         }
     }
 }

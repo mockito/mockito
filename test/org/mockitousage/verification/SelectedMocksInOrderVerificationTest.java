@@ -12,10 +12,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.Strictly;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.StrictVerificationFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -88,18 +85,17 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockOne).differentMethod();
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (StrictVerificationFailure e) {}
     } 
     
     @Test
     public void shouldFailVerificationForMockOneBecauseOfWrongOrder() {
         Strictly strictly = createStrictOrderVerifier(mockOne);
-        strictly.verify(mockOne).simpleMethod(4);
         
         try {
-            strictly.verify(mockOne).simpleMethod(1);
+            strictly.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (StrictVerificationFailure e) {}
     } 
 
     @Test
@@ -127,7 +123,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -137,7 +133,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -147,7 +143,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -157,7 +153,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (StrictVerificationFailure e) {}
     }
     
     @Test
@@ -173,12 +169,9 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         Strictly strictly = createStrictOrderVerifier(mockTwo, mockThree);
 
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
-        strictly.verify(mockTwo, times(1)).simpleMethod(2);
-        verifyNoMoreInteractions(mockTwo);
-        try {
-            verifyNoMoreInteractions(mockThree);
-            fail();
-        } catch (NoInteractionsWanted e) {}
+        strictly.verify(mockThree).simpleMethod(3);
+        strictly.verify(mockTwo).simpleMethod(2);
+        verifyNoMoreInteractions(mockTwo, mockThree);
     }
     
     @Test

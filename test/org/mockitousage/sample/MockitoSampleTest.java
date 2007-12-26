@@ -3,15 +3,15 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.sample;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
+import org.mockito.Strictly;
 
 public class MockitoSampleTest extends RequiresValidState {
     
@@ -87,5 +87,28 @@ public class MockitoSampleTest extends RequiresValidState {
         verify(mockDatabase).save(articleOne);
         verify(mockDatabase).save(articleTwo);
         verify(mockDatabase).save(articleThree);
+    }
+    
+    @Test
+    public void strictVerificationAndArgumentMatchers() {
+        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
+        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
+        
+        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
+
+        Article articleOne = new Article();
+        Article articleTwo = new Article();
+        
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(1);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(12);
+        
+        stub(mockDatabase.getArticlesFor("Guardian")).andReturn(Arrays.asList(articleOne, articleTwo)); 
+        
+        articleManager.updateRelatedArticlesCounters("Guardian");
+
+        Strictly strictly = createStrictOrderVerifier(mockDatabase);
+        
+        strictly.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
+        strictly.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
     }
 }
