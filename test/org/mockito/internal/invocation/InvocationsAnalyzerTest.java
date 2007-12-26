@@ -13,8 +13,6 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationModeImpl;
 
 public class InvocationsAnalyzerTest extends RequiresValidState {
     

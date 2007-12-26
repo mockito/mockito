@@ -7,7 +7,6 @@ package org.mockito.internal.invocation;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 /**
