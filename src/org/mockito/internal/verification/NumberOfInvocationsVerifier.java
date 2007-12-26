@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.invocation.ActualInvocationsFinder;
+import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeImpl;
@@ -16,13 +16,13 @@ import org.mockito.internal.progress.VerificationModeImpl;
 public class NumberOfInvocationsVerifier implements Verifier {
     
     private final Reporter reporter;
-    private final ActualInvocationsFinder finder;
+    private final InvocationsFinder finder;
 
     public NumberOfInvocationsVerifier() {
-        this(new Reporter(), new ActualInvocationsFinder());
+        this(new Reporter(), new InvocationsFinder());
     }
     
-    NumberOfInvocationsVerifier(Reporter reporter, ActualInvocationsFinder finder) {
+    NumberOfInvocationsVerifier(Reporter reporter, InvocationsFinder finder) {
         this.reporter = reporter;
         this.finder = finder;
     }

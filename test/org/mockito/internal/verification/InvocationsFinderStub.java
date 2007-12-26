@@ -7,12 +7,12 @@ package org.mockito.internal.verification;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.invocation.ActualInvocationsFinder;
+import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeImpl;
 
-class ActualInvocationsFinderStub extends ActualInvocationsFinder {
+class InvocationsFinderStub extends InvocationsFinder {
     
     Invocation similarToReturn;
     final List<Invocation> actualToReturn = new LinkedList<Invocation>();

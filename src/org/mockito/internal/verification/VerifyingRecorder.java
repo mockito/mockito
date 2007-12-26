@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorder {
@@ -17,10 +17,10 @@ public class VerifyingRecorder {
     private LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
 
     private final List<? extends Verifier> verifiers;
-    private final InvocationsFinder invocationsFinder;
+    private final GlobalInvocationsFinder globalInvocationsFinder;
 
-    public VerifyingRecorder(InvocationsFinder invocationsFinder, List<? extends Verifier> verifiers) {
-        this.invocationsFinder = invocationsFinder;
+    public VerifyingRecorder(GlobalInvocationsFinder globalInvocationsFinder, List<? extends Verifier> verifiers) {
+        this.globalInvocationsFinder = globalInvocationsFinder;
         this.verifiers = verifiers;
     }
 
@@ -43,7 +43,7 @@ public class VerifyingRecorder {
     public void verify(InvocationMatcher wanted, VerificationModeImpl mode) {
         List<Invocation> invocations;
         if (mode.strictMode()) {
-            invocations = invocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedStrictly());
+            invocations = globalInvocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedStrictly());
         } else {
             invocations = registeredInvocations;
         }

@@ -16,7 +16,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
@@ -31,7 +31,7 @@ public class VerifyingRecorderTest extends RequiresValidState {
     @Before
     public void setup() {
         verifierStub = new VerifierStub();
-        recorder = new VerifyingRecorder(new InvocationsFinder() {
+        recorder = new VerifyingRecorder(new GlobalInvocationsFinder() {
             public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
                 return asList(simpleMethod, differentMethod.getInvocation());
             }}, asList(verifierStub));

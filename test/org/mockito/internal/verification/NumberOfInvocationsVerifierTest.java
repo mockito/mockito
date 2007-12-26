@@ -27,12 +27,12 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
-    private ActualInvocationsFinderStub finderStub;
+    private InvocationsFinderStub finderStub;
     
     @Before
     public void setup() {
         reporterStub = new ReporterStub();
-        finderStub = new ActualInvocationsFinderStub();
+        finderStub = new InvocationsFinderStub();
         verifier = new NumberOfInvocationsVerifier(reporterStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();

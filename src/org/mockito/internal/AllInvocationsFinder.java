@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.invocation.GlobalInvocationsFinder;
 
-public class AllInvocationsFinder implements InvocationsFinder {
+public class AllInvocationsFinder implements GlobalInvocationsFinder {
     
     public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());

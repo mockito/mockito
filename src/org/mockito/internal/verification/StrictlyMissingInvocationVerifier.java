@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.ActualInvocationsFinder;
+import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsPrinter;
@@ -16,18 +16,17 @@ import org.mockito.internal.progress.VerificationModeImpl;
 public class StrictlyMissingInvocationVerifier implements Verifier {
     
     private final Reporter reporter;
-    private final ActualInvocationsFinder finder;
+    private final InvocationsFinder finder;
     
     public StrictlyMissingInvocationVerifier() {
-        this(new ActualInvocationsFinder(), new Reporter());
+        this(new InvocationsFinder(), new Reporter());
     }
     
-    public StrictlyMissingInvocationVerifier(ActualInvocationsFinder finder, Reporter reporter) {
+    public StrictlyMissingInvocationVerifier(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }
 
-    //TODO tests! - do you like the message?
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         //TODO push to mode
         if (!mode.strictMode() || mode.wantedCountIsZero()) {

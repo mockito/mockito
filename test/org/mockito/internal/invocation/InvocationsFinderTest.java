@@ -14,13 +14,13 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 
 
-public class ActualInvocationsFinderTest extends RequiresValidState {
+public class InvocationsFinderTest extends RequiresValidState {
     
     private LinkedList<Invocation> invocations = new LinkedList<Invocation>();
     private Invocation simpleMethodInvocation;
     private Invocation simpleMethodInvocationTwo;
     private Invocation differentMethodInvocation;
-    private ActualInvocationsFinder finder;
+    private InvocationsFinder finder;
 
     @Before
     public void setup() throws Exception {
@@ -28,7 +28,7 @@ public class ActualInvocationsFinderTest extends RequiresValidState {
         simpleMethodInvocationTwo = new InvocationBuilder().simpleMethod().seq(2).toInvocation();
         differentMethodInvocation = new InvocationBuilder().differentMethod().seq(3).toInvocation();
         invocations.addAll(Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation));
-        finder = new ActualInvocationsFinder();
+        finder = new InvocationsFinder();
     }
 
     @Test

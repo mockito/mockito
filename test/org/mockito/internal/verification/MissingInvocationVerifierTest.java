@@ -24,7 +24,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
 
     private MissingInvocationVerifier verifier;
     
-    private ActualInvocationsFinderStub finderStub;
+    private InvocationsFinderStub finderStub;
     private ReporterStub reporterStub;
     
     private InvocationMatcher wanted;
@@ -33,7 +33,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     @Before
     public void setup() {
         reporterStub = new ReporterStub();
-        finderStub = new ActualInvocationsFinderStub();
+        finderStub = new InvocationsFinderStub();
         verifier = new MissingInvocationVerifier(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();

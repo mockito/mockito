@@ -21,12 +21,12 @@ import org.mockito.internal.progress.VerificationModeImpl;
 public class NoMoreInvocationsVerifierTest extends RequiresValidState {
 
     private NoMoreInvocationsVerifier verifier;
-    private ActualInvocationsFinderStub finder;
+    private InvocationsFinderStub finder;
     private ReporterStub reporterStub;
 
     @Before
     public void setup() {
-        finder = new ActualInvocationsFinderStub();
+        finder = new InvocationsFinderStub();
         reporterStub = new ReporterStub();
         verifier = new NoMoreInvocationsVerifier(finder, reporterStub);
     }
