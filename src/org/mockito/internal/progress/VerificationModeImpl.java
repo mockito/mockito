@@ -19,10 +19,10 @@ public class VerificationModeImpl implements VerificationMode {
     enum Verification { EXPLICIT, NO_MORE_WANTED };
     
     private final Integer wantedInvocationCount;
-    private final List<Object> mocksToBeVerifiedStrictly;
+    private final List<? extends Object> mocksToBeVerifiedStrictly;
     private final Verification verification;
     
-    private VerificationModeImpl(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly, Verification verification) {
+    private VerificationModeImpl(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedStrictly, Verification verification) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
@@ -40,7 +40,7 @@ public class VerificationModeImpl implements VerificationMode {
         return new VerificationModeImpl(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
-    public static VerificationModeImpl strict(Integer wantedNumberOfInvocations, List<Object> mocksToBeVerifiedStrictly) {
+    public static VerificationModeImpl strict(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedStrictly) {
         assert !mocksToBeVerifiedStrictly.isEmpty();
         return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedStrictly, Verification.EXPLICIT);
     }
@@ -53,7 +53,7 @@ public class VerificationModeImpl implements VerificationMode {
         return wantedInvocationCount;
     }
 
-    public List<Object> getMocksToBeVerifiedStrictly() {
+    public List<? extends Object> getMocksToBeVerifiedStrictly() {
         return mocksToBeVerifiedStrictly;
     }
 
@@ -71,6 +71,10 @@ public class VerificationModeImpl implements VerificationMode {
     
     public boolean missingMethodMode() {
         return explicitMode() && (atLeastOnceMode() || wantedInvocationCount > 0);
+    }
+    
+    public boolean strictlyMissingMethodMode() {
+        return strictMode() && missingMethodMode();
     }
     
     public boolean exactNumberOfInvocationsMode() {

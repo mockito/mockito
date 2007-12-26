@@ -50,6 +50,17 @@ public class VerificationModeImplTest extends RequiresValidState {
     }
     
     @Test
+    public void shouldKnowIfIsStrictlyMissingMethodMode() throws Exception {
+        assertTrue(strict(null, asList("mock")).strictlyMissingMethodMode());
+        assertTrue(strict(1, asList("mock")).strictlyMissingMethodMode());
+        assertTrue(strict(10, asList("mock")).strictlyMissingMethodMode());
+        
+        assertFalse(times(10).strictlyMissingMethodMode());
+        assertFalse(noMoreInteractions().strictlyMissingMethodMode());
+        assertFalse(times(0).strictlyMissingMethodMode());
+    }
+    
+    @Test
     public void shouldKnowIfIsStrict() throws Exception {
         assertTrue(strict(1, asList(new Object())).strictMode());
         

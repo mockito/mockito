@@ -28,8 +28,7 @@ public class StrictlyMissingInvocationVerifier implements Verifier {
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        //TODO push to mode
-        if (!mode.strictMode() || mode.wantedCountIsZero()) {
+        if (!mode.strictlyMissingMethodMode()) {
             return;
         }
         
