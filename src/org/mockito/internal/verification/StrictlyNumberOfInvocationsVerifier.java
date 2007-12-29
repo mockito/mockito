@@ -42,7 +42,7 @@ public class StrictlyNumberOfInvocationsVerifier implements Verifier {
         int actualCount = chunk.size();
         
         if (mode.tooLittleActualInvocations(actualCount)) {
-            HasStackTrace lastInvocation = getLastSafely(chunk);
+            HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
             reporter.strictlyTooLittleActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
         }
         
@@ -53,15 +53,6 @@ public class StrictlyNumberOfInvocationsVerifier implements Verifier {
         
         for (Invocation i : chunk) {
             i.markVerifiedStrictly();
-        }
-    }
-    
-    private HasStackTrace getLastSafely(List<Invocation> actualInvocations) {
-        if (actualInvocations.isEmpty()) {
-            return null;
-        } else {
-            Invocation last = actualInvocations.get(actualInvocations.size() - 1);
-            return last.getStackTrace();
         }
     }
 }

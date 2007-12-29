@@ -36,12 +36,10 @@ public class StrictlyMissingInvocationVerifier implements Verifier {
         
         if (chunk.size() == 0) {
             reporter.strictlyWantedButNotInvoked(wanted.toString());
-        }
-        
-        if (!wanted.matches(chunk.get(0))) {
+        } else if (!wanted.matches(chunk.get(0))) {
             Invocation actual = chunk.get(0);
             InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);
-            reporter.strictVerificationFailed(printer.printWanted(), printer.printActual(), actual.getStackTrace());
+            reporter.strictlyWantedDiffersFromActual(printer.printWanted(), printer.printActual(), actual.getStackTrace());
         }
     }
 }

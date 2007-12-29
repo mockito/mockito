@@ -43,7 +43,7 @@ public class MissingInvocationVerifier implements Verifier {
     private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
         if (similar != null) {
             InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
-            reporter.wantedInvocationDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
+            reporter.wantedDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
         } else {
             reporter.wantedButNotInvoked(wanted.toString());
         }

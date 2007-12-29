@@ -6,12 +6,14 @@ import static org.mockito.internal.progress.VerificationModeImpl.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.base.HasStackTrace;
 
 
 public class InvocationsFinderTest extends RequiresValidState {
@@ -154,4 +156,12 @@ public class InvocationsFinderTest extends RequiresValidState {
         Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
         assertNotSame(onDifferentMock, found);
     }  
+    
+    @Test
+    public void shouldGetLastStackTrace() throws Exception {
+        HasStackTrace last = finder.getLastStackTrace(invocations);
+        assertSame(differentMethodInvocation.getStackTrace(), last);
+        
+        assertNull(finder.getLastStackTrace(Collections.<Invocation>emptyList()));
+    } 
 }

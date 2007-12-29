@@ -97,7 +97,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         @Override public void wantedButNotInvoked(String wanted) {
             this.wanted = wanted;
         }
-        @Override public void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        @Override public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
                     this.wanted = wanted;
                     this.actual = actual;
                     this.actualInvocationStackTrace = actualInvocationStackTrace;

@@ -76,8 +76,7 @@ public class Reporter {
 
     }
 
-    //TODO refactor to wanted but not invoked with wanted and actual
-    public void wantedInvocationDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+    public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual
@@ -92,7 +91,7 @@ public class Reporter {
             ), cause);
     }
     
-    public void strictVerificationFailed(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+    public void strictlyWantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual
@@ -105,6 +104,10 @@ public class Reporter {
                 "Wanted invocation:",
                 wanted
             ), cause);
+    }
+    
+    private void wantedDiffersFromActual(String message, String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        
     }
 
     public void wantedButNotInvoked(String wanted) {
@@ -157,11 +160,11 @@ public class Reporter {
         ), cause);
     }
     
-    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
         TooLittleInvocations cause = null;
-        if (lastActualInvocationStackTrace != null) {
+        if (lastActualStackTrace != null) {
             cause = new TooLittleInvocations(join("Too little invocations:"));
-            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
+            cause.setStackTrace(lastActualStackTrace.getStackTrace());
         }
 
         throw new StrictVerificationFailure(join(
