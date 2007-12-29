@@ -108,7 +108,7 @@ public class MockitoSampleTest extends RequiresValidState {
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
-        Strictly strictly = createStrictOrderVerifier(mockDatabase);
+        Strictly strictly = strictly(mockDatabase);
         
         strictly.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
         strictly.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());

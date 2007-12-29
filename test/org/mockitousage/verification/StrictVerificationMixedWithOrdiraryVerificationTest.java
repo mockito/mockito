@@ -36,7 +36,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         mockThree.simpleMethod(3);
         mockThree.simpleMethod(4);
 
-        strictly = createStrictOrderVerifier(mockOne, mockThree);
+        strictly = strictly(mockOne, mockThree);
     }
     
     @Test
@@ -136,7 +136,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         
         verify(mockOne, times(2)).simpleMethod(textOne);
         
-        strictly = createStrictOrderVerifier(mockOne);
+        strictly = strictly(mockOne);
         strictly.verify(mockOne, times(2)).simpleMethod(textOne);
     } 
     
@@ -155,7 +155,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         
         verify(mockOne, times(2)).varargsObject(1, textOne, textOne);
         
-        strictly = createStrictOrderVerifier(mockOne);
+        strictly = strictly(mockOne);
         strictly.verify(mockOne, times(2)).varargsObject(1, textOne, textOne);
     } 
 }

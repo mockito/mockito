@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.util.Arrays;
+
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockUtil;
@@ -164,7 +166,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   secondMock.add("two");
  *   
  *   //create strict verifier 
- *   Strictly strictly = createStrictOrderVerifier(firstMock, secondMock);
+ *   Strictly strictly = strictly(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
  *   strictly.verify(firstMock).add("should be called first");
@@ -358,7 +360,7 @@ public class Mockito extends Matchers {
      * Creates strict verifier that allows verifying mocks in order.
      * 
      * <pre>
-     *   Strictly strictly = createStrictOrderVerifier(firstMock, secondMock);
+     *   Strictly strictly = strictly(firstMock, secondMock);
      *   
      *   strictly.verify(firstMock).add("should be called first");
      *   strictly.verify(secondMock).add("should be called second");
@@ -370,15 +372,14 @@ public class Mockito extends Matchers {
      * 
      * @return verifier object to be used to verify strictly
      */
-    public static Strictly createStrictOrderVerifier(Object... mocks) {
+    public static Strictly strictly(Object... mocks) {
         if (mocks.length == 0) {
             REPORTER.mocksHaveToBePassedWhenCreatingStrictly();
         }
-        StrictOrderVerifier strictOrderVerifier = new StrictOrderVerifier();
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
-            strictOrderVerifier.addMockToBeVerifiedStrictly(mock);
         }
+        Strictly strictOrderVerifier = new StrictOrderVerifier(Arrays.asList(mocks));
         return strictOrderVerifier;
     }
 

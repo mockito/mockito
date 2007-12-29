@@ -38,7 +38,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyStrictlyAllInvocations() {
-        Strictly strictly = createStrictOrderVerifier(mockOne, mockTwo, mockThree);
+        Strictly strictly = strictly(mockOne, mockTwo, mockThree);
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -49,7 +49,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyStrictlyMockTwoAndThree() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo, mockThree);
+        Strictly strictly = strictly(mockTwo, mockThree);
         
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -59,7 +59,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyStrictlyMockOneAndThree() {
-        Strictly strictly = createStrictOrderVerifier(mockOne, mockThree);
+        Strictly strictly = strictly(mockOne, mockThree);
         
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockThree).simpleMethod(3);
@@ -69,7 +69,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyStrictlyMockOne() {
-        Strictly strictly = createStrictOrderVerifier(mockOne);
+        Strictly strictly = strictly(mockOne);
         
         strictly.verify(mockOne).simpleMethod(1);
         strictly.verify(mockOne).simpleMethod(4);
@@ -79,7 +79,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldFailVerificationForMockOne() {
-        Strictly strictly = createStrictOrderVerifier(mockOne);
+        Strictly strictly = strictly(mockOne);
         
         strictly.verify(mockOne).simpleMethod(1);
         try {
@@ -90,7 +90,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldFailVerificationForMockOneBecauseOfWrongOrder() {
-        Strictly strictly = createStrictOrderVerifier(mockOne);
+        Strictly strictly = strictly(mockOne);
         
         try {
             strictly.verify(mockOne).simpleMethod(4);
@@ -100,7 +100,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldVerifyStrictlyMockTwoWhenThreeTimesUsed() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
         
         strictly.verify(mockTwo, times(3)).simpleMethod(2);
         
@@ -109,7 +109,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyStrictlyMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
         
         strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         
@@ -118,7 +118,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldFailVerificationForMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
 
         try {
             strictly.verify(mockTwo).simpleMethod(2);
@@ -128,7 +128,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldThrowNoMoreInvocationsForMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
 
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
@@ -138,7 +138,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldThrowTooLittleInvocationsForMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
 
         try {
             strictly.verify(mockTwo, times(4)).simpleMethod(2);
@@ -148,7 +148,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldThrowTooManyInvocationsForMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
 
         try {
             strictly.verify(mockTwo, times(2)).simpleMethod(2);
@@ -158,7 +158,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldAllowThreeTimesOnMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo);
+        Strictly strictly = strictly(mockTwo);
 
         strictly.verify(mockTwo, times(3)).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo);
@@ -166,7 +166,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldVerifyMockTwoCompletely() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo, mockThree);
+        Strictly strictly = strictly(mockTwo, mockThree);
 
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
         strictly.verify(mockThree).simpleMethod(3);
@@ -176,7 +176,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     
     @Test
     public void shouldAllowTwoTimesOnMockTwo() {
-        Strictly strictly = createStrictOrderVerifier(mockTwo, mockThree);
+        Strictly strictly = strictly(mockTwo, mockThree);
 
         strictly.verify(mockTwo, times(2)).simpleMethod(2);
         try {

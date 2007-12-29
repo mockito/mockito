@@ -16,10 +16,10 @@ class StrictOrderVerifier implements Strictly {
     private final Reporter reporter = new Reporter();
     private final List<Object> mocksToBeVerifiedSrictly = new LinkedList<Object>();
     
-    public void addMockToBeVerifiedStrictly(Object mock) {
-        mocksToBeVerifiedSrictly.add(mock);
+    public StrictOrderVerifier(List<Object> mocksToBeVerifiedStrictly) {
+        mocksToBeVerifiedSrictly.addAll(mocksToBeVerifiedStrictly);
     }
-    
+
     public <T> T verify(T mock) {
         return this.verify(mock, VerificationModeImpl.times(1));
     }

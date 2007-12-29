@@ -37,7 +37,7 @@ public class RelaxedStrictVerificationTest extends RequiresValidState {
         mockTwo = mock(IMethods.class);
         mockThree = mock(IMethods.class);
         
-        strictly = createStrictOrderVerifier(mockOne, mockTwo, mockThree);
+        strictly = strictly(mockOne, mockTwo, mockThree);
 
         mockOne.simpleMethod(1);
         mockTwo.simpleMethod(2);

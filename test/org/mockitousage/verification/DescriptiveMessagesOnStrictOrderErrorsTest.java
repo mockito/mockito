@@ -38,7 +38,7 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         two.simpleMethod(2);
         three.simpleMethod(3);
         
-        strictly = createStrictOrderVerifier(one, two, three);
+        strictly = strictly(one, two, three);
     }
     
     @Test

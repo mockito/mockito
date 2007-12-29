@@ -30,13 +30,13 @@ public class StrictVerificationTest extends RequiresValidState {
         mockTwo = mock(IMethods.class);
         mockThree = mock(IMethods.class);
         
-        strictly = createStrictOrderVerifier(mockOne, mockTwo, mockThree);
+        strictly = strictly(mockOne, mockTwo, mockThree);
     }
     
     @Test
     public void shouldVerifySingleMockStrictlyAndNotStrictly() {
         mockOne = mock(IMethods.class);
-        strictly = createStrictOrderVerifier(mockOne);
+        strictly = strictly(mockOne);
         
         mockOne.simpleMethod(1);
         mockOne.simpleMethod(2);

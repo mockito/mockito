@@ -29,7 +29,7 @@ public class PointingStackTraceToActualInvocationTest extends RequiresValidState
     public void setup() {
         mock = Mockito.mock(IMethods.class);
         mockTwo = Mockito.mock(IMethods.class);
-        strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly = strictly(mock, mockTwo);
         
         first();
         second();

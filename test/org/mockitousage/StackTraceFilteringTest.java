@@ -80,7 +80,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
     
     @Test
     public void shouldFilterStacktraceWhenStrictlyVerifying() {
-        Strictly strictly = createStrictOrderVerifier(mock);
+        Strictly strictly = strictly(mock);
         mock.oneArg(true);
         mock.oneArg(false);
         
@@ -95,7 +95,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
     @Test
     public void shouldFilterStacktraceWhenStrictlyThrowsMockitoException() {
         try {
-            createStrictOrderVerifier();
+            strictly();
             fail();
         } catch (MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyThrowsMockitoException"));
@@ -105,7 +105,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
     @Test
     public void shouldFilterStacktraceWhenStrictlyVerifies() {
         try {
-            Strictly strictly = createStrictOrderVerifier(mock);
+            Strictly strictly = strictly(mock);
             strictly.verify(null);
             fail();
         } catch (MockitoException expected) {

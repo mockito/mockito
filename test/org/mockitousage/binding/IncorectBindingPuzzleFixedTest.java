@@ -68,7 +68,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         Sub sub = mock(Sub.class);
         setMockWithDowncast(sub);
         say("Hello");
-        Strictly strictly = createStrictOrderVerifier(mock);
+        Strictly strictly = strictly(mock);
         try {
             strictly.verify(sub).say("Hello");
             fail();

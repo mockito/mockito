@@ -6,7 +6,7 @@ package org.mockitousage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.strictly;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.stubVoid;
@@ -162,7 +162,7 @@ public class InvalidStateDetectionTest extends RequiresValidState {
     
     private static class OnStrictVerify implements DetectsInvalidState {
         public void detect(IMethods mock) {
-            createStrictOrderVerifier(mock).verify(mock);
+            strictly(mock).verify(mock);
         }
     }
     

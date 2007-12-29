@@ -49,7 +49,7 @@ public class Reporter {
     public void strictlyRequiresFamiliarMock() {
         throw new MockitoException(join(
                 "Strictly can only verify mocks that were passed in during creation of Strictly. E.g:",
-                "strictly = createStrictOrderVerifier(mockOne)",
+                "Strictly strictly = strictly(mockOne)",
                 "strictly.verify(mockOne).doStuff()"
                 ));
     }
@@ -58,7 +58,7 @@ public class Reporter {
         throw new MockitoException(join(
                 "Method requires arguments.",
                 "Pass mocks that require strict order verification, e.g:",
-                "createStrictOrderVerifier(mockOne, mockTwo)"
+                "strictly(mockOne, mockTwo)"
                 ));
     }
 

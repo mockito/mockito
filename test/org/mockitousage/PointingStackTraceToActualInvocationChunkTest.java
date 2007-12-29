@@ -30,7 +30,7 @@ public class PointingStackTraceToActualInvocationChunkTest extends RequiresValid
     public void setup() {
         mock = Mockito.mock(IMethods.class);
         mockTwo = Mockito.mock(IMethods.class);
-        strictly = createStrictOrderVerifier(mock, mockTwo);
+        strictly = strictly(mock, mockTwo);
         
         firstChunk();
         secondChunk();

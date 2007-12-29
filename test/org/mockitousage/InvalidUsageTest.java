@@ -4,7 +4,7 @@
  */
 package org.mockitousage;
 
-import static org.mockito.Mockito.createStrictOrderVerifier;
+import static org.mockito.Mockito.strictly;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -48,12 +48,12 @@ public class InvalidUsageTest extends RequiresValidState {
     
     @Test(expected=MockitoException.class)
     public void shouldNotCreateStrictlyWithoutMocks() {
-        createStrictOrderVerifier();
+        strictly();
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotStrictlyVerifyUnfamilarMocks() {
-        Strictly strictly = createStrictOrderVerifier(mock);
+        Strictly strictly = strictly(mock);
         strictly.verify(mockTwo).simpleMethod();
     }
     
