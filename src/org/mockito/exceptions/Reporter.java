@@ -75,115 +75,7 @@ public class Reporter {
                 ));
 
     }
-
-    public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
-                "Actual invocation:",
-                actual
-            ));
-
-        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-
-        throw new InvocationDiffersFromActual(join(
-                "Invocation differs from actual",
-                "Wanted invocation:",
-                wanted
-            ), cause);
-    }
     
-    public void strictlyWantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
-                "Actual invocation:",
-                actual
-            ));
-
-        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
-                "Wanted invocation:",
-                wanted
-            ), cause);
-    }
-    
-    private void wantedDiffersFromActual(String message, String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        
-    }
-
-    public void wantedButNotInvoked(String wanted) {
-        throw new WantedButNotInvoked(join(
-                    "Wanted but not invoked:",
-                    wanted
-        ));
-    }
-    
-    public void strictlyWantedButNotInvoked(String wanted) {
-        throw new StrictVerificationFailure(join(
-                    "Strict verification failure",
-                    "Wanted but not invoked:",
-                    wanted
-        ));
-    }
-
-    public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
-        cause.setStackTrace(firstUndesired.getStackTrace());
-
-        throw new TooManyActualInvocations(join(
-                wanted,
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
-    }
-    
-    //TODO duplicated
-    public void strictlyTooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
-        cause.setStackTrace(firstUndesired.getStackTrace());
-
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
-                wanted,
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
-    }    
-
-    public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
-        TooLittleInvocations cause = null;
-        if (lastActualInvocationStackTrace != null) {
-            cause = new TooLittleInvocations(join("Too little invocations:"));
-            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
-        }
-
-        throw new TooLittleActualInvocations(join(
-                wanted,
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
-    }
-    
-    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
-        TooLittleInvocations cause = null;
-        if (lastActualStackTrace != null) {
-            cause = new TooLittleInvocations(join("Too little invocations:"));
-            cause.setStackTrace(lastActualStackTrace.getStackTrace());
-        }
-
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
-                wanted,
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
-    }
-
-    public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = new UndesiredInvocation(join(
-                "Undesired invocation:", 
-                undesired
-        ));
-        
-        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        throw new NoInteractionsWanted(join("No interactions wanted"), cause);
-    }
-
     public void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
                 "Unifinished stubbing detected, e.g. toReturn() is missing",
@@ -205,5 +97,114 @@ public class Reporter {
                 "Previous verify(mock) doesn't have a method call.",
                 "Should be something like that: verify(mock).doSomething()"
         ));
+    }
+
+    public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = createDiscrepancyCause(actual, actualInvocationStackTrace);
+
+        throw new InvocationDiffersFromActual(join(
+                "Invocation differs from actual",
+                "Wanted invocation:",
+                wanted
+            ), cause);
+    }
+    
+    public void strictlyWantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = createDiscrepancyCause(actual, actualInvocationStackTrace);
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
+                "Wanted invocation:",
+                wanted
+            ), cause);
+    }
+
+    private WantedDiffersFromActual createDiscrepancyCause(String actual, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
+                "Actual invocation:",
+                actual
+            ));
+
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        return cause;
+    }
+    
+    public void wantedButNotInvoked(String wanted) {
+        throw new WantedButNotInvoked(join(
+                    "Wanted but not invoked:",
+                    wanted
+        ));
+    }
+    
+    public void strictlyWantedButNotInvoked(String wanted) {
+        throw new StrictVerificationFailure(join(
+                    "Strict verification failure",
+                    "Wanted but not invoked:",
+                    wanted
+        ));
+    }
+
+    public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
+
+        throw new TooManyActualInvocations(join(
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+    
+    public void strictlyTooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+
+    private UndesiredInvocation createUndesiredInvocationCause(HasStackTrace firstUndesired) {
+        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
+        cause.setStackTrace(firstUndesired.getStackTrace());
+        return cause;
+    }    
+
+    public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualInvocationStackTrace);
+
+        throw new TooLittleActualInvocations(join(
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+
+    
+    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
+        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
+
+        throw new StrictVerificationFailure(join(
+                "Strict verification failure",
+                wanted,
+                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+    
+    private TooLittleInvocations createTooLittleInvocationsCause(HasStackTrace lastActualInvocationStackTrace) {
+        TooLittleInvocations cause = null;
+        if (lastActualInvocationStackTrace != null) {
+            cause = new TooLittleInvocations(join("Too little invocations:"));
+            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
+        }
+        return cause;
+    }
+
+    public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+        UndesiredInvocation cause = new UndesiredInvocation(join(
+                "Undesired invocation:", 
+                undesired
+        ));
+        
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        throw new NoInteractionsWanted(join("No interactions wanted"), cause);
     }
 }
