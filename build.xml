@@ -2,7 +2,7 @@
  Copyright (c) 2007 Mockito contributors 
  This program is made available under the terms of the MIT License.
 -->
-<project name="mockito" basedir="." default="all">
+<project name="mockito" basedir="." default="zip">
 
   <property name="src.dir" value="src" />
   <property name="test.src.dir" value="test" />
@@ -10,6 +10,7 @@
   <property name="src.classes.dir" value="${target.dir}/classes" />
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
+  <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
   <property name="lib.dir" value="lib" />
   <property name="lib.dir.build" value="${lib.dir}/build" />
@@ -48,7 +49,7 @@
     </delete>
   </target>
 
-  <target name="compile" depends="prepare">
+  <target name="compile" depends="clean, prepare">
     <javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
       <classpath refid="compile.classpath" />
     </javac>
@@ -72,56 +73,76 @@
     </junit>
   </target>
 
-  <target name="all" depends="clean, compile, pmd, test, jar.all" description="Performs a build and runs test" />
-
   <target name="pmd" depends="prepare">
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
-    
+
     <pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="conf/pmd-rules.xml">
       <ruleset>Mockito</ruleset>
       <formatter type="text" toConsole="true" />
-      
-            <fileset dir="${src.dir}">
-                <include name="**/*.java" />
-        </fileset>
 
-        <fileset dir="${test.src.dir}">
-            <include name="**/*.java" />
-        </fileset>
+      <fileset dir="${src.dir}">
+        <include name="**/*.java" />
+      </fileset>
+
+      <fileset dir="${test.src.dir}">
+        <include name="**/*.java" />
+      </fileset>
     </pmd>
 
   </target>
-    
+
   <target name="jar.all" depends="test">
-      <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath"/>
-      <jarjar jarfile="${target.dir}/mockito-all.jar">
-          <fileset dir="${src.classes.dir}" />
-        <fileset dir="${src.dir}" />
-        <fileset dir="${lib.dir.run}" excludes="*.jar" />
-        <zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
-        <zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
-          <exclude name="LICENSE"/>
-          <exclude name="NOTICE"/>
-        </zipfileset>
-      </jarjar>
+    <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath" />
+    <jarjar jarfile="${target.dir}/mockito-all.jar">
+      <fileset dir="." file="license.txt" />
+      <fileset dir="${src.classes.dir}" />
+      <fileset dir="${src.dir}" />
+      <fileset dir="${lib.dir.run}" excludes="*.jar" />
+      <zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
+      <zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
+        <exclude name="LICENSE" />
+        <exclude name="NOTICE" />
+      </zipfileset>
+    </jarjar>
+  </target>
+
+  <target name="jar" depends="jar.all">
+    <jar jarfile="${target.dir}/mockito.jar">
+      <fileset dir="." file="license.txt" />
+      <fileset dir="${src.classes.dir}" />
+      <fileset dir="${src.dir}" />
+    </jar>
+  </target>
+
+  <target name="zip" depends="jar, javadoc">
+    <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
+    <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
+      <fileset dir="${lib.dir.run}" />
+      <fileset dir="${target.dir}" includes="mockito.jar" />
+      <fileset dir="." includes="license.txt" />
+    </copy>
+    <mkdir dir="${target.dir}/mockito.zip.tmp/javadoc" />
+    <copy todir="${target.dir}/mockito.zip.tmp/javadoc">
+      <fileset dir="${javadoc.dir}" />
+    </copy>
+    <copy todir="${target.dir}/mockito.zip.tmp">
+      <fileset dir="." includes="license.txt" />
+      <fileset dir="doc" includes="jars-info.txt" />
+      <fileset dir="${target.dir}" includes="mockito-all.jar" />
+    </copy>
+    <zip destfile="${target.dir}/mockito.zip">
+      <fileset dir="${target.dir}/mockito.zip.tmp"/>
+    </zip>
   </target>
 
   <target name="javadoc">
-    <javadoc sourcepath="${src.dir}"
-             destdir="${target.dir}/javadoc"
-             author="true"
-             version="true"
-             use="true"
-             windowtitle="Mockito API">
-      <doctitle><![CDATA[<h1>Mockito API</h1>]]></doctitle>
-      <!--
-      <group title="Group 1 Packages" packages="com.dummy.test.a*"/>
-      <group title="Group 2 Packages" packages="com.dummy.test.b*:com.dummy.test.c*"/>
-      <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:\tmp"/>
-      <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
-      -->
+    <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}" 
+      author="true" version="true" use="true" windowtitle="Mockito API">
+      <doctitle>
+        <![CDATA[<h1>Mockito API</h1>]]>
+      </doctitle>
     </javadoc>
   </target>
-  
+
 </project>
