@@ -16,11 +16,11 @@ public class MockingProgressImpl implements MockingProgress {
     private int invocationSequenceNumber = 1;
     private boolean stubbingInProgress = false;
 
-    public void reportStubbable(OngoingStubbing ongoingStubbing) {
+    public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
         this.ongoingStubbing = ongoingStubbing;
     }
 
-    public OngoingStubbing pullStubbable() {
+    public OngoingStubbing pullOngoingStubbing() {
         OngoingStubbing temp = ongoingStubbing;
         ongoingStubbing = null;
         return temp;

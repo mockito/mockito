@@ -59,17 +59,17 @@ public class InvalidUsageTest extends RequiresValidState {
     
     @Test(expected=MissingMethodInvocationException.class)
     public void shouldReportMissingMethodInvocationWhenStubbing() {
-        stub(mock.simpleMethod()).andReturn("this stubbing is required to make sure Stubbable is pulled");
-        stub("".toString()).andReturn("x");
+        stub(mock.simpleMethod()).toReturn("this stubbing is required to make sure Stubbable is pulled");
+        stub("".toString()).toReturn("x");
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        stub(mock.simpleMethod()).andThrow(new Exception());
+        stub(mock.simpleMethod()).toThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        stub(mock.simpleMethod()).andThrow(null);
+        stub(mock.simpleMethod()).toThrow(null);
     }    
 }

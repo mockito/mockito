@@ -22,8 +22,8 @@ public class MockitoSampleTest extends RequiresValidState {
         
         ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
 
-        stub(mockCalculator.countArticles("Guardian")).andReturn(12);
-        stub(mockCalculator.countArticlesInPolish("Guardian")).andReturn(5);
+        stub(mockCalculator.countArticles("Guardian")).toReturn(12);
+        stub(mockCalculator.countArticlesInPolish("Guardian")).toReturn(5);
         
         articleManager.updateArticleCounters("Guardian");
         
@@ -78,11 +78,11 @@ public class MockitoSampleTest extends RequiresValidState {
         Article articleTwo = new Article();
         Article articleThree = new Article();
         
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(12);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(0);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(12);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(0);
         
-        stub(mockDatabase.getArticlesFor("Guardian")).andReturn(Arrays.asList(articleOne, articleTwo, articleThree)); 
+        stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo, articleThree)); 
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
@@ -101,10 +101,10 @@ public class MockitoSampleTest extends RequiresValidState {
         Article articleOne = new Article();
         Article articleTwo = new Article();
         
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).andReturn(12);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(12);
         
-        stub(mockDatabase.getArticlesFor("Guardian")).andReturn(Arrays.asList(articleOne, articleTwo)); 
+        stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo)); 
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 

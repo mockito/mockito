@@ -18,9 +18,9 @@ public class MockitoTest extends RequiresValidState {
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
-        Mockito.stub(mock.add("test")).andReturn(true);
+        Mockito.stub(mock.add("test")).toReturn(true);
         
-        assertNull(Mockito.MOCKING_PROGRESS.pullStubbable());
+        assertNull(Mockito.MOCKING_PROGRESS.pullOngoingStubbing());
     }
     
     @Test(expected=NotAMockException.class)

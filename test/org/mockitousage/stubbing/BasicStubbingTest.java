@@ -33,8 +33,8 @@ public class BasicStubbingTest extends RequiresValidState {
     
     @Test
     public void shouldEvaluateLatestStubbingFirst() throws Exception {
-        stub(mock.objectReturningMethod(isA(Integer.class))).andReturn(100);
-        stub(mock.objectReturningMethod(200)).andReturn(200);
+        stub(mock.objectReturningMethod(isA(Integer.class))).toReturn(100);
+        stub(mock.objectReturningMethod(200)).toReturn(200);
         
         assertEquals(200, mock.objectReturningMethod(200));
         assertEquals(100, mock.objectReturningMethod(666));
@@ -43,7 +43,7 @@ public class BasicStubbingTest extends RequiresValidState {
     
     @Test
     public void shouldStubbingBeTreatedAsInteraction() throws Exception {
-        stub(mock.booleanReturningMethod(1)).andReturn(true);
+        stub(mock.booleanReturningMethod(1)).toReturn(true);
         
         mock.booleanReturningMethod(1);
         
@@ -55,7 +55,7 @@ public class BasicStubbingTest extends RequiresValidState {
     
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.simpleMethod("one")).andThrow(new RuntimeException());
+        stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
         
         verifyZeroInteractions(mock);

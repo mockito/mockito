@@ -84,8 +84,8 @@ public class ExactNumberOfTimesVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldNotCountInStubbedInvocations() throws Exception {
-        stub(mock.add("test")).andReturn(false);
-        stub(mock.add("test")).andReturn(true);
+        stub(mock.add("test")).toReturn(false);
+        stub(mock.add("test")).toReturn(true);
 
         mock.add("test");
         mock.add("test");

@@ -104,7 +104,7 @@ public class BasicVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldVerifyStubbedMethods() throws Exception {
-        stub(mock.add("test")).andReturn(Boolean.FALSE);
+        stub(mock.add("test")).toReturn(Boolean.FALSE);
         
         mock.add("test");
         

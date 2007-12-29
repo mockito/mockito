@@ -33,8 +33,8 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
 
     @Test
     public void shouldStubbingNotRegisterRedundantInteractions() throws Exception {
-        stub(mock.add("one")).andReturn(true);
-        stub(mock.add("two")).andReturn(true);
+        stub(mock.add("one")).toReturn(true);
+        stub(mock.add("two")).toReturn(true);
 
         mock.add("one");
         

@@ -29,9 +29,9 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
     
     @Test
     public void shouldStubUsingMatchers() {
-        stub(one.simpleMethod(2)).andReturn("2");
-        stub(two.simpleMethod(anyString())).andReturn("any");
-        stub(three.simpleMethod(startsWith("test"))).andThrow(new RuntimeException());
+        stub(one.simpleMethod(2)).toReturn("2");
+        stub(two.simpleMethod(anyString())).toReturn("any");
+        stub(three.simpleMethod(startsWith("test"))).toThrow(new RuntimeException());
 
         assertEquals(null, one.simpleMethod(1));
         assertEquals("2", one.simpleMethod(2));
@@ -51,7 +51,7 @@ public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState
     @Test
     public void shouldVerifyUsingMatchers() {
         stubVoid(one).toThrow(new RuntimeException()).on().oneArg(true);
-        stub(three.varargsObject(5, "first arg", "second arg")).andReturn("stubbed");
+        stub(three.varargsObject(5, "first arg", "second arg")).toReturn("stubbed");
 
         try {
             one.oneArg(true);

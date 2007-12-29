@@ -46,9 +46,9 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * LinkedList mockedList = mock(LinkedList.class);
  * 
  * //stubbing
- * stub(mockedList.get(0)).andReturn("first");
- * stub(mockedList.get(1)).andReturn("second");
- * stub(mockedList.get(2)).andThrow(new RuntimeException());
+ * stub(mockedList.get(0)).toReturn("first");
+ * stub(mockedList.get(1)).toReturn("second");
+ * stub(mockedList.get(2)).toThrow(new RuntimeException());
  * 
  * //following prints "first"
  * System.out.println(mockedList.get(0));
@@ -78,7 +78,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <pre>
  *  //stubbing using anyInt() argument matcher
- *  stub(mockedList.get(anyInt())).andReturn("element");
+ *  stub(mockedList.get(anyInt())).toReturn("element");
  *  
  *  //following prints "element"
  *  System.out.println(mockedList.get(999));
@@ -205,9 +205,9 @@ public class Mockito extends Matchers {
     /**
      * Stubs with return value or exception. E.g:
      * <pre>
-     *   stub(mock.countElements()).andReturn(10);
+     *   stub(mock.countElements()).toReturn(10);
      *   
-     *   stub(mock.countElements()).andThrow(new RuntimeException());
+     *   stub(mock.countElements()).toThrow(new RuntimeException());
      * </pre>
      * <p>
      * Trying to stub void method? Look here: {@link Mockito#stubVoid}
@@ -221,7 +221,7 @@ public class Mockito extends Matchers {
     public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
         MOCKING_PROGRESS.stubbingStarted();
 
-        OngoingStubbing stubbable = MOCKING_PROGRESS.pullStubbable();
+        OngoingStubbing stubbable = MOCKING_PROGRESS.pullOngoingStubbing();
         if (stubbable == null) {
             REPORTER.missingMethodInvocation();
         }
@@ -340,7 +340,7 @@ public class Mockito extends Matchers {
     public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
         MockHandler<T> handler = MockUtil.getMockHandler(mock);
         MOCKING_PROGRESS.stubbingStarted();
-        return handler;
+        return handler.voidMethodStubbable();
     }
 
     /**

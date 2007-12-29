@@ -34,7 +34,7 @@ import org.mockito.internal.verification.VerifyingRecorder;
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<T>, VoidMethodStubbable<T>, StubbedMethodSelector<T> {
+public class MockHandler<T> implements MockAwareInterceptor<T> {
 
     private final VerifyingRecorder verifyingRecorder;
     private final Stubber stubber;
@@ -73,7 +73,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
         stubber.setInvocationForPotentialStubbing(invocationMatcher);
         verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());
 
-        mockingProgress.reportStubbable(this);
+        mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
         
         return stubber.resultFor(invocationMatcher.getInvocation());
     }
@@ -82,25 +82,10 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
         verifyingRecorder.verify(VerificationModeImpl.noMoreInteractions());
     }
     
-    public void andReturn(T value) {
-        verifyingRecorder.eraseLastInvocation();
-        stubber.addReturnValue(value);
-    }
-
-    public void andThrow(Throwable throwable) {
-        verifyingRecorder.eraseLastInvocation();
-        stubber.addThrowable(throwable);
+    public VoidMethodStubbable<T> voidMethodStubbable() {
+        return new VoidMethodStubbableImpl();
     }
     
-    public StubbedMethodSelector<T> toThrow(Throwable throwable) {
-        stubber.addThrowableForVoidMethod(throwable);
-        return this;
-    }
-
-    public T on() {
-        return mock;
-    }
-
     public void setMock(T mock) {
         this.mock = mock;
     }
@@ -117,5 +102,28 @@ public class MockHandler<T> implements MockAwareInterceptor<T>, OngoingStubbing<
                 new NumberOfInvocationsVerifier(),
                 new NoMoreInvocationsVerifier());
         return new VerifyingRecorder(new AllInvocationsFinder(), verifiers);
+    }
+    
+    private final class VoidMethodStubbableImpl implements VoidMethodStubbable<T> {
+        public StubbedMethodSelector<T> toThrow(Throwable throwable) {
+            stubber.addThrowableForVoidMethod(throwable);
+            return new StubbedMethodSelector<T>() {
+                public T on() {
+                    return mock;
+                }
+            };
+        }
+    }
+
+    private class OngoingStubbingImpl implements OngoingStubbing<T> {
+        public void toReturn(Object value) {
+            verifyingRecorder.eraseLastInvocation();
+            stubber.addReturnValue(value);
+        }
+
+        public void toThrow(Throwable throwable) {
+            verifyingRecorder.eraseLastInvocation();
+            stubber.addThrowable(throwable);
+        }
     }
 }
