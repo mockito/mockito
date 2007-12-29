@@ -65,7 +65,7 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
                     "\n" +
                     "No matchers found for Not(?)." +
                     "\n" +
-                    "Read more: http://code.google.com/p/mockito/matchers"
+                    "See javadoc for Matchers class"
                     , e.getMessage());
         }
 
@@ -77,7 +77,7 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
                     "\n" +
                     "2 matchers expected, 1 recorded." +
                     "\n" +
-                    "Read more: http://code.google.com/p/mockito/matchers"
+                    "See javadoc for Matchers class"
                     , e.getMessage());
         }
 
@@ -89,7 +89,7 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
                     "\n" +
                     "3 matchers expected, 1 recorded." +
                     "\n" +
-                    "Read more: http://code.google.com/p/mockito/matchers"
+                    "See javadoc for Matchers class"
                     , e.getMessage());
         }
     }

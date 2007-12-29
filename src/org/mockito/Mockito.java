@@ -88,7 +88,18 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Argument matchers allow less constrained verification or stubbing. Link to argument matchers documentation needed.
+ * Argument matchers allow less constrained verification or stubbing. See all {@link Matchers}.
+ * <p>
+ * <b>Warning:</b>
+ * <p>
+ * When multiple arguments used, all arguments have to be provided by matchers, e.g:
+ * <pre>
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
+ *   //above is correct - eq() is also an argument matcher (see {@link Matchers#eq(Object)})
+ *   
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
+ *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
+ * </pre>
  * 
  * <h3>Exact number of invocations verification</h3>
  *

@@ -15,9 +15,24 @@ import org.mockito.internal.matchers.LessThan;
 import org.mockito.internal.progress.LastArguments;
 
 /**
- * Very rarely used matchers are kept here
+ * See {@link Matchers} for general info about matchers.
  * <p>
- * Read more about matchers: http://code.google.com/p/mockito/matchers
+ * AdditionalMatchers provides rarely used matchers, kept only for somewhat compatibility with EasyMock. 
+ * Use additional matchers very judiciously because they impact readability of a test.
+ * It is recommended to use matchers only from {@link Matchers} and keep stubbing and verification simple.
+ * <p>
+ * Example of using logical and(), not(), or() matchers: 
+ *  
+ * <pre>
+ *   //anything but not "ejb"
+ *   mock.someMethod(not(eq("ejb")));
+ *   
+ *   //not "ejb" and not "michael jackson"
+ *   mock.someMethod(and(not(eq("ejb")), not(eq("michael jackson"))));
+ *   
+ *   //1 or 10
+ *   mock.someMethod(or(eq(1), eq(10)));
+ * </pre>
  */
 public class AdditionalMatchers {
 

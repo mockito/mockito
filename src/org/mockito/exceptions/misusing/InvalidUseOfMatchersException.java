@@ -14,6 +14,6 @@ public class InvalidUseOfMatchersException extends MockitoException {
         super(  "\n" +
                 message +
                 "\n" +
-                "Read more: http://code.google.com/p/mockito/matchers");
+                "See javadoc for Matchers class");
     }
 }

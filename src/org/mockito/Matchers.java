@@ -17,10 +17,27 @@ import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.progress.LastArguments;
 
 /**
- * Argument matchers
+ * Allow less constrained verification or stubbing. See also {@link AdditionalMatchers}.
+ * <pre>
+ *  //stubbing using anyInt() argument matcher
+ *  stub(mockedList.get(anyInt())).toReturn("element");
+ *  
+ *  //following prints "element"
+ *  System.out.println(mockedList.get(999));
+ *  
+ *  //you can also verify using argument matcher
+ *  verify(mockedList).get(anyInt());
+ * </pre>
+ * <b>Warning:</b>
  * <p>
- * TODO where is that documentation?
- * Read more about matchers: http://code.google.com/p/mockito/matchers
+ * When multiple arguments used, all arguments have to be provided by matchers, e.g:
+ * <pre>
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
+ *   //above is correct - eq() is also an argument matcher (see {@link Matchers#eq(Object)})
+ *   
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
+ *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
+ * </pre>
  */
 public class Matchers {
 
