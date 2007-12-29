@@ -18,9 +18,4 @@ public class VerificationModeBuilder {
         this.times = times;
         return this;
     }
-
-    public VerificationModeBuilder atLeastOnce() {
-        times = null;
-        return this;
-    }
 }

@@ -38,17 +38,6 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
-    public static <T> Matcher<String> containsString(final String text) {
-        return new BaseMatcher<String>() {
-            public boolean matches(Object string) {
-                return ((String) string).contains(text); 
-            }
-            public void describeTo(Description desc) {
-                desc.appendText("string doesn't contain " + text);
-            }
-        };
-    }
-    
     public static <T> Matcher<Throwable> messageContains(final String text) {
         return new BaseMatcher<Throwable>() {
             public boolean matches(Object throwable) {

@@ -83,8 +83,4 @@ public class InvocationBuilder {
     public InvocationBuilder differentMethod() {
         return this.method("differentMethod");
     }
-
-    public InvocationBuilder otherMethod() {
-        return this.method("otherMethod");
-    }
 }
