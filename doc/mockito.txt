@@ -59,9 +59,6 @@ Forget about:
 
 You'll see exact line of code where verification failed
 
-
--mocks unpredictable don't work if shared between threads - test easyMock
-
 -classical stubbing - if you stub method for given args - it always will replay in that manner. E.g. if mock is called few times with the same args and you want to return different result each time, then you'd better use EasyMock
 
 -known limitations:

@@ -1,14 +1,55 @@
 =Mockito=
 
-  * intuitive way of testing: setup-execute-assert.
-  * descriptive, refactorable, proven EasyMockish syntax.
-  * assert-what-you-want pattern allows creating more specific test methods concentrated on testing only selected behavior/interactions.
+  * simple and intuitive way of testing: setup-execute-assert
+  * descriptive, refactorable, proven EasyMockish syntax
+  * selective verification allows creating more specific test methods concentrated on testing only selected behavior/interactions
+  * verification errors are very readable - click on stack trace to see failed interaction in test, click on exception's cause to navigate to actual invocation in code
+  
+===Sample===
 
-I thought it's a shiny new idea but it's so hard to be inventive these days. Similar concept:
+  import static org.mockito.Mockito.*;
+  
+  //let's mock a List!
+  List mockedList = mock(List.class);
+  
+  //stubbing
+  stub(mockedList.get(0)).toReturn("first element");
+  
+  //using mock object
+  mockedList.add("one");
+  mockedList.clear();
+  
+  //verification
+  verify(mockedList).add("one");
+  verify(mockedList).clear();
+
+===More details===
+
+  * Mocks classes and interfaces
+  * All created mocks are friendly, e.g: methods return 0, false, empty collections or just nulls
+  * Selective verification (assert-what-you-want)
+  * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
+  * Allows verification in order
+  * Verification errors don't show stack trace elements from inside of library
+  * Very similar to EasyMock (page with differences in under construction)
+  * (Features explained page under construction)
+
+===Ideas? Suggestions? Problems?===
+
+mockito@googlegroups.com
+
+===Credits===
+
+Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. 
+Mockito is heavily inspired by ideas from EasyMock. 
+Moreover, Mockito was started as one big refactoring of EasyMock codebase. Some code and API (like argument matchers) is exactly the same as in EasyMock.  
+
+* [http://easymock.org EasyMock]
+
+Some other mocking frameworks share similar concepts as Mockito:
 
   * [http://mocklib.sourceforge.net MockLib]
   * [http://code.google.com/p/turtlemock turtlemock]
-
-It's definitely too late to reinvent the wheel. Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. Similar interface:
-
-  * [http://easymock.org EasyMock]
+  
+Here are just some of my friends who contributed ideas to Mockito (aplogize if I missed somebody):
+Patric Fornasier, Jim Berrit, Felix Leipold
