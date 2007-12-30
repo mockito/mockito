@@ -29,7 +29,7 @@ public interface IArgumentMatcher {
      * of failure, the printed message will show this string to allow to know which
      * matcher was used for the failing call.
      * 
-     * @param buffer the buffer to which the string representation is appended.
+     * @param builder the builder to which the string representation is appended.
      */
-    void appendTo(StringBuilder buffer);
+    void appendTo(StringBuilder builder);
 }
