@@ -1,0 +1,73 @@
+=Mockito vs EasyMock=
+
+  List mock = createNiceMock(List.class);				List mock = mock(List.class);
+  
+  expect(mock.add("one")).andStubReturn(true);			stub(mock.add("one")).toReturn(true);
+  
+  mock.clear();
+  
+  replay(mock);
+  
+  useMock();											useMock();
+  
+                                                        verify(easy).clear();
+  
+  verify(easy);											verifyNoMoreInteractions(mock);
+  
+===Mockito's similarities:===
+
+  * allow the same level verification as EasyMock (unexpected invocations, redundant invocations, strict verification)
+  
+  * argument matchers are exactly the same (anyInt(), anyObject(), etc.)
+
+===Mockito's differences:===
+  
+  * verification is explicit - verification errors point exactly what interaction failed.
+  
+  * stubbing is 'permanent', stubbed method will replay all the time with stubbed value no matter how many times it is called.
+   Works exactly like EasyMock's andStubReturn(), andStubThrow(). 
+  
+  * no record/replay modes - no need for them. There only 2 things you can do with Mockito mocks - verify or stub. 
+Stubbing goes before execution and verification afterwards.
+  
+  * only one kind of mock (no nice/default/strict mocks). 
+  Or using EasyMock metaphor: Mockito mocks can be nice or strict - but it depends on how you verify mocks, not how you create them.
+  Because there is only one kind of mock - it is easier to share setup 
+  (situations where mocks are fields in test class but different test methods require different kinds of mocks)
+  
+  * only one way of creating mocks (no MockControl object)
+  
+  * all mocks are 'nice' (even nicer than in EasyMock, because collection-returning methods return empty collections instead of nulls)
+  
+  * single jar distribution 
+  
+=Strict verification=  
+    
+  Control control = createStrictControl();  
+  
+  List one = control.createMock(List.class);				List one = mock(List.class);
+  List two = control.createMock(List.class);				List two = mock(List.class);
+  
+  expect(one.add("one")).andReturn(true);
+  expect(two.add("two")).andReturn(true);
+  
+  control.replay();
+  
+  useMocks();												useMocks();
+
+                                                            Strictly strictly = strictly(one, two);
+                                                            
+                                                            strictly.verify(one).add("one");
+                                                            strictly.verify(two).add("two");
+  
+  control.verify();											verifyNoMoreInteractions(one, two);
+  
+  
+=Stubbing void methods=
+
+  List mock = createNiceMock(List.class);					List mock = mock(List.class);
+  
+  mock.clear();												stubVoid(mock).toThrow(new Exception()).on().clear();
+  expectLastCall().andThrow(new Exception());
+  
+  replay(mock);
