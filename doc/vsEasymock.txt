@@ -8,7 +8,7 @@
   
   replay(mock);
   
-  useMock();											useMock();
+  someCodeThatInteractsWithMock();						someCodeThatInteractsWithMock();
   
                                                         verify(easy).clear();
   
@@ -30,14 +30,13 @@
   * no record/replay modes - no need for them. There only 2 things you can do with Mockito mocks - verify or stub. 
   Stubbing goes before execution and verification afterwards.
 
-  * all mocks are 'nice' (even nicer than in EasyMock, because collection-returning methods return empty collections instead of nulls).
-  Simple yet flexible: even though mocks are nice, you can verify them as strictly as you want and detect any unwanted interaction.
-  
+  * all mocks are 'nice' (even nicer than EasyMocks, because collection-returning methods return empty collections instead of nulls).
+  Even though mocks are nice, you can verify them as strictly as you want and detect any unwanted interaction.
   
   * verification is explicit - verification errors point exactly what interaction failed.
   
-  * stubbing is 'permanent' - stubbed method will replay all the time with stubbed value no matter how many times it is called.
-   Works exactly like EasyMock's andStubReturn(), andStubThrow(). 
+  * stubbed methods replay all the time with stubbed value no matter how many times they are called.
+   Works exactly like EasyMock's andStubReturn(), andStubThrow().
   
   * only one way of creating mocks (no MockControl object)
   
@@ -55,7 +54,7 @@
   
   control.replay();
   
-  useMocks();												useMocks();
+  someCodeThatInteractsWithMocks();							someCodeThatInteractsWithMocks();
 
                                                             Strictly strictly = strictly(one, two);
                                                             
