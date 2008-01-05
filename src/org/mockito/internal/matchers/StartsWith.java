@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class StartsWith implements IArgumentMatcher<String> {
+public class StartsWith implements ArgumentMatcher<String> {
 
     private final String prefix;
 

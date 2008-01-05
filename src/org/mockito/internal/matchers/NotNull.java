@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class NotNull implements IArgumentMatcher<Object> {
+public class NotNull implements ArgumentMatcher<Object> {
 
     public static final NotNull NOT_NULL = new NotNull();
     

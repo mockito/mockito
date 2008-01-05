@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class EqualsWithDelta implements IArgumentMatcher<Number>{
+public class EqualsWithDelta implements ArgumentMatcher<Number>{
     private final Number wanted;
 
     private final Number delta;

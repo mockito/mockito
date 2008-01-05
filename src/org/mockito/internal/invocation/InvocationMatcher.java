@@ -8,15 +8,15 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher {
 
     private final Invocation invocation;
-    private final List<IArgumentMatcher> matchers;
+    private final List<ArgumentMatcher> matchers;
 
-    public InvocationMatcher(Invocation invocation, List<IArgumentMatcher> matchers) {
+    public InvocationMatcher(Invocation invocation, List<ArgumentMatcher> matchers) {
         if (matchers == null) {
             throw new IllegalArgumentException("matchers cannot be null");
         }
@@ -25,7 +25,7 @@ public class InvocationMatcher {
     }
     
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<IArgumentMatcher>emptyList());
+        this(invocation, Collections.<ArgumentMatcher>emptyList());
     }
     
     public Method getMethod() {
@@ -36,7 +36,7 @@ public class InvocationMatcher {
         return this.invocation;
     }
     
-    public List<IArgumentMatcher> getMatchers() {
+    public List<ArgumentMatcher> getMatchers() {
         return this.matchers;
     }
 

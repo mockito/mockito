@@ -14,7 +14,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.NotNull;
 
 @SuppressWarnings("unchecked")
@@ -48,9 +48,9 @@ public class InvocationMatcherTest extends RequiresValidState {
     
     @Test
     public void shouldToStringWithMatchers() throws Exception {
-        IArgumentMatcher m = NotNull.NOT_NULL;
+        ArgumentMatcher m = NotNull.NOT_NULL;
         InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
-        IArgumentMatcher mTwo = new Equals('x');
+        ArgumentMatcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertEquals("Object.simpleMethod(notNull())", notNull.toString());

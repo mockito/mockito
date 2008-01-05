@@ -5,11 +5,11 @@
 package org.mockito.internal.matchers;
 
 @SuppressWarnings("unchecked")
-public class Not implements IArgumentMatcher {
+public class Not implements ArgumentMatcher {
 
-    private final IArgumentMatcher first;
+    private final ArgumentMatcher first;
 
-    public Not(IArgumentMatcher first) {
+    public Not(ArgumentMatcher first) {
         this.first = first;
     }
 

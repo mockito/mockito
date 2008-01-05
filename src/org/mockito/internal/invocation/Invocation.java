@@ -14,7 +14,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.ArgumentMatcher;
 
 /**
  * Method call on a mock object. 
@@ -119,7 +119,7 @@ public class Invocation {
         return toString(argumentsToMatchers());
     }
 
-    public String toString(List<IArgumentMatcher> matchers) {
+    public String toString(List<ArgumentMatcher> matchers) {
         String mockName = MockNamer.nameForMock(mock);
         String methodName = method.getName();
         String arguments = getArgumentsString(matchers);
@@ -138,18 +138,18 @@ public class Invocation {
         return result.toString().replaceFirst(", $", "").concat(")");
     }
     
-    private String getArgumentsString(List<IArgumentMatcher> matchers) {
+    private String getArgumentsString(List<ArgumentMatcher> matchers) {
         StringBuilder result = new StringBuilder();
         result.append("(");
-        for (IArgumentMatcher matcher : matchers) {
+        for (ArgumentMatcher matcher : matchers) {
             matcher.appendTo(result);
             result.append(", ");
         }
         return result.toString().replaceFirst(", $", "").concat(")");
     }
     
-    private List<IArgumentMatcher> argumentsToMatchers() {
-        List<IArgumentMatcher> matchers = new LinkedList<IArgumentMatcher>();
+    private List<ArgumentMatcher> argumentsToMatchers() {
+        List<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
         for (Object arg : this.arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));

@@ -18,7 +18,7 @@ import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.Find;
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Matches;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.NotNull;
@@ -106,7 +106,7 @@ public class MatchersToStringTest extends RequiresValidState {
 
     @Test
     public void orToString() {
-        List<IArgumentMatcher> matchers = new ArrayList<IArgumentMatcher>();
+        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         new Or(matchers).appendTo(buffer);
@@ -121,7 +121,7 @@ public class MatchersToStringTest extends RequiresValidState {
 
     @Test
     public void andToString() {
-        List<IArgumentMatcher> matchers = new ArrayList<IArgumentMatcher>();
+        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         new And(matchers).appendTo(buffer);

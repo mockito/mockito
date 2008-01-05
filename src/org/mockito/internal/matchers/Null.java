@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Null implements IArgumentMatcher<Object> {
+public class Null implements ArgumentMatcher<Object> {
 
     public static final Null NULL = new Null();
 

@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Contains implements IArgumentMatcher<String> {
+public class Contains implements ArgumentMatcher<String> {
 
     private final String substring;
 

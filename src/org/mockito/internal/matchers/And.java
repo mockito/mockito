@@ -8,16 +8,16 @@ import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class And implements IArgumentMatcher {
+public class And implements ArgumentMatcher {
 
-    private final List<IArgumentMatcher> matchers;
+    private final List<ArgumentMatcher> matchers;
 
-    public And(List<IArgumentMatcher> matchers) {
+    public And(List<ArgumentMatcher> matchers) {
         this.matchers = matchers;
     }
 
     public boolean matches(Object actual) {
-        for (IArgumentMatcher matcher : matchers) {
+        for (ArgumentMatcher matcher : matchers) {
             if (!matcher.matches(actual)) {
                 return false;
             }
@@ -27,7 +27,7 @@ public class And implements IArgumentMatcher {
 
     public void appendTo(StringBuilder buffer) {
         buffer.append("and(");
-        for (Iterator<IArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
+        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
             it.next().appendTo(buffer);
             if (it.hasNext()) {
                 buffer.append(", ");

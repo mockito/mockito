@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class EndsWith implements IArgumentMatcher<String> {
+public class EndsWith implements ArgumentMatcher<String> {
 
     private final String suffix;
 

@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMatcher<T> {
+public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T> {
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {

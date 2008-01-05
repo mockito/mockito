@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Matches implements IArgumentMatcher<Object> {
+public class Matches implements ArgumentMatcher<Object> {
 
     private final String regex;
 

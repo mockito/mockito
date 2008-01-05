@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.internal.matchers.IArgumentMatcher;
+import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.progress.LastArguments;
 import org.mockitousage.IMethods;
 
@@ -29,7 +29,7 @@ public class CustomMatchersTest extends RequiresValidState {
     }
 
     //TODO make CustomMatcher part of framework
-    abstract class CustomMatcher<T> implements IArgumentMatcher<T> {
+    abstract class CustomMatcher<T> implements ArgumentMatcher<T> {
         public void appendTo(StringBuilder builder) {
             builder.append("<custom argument matcher>");
         }

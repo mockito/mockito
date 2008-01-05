@@ -9,16 +9,16 @@ import java.util.List;
 
 
 @SuppressWarnings("unchecked")
-public class Or implements IArgumentMatcher {
+public class Or implements ArgumentMatcher {
 
-    private final List<IArgumentMatcher> matchers;
+    private final List<ArgumentMatcher> matchers;
 
-    public Or(List<IArgumentMatcher> matchers) {
+    public Or(List<ArgumentMatcher> matchers) {
         this.matchers = matchers;
     }
 
     public boolean matches(Object actual) {
-        for (IArgumentMatcher matcher : matchers) {
+        for (ArgumentMatcher matcher : matchers) {
             if (matcher.matches(actual)) {
                 return true;
             }
@@ -28,7 +28,7 @@ public class Or implements IArgumentMatcher {
 
     public void appendTo(StringBuilder buffer) {
         buffer.append("or(");
-        for (Iterator<IArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
+        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
             it.next().appendTo(buffer);
             if (it.hasNext()) {
                 buffer.append(", ");

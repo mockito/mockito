@@ -1,12 +1,12 @@
 =Mockito=
 
+  * descriptive, refactorable, proven EasyMockish syntax.
   * simple and intuitive way of testing: setup-execute-assert. 
-  Other words: you ask questions about interactions after execution instead setting up expectations first
-  * descriptive, refactorable, proven EasyMockish syntax
-  * selective verification (one interaction - one verification) allows creating more specific test methods 
-  concentrated on testing only selected behavior
+  Other words: you ask questions about interactions after execution instead setting up expectations beforehand.
+  * explicit verification allows creating more specific test methods 
+  concentrated on testing only selected interaction: one interaction - one verification.
   * verification errors are very readable - click on stack trace to see failed verification in test, 
-  click on exception's cause to navigate to actual interaction in code
+  click on exception's cause to navigate to actual interaction in code.
   
 ===Sample===
 
@@ -28,16 +28,14 @@
 
 ===More details===
 
-  * Mocks classes and interfaces
+  * Mocks concrete classes as well as interfaces
   * All created mocks are friendly, e.g: methods return 0, false, empty collections or just nulls. 
-  Once created mocks are ready to use without setting up any behavior. 
-  * Selective verification (assert-what-you-want)
+  Once created mocks are ready to use without setting up any behavior/expectations. 
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
-  * Verification error's stack trace is always clean. Click on first trace element - see what's failed. 
-  Trace elements from inside of library are not shown.
+  * Verification errors have clean stack trace: Click on first trace element - see what interaction failed. 
+  Trace elements from inside of Mockito library are not shown.
   * Very similar to EasyMock (page with differences in under construction)
-  * (Features explained page under construction)
 
 ===Ideas? Suggestions? Problems?===
 

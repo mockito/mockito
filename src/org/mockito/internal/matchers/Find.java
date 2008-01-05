@@ -6,7 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.util.regex.Pattern;
 
-public class Find implements IArgumentMatcher<String> {
+public class Find implements ArgumentMatcher<String> {
 
     private final String regex;
 
