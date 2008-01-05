@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.GlobalInvocationsFinder;
+import org.mockito.internal.invocation.Invocation;
 
 public class AllInvocationsFinder implements GlobalInvocationsFinder {
     

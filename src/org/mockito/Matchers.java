@@ -30,10 +30,10 @@ import org.mockito.internal.progress.LastArguments;
  * </pre>
  * <b>Warning:</b>
  * <p>
- * When multiple arguments used, all arguments have to be provided by matchers, e.g:
+ * When multiple arguments are combined with matchers, all arguments have to be provided by matchers, e.g:
  * <pre>
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
- *   //above is correct - eq() is also an argument matcher (see {@link Matchers#eq(Object)})
+ *   //above is correct - eq() is also an argument matcher
  *   
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.

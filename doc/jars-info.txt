@@ -1,3 +1,3 @@
 To use mockito either:
- - put 'mockit-all.jar' on your path (required dependencies are expanded into single jar)
- - or put all jar files from 'separate-jars' folder on your path
+ - put 'mockito-all-1.0.jar' on your path (cglib and objenesis are expanded into single jar)
+ - or put all jars from 'separate-jars' folder on your path

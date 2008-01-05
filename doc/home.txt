@@ -8,7 +8,11 @@
   * verification errors are very readable - click on stack trace to see failed verification in test, 
   click on exception's cause to navigate to actual interaction in code.
   
-===Sample===
+===Get started===
+
+Put mockito-all-1.0.jar on classpath  
+  
+==Sample==
 
   import static org.mockito.Mockito.*;
   
@@ -29,13 +33,15 @@
 ===More details===
 
   * Mocks concrete classes as well as interfaces
-  * All created mocks are friendly, e.g: methods return 0, false, empty collections or just nulls. 
-  Once created mocks are ready to use without setting up any behavior/expectations. 
+  * All created mocks are friendly, e.g: methods return 0, false, empty collections or just nulls 
+  Once created mocks are ready to use without setting up any behavior/expectations
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
-  * Verification errors have clean stack trace: Click on first trace element - see what interaction failed. 
-  Trace elements from inside of Mockito library are not shown.
+  * Verification errors have clean stack trace: Click on first trace element - see what interaction failed 
+  Trace elements from inside of Mockito library are not shown
   * Very similar to EasyMock (page with differences in under construction)
+  * Single-jar distribution (mockito-all-1.0.jar) includes java source inside jar
+  * Zip distribution (mockito-1.0.zip) contains javadoc and all jars    
 
 ===Ideas? Suggestions? Problems?===
 

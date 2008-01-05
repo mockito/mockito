@@ -49,19 +49,13 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * //stubbing
  * stub(mockedList.get(0)).toReturn("first");
- * stub(mockedList.get(1)).toReturn("second");
- * stub(mockedList.get(2)).toThrow(new RuntimeException());
+ * stub(mockedList.get(1)).toThrow(new RuntimeException());
  * 
  * //following prints "first"
  * System.out.println(mockedList.get(0));
  * 
- * //following prints "second" three times
- * System.out.println(mockedList.get(1));
- * System.out.println(mockedList.get(1));
- * System.out.println(mockedList.get(1));
- * 
  * //following throws runtime exception
- * System.out.println(mockedList.get(2));
+ * System.out.println(mockedList.get(1));
  * 
  * //following prints "null"
  * System.out.println(mockedList.get(999));
@@ -71,10 +65,10 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Once stubbed, mock object will always return stubbed value regardless of how many times it is called. 
+ * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called. 
  * <p>
  * By default, for all methods that return value mock object will return null,
- * appropriate primitive value (0, false, etc.) or empty collection. 
+ * appropriate primitive value (0, false, etc.) or empty collection.
  * 
  * <h3>Argument matchers</h3>
  * 
@@ -94,16 +88,16 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * <b>Warning:</b>
  * <p>
- * When multiple arguments used, all arguments have to be provided by matchers, e.g:
+ * When multiple arguments are combined with matchers, all arguments have to be provided by matchers, e.g:
  * <pre>
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
- *   //above is correct - eq() is also an argument matcher (see {@link Matchers#eq(Object)})
+ *   //above is correct - eq() is also an argument matcher
  *   
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
- * <h3>Exact number of invocations verification</h3>
+ * <h3>Verifying exact number of invocations / at least once</h3>
  *
  *<pre>
  *  //using mock 
@@ -116,9 +110,9 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *  mockedList.add("three times");
  *  mockedList.add("three times");
  *  
- *  //following two verifications work exactly the same
- *  verify(mockedList, times(1)).add("once");
+ *  //following two verifications work exactly the same - times(1) is used by default
  *  verify(mockedList).add("once");
+ *  verify(mockedList, times(1)).add("once");
  *  
  *  //exact number of invocation verification
  *  verify(mockedList, times(2)).add("twice");
@@ -129,7 +123,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * If times(x) is not given times(1) is assumed. Therefore using times(1) explicitly should be omitted.
+ * <b>times(1) is the default.</b> Therefore using times(1) explicitly can be omitted.
  * 
  * <h3>Stubbing void methods with exceptions</h3>
  * 
@@ -206,7 +200,7 @@ public class Mockito extends Matchers {
      * Creates mock object of given class or interface.
      * <p>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param classToMock
      * @return mock object
@@ -225,7 +219,7 @@ public class Mockito extends Matchers {
      * <p>
      * Trying to stub void method? Look here: {@link Mockito#stubVoid}
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param methodCallToStub
      * @return OngoingStubbing object to set stubbed value/exception
@@ -247,7 +241,7 @@ public class Mockito extends Matchers {
      *   verify(mock).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mock to be verified
      * @return mock object itself
@@ -264,7 +258,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mock to be verified
      * @param mode times(x) or atLeastOnce()
@@ -304,7 +298,7 @@ public class Mockito extends Matchers {
      * //oups: 'doSomethingUnexpected()' is unexpected
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mocks to be verified
      */
@@ -325,7 +319,7 @@ public class Mockito extends Matchers {
      * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
      * the first one is more explicit and can read better.
      * <p>
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mocks to be verified
      */
@@ -345,7 +339,7 @@ public class Mockito extends Matchers {
      *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mock to stub
      * @return stubbable object that allows stubbing with throwable
@@ -366,7 +360,7 @@ public class Mockito extends Matchers {
      *   strictly.verify(secondMock).add("should be called second");
      * </pre>
      *
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param mocks to be verified in strict order
      * 
@@ -389,7 +383,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @return verification mode
      */
@@ -403,7 +397,7 @@ public class Mockito extends Matchers {
      *   verify(mock, times(2)).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for{@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param wantedNumberOfInvocations wanted number of invocations 
      * 

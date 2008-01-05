@@ -7,9 +7,9 @@ package org.mockito.internal.verification;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorder {

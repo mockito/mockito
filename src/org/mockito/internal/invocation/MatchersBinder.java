@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.ArgumentMatcher;
+import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.progress.LastArguments;
 
 @SuppressWarnings("unchecked")
