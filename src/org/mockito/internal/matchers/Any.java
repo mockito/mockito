@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.matchers;
 
-
+@SuppressWarnings("unchecked")
 public class Any implements IArgumentMatcher {
 
     public static final Any ANY = new Any();    

@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Contains implements IArgumentMatcher {
+public class Contains implements IArgumentMatcher<String> {
 
     private final String substring;
 
@@ -13,9 +13,8 @@ public class Contains implements IArgumentMatcher {
         this.substring = substring;
     }
 
-    public boolean matches(Object actual) {
-        return (actual instanceof String)
-                && ((String) actual).indexOf(substring) >= 0;
+    public boolean matches(String actual) {
+        return actual != null && actual.contains(substring);
     }
 
     public void appendTo(StringBuilder buffer) {

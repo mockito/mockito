@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.mockito.internal.matchers.IArgumentMatcher;
 
+@SuppressWarnings("unchecked")
 public class InvocationMatcher {
 
     private final Invocation invocation;

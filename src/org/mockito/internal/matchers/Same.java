@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Same implements IArgumentMatcher {
+public class Same implements IArgumentMatcher<Object> {
 
     private final Object wanted;
 

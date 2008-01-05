@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class InstanceOf implements IArgumentMatcher {
+public class InstanceOf implements IArgumentMatcher<Object> {
 
     private final Class<?> clazz;
 

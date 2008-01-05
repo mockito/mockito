@@ -27,6 +27,7 @@ import org.mockito.internal.matchers.Or;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 
+@SuppressWarnings("unchecked")
 public class MatchersToStringTest extends RequiresValidState {
     private StringBuilder buffer;
 

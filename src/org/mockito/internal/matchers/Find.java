@@ -6,8 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.util.regex.Pattern;
 
-
-public class Find implements IArgumentMatcher {
+public class Find implements IArgumentMatcher<String> {
 
     private final String regex;
 
@@ -15,9 +14,8 @@ public class Find implements IArgumentMatcher {
         this.regex = regex;
     }
 
-    public boolean matches(Object actual) {
-        return (actual instanceof String)
-                && Pattern.compile(regex).matcher((String) actual).find();
+    public boolean matches(String actual) {
+        return actual != null && Pattern.compile(regex).matcher(actual).find();
     }
 
     public void appendTo(StringBuilder buffer) {

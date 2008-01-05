@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMatcher {
+public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMatcher<T> {
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {
@@ -13,7 +13,7 @@ public abstract class CompareTo<T extends Comparable<T>> implements IArgumentMat
     }
 
     @SuppressWarnings("unchecked")
-    public boolean matches(Object actual) {
+    public boolean matches(T actual) {
         
         if(!(actual instanceof Comparable)) {
             return false;

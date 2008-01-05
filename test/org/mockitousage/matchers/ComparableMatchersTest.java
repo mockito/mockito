@@ -4,10 +4,7 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
@@ -22,25 +19,6 @@ import org.mockito.internal.matchers.LessThan;
 
 public class ComparableMatchersTest extends RequiresValidState {
 
-    @Test
-    public void testNotComparable() {
-        CompareTo<Long> cmpTo = new CompareTo<Long>(5L) {
-
-            @Override
-            protected String getName() {
-                return null;
-            }
-
-            @Override
-            protected boolean matchResult(int result) {
-                fail("Shouldn't be called since the passed argument is not Comparable");
-                return true;
-            }
-            
-        };
-        
-        assertFalse(cmpTo.matches(new Object()));
-    }
     @Test
     public void testLessThan() {
         test(new LessThan<String>("b"), true, false, false, "lt");

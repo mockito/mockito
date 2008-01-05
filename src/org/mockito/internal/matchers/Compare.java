@@ -6,7 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.util.Comparator;
 
-
+@SuppressWarnings("unchecked")
 public class Compare<T> implements IArgumentMatcher {
 
     private T wanted;

@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.matchers;
 
-
+@SuppressWarnings("unchecked")
 public class Not implements IArgumentMatcher {
 
     private final IArgumentMatcher first;

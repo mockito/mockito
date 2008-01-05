@@ -18,9 +18,9 @@ import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class CustomMatchersTest extends RequiresValidState {
-    private final class ZeroOrOne extends CustomMatcher {
-        public boolean matches(Object argument) {
-            if (((Integer) argument) == 0 || ((Integer) argument) == 1) {  
+    private final class ZeroOrOne extends CustomMatcher<Integer> {
+        public boolean matches(Integer argument) {
+            if (argument == 0 || argument == 1) {
                 return true;
             }
             
@@ -29,12 +29,12 @@ public class CustomMatchersTest extends RequiresValidState {
     }
 
     //TODO make CustomMatcher part of framework
-    abstract class CustomMatcher implements IArgumentMatcher {
+    abstract class CustomMatcher<T> implements IArgumentMatcher<T> {
         public void appendTo(StringBuilder builder) {
             builder.append("<custom argument matcher>");
         }
 
-        public abstract boolean matches(Object argument);
+        public abstract boolean matches(T argument);
     }
     
     private IMethods mock;

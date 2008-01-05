@@ -7,7 +7,7 @@ package org.mockito.internal.matchers;
 /**
  * Decides whether an actual argument is accepted.
  */
-public interface IArgumentMatcher {
+public interface IArgumentMatcher<T> {
     
     /**
      * Returns whether this matcher accepts the given argument. 
@@ -22,7 +22,7 @@ public interface IArgumentMatcher {
      * @param argument the argument
      * @return whether this matcher accepts the given argument.
      */
-    boolean matches(Object argument);
+    boolean matches(T argument);
 
     /**
      * Appends a string representation of this matcher to the given buffer. In case

@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class EndsWith implements IArgumentMatcher {
+public class EndsWith implements IArgumentMatcher<String> {
 
     private final String suffix;
 
@@ -13,8 +13,8 @@ public class EndsWith implements IArgumentMatcher {
         this.suffix = suffix;
     }
 
-    public boolean matches(Object actual) {
-        return (actual instanceof String) && ((String) actual).endsWith(suffix);
+    public boolean matches(String actual) {
+        return actual != null && actual.endsWith(suffix);
     }
 
     public void appendTo(StringBuilder buffer) {

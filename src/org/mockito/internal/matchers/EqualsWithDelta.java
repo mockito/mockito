@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class EqualsWithDelta implements IArgumentMatcher {
+public class EqualsWithDelta implements IArgumentMatcher<Number>{
     private final Number wanted;
 
     private final Number delta;
@@ -15,11 +15,9 @@ public class EqualsWithDelta implements IArgumentMatcher {
         this.delta = delta;
     }
 
-    public boolean matches(Object actual) {
-        Number actualNumber = (Number) actual;
-        return wanted.doubleValue() - delta.doubleValue() <= actualNumber
-                .doubleValue()
-                && actualNumber.doubleValue() <= wanted.doubleValue()
+    public boolean matches(Number actual) {
+        return wanted.doubleValue() - delta.doubleValue() <= actual.doubleValue()
+                && actual.doubleValue() <= wanted.doubleValue()
                         + delta.doubleValue();
     }
 

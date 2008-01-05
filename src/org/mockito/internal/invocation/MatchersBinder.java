@@ -12,6 +12,7 @@ import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.IArgumentMatcher;
 import org.mockito.internal.progress.LastArguments;
 
+@SuppressWarnings("unchecked")
 public class MatchersBinder {
 
     public InvocationMatcher bindMatchers(Invocation invocation) {

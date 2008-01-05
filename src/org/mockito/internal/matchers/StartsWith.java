@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class StartsWith implements IArgumentMatcher {
+public class StartsWith implements IArgumentMatcher<String> {
 
     private final String prefix;
 
@@ -13,9 +13,8 @@ public class StartsWith implements IArgumentMatcher {
         this.prefix = prefix;
     }
 
-    public boolean matches(Object actual) {
-        return (actual instanceof String)
-                && ((String) actual).startsWith(prefix);
+    public boolean matches(String actual) {
+        return actual != null && actual.startsWith(prefix);
     }
 
     public void appendTo(StringBuilder buffer) {

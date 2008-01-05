@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 
-public class Equals implements IArgumentMatcher {
+public class Equals implements IArgumentMatcher<Object> {
 
     private final Object wanted;
 

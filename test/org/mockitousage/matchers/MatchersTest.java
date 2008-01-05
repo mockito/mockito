@@ -397,6 +397,7 @@ public class MatchersTest extends RequiresValidState {
 
         assertEquals("1", mock.oneArg("ab12"));
         assertEquals(null, mock.oneArg("12345"));
+        assertEquals(null, mock.oneArg(null));
     }
 
     @Test
@@ -469,7 +470,7 @@ public class MatchersTest extends RequiresValidState {
             assertThat(e, messageContains("eq(1.0, 0.1)"));
         }
     }
-
+    
     @Test
     public void sameMatcher() {
         Object one = new String("1243");

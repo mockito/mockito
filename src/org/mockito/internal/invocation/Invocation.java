@@ -24,6 +24,7 @@ import org.mockito.internal.matchers.IArgumentMatcher;
  * <p>
  * Contains stack trace of invocation
  */
+@SuppressWarnings("unchecked")
 public class Invocation {
 
     private final int sequenceNumber;
