@@ -10,7 +10,7 @@
   
 ===Get started===
 
-Put mockito-all-1.0.jar on classpath  
+Put mockito-all-x.jar on classpath  
   
 ==Sample==
 
@@ -40,8 +40,8 @@ Put mockito-all-1.0.jar on classpath
   * Verification errors have clean stack trace: Click on first trace element - see what interaction failed 
   Trace elements from inside of Mockito library are not shown
   * Very similar to EasyMock (page with differences in under construction)
-  * Single-jar distribution (mockito-all-1.0.jar) includes java source inside jar
-  * Zip distribution (mockito-1.0.zip) contains javadoc and all jars    
+  * Single-jar distribution (mockito-all-x.jar) includes java source inside jar
+  * Zip distribution (mockito-x.zip) contains javadoc and all jars    
 
 ===Ideas? Suggestions? Problems?===
 

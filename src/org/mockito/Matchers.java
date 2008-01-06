@@ -47,6 +47,7 @@ public class Matchers {
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
+        //TODO every matcher should have a link to documentation about matchers
         LastArguments.instance().reportMatcher(Any.ANY);
         return false;
     }
