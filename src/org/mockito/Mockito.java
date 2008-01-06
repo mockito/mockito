@@ -17,7 +17,10 @@ import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 
 /**
- * Enables mock objects creation, verification and stubbing.
+ * Enables mocks creation, verification and stubbing.
+ * <p>
+ * Following examples mock List or LinkedList, because everyone knows their interface (methods like add(), get(), clear() will be used). 
+ * <br>You probably wouldn't mock List class 'in real'.  
  * 
  * <h3>Let's verify!</h3>
  * 
@@ -168,7 +171,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Strict verification is required only in some cases and in most cases ordinary verification is enough. 
+ * Strict verification is required only in some cases and mostly ordinary verification is enough. 
  * 
  * <h3>Making sure no interactions happened on mock</h3>
  * 
@@ -200,9 +203,9 @@ public class Mockito extends Matchers {
      * Creates mock object of given class or interface.
      * <p>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
-     * @param classToMock
+     * @param classToMock class or interface to mock
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
@@ -212,16 +215,16 @@ public class Mockito extends Matchers {
     /**
      * Stubs with return value or exception. E.g:
      * <pre>
-     *   stub(mock.countElements()).toReturn(10);
+     *   stub(mock.someMethod()).toReturn(10);
      *   
-     *   stub(mock.countElements()).toThrow(new RuntimeException());
+     *   stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
      * </pre>
      * <p>
-     * Trying to stub void method? Look here: {@link Mockito#stubVoid}
+     * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
+     * <p>
+     * See examples in javadoc for {@link Mockito}
      * 
-     * See examples in javadoc for {@link Mockito#stub}
-     * 
-     * @param methodCallToStub
+     * @param methodCallToStub method call
      * @return OngoingStubbing object to set stubbed value/exception
      */
     @SuppressWarnings("unchecked")
@@ -241,7 +244,7 @@ public class Mockito extends Matchers {
      *   verify(mock).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
      * @return mock object itself
@@ -258,7 +261,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
      * @param mode times(x) or atLeastOnce()
@@ -279,7 +282,7 @@ public class Mockito extends Matchers {
      * else was invoked on your mocks.
      * <p>
      * It's a good pattern not to use this method in every test method. Test
-     * methods should focus on different behavior/interaction and it's not
+     * methods should focus on different behavior/interaction and it's usually not
      * necessary to call verifyNoMoreInteractions() all the time
      * <p>
      * Stubbed invocations are also treated as interactions.
@@ -298,7 +301,7 @@ public class Mockito extends Matchers {
      * //oups: 'doSomethingUnexpected()' is unexpected
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mocks to be verified
      */
@@ -319,7 +322,7 @@ public class Mockito extends Matchers {
      * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
      * the first one is more explicit and can read better.
      * <p>
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mocks to be verified
      */
@@ -336,10 +339,10 @@ public class Mockito extends Matchers {
     /**
      * Stubs void method with exception. E.g:
      * <pre>
-     *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+     *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to stub
      * @return stubbable object that allows stubbing with throwable
@@ -360,7 +363,7 @@ public class Mockito extends Matchers {
      *   strictly.verify(secondMock).add("should be called second");
      * </pre>
      *
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mocks to be verified in strict order
      * 
@@ -383,7 +386,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @return verification mode
      */
@@ -397,7 +400,7 @@ public class Mockito extends Matchers {
      *   verify(mock, times(2)).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito#stub}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param wantedNumberOfInvocations wanted number of invocations 
      * 

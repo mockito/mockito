@@ -10,7 +10,7 @@ import org.mockito.Mockito;
  * Chooses void method for stubbing with throwable. E.g:
  * 
  * <pre>
- * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+ * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
  * </pre>
  * 
  * See examples in javadoc for {@link Mockito#stubVoid}
@@ -21,7 +21,7 @@ public interface StubbedMethodSelector<T> {
      * Choose void method for stubbing with throwable. E.g:
      * 
      * <pre>
-     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
      * </pre>
      * 
      * If throwable is a checked exception then it has to match one of the

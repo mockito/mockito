@@ -25,8 +25,8 @@ public interface Strictly {
      * <pre>
      * Strictly strictly = strictly(firstMock, secondMock);
      * 
-     * strictly.verify(firstMock).add("should be called first");
-     * strictly.verify(secondMock).add("should be called second");
+     * strictly.verify(firstMock).someMethod("should be called first");
+     * strictly.verify(secondMock).someMethod("should be called second");
      * </pre>
      * <p>
      * 
@@ -44,8 +44,8 @@ public interface Strictly {
      * <pre>
      * Strictly strictly = strictly(firstMock, secondMock);
      * 
-     * strictly.verify(firstMock, times(2)).add("should be called first two times");
-     * strictly.verify(secondMock, atLeastOnce()).add("should be called second");
+     * strictly.verify(firstMock, times(2)).someMethod("should be called first two times");
+     * strictly.verify(secondMock, atLeastOnce()).someMethod("should be called second");
      * </pre>
      * <p>
      * 

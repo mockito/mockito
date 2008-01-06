@@ -10,9 +10,9 @@ import org.mockito.Mockito;
  * Stubs with return value or exception. E.g:
  * 
  * <pre>
- * stub(mock.countElements()).toReturn(10);
+ * stub(mock.someMethod()).toReturn(10);
  * 
- * stub(mock.countElements()).toThrow(new RuntimeException());
+ * stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
  * </pre>
  * 
  * See examples in javadoc for {@link Mockito#stub}
@@ -22,7 +22,7 @@ public interface OngoingStubbing<T> {
     /**
      * Stub mock object with given return value. E.g:
      * <pre>
-     * stub(mock.countElements()).toReturn(10);
+     * stub(mock.someMethod()).toReturn(10);
      * </pre>
      * 
      * See examples in javadoc for {@link Mockito#stub}
@@ -34,7 +34,7 @@ public interface OngoingStubbing<T> {
     /**
      * Stub mock object with throwable that will be thrown on method invocation. E.g:
      * <pre>
-     * stub(mock.countElements()).toThrow(new RuntimeException());
+     * stub(mock.someMethod()).toThrow(new RuntimeException());
      * </pre>
      *
      * If throwable is a checked exception then it has to 
