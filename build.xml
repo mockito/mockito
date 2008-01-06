@@ -2,7 +2,7 @@
  Copyright (c) 2007 Mockito contributors 
  This program is made available under the terms of the MIT License.
 -->
-<project name="mockito" basedir="." default="zip">
+<project name="mockito" basedir="." default="all">
 
   <property name="src.dir" value="src" />
   <property name="test.src.dir" value="test" />
@@ -164,6 +164,42 @@
       <group title="Main package" packages="org.mockito"/>
     </javadoc>
   </target>
+
+  <target name="test.zip.release" depends="all" >
+    <delete dir="${target.dir}/tmp"/>
+    <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
+      <junit fork="true" forkmode="once" haltonfailure="true">
+        <formatter type="plain" usefile="false" />
+        <classpath>
+          <fileset dir="${lib.dir.test}" includes="*.jar" />
+          <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
+          <pathelement location="${test.classes.dir}" />
+        </classpath>
+        <jvmarg value="-ea" />
+
+        <batchtest>
+          <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
+        </batchtest>
+      </junit>
+  </target>
+  
+    <target name="test.zip.release.separate.jars" depends="all" >
+      <delete dir="${target.dir}/tmp"/>
+      <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
+        <junit fork="true" forkmode="once" haltonfailure="true">
+          <formatter type="plain" usefile="false" />
+          <classpath>
+            <fileset dir="${lib.dir.test}" includes="*.jar" />
+            <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
+            <pathelement location="${test.classes.dir}" />
+          </classpath>
+          <jvmarg value="-ea" />
+
+          <batchtest>
+            <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
+          </batchtest>
+        </junit>
+    </target>	
   
   <target name="all" depends="zip, tgzip" />
   
