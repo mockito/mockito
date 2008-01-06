@@ -230,11 +230,11 @@ public class Mockito extends Matchers {
      * <p>
      * See examples in javadoc for {@link Mockito}
      * 
-     * @param methodCallToStub method call
+     * @param methodCall method call
      * @return OngoingStubbing object to set stubbed value/exception
      */
     @SuppressWarnings("unchecked")
-    public static <T> OngoingStubbing<T> stub(T methodCallToStub) {
+    public static <T> OngoingStubbing<T> stub(T methodCall) {
         MOCKING_PROGRESS.stubbingStarted();
 
         OngoingStubbing stubbable = MOCKING_PROGRESS.pullOngoingStubbing();

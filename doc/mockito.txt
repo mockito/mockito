@@ -1,39 +1,6 @@
-***some REALLY random stuff that needs to be tidied up
+**** random thoughts
 
-stack traces stuff:
-
-M						EM
-wanted but not invoked	failure on verify
-wanted 1 but was 2		unexpected call (store the stack trace, and put it as second)
-differs from actual		unexpected call (store the stack trace, and put it as second)
-no more wanted			unexpected call (store the stack trace, and put it as second)
-
- # developer friendly
- 
- -smart failure reporting
- -stack filtering
- -narrow messages fit left bar
-
- # Mockito mocks are ready to play. You don't have to record any behavior, you don't even have to stub it. 
- Mock will record all operations and, for methods that return values, will return nulls, default primitives or empty collections.
- 
- # Assert what you want. It's up to you what behavior you want to verify.
-
-  mockito.noOtherInteractions(mockDatabase);
-
--no record() or replay(). I find it confusing. This is how I deal with mocks:
-
-  1. Mock returns value and you are interested in that value, then you stub this mock providing returned value. There is no need to verify whether mock was called or not because you only care about return value. Return value will take part in other calculations that will be asserted elsewhere effectively verifying the mock:
-
-  mockito.stub(mockCalculator.countArticles("Guardian")).toReturn(12);
-
-  2. Mock doesn't return value or returns something you don't care about. You are interested in verifying whether implementation interacted with that mock.
-
-  mockito.verify(mockDatabase).updateNumberOfArticles("Guardian", 12);
-
-There is no need for record() / replay() modes. mockitos are either stubs - then you have to stub them before method under test is called, or they are mocks - then you verify interactions after method under test was called.
-
--test code is easier to read. there is a clear distinction between ordinary method calls and expectatoins.
+-test code is easier to read. there is a clear distinction between ordinary method calls and expectations.
   Eg: this maybe genuine method call but also this maybe an expectation recorded on mock object. It depends whether someObject is a mock.
 
   someObject.do();
@@ -42,22 +9,12 @@ There is no need for record() / replay() modes. mockitos are either stubs - then
 
   verify(someObject).do()
 
--easy building class under test mocking constructors
-
 over EasyMock:
 -deliberately removed IAnswer - if you need to return different results for different args then you should stub on the per-test basis.
   this is the only way to have clean tests not cluttered with complicated mocky stuff.
 -mock's names are nicer - simple names
 -no need to name mocks. you see the exact line of code where it failed. for verifyNoOtherInteractions() names are simple and clean anyway (previous point)
--no comparator matcher (has anyone used it?)	 
--exception messages are less verbose - one may think it's a downside but I found it rarely useful...
 
--simpler - you see exactly what failed on verifaction.
-Forget about:
-  Expectation failure on verify:
-    clear(): expected: 1, actual: 0
-
-You'll see exact line of code where verification failed
 
 -classical stubbing - if you stub method for given args - it always will replay in that manner. E.g. if mock is called few times with the same args and you want to return different result each time, then you'd better use EasyMock
 
@@ -70,3 +27,5 @@ You'll see exact line of code where verification failed
 
 -think about merging in
 http://www.stephenduncanjr.com/projects/easymock-propertyutils
+
+-mocking constructors?

@@ -1,10 +1,10 @@
 =Mockito=
 
   * descriptive, refactorable, proven EasyMockish syntax.
-  * simple and intuitive way of testing: setup-execute-assert. 
+  * simple and intuitive way of testing: run -> verify behavior. 
   Other words: you ask questions about interactions after execution instead setting up expectations beforehand.
-  * explicit verification allows creating more specific test methods 
-  concentrated on testing only selected interaction: one interaction - one verification.
+  * explicit, selective verification allows creating more specific test methods 
+  concentrated on testing only selected interaction: one interaction - one verification. It's also increases readability.
   * verification errors are very readable - click on stack trace to see failed verification in test, 
   click on exception's cause to navigate to actual interaction in code.
   
