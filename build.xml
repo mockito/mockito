@@ -49,7 +49,7 @@
   </target>
 
   <target name="clean" description="Cleans out the build directories">
-    <delete includeemptydirs="true">
+    <delete includeemptydirs="true" quiet="true">
       <fileset dir="${target.dir}">
         <exclude name="eclipse-*/**" />
       </fileset>
