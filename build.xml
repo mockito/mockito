@@ -16,6 +16,13 @@
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
   <property name="lib.dir.test" value="${lib.dir}/test" />
+  
+  <property name="version" value="0.9" />
+  <property name="jar.core" value="mockito-core-${version}.jar" />
+  <property name="jar.all" value="mockito-all-${version}.jar" />
+  <property name="zip" value="mockito-${version}.zip" />
+  <property name="tar" value="mockito-${version}.tar" />
+  <property name="tgzip" value="mockito-${version}.tgz" />
 
   <path id="compile.classpath">
     <fileset dir="${lib.dir.run}" includes="*.jar" />
@@ -94,7 +101,7 @@
 
   <target name="jar.all" depends="test">
     <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath" />
-    <jarjar jarfile="${target.dir}/mockito-all.jar">
+    <jarjar jarfile="${target.dir}/${jar.all}">
       <fileset dir="." file="license.txt" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
@@ -108,18 +115,18 @@
   </target>
 
   <target name="jar" depends="jar.all">
-    <jar jarfile="${target.dir}/mockito.jar">
+    <jar jarfile="${target.dir}/${jar.core}">
       <fileset dir="." file="license.txt" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
     </jar>
   </target>
 
-  <target name="zip" depends="jar, javadoc">
+  <target name="prepare.package" depends="jar, javadoc">
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
       <fileset dir="${lib.dir.run}" />
-      <fileset dir="${target.dir}" includes="mockito.jar" />
+      <fileset dir="${target.dir}" includes="${jar.core}" />
       <fileset dir="." includes="license.txt" />
     </copy>
     <mkdir dir="${target.dir}/mockito.zip.tmp/javadoc" />
@@ -129,20 +136,35 @@
     <copy todir="${target.dir}/mockito.zip.tmp">
       <fileset dir="." includes="license.txt" />
       <fileset dir="doc" includes="jars-info.txt" />
-      <fileset dir="${target.dir}" includes="mockito-all.jar" />
+      <fileset dir="${target.dir}" includes="${jar.all}" />
     </copy>
-    <zip destfile="${target.dir}/mockito.zip">
+  </target>
+
+  <target name="zip" depends="prepare.package">
+    <zip destfile="${target.dir}/${zip}">
       <fileset dir="${target.dir}/mockito.zip.tmp"/>
     </zip>
+  </target>
+  
+  <target name="tgzip" depends="prepare.package">
+    <tar destfile="${target.dir}/${tar}">
+      <fileset dir="${target.dir}/mockito.zip.tmp" />
+    </tar>
+    <gzip destfile="${target.dir}/${tgzip}" src="${target.dir}/${tar}"/>
   </target>
 
   <target name="javadoc">
     <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}" 
       author="true" version="true" use="true" windowtitle="Mockito API">
       <doctitle>
-        <![CDATA[<h1>Mockito API</h1>]]>
+        <![CDATA[
+          <h1>Mockito API. Click to see <a href="org/mockito/Mockito.html">usage</a>.</h1>
+        ]]>
       </doctitle>
+      <group title="Main package" packages="org.mockito"/>
     </javadoc>
   </target>
-
+  
+  <target name="all" depends="zip, tgzip" />
+  
 </project>
