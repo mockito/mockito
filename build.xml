@@ -165,7 +165,7 @@
     </javadoc>
   </target>
 
-  <target name="test.zip.release" depends="all" >
+  <target name="test.zip.release" depends="zip" >
     <delete dir="${target.dir}/tmp"/>
     <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
       <junit fork="true" forkmode="once" haltonfailure="true">
@@ -183,24 +183,26 @@
       </junit>
   </target>
   
-    <target name="test.zip.release.separate.jars" depends="all" >
-      <delete dir="${target.dir}/tmp"/>
-      <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
-        <junit fork="true" forkmode="once" haltonfailure="true">
-          <formatter type="plain" usefile="false" />
-          <classpath>
-            <fileset dir="${lib.dir.test}" includes="*.jar" />
-            <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
-            <pathelement location="${test.classes.dir}" />
-          </classpath>
-          <jvmarg value="-ea" />
+  <target name="test.zip.release.separate.jars" depends="zip" >
+    <delete dir="${target.dir}/tmp"/>
+    <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
+    <junit fork="true" forkmode="once" haltonfailure="true">
+      <formatter type="plain" usefile="false" />
+      <classpath>
+        <fileset dir="${lib.dir.test}" includes="*.jar" />
+        <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
+        <pathelement location="${test.classes.dir}" />
+      </classpath>
+      <jvmarg value="-ea" />
 
-          <batchtest>
-            <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
-          </batchtest>
-        </junit>
-    </target>	
+      <batchtest>
+        <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
+      </batchtest>
+    </junit>
+  </target>	
   
-  <target name="all" depends="zip, tgzip" />
+  <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" />
+  
+  <target name="all" depends="zip, tgzip, test.release" />
   
 </project>
