@@ -207,4 +207,11 @@ public class Reporter {
         cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
         throw new NoInteractionsWanted(join("No interactions wanted"), cause);
     }
+    
+    public void cannotMockFinalClass(Class<?> clazz) {
+        throw new MockitoException(join(
+                "Mockito cannot mock final classes like: ",
+                clazz.toString()
+        ));
+    }
 }

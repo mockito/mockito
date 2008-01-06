@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import net.sf.cglib.core.CollectionUtils;
@@ -12,6 +13,9 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.base.MockitoException;
+
 /**
  * Factory generating a mock for a class.
  */
@@ -19,6 +23,7 @@ public class MockFactory<T> {
 
     @SuppressWarnings("unchecked")
     public T createMock(Class<T> toMock, final MethodInterceptorFilter filter) {
+        validateClass(toMock);
         Enhancer enhancer = createEnhancer(toMock);
         enhancer.setCallbackType(filter.getClass());
 
@@ -29,6 +34,12 @@ public class MockFactory<T> {
 
         filter.setMock(mock);
         return (T) mock;
+    }
+
+    private void validateClass(Class<T> toMock) {
+        if (Modifier.isFinal(toMock.getModifiers())) {
+            new Reporter().cannotMockFinalClass(toMock);
+        }
     }
 
     private Enhancer createEnhancer(Class<T> toMock) {

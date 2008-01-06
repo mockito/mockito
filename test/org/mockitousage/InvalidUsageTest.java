@@ -72,4 +72,13 @@ public class InvalidUsageTest extends RequiresValidState {
     public void shouldNotAllowSettingNullThrowable() throws Exception {
         stub(mock.simpleMethod()).toThrow(null);
     }    
+    
+    final class FinalClass {}
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowMockingFinalClasses() throws Exception {
+        mock(FinalClass.class); 
+    }
+    
+    //TODO what if interface has equals() method to stub? 
 }
