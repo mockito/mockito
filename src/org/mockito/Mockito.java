@@ -68,10 +68,12 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called. 
- * <p>
  * By default, for all methods that return value mock object will return null,
  * appropriate primitive value (0, false, etc.) or empty collection.
+ * <p>
+ * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
+ * <p>
+ * If you stub exactly the same method call many times last stubbing is more important.
  * 
  * <h3>Argument matchers</h3>
  * 
@@ -219,8 +221,12 @@ public class Mockito extends Matchers {
      *   
      *   stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
      * </pre>
-     * <p>
+     *
      * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
+     * <p>
+     * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
+     * <p>
+     * If you stub exactly the same method call many times last stubbing is more important. 
      * <p>
      * See examples in javadoc for {@link Mockito}
      * 

@@ -45,7 +45,15 @@ Put mockito-all-x.jar on classpath
 
 ===Ideas? Suggestions? Problems?===
 
+If you have any suggestions, find documentation unclear or you found a bug, write here:  
+
 mockito@googlegroups.com
+
+===Limitations===
+
+  * Cannot mock final classes
+  * Cannot mock final methods - their normal behavior is executed
+  * Cannot mock equals(), toString() and hashCode() - those are always implemented by mocks
 
 ===Credits===
 
