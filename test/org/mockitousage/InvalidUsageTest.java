@@ -4,11 +4,7 @@
  */
 package org.mockitousage;
 
-import static org.mockito.Mockito.strictly;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -80,5 +76,30 @@ public class InvalidUsageTest extends RequiresValidState {
         mock(FinalClass.class); 
     }
     
-    //TODO what if interface has equals() method to stub? 
+    interface ObjectLikeInterface {
+        boolean equals(Object o);
+        String toString();
+        int hashCode();
+    }
+    
+    @Test
+    public void shouldNotMockObjectMethodsOnInterface() throws Exception {
+        ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
+        
+        inter.equals(null);
+        inter.toString();
+        inter.hashCode();
+        
+        verifyZeroInteractions(inter);
+    }
+    
+    public void shouldNotMockObjectMethodsOnClass() throws Exception {
+        Object clazz = mock(ObjectLikeInterface.class);
+        
+        clazz.equals(null);
+        clazz.toString();
+        clazz.hashCode();
+        
+        verifyZeroInteractions(clazz);
+    }
 }

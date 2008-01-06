@@ -14,7 +14,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
 
 /**
  * Factory generating a mock for a class.
