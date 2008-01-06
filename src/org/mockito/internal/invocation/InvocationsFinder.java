@@ -34,6 +34,7 @@ public class InvocationsFinder {
         return firstChunk;
     }
     
+    //TODO it should only show method of the same name (or even nothing)
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         for (Invocation invocation : invocations) {
             String wantedMethodName = wanted.getMethod().getName();

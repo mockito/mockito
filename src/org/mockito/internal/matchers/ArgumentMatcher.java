@@ -25,7 +25,7 @@ public interface ArgumentMatcher<T> {
     boolean matches(T argument);
 
     /**
-     * Appends a string representation of this matcher to the given buffer. In case
+     * Appends a string representation of this matcher to the given builder. In case
      * of failure, the printed message will show this string to allow to know which
      * matcher was used for the failing call.
      * 

@@ -345,4 +345,14 @@ public class Matchers {
         LastArguments.instance().reportMatcher(new StartsWith(prefix));
         return null;
     }
+
+    public static int intThatIs(CustomMatcher<?> matcher) {
+        LastArguments.instance().reportMatcher(matcher);
+        return 0;
+    }
+    
+    public static boolean booleanThatIs(CustomMatcher<?> matcher) {
+        LastArguments.instance().reportMatcher(matcher);
+        return false;
+    }
 }
