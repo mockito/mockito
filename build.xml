@@ -203,6 +203,6 @@
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" />
   
-  <target name="all" depends="zip, tgzip, test.release" />
+  <target name="all" depends="zip, tgzip" />
   
 </project>
