@@ -25,7 +25,7 @@
   * only one kind of mock (no nice/default/strict mocks). 
   Using EasyMock metaphor: Mockito mocks can be nice or strict - but it depends on how you verify mocks, not how you create them.
   Because there is only one kind of mock - it is easier to share setup 
-  (situations where mocks are fields in test class but different test methods require different kinds of mocks)
+  (situations where mocks are fields in test class but different test methods require different kinds of mocks).
   
   * no record/replay modes - no need for them. There only 2 things you can do with Mockito mocks - verify or stub. 
   Stubbing goes before execution and verification afterwards.
@@ -35,12 +35,12 @@
   
   * verification is explicit - verification errors point exactly what interaction failed.
   
-  * stubbed methods replay all the time with stubbed value no matter how many times they are called.
+  * simplified stubbing model - stubbed methods replay all the time with stubbed value no matter how many times they are called.
    Works exactly like EasyMock's andStubReturn(), andStubThrow().
   
-  * only one way of creating mocks (no MockControl object)
+  * only one way of creating mocks (no MockControl object).
   
-  * single jar distribution 
+  * single jar distribution.
   
 =Strict verification=  
     

@@ -31,8 +31,9 @@ public class LastArguments {
         return INSTANCE.get();
     }
     
-    public void reportMatcher(ArgumentMatcher matcher) {
+    public ReturnValues reportMatcher(ArgumentMatcher matcher) {
         matcherStack.push(matcher);
+        return new ReturnValues();
     }
 
     public List<ArgumentMatcher> pullMatchers() {

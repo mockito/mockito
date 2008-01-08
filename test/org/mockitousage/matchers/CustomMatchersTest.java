@@ -13,20 +13,31 @@ import org.junit.Test;
 import org.mockito.CustomMatcher;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitousage.IMethods;
 
-@SuppressWarnings("unchecked")
 public class CustomMatchersTest extends RequiresValidState {
-    private final class AnyBoolean extends CustomMatcher<Boolean> {
+    
+    private final class ContainsFoo extends CustomMatcher<String> {
+        public boolean matches(String arg) {
+            return arg.contains("foo");
+        }
+    }
+
+    private final class IsAnyBoolean extends CustomMatcher<Boolean> {
         public boolean matches(Boolean argument) {
             return true;
         }
     }
+    
+    private final class IsSorZ extends CustomMatcher<Character> {
+        public boolean matches(Character argument) {
+            return argument.equals('s') || argument.equals('z');
+        }
+    }
 
-    private final class ZeroOrOne extends CustomMatcher<Integer> {
-        public boolean matches(Integer argument) {
-            if (argument == 0 || argument == 1) {
+    private final class IsZeroOrOne<T extends Number> extends CustomMatcher<T> {
+        public boolean matches(T argument) {
+            if (argument.intValue() == 0 || argument.intValue() == 1) {
                 return true;
             }
             return false;
@@ -41,29 +52,46 @@ public class CustomMatchersTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldUseCustomIntMatcher() {
-        stub(mock.simpleMethod(intThatIs(new ZeroOrOne()))).toReturn("zero or one");
+    public void shouldUseCustomBooleanMatcher() {
+        stub(mock.oneArg(booleanThat(new IsAnyBoolean()))).toReturn("foo");
         
-        assertEquals("zero or one", mock.simpleMethod(0));
-        assertEquals("zero or one", mock.simpleMethod(1));
-        assertEquals(null, mock.simpleMethod(2));
+        assertEquals("foo", mock.oneArg(true));
+        assertEquals("foo", mock.oneArg(false));
+    }
+    
+  @Test
+  public void shouldUseCustomCharMatcher() {
+      stub(mock.oneArg(charThat(new IsSorZ()))).toReturn("foo");
+      
+      assertEquals("foo", mock.oneArg('s'));
+      assertEquals("foo", mock.oneArg('z'));
+      assertEquals(null, mock.oneArg('x'));
+  }
+    
+    @Test
+    public void shouldUseCustomPrimitiveNumberMatchers() {
+        stub(mock.oneArg(byteThat(new IsZeroOrOne<Byte>()))).toReturn("byte");
+        stub(mock.oneArg(shortThat(new IsZeroOrOne<Short>()))).toReturn("short");
+        stub(mock.oneArg(intThat(new IsZeroOrOne<Integer>()))).toReturn("int");
+        stub(mock.oneArg(longThat(new IsZeroOrOne<Long>()))).toReturn("long");
+        stub(mock.oneArg(floatThat(new IsZeroOrOne<Float>()))).toReturn("float");
+        stub(mock.oneArg(doubleThat(new IsZeroOrOne<Double>()))).toReturn("double");
         
-        try {
-            verify(mock).simpleMethod(intThatIs(new ZeroOrOne()));
-            fail();
-        } catch (TooManyActualInvocations e) {}
+        assertEquals("byte", mock.oneArg((byte) 0));
+        assertEquals("short", mock.oneArg((short) 1));
+        assertEquals("int", mock.oneArg(0));
+        assertEquals("long", mock.oneArg(1L));
+        assertEquals("float", mock.oneArg(0F));
+        assertEquals("double", mock.oneArg(1.0));
+        
+        assertEquals(null, mock.oneArg(2));
     }
     
     @Test
-    public void shouldUseCustomBooleanMatcher() {
-        stub(mock.oneArg(booleanThatIs(new AnyBoolean()))).toReturn("any boolean");
+    public void shouldUseCustomObjectMatcher() {
+        stub(mock.oneArg(argThat(new ContainsFoo()))).toReturn("foo");
         
-        assertEquals("any boolean", mock.oneArg(true));
-        assertEquals("any boolean", mock.oneArg(false));
-        
-        try {
-            verify(mock).oneArg(booleanThatIs(new AnyBoolean()));
-            fail();
-        } catch (TooManyActualInvocations e) {}
+        assertEquals("foo", mock.oneArg("foo"));
+        assertEquals(null, mock.oneArg("bar"));
     }
 }

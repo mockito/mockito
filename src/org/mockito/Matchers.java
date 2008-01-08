@@ -342,17 +342,43 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String startsWith(String prefix) {
-        LastArguments.instance().reportMatcher(new StartsWith(prefix));
-        return null;
-    }
-
-    public static int intThatIs(CustomMatcher<?> matcher) {
-        LastArguments.instance().reportMatcher(matcher);
-        return 0;
+        return LastArguments.instance().reportMatcher(new StartsWith(prefix)).<String>nullValue();
     }
     
-    public static boolean booleanThatIs(CustomMatcher<?> matcher) {
-        LastArguments.instance().reportMatcher(matcher);
-        return false;
+    public static char charThat(CustomMatcher<Character> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).charValue();
+    }
+    
+    public static boolean booleanThat(CustomMatcher<Boolean> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).booleanValue();
+    }
+    
+    public static byte byteThat(CustomMatcher<Byte> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).byteValue();
+    }
+    
+    public static short shortThat(CustomMatcher<Short> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).shortValue();
+    }
+    
+    public static int intThat(CustomMatcher<Integer> matcher) {
+        //TODO one-liner pattern everywhere
+        return LastArguments.instance().reportMatcher(matcher).intValue();
+    }
+    
+    public static long longThat(CustomMatcher<Long> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).longValue();
+    }
+    
+    public static float floatThat(CustomMatcher<Float> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).floatValue();
+    }
+    
+    public static double doubleThat(CustomMatcher<Double> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).doubleValue();
+    }
+
+    public static <T> T argThat(CustomMatcher<T> matcher) {
+        return LastArguments.instance().reportMatcher(matcher).<T>nullValue();
     }
 }

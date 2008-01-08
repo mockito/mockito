@@ -19,7 +19,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
 /**
  * Enables mocks creation, verification and stubbing.
  * <p>
- * Following examples mock List or LinkedList, because everyone knows their interface (methods like add(), get(), clear() will be used). 
+ * Following examples mock List, because everyone knows its interface (methods like add(), get(), clear() will be used). 
  * <br>You probably wouldn't mock List class 'in real'.  
  * 
  * <h3>Let's verify!</h3>
