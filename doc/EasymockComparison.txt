@@ -12,7 +12,9 @@
   
                                                         verify(easy).clear();
   
-  verify(easy);											verifyNoMoreInteractions(mock);
+  verify(easy);											
+  
+                                                        verifyNoMoreInteractions(mock);
   
 ===Mockito's similarities:===
 
@@ -61,8 +63,9 @@
                                                             strictly.verify(one).add("one");
                                                             strictly.verify(two).add("two");
   
-  control.verify();											verifyNoMoreInteractions(one, two);
+  control.verify();											
   
+                                                            verifyNoMoreInteractions(one, two);
   
 =Stubbing void methods=
 
