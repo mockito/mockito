@@ -48,7 +48,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T geq(Comparable<T> value) {
-        return reportMatcher(new GreaterOrEqual<T>(value)).returnNull();
+        return reportMatcher(new GreaterOrEqual<T>(value)).<T>returnNull();
     }
 
     /**
@@ -230,7 +230,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T gt(Comparable<T> value) {
-        return reportMatcher(new GreaterThan<T>(value)).returnNull();
+        return reportMatcher(new GreaterThan<T>(value)).<T>returnNull();
     }
 
     /**
@@ -321,7 +321,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T lt(Comparable<T> value) {
-        return reportMatcher(new LessThan<T>(value)).returnNull();
+        return reportMatcher(new LessThan<T>(value)).<T>returnNull();
     }
 
     /**
@@ -425,7 +425,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static String find(String regex) {
-        return reportMatcher(new Find(regex)).returnNull();
+        return reportMatcher(new Find(regex)).<String>returnNull();
     }
 
     /**
@@ -690,7 +690,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
-        return LastArguments.instance().reportAnd().returnNull();
+        return LastArguments.instance().reportAnd().<T>returnNull();
     }
 
     /**
@@ -722,7 +722,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
-        return LastArguments.instance().reportOr().returnNull();
+        return LastArguments.instance().reportOr().<T>returnNull();
     }
 
     /**
@@ -842,7 +842,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
-        return LastArguments.instance().reportNot().returnNull();
+        return LastArguments.instance().reportNot().<T>returnNull();
     }
 
     /**

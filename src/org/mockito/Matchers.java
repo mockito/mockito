@@ -167,7 +167,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T isA(Class<T> clazz) {
-        return reportMatcher(new InstanceOf(clazz)).returnNull();
+        return reportMatcher(new InstanceOf(clazz)).<T>returnNull();
     }
 
     /**
@@ -284,7 +284,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T eq(T value) {
-        return reportMatcher(new Equals(value)).returnNull();
+        return reportMatcher(new Equals(value)).<T>returnNull();
     }
 
     /**
@@ -299,7 +299,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T same(T value) {
-        return reportMatcher(new Same(value)).returnNull();
+        return reportMatcher(new Same(value)).<T>returnNull();
     }
 
     /**
