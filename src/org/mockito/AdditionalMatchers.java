@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.CompareEqual;
 import org.mockito.internal.matchers.EqualsWithDelta;
@@ -13,6 +14,7 @@ import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
 import org.mockito.internal.progress.LastArguments;
+import org.mockito.internal.progress.ReturnValues;
 
 /**
  * See {@link Matchers} for general info about matchers.
@@ -44,8 +46,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T geq(Comparable<T> value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<T>(value));
-        return null;
+        return reportMatcher(new GreaterOrEqual<T>(value)).returnNull();
     }
 
     /**
@@ -56,8 +57,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte geq(byte value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Byte>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Byte>(value)).returnZero();
     }
 
     /**
@@ -68,8 +68,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double geq(double value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Double>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Double>(value)).returnZero();
     }
 
     /**
@@ -80,8 +79,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float geq(float value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Float>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Float>(value)).returnZero();
     }
 
     /**
@@ -92,8 +90,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int geq(int value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Integer>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Integer>(value)).returnZero();
     }
 
     /**
@@ -104,8 +101,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long geq(long value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Long>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Long>(value)).returnZero();
     }
 
     /**
@@ -116,8 +112,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short geq(short value) {
-        LastArguments.instance().reportMatcher(new GreaterOrEqual<Short>(value));
-        return 0;
+        return reportMatcher(new GreaterOrEqual<Short>(value)).returnZero();
     }
 
     /**
@@ -128,8 +123,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T leq(Comparable<T> value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<T>(value));
-        return null;
+        return reportMatcher(new LessOrEqual<T>(value)).<T>returnNull();
     }
 
     /**
@@ -140,8 +134,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte leq(byte value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Byte>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Byte>(value)).returnZero();
     }
 
     /**
@@ -152,8 +145,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double leq(double value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Double>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Double>(value)).returnZero();
     }
 
     /**
@@ -164,8 +156,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float leq(float value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Float>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Float>(value)).returnZero();
     }
 
     /**
@@ -176,8 +167,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int leq(int value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Integer>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Integer>(value)).returnZero();
     }
 
     /**
@@ -188,8 +178,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long leq(long value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Long>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Long>(value)).returnZero();
     }
 
     /**
@@ -200,8 +189,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short leq(short value) {
-        LastArguments.instance().reportMatcher(new LessOrEqual<Short>(value));
-        return 0;
+        return reportMatcher(new LessOrEqual<Short>(value)).returnZero();
     }
 
     /**
@@ -212,8 +200,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T gt(Comparable<T> value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<T>(value));
-        return null;
+        return reportMatcher(new GreaterThan<T>(value)).returnNull();
     }
 
     /**
@@ -224,8 +211,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte gt(byte value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Byte>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Byte>(value)).returnZero();
     }
 
     /**
@@ -236,8 +222,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double gt(double value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Double>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Double>(value)).returnZero();
     }
 
     /**
@@ -248,8 +233,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float gt(float value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Float>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Float>(value)).returnZero();
     }
 
     /**
@@ -260,8 +244,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int gt(int value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Integer>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Integer>(value)).returnZero();
     }
 
     /**
@@ -272,8 +255,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long gt(long value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Long>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Long>(value)).returnZero();
     }
 
     /**
@@ -284,8 +266,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short gt(short value) {
-        LastArguments.instance().reportMatcher(new GreaterThan<Short>(value));
-        return 0;
+        return reportMatcher(new GreaterThan<Short>(value)).returnZero();
     }
 
     /**
@@ -296,8 +277,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T lt(Comparable<T> value) {
-        LastArguments.instance().reportMatcher(new LessThan<T>(value));
-        return null;
+        return reportMatcher(new LessThan<T>(value)).returnNull();
     }
 
     /**
@@ -308,8 +288,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte lt(byte value) {
-        LastArguments.instance().reportMatcher(new LessThan<Byte>(value));
-        return 0;
+        return reportMatcher(new LessThan<Byte>(value)).returnZero();
     }
 
     /**
@@ -320,8 +299,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double lt(double value) {
-        LastArguments.instance().reportMatcher(new LessThan<Double>(value));
-        return 0;
+        return reportMatcher(new LessThan<Double>(value)).returnZero();
     }
 
     /**
@@ -332,8 +310,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float lt(float value) {
-        LastArguments.instance().reportMatcher(new LessThan<Float>(value));
-        return 0;
+        return reportMatcher(new LessThan<Float>(value)).returnZero();
     }
 
     /**
@@ -344,8 +321,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int lt(int value) {
-        LastArguments.instance().reportMatcher(new LessThan<Integer>(value));
-        return 0;
+        return reportMatcher(new LessThan<Integer>(value)).returnZero();
     }
 
     /**
@@ -356,8 +332,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long lt(long value) {
-        LastArguments.instance().reportMatcher(new LessThan<Long>(value));
-        return 0;
+        return reportMatcher(new LessThan<Long>(value)).returnZero();
     }
 
     /**
@@ -368,8 +343,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short lt(short value) {
-        LastArguments.instance().reportMatcher(new LessThan<Short>(value));
-        return 0;
+        return reportMatcher(new LessThan<Short>(value)).returnZero();
     }
 
     /**
@@ -381,8 +355,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T cmpEq(Comparable<T> value) {
-        LastArguments.instance().reportMatcher(new CompareEqual<T>(value));
-        return null;
+        return reportMatcher(new CompareEqual<T>(value)).<T>returnNull();
     }
 
     /**
@@ -394,8 +367,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static String find(String regex) {
-        LastArguments.instance().reportMatcher(new Find(regex));
-        return null;
+        return reportMatcher(new Find(regex)).returnNull();
     }
 
     /**
@@ -409,8 +381,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T[] aryEq(T[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -422,8 +393,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static short[] aryEq(short[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -435,8 +405,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static long[] aryEq(long[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -448,8 +417,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static int[] aryEq(int[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();       
     }
 
     /**
@@ -461,8 +429,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static float[] aryEq(float[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -474,8 +441,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static double[] aryEq(double[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -487,8 +453,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static char[] aryEq(char[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -500,8 +465,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static byte[] aryEq(byte[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -513,8 +477,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static boolean[] aryEq(boolean[] value) {
-        LastArguments.instance().reportMatcher(new ArrayEquals(value));
-        return null;
+        return reportMatcher(new ArrayEquals(value)).returnNull();
     }
 
     /**
@@ -527,8 +490,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
-        LastArguments.instance().reportAnd(2);
-        return false;
+        return LastArguments.instance().reportAnd(2).returnFalse();
     }
 
     /**
@@ -541,8 +503,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte and(byte first, byte second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -555,8 +516,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char and(char first, char second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnChar();
     }
 
     /**
@@ -569,8 +529,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double and(double first, double second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -583,8 +542,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float and(float first, float second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -597,8 +555,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int and(int first, int second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -611,8 +568,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long and(long first, long second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -625,8 +581,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short and(short first, short second) {
-        LastArguments.instance().reportAnd(2);
-        return 0;
+        return LastArguments.instance().reportAnd(2).returnZero();
     }
 
     /**
@@ -641,8 +596,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
-        LastArguments.instance().reportAnd(2);
-        return null;
+        return LastArguments.instance().reportAnd(2).returnNull();
     }
 
     /**
@@ -655,8 +609,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean or(boolean first, boolean second) {
-        LastArguments.instance().reportOr(2);
-        return false;
+        return LastArguments.instance().reportOr(2).returnFalse();
     }
 
     /**
@@ -671,8 +624,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
-        LastArguments.instance().reportOr(2);
-        return null;
+        return LastArguments.instance().reportOr(2).returnNull();
     }
 
     /**
@@ -685,8 +637,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short or(short first, short second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -699,8 +650,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long or(long first, long second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -713,8 +663,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int or(int first, int second) {
-        LastArguments.instance().reportOr(2);
-        return first;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -727,8 +676,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float or(float first, float second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -741,8 +689,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double or(double first, double second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -755,8 +702,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char or(char first, char second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnChar();
     }
 
     /**
@@ -769,8 +715,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte or(byte first, byte second) {
-        LastArguments.instance().reportOr(2);
-        return 0;
+        return LastArguments.instance().reportOr(2).returnZero();
     }
 
     /**
@@ -783,8 +728,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
-        LastArguments.instance().reportNot();
-        return null;
+        return LastArguments.instance().reportNot().returnNull();
     }
 
     /**
@@ -795,8 +739,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short not(short first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -807,8 +750,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int not(int first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -819,8 +761,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long not(long first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -831,8 +772,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float not(float first) {
-        LastArguments.instance().reportNot();
-        return first;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -843,8 +783,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double not(double first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -855,8 +794,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char not(char first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnChar();
     }
 
     /**
@@ -867,8 +805,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
-        LastArguments.instance().reportNot();
-        return false;
+        return LastArguments.instance().reportNot().returnFalse();
     }
 
     /**
@@ -879,8 +816,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte not(byte first) {
-        LastArguments.instance().reportNot();
-        return 0;
+        return LastArguments.instance().reportNot().returnZero();
     }
 
     /**
@@ -894,8 +830,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double eq(double value, double delta) {
-        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+        return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
     }
 
     /**
@@ -909,7 +844,10 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float eq(float value, float delta) {
-        LastArguments.instance().reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+        return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
+    }
+    
+    private static ReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
+        return LastArguments.instance().reportMatcher(matcher);
     }
 }

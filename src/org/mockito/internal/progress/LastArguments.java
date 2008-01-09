@@ -46,14 +46,17 @@ public class LastArguments {
         return matchers;
     }
 
-    public void reportAnd(int count) {
+    //TODO count here is dodgy 
+    public ReturnValues reportAnd(int count) {
         assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
         matcherStack.push(new And(popLastArgumentMatchers(count)));
+        return new ReturnValues();
     }
 
-    public void reportNot() {
+    public ReturnValues reportNot() {
         assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
         matcherStack.push(new Not(popLastArgumentMatchers(1).get(0)));
+        return new ReturnValues();
     }
 
     private List<ArgumentMatcher> popLastArgumentMatchers(int count) {
@@ -75,8 +78,9 @@ public class LastArguments {
         }
     }
 
-    public void reportOr(int count) {
+    public ReturnValues reportOr(int count) {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(count)));
+        return new ReturnValues();
     }
 }
