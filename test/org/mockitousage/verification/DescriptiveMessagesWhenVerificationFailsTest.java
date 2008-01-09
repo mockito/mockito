@@ -108,24 +108,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends RequiresValidS
     }
 
     @Test
-    public void shouldTreatFirstUnverifiedInvocationAsActualInvocation() {
-        mock.oneArg(true);
-        mock.simpleMethod();
-        mock.differentMethod();
-        mock.twoArgumentMethod(1, 2);
-
-        try {
-            verify(mock).oneArg(true);
-            verify(mock).differentMethod();
-            verify(mock).threeArgumentMethod(1, "2", "3");
-            fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.threeArgumentMethod(1, \"2\", \"3\")"));
-            assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
-        }
-    }
-
-    @Test
     public void shouldPrintActualAndUnverifiedWantedWhenTheDifferenceIsAboutArguments() {
         mock.twoArgumentMethod(1, 1);
         mock.twoArgumentMethod(2, 2);

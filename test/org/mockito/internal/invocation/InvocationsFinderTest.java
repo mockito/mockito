@@ -123,14 +123,6 @@ public class InvocationsFinderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFindSimilarInvocationByGettingFirstUnverified() throws Exception {
-        simpleMethodInvocation.markVerified();
-        simpleMethodInvocationTwo.markVerified();
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertSame(found, differentMethodInvocation);
-    }
-    
-    @Test
     public void shouldNotFindSimilarInvocationBecauseAllAreVerified() throws Exception {
         simpleMethodInvocation.markVerified();
         simpleMethodInvocationTwo.markVerified();

@@ -34,7 +34,6 @@ public class InvocationsFinder {
         return firstChunk;
     }
     
-    //TODO it should only show method of the same name (or even nothing)
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         for (Invocation invocation : invocations) {
             String wantedMethodName = wanted.getMethod().getName();
@@ -49,7 +48,7 @@ public class InvocationsFinder {
             }
         }
         
-        return findFirstUnverified(invocations, wanted.getInvocation().getMock());
+        return null;
     }
     
     public Invocation findFirstUnverified(List<Invocation> invocations) {
