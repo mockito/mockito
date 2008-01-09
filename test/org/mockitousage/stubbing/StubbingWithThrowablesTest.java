@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings({"serial", "unchecked"})
