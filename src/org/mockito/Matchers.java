@@ -20,6 +20,8 @@ import org.mockito.internal.progress.ReturnValues;
 
 /**
  * Allow less constrained verification or stubbing. See also {@link AdditionalMatchers}.
+ * <p>
+ * {@link Mockito} extends Matchers so to get access to matchers just import Mockito class statically.
  * <pre>
  *  //stubbing using anyInt() argument matcher
  *  stub(mockedList.get(anyInt())).toReturn("element");
@@ -45,16 +47,19 @@ public class Matchers {
 
     /**
      * any boolean argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
-        //TODO every matcher should have a link to documentation about matchers
         return reportMatcher(Any.ANY).returnFalse();
     }
 
     /**
      * any byte argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -64,6 +69,8 @@ public class Matchers {
 
     /**
      * any char argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -73,6 +80,8 @@ public class Matchers {
 
     /**
      * any int argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -82,6 +91,8 @@ public class Matchers {
 
     /**
      * any long argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -91,6 +102,8 @@ public class Matchers {
 
     /**
      * any float argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -100,6 +113,8 @@ public class Matchers {
 
     /**
      * any double argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -109,6 +124,8 @@ public class Matchers {
 
     /**
      * any short argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>0</code>.
      */
@@ -118,6 +135,8 @@ public class Matchers {
 
     /**
      * any Object argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>null</code>.
      */
@@ -127,6 +146,8 @@ public class Matchers {
 
     /**
      * any String argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>null</code>.
      */
@@ -136,6 +157,8 @@ public class Matchers {
 
     /**
      * Object argument that implements the given class. 
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param <T>
      *            the accepted type.
@@ -149,6 +172,8 @@ public class Matchers {
 
     /**
      * boolean argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -160,6 +185,8 @@ public class Matchers {
 
     /**
      * byte argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -171,6 +198,8 @@ public class Matchers {
 
     /**
      * char argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -182,6 +211,8 @@ public class Matchers {
 
     /**
      * double argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -193,6 +224,8 @@ public class Matchers {
 
     /**
      * float argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -204,6 +237,8 @@ public class Matchers {
     
     /**
      * int argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -215,6 +250,8 @@ public class Matchers {
 
     /**
      * long argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -226,6 +263,8 @@ public class Matchers {
 
     /**
      * short argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -237,6 +276,8 @@ public class Matchers {
 
     /**
      * Object argument that is equal to the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param value
      *            the given value.
@@ -248,6 +289,8 @@ public class Matchers {
 
     /**
      * Object argument that is the same as the given value.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -261,6 +304,8 @@ public class Matchers {
 
     /**
      * null argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>null</code>.
      */
@@ -270,6 +315,8 @@ public class Matchers {
 
     /**
      * not null argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @return <code>null</code>.
      */
@@ -279,6 +326,8 @@ public class Matchers {
 
     /**
      * String argument that contains the given substring.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param substring
      *            the substring.
@@ -290,6 +339,8 @@ public class Matchers {
 
     /**
      * String argument that matches the given regular expression.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param regex
      *            the regular expression.
@@ -301,6 +352,8 @@ public class Matchers {
 
     /**
      * String argument that ends with the given suffix.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param suffix
      *            the suffix.
@@ -312,6 +365,8 @@ public class Matchers {
 
     /**
      * String argument that starts with the given prefix.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
      * 
      * @param prefix
      *            the prefix.

@@ -15,7 +15,6 @@ import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
-//TODO should be similar pattern to MP
 @SuppressWarnings("unchecked")
 public class LastArguments {
     
