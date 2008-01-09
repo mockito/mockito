@@ -89,7 +89,8 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Argument matchers allow less constrained verification or stubbing. See all {@link Matchers}.
+ * Argument matchers allow less constrained verification or stubbing. 
+ * See all {@link Matchers} including examples of custom matchers. 
  * <p>
  * <b>Warning:</b>
  * <p>
@@ -164,7 +165,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   firstMock.add("one");
  *   secondMock.add("two");
  *   
- *   //create strict verifier 
+ *   //create strictly 
  *   Strictly strictly = strictly(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
@@ -360,7 +361,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Creates strict verifier that allows verifying mocks in order.
+     * Creates strictly that allows verifying mocks in order.
      * 
      * <pre>
      *   Strictly strictly = strictly(firstMock, secondMock);

@@ -158,7 +158,7 @@
       author="true" version="true" use="true" windowtitle="Mockito API">
       <doctitle>
         <![CDATA[
-          <h1>Mockito API. Click to see <a href="org/mockito/Mockito.html">usage</a>.</h1>
+          <h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito API.</h1>
         ]]>
       </doctitle>
       <group title="Main package" packages="org.mockito"/>

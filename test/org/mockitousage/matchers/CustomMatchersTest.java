@@ -86,7 +86,7 @@ public class CustomMatchersTest extends RequiresValidState {
         
         assertEquals(null, mock.oneArg(2));
     }
-    
+         
     @Test
     public void shouldUseCustomObjectMatcher() {
         stub(mock.oneArg(argThat(new ContainsFoo()))).toReturn("foo");

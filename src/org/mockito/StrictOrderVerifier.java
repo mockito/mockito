@@ -11,6 +11,9 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 
+/**
+ * Allows verifying strictly. This class should not be exposed, hence default access.
+ */
 class StrictOrderVerifier implements Strictly {
     
     private final Reporter reporter = new Reporter();

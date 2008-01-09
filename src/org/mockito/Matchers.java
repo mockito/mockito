@@ -42,6 +42,36 @@ import org.mockito.internal.progress.ReturnValues;
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
+ * 
+ * <h3>Custom Matchers</h3>
+ * 
+ * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods and implement your own {@link CustomMatcher}, e.g:
+ * 
+ * <pre>
+ *   class IsListOfTwoElements extends CustomMatcher&lt;List&gt; {
+ *      public boolean matches(List list) {
+ *          return list.size() == 2;
+ *      }
+ *   }
+ *   
+ *   List mock = mock(List.class);
+ *   
+ *   stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ *   
+ *   mock.addAll(Arrays.asList("one", "two"));
+ *   
+ *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
+ * </pre>
+ * 
+ * Custom matchers are generally used very rarely. 
+ * <p>
+ * To keep it readable you may want to extract method, e.g:
+ * <pre>
+ *   stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ *   //becomes
+ *   stub(mock.addAll(listOfTwoElements()).toReturn(true);
+ * </pre>
+ * 
  */
 public class Matchers {
 
@@ -375,43 +405,115 @@ public class Matchers {
     public static String startsWith(String prefix) {
         return reportMatcher(new StartsWith(prefix)).<String>returnNull();
     }
-    
-    public static char charThat(CustomMatcher<Character> matcher) {
-        return reportMatcher(matcher).returnChar();
-    }
-    
-    public static boolean booleanThat(CustomMatcher<Boolean> matcher) {
-        return reportMatcher(matcher).returnFalse();
-    }
-    
-    public static byte byteThat(CustomMatcher<Byte> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
-    
-    public static short shortThat(CustomMatcher<Short> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
-    
-    public static int intThat(CustomMatcher<Integer> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
 
-    public static long longThat(CustomMatcher<Long> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
-    
-    public static float floatThat(CustomMatcher<Float> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
-    
-    public static double doubleThat(CustomMatcher<Double> matcher) {
-        return reportMatcher(matcher).returnZero();
-    }
-
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>null</code>.
+     */
     public static <T> T argThat(CustomMatcher<T> matcher) {
         return reportMatcher(matcher).<T>returnNull();
     }
     
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static char charThat(CustomMatcher<Character> matcher) {
+        return reportMatcher(matcher).returnChar();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>false</code>.
+     */
+    public static boolean booleanThat(CustomMatcher<Boolean> matcher) {
+        return reportMatcher(matcher).returnFalse();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static byte byteThat(CustomMatcher<Byte> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static short shortThat(CustomMatcher<Short> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static int intThat(CustomMatcher<Integer> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static long longThat(CustomMatcher<Long> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static float floatThat(CustomMatcher<Float> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>0</code>.
+     */
+    public static double doubleThat(CustomMatcher<Double> matcher) {
+        return reportMatcher(matcher).returnZero();
+    }
+
     private static ReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
         return LastArguments.instance().reportMatcher(matcher);
     }

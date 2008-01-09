@@ -964,7 +964,7 @@ public class AdditionalMatchers {
     public static double eq(double value, double delta) {
         return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
     }
-
+    
     /**
      * float argument that has an absolute difference to the given value that is
      * less than the given delta details.
