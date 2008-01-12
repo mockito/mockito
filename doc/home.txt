@@ -43,7 +43,8 @@ See javadoc for more documentation (TODO link)
   Once created mocks usually are ready to use without setting up any behavior/expectations
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
-  * EasyMock comparison (TODO link)
+  * Thread-safe
+  * Similar to EasyMock (TODO link)
   * Single-jar distribution (mockito-all-x.jar) includes java source inside jar
   * Zip distribution (mockito-x.zip) contains javadoc and all jars    
 
