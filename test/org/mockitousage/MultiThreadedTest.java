@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,21 +15,35 @@ import org.junit.runner.notification.Failure;
 import org.mockito.MockUtilTest;
 import org.mockito.MockitoTest;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.ReporterTest;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
+import org.mockito.exceptions.base.StackTraceRemoverTest;
+import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.MockHandlerTest;
 import org.mockito.internal.creation.CglibTest;
 import org.mockito.internal.creation.MockFactoryTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
+import org.mockito.internal.invocation.InvocationsFinderTest;
+import org.mockito.internal.invocation.InvocationsPrinterTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.VerificationModeImplTest;
 import org.mockito.internal.stubbing.EmptyReturnValuesTest;
+import org.mockito.internal.stubbing.ResultTest;
+import org.mockito.internal.stubbing.StubberTest;
+import org.mockito.internal.util.ListUtilTest;
+import org.mockito.internal.verification.MissingInvocationInOrderVerifierTest;
+import org.mockito.internal.verification.MissingInvocationVerifierTest;
+import org.mockito.internal.verification.NoMoreInvocationsVerifierTest;
+import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
+import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.IncorectBindingPuzzleFixedTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
+import org.mockitousage.matchers.CustomMatchersTest;
 import org.mockitousage.matchers.InvalidUseOfMatchersTest;
 import org.mockitousage.matchers.MatchersTest;
 import org.mockitousage.matchers.MatchersToStringTest;
@@ -39,11 +53,15 @@ import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.AtLeastOnceVerificationTest;
+import org.mockitousage.verification.BasicVerificationInOrderTest;
 import org.mockitousage.verification.BasicVerificationTest;
 import org.mockitousage.verification.DescriptiveMessagesOnVerificationInOrderErrorsTest;
+import org.mockitousage.verification.DescriptiveMessagesWhenTimesXVerificationFailsTest;
 import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
 import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
 import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
+import org.mockitousage.verification.RelaxedVerificationInOrderTest;
+import org.mockitousage.verification.SelectedMocksInOrderVerificationTest;
 import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest;
 import org.mockitousage.verification.VerificationInOrderTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
@@ -55,49 +73,69 @@ public class MultiThreadedTest extends RequiresValidState {
         
         private boolean failed;
 
-        //TODO refresh those tests
         public void run() {
             Result result = JUnitCore.runClasses(
-                    MockitoSampleTest.class, 
-                    EqualsTest.class, 
-                    CglibTest.class, 
-                    InvocationMatcherTest.class, 
-                    MockFactoryTest.class, 
-                    NumberOfInvocationsVerifierTest.class, 
-                    MockingProgressImplTest.class, 
-                    EmptyReturnValuesTest.class, 
-                    VerificationModeImplTest.class, 
-                    InvocationTest.class, 
-                    MockUtilTest.class, 
-                    MockitoAssertionErrorTest.class, 
-                    MockitoExceptionTest.class, 
-                    BridgeMethodPuzzleTest.class, 
-                    IncorectBindingPuzzleFixedTest.class, 
-                    UsingVarargsTest.class, 
-                    ComparableMatchersTest.class, 
-                    MatchersToStringTest.class, 
-                    VerificationAndStubbingUsingMatchersTest.class, 
-                    BasicStubbingTest.class, 
-                    ReturningDefaultValuesTest.class, 
-                    StubbingWithThrowablesTest.class, 
-                    AtLeastOnceVerificationTest.class, 
-                    BasicVerificationTest.class, 
-                    ExactNumberOfTimesVerificationTest.class, 
-                    DescriptiveMessagesWhenVerificationFailsTest.class, 
-                    NoMoreInteractionsVerificationTest.class, 
-                    VerificationInOrderMixedWithOrdiraryVerificationTest.class, 
-                    VerificationInOrderTest.class, 
-                    VerificationOnMultipleMocksUsingMatchersTest.class, 
-                    VerificationUsingMatchersTest.class, 
-                    MatchersTest.class,
-                    ReplacingObjectMethodsTest.class,
+                    EqualsTest.class,
+                    ListUtilTest.class,
+                    MockingProgressImplTest.class,
+                    VerificationModeImplTest.class,
                     MockHandlerTest.class,
+                    AllInvocationsFinderTest.class,
+                    EmptyReturnValuesTest.class,
+                    StubberTest.class,
+                    ResultTest.class,
+                    NumberOfInvocationsVerifierTest.class,
+                    VerifyingRecorderTest.class,
+                    MissingInvocationVerifierTest.class,
+                    NoMoreInvocationsVerifierTest.class,
+                    NumberOfInvocationsInOrderVerifierTest.class,
+                    MissingInvocationInOrderVerifierTest.class,
+                    MockFactoryTest.class,
+                    CglibTest.class,
+                    InvocationMatcherTest.class,
+                    InvocationsFinderTest.class,
+                    InvocationTest.class,
+                    InvocationsPrinterTest.class,
                     MockitoTest.class,
+                    MockUtilTest.class,
+                    ReporterTest.class,
+                    MockitoAssertionErrorTest.class,
+                    StackTraceRemoverTest.class,
+                    MockitoExceptionTest.class,
+                    StackTraceFilteringTest.class,
+                    BridgeMethodPuzzleTest.class,
+                    IncorectBindingPuzzleFixedTest.class,
                     InvalidUsageTest.class,
+                    UsingVarargsTest.class,
+                    CustomMatchersTest.class,
+                    ComparableMatchersTest.class,
                     InvalidUseOfMatchersTest.class,
+                    MatchersTest.class,
+                    MatchersToStringTest.class,
+                    VerificationAndStubbingUsingMatchersTest.class,
+                    BasicStubbingTest.class,
+                    ReturningDefaultValuesTest.class,
+                    StubbingWithThrowablesTest.class,
+                    AtLeastOnceVerificationTest.class,
+                    BasicVerificationTest.class,
+                    ExactNumberOfTimesVerificationTest.class,
+                    VerificationInOrderTest.class,
+                    NoMoreInteractionsVerificationTest.class,
+                    SelectedMocksInOrderVerificationTest.class,
+                    VerificationOnMultipleMocksUsingMatchersTest.class,
+                    VerificationUsingMatchersTest.class,
+                    RelaxedVerificationInOrderTest.class,
+                    DescriptiveMessagesWhenVerificationFailsTest.class,
+                    DescriptiveMessagesWhenTimesXVerificationFailsTest.class,
+                    BasicVerificationInOrderTest.class,
+                    VerificationInOrderMixedWithOrdiraryVerificationTest.class,
                     DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
                     InvalidStateDetectionTest.class,
-                    StackTraceFilteringTest.class
+                    ReplacingObjectMethodsTest.class,
+                    StackTrackeChangingTest.class,
+                    MockitoSampleTest.class,
+                    PointingStackTraceToActualInvocationTest.class,
+                    PointingStackTraceToActualInvocationChunkTest.class
                 );
                 
                 if (!result.wasSuccessful()) {
