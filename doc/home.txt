@@ -10,11 +10,13 @@ EasyMock fork with following features:
   * verification errors are very readable - click on stack trace to see failed verification in test, 
   click on exception's cause to navigate to actual interaction in code. Stack trace is always clean.
 
-===Get started===
+===Getting started===
+
+Beta version 0.9 available for download!
 
 Put mockito-all-x.jar on classpath (TODO link it) 
   
-==Sample==
+===Sample===
 
   import static org.mockito.Mockito.*;
   
