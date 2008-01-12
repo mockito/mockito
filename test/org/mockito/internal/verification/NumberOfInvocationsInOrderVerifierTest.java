@@ -20,9 +20,9 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 
-public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState {
+public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
 
-    private StrictlyNumberOfInvocationsVerifier verifier;
+    private NumberOfInvocationsInOrderVerifier verifier;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -32,21 +32,21 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new StrictlyNumberOfInvocationsVerifier(finderStub, reporterStub);
+        verifier = new NumberOfInvocationsInOrderVerifier(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }
     
     @Test
-    public void shouldNeverVerifyIfModeIsNotStrict() throws Exception {
+    public void shouldNeverVerifyIfModeIsNotInOrder() throws Exception {
         verifier.verify(null, wanted, atLeastOnce());
     }
     
     @Test
     public void shouldPassIfWantedIsZeroAndFirstUnverifiedChunkIsEmpty() throws Exception {
         assertTrue(finderStub.firstUnverifiedChunkToReturn.isEmpty());
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).inOrder());
     }
     
     @Test
@@ -55,7 +55,7 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
         finderStub.firstUnverifiedChunkToReturn.add(differentMethod); 
         
         assertFalse(wanted.matches(differentMethod));
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).inOrder());
     }
     
     @Test
@@ -64,7 +64,7 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
         Invocation second = new InvocationBuilder().toInvocation();
         finderStub.firstUnverifiedChunkToReturn.addAll(asList(first, second)); 
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
         
         assertEquals(4, reporterStub.wantedCount);
         assertEquals(2, reporterStub.actualCount);
@@ -78,7 +78,7 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
         Invocation second = new InvocationBuilder().toInvocation();
         finderStub.firstUnverifiedChunkToReturn.addAll(asList(first, second)); 
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
         
         assertEquals(1, reporterStub.wantedCount);
         assertEquals(2, reporterStub.actualCount);
@@ -90,11 +90,11 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
     public void shouldMarkInvocationsAsVerified() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.firstUnverifiedChunkToReturn.add(invocation);
-        assertFalse(invocation.isVerifiedStrictly());
+        assertFalse(invocation.isVerifiedInOrder());
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
         
-        assertTrue(invocation.isVerifiedStrictly());
+        assertTrue(invocation.isVerifiedInOrder());
     }
 
     class ReporterStub extends Reporter {
@@ -104,14 +104,14 @@ public class StrictlyNumberOfInvocationsVerifierTest extends RequiresValidState 
         private HasStackTrace firstUndesired;
         private String wanted;
 
-        @Override public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
+        @Override public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
             this.wantedCount = wantedCount;
             this.actualCount = actualCount;
             this.wanted = wanted;
             this.lastActualStackTrace = lastActualStackTrace;
         }
         
-        @Override public void strictlyTooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        @Override public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
             this.wantedCount = wantedCount;
             this.actualCount = actualCount;
             this.wanted = wanted;

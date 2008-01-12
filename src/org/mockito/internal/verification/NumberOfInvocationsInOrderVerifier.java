@@ -13,22 +13,22 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
-public class StrictlyNumberOfInvocationsVerifier implements Verifier {
+public class NumberOfInvocationsInOrderVerifier implements Verifier {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
     
-    public StrictlyNumberOfInvocationsVerifier() {
+    public NumberOfInvocationsInOrderVerifier() {
         this(new InvocationsFinder(), new Reporter());
     }
     
-    public StrictlyNumberOfInvocationsVerifier(InvocationsFinder finder, Reporter reporter) {
+    public NumberOfInvocationsInOrderVerifier(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.strictMode()) {
+        if (!mode.inOrderMode()) {
             return;
         }
         
@@ -43,16 +43,16 @@ public class StrictlyNumberOfInvocationsVerifier implements Verifier {
         
         if (mode.tooLittleActualInvocations(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.strictlyTooLittleActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
+            reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
         }
         
         if (mode.tooManyActualInvocations(actualCount)) {
             HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
-            reporter.strictlyTooManyActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
+            reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
         }
         
         for (Invocation i : chunk) {
-            i.markVerifiedStrictly();
+            i.markVerifiedInOrder();
         }
     }
 }

@@ -10,19 +10,19 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class StrictVerificationMixedWithOrdiraryVerificationTest extends RequiresValidState {
+public class VerificationInOrderMixedWithOrdiraryVerificationTest extends RequiresValidState {
     
     private IMethods mockOne;
     private IMethods mockTwo;
     private IMethods mockThree;
-    private Strictly strictly;
+    private InOrder inOrder;
 
     @Before
     public void setUp() {
@@ -36,22 +36,22 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         mockThree.simpleMethod(3);
         mockThree.simpleMethod(4);
 
-        strictly = strictly(mockOne, mockThree);
+        inOrder = inOrder(mockOne, mockThree);
     }
     
     @Test
-    public void shouldMixStrictVerificationAndNormalVerification() {
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockThree).simpleMethod(4);
+    public void shouldMixVerificationInOrderAndOrdinaryVerification() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockThree).simpleMethod(4);
         verify(mockTwo).simpleMethod(2);
         
         verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
     }
     
     @Test
-    public void shouldAllowOrdinarilyVerifyingStrictlyControlledMock() {
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+    public void shouldAllowOrdinarilyVerifyingMockPassedToInOrderObject() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
 
         verify(mockThree).simpleMethod(3);
         verify(mockThree).simpleMethod(4);
@@ -67,18 +67,18 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         verify(mockThree).simpleMethod(3);
         verify(mockThree).simpleMethod(4);
         
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockThree).simpleMethod(4);
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockThree).simpleMethod(4);
         
         verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
     }
     
     @Test
     public void shouldFailOnNoMoreInteractions() {
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockThree).simpleMethod(4);
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockThree).simpleMethod(4);
         
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
@@ -87,9 +87,9 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
     }
     
     @Test
-    public void shouldFailOnNoMoreInteractionsOnStrictlyControlledMock() {
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        strictly.verify(mockThree).simpleMethod(3);
+    public void shouldFailOnNoMoreInteractionsOnMockVerifiedInOrder() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(3);
         verify(mockTwo).simpleMethod(2);
         
         try {
@@ -99,26 +99,26 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
     }
     
     @Test
-    public void shouldAllowOneMethodVerifiedStrictly() {
+    public void shouldAllowOneMethodVerifiedInOrder() {
         verify(mockTwo).simpleMethod(2);
         verify(mockOne, atLeastOnce()).simpleMethod(1);
 
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
     }
     
     @Test
     public void shouldFailOnLastInvocationTooEarly() {
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
         verify(mockTwo).simpleMethod(2);
         try {
-            strictly.verify(mockThree).simpleMethod(4);
+            inOrder.verify(mockThree).simpleMethod(4);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test(expected=MockitoException.class)
-    public void shouldScreamWhenNotStrictMockPassedToStrictly() {
-        strictly.verify(mockTwo, atLeastOnce()).simpleMethod(1);
+    public void shouldScreamWhenUnfamiliarMockPassedToInOrderObject() {
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(1);
     } 
     
     @Test
@@ -136,8 +136,8 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         
         verify(mockOne, times(2)).simpleMethod(textOne);
         
-        strictly = strictly(mockOne);
-        strictly.verify(mockOne, times(2)).simpleMethod(textOne);
+        inOrder = inOrder(mockOne);
+        inOrder.verify(mockOne, times(2)).simpleMethod(textOne);
     } 
     
     @Test
@@ -155,7 +155,7 @@ public class StrictVerificationMixedWithOrdiraryVerificationTest extends Require
         
         verify(mockOne, times(2)).varargsObject(1, textOne, textOne);
         
-        strictly = strictly(mockOne);
-        strictly.verify(mockOne, times(2)).varargsObject(1, textOne, textOne);
+        inOrder = inOrder(mockOne);
+        inOrder.verify(mockOne, times(2)).varargsObject(1, textOne, textOne);
     } 
 }

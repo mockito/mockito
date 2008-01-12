@@ -19,7 +19,7 @@ public class InvocationsFinder {
     }
 
     public List<Invocation> findFirstUnverifiedChunk(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> unverified = ListUtil.filter(invocations, new RemoveVerifiedStrictly());
+        List<Invocation> unverified = ListUtil.filter(invocations, new RemoveVerifiedInOrder());
         List<Invocation> firstChunk = new LinkedList<Invocation>();
         for (Invocation invocation : unverified) {
             if (wanted.matches(invocation)) {
@@ -86,9 +86,9 @@ public class InvocationsFinder {
         }
     }
 
-    private final class RemoveVerifiedStrictly implements Filter<Invocation> {
+    private final class RemoveVerifiedInOrder implements Filter<Invocation> {
         public boolean isOut(Invocation invocation) {
-            return invocation.isVerifiedStrictly();
+            return invocation.isVerifiedInOrder();
         }
     }
 }

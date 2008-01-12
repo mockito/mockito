@@ -55,8 +55,8 @@ public class InvocationsFinderTest extends RequiresValidState {
     
     @Test
     public void shouldFindFirstChunkAndSkipVerifiedInvocations() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationTwo.markVerifiedStrictly();
+        simpleMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationTwo.markVerifiedInOrder();
         
         List<Invocation> unverified = finder.findFirstUnverifiedChunk(invocations, new InvocationMatcher(simpleMethodInvocation));
         
@@ -65,9 +65,9 @@ public class InvocationsFinderTest extends RequiresValidState {
     
     @Test
     public void shouldFindFirstChunkAndSkipAllInvocations() throws Exception {
-        simpleMethodInvocation.markVerifiedStrictly();
-        simpleMethodInvocationTwo.markVerifiedStrictly();
-        differentMethodInvocation.markVerifiedStrictly();
+        simpleMethodInvocation.markVerifiedInOrder();
+        simpleMethodInvocationTwo.markVerifiedInOrder();
+        differentMethodInvocation.markVerifiedInOrder();
         
         List<Invocation> unverified = finder.findFirstUnverifiedChunk(invocations, new InvocationMatcher(simpleMethodInvocation));
         

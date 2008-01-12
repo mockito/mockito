@@ -16,7 +16,7 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -42,23 +42,23 @@ public class Reporter {
         throw new MockitoException(join(
                 "Method requires arguments.",
                 "Pass mocks that should be verified, e.g:",
-                "verifyNoMoreInteractions(mockOne, mockTwo)"
+                "verifyNoMoreInteractions(mockOne, mockTwo);"
                 ));
     }
 
-    public void strictlyRequiresFamiliarMock() {
+    public void inOrderRequiresFamiliarMock() {
         throw new MockitoException(join(
-                "Strictly can only verify mocks that were passed in during creation of Strictly. E.g:",
-                "Strictly strictly = strictly(mockOne)",
-                "strictly.verify(mockOne).doStuff()"
+                "InOrder can only verify mocks that were passed in during creation of InOrder. E.g:",
+                "InOrder inOrder = inOrder(mockOne);",
+                "inOrder.verify(mockOne).doStuff();"
                 ));
     }
 
-    public void mocksHaveToBePassedWhenCreatingStrictly() {
+    public void mocksHaveToBePassedWhenCreatingInOrder() {
         throw new MockitoException(join(
                 "Method requires arguments.",
-                "Pass mocks that require strict order verification, e.g:",
-                "strictly(mockOne, mockTwo)"
+                "Pass mocks that require verification in order, e.g:",
+                "InOrder inOrder = inOrder(mockOne, mockTwo);"
                 ));
     }
 
@@ -109,11 +109,11 @@ public class Reporter {
             ), cause);
     }
     
-    public void strictlyWantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+    public void wantedDiffersFromActualInOrder(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause = createDiscrepancyCause(actual, actualInvocationStackTrace);
 
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
+        throw new VerifcationInOrderFailed(join(
+                "Verification in order failed",
                 "Wanted invocation:",
                 wanted
             ), cause);
@@ -136,9 +136,9 @@ public class Reporter {
         ));
     }
     
-    public void strictlyWantedButNotInvoked(String wanted) {
-        throw new StrictVerificationFailure(join(
-                    "Strict verification failure",
+    public void wantedButNotInvokedInOrder(String wanted) {
+        throw new VerifcationInOrderFailed(join(
+                    "Verification in order failed",
                     "Wanted but not invoked:",
                     wanted
         ));
@@ -153,11 +153,11 @@ public class Reporter {
         ), cause);
     }
     
-    public void strictlyTooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
         UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
 
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
+        throw new VerifcationInOrderFailed(join(
+                "Verification in order failed",
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
@@ -179,11 +179,11 @@ public class Reporter {
     }
 
     
-    public void strictlyTooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
+    public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
         TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
 
-        throw new StrictVerificationFailure(join(
-                "Strict verification failure",
+        throw new VerifcationInOrderFailed(join(
+                "Verification in order failed",
                 wanted,
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);

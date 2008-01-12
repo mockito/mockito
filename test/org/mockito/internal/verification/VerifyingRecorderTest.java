@@ -53,9 +53,9 @@ public class VerifyingRecorderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldVerifyStrictly() {
-        VerificationModeImpl strictMode = new VerificationModeBuilder().strict();
-        recorder.verify(differentMethod, strictMode);
+    public void shouldVerifyInOrder() {
+        VerificationModeImpl inOrderMode = new VerificationModeBuilder().inOrder();
+        recorder.verify(differentMethod, inOrderMode);
         
         assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
     }

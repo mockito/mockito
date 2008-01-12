@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 
@@ -43,14 +43,14 @@ public class InvalidUsageTest extends RequiresValidState {
     }
     
     @Test(expected=MockitoException.class)
-    public void shouldNotCreateStrictlyWithoutMocks() {
-        strictly();
+    public void shouldNotCreateInOrderObjectWithoutMocks() {
+        inOrder();
     }
     
     @Test(expected=MockitoException.class)
-    public void shouldNotStrictlyVerifyUnfamilarMocks() {
-        Strictly strictly = strictly(mock);
-        strictly.verify(mockTwo).simpleMethod();
+    public void shouldNotAllowVerifyingInOrderUnfamilarMocks() {
+        InOrder inOrder = inOrder(mock);
+        inOrder.verify(mockTwo).simpleMethod();
     }
     
     @Test(expected=MissingMethodInvocationException.class)

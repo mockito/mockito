@@ -10,9 +10,9 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -37,148 +37,148 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldVerifyStrictlyAllInvocations() {
-        Strictly strictly = strictly(mockOne, mockTwo, mockThree);
-        strictly.verify(mockOne).simpleMethod(1);
-        strictly.verify(mockTwo, times(2)).simpleMethod(2);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockTwo).simpleMethod(2);
-        strictly.verify(mockOne).simpleMethod(4);
+    public void shouldVerifyAllInvocationsInOrder() {
+        InOrder inOrder = inOrder(mockOne, mockTwo, mockThree);
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
         verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
     } 
     
     @Test
-    public void shouldVerifyStrictlyMockTwoAndThree() {
-        Strictly strictly = strictly(mockTwo, mockThree);
+    public void shouldVerifyInOrderMockTwoAndThree() {
+        InOrder inOrder = inOrder(mockTwo, mockThree);
         
-        strictly.verify(mockTwo, times(2)).simpleMethod(2);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo, mockThree);
     }     
     
     @Test
-    public void shouldVerifyStrictlyMockOneAndThree() {
-        Strictly strictly = strictly(mockOne, mockThree);
+    public void shouldVerifyInOrderMockOneAndThree() {
+        InOrder inOrder = inOrder(mockOne, mockThree);
         
-        strictly.verify(mockOne).simpleMethod(1);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockOne).simpleMethod(4);
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockOne).simpleMethod(4);
         verifyNoMoreInteractions(mockOne, mockThree);
     } 
     
     @Test
-    public void shouldVerifyStrictlyMockOne() {
-        Strictly strictly = strictly(mockOne);
+    public void shouldVerifyMockOneInOrder() {
+        InOrder inOrder = inOrder(mockOne);
         
-        strictly.verify(mockOne).simpleMethod(1);
-        strictly.verify(mockOne).simpleMethod(4);
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockOne).simpleMethod(4);
         
         verifyNoMoreInteractions(mockOne);
     } 
     
     @Test
     public void shouldFailVerificationForMockOne() {
-        Strictly strictly = strictly(mockOne);
+        InOrder inOrder = inOrder(mockOne);
         
-        strictly.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockOne).simpleMethod(1);
         try {
-            strictly.verify(mockOne).differentMethod();
+            inOrder.verify(mockOne).differentMethod();
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     } 
     
     @Test
     public void shouldFailVerificationForMockOneBecauseOfWrongOrder() {
-        Strictly strictly = strictly(mockOne);
+        InOrder inOrder = inOrder(mockOne);
         
         try {
-            strictly.verify(mockOne).simpleMethod(4);
+            inOrder.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     } 
 
     @Test
-    public void shouldVerifyStrictlyMockTwoWhenThreeTimesUsed() {
-        Strictly strictly = strictly(mockTwo);
+    public void shouldVerifyMockTwoWhenThreeTimesUsed() {
+        InOrder inOrder = inOrder(mockTwo);
         
-        strictly.verify(mockTwo, times(3)).simpleMethod(2);
+        inOrder.verify(mockTwo, times(3)).simpleMethod(2);
         
         verifyNoMoreInteractions(mockTwo);
     } 
     
     @Test
-    public void shouldVerifyStrictlyMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+    public void shouldVerifyMockTwo() {
+        InOrder inOrder = inOrder(mockTwo);
         
-        strictly.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         
         verifyNoMoreInteractions(mockTwo);
     } 
     
     @Test
     public void shouldFailVerificationForMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+        InOrder inOrder = inOrder(mockTwo);
 
         try {
-            strictly.verify(mockTwo).simpleMethod(2);
+            inOrder.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
     public void shouldThrowNoMoreInvocationsForMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+        InOrder inOrder = inOrder(mockTwo);
 
         try {
-            strictly.verify(mockTwo, times(2)).simpleMethod(2);
+            inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
     public void shouldThrowTooLittleInvocationsForMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+        InOrder inOrder = inOrder(mockTwo);
 
         try {
-            strictly.verify(mockTwo, times(4)).simpleMethod(2);
+            inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
     public void shouldThrowTooManyInvocationsForMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+        InOrder inOrder = inOrder(mockTwo);
 
         try {
-            strictly.verify(mockTwo, times(2)).simpleMethod(2);
+            inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
     public void shouldAllowThreeTimesOnMockTwo() {
-        Strictly strictly = strictly(mockTwo);
+        InOrder inOrder = inOrder(mockTwo);
 
-        strictly.verify(mockTwo, times(3)).simpleMethod(2);
+        inOrder.verify(mockTwo, times(3)).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo);
     }
     
     @Test
     public void shouldVerifyMockTwoCompletely() {
-        Strictly strictly = strictly(mockTwo, mockThree);
+        InOrder inOrder = inOrder(mockTwo, mockThree);
 
-        strictly.verify(mockTwo, times(2)).simpleMethod(2);
-        strictly.verify(mockThree).simpleMethod(3);
-        strictly.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo, mockThree);
     }
     
     @Test
     public void shouldAllowTwoTimesOnMockTwo() {
-        Strictly strictly = strictly(mockTwo, mockThree);
+        InOrder inOrder = inOrder(mockTwo, mockThree);
 
-        strictly.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();

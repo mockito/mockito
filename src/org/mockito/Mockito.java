@@ -155,7 +155,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * See more {@link Mockito#verifyNoMoreInteractions}
  * 
- * <h3>Strict order verification</h3>
+ * <h3>Verification in order</h3>
  * 
  * <pre>
  *   List firstMock = mock(List.class);
@@ -165,16 +165,16 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   firstMock.add("one");
  *   secondMock.add("two");
  *   
- *   //create strictly 
- *   Strictly strictly = strictly(firstMock, secondMock);
+ *   //create inOrder object
+ *   InOrder inOrder = inOrder(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
- *   strictly.verify(firstMock).add("should be called first");
- *   strictly.verify(secondMock).add("should be called second");
+ *   inOrder.verify(firstMock).add("should be called first");
+ *   inOrder.verify(secondMock).add("should be called second");
  * </pre>
  * 
  * <p>
- * Strict verification is required only in some cases and mostly ordinary verification is enough. 
+ * Verification in order is required only in some cases and mostly ordinary verification is enough. 
  * 
  * <h3>Making sure no interactions happened on mock</h3>
  * 
@@ -360,30 +360,30 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Creates strictly that allows verifying mocks in order.
+     * Creates InOrder object that allows verifying mocks in order.
      * 
      * <pre>
-     *   Strictly strictly = strictly(firstMock, secondMock);
+     *   InOrder inOrder = inOrder(firstMock, secondMock);
      *   
-     *   strictly.verify(firstMock).add("should be called first");
-     *   strictly.verify(secondMock).add("should be called second");
+     *   inOrder.verify(firstMock).add("should be called first");
+     *   inOrder.verify(secondMock).add("should be called second");
      * </pre>
      *
      * See examples in javadoc for {@link Mockito}
      * 
-     * @param mocks to be verified in strict order
+     * @param mocks to be verified in order
      * 
-     * @return verifier object to be used to verify strictly
+     * @return InOrder object to be used to verify in order
      */
-    public static Strictly strictly(Object... mocks) {
+    public static InOrder inOrder(Object... mocks) {
         if (mocks.length == 0) {
-            REPORTER.mocksHaveToBePassedWhenCreatingStrictly();
+            REPORTER.mocksHaveToBePassedWhenCreatingInOrder();
         }
         for (Object mock : mocks) {
             MockUtil.validateMock(mock);
         }
-        Strictly strictOrderVerifier = new StrictOrderVerifier(Arrays.asList(mocks));
-        return strictOrderVerifier;
+        InOrder inOrderVerifier = new InOrderVerifier(Arrays.asList(mocks));
+        return inOrderVerifier;
     }
 
     /**

@@ -1,0 +1,257 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.mockitousage.verification;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.RequiresValidState;
+import org.mockito.InOrder;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockitousage.IMethods;
+
+@SuppressWarnings("unchecked")  
+public class BasicVerificationInOrderTest extends RequiresValidState {
+    
+    private IMethods mockOne;
+    private IMethods mockTwo;
+    private IMethods mockThree;
+    private InOrder inOrder;
+
+    @Before
+    public void setUp() {
+        mockOne = mock(IMethods.class);
+        mockTwo = mock(IMethods.class);
+        mockThree = mock(IMethods.class);
+        
+        inOrder = inOrder(mockOne, mockTwo, mockThree);
+
+        mockOne.simpleMethod(1);
+        mockTwo.simpleMethod(2);
+        mockTwo.simpleMethod(2);
+        mockThree.simpleMethod(3);
+        mockTwo.simpleMethod(2);
+        mockOne.simpleMethod(4);
+    }
+    
+    @Test
+    public void shouldVerifyInOrder() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+    } 
+    
+    @Test
+    public void shouldVerifyInOrderUsingAtLeastOnce() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(4);
+        verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+    } 
+    
+    @Test
+    public void shouldVerifyInOrderWhenExpectingSomeInvocationsToBeCalledZeroTimes() {
+        inOrder.verify(mockOne, times(0)).oneArg(false);
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockTwo, times(0)).simpleMethod(22);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        inOrder.verify(mockThree, times(0)).oneArg(false);
+        verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+    } 
+    
+    @Test
+    public void shouldFailWhenFirstMockCalledTwice() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        try {
+            inOrder.verify(mockOne).simpleMethod(1);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldFailWhenLastMockCalledTwice() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        try {
+            inOrder.verify(mockOne).simpleMethod(4);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
+        inOrder.verify(mockOne, times(0)).simpleMethod(1);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
+        inOrder.verify(mockOne, times(2)).simpleMethod(1);
+    }
+    
+    @Test
+    public void shouldFailOnSecondMethodBecauseTwoInvocationsWanted() {
+        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        try {
+            inOrder.verify(mockTwo, times(3)).simpleMethod(2);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldFailOnSecondMethodBecauseTwoInvocationsWantedAgain() {
+        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        try {
+            inOrder.verify(mockTwo, times(0)).simpleMethod(2);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }    
+    
+    @Test
+    public void shouldFailOnLastMethodBecauseOneInvocationWanted() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree, atLeastOnce()).simpleMethod(3);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        try {
+            inOrder.verify(mockOne, times(0)).simpleMethod(4);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldFailOnLastMethodBecauseOneInvocationWantedAgain() {
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree, atLeastOnce()).simpleMethod(3);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        try {
+            inOrder.verify(mockOne, times(2)).simpleMethod(4);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }    
+    
+    /* ------------- */
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
+        inOrder.verify(mockOne).simpleMethod(100);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
+        inOrder.verify(mockOne).oneArg(true);
+    }
+    
+    @Test
+    public void shouldFailOnSecondMethodBecauseDifferentArgsWanted() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        try {
+            inOrder.verify(mockTwo, times(2)).simpleMethod(-999);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldFailOnSecondMethodBecauseDifferentMethodWanted() {
+        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        try {
+            inOrder.verify(mockTwo, times(2)).oneArg(true);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }    
+    
+    @Test
+    public void shouldFailOnLastMethodBecauseDifferentArgsWanted() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        try {
+            inOrder.verify(mockOne).simpleMethod(-666);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldFailOnLastMethodBecauseDifferentMethodWanted() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        try {
+            inOrder.verify(mockOne).oneArg(false);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }    
+    
+    /* -------------- */
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenLastMethodVerifiedFirst() {
+        inOrder.verify(mockOne).simpleMethod(4);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenMiddleMethodVerifiedFirst() {
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenMiddleMethodVerifiedFirstInAtLeastOnceMode() {
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenSomeMiddleMethodsAreLeftOut() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenSomeMiddleMethodsInAtLeastOnceModeAreLeftOut() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailWhenLastMethodIsTooEarly() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockOne).simpleMethod(4);
+    }
+    
+    @Test
+    public void shouldFailOnVerifyNoMoreInteractions() {
+        inOrder.verify(mockOne).simpleMethod(1);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo).simpleMethod(2);
+        
+        try {
+            verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    } 
+    
+    @Test(expected=NoInteractionsWanted.class)
+    public void shouldFailOnVerifyZeroInteractions() {
+        verifyZeroInteractions(mockOne);
+    }
+}

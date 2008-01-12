@@ -19,16 +19,16 @@ public class VerificationModeImpl implements VerificationMode {
     enum Verification { EXPLICIT, NO_MORE_WANTED };
     
     private final Integer wantedInvocationCount;
-    private final List<? extends Object> mocksToBeVerifiedStrictly;
+    private final List<? extends Object> mocksToBeVerifiedInOrder;
     private final Verification verification;
     
-    private VerificationModeImpl(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedStrictly, Verification verification) {
+    private VerificationModeImpl(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations.intValue() < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        assert mocksToBeVerifiedStrictly != null;
+        assert mocksToBeVerifiedInOrder != null;
         this.wantedInvocationCount = wantedNumberOfInvocations;
-        this.mocksToBeVerifiedStrictly = mocksToBeVerifiedStrictly;
+        this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
         this.verification = verification;
     }
     
@@ -40,9 +40,9 @@ public class VerificationModeImpl implements VerificationMode {
         return new VerificationModeImpl(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
-    public static VerificationModeImpl strict(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedStrictly) {
-        assert !mocksToBeVerifiedStrictly.isEmpty();
-        return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedStrictly, Verification.EXPLICIT);
+    public static VerificationModeImpl inOrder(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
+        assert !mocksToBeVerifiedInOrder.isEmpty();
+        return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
     }
     
     public static VerificationModeImpl noMoreInteractions() {
@@ -53,8 +53,8 @@ public class VerificationModeImpl implements VerificationMode {
         return wantedInvocationCount;
     }
 
-    public List<? extends Object> getMocksToBeVerifiedStrictly() {
-        return mocksToBeVerifiedStrictly;
+    public List<? extends Object> getMocksToBeVerifiedInOrder() {
+        return mocksToBeVerifiedInOrder;
     }
 
     boolean atLeastOnceMode() {
@@ -65,20 +65,20 @@ public class VerificationModeImpl implements VerificationMode {
         return verification == Verification.EXPLICIT;
     }
     
-    public boolean strictMode() {
-        return !mocksToBeVerifiedStrictly.isEmpty() && explicitMode();
+    public boolean inOrderMode() {
+        return !mocksToBeVerifiedInOrder.isEmpty() && explicitMode();
     }
     
     public boolean missingMethodMode() {
         return explicitMode() && (atLeastOnceMode() || wantedInvocationCount > 0);
     }
     
-    public boolean strictlyMissingMethodMode() {
-        return strictMode() && missingMethodMode();
+    public boolean missingMethodInOrderMode() {
+        return inOrderMode() && missingMethodMode();
     }
     
     public boolean exactNumberOfInvocationsMode() {
-        return !strictMode() && explicitMode();
+        return !inOrderMode() && explicitMode();
     }
 
     public boolean matchesActualCount(int actualCount) {
@@ -102,6 +102,6 @@ public class VerificationModeImpl implements VerificationMode {
     
     @Override
     public String toString() {
-        return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedStrictly;
+        return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
     }
 }

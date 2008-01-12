@@ -1,24 +1,26 @@
 =Mockito vs EasyMock=
 
-  List mock = createNiceMock(List.class);				List mock = mock(List.class);
+  import static org.easymock.classextension.EasyMock.*; 	import static org.mockito.Mockito.*;
+
+  List mock = createNiceMock(List.class);					List mock = mock(List.class);
   
-  expect(mock.add("one")).andStubReturn(true);			stub(mock.add("one")).toReturn(true);
+  expect(mock.add("one")).andStubReturn(true);				stub(mock.add("one")).toReturn(true);
   
   mock.clear();
   
   replay(mock);
   
-  someCodeThatInteractsWithMock();						someCodeThatInteractsWithMock();
+  someCodeThatInteractsWithMock();							someCodeThatInteractsWithMock();
   
-                                                        verify(easy).clear();
+                                                            verify(easy).clear();
   
   verify(easy);											
   
-                                                        verifyNoMoreInteractions(mock);
+                                                            verifyNoMoreInteractions(mock);
   
 ===Mockito's similarities:===
 
-  * allow the same level verification as EasyMock (unexpected invocations, redundant invocations, strict verification)
+  * allow the same level verification as EasyMock (unexpected invocations, redundant invocations, verification in order)
   
   * argument matchers (anyInt(), anyObject(), etc.)
 
@@ -45,7 +47,7 @@
   
   * single jar distribution.
   
-=Strict verification=  
+=Verification in order=  
     
   Control control = createStrictControl();  
   
@@ -59,10 +61,10 @@
   
   someCodeThatInteractsWithMocks();							someCodeThatInteractsWithMocks();
 
-                                                            Strictly strictly = strictly(one, two);
+                                                            InOrder inOrder = inOrder(one, two);
                                                             
-                                                            strictly.verify(one).add("one");
-                                                            strictly.verify(two).add("two");
+                                                            inOrder.verify(one).add("one");
+                                                            inOrder.verify(two).add("two");
   
   control.verify();											
   

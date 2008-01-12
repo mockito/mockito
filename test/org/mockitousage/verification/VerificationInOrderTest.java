@@ -12,17 +12,17 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.InOrder;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class StrictVerificationTest extends RequiresValidState {
+public class VerificationInOrderTest extends RequiresValidState {
     
     private IMethods mockOne;
     private IMethods mockTwo;
     private IMethods mockThree;
-    private Strictly strictly;
+    private InOrder inOrder;
 
     @Before
     public void setUp() {
@@ -30,13 +30,13 @@ public class StrictVerificationTest extends RequiresValidState {
         mockTwo = mock(IMethods.class);
         mockThree = mock(IMethods.class);
         
-        strictly = strictly(mockOne, mockTwo, mockThree);
+        inOrder = inOrder(mockOne, mockTwo, mockThree);
     }
     
     @Test
-    public void shouldVerifySingleMockStrictlyAndNotStrictly() {
+    public void shouldVerifySingleMockInOrderAndNotInOrder() {
         mockOne = mock(IMethods.class);
-        strictly = strictly(mockOne);
+        inOrder = inOrder(mockOne);
         
         mockOne.simpleMethod(1);
         mockOne.simpleMethod(2);
@@ -45,9 +45,9 @@ public class StrictVerificationTest extends RequiresValidState {
         verify(mockOne).simpleMethod(1);
         
         try {
-            strictly.verify(mockOne).simpleMethod(2);
+            inOrder.verify(mockOne).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     } 
     
     @Test
@@ -56,33 +56,33 @@ public class StrictVerificationTest extends RequiresValidState {
         mockOne.simpleMethod();
         
         try {
-            strictly.verify(mockOne, atLeastOnce()).differentMethod();
+            inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e, messageContains("IMethods.differentMethod()"));
             assertThat(e, causeMessageContains("IMethods.differentMethod()"));
         }
     }
     
     @Test
-    public void shouldVerifyStrictlyWhenTwoChunksAreEqual() {
+    public void shouldVerifyInOrderWhenTwoChunksAreEqual() {
         mockOne.simpleMethod();
         mockOne.simpleMethod();
         mockTwo.differentMethod();
         mockOne.simpleMethod();
         mockOne.simpleMethod();
         
-        strictly.verify(mockOne, atLeastOnce()).simpleMethod();
-        strictly.verify(mockTwo).differentMethod();
-        strictly.verify(mockOne, times(2)).simpleMethod();
+        inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
+        inOrder.verify(mockTwo).differentMethod();
+        inOrder.verify(mockOne, times(2)).simpleMethod();
         try {
-            strictly.verify(mockOne, atLeastOnce()).simpleMethod();
+            inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
-    public void shouldVerifyStrictlyUsingMatcher() {
+    public void shouldVerifyInOrderUsingMatcher() {
         mockOne.simpleMethod(1);
         mockOne.simpleMethod(2);
         mockTwo.differentMethod();
@@ -91,12 +91,12 @@ public class StrictVerificationTest extends RequiresValidState {
         
         verify(mockOne, times(4)).simpleMethod(anyInt());
         
-        strictly.verify(mockOne, times(2)).simpleMethod(anyInt());
-        strictly.verify(mockTwo).differentMethod();
-        strictly.verify(mockOne, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mockOne, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mockTwo).differentMethod();
+        inOrder.verify(mockOne, times(2)).simpleMethod(anyInt());
         try {
-            strictly.verify(mockOne, times(3)).simpleMethod(anyInt());
+            inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (StrictVerificationFailure e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
 }

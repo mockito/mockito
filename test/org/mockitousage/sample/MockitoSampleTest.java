@@ -11,7 +11,7 @@ import java.util.Arrays;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 
 public class MockitoSampleTest extends RequiresValidState {
     
@@ -92,7 +92,7 @@ public class MockitoSampleTest extends RequiresValidState {
     }
     
     @Test
-    public void strictVerificationAndArgumentMatchers() {
+    public void verificationInOrderAndArgumentMatchers() {
         ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
         ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
         
@@ -108,10 +108,12 @@ public class MockitoSampleTest extends RequiresValidState {
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
-        Strictly strictly = strictly(mockDatabase);
+        InOrder inOrder = inOrder(mockDatabase);
         
-        strictly.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
-        strictly.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
-//        strictly.verify(mockDatabase, atLeastOnce()).save(null);
+        inOrder.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
+        inOrder.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
+//        inOrder.verify(mockDatabase, atLeastOnce()).save(null);
+        
+        //TODO review messages once more and remove commented out code
     }
 }

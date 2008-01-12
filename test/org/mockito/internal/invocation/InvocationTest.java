@@ -98,13 +98,13 @@ public class InvocationTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldMarkVerifiedWhenMarkingVerifiedStrictly() throws Exception {
+    public void shouldMarkVerifiedWhenMarkingVerifiedInOrder() throws Exception {
         assertFalse(invocation.isVerified());
-        assertFalse(invocation.isVerifiedStrictly());
+        assertFalse(invocation.isVerifiedInOrder());
         
-        invocation.markVerifiedStrictly();
+        invocation.markVerifiedInOrder();
         
         assertTrue(invocation.isVerified());
-        assertTrue(invocation.isVerifiedStrictly());
+        assertTrue(invocation.isVerifiedInOrder());
     }
 }

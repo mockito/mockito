@@ -40,8 +40,8 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldNeverVerifyWhenNotModeIsStrict() throws Exception {
-        verifier.verify(null, null, new VerificationModeBuilder().strict());
+    public void shouldNeverVerifyWhenNotModeIsInOrder() throws Exception {
+        verifier.verify(null, null, new VerificationModeBuilder().inOrder());
     }
     
     @Test

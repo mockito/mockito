@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
 import static org.mockito.internal.progress.VerificationModeImpl.noMoreInteractions;
-import static org.mockito.internal.progress.VerificationModeImpl.strict;
+import static org.mockito.internal.progress.VerificationModeImpl.inOrder;
 import static org.mockito.internal.progress.VerificationModeImpl.times;
 
 import org.junit.Test;
@@ -50,24 +50,24 @@ public class VerificationModeImplTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldKnowIfIsStrictlyMissingMethodMode() throws Exception {
-        assertTrue(strict(null, asList("mock")).strictlyMissingMethodMode());
-        assertTrue(strict(1, asList("mock")).strictlyMissingMethodMode());
-        assertTrue(strict(10, asList("mock")).strictlyMissingMethodMode());
+    public void shouldKnowIfIsMissingMethodInOrderMode() throws Exception {
+        assertTrue(inOrder(null, asList("mock")).missingMethodInOrderMode());
+        assertTrue(inOrder(1, asList("mock")).missingMethodInOrderMode());
+        assertTrue(inOrder(10, asList("mock")).missingMethodInOrderMode());
         
-        assertFalse(times(10).strictlyMissingMethodMode());
-        assertFalse(noMoreInteractions().strictlyMissingMethodMode());
-        assertFalse(times(0).strictlyMissingMethodMode());
+        assertFalse(times(10).missingMethodInOrderMode());
+        assertFalse(noMoreInteractions().missingMethodInOrderMode());
+        assertFalse(times(0).missingMethodInOrderMode());
     }
     
     @Test
-    public void shouldKnowIfIsStrict() throws Exception {
-        assertTrue(strict(1, asList(new Object())).strictMode());
+    public void shouldKnowIfIsInOrderMode() throws Exception {
+        assertTrue(inOrder(1, asList(new Object())).inOrderMode());
         
-        assertFalse(times(0).strictMode());
-        assertFalse(times(2).strictMode());
-        assertFalse(atLeastOnce().strictMode());
-        assertFalse(noMoreInteractions().strictMode());
+        assertFalse(times(0).inOrderMode());
+        assertFalse(times(2).inOrderMode());
+        assertFalse(atLeastOnce().inOrderMode());
+        assertFalse(noMoreInteractions().inOrderMode());
     }
     
     @Test
@@ -133,6 +133,6 @@ public class VerificationModeImplTest extends RequiresValidState {
         assertTrue(atLeastOnce().exactNumberOfInvocationsMode());
         
         assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
-        assertFalse(strict(1, asList(new Object())).exactNumberOfInvocationsMode());
+        assertFalse(inOrder(1, asList(new Object())).exactNumberOfInvocationsMode());
     }
 }

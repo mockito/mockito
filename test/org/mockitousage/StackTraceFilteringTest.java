@@ -14,10 +14,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 public class StackTraceFilteringTest extends RequiresValidState {
@@ -79,37 +79,37 @@ public class StackTraceFilteringTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFilterStacktraceWhenStrictlyVerifying() {
-        Strictly strictly = strictly(mock);
+    public void shouldFilterStacktraceWhenVerifyingInOrder() {
+        InOrder inOrder = inOrder(mock);
         mock.oneArg(true);
         mock.oneArg(false);
         
         try {
-            strictly.verify(mock).oneArg(false); 
+            inOrder.verify(mock).oneArg(false); 
             fail();
-        } catch (StrictVerificationFailure e) {
-            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifying"));
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));
         }
     }
     
     @Test
-    public void shouldFilterStacktraceWhenStrictlyThrowsMockitoException() {
+    public void shouldFilterStacktraceWhenInOrderThrowsMockitoException() {
         try {
-            strictly();
+            inOrder();
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyThrowsMockitoException"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenInOrderThrowsMockitoException"));
         }
     }
     
     @Test
-    public void shouldFilterStacktraceWhenStrictlyVerifies() {
+    public void shouldFilterStacktraceWhenInOrderVerifies() {
         try {
-            Strictly strictly = strictly(mock);
-            strictly.verify(null);
+            InOrder inOrder = inOrder(mock);
+            inOrder.verify(null);
             fail();
         } catch (MockitoException expected) {
-            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenStrictlyVerifies"));
+            assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenInOrderVerifies"));
         }
     }
     

@@ -11,9 +11,9 @@ import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Test;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
@@ -64,15 +64,15 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
     }
 
     @Test
-    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByStrictly() throws Exception {
+    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByVerificationInOrder() throws Exception {
         Sub sub = mock(Sub.class);
         setMockWithDowncast(sub);
         say("Hello");
-        Strictly strictly = strictly(mock);
+        InOrder inOrder = inOrder(mock);
         try {
-            strictly.verify(sub).say("Hello");
+            inOrder.verify(sub).say("Hello");
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e, messageContains("Sub.say(class java.lang.String)"));
             assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
         }

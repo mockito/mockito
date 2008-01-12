@@ -6,7 +6,7 @@ package org.mockitousage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.strictly;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.stubVoid;
@@ -36,7 +36,7 @@ import org.mockito.exceptions.misusing.UnfinishedVerificationException;
  *    -on verify
  *    -on verifyZeroInteractions
  *    -on verifyNoMoreInteractions
- *    -on verify on strictly
+ *    -on verify in order
  *    -on stub
  *    -on stubVoid
  */
@@ -67,7 +67,7 @@ public class InvalidStateDetectionTest extends RequiresValidState {
         detects(new OnVerify(), UnfinishedStubbingException.class);
         
         stub(mock.simpleMethod());
-        detects(new OnStrictVerify(), UnfinishedStubbingException.class);
+        detects(new OnVerifyInOrder(), UnfinishedStubbingException.class);
         
         stub(mock.simpleMethod());
         detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
@@ -91,7 +91,7 @@ public class InvalidStateDetectionTest extends RequiresValidState {
         detects(new OnVerify(), UnfinishedStubbingException.class);
         
         stubVoid(mock);
-        detects(new OnStrictVerify(), UnfinishedStubbingException.class);
+        detects(new OnVerifyInOrder(), UnfinishedStubbingException.class);
         
         stubVoid(mock);
         detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
@@ -112,7 +112,7 @@ public class InvalidStateDetectionTest extends RequiresValidState {
         detects(new OnVerify(), UnfinishedVerificationException.class);
         
         verify(mock);
-        detects(new OnStrictVerify(), UnfinishedVerificationException.class);
+        detects(new OnVerifyInOrder(), UnfinishedVerificationException.class);
         
         verify(mock);
         detects(new OnVerifyZeroInteractions(), UnfinishedVerificationException.class);
@@ -160,9 +160,9 @@ public class InvalidStateDetectionTest extends RequiresValidState {
         }
     }
     
-    private static class OnStrictVerify implements DetectsInvalidState {
+    private static class OnVerifyInOrder implements DetectsInvalidState {
         public void detect(IMethods mock) {
-            strictly(mock).verify(mock);
+            inOrder(mock).verify(mock);
         }
     }
     

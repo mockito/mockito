@@ -20,9 +20,9 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 
-public class StrictlyMissingInvocationVerifierTest extends RequiresValidState {
+public class MissingInvocationInOrderVerifierTest extends RequiresValidState {
 
-    private StrictlyMissingInvocationVerifier verifier;
+    private MissingInvocationInOrderVerifier verifier;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -32,21 +32,21 @@ public class StrictlyMissingInvocationVerifierTest extends RequiresValidState {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new StrictlyMissingInvocationVerifier(finderStub, reporterStub);
+        verifier = new MissingInvocationInOrderVerifier(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }                                                                    
 
     @Test
-    public void shouldNeverVerifyIfModeIsNotMissingModeStrictly() throws Exception {
+    public void shouldNeverVerifyIfModeIsNotMissingInvocationInOrderMode() throws Exception {
         verifier.verify(null, null, atLeastOnce());
     }
     
     @Test
     public void shouldReportWantedButNotInvoked() throws Exception {
         assertTrue(finderStub.firstUnverifiedChunkToReturn.isEmpty());
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
     }
@@ -55,7 +55,7 @@ public class StrictlyMissingInvocationVerifierTest extends RequiresValidState {
     public void shouldReportWantedDiffersFromActual() throws Exception {
         Invocation different = new InvocationBuilder().differentMethod().toInvocation();
         finderStub.firstUnverifiedChunkToReturn.add(different);
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().strict());
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted.toString(), reporterStub.wanted);
         assertEquals(different.toString(), reporterStub.actual);
@@ -67,11 +67,11 @@ public class StrictlyMissingInvocationVerifierTest extends RequiresValidState {
         private String actual;
         private HasStackTrace actualInvocationStackTrace;
 
-        @Override public void strictlyWantedButNotInvoked(String wanted) {
+        @Override public void wantedButNotInvokedInOrder(String wanted) {
             this.wanted = wanted;
         }
         
-        @Override public void strictlyWantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        @Override public void wantedDiffersFromActualInOrder(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
             this.wanted = wanted;
             this.actual = actual;
             this.actualInvocationStackTrace = actualInvocationStackTrace;

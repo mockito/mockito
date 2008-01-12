@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.InOrder;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
@@ -24,13 +24,13 @@ public class PointingStackTraceToActualInvocationChunkTest extends RequiresValid
     
     private IMethods mock;
     private IMethods mockTwo;
-    private Strictly strictly;
+    private InOrder inOrder;
 
     @Before
     public void setup() {
         mock = Mockito.mock(IMethods.class);
         mockTwo = Mockito.mock(IMethods.class);
-        strictly = strictly(mock, mockTwo);
+        inOrder = inOrder(mock, mockTwo);
         
         firstChunk();
         secondChunk();
@@ -57,65 +57,65 @@ public class PointingStackTraceToActualInvocationChunkTest extends RequiresValid
     
     @Test
     public void shouldPointStackTraceToActualInvocation() {
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mock).simpleMethod(999);
+            inOrder.verify(mock).simpleMethod(999);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
         }
     }
     
     @Test
     public void shouldPointToActualInvocation() {
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mockTwo).simpleMethod(999);
+            inOrder.verify(mockTwo).simpleMethod(999);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
         }
     }
     
     @Test
     public void shouldPointToUnverifiedInvocation() {
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mockTwo, times(3)).simpleMethod(999);
+            inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
         }
     }
     
     @Test
     public void shouldPointToTooManyInvocationsChunk() {
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mockTwo).simpleMethod(anyInt());
+            inOrder.verify(mockTwo).simpleMethod(anyInt());
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
         }
     }
     
     @Test
     public void shouldPointToTooLittleInvocationsUnverifiedChunk() {
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        strictly.verify(mockTwo, times(2)).simpleMethod(anyInt());
-        strictly.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         
         try {
-            strictly.verify(mockTwo, times(3)).simpleMethod(anyInt());
+            inOrder.verify(mockTwo, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
         }
     }

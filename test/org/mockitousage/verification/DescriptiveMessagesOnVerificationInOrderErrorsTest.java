@@ -12,19 +12,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.Strictly;
+import org.mockito.InOrder;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
-import org.mockito.exceptions.verification.StrictVerificationFailure;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
-public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidState {
+public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends RequiresValidState {
     
     private IMethods one;
     private IMethods two;
     private IMethods three;
-    private Strictly strictly;
+    private InOrder inOrder;
 
     @Before
     public void setup() {
@@ -38,20 +38,20 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
         two.simpleMethod(2);
         three.simpleMethod(3);
         
-        strictly = strictly(one, two, three);
+        inOrder = inOrder(one, two, three);
     }
     
     @Test
-    public void shouldPrintStrictErrorAndShowBothWantedAndActual() {
-        strictly.verify(one, atLeastOnce()).simpleMethod(1);
+    public void shouldPrintVerificationInOrderErrorAndShowBothWantedAndActual() {
+        inOrder.verify(one, atLeastOnce()).simpleMethod(1);
         
         try {
-            strictly.verify(one).simpleMethod(999);
+            inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             String expected = 
                     "\n" +
-                    "Strict verification failure" +
+                    "Verification in order failed" +
                     "\n" +
                     "Wanted invocation:" +
                     "\n" +
@@ -73,18 +73,18 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     
     @Test
     public void shouldPrintMethodThatWasNotInvoked() {
-        strictly.verify(one).simpleMethod(1);
-        strictly.verify(one).simpleMethod(11);
-        strictly.verify(two, times(2)).simpleMethod(2);
-        strictly.verify(three).simpleMethod(3);
+        inOrder.verify(one).simpleMethod(1);
+        inOrder.verify(one).simpleMethod(11);
+        inOrder.verify(two, times(2)).simpleMethod(2);
+        inOrder.verify(three).simpleMethod(3);
         try {
-            strictly.verify(three).simpleMethod(999);
+            inOrder.verify(three).simpleMethod(999);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Strict verification failure" +
+                    "Verification in order failed" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -95,16 +95,16 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     
     @Test
     public void shouldPrintTooManyInvocations() {
-        strictly.verify(one).simpleMethod(1);
-        strictly.verify(one).simpleMethod(11);
+        inOrder.verify(one).simpleMethod(1);
+        inOrder.verify(one).simpleMethod(11);
         try {
-            strictly.verify(two, times(1)).simpleMethod(2);
+            inOrder.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Strict verification failure" +
+                    "Verification in order failed" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +
@@ -124,18 +124,18 @@ public class DescriptiveMessagesOnStrictOrderErrorsTest extends RequiresValidSta
     public void shouldPrintTooLittleInvocations() {
         two.simpleMethod(2);
         
-        strictly.verify(one, atLeastOnce()).simpleMethod(anyInt());
-        strictly.verify(two, times(2)).simpleMethod(2);
-        strictly.verify(three, atLeastOnce()).simpleMethod(3);
+        inOrder.verify(one, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(two, times(2)).simpleMethod(2);
+        inOrder.verify(three, atLeastOnce()).simpleMethod(3);
         
         try {
-            strictly.verify(two, times(2)).simpleMethod(2);
+            inOrder.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (StrictVerificationFailure e) {
+        } catch (VerifcationInOrderFailed e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Strict verification failure" +
+                    "Verification in order failed" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +

@@ -24,8 +24,8 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.verification.MissingInvocationVerifier;
 import org.mockito.internal.verification.NoMoreInvocationsVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
-import org.mockito.internal.verification.StrictlyMissingInvocationVerifier;
-import org.mockito.internal.verification.StrictlyNumberOfInvocationsVerifier;
+import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
+import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 
@@ -96,8 +96,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     
     private VerifyingRecorder createRecorder() {
         List<Verifier> verifiers = Arrays.asList(
-                new StrictlyMissingInvocationVerifier(),
-                new StrictlyNumberOfInvocationsVerifier(),
+                new MissingInvocationInOrderVerifier(),
+                new NumberOfInvocationsInOrderVerifier(),
                 new MissingInvocationVerifier(),
                 new NumberOfInvocationsVerifier(),
                 new NoMoreInvocationsVerifier());

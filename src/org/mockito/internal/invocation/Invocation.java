@@ -20,7 +20,7 @@ import org.mockito.internal.matchers.Equals;
  * Method call on a mock object. 
  * <p>
  * Contains sequence number which should be
- * globally unique and is used for strict order verification.
+ * globally unique and is used for verification in order.
  * <p>
  * Contains stack trace of invocation
  */
@@ -34,7 +34,7 @@ public class Invocation {
     private final HasStackTrace stackTrace;
 
     private boolean verified;
-    private boolean verifiedStrictly;
+    private boolean verifiedInOrder;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
         this.mock = mock;
@@ -83,13 +83,13 @@ public class Invocation {
         return sequenceNumber;
     }
 
-    public void markVerifiedStrictly() {
+    public void markVerifiedInOrder() {
         this.markVerified();
-        this.verifiedStrictly = true;
+        this.verifiedInOrder = true;
     }
 
-    public boolean isVerifiedStrictly() {
-        return verifiedStrictly;
+    public boolean isVerifiedInOrder() {
+        return verifiedInOrder;
     }
     
     public HasStackTrace getStackTrace() {

@@ -10,8 +10,8 @@ public class VerificationModeBuilder {
 
     private Integer times;
 
-    public VerificationModeImpl strict() {
-        return VerificationModeImpl.strict(times, Arrays.asList(new Object()));
+    public VerificationModeImpl inOrder() {
+        return VerificationModeImpl.inOrder(times, Arrays.asList(new Object()));
     }
 
     public VerificationModeBuilder times(int times) {

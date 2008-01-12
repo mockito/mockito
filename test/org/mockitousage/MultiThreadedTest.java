@@ -40,12 +40,12 @@ import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.AtLeastOnceVerificationTest;
 import org.mockitousage.verification.BasicVerificationTest;
-import org.mockitousage.verification.DescriptiveMessagesOnStrictOrderErrorsTest;
+import org.mockitousage.verification.DescriptiveMessagesOnVerificationInOrderErrorsTest;
 import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
 import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
 import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
-import org.mockitousage.verification.StrictVerificationMixedWithOrdiraryVerificationTest;
-import org.mockitousage.verification.StrictVerificationTest;
+import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest;
+import org.mockitousage.verification.VerificationInOrderTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
 import org.mockitousage.verification.VerificationUsingMatchersTest;
 
@@ -85,8 +85,8 @@ public class MultiThreadedTest extends RequiresValidState {
                     ExactNumberOfTimesVerificationTest.class, 
                     DescriptiveMessagesWhenVerificationFailsTest.class, 
                     NoMoreInteractionsVerificationTest.class, 
-                    StrictVerificationMixedWithOrdiraryVerificationTest.class, 
-                    StrictVerificationTest.class, 
+                    VerificationInOrderMixedWithOrdiraryVerificationTest.class, 
+                    VerificationInOrderTest.class, 
                     VerificationOnMultipleMocksUsingMatchersTest.class, 
                     VerificationUsingMatchersTest.class, 
                     MatchersTest.class,
@@ -95,7 +95,7 @@ public class MultiThreadedTest extends RequiresValidState {
                     MockitoTest.class,
                     InvalidUsageTest.class,
                     InvalidUseOfMatchersTest.class,
-                    DescriptiveMessagesOnStrictOrderErrorsTest.class,
+                    DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
                     InvalidStateDetectionTest.class,
                     StackTraceFilteringTest.class
                 );

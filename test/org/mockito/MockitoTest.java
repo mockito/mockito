@@ -49,7 +49,7 @@ public class MockitoTest extends RequiresValidState {
     }
     
     @Test(expected=NotAMockException.class)
-    public void shouldValidateMockWhenGettingStrictVerifier() {
-        Mockito.strictly("notMock");
+    public void shouldValidateMockWhenCreatingInOrderObject() {
+        Mockito.inOrder("notMock");
     }
 }

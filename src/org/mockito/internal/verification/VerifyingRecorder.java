@@ -42,8 +42,8 @@ public class VerifyingRecorder {
 
     public void verify(InvocationMatcher wanted, VerificationModeImpl mode) {
         List<Invocation> invocations;
-        if (mode.strictMode()) {
-            invocations = globalInvocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedStrictly());
+        if (mode.inOrderMode()) {
+            invocations = globalInvocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedInOrder());
         } else {
             invocations = registeredInvocations;
         }
