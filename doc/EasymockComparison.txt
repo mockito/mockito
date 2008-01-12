@@ -20,7 +20,7 @@
 
   * allow the same level verification as EasyMock (unexpected invocations, redundant invocations, strict verification)
   
-  * argument matchers are exactly the same (anyInt(), anyObject(), etc.)
+  * argument matchers (anyInt(), anyObject(), etc.)
 
 ===Mockito's differences:===
 
@@ -38,7 +38,8 @@
   * verification is explicit - verification errors point exactly what interaction failed.
   
   * simplified stubbing model - stubbed methods replay all the time with stubbed value no matter how many times they are called.
-   Works exactly like EasyMock's andStubReturn(), andStubThrow().
+   Works exactly like EasyMock's andStubReturn(), andStubThrow(). Verification of stubbed methods is optional because usually it's more important
+   to test if the stubbed value is used correctly rather than where's it come from.
   
   * only one way of creating mocks (no MockControl object).
   
@@ -64,8 +65,6 @@
                                                             strictly.verify(two).add("two");
   
   control.verify();											
-  
-                                                            verifyNoMoreInteractions(one, two);
   
 =Stubbing void methods=
 

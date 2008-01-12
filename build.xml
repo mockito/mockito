@@ -199,7 +199,13 @@
         <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
       </batchtest>
     </junit>
-  </target>	
+  </target>
+  
+  <target name="release.javadoc" depends="javadoc">
+    <copy todir="javadoc">
+      <fileset dir="${target.dir}/javadoc" />
+    </copy>
+  </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" />
   

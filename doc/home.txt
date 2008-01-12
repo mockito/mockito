@@ -1,16 +1,18 @@
 =Mockito=
 
-  * descriptive, refactorable, proven EasyMockish syntax.
-  * simple and intuitive way of testing: run -> verify behavior. 
+EasyMock fork with following features: 
+
+  * simple and intuitive way of testing: run -> verify behavior.
   Other words: you ask questions about interactions __after__ execution.
-  * explicit, selective verification allows creating more specific test methods 
-  concentrated on testing only selected interaction: one interaction - one verification. It's also increases readability.
+  * explicit, selective verification allows creating readable and specific test methods 
+  concentrated on testing only selected interaction: one interaction - one verification.
+  * descriptive, refactorable, proven EasyMockish syntax.
   * verification errors are very readable - click on stack trace to see failed verification in test, 
   click on exception's cause to navigate to actual interaction in code. Stack trace is always clean.
-  
+
 ===Get started===
 
-Put mockito-all-x.jar on classpath  
+Put mockito-all-x.jar on classpath (TODO link it) 
   
 ==Sample==
 
@@ -30,7 +32,7 @@ Put mockito-all-x.jar on classpath
   verify(mockedList).add("one");
   verify(mockedList).clear();
   
-See javadoc for more documentation (link NEEDED!)
+See javadoc for more documentation (TODO link)
 
 ===More details===
 
@@ -39,7 +41,7 @@ See javadoc for more documentation (link NEEDED!)
   Once created mocks usually are ready to use without setting up any behavior/expectations
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
-  * Very similar to EasyMock (page with differences in under construction)
+  * EasyMock comparison (TODO link)
   * Single-jar distribution (mockito-all-x.jar) includes java source inside jar
   * Zip distribution (mockito-x.zip) contains javadoc and all jars    
 
@@ -58,9 +60,6 @@ mockito@googlegroups.com
 ===Credits===
 
 Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. 
-Mockito is heavily inspired by ideas from EasyMock. 
-Moreover, Mockito was started as one big refactoring of EasyMock. 
-Some code and API (argument matchers) is the same as in EasyMock.  
 
 * [http://easymock.org EasyMock]
 
@@ -70,7 +69,7 @@ Some other mocking frameworks share similar concepts as Mockito:
   * [http://code.google.com/p/turtlemock turtlemock]
   
 Here are just some of my friends who contributed ideas to Mockito (aplogize if I missed somebody):
-Igor Czechowski, Patric Fornasier, Jim Berrit, Felix Leipold
+Igor Czechowski, Patric Fornasier, Jim Berrit, Felix Leipold, Liz Keogh
 
 ===Why to implement yet another mocking framework?===
 

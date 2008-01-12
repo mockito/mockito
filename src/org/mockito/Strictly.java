@@ -6,6 +6,8 @@ package org.mockito;
 
 import org.mockito.internal.progress.VerificationMode;
 
+//TODO change to InOrder and add pattern for not creating it for all mocks
+
 /**
  * Allows strict order verification. E.g:
  * 

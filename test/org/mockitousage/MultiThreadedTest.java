@@ -55,6 +55,7 @@ public class MultiThreadedTest extends RequiresValidState {
         
         private boolean failed;
 
+        //TODO refresh those tests
         public void run() {
             Result result = JUnitCore.runClasses(
                     MockitoSampleTest.class, 
@@ -90,7 +91,6 @@ public class MultiThreadedTest extends RequiresValidState {
                     VerificationUsingMatchersTest.class, 
                     MatchersTest.class,
                     ReplacingObjectMethodsTest.class,
-                    //below are tests that mess up the state
                     MockHandlerTest.class,
                     MockitoTest.class,
                     InvalidUsageTest.class,
