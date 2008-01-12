@@ -288,11 +288,10 @@ public class Mockito extends Matchers {
      * Use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
      * <p>
-     * It's a good pattern not to use this method in every test method. Test
-     * methods should focus on different behavior/interaction and it's usually not
-     * necessary to call verifyNoMoreInteractions() all the time
+     * It's a good pattern to use this method only if extra invocations can be harmful. 
+     * It's usually not necessary to call verifyNoMoreInteractions() all the time
      * <p>
-     * Stubbed invocations are also treated as interactions.
+     * Stubbed invocations (if called) are also treated as interactions.
      * <p>
      * Example:
      * 
