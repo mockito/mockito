@@ -6,8 +6,6 @@ package org.mockito;
 
 import org.mockito.internal.progress.VerificationMode;
 
-//TODO add pattern for not creating it for all mocks
-
 /**
  * Allows verification in order. E.g:
  * 
@@ -18,7 +16,7 @@ import org.mockito.internal.progress.VerificationMode;
  * inOrder.verify(secondMock).add("should be called second");
  * </pre>
  * 
- * See examples {@link Mockito#inOrder(Object...)}
+ * See examples in javadoc for {@link Mockito}
  */
 public interface InOrder {
     /**
@@ -30,9 +28,8 @@ public interface InOrder {
      * inOrder.verify(firstMock).someMethod("should be called first");
      * inOrder.verify(secondMock).someMethod("should be called second");
      * </pre>
-     * <p>
      * 
-     * See examples {@link Mockito}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
      * 
@@ -49,9 +46,8 @@ public interface InOrder {
      * inOrder.verify(firstMock, times(2)).someMethod("should be called first two times");
      * inOrder.verify(secondMock, atLeastOnce()).someMethod("should be called second");
      * </pre>
-     * <p>
      * 
-     * See examples {@link Mockito}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
      * @param mode times(x) or atLeastOnce()

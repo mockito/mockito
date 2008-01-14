@@ -63,7 +63,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
             
             String expectedCause = 
                 "\n" +
-                "Actual invocation:" +
+                "Actual invocation in order:" +
                 "\n" +
                 "IMethods.simpleMethod(11)";
             

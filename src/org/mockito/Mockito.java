@@ -64,7 +64,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * System.out.println(mockedList.get(999));
  * 
  * //if you want you can still verify stubbed invocation
- * verify(mockedList.get(0));
+ * verify(mockedList).get(0);
  * </pre>
  * 
  * <p>
@@ -153,6 +153,9 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
+ * It's a good pattern to use this method only if extra invocations can be harmful. 
+ * It's usually not necessary to call verifyNoMoreInteractions() all the time.
+ * <p>
  * See more {@link Mockito#verifyNoMoreInteractions}
  * 
  * <h3>Verification in order</h3>
@@ -162,8 +165,8 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   List secondMock = mock(List.class);
  *   
  *   //using mocks
- *   firstMock.add("one");
- *   secondMock.add("two");
+ *   firstMock.add("should be called first");
+ *   secondMock.add("should be called second");
  *   
  *   //create inOrder object
  *   InOrder inOrder = inOrder(firstMock, secondMock);
@@ -172,10 +175,13 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   inOrder.verify(firstMock).add("should be called first");
  *   inOrder.verify(secondMock).add("should be called second");
  * </pre>
- * 
+ *
+ * Verification in order is strict: you cannot leave out interactions from the middle - 
+ * you have to verify interactions one-by-one.
  * <p>
- * Verification in order is required only in some cases and mostly ordinary verification is enough. 
- * 
+ * It's a good pattern not to create InOrder object with all mocks.
+ * Create it only with those mocks that have interactions required to be verified in order.
+ *  
  * <h3>Making sure no interactions happened on mock</h3>
  * 
  * <pre>
@@ -195,7 +201,6 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
  * the first one is more explicit and can read better.
- * 
  */
 public class Mockito extends Matchers {
 

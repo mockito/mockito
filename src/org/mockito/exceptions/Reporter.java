@@ -100,7 +100,13 @@ public class Reporter {
     }
 
     public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause = createDiscrepancyCause(actual, actualInvocationStackTrace);
+        WantedDiffersFromActual cause1 = new WantedDiffersFromActual(join(
+                "Actual invocation:",
+                actual
+            ));
+        
+        cause1.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        WantedDiffersFromActual cause = cause1;
 
         throw new InvocationDiffersFromActual(join(
                 "Invocation differs from actual",
@@ -110,7 +116,13 @@ public class Reporter {
     }
     
     public void wantedDiffersFromActualInOrder(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause = createDiscrepancyCause(actual, actualInvocationStackTrace);
+        WantedDiffersFromActual cause1 = new WantedDiffersFromActual(join(
+                "Actual invocation in order:",
+                actual
+            ));
+        
+        cause1.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        WantedDiffersFromActual cause = cause1;
 
         throw new VerifcationInOrderFailed(join(
                 "Verification in order failed",
@@ -119,16 +131,6 @@ public class Reporter {
             ), cause);
     }
 
-    private WantedDiffersFromActual createDiscrepancyCause(String actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
-                "Actual invocation:",
-                actual
-            ));
-
-        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        return cause;
-    }
-    
     public void wantedButNotInvoked(String wanted) {
         throw new WantedButNotInvoked(join(
                     "Wanted but not invoked:",

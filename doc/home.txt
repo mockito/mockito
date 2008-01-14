@@ -1,7 +1,5 @@
 =Mockito=
 
-EasyMock fork with following features: 
-
   * simple and intuitive way of testing: run -> verify behavior.
   Other words: you ask questions about interactions __after__ execution.
   * explicit, selective verification allows creating readable and specific test methods 
@@ -63,6 +61,8 @@ mockito@googlegroups.com
 ===Credits===
 
 Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. 
+Technically, Mockito is an EasyMock fork. It keeps stuff like invocation matching and mock creation 
+but rewrites the rest (like verification, stubbing, etc.)   
 
 * [http://easymock.org EasyMock]
 

@@ -12,9 +12,9 @@
   
   someCodeThatInteractsWithMock();							someCodeThatInteractsWithMock();
   
-                                                            verify(easy).clear();
+                                                            verify(mock).clear();
   
-  verify(easy);											
+  verify(mock);											
   
                                                             verifyNoMoreInteractions(mock);
   
@@ -40,8 +40,8 @@
   * verification is explicit - verification errors point exactly what interaction failed.
   
   * simplified stubbing model - stubbed methods replay all the time with stubbed value no matter how many times they are called.
-   Works exactly like EasyMock's andStubReturn(), andStubThrow(). Verification of stubbed methods is optional because usually it's more important
-   to test if the stubbed value is used correctly rather than where's it come from.
+   Works exactly like EasyMock's andStubReturn(), andStubThrow(). Verification of stubbed methods is optional 
+   because usually it's more important to test if the stubbed value is used correctly rather than where's it come from.
   
   * only one way of creating mocks (no MockControl object).
   
@@ -72,7 +72,23 @@
 
   List mock = createNiceMock(List.class);					List mock = mock(List.class);
   
-  mock.clear();												stubVoid(mock).toThrow(new Exception()).on().clear();
-  expectLastCall().andThrow(new Exception());
+  mock.clear();												stubVoid(mock).toThrow(new RuntimeException()).on().clear();
+  expectLastCall().andThrow(new RuntimeException());
   
   replay(mock);
+  
+=Exact number of times verification and argument matchers=
+
+  List mock = createNiceMock(List.class);						List mock = mock(List.class);
+  
+  mock.clear();
+  mock.clear();
+  
+  expect(mock.add(anyObject())).andReturn(true).atLeastOnce();												
+  
+  someCodeThatInteractsWithMock();								someCodeThatInteractsWithMock();
+  
+  replay(mock);
+  
+                                                                verify(mock, times(2)).clear();
+                                                                verify(mock, atLeastOnce()).add(anyObject());
