@@ -1,3 +1,5 @@
+=Under construction, don't read yet=
+
 =Mockito=
 
   * simple and intuitive way of testing: *run -> verify behaviour*. Other words: you ask questions about interactions *after* execution.
@@ -7,7 +9,7 @@
 
 =Getting started=
 
-Beta version 0.9 available for download!
+Beta version *0.9* available for download!
 
 Put mockito-all-x.jar on classpath (TODO link it) 
   
@@ -40,7 +42,7 @@ See javadoc for more documentation (TODO link)
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
   * Thread-safe
-  * Similar to EasyMock (TODO link)
+  * [MockitoVSEasyMock Similar to EasyMock]
   * Single-jar distribution (mockito-all-x.jar) includes java source inside jar
   * Zip distribution (mockito-x.zip) contains javadoc and all jars    
 
