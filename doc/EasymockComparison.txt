@@ -1,94 +1,139 @@
-=Mockito vs EasyMock=
+#summary Mockito VS EasyMock
 
-  import static org.easymock.classextension.EasyMock.*; 	import static org.mockito.Mockito.*;
+=Under construction, don't read yet=
 
-  List mock = createNiceMock(List.class);					List mock = mock(List.class);
+=EasyMock=
+
+{{{ 
   
-  expect(mock.add("one")).andStubReturn(true);				stub(mock.add("one")).toReturn(true);
-  
+  import static org.easymock.classextension.EasyMock.*; 	
+
+  List mock = createNiceMock(List.class);					
+  expect(mock.add("one")).andStubReturn(true);				
   mock.clear();
-  
   replay(mock);
   
-  someCodeThatInteractsWithMock();							someCodeThatInteractsWithMock();
+  someCodeThatInteractsWithMock();							
   
-                                                            verify(mock).clear();
+  verify(mock); 
+
+}}}
+
+=Mockito=
+     
+{{{
   
-  verify(mock);											
+  import static org.mockito.Mockito.*;
   
-                                                            verifyNoMoreInteractions(mock);
+  List mock = mock(List.class);
+  stub(mock.add("one")).toReturn(true);
   
-===Mockito's similarities:===
+  someCodeThatInteractsWithMock();
+  
+  verify(mock).clear();                       
+  verifyNoMoreInteractions(mock);
+  
+}}}
+  
+=Similarities=
 
   * allow the same level verification as EasyMock (unexpected invocations, redundant invocations, verification in order)
   
   * argument matchers (anyInt(), anyObject(), etc.)
 
-===Mockito's differences:===
+=Differences=
 
-  * only one kind of mock (no nice/default/strict mocks). 
-  Using EasyMock metaphor: Mockito mocks can be nice or strict - but it depends on how you verify mocks, not how you create them.
-  Because there is only one kind of mock - it is easier to share setup 
-  (situations where mocks are fields in test class but different test methods require different kinds of mocks).
+  * only one kind of mock (no nice/default/strict mocks). Using EasyMock metaphor: Mockito mocks can be nice or strict - but it depends on how you verify mocks, not how you create them. Because there is only one kind of mock - it is easier to share setup (situations where mocks are fields in test class but different test methods require different kinds of mocks).
   
-  * no record/replay modes - no need for them. There only 2 things you can do with Mockito mocks - verify or stub. 
-  Stubbing goes before execution and verification afterwards.
+  * no record/replay modes - no need for them. There only 2 things you can do with Mockito mocks - verify or stub. Stubbing goes before execution and verification afterwards.
 
-  * all mocks are 'nice' (even nicer than EasyMocks, because collection-returning methods return empty collections instead of nulls).
-  Even though mocks are nice, you can verify them as strictly as you want and detect any unwanted interaction.
+  * all mocks are 'nice' (even nicer, because collection-returning methods return empty collections instead of nulls). Even though mocks are nice, you can verify them as strictly as you want and detect any unwanted interaction.
   
   * verification is explicit - verification errors point exactly what interaction failed.
   
-  * simplified stubbing model - stubbed methods replay all the time with stubbed value no matter how many times they are called.
-   Works exactly like EasyMock's andStubReturn(), andStubThrow(). Verification of stubbed methods is optional 
-   because usually it's more important to test if the stubbed value is used correctly rather than where's it come from.
+  * simplified stubbing model - stubbed methods replay all the time with stubbed value no matter how many times they are called. Works exactly like EasyMock's andStubReturn(), andStubThrow(). Verification of stubbed methods is optional because usually it's more important to test if the stubbed value is used correctly rather than where's it come from.
   
   * only one way of creating mocks (no MockControl object).
   
-  * single jar distribution.
-  
 =Verification in order=  
+
+===EasyMock===
     
+{{{
   Control control = createStrictControl();  
   
-  List one = control.createMock(List.class);				List one = mock(List.class);
-  List two = control.createMock(List.class);				List two = mock(List.class);
+  List one = control.createMock(List.class);				
+  List two = control.createMock(List.class);				
   
   expect(one.add("one")).andReturn(true);
   expect(two.add("two")).andReturn(true);
   
   control.replay();
   
-  someCodeThatInteractsWithMocks();							someCodeThatInteractsWithMocks();
+  someCodeThatInteractsWithMocks();							
 
-                                                            InOrder inOrder = inOrder(one, two);
-                                                            
-                                                            inOrder.verify(one).add("one");
-                                                            inOrder.verify(two).add("two");
+  control.verify();	
+}}}		
   
-  control.verify();											
+===Mockito===
+  
+{{{
+  List one = mock(List.class);	
+  List two = mock(List.class);		
+  
+  someCodeThatInteractsWithMocks();	
+  
+  InOrder inOrder = inOrder(one, two);
+                                                            
+  inOrder.verify(one).add("one");
+  inOrder.verify(two).add("two");
+}}}			
   
 =Stubbing void methods=
 
-  List mock = createNiceMock(List.class);					List mock = mock(List.class);
+===EasyMock===
+
+{{{
+  List mock = createNiceMock(List.class);					
   
-  mock.clear();												stubVoid(mock).toThrow(new RuntimeException()).on().clear();
+  mock.clear();												
   expectLastCall().andThrow(new RuntimeException());
   
   replay(mock);
+}}}
+  
+===Mockito===
+
+{{{
+  List mock = mock(List.class);
+
+  stubVoid(mock).toThrow(new RuntimeException()).on().clear();
+}}}
   
 =Exact number of times verification and argument matchers=
 
-  List mock = createNiceMock(List.class);						List mock = mock(List.class);
+===EasyMock===
+
+{{{
+  List mock = createNiceMock(List.class);						
   
   mock.clear();
   mock.clear();
   
   expect(mock.add(anyObject())).andReturn(true).atLeastOnce();												
   
-  someCodeThatInteractsWithMock();								someCodeThatInteractsWithMock();
+  someCodeThatInteractsWithMock();								
   
   replay(mock);
+}}}  
   
-                                                                verify(mock, times(2)).clear();
-                                                                verify(mock, atLeastOnce()).add(anyObject());
+===Mockito=== 
+                                                               
+{{{
+  List mock = mock(List.class);        
+
+  someCodeThatInteractsWithMock();                 
+  
+  verify(mock, times(2)).clear();
+  verify(mock, atLeastOnce()).add(anyObject());      
+}}}

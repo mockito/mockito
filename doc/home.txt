@@ -1,21 +1,18 @@
 =Mockito=
 
-  * simple and intuitive way of testing: run -> verify behavior.
-  Other words: you ask questions about interactions __after__ execution.
-  * explicit, selective verification allows creating readable and specific test methods 
-  concentrated on testing only selected interaction: one interaction - one verification.
+  * simple and intuitive way of testing: *run -> verify behaviour*. Other words: you ask questions about interactions *after* execution.
+  * explicit, selective verification allows creating readable and specific test methods concentrated on testing only selected interaction: one interaction - one verification.
   * descriptive, refactorable, proven EasyMockish syntax.
-  * verification errors are very readable - click on stack trace to see failed verification in test, 
-  click on exception's cause to navigate to actual interaction in code. Stack trace is always clean.
+  * verification errors are clean - click on stack trace to see failed verification in test; click on exception's cause to navigate to actual interaction in code. Stack trace is always clean.
 
-===Getting started===
+=Getting started=
 
 Beta version 0.9 available for download!
 
 Put mockito-all-x.jar on classpath (TODO link it) 
   
-===Sample===
-
+=Sample=
+{{{
   import static org.mockito.Mockito.*;
   
   //let's mock a List!
@@ -31,14 +28,15 @@ Put mockito-all-x.jar on classpath (TODO link it)
   //verification
   verify(mockedList).add("one");
   verify(mockedList).clear();
+}}}
   
 See javadoc for more documentation (TODO link)
 
-===More details===
+=More details=
 
   * Mocks concrete classes as well as interfaces
   * All created mocks are friendly, e.g: methods return 0, false, empty collections or just nulls.
-  Once created mocks usually are ready to use without setting up any behavior/expectations
+  * Once created mocks are usually ready to play without expensive setup of any behavior/expectations
   * Less constrained verification/stubbing using argument matchers (anyObject(), anyString(), etc.)
   * Allows verification in order
   * Thread-safe
@@ -46,34 +44,32 @@ See javadoc for more documentation (TODO link)
   * Single-jar distribution (mockito-all-x.jar) includes java source inside jar
   * Zip distribution (mockito-x.zip) contains javadoc and all jars    
 
-===Ideas? Suggestions? Problems?===
+=Ideas? Suggestions? Problems?=
 
 If you have any suggestions, find documentation unclear or you found a bug, write here:  
 
-mockito@googlegroups.com
+[mailto:mockito@googlegroups.com mockito@googlegroups.com]
 
-===Limitations===
+=Limitations=
 
   * Cannot mock final classes
   * Cannot mock final methods - their normal behavior is executed
   * Cannot mock equals(), toString() and hashCode() - those are always implemented by mocks
 
-===Credits===
+=Credits=
 
-Hats down before EasyMock folks for their ideas on beautiful and refactorable mocking syntax. 
-Technically, Mockito is an EasyMock fork. It keeps stuff like invocation matching and mock creation 
+Hats down before [http://easymock.org EasyMock] folks for their ideas on beautiful and refactorable mocking syntax. 
+Technically, Mockito is an EasyMock fork. It keeps (read: refactors) stuff like invocation matching and mock creation 
 but rewrites the rest (like verification, stubbing, etc.)   
-
-* [http://easymock.org EasyMock]
 
 Some other mocking frameworks share similar concepts as Mockito:
 
   * [http://mocklib.sourceforge.net MockLib]
   * [http://code.google.com/p/turtlemock turtlemock]
   
-Here are just some of my friends who contributed ideas to Mockito (aplogize if I missed somebody):
+Here are just some of my friends who contributed ideas to Mockito (apologize if I missed somebody):
 Igor Czechowski, Patric Fornasier, Jim Berrit, Felix Leipold, Liz Keogh
 
-===Why to implement yet another mocking framework?===
+=Why to implement yet another mocking framework?=
 
 [http://szczepiq.wordpress.com/mockito]
