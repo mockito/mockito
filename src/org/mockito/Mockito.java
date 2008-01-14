@@ -67,13 +67,21 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * verify(mockedList).get(0);
  * </pre>
  * 
- * <p>
- * By default, for all methods that return value mock object will return null,
- * appropriate primitive value (0, false, etc.) or empty collection.
- * <p>
+ * <ul>
+ * <li>
+ * By default, for all methods that return value, mock object will return null,
+ * appropriate primitive value (0, false, etc.) or an empty collection.
+ * </li>
+ * <li>
  * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
- * <p>
- * If you stub exactly the same method call many times last stubbing is more important.
+ * </li>
+ * <li>
+ * Last stubbing is more important - when you stubbed the same method many times.
+ * </li>
+ * <li>
+ * Although it's possible to verify stubbed methods it's a good pattern to focus on testing if stubbed value is used correctly.
+ * </li> 
+ * </ul>
  * 
  * <h3>Argument matchers</h3>
  * 
@@ -168,7 +176,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   firstMock.add("should be called first");
  *   secondMock.add("should be called second");
  *   
- *   //create inOrder object
+ *   //create inOrder object passing only mocks that need to be verified in order
  *   InOrder inOrder = inOrder(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
@@ -180,7 +188,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * you have to verify interactions one-by-one.
  * <p>
  * It's a good pattern not to create InOrder object with all mocks.
- * Create it only with those mocks that have interactions required to be verified in order.
+ * Pass to the inOrder method only those mocks that have interactions required to be verified in order.
  *  
  * <h3>Making sure no interactions happened on mock</h3>
  * 
@@ -232,7 +240,7 @@ public class Mockito extends Matchers {
      * <p>
      * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
      * <p>
-     * If you stub exactly the same method call many times last stubbing is more important. 
+     * Last stubbing is more important - when you stubbed the same method many times.
      * <p>
      * See examples in javadoc for {@link Mockito}
      * 
