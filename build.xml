@@ -201,14 +201,14 @@
     </junit>
   </target>
   
-  <target name="release.javadoc" depends="javadoc">
+  <target name="release.javadoc" depends="javadoc" description="releases javadoc to 'javadoc' folder" >
     <copy todir="javadoc">
       <fileset dir="${target.dir}/javadoc" />
     </copy>
   </target>
   
-  <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" />
+  <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs test against jars" />
   
-  <target name="all" depends="zip, tgzip" />
+  <target name="all" depends="zip, tgzip" description="cleans, builds, tests, jars, zips" />
   
 </project>
