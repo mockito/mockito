@@ -8,20 +8,28 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
+import org.mockito.RequiresValidState;
 
 public class MockitoSampleTest extends RequiresValidState {
     
+    private ArticleCalculator mockCalculator;
+    private ArticleDatabase mockDatabase;
+    
+    private ArticleManager articleManager;
+    
+    @Before
+    public void setup() {
+        mockCalculator = mock(ArticleCalculator.class);
+        mockDatabase = mock(ArticleDatabase.class);
+        
+        articleManager = new ArticleManager(mockCalculator, mockDatabase);
+    }
+
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {
-        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
-        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
-        
-        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
-
         stub(mockCalculator.countArticles("Guardian")).toReturn(12);
         stub(mockCalculator.countArticlesInPolish("Guardian")).toReturn(5);
         
@@ -36,11 +44,6 @@ public class MockitoSampleTest extends RequiresValidState {
     
     @Test
     public void managerCountsArticlesUsingCalculator() {
-        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
-        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
-        
-        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
-
         articleManager.updateArticleCounters("Guardian");
 
         verify(mockCalculator).countArticles("Guardian");
@@ -51,11 +54,6 @@ public class MockitoSampleTest extends RequiresValidState {
     
     @Test
     public void managerSavesArticlesInTheDatabase() {
-        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
-        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
-        
-        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
-
         articleManager.updateArticleCounters("Guardian");
 
         verify(mockDatabase).updateNumberOfArticles("Guardian", 0);
@@ -67,18 +65,13 @@ public class MockitoSampleTest extends RequiresValidState {
     
     @Test
     public void managerUpdatesNumberOfRelatedArticles() {
-        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
-        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
-        
-        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
-
         Article articleOne = new Article();
         Article articleTwo = new Article();
         Article articleThree = new Article();
         
         stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(12);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(0);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleTwo)).toReturn(12);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleThree)).toReturn(0);
         
         stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo, articleThree)); 
         
@@ -91,16 +84,11 @@ public class MockitoSampleTest extends RequiresValidState {
     
     @Test
     public void verificationInOrderAndArgumentMatchers() {
-        ArticleCalculator mockCalculator = Mockito.mock(ArticleCalculator.class);
-        ArticleDatabase mockDatabase = Mockito.mock(ArticleDatabase.class);
-        
-        ArticleManager articleManager = new ArticleManager(mockCalculator, mockDatabase);
-
         Article articleOne = new Article();
         Article articleTwo = new Article();
         
         stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(12);
+        stub(mockCalculator.countNumberOfRelatedArticles(articleTwo)).toReturn(12);
         
         stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo)); 
         

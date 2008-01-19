@@ -209,6 +209,26 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
  * the first one is more explicit and can read better.
+ * 
+ * <h3>Shorthand for mocks creation - &#064;Mock annotation</h3>
+ * 
+ * <pre>
+ *   public class ArticleManagerTest { 
+ *     
+ *       &#064;Mock private ArticleCalculator calculator;
+ *       &#064;Mock private ArticleDatabase database;
+ *       &#064;Mock private UserProvider userProvider;
+ *     
+ *       private ArticleManager manager;
+ *       
+ * </pre>
+ * 
+ * <ul>
+ * <li>Minimizes repetitive mock creation code.</li> 
+ * <li>Makes the test class more readable.</li>
+ * </ul>
+ *
+ * See examples in javadoc for {@link MockitoAnnotations}
  */
 public class Mockito extends Matchers {
 
