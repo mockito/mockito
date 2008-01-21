@@ -10,7 +10,6 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.invocation.InvocationsPrinter;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class MissingInvocationInOrderVerifier implements Verifier {
@@ -32,14 +31,15 @@ public class MissingInvocationInOrderVerifier implements Verifier {
             return;
         }
         
-        List<Invocation> chunk = finder.findFirstUnverifiedChunk(invocations, wanted);
+        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         if (chunk.size() == 0) {
             reporter.wantedButNotInvokedInOrder(wanted.toString());
-        } else if (!wanted.matches(chunk.get(0))) {
-            Invocation actual = chunk.get(0);
-            InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);
-            reporter.wantedDiffersFromActualInOrder(printer.printWanted(), printer.printActual(), actual.getStackTrace());
-        }
+        }         
+//        else if (!wanted.matches(chunk.get(0))) {
+//            Invocation actual = chunk.get(0);
+//            InvocationsPrinter printer = new InvocationsPrinter(wanted, actual);
+//            reporter.wantedDiffersFromActualInOrder(printer.printWanted(), printer.printActual(), actual.getStackTrace());
+//        }
     }
 }

@@ -156,6 +156,7 @@ public class MultiThreadedTest extends RequiresValidState {
     
     @Test
     public void shouldRunInMultipleThreads() throws Exception {
+        //this test ALWAYS fails if there is a single failing unit
         assertFalse("Run in multiple thread failed", runInMultipleThreads(4));
     }
     

@@ -9,9 +9,10 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 
@@ -63,6 +64,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         }
     }
 
+    @Ignore
     @Test
     public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByVerificationInOrder() throws Exception {
         Sub sub = mock(Sub.class);

@@ -57,7 +57,7 @@ public class VerificationModeImpl implements VerificationMode {
         return mocksToBeVerifiedInOrder;
     }
 
-    boolean atLeastOnceMode() {
+    public boolean atLeastOnceMode() {
         return wantedInvocationCount == null && verification == Verification.EXPLICIT;
     }
 

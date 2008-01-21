@@ -6,6 +6,7 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
+//TODO change to 'failure'
 public class VerifcationInOrderFailed extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;

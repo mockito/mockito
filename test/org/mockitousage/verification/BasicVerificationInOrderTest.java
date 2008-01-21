@@ -52,7 +52,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     @Test
     public void shouldVerifyInOrderUsingAtLeastOnce() {
         inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockTwo).simpleMethod(2);
         inOrder.verify(mockOne, atLeastOnce()).simpleMethod(4);
@@ -105,10 +105,10 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldFailOnSecondMethodBecauseTwoInvocationsWanted() {
+    public void shouldFailOnSecondMethodBecauseFourInvocationsWanted() {
         inOrder.verify(mockOne, times(1)).simpleMethod(1);
         try {
-            inOrder.verify(mockTwo, times(3)).simpleMethod(2);
+            inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
         } catch (VerifcationInOrderFailed e) {}
     }
@@ -125,7 +125,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     @Test
     public void shouldFailOnLastMethodBecauseOneInvocationWanted() {
         inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree, atLeastOnce()).simpleMethod(3);
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         try {
@@ -137,7 +137,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     @Test
     public void shouldFailOnLastMethodBecauseOneInvocationWantedAgain() {
         inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree, atLeastOnce()).simpleMethod(3);
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
         try {
@@ -179,7 +179,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     @Test
     public void shouldFailOnLastMethodBecauseDifferentArgsWanted() {
         inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockTwo).simpleMethod(2);
         try {
@@ -191,7 +191,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     @Test
     public void shouldFailOnLastMethodBecauseDifferentMethodWanted() {
         inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockTwo).simpleMethod(2);
         try {
@@ -202,45 +202,37 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     
     /* -------------- */
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test
     public void shouldFailWhenLastMethodVerifiedFirst() {
         inOrder.verify(mockOne).simpleMethod(4);
+        try {
+            inOrder.verify(mockOne).simpleMethod(1);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test
     public void shouldFailWhenMiddleMethodVerifiedFirst() {
         inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        try {
+            inOrder.verify(mockOne).simpleMethod(1);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test
     public void shouldFailWhenMiddleMethodVerifiedFirstInAtLeastOnceMode() {
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
-    }
-    
-    @Test(expected=VerifcationInOrderFailed.class)
-    public void shouldFailWhenSomeMiddleMethodsAreLeftOut() {
-        inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
-        inOrder.verify(mockOne).simpleMethod(4);
-    }
-    
-    @Test(expected=VerifcationInOrderFailed.class)
-    public void shouldFailWhenSomeMiddleMethodsInAtLeastOnceModeAreLeftOut() {
-        inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
-    }
-    
-    @Test(expected=VerifcationInOrderFailed.class)
-    public void shouldFailWhenLastMethodIsTooEarly() {
-        inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockOne).simpleMethod(4);
+        try {
+            inOrder.verify(mockOne).simpleMethod(1);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
     public void shouldFailOnVerifyNoMoreInteractions() {
         inOrder.verify(mockOne).simpleMethod(1);
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockTwo).simpleMethod(2);
         

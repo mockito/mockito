@@ -1,0 +1,121 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.mockitousage;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
+import org.mockito.RequiresValidState;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+
+//TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
+@Ignore
+public class PointingStackTraceToActualInvocationChunkInOrderTest extends RequiresValidState {
+    
+    private IMethods mock;
+    private IMethods mockTwo;
+    private InOrder inOrder;
+
+    @Before
+    public void setup() {
+        mock = Mockito.mock(IMethods.class);
+        mockTwo = Mockito.mock(IMethods.class);
+        inOrder = inOrder(mock, mockTwo);
+        
+        firstChunk();
+        secondChunk();
+        thirdChunk();
+        fourthChunk();
+    }
+
+    private void firstChunk() {
+        mock.simpleMethod(1);
+        mock.simpleMethod(1);
+    }
+    private void secondChunk() {
+        mockTwo.simpleMethod(2);
+        mockTwo.simpleMethod(2);
+    }
+    private void thirdChunk() {
+        mock.simpleMethod(3);
+        mock.simpleMethod(3);
+    }
+    private void fourthChunk() {
+        mockTwo.simpleMethod(4);
+        mockTwo.simpleMethod(4);
+    }
+    
+    @Test
+    public void shouldPointStackTraceToActualInvocation() {
+        inOrder.verify(mock, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        
+        try {
+            inOrder.verify(mock).simpleMethod(999);
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+        }
+    }
+    
+    @Test
+    public void shouldPointToActualInvocation() {
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        
+        try {
+            inOrder.verify(mockTwo).simpleMethod(999);
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+        }
+    }
+    
+    @Test
+    public void shouldPointToUnverifiedInvocation() {
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        
+        try {
+            inOrder.verify(mockTwo, times(3)).simpleMethod(999);
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
+        }
+    }
+    
+    @Test
+    public void shouldPointToTooManyInvocationsChunk() {
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        
+        try {
+            inOrder.verify(mockTwo).simpleMethod(anyInt());
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+        }
+    }
+    
+    @Test
+    public void shouldPointToTooLittleInvocationsUnverifiedChunk() {
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
+        inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
+        
+        try {
+            inOrder.verify(mockTwo, times(3)).simpleMethod(anyInt());
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
+        }
+    }
+}

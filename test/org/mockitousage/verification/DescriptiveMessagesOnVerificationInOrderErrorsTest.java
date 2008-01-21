@@ -9,10 +9,11 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.InOrder;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
@@ -41,6 +42,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         inOrder = inOrder(one, two, three);
     }
     
+    @Ignore
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowBothWantedAndActual() {
         inOrder.verify(one, atLeastOnce()).simpleMethod(1);

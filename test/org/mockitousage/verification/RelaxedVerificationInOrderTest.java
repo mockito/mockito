@@ -8,21 +8,17 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
 /**
  * ignored since 'relaxed' in order verification is not implemented (too complex to bother, maybe later).
  */
-@Ignore
 @SuppressWarnings("unchecked")  
 public class RelaxedVerificationInOrderTest extends RequiresValidState {
     
@@ -58,6 +54,95 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
     } 
     
     @Test
+    public void shouldVerifyInOrderAndBeRelaxed() {
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        
+        verifyNoMoreInteractions(mockThree);
+    }    
+    
+    @Test
+    public void shouldAllowFirstChunkBeforeLastInvocation() {
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        
+        try {
+            verifyNoMoreInteractions(mockTwo);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
+    
+    @Test
+    public void shouldAllowAllChunksBeforeLastInvocation() {
+        inOrder.verify(mockTwo, times(3)).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        
+        verifyNoMoreInteractions(mockTwo);
+    }
+    
+    @Test
+    public void shouldVerifyDetectFirstChunkOfInvocationThatExistInManyChunks() {
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        try {
+            verifyNoMoreInteractions(mockTwo);
+            fail();
+        } catch(NoInteractionsWanted e) {}
+    }  
+    
+    @Test
+    public void shouldVerifyDetectAllChunksOfInvocationThatExistInManyChunks() {
+        inOrder.verify(mockTwo, times(3)).simpleMethod(2);
+        inOrder.verify(mockOne).simpleMethod(4);
+        verifyNoMoreInteractions(mockTwo);
+    }
+    
+    @Test
+    public void shouldVerifyInteractionsFromAllChunksWhenAtLeastOnceMode() {
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        verifyNoMoreInteractions(mockTwo);
+        try {
+            inOrder.verify(mockThree).simpleMethod(3);
+            fail();
+        } catch (VerifcationInOrderFailed e) {}
+    }
+    
+    @Test
+    public void shouldVerifyInteractionsFromFirstChunk() {
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        try {
+            verifyNoMoreInteractions(mockTwo);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
+    
+    @Test(expected=VerifcationInOrderFailed.class)
+    public void shouldFailVerificationOfNonFirstChunk() {
+        inOrder.verify(mockTwo, times(1)).simpleMethod(2);
+    }
+    
+    @Test
+    public void shouldPassOnCombinationOfTimesAndAtLeastOnce() {
+        mockTwo.simpleMethod(2);
+        
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        verifyNoMoreInteractions(mockTwo);
+    }
+    
+    @Test
+    public void shouldPassOnEdgyCombinationOfTimesAndAtLeastOnce() {
+        mockTwo.simpleMethod(2);
+        mockThree.simpleMethod(3);
+        
+        inOrder.verify(mockThree).simpleMethod(3);
+        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockThree).simpleMethod(3);
+        
+        verifyNoMoreInteractions(mockThree);
+    }
+    
+    @Test
     public void shouldVerifyInOrderMockTwoAndThree() {
         inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
@@ -87,11 +172,6 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
     }
     
     @Test
-    public void shouldVerifyMockTwoCalledOnce() {
-        inOrder.verify(mockTwo).simpleMethod(2);
-    }
-
-    @Test
     public void shouldVerifyMockTwoCalledTwice() {
         inOrder.verify(mockTwo, times(2)).simpleMethod(2);
     }
@@ -101,7 +181,7 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
     }
     
-    @Test(expected=InvocationDiffersFromActual.class)
+    @Test(expected=VerifcationInOrderFailed.class)
     public void shouldFailOnWrongMethodCalledOnMockTwo() {
         inOrder.verify(mockTwo, atLeastOnce()).differentMethod();
     }
@@ -119,46 +199,20 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
     
     @Test
     public void shouldFailTimesZeroInOrder() {
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
+        inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         try {
             inOrder.verify(mockThree, times(0)).simpleMethod(3);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
-    @Test
-    public void shouldFailOnNoMoreInteractionsWantedForMockTwo() {
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
-        try {
-            verifyNoMoreInteractions(mockTwo);
-            fail();
-        } catch (NoInteractionsWanted e) {}
-    }
-    
-    @Test
+    @Test(expected=VerifcationInOrderFailed.class)
     public void shouldFailWhenMockTwoWantedZeroTimes() {
-        try {
-            inOrder.verify(mockTwo, times(0)).simpleMethod(2);
-            fail();
-        } catch(TooManyActualInvocations e) {}
-    }
-    
-    @Test
-    public void shouldFailWhenMockTwoWantedThreeTimes() {
-        try {
-            inOrder.verify(mockTwo, times(3)).simpleMethod(2);
-            fail();
-        } catch(TooLittleActualInvocations e) {}
+        inOrder.verify(mockTwo, times(0)).simpleMethod(2);
     }
     
     @Test
     public void shouldVerifyLastInvocation() {
-        inOrder.verify(mockOne).simpleMethod(4);
-    }
-    
-    @Test
-    public void shouldVerifyLastTwoInvocations() {
-        inOrder.verify(mockTwo).simpleMethod(2);
         inOrder.verify(mockOne).simpleMethod(4);
     }
     
@@ -178,9 +232,9 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
     public void shouldFailOnLastTwoInvocationsInWrongOrder() {
         inOrder.verify(mockOne).simpleMethod(4);
         try {
-            inOrder.verify(mockTwo).simpleMethod(2);
+            inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
@@ -189,7 +243,7 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
     
     @Test
@@ -198,6 +252,6 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(999);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (VerifcationInOrderFailed e) {}
     }
 }

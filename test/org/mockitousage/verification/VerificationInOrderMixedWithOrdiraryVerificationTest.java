@@ -108,10 +108,13 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends Requir
     
     @Test
     public void shouldFailOnLastInvocationTooEarly() {
-        inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
+        inOrder.verify(mockThree).simpleMethod(4);
+        
+        verify(mockThree).simpleMethod(4);
         verify(mockTwo).simpleMethod(2);
+        
         try {
-            inOrder.verify(mockThree).simpleMethod(4);
+            inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
             fail();
         } catch (VerifcationInOrderFailed e) {}
     }

@@ -84,8 +84,9 @@ public class StackTraceFilteringTest extends RequiresValidState {
         mock.oneArg(true);
         mock.oneArg(false);
         
+        inOrder.verify(mock).oneArg(false);
         try {
-            inOrder.verify(mock).oneArg(false); 
+            inOrder.verify(mock).oneArg(true);
             fail();
         } catch (VerifcationInOrderFailed e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));

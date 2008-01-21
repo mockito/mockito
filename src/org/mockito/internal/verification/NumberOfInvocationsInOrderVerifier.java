@@ -32,23 +32,30 @@ public class NumberOfInvocationsInOrderVerifier implements Verifier {
             return;
         }
         
-        List<Invocation> chunk = finder.findFirstUnverifiedChunk(invocations, wanted);
+        List<Invocation> chunk = finder.findFirstMatchingChunk(invocations, wanted);
         
-        boolean noMatchFound = chunk.size() == 0 || !wanted.matches(chunk.get(0));
+        boolean noMatchFound = chunk.size() == 0;
         if (mode.wantedCountIsZero() && noMatchFound) {
             return;
         }
         
         int actualCount = chunk.size();
-        
-        if (mode.tooLittleActualInvocations(actualCount)) {
-            HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
+
+        if (mode.atLeastOnceMode() || !mode.matchesActualCount(actualCount)) {
+            //try to match on all chunks
+            chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         }
         
-        if (mode.tooManyActualInvocations(actualCount)) {
+        int actualInAll = chunk.size();
+            
+        if (mode.tooLittleActualInvocations(actualInAll)) {
+            HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
+            reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualInAll, wanted.toString(), lastInvocation);
+        }
+        
+        if (mode.tooManyActualInvocations(actualInAll)) {
             HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
-            reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
+            reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualInAll, wanted.toString(), firstUndesired);
         }
         
         for (Invocation i : chunk) {

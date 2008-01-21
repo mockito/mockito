@@ -10,9 +10,10 @@ import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
+import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockitousage.IMethods;
 
@@ -44,12 +45,14 @@ public class VerificationInOrderTest extends RequiresValidState {
         verify(mockOne).simpleMethod(2);
         verify(mockOne).simpleMethod(1);
         
+        inOrder.verify(mockOne).simpleMethod(2);
         try {
-            inOrder.verify(mockOne).simpleMethod(2);
+            inOrder.verify(mockOne).simpleMethod(1);
             fail();
         } catch (VerifcationInOrderFailed e) {}
     } 
     
+    @Ignore
     @Test
     public void shouldMessagesPointToProperMethod() {
         mockTwo.differentMethod();
@@ -72,7 +75,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         mockOne.simpleMethod();
         mockOne.simpleMethod();
         
-        inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
+        inOrder.verify(mockOne, times(2)).simpleMethod();
         inOrder.verify(mockTwo).differentMethod();
         inOrder.verify(mockOne, times(2)).simpleMethod();
         try {

@@ -11,6 +11,7 @@ import static org.mockito.internal.progress.VerificationModeImpl.*;
 import java.util.LinkedList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
@@ -20,6 +21,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 
+@Ignore
 public class MissingInvocationInOrderVerifierTest extends RequiresValidState {
 
     private MissingInvocationInOrderVerifier verifier;

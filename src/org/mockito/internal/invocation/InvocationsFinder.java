@@ -18,8 +18,11 @@ public class InvocationsFinder {
         return ListUtil.filter(invocations, new RemoveNotMatching(wanted));
     }
 
+    /**
+     * fills first chunk based on wanted.matches()
+     */
     public List<Invocation> findFirstUnverifiedChunk(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> unverified = ListUtil.filter(invocations, new RemoveVerifiedInOrder());
+        List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = new LinkedList<Invocation>();
         for (Invocation invocation : unverified) {
             if (wanted.matches(invocation)) {
@@ -28,6 +31,32 @@ public class InvocationsFinder {
                 firstChunk.add(invocation);
                 break;
             } else {
+                break;
+            }
+        }
+        return firstChunk;
+    }
+    
+
+    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
+        List<Invocation> unverified = removeVerifiedInOrder(invocations);
+        List<Invocation> allChunks = new LinkedList<Invocation>();
+        //TODO use filter
+        for (Invocation invocation : unverified) {
+            if (wanted.matches(invocation)) {
+                allChunks.add(invocation);
+            }
+        }
+        return allChunks;
+    }
+
+    public List<Invocation> findFirstMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted) {
+        List<Invocation> unverified = removeVerifiedInOrder(invocations);
+        List<Invocation> firstChunk = new LinkedList<Invocation>();
+        for (Invocation invocation : unverified) {
+            if (wanted.matches(invocation)) {
+                firstChunk.add(invocation);
+            } else if (!firstChunk.isEmpty()) {
                 break;
             }
         }
@@ -74,6 +103,18 @@ public class InvocationsFinder {
         }
     }
     
+    private List<Invocation> removeVerifiedInOrder(List<Invocation> invocations) {
+        List<Invocation> unverified = new LinkedList<Invocation>();
+        for (Invocation i : invocations) {
+            if (i.isVerifiedInOrder()) {
+                unverified.clear();
+            } else {
+                unverified.add(i);
+            }
+        }
+        return unverified;
+    }
+    
     private class RemoveNotMatching implements Filter<Invocation> {
         private final InvocationMatcher wanted;
 
@@ -83,12 +124,6 @@ public class InvocationsFinder {
 
         public boolean isOut(Invocation invocation) {
             return !wanted.matches(invocation);
-        }
-    }
-
-    private final class RemoveVerifiedInOrder implements Filter<Invocation> {
-        public boolean isOut(Invocation invocation) {
-            return invocation.isVerifiedInOrder();
         }
     }
 }

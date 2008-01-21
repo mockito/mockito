@@ -92,8 +92,9 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
     public void shouldFailVerificationForMockOneBecauseOfWrongOrder() {
         InOrder inOrder = inOrder(mockOne);
         
+        inOrder.verify(mockOne).simpleMethod(4);
         try {
-            inOrder.verify(mockOne).simpleMethod(4);
+            inOrder.verify(mockOne).simpleMethod(1);
             fail();
         } catch (VerifcationInOrderFailed e) {}
     } 
