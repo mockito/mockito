@@ -64,7 +64,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         }
     }
 
-    @Ignore
+    @Ignore("that's a very edge case, don't care for it now")
     @Test
     public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByVerificationInOrder() throws Exception {
         Sub sub = mock(Sub.class);

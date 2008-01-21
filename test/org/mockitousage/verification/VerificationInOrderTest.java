@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.RequiresValidState;
@@ -52,7 +51,6 @@ public class VerificationInOrderTest extends RequiresValidState {
         } catch (VerifcationInOrderFailed e) {}
     } 
     
-    @Ignore
     @Test
     public void shouldMessagesPointToProperMethod() {
         mockTwo.differentMethod();
@@ -63,7 +61,6 @@ public class VerificationInOrderTest extends RequiresValidState {
             fail();
         } catch (VerifcationInOrderFailed e) {
             assertThat(e, messageContains("IMethods.differentMethod()"));
-            assertThat(e, causeMessageContains("IMethods.differentMethod()"));
         }
     }
     
