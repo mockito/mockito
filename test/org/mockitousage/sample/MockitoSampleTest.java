@@ -83,7 +83,7 @@ public class MockitoSampleTest extends RequiresValidState {
     }
     
     @Test
-    public void verificationInOrderAndArgumentMatchers() {
+    public void shouldPersistRecalculatedArticle() {
         Article articleOne = new Article();
         Article articleTwo = new Article();
         
@@ -94,9 +94,9 @@ public class MockitoSampleTest extends RequiresValidState {
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
-        InOrder inOrder = inOrder(mockDatabase);
+        InOrder inOrder = inOrder(mockDatabase, mockCalculator);
         
-        inOrder.verify(mockDatabase, atLeastOnce()).getArticlesFor(anyString());
+        inOrder.verify(mockCalculator).countNumberOfRelatedArticles((Article) anyObject());
         inOrder.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
     }
 }

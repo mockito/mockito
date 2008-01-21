@@ -10,15 +10,16 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
+import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 /**
@@ -138,11 +139,25 @@ public class Reporter {
         ));
     }
     
-    public void wantedButNotInvokedInOrder(String wanted) {
+    //TODO do something about those objects (Printable object)
+    public void wantedButNotInvokedInOrder(Object wanted, Object previous, HasStackTrace previousInOrder) {
+        WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
+                        "Wanted anywhere AFTER following interaction:",
+                        previous.toString()));
+        cause.setStackTrace(previousInOrder.getStackTrace());
+        
         throw new VerifcationInOrderFailed(join(
                     "Verification in order failed",
                     "Wanted but not invoked:",
-                    wanted
+                    wanted.toString()
+        ), cause);
+    }
+    
+    public void wantedButNotInvokedInOrder(Object wanted) {
+        throw new VerifcationInOrderFailed(join(
+                    "Verification in order failed",
+                    "Wanted but not invoked:",
+                    wanted.toString()
         ));
     }
 

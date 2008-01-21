@@ -9,8 +9,8 @@ import java.util.List;
 
 public class ListUtil {
 
-    public static <T> List<T> filter(List<T> list, Filter<T> filter) {
-        List<T> filtered = new LinkedList<T>();
+    public static <T> LinkedList<T> filter(List<T> list, Filter<T> filter) {
+        LinkedList<T> filtered = new LinkedList<T>();
         for (T t : list) {
             if (!filter.isOut(t)) {
                 filtered.add(t);

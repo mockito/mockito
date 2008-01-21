@@ -69,8 +69,8 @@ public class MissingInvocationInOrderVerifierTest extends RequiresValidState {
         private String actual;
         private HasStackTrace actualInvocationStackTrace;
 
-        @Override public void wantedButNotInvokedInOrder(String wanted) {
-            this.wanted = wanted;
+        @Override public void wantedButNotInvokedInOrder(Object wanted, Object previous, HasStackTrace lastVerifiedInOrder) {
+            this.wanted = wanted.toString();
         }
         
         @Override public void wantedDiffersFromActualInOrder(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {

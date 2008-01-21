@@ -126,4 +126,20 @@ public class InvocationsFinder {
             return !wanted.matches(invocation);
         }
     }
+
+    private class RemoveUnverifiedInOrder implements Filter<Invocation> {
+        public boolean isOut(Invocation invocation) {
+            return !invocation.isVerifiedInOrder();
+        }
+    }
+    
+    public Invocation findPreviousInOrder(List<Invocation> invocations, InvocationMatcher wanted) {
+        LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder());
+        
+        if (verifiedOnly.isEmpty()) {
+            return null;
+        } else {
+            return verifiedOnly.getLast();
+        }
+    }
 }
