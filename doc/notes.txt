@@ -1,0 +1,14 @@
+relaxed verification in order:
+
+1 2 11 22
+
+p 1,222
+p 111,22
+p 1,2,11,22
+
+For 1 algorithm should check first matching chunk. if fails then it should check for merged chunks.
+
+
+11 22 11 22 11 22
+
+2222, 11, 22 
