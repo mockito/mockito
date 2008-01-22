@@ -19,7 +19,7 @@ import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 /**
@@ -131,8 +131,8 @@ public class Reporter {
                         previous.toString()));
         cause.setStackTrace(previousStackTrace.getStackTrace());
         
-        throw new VerifcationInOrderFailed(join(
-                    "Verification in order failed",
+        throw new VerifcationInOrderFailure(join(
+                    "Verification in order failure",
                     "Wanted but not invoked:",
                     wanted.toString()
         ), cause);
@@ -150,8 +150,8 @@ public class Reporter {
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, Printable wanted, HasStackTrace firstUndesired) {
         UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
 
-        throw new VerifcationInOrderFailed(join(
-                "Verification in order failed",
+        throw new VerifcationInOrderFailure(join(
+                "Verification in order failure",
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
@@ -176,8 +176,8 @@ public class Reporter {
     public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, Printable wanted, HasStackTrace lastActualStackTrace) {
         TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
 
-        throw new VerifcationInOrderFailed(join(
-                "Verification in order failed",
+        throw new VerifcationInOrderFailure(join(
+                "Verification in order failure",
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);

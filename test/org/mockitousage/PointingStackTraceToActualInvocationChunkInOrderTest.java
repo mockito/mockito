@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 
 //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
 public class PointingStackTraceToActualInvocationChunkInOrderTest extends RequiresValidState {
@@ -60,7 +60,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends Requir
         try {
             inOrder.verify(mock).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
         }
     }
@@ -72,7 +72,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends Requir
         try {
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
         }
     }
@@ -86,7 +86,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends Requir
         try {
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
         }
     }
@@ -98,7 +98,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends Requir
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
         }
     }

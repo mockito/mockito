@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.RequiresValidState;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -49,7 +49,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     } 
     
     @Test
@@ -79,7 +79,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -98,6 +98,6 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
 }

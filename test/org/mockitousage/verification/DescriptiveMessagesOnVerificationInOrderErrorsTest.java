@@ -16,7 +16,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -50,10 +50,10 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         try {
             inOrder.verify(one, atLeastOnce()).simpleMethod(11);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             String expected = 
                     "\n" +
-                    "Verification in order failed" +
+                    "Verification in order failure" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -100,11 +100,11 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         try {
             inOrder.verify(three).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Verification in order failed" +
+                    "Verification in order failure" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -120,11 +120,11 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         try {
             inOrder.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Verification in order failed" +
+                    "Verification in order failure" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +
@@ -151,11 +151,11 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         try {
             inOrder.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Verification in order failed" +
+                    "Verification in order failure" +
                     "\n" +
                     "IMethods.simpleMethod(2)" +
                     "\n" +

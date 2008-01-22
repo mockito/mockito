@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -85,7 +85,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).differentMethod();
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     } 
     
     @Test
@@ -96,7 +96,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     } 
 
     @Test
@@ -124,7 +124,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -134,7 +134,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -144,7 +144,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -154,7 +154,7 @@ public class SelectedMocksInOrderVerificationTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test

@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -66,7 +66,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
         try {
             verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 4 times but was 2"));
         }
     }
@@ -80,7 +80,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
         try {
             verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
         }
     }

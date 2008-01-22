@@ -17,7 +17,7 @@ import org.mockito.StateResetter;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 public class StackTraceFilteringTest extends RequiresValidState {
@@ -88,7 +88,7 @@ public class StackTraceFilteringTest extends RequiresValidState {
         try {
             inOrder.verify(mock).oneArg(true);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (VerifcationInOrderFailure e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));
         }
     }

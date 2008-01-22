@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -79,7 +79,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -92,15 +92,15 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test(expected=VerifcationInOrderFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
         inOrder.verify(mockOne, times(0)).simpleMethod(1);
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test(expected=VerifcationInOrderFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
         inOrder.verify(mockOne, times(2)).simpleMethod(1);
     }
@@ -111,7 +111,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -120,7 +120,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }    
     
     @Test
@@ -132,7 +132,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne, times(0)).simpleMethod(4);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -144,7 +144,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne, times(2)).simpleMethod(4);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }    
     
     /* ------------- */
@@ -165,7 +165,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(-999);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -174,7 +174,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockTwo, times(2)).oneArg(true);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }    
     
     @Test
@@ -186,7 +186,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(-666);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -198,7 +198,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).oneArg(false);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }    
     
     /* -------------- */
@@ -209,7 +209,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -218,7 +218,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test
@@ -227,7 +227,7 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test

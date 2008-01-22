@@ -13,7 +13,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -116,7 +116,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends Requir
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailed e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
     
     @Test(expected=MockitoException.class)
