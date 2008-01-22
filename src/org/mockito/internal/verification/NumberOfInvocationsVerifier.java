@@ -37,10 +37,10 @@ public class NumberOfInvocationsVerifier implements Verifier {
         int actualCount = actualInvocations.size();
         if (mode.tooLittleActualInvocations(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
-            reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), lastInvocation);
+            reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted, lastInvocation);
         } else if (mode.tooManyActualInvocations(actualCount)) {
             HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
-            reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted.toString(), firstUndesired);
+            reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted, firstUndesired);
         }
         
         for (Invocation i : actualInvocations) {

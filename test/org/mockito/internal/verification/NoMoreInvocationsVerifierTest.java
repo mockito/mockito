@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -52,14 +53,14 @@ public class NoMoreInvocationsVerifierTest extends RequiresValidState {
         
         assertSame(invocations, finder.invocations);
         
-        assertEquals(firstUnverified.toString(), reporterStub.undesired);
+        assertEquals(firstUnverified, reporterStub.undesired);
         assertSame(firstUnverified.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
     class ReporterStub extends Reporter {
-        private String undesired;
+        private Printable undesired;
         private HasStackTrace actualInvocationStackTrace;
-        @Override public void noMoreInteractionsWanted(String undesired, HasStackTrace actualInvocationStackTrace) {
+        @Override public void noMoreInteractionsWanted(Printable undesired, HasStackTrace actualInvocationStackTrace) {
             this.undesired = undesired;
             this.actualInvocationStackTrace = actualInvocationStackTrace;
         }

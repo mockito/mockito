@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
@@ -25,7 +26,7 @@ import org.mockito.internal.matchers.Equals;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation {
+public class Invocation implements Printable {
 
     private final int sequenceNumber;
     private final Object mock;

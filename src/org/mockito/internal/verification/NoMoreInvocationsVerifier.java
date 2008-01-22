@@ -33,7 +33,7 @@ public class NoMoreInvocationsVerifier implements Verifier {
 
         Invocation unverified = finder.findFirstUnverified(invocations);
         if (unverified != null) {
-            reporter.noMoreInteractionsWanted(unverified.toString(), unverified.getStackTrace());
+            reporter.noMoreInteractionsWanted(unverified, unverified.getStackTrace());
         }
     }
 }

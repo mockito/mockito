@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -53,7 +54,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         
         assertEquals(1, reporterStub.actualCount);
         assertEquals(100, reporterStub.wantedCount);
-        assertEquals(wanted.toString(), reporterStub.wanted);
+        assertEquals(wanted, reporterStub.wanted);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
         
         assertEquals(1, reporterStub.actualCount);
         assertEquals(0, reporterStub.wantedCount);
-        assertEquals(wanted.toString(), reporterStub.wanted);
+        assertEquals(wanted, reporterStub.wanted);
     }
     
     @Test
@@ -121,16 +122,16 @@ public class NumberOfInvocationsVerifierTest extends RequiresValidState {
     class ReporterStub extends Reporter {
         private int wantedCount;
         private int actualCount;
-        private String wanted;
+        private Printable wanted;
         private HasStackTrace stackTrace;
-        @Override public void tooLittleActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualInvocationStackTrace) {
+        @Override public void tooLittleActualInvocations(int wantedCount, int actualCount, Printable wanted, HasStackTrace lastActualInvocationStackTrace) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
                     this.stackTrace = lastActualInvocationStackTrace;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, Printable wanted, HasStackTrace firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;

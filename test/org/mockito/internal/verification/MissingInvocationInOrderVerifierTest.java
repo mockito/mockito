@@ -74,10 +74,10 @@ public class MissingInvocationInOrderVerifierTest extends RequiresValidState {
     
     class ReporterStub extends Reporter {
         private Printable wanted;
-        private Object previous;
+        private Printable previous;
         private HasStackTrace previousStackTrace;
         
-        @Override public void wantedButNotInvokedInOrder(Printable wanted, Object previous, HasStackTrace previousStackTrace) {
+        @Override public void wantedButNotInvokedInOrder(Printable wanted, Printable previous, HasStackTrace previousStackTrace) {
             this.wanted = wanted;
             this.previous = previous;
             this.previousStackTrace = previousStackTrace;
