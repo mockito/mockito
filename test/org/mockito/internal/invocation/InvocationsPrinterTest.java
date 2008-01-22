@@ -19,8 +19,8 @@ public class InvocationsPrinterTest extends RequiresValidState{
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         InvocationsPrinter printer = new InvocationsPrinter(simpleMethod, differentMethod);
         
-        assertEquals("Object.simpleMethod()", printer.printWanted());
-        assertEquals("Object.differentMethod()", printer.printActual());
+        assertEquals("Object.simpleMethod()", printer.getWanted().toString());
+        assertEquals("Object.differentMethod()", printer.getActual().toString());
     }
     
     class Super {
@@ -42,8 +42,8 @@ public class InvocationsPrinterTest extends RequiresValidState{
         
         assertEquals(invocationOne.toString(), invocationTwo.toString());
         
-        assertEquals("Object.test(class java.lang.Object)", printer.printWanted());
-        assertEquals("Object.test(class java.lang.String)", printer.printActual());
+        assertEquals("Object.test(class java.lang.Object)", printer.getWanted().toString());
+        assertEquals("Object.test(class java.lang.String)", printer.getActual().toString());
     }
     
     class Dummy {
@@ -62,7 +62,7 @@ public class InvocationsPrinterTest extends RequiresValidState{
         
         assertEquals(invocationOne.toString(), invocationTwo.toString());
         
-        assertEquals("Object.test(class [Ljava.lang.Object;)", printer.printWanted());
-        assertEquals("Object.test(class [Ljava.lang.String;)", printer.printActual());
+        assertEquals("Object.test(class [Ljava.lang.Object;)", printer.getWanted().toString());
+        assertEquals("Object.test(class [Ljava.lang.String;)", printer.getActual().toString());
     }
 }

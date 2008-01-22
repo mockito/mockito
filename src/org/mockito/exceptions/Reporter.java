@@ -100,8 +100,7 @@ public class Reporter {
         ));
     }
 
-    //TODO Printable for those strings?
-    public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+    public void wantedDiffersFromActual(Printable wanted, Printable actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause1 = new WantedDiffersFromActual(join(
                 "Actual invocation:",
                 actual.toString()
@@ -124,7 +123,6 @@ public class Reporter {
         ));
     }
     
-    //TODO previous and previousStackTrace should be the same object
     public void wantedButNotInvokedInOrder(Printable wanted, Printable previous, HasStackTrace previousStackTrace) {
         WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
                         "Wanted anywhere AFTER following interaction:",

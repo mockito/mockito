@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.exceptions.Printable;
+
 public class InvocationsPrinter {
 
     private final String wanted;
@@ -19,11 +21,17 @@ public class InvocationsPrinter {
         }
     }
 
-    public String printWanted() {
-        return wanted;
+    public Printable getWanted() {
+        return new Printable() {
+            public String toString() {
+                return wanted;
+        }};
     }
 
-    public String printActual() {
-        return actual;
+    public Printable getActual() {
+        return new Printable() {
+            public String toString() {
+                return actual;
+        }};
     }
 }

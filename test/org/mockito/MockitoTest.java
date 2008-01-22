@@ -18,6 +18,8 @@ public class MockitoTest extends RequiresValidState {
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
     // and create a test case that I can manually fix and run and make sure examples are valid
     
+    //TODO check if performace can be tweaked (e.g: LL -> AL)
+    
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);

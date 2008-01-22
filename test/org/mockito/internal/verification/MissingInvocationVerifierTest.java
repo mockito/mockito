@@ -86,19 +86,19 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
-        assertEquals(wanted.toString(), reporterStub.wanted);
-        assertEquals(actualInvocation.toString(), reporterStub.actual);
+        assertEquals(wanted.toString(), reporterStub.wanted.toString());
+        assertEquals(actualInvocation.toString(), reporterStub.actual.toString());
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
     class ReporterStub extends Reporter {
         private Object wanted;
-        private String actual;
+        private Object actual;
         private HasStackTrace actualInvocationStackTrace;
         @Override public void wantedButNotInvoked(Printable wanted) {
             this.wanted = wanted;
         }
-        @Override public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
+        @Override public void wantedDiffersFromActual(Printable wanted, Printable actual, HasStackTrace actualInvocationStackTrace) {
                     this.wanted = wanted;
                     this.actual = actual;
                     this.actualInvocationStackTrace = actualInvocationStackTrace;
