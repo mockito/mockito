@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
+import static org.mockito.util.ExtraMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 
@@ -14,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -55,64 +57,42 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
     }
     
-//    @Test
-//    public void shouldReportTooLittleInvocations() throws Exception {
-//        Invocation first = new InvocationBuilder().toInvocation();
-//        Invocation second = new InvocationBuilder().toInvocation();
-//        finderStub.allMatchingUnverifiedChunksToReturn.addAll(asList(first, second)); 
-//        
-//        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
-//        
-//        assertEquals(4, reporterStub.wantedCount);
-//        assertEquals(2, reporterStub.actualCount);
-//        assertSame(second.getStackTrace(), reporterStub.lastActualStackTrace);
-//        assertEquals(wanted.toString(), reporterStub.wanted);
-//    }
-//    
-//    @Test
-//    public void shouldReportTooManyInvocations() throws Exception {
-//        Invocation first = new InvocationBuilder().toInvocation();
-//        Invocation second = new InvocationBuilder().toInvocation();
-//        finderStub.allMatchingUnverifiedChunksToReturn.addAll(asList(first, second)); 
-//        
-//        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
-//        
-//        assertEquals(1, reporterStub.wantedCount);
-//        assertEquals(2, reporterStub.actualCount);
-//        assertSame(second.getStackTrace(), reporterStub.firstUndesired);
-//        assertEquals(wanted.toString(), reporterStub.wanted);
-//    }
-//    
-//    @Test
-//    public void shouldMarkInvocationsAsVerified() throws Exception {
-//        Invocation invocation = new InvocationBuilder().toInvocation();
-//        finderStub.allMatchingUnverifiedChunksToReturn.add(invocation);
-//        assertFalse(invocation.isVerifiedInOrder());
-//        
-//        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
-//        
-//        assertTrue(invocation.isVerifiedInOrder());
-//    }
-
-//    class ReporterStub extends Reporter {
-//        private HasStackTrace lastActualStackTrace;
-//        private int actualCount;
-//        private int wantedCount;
-//        private HasStackTrace firstUndesired;
-//        private String wanted;
-//
-//        @Override public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace lastActualStackTrace) {
-//            this.wantedCount = wantedCount;
-//            this.actualCount = actualCount;
-//            this.wanted = wanted;
-//            this.lastActualStackTrace = lastActualStackTrace;
-//        }
-//        
-//        @Override public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {
-//            this.wantedCount = wantedCount;
-//            this.actualCount = actualCount;
-//            this.wanted = wanted;
-//            this.firstUndesired = firstUndesired;
-//        }
-//    }
+    @Test
+    public void shouldReportTooLittleInvocations() throws Exception {
+        Invocation first = new InvocationBuilder().toInvocation();
+        Invocation second = new InvocationBuilder().toInvocation();
+        finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
+        
+        try {
+            verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e, messageContains("Wanted 4 times but was 2"));
+        };
+    }
+    
+    @Test
+    public void shouldReportTooManyInvocations() throws Exception {
+        Invocation first = new InvocationBuilder().toInvocation();
+        Invocation second = new InvocationBuilder().toInvocation();
+        finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
+        
+        try {
+            verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
+            fail();
+        } catch (VerifcationInOrderFailed e) {
+            assertThat(e, messageContains("Wanted 1 time but was 2"));
+        };
+    }
+    
+    @Test
+    public void shouldMarkAsVerifiedInOrder() throws Exception {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        assertFalse(invocation.isVerifiedInOrder());
+        finderStub.validMatchingChunkToReturn.addAll(asList(invocation)); 
+        
+        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
+        
+        assertTrue(invocation.isVerifiedInOrder());
+    }
 }
