@@ -51,7 +51,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public Invocation findPreviousInOrder(List<Invocation> invocations, InvocationMatcher wanted) {
+    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
         return previousInOrderToReturn;
     }
 }

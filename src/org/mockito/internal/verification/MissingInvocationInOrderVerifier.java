@@ -37,7 +37,7 @@ public class MissingInvocationInOrderVerifier implements Verifier {
             return;
         }
         
-        Invocation previousInOrder = finder.findPreviousInOrder(invocations, wanted);
+        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations);
         if (previousInOrder == null) {
             reporter.wantedButNotInvoked(wanted);
         } else {
