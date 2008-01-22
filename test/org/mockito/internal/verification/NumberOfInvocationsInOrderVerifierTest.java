@@ -47,14 +47,14 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
     
     @Test
     public void shouldPassIfWantedIsZeroAndFirstUnverifiedChunkIsEmpty() throws Exception {
-        assertTrue(finderStub.firstUnverifiedChunkToReturn.isEmpty());
+        assertTrue(finderStub.allMatchingUnverifiedChunksToReturn.isEmpty());
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).inOrder());
     }
     
     @Test
     public void shouldPassIfWantedIsZeroAndFirstUnverifiedChunkDoesNotMatch() throws Exception {
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        finderStub.firstUnverifiedChunkToReturn.add(differentMethod); 
+        finderStub.allMatchingUnverifiedChunksToReturn.add(differentMethod); 
         
         assertFalse(wanted.matches(differentMethod));
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).inOrder());
@@ -64,7 +64,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
     public void shouldReportTooLittleInvocations() throws Exception {
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
-        finderStub.firstUnverifiedChunkToReturn.addAll(asList(first, second)); 
+        finderStub.allMatchingUnverifiedChunksToReturn.addAll(asList(first, second)); 
         
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
         
@@ -78,7 +78,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
     public void shouldReportTooManyInvocations() throws Exception {
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
-        finderStub.firstUnverifiedChunkToReturn.addAll(asList(first, second)); 
+        finderStub.allMatchingUnverifiedChunksToReturn.addAll(asList(first, second)); 
         
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
         
@@ -91,7 +91,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
     @Test
     public void shouldMarkInvocationsAsVerified() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
-        finderStub.firstUnverifiedChunkToReturn.add(invocation);
+        finderStub.allMatchingUnverifiedChunksToReturn.add(invocation);
         assertFalse(invocation.isVerifiedInOrder());
         
         verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());

@@ -33,13 +33,15 @@ public class MissingInvocationInOrderVerifier implements Verifier {
         
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
-        if (chunk.size() == 0) {
-            Invocation previousInOrder = finder.findPreviousInOrder(invocations, wanted);
-            if (previousInOrder == null) {
-                reporter.wantedButNotInvokedInOrder(wanted);
-            } else {
-                reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getStackTrace());
-            }
-        }         
+        if (!chunk.isEmpty()) {
+            return;
+        }
+        
+        Invocation previousInOrder = finder.findPreviousInOrder(invocations, wanted);
+        if (previousInOrder == null) {
+            reporter.wantedButNotInvoked(wanted);
+        } else {
+            reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getStackTrace());
+        }
     }
 }

@@ -18,7 +18,8 @@ class InvocationsFinderStub extends InvocationsFinder {
     final List<Invocation> actualToReturn = new LinkedList<Invocation>();
     List<Invocation> invocations;
     Invocation firstUnverifiedToReturn;
-    final List<Invocation> firstUnverifiedChunkToReturn = new LinkedList<Invocation>();
+    final List<Invocation> allMatchingUnverifiedChunksToReturn = new LinkedList<Invocation>();
+    Invocation previousInOrderToReturn;
 
     @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
             VerificationModeImpl mode) {
@@ -36,7 +37,13 @@ class InvocationsFinderStub extends InvocationsFinder {
         return firstUnverifiedToReturn;
     }
     
-    @Override public List<Invocation> findFirstUnverifiedChunk(List<Invocation> invocations, InvocationMatcher wanted) {
-        return firstUnverifiedChunkToReturn;
+    @Override
+    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
+        return allMatchingUnverifiedChunksToReturn;
+    }
+    
+    @Override
+    public Invocation findPreviousInOrder(List<Invocation> invocations, InvocationMatcher wanted) {
+        return previousInOrderToReturn;
     }
 }

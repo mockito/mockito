@@ -18,26 +18,6 @@ public class InvocationsFinder {
         return ListUtil.filter(invocations, new RemoveNotMatching(wanted));
     }
 
-    /**
-     * fills first chunk based on wanted.matches()
-     */
-    public List<Invocation> findFirstUnverifiedChunk(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> unverified = removeVerifiedInOrder(invocations);
-        List<Invocation> firstChunk = new LinkedList<Invocation>();
-        for (Invocation invocation : unverified) {
-            if (wanted.matches(invocation)) {
-                firstChunk.add(invocation);
-            } else if (firstChunk.isEmpty()) {
-                firstChunk.add(invocation);
-                break;
-            } else {
-                break;
-            }
-        }
-        return firstChunk;
-    }
-    
-
     public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> allChunks = new LinkedList<Invocation>();

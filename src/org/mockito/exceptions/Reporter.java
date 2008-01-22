@@ -132,33 +132,26 @@ public class Reporter {
             ), cause);
     }
 
-    public void wantedButNotInvoked(String wanted) {
+    public void wantedButNotInvoked(Object wanted) {
         throw new WantedButNotInvoked(join(
                     "Wanted but not invoked:",
-                    wanted
+                    wanted.toString()
         ));
     }
     
     //TODO do something about those objects (Printable object)
-    public void wantedButNotInvokedInOrder(Object wanted, Object previous, HasStackTrace previousInOrder) {
+    //TODO previous and previousStackTrace should be the same object
+    public void wantedButNotInvokedInOrder(Object wanted, Object previous, HasStackTrace previousStackTrace) {
         WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
                         "Wanted anywhere AFTER following interaction:",
                         previous.toString()));
-        cause.setStackTrace(previousInOrder.getStackTrace());
+        cause.setStackTrace(previousStackTrace.getStackTrace());
         
         throw new VerifcationInOrderFailed(join(
                     "Verification in order failed",
                     "Wanted but not invoked:",
                     wanted.toString()
         ), cause);
-    }
-    
-    public void wantedButNotInvokedInOrder(Object wanted) {
-        throw new VerifcationInOrderFailed(join(
-                    "Verification in order failed",
-                    "Wanted but not invoked:",
-                    wanted.toString()
-        ));
     }
 
     public void tooManyActualInvocations(int wantedCount, int actualCount, String wanted, HasStackTrace firstUndesired) {

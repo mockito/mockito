@@ -17,6 +17,7 @@ import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends RequiresValidState {
@@ -77,10 +78,8 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (WantedButNotInvoked e) {
             String expected = 
-                    "\n" +
-                    "Verification in order failed" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +

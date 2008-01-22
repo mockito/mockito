@@ -91,10 +91,10 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
     }
     
     class ReporterStub extends Reporter {
-        private String wanted;
+        private Object wanted;
         private String actual;
         private HasStackTrace actualInvocationStackTrace;
-        @Override public void wantedButNotInvoked(String wanted) {
+        @Override public void wantedButNotInvoked(Object wanted) {
             this.wanted = wanted;
         }
         @Override public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {

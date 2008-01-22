@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -59,7 +60,7 @@ public class VerificationInOrderTest extends RequiresValidState {
         try {
             inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
-        } catch (VerifcationInOrderFailed e) {
+        } catch (WantedButNotInvoked e) {
             assertThat(e, messageContains("IMethods.differentMethod()"));
         }
     }

@@ -14,6 +14,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 /**
@@ -181,7 +182,7 @@ public class RelaxedVerificationInOrderTest extends RequiresValidState {
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test(expected=WantedButNotInvoked.class)
     public void shouldFailOnWrongMethodCalledOnMockTwo() {
         inOrder.verify(mockTwo, atLeastOnce()).differentMethod();
     }

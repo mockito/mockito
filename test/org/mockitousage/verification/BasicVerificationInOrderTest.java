@@ -13,6 +13,7 @@ import org.mockito.RequiresValidState;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerifcationInOrderFailed;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
@@ -148,12 +149,12 @@ public class BasicVerificationInOrderTest extends RequiresValidState {
     
     /* ------------- */
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test(expected=WantedButNotInvoked.class)
     public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
         inOrder.verify(mockOne).simpleMethod(100);
     }
     
-    @Test(expected=VerifcationInOrderFailed.class)
+    @Test(expected=WantedButNotInvoked.class)
     public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
         inOrder.verify(mockOne).oneArg(true);
     }
