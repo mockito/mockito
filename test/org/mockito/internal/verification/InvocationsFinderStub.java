@@ -15,11 +15,24 @@ import org.mockito.internal.progress.VerificationModeImpl;
 class InvocationsFinderStub extends InvocationsFinder {
     
     Invocation similarToReturn;
-    final List<Invocation> actualToReturn = new LinkedList<Invocation>();
-    List<Invocation> invocations;
     Invocation firstUnverifiedToReturn;
-    final List<Invocation> allMatchingUnverifiedChunksToReturn = new LinkedList<Invocation>();
     Invocation previousInOrderToReturn;
+    
+    final List<Invocation> actualToReturn = new LinkedList<Invocation>();
+    final List<Invocation> validMatchingChunkToReturn = new LinkedList<Invocation>();
+    final List<Invocation> allMatchingUnverifiedChunksToReturn = new LinkedList<Invocation>();
+    
+    List<Invocation> invocations;
+    
+    @Override
+    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
+        return allMatchingUnverifiedChunksToReturn;
+    }
+    
+    @Override
+    public List<Invocation> findValidMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        return validMatchingChunkToReturn;
+    }
 
     @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
             VerificationModeImpl mode) {
@@ -35,11 +48,6 @@ class InvocationsFinderStub extends InvocationsFinder {
     @Override public Invocation findFirstUnverified(List<Invocation> invocations) {
         this.invocations = invocations;
         return firstUnverifiedToReturn;
-    }
-    
-    @Override
-    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
-        return allMatchingUnverifiedChunksToReturn;
     }
     
     @Override

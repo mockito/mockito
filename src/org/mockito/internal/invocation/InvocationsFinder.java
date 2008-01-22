@@ -30,7 +30,7 @@ public class InvocationsFinder {
         return allChunks;
     }
 
-    public List<Invocation> findFirstMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted) {
+    public List<Invocation> findValidMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = new LinkedList<Invocation>();
         for (Invocation invocation : unverified) {
@@ -40,7 +40,12 @@ public class InvocationsFinder {
                 break;
             }
         }
-        return firstChunk;
+        
+        if (mode.atLeastOnceMode() || !mode.matchesActualCount(firstChunk.size())) {
+            return this.findAllMatchingUnverifiedChunks(invocations, wanted);
+        } else {
+            return firstChunk;
+        }
     }
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
