@@ -14,6 +14,7 @@ import org.mockito.internal.progress.VerificationModeImpl;
 
 public class VerifyingRecorder {
 
+    //TODO don't like LL coz it's too slow :)
     private LinkedList<Invocation> registeredInvocations = new LinkedList<Invocation>();
 
     private final List<? extends Verifier> verifiers;
