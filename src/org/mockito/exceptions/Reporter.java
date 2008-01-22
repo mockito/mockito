@@ -103,7 +103,7 @@ public class Reporter {
     public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {
         WantedDiffersFromActual cause1 = new WantedDiffersFromActual(join(
                 "Actual invocation:",
-                actual
+                actual.toString()
             ));
         
         cause1.setStackTrace(actualInvocationStackTrace.getStackTrace());
@@ -112,7 +112,7 @@ public class Reporter {
         throw new InvocationDiffersFromActual(join(
                 "Invocation differs from actual",
                 "Wanted invocation:",
-                wanted
+                wanted.toString()
             ), cause);
     }
     
@@ -132,7 +132,7 @@ public class Reporter {
             ), cause);
     }
 
-    public void wantedButNotInvoked(Object wanted) {
+    public void wantedButNotInvoked(Printable wanted) {
         throw new WantedButNotInvoked(join(
                     "Wanted but not invoked:",
                     wanted.toString()
@@ -141,7 +141,7 @@ public class Reporter {
     
     //TODO do something about those objects (Printable object)
     //TODO previous and previousStackTrace should be the same object
-    public void wantedButNotInvokedInOrder(Object wanted, Object previous, HasStackTrace previousStackTrace) {
+    public void wantedButNotInvokedInOrder(Printable wanted, Object previous, HasStackTrace previousStackTrace) {
         WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
                         "Wanted anywhere AFTER following interaction:",
                         previous.toString()));

@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
-import org.mockito.exceptions.verification.VerifcationInOrderFailed;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
@@ -71,13 +70,7 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
         setMockWithDowncast(sub);
         say("Hello");
         InOrder inOrder = inOrder(mock);
-        try {
-            inOrder.verify(sub).say("Hello");
-            fail();
-        } catch (VerifcationInOrderFailed e) {
-            assertThat(e, messageContains("Sub.say(class java.lang.String)"));
-            assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
-        }
+        inOrder.verify(sub).say("Hello");
     }
 
     @Test

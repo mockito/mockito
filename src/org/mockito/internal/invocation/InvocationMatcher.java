@@ -8,10 +8,11 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.mockito.exceptions.Printable;
 import org.mockito.internal.matchers.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher {
+public class InvocationMatcher implements Printable {
 
     private final Invocation invocation;
     private final List<ArgumentMatcher> matchers;

@@ -45,7 +45,7 @@ public class MissingInvocationVerifier implements Verifier {
             InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
             reporter.wantedDiffersFromActual(printer.printWanted(), printer.printActual(), similar.getStackTrace());
         } else {
-            reporter.wantedButNotInvoked(wanted.toString());
+            reporter.wantedButNotInvoked(wanted);
         }
     }
 }

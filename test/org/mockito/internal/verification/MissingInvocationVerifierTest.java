@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.RequiresValidState;
+import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -74,7 +75,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
-        assertEquals(wanted.toString(), reporterStub.wanted);
+        assertEquals(wanted, reporterStub.wanted);
     }
     
     @Test
@@ -94,7 +95,7 @@ public class MissingInvocationVerifierTest extends RequiresValidState {
         private Object wanted;
         private String actual;
         private HasStackTrace actualInvocationStackTrace;
-        @Override public void wantedButNotInvoked(Object wanted) {
+        @Override public void wantedButNotInvoked(Printable wanted) {
             this.wanted = wanted;
         }
         @Override public void wantedDiffersFromActual(String wanted, String actual, HasStackTrace actualInvocationStackTrace) {

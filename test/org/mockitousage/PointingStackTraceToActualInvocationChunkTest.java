@@ -16,7 +16,6 @@ import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 
-//TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
 public class PointingStackTraceToActualInvocationChunkTest extends RequiresValidState {
     
     private IMethods mock;

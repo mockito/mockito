@@ -68,7 +68,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
             fail();
         } catch (VerifcationInOrderFailed e) {
             assertThat(e, messageContains("Wanted 4 times but was 2"));
-        };
+        }
     }
     
     @Test
@@ -82,7 +82,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
             fail();
         } catch (VerifcationInOrderFailed e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
-        };
+        }
     }
     
     @Test
