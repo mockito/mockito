@@ -28,13 +28,14 @@ paths.each do |path|
   File.open(path, 'r+') do |f|   
     out = ''
     f.each { |line| out << line }
-  
+
     current_hdr = Regexp.new('.*\*/.*package org\.', Regexp::MULTILINE)
-  
-    if (out =~ current_hdr)     
-      out.gsub!(current_hdr, header + "package org.")
-    else 
+    
+    if (out !~ current_hdr)     
       out = header + out
+    else
+      first_hdr = Regexp.new('.*?\*/.*?[\n\r]+?', Regexp::MULTILINE)
+      out.sub!(first_hdr, header)
     end
   
     f.pos = 0           

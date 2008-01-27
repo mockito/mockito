@@ -1,0 +1,8 @@
+Mockito license - MIT.
+
+Libraries used:
+
+EasyMock - MIT license.
+Cglib - Apache License 2.0.
+Objenesis - MIT license.
+Apache Commons Lang - Apache License 2.0.

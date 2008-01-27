@@ -15,6 +15,7 @@ import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.matchers.Null;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.LastArguments;
 import org.mockito.internal.progress.ReturnValues;
 
@@ -317,6 +318,24 @@ public class Matchers {
         return reportMatcher(new Equals(value)).<T>returnNull();
     }
 
+    /**
+     * Object argument that is reflection-equal to the given value.
+     * <p>
+     * This matcher can be used when equals() is not implemented on compared objects.
+     * Matcher uses java reflection API to compare fields of wanted and actual object.
+     * <p>
+     * Works similarly to EqualsBuilder.reflectionEquals(this, other) from apache commons library.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param value
+     *            the given value.
+     * @return <code>null</code>.
+     */
+    public static <T> T refEq(T value) {
+        return reportMatcher(new ReflectionEquals(value)).<T>returnNull();
+    }
+    
     /**
      * Object argument that is the same as the given value.
      * <p>
