@@ -176,7 +176,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   firstMock.add("should be called first");
  *   secondMock.add("should be called second");
  *   
- *   //create inOrder object passing only mocks that need to be verified in order
+ *   //create inOrder object passing any mocks that need to be verified in order
  *   InOrder inOrder = inOrder(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
@@ -184,12 +184,6 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   inOrder.verify(secondMock).add("should be called second");
  * </pre>
  *
- * Verification in order is strict: you cannot leave out interactions from the middle - 
- * you have to verify interactions one-by-one.
- * <p>
- * It's a good pattern not to create InOrder object with all mocks.
- * Pass to the inOrder method only those mocks that have interactions required to be verified in order.
- *  
  * <h3>Making sure no interactions happened on mock</h3>
  * 
  * <pre>
