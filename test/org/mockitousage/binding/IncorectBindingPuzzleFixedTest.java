@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.RequiresValidState;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockitousage.IMethods;
 
 public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
@@ -65,12 +67,23 @@ public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
 
     @Ignore("that's a very edge case, don't care for it now")
     @Test
-    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetectedByVerificationInOrder() throws Exception {
+    public void shouldPrintArgumentTypeWhenOverloadingPuzzleDetectedByVerificationInOrder() throws Exception {
+        IMethods mockTwo = mock(IMethods.class);
+        mockTwo.simpleMethod();
+        
         Sub sub = mock(Sub.class);
         setMockWithDowncast(sub);
         say("Hello");
-        InOrder inOrder = inOrder(mock);
-        inOrder.verify(sub).say("Hello");
+        
+        InOrder inOrder = inOrder(mock, mockTwo);
+        inOrder.verify(mockTwo).simpleMethod();
+        
+        try {
+            inOrder.verify(sub).say("Hello");
+            fail();
+        } catch (VerifcationInOrderFailure e) {
+            assertThat(e, messageContains("Sub.say(class java.lang.String)"));
+        }
     }
 
     @Test

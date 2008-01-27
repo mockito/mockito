@@ -9,6 +9,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -76,12 +77,31 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends Requires
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowWantedOnly() {
         try {
-            inOrder.verify(one).simpleMethod(999);
+            inOrder.verify(one).differentMethod();
             fail();
         } catch (WantedButNotInvoked e) {
             String expected = 
                     "\n" +
                     "Wanted but not invoked:" +
+                    "\n" +
+                    "IMethods.differentMethod()"; 
+            
+            assertEquals(expected, e.getMessage());
+            
+            assertEquals(null, e.getCause());
+        }
+    } 
+    
+    @Ignore("TODO")
+    @Test
+    public void shouldPrintVerificationInOrderErrorAndShowWantedAndActual() {
+        try {
+            inOrder.verify(one).simpleMethod(999);
+            fail();
+        } catch (WantedButNotInvoked e) {
+            String expected = 
+                    "\n" +
+                    "Invocation differs from actual:" +
                     "\n" +
                     "IMethods.simpleMethod(999)"; 
             
