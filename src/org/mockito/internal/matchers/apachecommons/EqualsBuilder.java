@@ -90,7 +90,7 @@ import java.util.List;
  * @version $Id: EqualsBuilder.java 611543 2008-01-13 07:00:22Z bayard $
  */
 @SuppressWarnings("unchecked")
-public class EqualsBuilder {
+class EqualsBuilder {
     
     /**
      * If the fields tested are equals.
