@@ -16,7 +16,8 @@ import org.mockito.exceptions.misusing.NotAMockException;
 public class MockitoTest extends RequiresValidState {
 
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
-    // and create a test case that I can manually fix and run and make sure examples are valid
+    // and create a test case that I can manually fix and run and make sure examples are valid.
+    // Or better. Write examples as unit tests, annotate them in the way so that javadoc can be generated out of it.
     
     //TODO check if performace can be tweaked (e.g: LL -> AL)
     
