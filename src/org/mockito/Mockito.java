@@ -183,6 +183,11 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   inOrder.verify(firstMock).add("should be called first");
  *   inOrder.verify(secondMock).add("should be called second");
  * </pre>
+ * 
+ * Verification in order is flexible - you don't have to verify all interactions one-by-one
+ * but only those that you are interested in testing in order. 
+ * <p>
+ * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
  *
  * <h3>Making sure no interactions happened on mock</h3>
  * 
@@ -395,6 +400,11 @@ public class Mockito extends Matchers {
      *   inOrder.verify(firstMock).add("should be called first");
      *   inOrder.verify(secondMock).add("should be called second");
      * </pre>
+     * 
+     * Verification in order is flexible - you don't have to verify all interactions one-by-one
+     * but only those that you are interested in testing in order.
+     * <p>
+     * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
      *
      * See examples in javadoc for {@link Mockito}
      * 
