@@ -102,6 +102,10 @@
   <target name="jar.all" depends="test">
     <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath" />
     <jarjar jarfile="${target.dir}/${jar.all}">
+        <manifest>
+          <attribute name="Built-By" value="${user.name}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+        </manifest>
       <fileset dir="." file="license.txt" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
@@ -116,6 +120,10 @@
 
   <target name="jar" depends="jar.all">
     <jar jarfile="${target.dir}/${jar.core}">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+      </manifest>
       <fileset dir="." file="license.txt" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
