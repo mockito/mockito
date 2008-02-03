@@ -27,7 +27,7 @@ public interface OngoingStubbing<T> {
      * 
      * See examples in javadoc for {@link Mockito#stub}
      * 
-     * @param stubbed return value
+     * @param value return value
      */
     void toReturn(T value);
 
