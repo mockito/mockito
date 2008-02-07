@@ -11,17 +11,6 @@ public class InvalidUseOfMatchersException extends MockitoException {
     private static final long serialVersionUID = 1L;
 
     public InvalidUseOfMatchersException(String message) {
-        super(  "\n" +
-                message +
-                "\n" +
-                "Invalid use of matchers - see javadoc for Matchers class." +
-                "\n" +
-                "Typically this exception occurs when matchers are combined with raw values:" +
-                "\n" +
-                "    verify(mock).someMethod(anyObject(), \"raw value\");" +
-                "\n" +
-                "When using matchers, all arguments have to be provided by matchers, eg:" +
-                "\n" +
-                "    verify(mock).someMethod(anyObject(), eq(\"raw value\"));");
+        super(message);
     }
 }

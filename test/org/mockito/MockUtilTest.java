@@ -4,8 +4,7 @@
  */
 package org.mockito;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.internal.MockUtil.*;
 
 import java.util.ArrayList;
@@ -46,13 +45,9 @@ public class MockUtilTest extends TestBase {
         getMockHandler(null);
     }
     
-    @Test (expected=NotAMockException.class)
+    @Test
     public void shouldValidateMock() {
-        validateMock("");
-    }
-    
-    @Test (expected=MockitoException.class)
-    public void shouldScreamWhenNullPassedToValidation() {
-        validateMock(null);
+        assertFalse(isMock("i mock a mock"));
+        assertTrue(isMock(Mockito.mock(List.class)));
     }
 }

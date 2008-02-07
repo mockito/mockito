@@ -7,7 +7,7 @@ package org.mockito.internal.invocation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.progress.LastArguments;
@@ -27,11 +27,10 @@ public class MatchersBinder {
 
     private void validateMatchers(Invocation invocation, List<ArgumentMatcher> matchers) {
         if (matchers != null) {
-            if (matchers.size() != invocation.getArguments().length) {
-                throw new InvalidUseOfMatchersException(
-                        invocation.getArguments().length
-                        + " matchers expected, " + matchers.size()
-                        + " recorded.");
+            int recordedMatchersSize = matchers.size();
+            int expectedMatchersSize = invocation.getArguments().length;
+            if (expectedMatchersSize != recordedMatchersSize) {
+                new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize);
             }
         }
     }

@@ -377,7 +377,7 @@ public class Mockito extends Matchers {
 
     private static void assertMocksNotEmpty(Object[] mocks) {
         if (mocks == null || mocks.length == 0) {
-            REPORTER.mocksHaveToBePassedAsArguments();
+            REPORTER.mocksHaveToBePassedToVerifyNoMoreInteractions();
         }
     }
 
@@ -420,11 +420,13 @@ public class Mockito extends Matchers {
      * @return InOrder object to be used to verify in order
      */
     public static InOrder inOrder(Object... mocks) {
-        if (mocks.length == 0) {
+        if (mocks == null || mocks.length == 0) {
             REPORTER.mocksHaveToBePassedWhenCreatingInOrder();
         }
         for (Object mock : mocks) {
-            MockUtil.validateMock(mock);
+            if (!MockUtil.isMock(mock)) {
+                REPORTER.notAMockPassedWhenCreatingInOrder();
+            }
         }
         InOrder inOrderVerifier = new InOrderVerifier(Arrays.asList(mocks));
         return inOrderVerifier;

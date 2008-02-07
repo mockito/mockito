@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.InOrder;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -246,5 +247,11 @@ public class BasicVerificationInOrderTest extends TestBase {
     @Test(expected=NoInteractionsWanted.class)
     public void shouldFailOnVerifyZeroInteractions() {
         verifyZeroInteractions(mockOne);
+    }
+    
+    @SuppressWarnings("all")
+    @Test(expected=MockitoException.class)
+    public void shouldScreamWhenNullPassed() {
+        inOrder(null);
     }
 }

@@ -21,6 +21,34 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     
     @Mock private IMethods mock;
 
+    @SuppressWarnings("all")
+    @Ignore
+    @Test
+    public void tryDescriptiveMessagesOnMisuse() {
+        verifyNoMoreInteractions();
+        verifyNoMoreInteractions(null);
+        verifyNoMoreInteractions("");
+        verifyZeroInteractions();
+        verifyZeroInteractions(null);
+        verifyZeroInteractions("");
+
+        inOrder();
+        inOrder(null);
+        inOrder("test");
+        InOrder inOrder = inOrder(mock(List.class));
+        inOrder.verify(mock).simpleMethod();
+
+        verify(mock.differentMethod());
+        verify(null);
+
+        verify(mock).varargs("test", anyString());
+
+        stub("x").toReturn("x");
+
+        stub(mock.simpleMethod());
+        stub(mock.differentMethod()).toReturn("");
+    } 
+    
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerify() {
         verify(mock.booleanReturningMethod(2));
@@ -46,25 +74,4 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     public void shouldScreamWhenNullPassedToVerifyNoMoreInteractions() {
         verifyNoMoreInteractions(null);
     }
-    
-    @SuppressWarnings("all")
-    @Ignore
-    @Test
-    public void shouldExceptionMessageProvideUsefulInfo() {
-        verifyNoMoreInteractions(null);
-        verifyNoMoreInteractions("");
-        verifyZeroInteractions(null);
-        verifyZeroInteractions("");
-        
-        inOrder(null);
-        inOrder("test");
-        InOrder inOrder = inOrder(mock(List.class));
-        inOrder.verify(mock).simpleMethod();
-        
-        verify(mock.differentMethod());
-        verify(null);
-        
-        verify(mock).varargs("test", anyString());
-        //TODO replace 'Not a mock' with arg that ... or something ???
-    } 
 }
