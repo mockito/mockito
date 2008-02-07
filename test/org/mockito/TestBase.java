@@ -10,10 +10,11 @@ import org.junit.Before;
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
-public class RequiresValidState {
+public class TestBase {
 
     @Before
-    public void requiresValidState() {
+    public void init() {
         Mockito.MOCKING_PROGRESS.validateState();
+        MockitoAnnotations.initMocks(this);
     }
 }

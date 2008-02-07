@@ -20,10 +20,10 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
 @SuppressWarnings("unchecked")
-public class VerificationOnMultipleMocksUsingMatchersTest extends RequiresValidState {
+public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
 
     @Test
     public void shouldVerifyUsingMatchers() throws Exception {

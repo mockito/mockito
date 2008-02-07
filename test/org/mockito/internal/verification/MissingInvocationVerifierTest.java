@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
@@ -21,7 +21,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeImpl;
 
-public class MissingInvocationVerifierTest extends RequiresValidState {
+public class MissingInvocationVerifierTest extends TestBase {
 
     private MissingInvocationVerifier verifier;
     

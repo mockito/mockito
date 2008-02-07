@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
-public class UsingVarargsTest extends RequiresValidState {
+public class UsingVarargsTest extends TestBase {
 
     private interface IVarArgs {
         void withStringVarargs(int value, String... s);

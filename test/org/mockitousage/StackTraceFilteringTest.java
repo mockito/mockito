@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.StateResetter;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
@@ -20,7 +20,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
-public class StackTraceFilteringTest extends RequiresValidState {
+public class StackTraceFilteringTest extends TestBase {
     
     private IMethods mock;
 

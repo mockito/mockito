@@ -13,6 +13,7 @@ import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
@@ -41,25 +42,26 @@ public class Reporter {
 
     public void mocksHaveToBePassedAsArguments() {
         throw new MockitoException(join(
-                "Method requires arguments.",
+                "Method requires argument(s).",
                 "Pass mocks that should be verified, e.g:",
-                "verifyNoMoreInteractions(mockOne, mockTwo);"
+                "  verifyNoMoreInteractions(mockOne, mockTwo);",
+                "  verifyZeroInteractions(mockOne, mockTwo);"
                 ));
     }
 
     public void inOrderRequiresFamiliarMock() {
         throw new MockitoException(join(
                 "InOrder can only verify mocks that were passed in during creation of InOrder. E.g:",
-                "InOrder inOrder = inOrder(mockOne);",
-                "inOrder.verify(mockOne).doStuff();"
+                "  InOrder inOrder = inOrder(mockOne);",
+                "  inOrder.verify(mockOne).doStuff();"
                 ));
     }
 
     public void mocksHaveToBePassedWhenCreatingInOrder() {
         throw new MockitoException(join(
-                "Method requires arguments.",
+                "Method requires argument(s).",
                 "Pass mocks that require verification in order, e.g:",
-                "InOrder inOrder = inOrder(mockOne, mockTwo);"
+                "  InOrder inOrder = inOrder(mockOne, mockTwo);"
                 ));
     }
 
@@ -79,24 +81,27 @@ public class Reporter {
     
     public void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
-                "Unifinished stubbing detected, e.g. toReturn() is missing",
-                "Examples of proper stubbing:",
-                "stub(mock.isOk()).toReturn(true);",
-                "stub(mock.isOk()).toThrows(exception);",
-                "stubVoid(mock).toThrow(exception).on().someMethod();"
+                "Unifinished stubbing detected, e.g. toReturn() may be missing",
+                "Examples of correct stubbing:",
+                "  stub(mock.isOk()).toReturn(true);",
+                "  stub(mock.isOk()).toThrow(exception);",
+                "  stubVoid(mock).toThrow(exception).on().someMethod();"
         ));
     }
 
     public void missingMethodInvocation() {
         throw new MissingMethodInvocationException(join(
-                "stub() requires an argument which has to be a proper method call on a mock object"
+                "stub() requires an argument which has to be a method call on a mock",
+                "For example:",
+                "  stub(mock.getArticles()).toReturn(articles);"
         ));
     }
 
     public void unfinishedVerificationException() {
         throw new UnfinishedVerificationException(join(
                 "Previous verify(mock) doesn't have a method call.",
-                "Should be something like that: verify(mock).doSomething()"
+                "Example of correct verification:",
+                "  verify(mock).doSomething()"
         ));
     }
 
@@ -204,6 +209,26 @@ public class Reporter {
         throw new MockitoException(join(
                 "Mockito cannot mock final classes like: ",
                 clazz.toString()
+        ));
+    }
+
+    public void notAMockPassedToVerify() {
+        throw new NotAMockException(join(
+                "Not a mock passed to verify() method",
+                "Examples of correct verifications:",
+                "  verify(mock).someMethod();",
+                "  verify(mock, times(10)).someMethod();",
+                "  verify(mock, atLeastOnce()).someMethod();"
+                
+        ));
+    }
+
+    public void notAMockPassedToVerifyNoMoreInteractions() {
+        throw new NotAMockException(join(
+            "Not a mock passed to method",
+            "Examples of correct verifications:",
+            "  verifyNoMoreInteractions(mockOne, mockTwo);",
+            "  verifyZeroInteractions(mockOne, mockTwo);"
         ));
     }
 }

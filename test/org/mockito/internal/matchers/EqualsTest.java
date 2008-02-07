@@ -9,10 +9,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
 
-public class EqualsTest extends RequiresValidState {
+public class EqualsTest extends TestBase {
     
     @Test
     public void shouldBeEqual() {

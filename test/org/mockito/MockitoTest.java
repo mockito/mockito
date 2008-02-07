@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 
 @SuppressWarnings("unchecked")
-public class MockitoTest extends RequiresValidState {
+public class MockitoTest extends TestBase {
 
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
     // and create a test case that I can manually fix and run and make sure examples are valid.

@@ -4,22 +4,22 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.eq;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
 import org.mockito.StateResetter;
+import org.mockito.TestBase;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class InvalidUseOfMatchersTest extends RequiresValidState {
+public class InvalidUseOfMatchersTest extends TestBase {
 
     private IMethods mock;
 
@@ -61,36 +61,21 @@ public class InvalidUseOfMatchersTest extends RequiresValidState {
             mock.simpleMethod(AdditionalMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertEquals(
-                    "\n" +
-                    "No matchers found for Not(?)." +
-                    "\n" +
-                    "See javadoc for Matchers class"
-                    , e.getMessage());
+            assertThat(e, messageContains("No matchers found for Not(?)."));
         }
 
         try {
             mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertEquals(
-                    "\n" +
-                    "2 matchers expected, 1 recorded." +
-                    "\n" +
-                    "See javadoc for Matchers class"
-                    , e.getMessage());
+            assertThat(e, messageContains("2 matchers expected, 1 recorded."));
         }
 
         try {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertEquals(
-                    "\n" +
-                    "3 matchers expected, 1 recorded." +
-                    "\n" +
-                    "See javadoc for Matchers class"
-                    , e.getMessage());
+            assertThat(e, messageContains("3 matchers expected, 1 recorded."));
         }
     }
 }

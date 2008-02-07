@@ -15,10 +15,10 @@ import static org.mockito.internal.progress.VerificationModeImpl.inOrder;
 import static org.mockito.internal.progress.VerificationModeImpl.times;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 
-public class VerificationModeImplTest extends RequiresValidState {
+public class VerificationModeImplTest extends TestBase {
 
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {

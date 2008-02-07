@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
 /**
  * @author <a href="mailto:sdowney@panix.com">Steve Downey</a>
@@ -38,7 +38,7 @@ import org.mockito.RequiresValidState;
  * @author Maarten Coene
  * @version $Id: EqualsBuilderTest.java 611543 2008-01-13 07:00:22Z bayard $
  */
-public class EqualsBuilderTest extends RequiresValidState {
+public class EqualsBuilderTest extends TestBase {
     
     @Test
     public void testname() throws Exception {

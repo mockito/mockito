@@ -7,6 +7,7 @@ package org.mockito;
 import java.util.Arrays;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockUtil;
 import org.mockito.internal.progress.MockingProgress;
@@ -308,7 +309,9 @@ public class Mockito extends Matchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock, VerificationMode mode) {
-        MockUtil.validateMock(mock);
+        if (!MockUtil.isMock(mock)) {
+            REPORTER.notAMockPassedToVerify();
+        }
         MOCKING_PROGRESS.verificationStarted(mode);
         return mock;
     }
@@ -347,7 +350,11 @@ public class Mockito extends Matchers {
         assertMocksNotEmpty(mocks);
         MOCKING_PROGRESS.validateState();
         for (Object mock : mocks) {
-            MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+            try {
+                MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+            } catch (NotAMockException e) {
+                REPORTER.notAMockPassedToVerifyNoMoreInteractions();
+            }
         }
     }
 
@@ -369,7 +376,7 @@ public class Mockito extends Matchers {
     }
 
     private static void assertMocksNotEmpty(Object[] mocks) {
-        if (mocks.length == 0) {
+        if (mocks == null || mocks.length == 0) {
             REPORTER.mocksHaveToBePassedAsArguments();
         }
     }

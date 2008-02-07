@@ -12,13 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.NotNull;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcherTest extends RequiresValidState {
+public class InvocationMatcherTest extends TestBase {
 
     @Test(expected=IllegalArgumentException.class)
     public void shouldScreamWhenMatchersNull() throws Exception {

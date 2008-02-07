@@ -16,13 +16,13 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 
 @SuppressWarnings("unchecked")
-public class MatchersTest extends RequiresValidState {
+public class MatchersTest extends TestBase {
     private IMethods mock;
 
     @Before

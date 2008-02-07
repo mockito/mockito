@@ -5,11 +5,11 @@
 package org.mockito.exceptions;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.internal.invocation.InvocationBuilder;
 
-public class ReporterTest extends RequiresValidState {
+public class ReporterTest extends TestBase {
 
     @Test(expected=TooLittleActualInvocations.class)
     public void shouldLetPassingNullLastActualStackTrace() throws Exception {

@@ -8,11 +8,11 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
 @SuppressWarnings("all")
-public class ReflectionMatchersTest extends RequiresValidState {
+public class ReflectionMatchersTest extends TestBase {
 
     class Parent {
         private int parentField;

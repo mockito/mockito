@@ -13,10 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 
-public class PointingStackTraceToActualInvocationInOrderTest extends RequiresValidState {
+public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
     
     private IMethods mock;
     private IMethods mockTwo;

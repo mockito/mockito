@@ -12,13 +12,13 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationUsingMatchersTest extends RequiresValidState {
+public class VerificationUsingMatchersTest extends TestBase {
     private IMethods mock;
 
     @Before

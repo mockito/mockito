@@ -11,12 +11,12 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 
-public class PointingStackTraceToActualInvocationChunkTest extends RequiresValidState {
+public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
     
     private IMethods mock;
     private IMethods mockTwo;

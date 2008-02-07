@@ -13,11 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 
 //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
-public class PointingStackTraceToActualInvocationChunkInOrderTest extends RequiresValidState {
+public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBase {
     
     private IMethods mock;
     private IMethods mockTwo;

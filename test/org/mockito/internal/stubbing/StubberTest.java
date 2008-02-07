@@ -11,14 +11,14 @@ import java.nio.charset.CharacterCodingException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgressImpl;
 
-public class StubberTest extends RequiresValidState{
+public class StubberTest extends TestBase{
 
     private Stubber stubber;
     private MockingProgressImpl state;

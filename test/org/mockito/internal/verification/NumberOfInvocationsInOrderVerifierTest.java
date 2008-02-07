@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
@@ -21,7 +21,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 
-public class NumberOfInvocationsInOrderVerifierTest extends RequiresValidState {
+public class NumberOfInvocationsInOrderVerifierTest extends TestBase {
 
     private NumberOfInvocationsInOrderVerifier verifier;
     private Reporter reporter;

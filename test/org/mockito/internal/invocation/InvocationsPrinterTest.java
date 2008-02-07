@@ -9,9 +9,9 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
-public class InvocationsPrinterTest extends RequiresValidState{
+public class InvocationsPrinterTest extends TestBase{
 
     @Test
     public void shouldPrintWantedAndActualInvocation() throws Exception {

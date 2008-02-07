@@ -12,13 +12,13 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationInOrderTest extends RequiresValidState {
+public class VerificationInOrderTest extends TestBase {
     
     private IMethods mockOne;
     private IMethods mockTwo;

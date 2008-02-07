@@ -16,13 +16,13 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class BasicStubbingTest extends RequiresValidState {
+public class BasicStubbingTest extends TestBase {
 
     private IMethods mock;
 

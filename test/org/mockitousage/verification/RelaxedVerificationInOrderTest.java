@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
@@ -21,7 +21,7 @@ import org.mockitousage.IMethods;
  * ignored since 'relaxed' in order verification is not implemented (too complex to bother, maybe later).
  */
 @SuppressWarnings("unchecked")  
-public class RelaxedVerificationInOrderTest extends RequiresValidState {
+public class RelaxedVerificationInOrderTest extends TestBase {
     
     private IMethods mockOne;
     private IMethods mockTwo;

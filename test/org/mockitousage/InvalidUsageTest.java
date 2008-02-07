@@ -9,14 +9,14 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.StateResetter;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 
 @SuppressWarnings("unchecked")
-public class InvalidUsageTest extends RequiresValidState {
+public class InvalidUsageTest extends TestBase {
 
     private IMethods mock;
     private IMethods mockTwo;

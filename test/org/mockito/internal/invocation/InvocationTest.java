@@ -15,11 +15,11 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class InvocationTest extends RequiresValidState {
+public class InvocationTest extends TestBase {
 
     private Invocation invocation;
 

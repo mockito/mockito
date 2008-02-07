@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -20,7 +20,7 @@ import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
-public class VerifyingRecorderTest extends RequiresValidState {
+public class VerifyingRecorderTest extends TestBase {
     
     private VerifyingRecorder recorder;
     private VerifierStub verifierStub;

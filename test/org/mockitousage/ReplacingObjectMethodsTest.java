@@ -11,9 +11,9 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
-public class ReplacingObjectMethodsTest extends RequiresValidState {
+public class ReplacingObjectMethodsTest extends TestBase {
 
     private interface DummyInterface {}
     private class DummyClass {}

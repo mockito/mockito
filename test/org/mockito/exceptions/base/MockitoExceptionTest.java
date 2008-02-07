@@ -8,9 +8,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
-public class MockitoExceptionTest extends RequiresValidState {
+public class MockitoExceptionTest extends TestBase {
 
     private void throwIt() {
         throw new MockitoException("boom");

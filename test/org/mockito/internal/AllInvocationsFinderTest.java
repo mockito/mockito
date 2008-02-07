@@ -12,11 +12,11 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.internal.invocation.Invocation;
 import org.mockitousage.IMethods;
 
-public class AllInvocationsFinderTest extends RequiresValidState {
+public class AllInvocationsFinderTest extends TestBase {
     
     private AllInvocationsFinder finder;
     private IMethods mockTwo;

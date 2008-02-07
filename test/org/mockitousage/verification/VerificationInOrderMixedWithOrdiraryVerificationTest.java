@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -17,7 +17,7 @@ import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationInOrderMixedWithOrdiraryVerificationTest extends RequiresValidState {
+public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBase {
     
     private IMethods mockOne;
     private IMethods mockTwo;

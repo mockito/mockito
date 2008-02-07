@@ -12,12 +12,12 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
 
-public class IncorectBindingPuzzleFixedTest extends RequiresValidState {
+public class IncorectBindingPuzzleFixedTest extends TestBase {
 
     private Super mock;
 

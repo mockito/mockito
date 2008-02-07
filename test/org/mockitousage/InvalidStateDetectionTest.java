@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.StateResetter;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
@@ -41,7 +41,7 @@ import org.mockito.exceptions.misusing.UnfinishedVerificationException;
  *    -on stubVoid
  */
 @SuppressWarnings("unchecked")
-public class InvalidStateDetectionTest extends RequiresValidState {
+public class InvalidStateDetectionTest extends TestBase {
 
     private IMethods mock;
 

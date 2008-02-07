@@ -12,7 +12,7 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
@@ -22,7 +22,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
-public class NumberOfInvocationsVerifierTest extends RequiresValidState {
+public class NumberOfInvocationsVerifierTest extends TestBase {
 
     private NumberOfInvocationsVerifier verifier;
     private ReporterStub reporterStub;

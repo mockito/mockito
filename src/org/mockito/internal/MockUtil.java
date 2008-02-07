@@ -25,17 +25,17 @@ public class MockUtil {
     
     public static <T> MockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
-            throw new MockitoException("Mock cannot be null");
+            throw new NotAMockException("Argument should be a mock, but is null!");
         }
         
         try {
             if (Enhancer.isEnhanced(mock.getClass())) {
                 return ((MethodInterceptorFilter<MockHandler<T>>) getInterceptor(mock)).getDelegate();
             } else {
-                throw new NotAMockException(mock);
+                throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
             }
         } catch (ClassCastException e) {
-            throw new NotAMockException(mock);
+            throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
     }
     
@@ -47,5 +47,14 @@ public class MockUtil {
     
     public static void validateMock(Object mock) {
         getMockHandler(mock);
+    }
+    
+    public static boolean isMock(Object mock) {
+        try {
+            getMockHandler(mock);
+            return true;
+        } catch (MockitoException e) {
+            return false;
+        }
     }
 }

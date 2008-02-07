@@ -23,13 +23,13 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings({"serial", "unchecked"})
-public class StubbingWithThrowablesTest extends RequiresValidState {
+public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
     private Map mockTwo;

@@ -14,12 +14,12 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.base.MockitoException;
 
 @SuppressWarnings("unchecked")
-public class AnnotationsTest extends RequiresValidState {
+public class AnnotationsTest extends TestBase {
 
     @Mock List list;
     @Mock final Map map = new HashMap();

@@ -12,11 +12,11 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.internal.util.ListUtil.Filter;
 
 @SuppressWarnings("unchecked")
-public class ListUtilTest extends RequiresValidState {
+public class ListUtilTest extends TestBase {
 
     @Test
     public void shouldFilterList() throws Exception {

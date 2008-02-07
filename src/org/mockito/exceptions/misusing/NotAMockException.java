@@ -10,7 +10,7 @@ public class NotAMockException extends MockitoException {
 
     private static final long serialVersionUID = 1L;
 
-    public NotAMockException(Object object) {
-        super("Not a mock: " + object.getClass().getName());
+    public NotAMockException(String message) {
+        super(message);
     }
 }

@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 
-public class MockUtilTest extends RequiresValidState {
+public class MockUtilTest extends TestBase {
 
     @SuppressWarnings("unchecked")
     @Test 

@@ -11,10 +11,10 @@ import static org.mockito.util.ExtraMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 
-public class StackTrackeChangingTest extends RequiresValidState {
+public class StackTrackeChangingTest extends TestBase {
     
     private IMethods mock;
 

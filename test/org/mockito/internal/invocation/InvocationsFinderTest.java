@@ -15,13 +15,13 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 
-public class InvocationsFinderTest extends RequiresValidState {
+public class InvocationsFinderTest extends TestBase {
     
     private LinkedList<Invocation> invocations = new LinkedList<Invocation>();
     private Invocation simpleMethodInvocation;

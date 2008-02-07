@@ -11,27 +11,27 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
+import org.mockito.MockitoAnnotations.Mock;
 
-public class MockitoSampleTest extends RequiresValidState {
+public class MockitoSampleTest extends TestBase {
     
-    private ArticleCalculator mockCalculator;
-    private ArticleDatabase mockDatabase;
+    @Mock private ArticleCalculator mockCalculator;
+    @Mock private ArticleDatabase mockDatabase;
     
     private ArticleManager articleManager;
     
     @Before
     public void setup() {
-        mockCalculator = mock(ArticleCalculator.class);
-        mockDatabase = mock(ArticleDatabase.class);
-        
         articleManager = new ArticleManager(mockCalculator, mockDatabase);
     }
 
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {
         stub(mockCalculator.countArticles("Guardian")).toReturn(12);
-        stub(mockCalculator.countArticlesInPolish("Guardian")).toReturn(5);
+        stub(mockCalculator.countArticlesInPolish(anyString())).toReturn(5);
+
+//        stub(mockCalculator.countAllArticles(anyString(), "asdf")).toReturn(5);
         
         articleManager.updateArticleCounters("Guardian");
         

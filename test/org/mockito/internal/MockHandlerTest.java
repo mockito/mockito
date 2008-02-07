@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -17,7 +17,7 @@ import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 @SuppressWarnings("unchecked")
-public class MockHandlerTest extends RequiresValidState {
+public class MockHandlerTest extends TestBase {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {

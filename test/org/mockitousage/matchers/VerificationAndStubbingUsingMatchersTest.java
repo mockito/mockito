@@ -10,12 +10,12 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")  
-public class VerificationAndStubbingUsingMatchersTest extends RequiresValidState {
+public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     private IMethods one;
     private IMethods two;
     private IMethods three;

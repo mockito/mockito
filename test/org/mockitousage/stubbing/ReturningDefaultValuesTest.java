@@ -13,11 +13,11 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
-public class ReturningDefaultValuesTest extends RequiresValidState {
+public class ReturningDefaultValuesTest extends TestBase {
 
     @Test
     public void shouldReturnAllKindsOfPrimitives() throws Exception {

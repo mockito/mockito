@@ -16,12 +16,12 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
 /**
  * This test case is used to make sure that the way cglib is used is providing the expected behavior.
  */
-public class CglibTest extends RequiresValidState {
+public class CglibTest extends TestBase {
 
     /**
      * Check that an interceptor is used by only one instance of a class

@@ -11,10 +11,10 @@ import static org.junit.Assert.fail;
 import net.sf.cglib.proxy.Factory;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
 @SuppressWarnings("unchecked")
-public class MockFactoryTest extends RequiresValidState {
+public class MockFactoryTest extends TestBase {
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {

@@ -12,14 +12,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
-public class BasicVerificationTest extends RequiresValidState {
+public class BasicVerificationTest extends TestBase {
 
     private List mock;
     private List mockTwo;

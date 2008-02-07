@@ -11,9 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 
-public class StackTraceRemoverTest extends RequiresValidState {
+public class StackTraceRemoverTest extends TestBase {
 
     private StackTraceElement[] stackTrace;
     private List<StackTraceElement> causeStackTrace;

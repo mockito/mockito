@@ -14,6 +14,14 @@ public class InvalidUseOfMatchersException extends MockitoException {
         super(  "\n" +
                 message +
                 "\n" +
-                "See javadoc for Matchers class");
+                "Invalid use of matchers - see javadoc for Matchers class." +
+                "\n" +
+                "Typically this exception occurs when matchers are combined with raw values:" +
+                "\n" +
+                "    verify(mock).someMethod(anyObject(), \"raw value\");" +
+                "\n" +
+                "When using matchers, all arguments have to be provided by matchers, eg:" +
+                "\n" +
+                "    verify(mock).someMethod(anyObject(), eq(\"raw value\"));");
     }
 }

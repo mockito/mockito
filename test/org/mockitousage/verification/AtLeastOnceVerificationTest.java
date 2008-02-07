@@ -12,11 +12,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
-public class AtLeastOnceVerificationTest extends RequiresValidState {
+public class AtLeastOnceVerificationTest extends TestBase {
 
     private List mock;
     private List mockTwo;

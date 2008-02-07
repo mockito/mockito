@@ -13,11 +13,11 @@ import static org.mockito.util.ExtraMatchers.hasFirstMethodInStackTrace;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.StackTraceFilter;
 
-public class ResultTest extends RequiresValidState {
+public class ResultTest extends TestBase {
 
     @Test
     public void shouldCreateReturnResult() throws Throwable {

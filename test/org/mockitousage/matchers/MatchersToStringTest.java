@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
@@ -28,7 +28,7 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 
 @SuppressWarnings("unchecked")
-public class MatchersToStringTest extends RequiresValidState {
+public class MatchersToStringTest extends TestBase {
     private StringBuilder buffer;
 
     @Before

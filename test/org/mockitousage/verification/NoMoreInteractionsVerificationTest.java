@@ -4,13 +4,8 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,11 +13,12 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 
 @SuppressWarnings("unchecked")
-public class NoMoreInteractionsVerificationTest extends RequiresValidState {
+public class NoMoreInteractionsVerificationTest extends TestBase {
 
     private LinkedList mock;
     
@@ -99,5 +95,11 @@ public class NoMoreInteractionsVerificationTest extends RequiresValidState {
             verifyZeroInteractions(map);
             fail();
         } catch (NoInteractionsWanted e) {}
+    }
+    
+    @SuppressWarnings("all")
+    @Test(expected=MockitoException.class)
+    public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
+        verifyNoMoreInteractions(null);
     }
 }

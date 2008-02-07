@@ -12,10 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.CustomMatcher;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockitousage.IMethods;
 
-public class CustomMatchersTest extends RequiresValidState {
+public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo extends CustomMatcher<String> {
         public boolean matches(String arg) {

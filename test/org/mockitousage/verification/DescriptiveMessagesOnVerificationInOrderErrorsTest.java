@@ -13,7 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.RequiresValidState;
+import org.mockito.TestBase;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
@@ -21,7 +21,7 @@ import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
-public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends RequiresValidState {
+public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase {
     
     private IMethods one;
     private IMethods two;
