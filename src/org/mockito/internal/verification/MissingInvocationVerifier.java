@@ -34,7 +34,7 @@ public class MissingInvocationVerifier implements Verifier {
         
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         
-        if (actualInvocations.size() == 0) {
+        if (actualInvocations.isEmpty()) {
             Invocation similar = finder.findSimilarInvocation(invocations, wanted, mode);
             reportMissingInvocationError(wanted, similar);
         }
