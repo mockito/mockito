@@ -6,12 +6,30 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.rubypeople.rdt.core.rubybuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>net.sourceforge.metrics.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>net.sourceforge.metrics.nature</nature>
+		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
+		<nature>org.rubypeople.rdt.core.rubynature</nature>
 	</natures>
 </projectDescription>

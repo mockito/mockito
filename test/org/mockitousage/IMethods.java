@@ -6,6 +6,7 @@ package org.mockitousage;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.text.ChangedCharSetException;
@@ -63,6 +64,8 @@ public interface IMethods {
     String otherMethod();
 
     String simpleMethod(String argument);
+    
+    String simpleMethod(Collection<?> collection);
     
     String simpleMethod(Object argument);
     

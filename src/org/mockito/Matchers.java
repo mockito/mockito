@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Contains;
@@ -436,6 +437,27 @@ public class Matchers {
     public static <T> T argThat(CustomMatcher<T> matcher) {
         return reportMatcher(matcher).<T>returnNull();
     }
+    
+    /**
+     * Allows creating custom argument matchers.
+     * <p>
+     * See examples in javadoc for {@link Matchers}
+     * 
+     * @param matcher decides whether argument matches
+     * @return <code>null</code>.
+     */
+    public static <T> T argThat(final Matcher<T> matcher) {
+        return reportMatcher(
+            new CustomMatcher<T>() {
+                public boolean matches(T argument) {
+                    return matcher.matches(argument);
+                }
+                public void appendTo(StringBuilder builder) {
+                    builder.append(matcher.toString());
+                }
+            }
+        ).<T>returnNull();
+    }    
     
     /**
      * Allows creating custom argument matchers.

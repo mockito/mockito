@@ -7,7 +7,6 @@ package org.mockito.internal.matchers;
 import java.util.Iterator;
 import java.util.List;
 
-
 @SuppressWarnings("unchecked")
 public class Or implements ArgumentMatcher {
 

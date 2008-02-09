@@ -106,11 +106,15 @@
           <attribute name="Built-By" value="${user.name}"/>
           <attribute name="Implementation-Version" value="${version}"/>
         </manifest>
-      <fileset dir="." file="license.txt" />
+      <fileset dir="." file="LICENSE" />
+      <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
       <fileset dir="${lib.dir.run}" excludes="*.jar" />
       <zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
+      <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
+        <exclude name="LICENSE.txt" />
+      </zipfileset>
       <zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
         <exclude name="LICENSE" />
         <exclude name="NOTICE" />
@@ -124,7 +128,8 @@
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Implementation-Version" value="${version}"/>
       </manifest>
-      <fileset dir="." file="license.txt" />
+      <fileset dir="." file="LICENSE" />
+      <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
     </jar>
@@ -135,14 +140,14 @@
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
       <fileset dir="${lib.dir.run}" />
       <fileset dir="${target.dir}" includes="${jar.core}" />
-      <fileset dir="." includes="license.txt" />
     </copy>
     <mkdir dir="${target.dir}/mockito.zip.tmp/javadoc" />
     <copy todir="${target.dir}/mockito.zip.tmp/javadoc">
       <fileset dir="${javadoc.dir}" />
     </copy>
     <copy todir="${target.dir}/mockito.zip.tmp">
-      <fileset dir="." includes="license.txt" />
+      <fileset dir="." includes="LICENSE" />
+      <fileset dir="." includes="NOTICE" />
       <fileset dir="doc" includes="jars-info.txt" />
       <fileset dir="${target.dir}" includes="${jar.all}" />
     </copy>
