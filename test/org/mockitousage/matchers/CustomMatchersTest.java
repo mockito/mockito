@@ -57,6 +57,8 @@ public class CustomMatchersTest extends TestBase {
         
         assertEquals("foo", mock.oneArg(true));
         assertEquals("foo", mock.oneArg(false));
+        
+        assertEquals(null, mock.oneArg("x"));
     }
     
   @Test
@@ -85,6 +87,7 @@ public class CustomMatchersTest extends TestBase {
         assertEquals("double", mock.oneArg(1.0));
         
         assertEquals(null, mock.oneArg(2));
+        assertEquals(null, mock.oneArg("foo"));
     }
          
     @Test
