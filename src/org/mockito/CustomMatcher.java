@@ -4,7 +4,8 @@
  */
 package org.mockito;
 
-import org.mockito.internal.matchers.ArgumentMatcher;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 
 /**
  * Allows creating customized argument matchers.
@@ -40,15 +41,15 @@ import org.mockito.internal.matchers.ArgumentMatcher;
  * 
  * @param <T>
  */
-public abstract class CustomMatcher<T> implements ArgumentMatcher<T> {
+public abstract class CustomMatcher<T> extends BaseMatcher<T> {
+
+    public abstract boolean matches(Object argument);
     
     /* 
      * Usually not necessary but you might want to override this method to provide specific argument description 
      * (useful when errors are reported). 
      */
-    public void appendTo(StringBuilder builder) {
-        builder.append("<custom argument matcher>");
+    public void describeTo(Description d) {
+        d.appendText("<custom argument matcher>");
     }
-
-    public abstract boolean matches(T argument);
 }

@@ -18,26 +18,28 @@ import org.mockitousage.IMethods;
 public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo extends CustomMatcher<String> {
-        public boolean matches(String arg) {
-            return arg.contains("foo");
+        public boolean matches(Object arg) {
+            return ((String) arg).contains("foo");
         }
     }
 
     private final class IsAnyBoolean extends CustomMatcher<Boolean> {
-        public boolean matches(Boolean argument) {
+        public boolean matches(Object arg) {
             return true;
         }
     }
     
     private final class IsSorZ extends CustomMatcher<Character> {
-        public boolean matches(Character argument) {
-            return argument.equals('s') || argument.equals('z');
+        public boolean matches(Object arg) {
+            Character character = (Character) arg;
+            return character.equals('s') || character.equals('z');
         }
     }
 
     private final class IsZeroOrOne<T extends Number> extends CustomMatcher<T> {
-        public boolean matches(T argument) {
-            if (argument.intValue() == 0 || argument.intValue() == 1) {
+        public boolean matches(Object arg) {
+            Number number = (Number) arg;
+            if (number.intValue() == 0 || number.intValue() == 1) {
                 return true;
             }
             return false;

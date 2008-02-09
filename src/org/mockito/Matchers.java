@@ -4,7 +4,9 @@
  */
 package org.mockito;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.SelfDescribing;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Contains;
@@ -434,30 +436,9 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>null</code>.
      */
-    public static <T> T argThat(CustomMatcher<T> matcher) {
+    public static <T> T argThat(Matcher<T> matcher) {
         return reportMatcher(matcher).<T>returnNull();
     }
-    
-    /**
-     * Allows creating custom argument matchers.
-     * <p>
-     * See examples in javadoc for {@link Matchers}
-     * 
-     * @param matcher decides whether argument matches
-     * @return <code>null</code>.
-     */
-    public static <T> T argThat(final Matcher<T> matcher) {
-        return reportMatcher(
-            new CustomMatcher<T>() {
-                public boolean matches(T argument) {
-                    return matcher.matches(argument);
-                }
-                public void appendTo(StringBuilder builder) {
-                    builder.append(matcher.toString());
-                }
-            }
-        ).<T>returnNull();
-    }    
     
     /**
      * Allows creating custom argument matchers.
@@ -557,5 +538,45 @@ public class Matchers {
 
     private static ReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
         return LastArguments.instance().reportMatcher(matcher);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static ReturnValues reportMatcher(final Matcher<?> matcher) {
+        return LastArguments.instance().reportMatcher(new ArgumentMatcher() {
+
+            public void appendTo(final StringBuilder builder) {
+                matcher.describeTo(new Description() {
+
+                    public Description appendDescriptionOf(SelfDescribing arg0) {
+                        throw new RuntimeException("not implemented");
+                    }
+
+                    public Description appendList(String arg0, String arg1, String arg2,
+                            Iterable<? extends SelfDescribing> arg3) {
+                        throw new RuntimeException("not implemented");
+                    }
+
+                    public Description appendText(String arg0) {
+                        builder.append(arg0);
+                        return this;
+                    }
+
+                    public Description appendValue(Object arg0) {
+                        throw new RuntimeException("not implemented");
+                    }
+
+                    public <T> Description appendValueList(String arg0, String arg1, String arg2, T... arg3) {
+                        throw new RuntimeException("not implemented");
+                    }
+
+                    public <T> Description appendValueList(String arg0, String arg1, String arg2, Iterable<T> arg3) {
+                        throw new RuntimeException("not implemented");
+                    }} );
+            }
+
+            public boolean matches(Object argument){
+                return matcher.matches(argument);
+            }
+        });
     }
 }
