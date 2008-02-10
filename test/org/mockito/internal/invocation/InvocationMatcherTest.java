@@ -4,17 +4,16 @@
  */
 package org.mockito.internal.invocation;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static java.util.Arrays.*;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.NotNull;
 
 @SuppressWarnings("unchecked")
@@ -48,9 +47,9 @@ public class InvocationMatcherTest extends TestBase {
     
     @Test
     public void shouldToStringWithMatchers() throws Exception {
-        ArgumentMatcher m = NotNull.NOT_NULL;
+        Matcher m = NotNull.NOT_NULL;
         InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
-        ArgumentMatcher mTwo = new Equals('x');
+        Matcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertEquals("Object.simpleMethod(notNull())", notNull.toString());

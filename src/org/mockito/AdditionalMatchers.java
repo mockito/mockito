@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.CompareEqual;
 import org.mockito.internal.matchers.EqualsWithDelta;

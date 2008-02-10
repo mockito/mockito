@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class StartsWith implements ArgumentMatcher<String> {
+
+public class StartsWith extends ArgumentMatcher<String> {
 
     private final String prefix;
 
@@ -13,11 +16,11 @@ public class StartsWith implements ArgumentMatcher<String> {
         this.prefix = prefix;
     }
 
-    public boolean matches(String actual) {
-        return actual != null && actual.startsWith(prefix);
+    public boolean matches(Object actual) {
+        return actual != null && ((String) actual).startsWith(prefix);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("startsWith(\"" + prefix + "\")");
+    public void describeTo(Description description) {
+        description.appendText("startsWith(\"" + prefix + "\")");
     }
 }

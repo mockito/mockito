@@ -8,16 +8,16 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.hamcrest.Matcher;
 import org.mockito.exceptions.Printable;
-import org.mockito.internal.matchers.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements Printable {
 
     private final Invocation invocation;
-    private final List<ArgumentMatcher> matchers;
+    private final List<Matcher> matchers;
 
-    public InvocationMatcher(Invocation invocation, List<ArgumentMatcher> matchers) {
+    public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
         if (matchers == null) {
             throw new IllegalArgumentException("matchers cannot be null");
         }
@@ -26,7 +26,7 @@ public class InvocationMatcher implements Printable {
     }
     
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<ArgumentMatcher>emptyList());
+        this(invocation, Collections.<Matcher>emptyList());
     }
     
     public Method getMethod() {
@@ -37,7 +37,7 @@ public class InvocationMatcher implements Printable {
         return this.invocation;
     }
     
-    public List<ArgumentMatcher> getMatchers() {
+    public List<Matcher> getMatchers() {
         return this.matchers;
     }
 

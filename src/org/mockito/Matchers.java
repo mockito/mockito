@@ -4,11 +4,8 @@
  */
 package org.mockito;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.SelfDescribing;
 import org.mockito.internal.matchers.Any;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
@@ -49,10 +46,11 @@ import org.mockito.internal.progress.ReturnValues;
  * 
  * <h3>Custom Matchers</h3>
  * 
- * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods and implement your own {@link CustomMatcher}, e.g:
+ * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods 
+ * and implement your own {@link ArgumentMatcher}, e.g:
  * 
  * <pre>
- *   class IsListOfTwoElements extends CustomMatcher&lt;List&gt; {
+ *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *      public boolean matches(List list) {
  *          return list.size() == 2;
  *      }
@@ -448,7 +446,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static char charThat(CustomMatcher<Character> matcher) {
+    public static char charThat(Matcher<Character> matcher) {
         return reportMatcher(matcher).returnChar();
     }
     
@@ -460,7 +458,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>false</code>.
      */
-    public static boolean booleanThat(CustomMatcher<Boolean> matcher) {
+    public static boolean booleanThat(Matcher<Boolean> matcher) {
         return reportMatcher(matcher).returnFalse();
     }
     
@@ -472,7 +470,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static byte byteThat(CustomMatcher<Byte> matcher) {
+    public static byte byteThat(Matcher<Byte> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -484,7 +482,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static short shortThat(CustomMatcher<Short> matcher) {
+    public static short shortThat(Matcher<Short> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -496,7 +494,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static int intThat(CustomMatcher<Integer> matcher) {
+    public static int intThat(Matcher<Integer> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
@@ -508,7 +506,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static long longThat(CustomMatcher<Long> matcher) {
+    public static long longThat(Matcher<Long> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -520,7 +518,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static float floatThat(CustomMatcher<Float> matcher) {
+    public static float floatThat(Matcher<Float> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -532,51 +530,11 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static double doubleThat(CustomMatcher<Double> matcher) {
+    public static double doubleThat(Matcher<Double> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
-    private static ReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
+    private static ReturnValues reportMatcher(Matcher<?> matcher) {
         return LastArguments.instance().reportMatcher(matcher);
-    }
-    
-    @SuppressWarnings("unchecked")
-    private static ReturnValues reportMatcher(final Matcher<?> matcher) {
-        return LastArguments.instance().reportMatcher(new ArgumentMatcher() {
-
-            public void appendTo(final StringBuilder builder) {
-                matcher.describeTo(new Description() {
-
-                    public Description appendDescriptionOf(SelfDescribing arg0) {
-                        throw new RuntimeException("not implemented");
-                    }
-
-                    public Description appendList(String arg0, String arg1, String arg2,
-                            Iterable<? extends SelfDescribing> arg3) {
-                        throw new RuntimeException("not implemented");
-                    }
-
-                    public Description appendText(String arg0) {
-                        builder.append(arg0);
-                        return this;
-                    }
-
-                    public Description appendValue(Object arg0) {
-                        throw new RuntimeException("not implemented");
-                    }
-
-                    public <T> Description appendValueList(String arg0, String arg1, String arg2, T... arg3) {
-                        throw new RuntimeException("not implemented");
-                    }
-
-                    public <T> Description appendValueList(String arg0, String arg1, String arg2, Iterable<T> arg3) {
-                        throw new RuntimeException("not implemented");
-                    }} );
-            }
-
-            public boolean matches(Object argument){
-                return matcher.matches(argument);
-            }
-        });
     }
 }

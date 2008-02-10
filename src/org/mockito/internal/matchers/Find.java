@@ -6,7 +6,10 @@ package org.mockito.internal.matchers;
 
 import java.util.regex.Pattern;
 
-public class Find implements ArgumentMatcher<String> {
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
+
+public class Find extends ArgumentMatcher<String> {
 
     private final String regex;
 
@@ -14,11 +17,11 @@ public class Find implements ArgumentMatcher<String> {
         this.regex = regex;
     }
 
-    public boolean matches(String actual) {
-        return actual != null && Pattern.compile(regex).matcher(actual).find();
+    public boolean matches(Object actual) {
+        return actual != null && Pattern.compile(regex).matcher((String) actual).find();
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("find(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")");
+    public void describeTo(Description description) {
+        description.appendText("find(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")");
     }
 }

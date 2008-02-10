@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T> {
+
+public abstract class CompareTo<T extends Comparable<T>> extends ArgumentMatcher<T> {
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {
@@ -13,7 +16,7 @@ public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatc
     }
 
     @SuppressWarnings("unchecked")
-    public boolean matches(T actual) {
+    public boolean matches(Object actual) {
         
         if(!(actual instanceof Comparable)) {
             return false;
@@ -22,8 +25,8 @@ public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatc
         return matchResult(((Comparable) actual).compareTo(wanted));
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append(getName() + "(" + wanted + ")");
+    public void describeTo(Description description) {
+        description.appendText(getName() + "(" + wanted + ")");
     }
     
     protected abstract String getName();

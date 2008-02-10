@@ -4,10 +4,11 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
-import org.mockito.internal.matchers.ArgumentMatcher;
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
 
-public class ReflectionEquals implements ArgumentMatcher<Object>{
+public class ReflectionEquals extends ArgumentMatcher<Object>{
     private final Object wanted;
 
     public ReflectionEquals(Object wanted) {
@@ -18,7 +19,7 @@ public class ReflectionEquals implements ArgumentMatcher<Object>{
         return EqualsBuilder.reflectionEquals(wanted, actual);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("refEq(" + wanted + ")");
+    public void describeTo(Description description) {
+        description.appendText("refEq(" + wanted + ")");
     }
 }

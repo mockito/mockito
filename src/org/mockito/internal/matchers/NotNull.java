@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class NotNull implements ArgumentMatcher<Object> {
+
+public class NotNull extends ArgumentMatcher<Object> {
 
     public static final NotNull NOT_NULL = new NotNull();
     
@@ -17,7 +20,7 @@ public class NotNull implements ArgumentMatcher<Object> {
         return actual != null;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("notNull()");
+    public void describeTo(Description description) {
+        description.appendText("notNull()");
     }
 }

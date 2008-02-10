@@ -10,33 +10,33 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.CustomMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockitousage.IMethods;
 
 public class CustomMatchersTest extends TestBase {
     
-    private final class ContainsFoo extends CustomMatcher<String> {
+    private final class ContainsFoo extends ArgumentMatcher<String> {
         public boolean matches(Object arg) {
             return ((String) arg).contains("foo");
         }
     }
 
-    private final class IsAnyBoolean extends CustomMatcher<Boolean> {
+    private final class IsAnyBoolean extends ArgumentMatcher<Boolean> {
         public boolean matches(Object arg) {
             return true;
         }
     }
     
-    private final class IsSorZ extends CustomMatcher<Character> {
+    private final class IsSorZ extends ArgumentMatcher<Character> {
         public boolean matches(Object arg) {
             Character character = (Character) arg;
             return character.equals('s') || character.equals('z');
         }
     }
 
-    private final class IsZeroOrOne<T extends Number> extends CustomMatcher<T> {
+    private final class IsZeroOrOne<T extends Number> extends ArgumentMatcher<T> {
         public boolean matches(Object arg) {
             Number number = (Number) arg;
             if (number.intValue() == 0 || number.intValue() == 1) {

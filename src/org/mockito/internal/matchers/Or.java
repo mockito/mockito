@@ -7,17 +7,21 @@ package org.mockito.internal.matchers;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.mockito.ArgumentMatcher;
+
 @SuppressWarnings("unchecked")
-public class Or implements ArgumentMatcher {
+public class Or extends ArgumentMatcher {
 
-    private final List<ArgumentMatcher> matchers;
+    private final List<Matcher> matchers;
 
-    public Or(List<ArgumentMatcher> matchers) {
+    public Or(List<Matcher> matchers) {
         this.matchers = matchers;
     }
 
     public boolean matches(Object actual) {
-        for (ArgumentMatcher matcher : matchers) {
+        for (Matcher matcher : matchers) {
             if (matcher.matches(actual)) {
                 return true;
             }
@@ -25,14 +29,14 @@ public class Or implements ArgumentMatcher {
         return false;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("or(");
-        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
-            it.next().appendTo(buffer);
+    public void describeTo(Description description) {
+        description.appendText("or(");
+        for (Iterator<Matcher> it = matchers.iterator(); it.hasNext();) {
+            it.next().describeTo(description);
             if (it.hasNext()) {
-                buffer.append(", ");
+                description.appendText(", ");
             }
         }
-        buffer.append(")");
+        description.appendText(")");
     }
 }

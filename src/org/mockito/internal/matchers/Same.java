@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class Same implements ArgumentMatcher<Object> {
+
+public class Same extends ArgumentMatcher<Object> {
 
     private final Object wanted;
 
@@ -17,19 +20,19 @@ public class Same implements ArgumentMatcher<Object> {
         return wanted == actual;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("same(");
-        appendQuoting(buffer);
-        buffer.append(wanted);
-        appendQuoting(buffer);
-        buffer.append(")");
+    public void describeTo(Description description) {
+        description.appendText("same(");
+        appendQuoting(description);
+        description.appendText(wanted.toString());
+        appendQuoting(description);
+        description.appendText(")");
     }
 
-    private void appendQuoting(StringBuilder buffer) {
+    private void appendQuoting(Description description) {
         if (wanted instanceof String) {
-            buffer.append("\"");
+            description.appendText("\"");
         } else if (wanted instanceof Character) {
-            buffer.append("'");
+            description.appendText("'");
         }
     }
 }

@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
+
 @SuppressWarnings("unchecked")
-public class Any implements ArgumentMatcher {
+public class Any extends ArgumentMatcher {
 
     public static final Any ANY = new Any();    
     
@@ -15,7 +18,7 @@ public class Any implements ArgumentMatcher {
         return true;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("<any>");
+    public void describeTo(Description description) {
+        description.appendText("<any>");
     }
 }

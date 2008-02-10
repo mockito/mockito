@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class Matches implements ArgumentMatcher<Object> {
+
+public class Matches extends ArgumentMatcher<Object> {
 
     private final String regex;
 
@@ -17,8 +20,8 @@ public class Matches implements ArgumentMatcher<Object> {
         return (actual instanceof String) && ((String) actual).matches(regex);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\")
+    public void describeTo(Description description) {
+        description.appendText("matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\")
                 + "\")");
     }
 }

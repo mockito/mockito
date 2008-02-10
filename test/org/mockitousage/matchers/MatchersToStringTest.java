@@ -4,11 +4,14 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
@@ -18,7 +21,6 @@ import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.Find;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Matches;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.NotNull;
@@ -29,42 +31,42 @@ import org.mockito.internal.matchers.StartsWith;
 
 @SuppressWarnings("unchecked")
 public class MatchersToStringTest extends TestBase {
-    private StringBuilder buffer;
+    private Description description;
 
     @Before
     public void setup() {
-        buffer = new StringBuilder();
+        description = new StringDescription();
     }
 
     @Test
     public void sameToStringWithString() {
-        new Same("X").appendTo(buffer);
-        assertEquals("same(\"X\")", buffer.toString());
+        new Same("X").describeTo(description);
+        assertEquals("same(\"X\")", description.toString());
 
     }
 
     @Test
     public void nullToString() {
-        Null.NULL.appendTo(buffer);
-        assertEquals("isNull()", buffer.toString());
+        Null.NULL.describeTo(description);
+        assertEquals("isNull()", description.toString());
     }
 
     @Test
     public void notNullToString() {
-        NotNull.NOT_NULL.appendTo(buffer);
-        assertEquals("notNull()", buffer.toString());
+        NotNull.NOT_NULL.describeTo(description);
+        assertEquals("notNull()", description.toString());
     }
 
     @Test
     public void anyToString() {
-        Any.ANY.appendTo(buffer);
-        assertEquals("<any>", buffer.toString());
+        Any.ANY.describeTo(description);
+        assertEquals("<any>", description.toString());
     }
 
     @Test
     public void sameToStringWithChar() {
-        new Same('x').appendTo(buffer);
-        assertEquals("same('x')", buffer.toString());
+        new Same('x').describeTo(description);
+        assertEquals("same('x')", description.toString());
     }
 
     @Test
@@ -75,21 +77,21 @@ public class MatchersToStringTest extends TestBase {
                 return "X";
             }
         };
-        new Same(o).appendTo(buffer);
-        assertEquals("same(X)", buffer.toString());
+        new Same(o).describeTo(description);
+        assertEquals("same(X)", description.toString());
     }
 
     @Test
     public void equalsToStringWithString() {
-        new Equals("X").appendTo(buffer);
-        assertEquals("\"X\"", buffer.toString());
+        new Equals("X").describeTo(description);
+        assertEquals("\"X\"", description.toString());
 
     }
 
     @Test
     public void equalsToStringWithChar() {
-        new Equals('x').appendTo(buffer);
-        assertEquals("'x'", buffer.toString());
+        new Equals('x').describeTo(description);
+        assertEquals("'x'", description.toString());
     }
 
     @Test
@@ -100,62 +102,62 @@ public class MatchersToStringTest extends TestBase {
                 return "X";
             }
         };
-        new Equals(o).appendTo(buffer);
-        assertEquals("X", buffer.toString());
+        new Equals(o).describeTo(description);
+        assertEquals("X", description.toString());
     }
 
     @Test
     public void orToString() {
-        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
+        List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
-        new Or(matchers).appendTo(buffer);
-        assertEquals("or(1, 2)", buffer.toString());
+        new Or(matchers).describeTo(description);
+        assertEquals("or(1, 2)", description.toString());
     }
 
     @Test
     public void notToString() {
-        new Not(new Equals(1)).appendTo(buffer);
-        assertEquals("not(1)", buffer.toString());
+        new Not(new Equals(1)).describeTo(description);
+        assertEquals("not(1)", description.toString());
     }
 
     @Test
     public void andToString() {
-        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
+        List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
-        new And(matchers).appendTo(buffer);
-        assertEquals("and(1, 2)", buffer.toString());
+        new And(matchers).describeTo(description);
+        assertEquals("and(1, 2)", description.toString());
     }
 
     @Test
     public void startsWithToString() {
-        new StartsWith("AB").appendTo(buffer);
-        assertEquals("startsWith(\"AB\")", buffer.toString());
+        new StartsWith("AB").describeTo(description);
+        assertEquals("startsWith(\"AB\")", description.toString());
     }
 
     @Test
     public void endsWithToString() {
-        new EndsWith("AB").appendTo(buffer);
-        assertEquals("endsWith(\"AB\")", buffer.toString());
+        new EndsWith("AB").describeTo(description);
+        assertEquals("endsWith(\"AB\")", description.toString());
     }
 
     @Test
     public void containsToString() {
-        new Contains("AB").appendTo(buffer);
-        assertEquals("contains(\"AB\")", buffer.toString());
+        new Contains("AB").describeTo(description);
+        assertEquals("contains(\"AB\")", description.toString());
     }
 
     @Test
     public void findToString() {
-        new Find("\\s+").appendTo(buffer);
-        assertEquals("find(\"\\\\s+\")", buffer.toString());
+        new Find("\\s+").describeTo(description);
+        assertEquals("find(\"\\\\s+\")", description.toString());
     }
 
     @Test
     public void matchesToString() {
-        new Matches("\\s+").appendTo(buffer);
-        assertEquals("matches(\"\\\\s+\")", buffer.toString());
+        new Matches("\\s+").describeTo(description);
+        assertEquals("matches(\"\\\\s+\")", description.toString());
     }
 
 }

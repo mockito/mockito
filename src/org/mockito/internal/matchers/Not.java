@@ -4,12 +4,16 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.mockito.ArgumentMatcher;
+
 @SuppressWarnings("unchecked")
-public class Not implements ArgumentMatcher {
+public class Not extends ArgumentMatcher {
 
-    private final ArgumentMatcher first;
+    private final Matcher first;
 
-    public Not(ArgumentMatcher first) {
+    public Not(Matcher first) {
         this.first = first;
     }
 
@@ -17,9 +21,9 @@ public class Not implements ArgumentMatcher {
         return !first.matches(actual);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("not(");
-        first.appendTo(buffer);
-        buffer.append(")");
+    public void describeTo(Description description) {
+        description.appendText("not(");
+        first.describeTo(description);
+        description.appendText(")");
     }
 }

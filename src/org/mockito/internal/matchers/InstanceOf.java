@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class InstanceOf implements ArgumentMatcher<Object> {
+
+public class InstanceOf extends ArgumentMatcher<Object> {
 
     private final Class<?> clazz;
 
@@ -17,7 +20,7 @@ public class InstanceOf implements ArgumentMatcher<Object> {
         return (actual != null) && clazz.isAssignableFrom(actual.getClass());
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("isA(" + clazz.getName() + ")");
+    public void describeTo(Description description) {
+        description.appendText("isA(" + clazz.getName() + ")");
     }
 }

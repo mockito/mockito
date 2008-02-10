@@ -7,6 +7,8 @@ package org.mockito.internal.matchers;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.hamcrest.Description;
+
 public class ArrayEquals extends Equals {
 
     public ArrayEquals(Object wanted) {
@@ -15,6 +17,7 @@ public class ArrayEquals extends Equals {
 
     public boolean matches(Object actual) {
         Object wanted = getWanted();
+        //TODO can I use Arrays.x ?
         if (wanted == null) {
             return super.matches(actual);
         } else if (wanted instanceof boolean[]
@@ -49,23 +52,23 @@ public class ArrayEquals extends Equals {
         }
     }
 
-    public void appendTo(StringBuilder buffer) {
+    public void describeTo(Description description) {
         if (getWanted() != null && getWanted().getClass().isArray()) {
-            appendArray(createObjectArray(getWanted()), buffer);
+            appendArray(createObjectArray(getWanted()), description);
         } else {
-            super.appendTo(buffer);
+            super.describeTo(description);
         }
     }
 
-    private void appendArray(Object[] array, StringBuilder buffer) {
-        buffer.append("[");
+    private void appendArray(Object[] array, Description description) {
+        description.appendText("[");
         for (int i = 0; i < array.length; i++) {
-            new Equals(array[i]).appendTo(buffer);
+            new Equals(array[i]).describeTo(description);
             if (i != array.length - 1) {
-                buffer.append(", ");
+                description.appendText(", ");
             }
         }
-        buffer.append("]");
+        description.appendText("]");
     }
 
     public static Object[] createObjectArray(Object array) {

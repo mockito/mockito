@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class Contains implements ArgumentMatcher<String> {
+
+public class Contains extends ArgumentMatcher<String> {
 
     private final String substring;
 
@@ -13,11 +16,11 @@ public class Contains implements ArgumentMatcher<String> {
         this.substring = substring;
     }
 
-    public boolean matches(String actual) {
-        return actual != null && actual.contains(substring);
+    public boolean matches(Object actual) {
+        return actual != null && ((String) actual).contains(substring);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("contains(\"" + substring + "\")");
+    public void describeTo(Description description) {
+        description.appendText("contains(\"" + substring + "\")");
     }
 }

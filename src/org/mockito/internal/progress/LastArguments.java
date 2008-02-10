@@ -9,9 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import org.hamcrest.Matcher;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.And;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
@@ -20,7 +20,7 @@ public class LastArguments {
     
     private static final ThreadLocal<LastArguments> INSTANCE = new ThreadLocal<LastArguments>();
     
-    private Stack<ArgumentMatcher> matcherStack = new Stack<ArgumentMatcher>();
+    private Stack<Matcher> matcherStack = new Stack<Matcher>();
 
     public static LastArguments instance() {
         if (INSTANCE.get() == null) {
@@ -30,17 +30,17 @@ public class LastArguments {
         return INSTANCE.get();
     }
     
-    public ReturnValues reportMatcher(ArgumentMatcher matcher) {
+    public ReturnValues reportMatcher(Matcher matcher) {
         matcherStack.push(matcher);
         return new ReturnValues();
     }
 
-    public List<ArgumentMatcher> pullMatchers() {
+    public List<Matcher> pullMatchers() {
         if (matcherStack.isEmpty()) {
             return null;
         }
         
-        ArrayList<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>(matcherStack);
+        ArrayList<Matcher> matchers = new ArrayList<Matcher>(matcherStack);
         matcherStack.clear();
         return matchers;
     }
@@ -57,11 +57,11 @@ public class LastArguments {
         return new ReturnValues();
     }
 
-    private List<ArgumentMatcher> popLastArgumentMatchers(int count) {
+    private List<Matcher> popLastArgumentMatchers(int count) {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         assertState(matcherStack.size() >= count,
                 "" + count + " matchers expected, " + matcherStack.size() + " recorded.");
-        List<ArgumentMatcher> result = new LinkedList<ArgumentMatcher>();
+        List<Matcher> result = new LinkedList<Matcher>();
         result.addAll(matcherStack.subList(matcherStack.size() - count, matcherStack.size()));
         for (int i = 0; i < count; i++) {
             matcherStack.pop();

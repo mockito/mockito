@@ -7,8 +7,8 @@ package org.mockito.internal.invocation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.progress.LastArguments;
 
@@ -16,16 +16,16 @@ import org.mockito.internal.progress.LastArguments;
 public class MatchersBinder {
 
     public InvocationMatcher bindMatchers(Invocation invocation) {
-        List<ArgumentMatcher> lastMatchers = LastArguments.instance().pullMatchers();
+        List<Matcher> lastMatchers = LastArguments.instance().pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        List<ArgumentMatcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
+        List<Matcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
         
         InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, processedMatchers);
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(Invocation invocation, List<ArgumentMatcher> matchers) {
+    private void validateMatchers(Invocation invocation, List<Matcher> matchers) {
         if (matchers != null) {
             int recordedMatchersSize = matchers.size();
             int expectedMatchersSize = invocation.getArguments().length;
@@ -38,12 +38,12 @@ public class MatchersBinder {
     /**
      * if user passed bare arguments then create EqualsMatcher for every argument.
      */
-    private List<ArgumentMatcher> createEqualsMatchers(Invocation invocation,
-            List<ArgumentMatcher> matchers) {
+    private List<Matcher> createEqualsMatchers(Invocation invocation,
+            List<Matcher> matchers) {
         if (matchers != null) {
             return matchers;
         }
-        List<ArgumentMatcher> result = new ArrayList<ArgumentMatcher>();
+        List<Matcher> result = new ArrayList<Matcher>();
         for (Object argument : invocation.getArguments()) {
             result.add(new Equals(argument));
         }

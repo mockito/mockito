@@ -9,11 +9,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
 import org.mockito.exceptions.Printable;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
-import org.mockito.internal.matchers.ArgumentMatcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 
@@ -120,7 +122,7 @@ public class Invocation implements Printable {
         return toString(argumentsToMatchers());
     }
 
-    public String toString(List<ArgumentMatcher> matchers) {
+    public String toString(List<Matcher> matchers) {
         String mockName = MockNamer.nameForMock(mock);
         String methodName = method.getName();
         String arguments = getArgumentsString(matchers);
@@ -139,18 +141,14 @@ public class Invocation implements Printable {
         return result.toString().replaceFirst(", $", "").concat(")");
     }
     
-    private String getArgumentsString(List<ArgumentMatcher> matchers) {
-        StringBuilder result = new StringBuilder();
-        result.append("(");
-        for (ArgumentMatcher matcher : matchers) {
-            matcher.appendTo(result);
-            result.append(", ");
-        }
-        return result.toString().replaceFirst(", $", "").concat(")");
+    private String getArgumentsString(List<Matcher> matchers) {
+        Description result = new StringDescription();
+        result.appendList("(", ", ", ")", matchers);
+        return result.toString();
     }
     
-    private List<ArgumentMatcher> argumentsToMatchers() {
-        List<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
+    private List<Matcher> argumentsToMatchers() {
+        List<Matcher> matchers = new LinkedList<Matcher>();
         for (Object arg : this.arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));

@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class Null implements ArgumentMatcher<Object> {
+
+public class Null extends ArgumentMatcher<Object> {
 
     public static final Null NULL = new Null();
 
@@ -16,7 +19,7 @@ public class Null implements ArgumentMatcher<Object> {
         return actual == null;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append("isNull()");
+    public void describeTo(Description description) {
+        description.appendText("isNull()");
     }
 }

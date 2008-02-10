@@ -6,8 +6,11 @@ package org.mockito.internal.matchers;
 
 import java.util.Comparator;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
+
 @SuppressWarnings("unchecked")
-public class Compare<T> implements ArgumentMatcher {
+public class Compare<T> extends ArgumentMatcher {
 
     private T wanted;
 
@@ -21,8 +24,8 @@ public class Compare<T> implements ArgumentMatcher {
         this.operator = result;
     }
 
-    public void appendTo(StringBuilder buffer) {
-        buffer.append(comparator + "(" + wanted + ") " + operator.getSymbol()
+    public void describeTo(Description description) {
+        description.appendText(comparator + "(" + wanted + ") " + operator.getSymbol()
                 + " 0");
     }
 

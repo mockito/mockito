@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
 
-public class Equals implements ArgumentMatcher<Object> {
+
+public class Equals extends ArgumentMatcher<Object> {
 
     private final Object wanted;
 
@@ -20,17 +23,18 @@ public class Equals implements ArgumentMatcher<Object> {
         return wanted.equals(actual);
     }
 
-    public void appendTo(StringBuilder buffer) {
-        appendQuoting(buffer);
-        buffer.append(wanted);
-        appendQuoting(buffer);
+    public void describeTo(Description description) {
+        appendQuoting(description);
+        description.appendText(wanted.toString());
+        appendQuoting(description);
+        //TODO use appendValue from description to print values
     }
 
-    private void appendQuoting(StringBuilder buffer) {
+    private void appendQuoting(Description description) {
         if (wanted instanceof String) {
-            buffer.append("\"");
+            description.appendText("\"");
         } else if (wanted instanceof Character) {
-            buffer.append("'");
+            description.appendText("'");
         }
     }
 
