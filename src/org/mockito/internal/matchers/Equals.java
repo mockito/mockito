@@ -25,7 +25,11 @@ public class Equals extends ArgumentMatcher<Object> {
 
     public void describeTo(Description description) {
         appendQuoting(description);
-        description.appendText(wanted.toString());
+        if (wanted == null) {
+            description.appendText("null");
+        } else {
+            description.appendText(wanted.toString());
+        }
         appendQuoting(description);
         //TODO use appendValue from description to print values
     }
