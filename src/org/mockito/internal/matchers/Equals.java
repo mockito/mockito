@@ -31,7 +31,6 @@ public class Equals extends ArgumentMatcher<Object> {
             description.appendText(wanted.toString());
         }
         appendQuoting(description);
-        //TODO use appendValue from description to print values
     }
 
     private void appendQuoting(Description description) {

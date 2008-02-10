@@ -17,7 +17,6 @@ public class ArrayEquals extends Equals {
 
     public boolean matches(Object actual) {
         Object wanted = getWanted();
-        //TODO can I use Arrays.x ?
         if (wanted == null) {
             return super.matches(actual);
         } else if (wanted instanceof boolean[]
