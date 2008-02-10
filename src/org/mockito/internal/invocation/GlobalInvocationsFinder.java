@@ -12,7 +12,7 @@ public interface GlobalInvocationsFinder {
      * gets all invocations from mocks. Invocations are ordered earlier first. 
      * 
      * @param mocks
-     * @return
+     * @return invocations
      */
     List<Invocation> getAllInvocations(List<? extends Object> mocks);
 }

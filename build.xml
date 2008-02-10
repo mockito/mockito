@@ -175,6 +175,7 @@
         ]]>
       </doctitle>
       <group title="Main package" packages="org.mockito"/>
+      <classpath refid="compile.classpath" />
     </javadoc>
   </target>
 
