@@ -98,7 +98,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Argument matchers allow less constrained verification or stubbing. 
+ * Argument matchers allow flexible verification or stubbing. 
  * See all {@link Matchers} including examples of custom matchers. 
  * <p>
  * <b>Warning:</b>

@@ -20,7 +20,7 @@ import org.mockito.internal.progress.LastArguments;
 import org.mockito.internal.progress.ReturnValues;
 
 /**
- * Allow less constrained verification or stubbing. See also {@link AdditionalMatchers}.
+ * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
  * {@link Mockito} extends Matchers so to get access to matchers just import Mockito class statically.
  * <pre>
@@ -47,12 +47,15 @@ import org.mockito.internal.progress.ReturnValues;
  * <h3>Custom Matchers</h3>
  * 
  * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods 
- * and implement your own {@link ArgumentMatcher}, e.g:
+ * and pass an instance of hamcrest {@link Matcher}.
+ * <p>
+ * You can use {@link ArgumentMatcher} (it's a hamcrest matcher with predefined describeTo() method for convenience)  
+ * for creating your own matchers, e.g:
  * 
  * <pre>
  *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
- *      public boolean matches(List list) {
- *          return list.size() == 2;
+ *      public boolean matches(Object list) {
+ *          return ((List) list).size() == 2;
  *      }
  *   }
  *   
@@ -65,13 +68,13 @@ import org.mockito.internal.progress.ReturnValues;
  *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
  * </pre>
  * 
- * Custom matchers are generally used very rarely. 
+ * Custom matchers are generally used rarely. 
  * <p>
  * To keep it readable you may want to extract method, e.g:
  * <pre>
- *   stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
  *   //becomes
- *   stub(mock.addAll(listOfTwoElements()).toReturn(true);
+ *   verify(mock).addAll(listOfTwoElements());
  * </pre>
  * 
  */

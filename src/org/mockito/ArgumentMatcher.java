@@ -6,14 +6,17 @@ package org.mockito;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 /**
- * Allows creating customized argument matchers.
+ * Allows creating customized argument matchers. 
+ * <p>
+ * ArgumentMatcher is an hamcrest {@link Matcher} with predefined describeTo() method for convenience.
  * <p>
  * See {@link Matchers}
  * 
- * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc.
- * methods and implement your own {@link ArgumentMatcher}, e.g:
+ * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods 
+ * and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
  * <pre>
  * class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
@@ -31,17 +34,17 @@ import org.hamcrest.Description;
  * verify(mock).addAll(argThat(new IsListOfTwoElements()));
  * </pre>
  * 
- * Custom matchers are generally used very rarely.
+ * Custom matchers are generally used rarely.
  * <p>
  * To keep it readable you may want to extract method, e.g:
  * 
  * <pre>
- *   stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
  *   //becomes
- *   stub(mock.addAll(listOfTwoElements()).toReturn(true);
+ *   verify(mock).addAll(listOfTwoElements());
  * </pre>
  * 
- * @param <T>
+ * @param <T> type of argument
  */
 public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
 
