@@ -21,30 +21,40 @@ import java.util.TreeSet;
 
 public class EmptyReturnValues {
     
+    //new instances are used instead of Collections.emptyList(), etc.
+    //to avoid UnsupportedOperationException if code under test modifies returned collection
     public static Object emptyValueFor(Class<?> type) {
-        return emptyReturnValueToType.get(type);
-    }
-    
-    @SuppressWarnings("unchecked")
-    private static Map<Class, Object> emptyReturnValueToType = new HashMap<Class, Object>();
-    
-    static {
-        emptyReturnValueToType.put(Collection.class, new LinkedList<Object>());
+        if (type == Collection.class) {
+            return new LinkedList<Object>();
+        } else if (type == Set.class) {
+            return new HashSet<Object>();
+        } else if (type == HashSet.class) {
+            return new HashSet<Object>();
+        } else if (type == SortedSet.class) {
+            return new TreeSet<Object>();
+        } else if (type == TreeSet.class) {
+            return new TreeSet<Object>();
+        } else if (type == LinkedHashSet.class) {
+            return new LinkedHashSet<Object>();
+        } else if (type == List.class) {
+            return new LinkedList<Object>();
+        } else if (type == LinkedList.class) {
+            return new LinkedList<Object>();
+        } else if (type == ArrayList.class) {
+            return new ArrayList<Object>();
+        } else if (type == Map.class) {
+            return new HashMap<Object, Object>();
+        } else if (type == HashMap.class) {
+            return new HashMap<Object, Object>();
+        } else if (type == SortedMap.class) {
+            return new TreeMap<Object, Object>();
+        } else if (type == TreeMap.class) {
+            return new TreeMap<Object, Object>();
+        } else if (type == LinkedHashMap.class) {
+            return new LinkedHashMap<Object, Object>();
+        }       
         
-        emptyReturnValueToType.put(Set.class, new HashSet<Object>());
-        emptyReturnValueToType.put(HashSet.class, new HashSet<Object>());
-        emptyReturnValueToType.put(SortedSet.class, new TreeSet<Object>());        
-        emptyReturnValueToType.put(TreeSet.class, new TreeSet<Object>());
-        emptyReturnValueToType.put(LinkedHashSet.class, new LinkedHashSet<Object>());        
-
-        emptyReturnValueToType.put(List.class, new LinkedList<Object>());       
-        emptyReturnValueToType.put(LinkedList.class, new LinkedList<Object>());
-        emptyReturnValueToType.put(ArrayList.class, new ArrayList<Object>());
-        
-        emptyReturnValueToType.put(Map.class, new HashMap<Object, Object>());
-        emptyReturnValueToType.put(HashMap.class, new HashMap<Object, Object>());
-        emptyReturnValueToType.put(SortedMap.class, new TreeMap<Object, Object>());        
-        emptyReturnValueToType.put(TreeMap.class, new TreeMap<Object, Object>());
-        emptyReturnValueToType.put(LinkedHashMap.class, new LinkedHashMap<Object, Object>());
+        //let's not care about the rest of collections
+        return null;
     }
 }

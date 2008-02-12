@@ -42,13 +42,13 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </pre>
  * 
  * <p>
- * Once created, mock object will record all invocations. Then you can
+ * Once created, mock will remember all invocations. Then you can
  * selectively verify whatever interaction you are interested in.
  * 
  * <h3>How about some stubbing?</h3>
  * 
  * <pre>
- * //You can create mocks of concrete classes, not only interfaces
+ * //You can mock concrete classes, not only interfaces
  * LinkedList mockedList = mock(LinkedList.class);
  * 
  * //stubbing
@@ -61,26 +61,30 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * //following throws runtime exception
  * System.out.println(mockedList.get(1));
  * 
- * //following prints "null"
+ * //following prints "null" because get(999) was not stubbed
  * System.out.println(mockedList.get(999));
  * 
- * //if you want you can still verify stubbed invocation
+ * //if you really want you can still verify stubbed invocation. In most cases it's not necessary, though. 
  * verify(mockedList).get(0);
  * </pre>
  * 
  * <ul>
  * <li>
- * By default, for all methods that return value, mock object will return null,
+ * By default, for all methods that return value, mock will return null,
  * appropriate primitive value (0, false, etc.) or an empty collection.
+ * </li>
+ * <li>
+ * Stubbing can be overridden: for example common stubbing can go to fixture setup
+ * but test methods can override it anyway
  * </li>
  * <li>
  * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
  * </li>
  * <li>
- * Last stubbing is more important - when you stubbed the same method many times.
+ * Last stubbing is more important - when you stubbed the same method with the same arguments many times.
  * </li>
  * <li>
- * Although it's possible to verify stubbed methods it's a good pattern to focus on testing if stubbed value is used correctly.
+ * Although it's possible to verify stubbed methods it's a good pattern to focus on testing that stubbed value is used correctly.
  * </li> 
  * </ul>
  * 
@@ -258,9 +262,14 @@ public class Mockito extends Matchers {
      *
      * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
      * <p>
+     * Stubbing can be overridden: for example common stubbing can go to fixture setup
+     * but test methods can override it anyway 
+     * <p>
      * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
      * <p>
-     * Last stubbing is more important - when you stubbed the same method many times.
+     * Last stubbing is more important - when you stubbed the same method with the same arguments many times.
+     * <p>
+     * Although it's possible to verify stubbed methods it's a good pattern to focus on testing that stubbed value is used correctly.
      * <p>
      * See examples in javadoc for {@link Mockito}
      * 

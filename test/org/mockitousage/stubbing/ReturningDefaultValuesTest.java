@@ -4,8 +4,7 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +45,17 @@ public class ReturningDefaultValuesTest extends TestBase {
         assertTrue(mock.map().isEmpty());
         assertTrue(mock.hashSet().isEmpty());
     }
-
+    
+    @Test 
+    public void shouldReturnMutableEmptyCollection() {
+        CollectionsServer mock = Mockito.mock(CollectionsServer.class);
+        
+        List list = mock.list();
+        list.add("test");
+       
+        assertTrue(mock.list().isEmpty());
+    }
+    
     private class CollectionsServer {
         List list() {
             return null;

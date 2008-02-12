@@ -1,7 +1,8 @@
 **** random thoughts
 
 -test code is easier to read. there is a clear distinction between ordinary method calls and expectations.
-  Eg: this maybe genuine method call but also this maybe an expectation recorded on mock object. It depends whether someObject is a mock.
+  Eg: this maybe genuine method call but also this maybe an expectation recorded on mock. 
+  It depends whether someObject is a mock.
 
   someObject.do();
 
@@ -9,14 +10,17 @@
 
   verify(someObject).do()
 
-over EasyMock:
--deliberately removed IAnswer - if you need to return different results for different args then you should stub on the per-test basis.
-  this is the only way to have clean tests not cluttered with complicated mocky stuff.
+EasyMock:
+-deliberately removed IAnswer - if you need to return different results for different args then you should 
+stub on the per-test basis. this is the only way to have clean tests not cluttered with complicated mocky stuff.
 -mock's names are nicer - simple names
--no need to name mocks. you see the exact line of code where it failed. for verifyNoOtherInteractions() names are simple and clean anyway (previous point)
+-no need to name mocks. you see the exact line of code where it failed. 
+for verifyNoOtherInteractions() names are simple and clean anyway (previous point)
 
 
--classical stubbing - if you stub method for given args - it always will replay in that manner. E.g. if mock is called few times with the same args and you want to return different result each time, then you'd better use EasyMock
+-classical stubbing - if you stub method for given args - it always will replay in that manner. 
+E.g. if mock is called few times with the same args and you want to return different result each time, 
+then you'd better use EasyMock or write your own stub from scratch
 
 -known limitations:
 
@@ -24,8 +28,3 @@ over EasyMock:
   
     stub(mock.add("1")).andThrows(new ExceptionThree());
     stub(mock.add("1")).andThrows(new ExceptionFour());
-
--think about merging in
-http://www.stephenduncanjr.com/projects/easymock-propertyutils
-
--mocking constructors?
