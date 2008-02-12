@@ -144,9 +144,11 @@ public class Reporter {
                 "Invalid use of matchers! - see javadoc for Matchers class.",
                 expectedMatchersCount + " matchers expected, " + recordedMatchersCount + " recorded.",
                 "Typically this exception occurs when matchers are combined with raw values:",        
+                "    //incorrect:",
                 "    verify(mock).someMethod(anyObject(), \"raw String\");",
                 "When using matchers, all arguments have to be provided by matchers.",
                 "For example:",
+                "    //correct:",
                 "    verify(mock).someMethod(anyObject(), eq(\"String by matcher\"));"
         ));
     }    
