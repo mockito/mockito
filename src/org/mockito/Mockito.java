@@ -166,8 +166,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * It's a good pattern to use this method only if extra invocations can be harmful. 
- * It's usually not necessary to call verifyNoMoreInteractions() all the time.
+ * Remember that usually it's not necessary to call verifyNoMoreInteractions() all the time.
  * <p>
  * See more {@link Mockito#verifyNoMoreInteractions}
  * 
@@ -329,11 +328,10 @@ public class Mockito extends Matchers {
      * Throws an AssertionError if any of given mocks has any unverified
      * interaction.
      * <p>
-     * Use this method after you verified your mocks - to make sure that nothing
+     * You can use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
      * <p>
-     * It's a good pattern to use this method only if extra invocations can be harmful. 
-     * It's usually not necessary to call verifyNoMoreInteractions() all the time
+     * Usually it's not necessary to call verifyNoMoreInteractions() all the time.
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
@@ -346,9 +344,10 @@ public class Mockito extends Matchers {
      * 
      * //verification
      * verify(mock).doSomething();
+     * 
+     * //following will fail because 'doSomethingUnexpected()' is unexpected
      * verifyNoMoreInteractions(mock);
      * 
-     * //oups: 'doSomethingUnexpected()' is unexpected
      * </pre>
      * 
      * See examples in javadoc for {@link Mockito}
