@@ -14,6 +14,8 @@ import org.mockito.Mockito;
  *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
  * </pre>
  * 
+ * <b>times(1) is the default</b> and can be omitted
+ * <p>
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
  */
 public interface VerificationMode {}

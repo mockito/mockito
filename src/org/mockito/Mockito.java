@@ -287,11 +287,15 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior. E.g:
+     * Verifies certain behavior <b>happened once</b>. E.g:
      * <pre>
      *   verify(mock).someMethod("some arg");
      * </pre>
-     * 
+     * Above is equivalent to:
+     * <pre>
+     *   verify(mock, times(1)).someMethod("some arg");
+     * </pre>
+     *  
      * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
@@ -309,6 +313,8 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
      * </pre>
      * 
+     * <b>times(1) is the default</b> and can be omitted
+     * <p>
      * See examples in javadoc for {@link Mockito}
      * 
      * @param mock to be verified
