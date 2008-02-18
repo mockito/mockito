@@ -56,7 +56,7 @@ public class MockitoAnnotations {
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Mock {}
-
+    
     /**
      * Initializes objects annotated with &#064;Mock for given testClass.
      * See examples in javadoc for {@link MockitoAnnotations}.
@@ -66,7 +66,15 @@ public class MockitoAnnotations {
             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations");
         }
         
-        Field[] fields = testClass.getClass().getDeclaredFields();
+        Class<?> clazz = testClass.getClass();
+        while (clazz != Object.class) {
+            scan(testClass, clazz);
+            clazz = clazz.getSuperclass();
+        }
+    }
+
+    private static void scan(Object testClass, Class<?> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
         for (Field f : fields) {
             if (f.isAnnotationPresent(Mock.class)) {
                 f.setAccessible(true);

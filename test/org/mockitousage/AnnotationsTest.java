@@ -48,4 +48,46 @@ public class AnnotationsTest extends TestBase {
                     e.getMessage());
         }
     }
+    
+    @Test
+    public void shouldLookForAnnotatedMocksInSuperClasses() throws Exception {
+        Sub sub = new Sub();
+        MockitoAnnotations.initMocks(sub);
+        
+        assertNotNull(sub.getMock());
+        assertNotNull(sub.getBaseMock());
+        assertNotNull(sub.getSuperBaseMock());
+    }
+    
+    class SuperBase {
+        @Mock private IMethods mock;
+        
+        public IMethods getSuperBaseMock() {
+            return mock;
+        }
+    }
+    
+    class Base extends SuperBase {
+        @Mock private IMethods mock;
+        
+        public IMethods getBaseMock() {
+            return mock;
+        }
+    }
+    
+    class Base2 extends SuperBase {
+        @Mock private IMethods mock;
+        
+        public IMethods getBaseMock() {
+            return mock;
+        }
+    }
+    
+    class Sub extends Base {
+        @Mock private IMethods mock;
+        
+        public IMethods getMock() {
+            return mock;
+        }
+    }
 }
