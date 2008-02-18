@@ -181,8 +181,10 @@ public class MultiThreadedTest extends TestBase {
     
     public static void main(String[] args) throws Exception {
         int numberOfThreads = 100; 
+        long before = System.currentTimeMillis();
         runInMultipleThreads(numberOfThreads);
-        
-        System.out.println("Finished running tests in " + numberOfThreads + " threads");
+        long after = System.currentTimeMillis();
+        long executionTime = (after-before)/1000;
+        System.out.println("Finished tests in " + numberOfThreads + " threads in " + executionTime + " seconds.");
     }
 }
