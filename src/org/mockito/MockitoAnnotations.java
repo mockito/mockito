@@ -77,11 +77,14 @@ public class MockitoAnnotations {
         Field[] fields = clazz.getDeclaredFields();
         for (Field f : fields) {
             if (f.isAnnotationPresent(Mock.class)) {
+                boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
                     f.set(testClass, Mockito.mock(f.getType()));
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating mocks annotated with @Mock", e);
+                } finally {
+                    f.setAccessible(wasAccessible);
                 }
             }
         }
