@@ -16,7 +16,7 @@ import org.mockito.internal.progress.VerificationMode;
  * inOrder.verify(secondMock).add("should be called second");
  * </pre>
  * 
- * See examples in javadoc for {@link Mockito}
+ * See examples in javadoc for {@link Mockito} class
  */
 public interface InOrder {
     /**
@@ -29,7 +29,7 @@ public interface InOrder {
      * inOrder.verify(secondMock).someMethod("should be called second");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
      * 
@@ -47,7 +47,7 @@ public interface InOrder {
      * inOrder.verify(secondMock, atLeastOnce()).someMethod("should be called second");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
      * @param mode times(x) or atLeastOnce()

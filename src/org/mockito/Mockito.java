@@ -242,7 +242,7 @@ public class Mockito extends Matchers {
      * Creates mock object of given class or interface.
      * <p>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param classToMock class or interface to mock
      * @return mock object
@@ -274,7 +274,7 @@ public class Mockito extends Matchers {
      * <p>
      * Although it's possible to verify stubbed methods it's a good pattern to focus on testing that stubbed value is used correctly.
      * <p>
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param methodCall method call
      * @return OngoingStubbing object to set stubbed value/exception
@@ -300,7 +300,7 @@ public class Mockito extends Matchers {
      *   verify(mock, times(1)).someMethod("some arg");
      * </pre>
      *  
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
      * @return mock object itself
@@ -322,7 +322,7 @@ public class Mockito extends Matchers {
      * 
      * <b>times(1) is the default</b> and can be omitted
      * <p>
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
      * @param mode times(x) or atLeastOnce()
@@ -363,7 +363,7 @@ public class Mockito extends Matchers {
      * 
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified
      */
@@ -388,7 +388,7 @@ public class Mockito extends Matchers {
      * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
      * the first one is more explicit and can read better.
      * <p>
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified
      */
@@ -408,7 +408,7 @@ public class Mockito extends Matchers {
      *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to stub
      * @return stubbable object that allows stubbing with throwable
@@ -434,7 +434,7 @@ public class Mockito extends Matchers {
      * <p>
      * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
      *
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified in order
      * 
@@ -459,7 +459,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @return verification mode
      */
@@ -473,7 +473,7 @@ public class Mockito extends Matchers {
      *   verify(mock, times(2)).someMethod("some arg");
      * </pre>
      * 
-     * See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param wantedNumberOfInvocations wanted number of invocations 
      * 

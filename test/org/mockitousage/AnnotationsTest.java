@@ -44,7 +44,7 @@ public class AnnotationsTest extends TestBase {
             MockitoAnnotations.initMocks(null);
             fail();
         } catch (MockitoException e) {
-            assertEquals("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations",
+            assertEquals("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class",
                     e.getMessage());
         }
     }

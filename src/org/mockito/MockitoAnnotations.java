@@ -51,7 +51,7 @@ import org.mockito.exceptions.base.MockitoException;
 public class MockitoAnnotations {
 
     /**
-     * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations}.
+     * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations} class.
      */
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
@@ -59,11 +59,11 @@ public class MockitoAnnotations {
     
     /**
      * Initializes objects annotated with &#064;Mock for given testClass.
-     * See examples in javadoc for {@link MockitoAnnotations}.
+     * See examples in javadoc for {@link MockitoAnnotations} class.
      */
     public static void initMocks(Object testClass) {
         if (testClass == null) {
-            throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations");
+            throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
         
         Class<?> clazz = testClass.getClass();
