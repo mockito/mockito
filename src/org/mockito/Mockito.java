@@ -256,6 +256,10 @@ public class Mockito extends Matchers {
      * <pre>
      *   stub(mock.someMethod()).toReturn(10);
      *   
+     *   //you can use flexible argument matchers, e.g:
+     *   stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
+     *   
+     *   //setting exception to be thrown:
      *   stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
      * </pre>
      *
@@ -311,6 +315,9 @@ public class Mockito extends Matchers {
      *   verify(mock, times(5)).someMethod("should be called five times");
      *   
      *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
+     *   
+     *   //you can use flexible argument matchers, e.g:
+     *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
      * </pre>
      * 
      * <b>times(1) is the default</b> and can be omitted

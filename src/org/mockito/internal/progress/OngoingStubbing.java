@@ -12,6 +12,10 @@ import org.mockito.Mockito;
  * <pre>
  * stub(mock.someMethod()).toReturn(10);
  * 
+ * //you can use flexible argument matchers, e.g:
+ * stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
+ * 
+ * //setting exception to be thrown:
  * stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
  * </pre>
  * 
