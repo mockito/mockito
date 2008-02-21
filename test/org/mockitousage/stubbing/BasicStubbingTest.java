@@ -4,21 +4,17 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.stubVoid;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -51,6 +47,22 @@ public class BasicStubbingTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {}
+    }
+    
+    class Base {}
+    class Sub extends Base {}
+
+    interface Generic {
+        List<Base> getList();
+    }
+    
+    @Test
+    public void shouldAllowStubbingWithSubtypes() throws Exception {
+        Generic mockTwo = mock(Generic.class);
+        
+        List<Sub> subs = null;
+        //TODO can I somehow avoid a cast here:
+        stub(mockTwo.getList()).toReturn((List) subs);
     }
     
     @Test

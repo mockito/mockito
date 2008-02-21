@@ -92,4 +92,20 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
 
         verify(mock, times(2)).add("test");
     }
+    
+    @Test
+    public void shouldAllowVerifyingInteractionNeverHappened() throws Exception {
+        mock.add("one");
+
+        verify(mock, never()).add("two");
+        verify(mock, never()).clear();
+        
+        try {
+            verify(mock, never()).add("one");
+            fail();
+        } catch (TooManyActualInvocations e) {
+            e.printStackTrace();
+            assertThat(e, messageContains("Wanted 0 times but was 1"));
+        }
+    }
 }

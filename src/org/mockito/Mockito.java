@@ -107,7 +107,9 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * <b>Warning:</b>
  * <p>
- * When multiple arguments are combined with matchers, all arguments have to be provided by matchers, e.g:
+ * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
+ * <p>
+ * E.g: (example shows verification but the same applies to stubbing):
  * <pre>
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
  *   //above is correct - eq() is also an argument matcher
@@ -481,5 +483,18 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return VerificationModeImpl.times(wantedNumberOfInvocations);
+    }
+    
+    /**
+     * Alias to times(0)
+     * <p>
+     * See {@link Mockito#times(int)}
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode never() {
+        return times(0);
     }
 }
