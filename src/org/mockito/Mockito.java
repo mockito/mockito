@@ -486,6 +486,8 @@ public class Mockito extends Matchers {
     }
     
     /**
+     * TODO better error reporting - important case
+     *  
      * Alias to times(0)
      * <p>
      * See {@link Mockito#times(int)}
