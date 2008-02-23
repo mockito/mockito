@@ -46,10 +46,9 @@ import org.mockito.internal.progress.ReturnValues;
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
- * <h3>Custom Matchers</h3>
+ * <h2>Custom Matchers</h2>
  * 
- * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods 
- * and pass an instance of hamcrest {@link Matcher}.
+ * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}.
  * <p>
  * You can use {@link ArgumentMatcher} (it's a hamcrest matcher with predefined describeTo() method for convenience)  
  * for creating your own matchers, e.g:

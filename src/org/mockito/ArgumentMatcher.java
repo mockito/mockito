@@ -15,8 +15,7 @@ import org.hamcrest.Matcher;
  * <p>
  * See {@link Matchers}
  * 
- * Use one of the {@link Matchers#argThat}, {@link Matchers#intThat}, etc. methods 
- * and pass an instance of hamcrest {@link Matcher}, e.g:
+ * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
  * <pre>
  * class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {

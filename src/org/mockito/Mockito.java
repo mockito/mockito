@@ -103,7 +103,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <p>
  * Argument matchers allow flexible verification or stubbing. 
- * See all {@link Matchers} including examples of custom matchers. 
+ * See all {@link Matchers} including examples of <b>custom matchers / hamcrest matchers</b>. 
  * <p>
  * <b>Warning:</b>
  * <p>
