@@ -12,10 +12,12 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
@@ -105,5 +107,22 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, never()).add("one");
             fail();
         } catch (NeverWantedButInvoked e) {}
+    }
+    
+    @Test
+    public void shouldAllowVerifyingInteractionNeverHappenedInOrder() throws Exception {
+        mock.add("one");
+        mock.add("two");
+
+        InOrder inOrder = inOrder(mock);
+        
+        inOrder.verify(mock, never()).add("xxx");
+        inOrder.verify(mock).add("one");
+        inOrder.verify(mock, never()).add("one");
+        
+        try {
+            inOrder.verify(mock, never()).add("two");
+            fail();
+        } catch (VerifcationInOrderFailure e) {}
     }
 }
