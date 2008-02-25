@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -261,6 +262,20 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch(InvocationDiffersFromActual e) {
             assertThat(e, messageContains("IMethods.varargs(class [Ljava.lang.String;)"));
             assertThat(e, causeMessageContains("IMethods.varargs(class [Ljava.lang.Object;)"));
+        }
+    }
+    
+    @Test
+    public void shouldSayNeverWantedButInvoked() throws Exception {
+        mock.simpleMethod(1);
+    
+        verify(mock, never()).simpleMethod(2);
+        try {
+            verify(mock, never()).simpleMethod(1);
+            fail();
+        } catch (NeverWantedButInvoked e) {
+            assertThat(e, messageContains("Never wanted but invoked!"));
+            assertThat(e, causeMessageContains("Undesired invocation"));
         }
     }
 }

@@ -13,8 +13,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
 
 public class PointingStackTraceToActualInvocationTest extends TestBase {
     
@@ -82,7 +82,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock, times(0)).simpleMethod(1);
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (NeverWantedButInvoked e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
         }
     }   

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -71,8 +72,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(0)).clear();
             fail();
-        } catch (TooManyActualInvocations e) {
-            assertThat(e, messageContains("Wanted 0 times but was 1"));
+        } catch (NeverWantedButInvoked e) {
+            assertThat(e, messageContains("Never wanted but invoked!"));
         }
     }
 
@@ -103,9 +104,6 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, never()).add("one");
             fail();
-        } catch (TooManyActualInvocations e) {
-            e.printStackTrace();
-            assertThat(e, messageContains("Wanted 0 times but was 1"));
-        }
+        } catch (NeverWantedButInvoked e) {}
     }
 }

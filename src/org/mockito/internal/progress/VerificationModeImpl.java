@@ -96,12 +96,17 @@ public class VerificationModeImpl implements VerificationMode {
         return !atLeastOnceMode() && wantedInvocationCount < actualCount;
     }
     
-    public boolean wantedCountIsZero() {
+    public boolean neverWanted() {
         return !atLeastOnceMode() && wantedInvocationCount == 0;
+    }
+    
+    public boolean neverWantedButInvoked(int actualCount) {
+        return neverWanted() && actualCount > 0;
     }
     
     @Override
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
     }
+
 }

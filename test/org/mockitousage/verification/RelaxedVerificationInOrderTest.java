@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.TestBase;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -195,7 +195,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             verify(mockOne, times(0)).simpleMethod(1);
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (NeverWantedButInvoked e) {}
     }
     
     @Test

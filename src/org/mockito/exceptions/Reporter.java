@@ -18,6 +18,7 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
@@ -199,6 +200,15 @@ public class Reporter {
                 "Wanted " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
     }
+    
+    public void neverWantedButInvoked(Printable wanted, HasStackTrace firstUndesired) {
+        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
+
+        throw new NeverWantedButInvoked(join(
+                wanted.toString(),
+                "Never wanted but invoked!"
+        ), cause);
+    }    
     
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, Printable wanted, HasStackTrace firstUndesired) {
         UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);

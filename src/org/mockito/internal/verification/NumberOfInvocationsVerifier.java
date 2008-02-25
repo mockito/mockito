@@ -38,6 +38,9 @@ public class NumberOfInvocationsVerifier implements Verifier {
         if (mode.tooLittleActualInvocations(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
             reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted, lastInvocation);
+        } else if (mode.neverWantedButInvoked(actualCount)) {
+            HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
+            reporter.neverWantedButInvoked(wanted, firstUndesired); 
         } else if (mode.tooManyActualInvocations(actualCount)) {
             HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
             reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted, firstUndesired);

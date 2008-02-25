@@ -118,7 +118,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
- * <h3>Verifying exact number of invocations / at least once</h3>
+ * <h3>Verifying exact number of invocations / at least once / never</h3>
  *
  *<pre>
  *  //using mock 
@@ -139,8 +139,12 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *  verify(mockedList, times(2)).add("twice");
  *  verify(mockedList, times(3)).add("three times");
  *  
+ *  //verification using never(). never() is an alias to times(0)
+ *  verify(mockedList, never()).add("three times");
+ *  
  *  //verification using atLeastOnce()
  *  verify(mockedList, atLeastOnce()).add("three times");
+ *  
  * </pre>
  * 
  * <p>
@@ -195,7 +199,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
  *
- * <h3>Making sure no interactions happened on mock</h3>
+ * <h3>Making sure interaction(s) never happened on mock</h3>
  * 
  * <pre>
  *   //using mocks - only mockOne is interacted
@@ -204,7 +208,10 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   //ordinary verification
  *   verify(mockOne).add("one");
  *   
- *   //other mocks should not be interacted
+ *   //verify that method was never called on a mock
+ *   verify(mockOne, never()).add("two"); 
+ *   
+ *   //verify that other mocks were not interacted
  *   verifyZeroInteractions(mockTwo, mockThree);
  *   
  *   //following works exactly the same as above
@@ -486,8 +493,6 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * TODO better error reporting - important case
-     *  
      * Alias to times(0)
      * <p>
      * See {@link Mockito#times(int)}

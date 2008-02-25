@@ -35,7 +35,7 @@ public class NumberOfInvocationsInOrderVerifier implements Verifier {
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
         
         boolean noMatchFound = chunk.size() == 0;
-        if (mode.wantedCountIsZero() && noMatchFound) {
+        if (mode.neverWanted() && noMatchFound) {
             return;
         }
         

@@ -98,13 +98,14 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
     
     @Test
     public void shouldReportTooManyActual() throws Exception {
-        VerificationModeImpl mode = times(0);
+        VerificationModeImpl mode = times(1);
+        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
         verifier.verify(invocations, wanted, mode);
         
-        assertEquals(1, reporterStub.actualCount);
-        assertEquals(0, reporterStub.wantedCount);
+        assertEquals(2, reporterStub.actualCount);
+        assertEquals(1, reporterStub.wantedCount);
         assertEquals(wanted, reporterStub.wanted);
     }
     

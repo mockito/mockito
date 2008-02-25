@@ -119,11 +119,11 @@ public class VerificationModeImplTest extends TestBase {
     
     @Test
     public void shouldKnowIfWantedCountIsZero() throws Exception {
-        assertTrue(times(0).wantedCountIsZero());
+        assertTrue(times(0).neverWanted());
         
-        assertFalse(times(1).wantedCountIsZero());
-        assertFalse(times(20).wantedCountIsZero());
-        assertFalse(atLeastOnce().wantedCountIsZero());
+        assertFalse(times(1).neverWanted());
+        assertFalse(times(20).neverWanted());
+        assertFalse(atLeastOnce().neverWanted());
     }
     
     @Test
@@ -134,5 +134,18 @@ public class VerificationModeImplTest extends TestBase {
         
         assertFalse(noMoreInteractions().exactNumberOfInvocationsMode());
         assertFalse(inOrder(1, asList(new Object())).exactNumberOfInvocationsMode());
+    }
+    
+    @Test
+    public void shouldKnowIfNeverWantedButInvoked() throws Exception {
+        assertFalse(times(1).neverWantedButInvoked(0));
+        assertFalse(times(10).neverWantedButInvoked(20));
+        assertFalse(times(0).neverWantedButInvoked(0));
+        
+        assertFalse(atLeastOnce().neverWantedButInvoked(0));
+        assertFalse(atLeastOnce().neverWantedButInvoked(1));
+        
+        assertTrue(times(0).neverWantedButInvoked(1));
+        assertTrue(times(0).neverWantedButInvoked(10));
     }
 }
