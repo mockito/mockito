@@ -110,6 +110,18 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
     }
     
     @Test
+    public void shouldReportNeverWantedButInvoked() throws Exception {
+        VerificationModeImpl mode = times(0);
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        finderStub.actualToReturn.add(invocation);
+        
+        verifier.verify(invocations, wanted, mode);
+        
+        assertEquals(wanted, reporterStub.wanted);
+        assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);
+    }
+    
+    @Test
     public void shouldMarkInvocationsAsVerified() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
@@ -137,6 +149,12 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
                     this.actualCount = actualCount;
                     this.wanted = wanted;
                     this.stackTrace = firstUndesired;
+        }
+        
+        @Override
+        public void neverWantedButInvoked(Printable wanted, HasStackTrace firstUndesired) {
+            this.wanted = wanted;
+            this.stackTrace = firstUndesired;
         }
     }
 }
