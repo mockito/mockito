@@ -53,7 +53,7 @@ public interface InOrder {
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
-     * @param mode, for example times(x) or atLeastOnce()
+     * @param mode for example times(x) or atLeastOnce()
      * 
      * @return mock object itself
      */

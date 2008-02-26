@@ -34,6 +34,8 @@ import org.mockito.internal.progress.ReturnValues;
  *   //1 or 10
  *   mock.someMethod(or(eq(1), eq(10)));
  * </pre>
+ * 
+ * Scroll down to see all methods - full list of matchers.
  */
 public class AdditionalMatchers {
 

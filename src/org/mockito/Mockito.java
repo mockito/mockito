@@ -159,23 +159,6 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   mockedList.clear();
  * </pre>
  *
- * <h3>Finding redundant invocations</h3>
- * 
- * <pre>
- *   //using mocks
- *   mockedList.add("one");
- *   mockedList.add("two");
- *   
- *   verify(mockedList).add("one");
- *   
- *   //following verification will fail 
- *   verifyNoMoreInteractions(mockedList);
- * </pre>
- * 
- * Remember that usually it's not necessary to call verifyNoMoreInteractions() all the time.
- * <p>
- * See more {@link Mockito#verifyNoMoreInteractions}
- * 
  * <h3>Verification in order</h3>
  * 
  * <pre>
@@ -217,10 +200,29 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   //following works exactly the same as above
  *   verifyNoMoreInteractions(mockTwo, mockThree);
  * </pre>
+ *
+ * See more {@link Mockito#verifyNoMoreInteractions}
  * 
  * <p>
  * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
  * the first one is more explicit and can read better.
+ *
+ * <h3>Finding redundant invocations</h3>
+ * 
+ * <pre>
+ *   //using mocks
+ *   mockedList.add("one");
+ *   mockedList.add("two");
+ *   
+ *   verify(mockedList).add("one");
+ *   
+ *   //following verification will fail 
+ *   verifyNoMoreInteractions(mockedList);
+ * </pre>
+ * 
+ * Remember that usually it's not necessary to call verifyNoMoreInteractions() all the time.
+ * See also {@link Mockito#never()} - it is more explicit and communicates an intent well. 
+ * <p>
  * 
  * <h3>Shorthand for mocks creation - &#064;Mock annotation</h3>
  * 
@@ -356,6 +358,7 @@ public class Mockito extends Matchers {
      * else was invoked on your mocks.
      * <p>
      * Usually it's not necessary to call verifyNoMoreInteractions() all the time.
+     * See also {@link Mockito#never()} - it is more explicit and communicates an intent well.
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
