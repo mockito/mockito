@@ -75,7 +75,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * </li>
  * <li>
  * Stubbing can be overridden: for example common stubbing can go to fixture setup
- * but test methods can override it anyway
+ * but test methods can override it.
  * </li>
  * <li>
  * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
@@ -150,7 +150,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <p>
  * <b>times(1) is the default.</b> Therefore using times(1) explicitly can be omitted.
  * 
- * <h3>Stubbing void methods with exceptions</h3>
+ * <h3>Stubbing void methods with an exceptions</h3>
  * 
  * <pre>
  *   stubVoid(mockedList).toThrow(new RuntimeException()).on().clear();
@@ -277,7 +277,7 @@ public class Mockito extends Matchers {
      * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture setup
-     * but test methods can override it anyway 
+     * but test methods can override it.
      * <p>
      * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
      * <p>
@@ -323,7 +323,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior happened at least once or exact number of times. E.g:
+     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
      * <pre>
      *   verify(mock, times(5)).someMethod("was called five times");
      *   
@@ -417,7 +417,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs void method with exception. E.g:
+     * Stubs void method with an exception. E.g:
      * <pre>
      *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
      * </pre>
@@ -482,7 +482,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Allows exact number of invocations verification. E.g:
+     * Allows verifying exact number of invocations. E.g:
      * <pre>
      *   verify(mock, times(2)).someMethod("some arg");
      * </pre>

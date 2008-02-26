@@ -34,9 +34,9 @@ import org.hamcrest.Matcher;
  * To keep it readable you may want to extract method, e.g:
  * 
  * <pre>
- *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
+ *   verify(mock).addAll(<b>argThat(new IsListOfTwoElements())</b>);
  *   //becomes
- *   verify(mock).addAll(listOfTwoElements());
+ *   verify(mock).addAll(<b>listOfTwoElements()</b>);
  * </pre>
  *
  * Custom argument matchers can make the test less readable. 

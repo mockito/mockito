@@ -7,7 +7,7 @@ package org.mockito.internal.stubbing;
 import org.mockito.Mockito;
 
 /**
- * Stubs void method with exception. E.g:
+ * Stubs void method with an exception. E.g:
  * 
  * <pre>
  * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 public interface VoidMethodStubbable<T> {
 
     /**
-     * Stubs void method with exception. E.g:
+     * Stubs void method with an exception. E.g:
      * 
      * <pre>
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
