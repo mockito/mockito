@@ -9,9 +9,11 @@ import org.mockito.Mockito;
 /**
  * Allows verifying that certain behavior happened at least once or exact number of times. E.g:
  * <pre>
- *   verify(mock, times(5)).someMethod("should be called five times");
+ *   verify(mock, times(5)).someMethod("was called five times");
  *   
- *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
+ *   verify(mock, atLeastOnce()).someMethod("was called at least once");
+ *   
+ *   verify(mock, never()).someMethod("was never called");
  * </pre>
  * 
  * <b>times(1) is the default</b> and can be omitted

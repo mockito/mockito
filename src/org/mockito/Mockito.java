@@ -23,7 +23,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * Following examples mock List, because everyone knows its interface (methods like add(), get(), clear() will be used). 
  * <br>You probably wouldn't mock List class 'in real'.  
  * 
- * <h3>Let's verify!</h3>
+ * <h3>Let's verify some behaviour!</h3>
  * 
  * <pre>
  * //Let's import Mockito statically so that code looks clearer
@@ -103,7 +103,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <p>
  * Argument matchers allow flexible verification or stubbing. 
- * See all {@link Matchers} including examples of <b>custom matchers / hamcrest matchers</b>. 
+ * See all {@link Matchers} including examples of <b>custom argument matchers / hamcrest matchers</b>. 
  * <p>
  * <b>Warning:</b>
  * <p>
@@ -140,7 +140,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *  verify(mockedList, times(3)).add("three times");
  *  
  *  //verification using never(). never() is an alias to times(0)
- *  verify(mockedList, never()).add("three times");
+ *  verify(mockedList, never()).add("never happened");
  *  
  *  //verification using atLeastOnce()
  *  verify(mockedList, atLeastOnce()).add("three times");
@@ -183,15 +183,15 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *   List secondMock = mock(List.class);
  *   
  *   //using mocks
- *   firstMock.add("should be called first");
- *   secondMock.add("should be called second");
+ *   firstMock.add("was called first");
+ *   secondMock.add("was called second");
  *   
  *   //create inOrder object passing any mocks that need to be verified in order
  *   InOrder inOrder = inOrder(firstMock, secondMock);
  *   
  *   //following will make sure that firstMock was called before secondMock
- *   inOrder.verify(firstMock).add("should be called first");
- *   inOrder.verify(secondMock).add("should be called second");
+ *   inOrder.verify(firstMock).add("was called first");
+ *   inOrder.verify(secondMock).add("was called second");
  * </pre>
  * 
  * Verification in order is flexible - you don't have to verify all interactions one-by-one
@@ -300,7 +300,9 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior <b>happened once</b>. E.g:
+     * Verifies certain behavior <b>happened once</b> 
+     * <p>
+     * Alias to <code>verify(mock, times(1))</code> E.g:
      * <pre>
      *   verify(mock).someMethod("some arg");
      * </pre>
@@ -321,9 +323,9 @@ public class Mockito extends Matchers {
     /**
      * Verifies certain behavior happened at least once or exact number of times. E.g:
      * <pre>
-     *   verify(mock, times(5)).someMethod("should be called five times");
+     *   verify(mock, times(5)).someMethod("was called five times");
      *   
-     *   verify(mock, atLeastOnce()).someMethod("should be called at least once");
+     *   verify(mock, atLeastOnce()).someMethod("was called at least once");
      *   
      *   //you can use flexible argument matchers, e.g:
      *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
@@ -334,7 +336,7 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
-     * @param mode times(x) or atLeastOnce()
+     * @param mode times(x), atLeastOnce() or never()
      * 
      * @return mock object itself
      */
@@ -434,8 +436,8 @@ public class Mockito extends Matchers {
      * <pre>
      *   InOrder inOrder = inOrder(firstMock, secondMock);
      *   
-     *   inOrder.verify(firstMock).add("should be called first");
-     *   inOrder.verify(secondMock).add("should be called second");
+     *   inOrder.verify(firstMock).add("was called first");
+     *   inOrder.verify(secondMock).add("was called second");
      * </pre>
      * 
      * Verification in order is flexible - you don't have to verify all interactions one-by-one
@@ -493,9 +495,13 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Alias to times(0)
+     * Alias to times(0), see {@link Mockito#times(int)}
      * <p>
-     * See {@link Mockito#times(int)}
+     * Verifies that interaction did not happen
+     * <pre>
+     *   verify(mock, never()).someMethod();
+     * </pre>
+     * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 

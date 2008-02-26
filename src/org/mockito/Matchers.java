@@ -33,6 +33,8 @@ import org.mockito.internal.progress.ReturnValues;
  *  //you can also verify using argument matcher
  *  verify(mockedList).get(anyInt());
  * </pre>
+ * Scroll down to see all methods - full list of matchers.
+ * <p>
  * <b>Warning:</b>
  * <p>
  * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
@@ -46,7 +48,7 @@ import org.mockito.internal.progress.ReturnValues;
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
- * <h1>Custom Matchers</h1>
+ * <h1>Custom Argument Matchers</h1>
  * 
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}.
  * <p>
@@ -69,15 +71,17 @@ import org.mockito.internal.progress.ReturnValues;
  *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
  * </pre>
  * 
- * Custom matchers are generally used rarely. 
- * <p>
  * To keep it readable you may want to extract method, e.g:
  * <pre>
  *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
  *   //becomes
  *   verify(mock).addAll(listOfTwoElements());
  * </pre>
- * 
+ *
+ * Custom argument matchers can make the test less readable. 
+ * Sometimes it's better to implement equals() for arguments that are passed to mocks 
+ * (Mockito naturally uses equals() for argument matching). 
+ * This can make the test cleaner.
  */
 public class Matchers {
 

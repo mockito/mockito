@@ -13,8 +13,6 @@ import org.hamcrest.Matcher;
  * <p>
  * ArgumentMatcher is an hamcrest {@link Matcher} with predefined describeTo() method for convenience.
  * <p>
- * See {@link Matchers}
- * <p>
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
  * <pre>
@@ -33,8 +31,6 @@ import org.hamcrest.Matcher;
  * verify(mock).addAll(argThat(new IsListOfTwoElements()));
  * </pre>
  * 
- * Custom matchers are generally used rarely.
- * <p>
  * To keep it readable you may want to extract method, e.g:
  * 
  * <pre>
@@ -42,6 +38,13 @@ import org.hamcrest.Matcher;
  *   //becomes
  *   verify(mock).addAll(listOfTwoElements());
  * </pre>
+ *
+ * Custom argument matchers can make the test less readable. 
+ * Sometimes it's better to implement equals() for arguments that are passed to mocks 
+ * (Mockito naturally uses equals() for argument matching). 
+ * This can make the test cleaner.
+ * <p>
+ * Read more about {@link Matchers}
  * 
  * @param <T> type of argument
  */
