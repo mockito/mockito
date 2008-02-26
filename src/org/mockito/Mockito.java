@@ -91,19 +91,22 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * <h3>Argument matchers</h3>
  * 
  * <pre>
- *  //stubbing using anyInt() argument matcher
+ *  //stubbing using built-in anyInt() argument matcher
  *  stub(mockedList.get(anyInt())).toReturn("element");
+ *  
+ *  //stubbing using hamcrest (let's say isValid() returns your own hamcrest matcher):
+ *  stub(mockedList.contains(argThat(isValid()))).toReturn("element");
  *  
  *  //following prints "element"
  *  System.out.println(mockedList.get(999));
  *  
- *  //you can also verify using argument matcher
+ *  //<b>you can also verify using argument matcher</b>
  *  verify(mockedList).get(anyInt());
  * </pre>
  * 
  * <p>
  * Argument matchers allow flexible verification or stubbing. 
- * See all {@link Matchers} including examples of <b>custom argument matchers / hamcrest matchers</b>. 
+ * See the <b>whole library of</b> {@link Matchers} including examples of <b>custom argument matchers / hamcrest matchers</b>. 
  * <p>
  * <b>Warning:</b>
  * <p>
@@ -135,7 +138,7 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *  verify(mockedList).add("once");
  *  verify(mockedList, times(1)).add("once");
  *  
- *  //exact number of invocation verification
+ *  //exact number of invocations verification
  *  verify(mockedList, times(2)).add("twice");
  *  verify(mockedList, times(3)).add("three times");
  *  
