@@ -220,30 +220,33 @@
       <fileset dir="${target.dir}/javadoc" />
     </copy>
   </target>
-	
+  
   <target name="create.maven.bundle" depends="jar" description="Creates a bundle for Maven Central Repository">
-  	
+    
     <macrodef name="bundle" taskname="">
       <attribute name="type"/>
       <attribute name="destdir" default="${target.dir}/maven" />	
       <sequential>
-      	<filter token="version" value="${version}"/>
+        <filter token="version" value="${version}"/>
         <copy file="maven/mockito-@{type}.pom" tofile="@{destdir}/mockito-@{type}-pom/pom.xml" filtering="true" />
-      	
+        
         <jar destfile="@{destdir}/mockito-@{type}-${version}-bundle.jar">
           <fileset file="${target.dir}/mockito-@{type}-${version}.jar" />
           <fileset file="@{destdir}/mockito-@{type}-pom/pom.xml" />
         </jar>        
       </sequential>
     </macrodef>
-  	
+    
     <bundle type="core"/>
-  	<bundle type="all"/>
-  	
+    <bundle type="all"/>
+    
   </target> 
-	
+  
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs test against jars" />
   
   <target name="all" depends="zip, tgzip" description="cleans, builds, tests, jars, zips" />
+  
+  <!-- to make Hudson happy -->
+  <target name="build" depends="test"/>
   
 </project>
