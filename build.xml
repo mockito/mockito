@@ -17,7 +17,7 @@
   <property name="lib.dir.run" value="${lib.dir}/run" />
   <property name="lib.dir.test" value="${lib.dir}/test" />
   
-  <property name="version" value="1.1" />
+  <property name="version" value="1.2" />
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="zip" value="mockito-${version}.zip" />
