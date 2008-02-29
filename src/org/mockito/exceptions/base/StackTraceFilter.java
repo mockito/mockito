@@ -7,7 +7,6 @@ package org.mockito.exceptions.base;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class StackTraceFilter {
     
     public boolean isLastStackElementToRemove(StackTraceElement e) {
@@ -28,7 +27,7 @@ public class StackTraceFilter {
             i++;
         }
         
-        List<StackTraceElement> filtered = unfilteredStackTrace.subList(lastToRemove+1, unfilteredStackTrace.size() - 1);
+        List<StackTraceElement> filtered = unfilteredStackTrace.subList(lastToRemove + 1, unfilteredStackTrace.size());
         hasStackTrace.setStackTrace(filtered.toArray(new StackTraceElement[]{}));
     }
 }

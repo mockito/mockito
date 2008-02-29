@@ -12,11 +12,11 @@ import java.util.List;
 public class CommonStackTraceRemover {
 
     public void remove(HasStackTrace hasStackTrace, List<StackTraceElement> causeStackTrace) {
-        List<StackTraceElement> exceptionsPart = null;
-        List<StackTraceElement> exceptionsTrace = Arrays.asList(hasStackTrace.getStackTrace());
-        int length = exceptionsTrace.size();
-        for (int i = 0; i < length; i++) {
-            List<StackTraceElement> subList = exceptionsTrace.subList(i, length);
+        List<StackTraceElement> fullTrace = Arrays.asList(hasStackTrace.getStackTrace());
+        List<StackTraceElement> cleanedPart = fullTrace;
+        final int totalCount = fullTrace.size();
+        for (int i = 0; i < totalCount; i++) {
+            List<StackTraceElement> subList = fullTrace.subList(i, totalCount);
             int lastStartingIndexOfSubList = Collections.lastIndexOfSubList(causeStackTrace, subList);
             if (lastStartingIndexOfSubList == -1) {
                 continue;
@@ -24,12 +24,11 @@ public class CommonStackTraceRemover {
             
             int lastEndingIndexOfSubList = lastStartingIndexOfSubList + subList.size() - 1;
             if (lastEndingIndexOfSubList == causeStackTrace.size() - 1) {
-                exceptionsPart = exceptionsTrace.subList(0, i);
+                cleanedPart = fullTrace.subList(0, i);
                 break;
             }
         }
         
-        assert exceptionsPart != null;
-        hasStackTrace.setStackTrace(exceptionsPart.toArray(new StackTraceElement[exceptionsPart.size()]));
+        hasStackTrace.setStackTrace(cleanedPart.toArray(new StackTraceElement[cleanedPart.size()]));
     }
 }
