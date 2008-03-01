@@ -89,6 +89,7 @@ public class ExtraMatchers extends CoreMatchers {
         };
     }
     
+    //TODO can't you use matchers from hamcrest?
     public static <T> Matcher<Collection> collectionHas(final T ... elements) {
         return new BaseMatcher<Collection>() {
 

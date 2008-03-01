@@ -17,7 +17,7 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
@@ -156,19 +156,19 @@ public class Reporter {
         ));
     }    
 
-    public void wantedDiffersFromActual(Printable wanted, Printable actual, HasStackTrace actualInvocationStackTrace) {
-        WantedDiffersFromActual cause1 = new WantedDiffersFromActual(join(
-                "Actual invocation:",
-                actual.toString()
+    public void argumentsAreDifferent(Printable wanted, Printable wantedArgs, Printable actualArgs, HasStackTrace actualInvocationStackTrace) {
+        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
+                "All actual arguments:",
+                actualArgs.toString()
             ));
         
-        cause1.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        WantedDiffersFromActual cause = cause1;
-
-        throw new InvocationDiffersFromActual(join(
-                "Invocation differs from actual",
-                "Wanted invocation:",
-                wanted.toString()
+        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
+        
+        throw new ArgumentsAreDifferentException(join(
+                "Argument(s) are different!",
+                "Method: " + wanted.toString(),
+                "All wanted arguments:",
+                wantedArgs.toString()
             ), cause);
     }
     

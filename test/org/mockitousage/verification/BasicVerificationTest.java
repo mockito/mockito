@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 @SuppressWarnings("unchecked")
@@ -55,7 +55,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (InvocationDiffersFromActual expected) {}
+        } catch (ArgumentsAreDifferentException expected) {}
     }
 
     @Test

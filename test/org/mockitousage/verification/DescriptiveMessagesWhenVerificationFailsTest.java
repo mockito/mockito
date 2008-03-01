@@ -18,7 +18,7 @@ import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedDiffersFromActual;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -72,14 +72,18 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).twoArgumentMethod(1, 1000);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (ArgumentsAreDifferentException e) {
             String expected =
                     "\n" +
-                    "Invocation differs from actual" +
+                    "Argument(s) are different!" +
                     "\n" +
-                    "Wanted invocation:" +
+                    "Method: IMethods.twoArgumentMethod(...)" +
                     "\n" +
-                    "IMethods.twoArgumentMethod(1, 1000)";
+                    "All wanted arguments:" +
+                    "\n" +
+                    "    1: 1" +
+                    "\n" +
+                    "    2: 1000";
 
             assertEquals(expected, e.getMessage());
 
@@ -87,9 +91,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String expectedCause =
                     "\n" +
-                    "Actual invocation:" +
+                    "All actual arguments:" +
                     "\n" +
-                    "IMethods.twoArgumentMethod(1, 2)";
+                    "    1: 1" +
+                    "\n" +
+                    "    2: 2";
 
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -102,9 +108,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.simpleMethod(\"test\")"));
-            assertThat(e, causeMessageContains("IMethods.simpleMethod()"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("    1: \"test\""));
+            assertThat(e, causeMessageContains("    <no arguments>"));
         }
     }
 
@@ -119,9 +125,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.twoArgumentMethod(3, 1000)"));
-            assertThat(e, causeMessageContains("IMethods.twoArgumentMethod(3, 3)"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: 3"));
+            assertThat(e, messageContains("2: 1000"));
+            assertThat(e, causeMessageContains("1: 3"));
+            assertThat(e, causeMessageContains("2: 3"));
         }
     }
 
@@ -210,9 +218,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.oneArray([false, false, false])"));
-            assertThat(e, causeMessageContains("IMethods.oneArray([true, false, false])"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: [false, false, false]"));
+            assertThat(e, causeMessageContains("1: [true, false, false]"));
         }
     }
 
@@ -223,9 +231,14 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).varargsString(10, "two", "one");
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.varargsString(10, \"two\", \"one\")"));
-            assertThat(e, causeMessageContains("IMethods.varargsString(10, \"one\", \"two\")"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: 10"));
+            assertThat(e, messageContains("2: \"two\""));
+            assertThat(e, messageContains("3: \"one\""));
+            
+            assertThat(e, causeMessageContains("1: 10"));
+            assertThat(e, causeMessageContains("2: \"one\""));
+            assertThat(e, causeMessageContains("3: \"two\""));
         }
     }
 
@@ -234,11 +247,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         mock.simpleMethod("foo");
 
         try {
-            verify(mock).simpleMethod(matches("burrito"));
+            verify(mock).simpleMethod(matches("burrito from Exmouth"));
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.simpleMethod(matches(\"burrito\"))"));
-            assertThat(e, causeMessageContains("IMethods.simpleMethod(\"foo\")"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: matches(\"burrito from Exmouth\")"));
+            assertThat(e, causeMessageContains("1: \"foo\""));
         }
     }
 
@@ -248,8 +261,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, causeMessageContains("simpleMethod(null, null)"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, causeMessageContains("1: null"));
+            assertThat(e, causeMessageContains("2: null"));
         }
     }
 
@@ -259,9 +273,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).varargs((String[]) new String[] {});
             fail();
-        } catch(InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("IMethods.varargs(class [Ljava.lang.String;)"));
-            assertThat(e, causeMessageContains("IMethods.varargs(class [Ljava.lang.Object;)"));
+        } catch(ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: class [Ljava.lang.String;"));
+            assertThat(e, causeMessageContains("1: class [Ljava.lang.Object;"));
         }
     }
     

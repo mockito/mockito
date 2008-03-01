@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 
 public class StackTrackeChangingTest extends TestBase {
     
@@ -33,7 +33,7 @@ public class StackTrackeChangingTest extends TestBase {
         try {
             verifySimpleMethodOnAMock();
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (ArgumentsAreDifferentException e) {
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
             assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
             assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));

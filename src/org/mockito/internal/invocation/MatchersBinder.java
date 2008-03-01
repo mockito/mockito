@@ -4,12 +4,10 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.progress.LastArguments;
 
 @SuppressWarnings("unchecked")
@@ -19,9 +17,7 @@ public class MatchersBinder {
         List<Matcher> lastMatchers = LastArguments.instance().pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        List<Matcher> processedMatchers = createEqualsMatchers(invocation, lastMatchers);
-        
-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, processedMatchers);
+        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, lastMatchers);
         return invocationWithMatchers;
     }
 
@@ -33,20 +29,5 @@ public class MatchersBinder {
                 new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize);
             }
         }
-    }
-    
-    /**
-     * if user passed bare arguments then create EqualsMatcher for every argument.
-     */
-    private List<Matcher> createEqualsMatchers(Invocation invocation,
-            List<Matcher> matchers) {
-        if (matchers != null) {
-            return matchers;
-        }
-        List<Matcher> result = new ArrayList<Matcher>();
-        for (Object argument : invocation.getArguments()) {
-            result.add(new Equals(argument));
-        }
-        return result;
     }
 }

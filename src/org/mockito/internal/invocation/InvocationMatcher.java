@@ -5,11 +5,12 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Printable;
+import org.mockito.internal.matchers.Equals;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements Printable {
@@ -18,15 +19,24 @@ public class InvocationMatcher implements Printable {
     private final List<Matcher> matchers;
 
     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
-        if (matchers == null) {
-            throw new IllegalArgumentException("matchers cannot be null");
-        }
         this.invocation = invocation;
-        this.matchers = matchers;
+        if (matchers == null) {
+            this.matchers = buildMatchers(invocation);
+        } else {
+            this.matchers = matchers;
+        }
     }
     
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<Matcher>emptyList());
+        this(invocation, null);
+    }
+
+    private List<Matcher> buildMatchers(Invocation invocation) {
+        List<Matcher> result = new ArrayList<Matcher>();
+        for (Object argument : invocation.getArguments()) {
+            result.add(new Equals(argument));
+        }
+        return result;
     }
     
     public Method getMethod() {
@@ -72,5 +82,17 @@ public class InvocationMatcher implements Printable {
     
     public String toStringWithArgumentTypes() {
         return invocation.toStringWithArgumentTypes();
+    }
+
+    public String getMethodName() {
+        return invocation.getMethodName();
+    }
+
+    public String getTypedArgs() {
+        return invocation.getTypedArgs();
+    }
+    
+    public String getArgs() {
+        return invocation.getArgs(matchers);
     }
 }

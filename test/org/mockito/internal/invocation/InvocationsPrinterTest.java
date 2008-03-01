@@ -15,12 +15,14 @@ public class InvocationsPrinterTest extends TestBase{
 
     @Test
     public void shouldPrintWantedAndActualInvocation() throws Exception {
-        InvocationMatcher simpleMethod = new InvocationBuilder().simpleMethod().toInvocationMatcher();
-        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
+        InvocationMatcher simpleMethod = new InvocationBuilder().simpleMethod().arg("test").toInvocationMatcher();
+        Invocation differentMethod = new InvocationBuilder().differentMethod().arg("foo").toInvocation();
+        
         InvocationsPrinter printer = new InvocationsPrinter(simpleMethod, differentMethod);
         
-        assertEquals("Object.simpleMethod()", printer.getWanted().toString());
-        assertEquals("Object.differentMethod()", printer.getActual().toString());
+        assertEquals("Object.simpleMethod(...)", printer.getWanted().toString());
+        assertEquals("    1: \"test\"", printer.getWantedArgs().toString());
+        assertEquals("    1: \"foo\"", printer.getActualArgs().toString());
     }
     
     class Super {
@@ -32,7 +34,7 @@ public class InvocationsPrinterTest extends TestBase{
     }
 
     @Test
-    public void shouldPrintSequenceNumbersWhenMatchesButMocksDifferent() throws Exception {
+    public void shouldPrintTypesWhenOnlyTypesDiffer() throws Exception {
         Method methodOne = Super.class.getDeclaredMethod("test", Object.class);
         Method methodTwo = Sub.class.getDeclaredMethod("test", String.class);
         
@@ -42,8 +44,9 @@ public class InvocationsPrinterTest extends TestBase{
         
         assertEquals(invocationOne.toString(), invocationTwo.toString());
         
-        assertEquals("Object.test(class java.lang.Object)", printer.getWanted().toString());
-        assertEquals("Object.test(class java.lang.String)", printer.getActual().toString());
+        assertEquals("Object.test(...)", printer.getWanted().toString());
+        assertEquals("    1: class java.lang.Object", printer.getWantedArgs().toString());
+        assertEquals("    1: class java.lang.String", printer.getActualArgs().toString());
     }
     
     class Dummy {
@@ -52,7 +55,7 @@ public class InvocationsPrinterTest extends TestBase{
     }
     
     @Test
-    public void shouldPrintTypesWhenMockArgsAndMethodNameMatchButMethodNotEqual() throws Exception {
+    public void shouldPrintVarargTypesWhenOnlyTypesDiffer() throws Exception {
         Method methodOne = Dummy.class.getDeclaredMethod("test", new Object[]{}.getClass());
         Method methodTwo = Dummy.class.getDeclaredMethod("test", new String[]{}.getClass());
         
@@ -62,7 +65,8 @@ public class InvocationsPrinterTest extends TestBase{
         
         assertEquals(invocationOne.toString(), invocationTwo.toString());
         
-        assertEquals("Object.test(class [Ljava.lang.Object;)", printer.getWanted().toString());
-        assertEquals("Object.test(class [Ljava.lang.String;)", printer.getActual().toString());
+        assertEquals("Object.test(...)", printer.getWanted().toString());
+        assertEquals("    1: class [Ljava.lang.Object;", printer.getWantedArgs().toString());
+        assertEquals("    1: class [Ljava.lang.String;", printer.getActualArgs().toString());
     }
 }

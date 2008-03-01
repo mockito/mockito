@@ -6,6 +6,7 @@ package org.mockito.internal.invocation;
 
 import static java.util.Arrays.*;
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +20,9 @@ import org.mockito.internal.matchers.NotNull;
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {
 
-    @Test(expected=IllegalArgumentException.class)
-    public void shouldScreamWhenMatchersNull() throws Exception {
-        new InvocationMatcher(new InvocationBuilder().toInvocation(), null);
+    public void shouldBuildEqualsMatchersWhenNullPassed() throws Exception {
+        InvocationMatcher m = new InvocationMatcher(new InvocationBuilder().args("foo").toInvocation(), null);
+        assertThat(m.getMatchers(), collectionHasExactlyInOrder(new Equals("foo")));
     }
     
     @Test

@@ -13,7 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
 
@@ -45,22 +45,25 @@ public class IncorectBindingPuzzleFixedTest extends TestBase {
         try {
             verify(sub).say("Hello");
             fail();
-        } catch (InvocationDiffersFromActual error) {
+        } catch (ArgumentsAreDifferentException error) {
+            //TODO this is no longer valid, because method is different not the args 
             String expected =
                 "\n" +
-                "Invocation differs from actual" +
+                "Argument(s) are different!" +
                 "\n" +
-                "Wanted invocation:" +
+                "Method: Sub.say(...)" +
                 "\n" +
-                "Sub.say(class java.lang.String)";
+                "All wanted arguments:" +
+                "\n" +
+                "    1: class java.lang.String";
 
             assertEquals(expected, error.getMessage());
 
             String expectedCause =
                 "\n" +
-                "Actual invocation:" +
+                "All actual arguments:" +
                 "\n" +
-                "Sub.say(class java.lang.Object)";
+                "    1: class java.lang.Object";
             assertEquals(expectedCause, error.getCause().getMessage());
         }
     }
@@ -94,9 +97,9 @@ public class IncorectBindingPuzzleFixedTest extends TestBase {
         try {
             verify(sub).say(contains("world"));
             fail();
-        } catch (InvocationDiffersFromActual e) {
-            assertThat(e, messageContains("Sub.say(class java.lang.String)"));
-            assertThat(e, causeMessageContains("Sub.say(class java.lang.Object)"));
+        } catch (ArgumentsAreDifferentException e) {
+            assertThat(e, messageContains("1: class java.lang.String"));
+            assertThat(e, causeMessageContains("1: class java.lang.Object"));
         }
     }
 }

@@ -5,8 +5,8 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.Description;
@@ -30,6 +30,7 @@ import org.mockito.internal.matchers.Equals;
 @SuppressWarnings("unchecked")
 public class Invocation implements Printable {
 
+    private static final String TAB = "    ";
     private final int sequenceNumber;
     private final Object mock;
     private final Method method;
@@ -148,8 +149,8 @@ public class Invocation implements Printable {
     }
     
     private List<Matcher> argumentsToMatchers() {
-        List<Matcher> matchers = new LinkedList<Matcher>();
-        for (Object arg : this.arguments) {
+        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
+        for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));
             } else {
@@ -157,5 +158,48 @@ public class Invocation implements Printable {
             }
         }
         return matchers;
+    }
+
+    public String getMethodName() {
+        //TODO duplicated, unordered
+        return MockNamer.nameForMock(mock) + "." + method.getName() + "(...)";
+    }
+
+    public String getTypedArgs() {
+        StringBuilder result = new StringBuilder();
+        Class<?>[] types = getMethod().getParameterTypes();
+        for (int i = 0; i < types.length; i++) {
+            Class<?> paramType = types[i];
+            result.append(TAB).append(i+1).append(": ").append(paramType);
+            if (i != types.length-1) {
+                result.append("\n");
+            }
+        } 
+        return result.toString();
+    }
+    
+    public String getArgs() {
+        return getArgs(argumentsToMatchers());
+    }
+
+    public String getArgs(List<Matcher> matchers) {
+        //TODO some unit testing please
+        if (matchers.isEmpty()) {
+            return TAB + "<no arguments>"; 
+        }
+        
+        Description d = new StringDescription();
+        
+        for(int i = 0; i<matchers.size(); i++) {
+            d.appendText(TAB);
+            d.appendText(String.valueOf(i+1));
+            d.appendText(": ");
+            d.appendDescriptionOf(matchers.get(i));
+            if (i != matchers.size()-1) {
+                d.appendText("\n");
+            }
+        }
+
+        return d.toString();
     }
 }

@@ -9,29 +9,39 @@ import org.mockito.exceptions.Printable;
 public class InvocationsPrinter {
 
     private final String wanted;
-    private final String actual;
+    private final String wantedArgs;
+    private final String actualArgs;
 
     public InvocationsPrinter(InvocationMatcher wantedInvocation, Invocation actualInvocation) {
+        wanted = wantedInvocation.getMethodName();
         if (wantedInvocation.differsWithArgumentTypes(actualInvocation)) {
-            wanted = wantedInvocation.toStringWithArgumentTypes();
-            actual = actualInvocation.toStringWithArgumentTypes();
+            wantedArgs = wantedInvocation.getTypedArgs();
+            actualArgs = actualInvocation.getTypedArgs();
         } else {
-            wanted = wantedInvocation.toString();
-            actual = actualInvocation.toString();
+            wantedArgs = wantedInvocation.getArgs();
+            actualArgs = actualInvocation.getArgs();
         }
     }
 
     public Printable getWanted() {
-        return new Printable() {
-            public String toString() {
-                return wanted;
-        }};
+        return new PrintableString(wanted);
     }
 
-    public Printable getActual() {
-        return new Printable() {
-            public String toString() {
-                return actual;
-        }};
+    public Printable getWantedArgs() {
+        return new PrintableString(wantedArgs);
+    }
+
+    public Printable getActualArgs() {
+        return new PrintableString(actualArgs);
+    }
+    
+    private final class PrintableString implements Printable {
+        private final String printable;
+        public PrintableString(String printable) {
+            this.printable = printable;
+        }
+        public String toString() {
+            return printable;
+        }
     }
 }

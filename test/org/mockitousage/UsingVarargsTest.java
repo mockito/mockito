@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 
 public class UsingVarargsTest extends TestBase {
 
@@ -89,7 +89,7 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withStringVarargs(2, "1", "2", "79", "4");
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (ArgumentsAreDifferentException e) {}
     }
 
     @Test
@@ -117,6 +117,6 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withBooleanVarargs(3, true, true, true, true);
             fail();
-        } catch (InvocationDiffersFromActual e) {}
+        } catch (ArgumentsAreDifferentException e) {}
     }
 }

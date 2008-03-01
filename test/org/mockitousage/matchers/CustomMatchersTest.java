@@ -7,12 +7,15 @@ package org.mockitousage.matchers;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockitousage.IMethods;
 
 public class CustomMatchersTest extends TestBase {
@@ -93,28 +96,6 @@ public class CustomMatchersTest extends TestBase {
     }
     
     @Test
-    public void shouldUseCustomCharMatcher1() {
-        mock.simpleMethod(new Article(12, "Fabulous article"));
-        
-        Article articleOnPage12 = argThat(new ArgumentMatcher<Article>() {
-            public boolean matches(Object argument) {
-                Article o = (Article) argument;
-                assertEquals(12, o.getPageNumber());
-                return true;
-            }} );
-        
-        verify(mock).simpleMethod(articleOnPage12);
-        
-        //Assertors?
-        
-//        verify(mock).simpleMethod(argThat(new ArgumentAssertor<Article>() {
-//            public void assertArgument(Object argument) {
-//                Article o = (Article) argument;
-//                assertEquals("two", o.getHeadline());
-//            }} ));
-    }
-    
-    @Test
     public void shouldUseCustomPrimitiveNumberMatchers() {
         stub(mock.oneArg(byteThat(new IsZeroOrOne<Byte>()))).toReturn("byte");
         stub(mock.oneArg(shortThat(new IsZeroOrOne<Short>()))).toReturn("short");
@@ -140,5 +121,35 @@ public class CustomMatchersTest extends TestBase {
         
         assertEquals("foo", mock.oneArg("foo"));
         assertEquals(null, mock.oneArg("bar"));
+    }
+    
+    @Test
+    public void shouldCustomMatcherPrintDecentMessage() {
+        mock.simpleMethod("foo");
+
+        try {
+            verify(mock).simpleMethod(containsTest());
+            fail();
+        } catch (ArgumentsAreDifferentException e) {
+//            e.printStackTrace();
+            assertThat(e, messageContains("1: String that contains 'xxx'"));
+            assertThat(e, causeMessageContains("1: \"foo\""));
+        }
+    }
+
+    private String containsTest() {
+        return argThat(new IsStringThatContainsXxx());
+    }
+    
+    private final class IsStringThatContainsXxx extends ArgumentMatcher<String> {
+        public boolean matches(Object argument) {
+            String arg = (String) argument;
+            return arg.contains("xxx");
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("String that contains 'xxx'");
+        }
     }
 }

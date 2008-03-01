@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.InvocationDiffersFromActual;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 
@@ -54,7 +54,7 @@ public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
         try {
             verify(mock).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (ArgumentsAreDifferentException e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("firstChunk"));
         }
     }
@@ -65,7 +65,7 @@ public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
         try {
             verify(mock, atLeastOnce()).simpleMethod(999);
             fail();
-        } catch (InvocationDiffersFromActual e) {
+        } catch (ArgumentsAreDifferentException e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
         }
     }   

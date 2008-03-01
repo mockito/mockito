@@ -76,6 +76,7 @@ public class MissingInvocationVerifierTest extends TestBase {
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertEquals(wanted, reporterStub.wanted);
+        assertNull(reporterStub.actualInvocationStackTrace);
     }
     
     @Test
@@ -86,21 +87,27 @@ public class MissingInvocationVerifierTest extends TestBase {
         
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
-        assertEquals(wanted.toString(), reporterStub.wanted.toString());
-        assertEquals(actualInvocation.toString(), reporterStub.actual.toString());
+        assertNotNull(reporterStub.wanted);
+        assertNotNull(reporterStub.actualArgs);
+        assertNotNull(reporterStub.wantedArgs);
+        
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
     class ReporterStub extends Reporter {
         private Object wanted;
-        private Object actual;
         private HasStackTrace actualInvocationStackTrace;
+        private Printable wantedArgs;
+        private Printable actualArgs;
         @Override public void wantedButNotInvoked(Printable wanted) {
             this.wanted = wanted;
         }
-        @Override public void wantedDiffersFromActual(Printable wanted, Printable actual, HasStackTrace actualInvocationStackTrace) {
+        
+        @Override public void argumentsAreDifferent(Printable wanted, Printable wantedArgs, Printable actualArgs,
+                HasStackTrace actualInvocationStackTrace) {
                     this.wanted = wanted;
-                    this.actual = actual;
+                    this.wantedArgs = wantedArgs;
+                    this.actualArgs = actualArgs;
                     this.actualInvocationStackTrace = actualInvocationStackTrace;
         }
     }

@@ -61,6 +61,8 @@ public interface IMethods {
     
     String differentMethod();
     
+    String differentMethod(String argument);
+    
     String otherMethod();
 
     String simpleMethod(String argument);
