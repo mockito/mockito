@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.Printable;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -135,16 +135,16 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
     class ReporterStub extends Reporter {
         private int wantedCount;
         private int actualCount;
-        private Printable wanted;
+        private PrintableInvocation wanted;
         private HasStackTrace stackTrace;
-        @Override public void tooLittleActualInvocations(int wantedCount, int actualCount, Printable wanted, HasStackTrace lastActualInvocationStackTrace) {
+        @Override public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
                     this.stackTrace = lastActualInvocationStackTrace;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, Printable wanted, HasStackTrace firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
@@ -152,7 +152,7 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
         }
         
         @Override
-        public void neverWantedButInvoked(Printable wanted, HasStackTrace firstUndesired) {
+        public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
             this.wanted = wanted;
             this.stackTrace = firstUndesired;
         }

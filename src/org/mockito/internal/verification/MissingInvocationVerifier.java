@@ -10,7 +10,6 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.invocation.InvocationsPrinter;
 import org.mockito.internal.progress.VerificationModeImpl;
 
 public class MissingInvocationVerifier implements Verifier {
@@ -42,9 +41,7 @@ public class MissingInvocationVerifier implements Verifier {
 
     private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
         if (similar != null) {
-            InvocationsPrinter printer = new InvocationsPrinter(wanted, similar);
-            //TODO smelly
-            reporter.argumentsAreDifferent(printer.getWanted(), printer.getWantedArgs(), printer.getActualArgs(), similar.getStackTrace());
+            reporter.argumentsAreDifferent(wanted, similar, similar.getStackTrace());
         } else {
             reporter.wantedButNotInvoked(wanted);
         }

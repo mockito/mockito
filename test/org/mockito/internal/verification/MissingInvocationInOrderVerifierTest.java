@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.Printable;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -73,17 +73,17 @@ public class MissingInvocationInOrderVerifierTest extends TestBase {
     }
     
     class ReporterStub extends Reporter {
-        private Printable wanted;
-        private Printable previous;
+        private PrintableInvocation wanted;
+        private PrintableInvocation previous;
         private HasStackTrace previousStackTrace;
         
-        @Override public void wantedButNotInvokedInOrder(Printable wanted, Printable previous, HasStackTrace previousStackTrace) {
+        @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
             this.wanted = wanted;
             this.previous = previous;
             this.previousStackTrace = previousStackTrace;
         }
         
-        @Override public void wantedButNotInvoked(Printable wanted) {
+        @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
             this.wanted = wanted;
         }
     }

@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.Printable;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -88,26 +88,22 @@ public class MissingInvocationVerifierTest extends TestBase {
         verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
         
         assertNotNull(reporterStub.wanted);
-        assertNotNull(reporterStub.actualArgs);
-        assertNotNull(reporterStub.wantedArgs);
+        assertNotNull(reporterStub.actual);
         
         assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
     }
     
     class ReporterStub extends Reporter {
-        private Object wanted;
+        private PrintableInvocation wanted;
+        private PrintableInvocation actual;
         private HasStackTrace actualInvocationStackTrace;
-        private Printable wantedArgs;
-        private Printable actualArgs;
-        @Override public void wantedButNotInvoked(Printable wanted) {
+        @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
             this.wanted = wanted;
         }
         
-        @Override public void argumentsAreDifferent(Printable wanted, Printable wantedArgs, Printable actualArgs,
-                HasStackTrace actualInvocationStackTrace) {
+        @Override public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualInvocationStackTrace) {
                     this.wanted = wanted;
-                    this.wantedArgs = wantedArgs;
-                    this.actualArgs = actualArgs;
+                    this.actual = actual;
                     this.actualInvocationStackTrace = actualInvocationStackTrace;
         }
     }

@@ -26,7 +26,6 @@ import org.mockito.internal.creation.MockFactoryTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.invocation.InvocationsFinderTest;
-import org.mockito.internal.invocation.InvocationsPrinterTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.VerificationModeImplTest;
@@ -95,7 +94,6 @@ public class MultiThreadedTest extends TestBase {
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,
                     InvocationTest.class,
-                    InvocationsPrinterTest.class,
                     MockitoTest.class,
                     MockUtilTest.class,
                     ReporterTest.class,

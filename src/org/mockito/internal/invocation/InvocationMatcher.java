@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
-import org.mockito.exceptions.Printable;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.matchers.Equals;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements Printable {
+public class InvocationMatcher implements PrintableInvocation {
 
     private final Invocation invocation;
     private final List<Matcher> matchers;

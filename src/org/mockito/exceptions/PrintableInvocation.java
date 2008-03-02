@@ -4,7 +4,11 @@
  */
 package org.mockito.exceptions;
 
-public interface Printable {
+public interface PrintableInvocation {
 
     String toString();
+
+    String getArgs();
+
+    String getMethodName();
 }

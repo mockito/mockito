@@ -12,7 +12,7 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.mockito.exceptions.Printable;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
@@ -28,7 +28,7 @@ import org.mockito.internal.matchers.Equals;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements Printable {
+public class Invocation implements PrintableInvocation {
 
     private static final String TAB = "    ";
     private final int sequenceNumber;
@@ -123,7 +123,7 @@ public class Invocation implements Printable {
         return toString(argumentsToMatchers());
     }
 
-    public String toString(List<Matcher> matchers) {
+    protected String toString(List<Matcher> matchers) {
         return qualifiedMethodName() + getArgumentsString(matchers);
     }
 
@@ -135,7 +135,7 @@ public class Invocation implements Printable {
         return getArgs(argumentsToMatchers());
     }
 
-    public String getArgs(List<Matcher> matchers) {
+    protected String getArgs(List<Matcher> matchers) {
         //TODO some unit testing please
         if (matchers.isEmpty()) {
             return TAB + "<NO ARGUMENTS>"; 
