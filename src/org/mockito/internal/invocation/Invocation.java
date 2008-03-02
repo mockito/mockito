@@ -170,7 +170,6 @@ public class Invocation implements PrintableInvocation {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
-                //TODO unit
                 matchers.add(new ArrayEquals(arg));
             } else {
                 matchers.add(new Equals(arg));

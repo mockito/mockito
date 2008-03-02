@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,11 +12,18 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.IsAnything;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.matchers.IsCollectionContaining;
 import org.mockito.TestBase;
+import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.Equals;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -125,5 +133,13 @@ public class InvocationTest extends TestBase {
     public void shouldPrintNoArguments() throws Exception {
         Invocation i = new InvocationBuilder().toInvocation();
         assertEquals("    <NO ARGUMENTS>", i.getArgs());
+    }
+    
+    @Test
+    public void shouldTransformArgumentsToMatchers() throws Exception {
+        Invocation i = new InvocationBuilder().args("foo", new String[] {"bar"}).toInvocation();
+        List matchers = i.argumentsToMatchers();
+        //TODO sort out imports! in order?
+        assertThat(matchers, IsCollectionContaining.hasItems(CoreMatchers.is(Equals.class), CoreMatchers.is(ArrayEquals.class)));
     }
 }
