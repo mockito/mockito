@@ -136,7 +136,6 @@ public class Invocation implements PrintableInvocation {
     }
 
     protected String getArgs(List<Matcher> matchers) {
-        //TODO some unit testing please
         if (matchers.isEmpty()) {
             return TAB + "<NO ARGUMENTS>"; 
         }
@@ -171,6 +170,7 @@ public class Invocation implements PrintableInvocation {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
+                //TODO unit
                 matchers.add(new ArrayEquals(arg));
             } else {
                 matchers.add(new Equals(arg));

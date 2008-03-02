@@ -107,4 +107,23 @@ public class InvocationTest extends TestBase {
         assertTrue(invocation.isVerified());
         assertTrue(invocation.isVerifiedInOrder());
     }
+    
+    @Test
+    public void shouldPrintAllArguments() throws Exception {
+        Invocation i = new InvocationBuilder().args(new Object[] {"1", 2, 3, 4, 5}).toInvocation();
+        String expected = 
+            "    1st: \"1\"\n" +
+            "    2nd: 2\n" +
+            "    3rd: 3\n" +
+            "    4th: 4\n" +
+            "    5th: 5";
+        
+        assertEquals(expected, i.getArgs());
+    }
+    
+    @Test
+    public void shouldPrintNoArguments() throws Exception {
+        Invocation i = new InvocationBuilder().toInvocation();
+        assertEquals("    <NO ARGUMENTS>", i.getArgs());
+    }
 }
