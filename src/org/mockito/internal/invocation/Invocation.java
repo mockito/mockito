@@ -192,8 +192,8 @@ public class Invocation implements Printable {
         
         for(int i = 0; i<matchers.size(); i++) {
             d.appendText(TAB);
-            d.appendText(String.valueOf(i+1));
-            d.appendText(": ");
+            String argNumber = argNumber(i);
+            d.appendText(argNumber);
             d.appendDescriptionOf(matchers.get(i));
             if (i != matchers.size()-1) {
                 d.appendText("\n");
@@ -201,5 +201,18 @@ public class Invocation implements Printable {
         }
 
         return d.toString();
+    }
+
+    private String argNumber(int zeroBasedIndex) {
+        String no = String.valueOf(zeroBasedIndex+1);
+        if (no.endsWith("1")) {
+            return no.concat("st: ");
+        } else if (no.endsWith("2")) {
+            return no.concat("nd: ");
+        } else if (no.endsWith("3")) {
+            return no.concat("rd: ");
+        }
+        
+        return no.concat("th: ");
     }
 }

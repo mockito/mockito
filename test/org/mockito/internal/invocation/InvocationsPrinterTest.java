@@ -21,8 +21,8 @@ public class InvocationsPrinterTest extends TestBase{
         InvocationsPrinter printer = new InvocationsPrinter(simpleMethod, differentMethod);
         
         assertEquals("Object.simpleMethod(...)", printer.getWanted().toString());
-        assertEquals("    1: \"test\"", printer.getWantedArgs().toString());
-        assertEquals("    1: \"foo\"", printer.getActualArgs().toString());
+        assertEquals("    1st: \"test\"", printer.getWantedArgs().toString());
+        assertEquals("    1st: \"foo\"", printer.getActualArgs().toString());
     }
     
     class Super {

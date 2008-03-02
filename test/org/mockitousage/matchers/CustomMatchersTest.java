@@ -132,8 +132,8 @@ public class CustomMatchersTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferentException e) {
 //            e.printStackTrace();
-            assertThat(e, messageContains("1: String that contains 'xxx'"));
-            assertThat(e, causeMessageContains("1: \"foo\""));
+            assertThat(e, messageContains("1st: String that contains 'xxx'"));
+            assertThat(e, causeMessageContains("1st: \"foo\""));
         }
     }
 

@@ -81,9 +81,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "All wanted arguments:" +
                     "\n" +
-                    "    1: 1" +
+                    "    1st: 1" +
                     "\n" +
-                    "    2: 1000";
+                    "    2nd: 1000";
 
             assertEquals(expected, e.getMessage());
 
@@ -93,9 +93,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "All actual arguments:" +
                     "\n" +
-                    "    1: 1" +
+                    "    1st: 1" +
                     "\n" +
-                    "    2: 2";
+                    "    2nd: 2";
 
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -109,7 +109,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("test");
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("    1: \"test\""));
+            assertThat(e, messageContains("    1st: \"test\""));
             assertThat(e, causeMessageContains("    <no arguments>"));
         }
     }
@@ -126,10 +126,10 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("1: 3"));
-            assertThat(e, messageContains("2: 1000"));
-            assertThat(e, causeMessageContains("1: 3"));
-            assertThat(e, causeMessageContains("2: 3"));
+            assertThat(e, messageContains("1st: 3"));
+            assertThat(e, messageContains("2nd: 1000"));
+            assertThat(e, causeMessageContains("1st: 3"));
+            assertThat(e, causeMessageContains("2nd: 3"));
         }
     }
 
@@ -219,26 +219,28 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("1: [false, false, false]"));
-            assertThat(e, causeMessageContains("1: [true, false, false]"));
+            assertThat(e, messageContains("[false, false, false]"));
+            assertThat(e, causeMessageContains("[true, false, false]"));
         }
     }
 
     @Test
     public void shouldPrintMethodWhenMissingInvocationWithVarargMatcher() {
-        mock.varargsString(10, "one", "two");
+        mock.varargsString(10, "one", "two", "three");
 
         try {
-            verify(mock).varargsString(10, "two", "one");
+            verify(mock).varargsString(10, "two", "one", "three");
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("1: 10"));
-            assertThat(e, messageContains("2: \"two\""));
-            assertThat(e, messageContains("3: \"one\""));
+            assertThat(e, messageContains("1st: 10"));
+            assertThat(e, messageContains("2nd: \"two\""));
+            assertThat(e, messageContains("3rd: \"one\""));
+            assertThat(e, messageContains("4th: \"three\""));
             
-            assertThat(e, causeMessageContains("1: 10"));
-            assertThat(e, causeMessageContains("2: \"one\""));
-            assertThat(e, causeMessageContains("3: \"two\""));
+            assertThat(e, causeMessageContains("1st: 10"));
+            assertThat(e, causeMessageContains("2nd: \"one\""));
+            assertThat(e, causeMessageContains("3rd: \"two\""));
+            assertThat(e, causeMessageContains("4th: \"three\""));
         }
     }
 
@@ -250,8 +252,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod(matches("burrito from Exmouth"));
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("1: matches(\"burrito from Exmouth\")"));
-            assertThat(e, causeMessageContains("1: \"foo\""));
+            assertThat(e, messageContains("matches(\"burrito from Exmouth\")"));
+            assertThat(e, causeMessageContains("\"foo\""));
         }
     }
 
@@ -262,8 +264,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("test");
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            assertThat(e, causeMessageContains("1: null"));
-            assertThat(e, causeMessageContains("2: null"));
+            assertThat(e, causeMessageContains("1st: null"));
+            assertThat(e, causeMessageContains("2nd: null"));
         }
     }
 
