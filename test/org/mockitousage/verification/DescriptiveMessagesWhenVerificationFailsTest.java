@@ -259,7 +259,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
     @Test
     public void shouldPrintNullArguments() throws Exception {
-        mock.simpleMethod(null, null);
+        mock.simpleMethod(null, (Integer) null);
         try {
             verify(mock).simpleMethod("test");
             fail();
