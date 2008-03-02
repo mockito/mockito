@@ -124,45 +124,11 @@ public class Invocation implements Printable {
     }
 
     public String toString(List<Matcher> matchers) {
-        String mockName = MockNamer.nameForMock(mock);
-        String methodName = method.getName();
-        String arguments = getArgumentsString(matchers);
-        
-        return mockName + "." + methodName + arguments;
-    }
-
-    public String toStringWithArgumentTypes() {
-        StringBuilder result = new StringBuilder();
-        result.append((MockNamer.nameForMock(mock) + "." + method.getName()));
-        result.append("(");
-        for (Class<?> paramType : getMethod().getParameterTypes()) {
-            result.append(paramType);
-            result.append(", ");
-        } 
-        return result.toString().replaceFirst(", $", "").concat(")");
-    }
-    
-    private String getArgumentsString(List<Matcher> matchers) {
-        Description result = new StringDescription();
-        result.appendList("(", ", ", ")", matchers);
-        return result.toString();
-    }
-    
-    private List<Matcher> argumentsToMatchers() {
-        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
-        for (Object arg : arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
-        }
-        return matchers;
+        return qualifiedMethodName() + getArgumentsString(matchers);
     }
 
     public String getMethodName() {
-        //TODO duplicated, unordered
-        return MockNamer.nameForMock(mock) + "." + method.getName() + "(...)";
+        return qualifiedMethodName() + "(...)";
     }
 
     public String getTypedArgs() {
@@ -201,6 +167,29 @@ public class Invocation implements Printable {
         }
 
         return d.toString();
+    }
+    
+
+    private String qualifiedMethodName() {
+        return MockNamer.nameForMock(mock) + "." + method.getName();
+    }
+
+    private String getArgumentsString(List<Matcher> matchers) {
+        Description result = new StringDescription();
+        result.appendList("(", ", ", ")", matchers);
+        return result.toString();
+    }
+    
+    private List<Matcher> argumentsToMatchers() {
+        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
+        for (Object arg : arguments) {
+            if (arg != null && arg.getClass().isArray()) {
+                matchers.add(new ArrayEquals(arg));
+            } else {
+                matchers.add(new Equals(arg));
+            }
+        }
+        return matchers;
     }
 
     private String argNumber(int zeroBasedIndex) {

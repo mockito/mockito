@@ -80,10 +80,6 @@ public class InvocationMatcher implements Printable {
         return invocation.toString(matchers);
     }
     
-    public String toStringWithArgumentTypes() {
-        return invocation.toStringWithArgumentTypes();
-    }
-
     public String getMethodName() {
         return invocation.getMethodName();
     }
