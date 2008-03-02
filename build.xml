@@ -46,6 +46,7 @@
   <target name="prepare">
     <mkdir dir="${src.classes.dir}" />
     <mkdir dir="${test.classes.dir}" />
+  	<mkdir dir="${test.reports.dir}" />
   </target>
 
   <target name="clean" description="Cleans out the build directories">
@@ -69,15 +70,17 @@
   </target>
 
   <target name="test" depends="compile.test, pmd" description="Executes the unit tests">
-    <junit fork="true" forkmode="once" haltonfailure="true">
-      <formatter type="plain" usefile="false" />
+    <junit fork="true" forkmode="once" printsummary="on" haltonfailure="false" failureproperty="mockito.tests.failed">
+      <formatter type="xml"/>
       <classpath refid="test.classpath" />
       <jvmarg value="-ea" />
 
-      <batchtest>
+      <batchtest todir="${test.reports.dir}">
         <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
       </batchtest>
     </junit>
+  	
+  	<fail if="mockito.tests.failed" message="Tests failed."/>
   </target>
 
   <target name="pmd" depends="prepare">
@@ -183,7 +186,7 @@
     <delete dir="${target.dir}/tmp"/>
     <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
       <junit fork="true" forkmode="once" haltonfailure="true">
-        <formatter type="plain" usefile="false" />
+        <formatter type="plain" usefile="false"/>      	
         <classpath>
           <fileset dir="${lib.dir.test}" includes="*.jar" />
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
