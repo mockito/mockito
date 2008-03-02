@@ -5,12 +5,10 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.matchers.Equals;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements PrintableInvocation {
