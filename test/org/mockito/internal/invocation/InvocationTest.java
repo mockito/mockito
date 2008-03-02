@@ -133,7 +133,10 @@ public class InvocationTest extends TestBase {
     public void shouldTransformArgumentsToMatchers() throws Exception {
         Invocation i = new InvocationBuilder().args("foo", new String[] {"bar"}).toInvocation();
         List matchers = i.argumentsToMatchers();
-        //TODO sort out imports! in order?
-//        assertThat(matchers, IsCollectionContaining.hasItems(CoreMatchers.is(Equals.class), CoreMatchers.is(ArrayEquals.class)));
+
+        //TODO when I use IsCollectionContaining.hasItems ant fails to compile tests. 
+        assertEquals(2, matchers.size());
+        assertEquals(Equals.class, matchers.get(0).getClass());
+        assertEquals(ArrayEquals.class, matchers.get(1).getClass());
     }
 }
