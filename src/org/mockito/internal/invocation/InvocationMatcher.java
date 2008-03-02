@@ -21,7 +21,7 @@ public class InvocationMatcher implements PrintableInvocation {
     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
         this.invocation = invocation;
         if (matchers == null) {
-            this.matchers = buildMatchers(invocation);
+            this.matchers = invocation.argumentsToMatchers();
         } else {
             this.matchers = matchers;
         }
@@ -31,14 +31,6 @@ public class InvocationMatcher implements PrintableInvocation {
         this(invocation, null);
     }
 
-    private List<Matcher> buildMatchers(Invocation invocation) {
-        List<Matcher> result = new ArrayList<Matcher>();
-        for (Object argument : invocation.getArguments()) {
-            result.add(new Equals(argument));
-        }
-        return result;
-    }
-    
     public Method getMethod() {
         return invocation.getMethod();
     }
@@ -49,6 +41,18 @@ public class InvocationMatcher implements PrintableInvocation {
     
     public List<Matcher> getMatchers() {
         return this.matchers;
+    }
+    
+    public String toString() {
+        return invocation.toString(matchers);
+    }
+    
+    public String getMethodName() {
+        return invocation.getMethodName();
+    }
+    
+    public String getArgs() {
+        return invocation.getArgs(matchers);
     }
 
     public boolean matches(Invocation actual) {
@@ -74,17 +78,5 @@ public class InvocationMatcher implements PrintableInvocation {
             }
         }
         return true;
-    }
-    
-    public String toString() {
-        return invocation.toString(matchers);
-    }
-    
-    public String getMethodName() {
-        return invocation.getMethodName();
-    }
-
-    public String getArgs() {
-        return invocation.getArgs(matchers);
     }
 }

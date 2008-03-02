@@ -167,7 +167,7 @@ public class Invocation implements PrintableInvocation {
         return result.toString();
     }
     
-    private List<Matcher> argumentsToMatchers() {
+    protected List<Matcher> argumentsToMatchers() {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
