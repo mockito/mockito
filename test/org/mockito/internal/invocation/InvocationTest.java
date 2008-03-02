@@ -5,10 +5,6 @@
 package org.mockito.internal.invocation;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -16,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
-import org.hamcrest.core.IsAnything;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.matchers.IsCollectionContaining;
