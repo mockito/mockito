@@ -73,44 +73,6 @@ public class InvocationsFinderTest extends TestBase {
     }
     
     @Test
-    public void shouldFindSimilarUnverifiedInvocationByName() throws Exception {
-        simpleMethodInvocation.markVerified();
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertSame(found, simpleMethodInvocationTwo);
-    }
-    
-    @Test
-    public void shouldNotFindSimilarInvocationBecauseAllAreVerified() throws Exception {
-        simpleMethodInvocation.markVerified();
-        simpleMethodInvocationTwo.markVerified();
-        differentMethodInvocation.markVerified();
-        
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertNull(found);
-    }
-    
-    @Test
-    public void shouldLookForSimilarInvocationsOnlyOnTheSameMock() throws Exception {
-        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
-        invocations.addFirst(onDifferentMock);
-        
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertNotSame(onDifferentMock, found);
-    }    
-    
-    @Test
-    public void shouldReturnLastUnverifiedFromTheSameMockOnly() throws Exception {
-        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
-        invocations.addFirst(onDifferentMock);
-
-        simpleMethodInvocation.markVerified();
-        simpleMethodInvocationTwo.markVerified();
-        
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertNotSame(onDifferentMock, found);
-    }  
-    
-    @Test
     public void shouldGetLastStackTrace() throws Exception {
         HasStackTrace last = finder.getLastStackTrace(invocations);
         assertSame(differentMethodInvocation.getStackTrace(), last);

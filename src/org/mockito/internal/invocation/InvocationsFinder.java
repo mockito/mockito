@@ -48,16 +48,7 @@ public class InvocationsFinder {
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         for (Invocation invocation : invocations) {
-            //TODO shit code - refactor to InvocationMatcher wanted.isSimilar(invocation) and add test for overloading check, make it also efficient
-            String wantedMethodName = wanted.getMethod().getName();
-            String currentMethodName = invocation.getMethod().getName();
-            
-            boolean methodNameEquals = wantedMethodName.equals(currentMethodName);
-            boolean isUnverified = !invocation.isVerified();
-            boolean mockIsTheSame = wanted.getInvocation().getMock() == invocation.getMock();
-            boolean isOverloaded = wanted.isOverloadedVersionOf(invocation);
-            
-            if (methodNameEquals && isUnverified && mockIsTheSame && !isOverloaded) {
+            if (wanted.isSimilarTo(invocation)) {
                 return invocation;
             }
         }

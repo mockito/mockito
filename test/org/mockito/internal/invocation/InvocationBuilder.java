@@ -18,28 +18,31 @@ public class InvocationBuilder {
     private Object[] args = new Object[] {};
     private Object mock = "mock";
     private Method method;
+    private boolean verified;
 
     public Invocation toInvocation() {
-        if (method != null) {
-            return new Invocation(mock, method, args, sequenceNumber);
-        }
-        
-        Method m;
-        List<Class> argTypes = new LinkedList<Class>();
-        for (Object arg : args) {
-            if (arg == null) {
-                argTypes.add(Object.class);
-            } else {
-                argTypes.add(arg.getClass());
+        if (method == null) {
+            List<Class> argTypes = new LinkedList<Class>();
+            for (Object arg : args) {
+                if (arg == null) {
+                    argTypes.add(Object.class);
+                } else {
+                    argTypes.add(arg.getClass());
+                }
+            }
+            
+            try {
+                method = IMethods.class.getMethod(methodName, argTypes.toArray(new Class[argTypes.size()]));
+            } catch (Exception e) {
+                throw new RuntimeException("builder only creates invocations of IMethods interface", e);
             }
         }
         
-        try {
-            m = IMethods.class.getMethod(methodName, argTypes.toArray(new Class[argTypes.size()]));
-        } catch (Exception e) {
-            throw new RuntimeException("builder only creates invocations of IMethods interface", e);
+        Invocation i = new Invocation(mock, method, args, sequenceNumber);
+        if (verified) {
+            i.markVerified();
         }
-        return new Invocation(mock, m, args, sequenceNumber);
+        return i;
     }
 
     public InvocationBuilder method(String methodName) {
@@ -69,6 +72,11 @@ public class InvocationBuilder {
 
     public InvocationBuilder method(Method method) {
         this.method = method;
+        return this;
+    }
+
+    public InvocationBuilder verified() {
+        this.verified = true;
         return this;
     }
 
