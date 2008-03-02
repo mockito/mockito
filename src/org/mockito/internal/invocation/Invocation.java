@@ -131,19 +131,6 @@ public class Invocation implements Printable {
         return qualifiedMethodName() + "(...)";
     }
 
-    public String getTypedArgs() {
-        StringBuilder result = new StringBuilder();
-        Class<?>[] types = getMethod().getParameterTypes();
-        for (int i = 0; i < types.length; i++) {
-            Class<?> paramType = types[i];
-            result.append(TAB).append(i+1).append(": ").append(paramType);
-            if (i != types.length-1) {
-                result.append("\n");
-            }
-        } 
-        return result.toString();
-    }
-    
     public String getArgs() {
         return getArgs(argumentsToMatchers());
     }
@@ -151,7 +138,7 @@ public class Invocation implements Printable {
     public String getArgs(List<Matcher> matchers) {
         //TODO some unit testing please
         if (matchers.isEmpty()) {
-            return TAB + "<no arguments>"; 
+            return TAB + "<NO ARGUMENTS>"; 
         }
         
         Description d = new StringDescription();

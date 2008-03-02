@@ -9,27 +9,21 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.TestBase;
+import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class BasicVerificationTest extends TestBase {
 
-    private List mock;
-    private List mockTwo;
+    @Mock private List mock;
+    @Mock private List mockTwo;
     
-    @Before 
-    public void setup() {
-        mock = Mockito.mock(List.class);
-        mockTwo = Mockito.mock(List.class);
-    }
-
     @Test
     public void shouldVerify() throws Exception {
         mock.clear();
@@ -109,5 +103,17 @@ public class BasicVerificationTest extends TestBase {
         mock.add("test");
         
         verify(mock).add("test");
+    }
+    
+
+    @Test
+    public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
+        IMethods mockThree = mock(IMethods.class);
+        
+        mockThree.varargs((Object[]) new Object[] {});
+        try {
+            verify(mockThree).varargs((String[]) new String[] {});
+            fail();
+        } catch(WantedButNotInvoked e) {}
     }
 }

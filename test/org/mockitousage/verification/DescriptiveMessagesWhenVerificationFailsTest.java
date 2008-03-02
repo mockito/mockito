@@ -110,7 +110,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferentException e) {
             assertThat(e, messageContains("    1st: \"test\""));
-            assertThat(e, causeMessageContains("    <no arguments>"));
+            assertThat(e, causeMessageContains("    <NO ARGUMENTS>"));
         }
     }
 
@@ -266,18 +266,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (ArgumentsAreDifferentException e) {
             assertThat(e, causeMessageContains("1st: null"));
             assertThat(e, causeMessageContains("2nd: null"));
-        }
-    }
-
-    @Test
-    public void shouldPrintTypesWhenMethodSupposablyTheSame() throws Exception {
-        mock.varargs((Object[]) new Object[] {});
-        try {
-            verify(mock).varargs((String[]) new String[] {});
-            fail();
-        } catch(ArgumentsAreDifferentException e) {
-            assertThat(e, messageContains("1: class [Ljava.lang.String;"));
-            assertThat(e, causeMessageContains("1: class [Ljava.lang.Object;"));
         }
     }
     

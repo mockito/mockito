@@ -14,13 +14,8 @@ public class InvocationsPrinter {
 
     public InvocationsPrinter(InvocationMatcher wantedInvocation, Invocation actualInvocation) {
         wanted = wantedInvocation.getMethodName();
-        if (wantedInvocation.differsWithArgumentTypes(actualInvocation)) {
-            wantedArgs = wantedInvocation.getTypedArgs();
-            actualArgs = actualInvocation.getTypedArgs();
-        } else {
-            wantedArgs = wantedInvocation.getArgs();
-            actualArgs = actualInvocation.getArgs();
-        }
+        wantedArgs = wantedInvocation.getArgs();
+        actualArgs = actualInvocation.getArgs();
     }
 
     public Printable getWanted() {

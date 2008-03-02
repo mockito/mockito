@@ -41,7 +41,7 @@ import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
-import org.mockitousage.binding.IncorectBindingPuzzleFixedTest;
+import org.mockitousage.binding.OverloadingPuzzleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
 import org.mockitousage.matchers.InvalidUseOfMatchersTest;
@@ -104,7 +104,7 @@ public class MultiThreadedTest extends TestBase {
                     MockitoExceptionTest.class,
                     StackTraceFilteringTest.class,
                     BridgeMethodPuzzleTest.class,
-                    IncorectBindingPuzzleFixedTest.class,
+                    OverloadingPuzzleTest.class,
                     InvalidUsageTest.class,
                     UsingVarargsTest.class,
                     CustomMatchersTest.class,

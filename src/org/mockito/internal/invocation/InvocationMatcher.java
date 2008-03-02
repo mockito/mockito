@@ -57,7 +57,7 @@ public class InvocationMatcher implements Printable {
                 && argumentsMatch(actual.getArguments());
     }
     
-    public boolean differsWithArgumentTypes(Invocation actual) {
+    public boolean isOverloadedVersionOf(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
             && argumentsMatch(actual.getArguments())
             && invocation.getMethod().getName().equals(actual.getMethod().getName())
@@ -84,10 +84,6 @@ public class InvocationMatcher implements Printable {
         return invocation.getMethodName();
     }
 
-    public String getTypedArgs() {
-        return invocation.getTypedArgs();
-    }
-    
     public String getArgs() {
         return invocation.getArgs(matchers);
     }
