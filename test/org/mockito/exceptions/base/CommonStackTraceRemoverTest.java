@@ -5,14 +5,15 @@
 package org.mockito.exceptions.base;
 
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
 
+@SuppressWarnings("unchecked")
 public class CommonStackTraceRemoverTest extends TestBase {
 
     private CommonStackTraceRemover remover;
@@ -24,18 +25,21 @@ public class CommonStackTraceRemoverTest extends TestBase {
 
     @Test
     public void testShouldNotRemoveWhenStackTracesDontHaveCommonPart() {
-        StackTraceElement elementOne = new StackTraceElement("MethodInterceptorFilter", "intercept", "MethodInterceptorFilter.java", 49);
-        HasStackTrace trace = new HasStackTraceStub(elementOne);
+        HasStackTrace exception = new TraceBuilder().methods("intercept").toTrace();
+        List<StackTraceElement> cause = new TraceBuilder().methods("foo").toTraceList();
         
-        StackTraceElement elementTwo = new StackTraceElement("Mockito", "other", "Mockito.java", 90);
-        List<StackTraceElement> cause = Arrays.asList(elementTwo);
+        remover.remove(exception, cause);
         
-        remover.remove(trace, cause);
-        
-        assertEquals(1, trace.getStackTrace().length);
-        assertEquals(elementOne, trace.getStackTrace()[0]);
-        //TODO decent arrays equal please, the same in STFT
+        assertThat(exception, hasOnlyThoseMethodsInStackTrace("intercept"));
     }
     
-    //TODO even though this stuff is tested on functional level, I want some more tests here - the unit test should be complete
+    @Test
+    public void testShouldRemoveCommonStackTracePart() {
+        HasStackTrace exception = new TraceBuilder().methods("intercept", "handle", "foo", "bar").toTrace();
+        List<StackTraceElement> cause = new TraceBuilder().methods("intercept", "handle", "hello", "world").toTraceList();
+        
+        remover.remove(exception, cause);
+        
+        assertThat(exception, hasOnlyThoseMethodsInStackTrace("bar", "foo"));
+    }
 }

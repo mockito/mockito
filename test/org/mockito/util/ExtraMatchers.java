@@ -14,12 +14,49 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.mockito.exceptions.base.HasStackTrace;
 
 @SuppressWarnings("unchecked")
 public class ExtraMatchers extends CoreMatchers {
 
     public static <T> Matcher<Throwable> hasFirstMethodInStackTrace(final String method) {
         return hasMethodInStackTraceAt(0, method);
+    }
+    
+//    public static <T> Matcher<HasStackTrace> hasOnlyThoseMethodsInStackTrace(final String ... methods) {
+//        return new BaseMatcher<List<StackTraceElement>>() {
+//    }
+    
+    public static <T> Matcher hasOnlyThoseMethodsInStackTrace(final String ... methods) {
+        return new BaseMatcher() {
+            public boolean matches(Object traceElements) {
+                final List<StackTraceElement> trace;
+                if (traceElements instanceof List) {
+                    trace = (List<StackTraceElement>) traceElements;
+                } else if (traceElements instanceof HasStackTrace) {
+                    trace = Arrays.asList(((HasStackTrace) traceElements).getStackTrace());
+                } else {
+                    throw new RuntimeException("this matcher cannot deal with object provided: " + traceElements);
+                }
+                
+                if (trace.size() != methods.length) {
+                    return false;
+                }
+                    
+                for (int i = 0; i < trace.size(); i++) {
+                    if (!trace.get(i).getMethodName().equals(methods[i])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("has only those methods in stack trace: ");
+                desc.appendValue(methods);
+            }
+        };
     }
     
     public static <T> Matcher<Throwable> hasMethodInStackTraceAt(final int stackTraceIndex, final String method) {
