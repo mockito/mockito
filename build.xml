@@ -17,7 +17,7 @@
   <property name="lib.dir.run" value="${lib.dir}/run" />
   <property name="lib.dir.test" value="${lib.dir}/test" />
   
-  <property name="version" value="1.2" />
+  <property name="version" value="snapshot" />
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="zip" value="mockito-${version}.zip" />
@@ -46,7 +46,7 @@
   <target name="prepare">
     <mkdir dir="${src.classes.dir}" />
     <mkdir dir="${test.classes.dir}" />
-  	<mkdir dir="${test.reports.dir}" />
+    <mkdir dir="${test.reports.dir}" />
   </target>
 
   <target name="clean" description="Cleans out the build directories">
@@ -79,8 +79,8 @@
         <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
       </batchtest>
     </junit>
-  	
-  	<fail if="mockito.tests.failed" message="Tests failed."/>
+    
+    <fail if="mockito.tests.failed" message="Tests failed."/>
   </target>
 
   <target name="pmd" depends="prepare">
