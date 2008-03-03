@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * Removes common part from exception an cause. It makes the exception stack trace really clean.
+ */
 public class CommonStackTraceRemover {
 
     public void remove(HasStackTrace hasStackTrace, List<StackTraceElement> causeStackTrace) {
