@@ -34,7 +34,6 @@ public class StackTrackeChangingTest extends TestBase {
             verifySimpleMethodOnAMock();
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            //TODO hasOnlyThoseMethods stuff
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
             assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
             assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));
