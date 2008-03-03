@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.cause.UndesiredInvocation;
-import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
@@ -77,7 +77,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Argument(s) are different!" +
                     "\n" +
-                    "Method: IMethods.twoArgumentMethod(...)" +
+                    "    IMethods.twoArgumentMethod(...)" +
                     "\n" +
                     "All wanted arguments:" +
                     "\n" +
@@ -87,7 +87,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             assertEquals(expected, e.getMessage());
 
-            assertEquals(e.getCause().getClass(), WantedDiffersFromActual.class);
+            assertEquals(e.getCause().getClass(), ActualArgumentsAreDifferent.class);
 
             String expectedCause =
                     "\n" +

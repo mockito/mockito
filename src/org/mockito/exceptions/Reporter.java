@@ -11,7 +11,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
-import org.mockito.exceptions.cause.WantedDiffersFromActual;
+import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -157,7 +157,7 @@ public class Reporter {
     }    
 
     public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualStackTrace) {
-        WantedDiffersFromActual cause = new WantedDiffersFromActual(join(
+        ActualArgumentsAreDifferent cause = new ActualArgumentsAreDifferent(join(
                 "All actual arguments:",
                 actual.getArgs()
             ));
@@ -166,7 +166,7 @@ public class Reporter {
         
         throw new ArgumentsAreDifferentException(join(
                 "Argument(s) are different!",
-                "Method: " + wanted.getMethodName(),
+                "    " + wanted.getMethodName(),
                 "All wanted arguments:",
                 wanted.getArgs()
             ), cause);
