@@ -5,11 +5,13 @@
 package org.mockito.exceptions.base;
 
 import static org.junit.Assert.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
 
+@SuppressWarnings("unchecked")
 public class StackTraceFilterTest extends TestBase {
     
     private StackTraceFilter filter;
@@ -20,17 +22,30 @@ public class StackTraceFilterTest extends TestBase {
     }
 
     @Test
-    public void testShouldFilterStackTrace() {
-        StackTraceElement first = new StackTraceElement("MethodInterceptorFilter", "intercept", "MethodInterceptorFilter.java", 49);
-        StackTraceElement second = new StackTraceElement("List$$EnhancerByCGLIB$$2c406024", "add", "<generated>", 0);
-        StackTraceElement third = new StackTraceElement("MockitoSampleTest", "main", "MockitoSampleTest.java", 100);
-        
-        HasStackTraceStub trace = new HasStackTraceStub(first, second, third);
+    public void testShouldFilterOutCglibGarbage() {
+        HasStackTrace trace = new TraceBuilder().classes(
+            "MockitoSampleTest",
+            "List$$EnhancerByCGLIB$$2c406024", 
+            "MethodInterceptorFilter"
+        ).toTrace();
         
         filter.filterStackTrace(trace);
         
-        assertEquals(1, trace.getStackTrace().length);
-        assertEquals(third, trace.getStackTrace()[0]);
-        //TODO even though this stuff is tested on functional level, I want some more tests here - the unit test should be complete 
+        assertThat(trace, hasOnlyThoseClassesInStackTrace("MockitoSampleTest"));
+    }
+    
+    @Test
+    public void testShouldFilterOutMockitoPackage() {
+        HasStackTrace trace = new TraceBuilder().classes(
+            "org.test.MockitoSampleTest",
+            "org.test.TestSupport",
+            "org.mockito.Mockito", 
+            "org.test.TestSupport",
+            "org.mockito.Mockito"
+        ).toTrace();
+            
+        filter.filterStackTrace(trace);
+        
+        assertThat(trace, hasOnlyThoseClassesInStackTrace("org.test.TestSupport", "org.test.MockitoSampleTest"));
     }
 }

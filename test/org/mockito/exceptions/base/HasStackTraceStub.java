@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions.base;
 
+import java.util.Arrays;
+
 public class HasStackTraceStub implements HasStackTrace {
     private StackTraceElement[] stackTrace;
     
@@ -17,5 +19,9 @@ public class HasStackTraceStub implements HasStackTrace {
 
     public void setStackTrace(StackTraceElement[] stackTrace) {
         this.stackTrace = stackTrace;
+    }
+    
+    public String toString() {
+        return Arrays.toString(stackTrace);
     }
 }

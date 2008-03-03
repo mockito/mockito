@@ -23,10 +23,6 @@ public class ExtraMatchers extends CoreMatchers {
         return hasMethodInStackTraceAt(0, method);
     }
     
-//    public static <T> Matcher<HasStackTrace> hasOnlyThoseMethodsInStackTrace(final String ... methods) {
-//        return new BaseMatcher<List<StackTraceElement>>() {
-//    }
-    
     public static <T> Matcher hasOnlyThoseMethodsInStackTrace(final String ... methods) {
         return new BaseMatcher() {
             public boolean matches(Object traceElements) {
@@ -55,6 +51,31 @@ public class ExtraMatchers extends CoreMatchers {
             public void describeTo(Description desc) {
                 desc.appendText("has only those methods in stack trace: ");
                 desc.appendValue(methods);
+            }
+        };
+    }
+    
+    public static <T> Matcher<HasStackTrace> hasOnlyThoseClassesInStackTrace(final String ... classes) {
+        return new BaseMatcher() {
+            public boolean matches(Object traceElements) {
+                StackTraceElement[] trace = ((HasStackTrace) traceElements).getStackTrace();
+                
+                if (trace.length != classes.length) {
+                    return false;
+                }
+                    
+                for (int i = 0; i < trace.length; i++) {
+                    if (!trace[i].getClassName().equals(classes[i])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public void describeTo(Description desc) {
+                desc.appendText("has only those classes in stack trace: ");
+                desc.appendValue(classes);
             }
         };
     }

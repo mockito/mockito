@@ -10,12 +10,8 @@ import java.util.List;
 
 public class TraceBuilder {
 
-    private String[] methods;
-
-    public TraceBuilder methods(String ... methods) {
-        this.methods = methods;
-        return this;
-    }
+    private String[] methods = {};
+    private String[] classes = {};
 
     public HasStackTrace toTrace() {
         List<StackTraceElement> trace = toTraceList();
@@ -23,11 +19,27 @@ public class TraceBuilder {
     }
 
     public List<StackTraceElement> toTraceList() {
+        assert methods.length == 0 || classes.length == 0;
+        
         List<StackTraceElement> trace = new LinkedList<StackTraceElement>();
         for (String method : methods) {
             trace.add(new StackTraceElement("SomeClass", method, "SomeClass.java", 50));
         }
+        for (String clazz : classes) {
+            trace.add(new StackTraceElement(clazz, "someMethod", clazz + ".java", 50));
+        }
+        
         Collections.reverse(trace);
         return trace;
+    }
+
+    public TraceBuilder classes(String ... classes) {
+        this.classes = classes;
+        return this;
+    }
+    
+    public TraceBuilder methods(String ... methods) {
+        this.methods = methods;
+        return this;
     }
 }
