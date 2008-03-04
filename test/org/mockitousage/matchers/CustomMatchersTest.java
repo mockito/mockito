@@ -9,7 +9,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -124,32 +123,27 @@ public class CustomMatchersTest extends TestBase {
     }
     
     @Test
-    public void shouldCustomMatcherPrintDecentMessage() {
+    public void shouldCustomMatcherPrintMessageBasedOnName() {
         mock.simpleMethod("foo");
 
         try {
             verify(mock).simpleMethod(containsTest());
             fail();
         } catch (ArgumentsAreDifferentException e) {
-//            e.printStackTrace();
-            assertThat(e, messageContains("1st: String that contains 'xxx'"));
+            //TODO add documentation that names are cool
+            assertThat(e, messageContains("1st: String that contains xxx"));
             assertThat(e, causeMessageContains("1st: \"foo\""));
         }
     }
 
     private String containsTest() {
-        return argThat(new IsStringThatContainsXxx());
+        return argThat(new StringThatContainsXxx());
     }
     
-    private final class IsStringThatContainsXxx extends ArgumentMatcher<String> {
+    private final class StringThatContainsXxx extends ArgumentMatcher<String> {
         public boolean matches(Object argument) {
             String arg = (String) argument;
             return arg.contains("xxx");
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("String that contains 'xxx'");
         }
     }
 }

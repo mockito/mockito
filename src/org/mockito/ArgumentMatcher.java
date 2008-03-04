@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.util.regex.Pattern;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -50,6 +52,8 @@ import org.hamcrest.Matcher;
  */
 public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
 
+    private static final Pattern CAPS = Pattern.compile("([A-Z][^A-Z]*)");
+    
     /**
      * Returns whether this matcher accepts the given argument.
      * <p>
@@ -63,7 +67,7 @@ public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
     public abstract boolean matches(Object argument);
 
     /* 
-     * Usually not necessary but you might want to override this method to
+     * You might want to override this method to
      * provide more specific description of the matcher (useful when
      * verification failures are reported).
      * 
@@ -71,6 +75,31 @@ public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
      * appended.
      */
     public void describeTo(Description description) {
-        description.appendText("<custom argument matcher>");
+        description.appendText(deCamelCase());
+    }
+    
+    private String deCamelCase() {
+        String className = getClass().getSimpleName();
+        if (className.length() == 0) {
+            return "<custom argument matcher>";
+        }
+        
+        java.util.regex.Matcher match = CAPS.matcher(className);
+        
+        StringBuilder deCameled = new StringBuilder();
+        while(match.find()) {
+            if (deCameled.length() == 0) {
+                deCameled.append(match.group());
+            } else {
+                deCameled.append(" ");
+                deCameled.append(match.group().toLowerCase());
+            }
+        }
+        
+        if (deCameled.length() == 0) {
+            return className;
+        }
+        
+        return deCameled.toString();
     }
 }
