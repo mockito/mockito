@@ -129,6 +129,7 @@ public class CustomMatchersTest extends TestBase {
         try {
             verify(mock).simpleMethod(containsTest());
             fail();
+            //TODO it should be ArgumentsAreDifferent not ArgumentsAreDifferentException !!!!!!!!!!
         } catch (ArgumentsAreDifferentException e) {
             assertThat(e, messageContains("1st: String that contains xxx"));
             assertThat(e, causeMessageContains("1st: \"foo\""));
