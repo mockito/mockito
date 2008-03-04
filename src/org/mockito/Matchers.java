@@ -52,10 +52,10 @@ import org.mockito.internal.progress.ReturnValues;
  * 
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}.
  * <p>
- * You can use {@link ArgumentMatcher} which is an hamcrest matcher with predefined describeTo() method 
- * (description is a decamelized class name of a matcher to promote meaningful names for matchers).
+ * You can use {@link ArgumentMatcher} which is an hamcrest matcher with predefined describeTo() method.
+ * In case of failure {@link ArgumentMatcher} generates description based on <b>decamelized class name</b> - to promote meaningful class names.
  * <p>
- * For example:
+ * Example:
  * 
  * <pre>
  *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
