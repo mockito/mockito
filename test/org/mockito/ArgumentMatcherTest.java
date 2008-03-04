@@ -11,7 +11,7 @@ import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 @SuppressWarnings("unchecked")
-public class ArgumentMatcherTest {
+public class ArgumentMatcherTest extends TestBase {
     
     private class StringWithDirtyWords extends ArgumentMatcher<Object> {
         public boolean matches(Object argument) {
