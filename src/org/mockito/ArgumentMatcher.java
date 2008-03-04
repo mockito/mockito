@@ -11,7 +11,8 @@ import org.hamcrest.Matcher;
 /**
  * Allows creating customized argument matchers. 
  * <p>
- * ArgumentMatcher is an hamcrest {@link Matcher} with predefined describeTo() method for convenience.
+ * ArgumentMatcher is an hamcrest {@link Matcher} with predefined describeTo() method 
+ * (description is a decamelized class name of a matcher to promote meaningful names for matchers).
  * <p>
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
@@ -50,7 +51,6 @@ import org.hamcrest.Matcher;
  */
 public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
 
-    
     /**
      * Returns whether this matcher accepts the given argument.
      * <p>
@@ -64,6 +64,11 @@ public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
     public abstract boolean matches(Object argument);
 
     /* 
+     * By default this method decamlizes matchers name to promote meaningful names for matchers.
+     * <p>
+     * For example matcher with class name: <b>TooLongString</b> will generate following message:
+     * <b>Too long string</b> in case of failure.
+     * <p>
      * You might want to override this method to
      * provide more specific description of the matcher (useful when
      * verification failures are reported).
