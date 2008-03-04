@@ -130,7 +130,6 @@ public class CustomMatchersTest extends TestBase {
             verify(mock).simpleMethod(containsTest());
             fail();
         } catch (ArgumentsAreDifferentException e) {
-            //TODO add documentation that names are cool
             assertThat(e, messageContains("1st: String that contains xxx"));
             assertThat(e, causeMessageContains("1st: \"foo\""));
         }
