@@ -47,6 +47,7 @@ public class InvocationsFinder {
     }
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        //TODO this should return by type first (if exist)
         for (Invocation invocation : invocations) {
             if (wanted.isSimilarTo(invocation)) {
                 return invocation;
