@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 
@@ -50,7 +50,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
         }
     }
@@ -61,7 +61,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock, atLeastOnce()).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
         }
     }   

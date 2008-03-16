@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 
@@ -77,12 +77,12 @@ public class BasicStubbingTest extends TestBase {
         try {
             verify(mock).simpleMethod("one");
             fail();
-        } catch (ArgumentsAreDifferentException e) {}
+        } catch (ArgumentsAreDifferent e) {}
         
         try {
             verify(mock).simpleMethod("two");
             fail();
-        } catch (ArgumentsAreDifferentException e) {}
+        } catch (ArgumentsAreDifferent e) {}
         
         try {
             verifyNoMoreInteractions(mock);

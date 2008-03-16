@@ -17,7 +17,7 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
@@ -164,7 +164,7 @@ public class Reporter {
         
         cause.setStackTrace(actualStackTrace.getStackTrace());
         
-        throw new ArgumentsAreDifferentException(join(
+        throw new ArgumentsAreDifferent(join(
                 "Argument(s) are different!",
                 "    " + wanted.getMethodName(),
                 "All wanted arguments:",

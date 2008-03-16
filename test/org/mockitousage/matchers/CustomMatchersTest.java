@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 
 public class CustomMatchersTest extends TestBase {
@@ -123,14 +123,13 @@ public class CustomMatchersTest extends TestBase {
     }
     
     @Test
-    public void shouldCustomMatcherPrintMessageBasedOnName() {
+    public void shouldCustomMatcherPrintDescriptionBasedOnName() {
         mock.simpleMethod("foo");
 
         try {
             verify(mock).simpleMethod(containsTest());
             fail();
-            //TODO it should be ArgumentsAreDifferent not ArgumentsAreDifferentException !!!!!!!!!!
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("1st: String that contains xxx"));
             assertThat(e, causeMessageContains("1st: \"foo\""));
         }
@@ -144,6 +143,22 @@ public class CustomMatchersTest extends TestBase {
         public boolean matches(Object argument) {
             String arg = (String) argument;
             return arg.contains("xxx");
+        }
+    }
+    
+    @Test
+    public void shouldAnonymousCustomMatcherPrintDefaultDescription() {
+        mock.simpleMethod("foo");
+
+        try {
+            verify(mock).simpleMethod(argThat(new ArgumentMatcher<Object>() {
+                @Override public boolean matches(Object argument) {
+                    return false;
+                }}));
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+            assertThat(e, messageContains("1st: <custom argument matcher>"));
+            assertThat(e, causeMessageContains("1st: \"foo\""));
         }
     }
 }

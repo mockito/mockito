@@ -16,7 +16,7 @@ import org.hamcrest.Description;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -55,7 +55,7 @@ public class HamcrestMatchersTest extends TestBase {
         try {
             verify(mock).simpleMethod(argThat(new ContainsX()));
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("contains 'X'"));
         }
     }

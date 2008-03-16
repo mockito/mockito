@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -49,7 +49,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (ArgumentsAreDifferentException expected) {}
+        } catch (ArgumentsAreDifferent expected) {}
     }
 
     @Test

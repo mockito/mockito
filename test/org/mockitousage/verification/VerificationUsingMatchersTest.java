@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -64,21 +64,21 @@ public class VerificationUsingMatchersTest extends TestBase {
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (ArgumentsAreDifferentException e) {}
+        } catch (ArgumentsAreDifferent e) {}
 
         mock.threeArgumentMethod(8, new Object(), "01234");
         
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (ArgumentsAreDifferentException e) {}
+        } catch (ArgumentsAreDifferent e) {}
         
         mock.threeArgumentMethod(8, "", "no match");
 
         try {
             verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
-        } catch (ArgumentsAreDifferentException e) {}
+        } catch (ArgumentsAreDifferent e) {}
         
         mock.threeArgumentMethod(8, "", "123");
         

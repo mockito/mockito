@@ -13,7 +13,7 @@ import org.junit.Test;
 public class DecamelizerTest extends TestBase {
     
     @Test
-    public void shouldDecamelize() throws Exception {
+    public void shouldProduceDecentDescription() throws Exception {
         assertEquals("Sentence with strong language", decamelizeMatcher("SentenceWithStrongLanguage"));
         assertEquals("W e i r d o 1", decamelizeMatcher("WEIRDO1"));
         assertEquals("_", decamelizeMatcher("_"));

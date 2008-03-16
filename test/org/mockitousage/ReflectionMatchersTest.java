@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 
 @SuppressWarnings("all")
 public class ReflectionMatchersTest extends TestBase {
@@ -53,25 +53,25 @@ public class ReflectionMatchersTest extends TestBase {
         verify(mock).run(refEq(wanted));
     }
     
-    @Test(expected=ArgumentsAreDifferentException.class)
+    @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchWhenFieldValuesDiffer() throws Exception {
         Child wanted = new Child(1, "foo", 2, "bar XXX");
         verify(mock).run(refEq(wanted));
     }
     
-    @Test(expected=ArgumentsAreDifferentException.class)
+    @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchAgain() throws Exception {
         Child wanted = new Child(1, "foo", 999, "bar");
         verify(mock).run(refEq(wanted));
     }
     
-    @Test(expected=ArgumentsAreDifferentException.class)
+    @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchYetAgain() throws Exception {
         Child wanted = new Child(1, "XXXXX", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
     
-    @Test(expected=ArgumentsAreDifferentException.class)
+    @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatch() throws Exception {
         Child wanted = new Child(234234, "foo", 2, "bar");
         verify(mock).run(refEq(wanted));

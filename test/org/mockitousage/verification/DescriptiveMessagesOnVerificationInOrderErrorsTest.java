@@ -17,7 +17,7 @@ import org.mockito.TestBase;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -99,7 +99,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             String expected = 
                     "\n" +
                     "Arguments are different!" +

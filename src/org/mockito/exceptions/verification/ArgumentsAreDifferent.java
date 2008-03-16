@@ -6,11 +6,11 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
-public class ArgumentsAreDifferentException extends MockitoAssertionError {
+public class ArgumentsAreDifferent extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public ArgumentsAreDifferentException(String message, Throwable cause) {
+    public ArgumentsAreDifferent(String message, Throwable cause) {
         super(message, cause);
     }
 }

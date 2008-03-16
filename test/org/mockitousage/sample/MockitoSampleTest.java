@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
@@ -18,6 +19,7 @@ public class MockitoSampleTest extends TestBase {
     
     @Mock private ArticleCalculator mockCalculator;
     @Mock private ArticleDatabase mockDatabase;
+    
     
     private ArticleManager articleManager;
     

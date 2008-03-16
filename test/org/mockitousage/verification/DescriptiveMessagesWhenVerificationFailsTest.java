@@ -18,7 +18,7 @@ import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.ArgumentsAreDifferentException;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 
@@ -72,7 +72,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).twoArgumentMethod(1, 1000);
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             String expected =
                     "\n" +
                     "Argument(s) are different!" +
@@ -108,7 +108,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("    1st: \"test\""));
             assertThat(e, causeMessageContains("    <NO ARGUMENTS>"));
         }
@@ -125,7 +125,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).twoArgumentMethod(3, 1000);
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("1st: 3"));
             assertThat(e, messageContains("2nd: 1000"));
             assertThat(e, causeMessageContains("1st: 3"));
@@ -218,7 +218,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("[false, false, false]"));
             assertThat(e, causeMessageContains("[true, false, false]"));
         }
@@ -231,7 +231,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).varargsString(10, "two", "one", "three");
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("1st: 10"));
             assertThat(e, messageContains("2nd: \"two\""));
             assertThat(e, messageContains("3rd: \"one\""));
@@ -251,7 +251,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).simpleMethod(matches("burrito from Exmouth"));
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("matches(\"burrito from Exmouth\")"));
             assertThat(e, causeMessageContains("\"foo\""));
         }
@@ -263,7 +263,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(mock).simpleMethod("test");
             fail();
-        } catch (ArgumentsAreDifferentException e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e, causeMessageContains("1st: null"));
             assertThat(e, causeMessageContains("2nd: null"));
         }
