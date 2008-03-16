@@ -4,7 +4,6 @@
 -->
 <project name="mockito" basedir="." default="all">
 
-
   <property name="src.dir" value="src" />
   <property name="test.src.dir" value="test" />
   <property name="target.dir" value="target" />
