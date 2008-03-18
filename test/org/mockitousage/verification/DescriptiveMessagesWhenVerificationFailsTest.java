@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
@@ -280,6 +281,22 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (NeverWantedButInvoked e) {
             assertThat(e, messageContains("Never wanted but invoked!"));
             assertThat(e, causeMessageContains("Undesired invocation"));
+        }
+    }
+    
+    @Ignore("fix it!")
+    @Test
+    public void shouldShowRightActualMethod() throws Exception {
+        mock.simpleMethod(9191);
+        mock.simpleMethod("foo");
+    
+        try {
+            verify(mock).simpleMethod("bar");
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+        	e.printStackTrace();
+            assertThat(e, messageContains("bar"));
+            assertThat(e, causeMessageContains("foo"));
         }
     }
 }
