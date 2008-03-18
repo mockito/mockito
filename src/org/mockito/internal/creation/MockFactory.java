@@ -21,7 +21,6 @@ import org.mockito.exceptions.Reporter;
 public class MockFactory<T> {
 
     @SuppressWarnings("unchecked")
-    //TODO can I somehow cache mocks created for some classes?
     public T createMock(Class<T> toMock, final MethodInterceptorFilter filter) {
         validateClass(toMock);
         Enhancer enhancer = createEnhancer(toMock);
