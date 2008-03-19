@@ -284,7 +284,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         }
     }
     
-    @Ignore("fix it!")
+    @Ignore
     @Test
     public void shouldShowRightActualMethod() throws Exception {
         mock.simpleMethod(9191);
@@ -294,7 +294,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("bar");
             fail();
         } catch (ArgumentsAreDifferent e) {
-        	e.printStackTrace();
             assertThat(e, messageContains("bar"));
             assertThat(e, causeMessageContains("foo"));
         }
