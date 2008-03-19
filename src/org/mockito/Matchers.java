@@ -176,14 +176,13 @@ public class Matchers {
     }
 
     /**
-     * TODO this should be generic
      * any Object argument.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
      * @return <code>null</code>.
      */
-    public static Object anyObject() {
+    public static <T> T anyObject() {
         return reportMatcher(Any.ANY).returnNull();
     }
 
