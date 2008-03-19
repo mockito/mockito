@@ -6,7 +6,6 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
 

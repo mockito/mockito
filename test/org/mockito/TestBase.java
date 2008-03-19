@@ -5,7 +5,6 @@
 package org.mockito;
 
 import static org.junit.Assert.*;
-import junit.framework.Assert;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;

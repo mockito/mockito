@@ -4,11 +4,9 @@
  */
 package org.mockitousage.binding;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.util.ExtraMatchers.hasBridgeMethod;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.Test;
 import org.mockito.TestBase;
