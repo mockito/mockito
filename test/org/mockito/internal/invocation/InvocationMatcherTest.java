@@ -70,22 +70,22 @@ public class InvocationMatcherTest extends TestBase {
     @Test
     public void shouldKnowIfIsSimilarTo() throws Exception {
         Invocation same = new InvocationBuilder().simpleMethod().toInvocation();
-        assertTrue(simpleMethod.isSimilarTo(same));
+        assertTrue(simpleMethod.hasSimilarMethod(same));
         
         Invocation different = new InvocationBuilder().differentMethod().toInvocation();
-        assertFalse(simpleMethod.isSimilarTo(different));
+        assertFalse(simpleMethod.hasSimilarMethod(different));
     }
     
     @Test
     public void shouldNotBeSimilarToVerifiedInvocation() throws Exception {
         Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
-        assertFalse(simpleMethod.isSimilarTo(verified));
+        assertFalse(simpleMethod.hasSimilarMethod(verified));
     }
        
     @Test
     public void shouldNotBeSimilarIfMocksAreDifferent() throws Exception {
         Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
-        assertFalse(simpleMethod.isSimilarTo(onDifferentMock));
+        assertFalse(simpleMethod.hasSimilarMethod(onDifferentMock));
     }    
     
     @Test
@@ -98,7 +98,7 @@ public class InvocationMatcherTest extends TestBase {
         InvocationMatcher invocation = new InvocationBuilder().method(method).arg(sameArg).toInvocationMatcher();
         Invocation overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg(sameArg).toInvocation();
         
-        assertFalse(invocation.isSimilarTo(overloadedInvocation));
+        assertFalse(invocation.hasSimilarMethod(overloadedInvocation));
     } 
     
     @Test
@@ -109,6 +109,6 @@ public class InvocationMatcherTest extends TestBase {
         InvocationMatcher invocation = new InvocationBuilder().method(method).arg("foo").toInvocationMatcher();
         Invocation overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg("bar").toInvocation();
         
-        assertTrue(invocation.isSimilarTo(overloadedInvocation));
+        assertTrue(invocation.hasSimilarMethod(overloadedInvocation));
     }
 }

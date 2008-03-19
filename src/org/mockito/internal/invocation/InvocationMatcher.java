@@ -55,7 +55,7 @@ public class InvocationMatcher implements PrintableInvocation {
 
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
-                && invocation.getMethod().equals(actual.getMethod())
+                && hasSameMethod(actual)
                 && argumentsMatch(actual);
     }
 
@@ -76,14 +76,14 @@ public class InvocationMatcher implements PrintableInvocation {
      * similar means the same method name, same mock, unverified 
      * and: if arguments are the same cannot be overloaded
      */
-    public boolean isSimilarTo(Invocation candidate) {
+    public boolean hasSimilarMethod(Invocation candidate) {
         String wantedMethodName = getMethod().getName();
         String currentMethodName = candidate.getMethod().getName();
         
         final boolean methodNameEquals = wantedMethodName.equals(currentMethodName);
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
-        final boolean methodEquals = invocation.getMethod().equals(candidate.getMethod());
+        final boolean methodEquals = hasSameMethod(candidate);
         final boolean overloadedButSameArgs = !methodEquals && argumentsMatch(candidate);        
         
         if (methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs) {
@@ -92,4 +92,8 @@ public class InvocationMatcher implements PrintableInvocation {
         
         return false;
     }
+
+	public boolean hasSameMethod(Invocation candidate) {
+		return invocation.getMethod().equals(candidate.getMethod());
+	}
 }

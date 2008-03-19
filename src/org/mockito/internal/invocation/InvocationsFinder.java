@@ -47,14 +47,20 @@ public class InvocationsFinder {
     }
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        //TODO this should return by type first (if exist)
+    	Invocation firstSimilar = null;
         for (Invocation invocation : invocations) {
-            if (wanted.isSimilarTo(invocation)) {
-                return invocation;
-            }
+        	if (!wanted.hasSimilarMethod(invocation)) {
+        		continue;
+        	}
+        	if (firstSimilar == null) {
+        		firstSimilar = invocation;
+        	}
+        	if (wanted.hasSameMethod(invocation)) {
+        		return invocation;
+        	}
         }
         
-        return null;
+        return firstSimilar;
     }
     
     public Invocation findFirstUnverified(List<Invocation> invocations) {

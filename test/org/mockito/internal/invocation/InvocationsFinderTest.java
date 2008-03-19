@@ -67,9 +67,21 @@ public class InvocationsFinderTest extends TestBase {
     }
     
     @Test
-    public void shouldFindSimilarInvocationByName() throws Exception {
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
-        assertSame(found, simpleMethodInvocation);
+    public void shouldFindFirstSimilarInvocationByName() throws Exception {
+    	Invocation overloadedSimpleMethod = new InvocationBuilder().simpleMethod().arg("test").toInvocation();
+    	
+    	Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod), atLeastOnce());
+    	assertSame(found, simpleMethodInvocation);
+    }
+    
+    @Test
+    public void shouldFindInvocationWithTheSameMethod() throws Exception {
+        Invocation overloadedDifferentMethod = new InvocationBuilder().differentMethod().arg("test").toInvocation();
+        
+        invocations.add(overloadedDifferentMethod);
+        
+		Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod), atLeastOnce());
+        assertSame(found, overloadedDifferentMethod);
     }
     
     @Test

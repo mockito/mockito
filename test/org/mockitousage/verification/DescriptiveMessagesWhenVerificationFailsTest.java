@@ -284,7 +284,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         }
     }
     
-    @Ignore
     @Test
     public void shouldShowRightActualMethod() throws Exception {
         mock.simpleMethod(9191);

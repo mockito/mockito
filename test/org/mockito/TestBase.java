@@ -50,7 +50,7 @@ public class TestBase {
         	public void assertValue(Throwable value) {
         		Throwable cause = ((Throwable) value).getCause();
         		assertNotNull("Exception cause should not be null", cause);
-        		assertTrue("\nException message >>>" + value.getMessage() + "\n>>> should contain: " + text,
+        		assertTrue("\nException message >>>" + cause.getMessage() + "\n>>> should contain: " + text,
         				cause.getMessage().contains(text));
         	}
         };
