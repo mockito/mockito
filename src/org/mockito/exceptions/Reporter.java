@@ -38,6 +38,7 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
  */
 public class Reporter {
 
+	//TODO for every case when wanted and actual are shown, the arg list has to be consistently printed
     private String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
     }
@@ -158,17 +159,15 @@ public class Reporter {
 
     public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualStackTrace) {
         ActualArgumentsAreDifferent cause = new ActualArgumentsAreDifferent(join(
-                "All actual arguments:",
-                actual.getArgs()
+                "Actual invocation has different arguments:",
+                actual.toString()
             ));
         
         cause.setStackTrace(actualStackTrace.getStackTrace());
         
         throw new ArgumentsAreDifferent(join(
-                "Argument(s) are different!",
-                "    " + wanted.getMethodName(),
-                "All wanted arguments:",
-                wanted.getArgs()
+                "Argument(s) are different! Wanted:",
+                wanted.toString()
             ), cause);
     }
     

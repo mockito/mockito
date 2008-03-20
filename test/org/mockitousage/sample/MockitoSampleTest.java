@@ -19,7 +19,6 @@ public class MockitoSampleTest extends TestBase {
     @Mock private ArticleCalculator mockCalculator;
     @Mock private ArticleDatabase mockDatabase;
     
-    
     private ArticleManager articleManager;
     
     @Before

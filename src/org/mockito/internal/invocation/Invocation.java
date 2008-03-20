@@ -30,7 +30,8 @@ import org.mockito.internal.matchers.Equals;
 @SuppressWarnings("unchecked")
 public class Invocation implements PrintableInvocation {
 
-    private static final String TAB = "    ";
+    private static final int MAX_LINE_LENGTH = 35;
+	private static final String TAB = "    ";
     private final int sequenceNumber;
     private final Object mock;
     private final Method method;
@@ -127,43 +128,22 @@ public class Invocation implements PrintableInvocation {
         return qualifiedMethodName() + getArgumentsString(matchers);
     }
 
-    public String getMethodName() {
-        return qualifiedMethodName() + "(...)";
-    }
-
-    public String getArgs() {
-        return getArgs(argumentsToMatchers());
-    }
-
-    protected String getArgs(List<Matcher> matchers) {
-        if (matchers.isEmpty()) {
-            return TAB + "<NO ARGUMENTS>"; 
-        }
-        
-        Description d = new StringDescription();
-        
-        for(int i = 0; i<matchers.size(); i++) {
-            d.appendText(TAB);
-            String argNumber = argNumber(i);
-            d.appendText(argNumber);
-            d.appendDescriptionOf(matchers.get(i));
-            if (i != matchers.size()-1) {
-                d.appendText("\n");
-            }
-        }
-
-        return d.toString();
-    }
-    
-
     private String qualifiedMethodName() {
         return MockNamer.nameForMock(mock) + "." + method.getName();
     }
 
     private String getArgumentsString(List<Matcher> matchers) {
         Description result = new StringDescription();
-        result.appendList("(", ", ", ")", matchers);
-        return result.toString();
+        result.appendList("(", ", ", ");", matchers);
+        String args = result.toString();
+        //TODO max line lenght should consider lengthy classes/methods names
+        if (args.length() < MAX_LINE_LENGTH) {
+        	return args;
+        }
+        
+        result = new StringDescription();
+        result.appendList("(\n    ", ",\n    ", "\n  );", matchers);
+		return result.toString();
     }
     
     protected List<Matcher> argumentsToMatchers() {
@@ -176,18 +156,5 @@ public class Invocation implements PrintableInvocation {
             }
         }
         return matchers;
-    }
-
-    private String argNumber(int zeroBasedIndex) {
-        String no = String.valueOf(zeroBasedIndex+1);
-        if (no.endsWith("1")) {
-            return no.concat("st: ");
-        } else if (no.endsWith("2")) {
-            return no.concat("nd: ");
-        } else if (no.endsWith("3")) {
-            return no.concat("rd: ");
-        }
-        
-        return no.concat("th: ");
     }
 }

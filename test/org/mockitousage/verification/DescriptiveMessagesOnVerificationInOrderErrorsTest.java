@@ -59,7 +59,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "IMethods.simpleMethod(11)"; 
+                    "IMethods.simpleMethod(11);"; 
             
             assertEquals(expected, e.getMessage());
             
@@ -69,7 +69,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                 "\n" +
                 "Wanted anywhere AFTER following interaction:" +
                 "\n" +
-                "IMethods.simpleMethod(2)";
+                "IMethods.simpleMethod(2);";
             
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -85,7 +85,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "IMethods.differentMethod()"; 
+                    "IMethods.differentMethod();"; 
             
             assertEquals(expected, e.getMessage());
             
@@ -104,7 +104,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Arguments are different!" +
                     "\n" +
-                    "IMethods.simpleMethod(999)"; 
+                    "IMethods.simpleMethod(999);"; 
             
             assertEquals(expected, e.getMessage());
             
@@ -129,7 +129,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "IMethods.simpleMethod(999)"; 
+                    "IMethods.simpleMethod(999);"; 
             assertEquals(expectedMessage, actualMessage);     
         }
     }   
@@ -147,7 +147,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
-                    "IMethods.simpleMethod(2)" +
+                    "IMethods.simpleMethod(2);" +
                     "\n" +
                     "Wanted 1 time but was 2"; 
             assertEquals(expectedMessage, actualMessage);      
@@ -178,7 +178,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
-                    "IMethods.simpleMethod(2)" +
+                    "IMethods.simpleMethod(2);" +
                     "\n" +
                     "Wanted 2 times but was 1";
             assertEquals(expectedMessage, actualMessage);

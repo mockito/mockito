@@ -271,11 +271,7 @@ public class MatchersTest extends TestBase {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
         } catch (WantedButNotInvoked e) {
-            String expected = "\n" +
-                    "Wanted but not invoked:" +
-                    "\n" +
-                    "IMethods.oneArray(null)";
-            assertEquals(expected, e.getMessage());
+        	assertThat(e, messageContains("oneArray(null)"));
         }
     }
 

@@ -41,7 +41,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         } catch (TooLittleActualInvocations e) {
             String expected =
                 "\n" +
-                "LinkedList.clear()" +
+                "LinkedList.clear();" +
                 "\n" +
                 "Wanted 100 times but was 3";
             assertEquals(expected, e.getMessage());
@@ -69,7 +69,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         } catch (TooManyActualInvocations e) {
             String expected =
                 "\n" +
-                "LinkedList.clear()" +
+                "LinkedList.clear();" +
                 "\n" +
                 "Wanted 1 time but was 4";
             assertEquals(expected, e.getMessage());

@@ -63,38 +63,38 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldPrintMethodName() {
         invocation = new InvocationBuilder().toInvocation();
-        assertEquals("Object.simpleMethod()", invocation.toString());
+        assertEquals("Object.simpleMethod();", invocation.toString());
     }
     
     @Test
     public void shouldPrintMethodArgs() {
         invocation = new InvocationBuilder().args("foo").toInvocation();
-        assertEquals("Object.simpleMethod(\"foo\")", invocation.toString());
+        assertEquals("Object.simpleMethod(\"foo\");", invocation.toString());
     }
     
     @Test
     public void shouldPrintMethodIntegerArgAndString() {
         invocation = new InvocationBuilder().args("foo", 1).toInvocation();
-        assertEquals("Object.simpleMethod(\"foo\", 1)", invocation.toString());
+        assertEquals("Object.simpleMethod(\"foo\", 1);", invocation.toString());
     }
     
     @Test
     public void shouldPrintNull() {
         invocation = new InvocationBuilder().args((String) null).toInvocation();
-        assertEquals("Object.simpleMethod(null)", invocation.toString());
+        assertEquals("Object.simpleMethod(null);", invocation.toString());
     }
     
     @Test
     public void shouldPrintArray() {
         invocation = new InvocationBuilder().method("oneArray").args(new int[] { 1, 2, 3 }).toInvocation();
-        assertEquals("Object.oneArray([1, 2, 3])", invocation.toString());
+        assertEquals("Object.oneArray([1, 2, 3]);", invocation.toString());
     }
     
     @Test
     public void shouldPrintNullIfArrayIsNull() throws Exception {
         Method m = IMethods.class.getMethod("oneArray", Object[].class);
         invocation = new InvocationBuilder().method(m).args((Object) null).toInvocation();
-        assertEquals("Object.oneArray(null)", invocation.toString());
+        assertEquals("Object.oneArray(null);", invocation.toString());
     }
     
     @Test
@@ -106,25 +106,6 @@ public class InvocationTest extends TestBase {
         
         assertTrue(invocation.isVerified());
         assertTrue(invocation.isVerifiedInOrder());
-    }
-    
-    @Test
-    public void shouldPrintAllArguments() throws Exception {
-        Invocation i = new InvocationBuilder().args(new Object[] {"1", 2, 3, 4, 5}).toInvocation();
-        String expected = 
-            "    1st: \"1\"\n" +
-            "    2nd: 2\n" +
-            "    3rd: 3\n" +
-            "    4th: 4\n" +
-            "    5th: 5";
-        
-        assertEquals(expected, i.getArgs());
-    }
-    
-    @Test
-    public void shouldPrintNoArguments() throws Exception {
-        Invocation i = new InvocationBuilder().toInvocation();
-        assertEquals("    <NO ARGUMENTS>", i.getArgs());
     }
     
     @Test

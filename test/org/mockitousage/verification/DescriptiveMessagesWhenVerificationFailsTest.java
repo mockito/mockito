@@ -41,7 +41,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "IMethods.simpleMethod()";
+                    "IMethods.simpleMethod();";
             assertEquals(expectedMessage, actualMessage);
         }
     }
@@ -63,26 +63,18 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintActualAndWantedWhenTheDifferenceIsAboutArguments() {
-        mock.oneArg(true);
-        mock.twoArgumentMethod(1, 2);
+    public void shouldPrintActualAndWantedInLine() {
+        mock.varargs(1, 2);
 
-        verify(mock).oneArg(true);
         try {
-            verify(mock).twoArgumentMethod(1, 1000);
+            verify(mock).varargs(1, 1000);
             fail();
         } catch (ArgumentsAreDifferent e) {
             String expected =
                     "\n" +
-                    "Argument(s) are different!" +
+                    "Argument(s) are different! Wanted:" +
                     "\n" +
-                    "    IMethods.twoArgumentMethod(...)" +
-                    "\n" +
-                    "All wanted arguments:" +
-                    "\n" +
-                    "    1st: 1" +
-                    "\n" +
-                    "    2nd: 1000";
+                    "IMethods.varargs(1, 1000);";
 
             assertEquals(expected, e.getMessage());
 
@@ -90,11 +82,51 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String expectedCause =
                     "\n" +
-                    "All actual arguments:" +
+                    "Actual invocation has different arguments:" +
                     "\n" +
-                    "    1st: 1" +
+                    "IMethods.varargs(1, 2);";
+
+            assertEquals(expectedCause, e.getCause().getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldPrintActualAndWantedInMultipleLines() {
+        mock.varargs("this is very long string", "this is another very long string");
+
+        try {
+        	verify(mock).varargs("this is very long string", "this is another very long string", "this is yet another very long string");
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+            String expected =
                     "\n" +
-                    "    2nd: 2";
+                    "Argument(s) are different! Wanted:" +
+                    "\n" +
+                    "IMethods.varargs(" +
+                    "\n" +
+                    "    \"this is very long string\"," +
+                    "\n" +
+                    "    \"this is another very long string\"," +
+                    "\n" +
+                    "    \"this is yet another very long string\"" +
+                    "\n" +
+                    "  );";
+
+            assertEquals(expected, e.getMessage());
+
+            assertEquals(e.getCause().getClass(), ActualArgumentsAreDifferent.class);
+
+            String expectedCause =
+                    "\n" +
+                    "Actual invocation has different arguments:" +
+                    "\n" +
+                    "IMethods.varargs(" +
+                    "\n" +
+                    "    \"this is very long string\"," +
+                    "\n" +
+                    "    \"this is another very long string\"" +
+                    "\n" +
+                    "  );";
 
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -105,11 +137,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         mock.simpleMethod();
 
         try {
-            verify(mock).simpleMethod("test");
+            verify(mock).simpleMethod(10);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("    1st: \"test\""));
-            assertThat(e, causeMessageContains("    <NO ARGUMENTS>"));
+            assertThat(e, messageContains("simpleMethod(10)"));
+            assertThat(e, causeMessageContains("simpleMethod()"));
         }
     }
 
@@ -117,18 +149,14 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     public void shouldPrintActualAndUnverifiedWantedWhenTheDifferenceIsAboutArguments() {
         mock.twoArgumentMethod(1, 1);
         mock.twoArgumentMethod(2, 2);
-        mock.twoArgumentMethod(3, 3);
 
         verify(mock).twoArgumentMethod(1, 1);
-        verify(mock).twoArgumentMethod(2, 2);
         try {
-            verify(mock).twoArgumentMethod(3, 1000);
+            verify(mock).twoArgumentMethod(2, 1000);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("1st: 3"));
-            assertThat(e, messageContains("2nd: 1000"));
-            assertThat(e, causeMessageContains("1st: 3"));
-            assertThat(e, causeMessageContains("2nd: 3"));
+            assertThat(e, messageContains("(2, 1000)"));
+            assertThat(e, causeMessageContains("(2, 2)"));
         }
     }
 
@@ -154,7 +182,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Undesired invocation:" +
                     "\n" +
-                    "IMethods.oneArg(false)";
+                    "IMethods.oneArg(false);";
             assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
@@ -178,7 +206,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "\n" +
                 "Undesired invocation:" +
                 "\n" +
-                "IMethods.twoArgumentMethod(1, 2)";
+                "IMethods.twoArgumentMethod(1, 2);";
 
             assertEquals(e.getCause().getMessage(), expectedCause);
         }
@@ -205,7 +233,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "\n" +
                 "Wanted but not invoked:" +
                 "\n" +
-                "IMethods.twoArgumentMethod(<any>, 100)";
+                "IMethods.twoArgumentMethod(<any>, 100);";
             assertEquals(expectedMessage, actualMessage);
         }
     }
@@ -231,15 +259,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).varargsString(10, "two", "one", "three");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("1st: 10"));
-            assertThat(e, messageContains("2nd: \"two\""));
-            assertThat(e, messageContains("3rd: \"one\""));
-            assertThat(e, messageContains("4th: \"three\""));
-            
-            assertThat(e, causeMessageContains("1st: 10"));
-            assertThat(e, causeMessageContains("2nd: \"one\""));
-            assertThat(e, causeMessageContains("3rd: \"two\""));
-            assertThat(e, causeMessageContains("4th: \"three\""));
+            assertThat(e, messageContains("(10, \"two\""));
+            assertThat(e, causeMessageContains("(10, \"one\""));
         }
     }
 
@@ -263,8 +284,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("test");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, causeMessageContains("1st: null"));
-            assertThat(e, causeMessageContains("2nd: null"));
+            assertThat(e, causeMessageContains("simpleMethod(null, null);"));
         }
     }
     

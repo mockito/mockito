@@ -19,10 +19,10 @@ private static final Pattern CAPS = Pattern.compile("([A-Z\\d][^A-Z\\d]*)");
         String decamelized = decamelizeClassName(className);
         
         if (decamelized.length() == 0) {
-            return className;
+            return "<" + className + ">";
         }
         
-        return decamelized.toString();
+        return "<" + decamelized + ">";
     }
 
     private static String decamelizeClassName(String className) {

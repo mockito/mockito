@@ -44,14 +44,6 @@ public class InvocationMatcher implements PrintableInvocation {
     public String toString() {
         return invocation.toString(matchers);
     }
-    
-    public String getMethodName() {
-        return invocation.getMethodName();
-    }
-    
-    public String getArgs() {
-        return invocation.getArgs(matchers);
-    }
 
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())

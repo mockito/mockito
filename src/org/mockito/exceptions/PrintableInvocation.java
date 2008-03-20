@@ -5,10 +5,5 @@
 package org.mockito.exceptions;
 
 public interface PrintableInvocation {
-
     String toString();
-
-    String getArgs();
-
-    String getMethodName();
 }
