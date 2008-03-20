@@ -31,7 +31,6 @@ import org.mockito.internal.matchers.Equals;
 public class Invocation implements PrintableInvocation {
 
     private static final int MAX_LINE_LENGTH = 35;
-	private static final String TAB = "    ";
     private final int sequenceNumber;
     private final Object mock;
     private final Method method;
