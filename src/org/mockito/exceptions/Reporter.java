@@ -38,7 +38,6 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
  */
 public class Reporter {
 
-	//TODO for every case when wanted and actual are shown, the arg list has to be consistently printed
     private String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
     }
