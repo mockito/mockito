@@ -30,7 +30,7 @@ import org.mockito.internal.matchers.Equals;
 @SuppressWarnings("unchecked")
 public class Invocation implements PrintableInvocation {
 
-    private static final int MAX_LINE_LENGTH = 35;
+    private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
     private final Object mock;
     private final Method method;
@@ -124,25 +124,29 @@ public class Invocation implements PrintableInvocation {
     }
 
     protected String toString(List<Matcher> matchers) {
-        return qualifiedMethodName() + getArgumentsString(matchers);
+    	String method = qualifiedMethodName();
+    	String invocation = method + getArgumentsLine(matchers);
+    	if (invocation.length() <= MAX_LINE_LENGTH) {
+    		return invocation;
+    	} else {
+    		return method + getArgumentsBlock(matchers);
+    	}
     }
 
     private String qualifiedMethodName() {
         return MockNamer.nameForMock(mock) + "." + method.getName();
     }
 
-    private String getArgumentsString(List<Matcher> matchers) {
+    private String getArgumentsLine(List<Matcher> matchers) {
         Description result = new StringDescription();
         result.appendList("(", ", ", ");", matchers);
-        String args = result.toString();
-        //TODO max line lenght should consider lengthy classes/methods names
-        if (args.length() < MAX_LINE_LENGTH) {
-        	return args;
-        }
-        
-        result = new StringDescription();
-        result.appendList("(\n    ", ",\n    ", "\n  );", matchers);
-		return result.toString();
+        return result.toString();
+    }
+    
+    private String getArgumentsBlock(List<Matcher> matchers) {
+    	Description result = new StringDescription();
+    	result.appendList("(\n    ", ",\n    ", "\n);", matchers);
+    	return result.toString();
     }
     
     protected List<Matcher> argumentsToMatchers() {

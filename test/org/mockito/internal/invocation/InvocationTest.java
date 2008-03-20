@@ -98,6 +98,18 @@ public class InvocationTest extends TestBase {
     }
     
     @Test
+    public void shouldPrintArgumentsInMultilinesWhenGetsTooBig() {
+        invocation = new InvocationBuilder().args("veeeeery long string that makes it ugly in one line", 1).toInvocation();
+        assertEquals("Object.simpleMethod(" +
+        		"\n" +
+        		"    \"veeeeery long string that makes it ugly in one line\"," +
+        		"\n" +
+        		"    1" +
+        		"\n" +
+        		");", invocation.toString());
+    }
+    
+    @Test
     public void shouldMarkVerifiedWhenMarkingVerifiedInOrder() throws Exception {
         assertFalse(invocation.isVerified());
         assertFalse(invocation.isVerifiedInOrder());

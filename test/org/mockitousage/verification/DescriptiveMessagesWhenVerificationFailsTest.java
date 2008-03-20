@@ -46,19 +46,19 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         }
     }
 
-    private class SomeClass {
+    private class Foo {
         public String toString() {
-            return "SomeClass instance";
+            return "foo";
         }
     }
 
     @Test
     public void shouldPrintMethodNameAndArguments() {
         try {
-            verify(mock).threeArgumentMethod(12, new SomeClass(), "xx");
+            verify(mock).threeArgumentMethod(12, new Foo(), "xx");
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("IMethods.threeArgumentMethod(12, SomeClass instance, \"xx\")"));
+            assertThat(e, messageContains("IMethods.threeArgumentMethod(12, foo, \"xx\")"));
         }
     }
 
@@ -110,7 +110,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "    \"this is yet another very long string\"" +
                     "\n" +
-                    "  );";
+                    ");";
 
             assertEquals(expected, e.getMessage());
 
@@ -126,7 +126,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "    \"this is another very long string\"" +
                     "\n" +
-                    "  );";
+                    ");";
 
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -253,14 +253,14 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
     @Test
     public void shouldPrintMethodWhenMissingInvocationWithVarargMatcher() {
-        mock.varargsString(10, "one", "two", "three");
+        mock.varargsString(10, "xxx", "yyy", "zzz");
 
         try {
-            verify(mock).varargsString(10, "two", "one", "three");
+            verify(mock).varargsString(10, "111", "222", "333");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("(10, \"two\""));
-            assertThat(e, causeMessageContains("(10, \"one\""));
+            assertThat(e, messageContains("111"));
+            assertThat(e, causeMessageContains("\"xxx\""));
         }
     }
 
