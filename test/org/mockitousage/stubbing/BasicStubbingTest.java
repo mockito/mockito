@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
@@ -35,6 +36,15 @@ public class BasicStubbingTest extends TestBase {
         assertEquals(200, mock.objectReturningMethod(200));
         assertEquals(100, mock.objectReturningMethod(666));
         assertEquals("default behavior should return null", null, mock.objectReturningMethod("blah"));
+    }
+    
+    @Ignore("prototyping new API")
+    @Test
+    public void shouldReturnMultipleValues() throws Exception {
+//        stub(mock.simpleMethod())
+//            .toReturn("test")
+//            .andThen("test2")
+//            .andThen(null);
     }
     
     @Test
