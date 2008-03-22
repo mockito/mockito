@@ -85,7 +85,7 @@ public class InvocationMatcher implements PrintableInvocation {
         return false;
     }
 
-	public boolean hasSameMethod(Invocation candidate) {
-		return invocation.getMethod().equals(candidate.getMethod());
-	}
+    public boolean hasSameMethod(Invocation candidate) {
+        return invocation.getMethod().equals(candidate.getMethod());
+    }
 }

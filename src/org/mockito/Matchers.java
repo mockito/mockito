@@ -183,7 +183,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     @SuppressWarnings("unchecked")
-	public static <T> T anyObject() {
+    public static <T> T anyObject() {
         return (T) reportMatcher(Any.ANY).returnNull();
     }
 

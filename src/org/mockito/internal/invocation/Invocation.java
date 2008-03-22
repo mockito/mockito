@@ -124,13 +124,13 @@ public class Invocation implements PrintableInvocation {
     }
 
     protected String toString(List<Matcher> matchers) {
-    	String method = qualifiedMethodName();
-    	String invocation = method + getArgumentsLine(matchers);
-    	if (invocation.length() <= MAX_LINE_LENGTH) {
-    		return invocation;
-    	} else {
-    		return method + getArgumentsBlock(matchers);
-    	}
+        String method = qualifiedMethodName();
+        String invocation = method + getArgumentsLine(matchers);
+        if (invocation.length() <= MAX_LINE_LENGTH) {
+            return invocation;
+        } else {
+            return method + getArgumentsBlock(matchers);
+        }
     }
 
     private String qualifiedMethodName() {
@@ -144,9 +144,9 @@ public class Invocation implements PrintableInvocation {
     }
     
     private String getArgumentsBlock(List<Matcher> matchers) {
-    	Description result = new StringDescription();
-    	result.appendList("(\n    ", ",\n    ", "\n);", matchers);
-    	return result.toString();
+        Description result = new StringDescription();
+        result.appendList("(\n    ", ",\n    ", "\n);", matchers);
+        return result.toString();
     }
     
     protected List<Matcher> argumentsToMatchers() {

@@ -47,17 +47,17 @@ public class InvocationsFinder {
     }
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-    	Invocation firstSimilar = null;
+        Invocation firstSimilar = null;
         for (Invocation invocation : invocations) {
-        	if (!wanted.hasSimilarMethod(invocation)) {
-        		continue;
-        	}
-        	if (firstSimilar == null) {
-        		firstSimilar = invocation;
-        	}
-        	if (wanted.hasSameMethod(invocation)) {
-        		return invocation;
-        	}
+            if (!wanted.hasSimilarMethod(invocation)) {
+                continue;
+            }
+            if (firstSimilar == null) {
+                firstSimilar = invocation;
+            }
+            if (wanted.hasSameMethod(invocation)) {
+                return invocation;
+            }
         }
         
         return firstSimilar;
