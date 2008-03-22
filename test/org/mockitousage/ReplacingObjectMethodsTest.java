@@ -18,8 +18,10 @@ public class ReplacingObjectMethodsTest extends TestBase {
     
     @Test
     public void shouldProvideMockyImplementationOfToString() {
-        assertEquals("Mock for DummyClass", Mockito.mock(DummyClass.class).toString());
-        assertEquals("Mock for DummyInterface", Mockito.mock(DummyInterface.class).toString());
+        DummyClass dummyClass = Mockito.mock(DummyClass.class);
+        assertEquals("Mock for DummyClass, hashCode: " + dummyClass.hashCode(), dummyClass.toString());
+        DummyInterface dummyInterface = Mockito.mock(DummyInterface.class);
+        assertEquals("Mock for DummyInterface, hashCode: " + dummyInterface.hashCode(), dummyInterface.toString());
     }
     
     @Test 
@@ -32,7 +34,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         
         assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
         
-        assertThat(mock.toString(), equalTo("Mock for ObjectMethodsOverridden"));
+        assertContains("Mock for ObjectMethodsOverridden", mock.toString());
     }
     
     @Test 
@@ -45,7 +47,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         
         assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
         
-        assertThat(mock.toString(), equalTo("Mock for ObjectMethodsOverriddenSubclass"));
+        assertContains("Mock for ObjectMethodsOverriddenSubclass", mock.toString());
     }
     
     public static class ObjectMethodsOverridden {

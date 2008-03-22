@@ -41,16 +41,20 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
         if (equalsMethod.equals(method)) {
             return Boolean.valueOf(proxy == args[0]);
         } else if (hashCodeMethod.equals(method)) {
-            return new Integer(System.identityHashCode(proxy));
+            return hashCodeForMock(proxy);
         } else if (toStringMethod.equals(method)) {
-            return mockToString(proxy);
+            return stringForMock(proxy);
         }
         
         return delegate.intercept(proxy, method, args, null);
     }
 
-    private String mockToString(Object mock) {
-        return "Mock for " + MockNamer.nameForMock(mock);
+    private int hashCodeForMock(Object mock) {
+        return new Integer(System.identityHashCode(mock));
+    }
+
+    private String stringForMock(Object mock) {
+        return "Mock for " + MockNamer.nameForMock(mock) + ", hashCode: " + hashCodeForMock(mock);
     }
 
     public T getDelegate() {
