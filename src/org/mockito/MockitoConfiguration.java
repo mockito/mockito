@@ -4,11 +4,13 @@
  */
 package org.mockito;
 
+import org.mockito.internal.stubbing.DefaultReturnValues;
+
 public class MockitoConfiguration {
     
-    private static EmptyValuesProvider emptyValuesProvider = new EmptyValuesProvider();
-
-    public static EmptyValuesProvider emptyValues() {
-        return emptyValuesProvider;
+    private static ReturnValues returnValues = new DefaultReturnValues();
+    
+    public static ReturnValues defaultReturnValues() {
+        return returnValues;
     }
 }

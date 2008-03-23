@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2007 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
 package org.mockito.internal.stubbing;
 
 import java.util.ArrayList;
@@ -19,11 +15,26 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class EmptyReturnValues {
+import org.mockito.ReturnValues;
+import org.mockito.internal.creation.MockNamer;
+import org.mockito.internal.invocation.Invocation;
+
+public class DefaultReturnValues implements ReturnValues {
+    
+    public Object valueFor(Invocation invocation) {
+        if (invocation.isToString()) {
+            Object mock = invocation.getMock();
+            String mockDescription = "Mock for " + MockNamer.nameForMock(mock) + ", hashCode: " + mock.hashCode();
+            return mockDescription;
+        }
+        
+        Class<?> returnType = invocation.getMethod().getReturnType();
+        return emptyValueFor(returnType);
+    }
     
     //new instances are used instead of Collections.emptyList(), etc.
     //to avoid UnsupportedOperationException if code under test modifies returned collection
-    public static Object emptyValueFor(Class<?> type) {
+    protected Object emptyValueFor(Class<?> type) {
         if (type == Collection.class) {
             return new LinkedList<Object>();
         } else if (type == Set.class) {

@@ -29,7 +29,7 @@ import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.VerificationModeImplTest;
-import org.mockito.internal.stubbing.EmptyReturnValuesTest;
+import org.mockito.internal.stubbing.DefaultReturnValuesTest;
 import org.mockito.internal.stubbing.ResultTest;
 import org.mockito.internal.stubbing.StubberTest;
 import org.mockito.internal.util.ListUtilTest;
@@ -80,7 +80,7 @@ public class MultiThreadedTest extends TestBase {
                     VerificationModeImplTest.class,
                     MockHandlerTest.class,
                     AllInvocationsFinderTest.class,
-                    EmptyReturnValuesTest.class,
+                    DefaultReturnValuesTest.class,
                     StubberTest.class,
                     ResultTest.class,
                     NumberOfInvocationsVerifierTest.class,
