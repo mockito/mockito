@@ -25,7 +25,6 @@ public class VerifyingRecorder {
     }
 
     public void recordInvocation(Invocation invocation) {
-        //TODO
         if (!invocation.isToString()) {
             this.registeredInvocations.add(invocation);
         }

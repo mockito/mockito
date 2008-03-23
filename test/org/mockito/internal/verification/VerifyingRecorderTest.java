@@ -60,6 +60,13 @@ public class VerifyingRecorderTest extends TestBase {
         assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
     }
     
+    @Test
+    public void shouldNotRecordToStringMethod() throws Exception {
+        Invocation invocation = new InvocationBuilder().method("toString").toInvocation();
+        recorder.recordInvocation(invocation);
+        assertTrue(recorder.getRegisteredInvocations().isEmpty());
+    }
+    
     class VerifierStub implements Verifier {
         private List<Invocation> invocations;
         private InvocationMatcher wanted;

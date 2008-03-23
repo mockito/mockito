@@ -116,4 +116,6 @@ public interface IMethods {
     void varargs(String ... string);
 
     List<String> listReturningMethod(Object ... objects);
+    
+    String toString();
 }
