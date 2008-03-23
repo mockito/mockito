@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
+import org.mockito.MockitoConfiguration;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -17,15 +18,14 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.EmptyReturnValues;
 import org.mockito.internal.stubbing.StubbedMethodSelector;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
 import org.mockito.internal.verification.MissingInvocationVerifier;
 import org.mockito.internal.verification.NoMoreInvocationsVerifier;
-import org.mockito.internal.verification.NumberOfInvocationsVerifier;
-import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifier;
+import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 
@@ -67,8 +67,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         
         if (verificationMode != null) {
             verifyingRecorder.verify(invocationMatcher, verificationMode);
-            return EmptyReturnValues.emptyValueFor(method.getReturnType());
-        } 
+            return MockitoConfiguration.emptyValues().valueFor(invocationMatcher.getInvocation());
+        }
         
         stubber.setInvocationForPotentialStubbing(invocationMatcher);
         verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());

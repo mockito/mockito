@@ -25,7 +25,10 @@ public class VerifyingRecorder {
     }
 
     public void recordInvocation(Invocation invocation) {
-        this.registeredInvocations.add(invocation);
+        //TODO
+        if (!invocation.isToString()) {
+            this.registeredInvocations.add(invocation);
+        }
     }
 
     public void eraseLastInvocation() {

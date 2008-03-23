@@ -160,4 +160,8 @@ public class Invocation implements PrintableInvocation {
         }
         return matchers;
     }
+
+    public boolean isToString() {
+        return method.getReturnType() == String.class && method.getParameterTypes().length == 0 && method.getName().equals("toString");
+    }
 }

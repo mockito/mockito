@@ -180,7 +180,7 @@ public class InvalidStateDetectionTest extends TestBase {
     
     private static class OnStub implements DetectsInvalidState {
         public void detect(IMethods mock) {
-            stub(mock.toString());
+            stub(mock);
         }
     }
     

@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing;
 
 import java.util.LinkedList;
 
+import org.mockito.MockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.internal.invocation.Invocation;
@@ -45,14 +46,13 @@ public class Stubber {
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, result));
     }
 
-    public Object resultFor(Invocation wanted) throws Throwable {
+    public Object resultFor(Invocation invocation) throws Throwable {
         for (StubbedInvocationMatcher s : stubbed) {
-            if (s.matches(wanted)) {
+            if (s.matches(invocation)) {
                 return s.answer();
             }
         }
-
-        return EmptyReturnValues.emptyValueFor(wanted.getMethod().getReturnType());
+        return MockitoConfiguration.emptyValues().valueFor(invocation);
     }
 
     public void addThrowableForVoidMethod(Throwable throwable) {
