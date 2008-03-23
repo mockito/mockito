@@ -118,4 +118,6 @@ public interface IMethods {
     List<String> listReturningMethod(Object ... objects);
     
     String toString();
+    
+    String toString(String foo);
 }

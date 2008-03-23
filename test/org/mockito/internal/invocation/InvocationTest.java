@@ -130,4 +130,13 @@ public class InvocationTest extends TestBase {
         assertEquals(Equals.class, matchers.get(0).getClass());
         assertEquals(ArrayEquals.class, matchers.get(1).getClass());
     }
+    
+    @Test
+    public void shouldKnowIfIsToString() throws Exception {
+        Invocation toString = new InvocationBuilder().method("toString").toInvocation();
+        assertTrue(toString.isToString());
+        
+        Invocation notToString = new InvocationBuilder().method("toString").arg("foo").toInvocation();
+        assertFalse(notToString.isToString());
+    }
 }
