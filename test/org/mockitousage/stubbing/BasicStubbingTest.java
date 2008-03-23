@@ -76,6 +76,15 @@ public class BasicStubbingTest extends TestBase {
     }
     
     @Test
+    public void shouldAllowStubbingToString() throws Exception {
+        IMethods mockTwo = mock(IMethods.class);
+        stub(mockTwo.toString()).toReturn("test");
+        
+        assertContains("Mock for IMethods", mock.toString());
+        assertEquals("test", mockTwo.toString());
+    }
+    
+    @Test
     public void shouldStubbingWithThrowableFailVerification() {
         stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");

@@ -61,10 +61,15 @@ public class VerifyingRecorderTest extends TestBase {
     }
     
     @Test
-    public void shouldNotRecordToStringMethod() throws Exception {
-        Invocation invocation = new InvocationBuilder().method("toString").toInvocation();
-        recorder.recordInvocation(invocation);
-        assertTrue(recorder.getRegisteredInvocations().isEmpty());
+    public void shouldNotReturnToStringMethod() throws Exception {
+        Invocation toString = new InvocationBuilder().method("toString").toInvocation();
+        Invocation simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
+        
+        recorder.recordInvocation(toString);
+        recorder.recordInvocation(simpleMethod);
+        
+        assertTrue(recorder.getRegisteredInvocations().contains(simpleMethod));
+        assertFalse(recorder.getRegisteredInvocations().contains(toString));
     }
     
     class VerifierStub implements Verifier {
