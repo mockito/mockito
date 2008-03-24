@@ -11,11 +11,11 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoConfiguration;
-import org.mockito.ReturnValues;
 import org.mockito.TestBase;
+import org.mockito.configuration.DefaultReturnValues;
+import org.mockito.configuration.MockitoConfiguration;
+import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.stubbing.DefaultReturnValues;
 
 public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase {
     

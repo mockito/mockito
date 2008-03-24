@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.stubbing;
+package org.mockito.configuration;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +23,7 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 import org.mockito.TestBase;
+import org.mockito.configuration.DefaultReturnValues;
 
 public class DefaultReturnValuesTest extends TestBase {
     

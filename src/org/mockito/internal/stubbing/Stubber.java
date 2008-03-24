@@ -6,7 +6,7 @@ package org.mockito.internal.stubbing;
 
 import java.util.LinkedList;
 
-import org.mockito.MockitoConfiguration;
+import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.internal.invocation.Invocation;

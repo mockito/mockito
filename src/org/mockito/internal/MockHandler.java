@@ -10,7 +10,7 @@ import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.MockitoConfiguration;
+import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;

@@ -1,4 +1,4 @@
-package org.mockito.internal.stubbing;
+package org.mockito.configuration;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,6 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.mockito.ReturnValues;
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.invocation.Invocation;
 

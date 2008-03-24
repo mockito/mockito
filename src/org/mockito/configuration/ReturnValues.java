@@ -1,4 +1,4 @@
-package org.mockito;
+package org.mockito.configuration;
 
 import org.mockito.internal.invocation.Invocation;
 
