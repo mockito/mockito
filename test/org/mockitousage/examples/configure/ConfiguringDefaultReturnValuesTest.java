@@ -18,7 +18,7 @@ import org.mockito.internal.stubbing.DefaultReturnValues;
 public class ConfiguringDefaultReturnValuesTest extends TestBase {
     
     @Test
-    public void shouldNotReturnNullsAnyMore() throws Exception {
+    public void shouldReturnMocksByDefaultInsteadOfNulls() throws Exception {
         MyObject m = mock(MyObject.class);
         MyObject returned = m.foo();
         assertNotNull(returned);
