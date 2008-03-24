@@ -21,7 +21,7 @@ import org.mockito.internal.invocation.Invocation;
 public class DefaultReturnValues implements ReturnValues {
     
     public Object valueFor(Invocation invocation) {
-        if (invocation.isToString()) {
+        if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
             String mockDescription = "Mock for " + MockNamer.nameForMock(mock) + ", hashCode: " + mock.hashCode();
             return mockDescription;

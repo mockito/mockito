@@ -161,9 +161,9 @@ public class Invocation implements PrintableInvocation {
         return matchers;
     }
 
-    public boolean isToString() {
-        return method.getReturnType() == String.class 
-            && method.getParameterTypes().length == 0 
-            && method.getName().equals("toString");
+    public static boolean isToString(Invocation invocation) {
+        return invocation.getMethod().getReturnType() == String.class 
+            && invocation.getMethod().getParameterTypes().length == 0 
+            && invocation.getMethod().getName().equals("toString");
     }
 }

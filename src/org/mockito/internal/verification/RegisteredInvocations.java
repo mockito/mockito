@@ -30,7 +30,7 @@ public class RegisteredInvocations {
     
     private static class RemoveToString implements Filter<Invocation> {
         public boolean isOut(Invocation invocation) {
-            return invocation.isToString();
+            return Invocation.isToString(invocation);
         }
     }
 }
