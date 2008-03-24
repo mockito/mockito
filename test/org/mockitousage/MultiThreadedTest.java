@@ -41,7 +41,7 @@ import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
-import org.mockitousage.examples.MockitoSampleTest;
+import org.mockitousage.examples.use.MockitoSampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
 import org.mockitousage.matchers.InvalidUseOfMatchersTest;
