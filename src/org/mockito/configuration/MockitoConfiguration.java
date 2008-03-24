@@ -26,6 +26,7 @@ public class MockitoConfiguration {
     }
 
     public void setReturnValues(ReturnValues returnValues) {
+        //TODO null check
         this.returnValues = returnValues;
     }
 
