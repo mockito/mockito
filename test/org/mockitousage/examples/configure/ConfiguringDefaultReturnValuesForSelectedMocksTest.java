@@ -55,7 +55,6 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
     @After
     public void resetDefaultReturnValues() {
         MockitoConfiguration.resetCustomReturnValues();
-        myDefaultReturnValues.clearSmartStubs();
     }
     
     private final class MyDefaultReturnValues implements ReturnValues {
@@ -81,10 +80,6 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
             } else {
                 return mock(returnType);
             }
-        }
-
-        public void clearSmartStubs() {
-            smartStubs.clear();
         }
 
         public void addSmartStub(Object mock) {

@@ -3,8 +3,6 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage;
-import static org.junit.Assert.*;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,6 +39,8 @@ import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
+import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesForSelectedMocksTest;
+import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesTest;
 import org.mockitousage.examples.use.ExampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
@@ -74,6 +74,8 @@ public class MultiThreadedTest extends TestBase {
 
         public void run() {
             Result result = JUnitCore.runClasses(
+                    ConfiguringDefaultReturnValuesForSelectedMocksTest.class,
+                    ConfiguringDefaultReturnValuesTest.class,
                     EqualsTest.class,
                     ListUtilTest.class,
                     MockingProgressImplTest.class,
