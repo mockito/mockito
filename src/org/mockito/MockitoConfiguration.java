@@ -12,14 +12,18 @@ public class MockitoConfiguration {
     private static final ThreadLocal<ReturnValues> CUSTOM_RETURN_VALUES = new ThreadLocal<ReturnValues>();
     
     public static ReturnValues defaultReturnValues() {
-        return CUSTOM_RETURN_VALUES.get() != null ? CUSTOM_RETURN_VALUES.get() : DEFAULT_RETURN_VALUES;
+        return getCustomReturnValues() != null ? getCustomReturnValues() : DEFAULT_RETURN_VALUES;
     }
 
     public static void setCustomReturnValues(ReturnValues returnValues) {
-        MockitoConfiguration.CUSTOM_RETURN_VALUES.set(returnValues);
+        CUSTOM_RETURN_VALUES.set(returnValues);
+    }
+    
+    public static ReturnValues getCustomReturnValues() {
+        return CUSTOM_RETURN_VALUES.get();
     }
 
     public static void resetCustomReturnValues() {
-        MockitoConfiguration.CUSTOM_RETURN_VALUES.remove();
+        CUSTOM_RETURN_VALUES.remove();
     }
 }
