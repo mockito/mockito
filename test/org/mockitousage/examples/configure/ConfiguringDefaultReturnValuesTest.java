@@ -39,7 +39,6 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
     @After
     public void resetDefaultReturnValues() {
         MockitoConfiguration.instance().resetReturnValues();
-        
     }
     
     private final class MyDefaultReturnValues implements ReturnValues {
