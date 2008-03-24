@@ -4,9 +4,6 @@
  */
 package org.mockito.internal;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;

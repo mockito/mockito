@@ -4,12 +4,7 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.stubVoid;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
@@ -17,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 
 public class UsingVarargsTest extends TestBase {
 

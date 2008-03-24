@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.junit.Assert.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 import static org.mockito.util.ExtraMatchers.*;
 

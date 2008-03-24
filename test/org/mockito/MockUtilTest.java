@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-import static org.junit.Assert.*;
 import static org.mockito.internal.MockUtil.*;
 
 import java.util.ArrayList;

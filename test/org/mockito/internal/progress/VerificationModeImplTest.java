@@ -4,15 +4,8 @@
  */
 package org.mockito.internal.progress;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.internal.progress.VerificationModeImpl.atLeastOnce;
-import static org.mockito.internal.progress.VerificationModeImpl.noMoreInteractions;
-import static org.mockito.internal.progress.VerificationModeImpl.inOrder;
-import static org.mockito.internal.progress.VerificationModeImpl.times;
+import static java.util.Arrays.*;
+import static org.mockito.internal.progress.VerificationModeImpl.*;
 
 import org.junit.Test;
 import org.mockito.TestBase;

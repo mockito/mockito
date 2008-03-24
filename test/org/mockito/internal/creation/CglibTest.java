@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.creation;
 
-import static org.junit.Assert.assertNotSame;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 

@@ -23,8 +23,6 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
-import static org.junit.Assert.*;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 

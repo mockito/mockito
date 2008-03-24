@@ -9,9 +9,9 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
-import org.mockito.StateResetter;
 import org.mockito.InOrder;
+import org.mockito.StateResetter;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 

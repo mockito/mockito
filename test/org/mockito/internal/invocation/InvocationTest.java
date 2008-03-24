@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;

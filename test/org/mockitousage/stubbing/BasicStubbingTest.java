@@ -4,7 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 

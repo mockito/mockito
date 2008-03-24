@@ -5,7 +5,6 @@
 package org.mockito.internal;
 
 import static java.util.Arrays.*;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;

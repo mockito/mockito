@@ -4,10 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;

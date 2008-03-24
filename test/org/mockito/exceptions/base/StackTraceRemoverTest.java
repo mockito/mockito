@@ -4,7 +4,6 @@
  */
 package org.mockito.exceptions.base;
 
-import static org.junit.Assert.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;

@@ -5,7 +5,6 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.*;
-import static org.junit.Assert.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.lang.reflect.Method;

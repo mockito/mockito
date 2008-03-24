@@ -4,8 +4,6 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
-
 import java.math.BigDecimal;
 
 import org.hamcrest.Description;

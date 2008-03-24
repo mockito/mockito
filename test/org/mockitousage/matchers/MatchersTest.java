@@ -4,7 +4,6 @@
  */
 package org.mockitousage.matchers;
 
-import static org.junit.Assert.*;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;

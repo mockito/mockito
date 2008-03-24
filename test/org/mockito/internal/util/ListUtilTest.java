@@ -9,7 +9,6 @@ import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.LinkedList;
 import java.util.List;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.mockito.TestBase;

@@ -4,7 +4,6 @@
  */
 package org.mockitousage.binding;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;

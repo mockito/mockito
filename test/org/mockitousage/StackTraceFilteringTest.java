@@ -4,17 +4,16 @@
  */
 package org.mockitousage;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.TestBase;
-import org.mockito.StateResetter;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
+import org.mockito.StateResetter;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;

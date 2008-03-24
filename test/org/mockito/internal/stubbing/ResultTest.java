@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import static org.junit.Assert.*;
 import static org.mockito.util.ExtraMatchers.*;
 
 import java.util.Arrays;

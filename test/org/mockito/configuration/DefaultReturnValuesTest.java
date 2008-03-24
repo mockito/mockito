@@ -4,8 +4,6 @@
  */
 package org.mockito.configuration;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +21,6 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.configuration.DefaultReturnValues;
 
 public class DefaultReturnValuesTest extends TestBase {
     
