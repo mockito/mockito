@@ -17,7 +17,7 @@ import org.mockito.TestBase;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.stubbing.DefaultReturnValues;
 
-public class MoreConfiguringDefaultReturnValuesTest extends TestBase {
+public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase {
     
     private MyDefaultReturnValues myDefaultReturnValues;
 
