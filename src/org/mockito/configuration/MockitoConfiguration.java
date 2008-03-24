@@ -4,7 +4,6 @@
  */
 package org.mockito.configuration;
 
-
 public class MockitoConfiguration {
     
     private static final ThreadLocal<MockitoConfiguration> CONFIG = new ThreadLocal<MockitoConfiguration>();
