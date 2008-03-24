@@ -19,22 +19,28 @@ import org.mockito.internal.invocation.Invocation;
 
 public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase {
     
-    private MyDefaultReturnValues myDefaultReturnValues;
-
     @Test
     public void shouldAllowConfiguringReturnValuesForSelectedMocks() throws Exception {
-        MyObject smartStub = mock(MyObject.class);
-        beSmartStub(smartStub);
-        MyObject mock = mock(MyObject.class);
+        MyObject smartMock = mock(MyObject.class);
+        beSmart(smartMock);
+        MyObject ordinaryMock = mock(MyObject.class);
         
-        assertNotNull(smartStub.returnMyObject());
-        assertEquals("", smartStub.returnString());
-        assertTrue(smartStub.returnBoolean());
+        //returns mock instead of null
+        assertNotNull(smartMock.returnMyObject());
+        //returns empty string instead of null
+        assertEquals("", smartMock.returnString());
+        //returns true instead of false
+        assertTrue(smartMock.returnBoolean());
         
-        assertNull(mock.returnMyObject());
-        assertNull(mock.returnString());
-        assertFalse(mock.returnBoolean());
+        //returns defaults
+        assertNull(ordinaryMock.returnMyObject());
+        assertNull(ordinaryMock.returnString());
+        assertFalse(ordinaryMock.returnBoolean());
     }
+    
+    //Configuration code below is typically hidden in a base class/test runner/some kind of static utility
+    
+    private MyDefaultReturnValues myDefaultReturnValues;
 
     interface MyObject {
         MyObject returnMyObject();
@@ -42,8 +48,8 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
         boolean returnBoolean();
     }
     
-    private void beSmartStub(Object mock) {
-        myDefaultReturnValues.addSmartStub(mock);
+    private void beSmart(Object mock) {
+        myDefaultReturnValues.addSmartMock(mock);
     }
     
     @Before
@@ -58,21 +64,21 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
     }
     
     private final class MyDefaultReturnValues implements ReturnValues {
-        private List<Object> smartStubs = new LinkedList<Object>();
+        private List<Object> smartMocks = new LinkedList<Object>();
 
         public Object valueFor(Invocation invocation) {
             Object value = new DefaultReturnValues().valueFor(invocation);
             Class<?> returnType = invocation.getMethod().getReturnType();
             if (value != null || returnType == Void.TYPE) {
                 return value;
-            } else if (smartStubs.contains(invocation.getMock())) {
-                return returnValueForSmartStub(returnType);
+            } else if (smartMocks.contains(invocation.getMock())) {
+                return returnValueForSmartMock(returnType);
             } else {
                 return null;
             }
         }
 
-        private Object returnValueForSmartStub(Class<?> returnType) {
+        private Object returnValueForSmartMock(Class<?> returnType) {
             if (returnType == String.class) {
                 return "";
             } else if (returnType == Boolean.TYPE) {
@@ -82,8 +88,8 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
             }
         }
 
-        public void addSmartStub(Object mock) {
-            smartStubs.add(mock);
+        public void addSmartMock(Object mock) {
+            smartMocks.add(mock);
         }
     }
 }

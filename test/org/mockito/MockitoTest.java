@@ -4,8 +4,7 @@
  */
 package org.mockito;
 
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -20,6 +19,9 @@ public class MockitoTest extends TestBase {
     // Or better. Write examples as unit tests, annotate them in the way so that javadoc can be generated out of it.
     
     //TODO check if performace can be tweaked (e.g: LL -> AL)
+    
+    //TODO names for @Mock - take field names
+    //TODO return 0 for Integer, etc
     
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {

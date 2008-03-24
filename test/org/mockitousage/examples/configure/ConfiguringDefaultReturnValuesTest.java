@@ -29,6 +29,8 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
         MyObject foo();
     }
     
+    //Configuration code below is typically hidden in a base class/test runner/some kind of static utility
+    
     @Before
     public void configureDefaultReturnValues() {
         MockitoConfiguration.setCustomReturnValues(new MyDefaultReturnValues());
@@ -39,6 +41,7 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
         MockitoConfiguration.resetCustomReturnValues();
         
     }
+    
     private final class MyDefaultReturnValues implements ReturnValues {
         public Object valueFor(Invocation invocation) {
             Object value = new DefaultReturnValues().valueFor(invocation);
