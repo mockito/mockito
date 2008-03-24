@@ -7,22 +7,30 @@ package org.mockito.configuration;
 
 public class MockitoConfiguration {
     
-    private static final ReturnValues DEFAULT_RETURN_VALUES = new DefaultReturnValues();
-    private static final ThreadLocal<ReturnValues> CUSTOM_RETURN_VALUES = new ThreadLocal<ReturnValues>();
-    
-    public static ReturnValues defaultReturnValues() {
-        return getCustomReturnValues() != null ? getCustomReturnValues() : DEFAULT_RETURN_VALUES;
-    }
+    private static final ThreadLocal<MockitoConfiguration> CONFIG = new ThreadLocal<MockitoConfiguration>();
 
-    public static void setCustomReturnValues(ReturnValues returnValues) {
-        CUSTOM_RETURN_VALUES.set(returnValues);
+    private ReturnValues returnValues;
+    
+    private MockitoConfiguration() {
+        resetReturnValues();
     }
     
-    public static ReturnValues getCustomReturnValues() {
-        return CUSTOM_RETURN_VALUES.get();
+    public static MockitoConfiguration instance() {
+        if (CONFIG.get() == null) {
+            CONFIG.set(new MockitoConfiguration());
+        }
+        return CONFIG.get();
+    }
+    
+    public ReturnValues getReturnValues() {
+        return returnValues;
     }
 
-    public static void resetCustomReturnValues() {
-        CUSTOM_RETURN_VALUES.remove();
+    public void setReturnValues(ReturnValues returnValues) {
+        this.returnValues = returnValues;
+    }
+
+    public void resetReturnValues() {
+        returnValues = new DefaultReturnValues();
     }
 }

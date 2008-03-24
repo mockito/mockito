@@ -67,7 +67,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         
         if (verificationMode != null) {
             verifyingRecorder.verify(invocationMatcher, verificationMode);
-            return MockitoConfiguration.defaultReturnValues().valueFor(invocationMatcher.getInvocation());
+            return MockitoConfiguration.instance().getReturnValues().valueFor(invocationMatcher.getInvocation());
         }
         
         stubber.setInvocationForPotentialStubbing(invocationMatcher);

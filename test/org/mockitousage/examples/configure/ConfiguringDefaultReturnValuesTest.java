@@ -33,12 +33,12 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
     
     @Before
     public void configureDefaultReturnValues() {
-        MockitoConfiguration.setCustomReturnValues(new MyDefaultReturnValues());
+        MockitoConfiguration.instance().setReturnValues(new MyDefaultReturnValues());
     }
     
     @After
     public void resetDefaultReturnValues() {
-        MockitoConfiguration.resetCustomReturnValues();
+        MockitoConfiguration.instance().resetReturnValues();
         
     }
     

@@ -52,7 +52,7 @@ public class Stubber {
                 return s.answer();
             }
         }
-        return MockitoConfiguration.defaultReturnValues().valueFor(invocation);
+        return MockitoConfiguration.instance().getReturnValues().valueFor(invocation);
     }
 
     public void addThrowableForVoidMethod(Throwable throwable) {
