@@ -8,13 +8,18 @@ import org.mockito.internal.stubbing.DefaultReturnValues;
 
 public class MockitoConfiguration {
     
-    private static ReturnValues emptyReturnValues = new DefaultReturnValues();
+    private static final ReturnValues DEFAULT_RETURN_VALUES = new DefaultReturnValues();
+    private static final ThreadLocal<ReturnValues> CUSTOM_RETURN_VALUES = new ThreadLocal<ReturnValues>();
     
     public static ReturnValues defaultReturnValues() {
-        return emptyReturnValues;
+        return CUSTOM_RETURN_VALUES.get() != null ? CUSTOM_RETURN_VALUES.get() : DEFAULT_RETURN_VALUES;
     }
 
-    public static void setDefaultReturnValues(ReturnValues emptyReturnValues) {
-        MockitoConfiguration.emptyReturnValues = emptyReturnValues;
+    public static void setCustomReturnValues(ReturnValues returnValues) {
+        MockitoConfiguration.CUSTOM_RETURN_VALUES.set(returnValues);
+    }
+
+    public static void resetCustomReturnValues() {
+        MockitoConfiguration.CUSTOM_RETURN_VALUES.remove();
     }
 }
