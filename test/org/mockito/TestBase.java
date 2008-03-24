@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import static org.junit.Assert.*;
+import junit.framework.Assert;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import org.mockito.util.Assertor;
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
-public class TestBase {
+public class TestBase extends Assert {
 
     @Before
     public void init() {

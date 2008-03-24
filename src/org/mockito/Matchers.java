@@ -17,7 +17,7 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.LastArguments;
-import org.mockito.internal.progress.ReturnValues;
+import org.mockito.internal.progress.EmptyReturnValues;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -545,7 +545,7 @@ public class Matchers {
         return reportMatcher(matcher).returnZero();
     }
 
-    private static ReturnValues reportMatcher(Matcher<?> matcher) {
+    private static EmptyReturnValues reportMatcher(Matcher<?> matcher) {
         return LastArguments.instance().reportMatcher(matcher);
     }
 }

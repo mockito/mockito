@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.progress;
 
-public class ReturnValues {
+public class EmptyReturnValues {
 
     public byte returnZero() {
         return 0;

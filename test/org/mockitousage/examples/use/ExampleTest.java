@@ -14,7 +14,7 @@ import org.mockito.InOrder;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 
-public class MockitoSampleTest extends TestBase {
+public class ExampleTest extends TestBase {
     
     @Mock private ArticleCalculator mockCalculator;
     @Mock private ArticleDatabase mockDatabase;

@@ -8,9 +8,13 @@ import org.mockito.internal.stubbing.DefaultReturnValues;
 
 public class MockitoConfiguration {
     
-    private static ReturnValues returnValues = new DefaultReturnValues();
+    private static ReturnValues emptyReturnValues = new DefaultReturnValues();
     
     public static ReturnValues defaultReturnValues() {
-        return returnValues;
+        return emptyReturnValues;
+    }
+
+    public static void setDefaultReturnValues(ReturnValues emptyReturnValues) {
+        MockitoConfiguration.emptyReturnValues = emptyReturnValues;
     }
 }

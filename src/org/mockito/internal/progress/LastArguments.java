@@ -30,9 +30,9 @@ public class LastArguments {
         return INSTANCE.get();
     }
     
-    public ReturnValues reportMatcher(Matcher matcher) {
+    public EmptyReturnValues reportMatcher(Matcher matcher) {
         matcherStack.push(matcher);
-        return new ReturnValues();
+        return new EmptyReturnValues();
     }
 
     public List<Matcher> pullMatchers() {
@@ -45,16 +45,16 @@ public class LastArguments {
         return matchers;
     }
 
-    public ReturnValues reportAnd() {
+    public EmptyReturnValues reportAnd() {
         assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
         matcherStack.push(new And(popLastArgumentMatchers(2)));
-        return new ReturnValues();
+        return new EmptyReturnValues();
     }
 
-    public ReturnValues reportNot() {
+    public EmptyReturnValues reportNot() {
         assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
         matcherStack.push(new Not(popLastArgumentMatchers(1).get(0)));
-        return new ReturnValues();
+        return new EmptyReturnValues();
     }
 
     private List<Matcher> popLastArgumentMatchers(int count) {
@@ -76,9 +76,9 @@ public class LastArguments {
         }
     }
 
-    public ReturnValues reportOr() {
+    public EmptyReturnValues reportOr() {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(2)));
-        return new ReturnValues();
+        return new EmptyReturnValues();
     }
 }

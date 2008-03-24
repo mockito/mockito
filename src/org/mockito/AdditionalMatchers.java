@@ -13,7 +13,7 @@ import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
 import org.mockito.internal.progress.LastArguments;
-import org.mockito.internal.progress.ReturnValues;
+import org.mockito.internal.progress.EmptyReturnValues;
 
 /**
  * See {@link Matchers} for general info about matchers.
@@ -982,7 +982,7 @@ public class AdditionalMatchers {
         return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
     }
     
-    private static ReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
+    private static EmptyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
         return LastArguments.instance().reportMatcher(matcher);
     }
 }

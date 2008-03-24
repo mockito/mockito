@@ -41,7 +41,7 @@ import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
-import org.mockitousage.examples.use.MockitoSampleTest;
+import org.mockitousage.examples.use.ExampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
 import org.mockitousage.matchers.InvalidUseOfMatchersTest;
@@ -131,7 +131,7 @@ public class MultiThreadedTest extends TestBase {
                     InvalidStateDetectionTest.class,
                     ReplacingObjectMethodsTest.class,
                     StackTrackeChangingTest.class,
-                    MockitoSampleTest.class,
+                    ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
                     PointingStackTraceToActualInvocationChunkTest.class
                 );
