@@ -15,7 +15,7 @@ import org.mockito.TestBase;
 import org.mockito.configuration.DefaultReturnValues;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationOnMock;
 
 public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase {
     
@@ -66,7 +66,7 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
     private final class MyDefaultReturnValues implements ReturnValues {
         private List<Object> smartMocks = new LinkedList<Object>();
 
-        public Object valueFor(Invocation invocation) {
+        public Object valueFor(InvocationOnMock invocation) {
             Object value = new DefaultReturnValues().valueFor(invocation);
             Class<?> returnType = invocation.getMethod().getReturnType();
             if (value != null || returnType == Void.TYPE) {

@@ -13,7 +13,7 @@ import org.mockito.TestBase;
 import org.mockito.configuration.DefaultReturnValues;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationOnMock;
 
 public class ConfiguringDefaultReturnValuesTest extends TestBase {
     
@@ -43,7 +43,7 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
     }
     
     private final class MyDefaultReturnValues implements ReturnValues {
-        public Object valueFor(Invocation invocation) {
+        public Object valueFor(InvocationOnMock invocation) {
             Object value = new DefaultReturnValues().valueFor(invocation);
             if (value != null || invocation.getMethod().getReturnType() == Void.TYPE) {
                 return value;

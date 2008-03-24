@@ -1,9 +1,9 @@
 package org.mockito.configuration;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationOnMock;
 
 public interface ReturnValues {
 
-    Object valueFor(Invocation invocation);
+    Object valueFor(InvocationOnMock invocation);
 
 }

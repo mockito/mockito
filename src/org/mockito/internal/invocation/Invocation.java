@@ -28,7 +28,7 @@ import org.mockito.internal.matchers.Equals;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation {
+public class Invocation implements PrintableInvocation, InvocationOnMock {
 
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
@@ -161,7 +161,7 @@ public class Invocation implements PrintableInvocation {
         return matchers;
     }
 
-    public static boolean isToString(Invocation invocation) {
+    public static boolean isToString(InvocationOnMock invocation) {
         return invocation.getMethod().getReturnType() == String.class 
             && invocation.getMethod().getParameterTypes().length == 0 
             && invocation.getMethod().getName().equals("toString");

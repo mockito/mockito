@@ -17,10 +17,11 @@ import java.util.TreeSet;
 
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationOnMock;
 
 public class DefaultReturnValues implements ReturnValues {
     
-    public Object valueFor(Invocation invocation) {
+    public Object valueFor(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
             String mockDescription = "Mock for " + MockNamer.nameForMock(mock) + ", hashCode: " + mock.hashCode();
