@@ -35,6 +35,6 @@ public class MockitoConfiguration {
     }
 
     public void resetReturnValues() {
-        returnValues = new DefaultReturnValues();
+        returnValues = MockitoProperties.DEFAULT_RETURN_VALUES;
     }
 }
