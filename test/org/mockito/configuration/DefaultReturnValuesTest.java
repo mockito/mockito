@@ -28,24 +28,24 @@ public class DefaultReturnValuesTest extends TestBase {
     @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {
         DefaultReturnValues values = new DefaultReturnValues();
         
-        assertTrue(((Collection) values.emptyValueFor(Collection.class)).isEmpty());
+        assertTrue(((Collection) values.returnValueFor(Collection.class)).isEmpty());
 
-        assertTrue(((Set) values.emptyValueFor(Set.class)).isEmpty());
-        assertTrue(((SortedSet) values.emptyValueFor(SortedSet.class)).isEmpty());
-        assertTrue(((HashSet) values.emptyValueFor(HashSet.class)).isEmpty());
-        assertTrue(((TreeSet) values.emptyValueFor(TreeSet.class)).isEmpty());
-        assertTrue(((LinkedHashSet) values.emptyValueFor(LinkedHashSet.class)).isEmpty());
+        assertTrue(((Set) values.returnValueFor(Set.class)).isEmpty());
+        assertTrue(((SortedSet) values.returnValueFor(SortedSet.class)).isEmpty());
+        assertTrue(((HashSet) values.returnValueFor(HashSet.class)).isEmpty());
+        assertTrue(((TreeSet) values.returnValueFor(TreeSet.class)).isEmpty());
+        assertTrue(((LinkedHashSet) values.returnValueFor(LinkedHashSet.class)).isEmpty());
 
-        assertTrue(((List) values.emptyValueFor(List.class)).isEmpty());
-        assertTrue(((ArrayList) values.emptyValueFor(ArrayList.class)).isEmpty());
-        assertTrue(((LinkedList) values.emptyValueFor(LinkedList.class)).isEmpty());
+        assertTrue(((List) values.returnValueFor(List.class)).isEmpty());
+        assertTrue(((ArrayList) values.returnValueFor(ArrayList.class)).isEmpty());
+        assertTrue(((LinkedList) values.returnValueFor(LinkedList.class)).isEmpty());
 
-        assertTrue(((Map) values.emptyValueFor(Map.class)).isEmpty());
-        assertTrue(((SortedMap) values.emptyValueFor(SortedMap.class)).isEmpty());
-        assertTrue(((HashMap) values.emptyValueFor(HashMap.class)).isEmpty());
-        assertTrue(((TreeMap) values.emptyValueFor(TreeMap.class)).isEmpty());
-        assertTrue(((LinkedHashMap) values.emptyValueFor(LinkedHashMap.class)).isEmpty());
+        assertTrue(((Map) values.returnValueFor(Map.class)).isEmpty());
+        assertTrue(((SortedMap) values.returnValueFor(SortedMap.class)).isEmpty());
+        assertTrue(((HashMap) values.returnValueFor(HashMap.class)).isEmpty());
+        assertTrue(((TreeMap) values.returnValueFor(TreeMap.class)).isEmpty());
+        assertTrue(((LinkedHashMap) values.returnValueFor(LinkedHashMap.class)).isEmpty());
         
-        assertNull(values.emptyValueFor(String.class));
+        assertNull(values.returnValueFor(String.class));
     }
 }

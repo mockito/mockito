@@ -21,7 +21,7 @@ import java.util.TreeSet;
 
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationOnMock;
+import org.mockito.invocation.InvocationOnMock;
 
 public class DefaultReturnValues implements ReturnValues {
     
@@ -33,12 +33,12 @@ public class DefaultReturnValues implements ReturnValues {
         }
         
         Class<?> returnType = invocation.getMethod().getReturnType();
-        return emptyValueFor(returnType);
+        return returnValueFor(returnType);
     }
     
     //new instances are used instead of Collections.emptyList(), etc.
     //to avoid UnsupportedOperationException if code under test modifies returned collection
-    protected Object emptyValueFor(Class<?> type) {
+    protected Object returnValueFor(Class<?> type) {
         if (type == Collection.class) {
             return new LinkedList<Object>();
         } else if (type == Set.class) {

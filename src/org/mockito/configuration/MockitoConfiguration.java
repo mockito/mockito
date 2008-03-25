@@ -4,6 +4,8 @@
  */
 package org.mockito.configuration;
 
+import org.mockito.exceptions.base.MockitoException;
+
 public class MockitoConfiguration {
     
     private static final ThreadLocal<MockitoConfiguration> CONFIG = new ThreadLocal<MockitoConfiguration>();
@@ -26,7 +28,9 @@ public class MockitoConfiguration {
     }
 
     public void setReturnValues(ReturnValues returnValues) {
-        //TODO null check
+        if (returnValues == null) {
+            throw new MockitoException("Cannot set null ReturnValues!");
+        }
         this.returnValues = returnValues;
     }
 

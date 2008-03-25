@@ -2,11 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito;
+package org.mockito.internal.util;
 
-import static org.mockito.Decamelizer.*;
+import static org.mockito.internal.util.Decamelizer.*;
 
 import org.junit.Test;
+import org.mockito.TestBase;
 
 @SuppressWarnings("unchecked")
 public class DecamelizerTest extends TestBase {

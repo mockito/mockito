@@ -4,7 +4,7 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.internal.invocation.InvocationOnMock;
+import org.mockito.invocation.InvocationOnMock;
 
 public interface ReturnValues {
 

@@ -13,7 +13,7 @@ import org.mockito.TestBase;
 import org.mockito.configuration.DefaultReturnValues;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
-import org.mockito.internal.invocation.InvocationOnMock;
+import org.mockito.invocation.InvocationOnMock;
 
 public class ConfiguringDefaultReturnValuesTest extends TestBase {
     

@@ -18,6 +18,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.invocation.InvocationOnMock;
 
 /**
  * Method call on a mock object. 
