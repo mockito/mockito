@@ -20,6 +20,7 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
     @Test
     public void shouldReturnMocksByDefaultInsteadOfNulls() throws Exception {
         MyObject m = mock(MyObject.class);
+        //mocks don't return nulls any more...
         MyObject returned = m.foo();
         assertNotNull(returned);
         assertNotNull(returned.foo());
@@ -29,7 +30,7 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
         MyObject foo();
     }
     
-    //Configuration code below is typically hidden in a base class/test runner/some kind of static utility
+    //Configuration code below is typically hidden in a base class / your test runner / some kind of static utility
     
     @Before
     public void configureDefaultReturnValues() {
@@ -37,16 +38,18 @@ public class ConfiguringDefaultReturnValuesTest extends TestBase {
     }
     
     @After
-    public void resetDefaultReturnValues() {
+    public void resetReturnValuesToDefaults() {
         MockitoConfiguration.instance().resetReturnValues();
     }
     
     private final class MyDefaultReturnValues implements ReturnValues {
         public Object valueFor(InvocationOnMock invocation) {
+            //get the default return value
             Object value = new DefaultReturnValues().valueFor(invocation);
             if (value != null || invocation.getMethod().getReturnType() == Void.TYPE) {
                 return value;
             } else {
+                //in case the default return value is null and method is not void, return new mock:
                 return Mockito.mock(invocation.getMethod().getReturnType());
             }
         }

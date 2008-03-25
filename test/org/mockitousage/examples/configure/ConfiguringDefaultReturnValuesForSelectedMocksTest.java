@@ -21,8 +21,10 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
     
     @Test
     public void shouldAllowConfiguringReturnValuesForSelectedMocks() throws Exception {
+        //create smart mock
         MyObject smartMock = mock(MyObject.class);
         beSmart(smartMock);
+        //create ordinary mock
         MyObject ordinaryMock = mock(MyObject.class);
         
         //returns mock instead of null
@@ -38,7 +40,7 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
         assertFalse(ordinaryMock.returnBoolean());
     }
     
-    //Configuration code below is typically hidden in a base class/test runner/some kind of static utility
+    //Configuration code below is typically hidden in a base class / your test runner / some kind of static utility
     
     private MyDefaultReturnValues myDefaultReturnValues;
 
@@ -59,10 +61,11 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
     }
     
     @After
-    public void resetDefaultReturnValues() {
+    public void resetReturnValuesToDefaults() {
         MockitoConfiguration.instance().resetReturnValues();
     }
     
+    //My own sophisticated version of ReturnValues - it treats 'smart mocks' differently
     private final class MyDefaultReturnValues implements ReturnValues {
         private List<Object> smartMocks = new LinkedList<Object>();
 
@@ -72,6 +75,7 @@ public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends TestBase
             if (value != null || returnType == Void.TYPE) {
                 return value;
             } else if (smartMocks.contains(invocation.getMock())) {
+                //if is a smart mock then return different value
                 return returnValueForSmartMock(returnType);
             } else {
                 return null;
