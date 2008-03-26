@@ -114,7 +114,9 @@
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
       <fileset dir="${lib.dir.run}" excludes="*.jar" />
-      <zipfileset src="${lib.dir.run}/objenesis-1.0.jar" />
+      <zipfileset src="${lib.dir.run}/objenesis-1.0.jar">
+        <exclude name="META-INF/maven/**"/>
+      </zipfileset>
       <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
         <exclude name="LICENSE.txt" />
       </zipfileset>
