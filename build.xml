@@ -120,7 +120,7 @@
       <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
         <exclude name="LICENSE.txt" />
       </zipfileset>
-      <zipfileset src="${lib.dir.run}/cglib-nodep-2.2_beta1.jar">
+      <zipfileset src="${lib.dir.run}/cglib-nodep-2.1_3.jar">
         <exclude name="LICENSE" />
         <exclude name="NOTICE" />
       </zipfileset>
