@@ -34,6 +34,7 @@
         </example>
     </rule>
     
+    <!--  TODO fix it so that I can have different base classes with common convention (like: TestBase)
     <rule name="TestClassShouldExtendTestBase"
         message="Test Class should extend TestBase to detect invalid state problems quickly"
         class="net.sourceforge.pmd.rules.XPathRule">
@@ -42,7 +43,7 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-                        /TypeDeclaration/ClassOrInterfaceDeclaration[ends-with(@Image, 'Test') and not(ExtendsList/ClassOrInterfaceType/@Image = 'TestBase')]
+                        /TypeDeclaration/ClassOrInterfaceDeclaration[ends-with(@Image, 'Test') and not(contains(ExtendsList/ClassOrInterfaceType/@Image, 'TestBase')]
                     ]]>
                 </value>
             </property>
@@ -56,6 +57,7 @@
                 public class BasicVerificationTest {             
             ]]>
         </example>
-    </rule>    
+    </rule>   
+     --> 
     
 </ruleset>

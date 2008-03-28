@@ -40,6 +40,7 @@ import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
 import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesForSelectedMocksTest;
+import org.mockitousage.examples.configure.ConfiguringMocksToReturnFakesTest;
 import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesTest;
 import org.mockitousage.examples.use.ExampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
@@ -76,6 +77,7 @@ public class MultiThreadedTest extends TestBase {
             Result result = JUnitCore.runClasses(
                     ConfiguringDefaultReturnValuesForSelectedMocksTest.class,
                     ConfiguringDefaultReturnValuesTest.class,
+                    ConfiguringMocksToReturnFakesTest.class,
                     EqualsTest.class,
                     ListUtilTest.class,
                     MockingProgressImplTest.class,
@@ -180,7 +182,7 @@ public class MultiThreadedTest extends TestBase {
     }
     
     public static void main(String[] args) throws Exception {
-        int numberOfThreads = 100; 
+        int numberOfThreads = 10; 
         long before = System.currentTimeMillis();
         runInMultipleThreads(numberOfThreads);
         long after = System.currentTimeMillis();

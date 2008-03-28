@@ -15,7 +15,7 @@ public class ArticleManager {
         this.calculator = calculator;
         this.database = database;
     }
-    
+   
     public void updateArticleCounters(String newspaper) {
         int articles = calculator.countArticles(newspaper);
         int polishArticles = calculator.countArticlesInPolish(newspaper);

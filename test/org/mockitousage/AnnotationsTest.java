@@ -22,6 +22,7 @@ public class AnnotationsTest extends TestBase {
 
     @Mock List list;
     @Mock final Map map = new HashMap();
+    //TODO add initMocks that allows to send own annotation/own implementation of creation logic
     
     @Before
     public void setup() {

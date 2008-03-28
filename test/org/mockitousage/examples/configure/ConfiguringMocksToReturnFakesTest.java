@@ -7,27 +7,25 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
-public class ConfiguringDefaultReturnValuesForSelectedMocksTest extends CanMakeMocksSmart {
+public class ConfiguringMocksToReturnFakesTest extends AllowsFakingReturnValues {
     
     @Test
-    public void shouldAllowConfiguringReturnValuesForSelectedMocks() throws Exception {
-        //create smart mock
-        MyObject smartMock = mock(MyObject.class);
-        beSmart(smartMock);
+    public void shouldAllowConfiguringMocksToReturnFakes() throws Exception {
+        MyObject fakeReturningMock = mock(MyObject.class);
+        //configure mock to return fakes
+        fakeReturnValues(fakeReturningMock);
+        
         //create ordinary mock
         MyObject ordinaryMock = mock(MyObject.class);
         
         //returns mock instead of null
-        assertNotNull(smartMock.returnMyObject());
+        assertNotNull(fakeReturningMock.returnMyObject());
         //returns empty string instead of null
-        assertEquals("", smartMock.returnString());
-        //returns true instead of false
-        assertTrue(smartMock.returnBoolean());
+        assertEquals("", fakeReturningMock.returnString());
         
         //returns defaults
         assertNull(ordinaryMock.returnMyObject());
         assertNull(ordinaryMock.returnString());
-        assertFalse(ordinaryMock.returnBoolean());
     }
     
     interface MyObject {
