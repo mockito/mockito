@@ -1,4 +1,4 @@
-package org.mockitousage.examples.configure;
+package org.mockitousage.examples.configure.withstaticutility;
 
 import static org.mockito.Mockito.*;
 
@@ -6,37 +6,35 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mockito.TestBase;
-import org.mockito.configuration.DefaultReturnValues;
+import org.mockito.configuration.BaseReturnValues;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
 
-public class AllowsFakingReturnValues extends TestBase {
+public class AllowsFakingReturnValues {
     
-    protected void fakeReturnValues(Object ... mocks) {
+    public static void fakeReturnValues(Object ... mocks) {
         FakeReturnValues fakeReturnValues = getFakeReturnValues();
         fakeReturnValues.configure(mocks);
     }
     
-    private FakeReturnValues getFakeReturnValues() {
+    private static FakeReturnValues getFakeReturnValues() {
         MockitoConfiguration config = MockitoConfiguration.instance();
         ReturnValues current = config.getReturnValues();
+        //if my custom return values are NOT yet set, do it 
         if (!(current instanceof FakeReturnValues)) {
             config.setReturnValues(new FakeReturnValues());
         }
         return (FakeReturnValues) config.getReturnValues();
     }
 
-    private final class FakeReturnValues implements ReturnValues {
+    private static final class FakeReturnValues extends BaseReturnValues {
+        
         private Set<Object> mocksReturningFakes = new HashSet<Object>();
 
-        public Object valueFor(InvocationOnMock invocation) {
-            Object value = new DefaultReturnValues().valueFor(invocation);
+        public Object returnValueFor(InvocationOnMock invocation) {
             Class<?> returnType = invocation.getMethod().getReturnType();
-            if (value != null || returnType == Void.TYPE) {
-                return value;
-            } else if (mocksReturningFakes.contains(invocation.getMock())) {
+            if (mocksReturningFakes.contains(invocation.getMock())) {
                 return returnFake(returnType);
             } else {
                 return null;

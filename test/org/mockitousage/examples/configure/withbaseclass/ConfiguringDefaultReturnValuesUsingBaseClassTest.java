@@ -2,12 +2,13 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.examples.configure;
+package org.mockitousage.examples.configure.withbaseclass;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
-public class ConfiguringDefaultReturnValuesTest extends MakesMocksNotToReturnNulls {
+public class ConfiguringDefaultReturnValuesUsingBaseClassTest extends MakesMocksNotToReturnNulls {
     
     @Test
     public void shouldReturnMocksByDefaultInsteadOfNulls() throws Exception {

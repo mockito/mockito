@@ -23,6 +23,9 @@ import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 
+/**
+ * Used by default by every Mockito mock
+ */
 public class DefaultReturnValues implements ReturnValues {
     
     public Object valueFor(InvocationOnMock invocation) {
@@ -69,7 +72,9 @@ public class DefaultReturnValues implements ReturnValues {
             return new LinkedHashMap<Object, Object>();
         }       
         
-        //let's not care about the rest of collections
+        //Let's not care about the rest of collections.
+        //Don't worry about primitives also: Null is going to be 
+        //automatically changed into appropriate primitive value by cglib
         return null;
     }
 }

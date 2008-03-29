@@ -39,9 +39,9 @@ import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
-import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesForSelectedMocksTest;
-import org.mockitousage.examples.configure.ConfiguringMocksToReturnFakesTest;
-import org.mockitousage.examples.configure.ConfiguringDefaultReturnValuesTest;
+import org.mockitousage.examples.configure.withbaseclass.ConfiguringDefaultReturnValuesUsingBaseClassTest;
+import org.mockitousage.examples.configure.withrunner.ConfiguringDefaultReturnValuesUsingRunnerTest;
+import org.mockitousage.examples.configure.withstaticutility.ConfiguringSelectedMocksToReturnFakesTest;
 import org.mockitousage.examples.use.ExampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
@@ -75,9 +75,9 @@ public class MultiThreadedTest extends TestBase {
 
         public void run() {
             Result result = JUnitCore.runClasses(
-                    ConfiguringDefaultReturnValuesForSelectedMocksTest.class,
-                    ConfiguringDefaultReturnValuesTest.class,
-                    ConfiguringMocksToReturnFakesTest.class,
+                    ConfiguringDefaultReturnValuesUsingBaseClassTest.class,
+                    ConfiguringDefaultReturnValuesUsingRunnerTest.class,
+                    ConfiguringSelectedMocksToReturnFakesTest.class,
                     EqualsTest.class,
                     ListUtilTest.class,
                     MockingProgressImplTest.class,
