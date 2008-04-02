@@ -15,7 +15,7 @@ public class AllowsFakingReturnValues {
     
     public static void fakeReturnValues(Object ... mocks) {
         FakeReturnValues fakeReturnValues = getFakeReturnValues();
-        fakeReturnValues.configure(mocks);
+        fakeReturnValues.addMocks(mocks);
     }
     
     private static FakeReturnValues getFakeReturnValues() {
@@ -41,7 +41,7 @@ public class AllowsFakingReturnValues {
             }
         }
 
-        public void configure(Object ... mocks) {
+        public void addMocks(Object ... mocks) {
             mocksReturningFakes.addAll(Arrays.asList(mocks));
         }
 
