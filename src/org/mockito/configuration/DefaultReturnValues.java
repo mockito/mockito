@@ -39,10 +39,12 @@ public class DefaultReturnValues implements ReturnValues {
         return returnValueFor(returnType);
     }
     
-    //new instances are used instead of Collections.emptyList(), etc.
-    //to avoid UnsupportedOperationException if code under test modifies returned collection
     protected Object returnValueFor(Class<?> type) {
-        if (type == Collection.class) {
+        if (type.isPrimitive()) {
+            return primitiveOf(type);
+        //new instances are used instead of Collections.emptyList(), etc.
+        //to avoid UnsupportedOperationException if code under test modifies returned collection
+        } else if (type == Collection.class) {
             return new LinkedList<Object>();
         } else if (type == Set.class) {
             return new HashSet<Object>();
@@ -71,10 +73,17 @@ public class DefaultReturnValues implements ReturnValues {
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<Object, Object>();
         }       
-        
         //Let's not care about the rest of collections.
-        //Don't worry about primitives also: Null is going to be 
-        //automatically changed into appropriate primitive value by cglib
         return null;
+    }
+
+    private Object primitiveOf(Class<?> type) {
+        if (type == Boolean.TYPE) {
+            return false;
+        } else if (type == Character.TYPE) {
+            return (char) 0;
+        } else {
+            return 0;
+        } 
     }
 }

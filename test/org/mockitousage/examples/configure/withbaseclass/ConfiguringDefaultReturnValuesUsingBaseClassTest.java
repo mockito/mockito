@@ -17,9 +17,12 @@ public class ConfiguringDefaultReturnValuesUsingBaseClassTest extends MakesMocks
         MyObject returned = m.foo();
         assertNotNull(returned);
         assertNotNull(returned.foo());
+        
+        assertEquals(0, returned.bar());
     }
 
     interface MyObject {
         MyObject foo();
+        int bar();
     }
 }

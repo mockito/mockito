@@ -29,7 +29,7 @@ public class ReturningDefaultValuesTest extends TestBase {
         assertEquals(0L, mock.intReturningMethod(12));
         assertEquals(0.0F, mock.floatReturningMethod(12), 0.0F);
         assertEquals(0.0D, mock.doubleReturningMethod(12), 0.0D);
-        assertEquals('\u0000', mock.charReturningMethod(12));
+        assertEquals((char) 0, mock.charReturningMethod(12));
         assertEquals(false, mock.booleanReturningMethod(12));
         assertEquals(null, mock.objectReturningMethod(12));
     }

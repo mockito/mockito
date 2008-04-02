@@ -48,4 +48,16 @@ public class DefaultReturnValuesTest extends TestBase {
         
         assertNull(values.returnValueFor(String.class));
     }
+    
+    @Test public void shouldReturnPrimitive() {
+        DefaultReturnValues values = new DefaultReturnValues();
+        
+        assertEquals(false, values.returnValueFor(Boolean.TYPE));
+        assertEquals((char) 0, values.returnValueFor(Character.TYPE));
+        assertEquals(0, values.returnValueFor(Short.TYPE));
+        assertEquals(0, values.returnValueFor(Integer.TYPE));
+        assertEquals(0, values.returnValueFor(Long.TYPE));
+        assertEquals(0, values.returnValueFor(Float.TYPE));
+        assertEquals(0, values.returnValueFor(Double.TYPE));
+    }
 }
