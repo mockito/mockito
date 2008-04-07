@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal;
+package org.mockito.internal.invocation;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.mockito.internal.invocation.GlobalInvocationsFinder;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockUtil;
 
-public class AllInvocationsFinder implements GlobalInvocationsFinder {
+public class AllInvocationsFinder {
     
+    /**
+     * gets all invocations from mocks. Invocations are ordered earlier first. 
+     * 
+     * @param mocks
+     * @return invocations
+     */
     public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {

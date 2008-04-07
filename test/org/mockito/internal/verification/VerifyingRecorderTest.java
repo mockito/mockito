@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.internal.invocation.GlobalInvocationsFinder;
+import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -30,7 +30,7 @@ public class VerifyingRecorderTest extends TestBase {
     @Before
     public void setup() {
         verifierStub = new VerifierStub();
-        recorder = new VerifyingRecorder(new GlobalInvocationsFinder() {
+        recorder = new VerifyingRecorder(new AllInvocationsFinder() {
             public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
                 return asList(simpleMethod, differentMethod.getInvocation());
             }}, asList(verifierStub));

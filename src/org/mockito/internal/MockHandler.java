@@ -13,6 +13,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.creation.MockAwareInterceptor;
+import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
