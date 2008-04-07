@@ -9,13 +9,13 @@ import java.util.Arrays;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
-import org.mockito.internal.MockUtil;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.util.MockUtil;
 
 /**
  * Enables mocks creation, verification and stubbing.

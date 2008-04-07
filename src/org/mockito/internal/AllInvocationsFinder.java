@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import org.mockito.internal.invocation.GlobalInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.MockUtil;
 
 public class AllInvocationsFinder implements GlobalInvocationsFinder {
     

@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito;
+package org.mockito.internal.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,10 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
 
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.MockUtil;
 
 public class MockUtilTest extends TestBase {
 
