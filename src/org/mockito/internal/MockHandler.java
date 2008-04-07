@@ -107,9 +107,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     
     //lower case first letter
     private String toInstanceName(String className) {
-        return className;
-        //TODO enable and fix tests
-//        return className.substring(0, 1).toLowerCase() + className.substring(1);
+        return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
 
     private VerifyingRecorder createRecorder() {

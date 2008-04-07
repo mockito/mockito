@@ -61,7 +61,7 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldPrintMethodName() {
         invocation = new InvocationBuilder().toInvocation();
-        assertEquals("IMethods.simpleMethod();", invocation.toString());
+        assertEquals("iMethods.simpleMethod();", invocation.toString());
     }
     
     @Test

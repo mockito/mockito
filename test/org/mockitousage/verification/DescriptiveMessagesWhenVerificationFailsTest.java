@@ -41,7 +41,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "IMethods.simpleMethod();";
+                    "iMethods.simpleMethod();";
             assertEquals(expectedMessage, actualMessage);
         }
     }
@@ -58,7 +58,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).threeArgumentMethod(12, new Foo(), "xx");
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("IMethods.threeArgumentMethod(12, foo, \"xx\")"));
+            assertThat(e, messageContains("iMethods.threeArgumentMethod(12, foo, \"xx\")"));
         }
     }
 
@@ -74,7 +74,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Argument(s) are different! Wanted:" +
                     "\n" +
-                    "IMethods.varargs(1, 1000);";
+                    "iMethods.varargs(1, 1000);";
 
             assertEquals(expected, e.getMessage());
 
@@ -84,7 +84,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Actual invocation has different arguments:" +
                     "\n" +
-                    "IMethods.varargs(1, 2);";
+                    "iMethods.varargs(1, 2);";
 
             assertEquals(expectedCause, e.getCause().getMessage());
         }
@@ -104,7 +104,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Argument(s) are different! Wanted:" +
                     "\n" +
-                    "IMethods.varargs(" +
+                    "iMethods.varargs(" +
                     "\n" +
                     "    \"this is very long string\"," +
                     "\n" +
@@ -122,7 +122,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Actual invocation has different arguments:" +
                     "\n" +
-                    "IMethods.varargs(" +
+                    "iMethods.varargs(" +
                     "\n" +
                     "    \"this is very long string\"," +
                     "\n" +
@@ -184,7 +184,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Undesired invocation:" +
                     "\n" +
-                    "IMethods.oneArg(false);";
+                    "iMethods.oneArg(false);";
             assertEquals(expectedCause, e.getCause().getMessage());
         }
     }
@@ -208,7 +208,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "\n" +
                 "Undesired invocation:" +
                 "\n" +
-                "IMethods.twoArgumentMethod(1, 2);";
+                "iMethods.twoArgumentMethod(1, 2);";
 
             assertEquals(e.getCause().getMessage(), expectedCause);
         }
@@ -220,7 +220,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("IMethods.twoArgumentMethod(1, 2)"));
+            assertThat(e, messageContains("twoArgumentMethod(1, 2)"));
         }
     }
 
@@ -235,7 +235,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "\n" +
                 "Wanted but not invoked:" +
                 "\n" +
-                "IMethods.twoArgumentMethod(<any>, 100);";
+                "iMethods.twoArgumentMethod(<any>, 100);";
             assertEquals(expectedMessage, actualMessage);
         }
     }
