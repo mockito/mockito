@@ -322,8 +322,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     
     @Test
     public void shouldPrintFieldNameWhenAnnotationsUsed() throws Exception {
-        //TODO if I am adding this feature, then shall I also make the first letter of generated mock name lower-case (for consistency)???
-        //it's hard to say what is more consistent... ask Igor or Felix
         iHavefunkyName.simpleMethod(10);
     
         try {
