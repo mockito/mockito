@@ -1,3 +1,5 @@
+    //add initMocks that allows to send own annotation/own implementation of creation logic
+    
     //java cross reference tool online
 
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
