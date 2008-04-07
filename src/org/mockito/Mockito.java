@@ -252,7 +252,6 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * Read more here: {@link MockitoAnnotations}
  */
-//TODO add javadoc how to do junit runner here and in mockito annotations
 public class Mockito extends Matchers {
 
     private static final Reporter REPORTER = new Reporter();

@@ -47,6 +47,9 @@ import org.mockito.exceptions.base.MockitoException;
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * You can also put it in your JUnit4 runner (&#064;RunWith).
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
+ * <p>
+ * How to implement mockito junit runner? See examples from mockito/test/org/mockitousage/examples/junitrunner subpackage. 
+ * You may want to check out the project from svn repository to easily browse Mockito's test code.
  */
 public class MockitoAnnotations {
 
