@@ -54,6 +54,7 @@ public class DefaultReturnValuesTest extends TestBase {
         
         assertEquals(false, values.returnValueFor(Boolean.TYPE));
         assertEquals((char) 0, values.returnValueFor(Character.TYPE));
+        assertEquals(0, values.returnValueFor(Byte.TYPE));
         assertEquals(0, values.returnValueFor(Short.TYPE));
         assertEquals(0, values.returnValueFor(Integer.TYPE));
         assertEquals(0, values.returnValueFor(Long.TYPE));

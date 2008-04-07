@@ -11,6 +11,7 @@ import java.util.List;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.configuration.MockitoConfiguration;
+import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -40,10 +41,12 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private final Stubber stubber;
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
+    private final String mockName;
     
     private T mock;
     
-    public MockHandler(MockingProgress mockingProgress, MatchersBinder matchersBinder) {
+    public MockHandler(String mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder) {
+        this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         stubber = new Stubber(mockingProgress);
@@ -94,6 +97,21 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         return verifyingRecorder.getRegisteredInvocations();
     }
     
+    public String getMockName() {
+        if (mockName != null) {
+            return mockName;
+        } else {
+            return toInstanceName(ClassNameFinder.classNameForMock(mock));
+        }
+    }
+    
+    //lower case first letter
+    private String toInstanceName(String className) {
+        return className;
+        //TODO enable and fix tests
+//        return className.substring(0, 1).toLowerCase() + className.substring(1);
+    }
+
     private VerifyingRecorder createRecorder() {
         List<Verifier> verifiers = Arrays.asList(
                 new MissingInvocationInOrderVerifier(),

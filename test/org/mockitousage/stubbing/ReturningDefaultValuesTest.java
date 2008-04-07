@@ -11,27 +11,37 @@ import java.util.Map;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
+import org.mockito.MockitoAnnotations.Mock;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class ReturningDefaultValuesTest extends TestBase {
 
+    @Mock private IMethods mock;
+
     @Test
     public void shouldReturnAllKindsOfPrimitives() throws Exception {
-        IMethods mock = Mockito.mock(IMethods.class);
-
-        //this is mainly to prove that cglib-enchanted-thing works properly 
-        //and returns primitive value rather than throw NullPointerException
-        //If we used java.lang.reflect.Proxy NullPointerException will bang
-        assertEquals((byte) 0, mock.byteReturningMethod(12));
-        assertEquals((short) 0, mock.shortReturningMethod(12));
-        assertEquals(0, mock.intReturningMethod(12));
-        assertEquals(0L, mock.intReturningMethod(12));
-        assertEquals(0.0F, mock.floatReturningMethod(12), 0.0F);
-        assertEquals(0.0D, mock.doubleReturningMethod(12), 0.0D);
-        assertEquals((char) 0, mock.charReturningMethod(12));
-        assertEquals(false, mock.booleanReturningMethod(12));
-        assertEquals(null, mock.objectReturningMethod(12));
+        assertEquals((byte) 0, mock.byteReturningMethod());
+        assertEquals((short) 0, mock.shortReturningMethod());
+        assertEquals(0, mock.intReturningMethod());
+        assertEquals(0L, mock.longReturningMethod());
+        assertEquals(0.0F, mock.floatReturningMethod(), 0.0F);
+        assertEquals(0.0D, mock.doubleReturningMethod(), 0.0D);
+        assertEquals((char) 0, mock.charReturningMethod());
+        assertEquals(false, mock.booleanReturningMethod());
+        assertEquals(null, mock.objectReturningMethod());
+    }
+    
+    @Test
+    public void shouldReturnTheSameValuesForWrapperClasses() throws Exception {
+        assertEquals(new Byte((byte) 0), mock.byteObjectReturningMethod());
+        assertEquals(new Short((short) 0), mock.shortObjectReturningMethod());
+        assertEquals(new Integer(0), mock.integerReturningMethod());
+        assertEquals(new Long(0L), mock.longObjectReturningMethod());
+        assertEquals(new Float(0.0F), mock.floatObjectReturningMethod(), 0.0F);
+        assertEquals(new Double(0.0D), mock.doubleObjectReturningMethod(), 0.0D);
+        assertEquals(new Character((char) 0), mock.charObjectReturningMethod());
+        assertEquals(new Boolean(false), mock.booleanObjectReturningMethod());
     }
     
     @Test 

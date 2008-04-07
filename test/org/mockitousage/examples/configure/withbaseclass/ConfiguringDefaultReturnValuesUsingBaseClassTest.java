@@ -14,6 +14,7 @@ public class ConfiguringDefaultReturnValuesUsingBaseClassTest extends MakesMocks
     public void shouldReturnMocksByDefaultInsteadOfNulls() throws Exception {
         MyObject m = mock(MyObject.class);
         //mocks don't return nulls any more...
+        //the configuration code is hidden in the base class
         MyObject returned = m.foo();
         assertNotNull(returned);
         assertNotNull(returned.foo());

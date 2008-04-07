@@ -4,6 +4,9 @@
  */
 package org.mockito.configuration;
 
+/**
+ * Configuration properties 
+ */
 public class MockitoProperties {
 
     public static final ReturnValues DEFAULT_RETURN_VALUES =  new DefaultReturnValues();

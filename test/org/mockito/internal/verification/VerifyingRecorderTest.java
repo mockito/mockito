@@ -48,7 +48,7 @@ public class VerifyingRecorderTest extends TestBase {
         
         assertSame(verifierStub.mode, mode);
         assertSame(verifierStub.wanted, differentMethod);
-        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod));
+        assertThat(verifierStub.invocations, hasExactlyInOrder(simpleMethod));
     }
     
     @Test
@@ -56,7 +56,7 @@ public class VerifyingRecorderTest extends TestBase {
         VerificationModeImpl inOrderMode = new VerificationModeBuilder().inOrder();
         recorder.verify(differentMethod, inOrderMode);
         
-        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
+        assertThat(verifierStub.invocations, hasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
     }
     
     @Test

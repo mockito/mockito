@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 
-//TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
 public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBase {
     
     private IMethods mock;

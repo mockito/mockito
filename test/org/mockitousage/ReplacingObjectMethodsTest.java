@@ -33,7 +33,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         
         assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
         
-        assertContains("Mock for ObjectMethodsOverridden", mock.toString());
+        assertThat(mock.toString(), contains("Mock for ObjectMethodsOverridden"));
     }
     
     @Test 
@@ -46,7 +46,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         
         assertThat(mock.hashCode(), not(equalTo(otherMock.hashCode())));
         
-        assertContains("Mock for ObjectMethodsOverriddenSubclass", mock.toString());
+        assertThat(mock.toString(), contains("Mock for ObjectMethodsOverriddenSubclass"));
     }
     
     public static class ObjectMethodsOverridden {

@@ -31,7 +31,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     //1. how objenesis deal with primitive arrays (like byte[])?
     //2. Analisys of all matchers used by R2 project finished before anyObject() and so far proves it's a good idea.
 
-    @Ignore("prototyping")
+    @Ignore("prototyping new feature that allows to avoid eq() matchers when raw args passed")
     @Test
     public void shouldAllowMixingRawArgumentsWithMatchers() {
         mock.varargs("1", "2", "3");

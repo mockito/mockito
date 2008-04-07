@@ -80,7 +80,7 @@ public class MockitoAnnotations {
                 boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
-                    f.set(testClass, Mockito.mock(f.getType()));
+                    f.set(testClass, Mockito.mock(f.getType(), f.getName()));
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating mocks annotated with @Mock", e);
                 } finally {

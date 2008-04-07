@@ -14,15 +14,6 @@ import org.mockito.exceptions.misusing.NotAMockException;
 @SuppressWarnings("unchecked")
 public class MockitoTest extends TestBase {
 
-    //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
-    // and create a test case that I can manually fix and run and make sure examples are valid.
-    // Or better. Write examples as unit tests, annotate them in the way so that javadoc can be generated out of it.
-    
-    //TODO check if performace can be tweaked (e.g: LL -> AL)
-    
-    //TODO names for @Mock - take field names
-    //TODO return 0 for Integer, etc
-    
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);

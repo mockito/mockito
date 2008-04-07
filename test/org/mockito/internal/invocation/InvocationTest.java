@@ -61,50 +61,51 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldPrintMethodName() {
         invocation = new InvocationBuilder().toInvocation();
-        assertEquals("Object.simpleMethod();", invocation.toString());
+        assertEquals("IMethods.simpleMethod();", invocation.toString());
     }
     
     @Test
     public void shouldPrintMethodArgs() {
         invocation = new InvocationBuilder().args("foo").toInvocation();
-        assertEquals("Object.simpleMethod(\"foo\");", invocation.toString());
+        assertThat(invocation.toString(), endsWith("simpleMethod(\"foo\");"));
     }
     
     @Test
     public void shouldPrintMethodIntegerArgAndString() {
         invocation = new InvocationBuilder().args("foo", 1).toInvocation();
-        assertEquals("Object.simpleMethod(\"foo\", 1);", invocation.toString());
+        assertThat(invocation.toString(), endsWith("simpleMethod(\"foo\", 1);"));
     }
     
     @Test
     public void shouldPrintNull() {
         invocation = new InvocationBuilder().args((String) null).toInvocation();
-        assertEquals("Object.simpleMethod(null);", invocation.toString());
+        assertThat(invocation.toString(), endsWith("simpleMethod(null);"));
     }
     
     @Test
     public void shouldPrintArray() {
         invocation = new InvocationBuilder().method("oneArray").args(new int[] { 1, 2, 3 }).toInvocation();
-        assertEquals("Object.oneArray([1, 2, 3]);", invocation.toString());
+        assertThat(invocation.toString(), endsWith("oneArray([1, 2, 3]);"));
     }
     
     @Test
     public void shouldPrintNullIfArrayIsNull() throws Exception {
         Method m = IMethods.class.getMethod("oneArray", Object[].class);
         invocation = new InvocationBuilder().method(m).args((Object) null).toInvocation();
-        assertEquals("Object.oneArray(null);", invocation.toString());
+        assertThat(invocation.toString(), endsWith("oneArray(null);"));
     }
     
     @Test
     public void shouldPrintArgumentsInMultilinesWhenGetsTooBig() {
         invocation = new InvocationBuilder().args("veeeeery long string that makes it ugly in one line", 1).toInvocation();
-        assertEquals("Object.simpleMethod(" +
+        assertThat(invocation.toString(), endsWith( 
+                "simpleMethod(" +
                 "\n" +
                 "    \"veeeeery long string that makes it ugly in one line\"," +
                 "\n" +
                 "    1" +
                 "\n" +
-                ");", invocation.toString());
+                ");"));
     }
     
     @Test
@@ -123,7 +124,6 @@ public class InvocationTest extends TestBase {
         Invocation i = new InvocationBuilder().args("foo", new String[] {"bar"}).toInvocation();
         List matchers = i.argumentsToMatchers();
 
-        //TODO when I use IsCollectionContaining.hasItems ant fails to compile tests. 
         assertEquals(2, matchers.size());
         assertEquals(Equals.class, matchers.get(0).getClass());
         assertEquals(ArrayEquals.class, matchers.get(1).getClass());

@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
@@ -16,7 +17,7 @@ public class InvocationBuilder {
     private String methodName = "simpleMethod";
     private int sequenceNumber = 0;
     private Object[] args = new Object[] {};
-    private Object mock = "mock";
+    private Object mock = Mockito.mock(IMethods.class);
     private Method method;
     private boolean verified;
 

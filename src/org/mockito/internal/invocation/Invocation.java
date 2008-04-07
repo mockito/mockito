@@ -15,7 +15,7 @@ import org.hamcrest.StringDescription;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.MockNamer;
+import org.mockito.internal.MockUtil;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.invocation.InvocationOnMock;
@@ -135,7 +135,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
     }
 
     private String qualifiedMethodName() {
-        return MockNamer.nameForMock(mock) + "." + method.getName();
+        //TODO this surely breaks sane dependencies between packages:
+        String name = MockUtil.getMockName(mock);
+        return name + "." + method.getName();
     }
 
     private String getArgumentsLine(List<Matcher> matchers) {

@@ -15,6 +15,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
+import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
 import org.mockitousage.IMethods;
@@ -23,15 +24,16 @@ import org.mockitousage.IMethods;
 public class InvocationMatcherTest extends TestBase {
 
     private InvocationMatcher simpleMethod;
+    @Mock private IMethods mock; 
     
     @Before
     public void setup() {
-        simpleMethod = new InvocationBuilder().simpleMethod().toInvocationMatcher();
+        simpleMethod = new InvocationBuilder().mock(mock).simpleMethod().toInvocationMatcher();
     }
 
     public void shouldBuildEqualsMatchersWhenNullPassed() throws Exception {
         InvocationMatcher m = new InvocationMatcher(new InvocationBuilder().args("foo").toInvocation(), null);
-        assertThat(m.getMatchers(), collectionHasExactlyInOrder(new Equals("foo")));
+        assertThat(m.getMatchers(), hasExactlyInOrder(new Equals("foo")));
     }
     
     @Test
@@ -62,16 +64,16 @@ public class InvocationMatcherTest extends TestBase {
         Matcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
-        assertContains("Object.simpleMethod(notNull())", notNull.toString());
-        assertContains("Object.simpleMethod('x')", equals.toString());
+        assertThat(notNull.toString(), contains("simpleMethod(notNull())"));
+        assertThat(equals.toString(), contains("simpleMethod('x')"));
     }
     
     @Test
     public void shouldKnowIfIsSimilarTo() throws Exception {
-        Invocation same = new InvocationBuilder().simpleMethod().toInvocation();
+        Invocation same = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
         assertTrue(simpleMethod.hasSimilarMethod(same));
         
-        Invocation different = new InvocationBuilder().differentMethod().toInvocation();
+        Invocation different = new InvocationBuilder().mock(mock).differentMethod().toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(different));
     }
     
@@ -105,8 +107,8 @@ public class InvocationMatcherTest extends TestBase {
         Method method = IMethods.class.getMethod("simpleMethod", String.class);
         Method overloadedMethod = IMethods.class.getMethod("simpleMethod", Object.class);
         
-        InvocationMatcher invocation = new InvocationBuilder().method(method).arg("foo").toInvocationMatcher();
-        Invocation overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg("bar").toInvocation();
+        InvocationMatcher invocation = new InvocationBuilder().mock(mock).method(method).arg("foo").toInvocationMatcher();
+        Invocation overloadedInvocation = new InvocationBuilder().mock(mock).method(overloadedMethod).arg("bar").toInvocation();
         
         assertTrue(invocation.hasSimilarMethod(overloadedInvocation));
     }

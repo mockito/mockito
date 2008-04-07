@@ -16,9 +16,9 @@ import org.mockito.internal.progress.MockingProgress;
 
 public class MockUtil {
     
-    public static <T> T createMock(Class<T> classToMock, MockingProgress progress) {
+    public static <T> T createMock(Class<T> classToMock, String mockName, MockingProgress progress) {
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockHandler<T> mockHandler = new MockHandler<T>(progress, new MatchersBinder());
+        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder());
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         return proxyFactory.createMock(classToMock, filter);
     }
@@ -56,5 +56,9 @@ public class MockUtil {
         } catch (MockitoException e) {
             return false;
         }
+    }
+
+    public static String getMockName(Object mock) {
+        return getMockHandler(mock).getMockName();
     }
 }

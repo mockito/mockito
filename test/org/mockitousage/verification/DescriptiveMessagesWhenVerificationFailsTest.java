@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
+import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
@@ -314,6 +315,23 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("bar"));
             assertThat(e, causeMessageContains("foo"));
+        }
+    }
+
+    @Mock private IMethods iHavefunkyName; 
+    
+    @Test
+    public void shouldPrintFieldNameWhenAnnotationsUsed() throws Exception {
+        //TODO if I am adding this feature, then shall I also make the first letter of generated mock name lower-case (for consistency)???
+        //it's hard to say what is more consistent... ask Igor or Felix
+        iHavefunkyName.simpleMethod(10);
+    
+        try {
+            verify(iHavefunkyName).simpleMethod(20);
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+            assertThat(e, messageContains("iHavefunkyName.simpleMethod(20)"));
+            assertThat(e, causeMessageContains("iHavefunkyName.simpleMethod(10)"));
         }
     }
 }

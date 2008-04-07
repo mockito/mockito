@@ -35,7 +35,7 @@ public class ResultTest extends TestBase {
             fail();
         } catch (RuntimeException e) {
             assertTrue(Arrays.equals(filterStub.hasStackTrace.getStackTrace(), e.getStackTrace()));
-            assertThat("should fill in stack trace", e, hasFirstMethodInStackTrace("answer"));
+            assertThat(e, hasFirstMethodInStackTrace("answer"));
         }
     }
     

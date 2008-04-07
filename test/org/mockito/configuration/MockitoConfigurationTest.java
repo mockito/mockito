@@ -16,7 +16,7 @@ public class MockitoConfigurationTest extends TestBase {
             MockitoConfiguration.instance().setReturnValues(null);
             fail();
         } catch (MockitoException e) {
-            assertContains("Cannot set null ReturnValues!", e.getMessage());
+            assertThat(e, messageContains("Cannot set null ReturnValues!"));
         }
     }
 }

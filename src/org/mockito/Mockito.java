@@ -229,6 +229,11 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <h3>Shorthand for mocks creation - &#064;Mock annotation</h3>
  * 
+ * <ul>
+ * <li>Minimizes repetitive mock creation code.</li> 
+ * <li>Makes the test class more readable.</li>
+ * </ul>
+ * 
  * <pre>
  *   public class ArticleManagerTest { 
  *     
@@ -237,16 +242,17 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *       &#064;Mock private UserProvider userProvider;
  *     
  *       private ArticleManager manager;
- *       
  * </pre>
  * 
- * <ul>
- * <li>Minimizes repetitive mock creation code.</li> 
- * <li>Makes the test class more readable.</li>
- * </ul>
- *
- * See examples in javadoc for {@link MockitoAnnotations}
+ * <b>Important!</b> This needs to be somewhere in the test runner or a base class:
+ *   
+ * <pre>
+ *   MockitoAnnotations.initMocks(testClass);
+ * </pre>   
+ * 
+ * Read more here: {@link MockitoAnnotations}
  */
+//TODO add javadoc how to do junit runner here and in mockito annotations
 public class Mockito extends Matchers {
 
     private static final Reporter REPORTER = new Reporter();
@@ -262,7 +268,11 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MockUtil.createMock(classToMock, MOCKING_PROGRESS);
+        return MockUtil.createMock(classToMock, null, MOCKING_PROGRESS);
+    }
+    
+    static <T> T mock(Class<T> classToMock, String name) {
+        return MockUtil.createMock(classToMock, name, MOCKING_PROGRESS);
     }
 
     /**

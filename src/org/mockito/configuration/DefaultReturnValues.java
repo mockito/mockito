@@ -19,19 +19,36 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.mockito.internal.creation.MockNamer;
+import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Used by default by every Mockito mock
+ * Used by default by every Mockito mock.
+ * <ul>
+ * <li>
+ *  Returns appropriate primitive for primitive-returning methods
+ * </li>
+ * <li>
+ *  Returns empty collection for collection-returning methods (works for most commonly used collection types)
+ * </li>
+ * <li>
+ *  Returns description of mock for toString() method
+ * </li>
+ * <li>
+ *  Returns null for everything else
+ * </li>
+ * </ul>
  */
 public class DefaultReturnValues implements ReturnValues {
     
+    /* (non-Javadoc)
+     * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
+     */
     public Object valueFor(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
-            String mockDescription = "Mock for " + MockNamer.nameForMock(mock) + ", hashCode: " + mock.hashCode();
+            String mockDescription = "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
             return mockDescription;
         }
         
@@ -42,6 +59,8 @@ public class DefaultReturnValues implements ReturnValues {
     protected Object returnValueFor(Class<?> type) {
         if (type.isPrimitive()) {
             return primitiveOf(type);
+        } else if (isPrimitiveWrapper(type)) {
+            return primitiveWrapperOf(type);
         //new instances are used instead of Collections.emptyList(), etc.
         //to avoid UnsupportedOperationException if code under test modifies returned collection
         } else if (type == Collection.class) {
@@ -85,5 +104,26 @@ public class DefaultReturnValues implements ReturnValues {
         } else {
             return 0;
         } 
+    }
+    
+    private boolean isPrimitiveWrapper(Class<?> type) {
+        return wrapperReturnValues.containsKey(type);
+    }
+    
+    private Object primitiveWrapperOf(Class<?> type) {
+        return wrapperReturnValues.get(type);
+    }
+    
+    private static Map<Class<?>, Object> wrapperReturnValues = new HashMap<Class<?>, Object>();
+    
+    static {
+        wrapperReturnValues.put(Boolean.class, Boolean.FALSE);
+        wrapperReturnValues.put(Character.class, new Character((char) 0));
+        wrapperReturnValues.put(Byte.class, new Byte((byte) 0));
+        wrapperReturnValues.put(Short.class, new Short((short) 0));
+        wrapperReturnValues.put(Integer.class, new Integer(0));
+        wrapperReturnValues.put(Long.class, new Long(0));
+        wrapperReturnValues.put(Float.class, new Float(0));
+        wrapperReturnValues.put(Double.class, new Double(0));
     }
 }

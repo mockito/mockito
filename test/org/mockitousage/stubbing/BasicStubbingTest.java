@@ -48,9 +48,9 @@ public class BasicStubbingTest extends TestBase {
     
     @Test
     public void shouldStubbingBeTreatedAsInteraction() throws Exception {
-        stub(mock.booleanReturningMethod(1)).toReturn(true);
+        stub(mock.booleanReturningMethod()).toReturn(true);
         
-        mock.booleanReturningMethod(1);
+        mock.booleanReturningMethod();
         
         try {
             verifyNoMoreInteractions(mock);
@@ -70,7 +70,7 @@ public class BasicStubbingTest extends TestBase {
         Generic mockTwo = mock(Generic.class);
         
         List<Sub> subs = null;
-        //TODO can I somehow avoid a cast here:
+        //can I somehow avoid a cast here:
         stub(mockTwo.getList()).toReturn((List) subs);
     }
     
@@ -79,7 +79,7 @@ public class BasicStubbingTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         stub(mockTwo.toString()).toReturn("test");
         
-        assertContains("Mock for IMethods", mock.toString());
+        assertThat(mock.toString(), contains("Mock for IMethods"));
         assertEquals("test", mockTwo.toString());
     }
     

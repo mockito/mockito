@@ -49,7 +49,7 @@ public class StackTraceRemoverTest extends TestBase {
         setStackTrace("methodOne", "methodTwo", "methodThree", "commonMethodOne", "commonMethodTwo");
         setCauseStackTrace("actualOne", "actualTwo", "commonMethodOne", "commonMethodTwo");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, hasExactlyInOrder(
                 "methodOne",
                 "methodTwo",
                 "methodThree"
@@ -61,7 +61,7 @@ public class StackTraceRemoverTest extends TestBase {
         setStackTrace("methodOne", "commonMethodOne", "commonMethodTwo", "commonMethodOne", "commonMethodTwo");
         setCauseStackTrace("actualOne", "commonMethodOne", "commonMethodTwo");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, hasExactlyInOrder(
                 "methodOne",
                 "commonMethodOne",
                 "commonMethodTwo"
@@ -73,7 +73,7 @@ public class StackTraceRemoverTest extends TestBase {
         setStackTrace("methodOne", "commonMethodOne");
         setCauseStackTrace("actualOne", "commonMethodOne", "actualOne", "commonMethodOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, hasExactlyInOrder(
                 "methodOne"
         ));
     }
@@ -91,7 +91,7 @@ public class StackTraceRemoverTest extends TestBase {
         setStackTrace("one", "commonOne");
         setCauseStackTrace("two", "commonOne");
         remove();
-        assertThat(methodsOnTraceAfterRemoving, collectionHasExactlyInOrder(
+        assertThat(methodsOnTraceAfterRemoving, hasExactlyInOrder(
                 "one"
         ));
     }

@@ -6,9 +6,6 @@ package org.mockitousage.matchers;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
-
-import java.util.Arrays;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -38,13 +35,6 @@ public class HamcrestMatchersTest extends TestBase {
         stub(mock.simpleMethod(argThat(new ContainsX()))).toReturn("X");
         assertNull(mock.simpleMethod("blah"));
         assertEquals("X", mock.simpleMethod("blah X blah"));
-    }
-    
-    @Test
-    public void shouldAcceptCollectionContainingMatcher() {
-        stub(mock.simpleMethod(argThat(collectionHas("1", "2")))).toReturn("1 and 2");
-        assertNull(mock.simpleMethod(Arrays.asList("3", "1")));
-        assertEquals("1 and 2", mock.simpleMethod(Arrays.asList("1", "2")));
     }
     
     @Test
