@@ -247,6 +247,14 @@
     
   </target> 
   
+  <target name="java-xrf">
+    <taskdef resource="org/jvnet/sorcerer/ant.properties" classpathref="ant.classpath" />
+
+    <sorcerer srcdir="path/to/src" destdir="path/to/output">
+      <classpath refid="test.compile.classpath" />
+    </sorcerer>
+  </target>
+  
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs test against jars" />
   
   <target name="all" depends="zip, tgzip" description="cleans, builds, tests, jars, zips" />
