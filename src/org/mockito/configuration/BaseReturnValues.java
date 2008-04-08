@@ -59,7 +59,7 @@ public abstract class BaseReturnValues implements ReturnValues {
      * @param clazz
      * @return true if clazz is void (primitive class)
      */    
-    protected boolean isVoid(Class<?> returnType) {
-        return returnType == Void.TYPE;
+    protected boolean isVoid(Class<?> clazz) {
+        return clazz == Void.TYPE;
     }
 }
