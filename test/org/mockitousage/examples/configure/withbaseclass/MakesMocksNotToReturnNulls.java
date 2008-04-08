@@ -31,7 +31,12 @@ public class MakesMocksNotToReturnNulls {
     
     private final class MyDefaultReturnValues extends BaseReturnValues implements ReturnValues {
         public Object returnValueFor(InvocationOnMock invocation) {
-            return Mockito.mock(invocation.getMethod().getReturnType());
+            Class<?> returnType = invocation.getMethod().getReturnType();
+            if (isFinalClass(returnType)) {
+                return null;
+            } else {
+                return Mockito.mock(returnType);
+            }
         }
     }
 }

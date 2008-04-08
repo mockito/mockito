@@ -37,11 +37,10 @@ public class AllowsFakingReturnValues {
         private Set<Object> mocksReturningFakes = new HashSet<Object>();
 
         public Object returnValueFor(InvocationOnMock invocation) {
-            Class<?> returnType = invocation.getMethod().getReturnType();
             if (mocksReturningFakes.contains(invocation.getMock())) {
-                return returnFake(returnType);
+                return returnFake(invocation);
             } else {
-                return null;
+                return defaultValueFor(invocation);
             }
         }
 
@@ -49,11 +48,15 @@ public class AllowsFakingReturnValues {
             mocksReturningFakes.addAll(Arrays.asList(mocks));
         }
 
-        private Object returnFake(Class<?> returnType) {
+        private Object returnFake(InvocationOnMock invocation) {
+            Class<?> returnType = invocation.getMethod().getReturnType();
             if (returnType == String.class) {
                 return "";
             } else if (returnType == Boolean.TYPE) {
                 return true;
+            } else if (isFinalClass(returnType)) {
+                //cannot mock final class :(
+                return null;
             } else {
                 return mock(returnType);
             }

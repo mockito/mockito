@@ -4,38 +4,62 @@
  */
 package org.mockito.configuration;
 
+import java.lang.reflect.Modifier;
+
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Handy implementation of {@link ReturnValues} that already deals with void types and default return values.
+ * Handy implementation of {@link ReturnValues} that already deals with void types and provides some useful methods.
  * <p>
- * Intended for subclassing and providing implementation for {@link BaseReturnValues#returnValueFor(InvocationOnMock)}.
+ * Intended for subclassing and providing the implementation for {@link BaseReturnValues#returnValueFor(InvocationOnMock)}.
  * <p>
  * See examples from mockito/test/org/mockitousage/examples/configure subpackage. 
  * You may want to check out the project from svn repository to easily browse Mockito's test code.
  */
 public abstract class BaseReturnValues implements ReturnValues {
     
-    private DefaultReturnValues defaultReturnValues = new DefaultReturnValues();
-    
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
      */
     public Object valueFor(InvocationOnMock invocation) {
-        Object returnByDefault = defaultReturnValues.valueFor(invocation);
         Class<?> returnType = invocation.getMethod().getReturnType();
-        if (returnByDefault != null || returnType == Void.TYPE) {
-            return returnByDefault;
+        if (isVoid(returnType)) {
+            return null;
         }
         return returnValueFor(invocation);
     }
 
     /**
-     * The default implementation already evaluated invocation and decided to return null.
-     * Override this method to return different value than null. 
+     * Override this method to return different value for given invocation.
      * 
      * @param invocation
      * @return return value for an invocation
      */
     protected abstract Object returnValueFor(InvocationOnMock invocation);
+    
+    /**
+     * what Mockito returns by default for given invocation 
+     * 
+     * @param invocation
+     * @return default return value
+     */
+    protected Object defaultValueFor(InvocationOnMock invocation) {
+        return MockitoProperties.DEFAULT_RETURN_VALUES.valueFor(invocation);
+    }
+
+    /**
+     * @param clazz
+     * @return returns true if clazz is final
+     */
+    protected boolean isFinalClass(Class<?> clazz) {
+        return Modifier.isFinal(clazz.getModifiers());
+    }
+    
+    /**
+     * @param clazz
+     * @return true if clazz is void (primitive class)
+     */    
+    protected boolean isVoid(Class<?> returnType) {
+        return returnType == Void.TYPE;
+    }
 }
