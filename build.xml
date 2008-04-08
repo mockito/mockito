@@ -247,10 +247,12 @@
     
   </target> 
   
-  <target name="java-xrf">
+  <target name="java-xref">
     <taskdef resource="org/jvnet/sorcerer/ant.properties" classpathref="ant.classpath" />
 
-    <sorcerer srcdir="path/to/src" destdir="path/to/output">
+    <sorcerer srcdir="." destdir="target/xref">
+      <include name="src/**/*.java"/>
+      <include name="test/**/*.java"/>
       <classpath refid="test.compile.classpath" />
     </sorcerer>
   </target>
