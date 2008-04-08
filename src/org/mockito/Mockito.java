@@ -70,8 +70,9 @@ import org.mockito.internal.util.MockUtil;
  * 
  * <ul>
  * <li>
- * By default, for all methods that return value, mock will return null,
- * appropriate primitive value (0, false, etc.) or an empty collection.
+ * By default, for all methods that return value, mock returns null,
+ * an empty collection or appropriate primitive/primitive wrapper value 
+ * (e.g: 0, false, ... for int/Integer, boolean/Boolean, ...).
  * </li>
  * <li>
  * Stubbing can be overridden: for example common stubbing can go to fixture setup
@@ -232,6 +233,7 @@ import org.mockito.internal.util.MockUtil;
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li> 
  * <li>Makes the test class more readable.</li>
+ * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
  * </ul>
  * 
  * <pre>

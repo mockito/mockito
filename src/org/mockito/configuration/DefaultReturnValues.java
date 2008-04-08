@@ -30,6 +30,9 @@ import org.mockito.invocation.InvocationOnMock;
  *  Returns appropriate primitive for primitive-returning methods
  * </li>
  * <li>
+ *  Returns consistent values for primitive wrapper classes (e.g. int-returning method retuns 0 <b>and</b> Integer-returning method returns 0, too)
+ * </li>
+ * <li>
  *  Returns empty collection for collection-returning methods (works for most commonly used collection types)
  * </li>
  * <li>

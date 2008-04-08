@@ -18,6 +18,7 @@ import org.mockito.exceptions.base.MockitoException;
  * <li>Allows shorthand mock creation.</li> 
  * <li>Minimizes repetitive mock creation code.</li> 
  * <li>Makes the test class more readable.</li>
+ * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
  * </ul>
  * 
  * <pre>
