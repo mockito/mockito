@@ -9,6 +9,9 @@ package org.mockito.configuration;
  */
 public class MockitoProperties {
 
+    /**
+     * Mockito uses it by default to get return values for unstubbed invocations 
+     */
     public static final ReturnValues DEFAULT_RETURN_VALUES =  new DefaultReturnValues();
    
 }

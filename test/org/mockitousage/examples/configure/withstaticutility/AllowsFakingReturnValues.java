@@ -53,15 +53,17 @@ public class AllowsFakingReturnValues {
         private Object returnFake(InvocationOnMock invocation) {
            
             Class<?> returnType = invocation.getMethod().getReturnType();
+            
+            Object defaultReturnValue = ConfigurationSupport.defaultValueFor(invocation);
 
             if (returnType == String.class) {
                 return "";
             } else if (returnType == Boolean.TYPE) {
                 return true;
-            } else if (ConfigurationSupport.isMockable(returnType)) {
-                return mock(returnType);
+            } else if (defaultReturnValue != null || !ConfigurationSupport.isMockable(returnType)) {
+                return defaultReturnValue;
             } else {
-                return ConfigurationSupport.defaultValueFor(invocation);
+                return mock(returnType);
             }
         }
     }

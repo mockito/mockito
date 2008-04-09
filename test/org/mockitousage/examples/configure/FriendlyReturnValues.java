@@ -12,20 +12,18 @@ import org.mockito.invocation.InvocationOnMock;
 /**
  * tries to return mocks instead of nulls
  */
-public final class FriendlyReturnValues implements ReturnValues {
+public class FriendlyReturnValues implements ReturnValues {
 
     public Object valueFor(InvocationOnMock invocation) {
-        
+
         Class<?> returnType = invocation.getMethod().getReturnType();
-        
+
         Object defaultReturnValue = ConfigurationSupport.defaultValueFor(invocation);
-        
-        if (defaultReturnValue != null) {
+
+        if (defaultReturnValue != null || !ConfigurationSupport.isMockable(returnType)) {
             return defaultReturnValue;
-        } else if (ConfigurationSupport.isMockable(returnType)) { 
-            return Mockito.mock(returnType);
         } else {
-            return defaultReturnValue;
+            return Mockito.mock(returnType);
         }
     }
 }

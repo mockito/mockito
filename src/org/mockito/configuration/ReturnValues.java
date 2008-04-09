@@ -8,12 +8,16 @@ import org.mockito.invocation.InvocationOnMock;
 
 /**
  * Configures return values for an unstubbed invocation
+ * <p>
+ * See examples in javadoc for {@link MockitoConfiguration}
  */
 public interface ReturnValues {
 
     /**
-     * @param invocation
-     * @return default return value if no stubbed value found
+     * See examples in javadoc for {@link MockitoConfiguration}
+     * 
+     * @param invocation placeholder for mock and a method
+     * @return the return value
      */
     Object valueFor(InvocationOnMock invocation);
 }

@@ -8,14 +8,36 @@ import org.mockito.exceptions.base.MockitoException;
 
 /**
  * Allows configuring Mockito to enable custom 'mocking style'. 
- * It can be useful when working with legacy code, etc. 
+ * It can be useful when working with legacy code, etc.
  * <p>
  * See examples from mockito/test/org/mockitousage/examples/configure subpackage. 
  * You may want to check out the project from svn repository to easily browse Mockito's test code.
  * <p>
- * This class is thread-safe but every thread has own instance of configuration (ThreadLocal pattern).
+ * Basic example:
+ * <pre>
+ *   //create an implementation of ReturnValues interface
+ *   
+ *   public class FriendlyReturnValues implements ReturnValues {
+ *
+ *   public Object valueFor(InvocationOnMock invocation) {
+ *       
+ *       Class<?> returnType = invocation.getMethod().getReturnType();
+ *       
+ *       Object defaultReturnValue = ConfigurationSupport.defaultValueFor(invocation);
+ *       
+ *       if (defaultReturnValue != null || !ConfigurationSupport.isMockable(returnType)) {
+ *           return defaultReturnValue;
+ *       } else { 
+ *           return Mockito.mock(returnType);
+ *       }
+ *   }
+ *   
+ *   //finally, change the configuration: 
+ *   
+ *   MockitoConfiguration.instance().setReturnValues(new FriendlyReturnValues());
+ * </pre>
  * <p>
- * Configuring mockito is a new concept that we evaluate. Please let us know if you find it useful. 
+ * Configuring Mockito is a new concept that we evaluate. Please let us know if you find it useful/harmful. 
  */
 public class MockitoConfiguration {
     
@@ -28,7 +50,9 @@ public class MockitoConfiguration {
     }
     
     /**
-     * @return instance of a configuration 
+     * gets the singleton instance of a configuration
+     * 
+     * @return configuration 
      */
     public static MockitoConfiguration instance() {
         if (CONFIG.get() == null) {
@@ -38,7 +62,9 @@ public class MockitoConfiguration {
     }
     
     /**
-     * @return current {@link ReturnValues} implementation
+     * returns currently set {@link ReturnValues}
+     * 
+     * @return
      */
     public ReturnValues getReturnValues() {
         return returnValues;
@@ -46,7 +72,8 @@ public class MockitoConfiguration {
 
     /**
      * Sets {@link ReturnValues} implementation. 
-     * Allows to change the default (unstubbed) values returned by mocks. 
+     * <p>
+     * Allows to change the values returned by unstubbed methods. 
      * 
      * @param returnValues
      */

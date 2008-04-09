@@ -59,7 +59,7 @@ public class DefaultReturnValues implements ReturnValues {
         return returnValueFor(returnType);
     }
     
-    protected Object returnValueFor(Class<?> type) {
+    Object returnValueFor(Class<?> type) {
         if (type.isPrimitive()) {
             return primitiveOf(type);
         } else if (isPrimitiveWrapper(type)) {
