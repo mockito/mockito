@@ -246,12 +246,14 @@ import org.mockito.internal.util.MockUtil;
  *       private ArticleManager manager;
  * </pre>
  * 
- * <b>Important!</b> This needs to be somewhere in the test runner or a base class:
+ * <b>Important!</b> This needs to be somewhere in the base class or a test runner:
  *   
  * <pre>
  *   MockitoAnnotations.initMocks(testClass);
- * </pre>   
+ * </pre>
  * 
+ * Examples how to write a junit test runner are in Mockito test code (mockito/test/org/mockitousage/examples/junitrunner package);
+ * <p>
  * Read more here: {@link MockitoAnnotations}
  */
 public class Mockito extends Matchers {
