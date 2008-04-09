@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mockito.configuration.BaseReturnValues;
+import org.mockito.configuration.ConfigurationSupport;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
@@ -32,11 +32,11 @@ public class AllowsFakingReturnValues {
         return (FakeReturnValues) config.getReturnValues();
     }
 
-    private static final class FakeReturnValues extends BaseReturnValues {
+    private static final class FakeReturnValues extends ConfigurationSupport implements ReturnValues {
         
         private Set<Object> mocksReturningFakes = new HashSet<Object>();
 
-        public Object returnValueFor(InvocationOnMock invocation) {
+        public Object valueFor(InvocationOnMock invocation) {
             if (mocksReturningFakes.contains(invocation.getMock())) {
                 return returnFake(invocation);
             } else {
@@ -54,11 +54,10 @@ public class AllowsFakingReturnValues {
                 return "";
             } else if (returnType == Boolean.TYPE) {
                 return true;
-            } else if (isFinalClass(returnType)) {
-                //cannot mock final class :(
-                return null;
-            } else {
+            } else if (!isMockable(returnType)) {
                 return mock(returnType);
+            } else {
+                return defaultValueFor(invocation);
             }
         }
     }

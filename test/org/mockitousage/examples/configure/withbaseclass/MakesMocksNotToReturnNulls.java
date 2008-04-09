@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.configuration.BaseReturnValues;
+import org.mockito.configuration.ConfigurationSupport;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
@@ -29,13 +29,16 @@ public class MakesMocksNotToReturnNulls {
         MockitoConfiguration.instance().resetReturnValues();
     }
     
-    private final class MyDefaultReturnValues extends BaseReturnValues implements ReturnValues {
-        public Object returnValueFor(InvocationOnMock invocation) {
+    private final class MyDefaultReturnValues extends ConfigurationSupport implements ReturnValues {
+        public Object valueFor(InvocationOnMock invocation) {
             Class<?> returnType = invocation.getMethod().getReturnType();
-            if (isFinalClass(returnType)) {
-                return null;
-            } else {
+            Object defaultReturnValue = defaultValueFor(invocation);
+            if (defaultReturnValue != null) {
+                return defaultReturnValue;
+            } else if (!isMockable(returnType)) { 
                 return Mockito.mock(returnType);
+            } else {
+                return defaultReturnValue;
             }
         }
     }
