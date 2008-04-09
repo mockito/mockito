@@ -32,15 +32,17 @@ public class AllowsFakingReturnValues {
         return (FakeReturnValues) config.getReturnValues();
     }
 
-    private static final class FakeReturnValues extends ConfigurationSupport implements ReturnValues {
+    private static final class FakeReturnValues implements ReturnValues {
         
         private Set<Object> mocksReturningFakes = new HashSet<Object>();
 
         public Object valueFor(InvocationOnMock invocation) {
             if (mocksReturningFakes.contains(invocation.getMock())) {
+                //return non-standard value only for 'special' mocks
                 return returnFake(invocation);
             } else {
-                return defaultValueFor(invocation);
+                //return default value for any other mock
+                return ConfigurationSupport.defaultValueFor(invocation);
             }
         }
 
@@ -49,15 +51,17 @@ public class AllowsFakingReturnValues {
         }
 
         private Object returnFake(InvocationOnMock invocation) {
+           
             Class<?> returnType = invocation.getMethod().getReturnType();
+
             if (returnType == String.class) {
                 return "";
             } else if (returnType == Boolean.TYPE) {
                 return true;
-            } else if (!isMockable(returnType)) {
+            } else if (ConfigurationSupport.isMockable(returnType)) {
                 return mock(returnType);
             } else {
-                return defaultValueFor(invocation);
+                return ConfigurationSupport.defaultValueFor(invocation);
             }
         }
     }

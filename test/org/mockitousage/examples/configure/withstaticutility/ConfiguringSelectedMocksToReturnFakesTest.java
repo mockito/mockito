@@ -26,10 +26,10 @@ public class ConfiguringSelectedMocksToReturnFakesTest {
         assertEquals("", fakeReturningMock.returnString());
         //returns null because we cannot mock final classes :(
         assertNull(fakeReturningMock.returnFinalClass());
-        //returns true not false
+        //returns true instead of false
         assertTrue(fakeReturningMock.returnBoolean());
         
-        //returns defaults
+        //ordinary mock returns defaults
         assertNull(ordinaryMock.returnMyObject());
         assertNull(ordinaryMock.returnString());
     }

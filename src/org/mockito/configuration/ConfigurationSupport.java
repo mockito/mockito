@@ -31,6 +31,6 @@ public class ConfigurationSupport {
      * @return returns true if Mockito CAN create mocks of the clazz
      */
     public static boolean isMockable(Class<?> clazz) {
-        return Modifier.isFinal(clazz.getModifiers());
+        return !Modifier.isFinal(clazz.getModifiers());
     }
 }

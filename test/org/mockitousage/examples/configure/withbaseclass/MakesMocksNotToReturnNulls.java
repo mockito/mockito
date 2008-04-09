@@ -6,40 +6,20 @@ package org.mockitousage.examples.configure.withbaseclass;
 
 import org.junit.After;
 import org.junit.Before;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.configuration.ConfigurationSupport;
 import org.mockito.configuration.MockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
-import org.mockito.invocation.InvocationOnMock;
+import org.mockitousage.examples.configure.FriendlyReturnValues;
 
 public class MakesMocksNotToReturnNulls {
     
     @Before
     public void configureMockito() {
         //setting custom return values
-        MockitoConfiguration.instance().setReturnValues(new MyDefaultReturnValues());
-        //initializing annotated mocks
-        MockitoAnnotations.initMocks(this);
+        MockitoConfiguration.instance().setReturnValues(new FriendlyReturnValues());
     }
     
     @After
     public void resetReturnValuesToDefaults() {
         //I don't want mocks from other tests to be reconfigured
         MockitoConfiguration.instance().resetReturnValues();
-    }
-    
-    private final class MyDefaultReturnValues extends ConfigurationSupport implements ReturnValues {
-        public Object valueFor(InvocationOnMock invocation) {
-            Class<?> returnType = invocation.getMethod().getReturnType();
-            Object defaultReturnValue = defaultValueFor(invocation);
-            if (defaultReturnValue != null) {
-                return defaultReturnValue;
-            } else if (!isMockable(returnType)) { 
-                return Mockito.mock(returnType);
-            } else {
-                return defaultReturnValue;
-            }
-        }
     }
 }
