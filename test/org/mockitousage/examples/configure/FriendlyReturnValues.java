@@ -5,8 +5,8 @@
 package org.mockitousage.examples.configure;
 
 import org.mockito.Mockito;
-import org.mockito.configuration.ConfigurationSupport;
 import org.mockito.configuration.ReturnValues;
+import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockito.invocation.InvocationOnMock;
 
 /**

@@ -6,9 +6,9 @@ package org.mockito.internal.stubbing;
 
 import java.util.LinkedList;
 
-import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
@@ -52,7 +52,7 @@ public class Stubber {
                 return s.answer();
             }
         }
-        return MockitoConfiguration.instance().getReturnValues().valueFor(invocation);
+        return Configuration.instance().getReturnValues().valueFor(invocation);
     }
 
     public void addThrowableForVoidMethod(Throwable throwable) {

@@ -10,7 +10,7 @@ import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.configuration.MockitoConfiguration;
+import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.AllInvocationsFinder;
@@ -71,7 +71,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         
         if (verificationMode != null) {
             verifyingRecorder.verify(invocationMatcher, verificationMode);
-            return MockitoConfiguration.instance().getReturnValues().valueFor(invocationMatcher.getInvocation());
+            return Configuration.instance().getReturnValues().valueFor(invocationMatcher.getInvocation());
         }
         
         stubber.setInvocationForPotentialStubbing(invocationMatcher);

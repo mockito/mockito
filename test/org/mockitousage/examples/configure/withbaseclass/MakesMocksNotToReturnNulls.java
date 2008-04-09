@@ -6,7 +6,7 @@ package org.mockitousage.examples.configure.withbaseclass;
 
 import org.junit.After;
 import org.junit.Before;
-import org.mockito.configuration.MockitoConfiguration;
+import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockitousage.examples.configure.FriendlyReturnValues;
 
 public class MakesMocksNotToReturnNulls {
@@ -14,12 +14,12 @@ public class MakesMocksNotToReturnNulls {
     @Before
     public void configureMockito() {
         //setting custom return values
-        MockitoConfiguration.instance().setReturnValues(new FriendlyReturnValues());
+        ConfigurationSupport.getConfiguration().setReturnValues(new FriendlyReturnValues());
     }
     
     @After
     public void resetReturnValuesToDefaults() {
         //I don't want mocks from other tests to be reconfigured
-        MockitoConfiguration.instance().resetReturnValues();
+        ConfigurationSupport.getConfiguration().resetReturnValues();
     }
 }

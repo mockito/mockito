@@ -10,9 +10,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mockito.configuration.ConfigurationSupport;
-import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
+import org.mockito.configuration.experimental.ConfigurationSupport;
+import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
 public class AllowsFakingReturnValues {
@@ -23,7 +23,7 @@ public class AllowsFakingReturnValues {
     }
     
     private static FakeReturnValues getFakeReturnValues() {
-        MockitoConfiguration config = MockitoConfiguration.instance();
+        MockitoConfiguration config = ConfigurationSupport.getConfiguration();
         ReturnValues current = config.getReturnValues();
         //if my custom return values are NOT yet set, do it 
         if (!(current instanceof FakeReturnValues)) {
