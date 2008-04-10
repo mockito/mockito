@@ -4,28 +4,26 @@
  */
 package org.mockito.util;
 
+import static org.junit.Assert.*;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.mockito.exceptions.base.HasStackTrace;
 
 @SuppressWarnings("unchecked")
-public class ExtraMatchers extends CoreMatchers {
+public class ExtraMatchers {
 
-    public static <T> Matcher<Throwable> hasFirstMethodInStackTrace(final String method) {
+    public static <T> Assertor<Throwable> hasFirstMethodInStackTrace(final String method) {
         return hasMethodInStackTraceAt(0, method);
     }
     
-    public static <T> Matcher hasOnlyThoseMethodsInStackTrace(final String ... methods) {
-        return new BaseMatcher() {
-            public boolean matches(Object traceElements) {
+    public static <T> Assertor hasOnlyThoseMethodsInStackTrace(final String ... methods) {
+        return new Assertor() {
+            public void assertValue(Object traceElements) {
                 final List<StackTraceElement> trace;
                 if (traceElements instanceof List) {
                     trace = (List<StackTraceElement>) traceElements;
@@ -35,71 +33,52 @@ public class ExtraMatchers extends CoreMatchers {
                     throw new RuntimeException("this matcher cannot deal with object provided: " + traceElements);
                 }
                 
-                if (trace.size() != methods.length) {
-                    return false;
-                }
+                assertEquals(methods.length, trace.size());
                     
                 for (int i = 0; i < trace.size(); i++) {
-                    if (!trace.get(i).getMethodName().equals(methods[i])) {
-                        return false;
-                    }
+                    assertEquals(methods[i], trace.get(i).getMethodName());
                 }
-
-                return true;
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("has only those methods in stack trace: ");
-                desc.appendValue(methods);
             }
         };
     }
     
-    public static <T> Matcher<HasStackTrace> hasOnlyThoseClassesInStackTrace(final String ... classes) {
-        return new BaseMatcher() {
-            public boolean matches(Object traceElements) {
-                StackTraceElement[] trace = ((HasStackTrace) traceElements).getStackTrace();
+    public static <T> Assertor<HasStackTrace> hasOnlyThoseClassesInStackTrace(final String ... classes) {
+        return new Assertor<HasStackTrace>() {
+            public void assertValue(HasStackTrace traceElements) {
+                StackTraceElement[] trace = traceElements.getStackTrace();
                 
-                if (trace.length != classes.length) {
-                    return false;
-                }
+                assertEquals("Number of classes does not match",
+                        classes.length, trace.length);
                     
                 for (int i = 0; i < trace.length; i++) {
-                    if (!trace[i].getClassName().equals(classes[i])) {
-                        return false;
-                    }
+                    assertEquals(classes[i], trace[i].getClassName());
                 }
-
-                return true;
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("has only those classes in stack trace: ");
-                desc.appendValue(classes);
             }
         };
     }
     
-    public static <T> Matcher<Throwable> hasMethodInStackTraceAt(final int stackTraceIndex, final String method) {
-        return new BaseMatcher<Throwable>() {
+    public static <T> Assertor<Throwable> hasMethodInStackTraceAt(final int stackTraceIndex, final String method) {
+        return new Assertor<Throwable>() {
 
             private String actualMethodAtIndex;
 
-            public boolean matches(Object throwable) {
-                actualMethodAtIndex = ((Throwable) throwable).getStackTrace()[stackTraceIndex].getMethodName();
-                return  actualMethodAtIndex.equals(method);
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("Method of index: " + stackTraceIndex + " expected to be: " + method + " but is: " + actualMethodAtIndex);
+            public void assertValue(Throwable throwable) {
+                actualMethodAtIndex = throwable.getStackTrace()[stackTraceIndex].getMethodName();
+                assertTrue(
+                    "Method at index: " + stackTraceIndex + 
+                    "\n" +
+                    "expected to be: " + method + 
+                    "\n" +
+                    "but is: " + actualMethodAtIndex,
+                    actualMethodAtIndex.equals(method));
             }
         };
     }
     
-    public static <T> Matcher<Object> hasBridgeMethod(final String methodName) {
-        return new BaseMatcher<Object>() {
+    public static <T> Assertor<Object> hasBridgeMethod(final String methodName) {
+        return new Assertor<Object>() {
 
-            public boolean matches(Object o) {
+            public void assertValue(Object o) {
                 Class clazz = null;
                 if (o instanceof Class) {
                     clazz = (Class) o;
@@ -108,60 +87,50 @@ public class ExtraMatchers extends CoreMatchers {
                 }
                 
                 for (Method m : clazz.getMethods()) {
-                    if (m.isBridge()) {
-                        if (m.getName().equals(methodName)) {
-                            return true;
-                        }
+                    if (m.isBridge() && m.getName().equals(methodName)) {
+                        return;
                     }
                 }
                 
-                return false; 
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("Bridge method: " + methodName + " not found!");
+                fail("Bridge method [" + methodName + "]\nnot found in:\n" + o);
             }
         };
     }
     
-    public static <T> Matcher<Collection> collectionHas(final T ... elements) {
-        return new BaseMatcher<Collection>() {
+    public static <T> Assertor<Collection> has(final T ... elements) {
+        return new Assertor<Collection>() {
 
-            public boolean matches(Object collection) {
+            public void assertValue(Collection value) {
                 for (T element : elements) {
-                    if (((Collection) collection).contains(element) == false) {
-                        return false;
-                    }
+                    assertTrue(
+                            "Element:" +
+                            "\n" +
+                            element +
+                            "does not exists in:" +
+                            "\n" +
+                            value, 
+                            value.contains(element));
                 }
-                return true;
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("collection doesn't containg one of: " + Arrays.toString(elements));
             }
         };
     }
     
-    //TODO can't you use matchers from hamcrest library (may apply to other methods here)?
-    public static <T> Matcher<Collection> collectionHasExactlyInOrder(final T ... elements) {
-        return new BaseMatcher<Collection>() {
+    public static <T> Assertor<Collection> hasExactlyInOrder(final T ... elements) {
+        return new Assertor<Collection>() {
 
-            public boolean matches(Object collection) {
-                Collection actual = (Collection) collection;
-                if (actual.size() != elements.length) {
-                    return false;
-                }
-                if (Collections.indexOfSubList((List<?>) actual, Arrays.asList(elements)) == -1) {
-                    return false;
-                }
+            public void assertValue(Collection value) {
+                assertEquals(elements.length, value.size());
                 
-                return true;
-            }
-
-            public void describeTo(Description desc) {
-                desc.appendText("collection doesn't contain following elements in order: " + Arrays.toString(elements));
+                boolean containsSublist = Collections.indexOfSubList((List<?>) value, Arrays.asList(elements)) != -1;
+                assertTrue(
+                        "Elements:" +
+                        "\n" + 
+                        Arrays.toString(elements) + 
+                        "\n" +
+                        "were not found in collection:" +
+                        "\n" +
+                        value, containsSublist);
             }
         };
     }
-    //TODO get rid of matchers and use assertors to investigate the idea and make testing simpler
 }

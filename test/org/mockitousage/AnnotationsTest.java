@@ -22,7 +22,8 @@ public class AnnotationsTest extends TestBase {
 
     @Mock List list;
     @Mock final Map map = new HashMap();
-    //TODO add initMocks that allows to send own annotation/own implementation of creation logic
+    //TODO shall I bother deprecating @MockitoAnnotations.Mock and refactor annotation to own file?
+    //TODO don't use cglib-nodep, have all jars separate
     
     @Before
     public void setup() {

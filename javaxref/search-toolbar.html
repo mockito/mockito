@@ -1,0 +1,58 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="left-pane.css">
+  <script type="text/javascript" src="left-pane.js"></script>
+  <script type="text/javascript">
+    var caption; // caption bar that also shows tooltip
+    var radioGroup = []; // radio group buttons
+
+    // strategy pattern that determines how to draw a tree.
+    // each function filters out nodes by returning false
+    var strategies = {
+      byPackage : function(model) {
+        if(model.kind=="package" && model.classes==null)
+          return false;
+        return true;
+      },
+
+      byType : function(model) {
+        return model.kind!="package";
+      }
+    };
+
+    var strategy = strategies.byPackage; // currently enabled view strategy
+
+    function start() {
+      caption = document.getElementById("caption");
+      new Caption(caption);
+      var dd = document.getElementById('radio').firstChild;
+      for( n=dd; n!=null; n=n.nextSibling ) {
+        if(n.nodeType==1 && n.tagName=="IMG") {
+          new RadioButton(n,radioGroup,function(x) {
+            strategy = strategies[x.getAttribute("strategy")];
+            parent.main.redraw();
+          });
+        }
+      }
+    }
+  </script>
+</head>
+<body class=toolbar onload="start()">
+<div style="float:right;">
+  <span id='radio'>
+    <img  class="button pressed" src="resource-files/search/package_mode.gif"
+          tip="Group by packages"
+          strategy="byPackage"
+    ><img class=button src="resource-files/search/type_mode.gif"
+          tip="Group by types"
+          strategy="byType"
+    >
+  </span>
+  &nbsp;&nbsp;&nbsp;
+  <img class=button src="resource-files/close.gif" alt="[x]"
+       onclick="javascript:parent.displayController.hide()">
+</div>
+<span id=caption>Usage</span>
+</body>
+</html>

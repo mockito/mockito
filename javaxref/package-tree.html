@@ -1,0 +1,326 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="left-pane.css">
+  <link rel="stylesheet" type="text/css" href="resource-files/tree/noicon.css">
+  <script type="text/javascript" src="resource-files/yahoo.js" ></script>
+  <script type="text/javascript" src="resource-files/tree/treeview.js" ></script>
+  <script type="text/javascript" src="left-pane.js" ></script>
+  <script type="text/javascript" src="sorcerer.js" ></script>
+</head>
+<body onload="start()">
+<div id="treeDiv" style="white-space:nowrap;"></div>
+<!-- linker definitions -->
+<script type="text/javascript">
+var linker = {
+  // common basis for all linker instances
+  prototype: {
+    // computes a link to a type.
+    //   t: type table entry
+    type : function(t) { return null; },
+    // computes a link to a method.
+    //   m: method table entry
+    method: function(m) { return null; },
+    // computes a link to a field
+    //   t: type table entry
+    //   name: field name
+    field: function(t,name) { return null; },
+
+    // debug assist
+    name: function() { return "prototype"; }
+  },
+
+  // generates links to external javadoc.
+  //   model: items in the package-list.js
+  javadoc: function(baseURL) {
+    return derive(this.prototype, {
+      baseURL: baseURL, // the base URL of the javadoc
+      type : function(t) {
+        // A.B.C$D$E => A/B/C.D.E.html
+        return this.baseURL+t.binaryName.replace(/\./g,"/").replace(/\$/g,".")+".html";
+      },
+      method : function(m) {
+        // TODO: javadoc doesn't really use erasure format. Doh!
+        return this.type(m.owner)+'#'+m.signature();
+      },
+      field : function(t,name) {
+        return this.type(t)+'#'+name;
+      },
+      name: function() { return "javadocLinker to "+this.baseURL; }
+    });
+  },
+
+  // generate links within this document
+  self: function(url) {
+    return derive(linker.sorcerer(""),{
+      name: function() { return "self"; }
+    });
+  },
+
+  sorcerer: function(baseURL) {
+    return derive(this.prototype,{
+      baseURL: baseURL, // the base URL of the sorcerer website
+      calc : function(t,suffix) {
+        var n = t.binaryName;
+        var idx = n.indexOf('$');
+        if(idx<0)
+          return "?"+this.baseURL+n.replace(/\./g,"/")+".js#"+suffix;
+
+        var head = n.substring(0,idx);
+        var tail = n.substring(idx+1);
+
+        // A.B.C$D$E => A/B/C.js#~D-~E-suffix
+        return "?"+this.baseURL+head.replace(/\./g,"/")+".js#~"+tail.replace(/\$/g,"-~")+"-"+suffix;
+      },
+      type : function(t) {
+        return this.calc(t,"this");
+      },
+      method : function(m) {
+        return this.calc(m.owner,m.signature());
+      },
+      field : function(t,name) {
+        return this.calc(t,name);
+      },
+      name: function() {
+        return "sorcererLinker to "+this.baseURL;
+      }
+    });
+  },
+
+  // obtain a linker for the given package name
+  get: function(packageName) {
+    var lib = packageName2Lib[packageName];
+    if(lib!=null)
+      return lib.linker;
+    else
+      return linker.prototype;
+
+  }
+};
+
+</script>
+
+<!-- main script -->
+<script type="text/javascript">
+  var treeDiv = document.getElementById("treeDiv");
+  var tree;
+  var packageList; // see package-list.js for the structure of this object.
+
+  // map from package name (e.g., "java.lang") to its corresponding library object in "packageList".
+  var packageName2Lib = {};
+
+  // called from package-list.js, before window.onload fires.
+  function setProject(o) {
+    packageList = o;
+
+    packageList.forEach(function(lib) {
+      // create a linker for the project
+      lib.linker = lib.linker(lib.baseURL);
+
+      // augument the model objects by adding inferable properties to it
+      function build(model,prefix) {
+        model.fullName = (prefix+model.name).substring(1);
+
+        if(model.leaf)
+          packageName2Lib[model.fullName]=lib;
+
+        // true if this is intermediate node and thus collapsed even for hierarchical view
+        if(!model.leaf && model.children.length==1)
+          model.intermediate = model.children[0]; // point to the sole child
+
+        if(model.children!=null)
+          model.children.forEach(function(child) {
+            build(child, prefix+model.name+".");
+          });
+      }
+
+      build(lib.packages,"");
+    });
+  }
+
+  var loader = derive(scriptLoadManager,{
+    // entry point to the load method
+    loadClassList: function(model,treeNode,callback) {
+      this.load(model.fullName, function(list) {
+        addClassList(list,treeNode,callback);
+      })
+    },
+
+    // load class-list.js by using the package name as the key
+    getScriptName : function(packageName) {
+      // path to class-list.js
+      return packageName=="" ? "./class-list.js" : packageName.replace(/\./g,"/")+"/class-list.js";
+    },
+
+    postProcess : function(packageName,classList) {
+      classList.forEach(function(c) {
+        c.label = "<img src='resource-files/"+c.kind+"_"+c.access+".gif'> "+c.name;
+        c.href = "source-view.html?"+c.script;
+      });
+    }
+  });
+
+  // display packages in a nested tree view
+  var hierarchicalView = {
+    icon: "resource-files/layout-hierarchical.gif",
+    tooltip: "Hierarchical view",
+
+    loadPackage : function(node,model) {
+      // adds the child packages and classes to the given treeNode asynchronously,
+      // and when ready, call back.
+      function addChildPackagesTo(treeNode,model,callback) {
+        // first add child packages
+        if(model.children!=null) {
+          model.children.forEach(function(cmodel){
+            // skip any intermediate nodes
+            var prefix="";
+            while(cmodel.intermediate!=null) {
+              prefix += cmodel.name+".";
+              cmodel = cmodel.intermediate;
+            }
+            var o = {};
+            o.label = "<img src='resource-files/package.gif'> "+prefix+cmodel.name;
+            o.model = cmodel;
+            var n = new YAHOO.widget.TextNode(o,treeNode,false);
+            n.setDynamicLoad(function(node,onCompleteCallback) {
+              addChildPackagesTo(node, node.data.model, onCompleteCallback);
+            });
+          });
+        }
+
+        // then load class list, if any
+        if(model.leaf) {
+          loader.loadClassList(model,treeNode,callback);
+        } else {
+          // if no class is in there, we are done
+          callback();
+        }
+      }
+
+      addChildPackagesTo(node,model,function(){tree.draw();});
+    },
+
+    setClassList : function(packageName,classList) {
+    }
+  };
+
+  // display packages in a flat view
+  var flatView = {
+    icon: "resource-files/layout-flat.gif",
+    tooltip: "Flat view",
+
+    loadPackage : function(root,model) {
+      // recursively add model nodes as flat pacakge list
+      function buildTree(model) {
+        if(model.leaf) {
+          var o = {};
+          o.model = model;
+          if(model.fullName=="")
+            o.label="(unnamed package)";
+          else
+            o.label=model.fullName;
+
+          o.label = "<img src='resource-files/package.gif'> "+o.label;
+
+          var n = new YAHOO.widget.TextNode(o,root,false);
+          n.setDynamicLoad(function(node,callback) {
+            loader.loadClassList(node.data.model, node, callback);
+          });
+        }
+        if(model.children!=null)
+          for( var i=0; i<model.children.length; i++ )
+            buildTree(model.children[i]);
+      }
+
+      buildTree(model);
+
+      tree.draw();
+    }
+  };
+
+  // currently selected view mode
+  var currentView = flatView;
+
+  // called when class-list.js is loaded
+  function setClassList(packageName,classList) {
+    loader.loadComplete(packageName,classList);
+  }
+
+  // TODO: shouldn't this be merged into loader?
+  function addClassList(classList, node, onComplete) {
+    for( var j=0; j<classList.length; j++ ) {
+      var c = classList[j];
+      var cnode = new YAHOO.widget.TextNode(c, node, false);
+      cnode.onLabelClick = function(me) {
+        try {
+          top.main.location="source-view.html?"+me.data.script;
+          // TODO: the following is clever in the sense that it doesn't reload the source view page,
+          // but it renders the back button useless. is there anyway to fix this?
+          // top.main.load(me.data.script);
+        } catch(e) {/*don't let the navigation failure leak (which causes the page to be loaded on this frame.*/}
+        return false;
+      }
+    }
+    onComplete();
+  }
+
+  function errorCheck() {
+    if(packageList==null) {
+      // by now JSON should have been loaded,
+      // but check anyway
+      treeDiv.innerHTML = "<div class='error'>failed to load package list</div>";
+      return true;
+    }
+    return false;
+  }
+
+  function start() {
+    if(errorCheck())
+      return;
+
+    flatView.nextView = hierarchicalView;
+    hierarchicalView.nextView = flatView; // couldn't figure out how to set this up with literal syntax
+    loadView();
+  }
+
+  function loadView() {
+    tree = new YAHOO.widget.TreeView(treeDiv);
+
+    if(packageList.length==1) {
+      currentView.loadPackage( tree.getRoot(), packageList[0].packages );
+    } else {
+      // display library nodes
+      for(var i=0;i<packageList.length;i++) {
+        var lmodel = packageList[i];
+        var lnode;
+
+        if(i==0)
+          lnode = tree.getRoot(); // show project classes at top-level
+        else {
+          // the rest is displayed under library label
+          lnode = new YAHOO.widget.TextNode({
+            label:"<img src='resource-files/library.gif'> "+lmodel.name
+          }, tree.getRoot(), false);
+        }
+        currentView.loadPackage(lnode,lmodel.packages);
+      }
+    }
+  }
+
+  function toggleView(img) {
+    pendingLoads = {}; // reset the pending activities
+
+    img.src = currentView.icon;
+    currentView = currentView.nextView;
+
+    // create a new tree
+    treeDiv.innerHTML="";
+    loadView();
+  }
+</script>
+
+<!-- load package list -->
+<script type="text/javascript" src="package-list.js" ></script>
+  </body>
+</html>
+

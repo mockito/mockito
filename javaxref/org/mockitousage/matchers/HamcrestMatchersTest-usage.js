@@ -1,0 +1,2 @@
+setClassUsage('org.mockitousage.matchers.HamcrestMatchersTest',
+{"mock":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","children":[{"kind":"package","name":"matchers","classes":[{"name":"HamcrestMatchersTest","kind":"class","access":"public","line":18,"children":[{"name":"shouldVerifyUsingHamcrestMatcher():void","kind":"method","access":"public","line":40,"leaves":[45,42]},{"name":"shouldAcceptHamcrestMatcher():void","kind":"method","access":"public","line":33,"leaves":[37,36,35]}]}]}]}]}]}});

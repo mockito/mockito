@@ -1,0 +1,2 @@
+setClassUsage('Array',
+{"class":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"invocation","classes":[{"name":"InvocationTest","kind":"class","access":"public","line":19,"children":[{"name":"shouldPrintNullIfArrayIsNull():void","kind":"method","access":"public","line":91,"children":[{"name":"m","kind":"null","access":"default","local":true,"line":93,"leaves":[93]}]}]}]}]}]}]}]}});

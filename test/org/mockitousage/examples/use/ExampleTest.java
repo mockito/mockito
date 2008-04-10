@@ -34,15 +34,11 @@ public class ExampleTest extends TestBase {
         stub(mockCalculator.countArticles("Guardian")).toReturn(12);
         stub(mockCalculator.countArticlesInPolish(anyString())).toReturn(5);
 
-//        stub(mockCalculator.countAllArticles(anyString(), "asdf")).toReturn(5);
-        
         articleManager.updateArticleCounters("Guardian");
         
         verify(mockDatabase).updateNumberOfArticles("Guardian", 12);
         verify(mockDatabase).updateNumberOfPolishArticles("Guardian", 5);
         verify(mockDatabase).updateNumberOfEnglishArticles("Guardian", 7);
-        
-        verifyNoMoreInteractions(mockDatabase);
     }
     
     @Test
@@ -51,8 +47,6 @@ public class ExampleTest extends TestBase {
 
         verify(mockCalculator).countArticles("Guardian");
         verify(mockCalculator).countArticlesInPolish("Guardian");
-        
-        verifyNoMoreInteractions(mockCalculator);
     }
     
     @Test
@@ -62,8 +56,6 @@ public class ExampleTest extends TestBase {
         verify(mockDatabase).updateNumberOfArticles("Guardian", 0);
         verify(mockDatabase).updateNumberOfPolishArticles("Guardian", 0);
         verify(mockDatabase).updateNumberOfEnglishArticles("Guardian", 0);
-        
-        verifyNoMoreInteractions(mockDatabase);
     }
     
     @Test

@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
-import org.mockito.internal.invocation.GlobalInvocationsFinder;
+import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -30,7 +30,7 @@ public class VerifyingRecorderTest extends TestBase {
     @Before
     public void setup() {
         verifierStub = new VerifierStub();
-        recorder = new VerifyingRecorder(new GlobalInvocationsFinder() {
+        recorder = new VerifyingRecorder(new AllInvocationsFinder() {
             public List<Invocation> getAllInvocations(List<? extends Object> mocks) {
                 return asList(simpleMethod, differentMethod.getInvocation());
             }}, asList(verifierStub));
@@ -48,7 +48,7 @@ public class VerifyingRecorderTest extends TestBase {
         
         assertSame(verifierStub.mode, mode);
         assertSame(verifierStub.wanted, differentMethod);
-        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod));
+        assertThat(verifierStub.invocations, hasExactlyInOrder(simpleMethod));
     }
     
     @Test
@@ -56,7 +56,7 @@ public class VerifyingRecorderTest extends TestBase {
         VerificationModeImpl inOrderMode = new VerificationModeBuilder().inOrder();
         recorder.verify(differentMethod, inOrderMode);
         
-        assertThat(verifierStub.invocations, collectionHasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
+        assertThat(verifierStub.invocations, hasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
     }
     
     @Test

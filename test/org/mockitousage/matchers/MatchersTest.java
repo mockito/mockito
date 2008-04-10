@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -38,7 +39,7 @@ public class MatchersTest extends TestBase {
         stub(mock.oneArg(and(eq((int) 1), eq((int) 1)))).toReturn("5");
         stub(mock.oneArg(and(eq((long) 1), eq((long) 1)))).toReturn("6");
         stub(mock.oneArg(and(eq((short) 1), eq((short) 1)))).toReturn("7");
-        stub(mock.oneArg(and(contains("a"), contains("d")))).toReturn("8");
+        stub(mock.oneArg(and(Matchers.contains("a"), Matchers.contains("d")))).toReturn("8");
         stub(mock.oneArg(and(isA(Class.class), eq(Object.class)))).toReturn("9");
 
         assertEquals("0", mock.oneArg(false));
@@ -100,7 +101,7 @@ public class MatchersTest extends TestBase {
         stub(mock.oneArg(not(eq((int) 1)))).toReturn("5");
         stub(mock.oneArg(not(eq((long) 1)))).toReturn("6");
         stub(mock.oneArg(not(eq((short) 1)))).toReturn("7");
-        stub(mock.oneArg(not(contains("a")))).toReturn("8");
+        stub(mock.oneArg(not(Matchers.contains("a")))).toReturn("8");
         stub(mock.oneArg(not(isA(Class.class)))).toReturn("9");
 
         assertEquals("0", mock.oneArg(true));
@@ -406,8 +407,8 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void containsMatcher() {
-        stub(mock.oneArg(contains("ell"))).toReturn("1");
-        stub(mock.oneArg(contains("ld"))).toReturn("2");
+        stub(mock.oneArg(Matchers.contains("ell"))).toReturn("1");
+        stub(mock.oneArg(Matchers.contains("ld"))).toReturn("2");
 
         assertEquals("1", mock.oneArg("hello"));
         assertEquals("2", mock.oneArg("world"));
@@ -426,8 +427,8 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void endsWithMatcher() {
-        stub(mock.oneArg(endsWith("ab"))).toReturn("1");
-        stub(mock.oneArg(endsWith("bc"))).toReturn("2");
+        stub(mock.oneArg(Matchers.endsWith("ab"))).toReturn("1");
+        stub(mock.oneArg(Matchers.endsWith("bc"))).toReturn("2");
 
         assertEquals("1", mock.oneArg("xab"));
         assertEquals("2", mock.oneArg("xbc"));

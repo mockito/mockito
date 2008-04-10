@@ -1,0 +1,2 @@
+setClassUsage('org.mockitousage.matchers.CustomMatchersTest.StringThatContainsXxx',
+{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","children":[{"kind":"package","name":"matchers","classes":[{"name":"CustomMatchersTest","kind":"class","access":"public","line":18,"children":[{"name":"containsTest():String","kind":"method","access":"private","line":135,"leaves":[136]}]}]}]}]}]}});

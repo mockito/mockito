@@ -16,6 +16,7 @@ public class ConfiguringDefaultReturnValuesUsingRunnerTest {
     public void shouldReturnMocksByDefaultInsteadOfNulls() throws Exception {
         MyObject m = mock(MyObject.class);
         //mocks don't return nulls any more...
+        //the configuration is in the junit runner
         MyObject returned = m.foo();
         assertNotNull(returned);
         assertNotNull(returned.foo());

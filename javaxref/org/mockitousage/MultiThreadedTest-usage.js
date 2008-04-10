@@ -1,0 +1,2 @@
+setClassUsage('org.mockitousage.MultiThreadedTest',
+{"runInMultipleThreads(int)":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","classes":[{"name":"MultiThreadedTest","kind":"class","access":"public","line":70,"children":[{"name":"shouldRunInMultipleThreads():void","kind":"method","access":"public","line":159,"leaves":[162]},{"name":"main(String[]):void","kind":"method","access":"public","static":true,"line":184,"leaves":[187]}]}]}]}]}});

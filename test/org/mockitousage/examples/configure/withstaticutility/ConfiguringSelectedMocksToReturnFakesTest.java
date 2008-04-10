@@ -24,8 +24,12 @@ public class ConfiguringSelectedMocksToReturnFakesTest {
         assertNotNull(fakeReturningMock.returnMyObject());
         //returns empty string instead of null
         assertEquals("", fakeReturningMock.returnString());
+        //returns null because we cannot mock final classes :(
+        assertNull(fakeReturningMock.returnFinalClass());
+        //returns true instead of false
+        assertTrue(fakeReturningMock.returnBoolean());
         
-        //returns defaults
+        //ordinary mock returns defaults
         assertNull(ordinaryMock.returnMyObject());
         assertNull(ordinaryMock.returnString());
     }
@@ -34,5 +38,6 @@ public class ConfiguringSelectedMocksToReturnFakesTest {
         MyObject returnMyObject();
         String returnString();
         boolean returnBoolean();
+        StringBuilder returnFinalClass();
     }
 }

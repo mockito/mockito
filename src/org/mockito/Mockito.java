@@ -9,13 +9,13 @@ import java.util.Arrays;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
-import org.mockito.internal.MockUtil;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.util.MockUtil;
 
 /**
  * Enables mocks creation, verification and stubbing.
@@ -70,8 +70,9 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <ul>
  * <li>
- * By default, for all methods that return value, mock will return null,
- * appropriate primitive value (0, false, etc.) or an empty collection.
+ * By default, for all methods that return value, mock returns null,
+ * an empty collection or appropriate primitive/primitive wrapper value 
+ * (e.g: 0, false, ... for int/Integer, boolean/Boolean, ...).
  * </li>
  * <li>
  * Stubbing can be overridden: for example common stubbing can go to fixture setup
@@ -229,6 +230,12 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  * 
  * <h3>Shorthand for mocks creation - &#064;Mock annotation</h3>
  * 
+ * <ul>
+ * <li>Minimizes repetitive mock creation code.</li> 
+ * <li>Makes the test class more readable.</li>
+ * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
+ * </ul>
+ * 
  * <pre>
  *   public class ArticleManagerTest { 
  *     
@@ -237,15 +244,17 @@ import org.mockito.internal.stubbing.VoidMethodStubbable;
  *       &#064;Mock private UserProvider userProvider;
  *     
  *       private ArticleManager manager;
- *       
  * </pre>
  * 
- * <ul>
- * <li>Minimizes repetitive mock creation code.</li> 
- * <li>Makes the test class more readable.</li>
- * </ul>
- *
- * See examples in javadoc for {@link MockitoAnnotations}
+ * <b>Important!</b> This needs to be somewhere in the base class or a test runner:
+ *   
+ * <pre>
+ *   MockitoAnnotations.initMocks(testClass);
+ * </pre>
+ * 
+ * Examples how to write a junit test runner are in Mockito test code (mockito/test/org/mockitousage/examples/junitrunner package);
+ * <p>
+ * Read more here: {@link MockitoAnnotations}
  */
 public class Mockito extends Matchers {
 
@@ -262,7 +271,11 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MockUtil.createMock(classToMock, MOCKING_PROGRESS);
+        return MockUtil.createMock(classToMock, null, MOCKING_PROGRESS);
+    }
+    
+    static <T> T mock(Class<T> classToMock, String name) {
+        return MockUtil.createMock(classToMock, name, MOCKING_PROGRESS);
     }
 
     /**

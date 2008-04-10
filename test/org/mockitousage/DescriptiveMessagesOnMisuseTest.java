@@ -51,12 +51,12 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerify() {
-        verify(mock.booleanReturningMethod(2));
+        verify(mock.booleanReturningMethod());
     }   
     
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions(mock.byteReturningMethod(1));
+        verifyNoMoreInteractions(mock.byteReturningMethod());
     }  
     
     @Test(expected=MockitoException.class)

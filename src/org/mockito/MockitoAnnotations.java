@@ -18,6 +18,7 @@ import org.mockito.exceptions.base.MockitoException;
  * <li>Allows shorthand mock creation.</li> 
  * <li>Minimizes repetitive mock creation code.</li> 
  * <li>Makes the test class more readable.</li>
+ * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
  * </ul>
  * 
  * <pre>
@@ -47,6 +48,9 @@ import org.mockito.exceptions.base.MockitoException;
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * You can also put it in your JUnit4 runner (&#064;RunWith).
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
+ * <p>
+ * How to implement mockito junit runner? See examples from mockito/test/org/mockitousage/examples/junitrunner subpackage. 
+ * You may want to check out the project from svn repository to easily browse Mockito's test code.
  */
 public class MockitoAnnotations {
 
@@ -80,7 +84,7 @@ public class MockitoAnnotations {
                 boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
-                    f.set(testClass, Mockito.mock(f.getType()));
+                    f.set(testClass, Mockito.mock(f.getType(), f.getName()));
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating mocks annotated with @Mock", e);
                 } finally {

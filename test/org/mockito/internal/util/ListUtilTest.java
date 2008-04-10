@@ -26,7 +26,7 @@ public class ListUtilTest extends TestBase {
             }
         });
         
-        assertThat(filtered, collectionHasExactlyInOrder("one", "two", "three"));
+        assertThat(filtered, hasExactlyInOrder("one", "two", "three"));
     }
     
     @Test

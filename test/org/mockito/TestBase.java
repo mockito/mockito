@@ -35,10 +35,24 @@ public class TestBase extends Assert {
         org.junit.Assert.assertThat(message, actual, m);
     }
     
-    protected void assertContains(String expectedSubstring, String target) {
-        assertTrue("This substring:\n" + expectedSubstring
-                + "\nshould exist somewhere here:\n" + target, 
-                target.contains(expectedSubstring));
+    public static <T> Assertor<String> contains(final String substring) {
+        return new Assertor<String>() {
+            public void assertValue(String value) {
+                assertTrue("This substring: \n" + substring + 
+                        "\nshould be inside of:\n" + value
+                        , value.contains(substring));
+            }
+        };
+    }
+    
+    public static <T> Assertor<String> endsWith(final String substring) {
+        return new Assertor<String>() {
+            public void assertValue(String value) {
+                assertTrue("This substring: \n" + substring + 
+                        "\nshould be at the end of:\n" + value
+                        , value.endsWith(substring));
+            }
+        };
     }
 
     public static <T> Assertor<Throwable> messageContains(final String text) {

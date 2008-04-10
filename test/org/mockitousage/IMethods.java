@@ -13,21 +13,37 @@ import javax.swing.text.ChangedCharSetException;
 
 public interface IMethods {
 
-    boolean booleanReturningMethod(int index);
+    boolean booleanReturningMethod();
+    
+    Boolean booleanObjectReturningMethod();
 
-    byte byteReturningMethod(int index);
+    byte byteReturningMethod();
+    
+    Byte byteObjectReturningMethod();
 
-    short shortReturningMethod(int index);
+    short shortReturningMethod();
+    
+    Short shortObjectReturningMethod();
 
-    char charReturningMethod(int index);
+    char charReturningMethod();
+    
+    Character charObjectReturningMethod();
 
-    int intReturningMethod(int index);
+    int intReturningMethod();
+    
+    Integer integerReturningMethod();
 
-    long longReturningMethod(int index);
+    long longReturningMethod();
+    
+    Long longObjectReturningMethod();
 
-    float floatReturningMethod(int index);
+    float floatReturningMethod();
+    
+    Float floatObjectReturningMethod();
 
-    double doubleReturningMethod(int index);
+    double doubleReturningMethod();
+    
+    Double doubleObjectReturningMethod();
 
     Object objectReturningMethod(Object ... objects);
 

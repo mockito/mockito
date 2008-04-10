@@ -1,0 +1,2 @@
+setClassUsage('org.mockitousage.stubbing.BasicStubbingTest.Sub',
+{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","children":[{"kind":"package","name":"stubbing","classes":[{"name":"BasicStubbingTest","kind":"class","access":"public","line":20,"children":[{"name":"shouldAllowStubbingWithSubtypes():void","kind":"method","access":"public","line":68,"children":[{"name":"subs","kind":"null","access":"default","local":true,"line":72,"leaves":[72]}]}]}]}]}]}]}});

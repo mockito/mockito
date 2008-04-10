@@ -15,9 +15,9 @@ import org.hamcrest.StringDescription;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.MockNamer;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -135,7 +135,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
     }
 
     private String qualifiedMethodName() {
-        return MockNamer.nameForMock(mock) + "." + method.getName();
+        return MockUtil.getMockName(mock) + "." + method.getName();
     }
 
     private String getArgumentsLine(List<Matcher> matchers) {

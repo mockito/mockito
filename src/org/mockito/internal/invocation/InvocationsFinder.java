@@ -23,6 +23,21 @@ public class InvocationsFinder {
         return ListUtil.filter(unverified, new RemoveNotMatching(wanted));
     }
 
+    /**
+     * some examples how it works:
+     * 
+     * Given invocations sequence:
+     * 1,1,2,1
+     * 
+     * if wanted is 1 and mode is times(2) then returns
+     * 1,1  
+     * 
+     * if wanted is 1 and mode is atLeastOnce() then returns
+     * 1,1,1
+     * 
+     * if wanted is 1 and mode is times(x), where x != 2 then returns
+     * 1,1,1
+     */
     public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
