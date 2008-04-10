@@ -1,0 +1,2 @@
+setClassUsage('org.mockito.internal.MockHandlerTest.ExceptionThrowingBinder',
+{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","classes":[{"name":"MockHandlerTest","kind":"class","access":"public","line":16,"children":[{"name":"shouldRemoveVerificationModeEvenWhenInvalidMatchers():void","kind":"method","access":"public","line":19,"children":[{"name":"handler","kind":"null","access":"default","local":true,"line":23,"leaves":[23]}]}]}]}]}]}]}});

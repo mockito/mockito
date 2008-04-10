@@ -1,0 +1,203 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="left-pane.css">
+  <link rel="stylesheet" type="text/css" href="resource-files/tree/noicon.css">
+  <script type="text/javascript" src="resource-files/yahoo.js" ></script>
+  <script type="text/javascript" src="resource-files/tree/treeview.js" ></script>
+  <script type="text/javascript" src="sorcerer.js" ></script>
+  <script type="text/javascript" src="left-pane.js" ></script>
+</head>
+<body>
+<div id=center-text-container style="display:none;">
+  <div id=center-text-box>
+    <img src="resource-files/tree/loading.gif" alt=""> loading...
+  </div>
+</div>
+<div id="treeDiv" style="white-space:nowrap;"></div>
+<script type="text/javascript">
+  // tree for displaying "find usage" search result
+  var treeDiv = document.getElementById("treeDiv");
+  var tree = new YAHOO.widget.TreeView(treeDiv);
+
+  // handle loading of "*-usage.js"
+  var loader = derive(scriptLoadManager,{
+    getScriptName : function(className) {
+      return className.replace(/\./g,"/")+"-usage.js";
+    },
+
+    postProcess : function(className,model) {
+      // post process model
+      // step.1 : compute full package name
+      function buildChildren(model,pkgPrefix) {
+        if(model.children==null)  return; // no children
+        for( var i=0; i<model.children.length; i++ )
+          buildChild( model.children[i], pkgPrefix );
+      }
+      function buildChild(model,pkgPrefix) {
+        model.name = pkgPrefix+model.name;
+        if(model.kind=="package" && model.children!=null)
+          buildChildren(model,model.name+".");
+      }
+      for( var x in model )
+        buildChildren(model[x],"");
+
+      // step.2 : compute the link target
+      function setLinkTarget(m) {
+        if(m.children!=null) {
+          for( var i=0; i<m.children.length; i++ )
+            setLinkTarget( m.children[i] );
+        }
+        if(m.classes!=null) {
+          for( var i=0; i<m.classes.length; i++ ) {
+            var c = m.classes[i];
+
+            c.href = "source-view.html?";
+            if(m.name!="")
+              c.href += m.name.replace(/\./g,"/")+"/";
+            if(c.source==null)
+              c.href += c.name;
+            else
+              c.href += c.source;
+            c.href += ".js";
+
+            function copyHref(m,href) {
+              m.href = href+"#"+m.line;
+              if(m.children==null)  return;
+              for( var j=0; j<m.children.length; j++ ) {
+                copyHref( m.children[j], href );
+              }
+            }
+            copyHref(c,c.href);
+          }
+        }
+      }
+      for( var x in model )
+        setLinkTarget(model[x]);
+
+      // fix the anonymous package name. this has to be done after href is computed from name in step 1
+      for( var x in model )
+        model[x].name="(unnamed package)";
+    }
+  });
+
+  // called when *-usage.js is loaded
+  function setClassUsage(className,model) {
+    loader.loadComplete(className,model);
+  }
+
+  var projectUsage = {}; // map of class names
+  // called from project-usage.js
+  function setProjectUsage(model) {
+    for( var i=0; i<model.length; i++ ) {
+      var pkg = model[i];
+      var prefix = pkg.package;
+      if(prefix!="") prefix+='.';
+      for( var j=0; j<pkg.classes.length; j++ )
+        projectUsage[prefix+pkg.classes[j]]=true;
+    }
+  }
+
+  var current = null; // currently displayed
+
+  function loadUsage(className,anchor) {
+    window.parent.toolbar.caption.setCaption("Usage of "+className+"."+anchor);
+    current = { className:className, anchor:anchor };
+    redraw();
+  }
+
+  // redraw the tree by using the current strategy, and the search target
+  function redraw() {
+    if(current==null)   return; // this happens when tool buttons are clicked when nothing is shown
+
+    resetTree();
+
+    function noUsageFound() {
+      new YAHOO.widget.TextNode({label:"No usage found"}, tree.getRoot(), true);
+    }
+
+    // does this usage exists?
+    if(projectUsage[current.className]!=true) {
+      noUsageFound();
+      tree.draw();
+      return;
+    }
+
+    document.getElementById("center-text-container").style.display="block";
+    loader.load(current.className,function(model) {
+      document.getElementById("center-text-container").style.display="none";
+
+      model = model[current.anchor];
+
+      if(model==null) {// not found
+        noUsageFound();
+      } else {
+        insertNode( tree.getRoot(), model, true);
+        // addChildren(model.children, tree.getRoot(), true);
+      }
+      tree.draw();
+    });
+  }
+
+  function resetTree() {
+    treeDiv.innerHTML=""; // reset
+    tree = new YAHOO.widget.TreeView(treeDiv);
+  }
+
+  function addChildren( children, node, expanded ) {
+    if(children==null)  return;
+    for( var i=0; i<children.length; i++ ) {
+      insertNode( node, children[i], expanded );
+    }
+  }
+
+  function cutHash(s) {
+    var idx=s.indexOf('#');
+    if(idx>=0)
+      s = s.substring(0,idx);
+    return s;
+  }
+
+  // insert a tree node from a model node
+  function insertNode( parent, m, expanded ) {
+    if(window.parent.toolbar.strategy(m)) {
+      m.label = "<img src='resource-files/"+m.kind+(m.access!=null?"_"+m.access:"")+".gif'> "+m.name;
+
+      var node = new YAHOO.widget.TextNode(m, parent, expanded);
+      node.onLabelClick = function(me) {
+        if(me.data.href!=null)
+          try {
+            window.top.main.location = me.data.href;
+          } catch(e) {/*don't let the navigation failure leak (which causes the page to be loaded on this frame.*/}
+
+        // jump and toggle at the same time
+        me.toggle();
+        return false;
+      }
+      parent = node;
+    }
+    addChildren( m.children, m.kind=="package"?tree.getRoot():parent, false );
+    addChildren( m.classes, parent, false );
+    if(m.leaves!=null) {
+      for( var i=0; i<m.leaves.length; i++ ) {
+        var leaf = m.leaves[i];
+        var data = {
+          label: "line"+leaf,
+          href:  cutHash(m.href)+'#'+leaf
+        };
+        var node = new YAHOO.widget.TextNode(data,parent,expanded);
+        node.onLabelClick = function(me) {
+          try {// data.target doesn't work since we are in different frameset.
+            window.top.main.location = me.data.href;
+          } catch(e) {}
+          return false;
+        }
+      }
+    }
+  }
+
+</script>
+<script type="text/javascript" src="project-usage.js" ></script>
+</body>
+</html>
+

@@ -1,0 +1,2 @@
+setClassUsage('org.mockito.internal.MockHandler.VoidMethodStubbableImpl',
+{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","classes":[{"name":"MockHandler","kind":"class","access":"public","line":39,"children":[{"name":"voidMethodStubbable():VoidMethodStubbable","kind":"method","access":"public","line":89,"leaves":[90]}]}]}]}]}]}});

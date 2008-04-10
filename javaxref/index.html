@@ -1,0 +1,25 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Mockito</title>
+  <script>//<![CDATA[
+    targetPage = "" + window.location.search;
+    if (targetPage != "" && targetPage != "undefined")
+       targetPage = targetPage.substring(1);
+    function loadFrames() {
+        if (targetPage != "" && targetPage != "undefined")
+             top.main.location = top.targetPage;
+    }
+  //]]></script>
+</head>
+<frameset cols="20%,80%" onLoad="top.loadFrames()">
+  <frameset rows="50%,50%" onLoad="top.loadFrames()">
+    <frame src="package-container.html" name="packageView" title="Class View" />
+    <frame src="outline-container.html" name="outline" title="Outline" />
+  </frameset>
+  <frameset rows="100%,*" id="contentframeset">
+    <frame src="source-view.html" name="main" title="Source" />
+    <frame src="search-container.html" name="searchpane" title="Search result" />
+  </frameset>
+</frameset>
+</html>

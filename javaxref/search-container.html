@@ -1,0 +1,34 @@
+<!DOCTYPE html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <script type="text/javascript">
+    var displayController = {
+      rowSpec : "75%,25%", // remember the row set specification when the page was open
+      frame   : window.parent.document.getElementById("contentframeset"),
+      spane   : window.parent.document.getElementById("searchpane"),
+
+      hide : function() {
+        if(this.isShown()) {
+          this.rowSpec = this.frame.rows;
+          this.frame.rows="100%,*";
+        }
+      },
+      show : function(link) {
+        if(!this.isShown())
+          this.frame.rows=this.rowSpec;
+        var usage = link.getAttribute('u');
+        idx = usage.indexOf('#');
+        main.loadUsage(usage.substring(0,idx),usage.substring(idx+1));
+      },
+      isShown : function() {
+        return this.frame.rows!="100%,*";
+      }
+    };
+
+  </script>
+</head>
+<frameset rows="22px,*" frameborder="0">
+  <frame src="search-toolbar.html" name="toolbar" noresize="true" scrolling="no" />
+  <frame src="search-pane.html" name="main" />
+</frameset>
+</html>
