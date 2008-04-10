@@ -51,4 +51,7 @@ public class MockitoTest extends TestBase {
     public void shouldValidateMockWhenCreatingInOrderObject() {
         Mockito.inOrder("notMock");
     }
+    
+    //TODO remove tar creation stuff from ant
+    //TODO stack trace remover does not work when it comes to threads
 }
