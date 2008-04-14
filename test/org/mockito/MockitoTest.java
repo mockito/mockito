@@ -53,6 +53,5 @@ public class MockitoTest extends TestBase {
     }
     
     //TODO add initMocks that allows to send own annotation/own implementation of creation logic
-    //TODO remove tar creation stuff from ant
     //TODO stack trace remover does not work when it comes to threads
 }
