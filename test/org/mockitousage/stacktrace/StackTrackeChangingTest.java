@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
 
 public class StackTrackeChangingTest extends TestBase {
     

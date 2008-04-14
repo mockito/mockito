@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.util.ExtraMatchers.*;
@@ -14,6 +14,7 @@ import org.mockito.TestBase;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockitousage.IMethods;
 
 public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
     

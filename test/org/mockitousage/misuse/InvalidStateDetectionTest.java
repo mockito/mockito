@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.misuse;
 
 import static org.mockito.Mockito.*;
 
@@ -13,6 +13,7 @@ import org.mockito.StateResetter;
 import org.mockito.TestBase;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockitousage.IMethods;
 
 /**
  * invalid state happens if:

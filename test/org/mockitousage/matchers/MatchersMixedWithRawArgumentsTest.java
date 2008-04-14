@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.matchers;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -11,6 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
+import org.mockitousage.IMethods;
 
 public class MatchersMixedWithRawArgumentsTest extends TestBase {
     

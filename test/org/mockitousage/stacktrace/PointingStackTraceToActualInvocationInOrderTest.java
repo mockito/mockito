@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.stacktrace;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -14,6 +14,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockitousage.IMethods;
 
 public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
     
