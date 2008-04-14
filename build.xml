@@ -21,8 +21,6 @@
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="zip" value="mockito-${version}.zip" />
-  <property name="tar" value="mockito-${version}.tar" />
-  <property name="tgzip" value="mockito-${version}.tgz" />
 
   <path id="compile.classpath">
     <fileset dir="${lib.dir.run}" includes="*.jar" />
@@ -163,13 +161,6 @@
       <fileset dir="${target.dir}/mockito.zip.tmp"/>
     </zip>
   </target>
-  
-  <target name="tgzip" depends="prepare.package">
-    <tar destfile="${target.dir}/${tar}">
-      <fileset dir="${target.dir}/mockito.zip.tmp" />
-    </tar>
-    <gzip destfile="${target.dir}/${tgzip}" src="${target.dir}/${tar}"/>
-  </target>
 
   <target name="javadoc">
     <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}" 
@@ -263,9 +254,9 @@
     </copy>
   </target>
   
-  <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs test against jars" />
+  <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
-  <target name="all" depends="zip, tgzip" description="cleans, builds, tests, jars, zips" />
+  <target name="all" depends="zip" description="cleans, builds, tests, jars, zips" />
   
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
