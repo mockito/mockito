@@ -19,11 +19,26 @@ import org.mockito.internal.util.MockUtil;
 
 /**
  * Enables mocks creation, verification and stubbing.
+ * 
+ * <h1>Contents</h1>
+ * 
+ * <b>
+ *         1. Let's verify some behaviour!
+ *   <br/> 2. How about some stubbing?
+ *   <br/> 3. Argument matchers
+ *   <br/> 4. Verifying exact number of invocations / at least once / never
+ *   <br/> 5. Stubbing void methods with exceptions
+ *   <br/> 6. Verification in order
+ *   <br/> 7. Making sure interaction(s) never happened on mock
+ *   <br/> 8. Finding redundant invocations
+ *   <br/> 9. Shorthand for mocks creation - &#064;Mock annotation
+ * </b>
+ * 
  * <p>
  * Following examples mock List, because everyone knows its interface (methods like add(), get(), clear() will be used). 
  * <br>You probably wouldn't mock List class 'in real'.  
  * 
- * <h3>Let's verify some behaviour!</h3>
+ * <h3>1. Let's verify some behaviour!</h3>
  * 
  * <pre>
  * //Let's import Mockito statically so that code looks clearer
@@ -45,7 +60,7 @@ import org.mockito.internal.util.MockUtil;
  * Once created, mock will remember all invocations. Then you can
  * selectively verify whatever interaction you are interested in.
  * 
- * <h3>How about some stubbing?</h3>
+ * <h3>2. How about some stubbing?</h3>
  * 
  * <pre>
  * //You can mock concrete classes, not only interfaces
@@ -64,7 +79,8 @@ import org.mockito.internal.util.MockUtil;
  * //following prints "null" because get(999) was not stubbed
  * System.out.println(mockedList.get(999));
  * 
- * //if you really want you can still verify stubbed invocation. In most cases it's not necessary, though. 
+ * //Stubbed invocations <b>are verified implicitly</b>. The execution flow of your own code does it completely <b>for free</b>. 
+ * //Although it is possible to verify a stubbed invocation, in majority of cases <b>it's not necessary</b>:
  * verify(mockedList).get(0);
  * </pre>
  * 
@@ -85,11 +101,12 @@ import org.mockito.internal.util.MockUtil;
  * Last stubbing is more important - when you stubbed the same method with the same arguments many times.
  * </li>
  * <li>
- * Although it's possible to verify stubbed methods it's a good pattern to focus on testing that stubbed value is used correctly.
+ * Although it is possible to verify a stubbed invocation, in majority of cases <b>it's not necessary</b>.
+ * Stubbed invocations <b>are verified implicitly</b>. The execution flow of your own code does it completely <b>for free</b>.
  * </li> 
  * </ul>
  * 
- * <h3>Argument matchers</h3>
+ * <h3>3. Argument matchers</h3>
  * 
  * <pre>
  *  //stubbing using built-in anyInt() argument matcher
@@ -122,7 +139,7 @@ import org.mockito.internal.util.MockUtil;
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
- * <h3>Verifying exact number of invocations / at least once / never</h3>
+ * <h3>4. Verifying exact number of invocations / at least once / never</h3>
  *
  *<pre>
  *  //using mock 
@@ -154,7 +171,7 @@ import org.mockito.internal.util.MockUtil;
  * <p>
  * <b>times(1) is the default.</b> Therefore using times(1) explicitly can be omitted.
  * 
- * <h3>Stubbing void methods with an exceptions</h3>
+ * <h3>5. Stubbing void methods with exceptions</h3>
  * 
  * <pre>
  *   stubVoid(mockedList).toThrow(new RuntimeException()).on().clear();
@@ -163,7 +180,7 @@ import org.mockito.internal.util.MockUtil;
  *   mockedList.clear();
  * </pre>
  *
- * <h3>Verification in order</h3>
+ * <h3>6. Verification in order</h3>
  * 
  * <pre>
  *   List firstMock = mock(List.class);
@@ -186,7 +203,7 @@ import org.mockito.internal.util.MockUtil;
  * <p>
  * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
  *
- * <h3>Making sure interaction(s) never happened on mock</h3>
+ * <h3>7. Making sure interaction(s) never happened on mock</h3>
  * 
  * <pre>
  *   //using mocks - only mockOne is interacted
@@ -211,7 +228,7 @@ import org.mockito.internal.util.MockUtil;
  * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
  * the first one is more explicit and can read better.
  *
- * <h3>Finding redundant invocations</h3>
+ * <h3>8. Finding redundant invocations</h3>
  * 
  * <pre>
  *   //using mocks
@@ -228,7 +245,7 @@ import org.mockito.internal.util.MockUtil;
  * See also {@link Mockito#never()} - it is more explicit and communicates an intent well. 
  * <p>
  * 
- * <h3>Shorthand for mocks creation - &#064;Mock annotation</h3>
+ * <h3>9. Shorthand for mocks creation - &#064;Mock annotation</h3>
  * 
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li> 
@@ -299,7 +316,7 @@ public class Mockito extends Matchers {
      * <p>
      * Last stubbing is more important - when you stubbed the same method with the same arguments many times.
      * <p>
-     * Although it's possible to verify stubbed methods it's a good pattern to focus on testing that stubbed value is used correctly.
+     * Although it's possible to verify stubbed methods, bear in mind that <b>are verified for free</b>.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
