@@ -4,18 +4,15 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-
-import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.InOrder;
 import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockitousage.IMethods;
 
 public class DescriptiveMessagesOnMisuseTest extends TestBase {
@@ -26,28 +23,28 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @Ignore("just for tuning up the error messages")
     @Test
     public void tryDescriptiveMessagesOnMisuse() {
-        verifyNoMoreInteractions();
-        verifyNoMoreInteractions(null);
-        verifyNoMoreInteractions("");
-        verifyZeroInteractions();
-        verifyZeroInteractions(null);
-        verifyZeroInteractions("");
+//        verifyNoMoreInteractions();
+//        verifyNoMoreInteractions(null);
+//        verifyNoMoreInteractions("");
+//        verifyZeroInteractions();
+//        verifyZeroInteractions(null);
+//        verifyZeroInteractions("");
+//
+//        inOrder();
+//        inOrder(null);
+//        inOrder("test");
+//        InOrder inOrder = inOrder(mock(List.class));
+//        inOrder.verify(mock).simpleMethod();
 
-        inOrder();
-        inOrder(null);
-        inOrder("test");
-        InOrder inOrder = inOrder(mock(List.class));
-        inOrder.verify(mock).simpleMethod();
+//        verify(null);
+//        verify(mock.booleanReturningMethod());
 
-        verify(mock.differentMethod());
-        verify(null);
+//        verify(mock).varargs("test", anyString());
 
-        verify(mock).varargs("test", anyString());
+//        stub("x").toReturn("x");
 
-        stub("x").toReturn("x");
-
-        stub(mock.simpleMethod());
-        stub(mock.differentMethod()).toReturn("");
+//        stub(mock.simpleMethod());
+//        stub(mock.differentMethod()).toReturn("");
     } 
     
     @Test(expected=NotAMockException.class)
@@ -58,14 +55,24 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerifyNoMoreInteractions() {
         verifyNoMoreInteractions(mock.byteReturningMethod());
-    }  
+    }
     
-    @Test(expected=MockitoException.class)
+    @Test(expected=NotAMockException.class)
+    public void shouldScreamWhenInOrderCreatedWithDodgyMock() {
+        inOrder("not a mock");
+    }
+    
+    @Test(expected=NullInsteadOfMockException.class)
+    public void shouldScreamWhenInOrderCreatedWithNulls() {
+        inOrder(mock, null);
+    }
+    
+    @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamNullPassedToVerify() {
         verify(null);
     }  
     
-    @Test(expected=NotAMockException.class)
+    @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamWhenNotMockPassedToVerifyNoMoreInteractions() {
         verifyNoMoreInteractions(null, "blah");
     } 

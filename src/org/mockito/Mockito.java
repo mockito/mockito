@@ -376,7 +376,9 @@ public class Mockito extends Matchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock, VerificationMode mode) {
-        if (!MockUtil.isMock(mock)) {
+        if (mock == null) {
+            REPORTER.nullPassedToVerify();
+        } else if (!MockUtil.isMock(mock)) {
             REPORTER.notAMockPassedToVerify();
         }
         MOCKING_PROGRESS.verificationStarted(mode);
@@ -419,6 +421,9 @@ public class Mockito extends Matchers {
         MOCKING_PROGRESS.validateState();
         for (Object mock : mocks) {
             try {
+                if (mock == null) {
+                    REPORTER.nullPassedToVerifyNoMoreInteractions();
+                }
                 MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
             } catch (NotAMockException e) {
                 REPORTER.notAMockPassedToVerifyNoMoreInteractions();
@@ -492,7 +497,9 @@ public class Mockito extends Matchers {
             REPORTER.mocksHaveToBePassedWhenCreatingInOrder();
         }
         for (Object mock : mocks) {
-            if (!MockUtil.isMock(mock)) {
+            if (mock == null) {
+                REPORTER.nullPassedWhenCreatingInOrder();
+            } else if (!MockUtil.isMock(mock)) {
                 REPORTER.notAMockPassedWhenCreatingInOrder();
             }
         }
