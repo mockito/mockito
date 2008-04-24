@@ -1,3 +1,0 @@
-defineStructure(
-"PrintableInvocation",function(factory){with(factory) { typeTable(["org.mockito.exceptions.PrintableInvocation","it"],["org.mockito.internal.invocation.Invocation","cl"],["org.mockito.internal.invocation.InvocationMatcher","cl"],["java.lang.String","cl"]),methodTable([0,"toString",[],"me"],[2,"toString",[],"me"],[1,"toString",[],"me"]),localVariableTable()
-return classDef(O("/*",nl," * Copyright (c) 2007 Mockito contributors",nl," * This program is made available under the terms of the MIT License.",nl," */"),nl,pa," org.mockito.exceptions;",nl,nl,C(0,[1,2],$(pu,_,it,_,I("PrintableInvocation"),_,B(nl,w(4),M(0,[],[1,2],$(T(3),_,I("toString"),P(),";")),nl))));}});

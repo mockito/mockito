@@ -1,2 +1,0 @@
-setClassUsage('java.util.AbstractMap',
-{"isEmpty()":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"configuration","classes":[{"name":"DefaultReturnValuesTest","kind":"class","access":"public","line":25,"children":[{"name":"shouldReturnEmptyCollectionsOrNullForNonCollections():void","kind":"method","access":"public","line":27,"leaves":[46]}]}]}]}]}]}]}});

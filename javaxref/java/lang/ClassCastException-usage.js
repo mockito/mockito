@@ -1,2 +1,0 @@
-setClassUsage('java.lang.ClassCastException',
-{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"util","classes":[{"name":"MockUtil","kind":"class","access":"public","line":18,"children":[{"name":"getMockHandler(T):MockHandler","kind":"method","access":"public","static":true,"line":27,"children":[{"name":"e","kind":"null","access":"default","local":true,"line":38,"leaves":[38]}]}]}]}]}]}]}]}});

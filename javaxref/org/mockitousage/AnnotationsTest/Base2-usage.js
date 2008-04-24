@@ -1,2 +1,0 @@
-setClassUsage('org.mockitousage.AnnotationsTest.Base2',
-{"mock":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","classes":[{"name":"AnnotationsTest","kind":"class","access":"public","line":20,"children":[{"name":"Base2","kind":"class","access":"default","line":79,"children":[{"name":"getBaseMock():IMethods","kind":"method","access":"public","line":82,"leaves":[83]}]}]}]}]}]}});

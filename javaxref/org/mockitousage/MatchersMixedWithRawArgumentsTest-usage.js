@@ -1,2 +1,0 @@
-setClassUsage('org.mockitousage.MatchersMixedWithRawArgumentsTest',
-{"mock":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockitousage","classes":[{"name":"MatchersMixedWithRawArgumentsTest","kind":"class","access":"public","line":15,"children":[{"name":"shouldAllowMixingRawArgumentsWithMatchers():void","kind":"method","access":"public","line":34,"leaves":[40,38,37]}]}]}]}]}});

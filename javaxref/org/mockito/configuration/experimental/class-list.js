@@ -1,1 +1,0 @@
-setClassList("org.mockito.configuration.experimental",[{"name":"ConfigurationSupport","kind":"class","script":"org/mockito/configuration/experimental/ConfigurationSupport.js","access":"public"},{"name":"ConfigurationTest","kind":"class","script":"org/mockito/configuration/experimental/ConfigurationTest.js","access":"public"}]);

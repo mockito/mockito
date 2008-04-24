@@ -1,2 +1,0 @@
-setClassUsage('java.lang.AbstractStringBuilder',
-{"length()":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"util","classes":[{"name":"Decamelizer","kind":"class","access":"public","line":10,"children":[{"name":"decamelizeClassName(String):String","kind":"method","access":"private","static":true,"line":28,"leaves":[32]}]}]}]}]}]}]}});

@@ -1,3 +1,0 @@
-defineStructure(
-"StateResetter",function(factory){with(factory) { typeTable(["org.mockito.StateResetter","cl"],["org.mockito.Mockito","cl"],["org.mockito.internal.progress.MockingProgress","it"]),methodTable([0,"reset",[],"st me"],[2,"reset",[],"me"]),localVariableTable()
-return classDef(O("/*",nl," * Copyright (c) 2007 Mockito contributors",nl," * This program is made available under the terms of the MIT License.",nl," */"),nl,pa," org.mockito;",nl,nl,C(0,[],$(pu,_,c,_,I("StateResetter"),_,B(nl,w(4),nl,w(4),M(0,[],[],$(pu,_,s,_,v,_,I("reset"),P(),_,B(nl,w(8),T(1),".",G(1,"st fi","MOCKING_PROGRESS"),".",N(1),P(),";",nl,w(4)))),nl))),nl);}});

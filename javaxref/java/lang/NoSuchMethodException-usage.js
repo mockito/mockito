@@ -1,2 +1,0 @@
-setClassUsage('java.lang.NoSuchMethodException',
-{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"creation","classes":[{"name":"MethodInterceptorFilter","kind":"class","access":"public","line":11,"children":[{"name":"MethodInterceptorFilter(Class,T)","kind":"method","access":"public","line":19,"children":[{"name":"e","kind":"null","access":"default","local":true,"line":27,"leaves":[27]}]}]}]}]}]}]}]}});

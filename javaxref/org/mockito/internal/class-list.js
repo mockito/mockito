@@ -1,1 +1,0 @@
-setClassList("org.mockito.internal",[{"name":"AllInvocationsFinderTest","kind":"class","script":"org/mockito/internal/AllInvocationsFinderTest.js","access":"public"},{"name":"MockHandler","kind":"class","script":"org/mockito/internal/MockHandler.js","access":"public"},{"name":"MockHandlerTest","kind":"class","script":"org/mockito/internal/MockHandlerTest.js","access":"public"}]);

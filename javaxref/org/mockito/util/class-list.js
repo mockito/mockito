@@ -1,1 +1,0 @@
-setClassList("org.mockito.util",[{"name":"Assertor","kind":"interface","script":"org/mockito/util/Assertor.js","access":"public"},{"name":"ExtraMatchers","kind":"class","script":"org/mockito/util/ExtraMatchers.js","access":"public"}]);

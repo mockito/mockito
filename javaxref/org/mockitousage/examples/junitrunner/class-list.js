@@ -1,1 +1,0 @@
-setClassList("org.mockitousage.examples.junitrunner",[{"name":"ExampleTest","kind":"class","script":"org/mockitousage/examples/junitrunner/ExampleTest.js","access":"public"},{"name":"MockitoRunner","kind":"class","script":"org/mockitousage/examples/junitrunner/MockitoRunner.js","access":"public"}]);

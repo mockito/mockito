@@ -1,2 +1,0 @@
-setClassUsage('org.mockito.internal.verification.RegisteredInvocations.RemoveToString',
-{"this":{"kind":"package","name":"","children":[{"kind":"package","name":"org","children":[{"kind":"package","name":"mockito","children":[{"kind":"package","name":"internal","children":[{"kind":"package","name":"verification","classes":[{"name":"RegisteredInvocations","kind":"class","access":"public","line":15,"children":[{"name":"getVerifiableInvocations():List","kind":"method","access":"public","line":27,"leaves":[28]}]}]}]}]}]}]}});
