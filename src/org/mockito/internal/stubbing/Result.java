@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
 import org.mockito.exceptions.base.StackTraceFilter;
 
+//TODO name of this class is stupid
 @SuppressWarnings("unchecked")
 public class Result implements IAnswer {
 

@@ -32,8 +32,9 @@ public interface OngoingStubbing<T> {
      * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param value return value
+     * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    void toReturn(T value);
+    OngoingStubbing<T> toReturn(T value);
 
     /**
      * Stub mock object with throwable that will be thrown on method invocation. E.g:
@@ -47,6 +48,7 @@ public interface OngoingStubbing<T> {
      * See examples in javadoc for {@link Mockito#stub}
      * 
      * @param throwable to be thrown on method invocation
+     * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    void toThrow(Throwable throwable);
+    OngoingStubbing<T> toThrow(Throwable throwable);
 }

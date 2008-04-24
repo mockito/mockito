@@ -133,14 +133,28 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     private class OngoingStubbingImpl implements OngoingStubbing<T> {
-        public void toReturn(Object value) {
+        public OngoingStubbing<T> toReturn(Object value) {
             verifyingRecorder.eraseLastInvocation();
             stubber.addReturnValue(value);
+            return new ConsecutiveStubbing();
         }
 
-        public void toThrow(Throwable throwable) {
+        public OngoingStubbing<T> toThrow(Throwable throwable) {
             verifyingRecorder.eraseLastInvocation();
             stubber.addThrowable(throwable);
+            return new ConsecutiveStubbing();
+        }
+    }
+    
+    private class ConsecutiveStubbing implements OngoingStubbing<T> {
+        public OngoingStubbing<T> toReturn(Object value) {
+            stubber.addConsecutiveReturnValue(value);
+            return this;
+        }
+
+        public OngoingStubbing<T> toThrow(Throwable throwable) {
+            stubber.addConsecutiveThrowable(throwable);
+            return this;
         }
     }
 }

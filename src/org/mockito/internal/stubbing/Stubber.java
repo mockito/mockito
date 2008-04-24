@@ -40,11 +40,19 @@ public class Stubber {
         validateThrowable(throwable);
         addResult(Result.createThrowResult(throwable, new StackTraceFilter()));
     }
-
+    
     private void addResult(Result result) {
         assert invocationForStubbing != null;
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, result));
     }
+    
+    public void addConsecutiveReturnValue(Object value) {
+        stubbed.getFirst().addResult(Result.createReturnResult(value));
+    }
+
+    public void addConsecutiveThrowable(Throwable throwable) {
+        // TODO Auto-generated method stub
+    }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
         for (StubbedInvocationMatcher s : stubbed) {
