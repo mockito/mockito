@@ -13,23 +13,24 @@ import org.mockito.TestBase;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.StackTraceFilter;
 
-public class ResultTest extends TestBase {
+@SuppressWarnings("unchecked")
+public class AnswerFactoryTest extends TestBase {
 
     @Test
     public void shouldCreateReturnResult() throws Throwable {
-        Result result = Result.createReturnResult("lol");
+        Answer result = AnswerFactory.createReturnResult("lol");
         assertEquals("lol", result.answer());
     }
     
     @Test(expected=RuntimeException.class)
     public void shouldCreateThrowResult() throws Throwable {
-        Result.createThrowResult(new RuntimeException(), new StackTraceFilter()).answer();
+        AnswerFactory.createThrowResult(new RuntimeException(), new StackTraceFilter()).answer();
     }
     
     @Test
     public void shouldFilterStackTraceWhenCreatingThrowResult() throws Throwable {
         StackTraceFilterStub filterStub = new StackTraceFilterStub();
-        Result result = Result.createThrowResult(new RuntimeException(), filterStub);
+        Answer result = AnswerFactory.createThrowResult(new RuntimeException(), filterStub);
         try {
             result.answer(); 
             fail();

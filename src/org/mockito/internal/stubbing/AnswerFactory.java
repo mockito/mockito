@@ -8,32 +8,23 @@ import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
 import org.mockito.exceptions.base.StackTraceFilter;
 
 @SuppressWarnings("unchecked")
-public class Result implements Answer {
+public class AnswerFactory {
 
-    private Answer value;
-
-    private Result(Answer value) {
-        this.value = value;
-    }
-
-    public static Result createThrowResult(final Throwable throwable, final StackTraceFilter filter) {
-        return new Result(new Answer<Object>() {
+    public static Answer createThrowResult(final Throwable throwable, final StackTraceFilter filter) {
+        return new Answer<Object>() {
             public Object answer() throws Throwable {
                 Throwable filtered = throwable.fillInStackTrace();
                 filter.filterStackTrace(new HasStackTraceThrowableWrapper(filtered));
                 throw filtered;
             }
-        });
+        };
     }
-    public static Result createReturnResult(final Object value) {
-        return new Result(new Answer<Object>() {
+    
+    public static Answer createReturnResult(final Object value) {
+        return new Answer<Object>() {
             public Object answer() throws Throwable {
                 return value;
             }
-        });
-    }
-
-    public Object answer() throws Throwable {
-        return value.answer();
+        };
     }
 }

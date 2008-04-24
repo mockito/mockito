@@ -13,6 +13,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
 
+@SuppressWarnings("unchecked")
 public class Stubber {
 
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
@@ -32,27 +33,27 @@ public class Stubber {
     
     public void addReturnValue(Object value) {
         mockingProgress.stubbingCompleted();
-        addResult(Result.createReturnResult(value));
+        addResult(AnswerFactory.createReturnResult(value));
     }
     
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
         validateThrowable(throwable);
-        addResult(Result.createThrowResult(throwable, new StackTraceFilter()));
+        addResult(AnswerFactory.createThrowResult(throwable, new StackTraceFilter()));
     }
     
-    private void addResult(Result result) {
+    private void addResult(Answer result) {
         assert invocationForStubbing != null;
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, result));
     }
     
     public void addConsecutiveReturnValue(Object value) {
-        stubbed.getFirst().addAnswer(Result.createReturnResult(value));
+        stubbed.getFirst().addAnswer(AnswerFactory.createReturnResult(value));
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
         validateThrowable(throwable);
-        stubbed.getFirst().addAnswer(Result.createThrowResult(throwable, new StackTraceFilter()));
+        stubbed.getFirst().addAnswer(AnswerFactory.createThrowResult(throwable, new StackTraceFilter()));
     }    
 
     public Object resultFor(Invocation invocation) throws Throwable {

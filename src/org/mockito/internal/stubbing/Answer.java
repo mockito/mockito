@@ -7,7 +7,6 @@ package org.mockito.internal.stubbing;
 /**
  * Used to answer expected calls.
  * @param <T> the type to return.
- * //TODO should be Answer
  */
 public interface Answer<T> {
 
