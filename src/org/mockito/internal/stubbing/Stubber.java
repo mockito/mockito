@@ -51,7 +51,8 @@ public class Stubber {
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
-        // TODO Auto-generated method stub
+        validateThrowable(throwable);
+        stubbed.getFirst().addResult(Result.createThrowResult(throwable, new StackTraceFilter()));
     }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
