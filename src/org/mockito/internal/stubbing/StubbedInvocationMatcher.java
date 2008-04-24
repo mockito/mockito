@@ -11,18 +11,18 @@ import org.mockito.internal.invocation.InvocationMatcher;
 @SuppressWarnings("unchecked")
 public class StubbedInvocationMatcher extends InvocationMatcher {
 
-    private final LinkedList<IAnswer> answers = new LinkedList<IAnswer>();
+    private final LinkedList<Answer> answers = new LinkedList<Answer>();
     
-    public StubbedInvocationMatcher(InvocationMatcher invocation, IAnswer result) {
+    public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
-        this.answers.add(result);
+        this.answers.add(answer);
     }
 
     public Object answer() throws Throwable {
         return answers.size() == 1 ? answers.getFirst().answer() : answers.removeFirst().answer();
     }
 
-    public void addResult(IAnswer answer) {
+    public void addAnswer(Answer answer) {
         answers.add(answer);
     }
     

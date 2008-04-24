@@ -9,7 +9,7 @@ package org.mockito.internal.stubbing;
  * @param <T> the type to return.
  * //TODO should be Answer
  */
-public interface IAnswer<T> {
+public interface Answer<T> {
 
     /**
      * @return the value to be returned

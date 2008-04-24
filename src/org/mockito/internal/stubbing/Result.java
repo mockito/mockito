@@ -7,18 +7,17 @@ package org.mockito.internal.stubbing;
 import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
 import org.mockito.exceptions.base.StackTraceFilter;
 
-//TODO name of this class is stupid
 @SuppressWarnings("unchecked")
-public class Result implements IAnswer {
+public class Result implements Answer {
 
-    private IAnswer value;
+    private Answer value;
 
-    private Result(IAnswer value) {
+    private Result(Answer value) {
         this.value = value;
     }
 
     public static Result createThrowResult(final Throwable throwable, final StackTraceFilter filter) {
-        return new Result(new IAnswer<Object>() {
+        return new Result(new Answer<Object>() {
             public Object answer() throws Throwable {
                 Throwable filtered = throwable.fillInStackTrace();
                 filter.filterStackTrace(new HasStackTraceThrowableWrapper(filtered));
@@ -27,7 +26,7 @@ public class Result implements IAnswer {
         });
     }
     public static Result createReturnResult(final Object value) {
-        return new Result(new IAnswer<Object>() {
+        return new Result(new Answer<Object>() {
             public Object answer() throws Throwable {
                 return value;
             }

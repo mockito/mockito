@@ -11,7 +11,7 @@
   verify(someObject).do()
 
 EasyMock:
--deliberately removed IAnswer - if you need to return different results for different args then you should 
+-deliberately removed Answer interface - if you need to return different results for different args then you should 
 stub on the per-test basis. this is the only way to have clean tests not cluttered with complicated mocky stuff.
 -mock's names are nicer - simple names
 -no need to name mocks. you see the exact line of code where it failed. 

@@ -47,12 +47,12 @@ public class Stubber {
     }
     
     public void addConsecutiveReturnValue(Object value) {
-        stubbed.getFirst().addResult(Result.createReturnResult(value));
+        stubbed.getFirst().addAnswer(Result.createReturnResult(value));
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
         validateThrowable(throwable);
-        stubbed.getFirst().addResult(Result.createThrowResult(throwable, new StackTraceFilter()));
+        stubbed.getFirst().addAnswer(Result.createThrowResult(throwable, new StackTraceFilter()));
     }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
