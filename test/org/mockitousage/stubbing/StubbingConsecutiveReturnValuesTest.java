@@ -39,18 +39,22 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
 
         try {
             mock.simpleMethod();
+            fail();
         } catch (RuntimeException e) {}
         
         try {
             mock.simpleMethod();
+            fail();
         } catch (IllegalArgumentException e) {}
         
         try {
             mock.simpleMethod();
+            fail();
         } catch (NullPointerException e) {}
         
         try {
             mock.simpleMethod();
+            fail();
         } catch (NullPointerException e) {}
     }
     
@@ -64,12 +68,14 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
         
         try {
             mock.simpleMethod();
+            fail();
         } catch (IllegalArgumentException e) {}
         
         assertEquals("one", mock.simpleMethod());
         
         try {
             mock.simpleMethod();
+            fail();
         } catch (NullPointerException e) {}
         
         assertEquals(null, mock.simpleMethod());

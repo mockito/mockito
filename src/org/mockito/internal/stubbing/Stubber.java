@@ -33,13 +33,13 @@ public class Stubber {
     
     public void addReturnValue(Object value) {
         mockingProgress.stubbingCompleted();
-        addResult(AnswerFactory.createReturnResult(value));
+        addResult(AnswerFactory.createReturningAnswer(value));
     }
     
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
         validateThrowable(throwable);
-        addResult(AnswerFactory.createThrowResult(throwable, new StackTraceFilter()));
+        addResult(AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter()));
     }
     
     private void addResult(Answer result) {
@@ -48,12 +48,13 @@ public class Stubber {
     }
     
     public void addConsecutiveReturnValue(Object value) {
-        stubbed.getFirst().addAnswer(AnswerFactory.createReturnResult(value));
+        stubbed.getFirst().addAnswer(AnswerFactory.createReturningAnswer(value));
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
+        //TODO move validation of throwable to createThrowResult
         validateThrowable(throwable);
-        stubbed.getFirst().addAnswer(AnswerFactory.createThrowResult(throwable, new StackTraceFilter()));
+        stubbed.getFirst().addAnswer(AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter()));
     }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
