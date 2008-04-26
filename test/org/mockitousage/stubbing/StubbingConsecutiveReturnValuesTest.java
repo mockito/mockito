@@ -88,4 +88,19 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
             .toReturn("one")
             .toThrow(new Exception());
     }
+    
+    @Test
+    public void shouldAllowConsecutiveStubbingForVoidMethod() throws Exception {
+        //TODO implement me!
+//        stubVoid(mock)
+//            .toThrow(new IllegalArgumentException())
+//            .toReturn()
+//            .toThrow(new NullPointerException())
+//            .toReturn();
+//        
+//        try {
+//            mock.simpleMethod();
+//            fail();
+//        } catch (IllegalArgumentException e) {}
+    }
 }
