@@ -29,8 +29,9 @@ public class MockFactory<T> {
         Enhancer enhancer = createEnhancer(toMock);
         enhancer.setCallbackType(filter.getClass());
 
+        //This is required but I could not figure out the way to test it
+        //See issue #11
         if (toMock.getSigners() != null) {
-            //TODO think about a test that can cover this scenario
             enhancer.setNamingPolicy(ALLOWS_MOCKING_CLASSES_IN_SIGNED_PACKAGES);
         }
 
