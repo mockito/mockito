@@ -8,6 +8,9 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.DefaultNamingPolicy;
+import net.sf.cglib.core.NamingPolicy;
+import net.sf.cglib.core.Predicate;
 import net.sf.cglib.core.VisibilityPredicate;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
@@ -26,7 +29,13 @@ public class MockFactory<T> {
         Enhancer enhancer = createEnhancer(toMock);
         enhancer.setCallbackType(filter.getClass());
 
+        if (toMock.getSigners() != null) {
+            //TODO think about a test that can cover this scenario
+            enhancer.setNamingPolicy(ALLOWS_MOCKING_CLASSES_IN_SIGNED_PACKAGES);
+        }
+
         Class mockClass = enhancer.createClass();
+        
         Enhancer.registerCallbacks(mockClass, new Callback[] { filter });
 
         Factory mock = createMock(mockClass);
@@ -79,4 +88,11 @@ public class MockFactory<T> {
         mock.getCallback(0);
         return mock;
     }
+    
+    private static final NamingPolicy ALLOWS_MOCKING_CLASSES_IN_SIGNED_PACKAGES = new DefaultNamingPolicy() {
+        @Override
+        public String getClassName(String prefix, String source, Object key, Predicate names) {
+            return "codegen." + super.getClassName(prefix, source, key, names);
+        }
+    };
 }
