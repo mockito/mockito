@@ -90,17 +90,55 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
     }
     
     @Test
-    public void shouldAllowConsecutiveStubbingForVoidMethod() throws Exception {
-        //TODO implement me!
-//        stubVoid(mock)
-//            .toThrow(new IllegalArgumentException())
-//            .toReturn()
-//            .toThrow(new NullPointerException())
-//            .toReturn();
-//        
-//        try {
-//            mock.simpleMethod();
-//            fail();
-//        } catch (IllegalArgumentException e) {}
+    public void shouldStubVoidMethodAndContinueThrowing() throws Exception {
+        stubVoid(mock)
+            .toThrow(new IllegalArgumentException())
+            .toReturn()
+            .toThrow(new NullPointerException())
+            .on().voidMethod();
+        
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (IllegalArgumentException e) {}
+        
+        mock.voidMethod();
+        
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (NullPointerException e) {}
+        
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (NullPointerException e) {}        
+    }
+    
+    @Test
+    public void shouldStubVoidMethod() throws Exception {
+        stubVoid(mock)
+            .toReturn()
+            .toThrow(new NullPointerException())
+            .toReturn()
+            .on().voidMethod();
+        
+        mock.voidMethod();
+        
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (NullPointerException e) {}
+        
+        mock.voidMethod();
+        mock.voidMethod();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldValidateConsecutiveExceptionForVoidMethod() throws Exception {
+        stubVoid(mock)
+            .toReturn()
+            .toThrow(new Exception())
+            .on().voidMethod();
     }
 }

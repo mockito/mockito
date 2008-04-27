@@ -136,4 +136,6 @@ public interface IMethods {
     String toString();
     
     String toString(String foo);
+
+    void voidMethod();
 }

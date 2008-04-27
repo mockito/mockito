@@ -13,6 +13,9 @@ public class AnswerFactory {
     public static Answer createThrowingAnswer(final Throwable throwable, final StackTraceFilter filter) {
         return new Answer<Object>() {
             public Object answer() throws Throwable {
+                if (throwable == DontThrow.DONT_THROW) {
+                    return null;
+                }
                 Throwable filtered = throwable.fillInStackTrace();
                 filter.filterStackTrace(new HasStackTraceThrowableWrapper(filtered));
                 throw filtered;

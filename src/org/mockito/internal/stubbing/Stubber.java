@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.StackTraceFilter;
@@ -19,9 +21,9 @@ public class Stubber {
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final Reporter reporter = new Reporter();
     private final MockingProgress mockingProgress;
+    private final List<Throwable> throwablesForVoidMethod = new ArrayList<Throwable>();
     
     private InvocationMatcher invocationForStubbing;
-    private Throwable throwableForVoidMethod;
     
     public Stubber(MockingProgress mockingProgress) {
         this.mockingProgress = mockingProgress;
@@ -33,18 +35,15 @@ public class Stubber {
     
     public void addReturnValue(Object value) {
         mockingProgress.stubbingCompleted();
-        addResult(AnswerFactory.createReturningAnswer(value));
+        Answer answer = AnswerFactory.createReturningAnswer(value);
+        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
     
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
         validateThrowable(throwable);
-        addResult(AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter()));
-    }
-    
-    private void addResult(Answer result) {
-        assert invocationForStubbing != null;
-        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, result));
+        Answer answer = AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter());
+        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
     
     public void addConsecutiveReturnValue(Object value) {
@@ -67,17 +66,25 @@ public class Stubber {
     }
 
     public void addThrowableForVoidMethod(Throwable throwable) {
-        throwableForVoidMethod = throwable;
+        throwablesForVoidMethod.add(throwable);
     }
 
     public boolean hasThrowableForVoidMethod() {
-        return throwableForVoidMethod != null;
+        return !throwablesForVoidMethod.isEmpty();
     }
     
     public void addVoidMethodForThrowable(InvocationMatcher voidMethodInvocationMatcher) {
         invocationForStubbing = voidMethodInvocationMatcher;
-        addThrowable(throwableForVoidMethod);
-        throwableForVoidMethod = null;
+        assert hasThrowableForVoidMethod();
+        for (int i = 0; i < throwablesForVoidMethod.size(); i++) {
+            Throwable throwable = throwablesForVoidMethod.get(i);
+            if (i == 0) {
+                addThrowable(throwable);
+            } else {
+                addConsecutiveThrowable(throwable);
+            }
+        }
+        throwablesForVoidMethod.clear();
     }
     
     private void validateThrowable(Throwable throwable) {
