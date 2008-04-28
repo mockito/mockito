@@ -15,7 +15,7 @@ import org.mockito.Mockito;
  * 
  * See examples in javadoc for {@link Mockito#stubVoid}
  */
-public interface VoidMethodStubbable<T> extends StubbedMethodSelector<T>{
+public interface VoidMethodStubbable<T> {
 
     /**
      * Stubs void method with an exception. E.g:
@@ -62,5 +62,17 @@ public interface VoidMethodStubbable<T> extends StubbedMethodSelector<T>{
      * @return method selector - to choose void method and finish stubbing 
      */
     VoidMethodStubbable<T> toReturn();
-
+    
+    /**
+     * Choose void method for stubbing. E.g:
+     * 
+     * <pre>
+     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito#stubVoid}
+     * 
+     * @return mock object itself
+     */
+    T on();
 }
