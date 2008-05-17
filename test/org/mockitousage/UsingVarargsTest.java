@@ -114,4 +114,24 @@ public class UsingVarargsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {}
     }
+    
+    @Test
+    public void shouldVerifyWithAnyObject() {
+        Foo myClass = Mockito.mock(Foo.class);
+        myClass.varArgs("");        
+        Mockito.verify(myClass).varArgs((String[]) Mockito.anyObject());
+        Mockito.verify(myClass).varArgs((String) Mockito.anyObject());
+    }   
+    
+    @Test
+    public void shouldVerifyWithNullVarArgArray() {
+        Foo myClass = Mockito.mock(Foo.class);
+        myClass.varArgs((String[]) null);    
+        Mockito.verify(myClass).varArgs((String[]) Mockito.anyObject());
+        Mockito.verify(myClass).varArgs((String[]) null);
+    }  
+    
+    public class Foo {      
+        public void varArgs(String... args) {}       
+    }
 }

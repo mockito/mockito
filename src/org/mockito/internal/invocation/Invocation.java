@@ -49,14 +49,21 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
         this.stackTrace = new MockitoException("");
     }
 
+    //expands array varArgs that are given by runtime (1, [a, b]) into true varArgs (1, a, b);
     private static Object[] expandVarArgs(final boolean isVarArgs,
             final Object[] args) {
         if (!isVarArgs || isVarArgs && args[args.length - 1] != null
                 && !args[args.length - 1].getClass().isArray()) {
             return args == null ? new Object[0] : args;
         }
-        Object[] varArgs = ArrayEquals.createObjectArray(args[args.length - 1]);
+        
+        //in case someone deliberately passed null varArg array
+        if (args[args.length - 1] == null) {
+            return new Object[] {null};
+        }
+            
         final int nonVarArgsCount = args.length - 1;
+        Object[] varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
         final int varArgsCount = varArgs.length;
         Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
         System.arraycopy(args, 0, newArgs, 0, nonVarArgsCount);
