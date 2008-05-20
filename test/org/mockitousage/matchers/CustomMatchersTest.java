@@ -148,7 +148,7 @@ public class CustomMatchersTest extends TestBase {
         mock.simpleMethod("foo");
 
         try {
-            verify(mock).simpleMethod(argThat(new ArgumentMatcher<Object>() {
+            verify(mock).simpleMethod((String) argThat(new ArgumentMatcher<Object>() {
                 @Override public boolean matches(Object argument) {
                     return false;
                 }}));
