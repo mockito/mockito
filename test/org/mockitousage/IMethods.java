@@ -48,21 +48,37 @@ public interface IMethods {
     Object objectReturningMethod(Object ... objects);
 
     String oneArg(boolean value);
+    
+    String oneArg(Boolean value);
 
     String oneArg(byte value);
+    
+    String oneArg(Byte value);
 
     String oneArg(short value);
 
+    String oneArg(Short value);
+    
     String oneArg(char value);
+    
+    String oneArg(Character value);
 
     String oneArg(int value);
+    
+    String oneArg(Integer value);
 
     String oneArg(long value);
 
+    String oneArg(Long value);
+    
     String oneArg(float value);
 
+    String oneArg(Float value);
+    
     String oneArg(double value);
 
+    String oneArg(Double value);
+    
     String oneArg(Object value);
 
     String oneArg(String value);

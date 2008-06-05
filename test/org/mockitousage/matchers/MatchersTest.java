@@ -226,7 +226,7 @@ public class MatchersTest extends TestBase {
         
         assertEquals("1", mock.oneArg(""));
         assertEquals("1", mock.oneArg("any string"));
-        assertEquals(null, mock.oneArg(null));
+        assertEquals(null, mock.oneArg((Object) null));
     }
 
     @Test
@@ -392,7 +392,7 @@ public class MatchersTest extends TestBase {
 
         assertEquals("1", mock.oneArg("ab12"));
         assertEquals(null, mock.oneArg("12345"));
-        assertEquals(null, mock.oneArg(null));
+        assertEquals(null, mock.oneArg((Object) null));
     }
 
     @Test
