@@ -11,6 +11,13 @@ import org.mockito.Mockito;
  * 
  * <pre>
  * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+ * 
+ * //you can stub with different behavior for consecutive method calls.
+ * //Last stubbing (e.g: toReturn()) determines the behavior for further consecutive calls.   
+ * stub(mock)
+ *  .toThrow(new RuntimeException())
+ *  .toReturn()
+ *  .on().someMethod();
  * </pre>
  * 
  * See examples in javadoc for {@link Mockito#stubVoid}
@@ -37,9 +44,9 @@ public interface VoidMethodStubbable<T> {
     VoidMethodStubbable<T> toThrow(Throwable throwable);
     
     /**
-     * Stubs void method to 'just return' (e.g. to <b>not</b> throw any exception)
+     * Stubs void method to 'just return' (e.g. to <b>not</b> to throw any exception)
      * <p>
-     * <b>Only</b> use this method if you're chaining multiple return values.
+     * <b>Only</b> use this method if you're stubbing for consecutive calls.
      * <p>
      * For example:
      * <pre>

@@ -17,6 +17,13 @@ import org.mockito.Mockito;
  * 
  * //setting exception to be thrown:
  * stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
+ * 
+ * //you can stub with different behavior for consecutive method calls.
+ * //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.   
+ * stub(mock.someMethod("some arg"))
+ *  .toThrow(new RuntimeException())
+ *  .toReturn("foo");
+ * 
  * </pre>
  * 
  * See examples in javadoc for {@link Mockito#stub}

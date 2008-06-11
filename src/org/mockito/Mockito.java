@@ -32,6 +32,7 @@ import org.mockito.internal.util.MockUtil;
  *   <br/> 7. Making sure interaction(s) never happened on mock
  *   <br/> 8. Finding redundant invocations
  *   <br/> 9. Shorthand for mocks creation - &#064;Mock annotation
+ *   <br/> 10. (New!) Stubbing consecutive calls (iterator-style stubbing)
  * </b>
  * 
  * <p>
@@ -272,6 +273,22 @@ import org.mockito.internal.util.MockUtil;
  * Examples how to write a junit test runner are in Mockito test code (mockito/test/org/mockitousage/examples/junitrunner package);
  * <p>
  * Read more here: {@link MockitoAnnotations}
+ * 
+ * <h3> 10. (New!) Stubbing consecutive calls (iterator-style stubbing)</h3>
+ * 
+ * Sometimes we need to stub with different return value/exception for the same method call. 
+ * Typical use case could be mocking iterators. However, this feature was not included in original version of Mockito to promote simple mocking.
+ * Instead of iterators we strongly recommend using Iterable or simply collections. Those offer natural ways of stubbing (e.g. using real collections).
+ * In rare scenarios stubbing consecutive calls could useful, though.
+ *   
+ * Example: 
+ * <pre>
+ *   //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.
+ *   stub(mock.someMethod("some arg"))
+ *    .toThrow(new RuntimeException())
+ *    .toReturn("foo") 
+ * </pre>
+ * 
  */
 public class Mockito extends Matchers {
 
@@ -297,6 +314,7 @@ public class Mockito extends Matchers {
 
     /**
      * Stubs with return value or exception. E.g:
+     * 
      * <pre>
      *   stub(mock.someMethod()).toReturn(10);
      *   
@@ -304,23 +322,34 @@ public class Mockito extends Matchers {
      *   stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
      *   
      *   //setting exception to be thrown:
-     *   stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
+     *   stub(mock.someMethod(&quot;some arg&quot;)).toThrow(new RuntimeException());
+     *   
+     *   //you can stub with different behavior for consecutive method calls.
+     *   //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.   
+     *   stub(mock.someMethod("some arg"))
+     *    .toThrow(new RuntimeException())
+     *    .toReturn("foo");
+     *   
      * </pre>
-     *
+     * 
      * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
      * <p>
-     * Stubbing can be overridden: for example common stubbing can go to fixture setup
-     * but test methods can override it.
+     * Stubbing can be overridden: for example common stubbing can go to fixture
+     * setup but test methods can override it.
      * <p>
-     * Once stubbed, mocked method will always return stubbed value regardless of how many times it is called.
+     * Once stubbed, mocked method will always return stubbed value regardless
+     * of how many times it is called.
      * <p>
-     * Last stubbing is more important - when you stubbed the same method with the same arguments many times.
+     * Last stubbing is more important - when you stubbed the same method with
+     * the same arguments many times.
      * <p>
-     * Although it's possible to verify stubbed methods, bear in mind that <b>are verified for free</b>.
+     * Although it's possible to verify stubbed methods, bear in mind that
+     * <b>are verified for free</b>.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @param methodCall method call
+     * @param methodCall
+     *            method call
      * @return OngoingStubbing object to set stubbed value/exception
      */
     @SuppressWarnings("unchecked")
@@ -456,13 +485,22 @@ public class Mockito extends Matchers {
 
     /**
      * Stubs void method with an exception. E.g:
+     * 
      * <pre>
-     *   stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
+     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+     * 
+     * //you can stub with different behavior for consecutive method calls.
+     * //Last stubbing determines the behavior for further consecutive calls.   
+     * stub(mock)
+     *   .toThrow(new RuntimeException())
+     *   .toReturn()
+     *   .on().someMethod();
      * </pre>
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @param mock to stub
+     * @param mock
+     *            to stub
      * @return stubbable object that allows stubbing with throwable
      */
     public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
