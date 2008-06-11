@@ -32,7 +32,7 @@ import org.mockito.internal.util.MockUtil;
  *   <br/> 7. Making sure interaction(s) never happened on mock
  *   <br/> 8. Finding redundant invocations
  *   <br/> 9. Shorthand for mocks creation - &#064;Mock annotation
- *   <br/> 10. (New!) Stubbing consecutive calls (iterator-style stubbing)
+ *   <br/> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)
  * </b>
  * 
  * <p>
@@ -274,21 +274,29 @@ import org.mockito.internal.util.MockUtil;
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
- * <h3> 10. (New!) Stubbing consecutive calls (iterator-style stubbing)</h3>
+ * <h3> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same method call. 
  * Typical use case could be mocking iterators. However, this feature was not included in original version of Mockito to promote simple mocking.
  * Instead of iterators we strongly recommend using Iterable or simply collections. Those offer natural ways of stubbing (e.g. using real collections).
  * In rare scenarios stubbing consecutive calls could useful, though.
- *   
- * Example: 
+ * <p>
+ *
+ * Example:
  * <pre>
- *   //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.
  *   stub(mock.someMethod("some arg"))
  *    .toThrow(new RuntimeException())
- *    .toReturn("foo") 
+ *    .toReturn("foo");
+ *    
+ *   //First call: throws runtime exception:
+ *   mock.someMethod("some arg");
+ *   
+ *   //Second call: prints "foo"
+ *   System.out.println(mock.someMethod("some arg"));
+ *   
+ *   //Any consecutive call: prints "foo" as well because it is the last stubbed behaviour. 
+ *   System.out.println(mock.someMethod("some arg"));
  * </pre>
- * 
  */
 public class Mockito extends Matchers {
 
@@ -490,7 +498,7 @@ public class Mockito extends Matchers {
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
      * 
      * //you can stub with different behavior for consecutive method calls.
-     * //Last stubbing determines the behavior for further consecutive calls.   
+     * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.   
      * stub(mock)
      *   .toThrow(new RuntimeException())
      *   .toReturn()
