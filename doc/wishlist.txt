@@ -11,3 +11,6 @@
     List<Sub> subs = null;
     //TODO can I somehow avoid a cast here:
     stub(mockTwo.getList()).toReturn((List) subs);
+    
+    //TODO arguments printed consistently on failures (if actual are broken to lines, the expected should do that as well)
+    //TODO Use ComparisonFailure for reporting (include junit) to nicely print arg mismatches 
