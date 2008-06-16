@@ -11,7 +11,7 @@ import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation {
+public class InvocationMatcher implements PrintableInvocation, CanPrintInMultilines {
 
     private final Invocation invocation;
     private final List<Matcher> matchers;
@@ -41,14 +41,23 @@ public class InvocationMatcher implements PrintableInvocation {
         return this.matchers;
     }
     
+    /* (non-Javadoc)
+     * @see org.mockito.internal.invocation.CanPrintInMultilines#toString()
+     */
     public String toString() {
         return invocation.toString(matchers, false);
     }
 
-    public boolean hasMultilinePrint() {        
+    /* (non-Javadoc)
+     * @see org.mockito.internal.invocation.CanPrintInMultilines#hasMultilinePrint()
+     */
+    public boolean printsInMultilines() {        
         return toString().contains("\n");
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.invocation.CanPrintInMultilines#toMultilineString()
+     */
     public String toMultilineString() {
         return invocation.toString(matchers, true);
     }    

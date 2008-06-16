@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.internal.invocation.AllInvocationsFinder;
+import org.mockito.internal.invocation.CanPrintInMultilines;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -73,7 +74,7 @@ public class VerifyingRecorderTest extends TestBase {
     
     class VerifierStub implements Verifier {
         private List<Invocation> invocations;
-        private InvocationMatcher wanted;
+        private CanPrintInMultilines wanted;
         private VerificationModeImpl mode;
         public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
             this.invocations = invocations;

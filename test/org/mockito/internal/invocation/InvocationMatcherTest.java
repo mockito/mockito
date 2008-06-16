@@ -50,8 +50,8 @@ public class InvocationMatcherTest extends TestBase {
     
     @Test
     public void shouldNotEqualIfNumberOfArgumentsDiffer() throws Exception {
-        InvocationMatcher withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
-        InvocationMatcher withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
+        CanPrintInMultilines withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
+        CanPrintInMultilines withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));

@@ -1,16 +1,15 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.CanPrintInMultilines;
 
 public class SyncingPrinter {
 
     private final String wanted;
     private final String actual;
 
-    public SyncingPrinter(InvocationMatcher wanted, Invocation actual) {
-        if (wanted.hasMultilinePrint() || actual.hasMultiLinePrint()) {
+    public SyncingPrinter(CanPrintInMultilines wanted, CanPrintInMultilines actual) {
+        if (wanted.printsInMultilines() || actual.printsInMultilines()) {
             this.wanted = wanted.toMultilineString();
             this.actual = actual.toMultilineString();
         } else {

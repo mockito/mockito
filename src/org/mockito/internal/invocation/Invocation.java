@@ -29,7 +29,7 @@ import org.mockito.invocation.InvocationOnMock;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock {
+public class Invocation implements PrintableInvocation, InvocationOnMock, CanPrintInMultilines {
 
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
@@ -131,7 +131,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
         return toString(argumentsToMatchers(), false);
     }
 
-    public boolean hasMultiLinePrint() {
+    public boolean printsInMultilines() {
         return toString().contains("\n");
     }
 
