@@ -6,31 +6,45 @@ package org.mockito.internal.stubbing;
 
 import static org.mockito.util.ExtraMatchers.*;
 
+import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
 
 @SuppressWarnings("unchecked")
 public class AnswerFactoryTest extends TestBase {
 
+    private StackTraceFilterStub filterStub;
+    private AnswerFactory factory;
+
+    @Before
+    public void setup() {
+        this.filterStub = new StackTraceFilterStub();
+        this.factory = new AnswerFactory(filterStub);
+    }
+    
     @Test
     public void shouldCreateReturnResult() throws Throwable {
-        Answer result = AnswerFactory.createReturningAnswer("lol");
+        Answer result = factory.createReturningAnswer("lol");
         assertEquals("lol", result.answer());
     }
     
     @Test(expected=RuntimeException.class)
     public void shouldCreateThrowResult() throws Throwable {
-        AnswerFactory.createThrowingAnswer(new RuntimeException(), new StackTraceFilter()).answer();
+        factory.createThrowingAnswer(new RuntimeException(), null).answer();
     }
     
     @Test
     public void shouldFilterStackTraceWhenCreatingThrowResult() throws Throwable {
-        StackTraceFilterStub filterStub = new StackTraceFilterStub();
-        Answer result = AnswerFactory.createThrowingAnswer(new RuntimeException(), filterStub);
+        Answer result = factory.createThrowingAnswer(new RuntimeException(), null);
         try {
             result.answer(); 
             fail();
@@ -40,6 +54,26 @@ public class AnswerFactoryTest extends TestBase {
         }
     }
     
+    @Test
+    public void shouldValidateNullThrowable() throws Throwable {
+        try {
+            factory.createThrowingAnswer(null, null);
+            fail();
+        } catch (MockitoException e) {}
+    }
+    
+    @Test
+    public void shouldAllowSettingProperCheckedException() throws Throwable {
+        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+        factory.createThrowingAnswer(new CharacterCodingException(), invocation);
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldValidateCheckedException() throws Throwable {
+        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+        factory.createThrowingAnswer(new IOException(), invocation);
+    }
+
     class StackTraceFilterStub extends StackTraceFilter {
         HasStackTrace hasStackTrace;
         @Override public void filterStackTrace(HasStackTrace hasStackTrace) {

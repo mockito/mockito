@@ -128,7 +128,7 @@ public class CustomMatchersTest extends TestBase {
             verify(mock).simpleMethod(containsTest());
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("simpleMethod(\n    <String that contains xxx>\n);"));
+            assertThat(e, messageContains("<String that contains xxx>"));
         }
     }
 
@@ -154,7 +154,7 @@ public class CustomMatchersTest extends TestBase {
                 }}));
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("simpleMethod(\n    <custom argument matcher>\n);"));
+            assertThat(e, messageContains("<custom argument matcher>"));
             assertThat(e, causeMessageContains("foo"));
         }
     }

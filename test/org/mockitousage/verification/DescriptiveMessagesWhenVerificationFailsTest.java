@@ -95,22 +95,20 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         mock.varargs("this is very long string", "this is another very long string");
 
         try {
-            verify(mock).varargs("this is very long string", "this is another very long string", "this is yet another very long string");
+            verify(mock).varargs("x", "y", "z");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            //TODO for every case when wanted and actual are shown, the arg list has to be consistently printed
-            //(e.g. if one invocation is multiline, the the other one has to to be printed in multilines as well)
             String expected =
                     "\n" +
                     "Argument(s) are different! Wanted:" +
                     "\n" +
                     "iMethods.varargs(" +
                     "\n" +
-                    "    \"this is very long string\"," +
+                    "    \"x\"," +
                     "\n" +
-                    "    \"this is another very long string\"," +
+                    "    \"y\"," +
                     "\n" +
-                    "    \"this is yet another very long string\"" +
+                    "    \"z\"" +
                     "\n" +
                     ");";
 

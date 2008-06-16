@@ -4,6 +4,10 @@
  */
 package org.mockito;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
@@ -16,8 +20,8 @@ import org.mockito.internal.matchers.Null;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.progress.LastArguments;
 import org.mockito.internal.progress.EmptyReturnValues;
+import org.mockito.internal.progress.LastArguments;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -85,6 +89,7 @@ import org.mockito.internal.progress.EmptyReturnValues;
  * (Mockito naturally uses equals() for argument matching). 
  * This can make the test cleaner.
  */
+@SuppressWarnings("unchecked")
 public class Matchers {
 
     /**
@@ -195,8 +200,41 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String anyString() {
-        return isA(String.class);
+        return (String) anyObject();
     }
+    
+    /**
+     * any List argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    public static List anyList() {
+        return (List) anyObject();
+    }    
+    
+    /**
+     * any Map argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    public static Map anyMap() {
+        return (Map) anyObject();
+    }    
+    
+    /**
+     * any Collection argument.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    public static Collection anyCollection() {
+        return (Collection) anyObject();
+    }    
 
     /**
      * Object argument that implements the given class. 

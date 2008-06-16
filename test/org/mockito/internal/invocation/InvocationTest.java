@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
+import java.nio.charset.CharacterCodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,5 +137,12 @@ public class InvocationTest extends TestBase {
         
         Invocation notToString = new InvocationBuilder().method("toString").arg("foo").toInvocation();
         assertFalse(Invocation.isToString(notToString));
+    }
+    
+    @Test
+    public void shouldKnowValidThrowables() throws Exception {
+        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+        assertFalse(invocation.isValidException(new Exception()));
+        assertTrue(invocation.isValidException(new CharacterCodingException()));
     }
 }

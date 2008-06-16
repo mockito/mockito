@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.text.ChangedCharSetException;
 
@@ -51,33 +52,49 @@ public interface IMethods {
     
     String oneArg(Boolean value);
 
+    String forBoolean(Boolean value);
+
     String oneArg(byte value);
     
     String oneArg(Byte value);
 
+    String forByte(Byte value);
+    
     String oneArg(short value);
 
     String oneArg(Short value);
     
+    String forShort(Short value);
+    
     String oneArg(char value);
     
     String oneArg(Character value);
+    
+    String forCharacter(Character value);
 
     String oneArg(int value);
     
     String oneArg(Integer value);
+    
+    String forInteger(Integer value);
 
     String oneArg(long value);
 
     String oneArg(Long value);
     
+    String forLong(Long value);
+    
     String oneArg(float value);
 
     String oneArg(Float value);
     
+    String forFloat(Float value);
+    
     String oneArg(double value);
 
     String oneArg(Double value);
+    
+    String forDouble(Double value);
     
     String oneArg(Object value);
 
@@ -154,4 +171,10 @@ public interface IMethods {
     String toString(String foo);
 
     void voidMethod();
+
+    String forList(List<String> list);
+    
+    String forMap(Map<String, String> map);
+    
+    String forCollection(Collection<String> collection);
 }

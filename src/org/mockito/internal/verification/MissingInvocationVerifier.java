@@ -41,7 +41,8 @@ public class MissingInvocationVerifier implements Verifier {
 
     private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
         if (similar != null) {
-            reporter.argumentsAreDifferent(wanted, similar, similar.getStackTrace());
+            SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
+            reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getStackTrace());
         } else {
             reporter.wantedButNotInvoked(wanted);
         }

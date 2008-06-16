@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.invocation.Invocation;
@@ -19,9 +18,9 @@ import org.mockito.internal.progress.MockingProgress;
 public class Stubber {
 
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
-    private final Reporter reporter = new Reporter();
     private final MockingProgress mockingProgress;
     private final List<Throwable> throwablesForVoidMethod = new ArrayList<Throwable>();
+    private final AnswerFactory answerFactory = new AnswerFactory(new StackTraceFilter());
     
     private InvocationMatcher invocationForStubbing;
     
@@ -35,25 +34,22 @@ public class Stubber {
     
     public void addReturnValue(Object value) {
         mockingProgress.stubbingCompleted();
-        Answer answer = AnswerFactory.createReturningAnswer(value);
+        Answer answer = answerFactory.createReturningAnswer(value);
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
     
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
-        validateThrowable(throwable);
-        Answer answer = AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter());
+        Answer answer = answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation());
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
     
     public void addConsecutiveReturnValue(Object value) {
-        stubbed.getFirst().addAnswer(AnswerFactory.createReturningAnswer(value));
+        stubbed.getFirst().addAnswer(answerFactory.createReturningAnswer(value));
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
-        //TODO move validation of throwable to createThrowResult
-        validateThrowable(throwable);
-        stubbed.getFirst().addAnswer(AnswerFactory.createThrowingAnswer(throwable, new StackTraceFilter()));
+        stubbed.getFirst().addAnswer(answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation()));
     }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
@@ -85,33 +81,5 @@ public class Stubber {
             }
         }
         throwablesForVoidMethod.clear();
-    }
-    
-    private void validateThrowable(Throwable throwable) {
-        if (throwable == null) {
-            reporter.cannotStubWithNullThrowable();
-        }
-
-        if (throwable instanceof RuntimeException || throwable instanceof Error) {
-            return;
-        }
-    
-        if (!isValidCheckedException(throwable)) {
-            reporter.checkedExceptionInvalid(throwable);
-        }
-    }
-
-    private boolean isValidCheckedException(Throwable throwable) {
-        Invocation lastInvocation = invocationForStubbing.getInvocation();
-
-        Class<?>[] exceptions = lastInvocation.getMethod().getExceptionTypes();
-        Class<?> throwableClass = throwable.getClass();
-        for (Class<?> exception : exceptions) {
-            if (exception.isAssignableFrom(throwableClass)) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 }

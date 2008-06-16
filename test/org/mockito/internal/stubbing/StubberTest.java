@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import java.nio.charset.CharacterCodingException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.TestBase;
@@ -32,7 +30,7 @@ public class StubberTest extends TestBase{
     }
 
     @Test
-    public void shouldFinishStubbingBeforeValidatingThrowable() throws Exception {
+    public void shouldFinishStubbingWhenWrongThrowableIsSet() throws Exception {
         state.stubbingStarted();
         try {
             stubber.addThrowable(new Exception());
@@ -98,17 +96,11 @@ public class StubberTest extends TestBase{
     }
     
     @Test
-    public void shouldValidateNullThrowable() throws Throwable {
+    public void shouldValidateThrowable() throws Throwable {
         try {
             stubber.addThrowable(null);
             fail();
         } catch (MockitoException e) {}
-    }
-    
-    @Test
-    public void shouldLetSettingProperCheckedException() throws Throwable {
-        stubber.setInvocationForPotentialStubbing(new InvocationBuilder().method("canThrowException").toInvocationMatcher());
-        stubber.addThrowable(new CharacterCodingException());
     }
     
     @SuppressWarnings("serial") class MyException extends RuntimeException {};

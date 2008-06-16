@@ -42,8 +42,16 @@ public class InvocationMatcher implements PrintableInvocation {
     }
     
     public String toString() {
-        return invocation.toString(matchers);
+        return invocation.toString(matchers, false);
     }
+
+    public boolean hasMultilinePrint() {        
+        return toString().contains("\n");
+    }
+
+    public String toMultilineString() {
+        return invocation.toString(matchers, true);
+    }    
 
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())

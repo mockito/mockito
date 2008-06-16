@@ -58,8 +58,6 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (stubber.hasThrowableForVoidMethod()) {
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
-            //TODO ideally we should get matchers first so that invocation doesn't have to expand varargs
-            //matchersBinder then would become argumentsBinder
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
             stubber.addVoidMethodForThrowable(invocationMatcher);
             return null;

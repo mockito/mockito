@@ -128,16 +128,24 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
     }
     
     public String toString() {
-        return toString(argumentsToMatchers());
+        return toString(argumentsToMatchers(), false);
     }
 
-    protected String toString(List<Matcher> matchers) {
+    public boolean hasMultiLinePrint() {
+        return toString().contains("\n");
+    }
+
+    public String toMultilineString() {
+        return toString(argumentsToMatchers(), true);
+    }    
+
+    protected String toString(List<Matcher> matchers, boolean forceMultiline) {
         String method = qualifiedMethodName();
         String invocation = method + getArgumentsLine(matchers);
-        if (invocation.length() <= MAX_LINE_LENGTH) {
-            return invocation;
-        } else {
+        if (forceMultiline || invocation.length() > MAX_LINE_LENGTH) {
             return method + getArgumentsBlock(matchers);
+        } else {
+            return invocation;
         }
     }
 
@@ -173,5 +181,17 @@ public class Invocation implements PrintableInvocation, InvocationOnMock {
         return invocation.getMethod().getReturnType() == String.class 
             && invocation.getMethod().getParameterTypes().length == 0 
             && invocation.getMethod().getName().equals("toString");
+    }
+
+    public boolean isValidException(Throwable throwable) {
+        Class<?>[] exceptions = this.getMethod().getExceptionTypes();
+        Class<?> throwableClass = throwable.getClass();
+        for (Class<?> exception : exceptions) {
+            if (exception.isAssignableFrom(throwableClass)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
