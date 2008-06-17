@@ -39,14 +39,14 @@ public interface VoidMethodStubbable<T> {
      * @param throwable
      *            to be thrown on method invocation
      * 
-     * @return method selector - to choose void method and finish stubbing 
+     * @return VoidMethodStubbable - typically to choose void method and finish stubbing
      */
     VoidMethodStubbable<T> toThrow(Throwable throwable);
     
     /**
      * Stubs void method to 'just return' (e.g. to <b>not</b> to throw any exception)
      * <p>
-     * <b>Only</b> use this method if you're stubbing for consecutive calls.
+     * <b>Only use this method if you're stubbing consecutive calls.</b>
      * <p>
      * For example:
      * <pre>
@@ -55,18 +55,15 @@ public interface VoidMethodStubbable<T> {
      *   .toThrow(new RuntimeException())
      *   .on().foo(10);
      * </pre>
-     * <ol> 
+     * <ul> 
      * <li>first time foo(10) is called the mock will 'just return' (e.g. don't throw any exception)</li>
      * <li>second time foo(10) is called the mock will throw RuntimeException</li>
-     * <li>every next time foo(10) is called the mock will throw RuntimeException</li>
-     * </ol> 
-     * 
+     * <li>every consecutive time foo(10) is called the mock will throw RuntimeException</li>
+     * </ul> 
+     * <p>
      * See examples in javadoc for {@link Mockito#stubVoid}
      * 
-     * @param throwable
-     *            to be thrown on method invocation
-     * 
-     * @return method selector - to choose void method and finish stubbing 
+     * @return VoidMethodStubbable - typically to choose void method and finish stubbing 
      */
     VoidMethodStubbable<T> toReturn();
     
