@@ -93,7 +93,7 @@ import org.mockito.internal.progress.LastArguments;
 public class Matchers {
 
     /**
-     * any boolean argument.
+     * any boolean, Boolean or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -104,7 +104,7 @@ public class Matchers {
     }
 
     /**
-     * any byte argument.
+     * any byte, Byte or null
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -115,7 +115,7 @@ public class Matchers {
     }
 
     /**
-     * any char argument.
+     * any char, Character or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -126,7 +126,7 @@ public class Matchers {
     }
 
     /**
-     * any int argument.
+     * any int, Integer or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -137,7 +137,7 @@ public class Matchers {
     }
 
     /**
-     * any long argument.
+     * any long, Long or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -148,7 +148,7 @@ public class Matchers {
     }
 
     /**
-     * any float argument.
+     * any float, Float or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -159,7 +159,7 @@ public class Matchers {
     }
 
     /**
-     * any double argument.
+     * any double, Double or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -170,7 +170,7 @@ public class Matchers {
     }
 
     /**
-     * any short argument.
+     * any short, Short or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -181,7 +181,7 @@ public class Matchers {
     }
 
     /**
-     * any Object argument.
+     * any Object or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -193,7 +193,7 @@ public class Matchers {
     }
 
     /**
-     * any String argument.
+     * any String or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -204,7 +204,7 @@ public class Matchers {
     }
     
     /**
-     * any List argument.
+     * any List or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -215,7 +215,7 @@ public class Matchers {
     }    
     
     /**
-     * any Map argument.
+     * any Map or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -226,7 +226,7 @@ public class Matchers {
     }    
     
     /**
-     * any Collection argument.
+     * any Collection or null.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
