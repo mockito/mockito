@@ -1,12 +1,11 @@
 package org.mockito.internal.verification;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.TestBase;
 import org.mockito.internal.invocation.CanPrintInMultilines;
 
-public class SyncingPrinterTest {
+public class SyncingPrinterTest extends TestBase {
 
     private CanPrintInMultilines multi;
     private CanPrintInMultilines normal;
