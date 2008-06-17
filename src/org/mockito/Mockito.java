@@ -277,12 +277,10 @@ import org.mockito.internal.util.MockUtil;
  * <h3> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same method call. 
- * Typical use case could be mocking iterators. However, this feature was not included in original version of Mockito to promote simple mocking.
+ * Typical use case could be mocking iterators. Initially this feature was not included in original version of Mockito to promote simple mocking.
  * Instead of iterators we strongly recommend using Iterable or simply collections. Those offer natural ways of stubbing (e.g. using real collections).
- * In rare scenarios stubbing consecutive calls could useful, though.
+ * In rare scenarios stubbing consecutive calls could useful, though:
  * <p>
- *
- * Example:
  * <pre>
  *   stub(mock.someMethod("some arg"))
  *    .toThrow(new RuntimeException())
@@ -294,11 +292,13 @@ import org.mockito.internal.util.MockUtil;
  *   //Second call: prints "foo"
  *   System.out.println(mock.someMethod("some arg"));
  *   
- *   //Any consecutive call: prints "foo" as well because it is the last stubbed behaviour. 
+ *   //Any consecutive call: prints "foo" as well (last stubbing wins). 
  *   System.out.println(mock.someMethod("some arg"));
  * </pre>
  */
 public class Mockito extends Matchers {
+    
+    private Mockito() {}
 
     private static final Reporter REPORTER = new Reporter();
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
@@ -332,7 +332,7 @@ public class Mockito extends Matchers {
      *   //setting exception to be thrown:
      *   stub(mock.someMethod(&quot;some arg&quot;)).toThrow(new RuntimeException());
      *   
-     *   //you can stub with different behavior for consecutive method calls.
+     *   //you can stub with different behavior for consecutive calls.
      *   //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.   
      *   stub(mock.someMethod("some arg"))
      *    .toThrow(new RuntimeException())
@@ -497,7 +497,7 @@ public class Mockito extends Matchers {
      * <pre>
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
      * 
-     * //you can stub with different behavior for consecutive method calls.
+     * //you can stub with different behavior for consecutive calls.
      * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.   
      * stub(mock)
      *   .toThrow(new RuntimeException())
