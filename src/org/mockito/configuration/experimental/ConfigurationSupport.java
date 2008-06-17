@@ -64,7 +64,7 @@ public class ConfigurationSupport {
      * See examples in javadoc for {@link ConfigurationSupport}
      * 
      * @param clazz
-     * @return 
+     * @return clazz is mockable  
      */
     public static boolean isMockable(Class<?> clazz) {
         return !Modifier.isFinal(clazz.getModifiers());
@@ -75,7 +75,7 @@ public class ConfigurationSupport {
      * <p>
      * See examples in javadoc for {@link ConfigurationSupport}
      * 
-     * @return
+     * @return MockitoConfiguration
      */
     public static MockitoConfiguration getConfiguration() {
         return Configuration.instance();
