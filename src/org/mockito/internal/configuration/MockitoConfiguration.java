@@ -17,7 +17,7 @@ public interface MockitoConfiguration {
     /**
      * returns currently set {@link ReturnValues}
      * 
-     * @return
+     * @return ReturnValues
      */
     ReturnValues getReturnValues();
 
