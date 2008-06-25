@@ -23,6 +23,8 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.EmptyReturnValues;
 import org.mockito.internal.progress.LastArguments;
 
+//TODO add isNotNull() matcher
+
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
