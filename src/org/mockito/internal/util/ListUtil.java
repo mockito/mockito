@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.util;
 
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class ListUtil {
 
-    public static <T> LinkedList<T> filter(List<T> list, Filter<T> filter) {
+    public static <T> LinkedList<T> filter(Collection<T> collection, Filter<T> filter) {
         LinkedList<T> filtered = new LinkedList<T>();
-        for (T t : list) {
+        for (T t : collection) {
             if (!filter.isOut(t)) {
                 filtered.add(t);
             }

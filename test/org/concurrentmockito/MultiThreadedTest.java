@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.concurrentmockito;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +37,8 @@ import org.mockito.internal.verification.NoMoreInvocationsVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
+import org.mockitousage.ReplacingObjectMethodsTest;
+import org.mockitousage.UsingVarargsTest;
 import org.mockitousage.binding.BridgeMethodPuzzleTest;
 import org.mockitousage.binding.OverloadingPuzzleTest;
 import org.mockitousage.examples.configure.withbaseclass.ConfiguringDefaultReturnValuesUsingBaseClassTest;
@@ -188,7 +190,7 @@ public class MultiThreadedTest extends TestBase {
     }
     
     public static void main(String[] args) throws Exception {
-        int numberOfThreads = 10; 
+        int numberOfThreads = 20; 
         long before = System.currentTimeMillis();
         runInMultipleThreads(numberOfThreads);
         long after = System.currentTimeMillis();

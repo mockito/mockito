@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.verification;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,14 +15,14 @@ import org.mockito.internal.util.ListUtil.Filter;
 
 public class RegisteredInvocations {
 
-    private final LinkedList<Invocation> invocations = new LinkedList<Invocation>();
+    private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());
     
     public void add(Invocation invocation) {
         invocations.add(invocation);
     }
 
     public void removeLast() {
-        invocations.removeLast();
+        invocations.remove(invocations.size()-1);
     }
 
     public List<Invocation> getVerifiableInvocations() {
