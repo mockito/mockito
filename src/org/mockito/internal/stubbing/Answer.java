@@ -4,15 +4,21 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.invocation.InvocationOnMock;
+
 /**
  * Used to answer expected calls.
+ *
  * @param <T> the type to return.
  */
 public interface Answer<T> {
 
     /**
+     * @param invocation the invocation on the mock.
+     *
      * @return the value to be returned
+     *
      * @throws Throwable the throwable to be thrown
      */
-    T answer() throws Throwable;
+    T answer(InvocationOnMock invocation) throws Throwable;
 }

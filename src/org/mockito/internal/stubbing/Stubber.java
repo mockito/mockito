@@ -21,9 +21,9 @@ public class Stubber {
     private final MockingProgress mockingProgress;
     private final List<Throwable> throwablesForVoidMethod = new ArrayList<Throwable>();
     private final AnswerFactory answerFactory = new AnswerFactory(new StackTraceFilter());
-    
+
     private InvocationMatcher invocationForStubbing;
-    
+
     public Stubber(MockingProgress mockingProgress) {
         this.mockingProgress = mockingProgress;
     }
@@ -31,31 +31,41 @@ public class Stubber {
     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
         this.invocationForStubbing = invocation;
     }
-    
+
     public void addReturnValue(Object value) {
         mockingProgress.stubbingCompleted();
         Answer answer = answerFactory.createReturningAnswer(value);
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
-    
+
     public void addThrowable(Throwable throwable) {
         mockingProgress.stubbingCompleted();
         Answer answer = answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation());
         stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
     }
-    
+
+    public void addAnswer(Answer answer) {
+        mockingProgress.stubbingCompleted();
+        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+    }
+
     public void addConsecutiveReturnValue(Object value) {
         stubbed.getFirst().addAnswer(answerFactory.createReturningAnswer(value));
     }
 
     public void addConsecutiveThrowable(Throwable throwable) {
-        stubbed.getFirst().addAnswer(answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation()));
-    }    
+        stubbed.getFirst()
+                .addAnswer(answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation()));
+    }
+
+    public void addConsecutiveAnswer(Answer answer) {
+        stubbed.getFirst().addAnswer(answer);
+    }
 
     public Object resultFor(Invocation invocation) throws Throwable {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(invocation)) {
-                return s.answer();
+                return s.answer(invocation);
             }
         }
         return Configuration.instance().getReturnValues().valueFor(invocation);
@@ -68,7 +78,7 @@ public class Stubber {
     public boolean hasThrowableForVoidMethod() {
         return !throwablesForVoidMethod.isEmpty();
     }
-    
+
     public void addVoidMethodForThrowable(InvocationMatcher voidMethodInvocationMatcher) {
         invocationForStubbing = voidMethodInvocationMatcher;
         assert hasThrowableForVoidMethod();
