@@ -23,8 +23,6 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.EmptyReturnValues;
 import org.mockito.internal.progress.LastArguments;
 
-//TODO add isNotNull() matcher
-
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
@@ -417,12 +415,27 @@ public class Matchers {
     /**
      * not null argument.
      * <p>
+     * alias to {@link Matchers#isNotNull()}
+     * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
      * @return <code>null</code>.
      */
     public static Object notNull() {
         return reportMatcher(NotNull.NOT_NULL).returnNull();
+    }
+    
+    /**
+     * not null argument.
+     * <p>
+     * alias to {@link Matchers#notNull()}
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    public static Object isNotNull() {
+        return notNull();
     }
 
     /**

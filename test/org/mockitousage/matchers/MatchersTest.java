@@ -380,7 +380,7 @@ public class MatchersTest extends TestBase {
     @Test
     public void notNullMatcher() {
         stub(mock.threeArgumentMethod(eq(1), notNull(), eq(""))).toReturn("1");
-        stub(mock.threeArgumentMethod(eq(1), not(notNull()), eq(""))).toReturn("2");
+        stub(mock.threeArgumentMethod(eq(1), not(isNotNull()), eq(""))).toReturn("2");
 
         assertEquals("1", mock.threeArgumentMethod(1, new Object(), ""));
         assertEquals("2", mock.threeArgumentMethod(1, null, ""));
