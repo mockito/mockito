@@ -4,7 +4,7 @@
     // and create a test case that I can manually fix and run and make sure examples are valid.
     // Or better. Write examples as unit tests, annotate them in the way so that javadoc can be generated out of it.
     
-    //TODO check if performace can be tweaked (e.g: LL -> AL)
+    //TODO check if performance can be tweaked (e.g: LL -> AL)
     
     //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
     
@@ -12,5 +12,4 @@
     //TODO can I somehow avoid a cast here:
     stub(mockTwo.getList()).toReturn((List) subs);
     
-    //TODO arguments printed consistently on failures (if actual are broken to lines, the expected should do that as well)
     //TODO Use ComparisonFailure for reporting (include junit) to nicely print arg mismatches 
