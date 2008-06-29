@@ -14,6 +14,7 @@ import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.stubbing.Answer;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
 
@@ -33,6 +34,7 @@ import org.mockito.internal.util.MockUtil;
  *   <br/> 8. Finding redundant invocations
  *   <br/> 9. Shorthand for mocks creation - &#064;Mock annotation
  *   <br/> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)
+ *   <br/> 11. (**New**) Stubbing with callbacks
  * </b>
  * 
  * <p>
@@ -294,6 +296,29 @@ import org.mockito.internal.util.MockUtil;
  *   
  *   //Any consecutive call: prints "foo" as well (last stubbing wins). 
  *   System.out.println(mock.someMethod("some arg"));
+ * </pre>
+ * 
+ * <h3> 11. (**New**) Stubbing with callbacks</h3>
+ * 
+ * Yet another controversial feature which was not included in Mockito originally. 
+ * We strongly recommend using simple stubbing (toReturn() or toThrow() only).
+ * Those two should be <b>just enough</b> to test/test-drive any decent (clean & simple) code. 
+ * 
+ * Allows stubbing with generic {@link Answer} interface
+ * 
+ * <p>
+ * <pre>
+ *   stub(mock.someMethod(anyString()))
+ *     .toAnswer(new Answer() {
+ *       Object answer(InvocationOnMock invocation) {
+ *         Object[] args = invocation.getArguments();
+ *         Object mock = invocation.getMock();
+ *         return "called with arguments: " + args;
+ *       }
+ *     });
+ *    
+ *   //Following prints "called with arguments: foo"
+ *   System.out.println(mock.someMethod("foo"));
  * </pre>
  */
 public class Mockito extends Matchers {

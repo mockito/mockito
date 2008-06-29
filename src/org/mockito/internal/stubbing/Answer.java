@@ -12,6 +12,7 @@ import org.mockito.invocation.InvocationOnMock;
  * @param <T> the type to return.
  */
 public interface Answer<T> {
+//TODO move to org.mockito.stubbing    
 
     /**
      * @param invocation the invocation on the mock.

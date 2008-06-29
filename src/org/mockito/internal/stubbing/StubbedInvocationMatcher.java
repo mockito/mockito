@@ -4,7 +4,8 @@
  */
 package org.mockito.internal.stubbing;
 
-import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -12,7 +13,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 @SuppressWarnings("unchecked")
 public class StubbedInvocationMatcher extends InvocationMatcher {
 
-    private final LinkedList<Answer> answers = new LinkedList<Answer>();
+    private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
 
     public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
@@ -20,7 +21,9 @@ public class StubbedInvocationMatcher extends InvocationMatcher {
     }
 
     public Object answer(Invocation invocation) throws Throwable {
-        return answers.size() == 1 ? answers.getFirst().answer(invocation) : answers.removeFirst().answer(invocation);
+        synchronized(answers) {
+            return answers.size() == 1 ? answers.peek().answer(invocation) : answers.poll().answer(invocation);
+        }
     }
 
     public void addAnswer(Answer answer) {

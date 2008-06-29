@@ -76,5 +76,5 @@ public interface OngoingStubbing<T> {
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    OngoingStubbing<T> toAnswer(Answer<T> answer);
+    OngoingStubbing<T> toAnswer(Answer<?> answer);
 }

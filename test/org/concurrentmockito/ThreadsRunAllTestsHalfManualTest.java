@@ -27,7 +27,6 @@ import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.VerificationModeImplTest;
-import org.mockito.internal.stubbing.AnswerFactoryTest;
 import org.mockito.internal.stubbing.StubberTest;
 import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
@@ -75,7 +74,7 @@ import org.mockitousage.verification.VerificationInOrderTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
 import org.mockitousage.verification.VerificationUsingMatchersTest;
 
-public class MultiThreadedTest extends TestBase {
+public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     
     private static class AllTestsRunner extends Thread {
         
@@ -94,7 +93,6 @@ public class MultiThreadedTest extends TestBase {
                     AllInvocationsFinderTest.class,
                     DefaultReturnValuesTest.class,
                     StubberTest.class,
-                    AnswerFactoryTest.class,
                     NumberOfInvocationsVerifierTest.class,
                     VerifyingRecorderTest.class,
                     MissingInvocationVerifierTest.class,

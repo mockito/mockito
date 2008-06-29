@@ -87,7 +87,7 @@ public interface VoidMethodStubbable<T> {
      *
      * @return VoidMethodStubbable - typically to choose void method and finish stubbing
      */
-    VoidMethodStubbable<T> toAnswer(Answer<T> answer);
+    VoidMethodStubbable<T> toAnswer(Answer<?> answer);
 
     /**
      * Choose void method for stubbing. E.g:

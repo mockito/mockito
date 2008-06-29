@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -19,8 +18,7 @@ public class Stubber {
 
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
-    private final List<Throwable> throwablesForVoidMethod = new ArrayList<Throwable>();
-    private final AnswerFactory answerFactory = new AnswerFactory(new StackTraceFilter());
+    private final List<Answer> answersForVoidMethod = new ArrayList<Answer>();
 
     private InvocationMatcher invocationForStubbing;
 
@@ -32,35 +30,26 @@ public class Stubber {
         this.invocationForStubbing = invocation;
     }
 
-    public void addReturnValue(Object value) {
-        mockingProgress.stubbingCompleted();
-        Answer answer = answerFactory.createReturningAnswer(value);
-        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
-    }
-
-    public void addThrowable(Throwable throwable) {
-        mockingProgress.stubbingCompleted();
-        Answer answer = answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation());
-        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
-    }
-
     public void addAnswer(Answer answer) {
-        mockingProgress.stubbingCompleted();
-        stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
-    }
-
-    public void addConsecutiveReturnValue(Object value) {
-        stubbed.getFirst().addAnswer(answerFactory.createReturningAnswer(value));
-    }
-
-    public void addConsecutiveThrowable(Throwable throwable) {
-        stubbed.getFirst()
-                .addAnswer(answerFactory.createThrowingAnswer(throwable, invocationForStubbing.getInvocation()));
+        addAnswer(answer, false);
     }
 
     public void addConsecutiveAnswer(Answer answer) {
-        stubbed.getFirst().addAnswer(answer);
+        addAnswer(answer, true);
     }
+    
+    private void addAnswer(Answer answer, boolean isConsecutive) {
+        mockingProgress.stubbingCompleted();
+        if (answer instanceof ThrowsException) {
+            new ExceptionsValidator().validate(((ThrowsException) answer).getThrowable(), invocationForStubbing.getInvocation());
+        }
+        
+        if (isConsecutive) {
+            stubbed.getFirst().addAnswer(answer);
+        } else {
+            stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+        }
+    }    
 
     public Object resultFor(Invocation invocation) throws Throwable {
         for (StubbedInvocationMatcher s : stubbed) {
@@ -71,25 +60,20 @@ public class Stubber {
         return Configuration.instance().getReturnValues().valueFor(invocation);
     }
 
-    public void addThrowableForVoidMethod(Throwable throwable) {
-        throwablesForVoidMethod.add(throwable);
+    public void addAnswerForVoidMethod(Answer answer) {
+        answersForVoidMethod.add(answer);
     }
 
-    public boolean hasThrowableForVoidMethod() {
-        return !throwablesForVoidMethod.isEmpty();
+    public boolean hasAnswerForVoidMethod() {
+        return !answersForVoidMethod.isEmpty();
     }
 
-    public void addVoidMethodForThrowable(InvocationMatcher voidMethodInvocationMatcher) {
+    public void addVoidMethodForStubbing(InvocationMatcher voidMethodInvocationMatcher) {
         invocationForStubbing = voidMethodInvocationMatcher;
-        assert hasThrowableForVoidMethod();
-        for (int i = 0; i < throwablesForVoidMethod.size(); i++) {
-            Throwable throwable = throwablesForVoidMethod.get(i);
-            if (i == 0) {
-                addThrowable(throwable);
-            } else {
-                addConsecutiveThrowable(throwable);
-            }
+        assert hasAnswerForVoidMethod();
+        for (int i = 0; i < answersForVoidMethod.size(); i++) {
+            addAnswer(answersForVoidMethod.get(i), i != 0);
         }
-        throwablesForVoidMethod.clear();
+        answersForVoidMethod.clear();
     }
 }

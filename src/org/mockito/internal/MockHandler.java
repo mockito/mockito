@@ -21,9 +21,10 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.Answer;
-import org.mockito.internal.stubbing.DontThrow;
 import org.mockito.internal.stubbing.Stubber;
+import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
 import org.mockito.internal.verification.MissingInvocationVerifier;
 import org.mockito.internal.verification.NoMoreInvocationsVerifier;
@@ -57,10 +58,10 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        if (stubber.hasThrowableForVoidMethod()) {
+        if (stubber.hasAnswerForVoidMethod()) {
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
-            stubber.addVoidMethodForThrowable(invocationMatcher);
+            stubber.addVoidMethodForStubbing(invocationMatcher);
             return null;
         }
 
@@ -124,18 +125,17 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
     private final class VoidMethodStubbableImpl implements VoidMethodStubbable<T> {
         public VoidMethodStubbable<T> toThrow(Throwable throwable) {
-            stubber.addThrowableForVoidMethod(throwable);
+            stubber.addAnswerForVoidMethod(new ThrowsException(throwable));
             return this;
         }
 
         public VoidMethodStubbable<T> toReturn() {
-            stubber.addThrowableForVoidMethod(DontThrow.DONT_THROW);
+            stubber.addAnswerForVoidMethod(new Returns());
             return this;
         }
 
-        @SuppressWarnings("unchecked")
-        public VoidMethodStubbable<T> toAnswer(Answer answer) {
-            stubber.addThrowableForVoidMethod(new DontThrow(answer));
+        public VoidMethodStubbable<T> toAnswer(Answer<?> answer) {
+            stubber.addAnswerForVoidMethod(answer);
             return this;
         }
 
@@ -147,17 +147,17 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private class OngoingStubbingImpl implements OngoingStubbing<T> {
         public OngoingStubbing<T> toReturn(Object value) {
             verifyingRecorder.eraseLastInvocation();
-            stubber.addReturnValue(value);
+            stubber.addAnswer(new Returns(value));
             return new ConsecutiveStubbing();
         }
 
         public OngoingStubbing<T> toThrow(Throwable throwable) {
             verifyingRecorder.eraseLastInvocation();
-            stubber.addThrowable(throwable);
+            stubber.addAnswer(new ThrowsException(throwable));
             return new ConsecutiveStubbing();
         }
 
-        public OngoingStubbing<T> toAnswer(Answer<T> answer) {
+        public OngoingStubbing<T> toAnswer(Answer<?> answer) {
             verifyingRecorder.eraseLastInvocation();
             stubber.addAnswer(answer);
             return new ConsecutiveStubbing();
@@ -166,16 +166,16 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
     private class ConsecutiveStubbing implements OngoingStubbing<T> {
         public OngoingStubbing<T> toReturn(Object value) {
-            stubber.addConsecutiveReturnValue(value);
+            stubber.addConsecutiveAnswer(new Returns(value));
             return this;
         }
 
         public OngoingStubbing<T> toThrow(Throwable throwable) {
-            stubber.addConsecutiveThrowable(throwable);
+            stubber.addConsecutiveAnswer(new ThrowsException(throwable));
             return this;
         }
 
-        public OngoingStubbing<T> toAnswer(Answer<T> answer) {
+        public OngoingStubbing<T> toAnswer(Answer<?> answer) {
             stubber.addConsecutiveAnswer(answer);
             return this;
         }

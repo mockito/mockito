@@ -1,0 +1,26 @@
+package org.mockito.internal.stubbing;
+
+import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
+import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.invocation.InvocationOnMock;
+
+public class ThrowsException implements Answer<Object> {
+
+    private final Throwable throwable;
+    private final StackTraceFilter filter = new StackTraceFilter();
+
+    public ThrowsException(Throwable throwable) {
+        this.throwable = throwable;
+    }
+
+    @Override
+    public Object answer(InvocationOnMock invocation) throws Throwable {
+        Throwable filtered = throwable.fillInStackTrace();
+        filter.filterStackTrace(new HasStackTraceThrowableWrapper(filtered));
+        throw filtered;
+    }
+
+    public Throwable getThrowable() {
+        return throwable;
+    }
+}

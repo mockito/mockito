@@ -33,7 +33,7 @@ public class StubberTest extends TestBase{
     public void shouldFinishStubbingWhenWrongThrowableIsSet() throws Exception {
         state.stubbingStarted();
         try {
-            stubber.addThrowable(new Exception());
+            stubber.addAnswer(new ThrowsException(new Exception()));
             fail();
         } catch (MockitoException e) {
             state.validateState();
@@ -43,18 +43,18 @@ public class StubberTest extends TestBase{
     @Test
     public void shouldFinishStubbingOnAddingReturnValue() throws Exception {
         state.stubbingStarted();
-        stubber.addReturnValue("test");
+        stubber.addAnswer(new Returns("test"));
         state.validateState();
     }
     
     @Test
     public void shouldGetResultsForMethods() throws Throwable {
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        stubber.addReturnValue("simpleMethod");
+        stubber.addAnswer(new Returns("simpleMethod"));
         
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
-        stubber.addThrowable(new MyException());
+        stubber.addAnswer(new ThrowsException(new MyException()));
         
         assertEquals("simpleMethod", stubber.resultFor(simpleMethod));
         
@@ -67,7 +67,7 @@ public class StubberTest extends TestBase{
     @Test
     public void shouldGetEmptyResultIfMethodsDontMatch() throws Throwable {
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        stubber.addReturnValue("simpleMethod");
+        stubber.addAnswer(new Returns("simpleMethod"));
         
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         
@@ -76,8 +76,8 @@ public class StubberTest extends TestBase{
     
     @Test
     public void shouldAddThrowableForVoidMethod() throws Throwable {
-        stubber.addThrowableForVoidMethod(new MyException());
-        stubber.addVoidMethodForThrowable(new InvocationMatcher(simpleMethod));
+        stubber.addAnswerForVoidMethod(new ThrowsException(new MyException()));
+        stubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
         
         try {
             stubber.resultFor(simpleMethod);
@@ -87,10 +87,10 @@ public class StubberTest extends TestBase{
     
     @Test
     public void shouldValidateThrowableForVoidMethod() throws Throwable {
-        stubber.addThrowableForVoidMethod(new Exception());
+        stubber.addAnswerForVoidMethod(new ThrowsException(new Exception()));
         
         try {
-            stubber.addVoidMethodForThrowable(new InvocationMatcher(simpleMethod));
+            stubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
             fail();
         } catch (MockitoException e) {}
     }
@@ -98,7 +98,7 @@ public class StubberTest extends TestBase{
     @Test
     public void shouldValidateThrowable() throws Throwable {
         try {
-            stubber.addThrowable(null);
+            stubber.addAnswer(new ThrowsException(null));
             fail();
         } catch (MockitoException e) {}
     }

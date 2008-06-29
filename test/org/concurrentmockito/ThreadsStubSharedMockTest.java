@@ -6,17 +6,18 @@ package org.concurrentmockito;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.TestBase;
 import org.mockitousage.IMethods;
 
-//this test exposes the problem at least once in 10 runs
-public class ThreadsShareAMockTest extends TestBase {
+public class ThreadsStubSharedMockTest extends TestBase {
 
     private IMethods mock;
 
+    @Ignore("stubbing from multiple threads is not supported")
     @Test
-    public void testShouldAllowVerifyingInThreads() throws Exception {
+    public void testShouldStubFineConcurrently() throws Exception {
         for(int i = 0; i < 100; i++) {
             performTest();
         }
@@ -29,7 +30,16 @@ public class ThreadsShareAMockTest extends TestBase {
             listeners[i] = new Thread() {
                 @Override
                 public void run() {
-                    mock.simpleMethod("foo");
+                    stub(mock.simpleMethod(getId()))
+                        .toReturn(getId() + "")
+                        .toReturn("foo")
+                        .toReturn("bar");
+                        
+                    stubVoid(mock)
+                        .toThrow(new RuntimeException(getId() + ""))
+                        .toReturn()
+                        .toThrow(new RuntimeException())
+                        .on().differentMethod();
                 }
             };
             listeners[i].start();
@@ -37,6 +47,5 @@ public class ThreadsShareAMockTest extends TestBase {
         for (int i = 0; i < listeners.length; i++) {
             listeners[i].join();
         }
-        verify(mock, times(listeners.length)).simpleMethod("foo");
     }
 }
