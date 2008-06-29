@@ -29,12 +29,6 @@ public class MockFactory<T> {
         Enhancer enhancer = createEnhancer(toMock);
         enhancer.setCallbackType(filter.getClass());
 
-        //This is required but I could not figure out the way to test it
-        //See issue #11
-        if (toMock.getSigners() != null) {
-            enhancer.setNamingPolicy(ALLOWS_MOCKING_CLASSES_IN_SIGNED_PACKAGES);
-        }
-
         Class mockClass = enhancer.createClass();
         
         Enhancer.registerCallbacks(mockClass, new Callback[] { filter });
@@ -54,7 +48,7 @@ public class MockFactory<T> {
     private Enhancer createEnhancer(Class<T> toMock) {
         Enhancer enhancer = new Enhancer() {
             @SuppressWarnings("unchecked")
-            //Filter all private constructors but do not check that there are some left
+            //Override default behavior which throws exception when no non-private constructors are left
             protected void filterConstructors(Class sc, List constructors) {
                 CollectionUtils.filter(constructors, new VisibilityPredicate(
                         sc, true));
@@ -66,6 +60,17 @@ public class MockFactory<T> {
         } else {
             enhancer.setSuperclass(toMock);
         }
+        
+        //This is required but I could not figure out the way to test it
+        //See issue #11
+        if (toMock.getSigners() != null) {
+            enhancer.setNamingPolicy(ALLOWS_MOCKING_CLASSES_IN_SIGNED_PACKAGES);
+        }
+
+        //This is required to make (cglib + eclipse plugins testing) happy
+        //See issue #11
+        enhancer.setClassLoader(MockFactory.class.getClassLoader());
+        
         return enhancer;
     }
 

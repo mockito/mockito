@@ -11,7 +11,7 @@ import org.mockito.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MockFactoryTest extends TestBase {
-
+    
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
         MockFactory<SomeInterface> factory = new MockFactory<SomeInterface>();
