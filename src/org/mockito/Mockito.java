@@ -14,9 +14,9 @@ import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.Answer;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.stubbing.Answer;
 
 /**
  * Enables mocks creation, verification and stubbing.

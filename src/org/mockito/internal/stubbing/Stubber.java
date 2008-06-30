@@ -12,6 +12,7 @@ import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
+import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
 public class Stubber {

@@ -1,6 +1,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class Returns implements Answer<Object> {
 
@@ -14,7 +15,6 @@ public class Returns implements Answer<Object> {
         this(null);
     }
 
-    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return value;
     }

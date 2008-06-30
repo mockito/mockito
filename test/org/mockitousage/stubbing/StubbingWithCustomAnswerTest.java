@@ -4,8 +4,8 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.TestBase;
-import org.mockito.internal.stubbing.Answer;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")

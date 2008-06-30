@@ -5,7 +5,7 @@
 package org.mockito.internal.progress;
 
 import org.mockito.Mockito;
-import org.mockito.internal.stubbing.Answer;
+import org.mockito.stubbing.Answer;
 
 /**
  * Stubs with return value or exception. E.g:

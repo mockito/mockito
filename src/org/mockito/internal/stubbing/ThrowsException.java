@@ -3,6 +3,7 @@ package org.mockito.internal.stubbing;
 import org.mockito.exceptions.base.HasStackTraceThrowableWrapper;
 import org.mockito.exceptions.base.StackTraceFilter;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class ThrowsException implements Answer<Object> {
 
@@ -13,7 +14,6 @@ public class ThrowsException implements Answer<Object> {
         this.throwable = throwable;
     }
 
-    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Throwable filtered = throwable.fillInStackTrace();
         filter.filterStackTrace(new HasStackTraceThrowableWrapper(filtered));

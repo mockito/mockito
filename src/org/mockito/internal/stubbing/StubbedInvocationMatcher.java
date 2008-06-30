@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
 public class StubbedInvocationMatcher extends InvocationMatcher {

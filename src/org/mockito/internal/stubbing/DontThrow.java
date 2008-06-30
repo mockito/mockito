@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
 public class DontThrow extends RuntimeException {

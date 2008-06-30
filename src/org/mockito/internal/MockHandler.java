@@ -20,7 +20,6 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.Answer;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
@@ -32,6 +31,7 @@ import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifier;
 import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
+import org.mockito.stubbing.Answer;
 
 /**
  * Invocation handler set on mock objects.
