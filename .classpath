@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/hamcrest-core-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/test/junit-4.4.jar" sourcepath="lib/sources/junit-4.4-src.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/run/objenesis-1.0.jar" sourcepath="lib/sources/objenesis-1.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/test/junit-4.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/run/objenesis-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/asm-3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/cglib-2.2.jar"/>

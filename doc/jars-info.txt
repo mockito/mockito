@@ -1,3 +1,5 @@
 To use mockito either:
  - put 'mockito-all-x.jar' on your path (all jars are expanded into single jar)
  - or put all jars from 'separate-jars' folder on your path
+ 
+All jars (even the dependencies) contain java source inside.
