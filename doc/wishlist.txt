@@ -12,4 +12,6 @@
     //TODO can I somehow avoid a cast here:
     stub(mockTwo.getList()).toReturn((List) subs);
     
-    //TODO Use ComparisonFailure for reporting (include junit) to nicely print arg mismatches 
+    //TODO Use ComparisonFailure for reporting (include junit) to nicely print arg mismatches
+    
+    //TODO Felix had weird problem - check old emails - maybe we could do something about it (better exception message)  
