@@ -67,6 +67,9 @@ public class InvalidStateDetectionTest extends TestBase {
         
         stub(mock.simpleMethod());
         detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
+        
+        stub(mock.simpleMethod());
+        detects(new OnDoReturn(), UnfinishedStubbingException.class);
     }
     
     @Test
@@ -91,6 +94,9 @@ public class InvalidStateDetectionTest extends TestBase {
         
         stubVoid(mock);
         detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
+        
+        stubVoid(mock);
+        detects(new OnDoReturn(), UnfinishedStubbingException.class);
     }
     
     @Test
@@ -112,6 +118,9 @@ public class InvalidStateDetectionTest extends TestBase {
         
         verify(mock);
         detects(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
+        
+        verify(mock);
+        detects(new OnDoReturn(), UnfinishedVerificationException.class);
     }
     
     @Test
@@ -169,7 +178,14 @@ public class InvalidStateDetectionTest extends TestBase {
         public void detect(IMethods mock) {
             verifyNoMoreInteractions(mock);
         }
-    }    
+    }   
+    
+    //TODO add other doX() methods as well
+    private static class OnDoReturn implements DetectsInvalidState {
+        public void detect(IMethods mock) {
+            doReturn(null);
+        }
+    }  
     
     private static class OnStub implements DetectsInvalidState {
         public void detect(IMethods mock) {

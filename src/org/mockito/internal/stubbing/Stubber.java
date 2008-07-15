@@ -69,6 +69,7 @@ public class Stubber {
         return null;
     }
 
+    //TODO it's not for void method any more
     public void addAnswerForVoidMethod(Answer answer) {
         answersForVoidMethod.add(answer);
     }

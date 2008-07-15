@@ -179,4 +179,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             return this;
         }
     }
+
+    public void setAnswerForStubbing(Answer<?> answer) {
+        stubber.addAnswerForVoidMethod(answer);
+    }
 }
