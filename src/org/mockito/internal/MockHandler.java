@@ -11,7 +11,6 @@ import java.util.List;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.internal.configuration.Configuration;
-import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
@@ -20,10 +19,11 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.Returns;
-import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.ThrowsException;
+import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
 import org.mockito.internal.verification.MissingInvocationVerifier;
 import org.mockito.internal.verification.NoMoreInvocationsVerifier;
@@ -46,25 +46,26 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private final MockingProgress mockingProgress;
     private final String mockName;
 
-    private T mock;
+    private T instance;
 
     public MockHandler(String mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder) {
         this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
-        stubber = new Stubber(mockingProgress);
+        this.stubber = new Stubber(mockingProgress);
 
         verifyingRecorder = createRecorder();
     }
-
+    
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (stubber.hasAnswerForVoidMethod()) {
+            //stubbing voids
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
             stubber.addVoidMethodForStubbing(invocationMatcher);
             return null;
         }
-
+        
         VerificationModeImpl verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
 
@@ -72,8 +73,9 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 
         if (verificationMode != null) {
+            //verifying
             verifyingRecorder.verify(invocationMatcher, verificationMode);
-            return Configuration.instance().getReturnValues().valueFor(invocationMatcher.getInvocation());
+            return null;
         }
 
         stubber.setInvocationForPotentialStubbing(invocationMatcher);
@@ -81,7 +83,13 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
         mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
 
-        return stubber.resultFor(invocationMatcher.getInvocation());
+        if (stubber.hasResultFor(invocation)) {
+            return stubber.getResultFor(invocation);
+        } else if (MockUtil.isMock(instance)) {
+            return Configuration.instance().getReturnValues().valueFor(invocation);
+        } else {
+            return methodProxy.invoke(instance, args);
+        }
     }
 
     public void verifyNoMoreInteractions() {
@@ -92,8 +100,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         return new VoidMethodStubbableImpl();
     }
 
-    public void setMock(T mock) {
-        this.mock = mock;
+    public void setInstance(T instance) {
+        this.instance = instance;
     }
 
     public List<Invocation> getRegisteredInvocations() {
@@ -101,16 +109,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public String getMockName() {
-        if (mockName != null) {
-            return mockName;
-        } else {
-            return toInstanceName(ClassNameFinder.classNameForMock(mock));
-        }
-    }
-
-    //lower case first letter
-    private String toInstanceName(String className) {
-        return className.substring(0, 1).toLowerCase() + className.substring(1);
+        return mockName;
     }
 
     private VerifyingRecorder createRecorder() {
@@ -140,7 +139,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public T on() {
-            return mock;
+            return instance;
         }
     }
 

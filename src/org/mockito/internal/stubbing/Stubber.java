@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
@@ -50,15 +49,24 @@ public class Stubber {
         } else {
             stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
         }
-    }    
+    } 
+    
+    public boolean hasResultFor(Invocation invocation) {
+        return findMatch(invocation) != null;
+    }
+    
+    public Object getResultFor(Invocation invocation) throws Throwable {
+        return findMatch(invocation).answer(invocation);
+    }
 
-    public Object resultFor(Invocation invocation) throws Throwable {
+    private StubbedInvocationMatcher findMatch(Invocation invocation) {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(invocation)) {
-                return s.answer(invocation);
+                return s;
             }
         }
-        return Configuration.instance().getReturnValues().valueFor(invocation);
+        
+        return null;
     }
 
     public void addAnswerForVoidMethod(Answer answer) {

@@ -24,7 +24,7 @@ import org.mockito.exceptions.Reporter;
 public class MockFactory<T> {
 
     @SuppressWarnings("unchecked")
-    public T createMock(Class<T> toMock, final MethodInterceptorFilter filter) {
+    public T createMock(Class<T> toMock, final MethodInterceptorFilter filter, Object optionalInstance) {
         validateClass(toMock);
         Enhancer enhancer = createEnhancer(toMock);
         enhancer.setCallbackType(filter.getClass());
@@ -35,7 +35,7 @@ public class MockFactory<T> {
 
         Factory mock = createMock(mockClass);
 
-        filter.setMock(mock);
+        filter.setInstance(optionalInstance != null ? optionalInstance : mock);
         return (T) mock;
     }
 

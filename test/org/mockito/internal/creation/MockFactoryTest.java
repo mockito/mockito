@@ -15,7 +15,7 @@ public class MockFactoryTest extends TestBase {
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
         MockFactory<SomeInterface> factory = new MockFactory<SomeInterface>();
-        SomeInterface proxy = factory.createMock(SomeInterface.class, new MockAwareStub());
+        SomeInterface proxy = factory.createMock(SomeInterface.class, new MockAwareStub(), null);
         
         Class superClass = proxy.getClass().getSuperclass();
         assertEquals(Object.class, superClass);
@@ -24,7 +24,7 @@ public class MockFactoryTest extends TestBase {
     @Test
     public void shouldCreateMockFromClass() throws Exception {
         MockFactory<ClassWithoutConstructor> factory = new MockFactory<ClassWithoutConstructor>();
-        ClassWithoutConstructor proxy = factory.createMock(ClassWithoutConstructor.class, new MockAwareStub());
+        ClassWithoutConstructor proxy = factory.createMock(ClassWithoutConstructor.class, new MockAwareStub(), null);
         
         Class superClass = proxy.getClass().getSuperclass();
         assertEquals(ClassWithoutConstructor.class, superClass);
@@ -38,15 +38,15 @@ public class MockFactoryTest extends TestBase {
         } catch (Exception e) {}
         
         MockFactory<ClassWithDodgyConstructor> factory = new MockFactory<ClassWithDodgyConstructor>();
-        ClassWithDodgyConstructor mock = factory.createMock(ClassWithDodgyConstructor.class, new MockAwareStub());
+        ClassWithDodgyConstructor mock = factory.createMock(ClassWithDodgyConstructor.class, new MockAwareStub(), null);
         assertNotNull(mock);
     }
     
     @Test 
     public void shouldMocksHaveDifferentInterceptors() throws Exception {
         MockFactory<SomeClass> factory = new MockFactory<SomeClass>();
-        SomeClass mockOne = factory.createMock(SomeClass.class, new MockAwareStub());
-        SomeClass mockTwo = factory.createMock(SomeClass.class, new MockAwareStub());
+        SomeClass mockOne = factory.createMock(SomeClass.class, new MockAwareStub(), null);
+        SomeClass mockTwo = factory.createMock(SomeClass.class, new MockAwareStub(), null);
         
         Factory cglibFactoryOne = (Factory) mockOne;
         Factory cglibFactoryTwo = (Factory) mockTwo;
@@ -70,6 +70,6 @@ public class MockFactoryTest extends TestBase {
             super(Object.class, null);
         }
 
-        public void setMock(Object mock) {}
+        public void setInstance(Object mock) {}
     }
 }

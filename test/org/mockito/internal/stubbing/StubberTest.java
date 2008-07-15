@@ -56,22 +56,12 @@ public class StubberTest extends TestBase{
         stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         stubber.addAnswer(new ThrowsException(new MyException()));
         
-        assertEquals("simpleMethod", stubber.resultFor(simpleMethod));
+        assertEquals("simpleMethod", stubber.getResultFor(simpleMethod));
         
         try {
-            stubber.resultFor(differentMethod);
+            stubber.getResultFor(differentMethod);
             fail();
         } catch (MyException e) {}
-    }
-    
-    @Test
-    public void shouldGetEmptyResultIfMethodsDontMatch() throws Throwable {
-        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        stubber.addAnswer(new Returns("simpleMethod"));
-        
-        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        
-        assertEquals(null, stubber.resultFor(differentMethod));
     }
     
     @Test
@@ -80,7 +70,7 @@ public class StubberTest extends TestBase{
         stubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
         
         try {
-            stubber.resultFor(simpleMethod);
+            stubber.getResultFor(simpleMethod);
             fail();
         } catch (MyException e) {}
     }

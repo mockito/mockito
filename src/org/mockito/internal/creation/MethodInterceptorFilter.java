@@ -42,7 +42,7 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
             return hashCodeForMock(proxy);
         }
         
-        return delegate.intercept(proxy, method, args, null);
+        return delegate.intercept(proxy, method, args, methodProxy);
     }
 
     private int hashCodeForMock(Object mock) {
@@ -53,7 +53,7 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
         return delegate;
     }
 
-    public void setMock(Object mock) {
-        delegate.setMock(mock);
+    public void setInstance(Object instance) {
+        delegate.setInstance(instance);
     }
 }
