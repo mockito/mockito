@@ -1,5 +1,5 @@
 package org.mockitousage.packageprotected;
 
-public class PackageProtected {
+class PackageProtected {
 
 }
