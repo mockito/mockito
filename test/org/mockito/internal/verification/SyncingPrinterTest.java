@@ -6,8 +6,8 @@ package org.mockito.internal.verification;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.invocation.CanPrintInMultilines;
+import org.mockitoutil.TestBase;
 
 public class SyncingPrinterTest extends TestBase {
 

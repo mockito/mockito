@@ -12,9 +12,9 @@ import net.sf.cglib.proxy.NoOp;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockitoutil.TestBase;
 
 public class MockUtilTest extends TestBase {
 

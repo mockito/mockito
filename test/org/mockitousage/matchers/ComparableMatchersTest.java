@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.matchers.CompareEqual;
 import org.mockito.internal.matchers.CompareTo;
 import org.mockito.internal.matchers.GreaterOrEqual;
 import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
+import org.mockitoutil.TestBase;
 
 public class ComparableMatchersTest extends TestBase {
 

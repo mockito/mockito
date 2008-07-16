@@ -8,7 +8,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 public class ReplacingObjectMethodsTest extends TestBase {
 

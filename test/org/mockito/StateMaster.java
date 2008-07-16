@@ -4,9 +4,13 @@
  */
 package org.mockito;
 
-public class StateResetter {
+public class StateMaster {
     
     public static void reset() {
         Mockito.MOCKING_PROGRESS.reset();
+    }
+    
+    public static void validate() {
+        Mockito.MOCKING_PROGRESS.validateState();
     }
 }

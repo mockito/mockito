@@ -5,7 +5,8 @@
 package org.mockitousage.packageprotected;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
+
 import static org.mockito.Mockito.*;
 
 public class MockingPackageProtectedTest extends TestBase {

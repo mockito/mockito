@@ -6,12 +6,12 @@ package org.mockito.internal.stubbing;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgressImpl;
+import org.mockitoutil.TestBase;
 
 public class StubberTest extends TestBase{
 

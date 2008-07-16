@@ -5,20 +5,20 @@
 package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.StateResetter;
-import org.mockito.TestBase;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class StackTraceFilteringTest extends TestBase {
     
@@ -26,7 +26,7 @@ public class StackTraceFilteringTest extends TestBase {
 
     @After
     public void resetState() {
-        StateResetter.reset();
+        StateMaster.reset();
     }
     
     @Before

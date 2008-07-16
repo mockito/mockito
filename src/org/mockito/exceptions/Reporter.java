@@ -91,10 +91,9 @@ public class Reporter {
                 "    verify(mock).someMethod();",
                 "    verify(mock, times(10)).someMethod();",
                 "    verify(mock, atLeastOnce()).someMethod();"
-                
         ));
     }
-
+    
     public void nullPassedToVerify() {
         throw new NullInsteadOfMockException(join(
                 "Argument passed to verify() is null!",
@@ -105,6 +104,23 @@ public class Reporter {
                 "Also, if you use @Mock annotation don't miss initMocks()"
         ));
     }    
+    
+    public void notAMockPassedToWhenMethod() {
+        throw new NotAMockException(join(
+                "Argument passed to when() is not a mock!",
+                "Example of correct stubbing:",
+                "    doThrow(new RuntimeException()).when(mock).someMethod();"
+        ));
+    }
+    
+    public void nullPassedToWhenMethod() {
+        throw new NullInsteadOfMockException(join(
+                "Argument passed to when() is null!",
+                "Example of correct stubbing:",
+                "    doThrow(new RuntimeException()).when(mock).someMethod();",                
+                "Also, if you use @Mock annotation don't miss initMocks()"
+        ));
+    }
     
     public void mocksHaveToBePassedToVerifyNoMoreInteractions() {
         throw new MockitoException(join(
@@ -299,8 +315,10 @@ public class Reporter {
         ));
     }
 
-
-
-
-
+    public void cannotStubVoidMethodWithAReturnValue() {
+        throw new MockitoException(join(
+                "Cannot stub a void method with a return value!",
+                "Voids should be stubbed with Throwables (or instances of Answer interface)"
+             ));
+    }
 }

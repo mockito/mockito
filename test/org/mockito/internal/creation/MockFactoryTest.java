@@ -7,7 +7,7 @@ package org.mockito.internal.creation;
 import net.sf.cglib.proxy.Factory;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MockFactoryTest extends TestBase {

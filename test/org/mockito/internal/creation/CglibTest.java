@@ -14,7 +14,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 /**
  * This test case is used to make sure that the way cglib is used is providing the expected behavior.

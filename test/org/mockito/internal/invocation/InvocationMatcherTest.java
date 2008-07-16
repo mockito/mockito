@@ -5,7 +5,7 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -14,11 +14,11 @@ import java.util.Map;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {

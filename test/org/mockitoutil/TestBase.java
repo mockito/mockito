@@ -2,13 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito;
+package org.mockitoutil;
 
 import junit.framework.Assert;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.mockito.util.Assertor;
+import org.mockito.MockitoAnnotations;
+import org.mockito.StateMaster;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
@@ -18,7 +19,7 @@ public class TestBase extends Assert {
 
     @Before
     public void init() {
-        Mockito.MOCKING_PROGRESS.validateState();
+        StateMaster.validate();
         MockitoAnnotations.initMocks(this);
     }
     

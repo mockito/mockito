@@ -11,11 +11,11 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase {

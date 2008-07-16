@@ -3,10 +3,10 @@ package org.mockitousage.stubbing;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations.Mock;
-import org.mockito.TestBase;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithCustomAnswerTest extends TestBase {

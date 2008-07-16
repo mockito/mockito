@@ -20,7 +20,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 public class DefaultReturnValuesTest extends TestBase {
     

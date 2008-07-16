@@ -4,13 +4,13 @@
  */
 package org.mockito.exceptions.base;
 
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class CommonStackTraceRemoverTest extends TestBase {

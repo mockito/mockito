@@ -5,13 +5,12 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.CanPrintInMultilines;
 import org.mockito.internal.invocation.Invocation;
@@ -19,6 +18,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockitoutil.TestBase;
 
 public class VerifyingRecorderTest extends TestBase {
     

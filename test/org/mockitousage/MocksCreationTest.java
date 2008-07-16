@@ -6,7 +6,7 @@ package org.mockitousage;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 public class MocksCreationTest extends TestBase {
 

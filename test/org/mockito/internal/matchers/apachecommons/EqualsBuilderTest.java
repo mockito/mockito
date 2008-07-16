@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 /**
  * @author <a href="mailto:sdowney@panix.com">Steve Downey</a>

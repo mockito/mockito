@@ -11,7 +11,6 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.MockitoTest;
-import org.mockito.TestBase;
 import org.mockito.exceptions.ReporterTest;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
@@ -73,6 +72,7 @@ import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerific
 import org.mockitousage.verification.VerificationInOrderTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
 import org.mockitousage.verification.VerificationUsingMatchersTest;
+import org.mockitoutil.TestBase;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     

@@ -7,8 +7,8 @@ package org.concurrentmockito;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 //this test always passes but please keep looking sys err
 //this test should be run multiple times, manually

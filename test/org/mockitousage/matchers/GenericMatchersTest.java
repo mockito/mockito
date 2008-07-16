@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
+import org.mockitoutil.TestBase;
 
 public class GenericMatchersTest extends TestBase {
     

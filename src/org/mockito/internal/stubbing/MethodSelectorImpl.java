@@ -1,17 +1,26 @@
 package org.mockito.internal.stubbing;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.stubbing.Answer;
 
 public class MethodSelectorImpl implements MethodSelector {
 
-    private final Object toBeReturned;
+    private final Answer<?> answer;
+    private final Reporter reporter = new Reporter();
 
-    public MethodSelectorImpl(Object toBeReturned) {
-        this.toBeReturned = toBeReturned;
+    public MethodSelectorImpl(Answer<?> answer) {
+        this.answer = answer;
     }
 
     public <T> T when(T mock) {
-        MockUtil.getMockHandler(mock).setAnswerForStubbing(new Returns(toBeReturned));
+        if (mock == null) {
+            reporter.nullPassedToWhenMethod();
+        } else if (!MockUtil.isMock(mock)) {
+            reporter.notAMockPassedToWhenMethod();
+        }
+        
+        MockUtil.getMockHandler(mock).setAnswerForStubbing(answer);
         return mock;
     }
 }

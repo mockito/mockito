@@ -7,10 +7,10 @@ package org.mockitousage.stubbing;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class StubbingConsecutiveReturnValuesTest extends TestBase {
 

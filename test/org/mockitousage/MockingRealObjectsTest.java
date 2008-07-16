@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MockingRealObjectsTest extends TestBase {

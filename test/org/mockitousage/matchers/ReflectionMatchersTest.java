@@ -9,8 +9,8 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("all")
 public class ReflectionMatchersTest extends TestBase {

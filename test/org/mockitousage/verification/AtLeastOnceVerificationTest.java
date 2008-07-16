@@ -11,8 +11,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class AtLeastOnceVerificationTest extends TestBase {

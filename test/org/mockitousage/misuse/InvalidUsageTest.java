@@ -10,11 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.StateResetter;
-import org.mockito.TestBase;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class InvalidUsageTest extends TestBase {
@@ -30,7 +30,7 @@ public class InvalidUsageTest extends TestBase {
     
     @After
     public void resetState() {
-        StateResetter.reset();
+        StateMaster.reset();
     }
     
     @Test(expected=MockitoException.class)

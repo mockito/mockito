@@ -9,9 +9,9 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class MatchersMixedWithRawArgumentsTest extends TestBase {
     

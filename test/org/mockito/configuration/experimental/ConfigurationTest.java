@@ -5,8 +5,8 @@
 package org.mockito.configuration.experimental;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockitoutil.TestBase;
 
 public class ConfigurationTest extends TestBase {
     

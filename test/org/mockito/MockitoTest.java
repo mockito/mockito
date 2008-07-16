@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest extends TestBase {

@@ -7,20 +7,23 @@ package org.mockitousage.stubbing;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
-
-import org.junit.Ignore;
+import org.junit.After;
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockito.StateMaster;
 import org.mockito.MockitoAnnotations.Mock;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class StubbingUsingDoReturnTest extends TestBase {
 
     @Mock private IMethods mock;
+    
+    @After public void resetState() {
+        StateMaster.reset();
+    }
 
     @Test
     public void shouldStub() throws Exception {
@@ -43,7 +46,6 @@ public class StubbingUsingDoReturnTest extends TestBase {
     @SuppressWarnings("serial")
     class FooException extends RuntimeException {}
     
-    @Ignore
     @Test
     public void shouldStubWithThrowable() throws Exception {
         doThrow(new FooException()).when(mock).voidMethod();
@@ -53,25 +55,36 @@ public class StubbingUsingDoReturnTest extends TestBase {
         } catch (FooException e) {}
     }
     
-    @Ignore
     @Test
     public void shouldScreamWhenReturnSetForVoid() throws Exception {
-        doReturn(new RuntimeException()).when(mock).voidMethod();
-        fail();
+        try {
+            doReturn("foo").when(mock).voidMethod();
+            fail();
+        } catch (MockitoException e) {
+            //TODO could the message be clearer?
+            assertThat(e.getMessage(), contains("Cannot stub a void method with a return value"));
+        }
     }
     
-    @Ignore
     @Test
     public void shouldScreamWhenNotAMockPassed() throws Exception {
         try {
             doReturn("foo").when("foo").toString();
             fail();
         } catch (Exception e) {
-            assertEquals("Argument passed to when() method is not a mock", e.getMessage());
+            assertThat(e.getMessage(), contains("Argument passed to when() is not a mock"));
         }
     }
     
-    //TODO when not a mock passed
+    @Test
+    public void shouldScreamWhenNullPassed() throws Exception {
+        try {
+            doReturn("foo").when(null).toString();
+            fail();
+        } catch (Exception e) {
+            assertThat(e.getMessage(), contains("Argument passed to when() is null"));
+        }
+    }    
     
     //TODO checked Exceptions
     
@@ -85,63 +98,27 @@ public class StubbingUsingDoReturnTest extends TestBase {
     
     @Test
     public void shouldStubbingBeTreatedAsInteraction() throws Exception {
-        stub(mock.booleanReturningMethod()).toReturn(true);
-        
-        mock.booleanReturningMethod();
-        
+        doReturn("foo").when(mock).simpleMethod();
+        mock.simpleMethod();
         try {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {}
     }
     
-    class Base {}
-    class Sub extends Base {}
-
-    interface Generic {
-        List<Base> getList();
-    }
-    
     @Test
-    public void shouldAllowStubbingWithSubtypes() throws Exception {
-        Generic mockTwo = mock(Generic.class);
+    public void shouldVerifyStubbedCall() throws Exception {
+        doReturn("foo").when(mock).simpleMethod();
+        mock.simpleMethod();
+        mock.simpleMethod();
         
-        List<Sub> subs = null;
-        //can I somehow avoid a cast here:
-        stub(mockTwo.getList()).toReturn((List) subs);
+        verify(mock, times(2)).simpleMethod();
+        verifyNoMoreInteractions(mock);
     }
     
     @Test
     public void shouldAllowStubbingToString() throws Exception {
-        IMethods mockTwo = mock(IMethods.class);
-        stub(mockTwo.toString()).toReturn("test");
-        
-        assertThat(mock.toString(), contains("Mock for IMethods"));
-        assertEquals("test", mockTwo.toString());
-    }
-    
-    @Test
-    public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
-        
-        verifyZeroInteractions(mock);
-        
-        mock.simpleMethod("foo");
-        
-        try {
-            verify(mock).simpleMethod("one");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
-        
-        try {
-            verify(mock).simpleMethod("two");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
-        
-        try {
-            verifyNoMoreInteractions(mock);
-            fail();
-        } catch (NoInteractionsWanted e) {}
+        doReturn("test").when(mock).toString();
+        assertEquals("test", mock.toString());
     }
 }

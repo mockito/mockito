@@ -5,7 +5,7 @@
 package org.mockito.internal.invocation;
 
 import static org.mockito.internal.progress.VerificationModeImpl.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,12 +14,12 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 
 public class InvocationsFinderTest extends TestBase {

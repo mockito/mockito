@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {

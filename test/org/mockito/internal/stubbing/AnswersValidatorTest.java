@@ -8,38 +8,37 @@ import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockitoutil.TestBase;
 
-public class ExceptionsValidatorTest extends TestBase {
+public class AnswersValidatorTest extends TestBase {
 
-    private ExceptionsValidator validator = new ExceptionsValidator();
+    private AnswersValidator validator = new AnswersValidator();
     private Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
 
     @Test
     public void shouldValidateNullThrowable() throws Throwable {
         try {
-            validator.validate(null, null);
+            validator.validate(new ThrowsException(null), null);
             fail();
-        } catch (MockitoException e) {
-        }
+        } catch (MockitoException e) {}
     }
 
     @Test
     public void shouldPassProperCheckedException() throws Throwable {
-        validator.validate(new CharacterCodingException(), invocation);
+        validator.validate(new ThrowsException(new CharacterCodingException()), invocation);
     }
 
     @Test(expected = MockitoException.class)
     public void shouldFailInvalidCheckedException() throws Throwable {
-        validator.validate(new IOException(), invocation);
+        validator.validate(new ThrowsException(new IOException()), invocation);
     }
     
     @Test
     public void shouldPassRuntimeExceptions() throws Throwable {
-        validator.validate(new Error(), invocation);
-        validator.validate(new RuntimeException(), invocation);
+        validator.validate(new ThrowsException(new Error()), invocation);
+        validator.validate(new ThrowsException(new RuntimeException()), invocation);
     }
 }

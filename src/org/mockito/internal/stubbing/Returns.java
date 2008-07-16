@@ -18,4 +18,8 @@ public class Returns implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return value;
     }
+
+    public boolean hasReturnValue() {
+        return this.value != null;
+    }
 }

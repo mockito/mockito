@@ -8,8 +8,8 @@ import static java.util.Arrays.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockitoutil.TestBase;
 
 public class VerificationModeImplTest extends TestBase {
 

@@ -40,9 +40,8 @@ public class Stubber {
     
     private void addAnswer(Answer answer, boolean isConsecutive) {
         mockingProgress.stubbingCompleted();
-        if (answer instanceof ThrowsException) {
-            new ExceptionsValidator().validate(((ThrowsException) answer).getThrowable(), invocationForStubbing.getInvocation());
-        }
+        AnswersValidator answersValidator = new AnswersValidator();
+        answersValidator.validate(answer, invocationForStubbing.getInvocation());
         
         if (isConsecutive) {
             stubbed.getFirst().addAnswer(answer);
@@ -78,6 +77,7 @@ public class Stubber {
         return !answersForVoidMethod.isEmpty();
     }
 
+    //TODO it's not for void method any more
     public void addVoidMethodForStubbing(InvocationMatcher voidMethodInvocationMatcher) {
         invocationForStubbing = voidMethodInvocationMatcher;
         assert hasAnswerForVoidMethod();

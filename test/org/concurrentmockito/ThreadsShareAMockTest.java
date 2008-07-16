@@ -7,8 +7,8 @@ package org.concurrentmockito;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 //this test exposes the problem at least once in 10 runs
 public class ThreadsShareAMockTest extends TestBase {

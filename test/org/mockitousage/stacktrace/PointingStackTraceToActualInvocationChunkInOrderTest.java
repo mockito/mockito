@@ -6,15 +6,15 @@ package org.mockitousage.stacktrace;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBase {
     

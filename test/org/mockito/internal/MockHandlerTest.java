@@ -5,13 +5,13 @@
 package org.mockito.internal;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MockHandlerTest extends TestBase {

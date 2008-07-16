@@ -5,7 +5,7 @@
 package org.mockito.exceptions.base;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 public class MockitoAssertionErrorTest extends TestBase {
 

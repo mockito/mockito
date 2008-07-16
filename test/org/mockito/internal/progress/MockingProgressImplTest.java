@@ -6,8 +6,8 @@ package org.mockito.internal.progress;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockitoutil.TestBase;
 
 public class MockingProgressImplTest extends TestBase {
 

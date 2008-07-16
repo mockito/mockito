@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockitousage.examples.junitrunner.MockitoRunner;
+import org.mockitoutil.TestBase;
 
 @RunWith(MockitoRunner.class)
 public class ExampleTest extends TestBase {

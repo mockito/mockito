@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
-import org.mockito.StateResetter;
-import org.mockito.TestBase;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class InvalidUseOfMatchersTest extends TestBase {
@@ -23,13 +23,13 @@ public class InvalidUseOfMatchersTest extends TestBase {
 
     @Before
     public void setUp() {
-        StateResetter.reset();
+        StateMaster.reset();
         mock = Mockito.mock(IMethods.class);
     }
 
     @After
     public void resetState() {
-        StateResetter.reset();
+        StateMaster.reset();
     }
 
     @Test

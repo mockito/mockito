@@ -56,10 +56,6 @@ public class MockUtil {
         return (MethodInterceptorFilter) factory.getCallback(0);
     }
     
-    public static void validateMock(Object mock) {
-        getMockHandler(mock);
-    }
-    
     public static boolean isMock(Object mock) {
         try {
             getMockHandler(mock);

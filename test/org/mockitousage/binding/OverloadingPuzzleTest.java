@@ -7,8 +7,8 @@ package org.mockitousage.binding;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitoutil.TestBase;
 
 public class OverloadingPuzzleTest extends TestBase {
 

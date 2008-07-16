@@ -194,4 +194,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         
         return false;
     }
+
+    public boolean isVoid() {
+        return this.method.getReturnType() == Void.TYPE;
+    }
 }

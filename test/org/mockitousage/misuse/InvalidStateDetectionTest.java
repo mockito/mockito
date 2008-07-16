@@ -9,11 +9,11 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.StateResetter;
-import org.mockito.TestBase;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 /**
  * invalid state happens if:
@@ -41,7 +41,7 @@ public class InvalidStateDetectionTest extends TestBase {
     @Before
     @After
     public void resetState() {
-        StateResetter.reset();
+        StateMaster.reset();
         mock = mock(IMethods.class);
     }
     

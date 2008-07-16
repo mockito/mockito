@@ -7,7 +7,7 @@ package org.mockito.internal.util;
 import static org.mockito.internal.util.Decamelizer.*;
 
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class DecamelizerTest extends TestBase {

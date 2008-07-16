@@ -5,16 +5,16 @@
 package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class PointingStackTraceToActualInvocationTest extends TestBase {
     

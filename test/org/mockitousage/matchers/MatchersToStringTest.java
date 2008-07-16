@@ -12,7 +12,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
@@ -26,6 +25,7 @@ import org.mockito.internal.matchers.Null;
 import org.mockito.internal.matchers.Or;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MatchersToStringTest extends TestBase {

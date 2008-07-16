@@ -5,14 +5,14 @@
 package org.mockito.internal.util;
 
 import static java.util.Arrays.*;
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.util.ListUtil.Filter;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class ListUtilTest extends TestBase {

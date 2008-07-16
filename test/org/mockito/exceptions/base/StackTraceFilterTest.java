@@ -4,11 +4,11 @@
  */
 package org.mockito.exceptions.base;
 
-import static org.mockito.util.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class StackTraceFilterTest extends TestBase {

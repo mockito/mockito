@@ -6,8 +6,8 @@ package org.mockitousage.examples.use;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.TestBase;
 import org.mockitousage.examples.junitrunner.MockitoRunner;
+import org.mockitoutil.TestBase;
 
 @RunWith(MockitoRunner.class)
 public class PrototypingTest extends TestBase {

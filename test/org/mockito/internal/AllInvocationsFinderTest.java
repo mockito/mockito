@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.TestBase;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class AllInvocationsFinderTest extends TestBase {
     

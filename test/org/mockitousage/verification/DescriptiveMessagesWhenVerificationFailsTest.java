@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.TestBase;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.UndesiredInvocation;
@@ -20,6 +19,7 @@ import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
