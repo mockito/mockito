@@ -7,11 +7,11 @@ package org.mockito.internal.stubbing;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public interface StubberFoo extends StubbedMethodSelector {
+public interface Stubber extends StubbedMethodSelector {
 
-    StubberFoo doReturn(Object toBeReturned);
-    StubberFoo doReturn();
-    StubberFoo doThrow(Throwable toBeThrown);
-    StubberFoo doAnswer(Answer answer);
+    Stubber doReturn(Object toBeReturned);
+    Stubber doReturn();
+    Stubber doThrow(Throwable toBeThrown);
+    Stubber doAnswer(Answer answer);
     
 }

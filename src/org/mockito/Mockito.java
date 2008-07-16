@@ -15,7 +15,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.Returns;
-import org.mockito.internal.stubbing.StubberFoo;
+import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
@@ -656,19 +656,19 @@ public class Mockito extends Matchers {
         return handler.voidMethodStubbable();
     }
     
-    public static StubberFoo doReturn(Object toBeReturned) {
+    public static Stubber doReturn(Object toBeReturned) {
         return doAnswer(new Returns(toBeReturned));
     }
     
-    public static StubberFoo doReturn() {
+    public static Stubber doReturn() {
         return doAnswer(new Returns());
     }
     
-    public static StubberFoo doThrow(Throwable toBeThrown) {
+    public static Stubber doThrow(Throwable toBeThrown) {
         return doAnswer(new ThrowsException(toBeThrown));
     }
     
-    public static StubberFoo doAnswer(Answer answer) {
+    public static Stubber doAnswer(Answer answer) {
         MOCKING_PROGRESS.stubbingStarted();
         return new StubberImpl().doAnswer(answer);
     }

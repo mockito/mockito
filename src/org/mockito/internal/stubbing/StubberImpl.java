@@ -8,7 +8,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class StubberImpl implements StubberFoo {
+public class StubberImpl implements Stubber {
 
     final List<Answer> answers = new LinkedList<Answer>();
     private final Reporter reporter = new Reporter();
@@ -24,22 +24,22 @@ public class StubberImpl implements StubberFoo {
         return mock;
     }
 
-    public StubberFoo doReturn(Object toBeReturned) {
+    public Stubber doReturn(Object toBeReturned) {
         answers.add(new Returns(toBeReturned));
         return this;
     }
 
-    public StubberFoo doThrow(Throwable toBeThrown) {
+    public Stubber doThrow(Throwable toBeThrown) {
         answers.add(new ThrowsException(toBeThrown));
         return this;
     }
 
-    public StubberFoo doReturn() {
+    public Stubber doReturn() {
         answers.add(new Returns());
         return this;
     }
 
-    public StubberFoo doAnswer(Answer answer) {
+    public Stubber doAnswer(Answer answer) {
         answers.add(answer);
         return this;
     }
