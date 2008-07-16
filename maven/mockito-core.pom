@@ -29,11 +29,6 @@
             <artifactId>objenesis</artifactId>
             <version>1.0</version>        
         </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>2.1_3</version>        
-        </dependency>
     </dependencies>
     
 </project>
