@@ -6,7 +6,7 @@
     <artifactId>mockito-core</artifactId>
     <version>@version@</version>
     <name>Mockito</name>
-    <url>http://mockito.goolecode.com</url>
+    <url>http://www.mockito.org</url>
     <description>Mock objects library for java</description>
     <licenses>
         <license>
