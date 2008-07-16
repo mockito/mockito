@@ -13,5 +13,4 @@ public interface Stubber extends StubbedMethodSelector {
     Stubber doReturn();
     Stubber doThrow(Throwable toBeThrown);
     Stubber doAnswer(Answer answer);
-    
 }

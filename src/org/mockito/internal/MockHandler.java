@@ -19,8 +19,9 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.MockitoStubber;
+import org.mockito.internal.stubbing.Returns;
+import org.mockito.internal.stubbing.ReturnsVoid;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
@@ -129,7 +130,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public VoidMethodStubbable<T> toReturn() {
-            mockitoStubber.addAnswerForVoidMethod(new Returns());
+            mockitoStubber.addAnswerForVoidMethod(new ReturnsVoid());
             return this;
         }
 

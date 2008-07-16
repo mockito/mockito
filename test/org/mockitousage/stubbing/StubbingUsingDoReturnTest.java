@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 import java.io.IOException;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.StateMaster;
 import org.mockito.MockitoAnnotations.Mock;
@@ -160,11 +159,14 @@ public class StubbingUsingDoReturnTest extends TestBase {
         assertEquals("foo", mock.simpleMethod());
     }
     
-    @Ignore
     @Test
     public void shouldNotAllowDoReturnOnNonVoids() {
-        doReturn().when(mock).simpleMethod();
-        fail();
+        try {
+            doReturn().when(mock).simpleMethod();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage(), contains("Cannot stub a non-void method"));
+        }
     }
     
     //TODO state validation

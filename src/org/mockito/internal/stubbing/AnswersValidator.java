@@ -10,22 +10,32 @@ public class AnswersValidator {
     
     public void validate(Answer<?> answer, Invocation invocation) {
         if (answer instanceof ThrowsException) {
-            validateException(answer, invocation);
+            validateException((ThrowsException) answer, invocation);
         }
         
         if (answer instanceof Returns) {
-            validateReturnValue(answer, invocation);
+            validateReturnValue((Returns) answer, invocation);
+        }
+        
+        if (answer instanceof ReturnsVoid) {
+            validateVoidReturn((ReturnsVoid) answer, invocation);
         }
     }
 
-    private void validateReturnValue(Answer<?> answer, Invocation invocation) {
-        if (invocation.isVoid() && ((Returns) answer).hasReturnValue()) {
+    private void validateVoidReturn(ReturnsVoid answer, Invocation invocation) {
+        if (!invocation.isVoid()) {
+            reporter.cannotStubNonVoidMethodWithAVoidReturn();
+        }
+    }
+
+    private void validateReturnValue(Returns answer, Invocation invocation) {
+        if (invocation.isVoid()) {
             reporter.cannotStubVoidMethodWithAReturnValue();
         }
     }
 
-    private void validateException(Answer<?> answer, Invocation invocation) {
-        Throwable throwable = ((ThrowsException) answer).getThrowable();
+    private void validateException(ThrowsException answer, Invocation invocation) {
+        Throwable throwable = answer.getThrowable();
         if (throwable == null) {
             reporter.cannotStubWithNullThrowable();
         }

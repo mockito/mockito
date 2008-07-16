@@ -318,7 +318,21 @@ public class Reporter {
     public void cannotStubVoidMethodWithAReturnValue() {
         throw new MockitoException(join(
                 "Cannot stub a void method with a return value!",
-                "Voids should be stubbed with Throwables (or instances of Answer interface)"
+                "Voids are usually stubbed with Throwables:",
+                "    doThrow(new RuntimeException()).when(mock).someVoidMethod();"
+             ));
+    }
+
+    public void cannotStubNonVoidMethodWithAVoidReturn() {
+        throw new MockitoException(join(
+                "Cannot stub a non-void method with a void return!",
+                "Void return is only used for stubbing consecutive calls on void methods.",
+                "Example:",
+                "    doReturn().",
+                "    doThrow(new RuntimeException()).",
+                "    when(mock).someVoidMethod();",
+                "Above means:",
+                "someVoidMethod() does nothing the 1st time but throws an exception 2nd time is called"
              ));
     }
 }
