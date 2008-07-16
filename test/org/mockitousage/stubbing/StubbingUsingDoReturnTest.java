@@ -7,16 +7,21 @@ package org.mockitousage.stubbing;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.StateMaster;
 import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("serial")
 public class StubbingUsingDoReturnTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -43,16 +48,37 @@ public class StubbingUsingDoReturnTest extends TestBase {
         assertEquals(null, mock.simpleMethod("xxx", 234));
     }
     
-    @SuppressWarnings("serial")
-    class FooException extends RuntimeException {}
+    class FooRuntimeException extends RuntimeException {}
     
     @Test
     public void shouldStubWithThrowable() throws Exception {
-        doThrow(new FooException()).when(mock).voidMethod();
+        doThrow(new FooRuntimeException()).when(mock).voidMethod();
         try {
             mock.voidMethod();
             fail();
-        } catch (FooException e) {}
+        } catch (FooRuntimeException e) {}
+    }
+    
+    @Test
+    public void shouldAllowSettingValidCheckedException() throws Exception {
+        doThrow(new IOException()).when(mock).throwsIOException(0);
+        
+        try {
+            mock.throwsIOException(0);
+            fail();
+        } catch (IOException e) {}
+    }
+    
+    class FooCheckedException extends Exception {}
+    
+    @Test
+    public void shouldDetectInvalidCheckedException() throws Exception {
+        try {
+            doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
+            fail();
+        } catch (Exception e) {
+            assertThat(e.getMessage(), contains("Checked exception is invalid"));
+        }
     }
     
     @Test
@@ -79,20 +105,69 @@ public class StubbingUsingDoReturnTest extends TestBase {
     @Test
     public void shouldScreamWhenNullPassed() throws Exception {
         try {
-            doReturn("foo").when(null).toString();
+            doReturn("foo").when((Object) null).toString();
             fail();
         } catch (Exception e) {
             assertThat(e.getMessage(), contains("Argument passed to when() is null"));
         }
     }    
     
-    //TODO checked Exceptions
+    @Test
+    public void shouldAllowChainedStubbing() {
+        doReturn("foo").
+        doThrow(new RuntimeException()).
+        doReturn("bar")
+        .when(mock).simpleMethod();
+        
+        assertEquals("foo", mock.simpleMethod());
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (RuntimeException e) {}
+        
+        assertEquals("bar", mock.simpleMethod());
+        assertEquals("bar", mock.simpleMethod());
+    }
     
-    //TODO chains
+    @Test
+    public void shouldAllowChainedStubbingOnVoidMethods() {
+        doReturn().
+        doReturn().
+        doThrow(new RuntimeException())
+        .when(mock).voidMethod();
+        
+        mock.voidMethod();
+        mock.voidMethod();
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (RuntimeException e) {}
+        try {
+            mock.voidMethod();
+            fail();
+        } catch (RuntimeException e) {}
+    }
+    
+    @Test
+    public void shouldStubWithGenericAnswer() {
+        doAnswer(new Answer<Object>() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return "foo";
+            }
+        })
+        .when(mock).simpleMethod();
+        
+        assertEquals("foo", mock.simpleMethod());
+    }
+    
+    @Ignore
+    @Test
+    public void shouldNotAllowDoReturnOnNonVoids() {
+        doReturn().when(mock).simpleMethod();
+        fail();
+    }
     
     //TODO state validation
-    
-    //TODO should verify
     
     //TODO exception messages with UnfinishedStubbingException
     

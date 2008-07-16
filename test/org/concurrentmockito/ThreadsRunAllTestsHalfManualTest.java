@@ -26,7 +26,6 @@ import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.VerificationModeImplTest;
-import org.mockito.internal.stubbing.StubberTest;
 import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
 import org.mockito.internal.verification.MissingInvocationInOrderVerifierTest;
@@ -92,7 +91,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MockHandlerTest.class,
                     AllInvocationsFinderTest.class,
                     DefaultReturnValuesTest.class,
-                    StubberTest.class,
                     NumberOfInvocationsVerifierTest.class,
                     VerifyingRecorderTest.class,
                     MissingInvocationVerifierTest.class,

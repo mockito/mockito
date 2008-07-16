@@ -14,7 +14,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class Stubber {
+public class MockitoStubber {
 
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
@@ -22,7 +22,7 @@ public class Stubber {
 
     private InvocationMatcher invocationForStubbing;
 
-    public Stubber(MockingProgress mockingProgress) {
+    public MockitoStubber(MockingProgress mockingProgress) {
         this.mockingProgress = mockingProgress;
     }
 
@@ -71,6 +71,11 @@ public class Stubber {
     //TODO it's not for void method any more
     public void addAnswerForVoidMethod(Answer answer) {
         answersForVoidMethod.add(answer);
+    }
+    
+    //TODO dodgy name
+    public void addAnswersForVoidMethod(List<Answer> answers) {
+        answersForVoidMethod.addAll(answers);
     }
 
     public boolean hasAnswerForVoidMethod() {

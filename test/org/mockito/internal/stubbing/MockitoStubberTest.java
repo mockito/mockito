@@ -13,9 +13,9 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockitoutil.TestBase;
 
-public class StubberTest extends TestBase{
+public class MockitoStubberTest extends TestBase{
 
-    private Stubber stubber;
+    private MockitoStubber mockitoStubber;
     private MockingProgressImpl state;
     private Invocation simpleMethod;
     
@@ -23,8 +23,8 @@ public class StubberTest extends TestBase{
     public void setup() {
         state = new MockingProgressImpl();
         
-        stubber = new Stubber(state);
-        stubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
+        mockitoStubber = new MockitoStubber(state);
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
         
         simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
     }
@@ -33,7 +33,7 @@ public class StubberTest extends TestBase{
     public void shouldFinishStubbingWhenWrongThrowableIsSet() throws Exception {
         state.stubbingStarted();
         try {
-            stubber.addAnswer(new ThrowsException(new Exception()));
+            mockitoStubber.addAnswer(new ThrowsException(new Exception()));
             fail();
         } catch (MockitoException e) {
             state.validateState();
@@ -43,44 +43,44 @@ public class StubberTest extends TestBase{
     @Test
     public void shouldFinishStubbingOnAddingReturnValue() throws Exception {
         state.stubbingStarted();
-        stubber.addAnswer(new Returns("test"));
+        mockitoStubber.addAnswer(new Returns("test"));
         state.validateState();
     }
     
     @Test
     public void shouldGetResultsForMethods() throws Throwable {
-        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
-        stubber.addAnswer(new Returns("simpleMethod"));
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        mockitoStubber.addAnswer(new Returns("simpleMethod"));
         
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        stubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
-        stubber.addAnswer(new ThrowsException(new MyException()));
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
+        mockitoStubber.addAnswer(new ThrowsException(new MyException()));
         
-        assertEquals("simpleMethod", stubber.getResultFor(simpleMethod));
+        assertEquals("simpleMethod", mockitoStubber.getResultFor(simpleMethod));
         
         try {
-            stubber.getResultFor(differentMethod);
+            mockitoStubber.getResultFor(differentMethod);
             fail();
         } catch (MyException e) {}
     }
     
     @Test
     public void shouldAddThrowableForVoidMethod() throws Throwable {
-        stubber.addAnswerForVoidMethod(new ThrowsException(new MyException()));
-        stubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
+        mockitoStubber.addAnswerForVoidMethod(new ThrowsException(new MyException()));
+        mockitoStubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
         
         try {
-            stubber.getResultFor(simpleMethod);
+            mockitoStubber.getResultFor(simpleMethod);
             fail();
         } catch (MyException e) {}
     }
     
     @Test
     public void shouldValidateThrowableForVoidMethod() throws Throwable {
-        stubber.addAnswerForVoidMethod(new ThrowsException(new Exception()));
+        mockitoStubber.addAnswerForVoidMethod(new ThrowsException(new Exception()));
         
         try {
-            stubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
+            mockitoStubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
             fail();
         } catch (MockitoException e) {}
     }
@@ -88,7 +88,7 @@ public class StubberTest extends TestBase{
     @Test
     public void shouldValidateThrowable() throws Throwable {
         try {
-            stubber.addAnswer(new ThrowsException(null));
+            mockitoStubber.addAnswer(new ThrowsException(null));
             fail();
         } catch (MockitoException e) {}
     }
