@@ -58,6 +58,7 @@ public class MockUtil {
     
     public static boolean isMock(Object mock) {
         try {
+            //TODO hacky
             getMockHandler(mock);
             return true;
         } catch (MockitoException e) {

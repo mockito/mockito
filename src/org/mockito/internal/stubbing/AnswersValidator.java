@@ -10,24 +10,32 @@ public class AnswersValidator {
     
     public void validate(Answer<?> answer, Invocation invocation) {
         if (answer instanceof ThrowsException) {
-            Throwable throwable = ((ThrowsException) answer).getThrowable();
-            if (throwable == null) {
-                reporter.cannotStubWithNullThrowable();
-            }
-            
-            if (throwable instanceof RuntimeException || throwable instanceof Error) {
-                return;
-            }
-            
-            if (!invocation.isValidException(throwable)) {
-                reporter.checkedExceptionInvalid(throwable);
-            }
+            validateException(answer, invocation);
         }
         
         if (answer instanceof Returns) {
-            if (invocation.isVoid() && ((Returns) answer).hasReturnValue()) {
-                reporter.cannotStubVoidMethodWithAReturnValue();
-            }
+            validateReturnValue(answer, invocation);
+        }
+    }
+
+    private void validateReturnValue(Answer<?> answer, Invocation invocation) {
+        if (invocation.isVoid() && ((Returns) answer).hasReturnValue()) {
+            reporter.cannotStubVoidMethodWithAReturnValue();
+        }
+    }
+
+    private void validateException(Answer<?> answer, Invocation invocation) {
+        Throwable throwable = ((ThrowsException) answer).getThrowable();
+        if (throwable == null) {
+            reporter.cannotStubWithNullThrowable();
+        }
+        
+        if (throwable instanceof RuntimeException || throwable instanceof Error) {
+            return;
+        }
+        
+        if (!invocation.isValidException(throwable)) {
+            reporter.checkedExceptionInvalid(throwable);
         }
     }
 }
