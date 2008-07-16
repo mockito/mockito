@@ -20,6 +20,7 @@
   <property name="version" value="snapshot" />
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
+  <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
 
   <path id="compile.classpath">
@@ -188,7 +189,15 @@
     </javadoc>
   </target>
 
-  <target name="test.zip.release" depends="zip" >
+  <target name="repackage-tests">
+    <jarjar jarfile="${target.dir}/${jar.tests}">
+      <fileset dir="${test.classes.dir}"/>
+      <rule pattern="net.sf.**" result="org.mockito.@1" />
+      <rule pattern="org.objectweb.**" result="org.mockito.@1" />
+    </jarjar>
+  </target>  
+  
+  <target name="test.zip.release" depends="zip, repackage-tests" >
     <delete dir="${target.dir}/tmp"/>
     <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
       <junit fork="true" forkmode="once" haltonfailure="true">
@@ -196,7 +205,7 @@
         <classpath>
           <fileset dir="${lib.dir.test}" includes="*.jar" />
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
-          <pathelement location="${test.classes.dir}" />
+          <pathelement location="${target.dir}/${jar.tests}"/>
         </classpath>
         <jvmarg value="-ea" />
 
@@ -206,7 +215,7 @@
       </junit>
   </target>
   
-  <target name="test.zip.release.separate.jars" depends="zip" >
+  <target name="test.zip.release.separate.jars" depends="zip, repackage-tests" >
     <delete dir="${target.dir}/tmp"/>
     <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
     <junit fork="true" forkmode="once" haltonfailure="true">
@@ -214,7 +223,7 @@
       <classpath>
         <fileset dir="${lib.dir.test}" includes="*.jar" />
         <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
-        <pathelement location="${test.classes.dir}" />
+        <pathelement location="${target.dir}/${jar.tests}"/>
       </classpath>
       <jvmarg value="-ea" />
 
