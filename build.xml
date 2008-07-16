@@ -239,7 +239,7 @@
     </copy>
   </target>
   
-  <target name="create.maven.bundle" depends="jar" description="Creates a bundle for Maven Central Repository">
+  <target name="maven.bundle" depends="zip" description="creates bundles for Maven Central Repository">
     
     <macrodef name="bundle" taskname="">
       <attribute name="type"/>
@@ -260,6 +260,14 @@
     
   </target> 
   
+  <target name="release.maven" depends="maven.bundle" description="releases maven bundles to 'maven' folder">
+    <copy todir="maven">
+      <fileset dir="${target.dir}/maven">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+    
   <target name="java-xref">
     <taskdef resource="org/jvnet/sorcerer/ant.properties" classpathref="ant.classpath" />
 
@@ -278,7 +286,7 @@
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
-  <target name="all" depends="zip" description="cleans, builds, tests, jars, zips" />
+  <target name="all" depends="maven.bundle" description="cleans, builds, tests, jars, zips, bundles maven" />
   
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
