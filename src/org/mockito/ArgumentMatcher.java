@@ -20,7 +20,7 @@ import org.mockito.internal.util.Decamelizer;
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
  * <pre>
- * class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
+ * class IsListOfTwoElements extends ArgumentMatcher<List> {
  *     public boolean matches(Object list) {
  *         return ((List) list).size() == 2;
  *     }

@@ -65,7 +65,7 @@ public interface OngoingStubbing<T> {
     /**
      * Stub mock object with a custom answer. E.g:
      * <pre>
-     * stub(mock.someMethod(10)).toAnswer(new Answer&lt;Integer&gt;() {
+     * stub(mock.someMethod(10)).toAnswer(new Answer<Integer>() {
      *     public Integer answer(InvocationOnMock invocation) throws Throwable {
      *         return (Integer) invocation.getArguments()[0];
      *     }

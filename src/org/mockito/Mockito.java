@@ -28,13 +28,18 @@ import org.mockito.stubbing.Answer;
  * 
  * <h1>Contents</h1>
  * 
- * <b> 1. Let's verify some behaviour! <br/> 2. How about some stubbing? <br/>
- * 3. Argument matchers <br/> 4. Verifying exact number of invocations / at
- * least once / never <br/> 5. Stubbing void methods with exceptions <br/> 6.
- * Verification in order <br/> 7. Making sure interaction(s) never happened on
- * mock <br/> 8. Finding redundant invocations <br/> 9. Shorthand for mocks
- * creation - &#064;Mock annotation <br/> 10. (**New**) Stubbing consecutive
- * calls (iterator-style stubbing) <br/> 11. (**New**) Stubbing with callbacks
+ * <b> 
+ *      1. Let's verify some behaviour! <br/> 
+ *      2. How about some stubbing? <br/>
+ *      3. Argument matchers <br/> 
+ *      4. Verifying exact number of invocations / at least once / never <br/> 
+ *      5. Stubbing void methods with exceptions <br/> 
+ *      6. Verification in order <br/> 
+ *      7. Making sure interaction(s) never happened on mock <br/> 
+ *      8. Finding redundant invocations <br/> 
+ *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
+ *      10. (**New**) Stubbing consecutive calls (iterator-style stubbing) <br/> 
+ *      11. (**New**) Stubbing with callbacks
  * </b>
  * 
  * <p>
@@ -83,8 +88,8 @@ import org.mockito.stubbing.Answer;
  * //following prints "null" because get(999) was not stubbed
  * System.out.println(mockedList.get(999));
  * 
- * //Stubbed invocations &lt;b&gt;are verified implicitly&lt;/b&gt;. The execution flow of your own code does it completely &lt;b&gt;for free&lt;/b&gt;. 
- * //Although it is possible to verify a stubbed invocation, in majority of cases &lt;b&gt;it's not necessary&lt;/b&gt;:
+ * //Stubbed invocations <b>are verified implicitly</b>. The execution flow of your own code does it completely <b>for free</b>. 
+ * //Although it is possible to verify a stubbed invocation, in majority of cases <b>it's not necessary</b>:
  * verify(mockedList).get(0);
  * </pre>
  * 
@@ -116,7 +121,7 @@ import org.mockito.stubbing.Answer;
  * //following prints "element"
  * System.out.println(mockedList.get(999));
  * 
- * //&lt;b&gt;you can also verify using argument matcher&lt;/b&gt;
+ * //<b>you can also verify using argument matcher</b>
  * verify(mockedList).get(anyInt());
  * </pre>
  * 
@@ -133,10 +138,10 @@ import org.mockito.stubbing.Answer;
  * E.g: (example shows verification but the same applies to stubbing):
  * 
  * <pre>
- *   verify(mock).someMethod(anyInt(), anyString(), &lt;b&gt;eq("third argument")&lt;/b&gt;);
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
  *   //above is correct - eq() is also an argument matcher
  *   
- *   verify(mock).someMethod(anyInt(), anyString(), &lt;b&gt;"third argument"&lt;/b&gt;);
+ *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </pre>
  * 
@@ -313,8 +318,6 @@ import org.mockito.stubbing.Answer;
  * any decent (clean & simple) code.
  * 
  * Allows stubbing with generic {@link Answer} interface
- * 
- * <p>
  * 
  * <pre>
  * stub(mock.someMethod(anyString())).toAnswer(new Answer() {
