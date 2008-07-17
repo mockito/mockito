@@ -97,16 +97,23 @@ import org.mockito.stubbing.Answer;
  * <li> By default, for all methods that return value, mock returns null, an
  * empty collection or appropriate primitive/primitive wrapper value (e.g: 0,
  * false, ... for int/Integer, boolean/Boolean, ...). </li>
+ * 
  * <li> Stubbing can be overridden: for example common stubbing can go to
  * fixture setup but test methods can override it. </li>
+ * 
  * <li> Once stubbed, mocked method will always return stubbed value regardless
  * of how many times it is called. </li>
+ * 
  * <li> Last stubbing is more important - when you stubbed the same method with
  * the same arguments many times. </li>
- * <li> Although it is possible to verify a stubbed invocation, in majority of
- * cases <b>it's not necessary</b>. Stubbed invocations <b>are verified
- * implicitly</b>. The execution flow of your own code does it completely
- * <b>for free</b>. </li>
+ * 
+ * <li> 
+ * Although it is possible to verify a stubbed invocation, in majority
+ * of cases it's not necessary. Let's say you've stubbed foo.bar()
+ * method. If your code cares what value foo.bar() returns, something
+ * else will fail if you forget to call foo.bar(). Hence you don't have
+ * to verify() it (e.g. it's just redundant). Not convinced? See  
+ * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a></li>
  * </ul>
  * 
  * <h3>3. Argument matchers</h3>
@@ -227,11 +234,7 @@ import org.mockito.stubbing.Answer;
  * //verify that other mocks were not interacted
  * verifyZeroInteractions(mockTwo, mockThree);
  * 
- * //following works exactly the same as above
- * verifyNoMoreInteractions(mockTwo, mockThree);
  * </pre>
- * 
- * See more {@link Mockito#verifyNoMoreInteractions}
  * 
  * <p>
  * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions()
@@ -250,8 +253,14 @@ import org.mockito.stubbing.Answer;
  * verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * Remember that usually it's not necessary to call verifyNoMoreInteractions()
- * all the time. See also {@link Mockito#never()} - it is more explicit and
+ * verifyNoMoreInteractions() should not be used in every method. 
+ * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
+ * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
+ * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
+ * 
+ * <p>   
+ * 
+ *  See also {@link Mockito#never()} - it is more explicit and
  * communicates an intent well.
  * <p>
  * 
@@ -358,7 +367,7 @@ import org.mockito.stubbing.Answer;
  *   verify(spy).add("two");
  * </pre>
  * 
- * <h3>IMPORTANT</h3>
+ * <h4>Important gotcha on spying real objects!</h4>
  * 
  * Sometimes it's impossible to use {@link Mockito#stub(Object)} for stubbing spies. Example:
  * 
@@ -493,8 +502,12 @@ public class Mockito extends Matchers {
      * Last stubbing is more important - when you stubbed the same method with
      * the same arguments many times.
      * <p>
-     * Although it's possible to verify stubbed methods, bear in mind that
-     * <b>are verified for free</b>.
+     * Although it is possible to verify a stubbed invocation, in majority
+     * of cases it's not necessary. Let's say you've stubbed foo.bar()
+     * method. If your code cares what value foo.bar() returns, something
+     * else will fail if you forget to call foo.bar(). Hence you don't have
+     * to verify() it (e.g. it's just redundant). Not convinced? See  
+     * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>. 
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -502,7 +515,6 @@ public class Mockito extends Matchers {
      *            method call
      * @return OngoingStubbing object to set stubbed value/exception
      */
-    //TODO change the javadoc to what was said on the mailing list
     @SuppressWarnings("unchecked")
     public static <T> OngoingStubbing<T> stub(T methodCall) {
         MOCKING_PROGRESS.stubbingStarted();
@@ -525,6 +537,14 @@ public class Mockito extends Matchers {
      * <pre>
      *   verify(mock, times(1)).someMethod("some arg");
      * </pre>
+     * 
+     * <p>
+     * Although it is possible to verify a stubbed invocation, in majority
+     * of cases it's not necessary. Let's say you've stubbed foo.bar()
+     * method. If your code cares what value foo.bar() returns, something
+     * else will fail if you forget to call foo.bar(). Hence you don't have
+     * to verify() it (e.g. it's just redundant). Not convinced? See  
+     * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
      *  
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -572,10 +592,15 @@ public class Mockito extends Matchers {
      * You can use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
      * <p>
-     * Usually it's not necessary to call verifyNoMoreInteractions() all the time.
      * See also {@link Mockito#never()} - it is more explicit and communicates an intent well.
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
+     * <p>
+     * verifyNoMoreInteractions() should not be used in every method. 
+     * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
+     * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
+     * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
+     * 
      * <p>
      * Example:
      * 
