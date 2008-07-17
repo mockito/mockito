@@ -97,8 +97,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         verifyingRecorder.verify(VerificationModeImpl.noMoreInteractions());
     }
 
-    public VoidMethodStubbable<T> voidMethodStubbable() {
-        return new VoidMethodStubbableImpl();
+    public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
+        return new VoidMethodStubbableImpl(mock);
     }
 
     public void setInstance(T instance) {
@@ -124,6 +124,12 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     private final class VoidMethodStubbableImpl implements VoidMethodStubbable<T> {
+        private final T mock;
+
+        public VoidMethodStubbableImpl(T mock) {
+            this.mock = mock;
+        }
+
         public VoidMethodStubbable<T> toThrow(Throwable throwable) {
             mockitoStubber.addAnswerForVoidMethod(new ThrowsException(throwable));
             return this;
@@ -140,7 +146,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public T on() {
-            return instance;
+            return mock;
         }
     }
 

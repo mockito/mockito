@@ -654,7 +654,7 @@ public class Mockito extends Matchers {
     public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
         MockHandler<T> handler = MockUtil.getMockHandler(mock);
         MOCKING_PROGRESS.stubbingStarted();
-        return handler.voidMethodStubbable();
+        return handler.voidMethodStubbable(mock);
     }
     
     public static Stubber doReturn(Object toBeReturned) {

@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
@@ -46,10 +45,8 @@ public class MockingRealObjectsTest extends TestBase {
         assertEquals(1, spy.size());
     }
     
-    @Ignore("needs fixing - the real clear() method is called :)")
     @Test
     public void shouldStubVoid() {
-        spy.add("one");
         stubVoid(spy)
             .toReturn()
             .toThrow(new RuntimeException())
