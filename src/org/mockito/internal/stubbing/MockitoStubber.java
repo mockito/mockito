@@ -18,7 +18,7 @@ public class MockitoStubber {
 
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
-    private final List<Answer> answersForVoidMethod = new ArrayList<Answer>();
+    private final List<Answer> answersForStubbing = new ArrayList<Answer>();
 
     private InvocationMatcher invocationForStubbing;
 
@@ -68,27 +68,24 @@ public class MockitoStubber {
         return null;
     }
 
-    //TODO it's not for void method any more
     public void addAnswerForVoidMethod(Answer answer) {
-        answersForVoidMethod.add(answer);
+        answersForStubbing.add(answer);
     }
     
-    //TODO dodgy name
-    public void addAnswersForVoidMethod(List<Answer> answers) {
-        answersForVoidMethod.addAll(answers);
+    public void setAnswersForStubbing(List<Answer> answers) {
+        answersForStubbing.addAll(answers);
     }
 
-    public boolean hasAnswerForVoidMethod() {
-        return !answersForVoidMethod.isEmpty();
+    public boolean hasAnswersForStubbing() {
+        return !answersForStubbing.isEmpty();
     }
 
-    //TODO it's not for void method any more
-    public void addVoidMethodForStubbing(InvocationMatcher voidMethodInvocationMatcher) {
-        invocationForStubbing = voidMethodInvocationMatcher;
-        assert hasAnswerForVoidMethod();
-        for (int i = 0; i < answersForVoidMethod.size(); i++) {
-            addAnswer(answersForVoidMethod.get(i), i != 0);
+    public void setMethodForStubbing(InvocationMatcher invocation) {
+        invocationForStubbing = invocation;
+        assert hasAnswersForStubbing();
+        for (int i = 0; i < answersForStubbing.size(); i++) {
+            addAnswer(answersForStubbing.get(i), i != 0);
         }
-        answersForVoidMethod.clear();
+        answersForStubbing.clear();
     }
 }

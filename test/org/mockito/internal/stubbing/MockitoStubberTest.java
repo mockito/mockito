@@ -67,7 +67,7 @@ public class MockitoStubberTest extends TestBase{
     @Test
     public void shouldAddThrowableForVoidMethod() throws Throwable {
         mockitoStubber.addAnswerForVoidMethod(new ThrowsException(new MyException()));
-        mockitoStubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
+        mockitoStubber.setMethodForStubbing(new InvocationMatcher(simpleMethod));
         
         try {
             mockitoStubber.getResultFor(simpleMethod);
@@ -80,7 +80,7 @@ public class MockitoStubberTest extends TestBase{
         mockitoStubber.addAnswerForVoidMethod(new ThrowsException(new Exception()));
         
         try {
-            mockitoStubber.addVoidMethodForStubbing(new InvocationMatcher(simpleMethod));
+            mockitoStubber.setMethodForStubbing(new InvocationMatcher(simpleMethod));
             fail();
         } catch (MockitoException e) {}
     }

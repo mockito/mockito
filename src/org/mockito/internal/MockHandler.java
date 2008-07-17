@@ -59,11 +59,11 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
     
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-        if (mockitoStubber.hasAnswerForVoidMethod()) {
-            //stubbing voids
+        if (mockitoStubber.hasAnswersForStubbing()) {
+            //stubbing voids in the old-school way: stubVoid()
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
-            mockitoStubber.addVoidMethodForStubbing(invocationMatcher);
+            mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
         
@@ -189,6 +189,6 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
-        mockitoStubber.addAnswersForVoidMethod(answers);
+        mockitoStubber.setAnswersForStubbing(answers);
     }
 }
