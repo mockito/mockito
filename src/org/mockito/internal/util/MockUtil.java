@@ -17,13 +17,12 @@ import org.mockito.internal.progress.MockingProgress;
 
 public class MockUtil {
     
-    //TODO reorder args
-    public static <T> T createMock(Class<T> classToMock, String mockName, MockingProgress progress, T optionalInstance) {
-        if (mockName == null) {
-            mockName = toInstanceName(classToMock);
+    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String optionalMockName, T optionalInstance) {
+        if (optionalMockName == null) {
+            optionalMockName = toInstanceName(classToMock);
         }
         MockFactory<T> proxyFactory = new MockFactory<T>();
-        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder());
+        MockHandler<T> mockHandler = new MockHandler<T>(optionalMockName, progress, new MatchersBinder());
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         return proxyFactory.createMock(classToMock, filter, optionalInstance);
     }

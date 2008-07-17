@@ -404,7 +404,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return MockUtil.createMock(classToMock, name, MOCKING_PROGRESS, null);
+        return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, null);
     }
 
     /**
@@ -456,7 +456,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MockUtil.createMock((Class<T>) object.getClass(), null, MOCKING_PROGRESS, object);
+        return MockUtil.createMock((Class<T>) object.getClass(), MOCKING_PROGRESS, null, object);
     }
 
     /**
