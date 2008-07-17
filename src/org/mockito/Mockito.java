@@ -109,7 +109,7 @@ import org.mockito.stubbing.Answer;
  * 
  * <li> 
  * Although it is possible to verify a stubbed invocation, in majority
- * of cases it's not necessary. Let's say you've stubbed foo.bar()
+ * of cases it's not necessary: Let's say you've stubbed foo.bar()
  * method. If your code cares what value foo.bar() returns, something
  * else will fail if you forget to call foo.bar(). Hence you don't have
  * to verify() it (e.g. it's just redundant). Not convinced? See  
@@ -253,7 +253,7 @@ import org.mockito.stubbing.Answer;
  * verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * verifyNoMoreInteractions() should not be used in every method. 
+ * verifyNoMoreInteractions() should not be used in every test method. 
  * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
  * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
  * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
@@ -503,11 +503,12 @@ public class Mockito extends Matchers {
      * the same arguments many times.
      * <p>
      * Although it is possible to verify a stubbed invocation, in majority
-     * of cases it's not necessary. Let's say you've stubbed foo.bar()
+     * of cases it's not necessary: Let's say you've stubbed foo.bar()
      * method. If your code cares what value foo.bar() returns, something
      * else will fail if you forget to call foo.bar(). Hence you don't have
      * to verify() it (e.g. it's just redundant). Not convinced? See  
      * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>. 
+     * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -545,7 +546,8 @@ public class Mockito extends Matchers {
      * else will fail if you forget to call foo.bar(). Hence you don't have
      * to verify() it (e.g. it's just redundant). Not convinced? See  
      * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
-     *  
+     * 
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
@@ -596,7 +598,7 @@ public class Mockito extends Matchers {
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
-     * verifyNoMoreInteractions() should not be used in every method. 
+     * verifyNoMoreInteractions() should not be used in every test method. 
      * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
      * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
      * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
