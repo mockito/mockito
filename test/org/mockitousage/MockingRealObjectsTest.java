@@ -63,6 +63,19 @@ public class MockingRealObjectsTest extends TestBase {
     }
     
     @Test
+    public void shouldStubWithDoReturnAndVerify() {
+        doReturn("foo")
+        .doReturn("bar")
+        .when(spy).get(0);
+        
+        assertEquals("foo", spy.get(0));
+        assertEquals("bar", spy.get(0));
+        
+        verify(spy, times(2)).get(0);
+        verifyNoMoreInteractions(spy);
+    }
+    
+    @Test
     public void shouldToString() {
         spy.add("foo");
         assertEquals("[foo]" , spy.toString());
