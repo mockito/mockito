@@ -341,6 +341,30 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
+ * <h3> 12. (**New**) doThrow|doAnswer() family of methods mostly for stubbing voids</h3>
+ * 
+ * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+ * <p>
+ * doThrow() replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
+ * <p>
+ * Use doThrow() when you want the void method to throw an exception:
+ * <pre>
+ *   doThrow(new RuntimeException()).when(mockedList).clear();
+ *   
+ *   //following throws RuntimeException:
+ *   mockedList.clear();
+ * </pre>
+ * 
+ * Read more about other similar methods:
+ * <p>
+ * {@link Mockito#doThrow(Throwable)}
+ * <p>
+ * {@link Mockito#doAnswer(Answer)}
+ * <p>
+ * {@link Mockito#doNothing()}
+ * <p>
+ * {@link Mockito#doReturn(Object)}
+ * 
  * <h3> 13. (**New**) Spying on real objects</h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
@@ -424,7 +448,7 @@ public class Mockito extends Matchers {
      * 
      * <pre>
      *   List list = new LinkedList();
-     *   List spy = Mockito.spy(list);
+     *   List spy = spy(list);
      * 
      *   //optionally, you can stub out some methods:
      *   stub(spy.size()).toReturn(100);
@@ -734,7 +758,7 @@ public class Mockito extends Matchers {
      * {@link Mockito#stub(Object)} is always recommended for stubbing because it is argument type-safe 
      * and more readable (especially when stubbing consecutive calls).
      * <p> 
-     * In rare cases you cannot use {@link Mockito#stub(Object)} for stubbing. Here are those situations: 
+     * In extremaly rare cases you cannot use {@link Mockito#stub(Object)} for stubbing. Here are those situations: 
      * <p>
      * 1. Overriding a previous exception-stubbing:
      * 
@@ -769,9 +793,9 @@ public class Mockito extends Matchers {
     }
  
     /**
-     * Mockito mocks' void methods do nothing by default. However, there are situations when doNothing() comes handy:  
+     * Mock's void methods do nothing by default. However, there are situations when doNothing() comes handy:  
      * <p>
-     * 1. Stubbing consecutive calls on void method:
+     * 1. Stubbing consecutive calls on a void method:
      * <pre>
      *   doNothing().
      *   doThrow(new RuntimeException()).
