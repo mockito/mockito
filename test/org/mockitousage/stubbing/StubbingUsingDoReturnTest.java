@@ -130,8 +130,8 @@ public class StubbingUsingDoReturnTest extends TestBase {
     
     @Test
     public void shouldAllowChainedStubbingOnVoidMethods() {
-        doReturn().
-        doReturn().
+        doNothing().
+        doNothing().
         doThrow(new RuntimeException())
         .when(mock).voidMethod();
         
@@ -160,9 +160,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
     
     @Test
-    public void shouldNotAllowDoReturnOnNonVoids() {
+    public void shouldNotAllowDoNothingOnNonVoids() {
         try {
-            doReturn().when(mock).simpleMethod();
+            doNothing().when(mock).simpleMethod();
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage(), contains("Cannot stub a non-void method"));

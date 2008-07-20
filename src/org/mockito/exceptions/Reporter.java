@@ -328,7 +328,7 @@ public class Reporter {
                 "Cannot stub a non-void method with a void return!",
                 "Void return is only used for stubbing consecutive calls on void methods.",
                 "Example:",
-                "    doReturn().",
+                "    doNothing().",
                 "    doThrow(new RuntimeException()).",
                 "    when(mock).someVoidMethod();",
                 "Above means:",

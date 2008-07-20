@@ -10,7 +10,7 @@ import org.mockito.stubbing.Answer;
 public interface Stubber extends StubbedMethodSelector {
 
     Stubber doReturn(Object toBeReturned);
-    Stubber doReturn();
+    Stubber doNothing();
     Stubber doThrow(Throwable toBeThrown);
     Stubber doAnswer(Answer answer);
 }

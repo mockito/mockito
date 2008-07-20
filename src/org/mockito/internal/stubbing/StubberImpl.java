@@ -34,8 +34,8 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
-    public Stubber doReturn() {
-        answers.add(new ReturnsVoid());
+    public Stubber doNothing() {
+        answers.add(new DoesNothing());
         return this;
     }
 

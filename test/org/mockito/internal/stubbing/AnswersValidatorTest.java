@@ -54,11 +54,11 @@ public class AnswersValidatorTest extends TestBase {
     
     @Test(expected = MockitoException.class)
     public void shouldFailWhenVoidReturnSetOnNonVoidMethod() throws Throwable {
-        validator.validate(new ReturnsVoid(), new InvocationBuilder().simpleMethod().toInvocation());
+        validator.validate(new DoesNothing(), new InvocationBuilder().simpleMethod().toInvocation());
     }
     
     @Test
     public void shouldAllowVoidReturnForVoidMethod() throws Throwable {
-        validator.validate(new ReturnsVoid(), new InvocationBuilder().method("voidMethod").toInvocation());
+        validator.validate(new DoesNothing(), new InvocationBuilder().method("voidMethod").toInvocation());
     }
 }

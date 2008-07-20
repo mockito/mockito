@@ -17,12 +17,12 @@ public class AnswersValidator {
             validateReturnValue((Returns) answer, invocation);
         }
         
-        if (answer instanceof ReturnsVoid) {
-            validateVoidReturn((ReturnsVoid) answer, invocation);
+        if (answer instanceof DoesNothing) {
+            validateVoidReturn((DoesNothing) answer, invocation);
         }
     }
 
-    private void validateVoidReturn(ReturnsVoid answer, Invocation invocation) {
+    private void validateVoidReturn(DoesNothing answer, Invocation invocation) {
         if (!invocation.isVoid()) {
             reporter.cannotStubNonVoidMethodWithAVoidReturn();
         }
