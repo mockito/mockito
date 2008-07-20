@@ -323,16 +323,15 @@ public class Reporter {
              ));
     }
 
-    public void cannotStubNonVoidMethodWithAVoidReturn() {
+    public void onlyVoidMethodsCanBeSetToDoNothing() {
         throw new MockitoException(join(
-                "Cannot stub a non-void method with a void return!",
-                "Void return is only used for stubbing consecutive calls on void methods.",
-                "Example:",
+                "Only void methods can doNothing()!",
+                "Example of correct use of doNothing():",
                 "    doNothing().",
                 "    doThrow(new RuntimeException()).",
                 "    when(mock).someVoidMethod();",
                 "Above means:",
-                "someVoidMethod() does nothing the 1st time but throws an exception 2nd time is called"
+                "someVoidMethod() does nothing the 1st time but throws an exception the 2nd time is called"
              ));
     }
 }

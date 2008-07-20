@@ -18,13 +18,13 @@ public class AnswersValidator {
         }
         
         if (answer instanceof DoesNothing) {
-            validateVoidReturn((DoesNothing) answer, invocation);
+            validateDoNothing((DoesNothing) answer, invocation);
         }
     }
 
-    private void validateVoidReturn(DoesNothing answer, Invocation invocation) {
+    private void validateDoNothing(DoesNothing answer, Invocation invocation) {
         if (!invocation.isVoid()) {
-            reporter.cannotStubNonVoidMethodWithAVoidReturn();
+            reporter.onlyVoidMethodsCanBeSetToDoNothing();
         }
     }
 

@@ -688,9 +688,53 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Sometimes you cannot stub using {@link Mockito#stub(Object)}. 
+     * Use doThrow() when you want the void method to throw an exception.
      * <p>
-     * When should you use doReturn() for stubbing?
+     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+     * <p>
+     * Example:
+     * 
+     * <pre>
+     *   doThrow(new RuntimeException()).when(mock).someVoidMethod();
+     * </pre>
+     * 
+     * @param toBeThrown
+     * @return stubber - to select a method 
+     */
+    public static Stubber doThrow(Throwable toBeThrown) {
+        return doAnswer(new ThrowsException(toBeThrown));
+    }
+    
+    /**
+     * Use doAnswer() when you want to stub a void method with generic {@link Answer}.
+     * <p>
+     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+     * <p>
+     * Example:
+     * 
+     * <pre>
+     *   doAnswer(new Answer() {
+     *      public Object answer(InvocationOnMock invocation) {
+     *          Object[] args = invocation.getArguments();
+     *          Mock mock = invocation.getMock();
+                return null;
+     *      }})
+     *    .when(mock).someMethod();
+     * </pre>
+     * 
+     * @param answer
+     * @return stubber - to select a method
+     */
+    public static Stubber doAnswer(Answer answer) {
+        MOCKING_PROGRESS.stubbingStarted();
+        return new StubberImpl().doAnswer(answer);
+    }    
+    
+    /**
+     * {@link Mockito#stub(Object)} is always recommended for stubbing because it is argument type-safe 
+     * and more readable (especially when stubbing consecutive calls).
+     * <p> 
+     * In rare cases you cannot use {@link Mockito#stub(Object)} for stubbing. Here are those situations: 
      * <p>
      * 1. Overriding a previous exception-stubbing:
      * 
@@ -704,7 +748,7 @@ public class Mockito extends Matchers {
      *   doReturn("bar").when(mock).foo();
      * </pre>
      * 
-     * 2. When spying real objects but calling real methods on a spy brings side effects  
+     * 2. When spying real objects and calling real methods on a spy brings side effects  
      * 
      * <pre>
      *   List list = new LinkedList();
@@ -718,23 +762,46 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * @param toBeReturned
-     * @return
+     * @return stubber - to select a method
      */
     public static Stubber doReturn(Object toBeReturned) {
         return doAnswer(new Returns(toBeReturned));
     }
-    
+ 
+    /**
+     * Mockito mocks' void methods do nothing by default. However, there are situations when doNothing() comes handy:  
+     * <p>
+     * 1. Stubbing consecutive calls on void method:
+     * <pre>
+     *   doNothing().
+     *   doThrow(new RuntimeException()).
+     *   when(mock).someVoidMethod();
+     *   
+     *   //does nothing the first time:
+     *   mock.someVoidMethod();
+     *   
+     *   //throws RuntimeException the next time:
+     *   mock.someVoidMethod();
+     * </pre>
+     * 
+     * 2. When you spy real objects and you want the void method to do nothing:
+     * <pre>
+     *   List list = new LinkedList();
+     *   List spy = spy(list);
+     *   
+     *   //let's make clear() do nothing
+     *   doNothing().when(spy).clear();
+     *   
+     *   spy.add("one");
+     *   
+     *   //clear does nothing, so the list still contains "one"
+     *   spy.clear();
+     * </pre>
+     *   
+     * @return stubber - to select a method
+     */
     public static Stubber doNothing() {
         return doAnswer(new DoesNothing());
-    }
-    
-    public static Stubber doThrow(Throwable toBeThrown) {
-        return doAnswer(new ThrowsException(toBeThrown));
-    }
-    
-    public static Stubber doAnswer(Answer answer) {
-        MOCKING_PROGRESS.stubbingStarted();
-        return new StubberImpl().doAnswer(answer);
     }
     
     /**

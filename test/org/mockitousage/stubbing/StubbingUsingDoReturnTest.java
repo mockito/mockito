@@ -165,7 +165,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doNothing().when(mock).simpleMethod();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.getMessage(), contains("Cannot stub a non-void method"));
+            assertThat(e.getMessage(), contains("Only void methods can doNothing()"));
         }
     }
     

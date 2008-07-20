@@ -68,7 +68,7 @@ public interface VoidMethodStubbable<T> {
     VoidMethodStubbable<T> toReturn();
 
     /**
-     * Stubs void method to execute a custom answer.
+     * Stubs a void method with generic {@link Answer}
      * <p>
      * For Example:
      * <pre>
