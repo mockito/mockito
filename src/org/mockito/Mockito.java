@@ -40,6 +40,8 @@ import org.mockito.stubbing.Answer;
  *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
  *      10. (**New**) Stubbing consecutive calls (iterator-style stubbing) <br/> 
  *      11. (**New**) Stubbing with callbacks
+ *      12. (**Totally New**) doThrow()|doAnswer() family of methods mostly for stubbing voids
+ *      13. (**Totally New**) Spying on real objects
  * </b>
  * 
  * <p>
@@ -187,12 +189,9 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3>5. Stubbing void methods with exceptions</h3>
  * 
- * <pre>
- * stubVoid(mockedList).toThrow(new RuntimeException()).on().clear();
- * 
- * //following throws exception
- * mockedList.clear();
- * </pre>
+ * {@link Mockito#doThrow(Throwable)} replaces {@link Mockito#stubVoid(Object)} because of improved readability and consistency with family of doAnswer() methods. 
+ * <p>
+ * See paragraph 12.
  * 
  * <h3>6. Verification in order</h3>
  * 
@@ -341,11 +340,11 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
- * <h3> 12. (**New**) doThrow|doAnswer() family of methods mostly for stubbing voids</h3>
+ * <h3> 12. (**Totally New**) doThrow|doAnswer() family of methods mostly for stubbing voids</h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
  * <p>
- * doThrow() replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
+ * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
  * <p>
  * Use doThrow() when you want the void method to throw an exception:
  * <pre>
@@ -365,7 +364,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * {@link Mockito#doReturn(Object)}
  * 
- * <h3> 13. (**New**) Spying on real objects</h3>
+ * <h3> 13. (**Totally New**) Spying on real objects</h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
  * 
@@ -686,7 +685,13 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs void method with an exception. E.g:
+     * @deprecated
+     * 
+     * Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
+     * <p>
+     * doThrow() replaces stubVoid() because of improved readability and consistency with family of doAnswer() methods. 
+     * <p>
+     * Originally, stubVoid() was used for stubbing void methods with exceptions. E.g:
      * 
      * <pre>
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
