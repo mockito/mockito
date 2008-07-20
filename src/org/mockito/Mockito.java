@@ -452,7 +452,7 @@ public class Mockito extends Matchers {
      *   List list = new LinkedList();
      *   List spy = Mockito.spy(list);
      *   
-     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException because the list is yet empty
+     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
      *   stub(spy.get(0)).toReturn("foo");
      *   
      *   //You have to use doReturn() for stubbing
@@ -687,6 +687,39 @@ public class Mockito extends Matchers {
         return handler.voidMethodStubbable(mock);
     }
     
+    /**
+     * Sometimes you cannot stub using {@link Mockito#stub(Object)}. 
+     * <p>
+     * When should you use doReturn() for stubbing?
+     * <p>
+     * 1. Overriding a previous exception-stubbing:
+     * 
+     * <pre>
+     *   stub(mock.foo()).toThrow(new RuntimeException());
+     *   
+     *   //Impossible: real method is called so mock.foo() throws RuntimeException
+     *   stub(mock.foo()).toReturn("bar");
+     *   
+     *   //You have to use doReturn() for stubbing
+     *   doReturn("bar").when(mock).foo();
+     * </pre>
+     * 
+     * 2. When spying real objects but calling real methods on a spy brings side effects  
+     * 
+     * <pre>
+     *   List list = new LinkedList();
+     *   List spy = Mockito.spy(list);
+     *   
+     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
+     *   stub(spy.get(0)).toReturn("foo");
+     *   
+     *   //You have to use doReturn() for stubbing
+     *   doReturn("foo").when(spy).get(0);
+     * </pre>
+     * 
+     * @param toBeReturned
+     * @return
+     */
     public static Stubber doReturn(Object toBeReturned) {
         return doAnswer(new Returns(toBeReturned));
     }
