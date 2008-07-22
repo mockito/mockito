@@ -45,6 +45,7 @@ public class MockingRealObjectsTest extends TestBase {
         assertEquals(1, spy.size());
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldStubVoid() {
         stubVoid(spy)

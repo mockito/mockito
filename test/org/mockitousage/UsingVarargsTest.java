@@ -31,6 +31,7 @@ public class UsingVarargsTest extends TestBase {
         mock = Mockito.mock(IVarArgs.class);
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldStubStringVarargs() {
         stub(mock.withStringVarargsReturningString(1)).toReturn("1");

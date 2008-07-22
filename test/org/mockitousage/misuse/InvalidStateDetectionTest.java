@@ -33,7 +33,7 @@ import org.mockitoutil.TestBase;
  *    -on stub
  *    -on stubVoid
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "deprecation"})
 public class InvalidStateDetectionTest extends TestBase {
 
     private IMethods mock;
@@ -67,9 +67,9 @@ public class InvalidStateDetectionTest extends TestBase {
         
         stub(mock.simpleMethod());
         detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
-        
+
         stub(mock.simpleMethod());
-        detects(new OnDoReturn(), UnfinishedStubbingException.class);
+        detects(new OnDoAnswer(), UnfinishedStubbingException.class);
     }
     
     @Test
@@ -96,7 +96,34 @@ public class InvalidStateDetectionTest extends TestBase {
         detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
         
         stubVoid(mock);
-        detects(new OnDoReturn(), UnfinishedStubbingException.class);
+        detects(new OnDoAnswer(), UnfinishedStubbingException.class);
+    }
+    
+    @Test
+    public void shouldDetectUnfinishedDoAnswerStubbing() {
+        doAnswer(null);
+        detects(new OnMethodCallOnMock(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnStub(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnStubVoid(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnVerify(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnVerifyInOrder(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
+        
+        doAnswer(null);
+        detects(new OnDoAnswer(), UnfinishedStubbingException.class);
     }
     
     @Test
@@ -120,7 +147,7 @@ public class InvalidStateDetectionTest extends TestBase {
         detects(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
         
         verify(mock);
-        detects(new OnDoReturn(), UnfinishedVerificationException.class);
+        detects(new OnDoAnswer(), UnfinishedVerificationException.class);
     }
     
     @Test
@@ -180,10 +207,9 @@ public class InvalidStateDetectionTest extends TestBase {
         }
     }   
     
-    //TODO add other doX() methods as well
-    private static class OnDoReturn implements DetectsInvalidState {
+    private static class OnDoAnswer implements DetectsInvalidState {
         public void detect(IMethods mock) {
-            doReturn(null);
+            doAnswer(null);
         }
     }  
     

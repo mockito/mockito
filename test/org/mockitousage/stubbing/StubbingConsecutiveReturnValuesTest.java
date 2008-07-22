@@ -12,6 +12,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("deprecation")
 public class StubbingConsecutiveReturnValuesTest extends TestBase {
 
     @Mock private IMethods mock;

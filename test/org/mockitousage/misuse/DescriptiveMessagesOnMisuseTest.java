@@ -23,6 +23,9 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @Ignore("just for tuning up the error messages")
     @Test
     public void tryDescriptiveMessagesOnMisuse() {
+        doReturn("foo");
+        doReturn("bar");
+        
 //        verifyNoMoreInteractions();
 //        verifyNoMoreInteractions(null);
 //        verifyNoMoreInteractions("");

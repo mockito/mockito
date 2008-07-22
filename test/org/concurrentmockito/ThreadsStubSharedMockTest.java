@@ -28,6 +28,7 @@ public class ThreadsStubSharedMockTest extends TestBase {
         final Thread[] listeners = new Thread[3];
         for (int i = 0; i < listeners.length; i++) {
             listeners[i] = new Thread() {
+                @SuppressWarnings("deprecation")
                 @Override
                 public void run() {
                     stub(mock.simpleMethod(getId()))

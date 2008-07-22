@@ -73,6 +73,7 @@ public class BasicStubbingTest extends TestBase {
         assertEquals("test", mockTwo.toString());
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
         stub(mock.simpleMethod("one")).toThrow(new RuntimeException());

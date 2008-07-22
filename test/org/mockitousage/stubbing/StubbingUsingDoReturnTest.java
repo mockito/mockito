@@ -169,10 +169,6 @@ public class StubbingUsingDoReturnTest extends TestBase {
         }
     }
     
-    //TODO state validation
-    
-    //TODO exception messages with UnfinishedStubbingException
-    
     @Test
     public void shouldStubbingBeTreatedAsInteraction() throws Exception {
         doReturn("foo").when(mock).simpleMethod();

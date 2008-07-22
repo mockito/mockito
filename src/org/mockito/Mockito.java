@@ -39,9 +39,9 @@ import org.mockito.stubbing.Answer;
  *      8. Finding redundant invocations <br/> 
  *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
  *      10. (**New**) Stubbing consecutive calls (iterator-style stubbing) <br/> 
- *      11. (**New**) Stubbing with callbacks
- *      12. (**Totally New**) doThrow()|doAnswer() family of methods mostly for stubbing voids
- *      13. (**Totally New**) Spying on real objects
+ *      11. (**New**) Stubbing with callbacks <br/>
+ *      12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
+ *      13. (**Totally New**) Spying on real objects <br/>
  * </b>
  * 
  * <p>
@@ -340,7 +340,7 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
- * <h3> 12. (**Totally New**) doThrow|doAnswer() family of methods mostly for stubbing voids</h3>
+ * <h3> 12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids</h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
  * <p>
@@ -354,7 +354,7 @@ import org.mockito.stubbing.Answer;
  *   mockedList.clear();
  * </pre>
  * 
- * Read more about other similar methods:
+ * Read more about other those methods:
  * <p>
  * {@link Mockito#doThrow(Throwable)}
  * <p>
@@ -408,8 +408,6 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    private Mockito() {}
-
     private static final Reporter REPORTER = new Reporter();
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
 
@@ -728,7 +726,7 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * @param toBeThrown
-     * @return stubber - to select a method 
+     * @return stubber - to select a method for stubbing
      */
     public static Stubber doThrow(Throwable toBeThrown) {
         return doAnswer(new ThrowsException(toBeThrown));
@@ -752,53 +750,16 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * @param answer
-     * @return stubber - to select a method
+     * @return stubber - to select a method for stubbing
      */
     public static Stubber doAnswer(Answer answer) {
         MOCKING_PROGRESS.stubbingStarted();
         return new StubberImpl().doAnswer(answer);
-    }    
+    }  
     
     /**
-     * {@link Mockito#stub(Object)} is always recommended for stubbing because it is argument type-safe 
-     * and more readable (especially when stubbing consecutive calls).
-     * <p> 
-     * In extremaly rare cases you cannot use {@link Mockito#stub(Object)} for stubbing. Here are those situations: 
-     * <p>
-     * 1. Overriding a previous exception-stubbing:
-     * 
-     * <pre>
-     *   stub(mock.foo()).toThrow(new RuntimeException());
-     *   
-     *   //Impossible: real method is called so mock.foo() throws RuntimeException
-     *   stub(mock.foo()).toReturn("bar");
-     *   
-     *   //You have to use doReturn() for stubbing
-     *   doReturn("bar").when(mock).foo();
-     * </pre>
-     * 
-     * 2. When spying real objects and calling real methods on a spy brings side effects  
-     * 
-     * <pre>
-     *   List list = new LinkedList();
-     *   List spy = Mockito.spy(list);
-     *   
-     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
-     *   stub(spy.get(0)).toReturn("foo");
-     *   
-     *   //You have to use doReturn() for stubbing
-     *   doReturn("foo").when(spy).get(0);
-     * </pre>
-     * 
-     * @param toBeReturned
-     * @return stubber - to select a method
-     */
-    public static Stubber doReturn(Object toBeReturned) {
-        return doAnswer(new Returns(toBeReturned));
-    }
- 
-    /**
-     * Mock's void methods do nothing by default. However, there are situations when doNothing() comes handy:  
+     * Use doNothing() for setting void methods to do nothing. <b>Beware</b> that void methods do nothing by default! 
+     * However, there are rare situations when doNothing() comes handy:  
      * <p>
      * 1. Stubbing consecutive calls on a void method:
      * <pre>
@@ -827,12 +788,53 @@ public class Mockito extends Matchers {
      *   spy.clear();
      * </pre>
      *   
-     * @return stubber - to select a method
+     * @return stubber - to select a method for stubbing
      */
     public static Stubber doNothing() {
         return doAnswer(new DoesNothing());
-    }
+    }    
     
+    /**
+     * Use doReturn() in those rare occasions when you cannot use {@link Mockito#stub(Object)}.
+     * <p>
+     * Beware that {@link Mockito#stub(Object)} is always recommended for stubbing because it is argument type-safe 
+     * and more readable (especially when stubbing consecutive calls). 
+     * <p>
+     * However, there are occasions when doReturn() comes handy:
+     * <p>
+     * 
+     * 1. When spying real objects and calling real methods on a spy brings side effects  
+     * 
+     * <pre>
+     *   List list = new LinkedList();
+     *   List spy = Mockito.spy(list);
+     *   
+     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
+     *   stub(spy.get(0)).toReturn("foo");
+     *   
+     *   //You have to use doReturn() for stubbing
+     *   doReturn("foo").when(spy).get(0);
+     * </pre>
+     * 
+     * 2. Overriding a previous exception-stubbing:
+     * 
+     * <pre>
+     *   stub(mock.foo()).toThrow(new RuntimeException());
+     *   
+     *   //Impossible: real method is called so mock.foo() throws RuntimeException
+     *   stub(mock.foo()).toReturn("bar");
+     *   
+     *   //You have to use doReturn() for stubbing
+     *   doReturn("bar").when(mock).foo();
+     * </pre>
+     * 
+     * @param toBeReturned
+     * @return stubber - to select a method for stubbing
+     */
+    public static Stubber doReturn(Object toBeReturned) {
+        return doAnswer(new Returns(toBeReturned));
+    }
+ 
     /**
      * Creates InOrder object that allows verifying mocks in order.
      * 

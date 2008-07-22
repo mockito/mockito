@@ -8,7 +8,7 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "deprecation"})
 public class StubbingWithCustomAnswerTest extends TestBase {
     @Mock
     private IMethods mock;

@@ -64,7 +64,7 @@ public class Reporter {
                 "Examples of correct stubbing:",
                 "    stub(mock.isOk()).toReturn(true);",
                 "    stub(mock.isOk()).toThrow(exception);",
-                "    stubVoid(mock).toThrow(exception).on().someMethod();"
+                "    doThrow(exception).when(mock).someVoidMethod();"
         ));
     }
 
@@ -319,7 +319,7 @@ public class Reporter {
         throw new MockitoException(join(
                 "Cannot stub a void method with a return value!",
                 "Voids are usually stubbed with Throwables:",
-                "    doThrow(new RuntimeException()).when(mock).someVoidMethod();"
+                "    doThrow(exception).when(mock).someVoidMethod();"
              ));
     }
 

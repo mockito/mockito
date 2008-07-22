@@ -19,7 +19,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"serial", "unchecked"})
+@SuppressWarnings({"serial", "unchecked", "all"})
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;

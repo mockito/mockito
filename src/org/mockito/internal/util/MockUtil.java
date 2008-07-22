@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.util;
 
+import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.creation.MethodInterceptorFilter;
@@ -38,31 +38,29 @@ public class MockUtil {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
         
-        try {
-            if (Enhancer.isEnhanced(mock.getClass())) {
-                return ((MethodInterceptorFilter<MockHandler<T>>) getInterceptor(mock)).getDelegate();
-            } else {
-                throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
-            }
-        } catch (ClassCastException e) {
+        if (isMockitoMock(mock)) {
+            return getInterceptor(mock).getDelegate();
+        } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
+    }
+
+    private static <T> boolean isMockitoMock(T mock) {
+        return Enhancer.isEnhanced(mock.getClass()) && getInterceptor(mock) != null;
+    }
+    
+    public static boolean isMock(Object mock) {
+        return mock != null && isMockitoMock(mock);
     }
     
     @SuppressWarnings("unchecked")
     private static <T> MethodInterceptorFilter<MockHandler<T>> getInterceptor(T mock) {
         Factory factory = (Factory) mock;
-        return (MethodInterceptorFilter) factory.getCallback(0);
-    }
-    
-    public static boolean isMock(Object mock) {
-        try {
-            //TODO hacky
-            getMockHandler(mock);
-            return true;
-        } catch (MockitoException e) {
-            return false;
+        Callback callback = factory.getCallback(0);
+        if(callback instanceof MethodInterceptorFilter) {
+            return (MethodInterceptorFilter) callback;
         }
+        return null;
     }
 
     public static String getMockName(Object mock) {
