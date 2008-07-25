@@ -687,10 +687,16 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * @deprecated
+     * <b>Deprecated</b>
      * 
-     * Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
-     * <p>
+     * <pre>
+     *   //Instead of:
+     *   stubVoid(mock).toThrow(e).on().someVoidMethod();
+     * 
+     *   //Please do:
+     *   doThrow(e).when(mock).someVoidMethod();
+     * </pre> 
+     * 
      * doThrow() replaces stubVoid() because of improved readability and consistency with the family of doAnswer() methods. 
      * <p>
      * Originally, stubVoid() was used for stubbing void methods with exceptions. E.g:
@@ -707,6 +713,8 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * See examples in javadoc for {@link Mockito} class
+     * 
+     * @deprecated Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
      * 
      * @param mock
      *            to stub
