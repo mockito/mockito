@@ -114,7 +114,7 @@ import org.mockito.stubbing.Answer;
  * of cases it's not necessary: Let's say you've stubbed foo.bar()
  * method. If your code cares what value foo.bar() returns, something
  * else will fail if you forget to call foo.bar(). Hence you don't have
- * to verify() it (e.g. it's just redundant). Not convinced? See  
+ * to verify() it. It's  (e.g. it's just redundant). Not convinced? See  
  * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a></li>
  * </ul>
  * 
@@ -189,7 +189,7 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3>5. Stubbing void methods with exceptions</h3>
  * 
- * {@link Mockito#doThrow(Throwable)} replaces {@link Mockito#stubVoid(Object)} because of improved readability and consistency with family of doAnswer() methods. 
+ * {@link Mockito#doThrow(Throwable)} replaces {@link Mockito#stubVoid(Object)} because of improved readability and consistency with the family of doAnswer() methods. 
  * <p>
  * See paragraph 12.
  * 
@@ -215,7 +215,7 @@ import org.mockito.stubbing.Answer;
  * interactions</b> one-by-one but only those that you are interested in
  * testing in order.
  * <p>
- * Also, you can create InOrder object passing only mocks that relevant for
+ * Also, you can create InOrder object passing only mocks that are relevant for
  * in-order verification.
  * 
  * <h3>7. Making sure interaction(s) never happened on mock</h3>
@@ -252,7 +252,8 @@ import org.mockito.stubbing.Answer;
  * verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * verifyNoMoreInteractions() should not be used in every test method. 
+ * Some users who did a lot of classical, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
+ * verifyNoMoreInteractions() is not recommended to use in every test method. 
  * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
  * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
  * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
@@ -297,16 +298,18 @@ import org.mockito.stubbing.Answer;
  * <h3> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same
- * method call. Typical use case could be mocking iterators. Initially this
- * feature was not included in original version of Mockito to promote simple
- * mocking. Instead of iterators we strongly recommend using Iterable or simply
+ * method call. Typical use case could be mocking iterators. 
+ * Original version of Mockito did not have this feature to promote simple mocking. 
+ * For example, instead of iterators one could use {@link Iterable} or simply
  * collections. Those offer natural ways of stubbing (e.g. using real
- * collections). In rare scenarios stubbing consecutive calls could useful,
+ * collections). In rare scenarios stubbing consecutive calls could be useful,
  * though:
  * <p>
  * 
  * <pre>
- * stub(mock.someMethod("some arg")).toThrow(new RuntimeException()).toReturn("foo");
+ * stub(mock.someMethod("some arg"))
+ *   .toThrow(new RuntimeException())
+ *   .toReturn("foo");
  * 
  * //First call: throws runtime exception:
  * mock.someMethod("some arg");
@@ -320,12 +323,12 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3> 11. (**New**) Stubbing with callbacks</h3>
  * 
+ * Allows stubbing with generic {@link Answer} interface.
+*  <p>
  * Yet another controversial feature which was not included in Mockito
- * originally. We strongly recommend using simple stubbing (toReturn() or
- * toThrow() only). Those two should be <b>just enough</b> to test/test-drive
+ * originally. We recommend using simple stubbing with toReturn() or
+ * toThrow() only. Those two should be <b>just enough</b> to test/test-drive
  * any decent (clean & simple) code.
- * 
- * Allows stubbing with generic {@link Answer} interface
  * 
  * <pre>
  * stub(mock.someMethod(anyString())).toAnswer(new Answer() {
@@ -340,13 +343,13 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
- * <h3> 12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids</h3>
+ * <h3> 12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
  * 
- * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+ * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
  * <p>
  * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
  * <p>
- * Use doThrow() when you want the void method to throw an exception:
+ * Use doThrow() when you want to stub a void method with an exception:
  * <pre>
  *   doThrow(new RuntimeException()).when(mockedList).clear();
  *   
@@ -354,7 +357,7 @@ import org.mockito.stubbing.Answer;
  *   mockedList.clear();
  * </pre>
  * 
- * Read more about other those methods:
+ * Read more about other methods:
  * <p>
  * {@link Mockito#doThrow(Throwable)}
  * <p>
@@ -370,7 +373,7 @@ import org.mockito.stubbing.Answer;
  * 
  * <pre>
  *   List list = new LinkedList();
- *   List spy = Mockito.spy(list);
+ *   List spy = spy(list);
  * 
  *   //optionally, you can stub out some methods:
  *   stub(spy.size()).toReturn(100);
@@ -396,9 +399,9 @@ import org.mockito.stubbing.Answer;
  * 
  * <pre>
  *   List list = new LinkedList();
- *   List spy = Mockito.spy(list);
+ *   List spy = spy(list);
  *   
- *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException because the list is yet empty
+ *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
  *   stub(spy.get(0)).toReturn("foo");
  *   
  *   //You have to use doReturn() for stubbing
@@ -471,7 +474,7 @@ public class Mockito extends Matchers {
      * 
      * <pre>
      *   List list = new LinkedList();
-     *   List spy = Mockito.spy(list);
+     *   List spy = spy(list);
      *   
      *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
      *   stub(spy.get(0)).toReturn("foo");
@@ -619,7 +622,8 @@ public class Mockito extends Matchers {
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
-     * verifyNoMoreInteractions() should not be used in every test method. 
+     * Some users who did a lot of classical, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
+     * verifyNoMoreInteractions() is not recommended to use in every test method. 
      * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
      * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
      * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
@@ -687,7 +691,7 @@ public class Mockito extends Matchers {
      * 
      * Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
      * <p>
-     * doThrow() replaces stubVoid() because of improved readability and consistency with family of doAnswer() methods. 
+     * doThrow() replaces stubVoid() because of improved readability and consistency with the family of doAnswer() methods. 
      * <p>
      * Originally, stubVoid() was used for stubbing void methods with exceptions. E.g:
      * 
@@ -715,9 +719,9 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Use doThrow() when you want the void method to throw an exception.
+     * Use doThrow() when you want to stub the void method with an exception.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
      * <p>
      * Example:
      * 
@@ -725,7 +729,7 @@ public class Mockito extends Matchers {
      *   doThrow(new RuntimeException()).when(mock).someVoidMethod();
      * </pre>
      * 
-     * @param toBeThrown
+     * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doThrow(Throwable toBeThrown) {
@@ -735,21 +739,21 @@ public class Mockito extends Matchers {
     /**
      * Use doAnswer() when you want to stub a void method with generic {@link Answer}.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because void is not a decent type.
+     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
      * <p>
      * Example:
      * 
      * <pre>
-     *   doAnswer(new Answer() {
+     *  doAnswer(new Answer() {
      *      public Object answer(InvocationOnMock invocation) {
      *          Object[] args = invocation.getArguments();
      *          Mock mock = invocation.getMock();
-                return null;
+     *          return null;
      *      }})
-     *    .when(mock).someMethod();
+     *  .when(mock).someMethod();
      * </pre>
      * 
-     * @param answer
+     * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doAnswer(Answer answer) {
@@ -764,8 +768,8 @@ public class Mockito extends Matchers {
      * 1. Stubbing consecutive calls on a void method:
      * <pre>
      *   doNothing().
-     *   doThrow(new RuntimeException()).
-     *   when(mock).someVoidMethod();
+     *   doThrow(new RuntimeException())
+     *   .when(mock).someVoidMethod();
      *   
      *   //does nothing the first time:
      *   mock.someVoidMethod();
@@ -784,7 +788,7 @@ public class Mockito extends Matchers {
      *   
      *   spy.add("one");
      *   
-     *   //clear does nothing, so the list still contains "one"
+     *   //clear() does nothing, so the list still contains "one"
      *   spy.clear();
      * </pre>
      *   
@@ -797,7 +801,7 @@ public class Mockito extends Matchers {
     /**
      * Use doReturn() in those rare occasions when you cannot use {@link Mockito#stub(Object)}.
      * <p>
-     * Beware that {@link Mockito#stub(Object)} is always recommended for stubbing because it is argument type-safe 
+     * Beware that {@link Mockito#stub(Object)} is <b>always recommended</b> for stubbing because it is argument type-safe 
      * and more readable (especially when stubbing consecutive calls). 
      * <p>
      * However, there are occasions when doReturn() comes handy:
@@ -807,12 +811,12 @@ public class Mockito extends Matchers {
      * 
      * <pre>
      *   List list = new LinkedList();
-     *   List spy = Mockito.spy(list);
+     *   List spy = spy(list);
      *   
      *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
      *   stub(spy.get(0)).toReturn("foo");
      *   
-     *   //You have to use doReturn() for stubbing
+     *   //You have to use doReturn() for stubbing:
      *   doReturn("foo").when(spy).get(0);
      * </pre>
      * 
@@ -821,14 +825,16 @@ public class Mockito extends Matchers {
      * <pre>
      *   stub(mock.foo()).toThrow(new RuntimeException());
      *   
-     *   //Impossible: real method is called so mock.foo() throws RuntimeException
+     *   //Impossible: the exception-stubbed foo() method is really called so RuntimeException is thrown. 
      *   stub(mock.foo()).toReturn("bar");
      *   
-     *   //You have to use doReturn() for stubbing
+     *   //You have to use doReturn() for stubbing:
      *   doReturn("bar").when(mock).foo();
      * </pre>
      * 
-     * @param toBeReturned
+     * Above scenario shows a tradeoff of Mockito's ellegant syntax. The scenario is very rare, though.
+     * 
+     * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doReturn(Object toBeReturned) {
@@ -848,7 +854,7 @@ public class Mockito extends Matchers {
      * Verification in order is flexible - <b>you don't have to verify all interactions</b> one-by-one
      * but only those that you are interested in testing in order.
      * <p>
-     * Also, you can create InOrder object passing only mocks that relevant for in-order verification.  
+     * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.  
      *
      * See examples in javadoc for {@link Mockito} class
      * 

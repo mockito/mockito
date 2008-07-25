@@ -7,8 +7,23 @@ package org.mockito.stubbing;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Used to answer expected calls.
- *
+ * Generic interface for stubbing methods with callbacks.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ * stub(mock.someMethod(anyString())).toAnswer(new Answer() {
+ *     Object answer(InvocationOnMock invocation) {
+ *         Object[] args = invocation.getArguments();
+ *         Object mock = invocation.getMock();
+ *         return "called with arguments: " + args;
+ *     }
+ * });
+ * 
+ * //Following prints "called with arguments: foo"
+ * System.out.println(mock.someMethod("foo"));
+ * </pre>
+ * 
  * @param <T> the type to return.
  */
 public interface Answer<T> {
