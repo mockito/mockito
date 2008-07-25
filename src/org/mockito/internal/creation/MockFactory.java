@@ -69,8 +69,7 @@ public class MockFactory<T> {
 
         //This is required to make (cglib + eclipse plugins testing) happy
         //See issue #11
-        //TODO allow other classloaders here
-        enhancer.setClassLoader(MockFactory.class.getClassLoader());
+        enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(toMock));
         
         return enhancer;
     }
