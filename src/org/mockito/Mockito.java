@@ -52,7 +52,7 @@ import org.mockito.stubbing.Answer;
  * <h3>1. Let's verify some behaviour!</h3>
  * 
  * <pre>
- * //Let's import Mockito statically so that code looks clearer
+ * //Let's import Mockito statically so that the code looks clearer
  * import static org.mockito.Mockito.*;
  * 
  * //mock creation
@@ -89,9 +89,10 @@ import org.mockito.stubbing.Answer;
  * 
  * //following prints "null" because get(999) was not stubbed
  * System.out.println(mockedList.get(999));
- * 
- * //Stubbed invocations <b>are verified implicitly</b>. The execution flow of your own code does it completely <b>for free</b>. 
- * //Although it is possible to verify a stubbed invocation, in majority of cases <b>it's not necessary</b>:
+ *  
+ * //Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>
+ * //If your code cares what get(0) returns then something else breaks (often before even verify() gets executed).
+ * //If your code doesn't care what get(0) returns then it should not be stubbed. Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
  * verify(mockedList).get(0);
  * </pre>
  * 
@@ -109,13 +110,6 @@ import org.mockito.stubbing.Answer;
  * <li> Last stubbing is more important - when you stubbed the same method with
  * the same arguments many times. </li>
  * 
- * <li> 
- * Although it is possible to verify a stubbed invocation, in majority
- * of cases it's not necessary: Let's say you've stubbed foo.bar()
- * method. If your code cares what value foo.bar() returns, something
- * else will fail if you forget to call foo.bar(). Hence you don't have
- * to verify() it. It's  (e.g. it's just redundant). Not convinced? See  
- * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a></li>
  * </ul>
  * 
  * <h3>3. Argument matchers</h3>
@@ -252,7 +246,7 @@ import org.mockito.stubbing.Answer;
  * verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
- * Some users who did a lot of classical, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
+ * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
  * verifyNoMoreInteractions() is not recommended to use in every test method. 
  * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
  * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
@@ -347,7 +341,8 @@ import org.mockito.stubbing.Answer;
  * 
  * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
  * <p>
- * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
+ * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids. 
+ * The main reason is improved readability and consistency with the family of doAnswer() methods.
  * <p>
  * Use doThrow() when you want to stub a void method with an exception:
  * <pre>
@@ -370,6 +365,10 @@ import org.mockito.stubbing.Answer;
  * <h3> 13. (**Totally New**) Spying on real objects</h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
+ * <p>
+ * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
+ * <p>
+ * Spying on real objects is associated with "partial mocking" concept. 
  * 
  * <pre>
  *   List list = new LinkedList();
@@ -429,7 +428,8 @@ public class Mockito extends Matchers {
     
     /**
      * Creates mock with a name. Naming mocks can be helpful for debugging. 
-     * Remember that naming mocks is not a solution for complex test/code which uses too many mocks. 
+     * <p>
+     * Beware that naming mocks is not a solution for complex code which uses too many mocks or collaborators. In that case we recommend merciless refactoring.
      * <p>
      * If you use &#064;Mock annotation then you've got naming mocks for free. &#064;Mock uses field name as mock name.
      * <p>
@@ -444,7 +444,13 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Creates a spy of the real object. Example:
+     * Creates a spy of the real object. The spy calls <b>real</b> methods unless they are stubbed.
+     * <p>
+     * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
+     * <p>
+     * Spying on real objects is associated with "partial mocking" concept.
+     * <p>
+     * Example:
      * 
      * <pre>
      *   List list = new LinkedList();
@@ -468,7 +474,7 @@ public class Mockito extends Matchers {
      *   verify(spy).add("two");
      * </pre>
      * 
-     * <h3>IMPORTANT</h3>
+     * <h4>Important gotcha on spying real objects!</h4>
      * 
      * Sometimes it's impossible to use {@link Mockito#stub(Object)} for stubbing spies. Example:
      * 
@@ -486,7 +492,6 @@ public class Mockito extends Matchers {
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @param <T>
      * @param object
      *            to spy on
      * @return a spy of the real object
@@ -526,12 +531,11 @@ public class Mockito extends Matchers {
      * Last stubbing is more important - when you stubbed the same method with
      * the same arguments many times.
      * <p>
-     * Although it is possible to verify a stubbed invocation, in majority
-     * of cases it's not necessary: Let's say you've stubbed foo.bar()
-     * method. If your code cares what value foo.bar() returns, something
-     * else will fail if you forget to call foo.bar(). Hence you don't have
-     * to verify() it (e.g. it's just redundant). Not convinced? See  
-     * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>. 
+     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
+     * Let's say you've stubbed foo.bar(). 
+     * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
+     * If your code doesn't care what get(0) returns then it should not be stubbed. 
+     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
      * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
@@ -564,12 +568,11 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * <p>
-     * Although it is possible to verify a stubbed invocation, in majority
-     * of cases it's not necessary. Let's say you've stubbed foo.bar()
-     * method. If your code cares what value foo.bar() returns, something
-     * else will fail if you forget to call foo.bar(). Hence you don't have
-     * to verify() it (e.g. it's just redundant). Not convinced? See  
-     * <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
+     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
+     * Let's say you've stubbed foo.bar(). 
+     * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
+     * If your code doesn't care what get(0) returns then it should not be stubbed. 
+     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
      * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
@@ -622,7 +625,7 @@ public class Mockito extends Matchers {
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
-     * Some users who did a lot of classical, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
+     * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
      * verifyNoMoreInteractions() is not recommended to use in every test method. 
      * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
      * Abusing it leads to overspecified, less maintainable tests. You can find further reading 

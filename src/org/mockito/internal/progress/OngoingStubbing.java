@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
 /**
- * Stubs with return value or exception. E.g:
+ * Stubs a method call with return value or an exception. E.g:
  *
  * <pre>
  * stub(mock.someMethod()).toReturn(10);
@@ -32,7 +32,7 @@ import org.mockito.stubbing.Answer;
 public interface OngoingStubbing<T> {
 
     /**
-     * Stub mock object with given return value. E.g:
+     * Set a return value for the stubbed method. E.g:
      * <pre>
      * stub(mock.someMethod()).toReturn(10);
      * </pre>
@@ -46,7 +46,7 @@ public interface OngoingStubbing<T> {
     OngoingStubbing<T> toReturn(T value);
 
     /**
-     * Stub mock object with throwable that will be thrown on method invocation. E.g:
+     * Set a Throwable to be thrown when the stubbed method is called. E.g:
      * <pre>
      * stub(mock.someMethod()).toThrow(new RuntimeException());
      * </pre>
@@ -63,7 +63,7 @@ public interface OngoingStubbing<T> {
     OngoingStubbing<T> toThrow(Throwable throwable);
 
     /**
-     * Stub mock object with a custom answer. E.g:
+     * Set a generic Answer for the stubbed method. E.g:
      * <pre>
      * stub(mock.someMethod(10)).toAnswer(new Answer<Integer>() {
      *     public Integer answer(InvocationOnMock invocation) throws Throwable {
