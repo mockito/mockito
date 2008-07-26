@@ -315,7 +315,7 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("some arg"));
  * </pre>
  * 
- * <h3> 11. (**New**) Stubbing with callbacks</h3>
+ * <h3> 11. (**Totally New**) Stubbing with callbacks</h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
