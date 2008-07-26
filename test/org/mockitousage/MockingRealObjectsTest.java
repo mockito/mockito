@@ -10,7 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -74,6 +77,51 @@ public class MockingRealObjectsTest extends TestBase {
         
         verify(spy, times(2)).get(0);
         verifyNoMoreInteractions(spy);
+    }
+    
+    @Test
+    public void shouldVerifyInOrder() {
+        spy.add("one");
+        spy.add("two");
+        
+        InOrder inOrder = inOrder(spy);
+        inOrder.verify(spy).add("one");
+        inOrder.verify(spy).add("two");
+        
+        verifyNoMoreInteractions(spy);
+    }
+    
+    @Test
+    public void shouldVerifyInOrderAndFail() {
+        spy.add("one");
+        spy.add("two");
+        
+        InOrder inOrder = inOrder(spy);
+        inOrder.verify(spy).add("two");
+        try {
+            inOrder.verify(spy).add("one");
+            fail();
+        } catch (VerifcationInOrderFailure f) {}
+    }
+    
+    @Test
+    public void shouldVerifyNumberOfTimes() {
+        spy.add("one");
+        spy.add("one");
+        
+        verify(spy, times(2)).add("one");
+        verifyNoMoreInteractions(spy);
+    }
+    
+    @Test
+    public void shouldVerifyNumberOfTimesAndFail() {
+        spy.add("one");
+        spy.add("one");
+        
+        try {
+            verify(spy, times(3)).add("one");
+            fail();
+        } catch (TooLittleActualInvocations e) {}
     }
     
     @Test
