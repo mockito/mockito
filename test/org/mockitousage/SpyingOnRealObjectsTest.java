@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitoutil.TestBase;
@@ -131,6 +132,18 @@ public class SpyingOnRealObjectsTest extends TestBase {
             verify(spy, times(3)).add("one");
             fail();
         } catch (TooLittleActualInvocations e) {}
+    }
+    
+    @Test
+    public void shouldVerifyNoMoreInteractionsAndFail() {
+        spy.add("one");
+        spy.add("two");
+        
+        verify(spy).add("one");
+        try {
+            verifyNoMoreInteractions(spy);
+            fail();
+        } catch (NoInteractionsWanted e) {}
     }
     
     @Test
