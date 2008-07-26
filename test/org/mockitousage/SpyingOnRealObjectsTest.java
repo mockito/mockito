@@ -17,7 +17,7 @@ import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class MockingRealObjectsTest extends TestBase {
+public class SpyingOnRealObjectsTest extends TestBase {
 
     List list = new LinkedList();
     List spy = Mockito.spy(list);
@@ -46,6 +46,15 @@ public class MockingRealObjectsTest extends TestBase {
         assertEquals("one", spy.iterator().next());
         
         assertEquals(1, spy.size());
+    }
+    
+    @Test
+    public void shouldAllowOverridingStubs() {
+        stub(spy.contains(anyObject())).toReturn(true);
+        stub(spy.contains("foo")).toReturn(false);
+        
+        assertTrue(spy.contains("bar"));
+        assertFalse(spy.contains("foo"));
     }
     
     @SuppressWarnings("deprecation")
