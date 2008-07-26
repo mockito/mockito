@@ -39,7 +39,7 @@ import org.mockito.stubbing.Answer;
  *      8. Finding redundant invocations <br/> 
  *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
  *      10. (**New**) Stubbing consecutive calls (iterator-style stubbing) <br/> 
- *      11. (**New**) Stubbing with callbacks <br/>
+ *      11. (**Totally New**) Stubbing with callbacks <br/>
  *      12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. (**Totally New**) Spying on real objects <br/>
  * </b>
@@ -315,7 +315,7 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("some arg"));
  * </pre>
  * 
- * <h3> 11. (**New**) Stubbing with callbacks</h3>
+ * <h3> 11. (**Totally New**) Stubbing with callbacks</h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
