@@ -520,7 +520,7 @@ public class Mockito extends Matchers {
      *   
      * </pre>
      * 
-     * For stubbing void methods with throwables see: {@link Mockito#stubVoid}
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but test methods can override it.
