@@ -57,7 +57,7 @@ import org.mockitousage.stacktrace.StackTrackeChangingTest;
 import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
-import org.mockitousage.verification.AtLeastOnceVerificationTest;
+import org.mockitousage.verification.AtLeastXVerificationTest;
 import org.mockitousage.verification.BasicVerificationInOrderTest;
 import org.mockitousage.verification.BasicVerificationTest;
 import org.mockitousage.verification.DescriptiveMessagesOnVerificationInOrderErrorsTest;
@@ -122,7 +122,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     BasicStubbingTest.class,
                     ReturningDefaultValuesTest.class,
                     StubbingWithThrowablesTest.class,
-                    AtLeastOnceVerificationTest.class,
+                    AtLeastXVerificationTest.class,
                     BasicVerificationTest.class,
                     ExactNumberOfTimesVerificationTest.class,
                     VerificationInOrderTest.class,

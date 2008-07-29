@@ -15,7 +15,7 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class AtLeastOnceVerificationTest extends TestBase {
+public class AtLeastXVerificationTest extends TestBase {
 
     private List mock;
     private List mockTwo;
@@ -43,5 +43,15 @@ public class AtLeastOnceVerificationTest extends TestBase {
     @Test(expected=WantedButNotInvoked.class)
     public void shouldFailIfMethodWasNotCalledAtAll() throws Exception {
         verify(mock, atLeastOnce()).add("foo");
+    }
+    
+    @Test
+    public void shouldVerifyAtLeast3Times() throws Exception {
+        mock.add("foo");
+        mock.add("foo");
+        mock.add("foo");
+        
+//TODO        
+//      verify(mock, atLeast(2)).add("foo");
     }
 }
