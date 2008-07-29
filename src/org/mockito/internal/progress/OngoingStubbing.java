@@ -65,7 +65,7 @@ public interface OngoingStubbing<T> {
     /**
      * Set a generic Answer for the stubbed method. E.g:
      * <pre>
-     * stub(mock.someMethod(10)).toAnswer(new Answer<Integer>() {
+     * stub(mock.someMethod(10)).toAnswer(new Answer&lt;Integer&gt;() {
      *     public Integer answer(InvocationOnMock invocation) throws Throwable {
      *         return (Integer) invocation.getArguments()[0];
      *     }

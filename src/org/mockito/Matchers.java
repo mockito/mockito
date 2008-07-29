@@ -62,7 +62,7 @@ import org.mockito.internal.progress.LastArguments;
  * Example:
  * 
  * <pre>
- *   class IsListOfTwoElements extends ArgumentMatcher<List> {
+ *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *      public boolean matches(Object list) {
  *          return ((List) list).size() == 2;
  *      }
