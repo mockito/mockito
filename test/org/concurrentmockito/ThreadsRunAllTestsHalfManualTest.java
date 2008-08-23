@@ -163,7 +163,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     @Test
     public void shouldRunInMultipleThreads() throws Exception {
         //this test ALWAYS fails if there is a single failing unit
-        assertFalse("Run in multiple thread failed", runInMultipleThreads(4));
+        assertFalse("Run in multiple thread failed", runInMultipleThreads(3));
     }
     
     public static boolean runInMultipleThreads(int numberOfThreads) throws Exception {
