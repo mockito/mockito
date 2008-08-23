@@ -50,7 +50,7 @@ public class MockitoStubber {
         }
     } 
     
-    public Object getResultFor(Invocation invocation) throws Throwable {
+    Object getResultFor(Invocation invocation) throws Throwable {
         return findMatchFor(invocation).answer(invocation);
     }
 
