@@ -7,12 +7,12 @@ package org.mockito.internal.stubbing;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class StubbedInvocationMatcher extends InvocationMatcher {
+public class StubbedInvocationMatcher extends InvocationMatcher implements Answer {
 
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
 
@@ -21,7 +21,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher {
         this.answers.add(answer);
     }
 
-    public Object answer(Invocation invocation) throws Throwable {
+    public Object answer(InvocationOnMock invocation) throws Throwable {
         synchronized(answers) {
             return answers.size() == 1 ? answers.peek().answer(invocation) : answers.poll().answer(invocation);
         }

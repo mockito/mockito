@@ -19,10 +19,9 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
-import org.mockito.internal.stubbing.DoesNothing;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
@@ -86,9 +85,9 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
 
         
-        StubbedInvocationMatcher matchForInvocation = mockitoStubber.findMatchFor(invocation);
-        if (matchForInvocation != null) {
-            return matchForInvocation.answer(invocation);
+        Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
+        if (answer != null) {
+            return answer.answer(invocation);
         } else if (MockUtil.isMock(instance)) {
             return Configuration.instance().getReturnValues().valueFor(invocation);
         } else {

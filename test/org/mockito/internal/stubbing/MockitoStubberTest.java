@@ -56,10 +56,10 @@ public class MockitoStubberTest extends TestBase{
         mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         mockitoStubber.addAnswer(new ThrowsException(new MyException()));
         
-        assertEquals("simpleMethod", mockitoStubber.getResultFor(simpleMethod));
+        assertEquals("simpleMethod", mockitoStubber.answerTo(simpleMethod));
         
         try {
-            mockitoStubber.getResultFor(differentMethod);
+            mockitoStubber.answerTo(differentMethod);
             fail();
         } catch (MyException e) {}
     }
@@ -70,7 +70,7 @@ public class MockitoStubberTest extends TestBase{
         mockitoStubber.setMethodForStubbing(new InvocationMatcher(simpleMethod));
         
         try {
-            mockitoStubber.getResultFor(simpleMethod);
+            mockitoStubber.answerTo(simpleMethod);
             fail();
         } catch (MyException e) {}
     }
