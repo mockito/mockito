@@ -25,6 +25,7 @@ import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.JUnitTool;
 
 /**
  * Reports verification and misusing errors.
@@ -209,10 +210,18 @@ public class Reporter {
         
         cause.setStackTrace(actualStackTrace.getStackTrace());
         
-        throw new ArgumentsAreDifferent(join(
-                "Argument(s) are different! Wanted:",
-                wanted.toString()
-            ), cause);
+        if (JUnitTool.hasJUnit()) {
+            throw JUnitTool.createArgumentsAreDifferentException(
+                    join("Argument(s) are different! Wanted:", wanted.toString()),
+                    cause,
+                    wanted.toString(),
+                    actual.toString());
+        } else {
+            throw new ArgumentsAreDifferent(join(
+                    "Argument(s) are different! Wanted:",
+                    wanted.toString()
+                ), cause);
+        }
     }
     
     public void wantedButNotInvoked(PrintableInvocation wanted) {

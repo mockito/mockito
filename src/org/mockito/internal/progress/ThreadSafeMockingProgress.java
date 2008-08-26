@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-
-
 @SuppressWarnings("unchecked")
 public class ThreadSafeMockingProgress implements MockingProgress {
     

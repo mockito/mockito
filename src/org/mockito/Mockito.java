@@ -9,13 +9,15 @@ import java.util.Arrays;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
+import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
-import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.DoesNothing;
+import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.stubbing.ThrowsException;
@@ -102,9 +104,9 @@ import org.mockito.stubbing.Answer;
  * false, ... for int/Integer, boolean/Boolean, ...). </li>
  * 
  * <li> Stubbing can be overridden: for example common stubbing can go to
- * fixture setup but test methods can override it. </li>
+ * fixture setup but the test methods can override it. </li>
  * 
- * <li> Once stubbed, mocked method will always return stubbed value regardless
+ * <li> Once stubbed, the method will always return stubbed value regardless
  * of how many times it is called. </li>
  * 
  * <li> Last stubbing is more important - when you stubbed the same method with
@@ -501,31 +503,62 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs with return value or exception. E.g:
+     * <b>Deprecated</b>
+     * TODO regexp
      * 
      * <pre>
-     *   stub(mock.someMethod()).toReturn(10);
-     *   
-     *   //you can use flexible argument matchers, e.g:
-     *   stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
-     *   
-     *   //setting exception to be thrown:
-     *   stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
-     *   
-     *   //you can stub with different behavior for consecutive calls.
-     *   //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.   
-     *   stub(mock.someMethod("some arg"))
-     *    .toThrow(new RuntimeException())
-     *    .toReturn("foo");
+     *   //Instead of:
+     *   stub(mock.count()).toReturn(10);
+     * 
+     *   //Please do:
+     *   when(mock.count()).thenReturn(10);
+     * </pre> 
+     * 
+     * Please use {@link Mockito#when}. We received many signals and 
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param methodCall
+     *            method call
+     * @return DeprecatedOngoingStubbing object to set stubbed value/exception
+     */
+    @SuppressWarnings("unchecked")
+    @Deprecated
+    public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
+        MOCKING_PROGRESS.stubbingStarted();
+        return (DeprecatedOngoingStubbing) stub();
+    }
+    
+    /**
+     * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called. 
+     * <p>
+     * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
+     * <p>
+     * If you're familiar with Mockito then know that when() is a successor of {@link Mockito#stub()}
+     * 
+     * <pre>
+     * when(mock.someMethod()).thenReturn(10);
+     *
+     * //you can use flexible argument matchers, e.g:
+     * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);
+     *
+     * //setting exception to be thrown:
+     * when(mock.someMethod("some arg")).thenThrow(new RuntimeException());
+     *
+     * //you can set different behavior for consecutive method calls.
+     * //Last stubbing (e.g: thenReturn("foo")) determines the behavior of further consecutive calls.
+     * when(mock.someMethod("some arg"))
+     *  .thenThrow(new RuntimeException())
+     *  .thenReturn("foo");
      *   
      * </pre>
      * 
      * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
-     * setup but test methods can override it.
+     * setup but the test methods can override it.
      * <p>
-     * Once stubbed, mocked method will always return stubbed value regardless
+     * Once stubbed, the method will always return stubbed value regardless
      * of how many times it is called.
      * <p>
      * Last stubbing is more important - when you stubbed the same method with
@@ -539,20 +572,21 @@ public class Mockito extends Matchers {
      * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
-     * 
+     * @param <T>
      * @param methodCall
-     *            method call
-     * @return OngoingStubbing object to set stubbed value/exception
+     * @return
      */
-    @SuppressWarnings("unchecked")
-    public static <T> OngoingStubbing<T> stub(T methodCall) {
+    public static <T> NewOngoingStubbing<T> when(T methodCall) {
         MOCKING_PROGRESS.stubbingStarted();
+        return (NewOngoingStubbing) stub();
+    }
 
-        OngoingStubbing stubbable = MOCKING_PROGRESS.pullOngoingStubbing();
-        if (stubbable == null) {
+    private static OngoingStubbing stub() {
+        OngoingStubbing stubbing = MOCKING_PROGRESS.pullOngoingStubbing();
+        if (stubbing == null) {
             REPORTER.missingMethodInvocation();
         }
-        return stubbable;
+        return stubbing;
     }
 
     /**

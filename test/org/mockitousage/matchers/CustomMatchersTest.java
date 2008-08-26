@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -127,7 +126,7 @@ public class CustomMatchersTest extends TestBase {
         try {
             verify(mock).simpleMethod(containsTest());
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (AssertionError e) {
             assertThat(e, messageContains("<String that contains xxx>"));
         }
     }
@@ -153,7 +152,7 @@ public class CustomMatchersTest extends TestBase {
                     return false;
                 }}));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (AssertionError e) {
             assertThat(e, messageContains("<custom argument matcher>"));
             assertThat(e, causeMessageContains("foo"));
         }

@@ -16,8 +16,9 @@ import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.OngoingStubbing;
+import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
@@ -82,9 +83,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
         verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());
 
-        mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
+        mockingProgress.reportOngoingStubbing(new DeprecatedOngoingStubbingImpl());
 
-        
         Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
         if (answer != null) {
             return answer.answer(invocation);
@@ -152,43 +152,70 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
     }
 
-    private class OngoingStubbingImpl implements OngoingStubbing<T> {
-        public OngoingStubbing<T> toReturn(Object value) {
-            verifyingRecorder.eraseLastInvocation();
-            mockitoStubber.addAnswer(new Returns(value));
-            return new ConsecutiveStubbing();
+    //@Deprecated - remove when stub...toReturn disappears
+    private class DeprecatedOngoingStubbingImpl implements DeprecatedOngoingStubbing<T> {
+        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
+            return toAnswer(new Returns(value));
         }
 
-        public OngoingStubbing<T> toThrow(Throwable throwable) {
-            verifyingRecorder.eraseLastInvocation();
-            mockitoStubber.addAnswer(new ThrowsException(throwable));
-            return new ConsecutiveStubbing();
+        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
+            return toAnswer(new ThrowsException(throwable));
         }
 
-        public OngoingStubbing<T> toAnswer(Answer<?> answer) {
+        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
+            verifyingRecorder.eraseLastInvocation();
+            mockitoStubber.addAnswer(answer);
+            return new DeprecatedConsecutiveStubbing();
+        }
+    }
+
+    //@Deprecated - remove when stub...toReturn disappears
+    private class DeprecatedConsecutiveStubbing implements DeprecatedOngoingStubbing<T> {
+        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
+            return toAnswer(new Returns(value));
+        }
+
+        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
+            return toAnswer(new ThrowsException(throwable));
+        }
+
+        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
+            mockitoStubber.addConsecutiveAnswer(answer);
+            return this;
+        }
+    }
+    
+    private class OngoingStubbingImpl implements NewOngoingStubbing<T> {
+        public NewOngoingStubbing<T> thenReturn(Object value) {
+            return thenAnswer(new Returns(value));
+        }
+
+        public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
+            return thenAnswer(new ThrowsException(throwable));
+        }
+
+        public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
             verifyingRecorder.eraseLastInvocation();
             mockitoStubber.addAnswer(answer);
             return new ConsecutiveStubbing();
         }
     }
 
-    private class ConsecutiveStubbing implements OngoingStubbing<T> {
-        public OngoingStubbing<T> toReturn(Object value) {
-            mockitoStubber.addConsecutiveAnswer(new Returns(value));
-            return this;
+    private class ConsecutiveStubbing implements NewOngoingStubbing<T> {
+        public NewOngoingStubbing<T> thenReturn(Object value) {
+            return thenAnswer(new Returns(value));
         }
 
-        public OngoingStubbing<T> toThrow(Throwable throwable) {
-            mockitoStubber.addConsecutiveAnswer(new ThrowsException(throwable));
-            return this;
+        public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
+            return thenAnswer(new ThrowsException(throwable));
         }
 
-        public OngoingStubbing<T> toAnswer(Answer<?> answer) {
+        public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
             mockitoStubber.addConsecutiveAnswer(answer);
             return this;
         }
-    }
-
+    }    
+    
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
