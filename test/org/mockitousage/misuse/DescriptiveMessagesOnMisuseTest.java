@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;

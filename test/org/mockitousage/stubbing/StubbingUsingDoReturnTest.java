@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.StateMaster;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.invocation.InvocationOnMock;

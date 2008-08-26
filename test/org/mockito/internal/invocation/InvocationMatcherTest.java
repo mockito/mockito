@@ -14,7 +14,7 @@ import java.util.Map;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
 import org.mockitousage.IMethods;

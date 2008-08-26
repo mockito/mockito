@@ -6,7 +6,7 @@ package org.mockitousage.stubbing;
 
 import org.junit.Test;
 import static org.mockito.Mockito.*;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

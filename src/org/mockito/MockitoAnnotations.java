@@ -55,10 +55,16 @@ import org.mockito.exceptions.base.MockitoException;
 public class MockitoAnnotations {
 
     /**
+     * <b> Deprecated </b>
+     * 
      * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations} class.
+     * 
+     * @deprecated Use {@link Mock} annotation instead
+     * 
      */
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
+    @Deprecated
     public @interface Mock {}
     
     /**
@@ -80,7 +86,7 @@ public class MockitoAnnotations {
     private static void scan(Object testClass, Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field f : fields) {
-            if (f.isAnnotationPresent(Mock.class)) {
+            if (f.isAnnotationPresent(org.mockito.Mock.class) || f.isAnnotationPresent(Mock.class)) {
                 boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {

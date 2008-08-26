@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.mockito.MockitoAnnotations.Mock;
+import org.mockito.Mock;
 import org.mockitousage.examples.junitrunner.MockitoRunner;
 import org.mockitoutil.TestBase;
 
