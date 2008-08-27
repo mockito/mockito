@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferentJUnitStyle;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

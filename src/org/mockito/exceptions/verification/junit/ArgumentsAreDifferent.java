@@ -12,13 +12,13 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.StackTraceFilter;
 
 
-public class ArgumentsAreDifferentJUnitStyle extends ComparisonFailure implements HasStackTrace {
+public class ArgumentsAreDifferent extends ComparisonFailure implements HasStackTrace {
     
     private static final long serialVersionUID = 1L;
     private final String message;
     private StackTraceElement[] unfilteredStackTrace;
 
-    public ArgumentsAreDifferentJUnitStyle(String message, Throwable cause, String wanted, String actual) {
+    public ArgumentsAreDifferent(String message, Throwable cause, String wanted, String actual) {
         super(message, wanted, actual);
         this.message = message;
         
