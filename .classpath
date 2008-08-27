@@ -7,6 +7,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/run/asm-3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/cglib-2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Documents and Settings/SG0893871/Desktop/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit-4.5.jar"/>
 	<classpathentry kind="output" path="target/eclipse-classes"/>
 </classpath>
