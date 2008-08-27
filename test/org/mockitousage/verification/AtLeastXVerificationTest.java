@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
@@ -46,12 +47,20 @@ public class AtLeastXVerificationTest extends TestBase {
     }
     
     @Test
-    public void shouldVerifyAtLeast3Times() throws Exception {
+    public void shouldVerifyAtLeastXTimes() throws Exception {
         mock.add("foo");
         mock.add("foo");
         mock.add("foo");
-        
-//TODO        
-//      verify(mock, atLeast(2)).add("foo");
+
+        verify(mock, atLeast(1)).add("foo");
+        verify(mock, atLeast(2)).add("foo");
+        verify(mock, atLeast(3)).add("foo");
     }
+    
+    @Test(expected=TooLittleActualInvocations.class)
+    public void shouldFailOnVerifyAtLeast10WhenMethodWasInvokedOnce() throws Exception {
+        mock.add("foo");
+
+        verify(mock, atLeast(10)).add("foo");
+    }    
 }

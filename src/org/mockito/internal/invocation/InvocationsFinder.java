@@ -42,7 +42,7 @@ public class InvocationsFinder {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
         
-        if (mode.atLeastOnceMode() || !mode.matchesActualCount(firstChunk.size())) {
+        if (mode.atLeastMode() || !mode.matchesActualCount(firstChunk.size())) {
             return this.findAllMatchingUnverifiedChunks(invocations, wanted);
         } else {
             return firstChunk;

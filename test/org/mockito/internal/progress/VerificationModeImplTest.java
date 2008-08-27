@@ -16,10 +16,10 @@ public class VerificationModeImplTest extends TestBase {
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
         VerificationModeImpl mode = atLeastOnce();
-        assertTrue(mode.atLeastOnceMode());
+        assertTrue(mode.atLeastMode());
         
         mode = times(50);
-        assertFalse(mode.atLeastOnceMode());
+        assertFalse(mode.atLeastMode());
     }
     
     @Test
@@ -28,7 +28,17 @@ public class VerificationModeImplTest extends TestBase {
             times(-50);
             fail();
         } catch (MockitoException e) {
-            assertEquals("Negative value is not allowed here", e.getMessage());
+            assertEquals("Negative value is not allowed for wantedNumberOfInvocations", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldNotAllowCreatingModeWithNegativeNumberOfMinimumInvocations() throws Exception {
+        try {
+            atLeast(-50);
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("Negative value and zero are not allowed for minNumberOfInvocations", e.getMessage());
         }
     }
     
@@ -64,12 +74,13 @@ public class VerificationModeImplTest extends TestBase {
     }
     
     @Test
-    public void shouldKnowIfIsAtLeastOnceMode() throws Exception {
-        assertTrue(atLeastOnce().atLeastOnceMode());
+    public void shouldKnowIfIsAtLeastMode() throws Exception {
+        assertTrue(atLeastOnce().atLeastMode());
+        assertTrue(atLeast(10).atLeastMode());
         
-        assertFalse(times(0).atLeastOnceMode());
-        assertFalse(times(2).atLeastOnceMode());
-        assertFalse(noMoreInteractions().atLeastOnceMode());
+        assertFalse(times(0).atLeastMode());
+        assertFalse(times(2).atLeastMode());
+        assertFalse(noMoreInteractions().atLeastMode());
     }
     
     @Test
@@ -89,6 +100,15 @@ public class VerificationModeImplTest extends TestBase {
         assertTrue(atLeastOnce().matchesActualCount(1));
         assertTrue(atLeastOnce().matchesActualCount(100));
     }
+
+    @Test
+    public void shouldKnowIfMatchesActualInvocationCountWhenAtLeastMode() throws Exception {
+        assertFalse(atLeast(10).matchesActualCount(5));
+        assertFalse(atLeast(2).matchesActualCount(1));
+        
+        assertTrue(atLeast(10).matchesActualCount(10));
+        assertTrue(atLeast(10).matchesActualCount(15));
+    }
     
     @Test
     public void shouldKnowIfTooLittleActualInvocations() throws Exception {
@@ -98,6 +118,29 @@ public class VerificationModeImplTest extends TestBase {
         assertFalse(times(0).tooLittleActualInvocations(0));
         assertFalse(times(1).tooLittleActualInvocations(1));
         assertFalse(times(1).tooLittleActualInvocations(2));
+    }
+    
+    @Test
+    public void tooLittleActualInvocationsShouldNotApplyToAtLeastMode() throws Exception {
+        assertFalse(atLeast(10).tooLittleActualInvocations(5));        
+        assertFalse(atLeast(10).tooLittleActualInvocations(15));        
+        assertFalse(atLeastOnce().tooLittleActualInvocations(10));        
+    }
+
+    @Test
+    public void shouldKnowIfTooLittleActualInvocationsInAtLeastMode() throws Exception {
+        assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(2));
+        assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(1));
+        assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(0));
+        
+        assertFalse(atLeast(1).tooLittleActualInvocationsInAtLeastMode(1));
+        assertFalse(atLeast(1).tooLittleActualInvocationsInAtLeastMode(2));
+    }
+
+    @Test
+    public void tooLittleActualInvocationsInAtLeastModeShouldNotApplyToOtherModes() throws Exception {
+        assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(5));        
+        assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(15));        
     }
     
     @Test

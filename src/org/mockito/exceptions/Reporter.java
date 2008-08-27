@@ -26,6 +26,7 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
+import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
  * Reports verification and misusing errors.
@@ -342,5 +343,14 @@ public class Reporter {
                 "Above means:",
                 "someVoidMethod() does nothing the 1st time but throws an exception the 2nd time is called"
              ));
+    }
+
+    public void tooLittleActualInvocationsInAtLeastMode(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {        
+        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualInvocationStackTrace);
+
+        throw new TooLittleActualInvocations(join(
+            wanted.toString(),
+            "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
     }
 }

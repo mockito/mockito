@@ -177,6 +177,10 @@ import org.mockito.stubbing.Answer;
  * //verification using atLeastOnce()
  * verify(mockedList, atLeastOnce()).add("three times");
  * 
+ * //verification using atLeast()
+ * verify(mockedList, atLeast(2)).add("twice");
+ * verify(mockedList, atLeast(2)).add("three times");
+ * 
  * </pre>
  * 
  * <p>
@@ -936,6 +940,22 @@ public class Mockito extends Matchers {
         return VerificationModeImpl.atLeastOnce();
     }
 
+    /**
+     * Allows at-least-x verification. E.g:
+     * <pre>
+     *   verify(mock, atLeast(3)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param minNumberOfInvocations minimum number of invocations 
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode atLeast(int minNumberOfInvocations) {
+        return VerificationModeImpl.atLeast(minNumberOfInvocations);
+    }
+    
     /**
      * Allows verifying exact number of invocations. E.g:
      * <pre>
