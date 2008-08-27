@@ -6,10 +6,10 @@ package org.mockitousage;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockitousage.examples.junitrunner.MockitoRunner;
+import org.mockito.runners.MockitoJUnit4Runner;
 import org.mockitoutil.TestBase;
 
-@RunWith(MockitoRunner.class)
+@RunWith(MockitoJUnit4Runner.class)
 public class PrototypingTest extends TestBase {
     
     @Ignore

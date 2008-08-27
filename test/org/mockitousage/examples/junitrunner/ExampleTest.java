@@ -8,12 +8,10 @@ import static org.mockito.Mockito.*;
 import java.util.Map;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-@RunWith(MockitoRunner.class)
 @SuppressWarnings("unchecked")
-public class ExampleTest {
+public abstract class ExampleTest {
     
     @Mock private List list;
     @Mock private Map map;
