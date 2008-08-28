@@ -59,6 +59,11 @@ public class MockitoAnnotations {
      * 
      * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations} class.
      * 
+     * To fix deprecation warning replace deprecated annotation's import:
+     *  import org.mockito.MockitoAnnotations.Mock;
+     * with the new one:
+     *  <b>import org.mockito.Mock;</b>
+     * 
      * @deprecated Use {@link Mock} annotation instead
      * 
      */

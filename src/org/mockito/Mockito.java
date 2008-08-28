@@ -623,7 +623,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
+     * Verifies certain behavior happened at least n times / exact number of times / never. E.g:
      * <pre>
      *   verify(mock, times(5)).someMethod("was called five times");
      *   
@@ -640,7 +640,7 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
-     * @param mode times(x), atLeastOnce() or never()
+     * @param mode times(x), atLeastOnce(), atLeast(x) or never()
      * 
      * @return mock object itself
      */
