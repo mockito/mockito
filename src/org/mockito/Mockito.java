@@ -948,7 +948,6 @@ public class Mockito extends Matchers {
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
-     * //TODO call it accordingly
      * @param minNumberOfInvocations minimum number of invocations 
      * 
      * @return verification mode
