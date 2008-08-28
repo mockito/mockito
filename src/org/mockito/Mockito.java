@@ -629,6 +629,8 @@ public class Mockito extends Matchers {
      *   
      *   verify(mock, atLeastOnce()).someMethod("was called at least once");
      *   
+     *   verify(mock, atLeast(5)).someMethod("was called at least five times");
+     *   
      *   //you can use flexible argument matchers, e.g:
      *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
      * </pre>
@@ -927,10 +929,14 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Allows at-least-once verification. E.g:
+     * Allows at-least-once verification.E.g:
      * <pre>
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
+     * Alias for {@link Mockito#atLeast(int)} with 1 as an argument:
+     * <pre>
+     *   verify(mock, atLeast(1)).someMethod("some arg");
+     * </pre> 
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
