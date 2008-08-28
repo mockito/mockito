@@ -121,8 +121,7 @@ public class VerificationModeImplTest extends TestBase {
     }
     
     @Test
-    public void tooLittleActualInvocationsShouldNotApplyToAtLeastMode() throws Exception {
-        //TODO why?
+    public void shouldAtLeastModeIgnoreTooLittleActualInvocations() throws Exception {
         assertFalse(atLeast(10).tooLittleActualInvocations(5));        
         assertFalse(atLeast(10).tooLittleActualInvocations(15));        
         assertFalse(atLeastOnce().tooLittleActualInvocations(10));        
@@ -130,7 +129,6 @@ public class VerificationModeImplTest extends TestBase {
 
     @Test
     public void shouldKnowIfTooLittleActualInvocationsInAtLeastMode() throws Exception {
-        //TODO lengthy method
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(2));
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(1));
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(0));
@@ -140,8 +138,7 @@ public class VerificationModeImplTest extends TestBase {
     }
 
     @Test
-    public void tooLittleActualInvocationsInAtLeastModeShouldNotApplyToOtherModes() throws Exception {
-        //TODO review
+    public void shouldTooLittleActualInvocationsInAtLeastModeIgnoreOtherModes() throws Exception {
         assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(5));        
         assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(15));        
     }
