@@ -19,6 +19,7 @@ public class VerificationModeImpl implements VerificationMode {
     enum Verification { EXPLICIT, NO_MORE_WANTED };
     
     private final Integer wantedInvocationCount;
+    //TODO merge with wantedInvocationCount, use enum to preserve atLeast mode
     private final Integer minInvocationCount;
     private final List<? extends Object> mocksToBeVerifiedInOrder;
     private final Verification verification;
