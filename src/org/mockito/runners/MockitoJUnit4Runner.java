@@ -4,14 +4,9 @@
  */
 package org.mockito.runners;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.junit.internal.runners.InitializationError;
 import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.internal.runners.TestMethod;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 

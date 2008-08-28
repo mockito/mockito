@@ -26,7 +26,6 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
-import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
  * Reports verification and misusing errors.
