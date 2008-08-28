@@ -32,7 +32,7 @@ public class InvocationsFinder {
      * if wanted is 1 and mode is times(2) then returns
      * 1,1  
      * 
-     * if wanted is 1 and mode is atLeastOnce() then returns
+     * if wanted is 1 and mode is atLeast() then returns
      * 1,1,1
      * 
      * if wanted is 1 and mode is times(x), where x != 2 then returns
@@ -104,11 +104,7 @@ public class InvocationsFinder {
     public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
         LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder());
         
-        if (verifiedOnly.isEmpty()) {
-            return null;
-        } else {
-            return verifiedOnly.getLast();
-        }
+        return verifiedOnly.isEmpty() ? null : verifiedOnly.getLast();
     }
     
     private List<Invocation> removeVerifiedInOrder(List<Invocation> invocations) {
