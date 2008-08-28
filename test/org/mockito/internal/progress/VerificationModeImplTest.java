@@ -23,22 +23,22 @@ public class VerificationModeImplTest extends TestBase {
     }
     
     @Test
-    public void shouldNotAllowCreatingModeWithNegativeNumberOfInvocations() throws Exception {
+    public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {
         try {
             times(-50);
             fail();
         } catch (MockitoException e) {
-            assertEquals("Negative value is not allowed for wantedNumberOfInvocations", e.getMessage());
+            assertEquals("Negative value is not allowed here", e.getMessage());
         }
     }
 
     @Test
-    public void shouldNotAllowCreatingModeWithNegativeNumberOfMinimumInvocations() throws Exception {
+    public void shouldNotAllowNegativeNumberOfMinimumInvocations() throws Exception {
         try {
             atLeast(-50);
             fail();
         } catch (MockitoException e) {
-            assertEquals("Negative value and zero are not allowed for minNumberOfInvocations", e.getMessage());
+            assertEquals("Negative value or zero are not allowed here", e.getMessage());
         }
     }
     
@@ -100,7 +100,7 @@ public class VerificationModeImplTest extends TestBase {
         assertTrue(atLeastOnce().matchesActualCount(1));
         assertTrue(atLeastOnce().matchesActualCount(100));
     }
-
+    
     @Test
     public void shouldKnowIfMatchesActualInvocationCountWhenAtLeastMode() throws Exception {
         assertFalse(atLeast(10).matchesActualCount(5));
@@ -122,6 +122,7 @@ public class VerificationModeImplTest extends TestBase {
     
     @Test
     public void tooLittleActualInvocationsShouldNotApplyToAtLeastMode() throws Exception {
+        //TODO why?
         assertFalse(atLeast(10).tooLittleActualInvocations(5));        
         assertFalse(atLeast(10).tooLittleActualInvocations(15));        
         assertFalse(atLeastOnce().tooLittleActualInvocations(10));        
@@ -129,6 +130,7 @@ public class VerificationModeImplTest extends TestBase {
 
     @Test
     public void shouldKnowIfTooLittleActualInvocationsInAtLeastMode() throws Exception {
+        //TODO lengthy method
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(2));
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(1));
         assertTrue(atLeast(3).tooLittleActualInvocationsInAtLeastMode(0));
@@ -139,6 +141,7 @@ public class VerificationModeImplTest extends TestBase {
 
     @Test
     public void tooLittleActualInvocationsInAtLeastModeShouldNotApplyToOtherModes() throws Exception {
+        //TODO review
         assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(5));        
         assertFalse(times(10).tooLittleActualInvocationsInAtLeastMode(15));        
     }

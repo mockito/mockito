@@ -51,7 +51,7 @@ public class AtLeastXVerificationTest extends TestBase {
         mock.add("foo");
         mock.add("foo");
         mock.add("foo");
-
+        
         verify(mock, atLeast(1)).add("foo");
         verify(mock, atLeast(2)).add("foo");
         verify(mock, atLeast(3)).add("foo");
@@ -61,6 +61,6 @@ public class AtLeastXVerificationTest extends TestBase {
     public void shouldFailOnVerifyAtLeast10WhenMethodWasInvokedOnce() throws Exception {
         mock.add("foo");
 
-        verify(mock, atLeast(10)).add("foo");
-    }    
+        verify(mock, atLeast(2)).add("foo");
+    }
 }

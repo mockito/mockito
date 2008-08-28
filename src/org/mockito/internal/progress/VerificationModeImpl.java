@@ -25,10 +25,10 @@ public class VerificationModeImpl implements VerificationMode {
     
     private VerificationModeImpl(Integer wantedNumberOfInvocations, Integer minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
         if (wantedNumberOfInvocations != null && wantedNumberOfInvocations < 0) {
-            throw new MockitoException("Negative value is not allowed for wantedNumberOfInvocations");
+            throw new MockitoException("Negative value is not allowed here");
         }
         if (minNumberOfInvocations != null && minNumberOfInvocations < 1) {
-            throw new MockitoException("Negative value and zero are not allowed for minNumberOfInvocations");
+            throw new MockitoException("Negative value or zero are not allowed here");
         }
         assert mocksToBeVerifiedInOrder != null;
         this.wantedInvocationCount = wantedNumberOfInvocations;

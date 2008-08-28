@@ -43,6 +43,7 @@ import org.mockito.exceptions.base.MockitoException;
  *   }
  * </pre>
  * 
+ * TODO we have now runners in mockito
  * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated mocks.
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
@@ -55,14 +56,19 @@ import org.mockito.exceptions.base.MockitoException;
 public class MockitoAnnotations {
 
     /**
-     * <b> Deprecated </b>
-     * 
+     * <b>Deprecated</b> Use {@link Mock} annotation instead
+     * <p>
+     * Annotation is now a top-level class so that IDEs are not confused.
+     * <p>
      * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations} class.
-     * 
-     * To fix deprecation warning replace deprecated annotation's import:
+     * <p>
+     * To fix deprecation warnings just search & replace:
+     * Search:
      *  import org.mockito.MockitoAnnotations.Mock;
-     * with the new one:
-     *  <b>import org.mockito.Mock;</b>
+     * <p>
+     *  with:
+     * <p>
+     *  import org.mockito.Mock;
      * 
      * @deprecated Use {@link Mock} annotation instead
      * 

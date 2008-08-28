@@ -104,7 +104,11 @@ public class InvocationsFinder {
     public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
         LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder());
         
-        return verifiedOnly.isEmpty() ? null : verifiedOnly.getLast();
+        if (verifiedOnly.isEmpty()) {
+            return null;
+        } else {
+            return verifiedOnly.getLast();
+        }
     }
     
     private List<Invocation> removeVerifiedInOrder(List<Invocation> invocations) {

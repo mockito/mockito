@@ -174,12 +174,9 @@ import org.mockito.stubbing.Answer;
  * //verification using never(). never() is an alias to times(0)
  * verify(mockedList, never()).add("never happened");
  * 
- * //verification using atLeastOnce()
- * verify(mockedList, atLeastOnce()).add("three times");
- * 
  * //verification using atLeast()
- * verify(mockedList, atLeast(2)).add("twice");
- * verify(mockedList, atLeast(2)).add("three times");
+ * verify(mockedList, atLeastOnce()).add("three times");
+ * verify(mockedList, atLeast(2)).add("five times");
  * 
  * </pre>
  * 
@@ -623,7 +620,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Verifies certain behavior happened at least n times / exact number of times / never. E.g:
+     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
      * <pre>
      *   verify(mock, times(5)).someMethod("was called five times");
      *   
@@ -640,7 +637,7 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mock to be verified
-     * @param mode times(x), atLeastOnce(), atLeast(x) or never()
+     * @param mode times(x), atLeastOnce() or never()
      * 
      * @return mock object itself
      */
@@ -929,14 +926,11 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Allows at-least-once verification.E.g:
+     * Allows at-least-once verification. E.g:
      * <pre>
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
-     * Alias for {@link Mockito#atLeast(int)} with 1 as an argument:
-     * <pre>
-     *   verify(mock, atLeast(1)).someMethod("some arg");
-     * </pre> 
+     * Alias to atLeast(1)
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -954,6 +948,7 @@ public class Mockito extends Matchers {
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
+     * //TODO call it accordingly
      * @param minNumberOfInvocations minimum number of invocations 
      * 
      * @return verification mode
