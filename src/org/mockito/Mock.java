@@ -42,7 +42,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also put it in your JUnit4 runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
+ * You can also put it in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
  */
 @Target( { FIELD })
 @Retention(RetentionPolicy.RUNTIME)

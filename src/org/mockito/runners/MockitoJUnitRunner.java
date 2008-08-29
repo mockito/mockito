@@ -13,7 +13,9 @@ import org.mockito.MockitoAnnotations;
  * JUnit 4.5 runner initializes mocks annotated with {@link Mock},
  * so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
  * Mocks are initialized before each test method. 
+ * <p>
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
+ * <p>
  * Read more in javadoc for {@link MockitoAnnotations#initMocks(Object)}
  * <p>
  * Example:

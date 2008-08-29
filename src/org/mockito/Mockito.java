@@ -23,6 +23,8 @@ import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.runners.MockitoJUnit44Runner;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -287,8 +289,7 @@ import org.mockito.stubbing.Answer;
  * MockitoAnnotations.initMocks(testClass);
  * </pre>
  * 
- * Examples how to write a junit test runner are in Mockito test code
- * (mockito/test/org/mockitousage/examples/junitrunner package);
+ * You can use built-in runners {@link MockitoJUnitRunner}, {@link MockitoJUnit44Runner}.
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
