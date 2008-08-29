@@ -625,9 +625,7 @@ public class Mockito extends Matchers {
      * <pre>
      *   verify(mock, times(5)).someMethod("was called five times");
      *   
-     *   verify(mock, atLeastOnce()).someMethod("was called at least once");
-     *   
-     *   verify(mock, atLeast(5)).someMethod("was called at least five times");
+     *   verify(mock, atLeast(2)).someMethod("was called at least two times");
      *   
      *   //you can use flexible argument matchers, e.g:
      *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
