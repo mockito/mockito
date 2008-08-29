@@ -1,4 +1,4 @@
-package org.mockitousage.examples.junitrunner;
+package org.mockitousage.junitrunner;
 
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnit4Runner;

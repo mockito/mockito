@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.examples.junitrunner;
+package org.mockitousage.junitrunner;
 import java.util.List;
 import static org.mockito.Mockito.*;
 import java.util.Map;
