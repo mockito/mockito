@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.runners.MockitoJUnit4Runner;
 
 /**
  * <ul>
@@ -43,15 +44,11 @@ import org.mockito.exceptions.base.MockitoException;
  *   }
  * </pre>
  * 
- * TODO we have now runners in mockito
  * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated mocks.
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
- * You can also put it in your JUnit4 runner (&#064;RunWith).
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * <p>
- * How to implement mockito junit runner? See examples from mockito/test/org/mockitousage/examples/junitrunner subpackage. 
- * You may want to check out the project from svn repository to easily browse Mockito's test code.
+ * You can also use put it in your JUnit4 runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit4Runner}, {@link MockitoJUnit45Runner}
  */
 public class MockitoAnnotations {
 
