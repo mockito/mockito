@@ -56,23 +56,18 @@ import org.mockito.exceptions.base.MockitoException;
 public class MockitoAnnotations {
 
     /**
-     * TODO fix the message
-     * <b>Deprecated</b> Use {@link Mock} annotation instead
+     * <b>Deprecated</b> 
+     * Use top-level {@link org.mockito.Mock} annotation instead
      * <p>
-     * Annotation is now a top-level class so that IDEs are not confused.
+     * When &#064;Mock annotation was implemented as an inner class then users experienced problems with autocomplete features in IDEs. 
+     * Hence &#064;Mock was made a top-level class.  
      * <p>
-     * Allows shorthand mock creation, see examples in javadoc for {@link MockitoAnnotations} class.
+     * How to fix deprecation warnings? 
+     * Typically, you can just <b>search:</b> import org.mockito.MockitoAnnotations.Mock; <b>and replace with:</b> import org.mockito.Mock;
      * <p>
-     * To fix deprecation warnings just search & replace:
-     * Search:
-     *  import org.mockito.MockitoAnnotations.Mock;
-     * <p>
-     *  with:
-     * <p>
-     *  import org.mockito.Mock;
+     * Sorry for making your code littered with deprecation warnings but this change was required to make Mockito better. Hope you still love your little spying framework...
      * 
-     * @deprecated Use {@link Mock} annotation instead
-     * 
+     * @deprecated Use {@link org.mockito.Mock} annotation instead
      */
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
