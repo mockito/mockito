@@ -524,7 +524,8 @@ public class Mockito extends Matchers {
      *   .toThrow( -> .thenThrow(
      *   .toAnswer( -> .thenAnswer(
      * </pre>
-     * Sorry for making your code littered with deprecation warnings but this change was required to make Mockito better. Hope you still love your little spying framework...
+     * If you're an existing user then sorry for making your code littered with deprecation warnings. 
+     * This change was required to make Mockito better.
      * 
      * @param methodCall
      *            method call
