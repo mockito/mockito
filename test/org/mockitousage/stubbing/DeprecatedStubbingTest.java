@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -62,21 +61,5 @@ public class DeprecatedStubbingTest extends TestBase {
         stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
         
         verifyZeroInteractions(mock);
-    }
-    
-    @Test
-    public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
-        
-        try {
-            verify(mock).simpleMethod("one");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
-        
-        try {
-            verify(mock).simpleMethod("two");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
     }
 }

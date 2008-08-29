@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -55,29 +54,11 @@ public class BasicStubbingTest extends TestBase {
         assertEquals("test", mockTwo.toString());
     }
     
-    @SuppressWarnings("deprecation")
     @Test
-    public void shouldStubbingWithThrowableFailVerification() {
+    public void shouldStubbingNotBeTreatedAsInteraction() {
         when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
+        doThrow(new RuntimeException()).when(mock).simpleMethod("two");
         
         verifyZeroInteractions(mock);
-        
-        mock.simpleMethod("foo");
-        
-        try {
-            verify(mock).simpleMethod("one");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
-        
-        try {
-            verify(mock).simpleMethod("two");
-            fail();
-        } catch (ArgumentsAreDifferent e) {}
-        
-        try {
-            verifyNoMoreInteractions(mock);
-            fail();
-        } catch (NoInteractionsWanted e) {}
     }
 }
