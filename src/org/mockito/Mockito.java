@@ -506,7 +506,6 @@ public class Mockito extends Matchers {
 
     /**
      * <b>Deprecated</b>
-     * TODO regexp
      * 
      * <pre>
      *   //Instead of:
@@ -516,9 +515,16 @@ public class Mockito extends Matchers {
      *   when(mock.count()).thenReturn(10);
      * </pre> 
      * 
-     * Please use {@link Mockito#when}. We received many signals and 
+     * stub() is replaced by {@link Mockito#when()} because many users found stub() confusing. 
      * <p>
-     * See examples in javadoc for {@link Mockito} class
+     * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
+     * <pre>
+     *   stub( -> when(
+     *   toReturn( -> thenReturn(
+     *   toThrow( -> thenThrow(
+     *   toAnswer( -> thenAnswer(
+     * </pre>
+     * Sorry for making your code littered with deprecation warnings but this change was required to make Mockito better. Hope you still love your little spying framework...
      * 
      * @param methodCall
      *            method call

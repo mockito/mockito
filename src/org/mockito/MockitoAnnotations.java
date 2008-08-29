@@ -63,8 +63,6 @@ public class MockitoAnnotations {
      * Typically, you can just <b>search:</b> import org.mockito.MockitoAnnotations.Mock; <b>and replace with:</b> import org.mockito.Mock;
      * <p>
      * Sorry for making your code littered with deprecation warnings but this change was required to make Mockito better. Hope you still love your little spying framework...
-     * 
-     * @deprecated Use {@link org.mockito.Mock} annotation instead
      */
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
