@@ -520,9 +520,9 @@ public class Mockito extends Matchers {
      * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
      * <pre>
      *   stub( -> when(
-     *   toReturn( -> thenReturn(
-     *   toThrow( -> thenThrow(
-     *   toAnswer( -> thenAnswer(
+     *   .toReturn( -> .thenReturn(
+     *   .toThrow( -> .thenThrow(
+     *   .toAnswer( -> .thenAnswer(
      * </pre>
      * Sorry for making your code littered with deprecation warnings but this change was required to make Mockito better. Hope you still love your little spying framework...
      * 
