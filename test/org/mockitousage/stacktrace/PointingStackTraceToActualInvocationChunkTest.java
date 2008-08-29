@@ -10,7 +10,6 @@ import static org.mockitoutil.ExtraMatchers.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitousage.IMethods;
