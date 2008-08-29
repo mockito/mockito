@@ -56,6 +56,7 @@ import org.mockito.exceptions.base.MockitoException;
 public class MockitoAnnotations {
 
     /**
+     * TODO fix the message
      * <b>Deprecated</b> Use {@link Mock} annotation instead
      * <p>
      * Annotation is now a top-level class so that IDEs are not confused.
