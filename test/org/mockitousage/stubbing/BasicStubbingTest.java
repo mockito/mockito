@@ -7,8 +7,6 @@ package org.mockitousage.stubbing;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
@@ -46,22 +44,6 @@ public class BasicStubbingTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {}
-    }
-    
-    class Base {}
-    class Sub extends Base {}
-
-    interface Generic {
-        List<Base> getList();
-    }
-    
-    @Test
-    public void shouldAllowStubbingWithSubtypes() throws Exception {
-        Generic mockTwo = mock(Generic.class);
-        
-        List<Sub> subs = null;
-        //can I somehow avoid a cast here:
-        when(mockTwo.getList()).thenReturn((List) subs);
     }
     
     @Test
