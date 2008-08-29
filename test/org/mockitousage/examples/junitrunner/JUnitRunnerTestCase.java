@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 @SuppressWarnings("unchecked")
-public abstract class ExampleTestCase {
+public abstract class JUnitRunnerTestCase {
     
     @Mock private List list;
     @Mock private Map map;
