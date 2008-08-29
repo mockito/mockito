@@ -33,7 +33,7 @@ public class StackTrackeChangingTest extends TestBase {
         try {
             verifySimpleMethodOnAMock();
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (AssertionError e) {
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
             assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
             assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));

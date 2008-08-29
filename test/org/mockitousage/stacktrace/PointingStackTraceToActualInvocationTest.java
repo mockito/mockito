@@ -50,7 +50,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (AssertionError e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
         }
     }
@@ -61,7 +61,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock, atLeastOnce()).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (AssertionError e) {
             assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
         }
     }   

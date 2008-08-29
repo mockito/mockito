@@ -48,7 +48,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (ArgumentsAreDifferent expected) {}
+        } catch (AssertionError expected) {}
     }
 
     @Test
