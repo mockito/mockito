@@ -56,18 +56,18 @@ public class InvalidUsageTest extends TestBase {
     
     @Test(expected=MissingMethodInvocationException.class)
     public void shouldReportMissingMethodInvocationWhenStubbing() {
-        stub(mock.simpleMethod()).toReturn("this stubbing is required to make sure Stubbable is pulled");
-        stub("".toString()).toReturn("x");
+        when(mock.simpleMethod()).thenReturn("this stubbing is required to make sure Stubbable is pulled");
+        when("".toString()).thenReturn("x");
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        stub(mock.simpleMethod()).toThrow(new Exception());
+        when(mock.simpleMethod()).thenThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        stub(mock.simpleMethod()).toThrow(null);
+        when(mock.simpleMethod()).thenThrow(null);
     }    
     
     final class FinalClass {}

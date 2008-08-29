@@ -12,7 +12,7 @@ import org.mockito.invocation.InvocationOnMock;
  * Example:
  * 
  * <pre>
- * stub(mock.someMethod(anyString())).toAnswer(new Answer() {
+ * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
  *     Object answer(InvocationOnMock invocation) {
  *         Object[] args = invocation.getArguments();
  *         Object mock = invocation.getMock();

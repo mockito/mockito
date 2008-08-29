@@ -31,10 +31,10 @@ public class ThreadsStubSharedMockTest extends TestBase {
                 @SuppressWarnings("deprecation")
                 @Override
                 public void run() {
-                    stub(mock.simpleMethod(getId()))
-                        .toReturn(getId() + "")
-                        .toReturn("foo")
-                        .toReturn("bar");
+                    when(mock.simpleMethod(getId()))
+                        .thenReturn(getId() + "")
+                        .thenReturn("foo")
+                        .thenReturn("bar");
                         
                     stubVoid(mock)
                         .toThrow(new RuntimeException(getId() + ""))

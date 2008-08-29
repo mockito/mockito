@@ -47,28 +47,28 @@ public class InvalidStateDetectionTest extends TestBase {
     
     @Test
     public void shouldDetectUnfinishedStubbing() {
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnMethodCallOnMock(), UnfinishedStubbingException.class);
 
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnStub(), UnfinishedStubbingException.class);
         
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnStubVoid(), UnfinishedStubbingException.class);
         
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnVerify(), UnfinishedStubbingException.class);
         
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnVerifyInOrder(), UnfinishedStubbingException.class);
         
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
         
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
 
-        stub(mock.simpleMethod());
+        when(mock.simpleMethod());
         detects(new OnDoAnswer(), UnfinishedStubbingException.class);
     }
     
@@ -215,7 +215,7 @@ public class InvalidStateDetectionTest extends TestBase {
     
     private static class OnStub implements DetectsInvalidState {
         public void detect(IMethods mock) {
-            stub(mock);
+            when(mock);
         }
     }
     

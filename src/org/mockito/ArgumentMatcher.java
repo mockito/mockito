@@ -28,7 +28,7 @@ import org.mockito.internal.util.Decamelizer;
  * 
  * List mock = mock(List.class);
  * 
- * stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ * when(mock.addAll(argThat(new IsListOfTwoElements()))).thenReturn(true);
  * 
  * mock.addAll(Arrays.asList(&quot;one&quot;, &quot;two&quot;));
  * 

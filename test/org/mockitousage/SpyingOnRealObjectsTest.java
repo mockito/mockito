@@ -38,9 +38,9 @@ public class SpyingOnRealObjectsTest extends TestBase {
     @Test
     public void shouldStub() {
         spy.add("one");
-        stub(spy.get(0))
-            .toReturn("1")
-            .toReturn("1 again");
+        when(spy.get(0))
+            .thenReturn("1")
+            .thenReturn("1 again");
                
         assertEquals("1", spy.get(0));
         assertEquals("1 again", spy.get(0));
@@ -51,8 +51,8 @@ public class SpyingOnRealObjectsTest extends TestBase {
     
     @Test
     public void shouldAllowOverridingStubs() {
-        stub(spy.contains(anyObject())).toReturn(true);
-        stub(spy.contains("foo")).toReturn(false);
+        when(spy.contains(anyObject())).thenReturn(true);
+        when(spy.contains("foo")).thenReturn(false);
         
         assertTrue(spy.contains("bar"));
         assertFalse(spy.contains("foo"));

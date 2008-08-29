@@ -63,17 +63,17 @@ public class Reporter {
                 "Unifinished stubbing detected!",
                 "E.g. toReturn() may be missing.",
                 "Examples of correct stubbing:",
-                "    stub(mock.isOk()).toReturn(true);",
-                "    stub(mock.isOk()).toThrow(exception);",
+                "    when(mock.isOk()).thenReturn(true);",
+                "    when(mock.isOk()).thenThrow(exception);",
                 "    doThrow(exception).when(mock).someVoidMethod();"
         ));
     }
 
     public void missingMethodInvocation() {
         throw new MissingMethodInvocationException(join(
-                "stub() requires an argument which has to be a method call on a mock.",
+                "when() requires an argument which has to be a method call on a mock.",
                 "For example:",
-                "    stub(mock.getArticles()).toReturn(articles);"
+                "    when(mock.getArticles()).thenReturn(articles);"
         ));
     }
 

@@ -19,7 +19,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     @Test
     public void shouldAnswer() throws Exception {
-        stub(mock.simpleMethod(anyString())).toAnswer(new Answer<String>() {
+        when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
                 String arg = (String) invocation.getArguments()[0];
 
@@ -32,14 +32,14 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     @Test
     public void shouldAnswerConsecutively() throws Exception {
-        stub(mock.simpleMethod())
-                .toAnswer(new Answer<String>() {
+        when(mock.simpleMethod())
+                .thenAnswer(new Answer<String>() {
                     public String answer(InvocationOnMock invocation) throws Throwable {
                         return invocation.getMethod().getName();
                     }
                 })
-                .toReturn("Hello")
-                .toAnswer(new Answer<String>() {
+                .thenReturn("Hello")
+                .thenAnswer(new Answer<String>() {
                     public String answer(InvocationOnMock invocation) throws Throwable {
                         return invocation.getMethod().getName() + "-1";
                     }

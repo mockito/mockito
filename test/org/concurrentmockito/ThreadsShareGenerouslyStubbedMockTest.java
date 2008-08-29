@@ -26,13 +26,13 @@ public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
     private void performTest() throws InterruptedException {
         mock = mock(IMethods.class);
         
-        stub(mock.simpleMethod("foo"))
-            .toReturn("foo")
-            .toReturn("bar")
-            .toReturn("baz")
-            .toReturn("foo")
-            .toReturn("bar")
-            .toReturn("baz");
+        when(mock.simpleMethod("foo"))
+            .thenReturn("foo")
+            .thenReturn("bar")
+            .thenReturn("baz")
+            .thenReturn("foo")
+            .thenReturn("bar")
+            .thenReturn("baz");
         
         final Thread[] listeners = new Thread[100];
         for (int i = 0; i < listeners.length; i++) {

@@ -65,7 +65,7 @@ public interface NewOngoingStubbing<T> {
     /**
      * Sets a generic Answer for the method. E.g:
      * <pre>
-     * when(mock.someMethod(10)).toAnswer(new Answer&lt;Integer&gt;() {
+     * when(mock.someMethod(10)).thenAnswer(new Answer&lt;Integer&gt;() {
      *     public Integer answer(InvocationOnMock invocation) throws Throwable {
      *         return (Integer) invocation.getArguments()[0];
      *     }

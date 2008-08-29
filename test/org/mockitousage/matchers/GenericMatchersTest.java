@@ -26,10 +26,10 @@ public class GenericMatchersTest extends TestBase {
     @SuppressWarnings("unchecked")
     @Test
     public void shouldCompile() {
-        stub(sorter.convertDate(new Date())).toReturn("one");
-        stub(sorter.convertDate((Date) anyObject())).toReturn("two");
+        when(sorter.convertDate(new Date())).thenReturn("one");
+        when(sorter.convertDate((Date) anyObject())).thenReturn("two");
 
         //following requires warning suppression but allows setting anyList()
-        stub(sorter.sort(anyList())).toReturn(null);
+        when(sorter.sort(anyList())).thenReturn(null);
     }
 }

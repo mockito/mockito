@@ -54,7 +54,7 @@ public class CustomMatchersTest extends TestBase {
 
     @Test
     public void shouldUseCustomBooleanMatcher() {
-        stub(mock.oneArg(booleanThat(new IsAnyBoolean()))).toReturn("foo");
+        when(mock.oneArg(booleanThat(new IsAnyBoolean()))).thenReturn("foo");
         
         assertEquals("foo", mock.oneArg(true));
         assertEquals("foo", mock.oneArg(false));
@@ -64,7 +64,7 @@ public class CustomMatchersTest extends TestBase {
     
     @Test
     public void shouldUseCustomCharMatcher() {
-        stub(mock.oneArg(charThat(new IsSorZ()))).toReturn("foo");
+        when(mock.oneArg(charThat(new IsSorZ()))).thenReturn("foo");
       
         assertEquals("foo", mock.oneArg('s'));
         assertEquals("foo", mock.oneArg('z'));
@@ -93,12 +93,12 @@ public class CustomMatchersTest extends TestBase {
     
     @Test
     public void shouldUseCustomPrimitiveNumberMatchers() {
-        stub(mock.oneArg(byteThat(new IsZeroOrOne<Byte>()))).toReturn("byte");
-        stub(mock.oneArg(shortThat(new IsZeroOrOne<Short>()))).toReturn("short");
-        stub(mock.oneArg(intThat(new IsZeroOrOne<Integer>()))).toReturn("int");
-        stub(mock.oneArg(longThat(new IsZeroOrOne<Long>()))).toReturn("long");
-        stub(mock.oneArg(floatThat(new IsZeroOrOne<Float>()))).toReturn("float");
-        stub(mock.oneArg(doubleThat(new IsZeroOrOne<Double>()))).toReturn("double");
+        when(mock.oneArg(byteThat(new IsZeroOrOne<Byte>()))).thenReturn("byte");
+        when(mock.oneArg(shortThat(new IsZeroOrOne<Short>()))).thenReturn("short");
+        when(mock.oneArg(intThat(new IsZeroOrOne<Integer>()))).thenReturn("int");
+        when(mock.oneArg(longThat(new IsZeroOrOne<Long>()))).thenReturn("long");
+        when(mock.oneArg(floatThat(new IsZeroOrOne<Float>()))).thenReturn("float");
+        when(mock.oneArg(doubleThat(new IsZeroOrOne<Double>()))).thenReturn("double");
         
         assertEquals("byte", mock.oneArg((byte) 0));
         assertEquals("short", mock.oneArg((short) 1));
@@ -113,7 +113,7 @@ public class CustomMatchersTest extends TestBase {
          
     @Test
     public void shouldUseCustomObjectMatcher() {
-        stub(mock.oneArg(argThat(new ContainsFoo()))).toReturn("foo");
+        when(mock.oneArg(argThat(new ContainsFoo()))).thenReturn("foo");
         
         assertEquals("foo", mock.oneArg("foo"));
         assertEquals(null, mock.oneArg("bar"));

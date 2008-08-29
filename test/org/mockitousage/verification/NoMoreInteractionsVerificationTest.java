@@ -28,8 +28,8 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
     @Test
     public void shouldStubbingNotRegisterRedundantInteractions() throws Exception {
-        stub(mock.add("one")).toReturn(true);
-        stub(mock.add("two")).toReturn(true);
+        when(mock.add("one")).thenReturn(true);
+        when(mock.add("two")).thenReturn(true);
 
         mock.add("one");
         

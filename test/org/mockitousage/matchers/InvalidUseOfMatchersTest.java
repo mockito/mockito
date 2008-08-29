@@ -34,9 +34,9 @@ public class InvalidUseOfMatchersTest extends TestBase {
 
     @Test
     public void shouldDetectWrongNumberOfMatchersWhenStubbing() {
-        Mockito.stub(mock.threeArgumentMethod(1, "2", "3")).toReturn(null);
+        Mockito.when(mock.threeArgumentMethod(1, "2", "3")).thenReturn(null);
         try {
-            Mockito.stub(mock.threeArgumentMethod(1, eq("2"), "3")).toReturn(null);
+            Mockito.when(mock.threeArgumentMethod(1, eq("2"), "3")).thenReturn(null);
             fail();
         } catch (InvalidUseOfMatchersException e) {}
     }

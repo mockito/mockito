@@ -117,7 +117,7 @@ public class StackTraceFilteringTest extends TestBase {
     @Test
     public void shouldFilterStackTraceWhenThrowingExceptionFromMockHandler() {
         try {
-            stub(mock.oneArg(true)).toThrow(new Exception());
+            when(mock.oneArg(true)).thenThrow(new Exception());
             fail();
         } catch (MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromMockHandler"));
@@ -126,7 +126,7 @@ public class StackTraceFilteringTest extends TestBase {
     
     @Test
     public void shouldShowProperExceptionStackTrace() throws Exception {
-        stub(mock.simpleMethod()).toThrow(new RuntimeException());
+        when(mock.simpleMethod()).thenThrow(new RuntimeException());
 
         try {
             mock.simpleMethod();

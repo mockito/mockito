@@ -97,7 +97,7 @@ public class BasicVerificationTest extends TestBase {
 
     @Test
     public void shouldVerifyStubbedMethods() throws Exception {
-        stub(mock.add("test")).toReturn(Boolean.FALSE);
+        when(mock.add("test")).thenReturn(Boolean.FALSE);
         
         mock.add("test");
         

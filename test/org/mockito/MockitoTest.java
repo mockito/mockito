@@ -18,7 +18,7 @@ public class MockitoTest extends TestBase {
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
-        Mockito.stub(mock.add("test")).toReturn(true);
+        Mockito.when(mock.add("test")).thenReturn(true);
         
         assertNull(Mockito.MOCKING_PROGRESS.pullOngoingStubbing());
     }

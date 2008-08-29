@@ -29,7 +29,7 @@ import org.mockito.internal.progress.LastArguments;
  * {@link Mockito} extends Matchers so to get access to matchers just import Mockito class statically.
  * <pre>
  *  //stubbing using anyInt() argument matcher
- *  stub(mockedList.get(anyInt())).toReturn("element");
+ *  when(mockedList.get(anyInt())).thenReturn("element");
  *  
  *  //following prints "element"
  *  System.out.println(mockedList.get(999));
@@ -70,7 +70,7 @@ import org.mockito.internal.progress.LastArguments;
  *   
  *   List mock = mock(List.class);
  *   
- *   stub(mock.addAll(argThat(new IsListOfTwoElements()))).toReturn(true);
+ *   when(mock.addAll(argThat(new IsListOfTwoElements()))).thenReturn(true);
  *   
  *   mock.addAll(Arrays.asList("one", "two"));
  *   

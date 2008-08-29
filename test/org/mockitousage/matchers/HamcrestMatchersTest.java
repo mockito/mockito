@@ -32,7 +32,7 @@ public class HamcrestMatchersTest extends TestBase {
 
     @Test
     public void shouldAcceptHamcrestMatcher() {
-        stub(mock.simpleMethod(argThat(new ContainsX()))).toReturn("X");
+        when(mock.simpleMethod(argThat(new ContainsX()))).thenReturn("X");
         assertNull(mock.simpleMethod("blah"));
         assertEquals("X", mock.simpleMethod("blah X blah"));
     }

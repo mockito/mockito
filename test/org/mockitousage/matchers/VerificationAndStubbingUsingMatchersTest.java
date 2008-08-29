@@ -28,9 +28,9 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     
     @Test
     public void shouldStubUsingMatchers() {
-        stub(one.simpleMethod(2)).toReturn("2");
-        stub(two.simpleMethod(anyString())).toReturn("any");
-        stub(three.simpleMethod(startsWith("test"))).toThrow(new RuntimeException());
+        when(one.simpleMethod(2)).thenReturn("2");
+        when(two.simpleMethod(anyString())).thenReturn("any");
+        when(three.simpleMethod(startsWith("test"))).thenThrow(new RuntimeException());
 
         assertEquals(null, one.simpleMethod(1));
         assertEquals("2", one.simpleMethod(2));
@@ -51,7 +51,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     @Test
     public void shouldVerifyUsingMatchers() {
         stubVoid(one).toThrow(new RuntimeException()).on().oneArg(true);
-        stub(three.varargsObject(5, "first arg", "second arg")).toReturn("stubbed");
+        when(three.varargsObject(5, "first arg", "second arg")).thenReturn("stubbed");
 
         try {
             one.oneArg(true);

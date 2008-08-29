@@ -34,7 +34,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     @Test
     public void shouldStubWithThrowable() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
-        stub(mock.add("throw")).toThrow(expected);
+        when(mock.add("throw")).thenThrow(expected);
         
         try {
             mock.add("throw");
@@ -70,10 +70,10 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test
     public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
-        stub(mock.get(1)).toThrow(new ExceptionOne());
+        when(mock.get(1)).thenThrow(new ExceptionOne());
         
         try {
-            stub(mock.get(1)).toThrow(new ExceptionTwo());
+            when(mock.get(1)).thenThrow(new ExceptionTwo());
             fail();
         } catch (ExceptionOne e) {}
     }   
@@ -83,7 +83,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         Reader reader = mock(Reader.class);
         IOException ioException = new IOException();
         
-        stub(reader.read()).toThrow(ioException);
+        when(reader.read()).thenThrow(ioException);
         
         try {
             reader.read();
@@ -97,7 +97,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     public void shouldAllowSettingError() throws Exception {
         Error error = new Error();
         
-        stub(mock.add("quake")).toThrow(error);
+        when(mock.add("quake")).thenThrow(error);
         
         try {
             mock.add("quake");
@@ -109,23 +109,23 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        stub(mock.add("monkey island")).toThrow(new Exception());
+        when(mock.add("monkey island")).thenThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        stub(mock.add("monkey island")).toThrow(null);
+        when(mock.add("monkey island")).thenThrow(null);
     }    
     
     @Test
     public void shouldMixThrowablesAndReturnValuesOnDifferentMocks() throws Exception {
-        stub(mock.add("ExceptionOne")).toThrow(new ExceptionOne());
-        stub(mock.getLast()).toReturn("last");
+        when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
+        when(mock.getLast()).thenReturn("last");
         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
         
         stubVoid(mockTwo).toThrow(new ExceptionThree()).on().clear();
-        stub(mockTwo.containsValue("ExceptionFour")).toThrow(new ExceptionFour());
-        stub(mockTwo.get("Are you there?")).toReturn("Yes!");
+        when(mockTwo.containsValue("ExceptionFour")).thenThrow(new ExceptionFour());
+        when(mockTwo.get("Are you there?")).thenReturn("Yes!");
 
         assertNull(mockTwo.get("foo"));
         assertTrue(mockTwo.keySet().isEmpty());
@@ -153,7 +153,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test
     public void shouldStubbingWithThrowableBeVerifiable() {
-        stub(mock.size()).toThrow(new RuntimeException());
+        when(mock.size()).thenThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
         try {
@@ -173,7 +173,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.size()).toThrow(new RuntimeException());
+        when(mock.size()).thenThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
         verifyZeroInteractions(mock);

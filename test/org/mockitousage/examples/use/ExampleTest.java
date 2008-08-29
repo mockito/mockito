@@ -31,8 +31,8 @@ public class ExampleTest extends TestBase {
 
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {
-        stub(mockCalculator.countArticles("Guardian")).toReturn(12);
-        stub(mockCalculator.countArticlesInPolish(anyString())).toReturn(5);
+        when(mockCalculator.countArticles("Guardian")).thenReturn(12);
+        when(mockCalculator.countArticlesInPolish(anyString())).thenReturn(5);
 
         articleManager.updateArticleCounters("Guardian");
         
@@ -64,11 +64,11 @@ public class ExampleTest extends TestBase {
         Article articleTwo = new Article();
         Article articleThree = new Article();
         
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleTwo)).toReturn(12);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleThree)).toReturn(0);
+        when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
+        when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
+        when(mockCalculator.countNumberOfRelatedArticles(articleThree)).thenReturn(0);
         
-        stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo, articleThree)); 
+        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo, articleThree)); 
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
@@ -82,10 +82,10 @@ public class ExampleTest extends TestBase {
         Article articleOne = new Article();
         Article articleTwo = new Article();
         
-        stub(mockCalculator.countNumberOfRelatedArticles(articleOne)).toReturn(1);
-        stub(mockCalculator.countNumberOfRelatedArticles(articleTwo)).toReturn(12);
+        when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
+        when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
         
-        stub(mockDatabase.getArticlesFor("Guardian")).toReturn(Arrays.asList(articleOne, articleTwo)); 
+        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo)); 
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 

@@ -28,8 +28,8 @@ public class BasicStubbingTest extends TestBase {
     
     @Test
     public void shouldEvaluateLatestStubbingFirst() throws Exception {
-        stub(mock.objectReturningMethod(isA(Integer.class))).toReturn(100);
-        stub(mock.objectReturningMethod(200)).toReturn(200);
+        when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);
+        when(mock.objectReturningMethod(200)).thenReturn(200);
         
         assertEquals(200, mock.objectReturningMethod(200));
         assertEquals(100, mock.objectReturningMethod(666));
@@ -38,7 +38,7 @@ public class BasicStubbingTest extends TestBase {
     
     @Test
     public void shouldStubbingBeTreatedAsInteraction() throws Exception {
-        stub(mock.booleanReturningMethod()).toReturn(true);
+        when(mock.booleanReturningMethod()).thenReturn(true);
         
         mock.booleanReturningMethod();
         
@@ -61,13 +61,13 @@ public class BasicStubbingTest extends TestBase {
         
         List<Sub> subs = null;
         //can I somehow avoid a cast here:
-        stub(mockTwo.getList()).toReturn((List) subs);
+        when(mockTwo.getList()).thenReturn((List) subs);
     }
     
     @Test
     public void shouldAllowStubbingToString() throws Exception {
         IMethods mockTwo = mock(IMethods.class);
-        stub(mockTwo.toString()).toReturn("test");
+        when(mockTwo.toString()).thenReturn("test");
         
         assertThat(mock.toString(), contains("Mock for IMethods"));
         assertEquals("test", mockTwo.toString());
@@ -76,7 +76,7 @@ public class BasicStubbingTest extends TestBase {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
-        stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
+        when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
         
         verifyZeroInteractions(mock);

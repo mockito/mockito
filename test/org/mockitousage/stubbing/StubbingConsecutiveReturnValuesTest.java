@@ -19,10 +19,10 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
    
     @Test
     public void shouldReturnConsecutiveValues() throws Exception {
-        stub(mock.simpleMethod())
-            .toReturn("one")
-            .toReturn("two")
-            .toReturn("three");
+        when(mock.simpleMethod())
+            .thenReturn("one")
+            .thenReturn("two")
+            .thenReturn("three");
         
         assertEquals("one", mock.simpleMethod());
         assertEquals("two", mock.simpleMethod());
@@ -33,10 +33,10 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
     
     @Test
     public void shouldThrowConsecutively() throws Exception {
-        stub(mock.simpleMethod())
-            .toThrow(new RuntimeException())
-            .toThrow(new IllegalArgumentException())
-            .toThrow(new NullPointerException());
+        when(mock.simpleMethod())
+            .thenThrow(new RuntimeException())
+            .thenThrow(new IllegalArgumentException())
+            .thenThrow(new NullPointerException());
 
         try {
             mock.simpleMethod();
@@ -61,11 +61,11 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
     
     @Test
     public void shouldMixConsecutiveReturnsWithExcepions() throws Exception {
-        stub(mock.simpleMethod())
-            .toThrow(new IllegalArgumentException())
-            .toReturn("one")
-            .toThrow(new NullPointerException())
-            .toReturn(null);
+        when(mock.simpleMethod())
+            .thenThrow(new IllegalArgumentException())
+            .thenReturn("one")
+            .thenThrow(new NullPointerException())
+            .thenReturn(null);
         
         try {
             mock.simpleMethod();
@@ -85,9 +85,9 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldValidateConsecutiveException() throws Exception {
-        stub(mock.simpleMethod())
-            .toReturn("one")
-            .toThrow(new Exception());
+        when(mock.simpleMethod())
+            .thenReturn("one")
+            .thenThrow(new Exception());
     }
     
     @Test

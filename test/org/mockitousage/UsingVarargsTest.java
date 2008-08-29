@@ -34,8 +34,8 @@ public class UsingVarargsTest extends TestBase {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldStubStringVarargs() {
-        stub(mock.withStringVarargsReturningString(1)).toReturn("1");
-        stub(mock.withStringVarargsReturningString(2, "1", "2", "3")).toReturn("2");
+        when(mock.withStringVarargsReturningString(1)).thenReturn("1");
+        when(mock.withStringVarargsReturningString(2, "1", "2", "3")).thenReturn("2");
         
         RuntimeException expected = new RuntimeException();
         stubVoid(mock).toThrow(expected).on().withStringVarargs(3, "1", "2", "3", "4");
@@ -61,8 +61,8 @@ public class UsingVarargsTest extends TestBase {
     
     @Test
     public void shouldStubBooleanVarargs() {
-        stub(mock.withBooleanVarargs(1)).toReturn(true);
-        stub(mock.withBooleanVarargs(1, true, false)).toReturn(true);
+        when(mock.withBooleanVarargs(1)).thenReturn(true);
+        when(mock.withBooleanVarargs(1, true, false)).thenReturn(true);
         
         assertEquals(true, mock.withBooleanVarargs(1));
         assertEquals(false, mock.withBooleanVarargs(9999));

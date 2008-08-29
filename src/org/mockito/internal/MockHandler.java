@@ -83,7 +83,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
         verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());
 
-        mockingProgress.reportOngoingStubbing(new DeprecatedOngoingStubbingImpl());
+        mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
 
         Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
         if (answer != null) {
@@ -152,40 +152,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
     }
 
-    //@Deprecated - remove when stub...toReturn disappears
-    private class DeprecatedOngoingStubbingImpl implements DeprecatedOngoingStubbing<T> {
-        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
-            return toAnswer(new Returns(value));
-        }
-
-        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
-            return toAnswer(new ThrowsException(throwable));
-        }
-
-        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-            verifyingRecorder.eraseLastInvocation();
-            mockitoStubber.addAnswer(answer);
-            return new DeprecatedConsecutiveStubbing();
-        }
-    }
-
-    //@Deprecated - remove when stub...toReturn disappears
-    private class DeprecatedConsecutiveStubbing implements DeprecatedOngoingStubbing<T> {
-        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
-            return toAnswer(new Returns(value));
-        }
-
-        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
-            return toAnswer(new ThrowsException(throwable));
-        }
-
-        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-            mockitoStubber.addConsecutiveAnswer(answer);
-            return this;
-        }
-    }
-    
-    private class OngoingStubbingImpl implements NewOngoingStubbing<T> {
+    private class OngoingStubbingImpl implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
         public NewOngoingStubbing<T> thenReturn(Object value) {
             return thenAnswer(new Returns(value));
         }
@@ -199,9 +166,23 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             mockitoStubber.addAnswer(answer);
             return new ConsecutiveStubbing();
         }
+
+        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
+            return toAnswer(new Returns(value));
+        }
+
+        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
+            return toAnswer(new ThrowsException(throwable));
+        }
+
+        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
+            verifyingRecorder.eraseLastInvocation();
+            mockitoStubber.addAnswer(answer);
+            return new ConsecutiveStubbing();
+        }
     }
 
-    private class ConsecutiveStubbing implements NewOngoingStubbing<T> {
+    private class ConsecutiveStubbing implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
         public NewOngoingStubbing<T> thenReturn(Object value) {
             return thenAnswer(new Returns(value));
         }
@@ -211,6 +192,19 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
+            mockitoStubber.addConsecutiveAnswer(answer);
+            return this;
+        }
+        
+        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
+            return toAnswer(new Returns(value));
+        }
+
+        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
+            return toAnswer(new ThrowsException(throwable));
+        }
+
+        public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
             mockitoStubber.addConsecutiveAnswer(answer);
             return this;
         }

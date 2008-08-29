@@ -25,11 +25,11 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
 
     @Test
     public void shouldAnyXMatchersAcceptNull() {
-        stub(mock.oneArg(anyObject())).toReturn("0");
-        stub(mock.oneArg(anyString())).toReturn("1");
-        stub(mock.forList(anyList())).toReturn("2");
-        stub(mock.forMap(anyMap())).toReturn("3");
-        stub(mock.forCollection(anyCollection())).toReturn("4");
+        when(mock.oneArg(anyObject())).thenReturn("0");
+        when(mock.oneArg(anyString())).thenReturn("1");
+        when(mock.forList(anyList())).thenReturn("2");
+        when(mock.forMap(anyMap())).thenReturn("3");
+        when(mock.forCollection(anyCollection())).thenReturn("4");
         
         assertEquals("0", mock.oneArg((Object) null));
         assertEquals("1", mock.oneArg((String) null));
@@ -40,14 +40,14 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
     
     @Test
     public void shouldAnyPrimiteWraperMatchersAcceptNull() {
-        stub(mock.forInteger(anyInt())).toReturn("0");
-        stub(mock.forCharacter(anyChar())).toReturn("1");
-        stub(mock.forShort(anyShort())).toReturn("2");
-        stub(mock.forByte(anyByte())).toReturn("3");
-        stub(mock.forBoolean(anyBoolean())).toReturn("4");
-        stub(mock.forLong(anyLong())).toReturn("5");
-        stub(mock.forFloat(anyFloat())).toReturn("6");
-        stub(mock.forDouble(anyDouble())).toReturn("7");
+        when(mock.forInteger(anyInt())).thenReturn("0");
+        when(mock.forCharacter(anyChar())).thenReturn("1");
+        when(mock.forShort(anyShort())).thenReturn("2");
+        when(mock.forByte(anyByte())).thenReturn("3");
+        when(mock.forBoolean(anyBoolean())).thenReturn("4");
+        when(mock.forLong(anyLong())).thenReturn("5");
+        when(mock.forFloat(anyFloat())).thenReturn("6");
+        when(mock.forDouble(anyDouble())).thenReturn("7");
         
         assertEquals("0", mock.forInteger(null));
         assertEquals("1", mock.forCharacter(null));

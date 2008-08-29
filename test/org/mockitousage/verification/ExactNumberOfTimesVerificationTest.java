@@ -85,8 +85,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
 
     @Test
     public void shouldNotCountInStubbedInvocations() throws Exception {
-        stub(mock.add("test")).toReturn(false);
-        stub(mock.add("test")).toReturn(true);
+        when(mock.add("test")).thenReturn(false);
+        when(mock.add("test")).thenReturn(true);
 
         mock.add("test");
         mock.add("test");

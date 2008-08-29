@@ -44,10 +44,10 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
 
 //        verify(mock).varargs("test", anyString());
 
-//        stub("x").toReturn("x");
+//        when("x").thenReturn("x");
 
-//        stub(mock.simpleMethod());
-//        stub(mock.differentMethod()).toReturn("");
+//        when(mock.simpleMethod());
+//        when(mock.differentMethod()).thenReturn("");
     } 
     
     @Test(expected=NotAMockException.class)

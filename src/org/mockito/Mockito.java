@@ -80,8 +80,8 @@ import org.mockito.stubbing.Answer;
  * LinkedList mockedList = mock(LinkedList.class);
  * 
  * //stubbing
- * stub(mockedList.get(0)).toReturn("first");
- * stub(mockedList.get(1)).toThrow(new RuntimeException());
+ * when(mockedList.get(0)).thenReturn("first");
+ * when(mockedList.get(1)).thenThrow(new RuntimeException());
  * 
  * //following prints "first"
  * System.out.println(mockedList.get(0));
@@ -118,10 +118,10 @@ import org.mockito.stubbing.Answer;
  * 
  * <pre>
  * //stubbing using built-in anyInt() argument matcher
- * stub(mockedList.get(anyInt())).toReturn("element");
+ * when(mockedList.get(anyInt())).thenReturn("element");
  * 
  * //stubbing using hamcrest (let's say isValid() returns your own hamcrest matcher):
- * stub(mockedList.contains(argThat(isValid()))).toReturn("element");
+ * when(mockedList.contains(argThat(isValid()))).thenReturn("element");
  * 
  * //following prints "element"
  * System.out.println(mockedList.get(999));
@@ -304,9 +304,9 @@ import org.mockito.stubbing.Answer;
  * <p>
  * 
  * <pre>
- * stub(mock.someMethod("some arg"))
- *   .toThrow(new RuntimeException())
- *   .toReturn("foo");
+ * when(mock.someMethod("some arg"))
+ *   .thenThrow(new RuntimeException())
+ *   .thenReturn("foo");
  * 
  * //First call: throws runtime exception:
  * mock.someMethod("some arg");
@@ -328,7 +328,7 @@ import org.mockito.stubbing.Answer;
  * any decent (clean & simple) code.
  * 
  * <pre>
- * stub(mock.someMethod(anyString())).toAnswer(new Answer() {
+ * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
  *     Object answer(InvocationOnMock invocation) {
  *         Object[] args = invocation.getArguments();
  *         Object mock = invocation.getMock();
@@ -342,7 +342,7 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3> 12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
  * 
- * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
+ * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
  * <p>
  * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids. 
  * The main reason is improved readability and consistency with the family of doAnswer() methods.
@@ -378,7 +378,7 @@ import org.mockito.stubbing.Answer;
  *   List spy = spy(list);
  * 
  *   //optionally, you can stub out some methods:
- *   stub(spy.size()).toReturn(100);
+ *   when(spy.size()).thenReturn(100);
  * 
  *   //using the spy calls <b>real</b> methods
  *   spy.add("one");
@@ -397,14 +397,14 @@ import org.mockito.stubbing.Answer;
  * 
  * <h4>Important gotcha on spying real objects!</h4>
  * 
- * Sometimes it's impossible to use {@link Mockito#stub(Object)} for stubbing spies. Example:
+ * Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
  * 
  * <pre>
  *   List list = new LinkedList();
  *   List spy = spy(list);
  *   
  *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
- *   stub(spy.get(0)).toReturn("foo");
+ *   when(spy.get(0)).thenReturn("foo");
  *   
  *   //You have to use doReturn() for stubbing
  *   doReturn("foo").when(spy).get(0);
@@ -460,7 +460,7 @@ public class Mockito extends Matchers {
      *   List spy = spy(list);
      * 
      *   //optionally, you can stub out some methods:
-     *   stub(spy.size()).toReturn(100);
+     *   when(spy.size()).thenReturn(100);
      * 
      *   //using the spy calls <b>real</b> methods
      *   spy.add("one");
@@ -479,14 +479,14 @@ public class Mockito extends Matchers {
      * 
      * <h4>Important gotcha on spying real objects!</h4>
      * 
-     * Sometimes it's impossible to use {@link Mockito#stub(Object)} for stubbing spies. Example:
+     * Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
      * 
      * <pre>
      *   List list = new LinkedList();
      *   List spy = spy(list);
      *   
      *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
-     *   stub(spy.get(0)).toReturn("foo");
+     *   when(spy.get(0)).thenReturn("foo");
      *   
      *   //You have to use doReturn() for stubbing
      *   doReturn("foo").when(spy).get(0);
@@ -535,7 +535,7 @@ public class Mockito extends Matchers {
      * <p>
      * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
      * <p>
-     * If you're familiar with Mockito then know that when() is a successor of {@link Mockito#stub()}
+     * when() is a successor of {@link Mockito#stub()}
      * 
      * <pre>
      * when(mock.someMethod()).thenReturn(10);
@@ -746,7 +746,7 @@ public class Mockito extends Matchers {
      * 
      * //you can stub with different behavior for consecutive calls.
      * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.   
-     * stub(mock)
+     * stubVoid(mock)
      *   .toThrow(new RuntimeException())
      *   .toReturn()
      *   .on().someMethod();
@@ -769,7 +769,7 @@ public class Mockito extends Matchers {
     /**
      * Use doThrow() when you want to stub the void method with an exception.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
      * <p>
      * Example:
      * 
@@ -787,7 +787,7 @@ public class Mockito extends Matchers {
     /**
      * Use doAnswer() when you want to stub a void method with generic {@link Answer}.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#stub(Object)} because the compiler does not like void methods inside brackets...
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
      * <p>
      * Example:
      * 
@@ -847,9 +847,9 @@ public class Mockito extends Matchers {
     }    
     
     /**
-     * Use doReturn() in those rare occasions when you cannot use {@link Mockito#stub(Object)}.
+     * Use doReturn() in those rare occasions when you cannot use {@link Mockito#when(Object)}.
      * <p>
-     * Beware that {@link Mockito#stub(Object)} is <b>always recommended</b> for stubbing because it is argument type-safe 
+     * Beware that {@link Mockito#when(Object)} is <b>always recommended</b> for stubbing because it is argument type-safe 
      * and more readable (especially when stubbing consecutive calls). 
      * <p>
      * However, there are occasions when doReturn() comes handy:
@@ -862,7 +862,7 @@ public class Mockito extends Matchers {
      *   List spy = spy(list);
      *   
      *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
-     *   stub(spy.get(0)).toReturn("foo");
+     *   when(spy.get(0)).thenReturn("foo");
      *   
      *   //You have to use doReturn() for stubbing:
      *   doReturn("foo").when(spy).get(0);
@@ -871,10 +871,10 @@ public class Mockito extends Matchers {
      * 2. Overriding a previous exception-stubbing:
      * 
      * <pre>
-     *   stub(mock.foo()).toThrow(new RuntimeException());
+     *   when(mock.foo()).thenThrow(new RuntimeException());
      *   
      *   //Impossible: the exception-stubbed foo() method is really called so RuntimeException is thrown. 
-     *   stub(mock.foo()).toReturn("bar");
+     *   when(mock.foo()).thenReturn("bar");
      *   
      *   //You have to use doReturn() for stubbing:
      *   doReturn("bar").when(mock).foo();

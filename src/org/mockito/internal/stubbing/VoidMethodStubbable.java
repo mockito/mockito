@@ -15,7 +15,7 @@ import org.mockito.stubbing.Answer;
  *
  * //you can stub with different behavior for consecutive method calls.
  * //Last stubbing (e.g: toReturn()) determines the behavior for further consecutive calls.
- * stub(mock)
+ * stubVoid(mock)
  *  .toThrow(new RuntimeException())
  *  .toReturn()
  *  .on().someMethod();
