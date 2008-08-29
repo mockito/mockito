@@ -23,6 +23,9 @@ public class AnnotationsTest extends TestBase {
     @Mock List list;
     @Mock final Map map = new HashMap();
     
+    @SuppressWarnings("deprecation")
+    @MockitoAnnotations.Mock List listTwo;
+    
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -32,9 +35,11 @@ public class AnnotationsTest extends TestBase {
     public void shouldInitMocks() throws Exception {
         list.clear();
         map.clear();
+        listTwo.clear();
         
         verify(list).clear();
         verify(map).clear();
+        verify(listTwo).clear();
     }
     
     @Test
