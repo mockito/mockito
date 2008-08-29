@@ -48,7 +48,7 @@ import org.mockito.runners.MockitoJUnit4Runner;
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also use put it in your JUnit4 runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit4Runner}, {@link MockitoJUnit45Runner}
+ * You can also put it in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit4Runner}, {@link MockitoJUnit45Runner}
  */
 public class MockitoAnnotations {
 
