@@ -1,8 +1,8 @@
 package org.mockitousage.junitrunner;
 
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnit45Runner;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnit45Runner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class JUnit45RunnerTest extends JUnitRunnerTestCase {
 }

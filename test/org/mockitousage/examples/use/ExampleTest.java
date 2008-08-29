@@ -13,10 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnit4Runner;
+import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitoutil.TestBase;
 
-@RunWith(MockitoJUnit4Runner.class)
+@RunWith(MockitoJUnit44Runner.class)
 public class ExampleTest extends TestBase {
     
     @Mock private ArticleCalculator mockCalculator;

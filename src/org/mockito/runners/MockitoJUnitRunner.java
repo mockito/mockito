@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations;
  * <p>
  * Example:
  * <pre>
- * &#064;RunWith(MockitoJUnit4Runner.class)
+ * &#064;RunWith(MockitoJUnit44Runner.class)
  * public class ExampleTest {
  * 
  *     &#064;Mock
@@ -33,9 +33,9 @@ import org.mockito.MockitoAnnotations;
  * 
  * </pre>
  */
-public class MockitoJUnit45Runner extends BlockJUnit4ClassRunner {
+public class MockitoJUnitRunner extends BlockJUnit4ClassRunner {
 
-    public MockitoJUnit45Runner(Class<?> klass) throws InitializationError {
+    public MockitoJUnitRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
 
