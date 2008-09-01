@@ -4,12 +4,15 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -62,5 +65,39 @@ public class AtLeastXVerificationTest extends TestBase {
         mock.add("foo");
 
         verify(mock, atLeast(2)).add("foo");
+    }
+    
+    @Test
+    public void shouldVerifyInOrder() throws Exception {
+        mock.add("one");
+        mock.add("two");
+        mock.add("three");
+        
+        mock.clear();
+  
+        InOrder inOrder = inOrder(mock);
+        
+        inOrder.verify(mock, atLeast(2)).add(anyString());
+        inOrder.verify(mock).clear();
+        verifyNoMoreInteractions(mock);
+    }
+    
+    @Ignore
+    @Test
+    public void shouldFailVerificationInOrder() throws Exception {
+        mock.clear();
+
+        mock.add("one");
+        mock.add("two");
+        mock.add("three");
+  
+        InOrder inOrder = inOrder(mock);
+        
+        inOrder.verify(mock, atLeastOnce()).clear();
+
+        try {
+            inOrder.verify(mock, atLeast(4)).add(anyString());
+            fail();
+        } catch (TooLittleActualInvocations e) {}
     }
 }
