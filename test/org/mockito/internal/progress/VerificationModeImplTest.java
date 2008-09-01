@@ -48,13 +48,18 @@ public class VerificationModeImplTest extends TestBase {
         assertTrue(times(1).missingMethodMode());
         assertTrue(times(10).missingMethodMode());
         
+        assertFalse(atLeast(2).missingMethodMode());
         assertFalse(noMoreInteractions().missingMethodMode());
         assertFalse(times(0).missingMethodMode());
     }
     
     @Test
+    public void inOrderAtLeastShouldBeInAtLeastMode() throws Exception {
+        assertTrue(inOrderAtLeast(5, asList("mock")).atLeastMode());
+    }
+    
+    @Test
     public void shouldKnowIfIsMissingMethodInOrderMode() throws Exception {
-        assertTrue(inOrder(null, asList("mock")).missingMethodInOrderMode());
         assertTrue(inOrder(1, asList("mock")).missingMethodInOrderMode());
         assertTrue(inOrder(10, asList("mock")).missingMethodInOrderMode());
         

@@ -352,4 +352,15 @@ public class Reporter {
             "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
     }
+    
+    public void tooLittleActualInvocationsInOrderInAtLeastMode(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
+        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
+
+        throw new VerifcationInOrderFailure(join(
+                "Verification in order failure",
+                wanted.toString(),
+                "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
+        ), cause);
+    }
+    
 }

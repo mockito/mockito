@@ -27,7 +27,7 @@ public class NoMoreInvocationsVerifier implements Verifier {
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (mode.explicitMode()) {
+        if (mode.explicitMode() || mode.atLeastMode()) {
             return;
         }
 

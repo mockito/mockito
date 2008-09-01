@@ -28,10 +28,18 @@ class InOrderVerifier implements InOrder {
     }
     
     public <T> T verify(T mock, VerificationMode mode) {
+        return verify(mock, (VerificationModeImpl) mode);
+    }
+    
+    public <T> T verify(T mock, VerificationModeImpl mode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
         }
-        Integer wantedCount = ((VerificationModeImpl) mode).wantedCount();
-        return Mockito.verify(mock, VerificationModeImpl.inOrder(wantedCount, mocksToBeVerifiedInOrder));
+        Integer wantedCount = mode.wantedCount();
+        if (mode.atLeastMode()) {
+            return Mockito.verify(mock, VerificationModeImpl.inOrderAtLeast(wantedCount, mocksToBeVerifiedInOrder));
+        } else {
+            return Mockito.verify(mock, VerificationModeImpl.inOrder(wantedCount, mocksToBeVerifiedInOrder));            
+        }
     }
 }

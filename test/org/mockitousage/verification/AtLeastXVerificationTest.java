@@ -10,11 +10,11 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
@@ -82,7 +82,6 @@ public class AtLeastXVerificationTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
     
-    @Ignore
     @Test
     public void shouldFailVerificationInOrder() throws Exception {
         mock.clear();
@@ -98,6 +97,6 @@ public class AtLeastXVerificationTest extends TestBase {
         try {
             inOrder.verify(mock, atLeast(4)).add(anyString());
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (VerifcationInOrderFailure e) {}
     }
 }

@@ -16,24 +16,21 @@ import org.mockito.exceptions.base.MockitoException;
  */
 public class VerificationModeImpl implements VerificationMode {
     
-    enum Verification { EXPLICIT, NO_MORE_WANTED };
+    enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
     
-    private final Integer wantedInvocationCount;
-    //TODO merge with wantedInvocationCount, use enum to preserve atLeast mode
-    private final Integer minInvocationCount;
+    private final int wantedInvocationCount;
     private final List<? extends Object> mocksToBeVerifiedInOrder;
     private final Verification verification;
     
-    private VerificationModeImpl(Integer wantedNumberOfInvocations, Integer minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
-        if (wantedNumberOfInvocations != null && wantedNumberOfInvocations < 0) {
+    private VerificationModeImpl(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
+        if (verification != Verification.AT_LEAST && wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        if (minNumberOfInvocations != null && minNumberOfInvocations < 1) {
+        if (verification == Verification.AT_LEAST && wantedNumberOfInvocations < 1) {
             throw new MockitoException("Negative value or zero are not allowed here");
         }
         assert mocksToBeVerifiedInOrder != null;
         this.wantedInvocationCount = wantedNumberOfInvocations;
-        this.minInvocationCount = minNumberOfInvocations;
         this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
         this.verification = verification;
     }
@@ -43,28 +40,29 @@ public class VerificationModeImpl implements VerificationMode {
     }
 
     public static VerificationModeImpl atLeast(int minNumberOfInvocations) {
-        return new VerificationModeImpl(null, minNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
+        return new VerificationModeImpl(minNumberOfInvocations, Collections.emptyList(), Verification.AT_LEAST);
     }
 
     public static VerificationModeImpl times(int wantedNumberOfInvocations) {
-        return new VerificationModeImpl(wantedNumberOfInvocations, null, Collections.emptyList(), Verification.EXPLICIT);
+        return new VerificationModeImpl(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
-    public static VerificationModeImpl inOrder(Integer wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
+    public static VerificationModeImpl inOrder(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
         assert !mocksToBeVerifiedInOrder.isEmpty();
-        return new VerificationModeImpl(wantedNumberOfInvocations, null, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
+        return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
+    }
+
+    public static VerificationModeImpl inOrderAtLeast(int minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
+        assert !mocksToBeVerifiedInOrder.isEmpty();
+        return new VerificationModeImpl(minNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.AT_LEAST);
     }
     
     public static VerificationModeImpl noMoreInteractions() {
-        return new VerificationModeImpl(null, null, Collections.emptyList(), Verification.NO_MORE_WANTED);
+        return new VerificationModeImpl(0, Collections.emptyList(), Verification.NO_MORE_WANTED);
     }
 
     public Integer wantedCount() {
         return wantedInvocationCount;
-    }
-
-    public Integer minimumCount() {
-        return minInvocationCount;
     }
 
     public List<? extends Object> getMocksToBeVerifiedInOrder() {
@@ -72,7 +70,7 @@ public class VerificationModeImpl implements VerificationMode {
     }
 
     public boolean atLeastMode() {
-        return wantedInvocationCount == null && explicitMode();
+        return verification == Verification.AT_LEAST;
     }
 
     public boolean explicitMode() {
@@ -80,11 +78,11 @@ public class VerificationModeImpl implements VerificationMode {
     }
     
     public boolean inOrderMode() {
-        return !mocksToBeVerifiedInOrder.isEmpty() && explicitMode();
+        return !mocksToBeVerifiedInOrder.isEmpty() && (explicitMode() || atLeastMode());
     }
     
     public boolean missingMethodMode() {
-        return explicitMode() && (atLeastMode() || wantedInvocationCount > 0);
+        return (explicitMode() && wantedInvocationCount > 0) || (atLeastMode() && wantedInvocationCount == 1);
     }
     
     public boolean missingMethodInOrderMode() {
@@ -92,11 +90,11 @@ public class VerificationModeImpl implements VerificationMode {
     }
     
     public boolean exactNumberOfInvocationsMode() {
-        return !inOrderMode() && explicitMode();
+        return !inOrderMode() && (explicitMode() || atLeastMode());
     }
 
     public boolean matchesActualCount(int actualCount) {
-        boolean atLeast = atLeastMode() && actualCount >= minInvocationCount;
+        boolean atLeast = atLeastMode() && actualCount >= wantedInvocationCount;
         boolean actualMatchesWanted = !atLeastMode() && wantedInvocationCount == actualCount;
         
         return atLeast || actualMatchesWanted;
@@ -107,7 +105,7 @@ public class VerificationModeImpl implements VerificationMode {
     }
 
     public boolean tooLittleActualInvocationsInAtLeastMode(int actualCount) {
-        return atLeastMode() && minInvocationCount > actualCount;
+        return atLeastMode() && wantedInvocationCount > actualCount;
     }
     
     public boolean tooManyActualInvocations(int actualCount) {

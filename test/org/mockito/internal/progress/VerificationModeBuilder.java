@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class VerificationModeBuilder {
 
-    private Integer times;
+    private Integer times = 1;
 
     public VerificationModeImpl inOrder() {
         return VerificationModeImpl.inOrder(times, Arrays.asList(new Object()));
