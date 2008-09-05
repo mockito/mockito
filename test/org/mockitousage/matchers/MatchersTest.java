@@ -10,12 +10,14 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -273,6 +275,16 @@ public class MatchersTest extends TestBase {
         } catch (WantedButNotInvoked e) {
             assertThat(e, messageContains("oneArray(null)"));
         }
+    }
+    
+    @Test(expected=ArgumentsAreDifferent.class)
+    public void arrayEqualsShouldThrowArgumentsAreDifferentExceptionForNonMatchingArguments() {        
+        List list = Mockito.mock(List.class);
+        
+        list.add("test"); // testing fix for issue 20
+        list.contains(new Object[] {"1"});
+        
+        Mockito.verify(list).contains(new Object[] {"1","2", "3"});        
     }
 
     @Test
