@@ -19,32 +19,25 @@ public class ArrayEquals extends Equals {
         Object wanted = getWanted();
         if (wanted == null) {
             return super.matches(actual);
-        } else if (wanted instanceof boolean[]
-                && (actual == null || actual instanceof boolean[])) {
+        } else if (actual == null) {
+            return false;
+        } else if (wanted instanceof boolean[] && actual instanceof boolean[]) {
             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
-        } else if (wanted instanceof byte[]
-                && (actual == null || actual instanceof byte[])) {
+        } else if (wanted instanceof byte[] && actual instanceof byte[]) {
             return Arrays.equals((byte[]) wanted, (byte[]) actual);
-        } else if (wanted instanceof char[]
-                && (actual == null || actual instanceof char[])) {
+        } else if (wanted instanceof char[] && actual instanceof char[]) {
             return Arrays.equals((char[]) wanted, (char[]) actual);
-        } else if (wanted instanceof double[]
-                && (actual == null || actual instanceof double[])) {
+        } else if (wanted instanceof double[] && actual instanceof double[]) {
             return Arrays.equals((double[]) wanted, (double[]) actual);
-        } else if (wanted instanceof float[]
-                && (actual == null || actual instanceof float[])) {
+        } else if (wanted instanceof float[] && actual instanceof float[]) {
             return Arrays.equals((float[]) wanted, (float[]) actual);
-        } else if (wanted instanceof int[]
-                && (actual == null || actual instanceof int[])) {
+        } else if (wanted instanceof int[] && actual instanceof int[]) {
             return Arrays.equals((int[]) wanted, (int[]) actual);
-        } else if (wanted instanceof long[]
-                && (actual == null || actual instanceof long[])) {
+        } else if (wanted instanceof long[] && actual instanceof long[]) {
             return Arrays.equals((long[]) wanted, (long[]) actual);
-        } else if (wanted instanceof short[]
-                && (actual == null || actual instanceof short[])) {
+        } else if (wanted instanceof short[] && actual instanceof short[]) {
             return Arrays.equals((short[]) wanted, (short[]) actual);
-        } else if (wanted instanceof Object[]
-                && (actual == null || actual instanceof Object[])) {
+        } else if (wanted instanceof Object[] && actual instanceof Object[]) {
             return Arrays.equals((Object[]) wanted, (Object[]) actual);
         }
         return false;
