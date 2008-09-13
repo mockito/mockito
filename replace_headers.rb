@@ -30,16 +30,22 @@ paths.each do |path|
     f.each { |line| out << line }
 
     current_hdr = Regexp.new('.*\*/.*package org\.', Regexp::MULTILINE)
-    
+    first_hdr = Regexp.new('.*?\*/.*?[\n\r]+?', Regexp::MULTILINE)
+	
+	def printToFile(f, out) 
+	  f.pos = 0           
+	  f.print out
+	  f.truncate(f.pos) 
+	end
+	
     if (out !~ current_hdr)     
+	  puts "header is missing for file: #{path} - replacing"
       out = header + out
-    else
-      first_hdr = Regexp.new('.*?\*/.*?[\n\r]+?', Regexp::MULTILINE)
-      out.sub!(first_hdr, header)
-    end
-  
-    f.pos = 0           
-    f.print out
-    f.truncate(f.pos)             
+	  printToFile(f, out)
+    elsif (out[first_hdr] != header)
+	  puts "header is different for file: #{path} - replacing"
+	  out.sub!(first_hdr, header)		    
+	  printToFile(f, out)
+    end	
   end
 end
