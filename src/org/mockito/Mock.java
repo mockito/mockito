@@ -11,13 +11,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.mockito.runners.MockitoJUnit44Runner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * <ul>
  * <li>Allows shorthand mock creation.</li> 
  * <li>Minimizes repetitive mock creation code.</li> 
  * <li>Makes the test class more readable.</li>
- * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
+ * <li>Makes the verification error easier to read because the <b>field name</b> is used to identify the mock.</li>
  * </ul>
  * 
  * <pre>
@@ -46,7 +47,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also put it in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
+ * You can also put initMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
  */
 @Target( { FIELD })
 @Retention(RetentionPolicy.RUNTIME)

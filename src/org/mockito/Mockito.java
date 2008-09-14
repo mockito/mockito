@@ -42,14 +42,14 @@ import org.mockito.stubbing.Answer;
  *      7. Making sure interaction(s) never happened on mock <br/> 
  *      8. Finding redundant invocations <br/> 
  *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
- *      10. (**New**) Stubbing consecutive calls (iterator-style stubbing) <br/> 
- *      11. (**Totally New**) Stubbing with callbacks <br/>
- *      12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
- *      13. (**Totally New**) Spying on real objects <br/>
+ *      10. Stubbing consecutive calls (iterator-style stubbing) <br/> 
+ *      11. Stubbing with callbacks <br/>
+ *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
+ *      13. Spying on real objects <br/>
  * </b>
  * 
  * <p>
- * Following examples mock List, because everyone knows its interface (methods
+ * Following examples mock a List, because everyone knows its interface (methods
  * like add(), get(), clear() will be used). <br>
  * You probably wouldn't mock List class 'in real'.
  * 
@@ -72,7 +72,7 @@ import org.mockito.stubbing.Answer;
  * </pre>
  * 
  * <p>
- * Once created, mock will remember all invocations. Then you can selectively
+ * Once created, mock will remember all interactions. Then you can selectively
  * verify whatever interaction you are interested in.
  * 
  * <h3>2. How about some stubbing?</h3>
@@ -128,14 +128,14 @@ import org.mockito.stubbing.Answer;
  * //following prints "element"
  * System.out.println(mockedList.get(999));
  * 
- * //<b>you can also verify using argument matcher</b>
+ * //<b>you can also verify using an argument matcher</b>
  * verify(mockedList).get(anyInt());
  * </pre>
  * 
  * <p>
- * Argument matchers allow flexible verification or stubbing. See the <b>whole
- * library of</b> {@link Matchers} including examples of <b>custom argument
- * matchers / hamcrest matchers</b>.
+ * Argument matchers allow flexible verification or stubbing. 
+ * {@link Matchers Click here to see} more built-in matchers 
+ * and examples of <b>custom argument matchers / hamcrest matchers</b>.
  * <p>
  * <b>Warning:</b>
  * <p>
@@ -149,10 +149,10 @@ import org.mockito.stubbing.Answer;
  *   //above is correct - eq() is also an argument matcher
  *   
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
- *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
+ *   //above is incorrect - exception will be thrown because third argument is given without an argument matcher.
  * </pre>
  * 
- * <h3>4. Verifying exact number of invocations / at least once / never</h3>
+ * <h3>4. Verifying exact number of invocations / at least x / never</h3>
  * 
  * <pre>
  * //using mock 
@@ -188,9 +188,18 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3>5. Stubbing void methods with exceptions</h3>
  * 
- * {@link Mockito#doThrow(Throwable)} replaces {@link Mockito#stubVoid(Object)} because of improved readability and consistency with the family of doAnswer() methods. 
+ * <pre>
+ *   doThrow(new RuntimeException()).when(mockedList).clear();
+ *   
+ *   //following throws RuntimeException:
+ *   mockedList.clear();
+ * </pre>
+ * 
+ * Read more about doThrow|doAnswer family of methods in paragraph 12.
  * <p>
- * See paragraph 12.
+ * Initially, {@link Mockito#stubVoid(Object)} was used for stubbing voids.
+ * Currently stubVoid() is deprecated in favor of {@link Mockito#doThrow(Throwable)}.
+ * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods. 
  * 
  * <h3>6. Verification in order</h3>
  * 
@@ -234,10 +243,6 @@ import org.mockito.stubbing.Answer;
  * 
  * </pre>
  * 
- * <p>
- * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions()
- * but the first one is more explicit and can read better.
- * 
  * <h3>8. Finding redundant invocations</h3>
  * 
  * <pre>
@@ -268,7 +273,7 @@ import org.mockito.stubbing.Answer;
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
  * <li>Makes the test class more readable.</li>
- * <li>Makes the verification error easier to read because <b>field name</b>
+ * <li>Makes the verification error easier to read because the <b>field name</b>
  * is used to identify the mock.</li>
  * </ul>
  * 
@@ -293,7 +298,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
- * <h3> 10. (**New**) Stubbing consecutive calls (iterator-style stubbing)</h3>
+ * <h3> 10. Stubbing consecutive calls (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same
  * method call. Typical use case could be mocking iterators. 
@@ -319,14 +324,14 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("some arg"));
  * </pre>
  * 
- * <h3> 11. (**Totally New**) Stubbing with callbacks</h3>
+ * <h3> 11. Stubbing with callbacks</h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
  * Yet another controversial feature which was not included in Mockito
  * originally. We recommend using simple stubbing with toReturn() or
  * toThrow() only. Those two should be <b>just enough</b> to test/test-drive
- * any decent (clean & simple) code.
+ * any clean & simple code.
  * 
  * <pre>
  * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
@@ -341,7 +346,7 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
- * <h3> 12. (**Totally New**) doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
+ * <h3> 12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
  * <p>
@@ -366,13 +371,13 @@ import org.mockito.stubbing.Answer;
  * <p>
  * {@link Mockito#doReturn(Object)}
  * 
- * <h3> 13. (**Totally New**) Spying on real objects</h3>
+ * <h3> 13. Spying on real objects</h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
  * <p>
  * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
  * <p>
- * Spying on real objects is associated with "partial mocking" concept. 
+ * Spying on real objects is often associated with "partial mocking" concept. 
  * 
  * <pre>
  *   List list = new LinkedList();
@@ -433,9 +438,10 @@ public class Mockito extends Matchers {
     /**
      * Creates mock with a name. Naming mocks can be helpful for debugging. 
      * <p>
-     * Beware that naming mocks is not a solution for complex code which uses too many mocks or collaborators. In that case we recommend merciless refactoring.
+     * Beware that naming mocks is not a solution for complex code which uses too many mocks or collaborators. 
+     * <b>If you have too many mocks then refactor the code</b> so that it's easy to test/debug without necessity of naming mocks.
      * <p>
-     * If you use &#064;Mock annotation then you've got naming mocks for free. &#064;Mock uses field name as mock name.
+     * <b>If you use &#064;Mock annotation then you've got naming mocks for free!</b> &#064;Mock uses field name as mock name. {@link Mock Read more.}
      * <p>
      * 
      * See examples in javadoc for {@link Mockito} class
@@ -452,7 +458,7 @@ public class Mockito extends Matchers {
      * <p>
      * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
      * <p>
-     * Spying on real objects is associated with "partial mocking" concept.
+     * Spying on real objects is often associated with "partial mocking" concept.
      * <p>
      * Example:
      * 
@@ -505,8 +511,6 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * <b>Deprecated</b>
-     * 
      * <pre>
      *   //Instead of:
      *   stub(mock.count()).toReturn(10);
@@ -515,14 +519,14 @@ public class Mockito extends Matchers {
      *   when(mock.count()).thenReturn(10);
      * </pre> 
      * 
-     * stub() is replaced by {@link Mockito#when()} because many users found stub() confusing. 
+     * Many unexperienced users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
      * <p>
      * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
      * <pre>
-     *   stub( -> when(
-     *   .toReturn( -> .thenReturn(
-     *   .toThrow( -> .thenThrow(
-     *   .toAnswer( -> .thenAnswer(
+     *   stub(       <i>replace with:</i>  when(
+     *   .toReturn(  <i>replace with:</i>  .thenReturn(
+     *   .toThrow(   <i>replace with:</i>  .thenThrow(
+     *   .toAnswer(  <i>replace with:</i>  .thenAnswer(
      * </pre>
      * If you're an existing user then sorry for making your code littered with deprecation warnings. 
      * This change was required to make Mockito better.
@@ -542,11 +546,9 @@ public class Mockito extends Matchers {
      * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called. 
      * <p>
      * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
-     * <p>
-     * when() is a successor of {@link Mockito#stub()}
      * 
      * <pre>
-     * when(mock.someMethod()).thenReturn(10);
+     * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
      *
      * //you can use flexible argument matchers, e.g:
      * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);
@@ -563,6 +565,8 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * <p>
+     * when() is a successor of {@link Mockito#stub(Object)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -581,9 +585,7 @@ public class Mockito extends Matchers {
      * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
-     * @param <T>
-     * @param methodCall
-     * @return
+     * @param methodCall method to be stubbed
      */
     public static <T> NewOngoingStubbing<T> when(T methodCall) {
         MOCKING_PROGRESS.stubbingStarted();
@@ -658,8 +660,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Throws an AssertionError if any of given mocks has any unverified
-     * interaction.
+     * Checks if any of given mocks has any unverified interaction.
      * <p>
      * You can use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
@@ -715,9 +716,6 @@ public class Mockito extends Matchers {
      *   verifyZeroInteractions(mockOne, mockTwo);
      * </pre>
      * 
-     * Instead of verifyZeroInteractions() you can call verifyNoMoreInteractions() but 
-     * the first one is more explicit and can read better.
-     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified
@@ -733,8 +731,6 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * <b>Deprecated</b>
-     * 
      * <pre>
      *   //Instead of:
      *   stubVoid(mock).toThrow(e).on().someVoidMethod();
@@ -816,7 +812,7 @@ public class Mockito extends Matchers {
     }  
     
     /**
-     * Use doNothing() for setting void methods to do nothing. <b>Beware</b> that void methods do nothing by default! 
+     * Use doNothing() for setting void methods to do nothing. <b>Beware that void methods on mocks do nothing by default!</b> 
      * However, there are rare situations when doNothing() comes handy:  
      * <p>
      * 1. Stubbing consecutive calls on a void method:
@@ -855,10 +851,10 @@ public class Mockito extends Matchers {
     /**
      * Use doReturn() in those rare occasions when you cannot use {@link Mockito#when(Object)}.
      * <p>
-     * Beware that {@link Mockito#when(Object)} is <b>always recommended</b> for stubbing because it is argument type-safe 
-     * and more readable (especially when stubbing consecutive calls). 
+     * <b>Beware that {@link Mockito#when(Object)} is always recommended for stubbing because it is argument type-safe 
+     * and more readable</b> (especially when stubbing consecutive calls). 
      * <p>
-     * However, there are occasions when doReturn() comes handy:
+     * Here are those rare occasions when doReturn() comes handy:
      * <p>
      * 
      * 1. When spying real objects and calling real methods on a spy brings side effects  
@@ -879,14 +875,15 @@ public class Mockito extends Matchers {
      * <pre>
      *   when(mock.foo()).thenThrow(new RuntimeException());
      *   
-     *   //Impossible: the exception-stubbed foo() method is really called so RuntimeException is thrown. 
+     *   //Impossible: the exception-stubbed foo() method is called so RuntimeException is thrown. 
      *   when(mock.foo()).thenReturn("bar");
      *   
      *   //You have to use doReturn() for stubbing:
      *   doReturn("bar").when(mock).foo();
      * </pre>
      * 
-     * Above scenario shows a tradeoff of Mockito's ellegant syntax. The scenario is very rare, though.
+     * Above scenarios shows a tradeoff of Mockito's ellegant syntax. Note that the scenarios are very rare, though. 
+     * Spying should be sporadic and overriding exception-stubbing is very rare.  
      * 
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
@@ -930,7 +927,40 @@ public class Mockito extends Matchers {
         InOrder inOrderVerifier = new InOrderVerifier(Arrays.asList(mocks));
         return inOrderVerifier;
     }
-
+  
+    /**
+     * Allows verifying exact number of invocations. E.g:
+     * <pre>
+     *   verify(mock, times(2)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param wantedNumberOfInvocations wanted number of invocations 
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode times(int wantedNumberOfInvocations) {
+        return VerificationModeImpl.times(wantedNumberOfInvocations);
+    }
+    
+    /**
+     * Alias to times(0), see {@link Mockito#times(int)}
+     * <p>
+     * Verifies that interaction did not happen. E.g:
+     * <pre>
+     *   verify(mock, never()).someMethod();
+     * </pre>
+     * 
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode never() {
+        return times(0);
+    }
+    
     /**
      * Allows at-least-once verification. E.g:
      * <pre>
@@ -960,38 +990,5 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeImpl.atLeast(minNumberOfInvocations);
-    }
-    
-    /**
-     * Allows verifying exact number of invocations. E.g:
-     * <pre>
-     *   verify(mock, times(2)).someMethod("some arg");
-     * </pre>
-     * 
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param wantedNumberOfInvocations wanted number of invocations 
-     * 
-     * @return verification mode
-     */
-    public static VerificationMode times(int wantedNumberOfInvocations) {
-        return VerificationModeImpl.times(wantedNumberOfInvocations);
-    }
-    
-    /**
-     * Alias to times(0), see {@link Mockito#times(int)}
-     * <p>
-     * Verifies that interaction did not happen
-     * <pre>
-     *   verify(mock, never()).someMethod();
-     * </pre>
-     * 
-     * <p>
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @return verification mode
-     */
-    public static VerificationMode never() {
-        return times(0);
     }
 }

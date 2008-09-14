@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.runners.MockitoJUnit44Runner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * <ul>
@@ -48,12 +49,11 @@ import org.mockito.runners.MockitoJUnit44Runner;
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also put it in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
+ * You can also put initMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnit44Runner}, {@link MockitoJUnitRunner}
  */
 public class MockitoAnnotations {
 
     /**
-     * <b>Deprecated</b> 
      * Use top-level {@link org.mockito.Mock} annotation instead
      * <p>
      * When &#064;Mock annotation was implemented as an inner class then users experienced problems with autocomplete features in IDEs. 
@@ -72,6 +72,7 @@ public class MockitoAnnotations {
     
     /**
      * Initializes objects annotated with &#064;Mock for given testClass.
+     * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */
     public static void initMocks(Object testClass) {

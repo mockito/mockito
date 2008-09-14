@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Uses new default JUnit's runner {@link BlockJUnit4ClassRunner}.
+ * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
  * JUnit 4.5 runner initializes mocks annotated with {@link Mock},
  * so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
@@ -20,11 +20,11 @@ import org.mockito.MockitoAnnotations;
  * <p>
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
  * <p>
- * Read more in javadoc for {@link MockitoAnnotations#initMocks(Object)}
+ * Read more in javadoc for {@link MockitoAnnotations}
  * <p>
  * Example:
  * <pre>
- * &#064;RunWith(MockitoJUnit44Runner.class)
+ * <b>&#064;RunWith(MockitoJUnit44Runner.class)</b>
  * public class ExampleTest {
  * 
  *     &#064;Mock

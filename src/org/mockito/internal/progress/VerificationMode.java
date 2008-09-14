@@ -11,9 +11,12 @@ import org.mockito.Mockito;
  * <pre>
  *   verify(mock, times(5)).someMethod("was called five times");
  *   
+ *   verify(mock, never()).someMethod("was never called");
+
  *   verify(mock, atLeastOnce()).someMethod("was called at least once");
  *   
- *   verify(mock, never()).someMethod("was never called");
+ *   verify(mock, atLeast(2)).someMethod("was called at least twice");
+ *   
  * </pre>
  * 
  * <b>times(1) is the default</b> and can be omitted

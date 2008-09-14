@@ -11,7 +11,7 @@ import org.mockito.stubbing.Answer;
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
  *
  * <pre>
- * when(mock.someMethod()).thenReturn(10);
+ * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
  *
  * //you can use flexible argument matchers, e.g:
  * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);

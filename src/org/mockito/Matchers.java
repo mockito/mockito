@@ -26,7 +26,7 @@ import org.mockito.internal.progress.LastArguments;
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
- * {@link Mockito} extends Matchers so to get access to matchers just import Mockito class statically.
+ * {@link Mockito} extends Matchers so to get access to all matchers just import Mockito class statically.
  * <pre>
  *  //stubbing using anyInt() argument matcher
  *  when(mockedList.get(anyInt())).thenReturn("element");
@@ -493,7 +493,7 @@ public class Matchers {
     /**
      * Allows creating custom argument matchers.
      * <p>
-     * See examples in javadoc for {@link Matchers} class
+     * See examples in javadoc for {@link ArgumentMatcher} class
      * 
      * @param matcher decides whether argument matches
      * @return <code>null</code>.
