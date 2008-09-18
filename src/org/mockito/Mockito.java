@@ -519,7 +519,7 @@ public class Mockito extends Matchers {
      *   when(mock.count()).thenReturn(10);
      * </pre> 
      * 
-     * Many unexperienced users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
+     * Many users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
      * <p>
      * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
      * <pre>
