@@ -284,7 +284,7 @@ public class MatchersTest extends TestBase {
         list.add("test"); // testing fix for issue 20
         list.contains(new Object[] {"1"});
         
-        Mockito.verify(list).contains(new Object[] {"1","2", "3"});        
+        Mockito.verify(list).contains(new Object[] {"1", "2", "3"});    
     }
 
     @Test
