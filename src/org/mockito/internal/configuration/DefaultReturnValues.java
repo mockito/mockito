@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -63,8 +64,8 @@ public class DefaultReturnValues implements ReturnValues {
     Object returnValueFor(Class<?> type) {
         if (type.isPrimitive()) {
             return primitiveOf(type);
-        } else if (isPrimitiveWrapper(type)) {
-            return primitiveWrapperOf(type);
+        } else if (Primitives.isPrimitiveWrapper(type)) {
+            return Primitives.primitiveWrapperOf(type);
         //new instances are used instead of Collections.emptyList(), etc.
         //to avoid UnsupportedOperationException if code under test modifies returned collection
         } else if (type == Collection.class) {
@@ -108,26 +109,5 @@ public class DefaultReturnValues implements ReturnValues {
         } else {
             return 0;
         } 
-    }
-    
-    private boolean isPrimitiveWrapper(Class<?> type) {
-        return wrapperReturnValues.containsKey(type);
-    }
-    
-    private Object primitiveWrapperOf(Class<?> type) {
-        return wrapperReturnValues.get(type);
-    }
-    
-    private static Map<Class<?>, Object> wrapperReturnValues = new HashMap<Class<?>, Object>();
-    
-    static {
-        wrapperReturnValues.put(Boolean.class, Boolean.FALSE);
-        wrapperReturnValues.put(Character.class, new Character((char) 0));
-        wrapperReturnValues.put(Byte.class, new Byte((byte) 0));
-        wrapperReturnValues.put(Short.class, new Short((short) 0));
-        wrapperReturnValues.put(Integer.class, new Integer(0));
-        wrapperReturnValues.put(Long.class, new Long(0));
-        wrapperReturnValues.put(Float.class, new Float(0));
-        wrapperReturnValues.put(Double.class, new Double(0));
     }
 }

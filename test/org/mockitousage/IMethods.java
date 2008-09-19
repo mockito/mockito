@@ -47,6 +47,8 @@ public interface IMethods {
     Double doubleObjectReturningMethod();
 
     Object objectReturningMethod(Object ... objects);
+    
+    Object objectReturningMethodNoArgs();
 
     String oneArg(boolean value);
     

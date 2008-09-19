@@ -18,4 +18,16 @@ public class Returns implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return value;
     }
+
+    public String printReturnType() {
+        return value.getClass().getSimpleName();
+    }
+
+    public Class<?> getReturnType() {
+        return value.getClass();
+    }
+
+    public boolean returnsNull() {
+        return value == null;
+    }
 }

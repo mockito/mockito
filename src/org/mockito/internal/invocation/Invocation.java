@@ -18,6 +18,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -194,8 +195,28 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         
         return false;
     }
+    
+    public boolean isValidReturnType(Class clazz) {
+        if (method.getReturnType().isPrimitive()) {
+            return Primitives.primitiveTypeOf(clazz) == method.getReturnType();
+        } else {
+            return method.getReturnType().isAssignableFrom(clazz);
+        }
+    }
 
     public boolean isVoid() {
         return this.method.getReturnType() == Void.TYPE;
+    }
+
+    public String printMethodReturnType() {
+        return method.getReturnType().getSimpleName();
+    }
+
+    public String getMethodName() {
+        return method.getName();
+    }
+
+    public boolean returnsPrimitive() {
+        return method.getReturnType().isPrimitive();
     }
 }

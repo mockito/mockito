@@ -8,16 +8,17 @@ import static org.mockito.exceptions.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
-import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -362,5 +363,11 @@ public class Reporter {
                 "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
         ), cause);
     }
-    
+
+    public void wrongTypeOfReturnValue(String expectedType, String actualType, String method) {
+        throw new WrongTypeOfReturnValue(join(
+                actualType + " cannot be returned by " + method,
+                method + " should return " + expectedType
+                ));
+    }
 }

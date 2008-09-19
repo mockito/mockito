@@ -61,7 +61,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
-            //stubbing voids in the old-school way: stubVoid()
+            //stubbing voids with stubVoid() or doAnswer() style
             Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);

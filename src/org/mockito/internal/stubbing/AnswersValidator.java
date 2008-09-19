@@ -36,6 +36,14 @@ public class AnswersValidator {
         if (invocation.isVoid()) {
             reporter.cannotStubVoidMethodWithAReturnValue();
         }
+        
+        if (answer.returnsNull() && invocation.returnsPrimitive()) {
+            reporter.wrongTypeOfReturnValue(invocation.printMethodReturnType(), "null", invocation.getMethodName());
+        } 
+
+        if (!answer.returnsNull() && !invocation.isValidReturnType(answer.getReturnType())) {
+            reporter.wrongTypeOfReturnValue(invocation.printMethodReturnType(), answer.printReturnType(), invocation.getMethodName());
+        }
     }
 
     private void validateException(ThrowsException answer, Invocation invocation) {

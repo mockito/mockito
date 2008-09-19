@@ -10,10 +10,9 @@ import static org.mockito.Mockito.*;
 import java.io.IOException;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.StateMaster;
 import org.mockito.Mock;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.invocation.InvocationOnMock;
@@ -197,13 +196,33 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
  
     @Test
-    @Ignore("TODO")
-    public void shouldCheckTypesFast() throws Exception {
+    public void shouldDetectInvalidReturnType() throws Exception {
         try {
-            doReturn("foo").when(mock).booleanReturningMethod();
+            doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
         } catch (Exception e) {
-            
+            assertThat(e, messageContains(
+                    "String cannot be returned by booleanObjectReturningMethod" +
+                    "\n" +
+                    "booleanObjectReturningMethod should return Boolean"));
         }
+    }
+    
+    @Test
+    public void shouldDetectWhenNullAssignedToBoolean() throws Exception {
+        try {
+            doReturn(null).when(mock).intReturningMethod();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, messageContains("null cannot be returned by intReturningMethod"));
+        }
+    }
+    
+    @Test
+    public void shouldAllowStubbingWhenTypesMatchSignature() throws Exception {
+        doReturn("foo").when(mock).objectReturningMethodNoArgs();
+        doReturn("foo").when(mock).simpleMethod();
+        doReturn(1).when(mock).intReturningMethod();
+        doReturn(new Integer(2)).when(mock).intReturningMethod();
     }
 }
