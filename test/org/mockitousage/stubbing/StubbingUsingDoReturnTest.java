@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.StateMaster;
 import org.mockito.Mock;
@@ -193,5 +194,16 @@ public class StubbingUsingDoReturnTest extends TestBase {
     public void shouldAllowStubbingToString() throws Exception {
         doReturn("test").when(mock).toString();
         assertEquals("test", mock.toString());
+    }
+ 
+    @Test
+    @Ignore("TODO")
+    public void shouldCheckTypesFast() throws Exception {
+        try {
+            doReturn("foo").when(mock).booleanReturningMethod();
+            fail();
+        } catch (Exception e) {
+            
+        }
     }
 }
