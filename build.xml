@@ -202,6 +202,7 @@
         <formatter type="plain" usefile="false"/>      	
         <classpath>
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
+          <fileset dir="${lib.dir.run}" includes="junit-4.5.jar" />
           <pathelement location="${target.dir}/${jar.tests}"/>
         </classpath>
         <jvmarg value="-ea" />
@@ -219,6 +220,7 @@
       <formatter type="plain" usefile="false" />
       <classpath>
         <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
+        <fileset dir="${lib.dir.run}" includes="junit-4.5.jar" />
         <pathelement location="${target.dir}/${jar.tests}"/>
       </classpath>
       <jvmarg value="-ea" />
