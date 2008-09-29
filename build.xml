@@ -15,7 +15,6 @@
   <property name="lib.dir" value="lib" />
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
-  <property name="lib.dir.test" value="${lib.dir}/test" />
   
   <property name="version" value="snapshot" />
   <property name="jar.core" value="mockito-core-${version}.jar" />
@@ -30,7 +29,6 @@
   <path id="test.compile.classpath">
     <path refid="compile.classpath" />
     <pathelement location="${src.classes.dir}" />
-    <fileset dir="${lib.dir.test}" includes="*.jar" />
   </path>
 
   <path id="test.classpath">
@@ -203,7 +201,6 @@
       <junit fork="true" forkmode="once" haltonfailure="true">
         <formatter type="plain" usefile="false"/>      	
         <classpath>
-          <fileset dir="${lib.dir.test}" includes="*.jar" />
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
           <pathelement location="${target.dir}/${jar.tests}"/>
         </classpath>
@@ -221,7 +218,6 @@
     <junit fork="true" forkmode="once" haltonfailure="true">
       <formatter type="plain" usefile="false" />
       <classpath>
-        <fileset dir="${lib.dir.test}" includes="*.jar" />
         <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
         <pathelement location="${target.dir}/${jar.tests}"/>
       </classpath>
