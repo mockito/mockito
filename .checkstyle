@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fileset-config file-format-version="1.2.0" simple-config="false">
-    <local-check-config name="mockito-code" location="C:\projects\mockito\conf\checkstyle-code.xml" type="external" description="">
+    <local-check-config name="mockito-code" location="conf/checkstyle-code.xml" type="project" description="">
         <additional-data name="protect-config-file" value="false"/>
     </local-check-config>
-    <local-check-config name="mockito-test" location="C:\projects\mockito\conf\checkstyle-test.xml" type="external" description="">
+    <local-check-config name="mockito-test" location="conf/checkstyle-test.xml" type="project" description="">
         <additional-data name="protect-config-file" value="false"/>
     </local-check-config>
     <fileset name="mockito-code" enabled="true" check-config-name="mockito-code" local="true">
