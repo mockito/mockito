@@ -31,10 +31,10 @@ public class MockFactory<T> {
 
         Class mockClass = enhancer.createClass();
         
-        Enhancer.registerCallbacks(mockClass, new Callback[] { filter });
-
         Factory mock = createMock(mockClass);
-
+        
+        mock.setCallbacks(new Callback[] { filter });
+        
         filter.setInstance(optionalInstance != null ? optionalInstance : mock);
         return (T) mock;
     }
@@ -83,15 +83,6 @@ public class MockFactory<T> {
                     + " on " + System.getProperty("java.vm.vendor") + " JVM");
         }
 
-        // This call is required. Cglib has some "magic code" making sure a
-        // callback is used by only one instance of a given class. So only the
-        // instance created right after registering the callback will get it.
-        // However, this is done in the construtor which I'm bypassing to
-        // allow class instantiation without calling a constructor.
-        // Fortunatly, the "magic code" is also called in getCallback which is
-        // why I'm calling it here mock.getCallback(0);
-
-        mock.getCallback(0);
         return mock;
     }
     
