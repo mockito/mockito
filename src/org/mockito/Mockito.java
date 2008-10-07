@@ -523,10 +523,11 @@ public class Mockito extends Matchers {
      * <p>
      * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
      * <pre>
-     *   stub(       <i>replace with:</i>  when(
-     *   .toReturn(  <i>replace with:</i>  .thenReturn(
-     *   .toThrow(   <i>replace with:</i>  .thenThrow(
-     *   .toAnswer(  <i>replace with:</i>  .thenAnswer(
+     *   Mockito.stub;  <i>replace with:</i>  Mockito.when;
+     *   stub(          <i>replace with:</i>  when(
+     *   .toReturn(     <i>replace with:</i>  .thenReturn(
+     *   .toThrow(      <i>replace with:</i>  .thenThrow(
+     *   .toAnswer(     <i>replace with:</i>  .thenAnswer(
      * </pre>
      * If you're an existing user then sorry for making your code littered with deprecation warnings. 
      * This change was required to make Mockito better.
