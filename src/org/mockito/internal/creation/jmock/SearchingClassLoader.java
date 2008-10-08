@@ -43,7 +43,8 @@ public class SearchingClassLoader extends ClassLoader {
         // Note: I've been unable to reproduce the error in jMock's test suite.
         addIfNewElement(loaders, currentThread().getContextClassLoader());
 
-        addIfNewElement(loaders, ClassLoader.getSystemClassLoader());
+        //Had to comment that out because it didn't work with in-container Spring tests
+        //addIfNewElement(loaders, ClassLoader.getSystemClassLoader());
         
         return combine(loaders);
     }
