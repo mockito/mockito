@@ -85,10 +85,6 @@ public class VerificationModeImpl implements VerificationMode {
         return (explicitMode() && wantedInvocationCount > 0) || (atLeastMode() && wantedInvocationCount == 1);
     }
     
-    public boolean missingMethodInOrderMode() {
-        return inOrderMode() && missingMethodMode();
-    }
-    
     public boolean exactNumberOfInvocationsMode() {
         return !inOrderMode() && (explicitMode() || atLeastMode());
     }
