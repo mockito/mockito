@@ -33,12 +33,12 @@ public class NoMoreInvocationsVerifierTest extends TestBase {
     
     @Test
     public void shouldNeverVerifyWhenVerificationIsExplicit() throws Exception {
-        verifier.verify(null, null, VerificationModeImpl.times(1));
+        assertFalse(verifier.appliesTo(VerificationModeImpl.times(1)));
     }
 
     @Test
     public void shouldNeverVerifyWhenVerificationIsInAtLeastMode() throws Exception {
-        verifier.verify(null, null, VerificationModeImpl.atLeastOnce());
+        assertFalse(verifier.appliesTo(VerificationModeImpl.atLeastOnce()));
     }
     
     @Test

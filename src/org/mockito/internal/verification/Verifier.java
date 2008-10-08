@@ -12,4 +12,6 @@ import org.mockito.internal.progress.VerificationModeImpl;
 
 public interface Verifier {
     void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode);
+
+    boolean appliesTo(VerificationModeImpl mode);
 }

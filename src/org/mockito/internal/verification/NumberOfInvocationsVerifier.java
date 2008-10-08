@@ -27,11 +27,11 @@ public class NumberOfInvocationsVerifier implements Verifier {
         this.finder = finder;
     }
     
+    public boolean appliesTo(VerificationModeImpl mode) {
+        return mode.exactNumberOfInvocationsMode();
+    }
+    
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.exactNumberOfInvocationsMode()) {
-            return;
-        }
-        
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         
         int actualCount = actualInvocations.size();

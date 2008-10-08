@@ -48,7 +48,9 @@ public class VerifyingRecorder {
         }
 
         for (Verifier verifier : verifiers) {
-            verifier.verify(invocations, wanted, mode);
+            if (verifier.appliesTo(mode)) {
+                verifier.verify(invocations, wanted, mode);
+            }
         }
     }
 }

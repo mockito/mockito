@@ -42,7 +42,7 @@ public class MissingInvocationVerifierTest extends TestBase {
     
     @Test
     public void shouldNeverVerifyWhenModeIsNotMissingMethodMode() {
-        verifier.verify(null, null, noMoreInteractions());
+        assertFalse(verifier.appliesTo(noMoreInteractions()));
     }
     
     @Test

@@ -25,12 +25,12 @@ public class MissingInvocationVerifier implements Verifier {
         this.finder = finder;
         this.reporter = reporter;
     }
+    
+    public boolean appliesTo(VerificationModeImpl mode) {
+        return mode.missingMethodMode();
+    }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.missingMethodMode()) {
-            return;
-        }
-        
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         
         if (actualInvocations.isEmpty()) {

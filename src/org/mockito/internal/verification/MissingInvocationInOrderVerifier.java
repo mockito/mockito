@@ -27,10 +27,6 @@ public class MissingInvocationInOrderVerifier implements Verifier {
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.missingMethodInOrderMode()) {
-            return;
-        }
-        
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         if (!chunk.isEmpty()) {
@@ -43,5 +39,9 @@ public class MissingInvocationInOrderVerifier implements Verifier {
         } else {
             reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getStackTrace());
         }
+    }
+
+    public boolean appliesTo(VerificationModeImpl mode) {
+        return mode.missingMethodInOrderMode();
     }
 }

@@ -40,7 +40,7 @@ public class MissingInvocationInOrderVerifierTest extends TestBase {
 
     @Test
     public void shouldNeverVerifyIfModeIsNotMissingInvocationInOrderMode() throws Exception {
-        verifier.verify(null, null, atLeastOnce());
+        assertFalse(verifier.appliesTo(atLeastOnce()));
     }
     
     @Test

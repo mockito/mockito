@@ -25,12 +25,12 @@ public class NoMoreInvocationsVerifier implements Verifier {
         this.finder = finder;
         this.reporter = reporter;
     }
+    
+    public boolean appliesTo(VerificationModeImpl mode) {
+        return !mode.explicitMode() && !mode.atLeastMode();
+    }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (mode.explicitMode() || mode.atLeastMode()) {
-            return;
-        }
-
         Invocation unverified = finder.findFirstUnverified(invocations);
         if (unverified != null) {
             reporter.noMoreInteractionsWanted(unverified, unverified.getStackTrace());

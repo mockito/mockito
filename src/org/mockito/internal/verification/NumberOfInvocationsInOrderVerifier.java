@@ -26,12 +26,12 @@ public class NumberOfInvocationsInOrderVerifier implements Verifier {
         this.finder = finder;
         this.reporter = reporter;
     }
+    
+    public boolean appliesTo(VerificationModeImpl mode) {
+        return mode.inOrderMode();
+    }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
-        if (!mode.inOrderMode()) {
-            return;
-        }
-        
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
         
         boolean noMatchFound = chunk.size() == 0;

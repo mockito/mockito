@@ -41,7 +41,7 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
 
     @Test
     public void shouldNeverVerifyWhenNotModeIsInOrder() throws Exception {
-        verifier.verify(null, null, new VerificationModeBuilder().inOrder());
+        assertFalse(verifier.appliesTo(new VerificationModeBuilder().inOrder()));
     }
     
     @Test
