@@ -1,7 +1,5 @@
 package org.mockito.internal.creation.jmock;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.Factory;
@@ -9,9 +7,10 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class ClassImposterizerTest {
+public class ClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
