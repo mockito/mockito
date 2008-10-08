@@ -27,7 +27,7 @@ public class MissingInvocationVerifier implements Verifier {
     }
     
     public boolean appliesTo(VerificationModeImpl mode) {
-        return mode.missingMethodMode();
+        return new VerificationModeDecoder(mode).missingMethodMode();
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {

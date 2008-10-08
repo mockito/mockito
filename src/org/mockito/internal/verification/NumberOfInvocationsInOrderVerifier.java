@@ -28,26 +28,27 @@ public class NumberOfInvocationsInOrderVerifier implements Verifier {
     }
     
     public boolean appliesTo(VerificationModeImpl mode) {
-        return mode.inOrderMode();
+        return new VerificationModeDecoder(mode).inOrderMode();
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
         
         boolean noMatchFound = chunk.size() == 0;
-        if (mode.neverWanted() && noMatchFound) {
+        if (decoder.neverWanted() && noMatchFound) {
             return;
         }
         
         int actualCount = chunk.size();
         
-        if (mode.tooLittleActualInvocations(actualCount)) {
+        if (decoder.tooLittleActualInvocations(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
             reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (mode.tooLittleActualInvocationsInAtLeastMode(actualCount)) {
+        } else if (decoder.tooLittleActualInvocationsInAtLeastMode(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
             reporter.tooLittleActualInvocationsInOrderInAtLeastMode(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (mode.tooManyActualInvocations(actualCount)) {
+        } else if (decoder.tooManyActualInvocations(actualCount)) {
             HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
             reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, firstUndesired);
         }

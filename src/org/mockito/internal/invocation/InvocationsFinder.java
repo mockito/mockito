@@ -11,6 +11,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.verification.VerificationModeDecoder;
 
 public class InvocationsFinder {
 
@@ -42,7 +43,8 @@ public class InvocationsFinder {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
         
-        if (mode.atLeastMode() || !mode.matchesActualCount(firstChunk.size())) {
+        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
+        if (decoder.atLeastMode() || !decoder.matchesActualCount(firstChunk.size())) {
             return this.findAllMatchingUnverifiedChunks(invocations, wanted);
         } else {
             return firstChunk;

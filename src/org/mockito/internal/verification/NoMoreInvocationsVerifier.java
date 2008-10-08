@@ -27,7 +27,8 @@ public class NoMoreInvocationsVerifier implements Verifier {
     }
     
     public boolean appliesTo(VerificationModeImpl mode) {
-        return !mode.explicitMode() && !mode.atLeastMode();
+        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
+        return !decoder.explicitMode() && !decoder.atLeastMode();
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {

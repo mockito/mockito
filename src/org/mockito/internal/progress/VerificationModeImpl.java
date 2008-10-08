@@ -16,7 +16,7 @@ import org.mockito.exceptions.base.MockitoException;
  */
 public class VerificationModeImpl implements VerificationMode {
     
-    enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
+    public enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
     
     private final int wantedInvocationCount;
     private final List<? extends Object> mocksToBeVerifiedInOrder;
@@ -68,54 +68,11 @@ public class VerificationModeImpl implements VerificationMode {
     public List<? extends Object> getMocksToBeVerifiedInOrder() {
         return mocksToBeVerifiedInOrder;
     }
-
-    public boolean atLeastMode() {
-        return verification == Verification.AT_LEAST;
-    }
-
-    public boolean explicitMode() {
-        return verification == Verification.EXPLICIT;
-    }
     
-    public boolean inOrderMode() {
-        return !mocksToBeVerifiedInOrder.isEmpty() && (explicitMode() || atLeastMode());
-    }
-    
-    public boolean missingMethodMode() {
-        return (explicitMode() && wantedInvocationCount > 0) || (atLeastMode() && wantedInvocationCount == 1);
-    }
-    
-    public boolean exactNumberOfInvocationsMode() {
-        return !inOrderMode() && (explicitMode() || atLeastMode());
+    public Verification getVerification() {
+        return verification;
     }
 
-    public boolean matchesActualCount(int actualCount) {
-        boolean atLeast = atLeastMode() && actualCount >= wantedInvocationCount;
-        boolean actualMatchesWanted = !atLeastMode() && wantedInvocationCount == actualCount;
-        
-        return atLeast || actualMatchesWanted;
-    }
-    
-    public boolean tooLittleActualInvocations(int actualCount) {
-        return !atLeastMode() && wantedInvocationCount > actualCount; 
-    }
-
-    public boolean tooLittleActualInvocationsInAtLeastMode(int actualCount) {
-        return atLeastMode() && wantedInvocationCount > actualCount;
-    }
-    
-    public boolean tooManyActualInvocations(int actualCount) {
-        return !atLeastMode() && wantedInvocationCount < actualCount;
-    }
-    
-    public boolean neverWanted() {
-        return !atLeastMode() && wantedInvocationCount == 0;
-    }
-    
-    public boolean neverWantedButInvoked(int actualCount) {
-        return neverWanted() && actualCount > 0;
-    }
-    
     @Override
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
