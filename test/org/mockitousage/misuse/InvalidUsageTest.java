@@ -77,6 +77,11 @@ public class InvalidUsageTest extends TestBase {
         mock(FinalClass.class); 
     }
     
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowMockingPrimitves() throws Exception {
+        mock(Integer.TYPE); 
+    }
+    
     interface ObjectLikeInterface {
         boolean equals(Object o);
         String toString();

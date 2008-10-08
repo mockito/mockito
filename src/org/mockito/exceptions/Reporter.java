@@ -320,7 +320,7 @@ public class Reporter {
     
     public void cannotMockFinalClass(Class<?> clazz) {
         throw new MockitoException(join(
-                "Mockito cannot mock final classes like: ",
+                "Mockito cannot mock primitives or final classes like: ",
                 clazz.toString()
         ));
     }

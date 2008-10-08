@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation;
+package org.mockito.internal.creation.jmock;
 
 import static java.lang.Thread.*;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Thanks to jMock guys for this cool ClassLoader. 
+ * Thanks to jMock guys for this ClassLoader. 
  */
 public class SearchingClassLoader extends ClassLoader {
     private final ClassLoader nextToSearch;
@@ -42,7 +42,7 @@ public class SearchingClassLoader extends ClassLoader {
         // To support the Maven Surefire plugin.
         // Note: I've been unable to reproduce the error in jMock's test suite.
         addIfNewElement(loaders, currentThread().getContextClassLoader());
-        
+
         addIfNewElement(loaders, ClassLoader.getSystemClassLoader());
         
         return combine(loaders);

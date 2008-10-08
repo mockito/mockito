@@ -61,4 +61,15 @@ public class BasicStubbingTest extends TestBase {
         
         verifyZeroInteractions(mock);
     }
+    
+    class Foo {
+        public final String toString() {
+            return "foo";
+        }
+    }
+    
+    @Test
+    public void shouldAllowMockingWhenToStringIsFinal() throws Exception {
+        mock(Foo.class);
+    }
 }

@@ -19,7 +19,7 @@ import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.MockHandlerTest;
 import org.mockito.internal.configuration.DefaultReturnValuesTest;
 import org.mockito.internal.creation.CglibTest;
-import org.mockito.internal.creation.MockFactoryTest;
+import org.mockito.internal.creation.jmock.ClassImposterizerTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.invocation.InvocationsFinderTest;
@@ -97,7 +97,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     NoMoreInvocationsVerifierTest.class,
                     NumberOfInvocationsInOrderVerifierTest.class,
                     MissingInvocationInOrderVerifierTest.class,
-                    MockFactoryTest.class,
+                    ClassImposterizerTest.class,
                     CglibTest.class,
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,

@@ -8,23 +8,33 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.creation.MethodInterceptorFilter;
-import org.mockito.internal.creation.MockFactory;
+import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 
 public class MockUtil {
     
     public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance) {
+        validateType(classToMock);
         if (mockName == null) {
             mockName = toInstanceName(classToMock);
         }
-        MockFactory<T> proxyFactory = new MockFactory<T>();
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder());
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
-        return proxyFactory.createMock(classToMock, filter, optionalInstance);
+        
+        T mock = (T) ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
+        filter.setInstance(optionalInstance != null ? optionalInstance : mock);
+        return mock;
+    }
+
+    private static <T> void validateType(Class<T> classToMock) {
+        if (!ClassImposterizer.INSTANCE.canImposterise(classToMock)) {
+            new Reporter().cannotMockFinalClass(classToMock);
+        }
     }
 
     private static String toInstanceName(Class<?> clazz) {
