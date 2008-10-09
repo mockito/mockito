@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,7 +81,6 @@ public abstract class VerificationModeImpl implements VerificationMode {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
     }
 
-    @Override
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
         if (new VerificationModeDecoder(this).inOrderMode()) {
             invocations = new AllInvocationsFinder().getAllInvocations(this.getMocksToBeVerifiedInOrder());
