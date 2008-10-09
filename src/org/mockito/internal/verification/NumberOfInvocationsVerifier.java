@@ -11,7 +11,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.progress.VerificationMode;
 
 public class NumberOfInvocationsVerifier implements Verifier {
     
@@ -27,11 +27,11 @@ public class NumberOfInvocationsVerifier implements Verifier {
         this.finder = finder;
     }
     
-    public boolean appliesTo(VerificationModeImpl mode) {
+    public boolean appliesTo(VerificationMode mode) {
         return new VerificationModeDecoder(mode).exactNumberOfInvocationsMode();
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         

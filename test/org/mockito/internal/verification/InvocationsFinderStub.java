@@ -10,7 +10,7 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.progress.VerificationMode;
 
 class InvocationsFinderStub extends InvocationsFinder {
     
@@ -30,17 +30,17 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         return validMatchingChunkToReturn;
     }
 
     @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
-            VerificationModeImpl mode) {
+            VerificationMode mode) {
         this.invocations = invocations;
         return actualToReturn;
     }
     
-    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         this.invocations = invocations;
         return similarToReturn;
     }

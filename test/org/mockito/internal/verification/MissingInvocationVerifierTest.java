@@ -17,6 +17,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
@@ -48,7 +49,7 @@ public class MissingInvocationVerifierTest extends TestBase {
     @Test
     public void shouldAskFinderForActualInvocations() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        VerificationModeImpl mode = atLeastOnce();
+        VerificationMode mode = atLeastOnce();
         verifier.verify(invocations, wanted, mode);
         
         assertSame(invocations, finderStub.invocations);

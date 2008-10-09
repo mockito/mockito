@@ -9,7 +9,7 @@ import java.util.List;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.progress.VerificationMode;
 
 public class VerifyingRecorder {
 
@@ -35,11 +35,11 @@ public class VerifyingRecorder {
         return registeredInvocations.getVerifiableInvocations();
     }
 
-    public void verify(VerificationModeImpl mode) {
+    public void verify(VerificationMode mode) {
         verify(null, mode);
     }
 
-    public void verify(InvocationMatcher wanted, VerificationModeImpl mode) {
+    public void verify(InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> invocations;
         if (new VerificationModeDecoder(mode).inOrderMode()) {
             invocations = invocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedInOrder());

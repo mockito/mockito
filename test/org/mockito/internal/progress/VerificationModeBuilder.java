@@ -10,7 +10,7 @@ public class VerificationModeBuilder {
 
     private Integer times = 1;
 
-    public VerificationModeImpl inOrder() {
+    public VerificationMode inOrder() {
         return VerificationModeImpl.inOrder(times, Arrays.asList(new Object()));
     }
 

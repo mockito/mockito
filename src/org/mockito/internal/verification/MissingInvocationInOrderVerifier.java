@@ -10,7 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.progress.VerificationMode;
 
 public class MissingInvocationInOrderVerifier implements Verifier {
     
@@ -26,11 +26,11 @@ public class MissingInvocationInOrderVerifier implements Verifier {
         this.reporter = reporter;
     }
     
-    public boolean appliesTo(VerificationModeImpl mode) {
+    public boolean appliesTo(VerificationMode mode) {
         return new VerificationModeDecoder(mode).missingMethodInOrderMode();
     }
 
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         if (!chunk.isEmpty()) {

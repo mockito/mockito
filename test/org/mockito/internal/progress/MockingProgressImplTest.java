@@ -22,7 +22,7 @@ public class MockingProgressImplTest extends TestBase {
     public void shouldStartVerificationAndPullVerificationMode() throws Exception {
         assertNull(mockingProgress.pullVerificationMode());
         
-        VerificationModeImpl mode = VerificationModeImpl.times(19);
+        VerificationMode mode = VerificationModeImpl.times(19);
         
         mockingProgress.verificationStarted(mode);
         

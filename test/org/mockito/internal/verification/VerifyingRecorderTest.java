@@ -16,6 +16,7 @@ import org.mockito.internal.invocation.CanPrintInMultilines;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
@@ -44,7 +45,7 @@ public class VerifyingRecorderTest extends TestBase {
     public void shouldVerify() {
         recorder.recordInvocation(simpleMethod);
         
-        VerificationModeImpl mode = VerificationModeImpl.atLeastOnce();
+        VerificationMode mode = VerificationModeImpl.atLeastOnce();
         recorder.verify(differentMethod, mode);
         
         assertSame(verifierStub.mode, mode);
@@ -54,7 +55,7 @@ public class VerifyingRecorderTest extends TestBase {
     
     @Test
     public void shouldVerifyInOrder() {
-        VerificationModeImpl inOrderMode = new VerificationModeBuilder().inOrder();
+        VerificationMode inOrderMode = new VerificationModeBuilder().inOrder();
         recorder.verify(differentMethod, inOrderMode);
         
         assertThat(verifierStub.invocations, hasExactlyInOrder(simpleMethod, differentMethod.getInvocation()));
@@ -75,13 +76,13 @@ public class VerifyingRecorderTest extends TestBase {
     class VerifierStub implements Verifier {
         private List<Invocation> invocations;
         private CanPrintInMultilines wanted;
-        private VerificationModeImpl mode;
-        public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationModeImpl mode) {
+        private VerificationMode mode;
+        public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
             this.invocations = invocations;
             this.wanted = wanted;
             this.mode = mode;
         }
-        public boolean appliesTo(VerificationModeImpl mode) {
+        public boolean appliesTo(VerificationMode mode) {
             return true;
         }
     }

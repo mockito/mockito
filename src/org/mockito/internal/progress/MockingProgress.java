@@ -13,7 +13,7 @@ public interface MockingProgress {
 
     void verificationStarted(VerificationMode verificationMode);
 
-    VerificationModeImpl pullVerificationMode();
+    VerificationMode pullVerificationMode();
 
     void stubbingStarted();
 

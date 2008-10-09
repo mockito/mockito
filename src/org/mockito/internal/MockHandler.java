@@ -19,6 +19,7 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
+import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
@@ -68,7 +69,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             return null;
         }
         
-        VerificationModeImpl verificationMode = mockingProgress.pullVerificationMode();
+        VerificationMode verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
 
         Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());

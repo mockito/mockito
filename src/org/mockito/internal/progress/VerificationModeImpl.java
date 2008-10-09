@@ -18,9 +18,9 @@ public class VerificationModeImpl implements VerificationMode {
     
     public enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
     
-    private final int wantedInvocationCount;
-    private final List<? extends Object> mocksToBeVerifiedInOrder;
-    private final Verification verification;
+    final int wantedInvocationCount;
+    final List<? extends Object> mocksToBeVerifiedInOrder;
+    final Verification verification;
     
     private VerificationModeImpl(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
         if (verification != Verification.AT_LEAST && wantedNumberOfInvocations < 0) {
@@ -35,29 +35,29 @@ public class VerificationModeImpl implements VerificationMode {
         this.verification = verification;
     }
     
-    public static VerificationModeImpl atLeastOnce() {
+    public static VerificationMode atLeastOnce() {
         return atLeast(1);
     }
 
-    public static VerificationModeImpl atLeast(int minNumberOfInvocations) {
+    public static VerificationMode atLeast(int minNumberOfInvocations) {
         return new VerificationModeImpl(minNumberOfInvocations, Collections.emptyList(), Verification.AT_LEAST);
     }
 
-    public static VerificationModeImpl times(int wantedNumberOfInvocations) {
+    public static VerificationMode times(int wantedNumberOfInvocations) {
         return new VerificationModeImpl(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
-    public static VerificationModeImpl inOrder(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
+    public static VerificationMode inOrder(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
         assert !mocksToBeVerifiedInOrder.isEmpty();
         return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
     }
 
-    public static VerificationModeImpl inOrderAtLeast(int minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
+    public static VerificationMode inOrderAtLeast(int minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
         assert !mocksToBeVerifiedInOrder.isEmpty();
         return new VerificationModeImpl(minNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.AT_LEAST);
     }
     
-    public static VerificationModeImpl noMoreInteractions() {
+    public static VerificationMode noMoreInteractions() {
         return new VerificationModeImpl(0, Collections.emptyList(), Verification.NO_MORE_WANTED);
     }
 

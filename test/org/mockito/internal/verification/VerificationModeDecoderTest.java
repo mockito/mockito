@@ -4,13 +4,13 @@ import static java.util.Arrays.*;
 import static org.mockito.internal.progress.VerificationModeImpl.*;
 
 import org.junit.Test;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.progress.VerificationMode;
 import org.mockitoutil.TestBase;
 
 
 public class VerificationModeDecoderTest extends TestBase {
     
-    private VerificationModeDecoder decode(VerificationModeImpl mode) {
+    private VerificationModeDecoder decode(VerificationMode mode) {
         return new VerificationModeDecoder(mode);
     }
     
@@ -37,7 +37,7 @@ public class VerificationModeDecoderTest extends TestBase {
     
     @Test
     public void shouldKnowIfNumberOfInvocationsMatters() throws Exception {
-        VerificationModeImpl mode = atLeastOnce();
+        VerificationMode mode = atLeastOnce();
         assertTrue(decode(mode).atLeastMode());
         
         mode = times(50);

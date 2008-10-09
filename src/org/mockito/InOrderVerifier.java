@@ -29,10 +29,6 @@ class InOrderVerifier implements InOrder {
     }
     
     public <T> T verify(T mock, VerificationMode mode) {
-        return verify(mock, (VerificationModeImpl) mode);
-    }
-    
-    public <T> T verify(T mock, VerificationModeImpl mode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
         }
