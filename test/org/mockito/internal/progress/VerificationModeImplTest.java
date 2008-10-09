@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.progress;
 
-import static org.mockito.internal.progress.VerificationModeImpl.*;
+import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;

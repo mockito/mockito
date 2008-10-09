@@ -17,9 +17,7 @@ import org.mockito.internal.invocation.CanPrintInMultilines;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeBuilder;
-import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
 @Ignore

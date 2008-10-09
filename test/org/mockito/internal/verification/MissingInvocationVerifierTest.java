@@ -5,7 +5,7 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.internal.progress.VerificationModeImpl.*;
+import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import java.util.List;
 
@@ -17,8 +17,6 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationMode;
-import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationVerifierTest extends TestBase {

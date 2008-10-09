@@ -6,6 +6,9 @@ package org.mockito.internal.progress;
 
 import java.util.Arrays;
 
+import org.mockito.internal.verification.VerificationMode;
+import org.mockito.internal.verification.VerificationModeImpl;
+
 public class VerificationModeBuilder {
 
     private Integer times = 1;

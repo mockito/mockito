@@ -1,10 +1,9 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.internal.progress.VerificationModeImpl.*;
+import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import org.junit.Test;
-import org.mockito.internal.progress.VerificationMode;
 import org.mockitoutil.TestBase;
 
 

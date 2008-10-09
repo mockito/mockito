@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeDecoder;
 
 public class InvocationsFinder {

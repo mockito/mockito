@@ -15,7 +15,6 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
 public class NoMoreInvocationsVerifierTest extends TestBase {

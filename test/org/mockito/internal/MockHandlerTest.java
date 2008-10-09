@@ -10,7 +10,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")

@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.progress.VerificationModeImpl.*;
+import static org.mockito.internal.verification.VerificationModeImpl.*;
 import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.Arrays;
@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.HasStackTrace;
-import org.mockito.internal.progress.VerificationMode;
 import org.mockito.internal.progress.VerificationModeBuilder;
+import org.mockito.internal.verification.VerificationMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

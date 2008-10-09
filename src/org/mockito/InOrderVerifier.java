@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.progress.VerificationMode;
-import org.mockito.internal.progress.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeDecoder;
+import org.mockito.internal.verification.VerificationModeImpl;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.

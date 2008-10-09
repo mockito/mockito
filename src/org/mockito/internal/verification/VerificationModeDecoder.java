@@ -1,7 +1,6 @@
 package org.mockito.internal.verification;
 
-import org.mockito.internal.progress.VerificationMode;
-import org.mockito.internal.progress.VerificationModeImpl.Verification;
+import org.mockito.internal.verification.VerificationModeImpl.Verification;
 
 public class VerificationModeDecoder {
 

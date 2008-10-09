@@ -9,7 +9,6 @@ import java.util.List;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationMode;
 
 public class VerifyingRecorder {
 

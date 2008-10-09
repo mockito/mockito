@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationMode;
 
 public interface Verifier {
     void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode);

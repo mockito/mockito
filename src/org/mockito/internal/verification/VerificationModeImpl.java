@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.progress;
+package org.mockito.internal.verification;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,13 +12,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
-import org.mockito.internal.verification.MissingInvocationVerifier;
-import org.mockito.internal.verification.NoMoreInvocationsVerifier;
-import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifier;
-import org.mockito.internal.verification.NumberOfInvocationsVerifier;
-import org.mockito.internal.verification.VerificationModeDecoder;
-import org.mockito.internal.verification.Verifier;
 
 /**
  * Holds additional information regarding verification.
