@@ -40,17 +40,6 @@ public class VerifyingRecorder {
     }
 
     public void verify(InvocationMatcher wanted, VerificationMode mode) {
-        List<Invocation> invocations;
-        if (new VerificationModeDecoder(mode).inOrderMode()) {
-            invocations = invocationsFinder.getAllInvocations(mode.getMocksToBeVerifiedInOrder());
-        } else {
-            invocations = getRegisteredInvocations();
-        }
-
-        for (Verifier verifier : verifiers) {
-            if (verifier.appliesTo(mode)) {
-                verifier.verify(invocations, wanted, mode);
-            }
-        }
+        mode.verify(getRegisteredInvocations(), wanted);
     }
 }

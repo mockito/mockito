@@ -7,6 +7,8 @@ package org.mockito.internal.progress;
 import java.util.List;
 
 import org.mockito.Mockito;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeImpl.Verification;
 
 /**
@@ -35,4 +37,6 @@ public interface VerificationMode {
     List<? extends Object> getMocksToBeVerifiedInOrder();
 
     Verification getVerification();
+    
+    void verify(List<Invocation> invocations, InvocationMatcher wanted);
 }

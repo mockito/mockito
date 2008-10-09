@@ -10,6 +10,7 @@ import static org.mockitoutil.ExtraMatchers.*;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.CanPrintInMultilines;
@@ -21,6 +22,7 @@ import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.progress.VerificationModeImpl;
 import org.mockitoutil.TestBase;
 
+@Ignore
 public class VerifyingRecorderTest extends TestBase {
     
     private VerifyingRecorder recorder;
