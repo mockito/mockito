@@ -18,7 +18,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
  * <p> 
  * Implements marking interface which hides details from Mockito users. 
  */
-public class VerificationModeImpl implements VerificationMode {
+public abstract class VerificationModeImpl implements VerificationMode {
     
     public enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
     
@@ -26,7 +26,7 @@ public class VerificationModeImpl implements VerificationMode {
     final List<? extends Object> mocksToBeVerifiedInOrder;
     final Verification verification;
     
-    private VerificationModeImpl(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
+    protected VerificationModeImpl(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
         if (verification != Verification.AT_LEAST && wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
@@ -44,25 +44,25 @@ public class VerificationModeImpl implements VerificationMode {
     }
 
     public static VerificationMode atLeast(int minNumberOfInvocations) {
-        return new VerificationModeImpl(minNumberOfInvocations, Collections.emptyList(), Verification.AT_LEAST);
+        return new BasicVerificationMode(minNumberOfInvocations, Collections.emptyList(), Verification.AT_LEAST);
     }
 
     public static VerificationMode times(int wantedNumberOfInvocations) {
-        return new VerificationModeImpl(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
+        return new BasicVerificationMode(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
     public static VerificationMode inOrder(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
         assert !mocksToBeVerifiedInOrder.isEmpty();
-        return new VerificationModeImpl(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
+        return new InOrderVerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
     }
 
     public static VerificationMode inOrderAtLeast(int minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
         assert !mocksToBeVerifiedInOrder.isEmpty();
-        return new VerificationModeImpl(minNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.AT_LEAST);
+        return new InOrderVerificationMode(minNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.AT_LEAST);
     }
     
     public static VerificationMode noMoreInteractions() {
-        return new VerificationModeImpl(0, Collections.emptyList(), Verification.NO_MORE_WANTED);
+        return new NoMoreInteractionsMode(0, Collections.emptyList(), Verification.NO_MORE_WANTED);
     }
 
     public Integer wantedCount() {
@@ -88,12 +88,7 @@ public class VerificationModeImpl implements VerificationMode {
             invocations = new AllInvocationsFinder().getAllInvocations(this.getMocksToBeVerifiedInOrder());
         }
 
-        List<Verifier> verifiers = Arrays.asList(
-                new MissingInvocationInOrderVerifier(),
-                new NumberOfInvocationsInOrderVerifier(),
-                new MissingInvocationVerifier(),
-                new NumberOfInvocationsVerifier(),
-                new NoMoreInvocationsVerifier());
+        List<Verifier> verifiers = getVerifiers();
         
         for (Verifier verifier : verifiers) {
             if (verifier.appliesTo(this)) {
@@ -101,4 +96,6 @@ public class VerificationModeImpl implements VerificationMode {
             }
         }
     }
+    
+    public abstract List<Verifier> getVerifiers();
 }
