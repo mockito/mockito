@@ -81,7 +81,6 @@ public class VerifyingRecorderTest extends TestBase {
             this.wanted = wanted;
             this.mode = mode;
         }
-        @Override
         public boolean appliesTo(VerificationModeImpl mode) {
             return true;
         }

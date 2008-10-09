@@ -63,7 +63,6 @@ public class ClassImposterizerTest extends TestBase {
     
     private final class MethodInterceptorStub implements MethodInterceptor {
 
-        @Override
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             return null;
         }
