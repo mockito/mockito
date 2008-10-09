@@ -4,8 +4,10 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.Arrays;
 import java.util.List;
+
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
  */
@@ -15,9 +17,9 @@ public class NoMoreInteractionsMode extends VerificationModeImpl implements Veri
             Verification verification) {
         super(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, verification);
     }
-
+    
     @Override
-    public List<Verifier> getVerifiers() {
-        return Arrays.asList((Verifier) new NoMoreInvocationsVerifier());
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
+        new NoMoreInvocationsVerifier().verify(invocations, wanted, null);
     }
 }

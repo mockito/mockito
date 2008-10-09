@@ -8,9 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.AllInvocationsFinder;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
  * Holds additional information regarding verification.
@@ -80,20 +77,4 @@ public abstract class VerificationModeImpl implements VerificationMode {
     public String toString() {
         return "Wanted invocations count: " + wantedInvocationCount + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
     }
-
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
-        if (new VerificationModeDecoder(this).inOrderMode()) {
-            invocations = new AllInvocationsFinder().getAllInvocations(this.getMocksToBeVerifiedInOrder());
-        }
-
-        List<Verifier> verifiers = getVerifiers();
-        
-        for (Verifier verifier : verifiers) {
-            if (verifier.appliesTo(this)) {
-                verifier.verify(invocations, wanted, this);
-            }
-        }
-    }
-    
-    public abstract List<Verifier> getVerifiers();
 }
