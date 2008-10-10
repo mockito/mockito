@@ -6,15 +6,17 @@ package org.mockito.internal.progress;
 
 import java.util.Arrays;
 
+import org.mockito.internal.verification.BasicVerificationMode;
 import org.mockito.internal.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationModeImpl.Verification;
 
 public class VerificationModeBuilder {
 
     private Integer times = 1;
 
     public VerificationMode inOrder() {
-        return VerificationModeImpl.inOrder(times, Arrays.asList(new Object()));
+        //TODO move to factory
+        return new BasicVerificationMode(times, Arrays.asList(new Object()), Verification.EXPLICIT);
     }
 
     public VerificationModeBuilder times(int times) {

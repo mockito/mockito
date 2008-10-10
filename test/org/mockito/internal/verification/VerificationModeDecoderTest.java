@@ -1,6 +1,5 @@
 package org.mockito.internal.verification;
 
-import static java.util.Arrays.*;
 import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import org.junit.Test;
@@ -11,16 +10,6 @@ public class VerificationModeDecoderTest extends TestBase {
     
     private VerificationModeDecoder decode(VerificationMode mode) {
         return new VerificationModeDecoder(mode);
-    }
-    
-    @Test
-    public void shouldKnowIfIsMissingMethodInOrderMode() throws Exception {
-        assertTrue(decode(inOrder(1, asList("mock"))).missingMethodInOrderMode());
-        assertTrue(decode(inOrder(10, asList("mock"))).missingMethodInOrderMode());
-        
-        assertFalse(decode(times(10)).missingMethodInOrderMode());
-        assertFalse(decode(noMoreInteractions()).missingMethodInOrderMode());
-        assertFalse(decode(times(0)).missingMethodInOrderMode());
     }
     
     @Test
@@ -41,22 +30,6 @@ public class VerificationModeDecoderTest extends TestBase {
         
         mode = times(50);
         assertFalse(decode(mode).atLeastMode());
-    }
-    
-    
-    @Test
-    public void inOrderAtLeastShouldBeInAtLeastMode() throws Exception {
-        assertTrue(decode(inOrderAtLeast(5, asList("mock"))).atLeastMode());
-    }
-    
-    @Test
-    public void shouldKnowIfIsInOrderMode() throws Exception {
-        assertTrue(decode(inOrder(1, asList(new Object()))).inOrderMode());
-        
-        assertFalse(decode(times(0)).inOrderMode());
-        assertFalse(decode(times(2)).inOrderMode());
-        assertFalse(decode(atLeastOnce()).inOrderMode());
-        assertFalse(decode(noMoreInteractions()).inOrderMode());
     }
     
     @Test
@@ -146,16 +119,6 @@ public class VerificationModeDecoderTest extends TestBase {
         assertFalse(decode(times(1)).neverWanted());
         assertFalse(decode(times(10)).neverWanted());
         assertFalse(decode(atLeastOnce()).neverWanted());
-    }
-    
-    @Test
-    public void shouldKnowIfExactNumberOfInvocationsMode() throws Exception {
-        assertTrue(decode(times(0)).exactNumberOfInvocationsMode());
-        assertTrue(decode(times(1)).exactNumberOfInvocationsMode());
-        assertTrue(decode(atLeastOnce()).exactNumberOfInvocationsMode());
-        
-        assertFalse(decode(noMoreInteractions()).exactNumberOfInvocationsMode());
-        assertFalse(decode(inOrder(1, asList(new Object()))).exactNumberOfInvocationsMode());
     }
     
     @Test

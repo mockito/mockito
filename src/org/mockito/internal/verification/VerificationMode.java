@@ -39,4 +39,6 @@ public interface VerificationMode {
     Verification getVerification();
     
     void verify(List<Invocation> invocations, InvocationMatcher wanted);
+
+    void setMocksToBeVerifiedInOrder(List<Object> mocks);
 }

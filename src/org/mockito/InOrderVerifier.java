@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationModeDecoder;
 import org.mockito.internal.verification.VerificationModeImpl;
 
 /**
@@ -32,11 +31,7 @@ class InOrderVerifier implements InOrder {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
         }
-        Integer wantedCount = mode.wantedCount();
-        if (new VerificationModeDecoder(mode).atLeastMode()) {
-            return Mockito.verify(mock, VerificationModeImpl.inOrderAtLeast(wantedCount, mocksToBeVerifiedInOrder));
-        } else {
-            return Mockito.verify(mock, VerificationModeImpl.inOrder(wantedCount, mocksToBeVerifiedInOrder));            
-        }
+        mode.setMocksToBeVerifiedInOrder(mocksToBeVerifiedInOrder);
+        return Mockito.verify(mock, mode);
     }
 }

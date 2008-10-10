@@ -10,10 +10,6 @@ public class VerificationModeDecoder {
         this.mode = mode;
     }
 
-    public boolean missingMethodInOrderMode() {
-        return inOrderMode() && missingMethodMode();
-    }
-    
     public boolean missingMethodMode() {
         return (explicitMode() && mode.wantedCount() > 0) || (atLeastMode() && mode.wantedCount() == 1);
     }
@@ -26,14 +22,6 @@ public class VerificationModeDecoder {
         return mode.getVerification() == Verification.EXPLICIT;
     }
     
-    public boolean inOrderMode() {
-        return !mode.getMocksToBeVerifiedInOrder().isEmpty() && (explicitMode() || atLeastMode());
-    }
-    
-    public boolean exactNumberOfInvocationsMode() {
-        return !inOrderMode() && (explicitMode() || atLeastMode());
-    }
-
     public boolean matchesActualCount(int actualCount) {
         boolean atLeast = atLeastMode() && actualCount >= mode.wantedCount();
         boolean actualMatchesWanted = !atLeastMode() && mode.wantedCount() == actualCount;

@@ -19,7 +19,7 @@ public abstract class VerificationModeImpl implements VerificationMode {
     public enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
     
     final int wantedInvocationCount;
-    final List<? extends Object> mocksToBeVerifiedInOrder;
+    List<? extends Object> mocksToBeVerifiedInOrder;
     final Verification verification;
     
     protected VerificationModeImpl(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder, Verification verification) {
@@ -47,16 +47,6 @@ public abstract class VerificationModeImpl implements VerificationMode {
         return new BasicVerificationMode(wantedNumberOfInvocations, Collections.emptyList(), Verification.EXPLICIT);
     }
 
-    public static VerificationMode inOrder(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
-        assert !mocksToBeVerifiedInOrder.isEmpty();
-        return new InOrderVerificationMode(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.EXPLICIT);
-    }
-
-    public static VerificationMode inOrderAtLeast(int minNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder) {
-        assert !mocksToBeVerifiedInOrder.isEmpty();
-        return new InOrderVerificationMode(minNumberOfInvocations, mocksToBeVerifiedInOrder, Verification.AT_LEAST);
-    }
-    
     public static VerificationMode noMoreInteractions() {
         return new NoMoreInteractionsMode(0, Collections.emptyList(), Verification.NO_MORE_WANTED);
     }
@@ -71,6 +61,10 @@ public abstract class VerificationModeImpl implements VerificationMode {
     
     public Verification getVerification() {
         return verification;
+    }
+    
+    public void setMocksToBeVerifiedInOrder(List<Object> mocks) {
+        //do nothing
     }
 
     @Override
