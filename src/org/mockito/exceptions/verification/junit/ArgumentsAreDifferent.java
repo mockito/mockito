@@ -7,6 +7,7 @@ package org.mockito.exceptions.verification.junit;
 import java.util.Arrays;
 
 import junit.framework.ComparisonFailure;
+
 import org.mockito.exceptions.base.CommonStackTraceRemover;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.StackTraceFilter;

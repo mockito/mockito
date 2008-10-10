@@ -4,6 +4,7 @@
  */
 package org.mockitousage;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;

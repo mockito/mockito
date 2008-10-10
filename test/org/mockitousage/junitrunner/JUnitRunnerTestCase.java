@@ -3,8 +3,9 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.junitrunner;
-import java.util.List;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;

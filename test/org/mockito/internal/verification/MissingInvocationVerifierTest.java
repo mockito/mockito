@@ -5,7 +5,6 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class MissingInvocationVerifierTest extends TestBase {
     @Test
     public void shouldAskFinderForActualInvocations() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        VerificationMode mode = atLeastOnce();
+        VerificationMode mode = VerificationModeFactory.atLeastOnce();
         verifier.verify(invocations, wanted, mode);
         
         assertSame(invocations, finderStub.invocations);
@@ -51,12 +50,12 @@ public class MissingInvocationVerifierTest extends TestBase {
     @Test
     public void shouldPassBecauseActualInvocationFound() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        verifier.verify(invocations, wanted, atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
     }
     
     @Test
     public void shouldAskAnalyzerForSimilarInvocation() {
-        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
         
         assertSame(invocations, finderStub.invocations);
     }
@@ -66,7 +65,7 @@ public class MissingInvocationVerifierTest extends TestBase {
         assertTrue(finderStub.actualToReturn.isEmpty());
         finderStub.similarToReturn = null;
         
-        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
         
         assertEquals(wanted, reporterStub.wanted);
         assertNull(reporterStub.actualInvocationStackTrace);
@@ -78,7 +77,7 @@ public class MissingInvocationVerifierTest extends TestBase {
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
         finderStub.similarToReturn = actualInvocation;
         
-        verifier.verify(invocations, wanted, VerificationModeImpl.atLeastOnce());
+        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
         
         assertNotNull(reporterStub.wanted);
         assertNotNull(reporterStub.actual);

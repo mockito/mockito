@@ -1,12 +1,12 @@
 package org.mockito.internal.verification;
 
-import org.mockito.internal.verification.VerificationModeImpl.Verification;
+import org.mockito.internal.verification.MockitoVerificationMode.Verification;
 
 public class VerificationModeDecoder {
 
-    private final VerificationMode mode;
+    private final MockitoVerificationMode mode;
 
-    public VerificationModeDecoder(VerificationMode mode) {
+    public VerificationModeDecoder(MockitoVerificationMode mode) {
         this.mode = mode;
     }
 

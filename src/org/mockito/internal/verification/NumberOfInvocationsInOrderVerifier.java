@@ -26,7 +26,7 @@ public class NumberOfInvocationsInOrderVerifier {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, MockitoVerificationMode mode) {
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
         

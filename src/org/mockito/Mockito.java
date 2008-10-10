@@ -22,7 +22,7 @@ import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
@@ -942,7 +942,7 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode times(int wantedNumberOfInvocations) {
-        return VerificationModeImpl.times(wantedNumberOfInvocations);
+        return VerificationModeFactory.times(wantedNumberOfInvocations);
     }
     
     /**
@@ -974,7 +974,7 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode atLeastOnce() {
-        return VerificationModeImpl.atLeastOnce();
+        return VerificationModeFactory.atLeastOnce();
     }
 
     /**
@@ -990,6 +990,6 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode atLeast(int minNumberOfInvocations) {
-        return VerificationModeImpl.atLeast(minNumberOfInvocations);
+        return VerificationModeFactory.atLeast(minNumberOfInvocations);
     }
 }

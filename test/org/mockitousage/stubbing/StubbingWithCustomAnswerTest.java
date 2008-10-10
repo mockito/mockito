@@ -4,8 +4,10 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Test;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

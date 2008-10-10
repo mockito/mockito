@@ -9,7 +9,6 @@ import java.util.List;
 import org.mockito.Mockito;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.VerificationModeImpl.Verification;
 
 /**
  * Allows verifying that certain behavior happened at least once / exact number
@@ -32,12 +31,6 @@ import org.mockito.internal.verification.VerificationModeImpl.Verification;
  */
 public interface VerificationMode {
 
-    Integer wantedCount();
-
-    List<? extends Object> getMocksToBeVerifiedInOrder();
-
-    Verification getVerification();
-    
     void verify(List<Invocation> invocations, InvocationMatcher wanted);
 
     void setMocksToBeVerifiedInOrder(List<Object> mocks);

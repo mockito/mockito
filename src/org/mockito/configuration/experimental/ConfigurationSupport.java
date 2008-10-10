@@ -6,8 +6,8 @@ package org.mockito.configuration.experimental;
 
 import java.lang.reflect.Modifier;
 
-import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.internal.configuration.Configuration;
+import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.internal.configuration.MockitoProperties;
 import org.mockito.invocation.InvocationOnMock;
 

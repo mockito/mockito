@@ -12,8 +12,8 @@ import org.mockito.internal.matchers.GreaterOrEqual;
 import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
-import org.mockito.internal.progress.LastArguments;
 import org.mockito.internal.progress.EmptyReturnValues;
+import org.mockito.internal.progress.LastArguments;
 
 /**
  * See {@link Matchers} for general info about matchers.

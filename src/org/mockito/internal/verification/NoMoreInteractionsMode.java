@@ -11,18 +11,18 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 
-public class NoMoreInteractionsMode extends VerificationModeImpl implements VerificationMode {
+public class NoMoreInteractionsMode implements VerificationMode {
 
-    protected NoMoreInteractionsMode(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder,
-            Verification verification) {
-        super(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, verification);
-    }
-    
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation unverified = new InvocationsFinder().findFirstUnverified(invocations);
         
         if (unverified != null) {
             new Reporter().noMoreInteractionsWanted(unverified, unverified.getStackTrace());
         }
+    }
+
+    @Override
+    public void setMocksToBeVerifiedInOrder(List<Object> mocks) {
+        //do nothing
     }
 }

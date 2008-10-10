@@ -4,10 +4,10 @@
  */
 package org.mockitousage.packageprotected;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 public class MockingPackageProtectedTest extends TestBase {
 

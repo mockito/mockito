@@ -29,7 +29,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, MockitoVerificationMode mode) {
         return validMatchingChunkToReturn;
     }
 

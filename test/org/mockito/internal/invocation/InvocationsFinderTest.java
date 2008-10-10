@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.verification.VerificationModeImpl.*;
 import static org.mockitoutil.ExtraMatchers.*;
 
 import java.util.Arrays;
@@ -17,7 +16,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeBuilder;
-import org.mockito.internal.verification.VerificationMode;
+import org.mockito.internal.verification.MockitoVerificationMode;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -43,10 +43,10 @@ public class InvocationsFinderTest extends TestBase {
 
     @Test
     public void shouldFindActualInvocations() throws Exception {
-        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnce());
+        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeFactory.atLeastOnce());
         assertThat(actual, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
         
-        actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation), atLeastOnce());
+        actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation), VerificationModeFactory.atLeastOnce());
         assertThat(actual, hasExactlyInOrder(differentMethodInvocation));
     }
     
@@ -73,7 +73,7 @@ public class InvocationsFinderTest extends TestBase {
     public void shouldFindFirstSimilarInvocationByName() throws Exception {
         Invocation overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod), atLeastOnce());
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod), VerificationModeFactory.atLeastOnce());
         assertSame(found, simpleMethodInvocation);
     }
     
@@ -83,7 +83,7 @@ public class InvocationsFinderTest extends TestBase {
         
         invocations.add(overloadedDifferentMethod);
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod), atLeastOnce());
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod), VerificationModeFactory.atLeastOnce());
         assertSame(found, overloadedDifferentMethod);
     }
     
@@ -111,7 +111,7 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldFindMatchingChunk() throws Exception {
-        VerificationMode inOrderMode = new VerificationModeBuilder().times(2).inOrder();
+        MockitoVerificationMode inOrderMode = new VerificationModeBuilder().times(2).inOrder();
         List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), inOrderMode);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
     }
@@ -121,7 +121,7 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        VerificationMode atLeastOnceInOrder = new VerificationModeBuilder().inOrder();
+        MockitoVerificationMode atLeastOnceInOrder = new VerificationModeBuilder().inOrder();
         List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnceInOrder);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }
@@ -131,7 +131,7 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        VerificationMode atLeastOnceInOrder = new VerificationModeBuilder().times(100).inOrder();
+        MockitoVerificationMode atLeastOnceInOrder = new VerificationModeBuilder().times(100).inOrder();
         List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), atLeastOnceInOrder);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }

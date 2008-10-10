@@ -4,18 +4,17 @@
  */
 package org.mockito.internal.progress;
 
-import static org.mockito.internal.verification.VerificationModeImpl.*;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
-public class VerificationModeImplTest extends TestBase {
+public class MockitoVerificationModeTest extends TestBase {
 
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {
         try {
-            times(-50);
+            VerificationModeFactory.times(-50);
             fail();
         } catch (MockitoException e) {
             assertEquals("Negative value is not allowed here", e.getMessage());
@@ -25,7 +24,7 @@ public class VerificationModeImplTest extends TestBase {
     @Test
     public void shouldNotAllowNegativeNumberOfMinimumInvocations() throws Exception {
         try {
-            atLeast(-50);
+            VerificationModeFactory.atLeast(-50);
             fail();
         } catch (MockitoException e) {
             assertEquals("Negative value or zero are not allowed here", e.getMessage());

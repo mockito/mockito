@@ -26,7 +26,7 @@ public class NumberOfInvocationsVerifier {
         this.finder = finder;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, MockitoVerificationMode mode) {
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
         

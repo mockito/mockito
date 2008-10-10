@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
 public class MockingProgressImplTest extends TestBase {
@@ -24,7 +24,7 @@ public class MockingProgressImplTest extends TestBase {
     public void shouldStartVerificationAndPullVerificationMode() throws Exception {
         assertNull(mockingProgress.pullVerificationMode());
         
-        VerificationMode mode = VerificationModeImpl.times(19);
+        VerificationMode mode = VerificationModeFactory.times(19);
         
         mockingProgress.verificationStarted(mode);
         
@@ -35,9 +35,9 @@ public class MockingProgressImplTest extends TestBase {
     
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
-        mockingProgress.verificationStarted(VerificationModeImpl.atLeastOnce());
+        mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
         try {
-            mockingProgress.verificationStarted(VerificationModeImpl.atLeastOnce());
+            mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
     }

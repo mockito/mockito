@@ -26,7 +26,7 @@ public class NoMoreInvocationsVerifierTest extends TestBase {
 //    @Test
 //    public void shouldPassVerification() throws Exception {
 //        finder.firstUnverifiedToReturn = null;
-//        verifier.verify(null, null, VerificationModeImpl.noMoreInteractions());
+//        verifier.verify(null, null, MockitoVerificationMode.noMoreInteractions());
 //    }
 //    
 //    @Test
@@ -35,7 +35,7 @@ public class NoMoreInvocationsVerifierTest extends TestBase {
 //        finder.firstUnverifiedToReturn = firstUnverified;
 //        List<Invocation> invocations = asList(new InvocationBuilder().toInvocation());
 //        
-//        verifier.verify(invocations, null, VerificationModeImpl.noMoreInteractions());
+//        verifier.verify(invocations, null, MockitoVerificationMode.noMoreInteractions());
 //        
 //        assertSame(invocations, finder.invocations);
 //        

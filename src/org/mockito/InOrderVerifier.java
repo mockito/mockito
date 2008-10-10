@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationModeImpl;
+import org.mockito.internal.verification.VerificationModeFactory;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.
@@ -24,7 +24,7 @@ class InOrderVerifier implements InOrder {
     }
 
     public <T> T verify(T mock) {
-        return this.verify(mock, VerificationModeImpl.times(1));
+        return this.verify(mock, VerificationModeFactory.times(1));
     }
     
     public <T> T verify(T mock, VerificationMode mode) {
