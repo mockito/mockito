@@ -6,8 +6,10 @@ package org.mockito.internal.verification;
 
 import java.util.List;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.InvocationsFinder;
 
 public class NoMoreInteractionsMode extends VerificationModeImpl implements VerificationMode {
 
@@ -17,6 +19,10 @@ public class NoMoreInteractionsMode extends VerificationModeImpl implements Veri
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
-        new NoMoreInvocationsVerifier().verify(invocations, wanted, null);
+        Invocation unverified = new InvocationsFinder().findFirstUnverified(invocations);
+        
+        if (unverified != null) {
+            new Reporter().noMoreInteractionsWanted(unverified, unverified.getStackTrace());
+        }
     }
 }
