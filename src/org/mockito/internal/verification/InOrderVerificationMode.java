@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.mockito.internal.invocation.AllInvocationsFinder;
@@ -21,14 +20,13 @@ public class InOrderVerificationMode extends VerificationModeImpl implements Ver
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
         invocations = new AllInvocationsFinder().getAllInvocations(this.getMocksToBeVerifiedInOrder());
 
-        List<Verifier> verifiers = Arrays.asList(
-                new MissingInvocationInOrderVerifier(),
-                new NumberOfInvocationsInOrderVerifier());
+        MissingInvocationInOrderVerifier missingInvocation = new MissingInvocationInOrderVerifier();
+        NumberOfInvocationsInOrderVerifier numberOfCalls = new NumberOfInvocationsInOrderVerifier();
         
-        for (Verifier verifier : verifiers) {
-            if (verifier.appliesTo(this)) {
-                verifier.verify(invocations, wanted, this);
-            }
+        if (wantedCount() > 0 || (verification == Verification.AT_LEAST && wantedCount() == 1)) {
+            missingInvocation.verify(invocations, wanted, this);
         }
+
+        numberOfCalls.verify(invocations, wanted, this);
     }
 }

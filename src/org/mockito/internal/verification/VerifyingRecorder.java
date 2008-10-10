@@ -6,21 +6,13 @@ package org.mockito.internal.verification;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 
+//TODO is this class necessary?
 public class VerifyingRecorder {
 
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations();
-
-    private final List<? extends Verifier> verifiers;
-    private final AllInvocationsFinder invocationsFinder;
-
-    public VerifyingRecorder(AllInvocationsFinder globalInvocationsFinder, List<? extends Verifier> verifiers) {
-        this.invocationsFinder = globalInvocationsFinder;
-        this.verifiers = verifiers;
-    }
 
     public void recordInvocation(Invocation invocation) {
         registeredInvocations.add(invocation);

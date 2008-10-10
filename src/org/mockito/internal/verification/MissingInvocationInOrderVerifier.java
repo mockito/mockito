@@ -11,7 +11,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 
-public class MissingInvocationInOrderVerifier implements Verifier {
+public class MissingInvocationInOrderVerifier {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
@@ -25,10 +25,6 @@ public class MissingInvocationInOrderVerifier implements Verifier {
         this.reporter = reporter;
     }
     
-    public boolean appliesTo(VerificationMode mode) {
-        return new VerificationModeDecoder(mode).missingMethodInOrderMode();
-    }
-
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         

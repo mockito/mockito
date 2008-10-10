@@ -40,11 +40,6 @@ public class MissingInvocationVerifierTest extends TestBase {
     }
     
     @Test
-    public void shouldNeverVerifyWhenModeIsNotMissingMethodMode() {
-        assertFalse(verifier.appliesTo(noMoreInteractions()));
-    }
-    
-    @Test
     public void shouldAskFinderForActualInvocations() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         VerificationMode mode = atLeastOnce();

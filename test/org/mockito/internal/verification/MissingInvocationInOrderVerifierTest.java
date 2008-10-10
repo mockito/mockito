@@ -5,7 +5,6 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import java.util.LinkedList;
 
@@ -38,11 +37,6 @@ public class MissingInvocationInOrderVerifierTest extends TestBase {
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }                                                                    
 
-    @Test
-    public void shouldNeverVerifyIfModeIsNotMissingInvocationInOrderMode() throws Exception {
-        assertFalse(verifier.appliesTo(atLeastOnce()));
-    }
-    
     @Test
     public void shouldPassWhenMatchingInteractionFound() throws Exception {
         Invocation actual = new InvocationBuilder().toInvocation();

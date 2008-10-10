@@ -31,16 +31,6 @@ public class NoMoreInvocationsVerifierTest extends TestBase {
     }
     
     @Test
-    public void shouldNeverVerifyWhenVerificationIsExplicit() throws Exception {
-        assertFalse(verifier.appliesTo(VerificationModeImpl.times(1)));
-    }
-
-    @Test
-    public void shouldNeverVerifyWhenVerificationIsInAtLeastMode() throws Exception {
-        assertFalse(verifier.appliesTo(VerificationModeImpl.atLeastOnce()));
-    }
-    
-    @Test
     public void shouldPassVerification() throws Exception {
         finder.firstUnverifiedToReturn = null;
         verifier.verify(null, null, VerificationModeImpl.noMoreInteractions());

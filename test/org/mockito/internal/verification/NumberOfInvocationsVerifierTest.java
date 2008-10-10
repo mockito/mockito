@@ -17,7 +17,6 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsVerifierTest extends TestBase {
@@ -38,11 +37,6 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }
 
-    @Test
-    public void shouldNeverVerifyWhenNotModeIsInOrder() throws Exception {
-        assertFalse(verifier.appliesTo(new VerificationModeBuilder().inOrder()));
-    }
-    
     @Test
     public void shouldReportTooLittleActual() throws Exception {
         VerificationMode mode = times(100);

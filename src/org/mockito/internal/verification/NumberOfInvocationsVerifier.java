@@ -12,7 +12,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 
-public class NumberOfInvocationsVerifier implements Verifier {
+public class NumberOfInvocationsVerifier {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
@@ -24,10 +24,6 @@ public class NumberOfInvocationsVerifier implements Verifier {
     NumberOfInvocationsVerifier(Reporter reporter, InvocationsFinder finder) {
         this.reporter = reporter;
         this.finder = finder;
-    }
-    
-    public boolean appliesTo(VerificationMode mode) {
-        return new VerificationModeDecoder(mode).exactNumberOfInvocationsMode();
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {

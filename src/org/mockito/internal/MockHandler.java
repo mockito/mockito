@@ -5,14 +5,12 @@
 package org.mockito.internal;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.creation.MockAwareInterceptor;
-import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -25,14 +23,8 @@ import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.verification.MissingInvocationInOrderVerifier;
-import org.mockito.internal.verification.MissingInvocationVerifier;
-import org.mockito.internal.verification.NoMoreInvocationsVerifier;
-import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifier;
-import org.mockito.internal.verification.NumberOfInvocationsVerifier;
 import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeImpl;
-import org.mockito.internal.verification.Verifier;
 import org.mockito.internal.verification.VerifyingRecorder;
 import org.mockito.stubbing.Answer;
 
@@ -57,7 +49,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         this.matchersBinder = matchersBinder;
         this.mockitoStubber = new MockitoStubber(mockingProgress);
 
-        verifyingRecorder = createRecorder();
+        verifyingRecorder = new VerifyingRecorder();
     }
     
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -114,16 +106,6 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
     public String getMockName() {
         return mockName;
-    }
-
-    private VerifyingRecorder createRecorder() {
-        List<Verifier> verifiers = Arrays.asList(
-                new MissingInvocationInOrderVerifier(),
-                new NumberOfInvocationsInOrderVerifier(),
-                new MissingInvocationVerifier(),
-                new NumberOfInvocationsVerifier(),
-                new NoMoreInvocationsVerifier());
-        return new VerifyingRecorder(new AllInvocationsFinder(), verifiers);
     }
 
     private final class VoidMethodStubbableImpl implements VoidMethodStubbable<T> {

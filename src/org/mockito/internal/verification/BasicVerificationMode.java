@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
@@ -20,14 +19,13 @@ public class BasicVerificationMode extends VerificationModeImpl implements Verif
     }
 
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Verifier> verifiers = Arrays.asList(
-                new MissingInvocationVerifier(),
-                new NumberOfInvocationsVerifier());
+        MissingInvocationVerifier missingInvocation = new MissingInvocationVerifier();
+        NumberOfInvocationsVerifier numberOfInvocations = new NumberOfInvocationsVerifier();
         
-        for (Verifier verifier : verifiers) {
-            if (verifier.appliesTo(this)) {
-                verifier.verify(invocations, wanted, this);
-            }
+        //TODO duplicated
+        if (wantedCount() > 0 || (verification == Verification.AT_LEAST && wantedCount() == 1)) {
+            missingInvocation.verify(invocations, wanted, this);
         }
+        numberOfInvocations.verify(invocations, wanted, this);
     }
 }

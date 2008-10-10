@@ -5,7 +5,6 @@
 package org.mockito.internal.verification;
 
 import static java.util.Arrays.*;
-import static org.mockito.internal.verification.VerificationModeImpl.*;
 
 import java.util.LinkedList;
 
@@ -35,11 +34,6 @@ public class NumberOfInvocationsInOrderVerifierTest extends TestBase {
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
-    }
-    
-    @Test
-    public void shouldNeverVerifyIfModeIsNotInOrder() throws Exception {
-        assertFalse(verifier.appliesTo(atLeastOnce()));
     }
     
     @Test
