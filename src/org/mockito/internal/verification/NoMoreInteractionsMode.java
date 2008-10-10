@@ -9,8 +9,6 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 
-/**
- */
 public class NoMoreInteractionsMode extends VerificationModeImpl implements VerificationMode {
 
     protected NoMoreInteractionsMode(int wantedNumberOfInvocations, List<? extends Object> mocksToBeVerifiedInOrder,
@@ -18,7 +16,6 @@ public class NoMoreInteractionsMode extends VerificationModeImpl implements Veri
         super(wantedNumberOfInvocations, mocksToBeVerifiedInOrder, verification);
     }
     
-    @Override
     public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
         new NoMoreInvocationsVerifier().verify(invocations, wanted, null);
     }
