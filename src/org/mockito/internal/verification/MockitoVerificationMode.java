@@ -11,6 +11,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Holds additional information regarding verification.

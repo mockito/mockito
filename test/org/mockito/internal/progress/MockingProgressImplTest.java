@@ -7,8 +7,8 @@ package org.mockito.internal.progress;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
 public class MockingProgressImplTest extends TestBase {

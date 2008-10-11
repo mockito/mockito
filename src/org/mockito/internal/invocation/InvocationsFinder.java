@@ -11,8 +11,8 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 import org.mockito.internal.verification.MockitoVerificationMode;
-import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeDecoder;
+import org.mockito.verification.VerificationMode;
 
 public class InvocationsFinder {
 

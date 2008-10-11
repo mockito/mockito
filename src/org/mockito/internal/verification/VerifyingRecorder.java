@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.verification.VerificationMode;
 
 //TODO is this class necessary?
 public class VerifyingRecorder {

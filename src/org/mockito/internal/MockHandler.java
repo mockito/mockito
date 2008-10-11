@@ -23,10 +23,10 @@ import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.verification.VerificationMode;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerifyingRecorder;
 import org.mockito.stubbing.Answer;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Invocation handler set on mock objects.
