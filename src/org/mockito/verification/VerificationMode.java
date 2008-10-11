@@ -30,8 +30,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
  */
 public interface VerificationMode {
-
+    
     void verify(List<Invocation> invocations, InvocationMatcher wanted);
-
-    void setMocksToBeVerifiedInOrder(List<Object> mocks);
+    
 }
