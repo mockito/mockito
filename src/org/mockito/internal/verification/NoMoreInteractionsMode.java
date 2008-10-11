@@ -21,7 +21,6 @@ public class NoMoreInteractionsMode implements VerificationMode {
         }
     }
 
-    @Override
     public void setMocksToBeVerifiedInOrder(List<Object> mocks) {
         //do nothing
     }
