@@ -16,12 +16,10 @@ public class VerificationDataImpl implements VerificationData {
         this.wanted = wanted;
     }
 
-    @Override
     public List<Invocation> getAllInvocations() {
         return allInvocations;
     }
 
-    @Override
     public InvocationMatcher getWanted() {
         return wanted;
     }
