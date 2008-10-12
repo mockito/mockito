@@ -8,9 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.verification.MockitoInOrderVerificationMode;
-import org.mockito.internal.verification.MockitoVerificationMode;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.verification.InOrderVerificationModeWrapper;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.verification.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -32,14 +33,9 @@ class InOrderVerifier implements InOrder {
     public <T> T verify(T mock, VerificationMode mode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
+        } else if (!(mode instanceof VerificationInOrderMode)) {
+            throw new MockitoException("VerificationMode is not implmented to work with InOrder");
         }
-        if (mode instanceof MockitoVerificationMode) {
-            return Mockito.verify(mock, new MockitoInOrderVerificationMode((MockitoVerificationMode) mode, mocksToBeVerifiedInOrder));
-        }
-        throw new RuntimeException("nothing else is yet implemented");
-//        if (!(mode instanceof InOrderVerificationMode) {
-//            //TODO fail nicely here
-//        }
-//        return Mockito.verify(mock, mode);
+        return Mockito.verify(mock, new InOrderVerificationModeWrapper((VerificationInOrderMode) mode, mocksToBeVerifiedInOrder));
     }
 }

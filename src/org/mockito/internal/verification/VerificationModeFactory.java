@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.internal.verification.MockitoVerificationMode.Verification;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Holds additional information regarding verification.
@@ -27,5 +28,9 @@ public class VerificationModeFactory {
 
     public static NoMoreInteractionsMode noMoreInteractions() {
         return new NoMoreInteractionsMode();
+    }
+
+    public static VerificationMode atMost(int maxNumberOfInvocations) {
+        return new AtMostXVerificationMode(maxNumberOfInvocations);
     }
 }

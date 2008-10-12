@@ -19,9 +19,9 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
-public class MissingInvocationVerifierTest extends TestBase {
+public class MissingInvocationCheckerTest extends TestBase {
 
-    private MissingInvocationVerifier verifier;
+    private MissingInvocationChecker verifier;
     
     private InvocationsFinderStub finderStub;
     private ReporterStub reporterStub;
@@ -33,7 +33,7 @@ public class MissingInvocationVerifierTest extends TestBase {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new MissingInvocationVerifier(finderStub, reporterStub);
+        verifier = new MissingInvocationChecker(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());

@@ -12,23 +12,23 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 
-public class NumberOfInvocationsVerifier {
+public class NumberOfInvocationsChecker {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
 
-    public NumberOfInvocationsVerifier() {
+    public NumberOfInvocationsChecker() {
         this(new Reporter(), new InvocationsFinder());
     }
     
-    NumberOfInvocationsVerifier(Reporter reporter, InvocationsFinder finder) {
+    NumberOfInvocationsChecker(Reporter reporter, InvocationsFinder finder) {
         this.reporter = reporter;
         this.finder = finder;
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, MockitoVerificationMode mode) {
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted, mode);
+        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
         if (decoder.tooLittleActualInvocations(actualCount)) {

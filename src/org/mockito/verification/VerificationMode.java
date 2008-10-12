@@ -4,11 +4,7 @@
  */
 package org.mockito.verification;
 
-import java.util.List;
-
 import org.mockito.Mockito;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
  * Allows verifying that certain behavior happened at least once / exact number
@@ -31,6 +27,6 @@ import org.mockito.internal.invocation.InvocationMatcher;
  */
 public interface VerificationMode {
     
-    void verify(List<Invocation> invocations, InvocationMatcher wanted);
+    void verify(VerificationData data);
     
 }

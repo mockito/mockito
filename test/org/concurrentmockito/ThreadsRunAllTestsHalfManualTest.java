@@ -28,11 +28,11 @@ import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.MockitoVerificationModeTest;
 import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
-import org.mockito.internal.verification.MissingInvocationInOrderVerifierTest;
-import org.mockito.internal.verification.MissingInvocationVerifierTest;
+import org.mockito.internal.verification.MissingInvocationCheckerTest;
+import org.mockito.internal.verification.MissingInvocationInOrderCheckerTest;
 import org.mockito.internal.verification.NoMoreInvocationsVerifierTest;
-import org.mockito.internal.verification.NumberOfInvocationsInOrderVerifierTest;
-import org.mockito.internal.verification.NumberOfInvocationsVerifierTest;
+import org.mockito.internal.verification.NumberOfInvocationsCheckerTest;
+import org.mockito.internal.verification.NumberOfInvocationsInOrderCheckerTest;
 import org.mockito.internal.verification.VerifyingRecorderTest;
 import org.mockitousage.ReplacingObjectMethodsTest;
 import org.mockitousage.UsingVarargsTest;
@@ -91,12 +91,12 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MockHandlerTest.class,
                     AllInvocationsFinderTest.class,
                     DefaultReturnValuesTest.class,
-                    NumberOfInvocationsVerifierTest.class,
+                    NumberOfInvocationsCheckerTest.class,
                     VerifyingRecorderTest.class,
-                    MissingInvocationVerifierTest.class,
+                    MissingInvocationCheckerTest.class,
                     NoMoreInvocationsVerifierTest.class,
-                    NumberOfInvocationsInOrderVerifierTest.class,
-                    MissingInvocationInOrderVerifierTest.class,
+                    NumberOfInvocationsInOrderCheckerTest.class,
+                    MissingInvocationInOrderCheckerTest.class,
                     ClassImposterizerTest.class,
                     CglibTest.class,
                     InvocationMatcherTest.class,

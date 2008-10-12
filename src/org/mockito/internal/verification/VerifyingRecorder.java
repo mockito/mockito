@@ -32,6 +32,6 @@ public class VerifyingRecorder {
     }
 
     public void verify(InvocationMatcher wanted, VerificationMode mode) {
-        mode.verify(getRegisteredInvocations(), wanted);
+        mode.verify(new VerificationDataImpl(getRegisteredInvocations(), wanted));
     }
 }

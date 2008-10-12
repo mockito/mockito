@@ -4,25 +4,19 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.List;
-
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.verification.VerificationData;
 import org.mockito.verification.VerificationMode;
 
 public class NoMoreInteractionsMode implements VerificationMode {
 
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
-        Invocation unverified = new InvocationsFinder().findFirstUnverified(invocations);
+    public void verify(VerificationData data) {
+        Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());
         
         if (unverified != null) {
             new Reporter().noMoreInteractionsWanted(unverified, unverified.getStackTrace());
         }
-    }
-
-    public void setMocksToBeVerifiedInOrder(List<Object> mocks) {
-        //do nothing
     }
 }

@@ -18,9 +18,9 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockitoutil.TestBase;
 
-public class NumberOfInvocationsInOrderVerifierTest extends TestBase {
+public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
 
-    private NumberOfInvocationsInOrderVerifier verifier;
+    private NumberOfInvocationsInOrderChecker verifier;
     private Reporter reporter;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -30,7 +30,7 @@ public class NumberOfInvocationsInOrderVerifierTest extends TestBase {
     public void setup() {
         reporter = new Reporter();
         finderStub = new InvocationsFinderStub();
-        verifier = new NumberOfInvocationsInOrderVerifier(finderStub, reporter);
+        verifier = new NumberOfInvocationsInOrderChecker(finderStub, reporter);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));

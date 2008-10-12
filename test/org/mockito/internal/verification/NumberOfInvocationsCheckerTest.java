@@ -18,9 +18,9 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitoutil.TestBase;
 
-public class NumberOfInvocationsVerifierTest extends TestBase {
+public class NumberOfInvocationsCheckerTest extends TestBase {
 
-    private NumberOfInvocationsVerifier verifier;
+    private NumberOfInvocationsChecker verifier;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -30,7 +30,7 @@ public class NumberOfInvocationsVerifierTest extends TestBase {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new NumberOfInvocationsVerifier(reporterStub, finderStub);
+        verifier = new NumberOfInvocationsChecker(reporterStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));

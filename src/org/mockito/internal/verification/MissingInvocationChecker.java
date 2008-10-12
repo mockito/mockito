@@ -12,32 +12,35 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.verification.VerificationMode;
 
-public class MissingInvocationInOrderVerifier {
+public class MissingInvocationChecker {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
     
-    public MissingInvocationInOrderVerifier() {
+    public MissingInvocationChecker() {
         this(new InvocationsFinder(), new Reporter());
     }
     
-    public MissingInvocationInOrderVerifier(InvocationsFinder finder, Reporter reporter) {
+    public MissingInvocationChecker(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
+        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
-        if (!chunk.isEmpty()) {
-            return;
+        if (actualInvocations.isEmpty()) {
+            Invocation similar = finder.findSimilarInvocation(invocations, wanted, mode);
+            reportMissingInvocationError(wanted, similar);
         }
-        
-        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations);
-        if (previousInOrder == null) {
-            reporter.wantedButNotInvoked(wanted);
+    }
+
+    private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
+        if (similar != null) {
+            SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
+            reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getStackTrace());
         } else {
-            reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getStackTrace());
+            reporter.wantedButNotInvoked(wanted);
         }
     }
 }

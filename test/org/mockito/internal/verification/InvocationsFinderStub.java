@@ -34,8 +34,7 @@ class InvocationsFinderStub extends InvocationsFinder {
         return validMatchingChunkToReturn;
     }
 
-    @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted,
-            VerificationMode mode) {
+    @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted) {
         this.invocations = invocations;
         return actualToReturn;
     }

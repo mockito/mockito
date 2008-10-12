@@ -16,7 +16,7 @@ import org.mockito.verification.VerificationMode;
 
 public class InvocationsFinder {
 
-    public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted) {
         return ListUtil.filter(invocations, new RemoveNotMatching(wanted));
     }
 

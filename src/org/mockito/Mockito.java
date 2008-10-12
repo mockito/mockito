@@ -419,8 +419,8 @@ import org.mockito.verification.VerificationMode;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    private static final Reporter REPORTER = new Reporter();
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
+    private static final Reporter REPORTER = new Reporter();
 
     /**
      * Creates mock object of given class or interface.
@@ -991,5 +991,21 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
+    }
+    
+    /**
+     * Allows at-most-x verification. E.g:
+     * <pre>
+     *   verify(mock, atMost(3)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param minNumberOfInvocations minimum number of invocations 
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode atMost(int maxNumberOfInvocations) {
+        return VerificationModeFactory.atMost(maxNumberOfInvocations);
     }
 }

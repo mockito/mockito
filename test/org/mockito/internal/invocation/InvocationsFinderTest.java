@@ -43,10 +43,10 @@ public class InvocationsFinderTest extends TestBase {
 
     @Test
     public void shouldFindActualInvocations() throws Exception {
-        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation), VerificationModeFactory.atLeastOnce());
+        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
         assertThat(actual, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
         
-        actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation), VerificationModeFactory.atLeastOnce());
+        actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation));
         assertThat(actual, hasExactlyInOrder(differentMethodInvocation));
     }
     

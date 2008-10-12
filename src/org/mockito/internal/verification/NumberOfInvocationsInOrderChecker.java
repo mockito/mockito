@@ -12,16 +12,16 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 
-public class NumberOfInvocationsInOrderVerifier {
+public class NumberOfInvocationsInOrderChecker {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
     
-    public NumberOfInvocationsInOrderVerifier() {
+    public NumberOfInvocationsInOrderChecker() {
         this(new InvocationsFinder(), new Reporter());
     }
     
-    public NumberOfInvocationsInOrderVerifier(InvocationsFinder finder, Reporter reporter) {
+    public NumberOfInvocationsInOrderChecker(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }
