@@ -22,10 +22,10 @@ import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.mockito.verification.VerificationMode;
 
 /**
  * Enables mocks creation, verification and stubbing.

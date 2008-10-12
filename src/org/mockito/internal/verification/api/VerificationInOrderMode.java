@@ -1,4 +1,4 @@
-package org.mockito.verification;
+package org.mockito.internal.verification.api;
 
 public interface VerificationInOrderMode {
 

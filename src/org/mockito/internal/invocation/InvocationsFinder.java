@@ -12,7 +12,7 @@ import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 import org.mockito.internal.verification.MockitoVerificationMode;
 import org.mockito.internal.verification.VerificationModeDecoder;
-import org.mockito.verification.VerificationMode;
+import org.mockito.internal.verification.api.VerificationMode;
 
 public class InvocationsFinder {
 

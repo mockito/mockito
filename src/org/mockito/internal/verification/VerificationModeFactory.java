@@ -5,7 +5,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.internal.verification.MockitoVerificationMode.Verification;
-import org.mockito.verification.VerificationMode;
+import org.mockito.internal.verification.api.VerificationMode;
 
 /**
  * Holds additional information regarding verification.

@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.verification;
+package org.mockito.internal.verification.api;
 
 import org.mockito.Mockito;
 
@@ -18,6 +18,8 @@ import org.mockito.Mockito;
  * verify(mock, atLeastOnce()).someMethod(&quot;was called at least once&quot;);
  * 
  * verify(mock, atLeast(2)).someMethod(&quot;was called at least twice&quot;);
+ * 
+ * verify(mock, atMost(3)).someMethod(&quot;was called at most 3 times&quot;);
  * 
  * </pre>
  * 

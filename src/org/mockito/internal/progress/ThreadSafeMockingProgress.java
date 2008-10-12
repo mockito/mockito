@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.progress;
 
-import org.mockito.verification.VerificationMode;
+import org.mockito.internal.verification.api.VerificationMode;
 
 @SuppressWarnings("unchecked")
 public class ThreadSafeMockingProgress implements MockingProgress {

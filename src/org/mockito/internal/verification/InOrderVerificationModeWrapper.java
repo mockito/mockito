@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.verification.VerificationData;
-import org.mockito.verification.VerificationInOrderMode;
-import org.mockito.verification.VerificationMode;
+import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.internal.verification.api.VerificationInOrderMode;
+import org.mockito.internal.verification.api.VerificationMode;
 
 public class InOrderVerificationModeWrapper implements VerificationMode {
 

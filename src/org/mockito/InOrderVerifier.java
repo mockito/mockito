@@ -11,8 +11,8 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.InOrderVerificationModeWrapper;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.verification.VerificationInOrderMode;
-import org.mockito.verification.VerificationMode;
+import org.mockito.internal.verification.api.VerificationInOrderMode;
+import org.mockito.internal.verification.api.VerificationMode;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.

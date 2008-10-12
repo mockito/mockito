@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 
 public class VerificationDataImpl implements VerificationData {
 
