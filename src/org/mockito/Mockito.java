@@ -378,6 +378,9 @@ import org.mockito.stubbing.Answer;
  * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
  * <p>
  * Spying on real objects is often associated with "partial mocking" concept. 
+ * However, Mockito spies are not partial mocks. Mockito spy is meant to help testing other classes - not the spy itself. 
+ * Therefore spy will not help if you intend to verify if method calls other method on the same object. 
+ * In this case I suggest being OO/SRPy (for example you might extract new class/interface...)
  * 
  * <pre>
  *   List list = new LinkedList();
@@ -458,7 +461,10 @@ public class Mockito extends Matchers {
      * <p>
      * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
      * <p>
-     * Spying on real objects is often associated with "partial mocking" concept.
+     * Spying on real objects is often associated with "partial mocking" concept. 
+     * However, Mockito spies are not partial mocks. Mockito spy is meant to help testing other classes - not the spy itself. 
+     * Therefore spy will not help if you intend to verify if method calls other method on the same object. 
+     * In this case I suggest being OO/SRPy (for example you might extract new class/interface...)
      * <p>
      * Example:
      * 
