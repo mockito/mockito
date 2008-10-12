@@ -176,9 +176,10 @@ import org.mockito.stubbing.Answer;
  * //verification using never(). never() is an alias to times(0)
  * verify(mockedList, never()).add("never happened");
  * 
- * //verification using atLeast()
+ * //verification using atLeast()/atMost()
  * verify(mockedList, atLeastOnce()).add("three times");
  * verify(mockedList, atLeast(2)).add("five times");
+ * verify(mockedList, atMost(5)).add("three times");
  * 
  * </pre>
  * 
