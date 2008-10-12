@@ -197,7 +197,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
-     * @return <code>null</code>.
+     * @return empty String ("")
      */
     public static String anyString() {
         return reportMatcher(Any.ANY).returnString();
@@ -208,7 +208,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
-     * @return <code>null</code>.
+     * @return empty List.
      */
     public static List anyList() {
         return reportMatcher(Any.ANY).returnList();
@@ -219,7 +219,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
-     * @return <code>null</code>.
+     * @return empty Map.
      */
     public static Map anyMap() {
         return reportMatcher(Any.ANY).returnMap();
@@ -230,7 +230,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
-     * @return <code>null</code>.
+     * @return empty Collection.
      */
     public static Collection anyCollection() {
         return reportMatcher(Any.ANY).returnList();
@@ -445,7 +445,7 @@ public class Matchers {
      * 
      * @param substring
      *            the substring.
-     * @return <code>null</code>.
+     * @return empty String ("").
      */
     public static String contains(String substring) {
         return reportMatcher(new Contains(substring)).returnString();
@@ -458,7 +458,7 @@ public class Matchers {
      * 
      * @param regex
      *            the regular expression.
-     * @return <code>null</code>.
+     * @return empty String ("").
      */
     public static String matches(String regex) {
         return reportMatcher(new Matches(regex)).returnString();
@@ -471,7 +471,7 @@ public class Matchers {
      * 
      * @param suffix
      *            the suffix.
-     * @return <code>null</code>.
+     * @return empty String ("").
      */
     public static String endsWith(String suffix) {
         return reportMatcher(new EndsWith(suffix)).returnString();
@@ -484,7 +484,7 @@ public class Matchers {
      * 
      * @param prefix
      *            the prefix.
-     * @return <code>null</code>.
+     * @return empty String ("").
      */
     public static String startsWith(String prefix) {
         return reportMatcher(new StartsWith(prefix)).returnString();
