@@ -20,11 +20,8 @@ import org.mockito.internal.verification.api.VerificationMode;
  */
 public class MockitoVerificationMode implements VerificationInOrderMode, VerificationMode {
     
-    //TODO remove NO_MORE_WANTED
-    public enum Verification { EXPLICIT, NO_MORE_WANTED, AT_LEAST };
+    public enum Verification { EXPLICIT, AT_LEAST };
     
-    private List<Object> mocksToBeVerifiedInOrder;
-
     final int wantedInvocationCount;
     final Verification verification;
     
@@ -40,15 +37,9 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
     }
     
     public void verify(VerificationData data) {
-        if (mocksToBeVerifiedInOrder != null) {
-            verifyInOrder(data);
-            return;
-        }
-        
         MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
         
-        //TODO duplicated
         if (wantedInvocationCount > 0 || (verification == Verification.AT_LEAST && wantedInvocationCount == 1)) {
             missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
@@ -71,7 +62,7 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
     
     @Override
     public String toString() {
-        return "Wanted invocations count: " + wantedCount() + ", Mocks to verify in order: " + mocksToBeVerifiedInOrder;
+        return "Wanted invocations count: " + wantedCount();
     }    
 
     public int wantedCount() {
@@ -80,9 +71,5 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
     
     public Verification getVerification() {
         return verification;
-    }
-    
-    public void setMocksToVerifiedInOrder(List<Object> mocksToBeVerifiedInOrder) {
-        this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
     }
 }
