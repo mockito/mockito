@@ -10,7 +10,6 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.verification.api.VerificationMode;
 
 class InvocationsFinderStub extends InvocationsFinder {
     
@@ -39,7 +38,7 @@ class InvocationsFinderStub extends InvocationsFinder {
         return actualToReturn;
     }
     
-    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         this.invocations = invocations;
         return similarToReturn;
     }

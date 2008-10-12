@@ -12,7 +12,6 @@ import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 import org.mockito.internal.verification.MockitoVerificationMode;
 import org.mockito.internal.verification.VerificationModeDecoder;
-import org.mockito.internal.verification.api.VerificationMode;
 
 public class InvocationsFinder {
 
@@ -64,7 +63,7 @@ public class InvocationsFinder {
         return firstChunk;
     }
     
-    public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation firstSimilar = null;
         for (Invocation invocation : invocations) {
             if (!wanted.hasSimilarMethod(invocation)) {

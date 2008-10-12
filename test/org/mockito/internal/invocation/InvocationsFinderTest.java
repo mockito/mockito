@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.verification.MockitoVerificationMode;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -73,7 +72,7 @@ public class InvocationsFinderTest extends TestBase {
     public void shouldFindFirstSimilarInvocationByName() throws Exception {
         Invocation overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod), VerificationModeFactory.atLeastOnce());
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod));
         assertSame(found, simpleMethodInvocation);
     }
     
@@ -83,7 +82,7 @@ public class InvocationsFinderTest extends TestBase {
         
         invocations.add(overloadedDifferentMethod);
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod), VerificationModeFactory.atLeastOnce());
+        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod));
         assertSame(found, overloadedDifferentMethod);
     }
     

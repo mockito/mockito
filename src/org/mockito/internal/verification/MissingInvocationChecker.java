@@ -10,7 +10,6 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.verification.api.VerificationMode;
 
 public class MissingInvocationChecker {
     
@@ -26,11 +25,11 @@ public class MissingInvocationChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         if (actualInvocations.isEmpty()) {
-            Invocation similar = finder.findSimilarInvocation(invocations, wanted, mode);
+            Invocation similar = finder.findSimilarInvocation(invocations, wanted);
             reportMissingInvocationError(wanted, similar);
         }
     }

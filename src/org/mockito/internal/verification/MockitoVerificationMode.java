@@ -49,7 +49,7 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
         
         //TODO duplicated
         if (wantedInvocationCount > 0 || (verification == Verification.AT_LEAST && wantedInvocationCount == 1)) {
-            missingInvocation.verify(data.getAllInvocations(), data.getWanted(), this);
+            missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
         numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), this);
     }

@@ -42,8 +42,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldAskFinderForActualInvocations() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        VerificationMode mode = VerificationModeFactory.atLeastOnce();
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted);
         
         assertSame(invocations, finderStub.invocations);
     }
@@ -51,12 +50,12 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldPassBecauseActualInvocationFound() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
+        verifier.verify(invocations, wanted);
     }
     
     @Test
     public void shouldAskAnalyzerForSimilarInvocation() {
-        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
+        verifier.verify(invocations, wanted);
         
         assertSame(invocations, finderStub.invocations);
     }
@@ -66,7 +65,7 @@ public class MissingInvocationCheckerTest extends TestBase {
         assertTrue(finderStub.actualToReturn.isEmpty());
         finderStub.similarToReturn = null;
         
-        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
+        verifier.verify(invocations, wanted);
         
         assertEquals(wanted, reporterStub.wanted);
         assertNull(reporterStub.actualInvocationStackTrace);
@@ -78,7 +77,7 @@ public class MissingInvocationCheckerTest extends TestBase {
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
         finderStub.similarToReturn = actualInvocation;
         
-        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
+        verifier.verify(invocations, wanted);
         
         assertNotNull(reporterStub.wanted);
         assertNotNull(reporterStub.actual);
