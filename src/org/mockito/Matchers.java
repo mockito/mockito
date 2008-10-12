@@ -200,7 +200,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String anyString() {
-        return (String) anyObject();
+        return reportMatcher(Any.ANY).returnString();
     }
     
     /**
@@ -211,7 +211,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static List anyList() {
-        return (List) anyObject();
+        return reportMatcher(Any.ANY).returnList();
     }    
     
     /**
@@ -222,7 +222,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Map anyMap() {
-        return (Map) anyObject();
+        return reportMatcher(Any.ANY).returnMap();
     }    
     
     /**
@@ -233,7 +233,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Collection anyCollection() {
-        return (Collection) anyObject();
+        return reportMatcher(Any.ANY).returnList();
     }    
 
     /**
@@ -448,7 +448,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String contains(String substring) {
-        return reportMatcher(new Contains(substring)).<String>returnNull();
+        return reportMatcher(new Contains(substring)).returnString();
     }
 
     /**
@@ -461,7 +461,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String matches(String regex) {
-        return reportMatcher(new Matches(regex)).<String>returnNull();
+        return reportMatcher(new Matches(regex)).returnString();
     }
 
     /**
@@ -474,7 +474,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String endsWith(String suffix) {
-        return reportMatcher(new EndsWith(suffix)).<String>returnNull();
+        return reportMatcher(new EndsWith(suffix)).returnString();
     }
 
     /**
@@ -487,7 +487,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static String startsWith(String prefix) {
-        return reportMatcher(new StartsWith(prefix)).<String>returnNull();
+        return reportMatcher(new StartsWith(prefix)).returnString();
     }
 
     /**

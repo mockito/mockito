@@ -4,6 +4,12 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+@SuppressWarnings("unchecked")
 public class EmptyReturnValues {
 
     public byte returnZero() {
@@ -20,5 +26,17 @@ public class EmptyReturnValues {
 
     public boolean returnFalse() {
         return false;
+    }
+
+    public String returnString() {
+        return "";
+    }
+
+    public Map returnMap() {
+        return new HashMap();
+    }
+
+    public List returnList() {
+        return new LinkedList();
     }
 }
