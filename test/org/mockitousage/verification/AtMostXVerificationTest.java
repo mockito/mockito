@@ -9,94 +9,76 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class AtMostXVerificationTest extends TestBase {
 
-    private List mock;
-    private List mockTwo;
+    @Mock private List mock;
     
-    @Before public void setup() {
-        mock = Mockito.mock(List.class);
-        mockTwo = Mockito.mock(List.class);
-    }
-
     @Test
-    public void shouldVerifyAtLeastOnce() throws Exception {
+    public void shouldVerifyAtMostXTimes() throws Exception {
         mock.clear();
         mock.clear();
         
-        mockTwo.add("add");
-
-        verify(mock, atLeastOnce()).clear();
-        verify(mockTwo, atLeastOnce()).add("add");
+        verify(mock, atMost(2)).clear();
+        verify(mock, atMost(3)).clear();
+        
         try {
-            verify(mockTwo, atLeastOnce()).add("foo");
+            verify(mock, atMost(1)).clear();
             fail();
-        } catch (WantedButNotInvoked e) {}
-    }
-    
-    @Test(expected=WantedButNotInvoked.class)
-    public void shouldFailIfMethodWasNotCalledAtAll() throws Exception {
-        verify(mock, atLeastOnce()).add("foo");
+        } catch (MockitoAssertionError e) {}
     }
     
     @Test
-    public void shouldVerifyAtLeastXTimes() throws Exception {
-        mock.add("foo");
-        mock.add("foo");
-        mock.add("foo");
-        
-        verify(mock, atLeast(1)).add("foo");
-        verify(mock, atLeast(2)).add("foo");
-        verify(mock, atLeast(3)).add("foo");
-    }
-    
-    @Test(expected=TooLittleActualInvocations.class)
-    public void shouldFailOnVerifyAtLeast10WhenMethodWasInvokedOnce() throws Exception {
-        mock.add("foo");
-
-        verify(mock, atLeast(2)).add("foo");
-    }
-    
-    @Test
-    public void shouldVerifyInOrder() throws Exception {
+    public void shouldWorkWithArgumentMatchers() throws Exception {
         mock.add("one");
-        mock.add("two");
-        mock.add("three");
+        verify(mock, atMost(5)).add(anyString());
         
+        try {
+            verify(mock, atMost(0)).add(anyString());
+            fail();
+        } catch (MockitoAssertionError e) {}
+    }
+    
+    @Test
+    public void shouldNotAllowNegativeNumber() throws Exception {
+        try {
+            verify(mock, atMost(-1)).clear();
+            fail();
+        } catch (MockitoException e) {
+            //TODO assert message
+        }
+    }
+    
+    @Test
+    public void shouldPrintDecentMessage() throws Exception {
         mock.clear();
-  
+        mock.clear();
+        
+        try {
+            verify(mock, atMost(1)).clear();
+            fail();
+        } catch (MockitoAssertionError e) {
+            //TODO assert message
+        }
+    }
+    
+    @Test
+    public void shouldNotAllowInOrderMode() throws Exception {
+        mock.clear();
         InOrder inOrder = inOrder(mock);
         
-        inOrder.verify(mock, atLeast(2)).add(anyString());
-        inOrder.verify(mock).clear();
-        verifyNoMoreInteractions(mock);
-    }
-    
-    @Test
-    public void shouldFailVerificationInOrder() throws Exception {
-        mock.clear();
-
-        mock.add("one");
-        mock.add("two");
-        mock.add("three");
-  
-        InOrder inOrder = inOrder(mock);
-        
-        inOrder.verify(mock, atLeastOnce()).clear();
-
         try {
-            inOrder.verify(mock, atLeast(4)).add(anyString());
+            inOrder.verify(mock, atMost(1)).clear();
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (MockitoException e) {
+            //TODO assert message
+        }
     }
 }
