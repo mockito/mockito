@@ -25,7 +25,6 @@ public class AtMostXVerificationMode implements VerificationMode {
         this.maxNumberOfInvocations = maxNumberOfInvocations;
     }
 
-    @Override
     public void verify(VerificationData data) {
         List<Invocation> invocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();

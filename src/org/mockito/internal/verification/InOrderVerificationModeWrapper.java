@@ -18,7 +18,6 @@ public class InOrderVerificationModeWrapper implements VerificationMode {
         this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
     }
 
-    @Override
     public void verify(VerificationData data) {
         List<Invocation> allInvocations = new AllInvocationsFinder().getAllInvocations(mocksToBeVerifiedInOrder);
         mode.verifyInOrder(new VerificationDataImpl(allInvocations, data.getWanted()));
