@@ -8,12 +8,12 @@ import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.api.VerificationMode;
 
-public class InOrderVerificationModeWrapper implements VerificationMode {
+public class InOrderWrapper implements VerificationMode {
 
     private final VerificationInOrderMode mode;
     private final List<Object> mocksToBeVerifiedInOrder;
 
-    public InOrderVerificationModeWrapper(VerificationInOrderMode mode, List<Object> mocksToBeVerifiedInOrder) {
+    public InOrderWrapper(VerificationInOrderMode mode, List<Object> mocksToBeVerifiedInOrder) {
         this.mode = mode;
         this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
     }
