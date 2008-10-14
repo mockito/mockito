@@ -42,13 +42,13 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().inOrder());
+        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
     }
     
     @Test
     public void shouldReportWantedButNotInvoked() throws Exception {
         assertTrue(finderStub.allMatchingUnverifiedChunksToReturn.isEmpty());
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().inOrder());
+        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted, reporterStub.wanted);
     }
@@ -58,7 +58,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().inOrder());
+        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(previous, reporterStub.previous);

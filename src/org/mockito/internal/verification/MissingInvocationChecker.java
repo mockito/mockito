@@ -25,7 +25,7 @@ public class MissingInvocationChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted) {
+    public void check(List<Invocation> invocations, InvocationMatcher wanted) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         if (actualInvocations.isEmpty()) {

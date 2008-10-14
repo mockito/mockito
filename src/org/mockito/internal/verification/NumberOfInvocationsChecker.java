@@ -26,7 +26,7 @@ public class NumberOfInvocationsChecker {
         this.finder = finder;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();

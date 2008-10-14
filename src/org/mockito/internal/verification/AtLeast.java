@@ -29,7 +29,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         AtLeastXNumberOfInvocationsChecker numberOfInvocations = new AtLeastXNumberOfInvocationsChecker();
         
         if (wantedCount == 1) {
-            missingInvocation.verify(data.getAllInvocations(), data.getWanted());
+            missingInvocation.check(data.getAllInvocations(), data.getWanted());
         }
         numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
@@ -42,7 +42,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         AtLeastXNumberOfInvocationsInOrderChecker numberOfCalls = new AtLeastXNumberOfInvocationsInOrderChecker();
         
         if (wantedCount == 1) {
-            missingInvocation.verify(allInvocations, wanted, this);
+            missingInvocation.check(allInvocations, wanted, this);
         }
         
         numberOfCalls.verify(allInvocations, wanted, wantedCount);

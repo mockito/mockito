@@ -26,7 +26,7 @@ public class NumberOfInvocationsInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount);
         
         boolean noMatchFound = chunk.size() == 0;

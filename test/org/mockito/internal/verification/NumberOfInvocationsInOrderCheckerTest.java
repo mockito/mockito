@@ -38,14 +38,14 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     @Test
     public void shouldPassIfWantedIsZeroAndMatchingChunkIsEmpty() throws Exception {
         assertTrue(finderStub.validMatchingChunkToReturn.isEmpty());
-        verifier.verify(invocations, wanted, 0);
+        verifier.check(invocations, wanted, 0);
     }
     
     @Test
     public void shouldPassIfChunkMatches() throws Exception {
         finderStub.validMatchingChunkToReturn.add(wanted.getInvocation());
         
-        verifier.verify(invocations, wanted, 1);
+        verifier.check(invocations, wanted, 1);
     }
     
     @Test
@@ -55,7 +55,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            verifier.verify(invocations, wanted, 4);
+            verifier.check(invocations, wanted, 4);
             fail();
         } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 4 times but was 2"));
@@ -69,7 +69,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            verifier.verify(invocations, wanted, 1);
+            verifier.check(invocations, wanted, 1);
             fail();
         } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
@@ -82,7 +82,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         assertFalse(invocation.isVerifiedInOrder());
         finderStub.validMatchingChunkToReturn.addAll(asList(invocation)); 
         
-        verifier.verify(invocations, wanted, 1);
+        verifier.check(invocations, wanted, 1);
         
         assertTrue(invocation.isVerifiedInOrder());
     }

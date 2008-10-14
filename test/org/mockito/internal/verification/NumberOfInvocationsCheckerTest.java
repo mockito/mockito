@@ -41,7 +41,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     public void shouldReportTooLittleActual() throws Exception {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.verify(invocations, wanted, 100);
+        verifier.check(invocations, wanted, 100);
         
         assertEquals(1, reporterStub.actualCount);
         assertEquals(100, reporterStub.wantedCount);
@@ -55,7 +55,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         finderStub.actualToReturn.addAll(asList(first, second));
         
-        verifier.verify(invocations, wanted, 100);
+        verifier.check(invocations, wanted, 100);
         
         assertSame(second.getStackTrace(), reporterStub.stackTrace);
     }
@@ -64,7 +64,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
         assertTrue(finderStub.actualToReturn.isEmpty());
         
-        verifier.verify(invocations, wanted, 100);
+        verifier.check(invocations, wanted, 100);
         
         assertNull(reporterStub.stackTrace);
     }
@@ -77,7 +77,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         finderStub.actualToReturn.addAll(asList(first, second, third));
         
-        verifier.verify(invocations, wanted, 2);
+        verifier.check(invocations, wanted, 2);
         
         assertSame(third.getStackTrace(), reporterStub.stackTrace);
     }
@@ -87,7 +87,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.verify(invocations, wanted, 1);
+        verifier.check(invocations, wanted, 1);
         
         assertEquals(2, reporterStub.actualCount);
         assertEquals(1, reporterStub.wantedCount);
@@ -99,7 +99,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         
-        verifier.verify(invocations, wanted, 0);
+        verifier.check(invocations, wanted, 0);
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);

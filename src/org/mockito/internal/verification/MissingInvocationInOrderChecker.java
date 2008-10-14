@@ -26,7 +26,7 @@ public class MissingInvocationInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         if (!chunk.isEmpty()) {

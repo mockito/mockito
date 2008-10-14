@@ -27,10 +27,10 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     public void verify(VerificationData data) {
         if (wantedCount > 0) {
             MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
-            missingInvocation.verify(data.getAllInvocations(), data.getWanted());
+            missingInvocation.check(data.getAllInvocations(), data.getWanted());
         }
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
-        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedCount);
+        numberOfInvocations.check(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
     public void verifyInOrder(VerificationData data) {
@@ -39,10 +39,10 @@ public class Times implements VerificationInOrderMode, VerificationMode {
         
         if (wantedCount > 0) {
             MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
-            missingInvocation.verify(allInvocations, wanted, this);
+            missingInvocation.check(allInvocations, wanted, this);
         }
         NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
-        numberOfCalls.verify(allInvocations, wanted, wantedCount);
+        numberOfCalls.check(allInvocations, wanted, wantedCount);
     }
     
     @Override
