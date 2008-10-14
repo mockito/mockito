@@ -2,6 +2,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.internal.verification.MockitoVerificationMode.Verification;
 
+//TODO verify all methods are used
 public class VerificationModeDecoder {
 
     private final MockitoVerificationMode mode;

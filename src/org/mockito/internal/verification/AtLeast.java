@@ -13,12 +13,12 @@ import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.api.VerificationMode;
 
-public class AtLeastXVerificationMode implements VerificationInOrderMode, VerificationMode {
+public class AtLeast implements VerificationInOrderMode, VerificationMode {
     
     final int wantedInvocationCount;
     
-    public AtLeastXVerificationMode(int wantedNumberOfInvocations) {
-        if (wantedNumberOfInvocations < 1) {
+    public AtLeast(int wantedNumberOfInvocations) {
+        if (wantedNumberOfInvocations <= 0) {
             throw new MockitoException("Negative value or zero are not allowed here");
         }
         this.wantedInvocationCount = wantedNumberOfInvocations;
@@ -26,12 +26,12 @@ public class AtLeastXVerificationMode implements VerificationInOrderMode, Verifi
     
     public void verify(VerificationData data) {
         MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
-        NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
+        AtLeastXNumberOfInvocationsChecker numberOfInvocations = new AtLeastXNumberOfInvocationsChecker();
         
         if (wantedInvocationCount == 1) {
             missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
-//        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), this);
+        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedInvocationCount);
     }
     
     public void verifyInOrder(VerificationData data) {
