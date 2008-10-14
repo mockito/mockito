@@ -14,17 +14,8 @@ import org.mockito.internal.invocation.InvocationsFinder;
 
 public class AtLeastXNumberOfInvocationsInOrderChecker {
     
-    private final Reporter reporter;
-    private final InvocationsFinder finder;
-    
-    public AtLeastXNumberOfInvocationsInOrderChecker() {
-        this(new InvocationsFinder(), new Reporter());
-    }
-    
-    public AtLeastXNumberOfInvocationsInOrderChecker(InvocationsFinder finder, Reporter reporter) {
-        this.finder = finder;
-        this.reporter = reporter;
-    }
+    private final Reporter reporter = new Reporter();
+    private final InvocationsFinder finder = new InvocationsFinder();
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);

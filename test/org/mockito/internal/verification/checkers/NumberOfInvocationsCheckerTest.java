@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.verification;
+package org.mockito.internal.verification.checkers;
 
 import static java.util.Arrays.*;
 
@@ -16,7 +16,6 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.checkers.NumberOfInvocationsChecker;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsCheckerTest extends TestBase {

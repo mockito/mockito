@@ -21,7 +21,7 @@ public class NumberOfInvocationsInOrderChecker {
         this(new InvocationsFinder(), new Reporter());
     }
     
-    public NumberOfInvocationsInOrderChecker(InvocationsFinder finder, Reporter reporter) {
+    NumberOfInvocationsInOrderChecker(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }

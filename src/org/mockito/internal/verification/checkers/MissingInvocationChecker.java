@@ -21,7 +21,7 @@ public class MissingInvocationChecker {
         this(new InvocationsFinder(), new Reporter());
     }
     
-    public MissingInvocationChecker(InvocationsFinder finder, Reporter reporter) {
+    MissingInvocationChecker(InvocationsFinder finder, Reporter reporter) {
         this.finder = finder;
         this.reporter = reporter;
     }

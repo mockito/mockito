@@ -14,19 +14,9 @@ import org.mockito.internal.invocation.InvocationsFinder;
 
 public class AtLeastXNumberOfInvocationsChecker {
     
-    private final Reporter reporter;
-    private final InvocationsFinder finder;
+    private final Reporter reporter = new Reporter();
+    private final InvocationsFinder finder = new InvocationsFinder();
 
-    //TODO remove constructors if unit test not necessary
-    public AtLeastXNumberOfInvocationsChecker() {
-        this(new Reporter(), new InvocationsFinder());
-    }
-    
-    AtLeastXNumberOfInvocationsChecker(Reporter reporter, InvocationsFinder finder) {
-        this.reporter = reporter;
-        this.finder = finder;
-    }
-    
     //TODO check coverage
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
