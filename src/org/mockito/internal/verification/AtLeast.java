@@ -50,10 +50,6 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
     
     @Override
     public String toString() {
-        return "Wanted invocations count: at least " + wantedCount();
-    }    
-
-    public int wantedCount() {
-        return wantedCount;
+        return "Wanted invocations count: at least " + wantedCount;
     }
 }
