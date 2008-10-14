@@ -10,7 +10,7 @@ import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationMode;
 
-public class NoMoreInteractionsMode implements VerificationMode {
+public class NoMoreInteractions implements VerificationMode {
 
     public void verify(VerificationData data) {
         Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());

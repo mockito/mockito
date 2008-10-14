@@ -25,8 +25,8 @@ public class VerificationModeFactory {
         return new Times(wantedNumberOfInvocations);
     }
 
-    public static NoMoreInteractionsMode noMoreInteractions() {
-        return new NoMoreInteractionsMode();
+    public static NoMoreInteractions noMoreInteractions() {
+        return new NoMoreInteractions();
     }
 
     public static VerificationMode atMost(int maxNumberOfInvocations) {
