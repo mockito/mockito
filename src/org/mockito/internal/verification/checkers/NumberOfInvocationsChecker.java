@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.verification;
+package org.mockito.internal.verification.checkers;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class NumberOfInvocationsChecker {
         this(new Reporter(), new InvocationsFinder());
     }
     
-    NumberOfInvocationsChecker(Reporter reporter, InvocationsFinder finder) {
+    public NumberOfInvocationsChecker(Reporter reporter, InvocationsFinder finder) {
         this.reporter = reporter;
         this.finder = finder;
     }

@@ -16,6 +16,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.verification.checkers.MissingInvocationChecker;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationCheckerTest extends TestBase {

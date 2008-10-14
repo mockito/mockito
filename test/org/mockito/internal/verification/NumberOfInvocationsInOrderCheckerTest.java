@@ -15,6 +15,7 @@ import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
