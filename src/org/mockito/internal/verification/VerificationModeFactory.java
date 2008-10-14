@@ -6,11 +6,6 @@ package org.mockito.internal.verification;
 
 import org.mockito.internal.verification.api.VerificationMode;
 
-/**
- * Holds additional information regarding verification.
- * <p> 
- * Implements marking interface which hides details from Mockito users. 
- */
 public class VerificationModeFactory {
     
     public static VerificationMode atLeastOnce() {
