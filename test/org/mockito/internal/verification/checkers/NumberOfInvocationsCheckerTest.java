@@ -21,7 +21,6 @@ import org.mockitoutil.TestBase;
 public class NumberOfInvocationsCheckerTest extends TestBase {
 
     private NumberOfInvocationsChecker checker;
-    //TODO checkers should not be verifiers
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -105,17 +104,16 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);
     }
     
-       //TODO verify this test makes sense
-//    @Test
-//    public void shouldMarkInvocationsAsVerified() throws Exception {
-//        Invocation invocation = new InvocationBuilder().toInvocation();
-//        finderStub.actualToReturn.add(invocation);
-//        assertFalse(invocation.isVerified());
-//        
-//        checker.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
-//        
-//        assertTrue(invocation.isVerified());
-//    }
+    @Test
+    public void shouldMarkInvocationsAsVerified() throws Exception {
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        finderStub.actualToReturn.add(invocation);
+        assertFalse(invocation.isVerified());
+        
+        checker.check(invocations, wanted, 1);
+        
+        assertTrue(invocation.isVerified());
+    }
     
     class ReporterStub extends Reporter {
         private int wantedCount;
