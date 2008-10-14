@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
@@ -151,5 +152,17 @@ public class SpyingOnRealObjectsTest extends TestBase {
     public void shouldToString() {
         spy.add("foo");
         assertEquals("[foo]" , spy.toString());
+    }
+    
+    interface Foo {}
+    
+    @Test
+    public void shouldDealWithAnonymousClasses() {
+        try {
+            spy(new Foo() {});
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage(), contains("cannot mock"));
+        }
     }
 }

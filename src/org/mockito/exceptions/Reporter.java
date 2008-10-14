@@ -321,8 +321,11 @@ public class Reporter {
     
     public void cannotMockFinalClass(Class<?> clazz) {
         throw new MockitoException(join(
-                "Mockito cannot mock primitives or final classes like: ",
-                clazz.toString()
+                "Cannot mock/spy " + clazz.toString(),
+                "Mockito cannot mock/spy following:",
+                "  - final classes",
+                "  - anonymous classes",
+                "  - primitive types"
         ));
     }
 

@@ -43,7 +43,7 @@ public class ClassImposterizer  {
     };
     
     public boolean canImposterise(Class<?> type) {
-        return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+        return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers()) && !type.isAnonymousClass();
     }
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancilliaryTypes) {
