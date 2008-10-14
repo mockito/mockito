@@ -39,13 +39,13 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         InvocationMatcher wanted = data.getWanted();
         
         MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
-        NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
+        AtLeastXNumberOfInvocationsInOrderChecker numberOfCalls = new AtLeastXNumberOfInvocationsInOrderChecker();
         
         if (wantedInvocationCount == 1) {
             missingInvocation.verify(allInvocations, wanted, this);
         }
         
-//        numberOfCalls.verify(allInvocations, wanted, this);
+        numberOfCalls.verify(allInvocations, wanted, wantedInvocationCount);
     }
     
     @Override

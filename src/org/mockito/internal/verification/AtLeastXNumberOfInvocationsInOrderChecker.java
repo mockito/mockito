@@ -26,26 +26,14 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, MockitoVerificationMode mode) {
-        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
-        
-        boolean noMatchFound = chunk.size() == 0;
-        if (decoder.neverWanted() && noMatchFound) {
-            return;
-        }
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         int actualCount = chunk.size();
         
-        if (decoder.tooLittleActualInvocations(actualCount)) {
+        if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (decoder.tooLittleActualInvocationsInAtLeastMode(actualCount)) {
-            HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.tooLittleActualInvocationsInOrderInAtLeastMode(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (decoder.tooManyActualInvocations(actualCount)) {
-            HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
-            reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, firstUndesired);
+            reporter.tooLittleActualInvocationsInOrderInAtLeastMode(wantedCount, actualCount, wanted, lastInvocation);
         }
         
         for (Invocation i : chunk) {
