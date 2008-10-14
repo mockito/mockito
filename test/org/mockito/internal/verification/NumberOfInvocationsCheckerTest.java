@@ -21,7 +21,7 @@ import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsCheckerTest extends TestBase {
 
-    private NumberOfInvocationsChecker verifier;
+    private NumberOfInvocationsChecker checker;
     //TODO checkers should not be verifiers
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
@@ -32,7 +32,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new NumberOfInvocationsChecker(reporterStub, finderStub);
+        checker = new NumberOfInvocationsChecker(reporterStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
@@ -42,7 +42,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     public void shouldReportTooLittleActual() throws Exception {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.check(invocations, wanted, 100);
+        checker.check(invocations, wanted, 100);
         
         assertEquals(1, reporterStub.actualCount);
         assertEquals(100, reporterStub.wantedCount);
@@ -56,7 +56,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         finderStub.actualToReturn.addAll(asList(first, second));
         
-        verifier.check(invocations, wanted, 100);
+        checker.check(invocations, wanted, 100);
         
         assertSame(second.getStackTrace(), reporterStub.stackTrace);
     }
@@ -65,7 +65,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
         assertTrue(finderStub.actualToReturn.isEmpty());
         
-        verifier.check(invocations, wanted, 100);
+        checker.check(invocations, wanted, 100);
         
         assertNull(reporterStub.stackTrace);
     }
@@ -78,7 +78,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         finderStub.actualToReturn.addAll(asList(first, second, third));
         
-        verifier.check(invocations, wanted, 2);
+        checker.check(invocations, wanted, 2);
         
         assertSame(third.getStackTrace(), reporterStub.stackTrace);
     }
@@ -88,7 +88,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.check(invocations, wanted, 1);
+        checker.check(invocations, wanted, 1);
         
         assertEquals(2, reporterStub.actualCount);
         assertEquals(1, reporterStub.wantedCount);
@@ -100,7 +100,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         
-        verifier.check(invocations, wanted, 0);
+        checker.check(invocations, wanted, 0);
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);
@@ -113,7 +113,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 //        finderStub.actualToReturn.add(invocation);
 //        assertFalse(invocation.isVerified());
 //        
-//        verifier.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
+//        checker.verify(invocations, wanted, VerificationModeFactory.atLeastOnce());
 //        
 //        assertTrue(invocation.isVerified());
 //    }

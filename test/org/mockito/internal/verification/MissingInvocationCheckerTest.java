@@ -21,7 +21,7 @@ import org.mockitoutil.TestBase;
 
 public class MissingInvocationCheckerTest extends TestBase {
 
-    private MissingInvocationChecker verifier;
+    private MissingInvocationChecker checker;
     
     private InvocationsFinderStub finderStub;
     private ReporterStub reporterStub;
@@ -33,7 +33,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new MissingInvocationChecker(finderStub, reporterStub);
+        checker = new MissingInvocationChecker(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = asList(new InvocationBuilder().toInvocation());
@@ -42,7 +42,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldAskFinderForActualInvocations() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        verifier.check(invocations, wanted);
+        checker.check(invocations, wanted);
         
         assertSame(invocations, finderStub.invocations);
     }
@@ -50,12 +50,12 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldPassBecauseActualInvocationFound() {
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        verifier.check(invocations, wanted);
+        checker.check(invocations, wanted);
     }
     
     @Test
     public void shouldAskAnalyzerForSimilarInvocation() {
-        verifier.check(invocations, wanted);
+        checker.check(invocations, wanted);
         
         assertSame(invocations, finderStub.invocations);
     }
@@ -65,7 +65,7 @@ public class MissingInvocationCheckerTest extends TestBase {
         assertTrue(finderStub.actualToReturn.isEmpty());
         finderStub.similarToReturn = null;
         
-        verifier.check(invocations, wanted);
+        checker.check(invocations, wanted);
         
         assertEquals(wanted, reporterStub.wanted);
         assertNull(reporterStub.actualInvocationStackTrace);
@@ -77,7 +77,7 @@ public class MissingInvocationCheckerTest extends TestBase {
         Invocation actualInvocation = new InvocationBuilder().toInvocation();
         finderStub.similarToReturn = actualInvocation;
         
-        verifier.check(invocations, wanted);
+        checker.check(invocations, wanted);
         
         assertNotNull(reporterStub.wanted);
         assertNotNull(reporterStub.actual);

@@ -22,7 +22,7 @@ import org.mockitoutil.TestBase;
 
 public class MissingInvocationInOrderCheckerTest extends TestBase {
 
-    private MissingInvocationInOrderChecker verifier;
+    private MissingInvocationInOrderChecker checker;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
@@ -32,7 +32,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     public void setup() {
         reporterStub = new ReporterStub();
         finderStub = new InvocationsFinderStub();
-        verifier = new MissingInvocationInOrderChecker(finderStub, reporterStub);
+        checker = new MissingInvocationInOrderChecker(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
@@ -43,13 +43,13 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
-        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
     }
     
     @Test
     public void shouldReportWantedButNotInvoked() throws Exception {
         assertTrue(finderStub.allMatchingUnverifiedChunksToReturn.isEmpty());
-        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted, reporterStub.wanted);
     }
@@ -59,7 +59,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
-        verifier.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(previous, reporterStub.previous);
