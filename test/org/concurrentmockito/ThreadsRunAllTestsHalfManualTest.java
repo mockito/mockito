@@ -30,7 +30,6 @@ import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
 import org.mockito.internal.verification.MissingInvocationCheckerTest;
 import org.mockito.internal.verification.MissingInvocationInOrderCheckerTest;
-import org.mockito.internal.verification.NoMoreInvocationsVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsCheckerTest;
 import org.mockito.internal.verification.NumberOfInvocationsInOrderCheckerTest;
 import org.mockito.internal.verification.RegisteredInvocationsTest;
@@ -94,7 +93,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     NumberOfInvocationsCheckerTest.class,
                     RegisteredInvocationsTest.class,
                     MissingInvocationCheckerTest.class,
-                    NoMoreInvocationsVerifierTest.class,
                     NumberOfInvocationsInOrderCheckerTest.class,
                     MissingInvocationInOrderCheckerTest.class,
                     ClassImposterizerTest.class,
