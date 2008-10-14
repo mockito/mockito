@@ -34,9 +34,6 @@ public class NumberOfInvocationsChecker {
         if (decoder.tooLittleActualInvocations(actualCount)) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
             reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (decoder.tooLittleActualInvocationsInAtLeastMode(actualCount)) {
-            HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
-            reporter.tooLittleActualInvocationsInAtLeastMode(mode.wantedCount(), actualCount, wanted, lastInvocation);        
         } else if (decoder.neverWantedButInvoked(actualCount)) {
             HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
             reporter.neverWantedButInvoked(wanted, firstUndesired); 

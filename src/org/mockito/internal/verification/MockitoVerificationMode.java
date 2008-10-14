@@ -20,7 +20,7 @@ import org.mockito.internal.verification.api.VerificationMode;
  */
 public class MockitoVerificationMode implements VerificationInOrderMode, VerificationMode {
     
-    public enum Verification { EXPLICIT, AT_LEAST };
+    public enum Verification { EXPLICIT };
     
     final int wantedInvocationCount;
     final Verification verification;

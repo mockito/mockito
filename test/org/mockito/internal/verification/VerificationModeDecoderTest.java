@@ -11,12 +11,6 @@ public class VerificationModeDecoderTest extends TestBase {
     }
     
     @Test
-    public void shouldKnowIfIsAtLeastMode() throws Exception {
-        assertFalse(decode(VerificationModeFactory.times(0)).atLeastMode());
-        assertFalse(decode(VerificationModeFactory.times(10)).atLeastMode());
-    }
-    
-    @Test
     public void shouldKnowIfMatchesActualInvocationCount() throws Exception {
         assertFalse(decode(VerificationModeFactory.times(1)).matchesActualCount(0));
         assertFalse(decode(VerificationModeFactory.times(1)).matchesActualCount(2));
@@ -34,12 +28,6 @@ public class VerificationModeDecoderTest extends TestBase {
         assertFalse(decode(VerificationModeFactory.times(0)).tooLittleActualInvocations(0));
         assertFalse(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(1));
         assertFalse(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(2));
-    }
-    
-    @Test
-    public void shouldTooLittleActualInvocationsInAtLeastModeIgnoreOtherModes() throws Exception {
-        assertFalse(decode(VerificationModeFactory.times(10)).tooLittleActualInvocationsInAtLeastMode(5));        
-        assertFalse(decode(VerificationModeFactory.times(10)).tooLittleActualInvocationsInAtLeastMode(15));        
     }
     
     @Test

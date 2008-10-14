@@ -44,7 +44,7 @@ public class InvocationsFinder {
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
         
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        if (decoder.atLeastMode() || !decoder.matchesActualCount(firstChunk.size())) {
+        if (!decoder.matchesActualCount(firstChunk.size())) {
             return this.findAllMatchingUnverifiedChunks(invocations, wanted);
         } else {
             return firstChunk;
