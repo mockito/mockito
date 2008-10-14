@@ -13,11 +13,11 @@ import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.api.VerificationMode;
 
-public class MockitoVerificationMode implements VerificationInOrderMode, VerificationMode {
+public class Times implements VerificationInOrderMode, VerificationMode {
     
     final int wantedInvocationCount;
     
-    public MockitoVerificationMode(int wantedNumberOfInvocations) {
+    public Times(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }

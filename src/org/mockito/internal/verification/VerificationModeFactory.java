@@ -21,8 +21,8 @@ public class VerificationModeFactory {
         return new AtLeast(minNumberOfInvocations);
     }
 
-    public static MockitoVerificationMode times(int wantedNumberOfInvocations) {
-        return new MockitoVerificationMode(wantedNumberOfInvocations);
+    public static Times times(int wantedNumberOfInvocations) {
+        return new Times(wantedNumberOfInvocations);
     }
 
     public static NoMoreInteractionsMode noMoreInteractions() {

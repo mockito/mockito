@@ -4,9 +4,9 @@ package org.mockito.internal.verification;
 //TODO verify all methods are used
 public class VerificationModeDecoder {
 
-    private final MockitoVerificationMode mode;
+    private final Times mode;
 
-    public VerificationModeDecoder(MockitoVerificationMode mode) {
+    public VerificationModeDecoder(Times mode) {
         this.mode = mode;
     }
 

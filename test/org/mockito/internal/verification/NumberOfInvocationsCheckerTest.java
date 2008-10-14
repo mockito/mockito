@@ -39,7 +39,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportTooLittleActual() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(100);
+        Times mode = VerificationModeFactory.times(100);
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
         verifier.verify(invocations, wanted, mode);
@@ -51,7 +51,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportWithLastInvocationStackTrace() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(100);
+        Times mode = VerificationModeFactory.times(100);
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
         
@@ -64,7 +64,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(100);
+        Times mode = VerificationModeFactory.times(100);
         
         assertTrue(finderStub.actualToReturn.isEmpty());
         
@@ -75,7 +75,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(2);
+        Times mode = VerificationModeFactory.times(2);
 
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
@@ -90,7 +90,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportTooManyActual() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(1);
+        Times mode = VerificationModeFactory.times(1);
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
@@ -103,7 +103,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportNeverWantedButInvoked() throws Exception {
-        MockitoVerificationMode mode = VerificationModeFactory.times(0);
+        Times mode = VerificationModeFactory.times(0);
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         

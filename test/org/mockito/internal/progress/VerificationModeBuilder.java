@@ -5,14 +5,14 @@
 package org.mockito.internal.progress;
 
 
-import org.mockito.internal.verification.MockitoVerificationMode;
+import org.mockito.internal.verification.Times;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 public class VerificationModeBuilder {
 
     private Integer times = 1;
 
-    public MockitoVerificationMode inOrder() {
+    public Times inOrder() {
         return VerificationModeFactory.times(times);
     }
 

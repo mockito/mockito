@@ -9,7 +9,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
-public class MockitoVerificationModeTest extends TestBase {
+public class TimesTest extends TestBase {
 
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {

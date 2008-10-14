@@ -6,7 +6,7 @@ import org.mockitoutil.TestBase;
 
 public class VerificationModeDecoderTest extends TestBase {
     
-    private VerificationModeDecoder decode(MockitoVerificationMode mode) {
+    private VerificationModeDecoder decode(Times mode) {
         return new VerificationModeDecoder(mode);
     }
     
