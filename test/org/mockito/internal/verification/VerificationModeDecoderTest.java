@@ -11,16 +11,6 @@ public class VerificationModeDecoderTest extends TestBase {
     }
     
     @Test
-    public void shouldKnowIfMatchesActualInvocationCount() throws Exception {
-        assertFalse(decode(VerificationModeFactory.times(1)).matchesActualCount(0));
-        assertFalse(decode(VerificationModeFactory.times(1)).matchesActualCount(2));
-        assertFalse(decode(VerificationModeFactory.times(10)).matchesActualCount(20));
-        
-        assertTrue(decode(VerificationModeFactory.times(1)).matchesActualCount(1));
-        assertTrue(decode(VerificationModeFactory.times(10)).matchesActualCount(10));
-    }
-    
-    @Test
     public void shouldKnowIfTooLittleActualInvocations() throws Exception {
         assertTrue(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(0));
         assertTrue(decode(VerificationModeFactory.times(10)).tooLittleActualInvocations(9));

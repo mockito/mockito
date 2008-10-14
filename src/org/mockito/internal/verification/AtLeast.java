@@ -15,23 +15,23 @@ import org.mockito.internal.verification.api.VerificationMode;
 
 public class AtLeast implements VerificationInOrderMode, VerificationMode {
     
-    final int wantedInvocationCount;
+    final int wantedCount;
     
     public AtLeast(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations <= 0) {
             throw new MockitoException("Negative value or zero are not allowed here");
         }
-        this.wantedInvocationCount = wantedNumberOfInvocations;
+        this.wantedCount = wantedNumberOfInvocations;
     }
     
     public void verify(VerificationData data) {
         MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
         AtLeastXNumberOfInvocationsChecker numberOfInvocations = new AtLeastXNumberOfInvocationsChecker();
         
-        if (wantedInvocationCount == 1) {
+        if (wantedCount == 1) {
             missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
-        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedInvocationCount);
+        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
     public void verifyInOrder(VerificationData data) {
@@ -41,11 +41,11 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
         AtLeastXNumberOfInvocationsInOrderChecker numberOfCalls = new AtLeastXNumberOfInvocationsInOrderChecker();
         
-        if (wantedInvocationCount == 1) {
+        if (wantedCount == 1) {
             missingInvocation.verify(allInvocations, wanted, this);
         }
         
-        numberOfCalls.verify(allInvocations, wanted, wantedInvocationCount);
+        numberOfCalls.verify(allInvocations, wanted, wantedCount);
     }
     
     @Override
@@ -54,6 +54,6 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
     }    
 
     public int wantedCount() {
-        return wantedInvocationCount;
+        return wantedCount;
     }
 }

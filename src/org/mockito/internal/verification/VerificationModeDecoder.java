@@ -10,10 +10,6 @@ public class VerificationModeDecoder {
         this.mode = mode;
     }
 
-    public boolean matchesActualCount(int actualCount) {
-        return mode.wantedCount() == actualCount;
-    }
-    
     public boolean tooLittleActualInvocations(int actualCount) {
         return mode.wantedCount() > actualCount; 
     }

@@ -15,22 +15,22 @@ import org.mockito.internal.verification.api.VerificationMode;
 
 public class Times implements VerificationInOrderMode, VerificationMode {
     
-    final int wantedInvocationCount;
+    final int wantedCount;
     
     public Times(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
-        this.wantedInvocationCount = wantedNumberOfInvocations;
+        this.wantedCount = wantedNumberOfInvocations;
     }
     
     public void verify(VerificationData data) {
-        if (wantedInvocationCount > 0) {
+        if (wantedCount > 0) {
             MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
             missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
-        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), this);
+        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
     public void verifyInOrder(VerificationData data) {
@@ -51,6 +51,6 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     }    
 
     public int wantedCount() {
-        return wantedInvocationCount;
+        return wantedCount;
     }
 }

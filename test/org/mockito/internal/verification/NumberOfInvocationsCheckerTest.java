@@ -39,10 +39,9 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportTooLittleActual() throws Exception {
-        Times mode = VerificationModeFactory.times(100);
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 100);
         
         assertEquals(1, reporterStub.actualCount);
         assertEquals(100, reporterStub.wantedCount);
@@ -51,50 +50,44 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportWithLastInvocationStackTrace() throws Exception {
-        Times mode = VerificationModeFactory.times(100);
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second));
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 100);
         
         assertSame(second.getStackTrace(), reporterStub.stackTrace);
     }
     
     @Test
     public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
-        Times mode = VerificationModeFactory.times(100);
-        
         assertTrue(finderStub.actualToReturn.isEmpty());
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 100);
         
         assertNull(reporterStub.stackTrace);
     }
     
     @Test
     public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
-        Times mode = VerificationModeFactory.times(2);
-
         Invocation first = new InvocationBuilder().toInvocation();
         Invocation second = new InvocationBuilder().toInvocation();
         Invocation third = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second, third));
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 2);
         
         assertSame(third.getStackTrace(), reporterStub.stackTrace);
     }
     
     @Test
     public void shouldReportTooManyActual() throws Exception {
-        Times mode = VerificationModeFactory.times(1);
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 1);
         
         assertEquals(2, reporterStub.actualCount);
         assertEquals(1, reporterStub.wantedCount);
@@ -103,11 +96,10 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportNeverWantedButInvoked() throws Exception {
-        Times mode = VerificationModeFactory.times(0);
         Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         
-        verifier.verify(invocations, wanted, mode);
+        verifier.verify(invocations, wanted, 0);
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);

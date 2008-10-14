@@ -26,20 +26,19 @@ public class NumberOfInvocationsChecker {
         this.finder = finder;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, Times mode) {
-        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
-        if (decoder.tooLittleActualInvocations(actualCount)) {
+        if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
-            reporter.tooLittleActualInvocations(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (decoder.neverWantedButInvoked(actualCount)) {
-            HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
+            reporter.tooLittleActualInvocations(wantedCount, actualCount, wanted, lastInvocation);
+        } else if (wantedCount == 0 && actualCount > 0) {
+            HasStackTrace firstUndesired = actualInvocations.get(wantedCount).getStackTrace();
             reporter.neverWantedButInvoked(wanted, firstUndesired); 
-        } else if (decoder.tooManyActualInvocations(actualCount)) {
-            HasStackTrace firstUndesired = actualInvocations.get(mode.wantedCount()).getStackTrace();
-            reporter.tooManyActualInvocations(mode.wantedCount(), actualCount, wanted, firstUndesired);
+        } else if (wantedCount < actualCount) {
+            HasStackTrace firstUndesired = actualInvocations.get(wantedCount).getStackTrace();
+            reporter.tooManyActualInvocations(wantedCount, actualCount, wanted, firstUndesired);
         }
         
         for (Invocation i : actualInvocations) {
