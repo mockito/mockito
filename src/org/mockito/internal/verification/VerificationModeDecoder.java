@@ -11,10 +11,6 @@ public class VerificationModeDecoder {
         this.mode = mode;
     }
 
-    public boolean missingMethodMode() {
-        return (explicitMode() && mode.wantedCount() > 0) || (atLeastMode() && mode.wantedCount() == 1);
-    }
-    
     public boolean atLeastMode() {
         return mode.getVerification() == Verification.AT_LEAST;
     }

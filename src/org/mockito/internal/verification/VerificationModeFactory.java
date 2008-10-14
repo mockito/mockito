@@ -14,12 +14,12 @@ import org.mockito.internal.verification.api.VerificationMode;
  */
 public class VerificationModeFactory {
     
-    public static MockitoVerificationMode atLeastOnce() {
+    public static VerificationMode atLeastOnce() {
         return atLeast(1);
     }
 
-    public static MockitoVerificationMode atLeast(int minNumberOfInvocations) {
-        return new MockitoVerificationMode(minNumberOfInvocations, Verification.AT_LEAST);
+    public static VerificationMode atLeast(int minNumberOfInvocations) {
+        return new AtLeast(minNumberOfInvocations);
     }
 
     public static MockitoVerificationMode times(int wantedNumberOfInvocations) {
