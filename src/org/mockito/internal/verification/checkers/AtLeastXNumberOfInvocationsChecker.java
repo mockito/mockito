@@ -17,7 +17,6 @@ public class AtLeastXNumberOfInvocationsChecker {
     private final Reporter reporter = new Reporter();
     private final InvocationsFinder finder = new InvocationsFinder();
 
-    //TODO check coverage
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         

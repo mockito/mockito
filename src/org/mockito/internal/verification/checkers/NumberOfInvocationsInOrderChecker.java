@@ -29,11 +29,6 @@ public class NumberOfInvocationsInOrderChecker {
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount);
         
-        boolean noMatchFound = chunk.size() == 0;
-        if (wantedCount == 0 && noMatchFound) {
-            return;
-        }
-        
         int actualCount = chunk.size();
         
         if (wantedCount > actualCount) {
