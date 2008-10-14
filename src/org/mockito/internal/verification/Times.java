@@ -37,7 +37,7 @@ public class Times implements VerificationInOrderMode, VerificationMode {
         List<Invocation> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
-        if (wantedCount() > 0) {
+        if (wantedCount > 0) {
             MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
             missingInvocation.verify(allInvocations, wanted, this);
         }
@@ -47,10 +47,6 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     
     @Override
     public String toString() {
-        return "Wanted invocations count: " + wantedCount();
-    }    
-
-    public int wantedCount() {
-        return wantedCount;
+        return "Wanted invocations count: " + wantedCount;
     }
 }
