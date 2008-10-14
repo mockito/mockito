@@ -6,15 +6,14 @@ package org.mockito.internal.progress;
 
 
 import org.mockito.internal.verification.MockitoVerificationMode;
-import org.mockito.internal.verification.MockitoVerificationMode.Verification;
+import org.mockito.internal.verification.VerificationModeFactory;
 
 public class VerificationModeBuilder {
 
     private Integer times = 1;
 
     public MockitoVerificationMode inOrder() {
-        //TODO move to factory
-        return new MockitoVerificationMode(times, Verification.EXPLICIT);
+        return VerificationModeFactory.times(times);
     }
 
     public VerificationModeBuilder times(int times) {
