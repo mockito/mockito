@@ -27,10 +27,6 @@ public class VerifyingRecorder {
         return registeredInvocations.getVerifiableInvocations();
     }
 
-    public void verify(VerificationMode mode) {
-        verify(null, mode);
-    }
-
     public void verify(InvocationMatcher wanted, VerificationMode mode) {
         mode.verify(new VerificationDataImpl(getRegisteredInvocations(), wanted));
     }
