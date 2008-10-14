@@ -33,7 +33,7 @@ import org.mockito.internal.verification.MissingInvocationInOrderCheckerTest;
 import org.mockito.internal.verification.NoMoreInvocationsVerifierTest;
 import org.mockito.internal.verification.NumberOfInvocationsCheckerTest;
 import org.mockito.internal.verification.NumberOfInvocationsInOrderCheckerTest;
-import org.mockito.internal.verification.VerifyingRecorderTest;
+import org.mockito.internal.verification.RegisteredInvocationsTest;
 import org.mockitousage.ReplacingObjectMethodsTest;
 import org.mockitousage.UsingVarargsTest;
 import org.mockitousage.examples.configure.withbaseclass.ConfiguringDefaultReturnValuesUsingBaseClassTest;
@@ -92,7 +92,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     AllInvocationsFinderTest.class,
                     DefaultReturnValuesTest.class,
                     NumberOfInvocationsCheckerTest.class,
-                    VerifyingRecorderTest.class,
+                    RegisteredInvocationsTest.class,
                     MissingInvocationCheckerTest.class,
                     NoMoreInvocationsVerifierTest.class,
                     NumberOfInvocationsInOrderCheckerTest.class,

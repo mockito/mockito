@@ -21,6 +21,6 @@ public class VerifyingRecorder {
     }
 
     public List<Invocation> getRegisteredInvocations() {
-        return registeredInvocations.getVerifiableInvocations();
+        return registeredInvocations.getAll();
     }
 }

@@ -25,7 +25,7 @@ public class RegisteredInvocations {
         invocations.remove(invocations.size()-1);
     }
 
-    public List<Invocation> getVerifiableInvocations() {
+    public List<Invocation> getAll() {
         return ListUtil.filter(invocations, new RemoveToString());
     }
     

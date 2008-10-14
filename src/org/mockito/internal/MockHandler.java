@@ -68,7 +68,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 
         if (verificationMode != null) {
-            VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getVerifiableInvocations(), invocationMatcher);
+            VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getAll(), invocationMatcher);
             verificationMode.verify(data);
             return null;
         }
@@ -89,7 +89,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public void verifyNoMoreInteractions() {
-        VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getVerifiableInvocations(), null);
+        VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getAll(), null);
         VerificationModeFactory.noMoreInteractions().verify(data);
     }
 
@@ -102,7 +102,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public List<Invocation> getRegisteredInvocations() {
-        return registeredInvocations.getVerifiableInvocations();
+        return registeredInvocations.getAll();
     }
 
     public String getMockName() {

@@ -5,20 +5,18 @@
 package org.mockito.internal.verification;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
 
-@Ignore
-public class VerifyingRecorderTest extends TestBase {
+public class RegisteredInvocationsTest extends TestBase {
     
-    private VerifyingRecorder recorder;
+    private RegisteredInvocations invocations;
     
     @Before
     public void setup() {
-        recorder = new VerifyingRecorder();
+        invocations = new RegisteredInvocations();
     }
     
     @Test
@@ -26,10 +24,10 @@ public class VerifyingRecorderTest extends TestBase {
         Invocation toString = new InvocationBuilder().method("toString").toInvocation();
         Invocation simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
         
-        recorder.recordInvocation(toString);
-        recorder.recordInvocation(simpleMethod);
+        invocations.add(toString);
+        invocations.add(simpleMethod);
         
-        assertTrue(recorder.getRegisteredInvocations().contains(simpleMethod));
-        assertFalse(recorder.getRegisteredInvocations().contains(toString));
+        assertTrue(invocations.getAll().contains(simpleMethod));
+        assertFalse(invocations.getAll().contains(toString));
     }
 }
