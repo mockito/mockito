@@ -26,11 +26,8 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
     final Verification verification;
     
     public MockitoVerificationMode(int wantedNumberOfInvocations, Verification verification) {
-        if (verification != Verification.AT_LEAST && wantedNumberOfInvocations < 0) {
+        if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
-        }
-        if (verification == Verification.AT_LEAST && wantedNumberOfInvocations < 1) {
-            throw new MockitoException("Negative value or zero are not allowed here");
         }
         this.wantedInvocationCount = wantedNumberOfInvocations;
         this.verification = verification;
@@ -40,7 +37,7 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
         MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
         
-        if (wantedInvocationCount > 0 || (verification == Verification.AT_LEAST && wantedInvocationCount == 1)) {
+        if (wantedInvocationCount > 0) {
             missingInvocation.verify(data.getAllInvocations(), data.getWanted());
         }
         numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), this);
@@ -53,7 +50,7 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
         MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
         NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
         
-        if (wantedCount() > 0 || (verification == Verification.AT_LEAST && wantedCount() == 1)) {
+        if (wantedCount() > 0) {
             missingInvocation.verify(allInvocations, wanted, this);
         }
         
