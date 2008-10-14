@@ -7,10 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.api.VerificationMode;
 
-//TODO is this class necessary?
 public class VerifyingRecorder {
 
     private RegisteredInvocations registeredInvocations = new RegisteredInvocations();
@@ -25,9 +22,5 @@ public class VerifyingRecorder {
 
     public List<Invocation> getRegisteredInvocations() {
         return registeredInvocations.getVerifiableInvocations();
-    }
-
-    public void verify(InvocationMatcher wanted, VerificationMode mode) {
-        mode.verify(new VerificationDataImpl(getRegisteredInvocations(), wanted));
     }
 }

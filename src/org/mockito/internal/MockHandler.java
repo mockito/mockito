@@ -69,8 +69,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 
         if (verificationMode != null) {
-            //verifying
-            verifyingRecorder.verify(invocationMatcher, verificationMode);
+            VerificationDataImpl data = new VerificationDataImpl(verifyingRecorder.getRegisteredInvocations(), invocationMatcher);
+            verificationMode.verify(data);
             return null;
         }
 
