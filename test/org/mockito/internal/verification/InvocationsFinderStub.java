@@ -29,7 +29,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, Times mode) {
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         return validMatchingChunkToReturn;
     }
 

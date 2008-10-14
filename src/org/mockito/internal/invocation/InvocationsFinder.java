@@ -10,8 +10,6 @@ import java.util.List;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
-import org.mockito.internal.verification.Times;
-import org.mockito.internal.verification.VerificationModeDecoder;
 
 public class InvocationsFinder {
 
@@ -39,12 +37,11 @@ public class InvocationsFinder {
      * if wanted is 1 and mode is times(x), where x != 2 then returns
      * 1,1,1
      */
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, Times mode) {
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations);
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
         
-        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        if (!decoder.matchesActualCount(firstChunk.size())) {
+        if (wantedCount != firstChunk.size()) {
             return this.findAllMatchingUnverifiedChunks(invocations, wanted);
         } else {
             return firstChunk;

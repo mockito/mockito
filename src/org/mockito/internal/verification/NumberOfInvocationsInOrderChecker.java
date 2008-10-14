@@ -28,7 +28,7 @@ public class NumberOfInvocationsInOrderChecker {
     
     public void verify(List<Invocation> invocations, InvocationMatcher wanted, Times mode) {
         VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode);
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode.wantedCount());
         
         boolean noMatchFound = chunk.size() == 0;
         if (decoder.neverWanted() && noMatchFound) {
