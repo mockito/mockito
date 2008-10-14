@@ -35,7 +35,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         if (wantedCount == 1) {
             missingInvocation.check(data.getAllInvocations(), data.getWanted());
         }
-        numberOfInvocations.verify(data.getAllInvocations(), data.getWanted(), wantedCount);
+        numberOfInvocations.check(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
     public void verifyInOrder(VerificationData data) {
@@ -49,7 +49,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
             missingInvocation.check(allInvocations, wanted, this);
         }
         
-        numberOfCalls.verify(allInvocations, wanted, wantedCount);
+        numberOfCalls.check(allInvocations, wanted, wantedCount);
     }
     
     @Override

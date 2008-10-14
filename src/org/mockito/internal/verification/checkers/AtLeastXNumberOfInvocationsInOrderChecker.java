@@ -17,7 +17,7 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
     private final Reporter reporter = new Reporter();
     private final InvocationsFinder finder = new InvocationsFinder();
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
         
         int actualCount = chunk.size();
