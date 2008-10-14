@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.internal.verification.MockitoVerificationMode.Verification;
 import org.mockito.internal.verification.api.VerificationMode;
 
 /**
@@ -23,7 +22,7 @@ public class VerificationModeFactory {
     }
 
     public static MockitoVerificationMode times(int wantedNumberOfInvocations) {
-        return new MockitoVerificationMode(wantedNumberOfInvocations, Verification.EXPLICIT);
+        return new MockitoVerificationMode(wantedNumberOfInvocations);
     }
 
     public static NoMoreInteractionsMode noMoreInteractions() {

@@ -13,24 +13,15 @@ import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.api.VerificationMode;
 
-/**
- * Holds additional information regarding verification.
- * <p> 
- * Implements marking interface which hides details from Mockito users. 
- */
 public class MockitoVerificationMode implements VerificationInOrderMode, VerificationMode {
     
-    public enum Verification { EXPLICIT };
-    
     final int wantedInvocationCount;
-    final Verification verification;
     
-    public MockitoVerificationMode(int wantedNumberOfInvocations, Verification verification) {
+    public MockitoVerificationMode(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedInvocationCount = wantedNumberOfInvocations;
-        this.verification = verification;
     }
     
     public void verify(VerificationData data) {
@@ -64,9 +55,5 @@ public class MockitoVerificationMode implements VerificationInOrderMode, Verific
 
     public int wantedCount() {
         return wantedInvocationCount;
-    }
-    
-    public Verification getVerification() {
-        return verification;
     }
 }
