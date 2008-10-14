@@ -23,9 +23,9 @@ import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.VerifyingRecorder;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
 
@@ -36,7 +36,7 @@ import org.mockito.stubbing.Answer;
  */
 public class MockHandler<T> implements MockAwareInterceptor<T> {
 
-    private final VerifyingRecorder verifyingRecorder;
+    private final RegisteredInvocations registeredInvocations;
     private final MockitoStubber mockitoStubber;
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
@@ -49,8 +49,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         this.mockitoStubber = new MockitoStubber(mockingProgress);
-
-        verifyingRecorder = new VerifyingRecorder();
+        this.registeredInvocations = new RegisteredInvocations();
     }
     
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -69,13 +68,13 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 
         if (verificationMode != null) {
-            VerificationDataImpl data = new VerificationDataImpl(verifyingRecorder.getRegisteredInvocations(), invocationMatcher);
+            VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getVerifiableInvocations(), invocationMatcher);
             verificationMode.verify(data);
             return null;
         }
 
         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
-        verifyingRecorder.recordInvocation(invocationMatcher.getInvocation());
+        registeredInvocations.add(invocationMatcher.getInvocation());
 
         mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
 
@@ -90,7 +89,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public void verifyNoMoreInteractions() {
-        VerificationDataImpl data = new VerificationDataImpl(verifyingRecorder.getRegisteredInvocations(), null);
+        VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getVerifiableInvocations(), null);
         VerificationModeFactory.noMoreInteractions().verify(data);
     }
 
@@ -103,7 +102,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     }
 
     public List<Invocation> getRegisteredInvocations() {
-        return verifyingRecorder.getRegisteredInvocations();
+        return registeredInvocations.getVerifiableInvocations();
     }
 
     public String getMockName() {
@@ -147,7 +146,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
-            verifyingRecorder.eraseLastInvocation();
+            registeredInvocations.removeLast();
             mockitoStubber.addAnswer(answer);
             return new ConsecutiveStubbing();
         }
@@ -161,7 +160,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
 
         public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-            verifyingRecorder.eraseLastInvocation();
+            registeredInvocations.removeLast();
             mockitoStubber.addAnswer(answer);
             return new ConsecutiveStubbing();
         }
