@@ -17,12 +17,12 @@ import org.mockito.internal.verification.api.VerificationMode;
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.
  */
-class InOrderVerifier implements InOrder {
+class InOrderImpl implements InOrder {
     
     private final Reporter reporter = new Reporter();
     private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
     
-    public InOrderVerifier(List<Object> mocksToBeVerifiedInOrder) {
+    public InOrderImpl(List<Object> mocksToBeVerifiedInOrder) {
         this.mocksToBeVerifiedInOrder.addAll(mocksToBeVerifiedInOrder);
     }
 

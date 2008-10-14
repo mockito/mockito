@@ -932,8 +932,8 @@ public class Mockito extends Matchers {
                 REPORTER.notAMockPassedWhenCreatingInOrder();
             }
         }
-        InOrder inOrderVerifier = new InOrderVerifier(Arrays.asList(mocks));
-        return inOrderVerifier;
+        InOrder inOrder = new InOrderImpl(Arrays.asList(mocks));
+        return inOrder;
     }
   
     /**
