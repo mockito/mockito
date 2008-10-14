@@ -6,7 +6,7 @@ package org.mockito.internal.verification;
 
 import java.util.List;
 
-import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -14,13 +14,13 @@ import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationMode;
 
-public class AtMostXVerificationMode implements VerificationMode {
+public class AtMost implements VerificationMode {
 
     private final int maxNumberOfInvocations;
 
-    public AtMostXVerificationMode(int maxNumberOfInvocations) {
+    public AtMost(int maxNumberOfInvocations) {
         if (maxNumberOfInvocations < 0) {
-            throw new MockitoException("maxNumberOfInvocations cannot be negative");
+            throw new MockitoException("Negative value is not allowed here");
         }
         this.maxNumberOfInvocations = maxNumberOfInvocations;
     }
@@ -33,7 +33,7 @@ public class AtMostXVerificationMode implements VerificationMode {
         List<Invocation> found = finder.findInvocations(invocations, wanted);
         int foundSize = found.size();
         if (foundSize > maxNumberOfInvocations) {
-            throw new MockitoAssertionError("Wanted at most " + maxNumberOfInvocations + " but found: " + foundSize);
+            new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
     }
 }

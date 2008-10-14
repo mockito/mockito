@@ -52,7 +52,7 @@ public class AtMostXVerificationTest extends TestBase {
             verify(mock, atMost(-1)).clear();
             fail();
         } catch (MockitoException e) {
-            //TODO assert message
+            assertEquals("Negative value is not allowed here", e.getMessage());
         }
     }
     
@@ -65,7 +65,7 @@ public class AtMostXVerificationTest extends TestBase {
             verify(mock, atMost(1)).clear();
             fail();
         } catch (MockitoAssertionError e) {
-            //TODO assert message
+            assertEquals("\nWanted at most 1 time but was 2", e.getMessage());
         }
     }
     
@@ -78,7 +78,7 @@ public class AtMostXVerificationTest extends TestBase {
             inOrder.verify(mock, atMost(1)).clear();
             fail();
         } catch (MockitoException e) {
-            //TODO assert message
+            assertEquals("AtMost is not implemented to work with InOrder", e.getMessage());
         }
     }
 }

@@ -7,6 +7,7 @@ package org.mockito.exceptions;
 import static org.mockito.exceptions.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.TooLittleInvocations;
@@ -369,5 +370,9 @@ public class Reporter {
                 actualType + " cannot be returned by " + method,
                 method + " should return " + expectedType
                 ));
+    }
+
+    public void wantedAtMostX(int maxNumberOfInvocations, int foundSize) {
+        throw new MockitoAssertionError(join("Wanted at most " + pluralize(maxNumberOfInvocations) + " but was " + foundSize));
     }
 }

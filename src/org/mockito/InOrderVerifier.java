@@ -34,7 +34,7 @@ class InOrderVerifier implements InOrder {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
         } else if (!(mode instanceof VerificationInOrderMode)) {
-            throw new MockitoException("VerificationMode is not implmented to work with InOrder");
+            throw new MockitoException(mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
         }
         return Mockito.verify(mock, new InOrderVerificationModeWrapper((VerificationInOrderMode) mode, mocksToBeVerifiedInOrder));
     }

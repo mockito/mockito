@@ -31,6 +31,6 @@ public class VerificationModeFactory {
     }
 
     public static VerificationMode atMost(int maxNumberOfInvocations) {
-        return new AtMostXVerificationMode(maxNumberOfInvocations);
+        return new AtMost(maxNumberOfInvocations);
     }
 }
