@@ -10,14 +10,6 @@ public class VerificationModeDecoder {
         this.mode = mode;
     }
 
-    public boolean tooLittleActualInvocations(int actualCount) {
-        return mode.wantedCount() > actualCount; 
-    }
-
-    public boolean tooManyActualInvocations(int actualCount) {
-        return mode.wantedCount() < actualCount;
-    }
-    
     public boolean neverWanted() {
         return mode.wantedCount() == 0;
     }

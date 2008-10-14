@@ -42,7 +42,7 @@ public class Times implements VerificationInOrderMode, VerificationMode {
             missingInvocation.verify(allInvocations, wanted, this);
         }
         NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
-        numberOfCalls.verify(allInvocations, wanted, this);
+        numberOfCalls.verify(allInvocations, wanted, wantedCount);
     }
     
     @Override

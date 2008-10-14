@@ -26,23 +26,22 @@ public class NumberOfInvocationsInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void verify(List<Invocation> invocations, InvocationMatcher wanted, Times mode) {
-        VerificationModeDecoder decoder = new VerificationModeDecoder(mode);
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, mode.wantedCount());
+    public void verify(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount);
         
         boolean noMatchFound = chunk.size() == 0;
-        if (decoder.neverWanted() && noMatchFound) {
+        if (wantedCount == 0 && noMatchFound) {
             return;
         }
         
         int actualCount = chunk.size();
         
-        if (decoder.tooLittleActualInvocations(actualCount)) {
+        if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.tooLittleActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, lastInvocation);
-        } else if (decoder.tooManyActualInvocations(actualCount)) {
-            HasStackTrace firstUndesired = chunk.get(mode.wantedCount()).getStackTrace();
-            reporter.tooManyActualInvocationsInOrder(mode.wantedCount(), actualCount, wanted, firstUndesired);
+            reporter.tooLittleActualInvocationsInOrder(wantedCount, actualCount, wanted, lastInvocation);
+        } else if (wantedCount < actualCount) {
+            HasStackTrace firstUndesired = chunk.get(wantedCount).getStackTrace();
+            reporter.tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
         
         for (Invocation i : chunk) {

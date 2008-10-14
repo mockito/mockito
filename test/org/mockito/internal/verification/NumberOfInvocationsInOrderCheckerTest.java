@@ -15,7 +15,6 @@ import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
@@ -39,14 +38,14 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     @Test
     public void shouldPassIfWantedIsZeroAndMatchingChunkIsEmpty() throws Exception {
         assertTrue(finderStub.validMatchingChunkToReturn.isEmpty());
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(0).inOrder());
+        verifier.verify(invocations, wanted, 0);
     }
     
     @Test
     public void shouldPassIfChunkMatches() throws Exception {
         finderStub.validMatchingChunkToReturn.add(wanted.getInvocation());
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
+        verifier.verify(invocations, wanted, 1);
     }
     
     @Test
@@ -56,7 +55,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            verifier.verify(invocations, wanted, new VerificationModeBuilder().times(4).inOrder());
+            verifier.verify(invocations, wanted, 4);
             fail();
         } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 4 times but was 2"));
@@ -70,7 +69,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
+            verifier.verify(invocations, wanted, 1);
             fail();
         } catch (VerifcationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 1 time but was 2"));
@@ -83,7 +82,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         assertFalse(invocation.isVerifiedInOrder());
         finderStub.validMatchingChunkToReturn.addAll(asList(invocation)); 
         
-        verifier.verify(invocations, wanted, new VerificationModeBuilder().times(1).inOrder());
+        verifier.verify(invocations, wanted, 1);
         
         assertTrue(invocation.isVerifiedInOrder());
     }

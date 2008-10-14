@@ -11,26 +11,6 @@ public class VerificationModeDecoderTest extends TestBase {
     }
     
     @Test
-    public void shouldKnowIfTooLittleActualInvocations() throws Exception {
-        assertTrue(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(0));
-        assertTrue(decode(VerificationModeFactory.times(10)).tooLittleActualInvocations(9));
-        
-        assertFalse(decode(VerificationModeFactory.times(0)).tooLittleActualInvocations(0));
-        assertFalse(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(1));
-        assertFalse(decode(VerificationModeFactory.times(1)).tooLittleActualInvocations(2));
-    }
-    
-    @Test
-    public void shouldKnowIfTooManyActualInvocations() throws Exception {
-        assertTrue(decode(VerificationModeFactory.times(0)).tooManyActualInvocations(1));
-        assertTrue(decode(VerificationModeFactory.times(10)).tooManyActualInvocations(11));
-        
-        assertFalse(decode(VerificationModeFactory.times(0)).tooManyActualInvocations(0));
-        assertFalse(decode(VerificationModeFactory.times(1)).tooManyActualInvocations(1));
-        assertFalse(decode(VerificationModeFactory.times(2)).tooManyActualInvocations(1));
-    }
-    
-    @Test
     public void shouldKnowIfWantedCountIsZero() throws Exception {
         assertTrue(decode(VerificationModeFactory.times(0)).neverWanted());
         
