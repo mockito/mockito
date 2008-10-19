@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -80,5 +81,11 @@ public class ReturningDefaultValuesTest extends TestBase {
         java.util.HashSet hashSet() {
             return null;
         }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldReturnEmptyArrays() {
+        assertTrue(mock.arrayReturningMethod().length == 0);
     }
 }

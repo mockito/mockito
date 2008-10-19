@@ -179,4 +179,6 @@ public interface IMethods {
     String forMap(Map<String, String> map);
     
     String forCollection(Collection<String> collection);
+
+    Object[] arrayReturningMethod();
 }
