@@ -553,7 +553,11 @@ public class Mockito extends Matchers {
     /**
      * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called. 
      * <p>
-     * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
+     * Simply put: "<b>When</b> the x method is called <b>then</b> return y".
+     * <p>
+     * <b>when() is a successor of deprecated {@link Mockito#stub(Object)}</b>
+     * <p>
+     * Examples:
      * 
      * <pre>
      * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
@@ -573,8 +577,6 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
-     * <p>
-     * when() is a successor of {@link Mockito#stub(Object)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -1008,7 +1010,7 @@ public class Mockito extends Matchers {
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @param minNumberOfInvocations minimum number of invocations 
+     * @param maxNumberOfInvocations max number of invocations 
      * 
      * @return verification mode
      */
