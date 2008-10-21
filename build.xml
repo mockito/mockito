@@ -16,7 +16,7 @@
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
   
-  <property name="version" value="snapshot" />
+  <property name="version" value="1.6" />
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="jar.tests" value="mockito-tests.jar" />
