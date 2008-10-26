@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -59,6 +60,17 @@ public class BasicStubbingTest extends TestBase {
         when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
         doThrow(new RuntimeException()).when(mock).simpleMethod("two");
         
+        verifyZeroInteractions(mock);
+    }
+    
+    @Test
+    public void unfinishedStubbingCleansUpTheState() {
+        try {
+            when("").thenReturn("");
+            fail(); 
+        } catch (MissingMethodInvocationException e) {}
+
+        //anything that can cause state validation
         verifyZeroInteractions(mock);
     }
     

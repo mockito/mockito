@@ -605,6 +605,7 @@ public class Mockito extends Matchers {
     private static OngoingStubbing stub() {
         OngoingStubbing stubbing = MOCKING_PROGRESS.pullOngoingStubbing();
         if (stubbing == null) {
+            MOCKING_PROGRESS.reset();
             REPORTER.missingMethodInvocation();
         }
         return stubbing;
