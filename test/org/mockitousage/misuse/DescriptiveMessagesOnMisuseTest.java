@@ -6,7 +6,6 @@ package org.mockitousage.misuse;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
@@ -18,13 +17,24 @@ import org.mockitoutil.TestBase;
 public class DescriptiveMessagesOnMisuseTest extends TestBase {
     
     @Mock private IMethods mock;
+    
+    class Foo {
+        public final String finalMethod() {
+            return null;
+        }
+    }
 
     @SuppressWarnings("all")
-    @Ignore("just for tuning up the error messages")
     @Test
     public void tryDescriptiveMessagesOnMisuse() {
-        doReturn("foo");
-        doReturn("bar");
+        Foo foo = mock(Foo.class);
+        
+//        when(foo.finalMethod()).thenReturn("foo");
+//        doReturn("foo").when(foo).finalMethod();
+//        verify(foo).finalMethod();
+        
+//        doReturn("foo");
+//        doReturn("bar");
         
 //        verifyNoMoreInteractions();
 //        verifyNoMoreInteractions(null);
