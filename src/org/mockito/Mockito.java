@@ -573,6 +573,14 @@ public class Mockito extends Matchers {
      * when(mock.someMethod("some arg"))
      *  .thenThrow(new RuntimeException())
      *  .thenReturn("foo");
+     *  
+     * //shorter version for consecutive method calls returning some values:
+     * when(mock.someMethod("some arg"))
+     *  .thenReturn("foo", "bar");
+     * //is the same as:
+     * when(mock.someMethod("some arg"))
+     *  .thenReturn("foo")
+     *  .thenReturn("bar");
      *   
      * </pre>
      * 

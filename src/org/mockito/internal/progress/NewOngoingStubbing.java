@@ -24,7 +24,6 @@ import org.mockito.stubbing.Answer;
  * when(mock.someMethod("some arg"))
  *  .thenThrow(new RuntimeException())
  *  .thenReturn("foo");
- *
  * </pre>
  *
  * See examples in javadoc for {@link Mockito#when}
@@ -43,7 +42,22 @@ public interface NewOngoingStubbing<T> {
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    NewOngoingStubbing<T> thenReturn(T value);
+    NewOngoingStubbing<T> thenReturn(Object value);
+
+    /**
+     * Sets consecutive return values to be returned when the method is called. E.g:
+     * <pre>
+     * when(mock.someMethod()).thenReturn(1, 2, 3);
+     * </pre>
+     *
+     * See examples in javadoc for {@link Mockito#when}
+     *
+     * @param value first return value
+     * @param values next return values
+     *
+     * @return ongoingStubbing object that allows stubbing consecutive calls
+     */
+    NewOngoingStubbing<T> thenReturn(Object value, Object... values);
 
     /**
      * Sets a Throwable to be thrown when the method is called. E.g:

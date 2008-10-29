@@ -30,6 +30,37 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
         assertEquals("three", mock.simpleMethod());
         assertEquals("three", mock.simpleMethod());
     }
+
+    @Test
+    public void shouldReturnConsecutiveValuesSetByShortenThenReturnMethod() throws Exception {        
+        when(mock.simpleMethod())
+            .thenReturn("one", "two", "three");
+        
+        assertEquals("one", mock.simpleMethod());
+        assertEquals("two", mock.simpleMethod());
+        assertEquals("three", mock.simpleMethod());
+        assertEquals("three", mock.simpleMethod());
+        assertEquals("three", mock.simpleMethod());
+    }
+
+    @Test
+    public void shouldReturnConsecutiveValuesSetByShortenThenReturnMethodAndThrowException()
+            throws Exception {
+        when(mock.simpleMethod())
+            .thenReturn("zero")
+            .thenReturn("one", "two")
+            .thenReturn("three")
+            .thenThrow(new NullPointerException());
+
+        assertEquals("zero", mock.simpleMethod());
+        assertEquals("one", mock.simpleMethod());
+        assertEquals("two", mock.simpleMethod());
+        assertEquals("three", mock.simpleMethod());
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (NullPointerException e) {}
+    }
     
     @Test
     public void shouldThrowConsecutively() throws Exception {

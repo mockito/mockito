@@ -17,6 +17,7 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
+import org.mockito.internal.progress.NullObject;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
@@ -141,6 +142,14 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             return thenAnswer(new Returns(value));
         }
 
+        public NewOngoingStubbing<T> thenReturn(Object value, Object... values) {
+            NewOngoingStubbing<T> stubbing = thenAnswer(new Returns(value));
+            for (Object v: values) {
+                stubbing = stubbing.thenAnswer(new Returns(v));
+            }
+            return stubbing;
+        }
+
         public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
             return thenAnswer(new ThrowsException(throwable));
         }
@@ -169,6 +178,14 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private class ConsecutiveStubbing implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
         public NewOngoingStubbing<T> thenReturn(Object value) {
             return thenAnswer(new Returns(value));
+        }
+
+        public NewOngoingStubbing<T> thenReturn(Object value, Object... values) {
+            NewOngoingStubbing<T> stubbing = thenAnswer(new Returns(value));            
+            for (Object v: values) {
+                stubbing = stubbing.thenAnswer(new Returns(v));
+            }
+            return stubbing;
         }
 
         public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
