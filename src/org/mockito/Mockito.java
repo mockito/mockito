@@ -325,6 +325,13 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("some arg"));
  * </pre>
  * 
+ * Alternative, shorter version of consecutive stubbing:
+ * 
+ * <pre>
+ * when(mock.someMethod("some arg"))
+ *   .thenReturn("one", "two", "three");
+ * </pre>
+ * 
  * <h3> 11. Stubbing with callbacks</h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
@@ -574,13 +581,13 @@ public class Mockito extends Matchers {
      *  .thenThrow(new RuntimeException())
      *  .thenReturn("foo");
      *  
-     * //shorter version for consecutive method calls returning some values:
+     * //Alternative, shorter version for consecutive stubbing:
      * when(mock.someMethod("some arg"))
-     *  .thenReturn("foo", "bar");
+     *  .thenReturn("one", "two");
      * //is the same as:
      * when(mock.someMethod("some arg"))
-     *  .thenReturn("foo")
-     *  .thenReturn("bar");
+     *  .thenReturn("one")
+     *  .thenReturn("two");
      *   
      * </pre>
      * 
