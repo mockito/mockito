@@ -136,28 +136,40 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
     }
 
-    private class OngoingStubbingImpl implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
+    private abstract class BaseStubbing implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
         public NewOngoingStubbing<T> thenReturn(Object value) {
             return thenAnswer(new Returns(value));
         }
 
         public NewOngoingStubbing<T> thenReturn(Object value, Object... values) {
-            NewOngoingStubbing<T> stubbing = thenAnswer(new Returns(value));
+            NewOngoingStubbing<T> stubbing = thenReturn(value);            
+            if (values == null) {
+                return stubbing.thenReturn(null);
+            }
             for (Object v: values) {
-                stubbing = stubbing.thenAnswer(new Returns(v));
+                stubbing = stubbing.thenReturn(v);
             }
             return stubbing;
         }
 
-        public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
+        private NewOngoingStubbing<T> thenThrow(Throwable throwable) {
             return thenAnswer(new ThrowsException(throwable));
         }
 
-        public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
-            registeredInvocations.removeLast();
-            mockitoStubber.addAnswer(answer);
-            return new ConsecutiveStubbing();
-        }
+        public NewOngoingStubbing<T> thenThrow(Throwable... throwables) {
+            if (throwables == null) {
+                thenThrow((Throwable) null);
+            }
+            NewOngoingStubbing<T> stubbing = null;
+            for (Throwable t: throwables) {
+                if (stubbing == null) {
+                    stubbing = thenThrow(t);                    
+                } else {
+                    stubbing = stubbing.thenThrow(t);
+                }
+            }
+            return stubbing;
+        }        
 
         public DeprecatedOngoingStubbing<T> toReturn(Object value) {
             return toAnswer(new Returns(value));
@@ -165,6 +177,14 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
 
         public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
             return toAnswer(new ThrowsException(throwable));
+        }
+    }
+    
+    private class OngoingStubbingImpl extends BaseStubbing {
+        public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
+            registeredInvocations.removeLast();
+            mockitoStubber.addAnswer(answer);
+            return new ConsecutiveStubbing();
         }
 
         public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
@@ -174,36 +194,12 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         }
     }
 
-    private class ConsecutiveStubbing implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
-        public NewOngoingStubbing<T> thenReturn(Object value) {
-            return thenAnswer(new Returns(value));
-        }
-
-        public NewOngoingStubbing<T> thenReturn(Object value, Object... values) {
-            NewOngoingStubbing<T> stubbing = thenAnswer(new Returns(value));            
-            for (Object v: values) {
-                stubbing = stubbing.thenAnswer(new Returns(v));
-            }
-            return stubbing;
-        }
-
-        public NewOngoingStubbing<T> thenThrow(Throwable throwable) {
-            return thenAnswer(new ThrowsException(throwable));
-        }
-
+    private class ConsecutiveStubbing extends BaseStubbing {
         public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
             mockitoStubber.addConsecutiveAnswer(answer);
             return this;
         }
         
-        public DeprecatedOngoingStubbing<T> toReturn(Object value) {
-            return toAnswer(new Returns(value));
-        }
-
-        public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
-            return toAnswer(new ThrowsException(throwable));
-        }
-
         public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
             mockitoStubber.addConsecutiveAnswer(answer);
             return this;

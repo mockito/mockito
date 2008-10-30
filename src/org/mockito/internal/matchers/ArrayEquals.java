@@ -17,10 +17,8 @@ public class ArrayEquals extends Equals {
 
     public boolean matches(Object actual) {
         Object wanted = getWanted();
-        if (wanted == null) {
+        if (wanted == null || actual == null) {
             return super.matches(actual);
-        } else if (actual == null) {
-            return false;
         } else if (wanted instanceof boolean[] && actual instanceof boolean[]) {
             return Arrays.equals((boolean[]) wanted, (boolean[]) actual);
         } else if (wanted instanceof byte[] && actual instanceof byte[]) {

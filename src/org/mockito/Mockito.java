@@ -588,6 +588,10 @@ public class Mockito extends Matchers {
      * when(mock.someMethod("some arg"))
      *  .thenReturn("one")
      *  .thenReturn("two");
+     *
+     * //shorter version for consecutive method calls throwing exceptions:
+     * when(mock.someMethod("some arg"))
+     *  .thenThrow(new RuntimeException(), new NullPointerException();
      *   
      * </pre>
      * 

@@ -60,21 +60,21 @@ public interface NewOngoingStubbing<T> {
     NewOngoingStubbing<T> thenReturn(Object value, Object... values);
 
     /**
-     * Sets a Throwable to be thrown when the method is called. E.g:
+     * Sets Throwable objects to be thrown when the method is called. E.g:
      * <pre>
      * when(mock.someMethod()).thenThrow(new RuntimeException());
      * </pre>
      *
-     * If throwable is a checked exception then it has to
+     * If throwables contain a checked exception then it has to
      * match one of the checked exceptions of method signature.
      *
      * See examples in javadoc for {@link Mockito#when}
      *
-     * @param throwable to be thrown on method invocation
+     * @param throwables to be thrown on method invocation
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    NewOngoingStubbing<T> thenThrow(Throwable throwable);
+    NewOngoingStubbing<T> thenThrow(Throwable... throwables);
 
     /**
      * Sets a generic Answer for the method. E.g:

@@ -31,6 +31,15 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
         assertEquals("three", mock.simpleMethod());
     }
 
+    @SuppressWarnings("all")
+    @Test
+    public void shouldReturnConsecutiveValuesForTwoNulls() throws Exception {
+        when(mock.simpleMethod()).thenReturn(null, null);
+        
+        assertNull(mock.simpleMethod());        
+        assertNull(mock.simpleMethod());        
+    }
+
     @Test
     public void shouldReturnConsecutiveValuesSetByShortenThenReturnMethod() throws Exception {        
         when(mock.simpleMethod())
@@ -44,22 +53,31 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnConsecutiveValuesSetByShortenThenReturnMethodAndThrowException()
+    public void shouldReturnConsecutiveValueAndThrowExceptionssSetByShortenReturnMethods()
             throws Exception {
         when(mock.simpleMethod())
             .thenReturn("zero")
             .thenReturn("one", "two")
+            .thenThrow(new NullPointerException(), new RuntimeException())
             .thenReturn("three")
-            .thenThrow(new NullPointerException());
+            .thenThrow(new IllegalArgumentException());
 
         assertEquals("zero", mock.simpleMethod());
         assertEquals("one", mock.simpleMethod());
         assertEquals("two", mock.simpleMethod());
-        assertEquals("three", mock.simpleMethod());
         try {
             mock.simpleMethod();
             fail();
         } catch (NullPointerException e) {}
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (RuntimeException e) {}
+        assertEquals("three", mock.simpleMethod());
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (IllegalArgumentException e) {}
     }
     
     @Test
@@ -68,6 +86,32 @@ public class StubbingConsecutiveReturnValuesTest extends TestBase {
             .thenThrow(new RuntimeException())
             .thenThrow(new IllegalArgumentException())
             .thenThrow(new NullPointerException());
+
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (RuntimeException e) {}
+        
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (IllegalArgumentException e) {}
+        
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (NullPointerException e) {}
+        
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (NullPointerException e) {}
+    }
+
+    @Test
+    public void shouldThrowConsecutivelySetByShortenThenThrowMethod() throws Exception {
+        when(mock.simpleMethod())
+            .thenThrow(new RuntimeException(), new IllegalArgumentException(), new NullPointerException());
 
         try {
             mock.simpleMethod();
