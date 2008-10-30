@@ -42,7 +42,7 @@ public interface NewOngoingStubbing<T> {
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    NewOngoingStubbing<T> thenReturn(Object value);
+    NewOngoingStubbing<T> thenReturn(T value);
 
     /**
      * Sets consecutive return values to be returned when the method is called. E.g:
@@ -57,7 +57,7 @@ public interface NewOngoingStubbing<T> {
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls
      */
-    NewOngoingStubbing<T> thenReturn(Object value, Object... values);
+    NewOngoingStubbing<T> thenReturn(T value, T... values);
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:
