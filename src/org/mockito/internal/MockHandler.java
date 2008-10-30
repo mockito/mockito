@@ -9,7 +9,7 @@ import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.internal.configuration.Configuration;
+import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -41,13 +41,15 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
     private final String mockName;
+    private final ReturnValues returnValues;
 
     private T instance;
 
-    public MockHandler(String mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder) {
+    public MockHandler(String mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, ReturnValues returnValues) {
         this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
+        this.returnValues = returnValues;
         this.mockitoStubber = new MockitoStubber(mockingProgress);
         this.registeredInvocations = new RegisteredInvocations();
     }
@@ -82,7 +84,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         if (answer != null) {
             return answer.answer(invocation);
         } else if (MockUtil.isMock(instance)) {
-            return Configuration.instance().getReturnValues().valueFor(invocation);
+            return returnValues.valueFor(invocation);
         } else {
             return methodProxy.invoke(instance, args);
         }

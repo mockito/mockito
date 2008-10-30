@@ -20,7 +20,7 @@ public class MockHandlerTest extends TestBase {
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         MockingProgressImpl state = new MockingProgressImpl();
         state.verificationStarted(VerificationModeFactory.atLeastOnce());
-        MockHandler handler = new MockHandler(null, state, new ExceptionThrowingBinder());
+        MockHandler handler = new MockHandler(null, state, new ExceptionThrowingBinder(), null);
         
         try {
             handler.intercept(null, String.class.getDeclaredMethod("toString"), new Object[]{}, null);

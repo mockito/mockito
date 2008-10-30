@@ -8,6 +8,7 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.mockito.configuration.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
@@ -18,12 +19,12 @@ import org.mockito.internal.progress.MockingProgress;
 
 public class MockUtil {
     
-    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance) {
+    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance, ReturnValues returnValues) {
         validateType(classToMock);
         if (mockName == null) {
             mockName = toInstanceName(classToMock);
         }
-        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder());
+        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), returnValues);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         
         T mock = (T) ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
