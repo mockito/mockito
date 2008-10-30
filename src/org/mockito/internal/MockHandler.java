@@ -17,7 +17,6 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.progress.NullObject;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
