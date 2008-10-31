@@ -433,8 +433,9 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    //TODO rename
+    //TODO the name of this constant may change
     public static final ReturnValues USING_GLOBAL_CONFIG = new GloballyConfiguredReturnValues();
+    //TODO the name of this constant may change
     public static final ReturnValues SMART_NULLS = new SmartNullReturnValues();
     
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
@@ -472,6 +473,8 @@ public class Mockito extends Matchers {
     }
     
     /**
+     * Warning: the interface of this method may change
+     * 
      * Creates mock with a specified strategy for its return values.
      *
      * <p>This can be helpful for working with legacy systems.</p>
