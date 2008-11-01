@@ -14,7 +14,6 @@ public class MockingProgressImpl implements MockingProgress {
     
     private OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
-    private int invocationSequenceNumber = 1;
     private boolean stubbingInProgress = false;
 
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
@@ -36,10 +35,6 @@ public class MockingProgressImpl implements MockingProgress {
         VerificationMode temp = verificationMode;
         verificationMode = null;
         return temp;
-    }
-
-    public int nextSequenceNumber() {
-        return invocationSequenceNumber++;
     }
 
     public void stubbingStarted() {
@@ -66,13 +61,11 @@ public class MockingProgressImpl implements MockingProgress {
     public String toString() {
         return  "ongoingStubbing: " + ongoingStubbing + 
         ", verificationMode: " + verificationMode +
-        ", invocationSequenceNumber: " + invocationSequenceNumber +
         ", stubbingInProgress: " + stubbingInProgress;
     }
 
     public void reset() {
         stubbingInProgress = false;
         verificationMode = null;
-        invocationSequenceNumber = 1;
     }
 }

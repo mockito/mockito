@@ -34,10 +34,6 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         return threadSafely().pullVerificationMode();
     }
 
-    public int nextSequenceNumber() {
-        return threadSafely().nextSequenceNumber();
-    }
-
     public void stubbingStarted() {
         threadSafely().stubbingStarted();
     }

@@ -21,8 +21,6 @@ public interface MockingProgress {
 
     void stubbingCompleted();
     
-    int nextSequenceNumber();
-
     void validateState();
 
     void reset();

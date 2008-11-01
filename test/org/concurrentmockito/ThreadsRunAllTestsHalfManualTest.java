@@ -139,7 +139,8 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     StackTrackeChangingTest.class,
                     ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
-                    PointingStackTraceToActualInvocationChunkTest.class
+                    PointingStackTraceToActualInvocationChunkTest.class,
+                    VerificationInOrderFromMultipleThreadsTest.class
                 );
                 
                 if (!result.wasSuccessful()) {

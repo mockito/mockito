@@ -17,6 +17,7 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
+import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
@@ -57,7 +58,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
             //stubbing voids with stubVoid() or doAnswer() style
-            Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
+            Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
@@ -66,7 +67,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
 
-        Invocation invocation = new Invocation(proxy, method, args, mockingProgress.nextSequenceNumber());
+        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 
         if (verificationMode != null) {
