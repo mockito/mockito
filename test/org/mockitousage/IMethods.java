@@ -7,6 +7,7 @@ package org.mockitousage;
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -168,6 +169,8 @@ public interface IMethods {
 
     List<String> listReturningMethod(Object ... objects);
     
+    LinkedList<String> linkedListReturningMethod();
+    
     String toString();
     
     String toString(String foo);
@@ -181,4 +184,6 @@ public interface IMethods {
     String forCollection(Collection<String> collection);
 
     Object[] arrayReturningMethod();
+
+    IMethods iMethodsReturningMethod();
 }

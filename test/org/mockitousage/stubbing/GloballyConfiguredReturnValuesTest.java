@@ -20,6 +20,7 @@ public class GloballyConfiguredReturnValuesTest extends TestBase {
             this.returnValue = returnValue;
         }
 
+        @Override
         public Object valueFor(InvocationOnMock invocation) {
             return returnValue;
         }

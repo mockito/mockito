@@ -1,7 +1,5 @@
 package org.mockito.internal.returnvalues;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.exceptions.verification.SmartNullPointerException;
@@ -35,19 +33,18 @@ public class SmartNullReturnValuesTest extends TestBase {
         assertEquals(0,         returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
     
-    interface HasInterfaceMethod {
-        List<String> doListStuff();
+    interface Foo {
+        Foo get();
     }
     
     @Test
     public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Exception {
         ReturnValues returnValues = new SmartNullReturnValues();
         
-        @SuppressWarnings("unchecked")
-        List<String> smartNull = (List<String>) returnValues.valueFor(invocationOf(HasInterfaceMethod.class, "doListStuff"));
+        Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
         
         try {
-            smartNull.iterator();
+            smartNull.get();
             fail();
         } catch (SmartNullPointerException expected) {}
     }
