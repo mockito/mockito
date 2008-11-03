@@ -118,21 +118,51 @@ public class UsingVarargsTest extends TestBase {
     
     @Test
     public void shouldVerifyWithAnyObject() {
-        Foo myClass = Mockito.mock(Foo.class);
-        myClass.varArgs("");        
-        Mockito.verify(myClass).varArgs((String[]) Mockito.anyObject());
-        Mockito.verify(myClass).varArgs((String) Mockito.anyObject());
+        Foo foo = Mockito.mock(Foo.class);
+        foo.varArgs("");        
+        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
+        Mockito.verify(foo).varArgs((String) Mockito.anyObject());
     }   
     
     @Test
     public void shouldVerifyWithNullVarArgArray() {
-        Foo myClass = Mockito.mock(Foo.class);
-        myClass.varArgs((String[]) null);    
-        Mockito.verify(myClass).varArgs((String[]) Mockito.anyObject());
-        Mockito.verify(myClass).varArgs((String[]) null);
+        Foo foo = Mockito.mock(Foo.class);
+        foo.varArgs((String[]) null);    
+        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
+        Mockito.verify(foo).varArgs((String[]) null);
     }  
     
     public class Foo {      
         public void varArgs(String... args) {}       
+    }
+    
+    interface MixedVarargs {
+        String doSomething(String one, String... varargs);
+        String doSomething(String one, String two, String... varargs);
+    }
+
+    @SuppressWarnings("all")
+    @Test
+    //See bug #31
+    public void shouldStubCorrectlyWhenMixedVarargsUsed() {
+        MixedVarargs mixedVarargs = mock(MixedVarargs.class);
+        when(mixedVarargs.doSomething("hello", null)).thenReturn("hello");
+        when(mixedVarargs.doSomething("goodbye", null)).thenReturn("goodbye");
+
+        String result = mixedVarargs.doSomething("hello", null);
+        assertEquals("hello", result);
+        
+        verify(mixedVarargs).doSomething("hello", null);
+    }
+    
+    @SuppressWarnings("all")
+    @Test
+    public void shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed() {
+        MixedVarargs mixedVarargs = mock(MixedVarargs.class);
+        when(mixedVarargs.doSomething("one", "two", null)).thenReturn("hello");
+        when(mixedVarargs.doSomething("1", "2", null)).thenReturn("goodbye");
+
+        String result = mixedVarargs.doSomething("one", "two", null);
+        assertEquals("hello", result);
     }
 }
