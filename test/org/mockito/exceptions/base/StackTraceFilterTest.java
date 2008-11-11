@@ -24,7 +24,7 @@ public class StackTraceFilterTest extends TestBase {
     public void testShouldFilterOutCglibGarbage() {
         HasStackTrace trace = new TraceBuilder().classes(
             "MockitoExampleTest",
-            "List$$EnhancerByCGLIB$$2c406024", 
+            "List$$EnhancerByMockitoWithCGLIB$$2c406024", 
             "MethodInterceptorFilter"
         ).toTrace();
         

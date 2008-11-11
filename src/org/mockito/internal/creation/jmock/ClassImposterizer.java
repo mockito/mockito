@@ -34,6 +34,18 @@ public class ClassImposterizer  {
         public String getClassName(String prefix, String source, Object key, Predicate names) {
             return "codegen." + super.getClassName(prefix, source, key, names);
         }
+        
+        @Override
+        protected String getTag() {
+            return "ByMockitoWithCGLIB";
+        }        
+    };
+    
+    private static final NamingPolicy MOCKITO_NAMING_POLICY = new DefaultNamingPolicy() {
+        @Override
+        protected String getTag() {
+            return "ByMockitoWithCGLIB";
+        }
     };
     
     private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
@@ -86,6 +98,8 @@ public class ClassImposterizer  {
         enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
         if (mockedType.getSigners() != null) {
             enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
+        } else {
+            enhancer.setNamingPolicy(MOCKITO_NAMING_POLICY);
         }
         
         try {
