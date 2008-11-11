@@ -26,7 +26,7 @@ public class RegisteredInvocations {
     }
 
     public List<Invocation> getAll() {
-        return ListUtil.filter(invocations, new RemoveToString());
+        return ListUtil.filter(new LinkedList<Invocation>(invocations), new RemoveToString());
     }
     
     private static class RemoveToString implements Filter<Invocation> {
