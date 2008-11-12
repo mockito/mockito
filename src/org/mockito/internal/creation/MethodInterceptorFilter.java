@@ -6,6 +6,8 @@ package org.mockito.internal.creation;
 
 import java.lang.reflect.Method;
 
+import org.mockito.internal.creation.cglib.CGLIBHacker;
+
 import net.sf.cglib.proxy.MethodProxy;
 
 @SuppressWarnings("unchecked")
@@ -32,6 +34,7 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
 
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
             throws Throwable {
+        //TODO check if this is any useful
         if (method.isBridge()) {
             return methodProxy.invokeSuper(proxy, args);
         }
@@ -41,6 +44,8 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
         } else if (hashCodeMethod.equals(method)) {
             return hashCodeForMock(proxy);
         }
+        
+        new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
         
         return delegate.intercept(proxy, method, args, methodProxy);
     }

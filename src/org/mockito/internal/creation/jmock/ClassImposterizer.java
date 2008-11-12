@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import net.sf.cglib.core.CodeGenerationException;
-import net.sf.cglib.core.DefaultNamingPolicy;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.core.Predicate;
 import net.sf.cglib.proxy.Callback;
@@ -16,6 +15,7 @@ import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.NoOp;
 
+import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 import org.objenesis.ObjenesisStd;
 
 /**
@@ -29,22 +29,10 @@ public class ClassImposterizer  {
     
     private ObjenesisStd objenesis = new ObjenesisStd();
     
-    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new DefaultNamingPolicy() {
+    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
         @Override
         public String getClassName(String prefix, String source, Object key, Predicate names) {
             return "codegen." + super.getClassName(prefix, source, key, names);
-        }
-        
-        @Override
-        protected String getTag() {
-            return "ByMockitoWithCGLIB";
-        }        
-    };
-    
-    private static final NamingPolicy MOCKITO_NAMING_POLICY = new DefaultNamingPolicy() {
-        @Override
-        protected String getTag() {
-            return "ByMockitoWithCGLIB";
         }
     };
     
@@ -99,7 +87,7 @@ public class ClassImposterizer  {
         if (mockedType.getSigners() != null) {
             enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
         } else {
-            enhancer.setNamingPolicy(MOCKITO_NAMING_POLICY);
+            enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
         }
         
         try {
