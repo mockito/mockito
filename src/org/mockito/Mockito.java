@@ -489,6 +489,7 @@ public class Mockito extends Matchers {
     }
     
     private static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
+        MOCKING_PROGRESS.validateState();
         return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);
     }    
 
@@ -549,7 +550,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MockUtil.createMock((Class<T>) object.getClass(), MOCKING_PROGRESS, null, object, USING_GLOBAL_CONFIG);
+        return mock((Class<T>) object.getClass(), null, object, USING_GLOBAL_CONFIG);
     }
 
     /**

@@ -71,6 +71,12 @@ public class InvalidStateDetectionTest extends TestBase {
 
         when(mock.simpleMethod());
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedStubbingException.class);
+        
+        when(mock.simpleMethod());
+        detectsAndCleansUp(new OnMockCreation(), UnfinishedStubbingException.class);
+        
+        when(mock.simpleMethod());
+        detectsAndCleansUp(new OnSpyCreation(), UnfinishedStubbingException.class);
     }
     
     @Test
@@ -229,6 +235,18 @@ public class InvalidStateDetectionTest extends TestBase {
     private static class OnMethodCallOnMock implements DetectsInvalidState {
         public void detect(IMethods mock) {
             mock.simpleMethod();
+        }
+    }
+    
+    private static class OnMockCreation implements DetectsInvalidState {
+        public void detect(IMethods mock) {
+            mock(IMethods.class);
+        }
+    }
+    
+    private static class OnSpyCreation implements DetectsInvalidState {
+        public void detect(IMethods mock) {
+            spy(new Object());
         }
     }
     
