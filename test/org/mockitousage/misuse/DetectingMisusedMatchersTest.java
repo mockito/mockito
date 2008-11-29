@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
@@ -34,9 +35,29 @@ public class DetectingMisusedMatchersTest extends TestBase {
         anyObject();
     }
 
-    @Ignore
     @Test
     public void shouldFailFastWhenArgumentMatchersAbused() {
+        misplacedArgumentMatcher();
+        try {
+            mock(IMethods.class);
+            fail();
+        } catch (InvalidUseOfMatchersException e) {
+            assertThat(e, messageContains("Misplaced argument matcher"));
+        }
+    }
+    
+    @Test
+    public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {
+        verify(withFinal).finalMethod(anyObject());
+        try {
+            verify(withFinal).finalMethod(anyObject());
+            fail();
+        } catch (UnfinishedVerificationException e) {}
+    }
+    
+    @Ignore
+    @Test
+    public void shouldFailAndShowWhereMatchersAreMisused() {
         misplacedArgumentMatcher();
         try {
             mock(IMethods.class);

@@ -381,4 +381,16 @@ public class Reporter {
     public void wantedAtMostX(int maxNumberOfInvocations, int foundSize) {
         throw new MockitoAssertionError(join("Wanted at most " + pluralize(maxNumberOfInvocations) + " but was " + foundSize));
     }
+
+    public void misplacedArgumentMatcher() {
+        throw new InvalidUseOfMatchersException(join(
+                "Misplaced argument matcher detected!",
+                "Somewhere before this line you probably misused Mockito argument matchers.",
+                "For example you might have used anyObject() argument matcher outside of verification or stubbing.",
+                "Here are examples of correct usage of argument matchers:",
+                "    when(mock.get(anyInt())).thenReturn(null);",
+                "    doThrow(new RuntimeException()).when(mock).someVoidMethod(anyObject());",
+                "    verify(mock).someMethod(contains(\"foo\"));"
+                ));
+    }
 }

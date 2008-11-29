@@ -62,7 +62,7 @@ public class MockingProgressImpl implements MockingProgress {
         }
       
         //TODO LastArguments should be somewhere here...
-        //LastArguments.instance().validateState();
+        LastArguments.instance().validateState();
     }
 
     public void stubbingCompleted() {

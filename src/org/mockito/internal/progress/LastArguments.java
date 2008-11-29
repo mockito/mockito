@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.hamcrest.Matcher;
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.And;
@@ -89,9 +90,9 @@ public class LastArguments {
         //TODO test cleanup?
         //TODO duplicated
         if (!matcherStack.isEmpty()) {
-            MockitoException lastMatcherLocation = ((LocalizedMatcher) matcherStack.pop()).getLocation();
+//          MockitoException lastMatcherLocation = ((LocalizedMatcher) matcherStack.pop()).getLocation();
             matcherStack.clear();
-            throw new InvalidUseOfMatchersException("Misplaced argument matcher.", lastMatcherLocation);
+            new Reporter().misplacedArgumentMatcher();
         }
     }
 

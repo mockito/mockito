@@ -21,7 +21,6 @@ public class SmartNullReturnValuesTest extends TestBase {
         return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1);
     }
     
-    //TODO review other default return values
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Exception {
         SmartNullReturnValues returnValues = new SmartNullReturnValues();

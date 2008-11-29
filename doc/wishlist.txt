@@ -1,3 +1,5 @@
+    //add more null object return values
+
     //java cross reference tool online
 
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
@@ -7,9 +9,5 @@
     //TODO check if performance can be tweaked (e.g: LL -> AL)
     
     //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
-    
-    List<Sub> subs = null;
-    //TODO can I somehow avoid a cast here:
-    stub(mockTwo.getList()).toReturn((List) subs);
     
     //TODO Felix had weird problem - check old emails - maybe we could do something about it (better exception message)  

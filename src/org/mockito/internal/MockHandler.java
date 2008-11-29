@@ -63,12 +63,12 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
-        
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
-        mockingProgress.validateState();
-        
+
         Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
+        
+        mockingProgress.validateState();
 
         if (verificationMode != null) {
             VerificationDataImpl data = new VerificationDataImpl(registeredInvocations.getAll(), invocationMatcher);
