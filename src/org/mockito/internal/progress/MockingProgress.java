@@ -24,4 +24,10 @@ public interface MockingProgress {
     void validateState();
 
     void reset();
+
+    /**
+     * Removes ongoing stubbing so that in case the framework is misused
+     * state validation errors are more accurate
+     */
+    void resetOngoingStubbing();
 }

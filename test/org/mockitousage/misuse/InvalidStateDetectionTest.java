@@ -4,15 +4,18 @@
  */
 package org.mockitousage.misuse;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.StateMaster;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
+import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
 
 /**

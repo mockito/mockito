@@ -490,6 +490,7 @@ public class Mockito extends Matchers {
     
     private static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
         MOCKING_PROGRESS.validateState();
+        MOCKING_PROGRESS.resetOngoingStubbing();
         return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);
     }    
 
@@ -867,6 +868,7 @@ public class Mockito extends Matchers {
      */
     public static Stubber doAnswer(Answer answer) {
         MOCKING_PROGRESS.stubbingStarted();
+        MOCKING_PROGRESS.resetOngoingStubbing();
         return new StubberImpl().doAnswer(answer);
     }  
     

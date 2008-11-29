@@ -66,7 +66,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
         mockingProgress.validateState();
-
+        
         Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
 

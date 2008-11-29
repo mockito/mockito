@@ -12,7 +12,7 @@ public class MockingProgressImpl implements MockingProgress {
     
     private final Reporter reporter = new Reporter();
     
-    private OngoingStubbing ongoingStubbing;
+    OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
     private boolean stubbingInProgress = false;
 
@@ -28,7 +28,15 @@ public class MockingProgressImpl implements MockingProgress {
     
     public void verificationStarted(VerificationMode verify) {
         validateState();
+        resetOngoingStubbing();
         verificationMode = (VerificationMode) verify;
+    }
+
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.MockingProgress#resetOngoingStubbing()
+     */
+    public void resetOngoingStubbing() {
+        ongoingStubbing = null;
     }
 
     public VerificationMode pullVerificationMode() {
@@ -52,6 +60,9 @@ public class MockingProgressImpl implements MockingProgress {
             stubbingInProgress = false;
             reporter.unfinishedStubbing();
         }
+      
+        //TODO LastArguments should be somewhere here...
+        //LastArguments.instance().validateState();
     }
 
     public void stubbingCompleted() {
@@ -67,5 +78,7 @@ public class MockingProgressImpl implements MockingProgress {
     public void reset() {
         stubbingInProgress = false;
         verificationMode = null;
+        //TODO LastArguments should be somewhere here...
+        LastArguments.instance().reset();
     }
 }

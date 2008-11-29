@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.hamcrest.Matcher;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.Not;
@@ -31,6 +32,7 @@ public class LastArguments {
     }
     
     public EmptyReturnValues reportMatcher(Matcher matcher) {
+//        matcherStack.push(new LocalizedMatcher(matcher));
         matcherStack.push(matcher);
         return new EmptyReturnValues();
     }
@@ -80,5 +82,20 @@ public class LastArguments {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(2)));
         return new EmptyReturnValues();
+    }
+
+    public void validateState() {
+//        assertState(matcherStack.isEmpty(), "Misplaced argument matcher.");
+        //TODO test cleanup?
+        //TODO duplicated
+        if (!matcherStack.isEmpty()) {
+            MockitoException lastMatcherLocation = ((LocalizedMatcher) matcherStack.pop()).getLocation();
+            matcherStack.clear();
+            throw new InvalidUseOfMatchersException("Misplaced argument matcher.", lastMatcherLocation);
+        }
+    }
+
+    public void reset() {
+        matcherStack.clear();
     }
 }

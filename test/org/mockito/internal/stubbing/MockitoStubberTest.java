@@ -10,13 +10,14 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockitoutil.TestBase;
 
 public class MockitoStubberTest extends TestBase{
 
     private MockitoStubber mockitoStubber;
-    private MockingProgressImpl state;
+    private MockingProgress state;
     private Invocation simpleMethod;
     
     @Before

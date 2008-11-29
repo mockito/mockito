@@ -53,4 +53,8 @@ public class ThreadSafeMockingProgress implements MockingProgress {
     public void reset() {
         threadSafely().reset();
     }
+
+    public void resetOngoingStubbing() {
+        threadSafely().resetOngoingStubbing();
+    }
 }

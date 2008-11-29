@@ -84,4 +84,9 @@ public class MockitoStubber {
         }
         answersForStubbing.clear();
     }
+    
+    @Override
+    public String toString() {
+        return "invocationForStubbing: " + invocationForStubbing;
+    }
 }

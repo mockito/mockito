@@ -4,23 +4,53 @@
  */
 package org.mockitousage;
 
-import java.util.LinkedList;
-import java.util.List;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class PlaygroundTest extends TestBase {
 
-    List list = new LinkedList();
-    List spy = Mockito.spy(list);
-    @Mock IMethods mock;
-    
+    private static class BaseClass {
+        private final String s;
+
+        public BaseClass(String s) {
+            s.getClass(); //NPE check
+            this.s = s;
+        }
+
+        public boolean isLarger(int i) {
+            return s.length() < i;
+        }
+    }
+
+    /**
+     * This test succeeds.
+     */
     @Test
-    public void playWithSomething() {
-        //Here you can play with mockito
+    public void testSpyOfBaseClass() {
+        BaseClass ci = spy(new BaseClass("test"));
+        assertEquals(false, ci.isLarger(2));
+    }
+
+    private static class Subclass extends BaseClass {
+        public Subclass(String s) {
+            super(s);
+        }
+
+        public boolean isLarger(int i) {
+            return super.isLarger(i);
+        }
+    }
+
+    /**
+     * This test fails with a NullPointerException.
+     */
+    @Test
+    public void testSpyOfSubclass() {
+        BaseClass ci = spy(new Subclass("test"));
+        assertEquals(false, ci.isLarger(2));
     }
 }
