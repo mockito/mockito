@@ -417,7 +417,7 @@ import org.mockito.stubbing.Answer;
  * 
  * <h4>Important gotcha on spying real objects!</h4>
  * 
- * Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
+ * 1. Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
  * 
  * <pre>
  *   List list = new LinkedList();
@@ -429,6 +429,11 @@ import org.mockito.stubbing.Answer;
  *   //You have to use doReturn() for stubbing
  *   doReturn("foo").when(spy).get(0);
  * </pre>
+ * 
+ * 2. Watch out for final methods. 
+ * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
+ * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
+ * Typically you may get a NullPointerException because mock instances don't have fields initiated. 
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -530,7 +535,7 @@ public class Mockito extends Matchers {
      * 
      * <h4>Important gotcha on spying real objects!</h4>
      * 
-     * Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
+     * 1. Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
      * 
      * <pre>
      *   List list = new LinkedList();
@@ -542,6 +547,11 @@ public class Mockito extends Matchers {
      *   //You have to use doReturn() for stubbing
      *   doReturn("foo").when(spy).get(0);
      * </pre>
+     * 
+     * 2. Watch out for final methods. 
+     * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
+     * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
+     * Typically you may get a NullPointerException because mock instances don't have fields initiated.
      * 
      * <p>
      * See examples in javadoc for {@link Mockito} class
