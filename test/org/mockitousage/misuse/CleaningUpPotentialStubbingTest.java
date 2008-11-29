@@ -45,6 +45,14 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
         assertOngoingStubbingIsReset();
     }
 
+    @Test
+    public void shouldResetOngoingStubbingOnVerifyNoMoreInteractions() {
+        mock.booleanReturningMethod();
+        IMethods mock2 = mock(IMethods.class);
+        verifyNoMoreInteractions(mock2);
+        assertOngoingStubbingIsReset();
+    }
+
     private void assertOngoingStubbingIsReset() {
         try {
             //In real, there might be a call to real object or a final method call

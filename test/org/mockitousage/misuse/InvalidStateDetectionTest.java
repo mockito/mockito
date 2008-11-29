@@ -4,7 +4,6 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
@@ -15,7 +14,6 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
-import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
 
 /**
@@ -158,6 +156,27 @@ public class InvalidStateDetectionTest extends TestBase {
         
         verify(mock);
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedVerificationException.class);
+    }
+
+    @Test
+    public void shouldDetectMisplacedArgumentMatcher() {
+        anyObject();
+        detectsAndCleansUp(new OnStubVoid(), InvalidUseOfMatchersException.class);
+        
+        anyObject();
+        detectsAndCleansUp(new OnVerify(), InvalidUseOfMatchersException.class);
+        
+        anyObject();
+        detectsAndCleansUp(new OnVerifyInOrder(), InvalidUseOfMatchersException.class);
+        
+        anyObject();
+        detectsAndCleansUp(new OnVerifyZeroInteractions(), InvalidUseOfMatchersException.class);
+        
+        anyObject();
+        detectsAndCleansUp(new OnVerifyNoMoreInteractions(), InvalidUseOfMatchersException.class);
+        
+        anyObject();
+        detectsAndCleansUp(new OnDoAnswer(), InvalidUseOfMatchersException.class);
     }
     
     @Test
