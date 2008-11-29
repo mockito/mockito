@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import java.lang.reflect.Method;
-
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
@@ -22,7 +20,6 @@ import org.mockito.internal.progress.MockingProgress;
 public class MockUtil {
     
     public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance, ReturnValues returnValues) {
-        Method[] methods = classToMock.getMethods();
         validateType(classToMock);
         if (mockName == null) {
             mockName = toInstanceName(classToMock);

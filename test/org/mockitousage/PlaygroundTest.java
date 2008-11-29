@@ -7,7 +7,6 @@ package org.mockitousage;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")

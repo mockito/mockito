@@ -11,7 +11,6 @@ import java.util.Stack;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.Not;
