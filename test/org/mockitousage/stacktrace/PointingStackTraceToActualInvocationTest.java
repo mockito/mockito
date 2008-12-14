@@ -9,12 +9,16 @@ import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+//This is required to make sure stack trace is well filtered when runner is ON
+@RunWith(MockitoJUnit44Runner.class)
 public class PointingStackTraceToActualInvocationTest extends TestBase {
     
     private IMethods mock;
