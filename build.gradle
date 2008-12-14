@@ -1,0 +1,59 @@
+group = 'org.mockito'
+version = 'SNAPSHOT'
+archivesBaseName = 'mockito'
+
+usePlugin('java')
+  
+sourceCompatibility = 1.5
+targetCompatibility = 1.5
+srcRootName = '.'
+srcDirNames = ['src']
+testSrcDirNames = ['test']
+
+dependencies {
+  addConfiguration('build')
+  addFlatDirResolver('lib', "$rootDir/lib/run", "$rootDir/lib/ant", "$rootDir/lib/build")
+  compile ':asm:3.1', ':cglib:2.2', ':hamcrest-core:1.1', ':junit:4.5', ':objenesis:1.0'
+  testCompile ':junit:4.5'
+  build ":jarjar:1.0rc7"
+}
+
+createTask('package', dependsOn:'libs')
+
+createTask('wrapper', type: Wrapper).configure {
+  gradleVersion = '0.5'
+}
+
+createTask('jarjar', dependsOn: 'compile') {
+    ant {
+        taskdef(name: 'jarjar', classname: "com.tonicsystems.jarjar.JarJarTask",             classpath: dependencies.antpath('build'))
+        
+        jarjar(jarfile: "$buildDir/mockito-all.jar") {
+            manifest() {
+                attribute(name: 'Build-By', value: 'Someone')
+                attribute(name: 'Implementation-Version', value: version)
+            }
+            fileset(dir: '.', file: 'LICENSE')
+            fileset(dir: '.', file: 'NOTICE')
+            fileset(dir: classesDir)
+            fileset(dir: srcDirs[0])
+            runDir = "$rootDir/lib/run"
+            fileset(dir: runDir, excludes: "*.jar")
+            zipfileset(src: "$runDir/asm-3.1.jar")
+            zipfileset(src: "$runDir/objenesis-1.0.jar") {
+                exclude(name: "META-INF/maven/**")
+            }
+            zipfileset(src: "$runDir/hamcrest-core-1.1.jar") {
+                exclude(name: "LICENSE.txt")
+            }
+            zipfileset(src: "$runDir/cglib-2.2.jar") {
+                exclude(name: "LICENSE") 
+                exclude(name: "NOTICE")
+            }
+            rule(pattern: "net.sf.**", result: "org.mockito.@1")
+            rule(pattern: "org.objectweb.**", result: "org.mockito.@1")
+        }
+    }
+ } 
+ 
+libs.dependsOn jarjar
