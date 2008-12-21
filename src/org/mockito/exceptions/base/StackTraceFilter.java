@@ -14,7 +14,8 @@ public class StackTraceFilter {
         boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
         boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
         //boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
-        return fromMockObject || fromOrgMockito;//) && !isRunner;
+        //) && !isRunner;
+        return fromMockObject || fromOrgMockito;
     }
 
     public void filterStackTrace(HasStackTrace hasStackTrace) {

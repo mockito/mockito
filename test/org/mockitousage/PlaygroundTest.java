@@ -6,6 +6,7 @@ package org.mockitousage;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -42,6 +43,7 @@ public class PlaygroundTest extends TestBase {
     public void testSomething() {
     }
 
+    @Ignore
     @Test
     public void shouldFailButOnlyWhenIAssertReturnValueAndIWantToKnowWhy() throws Throwable {
         ReadFromSomeFileSystem reader = mock(ReadFromSomeFileSystem.class);
@@ -55,7 +57,7 @@ public class PlaygroundTest extends TestBase {
         byte[] bytes = controller.naughtyMethodUnderTestWhichDoesNotFailBecauseItReturnsAValue(filename);
 
 //        try {
-//        assertNotNull("Should have returned some bytes, i am HUNGRY!", bytes);
+        assertNotNull("Should have returned some bytes, i am HUNGRY!", bytes);
 //        } catch (Error ex) {
 //            verify(reader).readFromFile(filename);
 //            // i want to replace this bit with something like "verifyAllTheThingsIStubbed(mock)"

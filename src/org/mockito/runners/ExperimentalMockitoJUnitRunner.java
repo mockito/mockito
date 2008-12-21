@@ -72,7 +72,6 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
         @Override
         public void testFailure(Failure failure) throws Exception {
             DebuggingInfo debuggingInfo = new DebuggingInfo(failure.getTestHeader());
-            Throwable e = failure.getException();
             List<Invocation> stubbedInvocations = progress.pullStubbedInvocations();
             for (Invocation invocation : stubbedInvocations) {
                 if (!invocation.isVerified()) {

@@ -8,10 +8,10 @@ import org.mockito.internal.invocation.Invocation;
 public class DebuggingInfo {
 
     private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
-    private final String test;
+    private final String testName;
 
-    public DebuggingInfo(String test) {
-        this.test = test;
+    public DebuggingInfo(String testName) {
+        this.testName = testName;
     }
 
     public void addUnusedStub(Invocation invocation) {
