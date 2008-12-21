@@ -39,9 +39,10 @@ public class MockitoStubber {
     }
     
     private void addAnswer(Answer answer, boolean isConsecutive) {
-        mockingProgress.stubbingCompleted();
+        Invocation invocation = invocationForStubbing.getInvocation();
+        mockingProgress.stubbingCompleted(invocation);
         AnswersValidator answersValidator = new AnswersValidator();
-        answersValidator.validate(answer, invocationForStubbing.getInvocation());
+        answersValidator.validate(answer, invocation);
         
         if (isConsecutive) {
             stubbed.getFirst().addAnswer(answer);

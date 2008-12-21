@@ -4,16 +4,62 @@
  */
 package org.mockitousage;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.ExperimentalMockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
+@RunWith(ExperimentalMockitoJUnitRunner.class)
 public class PlaygroundTest extends TestBase {
 
-    @Mock IMethods mock;
-    
+    public class SomeController {
+
+        private final ReadFromSomeFileSystem reader;
+
+        public SomeController(ReadFromSomeFileSystem reader, Object object) {
+            this.reader = reader;
+        }
+
+        public byte[] naughtyMethodUnderTestWhichDoesNotFailBecauseItReturnsAValue(String filename) {
+            return this.reader.readFromFile("filename");
+        }
+    }
+
+    public interface ReadFromSomeFileSystem {
+
+        byte[] readFromFile(String filename);
+
+    }
+
+    @Mock
+    IMethods mock;
+
     @Test
     public void testSomething() {
+    }
+
+    @Test
+    public void shouldFailButOnlyWhenIAssertReturnValueAndIWantToKnowWhy() throws Throwable {
+        ReadFromSomeFileSystem reader = mock(ReadFromSomeFileSystem.class);
+
+        SomeController controller = new SomeController(reader, null);
+
+        final String filename = "/some/non/random/path";
+        final String message = "this is my message to you";
+        when(reader.readFromFile(filename)).thenReturn(message.getBytes("UTF8"));
+
+        byte[] bytes = controller.naughtyMethodUnderTestWhichDoesNotFailBecauseItReturnsAValue(filename);
+
+//        try {
+//        assertNotNull("Should have returned some bytes, i am HUNGRY!", bytes);
+//        } catch (Error ex) {
+//            verify(reader).readFromFile(filename);
+//            // i want to replace this bit with something like "verifyAllTheThingsIStubbed(mock)"
+//            throw ex;
+//        }
     }
 }

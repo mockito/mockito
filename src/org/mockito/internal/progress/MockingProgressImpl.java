@@ -4,7 +4,11 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -15,6 +19,8 @@ public class MockingProgressImpl implements MockingProgress {
     OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
     private boolean stubbingInProgress = false;
+
+    private List<Invocation> stubbedInvocations = new LinkedList<Invocation>();
 
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
         this.ongoingStubbing = ongoingStubbing;
@@ -47,6 +53,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingStarted() {
         validateState();
+        //TODO stubbingInProgress is somehow duplicated with stubbedInvocations
         stubbingInProgress = true;
     }
 
@@ -65,7 +72,8 @@ public class MockingProgressImpl implements MockingProgress {
         LastArguments.instance().validateState();
     }
 
-    public void stubbingCompleted() {
+    public void stubbingCompleted(Invocation invocation) {
+        stubbedInvocations.add(invocation);        
         stubbingInProgress = false;
     }
     
@@ -80,5 +88,11 @@ public class MockingProgressImpl implements MockingProgress {
         verificationMode = null;
         //TODO LastArguments should be somewhere here...
         LastArguments.instance().reset();
+    }
+
+    public List<Invocation> pullStubbedInvocations() {
+        List<Invocation> ret = new LinkedList<Invocation>(stubbedInvocations);
+        stubbedInvocations.clear();
+        return ret;
     }
 }

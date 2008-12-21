@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.List;
+
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -19,7 +22,7 @@ public interface MockingProgress {
 
     void stubbingStarted();
 
-    void stubbingCompleted();
+    void stubbingCompleted(Invocation invocation);
     
     void validateState();
 
@@ -30,4 +33,6 @@ public interface MockingProgress {
      * state validation errors are more accurate
      */
     void resetOngoingStubbing();
+
+    List<Invocation> pullStubbedInvocations();
 }

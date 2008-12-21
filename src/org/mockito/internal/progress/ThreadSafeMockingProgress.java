@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.List;
+
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -42,8 +45,8 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         threadSafely().validateState();
     }
 
-    public void stubbingCompleted() {
-        threadSafely().stubbingCompleted();
+    public void stubbingCompleted(Invocation invocation) {
+        threadSafely().stubbingCompleted(invocation);
     }
     
     public String toString() {
@@ -56,5 +59,9 @@ public class ThreadSafeMockingProgress implements MockingProgress {
 
     public void resetOngoingStubbing() {
         threadSafely().resetOngoingStubbing();
+    }
+
+    public List<Invocation> pullStubbedInvocations() {
+        return threadSafely().pullStubbedInvocations();
     }
 }
