@@ -64,4 +64,8 @@ public class ThreadSafeMockingProgress implements MockingProgress {
     public List<Invocation> pullStubbedInvocations() {
         return threadSafely().pullStubbedInvocations();
     }
+
+    public LastArguments getLastArguments() {
+        return threadSafely().getLastArguments();
+    }
 }

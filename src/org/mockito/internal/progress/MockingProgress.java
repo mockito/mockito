@@ -35,4 +35,6 @@ public interface MockingProgress {
     void resetOngoingStubbing();
 
     List<Invocation> pullStubbedInvocations();
+
+    LastArguments getLastArguments();
 }

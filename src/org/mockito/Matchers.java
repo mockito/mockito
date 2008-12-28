@@ -21,7 +21,8 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.EmptyReturnValues;
-import org.mockito.internal.progress.LastArguments;
+import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -91,6 +92,8 @@ import org.mockito.internal.progress.LastArguments;
  */
 @SuppressWarnings("unchecked")
 public class Matchers {
+    
+    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     /**
      * any boolean, Boolean or null.
@@ -599,6 +602,6 @@ public class Matchers {
     }
 
     private static EmptyReturnValues reportMatcher(Matcher<?> matcher) {
-        return LastArguments.instance().reportMatcher(matcher);
+        return mockingProgress.getLastArguments().reportMatcher(matcher);
     }
 }

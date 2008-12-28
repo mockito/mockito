@@ -59,14 +59,14 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         if (mockitoStubber.hasAnswersForStubbing()) {
             //stubbing voids with stubVoid() or doAnswer() style
             Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
+            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getLastArguments(), invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
         Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
-        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(invocation);
+        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getLastArguments(), invocation);
         
         mockingProgress.validateState();
 

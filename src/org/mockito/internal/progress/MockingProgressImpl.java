@@ -15,6 +15,7 @@ import org.mockito.internal.verification.api.VerificationMode;
 public class MockingProgressImpl implements MockingProgress {
     
     private final Reporter reporter = new Reporter();
+    private final LastArguments lastArguments = new LastArguments();
     
     OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
@@ -69,7 +70,7 @@ public class MockingProgressImpl implements MockingProgress {
         }
       
         //TODO LastArguments should be somewhere here...
-        LastArguments.instance().validateState();
+        getLastArguments().validateState();
     }
 
     public void stubbingCompleted(Invocation invocation) {
@@ -87,12 +88,16 @@ public class MockingProgressImpl implements MockingProgress {
         stubbingInProgress = false;
         verificationMode = null;
         //TODO LastArguments should be somewhere here...
-        LastArguments.instance().reset();
+        getLastArguments().reset();
     }
 
     public List<Invocation> pullStubbedInvocations() {
         List<Invocation> ret = new LinkedList<Invocation>(stubbedInvocations);
         stubbedInvocations.clear();
         return ret;
+    }
+
+    public LastArguments getLastArguments() {
+        return lastArguments;
     }
 }

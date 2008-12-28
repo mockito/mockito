@@ -13,8 +13,8 @@ import org.mockito.internal.progress.LastArguments;
 @SuppressWarnings("unchecked")
 public class MatchersBinder {
 
-    public InvocationMatcher bindMatchers(Invocation invocation) {
-        List<Matcher> lastMatchers = LastArguments.instance().pullMatchers();
+    public InvocationMatcher bindMatchers(LastArguments lastArguments, Invocation invocation) {
+        List<Matcher> lastMatchers = lastArguments.pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
         InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, lastMatchers);

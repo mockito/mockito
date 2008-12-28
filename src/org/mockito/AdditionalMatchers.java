@@ -13,7 +13,8 @@ import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
 import org.mockito.internal.progress.EmptyReturnValues;
-import org.mockito.internal.progress.LastArguments;
+import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 /**
  * See {@link Matchers} for general info about matchers.
@@ -38,6 +39,8 @@ import org.mockito.internal.progress.LastArguments;
  * Scroll down to see all methods - full list of matchers.
  */
 public class AdditionalMatchers {
+    
+    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     /**
      * argument greater than or equal the given value.
@@ -569,7 +572,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
-        return LastArguments.instance().reportAnd().returnFalse();
+        return mockingProgress.getLastArguments().reportAnd().returnFalse();
     }
 
     /**
@@ -584,7 +587,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte and(byte first, byte second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -599,7 +602,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char and(char first, char second) {
-        return LastArguments.instance().reportAnd().returnChar();
+        return mockingProgress.getLastArguments().reportAnd().returnChar();
     }
 
     /**
@@ -614,7 +617,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double and(double first, double second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -629,7 +632,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float and(float first, float second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -644,7 +647,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int and(int first, int second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -659,7 +662,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long and(long first, long second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -674,7 +677,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short and(short first, short second) {
-        return LastArguments.instance().reportAnd().returnZero();
+        return mockingProgress.getLastArguments().reportAnd().returnZero();
     }
 
     /**
@@ -691,7 +694,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
-        return LastArguments.instance().reportAnd().<T>returnNull();
+        return mockingProgress.getLastArguments().reportAnd().<T>returnNull();
     }
 
     /**
@@ -706,7 +709,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean or(boolean first, boolean second) {
-        return LastArguments.instance().reportOr().returnFalse();
+        return mockingProgress.getLastArguments().reportOr().returnFalse();
     }
 
     /**
@@ -723,7 +726,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
-        return LastArguments.instance().reportOr().<T>returnNull();
+        return mockingProgress.getLastArguments().reportOr().<T>returnNull();
     }
 
     /**
@@ -738,7 +741,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short or(short first, short second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -753,7 +756,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long or(long first, long second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -768,7 +771,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int or(int first, int second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -783,7 +786,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float or(float first, float second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -798,7 +801,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double or(double first, double second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -813,7 +816,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char or(char first, char second) {
-        return LastArguments.instance().reportOr().returnChar();
+        return mockingProgress.getLastArguments().reportOr().returnChar();
     }
 
     /**
@@ -828,7 +831,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte or(byte first, byte second) {
-        return LastArguments.instance().reportOr().returnZero();
+        return mockingProgress.getLastArguments().reportOr().returnZero();
     }
 
     /**
@@ -843,7 +846,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
-        return LastArguments.instance().reportNot().<T>returnNull();
+        return mockingProgress.getLastArguments().reportNot().<T>returnNull();
     }
 
     /**
@@ -856,7 +859,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short not(short first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -869,7 +872,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int not(int first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -882,7 +885,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long not(long first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -895,7 +898,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float not(float first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -908,7 +911,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double not(double first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -921,7 +924,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char not(char first) {
-        return LastArguments.instance().reportNot().returnChar();
+        return mockingProgress.getLastArguments().reportNot().returnChar();
     }
 
     /**
@@ -934,7 +937,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
-        return LastArguments.instance().reportNot().returnFalse();
+        return mockingProgress.getLastArguments().reportNot().returnFalse();
     }
 
     /**
@@ -947,7 +950,7 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte not(byte first) {
-        return LastArguments.instance().reportNot().returnZero();
+        return mockingProgress.getLastArguments().reportNot().returnZero();
     }
 
     /**
@@ -983,6 +986,6 @@ public class AdditionalMatchers {
     }
     
     private static EmptyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
-        return LastArguments.instance().reportMatcher(matcher);
+        return mockingProgress.getLastArguments().reportMatcher(matcher);
     }
 }

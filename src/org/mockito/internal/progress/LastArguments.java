@@ -19,17 +19,7 @@ import org.mockito.internal.matchers.Or;
 @SuppressWarnings("unchecked")
 public class LastArguments {
     
-    private static final ThreadLocal<LastArguments> INSTANCE = new ThreadLocal<LastArguments>();
-    
     private Stack<Matcher> matcherStack = new Stack<Matcher>();
-
-    public static LastArguments instance() {
-        if (INSTANCE.get() == null) {
-            INSTANCE.set(new LastArguments()); 
-        }
-        
-        return INSTANCE.get();
-    }
     
     public EmptyReturnValues reportMatcher(Matcher matcher) {
         matcherStack.push(matcher);
