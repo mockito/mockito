@@ -265,22 +265,6 @@
       </fileset>
     </copy>
   </target>
-    
-  <target name="java-xref">
-    <taskdef resource="org/jvnet/sorcerer/ant.properties" classpathref="ant.classpath" />
-
-    <sorcerer windowTitle="Mockito" srcdir="." destdir="target/javaxref">
-      <include name="src/**/*.java"/>
-      <include name="test/**/*.java"/>
-      <classpath refid="test.compile.classpath" />
-    </sorcerer>
-  </target>
-  
-  <target name="release.javaxref" depends="java-xref">
-    <copy todir="javaxref">
-      <fileset dir="${target.dir}/javaxref" />
-    </copy>
-  </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
