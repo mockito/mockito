@@ -17,8 +17,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.progress.DebuggingHelper;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.util.MockitoLogger;
+import org.mockito.internal.util.MockitoLoggerImpl;
 
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
@@ -50,8 +53,11 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
  */
 public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
 
+    MockitoLogger logger; 
+    
     public ExperimentalMockitoJUnitRunner(Class<?> klass) throws InitializationError {
         super(klass);
+        logger = new MockitoLoggerImpl();
     }
 
     @Override
@@ -62,17 +68,18 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
     
     class MockitoListener extends RunListener {
         
-        private MockingProgress progress;
+        private final DebuggingHelper debuggingHelper;
 
-        public MockitoListener(MockingProgress progress) {
-            super();
-            this.progress = progress;
+        public MockitoListener(DebuggingHelper debuggingHelper) {
+            this.debuggingHelper = debuggingHelper;
         }
 
         @Override
         public void testFailure(Failure failure) throws Exception {
+            //TODO DebuggingInfo should be produced by DebuggingHelper
             DebuggingInfo debuggingInfo = new DebuggingInfo(failure.getTestHeader());
-            List<Invocation> stubbedInvocations = progress.pullStubbedInvocations();
+            
+            List<Invocation> stubbedInvocations = debuggingHelper.pullStubbedInvocations();
             for (Invocation invocation : stubbedInvocations) {
                 if (!invocation.isVerified()) {
                     //TODO this requires some refactoring, it's just a dummy implementation
@@ -80,7 +87,13 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
                     break;
                 }
             }
-            debuggingInfo.printInfo();
+            
+            List<Invocation> unstubbedInvocations = debuggingHelper.pullUnstubbedInvocations();
+            for (Invocation invocation : unstubbedInvocations) {
+                debuggingInfo.addUnstubbedInvocation(invocation);
+            }
+            
+            debuggingInfo.printInfo(logger);
             super.testFailure(failure);
         }
     }
@@ -88,10 +101,13 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
     @Override
     public void run(RunNotifier notifier) {
         MockingProgress progress = new ThreadSafeMockingProgress();
-        MockitoListener listener = new MockitoListener(progress);
+        DebuggingHelper debuggingHelper = progress.getDebuggingHelper();
+        debuggingHelper.collectData();
+        
+        MockitoListener listener = new MockitoListener(debuggingHelper);
         notifier.addListener(listener);
         super.run(notifier);
-        //TODO pull should be done by the listener
-        progress.pullStubbedInvocations();
+        
+        debuggingHelper.clearData();
     }
 }

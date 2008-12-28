@@ -17,11 +17,11 @@ public class MockingProgressImpl implements MockingProgress {
     private final Reporter reporter = new Reporter();
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
+    private final DebuggingHelper debuggingHelper = new DebuggingHelper();
+
     OngoingStubbing ongoingStubbing;
     private VerificationMode verificationMode;
     private boolean stubbingInProgress = false;
-
-    private List<Invocation> stubbedInvocations = new LinkedList<Invocation>();
 
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
         this.ongoingStubbing = ongoingStubbing;
@@ -72,7 +72,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void stubbingCompleted(Invocation invocation) {
-        stubbedInvocations.add(invocation);        
+        debuggingHelper.addStubbedInvocation(invocation);        
         stubbingInProgress = false;
     }
     
@@ -88,13 +88,11 @@ public class MockingProgressImpl implements MockingProgress {
         getArgumentMatcherStorage().reset();
     }
 
-    public List<Invocation> pullStubbedInvocations() {
-        List<Invocation> ret = new LinkedList<Invocation>(stubbedInvocations);
-        stubbedInvocations.clear();
-        return ret;
-    }
-
     public ArgumentMatcherStorage getArgumentMatcherStorage() {
         return argumentMatcherStorage;
+    }
+
+    public DebuggingHelper getDebuggingHelper() {
+        return debuggingHelper;
     }
 }

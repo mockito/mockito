@@ -86,7 +86,6 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).voidMethod();
             fail();
         } catch (MockitoException e) {
-            //TODO could the message be clearer?
             assertThat(e.getMessage(), contains("Cannot stub a void method with a return value"));
         }
     }

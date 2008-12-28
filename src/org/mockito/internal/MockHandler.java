@@ -82,6 +82,11 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockingProgress.reportOngoingStubbing(new OngoingStubbingImpl());
 
         Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
+        if (!invocation.isVoid() && answer == null) {
+            //it is a return-value interaction but not stubbed. This *might* be a problem
+            mockingProgress.getDebuggingHelper().addUnstubbedInvocation(invocation);
+        }
+            
         if (answer != null) {
             return answer.answer(invocation);
         } else if (MockUtil.isMock(instance)) {

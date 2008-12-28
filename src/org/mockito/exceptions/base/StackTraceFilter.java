@@ -12,7 +12,8 @@ public class StackTraceFilter {
     public boolean isLastStackElementToRemove(StackTraceElement e) {
         boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
         boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
-        return fromMockObject || fromOrgMockito;
+        boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
+        return fromMockObject || fromOrgMockito && !isRunner;
     }
 
     public void filterStackTrace(HasStackTrace hasStackTrace) {

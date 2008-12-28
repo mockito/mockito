@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-import java.util.List;
-
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
@@ -34,7 +32,7 @@ public interface MockingProgress {
      */
     void resetOngoingStubbing();
 
-    List<Invocation> pullStubbedInvocations();
-
     ArgumentMatcherStorage getArgumentMatcherStorage();
+
+    DebuggingHelper getDebuggingHelper();
 }

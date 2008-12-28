@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-import java.util.List;
-
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
@@ -61,11 +59,11 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         threadSafely().resetOngoingStubbing();
     }
 
-    public List<Invocation> pullStubbedInvocations() {
-        return threadSafely().pullStubbedInvocations();
-    }
-
     public ArgumentMatcherStorage getArgumentMatcherStorage() {
         return threadSafely().getArgumentMatcherStorage();
+    }
+
+    public DebuggingHelper getDebuggingHelper() {
+        return threadSafely().getDebuggingHelper();
     }
 }

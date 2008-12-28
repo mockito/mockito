@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.MockitoLogger;
 
 public class DebuggingInfo {
 
     private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
+    private List<Invocation> unstubbedInvocations = new LinkedList<Invocation>();
     private final String testName;
 
     public DebuggingInfo(String testName) {
@@ -18,7 +20,7 @@ public class DebuggingInfo {
         this.unusedStubs.add(invocation);
     }
 
-    public void printInfo() {
+    public void printInfo(MockitoLogger logger) {
         if (!shouldPrint()) {
             return;
         }
@@ -28,16 +30,22 @@ public class DebuggingInfo {
 //        print(test);
         
         for (Invocation i : unusedStubs) {
-            print("Warning - unused stub detected:");
-            print(i.getStackTrace().getStackTrace()[0]);
+            logger.print("Warning - unused stub detected here:");
+            logger.print(i.getStackTrace().getStackTrace()[0]);
+        }
+        
+        for (Invocation i : unstubbedInvocations) {
+            logger.print("Warning - unstubbed method invoked here:");
+            logger.print(i.getStackTrace().getStackTrace()[0]);
         }
     }
 
-    private void print(Object text) {
-        System.out.println("[Mockito] " + text.toString());
+    private boolean shouldPrint() {
+        //TODO test, include unstubbedInvocations...
+        return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
     }
 
-    private boolean shouldPrint() {
-        return !unusedStubs.isEmpty();
+    public void addUnstubbedInvocation(Invocation invocation) {
+        unstubbedInvocations.add(invocation);
     }
 }

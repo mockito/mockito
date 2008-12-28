@@ -17,6 +17,7 @@ public class SmartNullReturnValues implements ReturnValues {
     private final ReturnValues delegate = new DefaultReturnValues();
 
     public Object valueFor(InvocationOnMock invocation) {
+        //TODO add more NullObjects
         Object defaultReturnValue = delegate.valueFor(invocation);
         if (defaultReturnValue != null) {
             return defaultReturnValue;
