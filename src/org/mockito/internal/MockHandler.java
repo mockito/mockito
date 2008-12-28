@@ -84,7 +84,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
         if (!invocation.isVoid() && answer == null) {
             //it is a return-value interaction but not stubbed. This *might* be a problem
-            mockingProgress.getDebuggingHelper().addUnstubbedInvocation(invocation);
+            mockingProgress.getDebuggingHelper().addPotentiallyUnstubbed(invocationMatcher);
         }
             
         if (answer != null) {

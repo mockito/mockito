@@ -1,15 +1,17 @@
 package org.mockito.internal.debugging;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.util.MockitoLogger;
 
 public class DebuggingInfo {
 
     private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
-    private List<Invocation> unstubbedInvocations = new LinkedList<Invocation>();
+    private List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
     private final String testName;
 
     public DebuggingInfo(String testName) {
@@ -29,14 +31,44 @@ public class DebuggingInfo {
 //        print("Test:");
 //        print(test);
         
-        for (Invocation i : unusedStubs) {
-            logger.print("Warning - unused stub detected here:");
-            logger.print(i.getStackTrace().getStackTrace()[0]);
+        Iterator<Invocation> unusedIterator = unusedStubs.iterator();
+        while(unusedIterator.hasNext()) {
+            Invocation unused = unusedIterator.next();
+            Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
+            while(unstubbedIterator.hasNext()) {
+                InvocationMatcher unstubbed = unstubbedIterator.next();
+                if(unstubbed.hasSimilarMethod(unused)) { 
+                    logger.print("Warning - stubbed method called with different arguments.");
+                    logger.print("Stubbed like that:");
+                    logger.print(unused);
+                    logger.print("Click here to see it in your code:");
+                    logger.print(unused.getStackTrace().getStackTrace()[0]);
+                    logger.print("But called with different arguments:");
+                    logger.print(unstubbed.getInvocation());
+                    logger.print("Click here to see it in your code:");
+                    logger.print(unstubbed.getInvocation().getStackTrace().getStackTrace()[0]);
+                    logger.print();
+                    
+                    unusedIterator.remove();
+                    unstubbedIterator.remove();
+                }
+            }
         }
         
-        for (Invocation i : unstubbedInvocations) {
-            logger.print("Warning - unstubbed method invoked here:");
+        for (Invocation i : unusedStubs) {
+            logger.print("Warning - this stub was not used:");
+            logger.print(i);
+            logger.print("Click here to see it in your code:");
             logger.print(i.getStackTrace().getStackTrace()[0]);
+            logger.print();
+        }
+        
+        for (InvocationMatcher i : unstubbedInvocations) {
+            logger.print("Warning - this method was not stubbed:");
+            logger.print(i.getInvocation());
+            logger.print("Click here to see it in your code:");
+            logger.print(i.getInvocation().getStackTrace().getStackTrace()[0]);
+            logger.print();
         }
     }
 
@@ -45,7 +77,7 @@ public class DebuggingInfo {
         return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
     }
 
-    public void addUnstubbedInvocation(Invocation invocation) {
+    public void addUnstubbedInvocation(InvocationMatcher invocation) {
         unstubbedInvocations.add(invocation);
     }
 }

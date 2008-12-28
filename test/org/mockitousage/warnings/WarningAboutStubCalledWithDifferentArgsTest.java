@@ -16,11 +16,10 @@ import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 @RunWith(ExperimentalMockitoJUnitRunner.class)
-public class WarningAboutStubsNotUsedTest extends TestBase {
+public class WarningAboutStubCalledWithDifferentArgsTest extends TestBase {
 
     public class SomeController {
 
-        @SuppressWarnings("unused")
         private final ReadFromSomeFileSystem reader;
 
         public SomeController(ReadFromSomeFileSystem reader, Object object) {
@@ -28,8 +27,7 @@ public class WarningAboutStubsNotUsedTest extends TestBase {
         }
 
         public byte[] naughtyMethodUnderTestWhichDoesNotFailBecauseItReturnsAValue(String filename) {
-            //oups... I forgot to call the stub...
-            return null;
+            return this.reader.readFromFile("filename");
         }
     }
 

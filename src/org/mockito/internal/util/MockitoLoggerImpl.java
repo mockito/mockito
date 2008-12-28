@@ -8,4 +8,8 @@ public class MockitoLoggerImpl implements MockitoLogger {
     public void print(Object what) {
         System.out.println("[Mockito] " + what.toString());
     }
+
+    public void print() {
+        System.out.println();
+    }
 }

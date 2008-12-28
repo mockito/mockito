@@ -4,4 +4,6 @@ public interface MockitoLogger {
 
     void print(Object what);
 
+    void print();
+
 }

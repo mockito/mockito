@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.DebuggingHelper;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -88,8 +89,8 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
                 }
             }
             
-            List<Invocation> unstubbedInvocations = debuggingHelper.pullUnstubbedInvocations();
-            for (Invocation invocation : unstubbedInvocations) {
+            List<InvocationMatcher> unstubbedInvocations = debuggingHelper.pullUnstubbedInvocations();
+            for (InvocationMatcher invocation : unstubbedInvocations) {
                 debuggingInfo.addUnstubbedInvocation(invocation);
             }
             
