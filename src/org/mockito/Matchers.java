@@ -602,6 +602,6 @@ public class Matchers {
     }
 
     private static EmptyReturnValues reportMatcher(Matcher<?> matcher) {
-        return mockingProgress.getLastArguments().reportMatcher(matcher);
+        return mockingProgress.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

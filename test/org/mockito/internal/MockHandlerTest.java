@@ -9,7 +9,7 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.progress.LastArguments;
+import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -34,7 +34,7 @@ public class MockHandlerTest extends TestBase {
     
     private class ExceptionThrowingBinder extends MatchersBinder {
         @Override
-        public InvocationMatcher bindMatchers(LastArguments lastArguments, Invocation invocation) {
+        public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
             throw new InvalidUseOfMatchersException("");
         }
     }

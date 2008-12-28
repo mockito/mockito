@@ -36,5 +36,5 @@ public interface MockingProgress {
 
     List<Invocation> pullStubbedInvocations();
 
-    LastArguments getLastArguments();
+    ArgumentMatcherStorage getArgumentMatcherStorage();
 }

@@ -17,15 +17,21 @@ import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
 @SuppressWarnings("unchecked")
-public class LastArguments {
+public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     
     private Stack<Matcher> matcherStack = new Stack<Matcher>();
     
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportMatcher(org.hamcrest.Matcher)
+     */
     public EmptyReturnValues reportMatcher(Matcher matcher) {
         matcherStack.push(matcher);
         return new EmptyReturnValues();
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#pullMatchers()
+     */
     public List<Matcher> pullMatchers() {
         if (matcherStack.isEmpty()) {
             return null;
@@ -36,12 +42,18 @@ public class LastArguments {
         return matchers;
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
+     */
     public EmptyReturnValues reportAnd() {
         assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
         matcherStack.push(new And(popLastArgumentMatchers(2)));
         return new EmptyReturnValues();
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportNot()
+     */
     public EmptyReturnValues reportNot() {
         assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
         matcherStack.push(new Not(popLastArgumentMatchers(1).get(0)));
@@ -67,12 +79,18 @@ public class LastArguments {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportOr()
+     */
     public EmptyReturnValues reportOr() {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(2)));
         return new EmptyReturnValues();
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#validateState()
+     */
     public void validateState() {
         if (!matcherStack.isEmpty()) {
             matcherStack.clear();
@@ -80,6 +98,9 @@ public class LastArguments {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reset()
+     */
     public void reset() {
         matcherStack.clear();
     }

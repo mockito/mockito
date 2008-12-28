@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.progress.LastArguments;
+import org.mockito.internal.progress.ArgumentMatcherStorage;
 
 @SuppressWarnings("unchecked")
 public class MatchersBinder {
 
-    public InvocationMatcher bindMatchers(LastArguments lastArguments, Invocation invocation) {
-        List<Matcher> lastMatchers = lastArguments.pullMatchers();
+    public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+        List<Matcher> lastMatchers = argumentMatcherStorage.pullMatchers();
         validateMatchers(invocation, lastMatchers);
 
         InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, lastMatchers);
