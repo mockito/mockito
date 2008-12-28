@@ -6,7 +6,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.configuration.ReturnValues;
-import org.mockito.exceptions.cause.UndesiredInvocation;
+import org.mockito.exceptions.cause.BecauseThisMethodWasNotStubbed;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.configuration.DefaultReturnValues;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
@@ -24,11 +24,9 @@ public class SmartNullReturnValues implements ReturnValues {
         Class<?> type = invocation.getMethod().getReturnType();
         if (ClassImposterizer.INSTANCE.canImposterise(type)) {
             return ClassImposterizer.INSTANCE.imposterise(new MethodInterceptor() {
-
-                //TODO change from UndesiredInvocation
-                Exception whenCreated = new UndesiredInvocation("Unstubbed method was invoked here");
+                Exception whenCreated = new BecauseThisMethodWasNotStubbed("\nBecause this method was not stubbed:");
                 public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                    throw new SmartNullPointerException("oops", whenCreated);
+                    throw new SmartNullPointerException("\nYou have a NullPointerException here:", whenCreated);
                 }}, type);
         }
         return null;
