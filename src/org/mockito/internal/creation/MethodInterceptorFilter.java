@@ -34,11 +34,6 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
 
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
             throws Throwable {
-        //TODO check if this is any useful
-        if (method.isBridge()) {
-            return methodProxy.invokeSuper(proxy, args);
-        }
-        
         if (equalsMethod.equals(method)) {
             return Boolean.valueOf(proxy == args[0]);
         } else if (hashCodeMethod.equals(method)) {
