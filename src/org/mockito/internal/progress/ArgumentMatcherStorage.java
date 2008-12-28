@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 
+@SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
     EmptyReturnValues reportMatcher(Matcher matcher);
