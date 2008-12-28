@@ -54,7 +54,6 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingStarted() {
         validateState();
-        //TODO stubbingInProgress is somehow duplicated with stubbedInvocations
         stubbingInProgress = true;
     }
 
