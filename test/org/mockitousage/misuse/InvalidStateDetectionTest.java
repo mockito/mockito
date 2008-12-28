@@ -279,7 +279,7 @@ public class InvalidStateDetectionTest extends TestBase {
         } catch (Exception e) {
             assertEquals(expected, e.getClass());
         }
-        //Make sure state is OK
+        //Make sure state is cleaned up
         StateMaster.validate();
     }
 }

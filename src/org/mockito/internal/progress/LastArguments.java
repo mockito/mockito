@@ -32,7 +32,6 @@ public class LastArguments {
     }
     
     public EmptyReturnValues reportMatcher(Matcher matcher) {
-//        matcherStack.push(new LocalizedMatcher(matcher));
         matcherStack.push(matcher);
         return new EmptyReturnValues();
     }
@@ -85,11 +84,7 @@ public class LastArguments {
     }
 
     public void validateState() {
-//        assertState(matcherStack.isEmpty(), "Misplaced argument matcher.");
-        //TODO test cleanup?
-        //TODO duplicated
         if (!matcherStack.isEmpty()) {
-//          MockitoException lastMatcherLocation = ((LocalizedMatcher) matcherStack.pop()).getLocation();
             matcherStack.clear();
             new Reporter().misplacedArgumentMatcher();
         }
