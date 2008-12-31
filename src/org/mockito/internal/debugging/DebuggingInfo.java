@@ -12,6 +12,9 @@ public class DebuggingInfo {
 
     private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
     private List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
+    
+    //I don't know if this is needed yet
+    @SuppressWarnings("unused")
     private final String testName;
 
     public DebuggingInfo(String testName) {
@@ -39,13 +42,11 @@ public class DebuggingInfo {
                 InvocationMatcher unstubbed = unstubbedIterator.next();
                 if(unstubbed.hasSimilarMethod(unused)) { 
                     logger.print("Warning - stubbed method called with different arguments.");
-                    logger.print("Stubbed like that:");
+                    logger.print("Stubbed this way:");
                     logger.print(unused);
-                    logger.print("Click here to see it in your code:");
                     logger.print(unused.getStackTrace().getStackTrace()[0]);
                     logger.print("But called with different arguments:");
                     logger.print(unstubbed.getInvocation());
-                    logger.print("Click here to see it in your code:");
                     logger.print(unstubbed.getInvocation().getStackTrace().getStackTrace()[0]);
                     logger.print();
                     
@@ -58,7 +59,6 @@ public class DebuggingInfo {
         for (Invocation i : unusedStubs) {
             logger.print("Warning - this stub was not used:");
             logger.print(i);
-            logger.print("Click here to see it in your code:");
             logger.print(i.getStackTrace().getStackTrace()[0]);
             logger.print();
         }
@@ -66,7 +66,6 @@ public class DebuggingInfo {
         for (InvocationMatcher i : unstubbedInvocations) {
             logger.print("Warning - this method was not stubbed:");
             logger.print(i.getInvocation());
-            logger.print("Click here to see it in your code:");
             logger.print(i.getInvocation().getStackTrace().getStackTrace()[0]);
             logger.print();
         }
