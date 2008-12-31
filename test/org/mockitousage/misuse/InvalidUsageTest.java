@@ -67,7 +67,18 @@ public class InvalidUsageTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
+        when(mock.simpleMethod()).thenThrow(new Throwable[] {null});
+    }    
+
+    @SuppressWarnings("all")
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingNullThrowableVararg() throws Exception {
         when(mock.simpleMethod()).thenThrow(null);
+    }    
+
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingNullConsecutiveThrowable() throws Exception {
+        when(mock.simpleMethod()).thenThrow(new RuntimeException(), null);
     }    
     
     final class FinalClass {}

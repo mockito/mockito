@@ -24,6 +24,10 @@ import org.mockito.stubbing.Answer;
  * when(mock.someMethod("some arg"))
  *  .thenThrow(new RuntimeException())
  *  .thenReturn("foo");
+ * 
+ * //There is a shorter way of consecutive stubbing:
+ * when(mock.someMethod()).thenReturn(1,2,3);
+ * when(mock.otherMethod()).thenThrow(exc1, exc2);
  * </pre>
  *
  * See examples in javadoc for {@link Mockito#when}
@@ -50,6 +54,8 @@ public interface NewOngoingStubbing<T> {
      * when(mock.someMethod()).thenReturn(1, 2, 3);
      * </pre>
      *
+     * Last return value in the sequence (in example: 3) determines the behavior of further consecutive calls.
+     * <p>
      * See examples in javadoc for {@link Mockito#when}
      *
      * @param value first return value
@@ -67,7 +73,12 @@ public interface NewOngoingStubbing<T> {
      *
      * If throwables contain a checked exception then it has to
      * match one of the checked exceptions of method signature.
-     *
+     * <p>
+     * You can specify throwables to be thrown for consecutive calls. 
+     * In that case the last throwable determines the behavior of further consecutive calls.
+     * <p>
+     * if throwable is null then exception will be thrown.
+     * <p>
      * See examples in javadoc for {@link Mockito#when}
      *
      * @param throwables to be thrown on method invocation
