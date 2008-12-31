@@ -2,8 +2,8 @@ package org.mockito.internal.util;
 
 public interface MockitoLogger {
 
-    void print(Object what);
+    void println(Object what);
 
-    void print();
+    void println();
 
 }

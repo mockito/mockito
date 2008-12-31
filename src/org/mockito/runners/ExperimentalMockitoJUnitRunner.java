@@ -4,8 +4,6 @@
  */
 package org.mockito.runners;
 
-import java.util.List;
-
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
@@ -16,9 +14,6 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.debugging.DebuggingInfo;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.DebuggingHelper;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.util.MockitoLogger;
@@ -54,7 +49,7 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  */
 public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
 
-    MockitoLogger logger; 
+    private final MockitoLogger logger;
     
     public ExperimentalMockitoJUnitRunner(Class<?> klass) throws InitializationError {
         super(klass);
@@ -67,48 +62,23 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
         return super.withBefores(method, target, statement);
     }
     
-    class MockitoListener extends RunListener {
-        
-        private final DebuggingHelper debuggingHelper;
-
-        public MockitoListener(DebuggingHelper debuggingHelper) {
-            this.debuggingHelper = debuggingHelper;
-        }
-
-        @Override
-        public void testFailure(Failure failure) throws Exception {
-            //TODO DebuggingInfo should be produced by DebuggingHelper
-            DebuggingInfo debuggingInfo = new DebuggingInfo(failure.getTestHeader());
-            
-            List<Invocation> stubbedInvocations = debuggingHelper.pullStubbedInvocations();
-            for (Invocation invocation : stubbedInvocations) {
-                if (!invocation.isVerified()) {
-                    //TODO this requires some refactoring, it's just a dummy implementation
-                    debuggingInfo.addUnusedStub(invocation);
-                    break;
-                }
-            }
-            
-            List<InvocationMatcher> unstubbedInvocations = debuggingHelper.pullUnstubbedInvocations();
-            for (InvocationMatcher invocation : unstubbedInvocations) {
-                debuggingInfo.addUnstubbedInvocation(invocation);
-            }
-            
-            debuggingInfo.printInfo(logger);
-            super.testFailure(failure);
-        }
-    }
-    
     @Override
     public void run(RunNotifier notifier) {
-        MockingProgress progress = new ThreadSafeMockingProgress();
-        DebuggingHelper debuggingHelper = progress.getDebuggingHelper();
-        debuggingHelper.collectData();
+        final MockingProgress progress = new ThreadSafeMockingProgress();
+        final DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
         
-        MockitoListener listener = new MockitoListener(debuggingHelper);
+        debuggingInfo.collectData();
+        
+        RunListener listener = new RunListener() {
+            @Override
+            public void testFailure(Failure failure) throws Exception {
+                debuggingInfo.printWarnings(logger);
+                super.testFailure(failure);
+            }
+        };
         notifier.addListener(listener);
         super.run(notifier);
         
-        debuggingHelper.clearData();
+        debuggingInfo.clearData();
     }
 }

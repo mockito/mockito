@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.progress;
 
+import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
@@ -63,7 +64,7 @@ public class ThreadSafeMockingProgress implements MockingProgress {
         return threadSafely().getArgumentMatcherStorage();
     }
 
-    public DebuggingHelper getDebuggingHelper() {
-        return threadSafely().getDebuggingHelper();
+    public DebuggingInfo getDebuggingInfo() {
+        return threadSafely().getDebuggingInfo();
     }
 }

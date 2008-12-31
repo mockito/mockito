@@ -10,73 +10,49 @@ import org.mockito.internal.util.MockitoLogger;
 
 public class DebuggingInfo {
 
-    private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
-    private List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
-    
-    //I don't know if this is needed yet
-    @SuppressWarnings("unused")
-    private final String testName;
+    private final List<Invocation> stubbedInvocations = new LinkedList<Invocation>();
+    private final List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
 
-    public DebuggingInfo(String testName) {
-        this.testName = testName;
-    }
-
-    public void addUnusedStub(Invocation invocation) {
-        this.unusedStubs.add(invocation);
-    }
-
-    public void printInfo(MockitoLogger logger) {
-        if (!shouldPrint()) {
-            return;
-        }
-        
-//        print("Mockito detected some of your stubs were not called. This *might* be the reason your test failed.");
-//        print("Test:");
-//        print(test);
-        
-        Iterator<Invocation> unusedIterator = unusedStubs.iterator();
-        while(unusedIterator.hasNext()) {
-            Invocation unused = unusedIterator.next();
-            Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
-            while(unstubbedIterator.hasNext()) {
-                InvocationMatcher unstubbed = unstubbedIterator.next();
-                if(unstubbed.hasSimilarMethod(unused)) { 
-                    logger.print("Warning - stubbed method called with different arguments.");
-                    logger.print("Stubbed this way:");
-                    logger.print(unused);
-                    logger.print(unused.getStackTrace().getStackTrace()[0]);
-                    logger.print("But called with different arguments:");
-                    logger.print(unstubbed.getInvocation());
-                    logger.print(unstubbed.getInvocation().getStackTrace().getStackTrace()[0]);
-                    logger.print();
-                    
-                    unusedIterator.remove();
-                    unstubbedIterator.remove();
-                }
+    public void addStubbedInvocation(Invocation invocation) {
+        //TODO test 
+        //this is required because we don't know if unstubbedInvocation was really stubbed later...
+        Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
+        while(unstubbedIterator.hasNext()) {
+            InvocationMatcher unstubbed = unstubbedIterator.next();
+            if (unstubbed.getInvocation().equals(invocation)) {
+                unstubbedIterator.remove();
             }
         }
-        
-        for (Invocation i : unusedStubs) {
-            logger.print("Warning - this stub was not used:");
-            logger.print(i);
-            logger.print(i.getStackTrace().getStackTrace()[0]);
-            logger.print();
-        }
-        
-        for (InvocationMatcher i : unstubbedInvocations) {
-            logger.print("Warning - this method was not stubbed:");
-            logger.print(i.getInvocation());
-            logger.print(i.getInvocation().getStackTrace().getStackTrace()[0]);
-            logger.print();
-        }
+        unstubbedInvocations.remove(invocation);
+        stubbedInvocations.add(invocation);
     }
 
-    private boolean shouldPrint() {
-        //TODO test, include unstubbedInvocations...
-        return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
+    public void addPotentiallyUnstubbed(InvocationMatcher invocationMatcher) {
+        unstubbedInvocations.add(invocationMatcher);
     }
 
-    public void addUnstubbedInvocation(InvocationMatcher invocation) {
-        unstubbedInvocations.add(invocation);
+    public List<Invocation> pullStubbedInvocations() {
+        List<Invocation> ret = new LinkedList<Invocation>(stubbedInvocations);
+        stubbedInvocations.clear();
+        return ret;
+    }
+
+    public List<InvocationMatcher> pullUnstubbedInvocations() {
+        List<InvocationMatcher> ret = new LinkedList<InvocationMatcher>(unstubbedInvocations);
+        unstubbedInvocations.clear();
+        return ret;
+    }
+
+    public void collectData() {
+        // TODO Auto-generated method stub
+    }
+
+    public void clearData() {
+        // TODO Auto-generated method stub
+    }
+
+    public void printWarnings(MockitoLogger logger) {
+        WarningsPrinter warningsPrinter = new WarningsPrinter(stubbedInvocations, unstubbedInvocations);
+        warningsPrinter.print(logger);
     }
 }

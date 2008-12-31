@@ -4,7 +4,7 @@
  */
 package org.mockito.exceptions;
 
-import static org.mockito.exceptions.StringJoiner.*;
+import static org.mockito.internal.util.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoAssertionError;

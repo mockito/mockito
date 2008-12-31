@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.progress;
 
+import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
@@ -34,5 +35,5 @@ public interface MockingProgress {
 
     ArgumentMatcherStorage getArgumentMatcherStorage();
 
-    DebuggingHelper getDebuggingHelper();
+    DebuggingInfo getDebuggingInfo();
 }
