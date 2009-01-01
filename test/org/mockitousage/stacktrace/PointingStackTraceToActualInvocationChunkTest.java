@@ -13,12 +13,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.runners.ExperimentalMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 //This is required to make sure stack trace is well filtered when runner is ON
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(ExperimentalMockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
     
     private IMethods mock;

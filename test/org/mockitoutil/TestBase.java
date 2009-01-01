@@ -24,15 +24,15 @@ public class TestBase extends Assert {
     }
     
     //I'm really tired of matchers, enter the assertor!
-    protected <T> void assertThat(T o, Assertor<T> a) {
+    protected static <T> void assertThat(T o, Assertor<T> a) {
         a.assertValue(o);
     }
     
-    protected <T> void assertThat(T actual, Matcher<T> m) {
+    protected static <T> void assertThat(T actual, Matcher<T> m) {
         org.junit.Assert.assertThat(actual, m);
     }
     
-    protected <T> void assertThat(String message, T actual, Matcher<T> m) {
+    protected static <T> void assertThat(String message, T actual, Matcher<T> m) {
         org.junit.Assert.assertThat(message, actual, m);
     }
     
@@ -45,6 +45,32 @@ public class TestBase extends Assert {
             }
         };
     }
+    
+    public static <T> Assertor<String> notContains(final String substring) {
+        return new Assertor<String>() {
+            public void assertValue(String value) {
+                assertFalse("This substring: \n" + substring + 
+                        "\nshould NOT be inside of:\n" + value
+                        , value.contains(substring));
+            }
+        };
+    }
+    
+    //Assertors will never be matchers...
+//    public static <T> Assertor<T> not(final Assertor<T> assertor) {
+//        return new Assertor<T>() {
+//            public void assertValue(T value) {
+//                boolean failed = false;
+//                try {
+//                    assertor.assertValue(value);
+//                } catch (AssertionError e) {
+//                    failed = true;
+//                }
+//                
+//                assertTrue("Assertion failed", failed);
+//            }
+//        };
+//    }
     
     public static <T> Assertor<String> endsWith(final String substring) {
         return new Assertor<String>() {

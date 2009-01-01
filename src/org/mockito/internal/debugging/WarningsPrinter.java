@@ -20,10 +20,6 @@ public class WarningsPrinter {
     }
 
     public void print(MockitoLogger logger) {
-        if (!shouldPrint()) {
-            return;
-        }
-        
         //TODO it should be visible that this method changes the state
         warnAboutStubsUsedWithDifferentArgs(logger);
         warnAboutUnusedStubs(logger);
@@ -32,7 +28,7 @@ public class WarningsPrinter {
 
     private void warnAboutUnstubbedInvocations(MockitoLogger logger) {
         for (InvocationMatcher i : unstubbedInvocations) {
-            logger.println(join(
+            logger.log(join(
                 "[Mockito] Warning - this method was not stubbed:",
                 i,
                 "Here:",
@@ -43,7 +39,7 @@ public class WarningsPrinter {
 
     private void warnAboutUnusedStubs(MockitoLogger logger) {
         for (Invocation i : unusedStubs) {
-            logger.println(join(
+            logger.log(join(
                 "[Mockito] Warning - this stub was not used:",
                 i,
                 "Here:",
@@ -60,7 +56,7 @@ public class WarningsPrinter {
             while(unstubbedIterator.hasNext()) {
                 InvocationMatcher unstubbed = unstubbedIterator.next();
                 if(unstubbed.hasSimilarMethod(unused)) { 
-                    logger.println(join(
+                    logger.log(join(
                             "[Mockito] Warning - stubbed method called with different arguments.",
                             "Stubbed this way:",
                             unused,
@@ -78,10 +74,5 @@ public class WarningsPrinter {
                 }
             }
         }
-    }
-
-    private boolean shouldPrint() {
-        //TODO test, include unstubbedInvocations...
-        return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
     }
 }

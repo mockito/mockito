@@ -49,11 +49,10 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  */
 public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
 
-    private final MockitoLogger logger;
+    static MockitoLogger logger = new MockitoLoggerImpl();
     
     public ExperimentalMockitoJUnitRunner(Class<?> klass) throws InitializationError {
         super(klass);
-        logger = new MockitoLoggerImpl();
     }
 
     @Override
@@ -62,22 +61,33 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
         return super.withBefores(method, target, statement);
     }
     
+    static interface SimpleRunner {
+        void run(RunNotifier notifier);
+    }
+    
     @Override
     public void run(RunNotifier notifier) {
+        this.run(notifier, new SimpleRunner() {
+            public void run(RunNotifier notifier) {
+                ExperimentalMockitoJUnitRunner.super.run(notifier);
+            }
+        });
+    }
+    
+    public void run(RunNotifier notifier, SimpleRunner littleRunner) {
         final MockingProgress progress = new ThreadSafeMockingProgress();
         final DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
         
         debuggingInfo.collectData();
-        
+
         RunListener listener = new RunListener() {
-            @Override
-            public void testFailure(Failure failure) throws Exception {
+            @Override public void testFailure(Failure failure) throws Exception {
                 debuggingInfo.printWarnings(logger);
-                super.testFailure(failure);
             }
         };
+        
         notifier.addListener(listener);
-        super.run(notifier);
+        littleRunner.run(notifier);
         
         debuggingInfo.clearData();
     }
