@@ -10,7 +10,6 @@ import org.mockito.internal.util.MockitoLogger;
 
 public class DebuggingInfo {
 
-    //TODO Thread safety issue?
     private final List<Invocation> stubbedInvocations = new LinkedList<Invocation>();
     private final List<InvocationMatcher> potentiallyUnstubbedInvocations = new LinkedList<InvocationMatcher>();
     //TODO this code is crap. Use different field to maintain unusedInvocations
