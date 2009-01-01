@@ -55,7 +55,7 @@ public class MockitoStubber {
         return findAnswerFor(invocation).answer(invocation);
     }
 
-    public Answer findAnswerFor(Invocation invocation) {
+    public Answer<?> findAnswerFor(Invocation invocation) {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(invocation)) {
                 return s;

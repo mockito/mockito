@@ -62,7 +62,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
             }
         });
     }
-    
+
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
         runner.run(notifier, new SimpleRunner() {
@@ -83,7 +83,8 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         runner.run(notifier, new SimpleRunner() {
             public void run(RunNotifier notifier) {
                 someStubbing();
-                callStubbedMethodCorrectly();
+                //TODO below should be different test method
+//                callStubbedMethodCorrectly();
                 callStubbedMethodWithDifferentArgs();
                 notifier.fireTestFailure(null);
                 
@@ -101,6 +102,22 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
             }
         });
     }
+    
+    @Test
+    public void shouldNotLogUsedStubbingWarningWhenTestFails() throws Exception {
+        runner.run(notifier, new SimpleRunner() {
+            public void run(RunNotifier notifier) {
+                when(mock.simpleMethod()).thenReturn("foo");
+                mock.simpleMethod();
+                
+                notifier.fireTestFailure(null);
+                
+                String loggedInfo = logger.getLoggedInfo();
+                assertEquals("", loggedInfo);
+            }
+        });
+    }
+    
     
     public void shouldClearDebuggingDataAfterwards() throws Exception {
         final DebuggingInfo debuggingInfo = new ThreadSafeMockingProgress().getDebuggingInfo();
@@ -142,7 +159,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         
         public void log(Object what) {
 //            can be uncommented when debugging this test
-//            super.println(what);
+//            super.log(what);
             loggedInfo.append(what);
         }
 

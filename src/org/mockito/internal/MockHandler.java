@@ -21,6 +21,7 @@ import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.util.MockUtil;
@@ -86,8 +87,9 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             //it is a return-value interaction but not stubbed. This *might* be a problem
             mockingProgress.getDebuggingInfo().addPotentiallyUnstubbed(invocationMatcher);
         }
-            
+        
         if (answer != null) {
+            mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             return answer.answer(invocation);
         } else if (MockUtil.isMock(instance)) {
             return returnValues.valueFor(invocation);

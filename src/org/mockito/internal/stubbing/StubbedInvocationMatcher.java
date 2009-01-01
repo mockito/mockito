@@ -22,6 +22,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
+        //TODO is synchronized here necessary?
         synchronized(answers) {
             return answers.size() == 1 ? answers.peek().answer(invocation) : answers.poll().answer(invocation);
         }

@@ -10,10 +10,9 @@ import org.mockito.internal.util.MockitoLogger;
 
 public class DebuggingInfo {
 
-    private final List<Invocation> stubbedInvocations = new LinkedList<Invocation>();
-    private final List<InvocationMatcher> potentiallyUnstubbedInvocations = new LinkedList<InvocationMatcher>();
-    //TODO this code is crap. Use different field to maintain unusedInvocations
-    private final List<InvocationMatcher> unusedInvocations = new LinkedList<InvocationMatcher>();
+    private final List<Invocation> unusedStubs = new LinkedList<Invocation>();
+    private final List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
+
     private boolean collectingData;
 
     public void addStubbedInvocation(Invocation invocation) {
@@ -21,24 +20,32 @@ public class DebuggingInfo {
             return;
         }
         
-        //TODO test 
-        //this is required because we don't know if unstubbedInvocation was really stubbed later...
-        Iterator<InvocationMatcher> unstubbedIterator = potentiallyUnstubbedInvocations.iterator();
+        Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
         while(unstubbedIterator.hasNext()) {
             InvocationMatcher unstubbed = unstubbedIterator.next();
             if (unstubbed.getInvocation().equals(invocation)) {
                 unstubbedIterator.remove();
             }
         }
-
-        stubbedInvocations.add(invocation);
+        
+        unusedStubs.add(invocation);
     }
 
     public void addPotentiallyUnstubbed(InvocationMatcher invocationMatcher) {
         if (!collectingData) {
             return;
         }
-        potentiallyUnstubbedInvocations.add(invocationMatcher);
+        unstubbedInvocations.add(invocationMatcher);
+    }
+    
+    public void reportUsedStub(InvocationMatcher invocationMatcher) {
+        Iterator<Invocation> i = unusedStubs.iterator();
+        while(i.hasNext()) {
+            Invocation invocation = i.next();
+            if (invocationMatcher.matches(invocation)) {
+                i.remove();
+            }
+        }
     }
 
     public void collectData() {
@@ -47,23 +54,19 @@ public class DebuggingInfo {
 
     public void clearData() {
         collectingData = false;
-        potentiallyUnstubbedInvocations.clear();
-        stubbedInvocations.clear();
+        unstubbedInvocations.clear();
+        unusedStubs.clear();
     }
 
     public void printWarnings(MockitoLogger logger) {
         if (hasData()) {
-            WarningsPrinter warningsPrinter = new WarningsPrinter(stubbedInvocations, potentiallyUnstubbedInvocations);
+            //TODO should only pass those that really wasn't called...
+            WarningsPrinter warningsPrinter = new WarningsPrinter(unusedStubs, unstubbedInvocations);
             warningsPrinter.print(logger);
         }
     }
 
     public boolean hasData() {
-        return !stubbedInvocations.isEmpty() || !potentiallyUnstubbedInvocations.isEmpty();
-    }
-    
-    @Override
-    public String toString() {
-        return "unusedInvocations: " + stubbedInvocations + "\nunstubbed invocations:" + potentiallyUnstubbedInvocations;
+        return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
     }
 }
