@@ -47,11 +47,11 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  * 
  * </pre>
  */
-public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
+public class ExperimentalMockitoJUnitRunnerPM extends BlockJUnit4ClassRunner {
 
     static MockitoLogger logger = new MockitoLoggerImpl();
     
-    public ExperimentalMockitoJUnitRunner(Class<?> klass) throws InitializationError {
+    public ExperimentalMockitoJUnitRunnerPM(Class<?> klass) throws InitializationError {
         super(klass);
     }
 
@@ -61,28 +61,19 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
         return super.withBefores(method, target, statement);
     }
     
-    //this is what is really executed when the test runs
-    static interface JunitTestBody {
-        void run(RunNotifier notifier);
+    protected void runTestBody(RunNotifier notifier) {
+        super.run(notifier);
     }
     
     @Override
     public void run(RunNotifier notifier) {
-        this.run(notifier, new JunitTestBody() {
-            public void run(RunNotifier notifier) {
-                ExperimentalMockitoJUnitRunner.super.run(notifier);
-            }
-        });
-    }
-    
-    public void run(RunNotifier notifier, JunitTestBody junitTestBody) {
         MockingProgress progress = new ThreadSafeMockingProgress();
         DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
         
         beforeRun(notifier, debuggingInfo);
         
-        junitTestBody.run(notifier);
-        
+        runTestBody(notifier);
+
         afterRun(debuggingInfo);
     }
 
