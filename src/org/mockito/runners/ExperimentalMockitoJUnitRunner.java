@@ -8,9 +8,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.debugging.DebuggingInfo;
@@ -47,7 +45,7 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  * 
  * </pre>
  */
-public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
+public class ExperimentalMockitoJUnitRunner extends MockitoJUnitRunner {
 
     private final MockitoLogger logger;
     
@@ -58,12 +56,6 @@ public class ExperimentalMockitoJUnitRunner extends BlockJUnit4ClassRunner {
     public ExperimentalMockitoJUnitRunner(Class<?> klass, MockitoLogger logger) throws InitializationError {
         super(klass);
         this.logger = logger;
-    }
-
-    @Override
-    protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
-        MockitoAnnotations.initMocks(target);
-        return super.withBefores(method, target, statement);
     }
     
     //this is what is really executed when the test runs
