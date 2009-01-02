@@ -49,10 +49,15 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  */
 public class ExperimentalMockitoJUnitRunnerPM extends BlockJUnit4ClassRunner {
 
-    static MockitoLogger logger = new MockitoLoggerImpl();
+    private final MockitoLogger logger;
     
-    public ExperimentalMockitoJUnitRunnerPM(Class<?> klass) throws InitializationError {
+    public ExperimentalMockitoJUnitRunnerPM(Class<?> klass, MockitoLogger logger) throws InitializationError {
         super(klass);
+        this.logger = logger; 
+    }
+
+    public ExperimentalMockitoJUnitRunnerPM(Class<?> klass) throws InitializationError {
+        this(klass, new MockitoLoggerImpl());
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.mockito.runners;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,13 +19,6 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("serial")
 public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
     
-    //just to get rid of noisy constructor
-    class ExperimentalMockitoJUnitRunnerPMStub extends ExperimentalMockitoJUnitRunnerPM {
-        public ExperimentalMockitoJUnitRunnerPMStub() throws InitializationError {
-            super(ExperimentalMockitoJUnitRunnerPMTest.class);
-        }
-    }
-    
     @Mock private IMethods mock;
     private ExperimentalMockitoJUnitRunnerPMStub runner;
     private MockitoLoggerStub loggerStub;
@@ -34,17 +26,18 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
 
     @Before
     public void setup() throws InitializationError {
-        runner = new ExperimentalMockitoJUnitRunnerPMStub();
         loggerStub = new MockitoLoggerStub();
-        ExperimentalMockitoJUnitRunnerPM.logger = loggerStub;
+        runner = new ExperimentalMockitoJUnitRunnerPMStub();
         notifier = new RunNotifier();
     }
     
-    @After
-    public void restoreLogger() {
-        ExperimentalMockitoJUnitRunnerPM.logger = new MockitoLoggerImpl();
+    //just to get rid of noisy constructor
+    class ExperimentalMockitoJUnitRunnerPMStub extends ExperimentalMockitoJUnitRunnerPM {
+        public ExperimentalMockitoJUnitRunnerPMStub() throws InitializationError {
+            super(ExperimentalMockitoJUnitRunnerPMTest.class, loggerStub);
+        }
     }
-
+    
     @Test
     public void shouldRunTests() throws Exception {
         final StringBuilder sb = new StringBuilder();

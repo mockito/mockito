@@ -60,7 +60,6 @@ public class DebuggingInfo {
 
     public void printWarnings(MockitoLogger logger) {
         if (hasData()) {
-            //TODO should only pass those that really wasn't called...
             WarningsPrinter warningsPrinter = new WarningsPrinter(unusedStubs, unstubbedInvocations);
             warningsPrinter.print(logger);
         }

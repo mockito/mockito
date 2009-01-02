@@ -2,7 +2,6 @@ package org.mockito.runners;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
@@ -20,23 +19,16 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
     private ExperimentalMockitoJUnitRunner runner;
-    private MockitoLoggerStub logger;
+    private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;
 
     @Before
     public void setup() throws InitializationError {
-        runner = new ExperimentalMockitoJUnitRunner(this.getClass());
-        logger = new MockitoLoggerStub();
-        ExperimentalMockitoJUnitRunner.logger = logger;
+        loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
+        runner = new ExperimentalMockitoJUnitRunner(this.getClass(), loggerStub);
     }
     
-    @After
-    public void restoreLogger() {
-        //TODO logger should instance field! 
-        ExperimentalMockitoJUnitRunner.logger = new MockitoLoggerImpl();
-    }
-
     @Test(expected=RunWasCalled.class)
     public void shouldRunTests() throws Exception {
         runner.run(notifier, new JunitTestBody() {
@@ -56,7 +48,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
                 //then, let's make the test fail so that warnings are printed
                 notifier.fireTestFailure(null);
                 //assert
-                String loggedInfo = logger.getLoggedInfo();
+                String loggedInfo = loggerStub.getLoggedInfo();
                 assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
                 assertThat(loggedInfo, contains("mock.simpleMethod(123);"));
                 assertThat(loggedInfo, contains(".unusedStubbingThatQualifiesForWarning("));
@@ -71,7 +63,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
                 callUnstubbedMethodThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
 
-                String loggedInfo = logger.getLoggedInfo();
+                String loggedInfo = loggerStub.getLoggedInfo();
                 assertThat(loggedInfo, contains("[Mockito] Warning - this method was not stubbed"));
                 assertThat(loggedInfo, contains("mock.simpleMethod(456);"));
                 assertThat(loggedInfo, contains(".callUnstubbedMethodThatQualifiesForWarning("));
@@ -89,7 +81,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
                 callStubbedMethodWithDifferentArgs();
                 notifier.fireTestFailure(null);
                 
-                String loggedInfo = logger.getLoggedInfo();
+                String loggedInfo = loggerStub.getLoggedInfo();
                 assertThat(loggedInfo, contains("[Mockito] Warning - stubbed method called with different arguments"));
                 assertThat(loggedInfo, contains("Stubbed this way:"));
                 assertThat(loggedInfo, contains("mock.simpleMethod(789);"));
@@ -113,7 +105,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
                 
                 notifier.fireTestFailure(null);
                 
-                String loggedInfo = logger.getLoggedInfo();
+                String loggedInfo = loggerStub.getLoggedInfo();
                 assertEquals("", loggedInfo);
             }
         });
