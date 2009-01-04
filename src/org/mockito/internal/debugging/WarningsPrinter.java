@@ -31,7 +31,7 @@ public class WarningsPrinter {
             logger.log(join(
                 "[Mockito] Warning - this method was not stubbed:",
                 i,
-                "Here:",
+                "Click here:",
                 i.getInvocation().getStackTrace().getStackTrace()[0],
                 ""));
         }
@@ -42,7 +42,7 @@ public class WarningsPrinter {
             logger.log(join(
                 "[Mockito] Warning - this stub was not used:",
                 i,
-                "Here:",
+                "Click here:",
                 i.getStackTrace().getStackTrace()[0],
                 ""));
         }
@@ -60,12 +60,12 @@ public class WarningsPrinter {
                             "[Mockito] Warning - stubbed method called with different arguments.",
                             "Stubbed this way:",
                             unused,
-                            "Here:",
+                            "Click here:",
                             unused.getStackTrace().getStackTrace()[0],
                             "",
                             "But called with different arguments:",
                             unstubbed.getInvocation(),
-                            "Here:",
+                            "Click here:",
                             unstubbed.getInvocation().getStackTrace().getStackTrace()[0],
                             ""));
                     

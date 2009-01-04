@@ -76,8 +76,6 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         runner.run(notifier, new JunitTestBody() {
             public void run(RunNotifier notifier) {
                 someStubbing();
-                //TODO below should be different test method
-//                callStubbedMethodCorrectly();
                 callStubbedMethodWithDifferentArgs();
                 notifier.fireTestFailure(null);
                 
@@ -90,23 +88,33 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
                 assertThat(loggedInfo, contains("But called with different arguments:"));
                 assertThat(loggedInfo, contains("mock.simpleMethod(10);"));
                 assertThat(loggedInfo, contains(".callStubbedMethodWithDifferentArgs("));
-                
-                assertThat(loggedInfo, notContains(".callStubbedMethodCorrectly("));
             }
         });
     }
     
     @Test
-    public void shouldNotLogUsedStubbingWarningWhenTestFails() throws Exception {
+    public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
+        runner.run(notifier, new JunitTestBody() {
+            public void run(RunNotifier notifier) {
+                when(mock.simpleMethod(1)).thenReturn("foo");
+                mock.simpleMethod(1);
+
+                notifier.fireTestFailure(null);
+                
+                assertEquals("", loggerStub.getLoggedInfo());
+            }
+        });
+    }
+    
+    @Test
+    public void shouldNotLogWhenTestPasses() throws Exception {
         runner.run(notifier, new JunitTestBody() {
             public void run(RunNotifier notifier) {
                 when(mock.simpleMethod()).thenReturn("foo");
-                mock.simpleMethod();
                 
-                notifier.fireTestFailure(null);
+                notifier.fireTestFinished(null);
                 
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertEquals("", loggedInfo);
+                assertEquals("", loggerStub.getLoggedInfo());
             }
         });
     }
@@ -138,10 +146,6 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         when(mock.simpleMethod(789)).thenReturn("foo");
     }
     
-    private void callStubbedMethodCorrectly() {
-        mock.simpleMethod(789);
-    }
-
     private void callStubbedMethodWithDifferentArgs() {
         mock.simpleMethod(10);
     }
@@ -151,8 +155,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         StringBuilder loggedInfo = new StringBuilder();
         
         public void log(Object what) {
-//            can be uncommented when debugging this test
-//            super.log(what);
+            super.log(what);
             loggedInfo.append(what);
         }
 
