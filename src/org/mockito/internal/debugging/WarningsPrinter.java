@@ -3,6 +3,7 @@ package org.mockito.internal.debugging;
 import static org.mockito.internal.util.StringJoiner.*;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
@@ -15,8 +16,8 @@ public class WarningsPrinter {
     private final List<InvocationMatcher> unstubbedInvocations;
 
     public WarningsPrinter(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
-        this.unusedStubs = unusedStubs;
-        this.unstubbedInvocations = unstubbedInvocations;
+        this.unusedStubs = new LinkedList<Invocation>(unusedStubs);
+        this.unstubbedInvocations = new LinkedList<InvocationMatcher>(unstubbedInvocations);
     }
 
     public void print(MockitoLogger logger) {
@@ -64,7 +65,7 @@ public class WarningsPrinter {
                             unused.getStackTrace().getStackTrace()[0],
                             "",
                             "But called with different arguments:",
-                            unstubbed.getInvocation(),
+                            unstubbed,
                             "Click here:",
                             unstubbed.getInvocation().getStackTrace().getStackTrace()[0],
                             ""));
