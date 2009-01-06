@@ -10,6 +10,7 @@ import org.mockito.exceptions.base.MockitoException;
 /**
  * Singleton implementation of MockitoConfiguration
  */
+@Deprecated
 public class Configuration implements MockitoConfiguration {
     
     public static final ThreadLocal<Configuration> CONFIG = new ThreadLocal<Configuration>();

@@ -33,6 +33,8 @@ public class GloballyConfiguredReturnValuesTest extends TestBase {
         
         ConfigurationSupport.getConfiguration().setReturnValues(returnsEdam);
         
+        ConfigurationSupport.getConfiguration().getReturnValues();
+        
         assertEquals("edam", mock.simpleMethod());
         
         ConfigurationSupport.getConfiguration().setReturnValues(returnsCheddar);

@@ -9,6 +9,7 @@ import org.mockito.configuration.ReturnValues;
 /**
  * Configuration properties 
  */
+@Deprecated
 public class MockitoProperties {
 
     /**

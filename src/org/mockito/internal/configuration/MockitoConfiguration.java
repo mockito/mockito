@@ -12,6 +12,7 @@ import org.mockito.configuration.experimental.ConfigurationSupport;
  * <p>
  * See examples in javadoc for {@link ConfigurationSupport}
  */
+@Deprecated
 public interface MockitoConfiguration {
 
     /**

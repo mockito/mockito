@@ -6,6 +6,8 @@ package org.mockito.configuration.experimental;
 
 import java.lang.reflect.Modifier;
 
+import org.mockito.Mockito;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.internal.configuration.MockitoProperties;
@@ -71,12 +73,20 @@ public class ConfigurationSupport {
     }
     
     /**
-     * returns a configuration object
+     * @deprecated
+     * 
+     * Please implement IMockitoConfiguration to configure Mockito globally. {@link IMockitoConfiguration}
+     * <p>
+     * Please use {@link Mockito#mock(Class, org.mockito.configuration.ReturnValues)} to configure return values 'per mock'
+     * <p>
+     * 
+     * This method returns a configuration object
      * <p>
      * See examples in javadoc for {@link ConfigurationSupport}
      * 
      * @return MockitoConfiguration
      */
+    @Deprecated
     public static MockitoConfiguration getConfiguration() {
         return Configuration.instance();
     }
