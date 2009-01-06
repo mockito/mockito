@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockitousage.examples.configure.FriendlyReturnValues;
 
+//deprecated but will dump it eventually
+@SuppressWarnings("deprecation")
 public class MakesMocksNotToReturnNulls {
     
     @Before

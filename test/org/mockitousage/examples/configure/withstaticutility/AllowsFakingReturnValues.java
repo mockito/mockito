@@ -15,6 +15,8 @@ import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
+//deprecated but will dump it eventually
+@SuppressWarnings("deprecation")
 public class AllowsFakingReturnValues {
     
     public static void fakeReturnValues(Object ... mocks) {

@@ -52,6 +52,6 @@ public class Configuration implements MockitoConfiguration {
      * @see org.mockito.internal.configuration.MockitoConfiguration#resetReturnValues()
      */
     public void resetReturnValues() {
-        returnValues = MockitoProperties.DEFAULT_RETURN_VALUES;
+        returnValues = new DefaultReturnValues();
     }
 }

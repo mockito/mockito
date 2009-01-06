@@ -10,6 +10,8 @@ import org.junit.runners.model.InitializationError;
 import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockitousage.examples.configure.FriendlyReturnValues;
 
+//deprecated but will dump it eventually
+@SuppressWarnings("deprecation")
 public class MakesMocksNotToReturnNulls extends BlockJUnit4ClassRunner {
     
     public MakesMocksNotToReturnNulls(Class<?> clazz) throws InitializationError {

@@ -10,7 +10,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-
+@SuppressWarnings("deprecation")
 public class GloballyConfiguredReturnValuesTest extends TestBase {
     
     public class HardCodedReturnValues implements ReturnValues {

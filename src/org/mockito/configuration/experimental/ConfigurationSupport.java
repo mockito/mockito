@@ -8,9 +8,10 @@ import java.lang.reflect.Modifier;
 
 import org.mockito.Mockito;
 import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.configuration.Configuration;
+import org.mockito.internal.configuration.DefaultReturnValues;
 import org.mockito.internal.configuration.MockitoConfiguration;
-import org.mockito.internal.configuration.MockitoProperties;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -46,7 +47,10 @@ import org.mockito.invocation.InvocationOnMock;
  * <p>
  * Configuring Mockito is a new concept that we evaluate. Please let us know if you find it useful/harmful. 
  */
+@SuppressWarnings("deprecation")
 public class ConfigurationSupport {
+    
+    private static final ReturnValues DEFAULT_RETURN_VALUES = new DefaultReturnValues();
     
     /**
      * this is what Mockito returns by default for given invocation 
@@ -57,7 +61,7 @@ public class ConfigurationSupport {
      * @return default return value
      */
     public static Object defaultValueFor(InvocationOnMock invocation) {
-        return MockitoProperties.DEFAULT_RETURN_VALUES.valueFor(invocation);
+        return DEFAULT_RETURN_VALUES.valueFor(invocation);
     }
 
     /**
