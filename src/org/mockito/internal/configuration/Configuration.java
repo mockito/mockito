@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.DefaultMockitoConfiguration;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.exceptions.base.MockitoException;
 
@@ -52,6 +54,9 @@ public class Configuration implements MockitoConfiguration {
      * @see org.mockito.internal.configuration.MockitoConfiguration#resetReturnValues()
      */
     public void resetReturnValues() {
-        returnValues = new DefaultReturnValues();
+        //This is a bit messy but it's just to maintain this stupid and deprecated Configuration class
+        //Once Configuration class is gone DefaultMockitoConfiguration will rule them all
+        IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration();
+        returnValues = defaultConfiguration.getReturnValues();
     }
 }
