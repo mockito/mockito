@@ -10,9 +10,9 @@ import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.util.MockitoLoggerImpl;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.mockito.util.MockitoLoggerStub;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -65,7 +65,7 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
     @Ignore
     @Test
     public void shouldRunTestsWithHypotheticalPartialMock() throws Exception {
-        runner = spy(runner);
+//        runner = spy(runner);
         
         //This even might not be needed because runOnParent() might be safe
         doNothing().when(runner).runTestBody(notifier);
@@ -76,47 +76,67 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
     }
     
     @Test
-    public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
+    public void usingAnnonymousInnerClass() throws Exception {
+        //boring setup that goes to @Before
+        loggerStub = new MockitoLoggerStub();
+        notifier = new RunNotifier();
+        
+        //arrange
         runner = new ExperimentalMockitoJUnitRunnerPMStub() {
             protected void runTestBody(RunNotifier notifier) {
-                //this is what happens when the test runs:
-                //first, unused stubbing:
-                unusedStubbingThatQualifiesForWarning();
-                //then, let's make the test fail so that warnings are printed
+                someUnusedStubbingThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
-                //assert
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(123);"));
-                assertThat(loggedInfo, contains(".unusedStubbingThatQualifiesForWarning("));
             }
         };
+        
+        //act
         runner.run(notifier);
+        
+        //assert
+        String loggedInfo = loggerStub.getLoggedInfo();
+        assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
     }
     
     @Ignore
     @Test
-    public void shouldLogUnusedStubbingWarningWhenTestFailsWithPartialMock() throws Exception {
-        runner = spy(runner);
+    public void usingPartialMocking() throws Exception {
+        //boring setup that goes to @Before
+        loggerStub = new MockitoLoggerStub();
+        notifier = new RunNotifier();
+        runner = spy(ExperimentalMockitoJUnitRunnerPMStub.class, guessConstructor(loggerStub));
         
+        //arrange
         doAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) {
                 RunNotifier notifier = (RunNotifier) invocation.getArguments()[0];
-                //this is what happens when the test runs:
-                //first, unused stubbing:
-                unusedStubbingThatQualifiesForWarning();
-                //then, let's make the test fail so that warnings are printed
+                someUnusedStubbingThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
-                //assert
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(123);"));
-                assertThat(loggedInfo, contains(".unusedStubbingThatQualifiesForWarning("));
                 return null;
             }
         }).when(runner).runTestBody(notifier);
-
+        
+        //act
         runner.run(notifier);
+        
+        //assert
+        String loggedInfo = loggerStub.getLoggedInfo();
+        assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
+    }
+
+    private <T> T spy(Class<T> clazz, Constructor guessConstructor) {
+        return null;
+    }
+
+    class Constructor<T> {
+        
+    }
+    
+    private Constructor guessConstructor(Object ... constructorArguments) {
+        return null;
+    }
+
+    private ExperimentalMockitoJUnitRunnerPMStub partialMock(Class<ExperimentalMockitoJUnitRunnerPM> class1) {
+        return null;
     }
 
     @Test
@@ -140,7 +160,6 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
         runner = new ExperimentalMockitoJUnitRunnerPMStub() {
             protected void runTestBody(RunNotifier notifier) {
                 someStubbing();
-                //TODO below should be different test method
 //                callStubbedMethodCorrectly();
                 callStubbedMethodWithDifferentArgs();
                 notifier.fireTestFailure(null);
@@ -183,7 +202,7 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
         
         runner = new ExperimentalMockitoJUnitRunnerPMStub() {
             protected void runTestBody(RunNotifier notifier) {
-                unusedStubbingThatQualifiesForWarning();
+                someUnusedStubbingThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
                 assertTrue(debuggingInfo.hasData());
             }
@@ -194,7 +213,7 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
         assertFalse(debuggingInfo.hasData());
     }    
 
-    private void unusedStubbingThatQualifiesForWarning() {
+    private void someUnusedStubbingThatQualifiesForWarning() {
         when(mock.simpleMethod(123)).thenReturn("foo");
     }
 
@@ -206,26 +225,7 @@ public class ExperimentalMockitoJUnitRunnerPMTest extends TestBase {
         when(mock.simpleMethod(789)).thenReturn("foo");
     }
     
-    private void callStubbedMethodCorrectly() {
-        mock.simpleMethod(789);
-    }
-
     private void callStubbedMethodWithDifferentArgs() {
         mock.simpleMethod(10);
-    }
-    
-    public class MockitoLoggerStub extends MockitoLoggerImpl {
-        
-        StringBuilder loggedInfo = new StringBuilder();
-        
-        public void log(Object what) {
-//            can be uncommented when debugging this test
-//            super.log(what);
-            loggedInfo.append(what);
-        }
-
-        public String getLoggedInfo() {
-            return loggedInfo.toString();
-        }
     }
 }

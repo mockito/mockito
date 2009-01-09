@@ -1,16 +1,16 @@
-package org.mockito.runners;
+package org.junit.mockito;
 
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.mockito.ExperimentalMockitoJUnitRunner.JunitTestBody;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.util.MockitoLoggerImpl;
-import org.mockito.runners.ExperimentalMockitoJUnitRunner.JunitTestBody;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

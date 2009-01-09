@@ -6,17 +6,20 @@ package org.mockito;
 
 import java.util.Arrays;
 
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
+import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.returnvalues.SmartNullReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
+import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
+import org.mockito.internal.returnvalues.SmartNullReturnValues;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.Stubber;
@@ -438,10 +441,32 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    //TODO the name of this constant may change
-    public static final ReturnValues USING_GLOBAL_CONFIG = new GloballyConfiguredReturnValues();
-    //TODO the name of this constant may change
-    public static final ReturnValues SMART_NULLS = new SmartNullReturnValues();
+    /**
+     * Default ReturnValues used by the framework.
+     * <p>
+     * {@link ReturnValues} defines the return values of unstubbed calls. 
+     * <p>
+     * This implementation first tries the global configuration (see {@link IMockitoConfiguration}). 
+     * If there is no global configuration then it uses {@link HandyReturnValues} (returns zeros, empty collections, nulls, etc.)
+     */
+    public static final ReturnValues RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
+    
+    /**
+     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * <p>
+     * {@link ReturnValues} defines the return values of unstubbed calls.
+     * <p>
+     * This implementation can be helpful when working with legacy code.
+     * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
+     * This implementation of ReturnValues makes unstubbed methods <b>return SmartNulls instead of nulls</b>.
+     * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
+     * <p>
+     * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
+     * then it tries to return SmartNull. If the return type is final then plain null is returned.
+     * <p>
+     * SmartNullReturnValues will be probably the default return values strategy in Mockito 2.0 
+     */
+    public static final ReturnValues RETURNS_SMART_NULLS = new SmartNullReturnValues();
     
     static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
     private static final Reporter REPORTER = new Reporter();
@@ -456,7 +481,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return mock(classToMock, null, null, USING_GLOBAL_CONFIG);
+        return mock(classToMock, null, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -474,7 +499,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return mock(classToMock, name, null, USING_GLOBAL_CONFIG);
+        return mock(classToMock, name, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -494,6 +519,8 @@ public class Mockito extends Matchers {
     }
     
     private static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
+        //TODO test
+        GlobalConfiguration.init();
         MOCKING_PROGRESS.validateState();
         MOCKING_PROGRESS.resetOngoingStubbing();
         return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);
@@ -561,7 +588,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return mock((Class<T>) object.getClass(), null, object, USING_GLOBAL_CONFIG);
+        return mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
     }
 
     /**

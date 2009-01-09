@@ -10,8 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.configuration.Configuration;
-import org.mockito.internal.configuration.DefaultReturnValues;
 import org.mockito.internal.configuration.MockitoConfiguration;
+import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -50,7 +50,7 @@ import org.mockito.invocation.InvocationOnMock;
 @SuppressWarnings("deprecation")
 public class ConfigurationSupport {
     
-    private static final ReturnValues DEFAULT_RETURN_VALUES = new DefaultReturnValues();
+    private static final ReturnValues DEFAULT_RETURN_VALUES = new EmptyReturnValues();
     
     /**
      * this is what Mockito returns by default for given invocation 

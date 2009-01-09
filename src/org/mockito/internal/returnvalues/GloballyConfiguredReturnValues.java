@@ -17,7 +17,7 @@ public class GloballyConfiguredReturnValues implements ReturnValues {
         }
         
         //For now, let's leave the deprecated way of getting return values, 
-        //it will go away, though
+        //it will go away, replaced simply by return new DefaultReturnValues()
         return Configuration.instance().getReturnValues().valueFor(invocation);
     }
 }

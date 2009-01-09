@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.configuration;
+package org.mockito.internal.returnvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +45,7 @@ import org.mockito.invocation.InvocationOnMock;
  * </li>
  * </ul>
  */
-public class DefaultReturnValues implements ReturnValues {
+public class EmptyReturnValues implements ReturnValues {
     
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)

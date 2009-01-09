@@ -20,7 +20,7 @@ import org.mockito.internal.matchers.Null;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.progress.EmptyReturnValues;
+import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
@@ -601,7 +601,7 @@ public class Matchers {
         return reportMatcher(matcher).returnZero();
     }
 
-    private static EmptyReturnValues reportMatcher(Matcher<?> matcher) {
+    private static HandyReturnValues reportMatcher(Matcher<?> matcher) {
         return mockingProgress.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

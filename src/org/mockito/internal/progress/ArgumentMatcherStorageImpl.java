@@ -24,9 +24,9 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportMatcher(org.hamcrest.Matcher)
      */
-    public EmptyReturnValues reportMatcher(Matcher matcher) {
+    public HandyReturnValues reportMatcher(Matcher matcher) {
         matcherStack.push(matcher);
-        return new EmptyReturnValues();
+        return new HandyReturnValues();
     }
 
     /* (non-Javadoc)
@@ -45,19 +45,19 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
      */
-    public EmptyReturnValues reportAnd() {
+    public HandyReturnValues reportAnd() {
         assertState(!matcherStack.isEmpty(), "No matchers found for And(?).");
         matcherStack.push(new And(popLastArgumentMatchers(2)));
-        return new EmptyReturnValues();
+        return new HandyReturnValues();
     }
 
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportNot()
      */
-    public EmptyReturnValues reportNot() {
+    public HandyReturnValues reportNot() {
         assertState(!matcherStack.isEmpty(), "No matchers found for Not(?).");
         matcherStack.push(new Not(popLastArgumentMatchers(1).get(0)));
-        return new EmptyReturnValues();
+        return new HandyReturnValues();
     }
 
     private List<Matcher> popLastArgumentMatchers(int count) {
@@ -82,10 +82,10 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportOr()
      */
-    public EmptyReturnValues reportOr() {
+    public HandyReturnValues reportOr() {
         assertState(!matcherStack.isEmpty(), "No matchers found.");
         matcherStack.push(new Or(popLastArgumentMatchers(2)));
-        return new EmptyReturnValues();
+        return new HandyReturnValues();
     }
 
     /* (non-Javadoc)

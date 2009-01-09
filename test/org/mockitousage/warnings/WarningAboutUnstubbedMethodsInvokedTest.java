@@ -6,9 +6,9 @@ package org.mockitousage.warnings;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.mockito.ExperimentalMockitoJUnitRunner;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.ExperimentalMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

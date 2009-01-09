@@ -17,7 +17,6 @@ import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.exceptions.base.StackTraceRemoverTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.MockHandlerTest;
-import org.mockito.internal.configuration.DefaultReturnValuesTest;
 import org.mockito.internal.creation.jmock.ClassImposterizerTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationTest;
@@ -25,6 +24,7 @@ import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.TimesTest;
+import org.mockito.internal.returnvalues.EmptyReturnValuesTest;
 import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
 import org.mockito.internal.verification.RegisteredInvocationsTest;
@@ -88,7 +88,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     TimesTest.class,
                     MockHandlerTest.class,
                     AllInvocationsFinderTest.class,
-                    DefaultReturnValuesTest.class,
+                    EmptyReturnValuesTest.class,
                     NumberOfInvocationsCheckerTest.class,
                     RegisteredInvocationsTest.class,
                     MissingInvocationCheckerTest.class,

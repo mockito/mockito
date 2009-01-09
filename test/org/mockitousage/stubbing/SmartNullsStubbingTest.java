@@ -21,7 +21,7 @@ public class SmartNullsStubbingTest extends TestBase {
 
     @Before
     public void setup() {
-        mock = mock(IMethods.class, Mockito.SMART_NULLS);
+        mock = mock(IMethods.class, Mockito.RETURNS_SMART_NULLS);
     }
     
     public IMethods unstubbedMethodInvokedHere(IMethods mock) {
@@ -57,7 +57,7 @@ public class SmartNullsStubbingTest extends TestBase {
     
     @Test
     public void shouldThrowSmartNPEWhenMethodReturnsClass() throws Exception {
-        Foo mock = mock(Foo.class, SMART_NULLS);
+        Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
         Foo foo = mock.getSomeClass(); 
         try {
             foo.boo();
@@ -68,7 +68,7 @@ public class SmartNullsStubbingTest extends TestBase {
     
     @Test
     public void shouldThrowSmartNPEWhenMethodReturnsInterface() throws Exception {
-        Foo mock = mock(Foo.class, SMART_NULLS);
+        Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
         Bar bar = mock.getSomeInterface(); 
         try {
             bar.boo();

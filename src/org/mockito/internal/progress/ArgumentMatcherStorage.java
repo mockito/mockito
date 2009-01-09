@@ -7,15 +7,15 @@ import org.hamcrest.Matcher;
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
-    EmptyReturnValues reportMatcher(Matcher matcher);
+    HandyReturnValues reportMatcher(Matcher matcher);
 
     List<Matcher> pullMatchers();
 
-    EmptyReturnValues reportAnd();
+    HandyReturnValues reportAnd();
 
-    EmptyReturnValues reportNot();
+    HandyReturnValues reportNot();
 
-    EmptyReturnValues reportOr();
+    HandyReturnValues reportOr();
 
     void validateState();
 

@@ -9,11 +9,11 @@ import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.mockito.ExperimentalMockitoJUnitRunner;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.runners.ExperimentalMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

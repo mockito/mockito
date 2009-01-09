@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class EmptyReturnValues {
+public class HandyReturnValues {
 
     public byte returnZero() {
         return 0;

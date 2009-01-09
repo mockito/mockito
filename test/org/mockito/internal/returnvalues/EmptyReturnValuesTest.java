@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.configuration;
+package org.mockito.internal.returnvalues;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +22,11 @@ import java.util.TreeSet;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-public class DefaultReturnValuesTest extends TestBase {
+public class EmptyReturnValuesTest extends TestBase {
     
     @SuppressWarnings("unchecked")
     @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {
-        DefaultReturnValues values = new DefaultReturnValues();
+        EmptyReturnValues values = new EmptyReturnValues();
         
         assertTrue(((Collection) values.returnValueFor(Collection.class)).isEmpty());
 
@@ -50,7 +50,7 @@ public class DefaultReturnValuesTest extends TestBase {
     }
     
     @Test public void shouldReturnPrimitive() {
-        DefaultReturnValues values = new DefaultReturnValues();
+        EmptyReturnValues values = new EmptyReturnValues();
         
         assertEquals(false, values.returnValueFor(Boolean.TYPE));
         assertEquals((char) 0, values.returnValueFor(Character.TYPE));

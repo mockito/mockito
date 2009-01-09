@@ -12,7 +12,7 @@ import org.mockito.internal.matchers.GreaterOrEqual;
 import org.mockito.internal.matchers.GreaterThan;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
-import org.mockito.internal.progress.EmptyReturnValues;
+import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
@@ -985,7 +985,7 @@ public class AdditionalMatchers {
         return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
     }
     
-    private static EmptyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
+    private static HandyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
         return mockingProgress.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

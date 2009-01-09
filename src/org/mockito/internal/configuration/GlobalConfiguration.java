@@ -1,20 +1,13 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.exceptions.misusing.MockitoConfigurationException;
 
 public class GlobalConfiguration {
     
     private static IMockitoConfiguration globalConfiguration;
-    private static boolean loaded = false;
+    private static boolean initialized = false;
 
-    static {
-        //TODO how bad is it? What happens if some exception is thrown?
-        if (!loaded) {
-            globalConfiguration = readFromClasspath();
-            loaded = true;
-        }
-    }
-    
     @SuppressWarnings("unchecked")
     private static IMockitoConfiguration readFromClasspath() {
         //Trying to get config from classpath
@@ -29,13 +22,27 @@ public class GlobalConfiguration {
         try {
             return (IMockitoConfiguration) configClass.newInstance();
         } catch (ClassCastException e) {
-            throw new RuntimeException("MockitoConfiguration class should implement org.mockito.configuration.IMockitoConfiguration interface.");
+            throw new MockitoConfigurationException("\n" +
+                    "MockitoConfiguration class must implement org.mockito.configuration.IMockitoConfiguration interface.", e);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to instantianate MockitoConfiguration class. Does it have a public, no-arg constructor?", e);
+            throw new MockitoConfigurationException("\n" +
+                    "Unable to instantianate org.mockito.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
         }
     }
 
     public static IMockitoConfiguration getConfig() {
+        if (!initialized) {
+            //TODO check email of mockito group
+            throw new IllegalStateException("Something went wrong. GlobalConfiguration should be initialised by now.\n" +
+                "Please report issue at http://mockito.org or write an email to mockito@googlegroups.com");
+        }
         return globalConfiguration;
+    }
+
+    public static void init() {
+        if (!initialized) {
+            globalConfiguration = readFromClasspath();
+            initialized = true;
+        }
     }
 }
