@@ -26,7 +26,7 @@ public class ArgumentCaptorTest extends TestBase {
         }
 
         public T getValue() {
-            //TODO nice instanceof check ?
+            //TODO after 1.7 nice instanceof check here?
             return (T) argument;
         }
     }
@@ -65,7 +65,7 @@ public class ArgumentCaptorTest extends TestBase {
 
     @Mock IMethods mock;
 
-    //TODO decide on getting capture matcher into Mockito
+    //TODO after 1.7 decide on getting capture matcher into Mockito
     @Test
     public void shouldUseArgumentCaptorInEasyMockStyle() {
         Foo foo = new Foo(mock);
