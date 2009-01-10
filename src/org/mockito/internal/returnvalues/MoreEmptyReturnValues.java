@@ -4,11 +4,13 @@
  */
 package org.mockito.internal.returnvalues;
 
+import java.lang.reflect.Array;
+
 import org.mockito.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Will be used by default by every Mockito 2.0 mock.
+ * It's likely this implmentation will be used by default by every Mockito 2.0 mock.
  * <ul>
  * <li>
  *  Returns appropriate primitive for primitive-returning methods
@@ -56,14 +58,8 @@ public class MoreEmptyReturnValues implements ReturnValues {
         } else if (type == Object.class) {
             return new Object();
         } else if (type.isArray()) {
-            //TODO is it possible to dynamically create array?
-            return null;
-//            System.out.println(type. getConstructors()[0].getParameterTypes());
-//            try {
-//                return type.newInstance();
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
+            Class<?> componenetType = type.getComponentType();
+            return Array.newInstance(componenetType, 0);
         }
         return null;
     }

@@ -1,6 +1,5 @@
 package org.mockito.internal.returnvalues;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -8,7 +7,6 @@ public class MoreEmptyReturnValuesTest extends TestBase {
 
     private MoreEmptyReturnValues rv = new MoreEmptyReturnValues();
 
-    @Ignore
     @Test
     public void shouldReturnEmptyArray() {
         String[] ret = (String[]) rv.returnValueFor((new String[0]).getClass());
