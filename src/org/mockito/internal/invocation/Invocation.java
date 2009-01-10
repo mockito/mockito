@@ -144,7 +144,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     protected String toString(List<Matcher> matchers, boolean forceMultiline) {
         String method = qualifiedMethodName();
         String invocation = method + getArgumentsLine(matchers);
-        //TODO make sure you don't break line when no args are given!
         if (forceMultiline || (!matchers.isEmpty() && invocation.length() > MAX_LINE_LENGTH)) {
             return method + getArgumentsBlock(matchers);
         } else {
