@@ -186,4 +186,6 @@ public interface IMethods {
     Object[] arrayReturningMethod();
 
     IMethods iMethodsReturningMethod();
+
+    String stringReturningMethod();
 }

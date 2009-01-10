@@ -75,4 +75,15 @@ public class SmartNullsStubbingTest extends TestBase {
             fail();
         } catch (SmartNullPointerException e) {}
     }
+    
+    
+    @Test
+    public void shouldReturnOrdinaryEmptyValuesForOrdinaryTypes() throws Exception {
+        IMethods mock = mock(IMethods.class, RETURNS_SMART_NULLS);
+        
+        assertEquals("", mock.stringReturningMethod());
+        assertEquals(0, mock.intReturningMethod());
+        assertEquals(true, mock.listReturningMethod().isEmpty());
+        assertEquals(0, mock.arrayReturningMethod().length);
+    }
 }
