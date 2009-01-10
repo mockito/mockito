@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-//TODO make sure tests for mockito run quickly on slower machines
-//this test exposes the problem at least once in 10 runs
 public class ThreadsShareAMockTest extends TestBase {
 
     private IMethods mock;

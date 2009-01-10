@@ -1,5 +1,3 @@
-    //add more null object return values
-
     //java cross reference tool online
 
     //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
@@ -10,4 +8,8 @@
     
     //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
     
-    //TODO Felix had weird problem - check old emails - maybe we could do something about it (better exception message)  
+    //TODO Felix had weird problem - check old emails - maybe we could do something about it (better exception message)
+    
+    //TODO make sure tests for mockito run quickly on slower machines
+    //this test exposes the problem at least once in 10 runs
+    //public class ThreadsShareAMockTest extends TestBase {      
