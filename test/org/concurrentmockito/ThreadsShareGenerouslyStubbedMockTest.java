@@ -11,7 +11,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 //this test always passes but please keep looking sys err
-//this test should be run multiple times, manually
+//this test should be run 10 times, manually
 public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
 
     private IMethods mock;
