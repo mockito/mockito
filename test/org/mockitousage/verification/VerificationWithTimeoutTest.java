@@ -19,7 +19,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     public void shouldVerify() throws Exception {
         mock.clear();
         
-        //TODO implement timeout
+        //TODO after 1.7 implement timeout
         //verify(mock, atLeastOnce().timeout(100)).clear();
     }
 }

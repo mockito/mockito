@@ -54,6 +54,6 @@ public class MockitoTest extends TestBase {
         Mockito.inOrder("notMock");
     }
     
-    //TODO add initMocks that allows to send own annotation/own implementation of creation logic
-    //TODO stack trace remover does not work very well when it comes to threads
+    //TODO after 1.7 add initMocks that allows to send own annotation/own implementation of creation logic
+    //TODO after 1.7 stack trace remover does not work very well when it comes to threads
 }
