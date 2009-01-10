@@ -23,8 +23,12 @@ public class GlobalConfiguration implements IMockitoConfiguration {
                 return Configuration.instance().getReturnValues();
             }
         };
-        IMockitoConfiguration config = new ClassPathLoader().loadConfiguration(defaultConfiguration);
-        return config;
+        IMockitoConfiguration config = new ClassPathLoader().loadConfiguration();
+        if (config != null) {
+            return config;
+        } else {
+            return defaultConfiguration;
+        }
     }
 
     public ReturnValues getReturnValues() {

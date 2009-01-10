@@ -55,7 +55,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
         } catch (UnfinishedVerificationException e) {}
     }
     
-    @Ignore
+    @Ignore("let's not implement it...")
     @Test
     public void shouldFailAndShowWhereMatchersAreMisused() {
         misplacedArgumentMatcher();

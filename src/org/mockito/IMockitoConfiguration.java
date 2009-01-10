@@ -11,7 +11,8 @@ package org.mockito;
  * <p>
  * <b>org.mockito.MockitoConfiguration</b> must implement IMockitoConfiguration or extend {@link DefaultMockitoConfiguration}
  * <p>
- *  
+ * Mockito will store single instance of org.mockito.MockitoConfiguration per thread (using ThreadLocal). 
+ * For sanity of your tests, don't make the implementation stateful.   
  * 
  */
 public interface IMockitoConfiguration {

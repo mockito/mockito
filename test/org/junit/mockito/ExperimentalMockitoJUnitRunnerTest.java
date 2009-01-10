@@ -18,6 +18,7 @@ import org.mockitoutil.TestBase;
 public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
+    
     private ExperimentalMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;
