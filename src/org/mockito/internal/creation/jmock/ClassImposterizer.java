@@ -15,6 +15,7 @@ import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.NoOp;
 
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 import org.objenesis.ObjenesisStd;
 
@@ -93,7 +94,16 @@ public class ClassImposterizer  {
         try {
             return enhancer.createClass(); 
         } catch (CodeGenerationException e) {
-            throw new IllegalArgumentException("could not imposterise " + mockedType, e);
+            if (Modifier.isPrivate(mockedType.getModifiers())) {
+                throw new MockitoException("\n"
+                        + "Mockito cannot mock this type: " + mockedType 
+                        + ".\n"
+                        + "Most likely it is a private class that is not visible by Mockito");
+            }
+            throw new MockitoException("\n"
+                    + "Mockito cannot mock this type: " + mockedType 
+                    + ".\n" 
+                    + "Mockito can only mock visible & non-final types");
         }
     }
     

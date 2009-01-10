@@ -7,6 +7,7 @@ package org.mockitousage;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -163,6 +164,17 @@ public class SpyingOnRealObjectsTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage(), contains("cannot mock"));
+        }
+    }
+    
+    @Test
+    public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
+        List real = Arrays.asList(new String[] {"first", "second"});
+        try {
+            spy(real);
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e, messageContains("Most likely it is a private class that is not visible by Mockito"));
         }
     }
 }
