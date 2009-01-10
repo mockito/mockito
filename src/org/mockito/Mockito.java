@@ -9,8 +9,8 @@ import java.util.Arrays;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
-import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
+import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
@@ -517,8 +517,6 @@ public class Mockito extends Matchers {
     }
     
     private static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
-        //TODO test
-        GlobalConfiguration.init();
         MOCKING_PROGRESS.validateState();
         MOCKING_PROGRESS.resetOngoingStubbing();
         return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);

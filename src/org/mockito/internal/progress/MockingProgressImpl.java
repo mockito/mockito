@@ -5,6 +5,7 @@
 package org.mockito.internal.progress;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
@@ -56,6 +57,10 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void validateState() {
+        //State is cool when GlobalConfiguration is already loaded
+        //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.MockitoConfiguration class 
+        GlobalConfiguration.validate();
+        
         if (verificationMode != null) {
             verificationMode = null;
             reporter.unfinishedVerificationException();

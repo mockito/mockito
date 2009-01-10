@@ -1,47 +1,37 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.IMockitoConfiguration;
-import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.ReturnValues;
 
-public class GlobalConfiguration {
+public class GlobalConfiguration implements IMockitoConfiguration {
     
-    private static IMockitoConfiguration globalConfiguration;
-    private static boolean initialized = false;
+    private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
 
-    @SuppressWarnings("unchecked")
-    private static IMockitoConfiguration readFromClasspath() {
-        //Trying to get config from classpath
-        Class configClass = null;
-        try {
-            configClass = (Class) Class.forName("org.mockito.MockitoConfiguration");
-        } catch (ClassNotFoundException e) {
-            //that's ok, it means there is no global config, 
-            return null;
-        }
-        
-        try {
-            return (IMockitoConfiguration) configClass.newInstance();
-        } catch (ClassCastException e) {
-            throw new MockitoConfigurationException("\n" +
-                    "MockitoConfiguration class must implement org.mockito.configuration.IMockitoConfiguration interface.", e);
-        } catch (Exception e) {
-            throw new MockitoConfigurationException("\n" +
-                    "Unable to instantianate org.mockito.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
+    public GlobalConfiguration() {
+        //Configuration should be loaded only once but I cannot really test it
+        if (globalConfiguration.get() == null) {
+            globalConfiguration.set(getConfig());
         }
     }
-
-    public static IMockitoConfiguration getConfig() {
-        if (!initialized) {
-            throw new IllegalStateException("Something went wrong. GlobalConfiguration should be initialised by now.\n" +
-                "Please report issue at http://mockito.org or write an email to mockito@googlegroups.com");
-        }
-        return globalConfiguration;
+    
+    @SuppressWarnings("deprecation")
+    IMockitoConfiguration getConfig() {
+        IMockitoConfiguration defaultConfiguration = new IMockitoConfiguration() {
+            public ReturnValues getReturnValues() {
+                //For now, let's leave the deprecated way of getting return values, 
+                //it will go away, replaced simply by return new DefaultReturnValues()
+                return Configuration.instance().getReturnValues();
+            }
+        };
+        IMockitoConfiguration config = new ClassPathLoader().loadConfiguration(defaultConfiguration);
+        return config;
     }
 
-    public static void init() {
-        if (!initialized) {
-            globalConfiguration = readFromClasspath();
-            initialized = true;
-        }
+    public ReturnValues getReturnValues() {
+        return globalConfiguration.get().getReturnValues();
+    }
+
+    public static void validate() {
+        new GlobalConfiguration();
     }
 }

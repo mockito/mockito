@@ -1,4 +1,4 @@
-package org.mockitousage.stubbing;
+package org.mockitousage.configuration;
 
 import org.junit.After;
 import org.junit.Test;

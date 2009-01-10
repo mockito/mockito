@@ -4,15 +4,8 @@
  */
 package org.mockito.configuration.experimental;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.After;
 import org.junit.Test;
-import org.mockito.MockitoConfiguration;
-import org.mockito.ReturnValues;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class ConfigurationTest extends TestBase {
@@ -26,21 +19,5 @@ public class ConfigurationTest extends TestBase {
         } catch (MockitoException e) {
             assertThat(e, messageContains("Cannot set null ReturnValues!"));
         }
-    }
-   
-    @Test
-    public void shouldReadConfigurationClassFromClassPath() {
-        MockitoConfiguration.overrideReturnValues(new ReturnValues() {
-            public Object valueFor(InvocationOnMock invocation) {
-                return "foo";
-            }});
-
-        IMethods mock = mock(IMethods.class); 
-        assertEquals("foo", mock.simpleMethod());
-    }
-    
-    @After
-    public void cleanUpConfig() {
-        MockitoConfiguration.overrideReturnValues(null);
     }
 }

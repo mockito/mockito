@@ -11,7 +11,7 @@ public class MockitoConfiguration implements IMockitoConfiguration {
     public static void overrideReturnValues(ReturnValues returnValues) {
         MockitoConfiguration.overridden = returnValues;
     }
-
+    
     public ReturnValues getReturnValues() {
         if (overridden == null) {
             return Configuration.instance().getReturnValues();
