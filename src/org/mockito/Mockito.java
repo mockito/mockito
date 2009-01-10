@@ -6,8 +6,6 @@ package org.mockito;
 
 import java.util.Arrays;
 
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;

@@ -19,7 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.Primitives;

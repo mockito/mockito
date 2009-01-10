@@ -1,6 +1,6 @@
 package org.mockito.internal.configuration;
 
-import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.IMockitoConfiguration;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 
 public class GlobalConfiguration {

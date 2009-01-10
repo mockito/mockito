@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;

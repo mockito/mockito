@@ -3,7 +3,7 @@
  */
 package org.mockito.internal.returnvalues;
 
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.invocation.InvocationOnMock;

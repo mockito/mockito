@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.MockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockitousage.IMethods;

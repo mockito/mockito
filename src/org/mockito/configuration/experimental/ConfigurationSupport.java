@@ -6,15 +6,21 @@ package org.mockito.configuration.experimental;
 
 import java.lang.reflect.Modifier;
 
+import org.mockito.DefaultMockitoConfiguration;
+import org.mockito.IMockitoConfiguration;
 import org.mockito.Mockito;
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
+ * @deprecated
+ * 
+ * Please see {@link IMockitoConfiguration} for info on configuring Mockito
+ * <p>
+ * 
  * Allows configuring Mockito to enable custom 'mocking style'. 
  * It can be useful when working with legacy code, etc.
  * <p>
@@ -47,12 +53,17 @@ import org.mockito.invocation.InvocationOnMock;
  * <p>
  * Configuring Mockito is a new concept that we evaluate. Please let us know if you find it useful/harmful. 
  */
+@Deprecated
 @SuppressWarnings("deprecation")
 public class ConfigurationSupport {
     
     private static final ReturnValues DEFAULT_RETURN_VALUES = new EmptyReturnValues();
     
     /**
+     * @deprecated
+     * 
+     * Please use {@link DefaultMockitoConfiguration} if you need default return values for mocks.
+     * <p>
      * this is what Mockito returns by default for given invocation 
      * <p>
      * See examples in javadoc for {@link ConfigurationSupport}
@@ -60,6 +71,7 @@ public class ConfigurationSupport {
      * @param invocation
      * @return default return value
      */
+    @Deprecated
     public static Object defaultValueFor(InvocationOnMock invocation) {
         return DEFAULT_RETURN_VALUES.valueFor(invocation);
     }
@@ -81,7 +93,7 @@ public class ConfigurationSupport {
      * 
      * Please implement IMockitoConfiguration to configure Mockito globally. {@link IMockitoConfiguration}
      * <p>
-     * Please use {@link Mockito#mock(Class, org.mockito.configuration.ReturnValues)} to configure return values 'per mock'
+     * Please use {@link Mockito#mock(Class, org.mockito.ReturnValues)} to configure return values 'per mock'
      * <p>
      * 
      * This method returns a configuration object

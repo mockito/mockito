@@ -3,7 +3,7 @@ package org.mockitousage.stubbing;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.configuration.experimental.ConfigurationSupport;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.invocation.InvocationOnMock;

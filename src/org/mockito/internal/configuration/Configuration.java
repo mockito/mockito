@@ -5,8 +5,8 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.DefaultMockitoConfiguration;
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
+import org.mockito.IMockitoConfiguration;
+import org.mockito.ReturnValues;
 import org.mockito.exceptions.base.MockitoException;
 
 /**

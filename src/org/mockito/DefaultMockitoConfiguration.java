@@ -1,7 +1,5 @@
 package org.mockito;
 
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.configuration.ReturnValues;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 
 //TODO javadocs

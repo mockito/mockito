@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.configuration.experimental.ConfigurationSupport;
 
 /**

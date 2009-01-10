@@ -8,7 +8,7 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;

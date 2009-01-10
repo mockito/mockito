@@ -1,7 +1,7 @@
 package org.mockito.internal.returnvalues;
 
 import org.junit.Test;
-import org.mockito.configuration.ReturnValues;
+import org.mockito.ReturnValues;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockitoutil.TestBase;
