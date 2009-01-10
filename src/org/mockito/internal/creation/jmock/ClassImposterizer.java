@@ -96,14 +96,14 @@ public class ClassImposterizer  {
         } catch (CodeGenerationException e) {
             if (Modifier.isPrivate(mockedType.getModifiers())) {
                 throw new MockitoException("\n"
-                        + "Mockito cannot mock this type: " + mockedType 
+                        + "Mockito cannot mock this class: " + mockedType 
                         + ".\n"
                         + "Most likely it is a private class that is not visible by Mockito");
             }
             throw new MockitoException("\n"
-                    + "Mockito cannot mock this type: " + mockedType 
+                    + "Mockito cannot mock this class: " + mockedType 
                     + ".\n" 
-                    + "Mockito can only mock visible & non-final types");
+                    + "Mockito can only mock visible & non-final classes");
         }
     }
     
