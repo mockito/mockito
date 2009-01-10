@@ -32,7 +32,6 @@ public class GlobalConfiguration {
 
     public static IMockitoConfiguration getConfig() {
         if (!initialized) {
-            //TODO check email of mockito group
             throw new IllegalStateException("Something went wrong. GlobalConfiguration should be initialised by now.\n" +
                 "Please report issue at http://mockito.org or write an email to mockito@googlegroups.com");
         }

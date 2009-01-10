@@ -21,8 +21,9 @@ public class WarningsPrinter {
     }
 
     public void print(MockitoLogger logger) {
-        //TODO it should be visible that this method changes the state
+        //TODO refactor, it should be visible that this method changes the state
         warnAboutStubsUsedWithDifferentArgs(logger);
+        
         warnAboutUnusedStubs(logger);
         warnAboutUnstubbedInvocations(logger);
     }

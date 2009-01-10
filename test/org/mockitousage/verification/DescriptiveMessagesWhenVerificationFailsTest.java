@@ -316,7 +316,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         }
     }
 
-    @Mock private IMethods iHavefunkyName; 
+    @Mock private IMethods iHavefunkyName;
     
     @Test
     public void shouldPrintFieldNameWhenAnnotationsUsed() throws Exception {
@@ -328,6 +328,18 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("iHavefunkyName.simpleMethod(20)"));
             assertThat(e, causeMessageContains("iHavefunkyName.simpleMethod(10)"));
+        }
+    }
+
+    @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock; 
+    
+    @Test
+    public void shouldNeverBreakMethodStringWhenNoArgsInMethod() throws Exception {
+        try {
+            verify(veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock).simpleMethod();
+            fail();
+        } catch(WantedButNotInvoked e) {
+            assertThat(e, messageContains("veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock.simpleMethod()"));
         }
     }
 }
