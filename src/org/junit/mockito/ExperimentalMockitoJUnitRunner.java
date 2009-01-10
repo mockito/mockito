@@ -19,8 +19,60 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
- * Does what {@link MockitoJUnitRunner} does plus warns when stubbing
- * TODO copy-paste stuff from web here  
+ * This runner does exactly what {@link MockitoJUnitRunner} does but also  
+ * prints useful warnings that can be helpful for debugging failed tests.
+ * <p>
+ * Sometimes when the test fails, the underlying reason is that stubbed method was called with wrong arguments. 
+ * Sometimes it fails because one forgets to stub a method or forgets to call a stubbed method. 
+ * All above problems are not immediately obvious.
+ * <p>
+ * One way of approaching this problem is full-blown 'expect' API. 
+ * However it means the 'expectations upfront' business which is not in line with core Mockito concepts.
+ * After all, one of the key points of Mockito are <b>explicit assertions</b> that are always placed at the <b>bottom of the test</b> method.
+ * <p>
+ * Let's look at different ways of addressing the issue.
+ * Here's the experiment: a warning is printed to the standard output if the test fails.
+ * Also, you get a clickabe link to the line of code. You can immediately jump to the place in code where the potential problem is.
+ * <p> 
+ * Let's say your test fails on assertion. 
+ * Let's say the underlying reason is a stubbed method that was called with different arguments:
+ * <pre>
+ * //test:
+ * when(translator.translate("Mockito")).thenReturn("cool framework");
+ * String translated = dictionary.search("Mockito");
+ * assertEquals("cool framework", translated);
+ * 
+ * //code:
+ * public String search(String word) {
+ *     ...
+ *     return translator.translate("oups");
+ *
+ * </pre>
+ * On standard output you'll see something like that:
+ * <pre>
+ * [Mockito] Warning - stubbed method called with different arguments.
+ * Stubbed this way:
+ * translator.translate("Mockito");
+ * org.dictionary.SmartDictionaryTest.shouldFindTranslation(SmartDictionaryTest.java:27)
+ *  
+ * But called with different arguments:
+ * translator.translate("oups");
+ * org.dictionary.SmartDictionary.search(SmartDictionary.java:15)
+ * </pre>
+ * <p>
+ * Note that it is just a warning, not an assertion. 
+ * The test fails on assertion because it's the assertion's task to document what the test stands for and what behavior it proves. 
+ * Warnings just helps debugging tests.
+ * <p>
+ * Note that code links printed to the console are clickable in any decent IDE (e.g. Eclipse).
+ * <p>
+ * So far I identified 3 cases when warnings are printed:
+ * <li>unstubbed method</li>
+ * <li>unsued stub</li>
+ * <li>stubbed method but called with different arguments</li> 
+ * <p>
+ * <br/>
+ * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com 
  */
 public class ExperimentalMockitoJUnitRunner extends MockitoJUnitRunner {
 
