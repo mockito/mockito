@@ -18,9 +18,4 @@ public class MoreEmptyReturnValuesTest extends TestBase {
     public void shouldReturnEmptyString() {
         assertEquals("", rv.returnValueFor(String.class));
     }
-
-    @Test
-    public void shouldReturnObjectInstance() {
-        assertNotNull(rv.returnValueFor(Object.class));
-    }
 }

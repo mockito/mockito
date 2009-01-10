@@ -24,7 +24,7 @@ import org.mockito.invocation.InvocationOnMock;
  * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
  * <p>
  * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
- * then it tries to return SmartNull. If the return type is final then plain null is returned.
+ * then it tries to return SmartNull. If the return type is not mockable (e.g. final) then ordinary null is returned.
  * <p>
  * If you would like to apply this return values strategy globally have a look at {@link IMockitoConfiguration} class
  * <p>

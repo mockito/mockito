@@ -55,9 +55,7 @@ public class MoreEmptyReturnValues implements ReturnValues {
     Object returnValueFor(Class<?> type) {
         if (type == String.class) {
             return "";
-        } else if (type == Object.class) {
-            return new Object();
-        } else if (type.isArray()) {
+        }  else if (type.isArray()) {
             Class<?> componenetType = type.getComponentType();
             return Array.newInstance(componenetType, 0);
         }
