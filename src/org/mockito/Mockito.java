@@ -261,6 +261,7 @@ import org.mockito.stubbing.Answer;
  * verifyNoMoreInteractions(mockedList);
  * </pre>
  * 
+ * A word of <b>warning</b>: 
  * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
  * verifyNoMoreInteractions() is not recommended to use in every test method. 
  * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
@@ -268,9 +269,8 @@ import org.mockito.stubbing.Answer;
  * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
  * 
  * <p>   
- * 
- *  See also {@link Mockito#never()} - it is more explicit and
- * communicates an intent well.
+ * See also {@link Mockito#never()} - it is more explicit and
+ * communicates the intent well.
  * <p>
  * 
  * <h3>9. Shorthand for mocks creation - &#064;Mock annotation</h3>
@@ -758,15 +758,20 @@ public class Mockito extends Matchers {
      * You can use this method after you verified your mocks - to make sure that nothing
      * else was invoked on your mocks.
      * <p>
-     * See also {@link Mockito#never()} - it is more explicit and communicates an intent well.
+     * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
      * <p>
+     * A word of <b>warning</b>: 
      * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
      * verifyNoMoreInteractions() is not recommended to use in every test method. 
      * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
      * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
      * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
+     * <p>
+     * This method will also detect unverified invocations that occurred before the test method,
+     * for example: in setUp(), &#064;Before method or in constructor.
+     * Consider writing nice code that makes interactions only in test methods.
      * 
      * <p>
      * Example:
@@ -808,7 +813,10 @@ public class Mockito extends Matchers {
      * <pre>
      *   verifyZeroInteractions(mockOne, mockTwo);
      * </pre>
-     * 
+     * This method will also detect invocations 
+     * that occurred before the test method, for example: in setUp(), &#064;Before method or in constructor.
+     * Consider writing nice code that makes interactions only in test methods.  
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified
