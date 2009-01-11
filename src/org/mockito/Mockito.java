@@ -6,11 +6,11 @@ package org.mockito;
 
 import java.util.Arrays;
 
+import org.junit.mockito.ExperimentalMockitoJUnitRunner;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
@@ -483,7 +483,7 @@ public class Mockito extends Matchers {
      * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration (see {@link IMockitoConfiguration}). 
-     * If there is no global configuration then it uses {@link HandyReturnValues} (returns zeros, empty collections, nulls, etc.)
+     * If there is no global configuration then it uses {@link DefaultReturnValues} (returns zeros, empty collections, nulls, etc.)
      */
     public static final ReturnValues RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
     
@@ -494,7 +494,7 @@ public class Mockito extends Matchers {
      * <p>
      * This implementation can be helpful when working with legacy code.
      * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
-     * This implementation of ReturnValues makes unstubbed methods <b>return SmartNulls instead of nulls</b>.
+     * This implementation of ReturnValues makes unstubbed methods <b>return SmartNull instead of null</b>.
      * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
      * <p>
      * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
@@ -510,7 +510,6 @@ public class Mockito extends Matchers {
     /**
      * Creates mock object of given class or interface.
      * <p>
-     * 
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param classToMock class or interface to mock
