@@ -5,7 +5,7 @@ package org.mockito;
  * <p>
  * In most cases you don't really need to configure Mockito. For example in case of working with legacy code, 
  * when you might want to have different 'mocking style' this interface might be helpful. 
- * A reason of configuring Mockito might be if you disagree with the default return values mocks return.
+ * A reason of configuring Mockito might be if you disagree with the default return values Mockito mocks return.
  * <p>
  * Currently, configuring Mockito can help you changing {@link ReturnValues} for all mocks. 
  * {@link ReturnValues} determines the return values for unstubbed invocations.
