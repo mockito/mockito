@@ -3,11 +3,14 @@
  */
 package org.mockito.internal.returnvalues;
 
+import org.mockito.IMockitoConfiguration;
 import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
-@SuppressWarnings("deprecation")
+/**
+ * ReturnValues from global configuration, see {@link IMockitoConfiguration}
+ */
 public class GloballyConfiguredReturnValues implements ReturnValues {
     
     public Object valueFor(InvocationOnMock invocation) {
