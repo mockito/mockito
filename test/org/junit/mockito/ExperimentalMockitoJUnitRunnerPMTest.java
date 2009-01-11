@@ -1,4 +1,4 @@
-package org.mockito.runners;
+package org.junit.mockito;
 
 import static org.mockito.Mockito.*;
 
