@@ -188,4 +188,10 @@ public interface IMethods {
     IMethods iMethodsReturningMethod();
 
     String stringReturningMethod();
+
+    Object objectArgMethod(Object str);
+
+    Object listArgMethod(List<String> list);
+
+    Object collectionArgMethod(Collection<String> collection);
 }

@@ -194,6 +194,21 @@ public class Matchers {
     public static <T> T anyObject() {
         return (T) reportMatcher(Any.ANY).returnNull();
     }
+    
+    /**
+     * any object of specified class. 
+     * Sometimes looks better than anyObject() 
+     * <p>
+     * Alias to {@link Matchers#anyObject()}
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T any(Class<T> clazz) {
+        return isA(clazz);
+    }
 
     /**
      * any String or null.
