@@ -50,6 +50,8 @@ import org.mockito.stubbing.Answer;
  *      11. Stubbing with callbacks <br/>
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
+ *      14. (**New**) Changing default return values of unstubbed invocations <br/>
+ *      15. (**New**) ExperimentalMockitoJUnitRunner to help with debugging failing tests <br/>
  * </b>
  * 
  * <p>
@@ -434,7 +436,43 @@ import org.mockito.stubbing.Answer;
  * 2. Watch out for final methods. 
  * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
  * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
- * Typically you may get a NullPointerException because mock instances don't have fields initiated. 
+ * Typically you may get a NullPointerException because mock instances don't have fields initiated.
+ * 
+ * <h3>14. (**New**) Changing default return values of unstubbed invocations</h3>
+ * 
+ * You can create a mock with specified strategy of for its return values.
+ * It's quite advanced feature and typically you don't need it to write decent tests.
+ * However it can be helpful for working with legacy systems.
+ * <p>
+ * Obviously return values are used only when you don't stub the method call.
+ * 
+ * <pre>
+ *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
+ *   Foo mockTwo = mock(Foo.class, new YourOwnReturnValues()); 
+ * </pre>
+ * 
+ * <p>
+ * Read more about {@link Mockito#RETURNS_SMART_NULLS}
+ * <p>
+ * Optionally, you can configure default return values using {@link IMockitoConfiguration}.
+ * 
+ * <h3>15. (**New**) ExperimentalMockitoJUnitRunner to enhance testing experience</h3>
+ *      
+ * ExperimentalMockitoJUnitRunner initializes &#064;Mock annotated mocks and prints useful warnings that can enhance testing experience.
+ * <p>
+ * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason. 
+ * Then the developer can implement the functionality. 
+ * Also when the test fails it should be easy to figure out why the test fails.
+ * <p>
+ * Read more in javadocs for ExperimentalMockitoJUnitRunner class: {@link ExperimentalMockitoJUnitRunner}
+ * <pre>
+ * 
+ * &#064;RunWith("ExperimentalMockitoJUnitRunner.class")
+ * YourTest extends TestCase {
+ *     
+ *     &#064;Mock private List list;
+ * 
+ * </pre>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -442,7 +480,7 @@ public class Mockito extends Matchers {
     /**
      * Default ReturnValues used by the framework.
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed calls. 
+     * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration (see {@link IMockitoConfiguration}). 
      * If there is no global configuration then it uses {@link HandyReturnValues} (returns zeros, empty collections, nulls, etc.)
@@ -452,7 +490,7 @@ public class Mockito extends Matchers {
     /**
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed calls.
+     * {@link ReturnValues} defines the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
@@ -501,15 +539,22 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Warning: the interface of this method may change
-     * 
-     * Creates mock with a specified strategy for its return values.
+     * Creates mock with a specified strategy for its return values. 
+     * It's quite advanced feature and typically you don't need it to write decent tests.
+     * However it can be helpful for working with legacy systems.
+     * <p>
+     * Obviously return values are used only when you don't stub the method call.
      *
-     * <p>This can be helpful for working with legacy systems.</p>
+     * <pre>
+     *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
+     *   Foo mockTwo = mock(Foo.class, new YourOwnReturnValues()); 
+     * </pre>
      * 
      * <p>See examples in javadoc for {@link Mockito} class</p>
      * 
      * @param classToMock class or interface to mock
+     * @param returnValues default return values for unstubbed methods
+     *
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {

@@ -54,4 +54,6 @@ public class WarningsPrinterTest extends TestBase {
         assertThat(logger.getLoggedInfo(), contains("called with different arguments"));
         assertThat(logger.getLoggedInfo(), contains("simpleMethod(\"bar\")"));
     }
+    
+    //TODO after 1.7 consider writing a warning when someone tries to mock a class that has any final methods
 }

@@ -20,7 +20,10 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
  * This runner does exactly what {@link MockitoJUnitRunner} does but also  
- * prints useful warnings that can be helpful for debugging failed tests.
+ * prints useful warnings that can enhance testing experience. 
+ * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason. 
+ * Then the developer can implement the functionality. 
+ * Also when the test fails it should be easy to figure out why the test fails. 
  * <p>
  * Sometimes when the test fails, the underlying reason is that stubbed method was called with wrong arguments. 
  * Sometimes it fails because one forgets to stub a method or forgets to call a stubbed method. 

@@ -8,11 +8,13 @@ import org.mockito.invocation.InvocationOnMock;
 
 /**
  * Configures return values for an unstubbed invocation
+ * <p>
+ * Can be used in {@link Mockito#mock(Class, ReturnValues)} or configured globally - see: {@link IMockitoConfiguration}
  */
 public interface ReturnValues {
 
     /**
-     * returns value for an unstubbed invocation
+     * return value for an unstubbed invocation
      * 
      * @param invocation placeholder for mock and a method
      * @return the return value
