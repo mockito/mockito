@@ -15,6 +15,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
 import org.mockito.internal.returnvalues.SmartNullReturnValues;
@@ -442,9 +443,9 @@ import org.mockito.stubbing.Answer;
  * 
  * You can create a mock with specified strategy of for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
- * However it can be helpful for working with legacy systems.
+ * However, it can be helpful for working with legacy systems.
  * <p>
- * Obviously return values are used only when you don't stub the method call.
+ * Obviously those return values are used only when you don't stub the method call.
  * 
  * <pre>
  *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
@@ -452,13 +453,14 @@ import org.mockito.stubbing.Answer;
  * </pre>
  * 
  * <p>
- * Read more about {@link Mockito#RETURNS_SMART_NULLS}
+ * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * <p>
- * Optionally, you can configure default return values using {@link IMockitoConfiguration}.
+ * Optionally, you can configure default return values for all mocks using {@link IMockitoConfiguration}.
  * 
- * <h3>15. (**New**) VerboseMockitoJUnitRunner to enhance testing experience</h3>
+ * <h3>15. (**New**) experimental VerboseMockitoJUnitRunner to improve testing/tdd experience</h3>
  *      
- * Experimental VerboseMockitoJUnitRunner initializes &#064;Mock annotated mocks and prints useful warnings that can enhance testing experience.
+ * Experimental VerboseMockitoJUnitRunner initializes &#064;Mock annotated mocks 
+ * and also prints warnings that might be useful.
  * <p>
  * Read more in javadoc for {@link VerboseMockitoJUnitRunner} class.
  */
@@ -471,7 +473,7 @@ public class Mockito extends Matchers {
      * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration (see {@link IMockitoConfiguration}). 
-     * If there is no global configuration then it uses {@link DefaultReturnValues} (returns zeros, empty collections, nulls, etc.)
+     * If there is no global configuration then it uses {@link EmptyReturnValues} (returns zeros, empty collections, nulls, etc.)
      */
     public static final ReturnValues RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
     
@@ -488,7 +490,22 @@ public class Mockito extends Matchers {
      * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
      * then it tries to return SmartNull. If the return type is final then plain null is returned.
      * <p>
-     * SmartNullReturnValues will be probably the default return values strategy in Mockito 2.0 
+     * SmartNullReturnValues will be probably the default return values strategy in Mockito 2.0
+     * <p>
+     * Example:
+     * <pre>
+     *   Foo mock = (Foo.class, RETURNS_SMART_NULLS);
+     *   
+     *   //calling unstubbed method here:
+     *   Stuff stuff = mock.getStuff();
+     *   
+     *   //using object returned by unstubbed call:
+     *   stuff.doSomething();
+     *   
+     *   //Above doesn't yield NullPointerException this time!
+     *   //Instead, SmartNullPointerException is thrown. 
+     *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
+     * </pre>
      */
     public static final ReturnValues RETURNS_SMART_NULLS = new SmartNullReturnValues();
     

@@ -5,6 +5,9 @@ import org.mockito.DefaultMockitoConfiguration;
 import org.mockito.IMockitoConfiguration;
 import org.mockito.ReturnValues;
 
+/**
+ * Thread-safe wrapper on user-defined org.mockito.MockitoConfiguration implementation
+ */
 public class GlobalConfiguration implements IMockitoConfiguration {
     
     private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();

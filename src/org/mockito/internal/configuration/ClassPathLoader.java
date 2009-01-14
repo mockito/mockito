@@ -6,8 +6,7 @@ import org.mockito.exceptions.misusing.MockitoConfigurationException;
 public class ClassPathLoader {
     
     /**
-     * @param defaultConfiguration - to be used if no config found on classpath
-     * @return
+     * @return configuration loaded from classpath or null
      */
     @SuppressWarnings({"unchecked"})
     public IMockitoConfiguration loadConfiguration() {

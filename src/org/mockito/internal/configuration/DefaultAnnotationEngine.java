@@ -6,7 +6,13 @@ import java.lang.reflect.Field;
 import org.mockito.AnnotationEngine;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
+/**
+ * Initializes fields annotated with &#064;Mock
+ * <p>
+ * See {@link MockitoAnnotations}
+ */
 public class DefaultAnnotationEngine implements AnnotationEngine {
     
     /* (non-Javadoc)

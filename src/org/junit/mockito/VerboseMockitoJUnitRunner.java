@@ -19,11 +19,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
- * Experimental implementation that suppose to enhance tdd/testing experience. 
+ * Experimental implementation that suppose to improve tdd/testing experience. 
  * Don't hesitate to send feedback to mockito@googlegroups.com
  * <p>
  * This runner does exactly what {@link MockitoJUnitRunner} does but also  
- * prints useful warnings that can enhance testing experience. 
+ * prints warnings that might be useful. 
  * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason. 
  * Then the developer can implement the functionality. 
  * Also when the test fails it should be easy to figure out why the test fails. 
@@ -34,9 +34,8 @@ import org.mockito.runners.MockitoJUnitRunner;
  * <p>
  * One way of approaching this problem is full-blown 'expect' API. 
  * However it means the 'expectations upfront' business which is not in line with core Mockito concepts.
- * After all, one of the key points of Mockito are <b>explicit assertions</b> that are always placed at the <b>bottom of the test</b> method.
+ * After all, the essence of testing are <b>explicit assertions</b> that are described consistently at the <b>bottom of the test</b> method.
  * <p>
- * Let's look at different ways of addressing the issue.
  * Here's the experiment: a warning is printed to the standard output if the test fails.
  * Also, you get a clickabe link to the line of code. You can immediately jump to the place in code where the potential problem is.
  * <p> 
@@ -44,6 +43,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Let's say the underlying reason is a stubbed method that was called with different arguments:
  * <pre>
  * //test:
+ * Dictionary dictionary = new Dictionary(translator);
  * when(translator.translate("Mockito")).thenReturn("cool framework");
  * String translated = dictionary.search("Mockito");
  * assertEquals("cool framework", translated);
@@ -67,8 +67,8 @@ import org.mockito.runners.MockitoJUnitRunner;
  * </pre>
  * <p>
  * Note that it is just a warning, not an assertion. 
- * The test fails on assertion because it's the assertion's task to document what the test stands for and what behavior it proves. 
- * Warnings just helps debugging tests.
+ * The test fails on assertion because it's the assertion's duty to document what the test stands for and what behavior it proves. 
+ * Warnings just makes it quicker to figure out if the test fails for the right reason.
  * <p>
  * Note that code links printed to the console are clickable in any decent IDE (e.g. Eclipse).
  * <p>

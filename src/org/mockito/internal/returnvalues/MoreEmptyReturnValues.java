@@ -6,11 +6,16 @@ package org.mockito.internal.returnvalues;
 
 import java.lang.reflect.Array;
 
+import org.mockito.Mockito;
 import org.mockito.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * It's likely this implmentation will be used by default by every Mockito 2.0 mock.
+ * It's likely this implementation will be used by default by every Mockito 2.0 mock.
+ * <p>
+ * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
+ * <p>
+ * Current version of Mockito mocks by deafult use {@link EmptyReturnValues}  
  * <ul>
  * <li>
  *  Returns appropriate primitive for primitive-returning methods

@@ -32,7 +32,7 @@ public interface MockitoConfiguration {
     void setReturnValues(ReturnValues returnValues);
 
     /**
-     * Resets {@link ReturnValues} implementation to the default one: {@link MockitoProperties#DEFAULT_RETURN_VALUES}
+     * Resets {@link ReturnValues} implementation to the default one
      */
     void resetReturnValues();
 }
