@@ -75,6 +75,9 @@ import org.mockito.runners.MockitoJUnitRunner;
  * <li>stubbed method but called with different arguments</li> 
  * <p>
  * <br/>
+ * This runner lives under org.junit.mockito package 
+ * so that it automatically takes advantage on clean stack traces in most IDEs 
+ * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com 
  */
 public class ExperimentalMockitoJUnitRunner extends MockitoJUnitRunner {
