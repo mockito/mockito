@@ -30,6 +30,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
         runner = new ExperimentalMockitoJUnitRunner(this.getClass(), loggerStub);
     }
     
+    //TODO after 1.7 refactor it to override-and-subclass
     @Test(expected=RunWasCalled.class)
     public void shouldRunTests() throws Exception {
         runner.run(notifier, new JunitTestBody() {
