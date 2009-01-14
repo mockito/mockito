@@ -6,12 +6,14 @@ package org.mockito;
 
 import static java.lang.annotation.ElementType.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -88,17 +90,21 @@ public class MockitoAnnotations {
     }
 
     private static void scan(Object testClass, Class<?> clazz) {
+        AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Field[] fields = clazz.getDeclaredFields();
-        for (Field f : fields) {
-            if (f.isAnnotationPresent(org.mockito.Mock.class) || f.isAnnotationPresent(Mock.class)) {
-                boolean wasAccessible = f.isAccessible();
-                f.setAccessible(true);
-                try {
-                    f.set(testClass, Mockito.mock(f.getType(), f.getName()));
-                } catch (IllegalAccessException e) {
-                    throw new MockitoException("Problems initiating mocks annotated with @Mock", e);
-                } finally {
-                    f.setAccessible(wasAccessible);
+        for (Field field : fields) {
+            for(Annotation annotation : field.getAnnotations()) {
+                Object mock = annotationEngine.createMockFor(annotation, field);
+                if (mock != null) {
+                    boolean wasAccessible = field.isAccessible();
+                    field.setAccessible(true);
+                    try {
+                        field.set(testClass, mock);
+                    } catch (IllegalAccessException e) {
+                        throw new MockitoException("Problems initiating mocks annotated with " + annotation, e);
+                    } finally {
+                        field.setAccessible(wasAccessible);
+                    }    
                 }
             }
         }

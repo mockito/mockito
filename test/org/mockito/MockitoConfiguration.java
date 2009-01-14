@@ -3,7 +3,7 @@ package org.mockito;
 import org.mockito.internal.configuration.Configuration;
 
 @SuppressWarnings("deprecation")
-public class MockitoConfiguration implements IMockitoConfiguration {
+public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
     private static ReturnValues overridden = null;
 

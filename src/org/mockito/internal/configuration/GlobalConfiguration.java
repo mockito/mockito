@@ -1,5 +1,7 @@
 package org.mockito.internal.configuration;
 
+import org.mockito.AnnotationEngine;
+import org.mockito.DefaultMockitoConfiguration;
 import org.mockito.IMockitoConfiguration;
 import org.mockito.ReturnValues;
 
@@ -16,8 +18,8 @@ public class GlobalConfiguration implements IMockitoConfiguration {
     
     @SuppressWarnings("deprecation")
     IMockitoConfiguration getConfig() {
-        IMockitoConfiguration defaultConfiguration = new IMockitoConfiguration() {
-            public ReturnValues getReturnValues() {
+        IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration() {
+            @Override public ReturnValues getReturnValues() {
                 //For now, let's leave the deprecated way of getting return values, 
                 //it will go away, replaced simply by return new DefaultReturnValues()
                 return Configuration.instance().getReturnValues();
@@ -31,11 +33,15 @@ public class GlobalConfiguration implements IMockitoConfiguration {
         }
     }
 
+    public static void validate() {
+        new GlobalConfiguration();
+    }
+    
     public ReturnValues getReturnValues() {
         return globalConfiguration.get().getReturnValues();
     }
 
-    public static void validate() {
-        new GlobalConfiguration();
+    public AnnotationEngine getAnnotationEngine() {
+        return globalConfiguration.get().getAnnotationEngine();
     }
 }

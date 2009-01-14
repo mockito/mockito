@@ -1,5 +1,6 @@
 package org.mockito;
 
+import org.mockito.internal.configuration.DefaultAnntotationEngine;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 
 /**
@@ -11,7 +12,17 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
  */
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
 
+    /* (non-Javadoc)
+     * @see org.mockito.IMockitoConfiguration#getReturnValues()
+     */
     public ReturnValues getReturnValues() {
         return new EmptyReturnValues();
+    }
+    
+    /* (non-Javadoc)
+     * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
+     */
+    public AnnotationEngine getAnnotationEngine() {
+        return new DefaultAnntotationEngine();
     }
 }

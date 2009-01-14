@@ -23,6 +23,17 @@ package org.mockito;
  */
 public interface IMockitoConfiguration {
 
+    /**
+     * Allows configuring the default return values of unstubbed invocations
+     * <p>
+     * See javadoc for {@link IMockitoConfiguration}
+     */
     ReturnValues getReturnValues();
 
+    /**
+     * Configures annotations for mocks
+     * <p>
+     * See javadoc for {@link IMockitoConfiguration}
+     */
+    AnnotationEngine getAnnotationEngine();
 }
