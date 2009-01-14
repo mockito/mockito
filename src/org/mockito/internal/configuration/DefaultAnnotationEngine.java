@@ -7,7 +7,7 @@ import org.mockito.AnnotationEngine;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-public class DefaultAnntotationEngine implements AnnotationEngine {
+public class DefaultAnnotationEngine implements AnnotationEngine {
     
     /* (non-Javadoc)
      * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)

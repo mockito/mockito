@@ -27,4 +27,12 @@ public class MockitoConfigurationTest extends TestBase {
         IMethods mock = mock(IMethods.class); 
         assertEquals("foo", mock.simpleMethod());
     }
+    
+    @SmartMock IMethods smartMock;
+
+    @Test
+    public void shouldUseCustomAnnotation() {
+        assertEquals("SmartMock should return empty String by default", "", smartMock.simpleMethod(1));
+        verify(smartMock).simpleMethod(1);
+    }
 }

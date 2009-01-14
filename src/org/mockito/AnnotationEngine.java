@@ -3,12 +3,12 @@ package org.mockito;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.mockito.internal.configuration.DefaultAnntotationEngine;
+import org.mockito.internal.configuration.DefaultAnnotationEngine;
 
 /**
  * Configures mock creation logic behind &#064;Mock annotations
  * <p>
- * See how it is implemented in {@link DefaultAnntotationEngine} and {@link MockitoAnnotations#initMocks(Object)}
+ * See how it is implemented in {@link DefaultAnnotationEngine} and {@link MockitoAnnotations#initMocks(Object)}
  */
 public interface AnnotationEngine {
 

@@ -1,6 +1,6 @@
 package org.mockito;
 
-import org.mockito.internal.configuration.DefaultAnntotationEngine;
+import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 
 /**
@@ -23,6 +23,6 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
      * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
      */
     public AnnotationEngine getAnnotationEngine() {
-        return new DefaultAnntotationEngine();
+        return new DefaultAnnotationEngine();
     }
 }
