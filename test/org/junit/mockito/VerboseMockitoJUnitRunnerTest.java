@@ -4,7 +4,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.mockito.ExperimentalMockitoJUnitRunner.JunitTestBody;
+import org.junit.mockito.VerboseMockitoJUnitRunner.JunitTestBody;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
@@ -15,11 +15,11 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 
-public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
+public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
     
-    private ExperimentalMockitoJUnitRunner runner;
+    private VerboseMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;
 
@@ -27,7 +27,7 @@ public class ExperimentalMockitoJUnitRunnerTest extends TestBase {
     public void setup() throws InitializationError {
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
-        runner = new ExperimentalMockitoJUnitRunner(this.getClass(), loggerStub);
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub);
     }
     
     //TODO after 1.7 refactor it to override-and-subclass

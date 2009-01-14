@@ -9,7 +9,7 @@ import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.mockito.ExperimentalMockitoJUnitRunner;
+import org.junit.mockito.VerboseMockitoJUnitRunner;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
@@ -18,7 +18,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 //This is required to make sure stack trace is well filtered when runner is ON
-@RunWith(ExperimentalMockitoJUnitRunner.class)
+@RunWith(VerboseMockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationChunkTest extends TestBase {
     
     private IMethods mock;

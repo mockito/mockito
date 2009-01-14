@@ -19,6 +19,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
+ * Experimental implementation that suppose to enhance tdd/testing experience. 
+ * Don't hesitate to send feedback to mockito@googlegroups.com
+ * <p>
  * This runner does exactly what {@link MockitoJUnitRunner} does but also  
  * prints useful warnings that can enhance testing experience. 
  * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason. 
@@ -78,17 +81,17 @@ import org.mockito.runners.MockitoJUnitRunner;
  * This runner lives under org.junit.mockito package 
  * so that it automatically takes advantage on clean stack traces in most IDEs 
  * <p>
- * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com 
+ * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
  */
-public class ExperimentalMockitoJUnitRunner extends MockitoJUnitRunner {
+public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
 
     private final MockitoLogger logger;
     
-    public ExperimentalMockitoJUnitRunner(Class<?> klass) throws InitializationError {
+    public VerboseMockitoJUnitRunner(Class<?> klass) throws InitializationError {
         this(klass, new MockitoLoggerImpl());
     }
     
-    public ExperimentalMockitoJUnitRunner(Class<?> klass, MockitoLogger logger) throws InitializationError {
+    public VerboseMockitoJUnitRunner(Class<?> klass, MockitoLogger logger) throws InitializationError {
         super(klass);
         this.logger = logger;
     }
@@ -102,7 +105,7 @@ public class ExperimentalMockitoJUnitRunner extends MockitoJUnitRunner {
     public void run(RunNotifier notifier) {
         this.run(notifier, new JunitTestBody() {
             public void run(RunNotifier notifier) {
-                ExperimentalMockitoJUnitRunner.super.run(notifier);
+                VerboseMockitoJUnitRunner.super.run(notifier);
             }
         });
     }

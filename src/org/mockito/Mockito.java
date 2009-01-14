@@ -6,7 +6,7 @@ package org.mockito;
 
 import java.util.Arrays;
 
-import org.junit.mockito.ExperimentalMockitoJUnitRunner;
+import org.junit.mockito.VerboseMockitoJUnitRunner;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
@@ -51,7 +51,7 @@ import org.mockito.stubbing.Answer;
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
  *      14. (**New**) Changing default return values of unstubbed invocations <br/>
- *      15. (**New**) ExperimentalMockitoJUnitRunner to help with debugging failing tests <br/>
+ *      15. (**New**) VerboseMockitoJUnitRunner to help with debugging failing tests <br/>
  * </b>
  * 
  * <p>
@@ -456,23 +456,11 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Optionally, you can configure default return values using {@link IMockitoConfiguration}.
  * 
- * <h3>15. (**New**) ExperimentalMockitoJUnitRunner to enhance testing experience</h3>
+ * <h3>15. (**New**) VerboseMockitoJUnitRunner to enhance testing experience</h3>
  *      
- * ExperimentalMockitoJUnitRunner initializes &#064;Mock annotated mocks and prints useful warnings that can enhance testing experience.
+ * Experimental VerboseMockitoJUnitRunner initializes &#064;Mock annotated mocks and prints useful warnings that can enhance testing experience.
  * <p>
- * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason. 
- * Then the developer can implement the functionality. 
- * Also when the test fails it should be easy to figure out why the test fails.
- * <p>
- * Read more in javadocs for ExperimentalMockitoJUnitRunner class: {@link ExperimentalMockitoJUnitRunner}
- * <pre>
- * 
- * &#064;RunWith("ExperimentalMockitoJUnitRunner.class")
- * YourTest extends TestCase {
- *     
- *     &#064;Mock private List list;
- * 
- * </pre>
+ * Read more in javadoc for {@link VerboseMockitoJUnitRunner} class.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
