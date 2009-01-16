@@ -7,7 +7,7 @@ eos
 
 require 'find'
 
-dirs = ["src","test"]
+dirs = ["../src","../test"]
 
 paths = []
 for dir in dirs
