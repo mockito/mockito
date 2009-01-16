@@ -1,5 +1,6 @@
-package org.mockito;
+package org.mockito.configuration;
 
+import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 

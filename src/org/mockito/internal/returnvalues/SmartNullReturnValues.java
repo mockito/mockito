@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.IMockitoConfiguration;
 import org.mockito.Mockito;
 import org.mockito.ReturnValues;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.cause.BecauseThisMethodWasNotStubbed;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.creation.jmock.ClassImposterizer;

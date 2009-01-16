@@ -1,5 +1,6 @@
-package org.mockito;
+package org.mockito.configuration;
 
+import org.mockito.ReturnValues;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 
 /**
@@ -9,13 +10,13 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
  * when you might want to have different 'mocking style' this interface might be helpful. 
  * A reason of configuring Mockito might be if you disagree with the {@link EmptyReturnValues} unstubbed mocks return.
  * <p>
- * To configure Mockito create exactly <b>org.mockito.MockitoConfiguration</b> class that implements this interface.
+ * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class that implements this interface.
  * <p>
- * Configuring Mockito is completely <b>optional</b> - nothing happens if there isn't any <b>org.mockito.MockitoConfiguration</b> on the classpath. 
+ * Configuring Mockito is completely <b>optional</b> - nothing happens if there isn't any <b>org.mockito.configuration.MockitoConfiguration</b> on the classpath. 
  * <p>
- * <b>org.mockito.MockitoConfiguration</b> must implement IMockitoConfiguration or extend {@link DefaultMockitoConfiguration}
+ * <b>org.mockito.configuration.MockitoConfiguration</b> must implement IMockitoConfiguration or extend {@link DefaultMockitoConfiguration}
  * <p>
- * Mockito will store single instance of org.mockito.MockitoConfiguration per thread (using ThreadLocal). 
+ * Mockito will store single instance of org.mockito.configuration.MockitoConfiguration per thread (using ThreadLocal). 
  * For sanity of your tests, don't make the implementation stateful.
  * <p>
  * If you have comments on Mockito configuration feature don't hesitate to write to mockito@googlegroups.com

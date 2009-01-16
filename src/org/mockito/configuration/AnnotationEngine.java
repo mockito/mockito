@@ -1,7 +1,9 @@
-package org.mockito;
+package org.mockito.configuration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import org.mockito.MockitoAnnotations;
 
 /**
  * Configures mock creation logic behind &#064;Mock annotations

@@ -58,7 +58,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void validateState() {
         //State is cool when GlobalConfiguration is already loaded
-        //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.MockitoConfiguration class 
+        //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.configuration.MockitoConfiguration class 
         GlobalConfiguration.validate();
         
         if (verificationMode != null) {

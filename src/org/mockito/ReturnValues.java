@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
 /**

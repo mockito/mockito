@@ -1,8 +1,10 @@
-package org.mockito;
+package org.mockito.configuration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import org.mockito.Mockito;
+import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockitousage.configuration.SmartMock;

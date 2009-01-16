@@ -6,10 +6,10 @@ package org.mockito.configuration.experimental;
 
 import java.lang.reflect.Modifier;
 
-import org.mockito.DefaultMockitoConfiguration;
-import org.mockito.IMockitoConfiguration;
 import org.mockito.Mockito;
 import org.mockito.ReturnValues;
+import org.mockito.configuration.DefaultMockitoConfiguration;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.MockitoConfiguration;
 import org.mockito.internal.returnvalues.EmptyReturnValues;

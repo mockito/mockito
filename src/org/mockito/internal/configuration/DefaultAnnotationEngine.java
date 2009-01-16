@@ -3,10 +3,10 @@ package org.mockito.internal.configuration;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.mockito.AnnotationEngine;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.configuration.AnnotationEngine;
 
 /**
  * Initializes fields annotated with &#064;Mock

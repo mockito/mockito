@@ -4,8 +4,8 @@ import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Test;
-import org.mockito.MockitoConfiguration;
 import org.mockito.ReturnValues;
+import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;

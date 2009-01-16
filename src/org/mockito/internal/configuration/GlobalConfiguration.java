@@ -1,12 +1,12 @@
 package org.mockito.internal.configuration;
 
-import org.mockito.AnnotationEngine;
-import org.mockito.DefaultMockitoConfiguration;
-import org.mockito.IMockitoConfiguration;
 import org.mockito.ReturnValues;
+import org.mockito.configuration.AnnotationEngine;
+import org.mockito.configuration.DefaultMockitoConfiguration;
+import org.mockito.configuration.IMockitoConfiguration;
 
 /**
- * Thread-safe wrapper on user-defined org.mockito.MockitoConfiguration implementation
+ * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
 public class GlobalConfiguration implements IMockitoConfiguration {
     

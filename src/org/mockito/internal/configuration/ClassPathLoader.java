@@ -1,6 +1,6 @@
 package org.mockito.internal.configuration;
 
-import org.mockito.IMockitoConfiguration;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 
 public class ClassPathLoader {
@@ -13,7 +13,7 @@ public class ClassPathLoader {
         //Trying to get config from classpath
         Class configClass = null;
         try {
-            configClass = (Class) Class.forName("org.mockito.MockitoConfiguration");
+            configClass = (Class) Class.forName("org.mockito.configuration.MockitoConfiguration");
         } catch (ClassNotFoundException e) {
             //that's ok, it means there is no global config, using default one. 
             return null;
@@ -26,7 +26,7 @@ public class ClassPathLoader {
                     "MockitoConfiguration class must implement org.mockito.configuration.IMockitoConfiguration interface.", e);
         } catch (Exception e) {
             throw new MockitoConfigurationException("\n" +
-                    "Unable to instantianate org.mockito.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
+                    "Unable to instantianate org.mockito.configuration.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
         }
     }
 }
