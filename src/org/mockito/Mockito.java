@@ -6,7 +6,6 @@ package org.mockito;
 
 import java.util.Arrays;
 
-import org.junit.mockito.VerboseMockitoJUnitRunner;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
@@ -52,7 +51,6 @@ import org.mockito.stubbing.Answer;
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
  *      14. (**New**) Changing default return values of unstubbed invocations <br/>
- *      15. (**New**) VerboseMockitoJUnitRunner to help with debugging failing tests <br/>
  * </b>
  * 
  * <p>
@@ -457,12 +455,6 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Optionally, you can configure default return values for all mocks using {@link IMockitoConfiguration}.
  * 
- * <h3>15. (**New**) experimental VerboseMockitoJUnitRunner to improve testing/tdd experience</h3>
- *      
- * Experimental VerboseMockitoJUnitRunner initializes &#064;Mock annotated mocks 
- * and also prints warnings that might be useful.
- * <p>
- * Read more in javadoc for {@link VerboseMockitoJUnitRunner} class.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {

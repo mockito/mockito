@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.junit.mockito;
+package org.mockito.internal.experimental;
 
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
