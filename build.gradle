@@ -11,22 +11,18 @@ srcDirNames = ['src']
 testSrcDirNames = ['test']
 
 dependencies {
-  addConfiguration('build')
-  addFlatDirResolver('lib', "$rootDir/lib/run", "$rootDir/lib/ant", "$rootDir/lib/build")
-  compile ':asm:3.1', ':cglib:2.2', ':hamcrest-core:1.1', ':junit:4.5', ':objenesis:1.0'
-  testCompile ':junit:4.5'
-  build ":jarjar:1.0rc7"
+    addConfiguration('build')
+    addFlatDirResolver("lib", "$rootDir/lib/run", "$rootDir/lib/ant", "$rootDir/lib/build")
+    compile ':asm:3.1', ':cglib:2.2', ':hamcrest-core:1.1', ':junit:4.5', ':objenesis:1.0'
+    testCompile ':junit:4.5'
+    build ':jarjar:1.0rc7', ':pmd:4.1'
 }
 
 createTask('package', dependsOn:'libs')
 
-createTask('wrapper', type: Wrapper).configure {
-  gradleVersion = '0.5'
-}
-
 createTask('jarjar', dependsOn: 'compile') {
     ant {
-        taskdef(name: 'jarjar', classname: "com.tonicsystems.jarjar.JarJarTask",             classpath: dependencies.antpath('build'))
+        taskdef(name: 'jarjar', classname: 'com.tonicsystems.jarjar.JarJarTask', classpath: dependencies.antpath('build'))
         
         jarjar(jarfile: "$buildDir/mockito-all.jar") {
             manifest() {
@@ -54,6 +50,32 @@ createTask('jarjar', dependsOn: 'compile') {
             rule(pattern: "org.objectweb.**", result: "org.mockito.@1")
         }
     }
- } 
+}
+
+createTask('pmd') {
+    println 'Running PMD static code analysis'
+    ant {
+        taskdef(name:'pmd', classname:'net.sourceforge.pmd.ant.PMDTask', classpath: dependencies.antpath('build'))
+
+        pmd(shortFilenames:'true', failonruleviolation:'true', rulesetfiles:'conf/pmd-rules.xml') {
+            ruleset() { 'Mockito' }
+            formatter(type:'text', toConsole:'true')
+            fileset(dir: srcDirs[0]) {
+                include(name: '**/*.java')
+            }
+            fileset(dir: testSrcDirNames[0]) {
+                include(name: '**/*.java')
+            }
+        }
+    }
+}    
+
+createTask('release.javadoc', dependsOn: 'javadoc') {
+    println 'Releasing javadoc html to the javadoc release folder'
+    ant.copy(todir: 'javadoc') {
+        fileset(dir: 'build/docs')
+    }
+}
  
 libs.dependsOn jarjar
+compile.dependsOn pmd
