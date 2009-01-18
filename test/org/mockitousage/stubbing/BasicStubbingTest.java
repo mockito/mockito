@@ -74,6 +74,15 @@ public class BasicStubbingTest extends TestBase {
         verifyZeroInteractions(mock);
     }
     
+    @Test
+    public void shouldToStringMockName() {
+        IMethods mock = mock(IMethods.class, "mockie");
+        IMethods mockTwo = mock(IMethods.class);
+        
+        assertContains("Mock for IMethods", "" + mockTwo);
+        assertEquals("mockie", "" + mock);
+    }
+    
     class Foo {
         public final String toString() {
             return "foo";

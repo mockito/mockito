@@ -56,6 +56,7 @@ public class TestBase extends Assert {
         };
     }
     
+    
     //Assertors will never be matchers...
 //    public static <T> Assertor<T> not(final Assertor<T> assertor) {
 //        return new Assertor<T>() {
@@ -101,5 +102,16 @@ public class TestBase extends Assert {
                         cause.getMessage().contains(text));
             }
         };
+    }
+
+    public static void assertContains(String sub, String string) {
+        assertTrue("\n" +
+                "This substing:" +
+                sub +
+                "\n" +
+                "should be inside of:" +
+                string +
+                "\n"
+                , string.contains(sub));
     }
 }

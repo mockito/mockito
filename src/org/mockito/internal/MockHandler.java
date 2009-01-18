@@ -23,6 +23,7 @@ import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
+import org.mockito.internal.util.MockName;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.VerificationDataImpl;
@@ -41,12 +42,12 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private final MockitoStubber mockitoStubber;
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
-    private final String mockName;
+    private final MockName mockName;
     private final ReturnValues returnValues;
 
     private T instance;
 
-    public MockHandler(String mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, ReturnValues returnValues) {
+    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, ReturnValues returnValues) {
         this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
@@ -114,7 +115,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         return registeredInvocations.getAll();
     }
 
-    public String getMockName() {
+    public MockName getMockName() {
         return mockName;
     }
 
@@ -218,5 +219,9 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
+    }
+
+    public boolean hasName() {
+        return false;
     }
 }

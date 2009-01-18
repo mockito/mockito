@@ -22,6 +22,8 @@ import java.util.TreeSet;
 import org.mockito.ReturnValues;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.MockName;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -53,8 +55,12 @@ public class EmptyReturnValues implements ReturnValues {
     public Object valueFor(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
-            String mockDescription = "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
-            return mockDescription;
+            MockName name = MockUtil.getMockName(mock);
+            if (name.isSurrogate()) {
+                return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
+            } else {
+                return name.toString();
+            }
         }
         
         Class<?> returnType = invocation.getMethod().getReturnType();

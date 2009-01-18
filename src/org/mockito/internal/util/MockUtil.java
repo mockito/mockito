@@ -21,10 +21,7 @@ public class MockUtil {
     
     public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance, ReturnValues returnValues) {
         validateType(classToMock);
-        if (mockName == null) {
-            mockName = toInstanceName(classToMock);
-        }
-        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), returnValues);
+        MockHandler<T> mockHandler = new MockHandler<T>(new MockName(mockName, classToMock), progress, new MatchersBinder(), returnValues);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         
         T mock = (T) ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
@@ -36,12 +33,6 @@ public class MockUtil {
         if (!ClassImposterizer.INSTANCE.canImposterise(classToMock)) {
             new Reporter().cannotMockFinalClass(classToMock);
         }
-    }
-
-    private static String toInstanceName(Class<?> clazz) {
-        String className = clazz.getSimpleName();
-        //lower case first letter
-        return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
     
     public static <T> MockHandler<T> getMockHandler(T mock) {
@@ -74,7 +65,7 @@ public class MockUtil {
         return null;
     }
 
-    public static String getMockName(Object mock) {
+    public static MockName getMockName(Object mock) {
         return getMockHandler(mock).getMockName();
     }
 }
