@@ -11,7 +11,6 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.Mockito;
 import org.mockito.ReturnValues;
-import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.cause.BecauseThisMethodWasNotStubbed;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
@@ -29,8 +28,6 @@ import org.mockito.invocation.InvocationOnMock;
  * <p>
  * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
  * then it tries to return SmartNull. If the return type is not mockable (e.g. final) then ordinary null is returned.
- * <p>
- * If you would like to apply this return values strategy globally have a look at {@link IMockitoConfiguration} class
  * <p>
  * SmartNullReturnValues will be probably the default return values strategy in Mockito 2.0
  */

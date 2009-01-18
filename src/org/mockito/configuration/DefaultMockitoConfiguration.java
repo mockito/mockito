@@ -16,7 +16,7 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
  * See javadocs for {@link IMockitoConfiguration} on info how to configure Mockito
  */
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
-
+    
     /* (non-Javadoc)
      * @see org.mockito.IMockitoConfiguration#getReturnValues()
      */

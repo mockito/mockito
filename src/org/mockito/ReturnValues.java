@@ -4,13 +4,12 @@
  */
 package org.mockito;
 
-import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
  * Configures return values for an unstubbed invocation
  * <p>
- * Can be used in {@link Mockito#mock(Class, ReturnValues)} or configured globally - see: {@link IMockitoConfiguration}
+ * Can be used in {@link Mockito#mock(Class, ReturnValues)}
  */
 public interface ReturnValues {
 

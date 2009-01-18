@@ -5,12 +5,11 @@
 package org.mockito.internal.returnvalues;
 
 import org.mockito.ReturnValues;
-import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * ReturnValues from global configuration, see {@link IMockitoConfiguration}
+ * ReturnValues from global configuration
  */
 public class GloballyConfiguredReturnValues implements ReturnValues {
     

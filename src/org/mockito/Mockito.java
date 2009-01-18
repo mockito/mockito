@@ -6,7 +6,6 @@ package org.mockito;
 
 import java.util.Arrays;
 
-import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
@@ -453,8 +452,6 @@ import org.mockito.stubbing.Answer;
  * 
  * <p>
  * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
- * <p>
- * Optionally, you can configure default return values for all mocks using {@link IMockitoConfiguration}.
  * 
  */
 @SuppressWarnings("unchecked")
@@ -465,7 +462,7 @@ public class Mockito extends Matchers {
      * <p>
      * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
-     * This implementation first tries the global configuration (see {@link IMockitoConfiguration}). 
+     * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link EmptyReturnValues} (returns zeros, empty collections, nulls, etc.)
      */
     public static final ReturnValues RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
