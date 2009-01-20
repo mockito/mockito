@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.SmartNullPointerException;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -65,7 +66,6 @@ public class SmartNullsStubbingTest extends TestBase {
         } catch (SmartNullPointerException e) {}
     }
     
-    
     @Test
     public void shouldThrowSmartNPEWhenMethodReturnsInterface() throws Exception {
         Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
@@ -86,4 +86,22 @@ public class SmartNullsStubbingTest extends TestBase {
         assertEquals(true, mock.listReturningMethod().isEmpty());
         assertEquals(0, mock.arrayReturningMethod().length);
     }
+    
+    @Test
+    public void shouldNotThrowSmartNullPointerOnToString() {
+        Object smartNull = mock.objectReturningMethod();
+        try {
+            verify(mock).simpleMethod(smartNull);
+            fail();
+        } catch (WantedButNotInvoked e) {}
+    }
+
+//    @Test
+//    public void shouldNotThrowSmartNullPointerOnObjectMethods() {
+//        Object smartNull = mock.objectReturningMethod();
+//        try {
+//            verify(mock).simpleMethod(smartNull);
+//            fail();
+//        } catch (WantedButNotInvoked e) {}
+//    }
 }

@@ -27,7 +27,8 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
             equalsMethod = toMock.getMethod("equals", new Class[] { Object.class });
             hashCodeMethod = toMock.getMethod("hashCode", (Class[]) null);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("An Object method could not be found!");
+            throw new RuntimeException("\nSomething went really wrong. Object method could not be found!" +
+                "\n please report it to the mocking mailing list at http://mockito.org");
         }
         this.delegate = delegate;
     }

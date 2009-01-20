@@ -180,9 +180,13 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     }
 
     public static boolean isToString(InvocationOnMock invocation) {
-        return invocation.getMethod().getReturnType() == String.class 
-            && invocation.getMethod().getParameterTypes().length == 0 
-            && invocation.getMethod().getName().equals("toString");
+        return isToString(invocation.getMethod());
+    }
+    
+    public static boolean isToString(Method method) {
+        return method.getReturnType() == String.class 
+        && method.getParameterTypes().length == 0 
+        && method.getName().equals("toString");
     }
 
     public boolean isValidException(Throwable throwable) {
