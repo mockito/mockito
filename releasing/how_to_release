@@ -1,0 +1,38 @@
+How to release version x.x
+
+1. make sure license headers are there: replace_headers.rb
+2. make sure you committed all that needs to be in the release
+3. branch: 
+
+svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk https://mockito.googlecode.com/svn/branches/x.x
+
+4. check out branch to some clean folder:
+
+svn co https://mockito.googlecode.com/svn/branches/x.x mockito-x.x
+
+5. update version in the build.xml file to x.x
+7. commit changes to build.xml
+6. test the release:
+
+ant test.release
+
+7. build javadocs:
+
+ant release.javadoc
+
+8. add javadocs to svn:
+
+svn add javadoc/*
+
+8. update mime-type on javadoc so that it is nicely viewable in browsers:
+
+cd releasing
+python mime-types.rb
+
+9. commit javadocs (takes fricking long)
+
+9. check if javadocs look beautiful over the web
+
+10. upload jars:
+
+python upload_jars.py x.x
