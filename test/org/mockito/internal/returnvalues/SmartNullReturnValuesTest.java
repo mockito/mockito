@@ -51,4 +51,15 @@ public class SmartNullReturnValuesTest extends TestBase {
             fail();
         } catch (SmartNullPointerException expected) {}
     }
+    
+    @Test
+    public void shouldReturnAnObjectThatAllowsObjectMethods() throws Exception {
+        ReturnValues returnValues = new SmartNullReturnValues();
+        
+        Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
+        
+        //TODO after 1.7 add functionality of printing params
+        assertEquals("SmartNull returned by get() method on mock", smartNull + "");
+//        assertEquals(false, smartNull.equals(null));
+    }
 }

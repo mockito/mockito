@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.ReturnValues;
 import org.mockito.exceptions.cause.BecauseThisMethodWasNotStubbed;
 import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,7 +36,7 @@ public class SmartNullReturnValues implements ReturnValues {
 
     private final ReturnValues delegate = new MoreEmptyReturnValues();
 
-    public Object valueFor(InvocationOnMock invocation) {
+    public Object valueFor(final InvocationOnMock invocation) {
         Object defaultReturnValue = delegate.valueFor(invocation);
         if (defaultReturnValue != null) {
             return defaultReturnValue;
@@ -48,8 +47,7 @@ public class SmartNullReturnValues implements ReturnValues {
                 Exception whenCreated = new BecauseThisMethodWasNotStubbed("\nBecause this method was not stubbed correctly:");
                 public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
                     if (Invocation.isToString(method)) {
-//                        return "SmartNull for " + ClassNameFinder.classNameForMock(obj) + ", hashCode: " + obj.hashCode();
-                        return "SmartNull for " + ClassNameFinder.classNameForMock(obj);
+                        return "SmartNull returned by " + invocation.getMethod().getName() + "() method on mock";
                     }
                     throw new SmartNullPointerException("\nYou have a NullPointerException here:", whenCreated);
                 }}, type);
