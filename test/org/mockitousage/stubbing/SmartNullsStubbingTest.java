@@ -96,12 +96,11 @@ public class SmartNullsStubbingTest extends TestBase {
         } catch (WantedButNotInvoked e) {}
     }
 
-//    @Test
-//    public void shouldNotThrowSmartNullPointerOnObjectMethods() {
-//        Object smartNull = mock.objectReturningMethod();
-//        try {
-//            verify(mock).simpleMethod(smartNull);
-//            fail();
-//        } catch (WantedButNotInvoked e) {}
-//    }
+    @Test
+    public void shouldNotThrowSmartNullPointerOnObjectMethods() {
+        Object smartNull = mock.objectReturningMethod();
+        smartNull.toString();
+        smartNull.hashCode();
+        smartNull.equals(null);
+    }
 }
