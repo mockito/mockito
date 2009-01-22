@@ -4,6 +4,8 @@
 -->
 <project name="mockito" basedir="." default="all">
 
+  <loadproperties srcfile="version.properties" />
+    
   <property name="src.dir" value="src" />
   <property name="test.src.dir" value="test" />
   <property name="target.dir" value="target" />
@@ -16,7 +18,7 @@
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
   
-  <property name="version" value="snapshot" />
+    
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="jar.tests" value="mockito-tests.jar" />
