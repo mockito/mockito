@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * <b>JUnit 4.0-4.4</b> runner initializes mocks annotated with {@link Mock},
+ * <b>JUnit 4.4</b> runner initializes mocks annotated with {@link Mock},
  * so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
  * Mocks are initialized before each test method. 
  * <p>
