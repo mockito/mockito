@@ -57,11 +57,8 @@ public class SmartNullReturnValuesTest extends TestBase {
         ReturnValues returnValues = new SmartNullReturnValues();
         
         Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
-        Foo otherSmartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
         
         //TODO after 1.7 add functionality of printing params
         assertEquals("SmartNull returned by get() method on mock", smartNull + "");
-        assertEquals(false, smartNull.equals(null));
-        assertTrue(otherSmartNull.hashCode() != smartNull.hashCode());
     }
 }

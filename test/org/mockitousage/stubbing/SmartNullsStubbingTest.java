@@ -100,7 +100,5 @@ public class SmartNullsStubbingTest extends TestBase {
     public void shouldNotThrowSmartNullPointerOnObjectMethods() {
         Object smartNull = mock.objectReturningMethod();
         smartNull.toString();
-        smartNull.hashCode();
-        smartNull.equals(null);
     }
 }
