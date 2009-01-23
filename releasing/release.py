@@ -17,8 +17,8 @@ if ok != "Y":
 ver = raw_input("Specify the version, e.g. 1.7:")
 
 branch = 'https://mockito.googlecode.com/svn/branches/' + ver
-#run('svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk ' + branch)
-#run('svn co ' + branch + ' ../../mockito-' + ver)
+run('svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk ' + branch)
+run('svn co ' + branch + ' ../../mockito-' + ver)
 
 print("Switching to ../../mockito-" + ver + " folder")
 
@@ -30,7 +30,7 @@ f = open('version.properties', 'w')
 f.write('version=' + ver)
 f.close()
 
-#run('ant test.release release.javadoc')
+run('ant test.release release.javadoc')
 
 run('svn add javadoc/*')
 run('svn ps -R svn:mime-type text/html javadoc/*')
