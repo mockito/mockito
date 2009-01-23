@@ -49,7 +49,7 @@ public class SmartNullReturnValues implements ReturnValues {
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             if (Invocation.isToString(method)) {
-                return "SmartNull returned by " + invocation.getMethod().getName() + "() method on mock";
+                return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
             }
             throw new SmartNullPointerException("\nYou have a NullPointerException here:", whenCreated);
         }
