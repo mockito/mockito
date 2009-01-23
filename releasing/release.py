@@ -1,3 +1,6 @@
+#This script is not really portable. It's just to automate some manual steps I usually do when releasing.
+#It might evolve into someting more robut but for it's ok for me.
+
 import os
 
 def run(cmd):
