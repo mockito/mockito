@@ -84,8 +84,8 @@ public class Reporter {
 
     public void unfinishedVerificationException(Location location) {
         UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
-                "Missing method call for verify(mock) method",
-                " -> Located at " + location,
+                "Method call not specified for verify(mock):",
+                "-> Located at " + location,
                 "",
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
