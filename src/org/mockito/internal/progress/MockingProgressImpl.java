@@ -7,6 +7,8 @@ package org.mockito.internal.progress;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.DebuggingInfo;
+import org.mockito.internal.debugging.Localized;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationMode;
 
@@ -19,7 +21,7 @@ public class MockingProgressImpl implements MockingProgress {
     private final DebuggingInfo debuggingInfo = new DebuggingInfo();
 
     OngoingStubbing ongoingStubbing;
-    private VerificationMode verificationMode;
+    private Localized<VerificationMode> verificationMode;
     private boolean stubbingInProgress = false;
 
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
@@ -35,7 +37,7 @@ public class MockingProgressImpl implements MockingProgress {
     public void verificationStarted(VerificationMode verify) {
         validateState();
         resetOngoingStubbing();
-        verificationMode = (VerificationMode) verify;
+        verificationMode = new Localized(verify);
     }
 
     /* (non-Javadoc)
@@ -46,7 +48,11 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public VerificationMode pullVerificationMode() {
-        VerificationMode temp = verificationMode;
+        if (verificationMode == null) {
+            return null;
+        }
+        
+        VerificationMode temp = verificationMode.getObject();
         verificationMode = null;
         return temp;
     }
@@ -62,8 +68,9 @@ public class MockingProgressImpl implements MockingProgress {
         GlobalConfiguration.validate();
         
         if (verificationMode != null) {
+            Location location = verificationMode.getLocation();
             verificationMode = null;
-            reporter.unfinishedVerificationException();
+            reporter.unfinishedVerificationException(location);
         }
         
         if (stubbingInProgress) {

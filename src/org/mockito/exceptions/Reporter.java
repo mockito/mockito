@@ -28,6 +28,7 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
+import org.mockito.internal.debugging.Location;
 
 /**
  * Reports verification and misusing errors.
@@ -81,13 +82,18 @@ public class Reporter {
         ));
     }
 
-    public void unfinishedVerificationException() {
-        throw new UnfinishedVerificationException(join(
-                "Previous verify(mock) doesn't have a method call!",
+    public void unfinishedVerificationException(Location location) {
+        UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
+                "Missing method call for verify(mock) method",
+                " -> Located at " + location,
+                "",
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
-                "Also make sure the method is not final - you cannot verify final methods."
+                "Also make sure the method is not final - you cannot verify final methods.",
+                ""
         ));
+        
+        throw exception;
     }
     
     public void notAMockPassedToVerify() {

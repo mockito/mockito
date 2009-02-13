@@ -17,7 +17,12 @@ public class StackTraceFilter {
     }
 
     public void filterStackTrace(HasStackTrace hasStackTrace) {
-        List<StackTraceElement> unfilteredStackTrace = Arrays.asList(hasStackTrace.getStackTrace());
+        StackTraceElement[] filtered = filterStackTrace(hasStackTrace.getStackTrace());
+        hasStackTrace.setStackTrace(filtered);
+    }
+
+    public StackTraceElement[] filterStackTrace(StackTraceElement[] target) {
+        List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastToRemove = -1;
         int i = 0;
@@ -29,6 +34,6 @@ public class StackTraceFilter {
         }
         
         List<StackTraceElement> filtered = unfilteredStackTrace.subList(lastToRemove + 1, unfilteredStackTrace.size());
-        hasStackTrace.setStackTrace(filtered.toArray(new StackTraceElement[]{}));
+        return filtered.toArray(new StackTraceElement[]{});
     }
 }

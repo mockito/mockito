@@ -48,6 +48,21 @@ public class InvalidStateDetectionTest extends TestBase {
     }
     
     @Test
+    public void shouldShowWhereIsUnfinishedVerification() throws Exception {
+        unfinishedVerificationHere();
+        try {
+            unfinishedVerificationHere();
+            fail();
+        } catch (UnfinishedVerificationException e) {
+            assertContains("InvalidStateDetectionTest.unfinishedVerificationHere", e.getMessage());
+        }
+    }
+
+    private void unfinishedVerificationHere() {
+        verify(mock);
+    }
+    
+    @Test
     public void shouldDetectUnfinishedStubbing() {
         when(mock.simpleMethod());
         detectsAndCleansUp(new OnMethodCallOnMock(), UnfinishedStubbingException.class);
@@ -136,25 +151,25 @@ public class InvalidStateDetectionTest extends TestBase {
     
     @Test
     public void shouldDetectUnfinishedVerification() {
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnStub(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnStubVoid(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnVerify(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnVerifyInOrder(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnVerifyZeroInteractions(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
         
-        verify(mock);
+        unfinishedVerificationHere();
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedVerificationException.class);
     }
 
@@ -198,7 +213,7 @@ public class InvalidStateDetectionTest extends TestBase {
     @Test
     public void shouldCorrectStateAfterDetectingUnfinishedVerification() {
         mock.simpleMethod();
-        verify(mock);
+        unfinishedVerificationHere();
         
         try {
             verify(mock).simpleMethod();
