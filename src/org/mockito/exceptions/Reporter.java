@@ -63,8 +63,8 @@ public class Reporter {
     
     public void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
-                "Unifinished stubbing detected!",
-                "E.g. toReturn() may be missing.",
+                "Unfinished stubbing detected!",
+                "E.g. thenReturn() may be missing.",
                 "Examples of correct stubbing:",
                 "    when(mock.isOk()).thenReturn(true);",
                 "    when(mock.isOk()).thenThrow(exception);",
