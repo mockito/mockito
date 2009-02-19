@@ -36,7 +36,6 @@ public class StackTrackeChangingTest extends TestBase {
             assertThat(e, hasMethodInStackTraceAt(0, "verifySimpleMethodOnAMock"));
             assertThat(e, hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
             assertThat(e.getCause(), hasMethodInStackTraceAt(0, "simpleMethodOnAMock"));
-            assertThat(e.getCause(), hasMethodInStackTraceAt(1, "shouldShowActualInvocationAsExceptionCause"));
         }
     }
 

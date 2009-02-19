@@ -4,20 +4,20 @@ import org.mockito.exceptions.base.StackTraceFilter;
 
 public class Location {
 
-    private final StackTraceElement[] stackTrace;
+    private final StackTraceElement firstTraceElement;
 
     public Location() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceFilter filter = new StackTraceFilter();
-        this.stackTrace = filter.filterStackTrace(stackTrace);
+        this.firstTraceElement = filter.filterStackTrace(stackTrace)[0];
     }
 
     @Override
     public String toString() {
-        return this.stackTrace[0].toString();
+        return this.firstTraceElement.toString();
     }
 
     public StackTraceElement[] getStackTrace() {
-        return stackTrace;
+        return new StackTraceElement[] {firstTraceElement};
     }
 }
