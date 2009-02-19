@@ -760,7 +760,22 @@ public class Mockito extends Matchers {
     public static <T> T verify(T mock) {
         return verify(mock, times(1));
     }
+    
+    /**
+     * TODO javadoc
+     * 
+     * @param <T>
+     * @param mock
+     */
+    public static <T> void reset(T mock) {
+        //TODO Perhaps we should validate the state instead of resetting?
+        MOCKING_PROGRESS.reset();
+        MOCKING_PROGRESS.resetOngoingStubbing();
+        //TODO Perhaps we should maintain previous ReturnValues?
+        MockUtil.resetMock(mock, MOCKING_PROGRESS, RETURNS_DEFAULTS);
+    }
 
+ 
     /**
      * Verifies certain behavior happened at least once / exact number of times / never. E.g:
      * <pre>

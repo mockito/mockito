@@ -18,15 +18,24 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 
 public class MockUtil {
-    
-    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance, ReturnValues returnValues) {
+
+    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance,
+            ReturnValues returnValues) {
         validateType(classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(new MockName(mockName, classToMock), progress, new MatchersBinder(), returnValues);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
-        
-        T mock = (T) ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
+
+        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
         filter.setInstance(optionalInstance != null ? optionalInstance : mock);
         return mock;
+    }
+
+    public static <T> void resetMock(T mock, MockingProgress progress, ReturnValues returnValues) {
+        MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
+        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler.getMockName(), progress, new MatchersBinder(), returnValues);
+        MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
+        newFilter.setInstance(mock);
+        ((Factory) mock).setCallback(0, newFilter);
     }
 
     private static <T> void validateType(Class<T> classToMock) {
@@ -34,12 +43,12 @@ public class MockUtil {
             new Reporter().cannotMockFinalClass(classToMock);
         }
     }
-    
+
     public static <T> MockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
-        
+
         if (isMockitoMock(mock)) {
             return getInterceptor(mock).getDelegate();
         } else {
@@ -50,17 +59,17 @@ public class MockUtil {
     private static <T> boolean isMockitoMock(T mock) {
         return Enhancer.isEnhanced(mock.getClass()) && getInterceptor(mock) != null;
     }
-    
+
     public static boolean isMock(Object mock) {
         return mock != null && isMockitoMock(mock);
     }
-    
+
     @SuppressWarnings("unchecked")
     private static <T> MethodInterceptorFilter<MockHandler<T>> getInterceptor(T mock) {
         Factory factory = (Factory) mock;
         Callback callback = factory.getCallback(0);
-        if(callback instanceof MethodInterceptorFilter) {
-            return (MethodInterceptorFilter) callback;
+        if (callback instanceof MethodInterceptorFilter) {
+            return (MethodInterceptorFilter<MockHandler<T>>) callback;
         }
         return null;
     }

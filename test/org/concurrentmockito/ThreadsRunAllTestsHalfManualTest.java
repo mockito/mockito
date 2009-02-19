@@ -48,6 +48,7 @@ import org.mockitousage.misuse.InvalidStateDetectionTest;
 import org.mockitousage.misuse.InvalidUsageTest;
 import org.mockitousage.puzzlers.BridgeMethodPuzzleTest;
 import org.mockitousage.puzzlers.OverloadingPuzzleTest;
+import org.mockitousage.reset.ResetTest;
 import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationChunkTest;
 import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationTest;
 import org.mockitousage.stacktrace.StackTraceFilteringTest;
@@ -138,7 +139,8 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
                     PointingStackTraceToActualInvocationChunkTest.class,
-                    VerificationInOrderFromMultipleThreadsTest.class
+                    VerificationInOrderFromMultipleThreadsTest.class,
+                    ResetTest.class
                 );
                 
                 if (!result.wasSuccessful()) {
