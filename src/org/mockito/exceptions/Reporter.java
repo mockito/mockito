@@ -9,7 +9,6 @@ import static org.mockito.internal.util.StringJoiner.*;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
@@ -214,24 +213,19 @@ public class Reporter {
     }    
 
     public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualStackTrace) {
-        ActualArgumentsAreDifferent cause = new ActualArgumentsAreDifferent(join(
+        String message = join("Argument(s) are different! Wanted:", 
+                wanted.toString(),
+                "-> at " + new Location(),
                 "Actual invocation has different arguments:",
-                actual.toString()
-            ));
-        
-        cause.setStackTrace(actualStackTrace.getStackTrace());
+                actual.toString(),
+                "-> at " + actualStackTrace.getStackTrace()[0],
+                ""
+                );
         
         if (JUnitTool.hasJUnit()) {
-            throw JUnitTool.createArgumentsAreDifferentException(
-                    join("Argument(s) are different! Wanted:", wanted.toString()),
-                    cause,
-                    wanted.toString(),
-                    actual.toString());
+            throw JUnitTool.createArgumentsAreDifferentException(message, wanted.toString(), actual.toString());
         } else {
-            throw new ArgumentsAreDifferent(join(
-                    "Argument(s) are different! Wanted:",
-                    wanted.toString()
-                ), cause);
+            throw new ArgumentsAreDifferent(message);
         }
     }
     

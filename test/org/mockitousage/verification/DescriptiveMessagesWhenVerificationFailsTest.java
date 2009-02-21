@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.cause.ActualArgumentsAreDifferent;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -70,23 +69,21 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).varargs(1, 1000);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            String expected =
+            String wanted =
                     "\n" +
                     "Argument(s) are different! Wanted:" +
                     "\n" +
                     "iMethods.varargs(1, 1000);";
 
-            assertEquals(expected, e.getMessage());
-
-            assertEquals(e.getCause().getClass(), ActualArgumentsAreDifferent.class);
-
-            String expectedCause =
+            assertContains(wanted, e.getMessage());
+            
+            String actual = 
                     "\n" +
                     "Actual invocation has different arguments:" +
                     "\n" +
                     "iMethods.varargs(1, 2);";
 
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertContains(actual, e.getMessage());
         }
     }
     
@@ -98,7 +95,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).varargs("x", "y", "z");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            String expected =
+            String wanted =
                     "\n" +
                     "Argument(s) are different! Wanted:" +
                     "\n" +
@@ -112,11 +109,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     ");";
 
-            assertEquals(expected, e.getMessage());
+            assertContains(wanted, e.getMessage());
 
-            assertEquals(e.getCause().getClass(), ActualArgumentsAreDifferent.class);
-
-            String expectedCause =
+            String actual =
                     "\n" +
                     "Actual invocation has different arguments:" +
                     "\n" +
@@ -128,7 +123,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     ");";
 
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertContains(actual, e.getMessage());
         }
     }
 
@@ -141,7 +136,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("simpleMethod(10)"));
-            assertThat(e, causeMessageContains("simpleMethod()"));
+            assertThat(e, messageContains("simpleMethod()"));
         }
     }
 
@@ -155,8 +150,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).twoArgumentMethod(2, 1000);
             fail();
         } catch (ArgumentsAreDifferent e) {
+            //TODO decide on messageContains matcher or assertContains
             assertThat(e, messageContains("(2, 1000)"));
-            assertThat(e, causeMessageContains("(2, 2)"));
+            assertThat(e, messageContains("(2, 2)"));
         }
     }
 
@@ -247,7 +243,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("[false, false, false]"));
-            assertThat(e, causeMessageContains("[true, false, false]"));
+            assertThat(e, messageContains("[true, false, false]"));
         }
     }
 
@@ -260,7 +256,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("111"));
-            assertThat(e, causeMessageContains("\"xxx\""));
+            assertThat(e, messageContains("\"xxx\""));
         }
     }
 
@@ -273,7 +269,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("matches(\"burrito from Exmouth\")"));
-            assertThat(e, causeMessageContains("\"foo\""));
+            assertThat(e, messageContains("\"foo\""));
         }
     }
 
@@ -284,7 +280,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("test");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, causeMessageContains("simpleMethod(null, null);"));
+            assertThat(e, messageContains("simpleMethod(null, null);"));
         }
     }
     
@@ -312,7 +308,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("bar"));
-            assertThat(e, causeMessageContains("foo"));
+            assertThat(e, messageContains("foo"));
         }
     }
 
@@ -327,7 +323,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e, messageContains("iHavefunkyName.simpleMethod(20)"));
-            assertThat(e, causeMessageContains("iHavefunkyName.simpleMethod(10)"));
+            assertThat(e, messageContains("iHavefunkyName.simpleMethod(10)"));
         }
     }
 

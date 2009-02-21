@@ -154,7 +154,7 @@ public class CustomMatchersTest extends TestBase {
             fail();
         } catch (AssertionError e) {
             assertThat(e, messageContains("<custom argument matcher>"));
-            assertThat(e, causeMessageContains("foo"));
+            assertThat(e, messageContains("foo"));
         }
     }
 }

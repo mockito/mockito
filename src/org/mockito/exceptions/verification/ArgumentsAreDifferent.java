@@ -13,4 +13,8 @@ public class ArgumentsAreDifferent extends MockitoAssertionError {
     public ArgumentsAreDifferent(String message, Throwable cause) {
         super(message, cause);
     }
+    
+    public ArgumentsAreDifferent(String message) {
+        super(message);
+    }
 }

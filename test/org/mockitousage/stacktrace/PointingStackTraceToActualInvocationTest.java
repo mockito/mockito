@@ -49,27 +49,6 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
     }
     
     @Test
-    public void shouldPointToActualInvocationOnVerificationError() {
-        try {
-            verify(mock).simpleMethod(999);
-            fail();
-        } catch (AssertionError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
-        }
-    }
-    
-    @Test
-    public void shouldPointToUnverifiedActualInvocationOnVerificationError() {
-        verify(mock, atLeastOnce()).simpleMethod(1);
-        try {
-            verify(mock, atLeastOnce()).simpleMethod(999);
-            fail();
-        } catch (AssertionError e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
-        }
-    }   
-    
-    @Test
     public void shouldPointToTooLittleInvocationsChunkOnError() {
         verify(mock, atLeastOnce()).simpleMethod(1);
         try {
