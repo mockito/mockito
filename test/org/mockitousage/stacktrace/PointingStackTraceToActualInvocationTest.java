@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -47,17 +46,6 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
     private void fourth() {
         mockTwo.simpleMethod(4);
     }
-    
-    @Test
-    public void shouldPointToTooLittleInvocationsChunkOnError() {
-        verify(mock, atLeastOnce()).simpleMethod(1);
-        try {
-            verify(mock, times(3)).simpleMethod(3);
-            fail();
-        } catch (TooLittleActualInvocations e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
-        }
-    }   
     
     @Test
     public void shouldPointToTooManyInvocationsChunkOnError() {

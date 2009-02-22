@@ -52,7 +52,7 @@ import org.mockitousage.reset.ResetTest;
 import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationChunkTest;
 import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationTest;
 import org.mockitousage.stacktrace.StackTraceFilteringTest;
-import org.mockitousage.stacktrace.StackTrackeChangingTest;
+import org.mockitousage.stacktrace.ClickableStackTracesTest;
 import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
@@ -135,7 +135,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
                     InvalidStateDetectionTest.class,
                     ReplacingObjectMethodsTest.class,
-                    StackTrackeChangingTest.class,
+                    ClickableStackTracesTest.class,
                     ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
                     PointingStackTraceToActualInvocationChunkTest.class,

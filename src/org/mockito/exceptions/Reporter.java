@@ -284,12 +284,16 @@ public class Reporter {
     }    
 
     public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
-        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualInvocationStackTrace);
-
+        String ending = 
+            (lastActualInvocationStackTrace != null)? "-> at " + lastActualInvocationStackTrace.getStackTrace()[0] + "\n" : "\n";
+        
         throw new TooLittleActualInvocations(join(
                 wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
+                "Wanted " + pluralize(wantedCount) + ":",
+                "-> at " + new Location(),
+                "But was " + actualCount + ":", 
+                ending
+        ));
     }
 
     

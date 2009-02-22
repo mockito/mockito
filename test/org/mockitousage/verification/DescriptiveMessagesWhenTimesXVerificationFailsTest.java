@@ -8,11 +8,10 @@ import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.cause.TooLittleInvocations;
-import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
@@ -20,12 +19,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase {
 
-    private LinkedList mock;
-
-    @Before
-    public void setup() {
-        mock = Mockito.mock(LinkedList.class);
-    }
+    @Mock private LinkedList mock;
 
     @Test
     public void shouldVerifyActualNumberOfInvocationsSmallerThanWanted() throws Exception {
@@ -38,22 +32,14 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             Mockito.verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocations e) {
-            String expected =
-                "\n" +
-                "linkedList.clear();" +
-                "\n" +
-                "Wanted 100 times but was 3";
-            assertEquals(expected, e.getMessage());
-
-            assertEquals(TooLittleInvocations.class, e.getCause().getClass());
-
-            String expectedCause =
-                "\n" +
-                "Too little invocations:";
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertThat(e, messageContains("mock.clear();"));
+            assertThat(e, messageContains("Wanted 100 times"));
+            assertThat(e, messageContains("was 3"));
         }
     }
 
+    //TODO next thing to do
+    @Ignore
     @Test
     public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() throws Exception {
         mock.clear();
@@ -66,20 +52,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             Mockito.verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            String expected =
-                "\n" +
-                "linkedList.clear();" +
-                "\n" +
-                "Wanted 1 time but was 4";
-            assertEquals(expected, e.getMessage());
-
-            assertEquals(UndesiredInvocation.class, e.getCause().getClass());
-
-            String expectedCause =
-                "\n" +
-                "Undesired invocation:";
-
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertThat(e, messageContains("mock.clear();"));
+            assertThat(e, messageContains("Wanted 1 time"));
+            assertThat(e, messageContains("was 4"));
         }
     }
 }
