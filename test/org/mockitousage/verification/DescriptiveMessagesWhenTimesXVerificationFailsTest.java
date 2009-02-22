@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -38,8 +37,6 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         }
     }
 
-    //TODO next thing to do
-    @Ignore
     @Test
     public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() throws Exception {
         mock.clear();

@@ -49,10 +49,9 @@ import org.mockitousage.misuse.InvalidUsageTest;
 import org.mockitousage.puzzlers.BridgeMethodPuzzleTest;
 import org.mockitousage.puzzlers.OverloadingPuzzleTest;
 import org.mockitousage.reset.ResetTest;
-import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationChunkTest;
+import org.mockitousage.stacktrace.ClickableStackTracesTest;
 import org.mockitousage.stacktrace.PointingStackTraceToActualInvocationTest;
 import org.mockitousage.stacktrace.StackTraceFilteringTest;
-import org.mockitousage.stacktrace.ClickableStackTracesTest;
 import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
@@ -138,7 +137,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     ClickableStackTracesTest.class,
                     ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
-                    PointingStackTraceToActualInvocationChunkTest.class,
                     VerificationInOrderFromMultipleThreadsTest.class,
                     ResetTest.class
                 );

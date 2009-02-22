@@ -53,7 +53,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertThat(e, messageContains("Wanted 1 time but was 2"));
+            assertThat(e, messageContains("Wanted 1 time"));
+            assertThat(e, messageContains("was 2 times"));
         }
     }
 

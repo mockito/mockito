@@ -13,4 +13,8 @@ public class TooManyActualInvocations extends MockitoAssertionError {
     public TooManyActualInvocations(String message, Throwable cause) {
         super(message, cause);
     }
+    
+    public TooManyActualInvocations(String message) {
+        super(message);
+    }
 }

@@ -250,12 +250,14 @@ public class Reporter {
     }
 
     public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
-
         throw new TooManyActualInvocations(join(
                 wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
+                "Wanted " + pluralize(wantedCount) + ":",
+                "-> at " + new Location(),
+                "but was " + pluralize(actualCount) + ". Undesired invocation:",
+                "-> at " + firstUndesired.getStackTrace()[0],
+                ""
+        ));
     }
     
     public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
@@ -291,7 +293,7 @@ public class Reporter {
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + ":",
                 "-> at " + new Location(),
-                "But was " + actualCount + ":", 
+                "But was " + pluralize(actualCount) + ":", 
                 ending
         ));
     }

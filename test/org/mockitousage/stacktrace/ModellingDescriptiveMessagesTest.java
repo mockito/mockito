@@ -34,4 +34,11 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         mock.simpleMethod();
         verify(mock, times(2)).simpleMethod();
     }
+    
+    @Test
+    public void shouldTooManyInvocations() {
+        mock.simpleMethod();
+        mock.simpleMethod();
+        verify(mock, times(1)).simpleMethod();
+    }
 }
