@@ -68,7 +68,10 @@ public class Reporter {
                 "    when(mock.isOk()).thenReturn(true);",
                 "    when(mock.isOk()).thenThrow(exception);",
                 "    doThrow(exception).when(mock).someVoidMethod();",
-                "Also make sure the method is not final - you cannot stub final methods."
+                "Hints:",
+                " 1. missing thenReturn() or mock call inside when()",
+                " 2. stubbed method cannot be final.",
+                " 3. although stubbed methods may return mocks, you cannot inline a mock() call inside a thenReturn method (see issue 53)"
         ));
     }
 
