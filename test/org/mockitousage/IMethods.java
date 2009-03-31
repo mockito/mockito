@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.text.ChangedCharSetException;
 
@@ -179,6 +180,8 @@ public interface IMethods {
 
     String forList(List<String> list);
     
+    String forSet(Set<String> anySet);
+
     String forMap(Map<String, String> map);
     
     String forCollection(Collection<String> collection);

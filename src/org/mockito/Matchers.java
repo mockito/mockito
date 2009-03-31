@@ -7,6 +7,7 @@ package org.mockito;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.Any;
@@ -232,6 +233,17 @@ public class Matchers {
         return reportMatcher(Any.ANY).returnList();
     }    
     
+    /**
+     * any Set or null
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return empty Set
+     */
+    public static Set anySet() {
+        return reportMatcher(Any.ANY).returnSet();
+    }
+
     /**
      * any Map or null.
      * <p>

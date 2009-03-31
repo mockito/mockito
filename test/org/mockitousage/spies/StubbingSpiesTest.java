@@ -39,5 +39,6 @@ public class StubbingSpiesTest extends TestBase {
         spy.size(anyMap());
         spy.size(anyList());
         spy.size(anyCollection());
+        spy.size(anySet());
     }
 }

@@ -5,9 +5,11 @@
 package org.mockito.internal.progress;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class HandyReturnValues {
@@ -38,5 +40,9 @@ public class HandyReturnValues {
 
     public List returnList() {
         return new LinkedList();
+    }
+
+    public Set returnSet() {
+        return new HashSet();
     }
 }
