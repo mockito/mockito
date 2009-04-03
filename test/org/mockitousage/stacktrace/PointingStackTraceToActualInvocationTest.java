@@ -5,7 +5,6 @@
 package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +52,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
             verify(mock, times(0)).simpleMethod(1);
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("first"));
+            assertContains("first(", e.getMessage());
         }
     }   
 }

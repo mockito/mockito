@@ -293,8 +293,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock, never()).simpleMethod(1);
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertThat(e, messageContains("Never wanted but invoked!"));
-            assertThat(e, causeMessageContains("Undesired invocation"));
+            assertThat(e, messageContains("Never wanted here:"));
+            assertThat(e, messageContains("But invoked here:"));
         }
     }
     

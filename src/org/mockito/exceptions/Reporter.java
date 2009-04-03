@@ -269,12 +269,14 @@ public class Reporter {
     }
     
     public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
-
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
-                "Never wanted but invoked!"
-        ), cause);
+                "Never wanted here:",
+                "-> at " + new Location(),
+                "But invoked here:",
+                "-> at " + firstUndesired.getStackTrace()[0],
+                ""
+        ));
     }    
     
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
@@ -283,12 +285,6 @@ public class Reporter {
                 "Verification in order failure:" + message
                 ));
     }
-
-    private UndesiredInvocation createUndesiredInvocationCause(HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = new UndesiredInvocation(join("Undesired invocation:"));
-        cause.setStackTrace(firstUndesired.getStackTrace());
-        return cause;
-    }    
 
     private String createTooLittleInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
             HasStackTrace lastActualStackTrace) {

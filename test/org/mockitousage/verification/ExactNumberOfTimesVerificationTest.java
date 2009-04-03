@@ -75,7 +75,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(0)).clear();
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertThat(e, messageContains("Never wanted but invoked!"));
+            assertThat(e, messageContains("Never wanted here"));
         }
     }
 
