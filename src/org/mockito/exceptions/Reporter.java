@@ -20,6 +20,7 @@ import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
@@ -373,6 +374,15 @@ public class Reporter {
                 "    doThrow(new RuntimeException()).when(mock).someVoidMethod(anyObject());",
                 "    verify(mock).someMethod(contains(\"foo\"))",
                 ""
+                ));
+    }
+
+    public void smartNullPointerException(Location location) {
+        throw new SmartNullPointerException(join(
+                "\nYou have a NullPointerException here:",
+                "-> at " + new Location(),
+                "\nBecause this method was *not* stubbed correctly:",
+                "-> at " + location
                 ));
     }
 }

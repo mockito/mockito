@@ -5,7 +5,6 @@
 package org.mockitousage.stubbing;
 
 import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class SmartNullsStubbingTest extends TestBase {
             methods.simpleMethod();
             fail();
         } catch (SmartNullPointerException e) {
-            assertThat(e.getCause(),  hasMethodInStackTraceAt(0, "unstubbedMethodInvokedHere"));
+            assertContains("unstubbedMethodInvokedHere(", e.getMessage());
         }
     }
 

@@ -11,9 +11,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import org.mockito.Mockito;
 import org.mockito.ReturnValues;
-import org.mockito.exceptions.cause.BecauseThisMethodWasNotStubbed;
-import org.mockito.exceptions.verification.SmartNullPointerException;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -41,7 +41,7 @@ public class SmartNullReturnValues implements ReturnValues {
 
     private final class ThrowingInterceptor implements MethodInterceptor {
         private final InvocationOnMock invocation;
-        private final Exception whenCreated = new BecauseThisMethodWasNotStubbed("\nBecause this method was not stubbed correctly:");
+        private final Location location = new Location();
 
         private ThrowingInterceptor(InvocationOnMock invocation) {
             this.invocation = invocation;
@@ -51,7 +51,9 @@ public class SmartNullReturnValues implements ReturnValues {
             if (Invocation.isToString(method)) {
                 return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
             }
-            throw new SmartNullPointerException("\nYou have a NullPointerException here:", whenCreated);
+            
+            new Reporter().smartNullPointerException(location);
+            return null;
         }
     }
 
