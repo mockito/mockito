@@ -10,7 +10,6 @@ import static org.mockito.internal.util.StringJoiner.*;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -312,13 +311,13 @@ public class Reporter {
     }
     
     public void noMoreInteractionsWanted(PrintableInvocation undesired, HasStackTrace actualInvocationStackTrace) {
-        UndesiredInvocation cause = new UndesiredInvocation(join(
-                "Undesired invocation:", 
-                undesired.toString()
-        ));
-        
-        cause.setStackTrace(actualInvocationStackTrace.getStackTrace());
-        throw new NoInteractionsWanted(join("No interactions wanted"), cause);
+        throw new NoInteractionsWanted(join(
+                "No interactions wanted here:",
+                "-> at " + new Location(),
+                "But found this interaction:",
+                "-> at " + actualInvocationStackTrace.getStackTrace()[0],
+                ""
+                ));
     }
     
     public void cannotMockFinalClass(Class<?> clazz) {

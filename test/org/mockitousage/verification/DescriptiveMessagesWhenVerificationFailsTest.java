@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -169,17 +168,17 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (NoInteractionsWanted e) {
             String expectedMessage =
                     "\n" +
-                    "No interactions wanted";
-            assertEquals(expectedMessage, e.getMessage());
-
-            assertEquals(e.getCause().getClass(), UndesiredInvocation.class);
+                    "No interactions wanted here:" +
+                    "\n" +
+                    "-> at";
+            assertContains(expectedMessage, e.getMessage());
 
             String expectedCause =
                     "\n" +
-                    "Undesired invocation:" +
+                    "But found this interaction:" +
                     "\n" +
-                    "iMethods.oneArg(false);";
-            assertEquals(expectedCause, e.getCause().getMessage());
+                    "-> at";
+            assertContains(expectedCause, e.getMessage());
         }
     }
 
@@ -194,17 +193,19 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         } catch (NoInteractionsWanted e) {
             String expected =
                     "\n" +
-                    "No interactions wanted";
+                    "No interactions wanted here:" +
+                    "\n" +
+                    "-> at";
 
-            assertEquals(e.getMessage(), expected);
+            assertContains(expected, e.getMessage());
 
             String expectedCause =
                 "\n" +
-                "Undesired invocation:" +
+                "But found this interaction:" +
                 "\n" +
-                "iMethods.twoArgumentMethod(1, 2);";
+                "-> at";
 
-            assertEquals(e.getCause().getMessage(), expectedCause);
+            assertContains(expectedCause, e.getMessage());
         }
     }
 

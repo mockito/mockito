@@ -13,7 +13,7 @@ public class NoInteractionsWanted extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public NoInteractionsWanted(String message, Throwable cause) {
-        super(message, cause);
+    public NoInteractionsWanted(String message) {
+        super(message);
     }
 }
