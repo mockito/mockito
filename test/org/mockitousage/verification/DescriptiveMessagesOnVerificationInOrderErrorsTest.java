@@ -14,7 +14,6 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
-import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -58,19 +57,21 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "iMethods.simpleMethod(11);"; 
+                    "iMethods.simpleMethod(11);" +
+                    "\n" +
+                    "-> at "; 
             
-            assertEquals(expected, e.getMessage());
-            
-            assertEquals(e.getCause().getClass(), WantedAnywhereAfterFollowingInteraction.class);
+            assertContains(expected, e.getMessage());
             
             String expectedCause = 
                 "\n" +
                 "Wanted anywhere AFTER following interaction:" +
                 "\n" +
-                "iMethods.simpleMethod(2);";
+                "iMethods.simpleMethod(2);" +
+                "\n" +
+                "-> at ";
             
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertContains(expectedCause, e.getMessage());
         }
     }  
     
@@ -130,7 +131,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "Wanted but not invoked:" +
                     "\n" +
                     "iMethods.simpleMethod(999);"; 
-            assertEquals(expectedMessage, actualMessage);     
+            assertContains(expectedMessage, actualMessage);     
         }
     }   
     

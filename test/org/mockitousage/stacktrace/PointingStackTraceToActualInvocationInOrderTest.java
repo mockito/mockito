@@ -60,7 +60,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             inOrder.verify(mock).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourth"));
+            assertContains("fourth(", e.getMessage());
         }
     }
     
@@ -72,7 +72,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("third"));
+            assertContains("third(", e.getMessage());
         }
     }
     
@@ -85,7 +85,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("second"));
+            assertContains("second(", e.getMessage());
         }
     }
     

@@ -63,7 +63,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mock).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("secondChunk"));
+            assertContains("secondChunk(", e.getMessage());
         }
     }
     
@@ -75,7 +75,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
+            assertContains("thirdChunk(", e.getMessage());
         }
     }
     
@@ -89,7 +89,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("thirdChunk"));
+            assertContains("thirdChunk(", e.getMessage());
         }
     }
     

@@ -11,7 +11,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
-import org.mockito.exceptions.cause.WantedAnywhereAfterFollowingInteraction;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -240,16 +239,21 @@ public class Reporter {
     }
     
     public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
-        WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
-                        "Wanted anywhere AFTER following interaction:",
-                        previous.toString()));
-        cause.setStackTrace(previousStackTrace.getStackTrace());
+//        WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
+//                        "Wanted anywhere AFTER following interaction:",
+//                        previous.toString()));
+//        cause.setStackTrace(previousStackTrace.getStackTrace());
         
         throw new VerifcationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
-                    wanted.toString()
-        ), cause);
+                    wanted.toString(),
+                    "-> at " + new Location(),
+                    "Wanted anywhere AFTER following interaction:",
+                    previous.toString(),
+                    "-> at " + previousStackTrace.getStackTrace()[0],
+                    ""
+        ));
     }
 
     public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
