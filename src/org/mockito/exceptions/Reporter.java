@@ -379,10 +379,11 @@ public class Reporter {
 
     public void smartNullPointerException(Location location) {
         throw new SmartNullPointerException(join(
-                "\nYou have a NullPointerException here:",
+                "You have a NullPointerException here:",
                 "-> at " + new Location(),
-                "\nBecause this method was *not* stubbed correctly:",
-                "-> at " + location
+                "Because this method was *not* stubbed correctly:",
+                "-> at " + location,
+                ""
                 ));
     }
 }
