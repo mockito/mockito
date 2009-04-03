@@ -24,7 +24,7 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
         
         if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(chunk);
-            reporter.tooLittleActualInvocationsInOrderInAtLeastMode(wantedCount, actualCount, wanted, lastInvocation);
+            reporter.tooLittleActualInvocationsInOrder(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastInvocation);
         }
         
         for (Invocation i : chunk) {

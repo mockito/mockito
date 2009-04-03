@@ -6,6 +6,7 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
+//TODO fix the typo: Verifcation
 public class VerifcationInOrderFailure extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;

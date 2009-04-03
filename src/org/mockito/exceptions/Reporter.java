@@ -4,12 +4,12 @@
  */
 package org.mockito.exceptions;
 
+import static org.mockito.exceptions.Pluralizer.*;
 import static org.mockito.internal.util.StringJoiner.*;
 
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.cause.TooLittleInvocations;
 import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
@@ -40,10 +40,6 @@ import org.mockito.internal.debugging.Location;
  * read (xunit plugins take only fraction of screen on modern IDEs).
  */
 public class Reporter {
-
-    private String pluralize(int number) {
-        return number == 1 ? "1 time" : number + " times";
-    }
 
     public void checkedExceptionInvalid(Throwable t) {
         throw new MockitoException(join(
@@ -260,7 +256,7 @@ public class Reporter {
             HasStackTrace firstUndesired) {
         return join(
                 wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + ":",
+                "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
                 "-> at " + new Location(),
                 "But was " + pluralize(actualCount) + ". Undesired invocation:",
                 "-> at " + firstUndesired.getStackTrace()[0],
@@ -286,44 +282,35 @@ public class Reporter {
                 ));
     }
 
-    private String createTooLittleInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
+    private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
             HasStackTrace lastActualStackTrace) {
         String ending = 
             (lastActualStackTrace != null)? "-> at " + lastActualStackTrace.getStackTrace()[0] + "\n" : "\n";
             
             String message = join(
                     wanted.toString(),
-                    "Wanted " + pluralize(wantedCount) + ":",
+                    "Wanted " + discrepancy.getPluralizedWantedCount() + ":",
                     "-> at " + new Location(),
-                    "But was " + pluralize(actualCount) + ":", 
+                    "But was " + discrepancy.getPluralizedActualCount() + ":", 
                     ending
             );
             return message;
     }
    
-    public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        String message = createTooLittleInvocationsMessage(wantedCount, actualCount, wanted, lastActualStackTrace);
+    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
+        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualStackTrace);
         
         throw new TooLittleActualInvocations(message);
     }
     
-    public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        String message = createTooLittleInvocationsMessage(wantedCount, actualCount, wanted, lastActualStackTrace);
+    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
+        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualStackTrace);
         
         throw new VerifcationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
     }
     
-    private TooLittleInvocations createTooLittleInvocationsCause(HasStackTrace lastActualInvocationStackTrace) {
-        TooLittleInvocations cause = null;
-        if (lastActualInvocationStackTrace != null) {
-            cause = new TooLittleInvocations(join("Too little invocations:"));
-            cause.setStackTrace(lastActualInvocationStackTrace.getStackTrace());
-        }
-        return cause;
-    }
-
     public void noMoreInteractionsWanted(PrintableInvocation undesired, HasStackTrace actualInvocationStackTrace) {
         UndesiredInvocation cause = new UndesiredInvocation(join(
                 "Undesired invocation:", 
@@ -362,25 +349,6 @@ public class Reporter {
                 "Above means:",
                 "someVoidMethod() does nothing the 1st time but throws an exception the 2nd time is called"
              ));
-    }
-
-    public void tooLittleActualInvocationsInAtLeastMode(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {        
-        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualInvocationStackTrace);
-
-        throw new TooLittleActualInvocations(join(
-            wanted.toString(),
-            "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
-    }
-    
-    public void tooLittleActualInvocationsInOrderInAtLeastMode(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
-
-        throw new VerifcationInOrderFailure(join(
-                "Verification in order failure",
-                wanted.toString(),
-                "Wanted at least " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
     }
 
     public void wrongTypeOfReturnValue(String expectedType, String actualType, String method) {

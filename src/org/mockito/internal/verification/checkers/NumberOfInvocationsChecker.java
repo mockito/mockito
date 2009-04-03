@@ -6,6 +6,7 @@ package org.mockito.internal.verification.checkers;
 
 import java.util.List;
 
+import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.invocation.Invocation;
@@ -32,7 +33,7 @@ public class NumberOfInvocationsChecker {
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
-            reporter.tooLittleActualInvocations(wantedCount, actualCount, wanted, lastInvocation);
+            reporter.tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } else if (wantedCount == 0 && actualCount > 0) {
             HasStackTrace firstUndesired = actualInvocations.get(wantedCount).getStackTrace();
             reporter.neverWantedButInvoked(wanted, firstUndesired); 

@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.HasStackTrace;
@@ -120,9 +121,9 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int actualCount;
         private PrintableInvocation wanted;
         private HasStackTrace stackTrace;
-        @Override public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
-                    this.wantedCount = wantedCount;
-                    this.actualCount = actualCount;
+        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
+                    this.wantedCount = discrepancy.getWantedCount();
+                    this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
                     this.stackTrace = lastActualInvocationStackTrace;
         }

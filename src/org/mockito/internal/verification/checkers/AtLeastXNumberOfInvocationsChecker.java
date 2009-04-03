@@ -23,7 +23,7 @@ public class AtLeastXNumberOfInvocationsChecker {
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             HasStackTrace lastInvocation = finder.getLastStackTrace(actualInvocations);
-            reporter.tooLittleActualInvocationsInAtLeastMode(wantedCount, actualCount, wanted, lastInvocation);        
+            reporter.tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastInvocation);        
         }
         
         for (Invocation i : actualInvocations) {
