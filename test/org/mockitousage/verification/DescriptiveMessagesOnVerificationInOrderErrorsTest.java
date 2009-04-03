@@ -177,20 +177,22 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Verification in order failure" +
+                    "Verification in order failure:" +
                     "\n" +
                     "iMethods.simpleMethod(2);" +
                     "\n" +
-                    "Wanted 2 times but was 1";
-            assertEquals(expectedMessage, actualMessage);
-            
-            assertEquals(e.getCause().getClass(), TooLittleInvocations.class);
+                    "Wanted 2 times:" +
+                    "\n" +
+                    "-> at";
+            assertContains(expectedMessage, actualMessage);
             
             String expectedCause = 
                 "\n" +
-                "Too little invocations:";
+                "But was 1 time:" +
+                "\n" +
+                "-> at";
             
-            assertEquals(expectedCause, e.getCause().getMessage());
+            assertContains(expectedCause, e.getMessage());
         }
     }   
 }

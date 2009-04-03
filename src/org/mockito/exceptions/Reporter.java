@@ -239,11 +239,6 @@ public class Reporter {
     }
     
     public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
-//        WantedAnywhereAfterFollowingInteraction cause = new WantedAnywhereAfterFollowingInteraction(join(
-//                        "Wanted anywhere AFTER following interaction:",
-//                        previous.toString()));
-//        cause.setStackTrace(previousStackTrace.getStackTrace());
-        
         throw new VerifcationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
@@ -292,28 +287,33 @@ public class Reporter {
         return cause;
     }    
 
-    public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
+    private String createTooLittleInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
+            HasStackTrace lastActualStackTrace) {
         String ending = 
-            (lastActualInvocationStackTrace != null)? "-> at " + lastActualInvocationStackTrace.getStackTrace()[0] + "\n" : "\n";
-        
-        throw new TooLittleActualInvocations(join(
-                wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + ":",
-                "-> at " + new Location(),
-                "But was " + pluralize(actualCount) + ":", 
-                ending
-        ));
+            (lastActualStackTrace != null)? "-> at " + lastActualStackTrace.getStackTrace()[0] + "\n" : "\n";
+            
+            String message = join(
+                    wanted.toString(),
+                    "Wanted " + pluralize(wantedCount) + ":",
+                    "-> at " + new Location(),
+                    "But was " + pluralize(actualCount) + ":", 
+                    ending
+            );
+            return message;
     }
-
+   
+    public void tooLittleActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
+        String message = createTooLittleInvocationsMessage(wantedCount, actualCount, wanted, lastActualStackTrace);
+        
+        throw new TooLittleActualInvocations(message);
+    }
     
     public void tooLittleActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        TooLittleInvocations cause = createTooLittleInvocationsCause(lastActualStackTrace);
-
+        String message = createTooLittleInvocationsMessage(wantedCount, actualCount, wanted, lastActualStackTrace);
+        
         throw new VerifcationInOrderFailure(join(
-                "Verification in order failure",
-                wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
+                "Verification in order failure:" + message
+                ));
     }
     
     private TooLittleInvocations createTooLittleInvocationsCause(HasStackTrace lastActualInvocationStackTrace) {

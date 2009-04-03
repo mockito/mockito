@@ -121,7 +121,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             inOrder.verify(mockTwo, times(3)).simpleMethod(anyInt());
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourth"));
+            assertContains("fourth(", e.getMessage());
         }
     }
 }

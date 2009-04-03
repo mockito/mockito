@@ -17,6 +17,7 @@ import org.mockito.exceptions.base.HasStackTrace;
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
 
+    //TODO remove
     public static <T> Assertor<Throwable> hasFirstMethodInStackTrace(final String method) {
         return hasMethodInStackTraceAt(0, method);
     }

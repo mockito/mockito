@@ -58,7 +58,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
             checker.check(invocations, wanted, 4);
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e, messageContains("Wanted 4 times but was 2"));
+            assertThat(e, messageContains("Wanted 4 times"));
+            assertThat(e, messageContains("But was 2 times"));
         }
     }
     
