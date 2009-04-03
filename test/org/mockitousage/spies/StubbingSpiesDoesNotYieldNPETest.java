@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class StubbingSpiesTest extends TestBase {
+public class StubbingSpiesDoesNotYieldNPETest extends TestBase {
     
     class Foo {
         public int len(String text) {
