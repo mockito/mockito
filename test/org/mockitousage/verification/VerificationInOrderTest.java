@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -47,7 +47,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     } 
     
     @Test
@@ -77,7 +77,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -96,6 +96,6 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
 }

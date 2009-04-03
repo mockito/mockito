@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -57,7 +57,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         try {
             checker.check(invocations, wanted, 4);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 4 times"));
             assertThat(e, messageContains("But was 2 times"));
         }
@@ -72,7 +72,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         try {
             checker.check(invocations, wanted, 1);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             assertThat(e, messageContains("Wanted 1 time"));
             assertThat(e, messageContains("But was 2 times"));
         }

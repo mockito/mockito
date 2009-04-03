@@ -6,16 +6,15 @@ package org.mockito.exceptions.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 
-//TODO fix the typo: Verifcation
-public class VerifcationInOrderFailure extends MockitoAssertionError {
+public class VerificationInOrderFailure extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public VerifcationInOrderFailure(String message, Throwable cause) {
+    public VerificationInOrderFailure(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public VerifcationInOrderFailure(String message) {
+    public VerificationInOrderFailure(String message) {
         super(message);
     }
 }

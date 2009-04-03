@@ -14,7 +14,7 @@ import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
@@ -123,6 +123,6 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             inOrder.verify(mock, never()).add("two");
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
 }

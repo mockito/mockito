@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -88,7 +88,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             inOrder.verify(mock).oneArg(true);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));
         }
     }

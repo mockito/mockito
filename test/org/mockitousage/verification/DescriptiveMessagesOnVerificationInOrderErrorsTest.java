@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -48,7 +48,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one, atLeastOnce()).simpleMethod(11);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             String expected = 
                     "\n" +
                     "Verification in order failure" +
@@ -120,7 +120,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(three).simpleMethod(999);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -140,7 +140,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
@@ -173,7 +173,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +

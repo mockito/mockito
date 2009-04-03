@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -84,7 +84,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockOne).differentMethod();
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     } 
     
     @Test
@@ -95,7 +95,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     } 
 
     @Test
@@ -123,7 +123,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockTwo).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -133,7 +133,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -143,7 +143,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -153,7 +153,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(2);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test

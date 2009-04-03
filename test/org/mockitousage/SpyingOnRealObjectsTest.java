@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -114,7 +114,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             inOrder.verify(spy).add("one");
             fail();
-        } catch (VerifcationInOrderFailure f) {}
+        } catch (VerificationInOrderFailure f) {}
     }
     
     @Test

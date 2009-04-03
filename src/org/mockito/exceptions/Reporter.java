@@ -23,7 +23,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
 import org.mockito.internal.debugging.Location;
@@ -235,7 +235,7 @@ public class Reporter {
     }
     
     public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
-        throw new VerifcationInOrderFailure(join(
+        throw new VerificationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
                     wanted.toString(),
@@ -277,7 +277,7 @@ public class Reporter {
     
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
-        throw new VerifcationInOrderFailure(join(
+        throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
     }
@@ -306,7 +306,7 @@ public class Reporter {
     public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualStackTrace);
         
-        throw new VerifcationInOrderFailure(join(
+        throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
     }

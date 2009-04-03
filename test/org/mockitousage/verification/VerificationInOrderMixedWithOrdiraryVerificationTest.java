@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerifcationInOrderFailure;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -115,7 +115,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
             fail();
-        } catch (VerifcationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {}
     }
     
     @Test(expected=MockitoException.class)
