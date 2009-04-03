@@ -6,7 +6,6 @@ package org.mockitousage.stacktrace;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -101,7 +100,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
         } catch (VerifcationInOrderFailure e) {
-            assertThat(e.getCause(), hasFirstMethodInStackTrace("fourthChunk"));
+            assertContains("fourthChunk(", e.getMessage());
         }
     }
 }

@@ -252,14 +252,20 @@ public class Reporter {
     }
 
     public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
-        throw new TooManyActualInvocations(join(
+        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
+        throw new TooManyActualInvocations(message);
+    }
+
+    private String createTooManyInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
+            HasStackTrace firstUndesired) {
+        return join(
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + ":",
                 "-> at " + new Location(),
-                "but was " + pluralize(actualCount) + ". Undesired invocation:",
+                "But was " + pluralize(actualCount) + ". Undesired invocation:",
                 "-> at " + firstUndesired.getStackTrace()[0],
                 ""
-        ));
+        );
     }
     
     public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
@@ -272,13 +278,10 @@ public class Reporter {
     }    
     
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
-        UndesiredInvocation cause = createUndesiredInvocationCause(firstUndesired);
-
+        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerifcationInOrderFailure(join(
-                "Verification in order failure",
-                wanted.toString(),
-                "Wanted " + pluralize(wantedCount) + " but was " + actualCount
-        ), cause);
+                "Verification in order failure:" + message
+                ));
     }
 
     private UndesiredInvocation createUndesiredInvocationCause(HasStackTrace firstUndesired) {

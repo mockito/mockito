@@ -12,7 +12,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.exceptions.cause.UndesiredInvocation;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.VerifcationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -145,19 +144,21 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             String actualMessage = e.getMessage();
             String expectedMessage = 
                     "\n" +
-                    "Verification in order failure" +
+                    "Verification in order failure:" +
                     "\n" +
                     "iMethods.simpleMethod(2);" +
                     "\n" +
-                    "Wanted 1 time but was 2"; 
-            assertEquals(expectedMessage, actualMessage);      
-            
-            assertEquals(UndesiredInvocation.class, e.getCause().getClass());
+                    "Wanted 1 time:" +
+                    "\n" +
+                    "-> at"; 
+            assertContains(expectedMessage, actualMessage);      
 
             String expectedCause =
                 "\n" +
-                "Undesired invocation:";
-            assertEquals(expectedCause, e.getCause().getMessage());
+                "But was 2 times. Undesired invocation:" +
+                "\n" +
+                "-> at";
+            assertContains(expectedCause, e.getMessage());
         }
     }  
     
