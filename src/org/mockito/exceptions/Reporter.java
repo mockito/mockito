@@ -399,7 +399,8 @@ public class Reporter {
                 "Here are examples of correct usage of argument matchers:",
                 "    when(mock.get(anyInt())).thenReturn(null);",
                 "    doThrow(new RuntimeException()).when(mock).someVoidMethod(anyObject());",
-                "    verify(mock).someMethod(contains(\"foo\"));"
+                "    verify(mock).someMethod(contains(\"foo\"))",
+                "Also make sure you're *not* stubbing/verifying a final method with an argument matcher."
                 ));
     }
 }
