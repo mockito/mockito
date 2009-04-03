@@ -87,7 +87,7 @@ public class Reporter {
     public void unfinishedVerificationException(Location location) {
         UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
                 "Missing method call for verify(mock) here:",
-                "-> Located at " + location,
+                "-> at " + location,
                 "",
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
@@ -391,16 +391,18 @@ public class Reporter {
         throw new MockitoAssertionError(join("Wanted at most " + pluralize(maxNumberOfInvocations) + " but was " + foundSize));
     }
 
-    public void misplacedArgumentMatcher() {
+    public void misplacedArgumentMatcher(Location location) {
         throw new InvalidUseOfMatchersException(join(
-                "Misplaced argument matcher detected!",
-                "Somewhere before this line you probably misused Mockito argument matchers.",
-                "For example you might have used anyObject() argument matcher outside of verification or stubbing.",
-                "Here are examples of correct usage of argument matchers:",
+                "Misplaced argument matcher detected here:",
+                "-> at " + location,
+                "",
+                "You cannot use argument matchers outside of verification or stubbing.",
+                "Also make sure you're *not* stubbing/verifying a final method with an argument matcher.",
+                "Examples of correct usage of argument matchers:",
                 "    when(mock.get(anyInt())).thenReturn(null);",
                 "    doThrow(new RuntimeException()).when(mock).someVoidMethod(anyObject());",
                 "    verify(mock).someMethod(contains(\"foo\"))",
-                "Also make sure you're *not* stubbing/verifying a final method with an argument matcher."
+                ""
                 ));
     }
 }

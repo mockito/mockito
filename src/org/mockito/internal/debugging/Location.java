@@ -2,7 +2,7 @@ package org.mockito.internal.debugging;
 
 import org.mockito.exceptions.base.StackTraceFilter;
 
-public class Location {
+public class Location  {
 
     private final StackTraceElement firstTraceElement;
 
@@ -17,6 +17,7 @@ public class Location {
         return this.firstTraceElement.toString();
     }
 
+    //TODO this needs to refactored - I don't want to talk to StackTraceElements any more
     public StackTraceElement[] getStackTrace() {
         return new StackTraceElement[] {firstTraceElement};
     }
