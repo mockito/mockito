@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -24,19 +25,36 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         StateMaster.reset();
     }
     
-    private void misplacedArgumentMatcher() {
+    private void misplacedArgumentMatcherHere() {
         anyString();
     }
 
     @Test
     public void shouldPointOutMisplacedMatcher() {
-        misplacedArgumentMatcher();
+        misplacedArgumentMatcherHere();
         try {
             verify(mock).simpleMethod();
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e, messageContains("-> at "));
-            assertThat(e, messageContains("misplacedArgumentMatcher("));
+            assertThat(e, messageContains("misplacedArgumentMatcherHere("));
+        }
+    }
+
+    private void unfinishedStubbingHere() {
+        when(mock.simpleMethod());
+    }
+    
+    @Test
+    public void shouldPointOutUnfinishedStubbing() {
+        unfinishedStubbingHere();
+        
+        try {
+            verify(mock).simpleMethod();
+            fail();
+        } catch (UnfinishedStubbingException e) {
+            assertThat(e, messageContains("-> at "));
+            assertThat(e, messageContains("unfinishedStubbingHere("));
         }
     }
 }

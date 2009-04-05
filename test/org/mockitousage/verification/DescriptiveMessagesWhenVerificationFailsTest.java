@@ -39,8 +39,10 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "iMethods.simpleMethod();";
-            assertEquals(expectedMessage, actualMessage);
+                    "iMethods.simpleMethod();" +
+                    "\n" +
+                    "-> at";
+            assertContains(expectedMessage, actualMessage);
         }
     }
 
@@ -231,7 +233,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "Wanted but not invoked:" +
                 "\n" +
                 "iMethods.twoArgumentMethod(<any>, 100);";
-            assertEquals(expectedMessage, actualMessage);
+            assertContains(expectedMessage, actualMessage);
         }
     }
 

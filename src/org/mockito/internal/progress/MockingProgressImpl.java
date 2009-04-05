@@ -75,7 +75,7 @@ public class MockingProgressImpl implements MockingProgress {
         
         if (stubbingInProgress) {
             stubbingInProgress = false;
-            reporter.unfinishedStubbing();
+            reporter.unfinishedStubbing(debuggingInfo.getLastInvocationLocation());
         }
       
         getArgumentMatcherStorage().validateState();

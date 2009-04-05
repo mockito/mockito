@@ -83,11 +83,11 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "iMethods.differentMethod();"; 
+                    "iMethods.differentMethod();" +
+                    "\n" +
+                    "-> at"; 
             
-            assertEquals(expected, e.getMessage());
-            
-            assertEquals(null, e.getCause());
+            assertContains(expected, e.getMessage());
         }
     } 
     

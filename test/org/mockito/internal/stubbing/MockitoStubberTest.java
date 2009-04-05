@@ -25,7 +25,7 @@ public class MockitoStubberTest extends TestBase{
         state = new MockingProgressImpl();
         
         mockitoStubber = new MockitoStubber(state);
-        mockitoStubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher(), null);
         
         simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
     }
@@ -50,11 +50,11 @@ public class MockitoStubberTest extends TestBase{
     
     @Test
     public void shouldGetResultsForMethods() throws Throwable {
-        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod), null);
         mockitoStubber.addAnswer(new Returns("simpleMethod"));
         
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
+        mockitoStubber.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod), null);
         mockitoStubber.addAnswer(new ThrowsException(new MyException()));
         
         assertEquals("simpleMethod", mockitoStubber.answerTo(simpleMethod));
