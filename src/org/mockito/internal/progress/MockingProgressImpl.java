@@ -22,7 +22,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     OngoingStubbing ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
-    private boolean stubbingInProgress = false;
+    private Location stubbingInProgress = null;
 
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
         this.ongoingStubbing = ongoingStubbing;
@@ -59,7 +59,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingStarted() {
         validateState();
-        stubbingInProgress = true;
+        stubbingInProgress = new Location();
     }
 
     public void validateState() {
@@ -73,9 +73,10 @@ public class MockingProgressImpl implements MockingProgress {
             reporter.unfinishedVerificationException(location);
         }
         
-        if (stubbingInProgress) {
-            stubbingInProgress = false;
-            reporter.unfinishedStubbing();
+        if (stubbingInProgress != null) {
+            Location temp = stubbingInProgress;
+            stubbingInProgress = null;
+            reporter.unfinishedStubbing(temp);
         }
       
         getArgumentMatcherStorage().validateState();
@@ -83,7 +84,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingCompleted(Invocation invocation) {
         debuggingInfo.addStubbedInvocation(invocation);        
-        stubbingInProgress = false;
+        stubbingInProgress = null;
     }
     
     public String toString() {
@@ -93,7 +94,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void reset() {
-        stubbingInProgress = false;
+        stubbingInProgress = null;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }

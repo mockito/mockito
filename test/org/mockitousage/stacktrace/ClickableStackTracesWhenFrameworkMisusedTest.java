@@ -8,7 +8,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.StateMaster;
@@ -46,8 +45,6 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         when(mock.simpleMethod());
     }
     
-    //TODO
-    @Ignore
     @Test
     public void shouldPointOutUnfinishedStubbing() {
         unfinishedStubbingHere();
