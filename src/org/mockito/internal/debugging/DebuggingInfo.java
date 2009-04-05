@@ -18,7 +18,6 @@ public class DebuggingInfo {
     private final List<InvocationMatcher> unstubbedInvocations = new LinkedList<InvocationMatcher>();
 
     private boolean collectingData;
-    private Invocation lastInvocation;
 
     public void addStubbedInvocation(Invocation invocation) {
         if (!collectingData) {
@@ -37,7 +36,6 @@ public class DebuggingInfo {
     }
 
     public void addPotentiallyUnstubbed(InvocationMatcher invocationMatcher) {
-        this.lastInvocation = invocationMatcher.getInvocation();
         if (!collectingData) {
             return;
         }
@@ -73,9 +71,5 @@ public class DebuggingInfo {
 
     public boolean hasData() {
         return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
-    }
-
-    public Location getLastInvocationLocation() {
-        return lastInvocation == null ? null : lastInvocation.getLocation();
     }
 }

@@ -55,19 +55,18 @@ public class Reporter {
 
     }
     
-    public void unfinishedStubbing(Location location) {
+    public void unfinishedStubbing() {
         throw new UnfinishedStubbingException(join(
-                "Unfinished stubbing detected here:",
-                "-> at " + location,
-                "",
+                "Unfinished stubbing detected!",
                 "E.g. thenReturn() may be missing.",
                 "Examples of correct stubbing:",
                 "    when(mock.isOk()).thenReturn(true);",
                 "    when(mock.isOk()).thenThrow(exception);",
                 "    doThrow(exception).when(mock).someVoidMethod();",
                 "Hints:",
-                " 1. missing thenReturn()",
-                " 2. although stubbed methods may return mocks, you cannot inline a mock() call inside a thenReturn method (see issue 53)"
+                " 1. missing thenReturn() or mock call inside when()",
+                " 2. stubbed method cannot be final.",
+                " 3. although stubbed methods may return mocks, you cannot inline a mock() call inside a thenReturn method (see issue 53)"
         ));
     }
 

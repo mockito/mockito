@@ -6,22 +6,22 @@ package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @Ignore
 public class ModellingDescriptiveMessagesTest extends TestBase {
     
-    private IMethods mock;
+    @Mock private IMethods mock;
 
-    @Before
-    public void setup() {
-        mock = Mockito.mock(IMethods.class);
+    @Test
+    public void shouldSayWantedButNotInvoked() {
+        mock.simpleMethod();
+        verify(mock).otherMethod();
     }
     
     @Test
@@ -109,4 +109,18 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         
         m.simpleMethod();
     }
+    
+    @Test
+    public void shouldPointOutUnfinishedStubbing() {
+        when(mock.simpleMethod());
+        
+        verify(mock).simpleMethod();
+    }    
+
+    @Test
+    public void shouldPointOutUnfinishedStubbingWhenVoidMethodCalled() {
+        doReturn("asdf");
+        
+        verify(mock).simpleMethod();
+    }    
 }

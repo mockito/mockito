@@ -12,10 +12,6 @@ public class Location  {
         this.firstTraceElement = filter.filterStackTrace(stackTrace)[0];
     }
 
-    public Location(StackTraceElement firstTraceElement) {
-        this.firstTraceElement = firstTraceElement;
-    }
-
     @Override
     public String toString() {
         return this.firstTraceElement.toString();

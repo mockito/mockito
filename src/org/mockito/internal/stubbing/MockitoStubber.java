@@ -11,7 +11,6 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
@@ -27,8 +26,7 @@ public class MockitoStubber {
         this.mockingProgress = mockingProgress;
     }
 
-    public void setInvocationForPotentialStubbing(InvocationMatcher invocation, OngoingStubbing ongoingStubbing) {
-        mockingProgress.reportOngoingStubbing(ongoingStubbing);
+    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
         this.invocationForStubbing = invocation;
     }
 

@@ -117,7 +117,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         return verifiedInOrder;
     }
     
-    //TODO this needs to go away
     public HasStackTrace getStackTrace() {
         return stackTrace;
     }
@@ -235,9 +234,5 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public boolean returnsPrimitive() {
         return method.getReturnType().isPrimitive();
-    }
-
-    public Location getLocation() {
-        return new Location(getStackTrace().getStackTrace()[0]);
     }
 }
