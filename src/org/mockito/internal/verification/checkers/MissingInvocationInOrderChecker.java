@@ -37,7 +37,7 @@ public class MissingInvocationInOrderChecker {
         if (previousInOrder == null) {
             reporter.wantedButNotInvoked(wanted);
         } else {
-            reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getStackTrace());
+            reporter.wantedButNotInvokedInOrder(wanted, previousInOrder, previousInOrder.getLocation());
         }
     }
 }

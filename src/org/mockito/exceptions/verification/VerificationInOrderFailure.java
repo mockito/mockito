@@ -10,10 +10,6 @@ public class VerificationInOrderFailure extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 
-    public VerificationInOrderFailure(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public VerificationInOrderFailure(String message) {
         super(message);
     }

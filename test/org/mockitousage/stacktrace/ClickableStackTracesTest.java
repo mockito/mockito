@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -38,18 +37,6 @@ public class ClickableStackTracesTest extends TestBase {
             verifyTheMock(1, "not foo");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("callMethodOnMock("));
-            assertThat(e, messageContains("verifyTheMock("));
-        }
-    }
-
-    @Test
-    public void shouldShowActualAndExpected1() {
-        callMethodOnMock("foo");
-        try {
-            verifyTheMock(2, "foo");
-            fail();
-        } catch (TooLittleActualInvocations e) {
             assertThat(e, messageContains("callMethodOnMock("));
             assertThat(e, messageContains("verifyTheMock("));
         }

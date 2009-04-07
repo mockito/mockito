@@ -5,7 +5,7 @@
 package org.mockito.exceptions.base;
 
 
-public class MockitoException extends RuntimeException implements HasStackTrace {
+public class MockitoException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

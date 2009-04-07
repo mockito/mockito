@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.mockito.exceptions.base.HasStackTrace;
-
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
 
@@ -22,30 +20,9 @@ public class ExtraMatchers {
         return hasMethodInStackTraceAt(0, method);
     }
     
-    public static <T> Assertor hasOnlyThoseMethodsInStackTrace(final String ... methods) {
-        return new Assertor() {
-            public void assertValue(Object traceElements) {
-                final List<StackTraceElement> trace;
-                if (traceElements instanceof List) {
-                    trace = (List<StackTraceElement>) traceElements;
-                } else if (traceElements instanceof HasStackTrace) {
-                    trace = Arrays.asList(((HasStackTrace) traceElements).getStackTrace());
-                } else {
-                    throw new RuntimeException("this matcher cannot deal with object provided: " + traceElements);
-                }
-                
-                assertEquals(methods.length, trace.size());
-                    
-                for (int i = 0; i < trace.size(); i++) {
-                    assertEquals(methods[i], trace.get(i).getMethodName());
-                }
-            }
-        };
-    }
-    
-    public static <T> Assertor<HasStackTrace> hasOnlyThoseClassesInStackTrace(final String ... classes) {
-        return new Assertor<HasStackTrace>() {
-            public void assertValue(HasStackTrace traceElements) {
+    public static <T> Assertor<Throwable> hasOnlyThoseClassesInStackTrace(final String ... classes) {
+        return new Assertor<Throwable>() {
+            public void assertValue(Throwable traceElements) {
                 StackTraceElement[] trace = traceElements.getStackTrace();
                 
                 assertEquals("Number of classes does not match",

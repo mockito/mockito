@@ -38,7 +38,7 @@ public class MissingInvocationChecker {
     private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
         if (similar != null) {
             SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
-            reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getStackTrace());
+            reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getLocation());
         } else {
             reporter.wantedButNotInvoked(wanted);
         }

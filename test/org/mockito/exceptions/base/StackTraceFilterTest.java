@@ -22,29 +22,29 @@ public class StackTraceFilterTest extends TestBase {
 
     @Test
     public void testShouldFilterOutCglibGarbage() {
-        HasStackTrace trace = new TraceBuilder().classes(
+        Throwable t = new TraceBuilder().classes(
             "MockitoExampleTest",
             "List$$EnhancerByMockitoWithCGLIB$$2c406024", 
             "MethodInterceptorFilter"
-        ).toTrace();
+        ).toThrowable();
         
-        filter.filterStackTrace(trace);
+        filter.filterStackTrace(t);
         
-        assertThat(trace, hasOnlyThoseClassesInStackTrace("MockitoExampleTest"));
+        assertThat(t, hasOnlyThoseClassesInStackTrace("MockitoExampleTest"));
     }
     
     @Test
     public void testShouldFilterOutMockitoPackage() {
-        HasStackTrace trace = new TraceBuilder().classes(
+        Throwable t = new TraceBuilder().classes(
             "org.test.MockitoSampleTest",
             "org.test.TestSupport",
             "org.mockito.Mockito", 
             "org.test.TestSupport",
             "org.mockito.Mockito"
-        ).toTrace();
+        ).toThrowable();
             
-        filter.filterStackTrace(trace);
+        filter.filterStackTrace(t);
         
-        assertThat(trace, hasOnlyThoseClassesInStackTrace("org.test.TestSupport", "org.test.MockitoSampleTest"));
+        assertThat(t, hasOnlyThoseClassesInStackTrace("org.test.TestSupport", "org.test.MockitoSampleTest"));
     }
 }

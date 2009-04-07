@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -57,7 +57,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         checker.check(invocations, wanted, 100);
         
-        assertSame(second.getStackTrace(), reporterStub.stackTrace);
+        assertSame(second.getLocation(), reporterStub.location);
     }
     
     @Test
@@ -66,7 +66,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         checker.check(invocations, wanted, 100);
         
-        assertNull(reporterStub.stackTrace);
+        assertNull(reporterStub.location);
     }
     
     @Test
@@ -79,7 +79,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         
         checker.check(invocations, wanted, 2);
         
-        assertSame(third.getStackTrace(), reporterStub.stackTrace);
+        assertSame(third.getLocation(), reporterStub.location);
     }
     
     @Test
@@ -102,7 +102,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         checker.check(invocations, wanted, 0);
         
         assertEquals(wanted, reporterStub.wanted);
-        assertEquals(invocation.getStackTrace(), reporterStub.stackTrace);
+        assertEquals(invocation.getLocation(), reporterStub.location);
     }
     
     @Test
@@ -120,25 +120,25 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int wantedCount;
         private int actualCount;
         private PrintableInvocation wanted;
-        private HasStackTrace stackTrace;
-        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualInvocationStackTrace) {
+        private Location location;
+        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
-                    this.stackTrace = lastActualInvocationStackTrace;
+                    this.location = lastActualLocation;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
-                    this.stackTrace = firstUndesired;
+                    this.location = firstUndesired;
         }
         
         @Override
-        public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
+        public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
             this.wanted = wanted;
-            this.stackTrace = firstUndesired;
+            this.location = firstUndesired;
         }
     }
 }

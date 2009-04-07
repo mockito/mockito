@@ -14,7 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.debugging.Location;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -86,8 +86,8 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldGetLastStackTrace() throws Exception {
-        HasStackTrace last = finder.getLastStackTrace(invocations);
-        assertSame(differentMethodInvocation.getStackTrace(), last);
+        Location last = finder.getLastStackTrace(invocations);
+        assertSame(differentMethodInvocation.getLocation(), last);
         
         assertNull(finder.getLastStackTrace(Collections.<Invocation>emptyList()));
     } 

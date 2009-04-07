@@ -16,7 +16,7 @@ public class StackTraceFilter {
         return fromMockObject || fromOrgMockito && !isRunner;
     }
 
-    public void filterStackTrace(HasStackTrace hasStackTrace) {
+    public void filterStackTrace(Throwable hasStackTrace) {
         StackTraceElement[] filtered = filterStackTrace(hasStackTrace.getStackTrace());
         hasStackTrace.setStackTrace(filtered);
     }

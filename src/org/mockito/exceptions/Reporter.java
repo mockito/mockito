@@ -7,7 +7,6 @@ package org.mockito.exceptions;
 import static org.mockito.exceptions.Pluralizer.*;
 import static org.mockito.internal.util.StringJoiner.*;
 
-import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -212,13 +211,13 @@ public class Reporter {
         ));
     }    
 
-    public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualStackTrace) {
+    public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, Location actualLocation) {
         String message = join("Argument(s) are different! Wanted:", 
                 wanted.toString(),
                 "-> at " + new Location(),
                 "Actual invocation has different arguments:",
                 actual.toString(),
-                "-> at " + actualStackTrace.getStackTrace()[0],
+                "-> at " + actualLocation,
                 ""
                 );
         
@@ -238,7 +237,8 @@ public class Reporter {
         ));
     }
     
-    public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
+    //TODO merge location into PrintableInvocation?
+    public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, Location previousLocation) {
         throw new VerificationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
@@ -246,40 +246,40 @@ public class Reporter {
                     "-> at " + new Location(),
                     "Wanted anywhere AFTER following interaction:",
                     previous.toString(),
-                    "-> at " + previousStackTrace.getStackTrace()[0],
+                    "-> at " + previousLocation,
                     ""
         ));
     }
 
-    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
+    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new TooManyActualInvocations(message);
     }
 
     private String createTooManyInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
-            HasStackTrace firstUndesired) {
+            Location firstUndesired) {
         return join(
                 wanted.toString(),
                 "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
                 "-> at " + new Location(),
                 "But was " + pluralize(actualCount) + ". Undesired invocation:",
-                "-> at " + firstUndesired.getStackTrace()[0],
+                "-> at " + firstUndesired,
                 ""
         );
     }
     
-    public void neverWantedButInvoked(PrintableInvocation wanted, HasStackTrace firstUndesired) {
+    public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
                 "Never wanted here:",
                 "-> at " + new Location(),
                 "But invoked here:",
-                "-> at " + firstUndesired.getStackTrace()[0],
+                "-> at " + firstUndesired,
                 ""
         ));
     }    
     
-    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, HasStackTrace firstUndesired) {
+    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
@@ -287,9 +287,9 @@ public class Reporter {
     }
 
     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
-            HasStackTrace lastActualStackTrace) {
+            Location lastActualInvocation) {
         String ending = 
-            (lastActualStackTrace != null)? "-> at " + lastActualStackTrace.getStackTrace()[0] + "\n" : "\n";
+            (lastActualInvocation != null)? "-> at " + lastActualInvocation + "\n" : "\n";
             
             String message = join(
                     wanted.toString(),
@@ -301,26 +301,26 @@ public class Reporter {
             return message;
     }
    
-    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualStackTrace);
+    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
         
         throw new TooLittleActualInvocations(message);
     }
     
-    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, HasStackTrace lastActualStackTrace) {
-        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualStackTrace);
+    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+        String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
         
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
     }
     
-    public void noMoreInteractionsWanted(PrintableInvocation undesired, HasStackTrace actualInvocationStackTrace) {
+    public void noMoreInteractionsWanted(PrintableInvocation undesired, Location actualLocation) {
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
                 "-> at " + new Location(),
                 "But found this interaction:",
-                "-> at " + actualInvocationStackTrace.getStackTrace()[0],
+                "-> at " + actualLocation,
                 ""
                 ));
     }

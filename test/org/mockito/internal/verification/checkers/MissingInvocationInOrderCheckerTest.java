@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -62,18 +62,18 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(previous, reporterStub.previous);
-        assertSame(previous.getStackTrace(), reporterStub.previousStackTrace);
+        assertSame(previous.getLocation(), reporterStub.previousLocation);
     }
     
     class ReporterStub extends Reporter {
         private PrintableInvocation wanted;
         private PrintableInvocation previous;
-        private HasStackTrace previousStackTrace;
+        private Location previousLocation;
         
-        @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, HasStackTrace previousStackTrace) {
+        @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, Location previousStackTrace) {
             this.wanted = wanted;
             this.previous = previous;
-            this.previousStackTrace = previousStackTrace;
+            this.previousLocation = previousStackTrace;
         }
         
         @Override public void wantedButNotInvoked(PrintableInvocation wanted) {

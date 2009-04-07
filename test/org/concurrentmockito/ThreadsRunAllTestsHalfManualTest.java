@@ -14,7 +14,6 @@ import org.mockito.MockitoTest;
 import org.mockito.exceptions.ReporterTest;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
-import org.mockito.exceptions.base.StackTraceRemoverTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.MockHandlerTest;
 import org.mockito.internal.creation.jmock.ClassImposterizerTest;
@@ -102,7 +101,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MockUtilTest.class,
                     ReporterTest.class,
                     MockitoAssertionErrorTest.class,
-                    StackTraceRemoverTest.class,
                     MockitoExceptionTest.class,
                     StackTraceFilteringTest.class,
                     BridgeMethodPuzzleTest.class,

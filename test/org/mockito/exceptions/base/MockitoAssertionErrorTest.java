@@ -22,9 +22,4 @@ public class MockitoAssertionErrorTest extends TestBase {
             assertEquals("throwIt", e.getUnfilteredStackTrace()[0].getMethodName());
         }
     }
-    
-    @Test
-    public void shouldNotInitCauseWhenCauseIsNull() {
-        new MockitoAssertionError("test", null);
-    }
 }

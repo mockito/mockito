@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -67,7 +67,7 @@ public class MissingInvocationCheckerTest extends TestBase {
         checker.check(invocations, wanted);
         
         assertEquals(wanted, reporterStub.wanted);
-        assertNull(reporterStub.actualInvocationStackTrace);
+        assertNull(reporterStub.actualLocation);
     }
     
     @Test
@@ -81,21 +81,21 @@ public class MissingInvocationCheckerTest extends TestBase {
         assertNotNull(reporterStub.wanted);
         assertNotNull(reporterStub.actual);
         
-        assertSame(actualInvocation.getStackTrace(), reporterStub.actualInvocationStackTrace);
+        assertSame(actualInvocation.getLocation(), reporterStub.actualLocation);
     }
     
     class ReporterStub extends Reporter {
         private PrintableInvocation wanted;
         private PrintableInvocation actual;
-        private HasStackTrace actualInvocationStackTrace;
+        private Location actualLocation;
         @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
             this.wanted = wanted;
         }
         
-        @Override public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, HasStackTrace actualInvocationStackTrace) {
+        @Override public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, Location actualLocation) {
                     this.wanted = wanted;
                     this.actual = actual;
-                    this.actualInvocationStackTrace = actualInvocationStackTrace;
+                    this.actualLocation = actualLocation;
         }
     }
 }

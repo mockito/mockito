@@ -13,9 +13,11 @@ public class TraceBuilder {
     private String[] methods = {};
     private String[] classes = {};
 
-    public HasStackTrace toTrace() {
+    public Throwable toThrowable() {
         List<StackTraceElement> trace = toTraceList();
-        return new HasStackTraceStub(trace.toArray(new StackTraceElement[methods.length]));
+        RuntimeException exception = new RuntimeException();
+        exception.setStackTrace(trace.toArray(new StackTraceElement[0]));
+        return exception;
     }
 
     public List<StackTraceElement> toTraceList() {

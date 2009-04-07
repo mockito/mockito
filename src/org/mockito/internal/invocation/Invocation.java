@@ -13,7 +13,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
@@ -37,7 +36,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
-    private final HasStackTrace stackTrace;
+    private final Location location;
 
     private boolean verified;
     private boolean verifiedInOrder;
@@ -47,18 +46,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         this.method = method;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
         this.sequenceNumber = sequenceNumber;
-        this.stackTrace = new HasStackTrace() {
-            
-            private Location location = new Location();
-            
-            public StackTraceElement[] getStackTrace() {
-                return location.getStackTrace();
-            }
-
-            public void setStackTrace(StackTraceElement[] stackTrace) {
-                throw new RuntimeException("Setting stack trace is not supported");
-            }
-        };
+        this.location = new Location();
     }
 
     //expands array varArgs that are given by runtime (1, [a, b]) into true varArgs (1, a, b);
@@ -117,10 +105,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         return verifiedInOrder;
     }
     
-    public HasStackTrace getStackTrace() {
-        return stackTrace;
-    }
-
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass())) {
             return false;
@@ -234,5 +218,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public boolean returnsPrimitive() {
         return method.getReturnType().isPrimitive();
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

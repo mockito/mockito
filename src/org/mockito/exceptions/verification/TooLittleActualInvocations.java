@@ -13,8 +13,4 @@ public class TooLittleActualInvocations extends MockitoAssertionError {
     public TooLittleActualInvocations(String message) {
         super(message);
     }
-    
-    public TooLittleActualInvocations(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

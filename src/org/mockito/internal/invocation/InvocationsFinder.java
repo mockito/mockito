@@ -7,7 +7,7 @@ package org.mockito.internal.invocation;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.exceptions.base.HasStackTrace;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 
@@ -91,12 +91,13 @@ public class InvocationsFinder {
         return null;
     }
 
-    public HasStackTrace getLastStackTrace(List<Invocation> invocations) {
+    //TODO rename
+    public Location getLastStackTrace(List<Invocation> invocations) {
         if (invocations.isEmpty()) {
             return null;
         } else {
             Invocation last = invocations.get(invocations.size() - 1);
-            return last.getStackTrace();
+            return last.getLocation();
         }
     }
     

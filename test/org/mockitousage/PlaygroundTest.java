@@ -4,12 +4,11 @@
  */
 package org.mockitousage;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -17,15 +16,17 @@ import org.mockitoutil.TestBase;
 public class PlaygroundTest extends TestBase {
 
     @Mock IMethods mock;
+    @Mock DummyException mock2;
+    
+    class DummyException extends RuntimeException {
+        public String otherMethod() {
+            return "";
+        }
+    }
 
     @Test
-    public void testSomething() {
-        anyString();
-    }
-    
-    @Test
     public void testGetLastUpdates() {
-        mock = Mockito.mock(IMethods.class);
+        when(mock.simpleMethod()).thenThrow(mock2);
         mock.simpleMethod();
     }
 }

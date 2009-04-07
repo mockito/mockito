@@ -37,7 +37,7 @@ public class WarningsPrinter {
             logger.log(join(
                 "[Mockito] Warning - this method was not stubbed:",
                 i,
-                i.getInvocation().getStackTrace().getStackTrace()[0],
+                i.getInvocation().getLocation(),
                 ""));
         }
     }
@@ -47,7 +47,7 @@ public class WarningsPrinter {
             logger.log(join(
                 "[Mockito] Warning - this stub was not used:",
                 i,
-                i.getStackTrace().getStackTrace()[0],
+                i.getLocation(),
                 ""));
         }
     }
@@ -64,11 +64,11 @@ public class WarningsPrinter {
                             "[Mockito] Warning - stubbed method called with different arguments.",
                             "Stubbed this way:",
                             unused,
-                            unused.getStackTrace().getStackTrace()[0],
+                            unused.getLocation(),
                             "",
                             "But called with different arguments:",
                             unstubbed,
-                            unstubbed.getInvocation().getStackTrace().getStackTrace()[0],
+                            unstubbed.getInvocation().getLocation(),
                             ""));
                     
                     unusedIterator.remove();

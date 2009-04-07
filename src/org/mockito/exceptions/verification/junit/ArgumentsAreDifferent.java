@@ -6,11 +6,10 @@ package org.mockito.exceptions.verification.junit;
 
 import junit.framework.ComparisonFailure;
 
-import org.mockito.exceptions.base.HasStackTrace;
 import org.mockito.exceptions.base.StackTraceFilter;
 
 
-public class ArgumentsAreDifferent extends ComparisonFailure implements HasStackTrace {
+public class ArgumentsAreDifferent extends ComparisonFailure {
     
     private static final long serialVersionUID = 1L;
     private final String message;
