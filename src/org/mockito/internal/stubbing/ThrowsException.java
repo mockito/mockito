@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -18,9 +19,13 @@ public class ThrowsException implements Answer<Object> {
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        Throwable filtered = throwable.fillInStackTrace();
-        filter.filterStackTrace(filtered);
-        throw filtered;
+        //TODO validate performance
+        if (MockUtil.isMock(throwable)) {
+            throw throwable;
+        }
+        Throwable t = throwable.fillInStackTrace();
+        filter.filterStackTrace(t);
+        throw t;
     }
 
     public Throwable getThrowable() {
