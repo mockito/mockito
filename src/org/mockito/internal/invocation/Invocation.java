@@ -223,4 +223,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     public Location getLocation() {
         return location;
     }
+
+    public boolean isVarArgs() {
+        return method.isVarArgs();
+    }
 }
