@@ -10,8 +10,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.mockito.internal.util.Decamelizer;
 
-//TODO misplaced argument matcher when calling final method is weird and confusing
-
 /**
  * Allows creating customized argument matchers. 
  * <p>

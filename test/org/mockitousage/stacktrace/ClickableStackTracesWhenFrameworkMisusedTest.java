@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -56,5 +57,20 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             assertThat(e, messageContains("-> at "));
             assertThat(e, messageContains("unfinishedStubbingHere("));
         }
+    }
+    
+    @Test
+    public void shouldShowWhereIsUnfinishedVerification() throws Exception {
+        unfinishedVerificationHere();
+        try {
+            mock(IMethods.class);
+            fail();
+        } catch (UnfinishedVerificationException e) {
+            assertContains("unfinishedVerificationHere(", e.getMessage());
+        }
+    }
+
+    private void unfinishedVerificationHere() {
+        verify(mock);
     }
 }

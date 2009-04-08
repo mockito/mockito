@@ -9,14 +9,12 @@ import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
-import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
 
 public class DetectingMisusedMatchersTest extends TestBase {
@@ -57,18 +55,5 @@ public class DetectingMisusedMatchersTest extends TestBase {
             verify(withFinal).finalMethod(anyObject());
             fail();
         } catch (UnfinishedVerificationException e) {}
-    }
-    
-    @Ignore("let's not implement it...")
-    @Test
-    public void shouldFailAndShowWhereMatchersAreMisused() {
-        misplacedArgumentMatcher();
-        try {
-            mock(IMethods.class);
-            fail();
-        } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("Misplaced argument matcher"));
-            assertThat(e.getCause(), ExtraMatchers.hasFirstMethodInStackTrace("misplacedArgumentMatcher"));
-        }
     }
 }

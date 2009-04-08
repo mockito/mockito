@@ -22,7 +22,7 @@ public class AtLeastXNumberOfInvocationsChecker {
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            Location lastLocation = finder.getLastStackTrace(actualInvocations);
+            Location lastLocation = finder.getLastLocation(actualInvocations);
             reporter.tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);        
         }
         

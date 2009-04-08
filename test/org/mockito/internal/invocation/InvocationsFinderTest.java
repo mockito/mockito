@@ -86,10 +86,10 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldGetLastStackTrace() throws Exception {
-        Location last = finder.getLastStackTrace(invocations);
+        Location last = finder.getLastLocation(invocations);
         assertSame(differentMethodInvocation.getLocation(), last);
         
-        assertNull(finder.getLastStackTrace(Collections.<Invocation>emptyList()));
+        assertNull(finder.getLastLocation(Collections.<Invocation>emptyList()));
     } 
     
     @Test

@@ -47,22 +47,6 @@ public class InvalidStateDetectionTest extends TestBase {
         mock = mock(IMethods.class);
     }
     
-    //TODO do the same for other misusing problems
-    @Test
-    public void shouldShowWhereIsUnfinishedVerification() throws Exception {
-        unfinishedVerificationHere();
-        try {
-            mock(IMethods.class);
-            fail();
-        } catch (UnfinishedVerificationException e) {
-            assertContains("InvalidStateDetectionTest.unfinishedVerificationHere", e.getMessage());
-        }
-    }
-
-    private void unfinishedVerificationHere() {
-        verify(mock);
-    }
-
     @Test
     public void shouldDetectUnfinishedStubbing() {
         when(mock.simpleMethod());

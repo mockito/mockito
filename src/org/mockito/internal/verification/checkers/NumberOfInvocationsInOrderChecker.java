@@ -33,7 +33,7 @@ public class NumberOfInvocationsInOrderChecker {
         int actualCount = chunk.size();
         
         if (wantedCount > actualCount) {
-            Location lastInvocation = finder.getLastStackTrace(chunk);
+            Location lastInvocation = finder.getLastLocation(chunk);
             reporter.tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } else if (wantedCount < actualCount) {
             Location firstUndesired = chunk.get(wantedCount).getLocation();

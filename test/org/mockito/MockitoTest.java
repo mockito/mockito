@@ -54,6 +54,5 @@ public class MockitoTest extends TestBase {
         Mockito.inOrder("notMock");
     }
     
-    //TODO after 1.7 stack trace remover does not work very well when it comes to threads
-    //TODO after 1.7 print warning when trying to mock a final class
+    //TODO after 1.7 stack filter does not work very well when it comes to threads?
 }

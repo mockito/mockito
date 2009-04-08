@@ -32,7 +32,7 @@ public class NumberOfInvocationsChecker {
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            Location lastInvocation = finder.getLastStackTrace(actualInvocations);
+            Location lastInvocation = finder.getLastLocation(actualInvocations);
             reporter.tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } else if (wantedCount == 0 && actualCount > 0) {
             Location firstUndesired = actualInvocations.get(wantedCount).getLocation();

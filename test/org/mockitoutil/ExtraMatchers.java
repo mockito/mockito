@@ -15,7 +15,6 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
 
-    //TODO remove
     public static <T> Assertor<Throwable> hasFirstMethodInStackTrace(final String method) {
         return hasMethodInStackTraceAt(0, method);
     }
@@ -71,24 +70,6 @@ public class ExtraMatchers {
                 }
                 
                 fail("Bridge method [" + methodName + "]\nnot found in:\n" + o);
-            }
-        };
-    }
-    
-    public static <T> Assertor<Collection> has(final T ... elements) {
-        return new Assertor<Collection>() {
-
-            public void assertValue(Collection value) {
-                for (T element : elements) {
-                    assertTrue(
-                            "Element:" +
-                            "\n" +
-                            element +
-                            "does not exists in:" +
-                            "\n" +
-                            value, 
-                            value.contains(element));
-                }
             }
         };
     }

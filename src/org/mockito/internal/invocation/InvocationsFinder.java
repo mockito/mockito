@@ -91,8 +91,7 @@ public class InvocationsFinder {
         return null;
     }
 
-    //TODO rename
-    public Location getLastStackTrace(List<Invocation> invocations) {
+    public Location getLastLocation(List<Invocation> invocations) {
         if (invocations.isEmpty()) {
             return null;
         } else {

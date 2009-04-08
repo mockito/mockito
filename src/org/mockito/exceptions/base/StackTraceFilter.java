@@ -16,10 +16,9 @@ public class StackTraceFilter {
         return fromMockObject || fromOrgMockito && !isRunner;
     }
 
-    //TODO remove hasStackTrace strings
-    public void filterStackTrace(Throwable hasStackTrace) {
-        StackTraceElement[] filtered = filterStackTrace(hasStackTrace.getStackTrace());
-        hasStackTrace.setStackTrace(filtered);
+    public void filterStackTrace(Throwable throwable) {
+        StackTraceElement[] filtered = filterStackTrace(throwable.getStackTrace());
+        throwable.setStackTrace(filtered);
     }
 
     public StackTraceElement[] filterStackTrace(StackTraceElement[] target) {
