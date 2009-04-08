@@ -65,16 +65,15 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
                 && hasSameMethod(actual)
-                && argumentsMatch(actual);
+                && (argumentsMatch(actual.getArguments()) || argumentsMatch(actual.getRawArguments()));
     }
 
-    private boolean argumentsMatch(Invocation actual) {
-        Object[] arguments = actual.getArguments();
-        if (arguments.length != matchers.size()) {
+    private boolean argumentsMatch(Object[] actualArgs) {
+        if (actualArgs.length != matchers.size()) {
             return false;
         }
-        for (int i = 0; i < arguments.length; i++) {
-            if (!matchers.get(i).matches(arguments[i])) {
+        for (int i = 0; i < actualArgs.length; i++) {
+            if (!matchers.get(i).matches(actualArgs[i])) {
                 return false;
             }
         }
@@ -93,7 +92,7 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
         final boolean methodEquals = hasSameMethod(candidate);
-        final boolean overloadedButSameArgs = !methodEquals && argumentsMatch(candidate);        
+        final boolean overloadedButSameArgs = !methodEquals && argumentsMatch(candidate.getArguments());        
         
         if (methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs) {
             return true;

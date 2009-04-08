@@ -40,11 +40,13 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     private boolean verified;
     private boolean verifiedInOrder;
+    private Object[] rawArguments;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
         this.mock = mock;
         this.method = method;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
+        this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
     }
@@ -226,5 +228,13 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public boolean isVarArgs() {
         return method.isVarArgs();
+    }
+
+    public int getArgumentsCount() {
+        return arguments.length;
+    }
+
+    public Object[] getRawArguments() {
+        return this.rawArguments;
     }
 }

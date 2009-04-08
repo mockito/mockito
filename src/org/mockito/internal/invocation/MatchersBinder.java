@@ -24,7 +24,7 @@ public class MatchersBinder {
     private void validateMatchers(Invocation invocation, List<Matcher> matchers) {
         if (matchers != null) {
             int recordedMatchersSize = matchers.size();
-            int expectedMatchersSize = invocation.getArguments().length;
+            int expectedMatchersSize = invocation.getArgumentsCount();
             if (expectedMatchersSize != recordedMatchersSize) {
                 new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize);
             }
