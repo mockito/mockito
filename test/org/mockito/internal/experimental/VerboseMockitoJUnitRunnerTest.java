@@ -45,6 +45,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         });
     }
     
+    //TODO why the hell this stuff is ignored?
     @Ignore("doesn't work due to package change from org.junit")
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
