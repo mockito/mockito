@@ -7,9 +7,11 @@ package org.mockitoutil;
 import junit.framework.Assert;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
+import org.mockito.internal.configuration.ConfigurationAccess;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
@@ -17,6 +19,12 @@ import org.mockito.StateMaster;
  */
 public class TestBase extends Assert {
 
+    @After
+    public void cleanUpConfigInAnyCase() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
+        ConfigurationAccess.getConfig().overrideReturnValues(null);
+    }
+    
     @Before
     public void init() {
         StateMaster.validate();

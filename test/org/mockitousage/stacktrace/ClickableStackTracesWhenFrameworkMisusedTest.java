@@ -8,12 +8,14 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -21,6 +23,11 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     
     @Mock private IMethods mock;
 
+    @Before
+    public void setupCleanStackTraces() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+    }
+    
     @After
     public void resetState() {
         StateMaster.reset();

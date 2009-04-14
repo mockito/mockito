@@ -40,4 +40,15 @@ public interface IMockitoConfiguration {
      * See javadoc for {@link IMockitoConfiguration}
      */
     AnnotationEngine getAnnotationEngine();
+
+    /**
+     * This should be turned on unless you're a Mockito developer and you wish
+     * to have verbose (read: messy) stack traces that only few understand (eg:
+     * Mockito developers)
+     * <p>
+     * See javadoc for {@link IMockitoConfiguration}
+     * 
+     * @return if Mockito should clean stack traces
+     */
+    boolean cleansStackTrace();
 }

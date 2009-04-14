@@ -11,18 +11,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class StackTraceFilteringTest extends TestBase {
     
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @After
     public void resetState() {
@@ -32,7 +33,7 @@ public class StackTraceFilteringTest extends TestBase {
     @Before
     public void setup() {
         resetState();
-        mock = Mockito.mock(IMethods.class);
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     
     @Test

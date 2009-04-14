@@ -9,8 +9,9 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -19,13 +20,12 @@ import org.mockitoutil.TestBase;
 @RunWith(MockitoJUnit44Runner.class)
 public class PointingStackTraceToActualInvocationTest extends TestBase {
     
-    private IMethods mock;
-    private IMethods mockTwo;
+    @Mock private IMethods mock;
+    @Mock private IMethods mockTwo;
 
     @Before
     public void setup() {
-        mock = Mockito.mock(IMethods.class);
-        mockTwo = Mockito.mock(IMethods.class);
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
         
         first();
         second();

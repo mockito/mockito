@@ -16,15 +16,20 @@ public class GlobalConfiguration implements IMockitoConfiguration {
     
     private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
 
+    //back door for testing
+    IMockitoConfiguration getIt() {
+        return globalConfiguration.get();
+    }
+    
     public GlobalConfiguration() {
         //Configuration should be loaded only once but I cannot really test it
         if (globalConfiguration.get() == null) {
-            globalConfiguration.set(getConfig());
+            globalConfiguration.set(createConfig());
         }
     }
     
     @SuppressWarnings("deprecation")
-    IMockitoConfiguration getConfig() {
+    private IMockitoConfiguration createConfig() {
         IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration() {
             @Override public ReturnValues getReturnValues() {
                 //For now, let's leave the deprecated way of getting return values, 
@@ -39,7 +44,7 @@ public class GlobalConfiguration implements IMockitoConfiguration {
             return defaultConfiguration;
         }
     }
-
+    
     public static void validate() {
         new GlobalConfiguration();
     }
@@ -50,5 +55,9 @@ public class GlobalConfiguration implements IMockitoConfiguration {
 
     public AnnotationEngine getAnnotationEngine() {
         return globalConfiguration.get().getAnnotationEngine();
+    }
+
+    public boolean cleansStackTrace() {
+        return globalConfiguration.get().cleansStackTrace();
     }
 }

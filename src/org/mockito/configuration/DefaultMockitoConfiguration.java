@@ -30,4 +30,11 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     public AnnotationEngine getAnnotationEngine() {
         return new DefaultAnnotationEngine();
     }
+
+    /* (non-Javadoc)
+     * @see org.mockito.configuration.IMockitoConfiguration#cleansStackTrace()
+     */
+    public boolean cleansStackTrace() {
+        return true;
+    }
 }

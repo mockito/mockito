@@ -16,11 +16,17 @@ import org.mockitousage.configuration.SmartMock;
 @SuppressWarnings("deprecation")
 public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
-    private static ReturnValues overriddenReturnValues = null;
+    private ReturnValues overriddenReturnValues = null;
+    private boolean cleansStackTrace;
 
     //for testing purposes, allow to override the configuration
-    public static void overrideReturnValues(ReturnValues returnValues) {
-        MockitoConfiguration.overriddenReturnValues = returnValues;
+    public void overrideReturnValues(ReturnValues returnValues) {
+        this.overriddenReturnValues = returnValues;
+    }
+
+    //for testing purposes, allow to override the configuration
+    public void overrideCleansStackTrace(boolean cleansStackTrace) {
+        this.cleansStackTrace = cleansStackTrace;
     }
 
     @Override
@@ -44,5 +50,10 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
                 }
             }
         };
+    }
+    
+    @Override
+    public boolean cleansStackTrace() {
+        return cleansStackTrace;
     }
 }
