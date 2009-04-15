@@ -14,6 +14,6 @@ public class Location  {
 
     @Override
     public String toString() {
-        return this.firstTraceElement.toString();
+        return "-> at " + this.firstTraceElement.toString();
     }
 }

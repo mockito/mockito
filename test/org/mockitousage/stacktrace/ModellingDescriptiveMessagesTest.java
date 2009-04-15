@@ -6,10 +6,12 @@ package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -17,6 +19,11 @@ import org.mockitoutil.TestBase;
 public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Mock private IMethods mock;
+    
+    @Before
+    public void cleanStackTrace() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+    }
 
     @Test
     public void shouldSayWantedButNotInvoked() {

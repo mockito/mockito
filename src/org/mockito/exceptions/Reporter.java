@@ -57,7 +57,7 @@ public class Reporter {
     public void unfinishedStubbing(Location location) {
         throw new UnfinishedStubbingException(join(
                 "Unfinished stubbing detected here:",
-                "-> at " + location,
+                location,
                 "",
                 "E.g. thenReturn() may be missing.",
                 "Examples of correct stubbing:",
@@ -83,7 +83,7 @@ public class Reporter {
     public void unfinishedVerificationException(Location location) {
         UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
                 "Missing method call for verify(mock) here:",
-                "-> at " + location,
+                location,
                 "",
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
@@ -214,10 +214,10 @@ public class Reporter {
     public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
         String message = join("Argument(s) are different! Wanted:", 
                 wanted,
-                "-> at " + new Location(),
+                new Location(),
                 "Actual invocation has different arguments:",
                 actual,
-                "-> at " + actualLocation,
+                actualLocation,
                 ""
                 );
         
@@ -232,7 +232,7 @@ public class Reporter {
         throw new WantedButNotInvoked(join(
                     "Wanted but not invoked:",
                     wanted.toString(),
-                    "-> at " + new Location(),
+                    new Location(),
                     ""
         ));
     }
@@ -242,10 +242,10 @@ public class Reporter {
                     "Verification in order failure",
                     "Wanted but not invoked:",
                     wanted.toString(),
-                    "-> at " + new Location(),
+                    new Location(),
                     "Wanted anywhere AFTER following interaction:",
                     previous.toString(),
-                    "-> at " + previous.getLocation(),
+                    previous.getLocation(),
                     ""
         ));
     }
@@ -260,9 +260,9 @@ public class Reporter {
         return join(
                 wanted.toString(),
                 "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
-                "-> at " + new Location(),
+                new Location(),
                 "But was " + pluralize(actualCount) + ". Undesired invocation:",
-                "-> at " + firstUndesired,
+                firstUndesired,
                 ""
         );
     }
@@ -271,9 +271,9 @@ public class Reporter {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
                 "Never wanted here:",
-                "-> at " + new Location(),
+                new Location(),
                 "But invoked here:",
-                "-> at " + firstUndesired,
+                firstUndesired,
                 ""
         ));
     }    
@@ -288,12 +288,12 @@ public class Reporter {
     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
             Location lastActualInvocation) {
         String ending = 
-            (lastActualInvocation != null)? "-> at " + lastActualInvocation + "\n" : "\n";
+            (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
             
             String message = join(
                     wanted.toString(),
                     "Wanted " + discrepancy.getPluralizedWantedCount() + ":",
-                    "-> at " + new Location(),
+                    new Location(),
                     "But was " + discrepancy.getPluralizedActualCount() + ":", 
                     ending
             );
@@ -317,9 +317,9 @@ public class Reporter {
     public void noMoreInteractionsWanted(PrintableInvocation undesired) {
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
-                "-> at " + new Location(),
+                new Location(),
                 "But found this interaction:",
-                "-> at " + undesired.getLocation(),
+                undesired.getLocation(),
                 ""
                 ));
     }
@@ -368,7 +368,7 @@ public class Reporter {
     public void misplacedArgumentMatcher(Location location) {
         throw new InvalidUseOfMatchersException(join(
                 "Misplaced argument matcher detected here:",
-                "-> at " + location,
+                location,
                 "",
                 "You cannot use argument matchers outside of verification or stubbing.",
                 "Also make sure you're *not* stubbing/verifying a final method with an argument matcher.",
@@ -383,9 +383,9 @@ public class Reporter {
     public void smartNullPointerException(Location location) {
         throw new SmartNullPointerException(join(
                 "You have a NullPointerException here:",
-                "-> at " + new Location(),
+                new Location(),
                 "Because this method was *not* stubbed correctly:",
-                "-> at " + location,
+                location,
                 ""
                 ));
     }
