@@ -7,20 +7,16 @@ package org.mockitousage.reset;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class ResetTest extends TestBase {
 
-    private IMethods mock;
-
-    @Before
-    public void setup() {
-        mock = mock(IMethods.class);
-    }
+    @Mock private IMethods mock;
+    @Mock private IMethods mockTwo;
 
     @Test
     public void shouldClearArgumentMatcherStackSoAbuseOfArgumentMatchersIsNotDetectedAfterReset() {
@@ -87,5 +83,13 @@ public class ResetTest extends TestBase {
         reset(mock);
         assertContains("Mock for IMethods", "" + mockTwo);
         assertEquals("mockie", "" + mock);
+    }
+    
+    @Test
+    public void shouldResetMultipleMocks() {
+        mock.simpleMethod();
+        mockTwo.simpleMethod();
+        reset(mock, mockTwo);
+        verifyNoMoreInteractions(mock, mockTwo);
     }
 }
