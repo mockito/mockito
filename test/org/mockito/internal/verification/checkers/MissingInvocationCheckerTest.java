@@ -85,14 +85,14 @@ public class MissingInvocationCheckerTest extends TestBase {
     }
     
     class ReporterStub extends Reporter {
-        private PrintableInvocation wanted;
-        private PrintableInvocation actual;
+        private Object wanted;
+        private String actual;
         private Location actualLocation;
         @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
             this.wanted = wanted;
         }
         
-        @Override public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, Location actualLocation) {
+        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
                     this.wanted = wanted;
                     this.actual = actual;
                     this.actualLocation = actualLocation;

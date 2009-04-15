@@ -16,7 +16,7 @@ public class NoMoreInteractions implements VerificationMode {
         Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());
         
         if (unverified != null) {
-            new Reporter().noMoreInteractionsWanted(unverified, unverified.getLocation());
+            new Reporter().noMoreInteractionsWanted(unverified);
         }
     }
 }

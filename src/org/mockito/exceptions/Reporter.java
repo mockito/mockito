@@ -211,18 +211,18 @@ public class Reporter {
         ));
     }    
 
-    public void argumentsAreDifferent(PrintableInvocation wanted, PrintableInvocation actual, Location actualLocation) {
+    public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
         String message = join("Argument(s) are different! Wanted:", 
-                wanted.toString(),
+                wanted,
                 "-> at " + new Location(),
                 "Actual invocation has different arguments:",
-                actual.toString(),
+                actual,
                 "-> at " + actualLocation,
                 ""
                 );
         
         if (JUnitTool.hasJUnit()) {
-            throw JUnitTool.createArgumentsAreDifferentException(message, wanted.toString(), actual.toString());
+            throw JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
         } else {
             throw new ArgumentsAreDifferent(message);
         }
@@ -237,8 +237,7 @@ public class Reporter {
         ));
     }
     
-    //TODO merge location into PrintableInvocation?
-    public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous, Location previousLocation) {
+    public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
         throw new VerificationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
@@ -246,7 +245,7 @@ public class Reporter {
                     "-> at " + new Location(),
                     "Wanted anywhere AFTER following interaction:",
                     previous.toString(),
-                    "-> at " + previousLocation,
+                    "-> at " + previous.getLocation(),
                     ""
         ));
     }
@@ -315,12 +314,12 @@ public class Reporter {
                 ));
     }
     
-    public void noMoreInteractionsWanted(PrintableInvocation undesired, Location actualLocation) {
+    public void noMoreInteractionsWanted(PrintableInvocation undesired) {
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
                 "-> at " + new Location(),
                 "But found this interaction:",
-                "-> at " + actualLocation,
+                "-> at " + undesired.getLocation(),
                 ""
                 ));
     }

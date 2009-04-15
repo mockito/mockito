@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.invocation.CanPrintInMultilines;
 
 public class SyncingPrinter {
@@ -21,20 +20,12 @@ public class SyncingPrinter {
             this.actual = actual.toString();
         }
     }
-    
-    public PrintableInvocation getWanted() {
-        return new PrintableInvocation() {
-            public String toString() {
-                return wanted;
-            }
-        };
+
+    public String getWanted() {
+        return wanted;
     }
-    
-    public PrintableInvocation getActual() {
-        return new PrintableInvocation() {
-            public String toString() {
-                return actual;
-            }
-        };
+
+    public String getActual() {
+        return actual;
     }
 }

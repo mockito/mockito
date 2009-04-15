@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.internal.debugging.Location;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements PrintableInvocation, CanPrintInMultilines {
@@ -103,5 +104,9 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
 
     public boolean hasSameMethod(Invocation candidate) {
         return invocation.getMethod().equals(candidate.getMethod());
+    }
+    
+    public Location getLocation() {
+        return invocation.getLocation();
     }
 }
