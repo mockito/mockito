@@ -240,25 +240,25 @@
   </target>
   
   
-  <target name="release.maven" depends="jar" description="releases binaries for maven">
+  <target name="release.maven" depends="jar" description="releases binaries to sync with maven repository">
     <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
   	
-  	<filter token="version" value="${version}"/>
-  	<copy todir="${target.dir}" filtering="true">
-  	    <fileset dir="maven" includes="mockito-*.pom"/> 
-  	</copy>
+    <filter token="version" value="${version}"/>
+    <copy todir="${target.dir}" filtering="true">
+      <fileset dir="maven" includes="mockito-*.pom"/> 
+    </copy>
   	
-  	<remoteRepository id="repo.local" url="file:///${basedir}/maven/repository" />
+    <remoteRepository id="repo.local" url="file:///${basedir}/maven/repository" />
   	
-  	<deploy file="${target.dir}/${jar.all}">
-  	    <pom file="${target.dir}/mockito-all.pom" />
-  	    <remoterepository refid="repo.local" />
-  	</deploy>
+    <deploy file="${target.dir}/${jar.all}">
+      <pom file="${target.dir}/mockito-all.pom" />
+      <remoterepository refid="repo.local" />
+    </deploy>
   	
-  	<deploy file="${target.dir}/${jar.core}" >
-  	    <pom file="${target.dir}/mockito-core.pom" />
-  	    <remoterepository refid="repo.local" />
-  	</deploy>
+    <deploy file="${target.dir}/${jar.core}" >
+      <pom file="${target.dir}/mockito-core.pom" />
+      <remoterepository refid="repo.local" />
+    </deploy>
   </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
