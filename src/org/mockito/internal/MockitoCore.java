@@ -67,7 +67,7 @@ public class MockitoCore {
     }
     
     public <T> void reset(T ... mocks) {
-        //TODO Perhaps we should validate the state instead of resetting?
+        MOCKING_PROGRESS.validateState();
         MOCKING_PROGRESS.reset();
         MOCKING_PROGRESS.resetOngoingStubbing();
         //TODO Perhaps we should maintain previous ReturnValues?

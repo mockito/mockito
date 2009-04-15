@@ -24,6 +24,10 @@ public class TestBase extends Assert {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         ConfigurationAccess.getConfig().overrideReturnValues(null);
     }
+
+    public void makeStackTracesClean() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+    }
     
     @Before
     public void init() {
