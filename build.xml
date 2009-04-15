@@ -239,38 +239,31 @@
     </copy>
   </target>
   
-  <target name="maven.bundle" depends="zip" description="creates bundles for Maven Central Repository">
-    
-    <macrodef name="bundle" taskname="">
-      <attribute name="type"/>
-      <attribute name="destdir" default="${target.dir}/maven" />	
-      <sequential>
-        <filter token="version" value="${version}"/>
-        <copy file="maven/mockito-@{type}.pom" tofile="@{destdir}/mockito-@{type}-pom/pom.xml" filtering="true" />
-        
-        <jar destfile="@{destdir}/mockito-@{type}-${version}-bundle.jar">
-          <fileset file="${target.dir}/mockito-@{type}-${version}.jar" />
-          <fileset file="@{destdir}/mockito-@{type}-pom/pom.xml" />
-        </jar>        
-      </sequential>
-    </macrodef>
-    
-    <bundle type="core"/>
-    <bundle type="all"/>
-    
-  </target> 
   
-  <target name="release.maven" depends="maven.bundle" description="releases maven bundles to 'maven' folder">
-    <copy todir="maven">
-      <fileset dir="${target.dir}/maven">
-        <include name="*.jar"/>
-      </fileset>
-    </copy>
+  <target name="release.maven" depends="jar" description="releases binaries for maven">
+    <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
+  	
+  	<filter token="version" value="${version}"/>
+  	<copy todir="${target.dir}" filtering="true">
+  	    <fileset dir="maven" includes="mockito-*.pom"/> 
+  	</copy>
+  	
+  	<remoteRepository id="repo.local" url="file:///${basedir}/maven/repository" />
+  	
+  	<deploy file="${target.dir}/${jar.all}">
+  	    <pom file="${target.dir}/mockito-all.pom" />
+  	    <remoterepository refid="repo.local" />
+  	</deploy>
+  	
+  	<deploy file="${target.dir}/${jar.core}" >
+  	    <pom file="${target.dir}/mockito-core.pom" />
+  	    <remoterepository refid="repo.local" />
+  	</deploy>
   </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
-  <target name="all" depends="maven.bundle" description="cleans, builds, tests, jars, zips, bundles maven" />
+  <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
