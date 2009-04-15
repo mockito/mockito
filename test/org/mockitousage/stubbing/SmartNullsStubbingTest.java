@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -22,7 +21,7 @@ public class SmartNullsStubbingTest extends TestBase {
     @Before
     public void setup() {
         mock = mock(IMethods.class, Mockito.RETURNS_SMART_NULLS);
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
     }
     
     public IMethods unstubbedMethodInvokedHere(IMethods mock) {

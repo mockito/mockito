@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -28,7 +27,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
 
     @Before
     public void setup() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
         
         inOrder = inOrder(mock, mockTwo);
         

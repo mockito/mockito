@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -20,7 +19,7 @@ public class ClickableStackTracesTest extends TestBase {
 
     @Before
     public void setup() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
     }
 
     private void callMethodOnMock(String param) {

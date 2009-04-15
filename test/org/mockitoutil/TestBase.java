@@ -58,33 +58,6 @@ public class TestBase extends Assert {
         };
     }
     
-    public static <T> Assertor<String> notContains(final String substring) {
-        return new Assertor<String>() {
-            public void assertValue(String value) {
-                assertFalse("This substring: \n" + substring + 
-                        "\nshould NOT be inside of:\n" + value
-                        , value.contains(substring));
-            }
-        };
-    }
-    
-    
-    //Assertors will never be matchers...
-//    public static <T> Assertor<T> not(final Assertor<T> assertor) {
-//        return new Assertor<T>() {
-//            public void assertValue(T value) {
-//                boolean failed = false;
-//                try {
-//                    assertor.assertValue(value);
-//                } catch (AssertionError e) {
-//                    failed = true;
-//                }
-//                
-//                assertTrue("Assertion failed", failed);
-//            }
-//        };
-//    }
-    
     public static <T> Assertor<String> endsWith(final String substring) {
         return new Assertor<String>() {
             public void assertValue(String value) {
@@ -101,17 +74,6 @@ public class TestBase extends Assert {
                 assertTrue("This substring: \n" + text + 
                         "\nshould occur in this exception message:" + value.getMessage()
                         , ((Throwable) value).getMessage().contains(text));
-            }
-        };
-    }
-    
-    public static <T> Assertor<Throwable> causeMessageContains(final String text) {
-        return new Assertor<Throwable>() {
-            public void assertValue(Throwable value) {
-                Throwable cause = ((Throwable) value).getCause();
-                assertNotNull("Exception cause should not be null", cause);
-                assertTrue("\nException message >>>" + cause.getMessage() + "\n>>> should contain: " + text,
-                        cause.getMessage().contains(text));
             }
         };
     }

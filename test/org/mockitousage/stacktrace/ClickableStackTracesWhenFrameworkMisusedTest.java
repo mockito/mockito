@@ -15,7 +15,6 @@ import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -25,7 +24,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
 
     @Before
     public void setupCleanStackTraces() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
     }
     
     @After

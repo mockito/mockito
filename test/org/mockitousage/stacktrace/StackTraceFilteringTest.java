@@ -17,7 +17,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -32,7 +31,7 @@ public class StackTraceFilteringTest extends TestBase {
     
     @Before
     public void setup() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
     }
     
     @Test

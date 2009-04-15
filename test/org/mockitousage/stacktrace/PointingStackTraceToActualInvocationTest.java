@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -25,7 +24,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
 
     @Before
     public void setup() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        super.makeStackTracesClean();
         
         first();
         second();
