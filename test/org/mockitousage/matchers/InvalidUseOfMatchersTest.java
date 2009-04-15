@@ -7,9 +7,9 @@ package org.mockitousage.matchers;
 import static org.mockito.Matchers.*;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -18,13 +18,7 @@ import org.mockitoutil.TestBase;
 
 public class InvalidUseOfMatchersTest extends TestBase {
 
-    private IMethods mock;
-
-    @Before
-    public void setUp() {
-        StateMaster.reset();
-        mock = Mockito.mock(IMethods.class);
-    }
+    @Mock private IMethods mock;
 
     @After
     public void resetState() {

@@ -7,9 +7,9 @@ package org.mockitousage.misuse;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Mock;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
@@ -18,15 +18,9 @@ import org.mockitoutil.TestBase;
 
 public class InvalidUsageTest extends TestBase {
 
-    private IMethods mock;
-    private IMethods mockTwo;
+    @Mock private IMethods mock;
+    @Mock private IMethods mockTwo;
 
-    @Before
-    public void setup() {
-        mock = mock(IMethods.class);
-        mockTwo = mock(IMethods.class);
-    }
-    
     @After
     public void resetState() {
         StateMaster.reset();

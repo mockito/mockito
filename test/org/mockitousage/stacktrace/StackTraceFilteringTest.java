@@ -32,7 +32,6 @@ public class StackTraceFilteringTest extends TestBase {
     
     @Before
     public void setup() {
-        resetState();
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     

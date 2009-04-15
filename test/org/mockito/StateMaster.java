@@ -4,15 +4,17 @@
  */
 package org.mockito;
 
-import org.mockito.internal.MockitoCore;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 public class StateMaster {
     
+    private static final ThreadSafeMockingProgress MOCKING_PROGRESS= new ThreadSafeMockingProgress();
+
     public static void reset() {
-        MockitoCore.MOCKING_PROGRESS.reset();
+        MOCKING_PROGRESS.reset();
     }
     
     public static void validate() {
-        MockitoCore.MOCKING_PROGRESS.validateState();
+        MOCKING_PROGRESS.validateState();
     }
 }
