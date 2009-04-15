@@ -1,7 +1,5 @@
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 

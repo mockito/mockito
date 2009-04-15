@@ -54,7 +54,6 @@ import org.mockito.invocation.InvocationOnMock;
  * Configuring Mockito is a new concept that we evaluate. Please let us know if you find it useful/harmful. 
  */
 @Deprecated
-@SuppressWarnings("deprecation")
 public class ConfigurationSupport {
     
     private static final ReturnValues DEFAULT_RETURN_VALUES = new EmptyReturnValues();

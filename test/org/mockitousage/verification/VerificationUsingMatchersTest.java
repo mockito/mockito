@@ -17,7 +17,6 @@ import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")  
 public class VerificationUsingMatchersTest extends TestBase {
     private IMethods mock;
 

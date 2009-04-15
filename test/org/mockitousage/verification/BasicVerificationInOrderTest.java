@@ -16,7 +16,6 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")  
 public class BasicVerificationInOrderTest extends TestBase {
     
     private IMethods mockOne;

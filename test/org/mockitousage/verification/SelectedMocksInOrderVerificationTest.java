@@ -14,7 +14,6 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")  
 public class SelectedMocksInOrderVerificationTest extends TestBase {
     
     private IMethods mockOne;

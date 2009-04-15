@@ -15,7 +15,6 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class SmartNullsStubbingTest extends TestBase {
 
     private IMethods mock;

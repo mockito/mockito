@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 @Ignore
 public class PlaygroundTest extends TestBase {
 

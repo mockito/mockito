@@ -15,7 +15,6 @@ import org.mockito.invocation.InvocationOnMock;
 @SuppressWarnings("deprecation")
 public class FriendlyReturnValues implements ReturnValues {
 
-    @SuppressWarnings("deprecation")
     public Object valueFor(InvocationOnMock invocation) {
 
         Class<?> returnType = invocation.getMethod().getReturnType();

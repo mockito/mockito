@@ -16,7 +16,6 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class InvalidUsageTest extends TestBase {
 
     private IMethods mock;

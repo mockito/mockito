@@ -13,7 +13,6 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")  
 public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     private IMethods one;
     private IMethods two;

@@ -19,7 +19,6 @@ import org.mockitoutil.TestBase;
 /**
  * ignored since 'relaxed' in order verification is not implemented (too complex to bother, maybe later).
  */
-@SuppressWarnings("unchecked")  
 public class RelaxedVerificationInOrderTest extends TestBase {
     
     private IMethods mockOne;

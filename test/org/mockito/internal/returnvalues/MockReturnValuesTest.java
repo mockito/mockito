@@ -1,7 +1,5 @@
 package org.mockito.internal.returnvalues;
 
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockUtil;

@@ -14,7 +14,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings("deprecation")
 public class DeprecatedStubbingTest extends TestBase {
 
     @Mock private IMethods mock;

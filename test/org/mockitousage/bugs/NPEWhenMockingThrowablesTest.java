@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class NPEWhenMockingThrowablesTest extends TestBase {
 
     @Mock IMethods mock;

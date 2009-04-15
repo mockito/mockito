@@ -14,7 +14,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class BasicStubbingTest extends TestBase {
 
     private IMethods mock;

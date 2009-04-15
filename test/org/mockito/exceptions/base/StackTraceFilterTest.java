@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class StackTraceFilterTest extends TestBase {
     
     private StackTraceFilter filter = new StackTraceFilter();

@@ -16,7 +16,6 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class InvalidUseOfMatchersTest extends TestBase {
 
     private IMethods mock;
