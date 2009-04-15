@@ -4,27 +4,20 @@
  */
 package org.mockito;
 
-import java.util.Arrays;
 
-import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.MockHandler;
+import org.mockito.internal.MockitoCore;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.progress.OngoingStubbing;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
+import org.mockito.internal.returnvalues.MockReturnValues;
 import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
 import org.mockito.internal.returnvalues.SmartNullReturnValues;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.Stubber;
-import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnit44Runner;
@@ -499,9 +492,19 @@ public class Mockito extends Matchers {
      */
     public static final ReturnValues RETURNS_SMART_NULLS = new SmartNullReturnValues();
     
-    static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
-    private static final Reporter REPORTER = new Reporter();
-
+    /**
+     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * <p>
+     * {@link ReturnValues} defines the return values of unstubbed invocations.
+     * <p>
+     * This implementation can be helpful when working with legacy code. 
+     * <p>
+     * MockReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
+     * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
+     * <p>
+     */
+    public static final ReturnValues RETURNS_MOCKS = new MockReturnValues();
+    
     /**
      * Creates mock object of given class or interface.
      * <p>
@@ -511,7 +514,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return mock(classToMock, null, null, RETURNS_DEFAULTS);
+        return MockitoCore.mock(classToMock, null, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -529,7 +532,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return mock(classToMock, name, null, RETURNS_DEFAULTS);
+        return MockitoCore.mock(classToMock, name, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -552,15 +555,9 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return mock(classToMock, null, (T) null, returnValues);
+        return MockitoCore.mock(classToMock, null, (T) null, returnValues);
     }
     
-    private static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
-        MOCKING_PROGRESS.validateState();
-        MOCKING_PROGRESS.resetOngoingStubbing();
-        return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);
-    }    
-
     /**
      * Creates a spy of the real object. The spy calls <b>real</b> methods unless they are stubbed.
      * <p>
@@ -623,114 +620,102 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
+        return MockitoCore.mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
     }
 
     /**
-     * <pre>
-     *   //Instead of:
-     *   stub(mock.count()).toReturn(10);
-     * 
-     *   //Please do:
-     *   when(mock.count()).thenReturn(10);
-     * </pre> 
-     * 
-     * Many users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
-     * <p>
-     * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
-     * <pre>
-     *   Mockito.stub;  <i>replace with:</i>  Mockito.when;
-     *   stub(          <i>replace with:</i>  when(
-     *   .toReturn(     <i>replace with:</i>  .thenReturn(
-     *   .toThrow(      <i>replace with:</i>  .thenThrow(
-     *   .toAnswer(     <i>replace with:</i>  .thenAnswer(
-     * </pre>
-     * If you're an existing user then sorry for making your code littered with deprecation warnings. 
-     * This change was required to make Mockito better.
-     * 
-     * @param methodCall
-     *            method call
-     * @return DeprecatedOngoingStubbing object to set stubbed value/exception
-     */
-    @SuppressWarnings("unchecked")
-    @Deprecated
-    public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
-        MOCKING_PROGRESS.stubbingStarted();
-        return (DeprecatedOngoingStubbing) stub();
-    }
+	 * <pre>
+	 *   //Instead of:
+	 *   stub(mock.count()).toReturn(10);
+	 * 
+	 *   //Please do:
+	 *   when(mock.count()).thenReturn(10);
+	 * </pre> 
+	 * 
+	 * Many users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
+	 * <p>
+	 * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
+	 * <pre>
+	 *   Mockito.stub;  <i>replace with:</i>  Mockito.when;
+	 *   stub(          <i>replace with:</i>  when(
+	 *   .toReturn(     <i>replace with:</i>  .thenReturn(
+	 *   .toThrow(      <i>replace with:</i>  .thenThrow(
+	 *   .toAnswer(     <i>replace with:</i>  .thenAnswer(
+	 * </pre>
+	 * If you're an existing user then sorry for making your code littered with deprecation warnings. 
+	 * This change was required to make Mockito better.
+	 * 
+	 * @param methodCall
+	 *            method call
+	 * @return DeprecatedOngoingStubbing object to set stubbed value/exception
+	 */
+	@Deprecated
+	public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
+		return MockitoCore.stub(methodCall);
+	}
     
     /**
-     * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called. 
-     * <p>
-     * Simply put: "<b>When</b> the x method is called <b>then</b> return y".
-     * <p>
-     * <b>when() is a successor of deprecated {@link Mockito#stub(Object)}</b>
-     * <p>
-     * Examples:
-     * 
-     * <pre>
-     * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
-     *
-     * //you can use flexible argument matchers, e.g:
-     * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);
-     *
-     * //setting exception to be thrown:
-     * when(mock.someMethod("some arg")).thenThrow(new RuntimeException());
-     *
-     * //you can set different behavior for consecutive method calls.
-     * //Last stubbing (e.g: thenReturn("foo")) determines the behavior of further consecutive calls.
-     * when(mock.someMethod("some arg"))
-     *  .thenThrow(new RuntimeException())
-     *  .thenReturn("foo");
-     *  
-     * //Alternative, shorter version for consecutive stubbing:
-     * when(mock.someMethod("some arg"))
-     *  .thenReturn("one", "two");
-     * //is the same as:
-     * when(mock.someMethod("some arg"))
-     *  .thenReturn("one")
-     *  .thenReturn("two");
-     *
-     * //shorter version for consecutive method calls throwing exceptions:
-     * when(mock.someMethod("some arg"))
-     *  .thenThrow(new RuntimeException(), new NullPointerException();
-     *   
-     * </pre>
-     * 
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
-     * <p>
-     * Stubbing can be overridden: for example common stubbing can go to fixture
-     * setup but the test methods can override it.
-     * <p>
-     * Once stubbed, the method will always return stubbed value regardless
-     * of how many times it is called.
-     * <p>
-     * Last stubbing is more important - when you stubbed the same method with
-     * the same arguments many times.
-     * <p>
-     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
-     * Let's say you've stubbed foo.bar(). 
-     * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
-     * If your code doesn't care what get(0) returns then it should not be stubbed. 
-     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
-     * 
-     * <p>
-     * See examples in javadoc for {@link Mockito} class
-     * @param methodCall method to be stubbed
-     */
-    public static <T> NewOngoingStubbing<T> when(T methodCall) {
-        MOCKING_PROGRESS.stubbingStarted();
-        return (NewOngoingStubbing) stub();
-    }
-
-    private static OngoingStubbing stub() {
-        OngoingStubbing stubbing = MOCKING_PROGRESS.pullOngoingStubbing();
-        if (stubbing == null) {
-            MOCKING_PROGRESS.reset();
-            REPORTER.missingMethodInvocation();
-        }
-        return stubbing;
-    }
+	 * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called. 
+	 * <p>
+	 * Simply put: "<b>When</b> the x method is called <b>then</b> return y".
+	 * <p>
+	 * <b>when() is a successor of deprecated {@link Mockito#stub(Object)}</b>
+	 * <p>
+	 * Examples:
+	 * 
+	 * <pre>
+	 * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
+	 *
+	 * //you can use flexible argument matchers, e.g:
+	 * when(mock.someMethod(<b>anyString()</b>)).thenReturn(10);
+	 *
+	 * //setting exception to be thrown:
+	 * when(mock.someMethod("some arg")).thenThrow(new RuntimeException());
+	 *
+	 * //you can set different behavior for consecutive method calls.
+	 * //Last stubbing (e.g: thenReturn("foo")) determines the behavior of further consecutive calls.
+	 * when(mock.someMethod("some arg"))
+	 *  .thenThrow(new RuntimeException())
+	 *  .thenReturn("foo");
+	 *  
+	 * //Alternative, shorter version for consecutive stubbing:
+	 * when(mock.someMethod("some arg"))
+	 *  .thenReturn("one", "two");
+	 * //is the same as:
+	 * when(mock.someMethod("some arg"))
+	 *  .thenReturn("one")
+	 *  .thenReturn("two");
+	 *
+	 * //shorter version for consecutive method calls throwing exceptions:
+	 * when(mock.someMethod("some arg"))
+	 *  .thenThrow(new RuntimeException(), new NullPointerException();
+	 *   
+	 * </pre>
+	 * 
+	 * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+	 * <p>
+	 * Stubbing can be overridden: for example common stubbing can go to fixture
+	 * setup but the test methods can override it.
+	 * <p>
+	 * Once stubbed, the method will always return stubbed value regardless
+	 * of how many times it is called.
+	 * <p>
+	 * Last stubbing is more important - when you stubbed the same method with
+	 * the same arguments many times.
+	 * <p>
+	 * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
+	 * Let's say you've stubbed foo.bar(). 
+	 * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
+	 * If your code doesn't care what get(0) returns then it should not be stubbed. 
+	 * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
+	 * 
+	 * <p>
+	 * See examples in javadoc for {@link Mockito} class
+	 * @param methodCall method to be stubbed
+	 */
+	public static <T> NewOngoingStubbing<T> when(T methodCall) {
+		return MockitoCore.when(methodCall);
+	}
 
     /**
      * Verifies certain behavior <b>happened once</b> 
@@ -758,109 +743,88 @@ public class Mockito extends Matchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock) {
-        return verify(mock, times(1));
+        return MockitoCore.verify(mock, times(1));
     }
     
     /**
-     * TODO javadoc
-     * 
-     * @param <T>
-     * @param mock
-     */
-    public static <T> void reset(T mock) {
-        //TODO Perhaps we should validate the state instead of resetting?
-        MOCKING_PROGRESS.reset();
-        MOCKING_PROGRESS.resetOngoingStubbing();
-        //TODO Perhaps we should maintain previous ReturnValues?
-        MockUtil.resetMock(mock, MOCKING_PROGRESS, RETURNS_DEFAULTS);
-    }
+	 * TODO javadoc
+	 * 
+	 * @param <T>
+	 * @param mock
+	 */
+	public static <T> void reset(T mock) {
+		MockitoCore.reset(mock);
+	}
 
  
     /**
-     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
-     * <pre>
-     *   verify(mock, times(5)).someMethod("was called five times");
-     *   
-     *   verify(mock, atLeast(2)).someMethod("was called at least two times");
-     *   
-     *   //you can use flexible argument matchers, e.g:
-     *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
-     * </pre>
-     * 
-     * <b>times(1) is the default</b> and can be omitted
-     * <p>
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param mock to be verified
-     * @param mode times(x), atLeastOnce() or never()
-     * 
-     * @return mock object itself
-     */
-    public static <T> T verify(T mock, VerificationMode mode) {
-        if (mock == null) {
-            REPORTER.nullPassedToVerify();
-        } else if (!MockUtil.isMock(mock)) {
-            REPORTER.notAMockPassedToVerify();
-        }
-        MOCKING_PROGRESS.verificationStarted(mode);
-        return mock;
-    }
+	 * Verifies certain behavior happened at least once / exact number of times / never. E.g:
+	 * <pre>
+	 *   verify(mock, times(5)).someMethod("was called five times");
+	 *   
+	 *   verify(mock, atLeast(2)).someMethod("was called at least two times");
+	 *   
+	 *   //you can use flexible argument matchers, e.g:
+	 *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
+	 * </pre>
+	 * 
+	 * <b>times(1) is the default</b> and can be omitted
+	 * <p>
+	 * See examples in javadoc for {@link Mockito} class
+	 * 
+	 * @param mock to be verified
+	 * @param mode times(x), atLeastOnce() or never()
+	 * 
+	 * @return mock object itself
+	 */
+	public static <T> T verify(T mock, VerificationMode mode) {
+		return MockitoCore.verify(mock, mode);
+	}
 
     /**
-     * Checks if any of given mocks has any unverified interaction.
-     * <p>
-     * You can use this method after you verified your mocks - to make sure that nothing
-     * else was invoked on your mocks.
-     * <p>
-     * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
-     * <p>
-     * Stubbed invocations (if called) are also treated as interactions.
-     * <p>
-     * A word of <b>warning</b>: 
-     * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
-     * verifyNoMoreInteractions() is not recommended to use in every test method. 
-     * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
-     * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
-     * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
-     * <p>
-     * This method will also detect unverified invocations that occurred before the test method,
-     * for example: in setUp(), &#064;Before method or in constructor.
-     * Consider writing nice code that makes interactions only in test methods.
-     * 
-     * <p>
-     * Example:
-     * 
-     * <pre>
-     * //interactions
-     * mock.doSomething();
-     * mock.doSomethingUnexpected();
-     * 
-     * //verification
-     * verify(mock).doSomething();
-     * 
-     * //following will fail because 'doSomethingUnexpected()' is unexpected
-     * verifyNoMoreInteractions(mock);
-     * 
-     * </pre>
-     * 
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param mocks to be verified
-     */
-    public static void verifyNoMoreInteractions(Object... mocks) {
-        assertMocksNotEmpty(mocks);
-        MOCKING_PROGRESS.validateState();
-        for (Object mock : mocks) {
-            try {
-                if (mock == null) {
-                    REPORTER.nullPassedToVerifyNoMoreInteractions();
-                }
-                MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
-            } catch (NotAMockException e) {
-                REPORTER.notAMockPassedToVerifyNoMoreInteractions();
-            }
-        }
-    }
+	 * Checks if any of given mocks has any unverified interaction.
+	 * <p>
+	 * You can use this method after you verified your mocks - to make sure that nothing
+	 * else was invoked on your mocks.
+	 * <p>
+	 * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
+	 * <p>
+	 * Stubbed invocations (if called) are also treated as interactions.
+	 * <p>
+	 * A word of <b>warning</b>: 
+	 * Some users who did a lot of classic, expect-run-verify mocking tend to use verifyNoMoreInteractions() very often, even in every test method. 
+	 * verifyNoMoreInteractions() is not recommended to use in every test method. 
+	 * verifyNoMoreInteractions() is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
+	 * Abusing it leads to overspecified, less maintainable tests. You can find further reading 
+	 * <a href="http://monkeyisland.pl/2008/07/12/should-i-worry-about-the-unexpected/">here</a>.
+	 * <p>
+	 * This method will also detect unverified invocations that occurred before the test method,
+	 * for example: in setUp(), &#064;Before method or in constructor.
+	 * Consider writing nice code that makes interactions only in test methods.
+	 * 
+	 * <p>
+	 * Example:
+	 * 
+	 * <pre>
+	 * //interactions
+	 * mock.doSomething();
+	 * mock.doSomethingUnexpected();
+	 * 
+	 * //verification
+	 * verify(mock).doSomething();
+	 * 
+	 * //following will fail because 'doSomethingUnexpected()' is unexpected
+	 * verifyNoMoreInteractions(mock);
+	 * 
+	 * </pre>
+	 * 
+	 * See examples in javadoc for {@link Mockito} class
+	 * 
+	 * @param mocks to be verified
+	 */
+	public static void verifyNoMoreInteractions(Object... mocks) {
+		MockitoCore.verifyNoMoreInteractions(mocks);
+	}
 
     /**
      * Verifies that no interactions happened on given mocks.
@@ -876,52 +840,48 @@ public class Mockito extends Matchers {
      * @param mocks to be verified
      */
     public static void verifyZeroInteractions(Object... mocks) {
-        verifyNoMoreInteractions(mocks);
+        MockitoCore.verifyNoMoreInteractions(mocks);
     }
 
-    private static void assertMocksNotEmpty(Object[] mocks) {
-        if (mocks == null || mocks.length == 0) {
-            REPORTER.mocksHaveToBePassedToVerifyNoMoreInteractions();
-        }
-    }
+    public static void assertMocksNotEmpty(Object[] mocks) {
+		MockitoCore.assertMocksNotEmpty(mocks);
+	}
 
     /**
-     * <pre>
-     *   //Instead of:
-     *   stubVoid(mock).toThrow(e).on().someVoidMethod();
-     * 
-     *   //Please do:
-     *   doThrow(e).when(mock).someVoidMethod();
-     * </pre> 
-     * 
-     * doThrow() replaces stubVoid() because of improved readability and consistency with the family of doAnswer() methods. 
-     * <p>
-     * Originally, stubVoid() was used for stubbing void methods with exceptions. E.g:
-     * 
-     * <pre>
-     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
-     * 
-     * //you can stub with different behavior for consecutive calls.
-     * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.   
-     * stubVoid(mock)
-     *   .toThrow(new RuntimeException())
-     *   .toReturn()
-     *   .on().someMethod();
-     * </pre>
-     * 
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @deprecated Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
-     * 
-     * @param mock
-     *            to stub
-     * @return stubbable object that allows stubbing with throwable
-     */
-    public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        MockHandler<T> handler = MockUtil.getMockHandler(mock);
-        MOCKING_PROGRESS.stubbingStarted();
-        return handler.voidMethodStubbable(mock);
-    }
+	 * <pre>
+	 *   //Instead of:
+	 *   stubVoid(mock).toThrow(e).on().someVoidMethod();
+	 * 
+	 *   //Please do:
+	 *   doThrow(e).when(mock).someVoidMethod();
+	 * </pre> 
+	 * 
+	 * doThrow() replaces stubVoid() because of improved readability and consistency with the family of doAnswer() methods. 
+	 * <p>
+	 * Originally, stubVoid() was used for stubbing void methods with exceptions. E.g:
+	 * 
+	 * <pre>
+	 * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
+	 * 
+	 * //you can stub with different behavior for consecutive calls.
+	 * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.   
+	 * stubVoid(mock)
+	 *   .toThrow(new RuntimeException())
+	 *   .toReturn()
+	 *   .on().someMethod();
+	 * </pre>
+	 * 
+	 * See examples in javadoc for {@link Mockito} class
+	 * 
+	 * @deprecated Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
+	 * 
+	 * @param mock
+	 *            to stub
+	 * @return stubbable object that allows stubbing with throwable
+	 */
+	public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
+		return MockitoCore.stubVoid(mock);
+	}
     
     /**
      * Use doThrow() when you want to stub the void method with an exception.
@@ -938,34 +898,32 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doThrow(Throwable toBeThrown) {
-        return doAnswer(new ThrowsException(toBeThrown));
+        return MockitoCore.doAnswer(new ThrowsException(toBeThrown));
     }
     
     /**
-     * Use doAnswer() when you want to stub a void method with generic {@link Answer}.
-     * <p>
-     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
-     * <p>
-     * Example:
-     * 
-     * <pre>
-     *  doAnswer(new Answer() {
-     *      public Object answer(InvocationOnMock invocation) {
-     *          Object[] args = invocation.getArguments();
-     *          Mock mock = invocation.getMock();
-     *          return null;
-     *      }})
-     *  .when(mock).someMethod();
-     * </pre>
-     * 
-     * @param answer to answer when the stubbed method is called
-     * @return stubber - to select a method for stubbing
-     */
-    public static Stubber doAnswer(Answer answer) {
-        MOCKING_PROGRESS.stubbingStarted();
-        MOCKING_PROGRESS.resetOngoingStubbing();
-        return new StubberImpl().doAnswer(answer);
-    }  
+	 * Use doAnswer() when you want to stub a void method with generic {@link Answer}.
+	 * <p>
+	 * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
+	 * <p>
+	 * Example:
+	 * 
+	 * <pre>
+	 *  doAnswer(new Answer() {
+	 *      public Object answer(InvocationOnMock invocation) {
+	 *          Object[] args = invocation.getArguments();
+	 *          Mock mock = invocation.getMock();
+	 *          return null;
+	 *      }})
+	 *  .when(mock).someMethod();
+	 * </pre>
+	 * 
+	 * @param answer to answer when the stubbed method is called
+	 * @return stubber - to select a method for stubbing
+	 */
+	public static Stubber doAnswer(Answer answer) {
+		return MockitoCore.doAnswer(answer);
+	}  
     
     /**
      * Use doNothing() for setting void methods to do nothing. <b>Beware that void methods on mocks do nothing by default!</b> 
@@ -1001,7 +959,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doNothing() {
-        return doAnswer(new DoesNothing());
+        return MockitoCore.doAnswer(new DoesNothing());
     }    
     
     /**
@@ -1045,44 +1003,33 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doReturn(Object toBeReturned) {
-        return doAnswer(new Returns(toBeReturned));
+        return MockitoCore.doAnswer(new Returns(toBeReturned));
     }
  
     /**
-     * Creates InOrder object that allows verifying mocks in order.
-     * 
-     * <pre>
-     *   InOrder inOrder = inOrder(firstMock, secondMock);
-     *   
-     *   inOrder.verify(firstMock).add("was called first");
-     *   inOrder.verify(secondMock).add("was called second");
-     * </pre>
-     * 
-     * Verification in order is flexible - <b>you don't have to verify all interactions</b> one-by-one
-     * but only those that you are interested in testing in order.
-     * <p>
-     * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.  
-     *
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param mocks to be verified in order
-     * 
-     * @return InOrder object to be used to verify in order
-     */
-    public static InOrder inOrder(Object... mocks) {
-        if (mocks == null || mocks.length == 0) {
-            REPORTER.mocksHaveToBePassedWhenCreatingInOrder();
-        }
-        for (Object mock : mocks) {
-            if (mock == null) {
-                REPORTER.nullPassedWhenCreatingInOrder();
-            } else if (!MockUtil.isMock(mock)) {
-                REPORTER.notAMockPassedWhenCreatingInOrder();
-            }
-        }
-        InOrder inOrder = new InOrderImpl(Arrays.asList(mocks));
-        return inOrder;
-    }
+	 * Creates InOrder object that allows verifying mocks in order.
+	 * 
+	 * <pre>
+	 *   InOrder inOrder = inOrder(firstMock, secondMock);
+	 *   
+	 *   inOrder.verify(firstMock).add("was called first");
+	 *   inOrder.verify(secondMock).add("was called second");
+	 * </pre>
+	 * 
+	 * Verification in order is flexible - <b>you don't have to verify all interactions</b> one-by-one
+	 * but only those that you are interested in testing in order.
+	 * <p>
+	 * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.  
+	 *
+	 * See examples in javadoc for {@link Mockito} class
+	 * 
+	 * @param mocks to be verified in order
+	 * 
+	 * @return InOrder object to be used to verify in order
+	 */
+	public static InOrder inOrder(Object... mocks) {
+		return MockitoCore.inOrder(mocks);
+	}
   
     /**
      * Allows verifying exact number of invocations. E.g:

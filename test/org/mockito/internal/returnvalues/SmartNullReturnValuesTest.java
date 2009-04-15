@@ -12,15 +12,6 @@ import org.mockitoutil.TestBase;
 
 public class SmartNullReturnValuesTest extends TestBase {
     
-    interface HasPrimitiveMethods {
-        boolean booleanMethod();
-        char charMethod();
-        int intMethod();
-        long longMethod();
-        float floatMethod();
-        double doubleMethod();
-    }
-
     private Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1);
     }

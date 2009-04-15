@@ -4,13 +4,15 @@
  */
 package org.mockito;
 
+import org.mockito.internal.MockitoCore;
+
 public class StateMaster {
     
     public static void reset() {
-        Mockito.MOCKING_PROGRESS.reset();
+        MockitoCore.MOCKING_PROGRESS.reset();
     }
     
     public static void validate() {
-        Mockito.MOCKING_PROGRESS.validateState();
+        MockitoCore.MOCKING_PROGRESS.validateState();
     }
 }

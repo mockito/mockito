@@ -2,11 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito;
+package org.mockito.internal;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.InOrder;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.InOrderWrapper;
@@ -36,6 +37,6 @@ class InOrderImpl implements InOrder {
         } else if (!(mode instanceof VerificationInOrderMode)) {
             throw new MockitoException(mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
         }
-        return Mockito.verify(mock, new InOrderWrapper((VerificationInOrderMode) mode, mocksToBeVerifiedInOrder));
+        return MockitoCore.verify(mock, new InOrderWrapper((VerificationInOrderMode) mode, mocksToBeVerifiedInOrder));
     }
 }

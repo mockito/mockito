@@ -4,12 +4,13 @@
  */
 package org.mockito;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -19,8 +20,8 @@ public class MockitoTest extends TestBase {
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
         Mockito.when(mock.add("test")).thenReturn(true);
-        
-        assertNull(Mockito.MOCKING_PROGRESS.pullOngoingStubbing());
+        //FIXME Consider to move to separate test
+        assertNull(new ThreadSafeMockingProgress().pullOngoingStubbing());
     }
     
     @Test(expected=NotAMockException.class)

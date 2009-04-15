@@ -14,7 +14,7 @@ public class MoreEmptyReturnValuesTest extends TestBase {
     @Test
     public void shouldReturnEmptyArray() {
         String[] ret = (String[]) rv.returnValueFor((new String[0]).getClass());
-        ret.getClass().isArray();
+        assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);
     }
     
