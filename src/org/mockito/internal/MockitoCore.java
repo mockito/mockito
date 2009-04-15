@@ -7,7 +7,6 @@ package org.mockito.internal;
 import java.util.Arrays;
 
 import org.mockito.InOrder;
-import org.mockito.Mockito;
 import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -70,10 +69,9 @@ public class MockitoCore {
         MOCKING_PROGRESS.validateState();
         MOCKING_PROGRESS.reset();
         MOCKING_PROGRESS.resetOngoingStubbing();
-        //TODO Perhaps we should maintain previous ReturnValues?
         
         for (T m : mocks) {
-            MockUtil.resetMock(m, MOCKING_PROGRESS, Mockito.RETURNS_DEFAULTS);
+            MockUtil.resetMock(m, MOCKING_PROGRESS);
         }
     }
     

@@ -96,4 +96,14 @@ public class ResetTest extends TestBase {
             fail();
         } catch (UnfinishedVerificationException e) {}
     }
+    
+    @Test
+    public void shouldMaintainPreviousReturnValuesStrategy() {
+        //given
+        mock = mock(IMethods.class, RETURNS_MOCKS);
+        //when
+        reset(mock);
+        //then
+        assertNotNull(mock.iMethodsReturningMethod());
+    }
 }

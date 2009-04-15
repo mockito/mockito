@@ -221,7 +221,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockitoStubber.setAnswersForStubbing(answers);
     }
 
-    public boolean hasName() {
-        return false;
+    public ReturnValues getReturnValues() {
+        return returnValues;
     }
 }

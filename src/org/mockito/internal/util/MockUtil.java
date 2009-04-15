@@ -30,9 +30,9 @@ public class MockUtil {
         return mock;
     }
 
-    public static <T> void resetMock(T mock, MockingProgress progress, ReturnValues returnValues) {
+    public static <T> void resetMock(T mock, MockingProgress progress) {
         MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
-        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler.getMockName(), progress, new MatchersBinder(), returnValues);
+        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler.getMockName(), progress, new MatchersBinder(), oldMockHandler.getReturnValues());
         MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
         newFilter.setInstance(mock);
         ((Factory) mock).setCallback(0, newFilter);
