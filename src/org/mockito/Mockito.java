@@ -450,6 +450,8 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
+    private static MockitoCore MOCKITO_CORE = new MockitoCore();
+    
     /**
      * Default ReturnValues used by the framework.
      * <p>
@@ -514,7 +516,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MockitoCore.mock(classToMock, null, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, null, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -532,7 +534,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return MockitoCore.mock(classToMock, name, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, name, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -555,7 +557,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return MockitoCore.mock(classToMock, null, (T) null, returnValues);
+        return MOCKITO_CORE.mock(classToMock, null, (T) null, returnValues);
     }
     
     /**
@@ -620,7 +622,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MockitoCore.mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
     }
 
     /**
@@ -651,7 +653,7 @@ public class Mockito extends Matchers {
 	 */
 	@Deprecated
 	public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
-		return MockitoCore.stub(methodCall);
+		return MOCKITO_CORE.stub(methodCall);
 	}
     
     /**
@@ -714,7 +716,7 @@ public class Mockito extends Matchers {
 	 * @param methodCall method to be stubbed
 	 */
 	public static <T> NewOngoingStubbing<T> when(T methodCall) {
-		return MockitoCore.when(methodCall);
+		return MOCKITO_CORE.when(methodCall);
 	}
 
     /**
@@ -743,7 +745,7 @@ public class Mockito extends Matchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock) {
-        return MockitoCore.verify(mock, times(1));
+        return MOCKITO_CORE.verify(mock, times(1));
     }
     
     /**
@@ -753,7 +755,7 @@ public class Mockito extends Matchers {
 	 * @param mock
 	 */
 	public static <T> void reset(T mock) {
-		MockitoCore.reset(mock);
+		MOCKITO_CORE.reset(mock);
 	}
 
  
@@ -778,7 +780,7 @@ public class Mockito extends Matchers {
 	 * @return mock object itself
 	 */
 	public static <T> T verify(T mock, VerificationMode mode) {
-		return MockitoCore.verify(mock, mode);
+		return MOCKITO_CORE.verify(mock, mode);
 	}
 
     /**
@@ -823,7 +825,7 @@ public class Mockito extends Matchers {
 	 * @param mocks to be verified
 	 */
 	public static void verifyNoMoreInteractions(Object... mocks) {
-		MockitoCore.verifyNoMoreInteractions(mocks);
+		MOCKITO_CORE.verifyNoMoreInteractions(mocks);
 	}
 
     /**
@@ -840,11 +842,11 @@ public class Mockito extends Matchers {
      * @param mocks to be verified
      */
     public static void verifyZeroInteractions(Object... mocks) {
-        MockitoCore.verifyNoMoreInteractions(mocks);
+        MOCKITO_CORE.verifyNoMoreInteractions(mocks);
     }
 
     public static void assertMocksNotEmpty(Object[] mocks) {
-		MockitoCore.assertMocksNotEmpty(mocks);
+		MOCKITO_CORE.assertMocksNotEmpty(mocks);
 	}
 
     /**
@@ -880,7 +882,7 @@ public class Mockito extends Matchers {
 	 * @return stubbable object that allows stubbing with throwable
 	 */
 	public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
-		return MockitoCore.stubVoid(mock);
+		return MOCKITO_CORE.stubVoid(mock);
 	}
     
     /**
@@ -898,7 +900,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doThrow(Throwable toBeThrown) {
-        return MockitoCore.doAnswer(new ThrowsException(toBeThrown));
+        return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
     }
     
     /**
@@ -922,7 +924,7 @@ public class Mockito extends Matchers {
 	 * @return stubber - to select a method for stubbing
 	 */
 	public static Stubber doAnswer(Answer answer) {
-		return MockitoCore.doAnswer(answer);
+		return MOCKITO_CORE.doAnswer(answer);
 	}  
     
     /**
@@ -959,7 +961,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doNothing() {
-        return MockitoCore.doAnswer(new DoesNothing());
+        return MOCKITO_CORE.doAnswer(new DoesNothing());
     }    
     
     /**
@@ -1003,7 +1005,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doReturn(Object toBeReturned) {
-        return MockitoCore.doAnswer(new Returns(toBeReturned));
+        return MOCKITO_CORE.doAnswer(new Returns(toBeReturned));
     }
  
     /**
@@ -1028,7 +1030,7 @@ public class Mockito extends Matchers {
 	 * @return InOrder object to be used to verify in order
 	 */
 	public static InOrder inOrder(Object... mocks) {
-		return MockitoCore.inOrder(mocks);
+		return MOCKITO_CORE.inOrder(mocks);
 	}
   
     /**

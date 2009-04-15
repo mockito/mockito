@@ -26,16 +26,16 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("unchecked")
 public class MockitoCore {
 
-	static final Reporter REPORTER = new Reporter();
+	Reporter REPORTER = new Reporter();
 	public static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
 	
-	public static <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
+	public <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
 	    MOCKING_PROGRESS.validateState();
 	    MOCKING_PROGRESS.resetOngoingStubbing();
 	    return MockUtil.createMock(classToMock, MOCKING_PROGRESS, name, optionalInstance, returnValues);
 	}
 	
-	public static OngoingStubbing stub() {
+	public OngoingStubbing stub() {
 	    OngoingStubbing stubbing = MOCKING_PROGRESS.pullOngoingStubbing();
 	    if (stubbing == null) {
 	        MOCKING_PROGRESS.reset();
@@ -45,18 +45,18 @@ public class MockitoCore {
 	}
 
 	@Deprecated
-	public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
+	public <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
 	    MOCKING_PROGRESS.stubbingStarted();
 	    return (DeprecatedOngoingStubbing) stub();
 	}
 
-	public static <T> NewOngoingStubbing<T> when(T methodCall) {
+	public <T> NewOngoingStubbing<T> when(T methodCall) {
 	    MOCKING_PROGRESS.stubbingStarted();
 	    return (NewOngoingStubbing) stub();
 	}
 	
 	
-	public static <T> T verify(T mock, VerificationMode mode) {
+	public <T> T verify(T mock, VerificationMode mode) {
 	    if (mock == null) {
 	        REPORTER.nullPassedToVerify();
 	    } else if (!MockUtil.isMock(mock)) {
@@ -66,7 +66,7 @@ public class MockitoCore {
 	    return mock;
 	}
 	
-	public static <T> void reset(T mock) {
+	public <T> void reset(T mock) {
 	    //TODO Perhaps we should validate the state instead of resetting?
 	    MOCKING_PROGRESS.reset();
 	    MOCKING_PROGRESS.resetOngoingStubbing();
@@ -74,8 +74,8 @@ public class MockitoCore {
 	    MockUtil.resetMock(mock, MOCKING_PROGRESS, Mockito.RETURNS_DEFAULTS);
 	}
 	
-	public static void verifyNoMoreInteractions(Object... mocks) {
-	    MockitoCore.assertMocksNotEmpty(mocks);
+	public void verifyNoMoreInteractions(Object... mocks) {
+	    assertMocksNotEmpty(mocks);
 	    MOCKING_PROGRESS.validateState();
 	    for (Object mock : mocks) {
 	        try {
@@ -89,13 +89,13 @@ public class MockitoCore {
 	    }
 	}
 	
-	public static void assertMocksNotEmpty(Object[] mocks) {
+	public void assertMocksNotEmpty(Object[] mocks) {
 	    if (mocks == null || mocks.length == 0) {
 	        REPORTER.mocksHaveToBePassedToVerifyNoMoreInteractions();
 	    }
 	}
 	
-	public static InOrder inOrder(Object... mocks) {
+	public InOrder inOrder(Object... mocks) {
 	    if (mocks == null || mocks.length == 0) {
 	        REPORTER.mocksHaveToBePassedWhenCreatingInOrder();
 	    }
@@ -110,13 +110,13 @@ public class MockitoCore {
 	    return inOrder;
 	}
 	
-	public static Stubber doAnswer(Answer answer) {
+	public Stubber doAnswer(Answer answer) {
 	    MOCKING_PROGRESS.stubbingStarted();
 	    MOCKING_PROGRESS.resetOngoingStubbing();
 	    return new StubberImpl().doAnswer(answer);
 	}
 	
-	public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
+	public <T> VoidMethodStubbable<T> stubVoid(T mock) {
 	    MockHandler<T> handler = MockUtil.getMockHandler(mock);
 	    MOCKING_PROGRESS.stubbingStarted();
 	    return handler.voidMethodStubbable(mock);

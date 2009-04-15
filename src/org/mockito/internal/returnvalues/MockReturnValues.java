@@ -7,6 +7,7 @@ import org.mockito.invocation.InvocationOnMock;
 
 public class MockReturnValues implements ReturnValues {
 	
+    private MockitoCore mockitoCore = new MockitoCore();
 	private ReturnValues delegate = new MoreEmptyReturnValues();
 	
 	public Object valueFor(InvocationOnMock invocation){
@@ -24,7 +25,7 @@ public class MockReturnValues implements ReturnValues {
 			return null;
 		}
 		
-		return MockitoCore.mock((Class)class1, null, null, this);
+		return mockitoCore.mock((Class)class1, null, null, this);
 	}
 
 }
