@@ -5,6 +5,7 @@
 package org.mockito.internal.progress;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -33,10 +34,9 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#pullMatchers()
      */
-    //TODO does it have to return null?
     public List<Matcher> pullMatchers() {
         if (matcherStack.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         
         List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);

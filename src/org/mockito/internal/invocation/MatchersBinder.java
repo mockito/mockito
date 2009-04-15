@@ -22,7 +22,7 @@ public class MatchersBinder {
     }
 
     private void validateMatchers(Invocation invocation, List<Matcher> matchers) {
-        if (matchers != null) {
+        if (!matchers.isEmpty()) {
             int recordedMatchersSize = matchers.size();
             int expectedMatchersSize = invocation.getArgumentsCount();
             if (expectedMatchersSize != recordedMatchersSize) {

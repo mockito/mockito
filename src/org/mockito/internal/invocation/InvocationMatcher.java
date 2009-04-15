@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.Matcher;
@@ -19,7 +20,7 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
 
     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
         this.invocation = invocation;
-        if (matchers == null) {
+        if (matchers.isEmpty()) {
             this.matchers = invocation.argumentsToMatchers();
         } else {
             this.matchers = matchers;
@@ -27,7 +28,7 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
     }
     
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, null);
+        this(invocation, Collections.<Matcher>emptyList());
     }
 
     public Method getMethod() {
