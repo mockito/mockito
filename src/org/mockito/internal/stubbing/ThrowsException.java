@@ -19,7 +19,6 @@ public class ThrowsException implements Answer<Object> {
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        //TODO validate performance
         if (MockUtil.isMock(throwable)) {
             throw throwable;
         }
