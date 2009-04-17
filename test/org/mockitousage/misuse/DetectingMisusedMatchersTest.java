@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
@@ -28,7 +27,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
     
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
 
     private void misplacedArgumentMatcher() {

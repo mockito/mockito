@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
@@ -26,7 +25,7 @@ public class StackTraceFilteringTest extends TestBase {
 
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
     
     @Before

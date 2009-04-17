@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
@@ -29,7 +28,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
     
     private void misplacedArgumentMatcherHere() {

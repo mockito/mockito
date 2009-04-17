@@ -10,7 +10,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
@@ -23,7 +22,7 @@ public class InvalidUsageTest extends TestBase {
 
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
     
     @Test(expected=MockitoException.class)

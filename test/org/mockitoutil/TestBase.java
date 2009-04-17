@@ -25,14 +25,19 @@ public class TestBase extends Assert {
         ConfigurationAccess.getConfig().overrideReturnValues(null);
     }
 
+    //TODO find out why performance dropped from 4.2 -> 4.3
+    @Before
+    public void init() {
+        new StateMaster().validate();
+        MockitoAnnotations.initMocks(this);
+    }
+    
     public void makeStackTracesClean() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     
-    @Before
-    public void init() {
-        StateMaster.validate();
-        MockitoAnnotations.initMocks(this);
+    public void resetState() {
+        new StateMaster().reset();
     }
     
     //I'm really tired of matchers, enter the assertor!

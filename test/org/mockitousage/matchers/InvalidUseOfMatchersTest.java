@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -22,7 +21,7 @@ public class InvalidUseOfMatchersTest extends TestBase {
 
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
 
     @Test

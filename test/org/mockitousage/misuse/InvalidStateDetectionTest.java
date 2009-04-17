@@ -43,7 +43,7 @@ public class InvalidStateDetectionTest extends TestBase {
 
     @After
     public void resetState() {
-        StateMaster.reset();
+        super.resetState();
     }
     
     @Test
@@ -279,6 +279,6 @@ public class InvalidStateDetectionTest extends TestBase {
             assertEquals(expected, e.getClass());
         }
         //Make sure state is cleaned up
-        StateMaster.validate();
+        new StateMaster().validate();
     }
 }

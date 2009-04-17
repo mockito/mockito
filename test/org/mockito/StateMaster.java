@@ -8,13 +8,13 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 public class StateMaster {
     
-    private static final ThreadSafeMockingProgress MOCKING_PROGRESS= new ThreadSafeMockingProgress();
+    private final ThreadSafeMockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
-    public static void reset() {
-        MOCKING_PROGRESS.reset();
+    public void reset() {
+        mockingProgress.reset();
     }
     
-    public static void validate() {
-        MOCKING_PROGRESS.validateState();
+    public void validate() {
+        mockingProgress.validateState();
     }
 }
