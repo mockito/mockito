@@ -8,6 +8,7 @@ public class Location  {
 
     public Location() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        //TODO location should have always clean stack traces
         StackTraceFilter filter = new StackTraceFilter();
         this.firstTraceElement = filter.filterStackTrace(stackTrace)[0];
     }

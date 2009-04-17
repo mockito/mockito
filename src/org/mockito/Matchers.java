@@ -206,7 +206,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
-        return isA(clazz);
+        return anyObject();
     }
 
     /**

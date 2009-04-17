@@ -7,6 +7,7 @@ package org.mockitousage.matchers;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
@@ -15,15 +16,26 @@ import org.mockitoutil.TestBase;
 public class MoreMatchersTest extends TestBase {
 
     @Mock private IMethods mock;
+    
+    @Before
+    public void cleanUpStackTraces() {
+        super.makeStackTracesClean();
+    }
 
     @Test
     public void shouldHelpOutWithUnnecessaryCasting() {
         when(mock.objectArgMethod(any(String.class))).thenReturn("string");
         
         assertEquals("string", mock.objectArgMethod("foo"));
-        assertEquals(null, mock.objectArgMethod(new Object()));
     }
-    
+
+    @Test
+    public void shouldAnyBeActualAliasToAnyObject() {
+        mock.simpleMethod((Object) null);
+
+        verify(mock).simpleMethod(anyObject());
+        verify(mock).simpleMethod(any(Object.class));
+    }
     
     @Test
     public void shouldHelpOutWithUnnecessaryCastingOfCollections() {
