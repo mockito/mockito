@@ -24,7 +24,9 @@ public class ExtraMatchers {
             public void assertValue(Throwable traceElements) {
                 StackTraceElement[] trace = traceElements.getStackTrace();
                 
-                assertEquals("Number of classes does not match",
+                assertEquals("Number of classes does not match." +
+                        "\nExpected: " + Arrays.toString(classes) + 
+                        "\nGot: " + Arrays.toString(traceElements.getStackTrace()),
                         classes.length, trace.length);
                     
                 for (int i = 0; i < trace.length; i++) {

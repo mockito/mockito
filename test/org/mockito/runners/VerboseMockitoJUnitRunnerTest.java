@@ -2,23 +2,21 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.experimental;
+package org.mockito.runners;
 
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.DebuggingInfo;
-import org.mockito.internal.experimental.VerboseMockitoJUnitRunner.JunitTestBody;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.util.MockitoLoggerImpl;
+import org.mockito.runners.VerboseMockitoJUnitRunner.JunitTestBody;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
 
 public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
@@ -30,6 +28,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
 
     @Before
     public void setup() throws InitializationError {
+        super.makeStackTracesClean();
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
         runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub);
@@ -45,8 +44,6 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         });
     }
     
-    //TODO why the hell this stuff is ignored?
-    @Ignore("doesn't work due to package change from org.junit")
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
         runner.run(notifier, new JunitTestBody() {
@@ -58,14 +55,13 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
                 //assert
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertThat(loggedInfo, contains("[Mockito] Warning - this stub was not used"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(123);"));
-                assertThat(loggedInfo, contains(".unusedStubbingThatQualifiesForWarning("));
+                assertContains("[Mockito] Warning - this stub was not used", loggedInfo);
+                assertContains("mock.simpleMethod(123);", loggedInfo);
+                assertContains(".unusedStubbingThatQualifiesForWarning(", loggedInfo);
             }
         });
     }
 
-    @Ignore("doesn't work due to package change from org.junit")
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
         runner.run(notifier, new JunitTestBody() {
@@ -74,14 +70,13 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
 
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertThat(loggedInfo, contains("[Mockito] Warning - this method was not stubbed"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(456);"));
-                assertThat(loggedInfo, contains(".callUnstubbedMethodThatQualifiesForWarning("));
+                assertContains("[Mockito] Warning - this method was not stubbed", loggedInfo);
+                assertContains("mock.simpleMethod(456);", loggedInfo);
+                assertContains(".callUnstubbedMethodThatQualifiesForWarning(", loggedInfo);
             }
         });
     }
     
-    @Ignore("doesn't work due to package change from org.junit")
     @Test
     public void shouldLogStubCalledWithDifferentArgumentsWhenTestFails() throws Exception {
         runner.run(notifier, new JunitTestBody() {
@@ -103,7 +98,6 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         });
     }
     
-    @Ignore("doesn't work due to package change from org.junit")
     @Test
     public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
         runner.run(notifier, new JunitTestBody() {

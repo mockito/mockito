@@ -47,6 +47,22 @@ public class StackTraceFilterTest extends TestBase {
     }
     
     @Test
+    public void testShouldIgnoreRunners() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
+        
+        Throwable t = new TraceBuilder().classes(
+                "org.mockito.runners.Runner",
+                "junit.stuff",
+                "org.test.MockitoSampleTest",
+                "org.mockito.Mockito"
+        ).toThrowable();
+        
+        filter.filterStackTrace(t);
+        
+        assertThat(t, hasOnlyThoseClassesInStackTrace("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
+    }
+    
+    @Test
     public void testShouldNotFilterWhenConfigurationSaysNo() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         
