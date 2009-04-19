@@ -4,6 +4,7 @@
  */
 package org.mockitousage.stacktrace;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -131,9 +132,18 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }    
 
     @Test
-    public void shouldPointOutUnfinishedStubbingWhenVoidMethodCalled() {
-        doReturn("asdf");
-        
+    public void shouldMentionFinalAndObjectMethodsWhenMissingMockCall() {
+        when(mock.equals(null)).thenReturn(false);
+    }
+    
+    @Test
+    public void shouldMentionFinalAndObjectMethodsWhenVerifying() {
+        verify(mock).equals(null);
         verify(mock).simpleMethod();
-    }   
+    }
+    
+    @Test
+    public void shouldMentionFinalAndObjectMethodsWhenMisplacedArgumentMatcher() {
+        when(mock.equals(anyObject())).thenReturn(false);
+    }
 }

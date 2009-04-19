@@ -67,8 +67,8 @@ public class Reporter {
                 "    when(mock.isOk()).thenThrow(exception);",
                 "    doThrow(exception).when(mock).someVoidMethod();",
                 "Hints:",
-                " 1. missing thenReturn() or mock call inside when()",
-                " 2. although stubbed methods may return mocks, you cannot inline a mock() call inside a thenReturn method (see issue 53)",
+                " 1. missing thenReturn()",
+                " 2. although stubbed methods may return mocks, you cannot inline mock creation (mock()) call inside a thenReturn method (see issue 53)",
                 ""
         ));
     }
@@ -78,7 +78,10 @@ public class Reporter {
                 "when() requires an argument which has to be a method call on a mock.",
                 "For example:",
                 "    when(mock.getArticles()).thenReturn(articles);",
-                "Also make sure the method is not final - you cannot stub final methods."
+                "",
+                "Also, this error might show up because you verify final method, equals() or hashcode() method.",
+                "Those methods *cannot* be stubbed/verified.",
+                ""
         ));
     }
 
@@ -89,7 +92,9 @@ public class Reporter {
                 "",
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
-                "Also make sure the method is not final - you cannot verify final methods.",
+                "",
+                "Also, this error might show up because you stub a final method, equals() or hashcode() method.",
+                "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
         
@@ -394,11 +399,13 @@ public class Reporter {
                 location,
                 "",
                 "You cannot use argument matchers outside of verification or stubbing.",
-                "Also make sure you're *not* stubbing/verifying a final method with an argument matcher.",
                 "Examples of correct usage of argument matchers:",
                 "    when(mock.get(anyInt())).thenReturn(null);",
                 "    doThrow(new RuntimeException()).when(mock).someVoidMethod(anyObject());",
                 "    verify(mock).someMethod(contains(\"foo\"))",
+                "",
+                "Also, this error might show up because you use argument matchers with methods that cannot be mocked.",
+                "Following methods *cannot* be stubbed/verified: final methods, equals() and hashcode().",                
                 ""
                 ));
     }
