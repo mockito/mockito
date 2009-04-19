@@ -25,34 +25,6 @@ public class WarningsPrinter {
     }
 
     public void print(MockitoLogger logger) {
-        //TODO refactor after 1.7, it should be visible that this method changes the state
-        warnAboutStubsUsedWithDifferentArgs(logger);
-        
-        warnAboutUnusedStubs(logger);
-        warnAboutUnstubbedInvocations(logger);
-    }
-
-    private void warnAboutUnstubbedInvocations(MockitoLogger logger) {
-        for (InvocationMatcher i : unstubbedInvocations) {
-            logger.log(join(
-                "[Mockito] Warning - this method was not stubbed:",
-                i,
-                i.getInvocation().getLocation(),
-                ""));
-        }
-    }
-
-    private void warnAboutUnusedStubs(MockitoLogger logger) {
-        for (Invocation i : unusedStubs) {
-            logger.log(join(
-                "[Mockito] Warning - this stub was not used:",
-                i,
-                i.getLocation(),
-                ""));
-        }
-    }
-
-    private void warnAboutStubsUsedWithDifferentArgs(MockitoLogger logger) {
         Iterator<Invocation> unusedIterator = unusedStubs.iterator();
         while(unusedIterator.hasNext()) {
             Invocation unused = unusedIterator.next();
@@ -60,21 +32,48 @@ public class WarningsPrinter {
             while(unstubbedIterator.hasNext()) {
                 InvocationMatcher unstubbed = unstubbedIterator.next();
                 if(unstubbed.hasSimilarMethod(unused)) { 
-                    logger.log(join(
-                            "[Mockito] Warning - stubbed method called with different arguments.",
-                            "Stubbed this way:",
-                            unused,
-                            unused.getLocation(),
-                            "",
-                            "But called with different arguments:",
-                            unstubbed,
-                            unstubbed.getInvocation().getLocation(),
-                            ""));
-                    
+                    logger.log(stubbedMethodCalledWithDifferentArguments(unused, unstubbed));
                     unusedIterator.remove();
                     unstubbedIterator.remove();
-                }
+                } 
             }
         }
+        
+        for (Invocation i : unusedStubs) {
+            logger.log(thisStubWasNotUsed(i));
+        }
+
+        for (InvocationMatcher i1 : unstubbedInvocations) {
+            logger.log(thisMethodWasNotStubbed(i1));
+        }
+    }
+
+    private String thisStubWasNotUsed(Invocation i) {
+        return join(
+            "[Mockito] Warning - this stub was not used:",
+            i,
+            i.getLocation(),
+            "");
+    }
+
+    private String thisMethodWasNotStubbed(InvocationMatcher i) {
+        return join(
+            "[Mockito] Warning - this method was not stubbed:",
+            i,
+            i.getInvocation().getLocation(),
+            "");
+    }
+
+    private String stubbedMethodCalledWithDifferentArguments(Invocation unused, InvocationMatcher unstubbed) {
+        return join(
+                "[Mockito] Warning - stubbed method called with different arguments.",
+                "Stubbed this way:",
+                unused,
+                unused.getLocation(),
+                "",
+                "But called with different arguments:",
+                unstubbed,
+                unstubbed.getInvocation().getLocation(),
+                "");
     }
 }
