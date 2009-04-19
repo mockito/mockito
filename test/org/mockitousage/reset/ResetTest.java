@@ -7,7 +7,6 @@ package org.mockitousage.reset;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
@@ -20,11 +19,6 @@ public class ResetTest extends TestBase {
     @Mock private IMethods mock;
     @Mock private IMethods mockTwo;
     
-    @Before
-    public void makeStackTracesClean() {
-        super.makeStackTracesClean();
-    }
-
     @Test
     public void shouldResetOngoingStubbingSoThatMoreMeaningfulExceptionsAreRaised() {
         mock(IMethods.class);

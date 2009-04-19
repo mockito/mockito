@@ -27,7 +27,6 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
     @Before
     public void setup() {
         inOrder = inOrder(mock, mockTwo);
-        super.makeStackTracesClean();
         
         firstChunk();
         secondChunk();

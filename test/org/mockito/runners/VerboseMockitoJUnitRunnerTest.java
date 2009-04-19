@@ -28,7 +28,6 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
 
     @Before
     public void setup() throws InitializationError {
-        super.makeStackTracesClean();
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
         runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub);

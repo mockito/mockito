@@ -6,7 +6,6 @@ package org.mockitousage.junitrunner;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,6 @@ public class ModellingVerboseMockitoTest extends TestBase {
     
     @Mock private IMethods mock;
     
-    @Before
     public void cleanStackTraces() {
         super.makeStackTracesClean();
     }

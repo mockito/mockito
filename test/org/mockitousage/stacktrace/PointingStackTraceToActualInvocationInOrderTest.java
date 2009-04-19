@@ -27,8 +27,6 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
 
     @Before
     public void setup() {
-        super.makeStackTracesClean();
-        
         inOrder = inOrder(mock, mockTwo);
         
         first();

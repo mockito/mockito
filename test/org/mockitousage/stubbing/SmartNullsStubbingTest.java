@@ -21,7 +21,6 @@ public class SmartNullsStubbingTest extends TestBase {
     @Before
     public void setup() {
         mock = mock(IMethods.class, Mockito.RETURNS_SMART_NULLS);
-        super.makeStackTracesClean();
     }
     
     public IMethods unstubbedMethodInvokedHere(IMethods mock) {

@@ -24,8 +24,6 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
 
     @Before
     public void setup() {
-        super.makeStackTracesClean();
-        
         first();
         second();
         third();

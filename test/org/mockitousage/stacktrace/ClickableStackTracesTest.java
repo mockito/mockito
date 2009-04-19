@@ -6,7 +6,6 @@ package org.mockitousage.stacktrace;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
@@ -16,11 +15,6 @@ import org.mockitoutil.TestBase;
 public class ClickableStackTracesTest extends TestBase {
     
     @Mock private IMethods mock;
-
-    @Before
-    public void setup() {
-        super.makeStackTracesClean();
-    }
 
     private void callMethodOnMock(String param) {
         mock.simpleMethod(param);

@@ -8,7 +8,6 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -21,11 +20,6 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     
     @Mock private IMethods mock;
 
-    @Before
-    public void setupCleanStackTraces() {
-        super.makeStackTracesClean();
-    }
-    
     @After
     public void resetState() {
         super.resetState();
