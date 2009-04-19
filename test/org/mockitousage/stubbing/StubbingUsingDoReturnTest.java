@@ -75,7 +75,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
             fail();
         } catch (Exception e) {
-            assertThat(e.getMessage(), contains("Checked exception is invalid"));
+            assertContains("Checked exception is invalid", e.getMessage());
         }
     }
     
@@ -85,7 +85,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).voidMethod();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.getMessage(), contains("Cannot stub a void method with a return value"));
+            assertContains("Cannot stub a void method with a return value", e.getMessage());
         }
     }
     
@@ -95,7 +95,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when("foo").toString();
             fail();
         } catch (Exception e) {
-            assertThat(e.getMessage(), contains("Argument passed to when() is not a mock"));
+            assertContains("Argument passed to when() is not a mock", e.getMessage());
         }
     }
     
@@ -105,7 +105,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when((Object) null).toString();
             fail();
         } catch (Exception e) {
-            assertThat(e.getMessage(), contains("Argument passed to when() is null"));
+            assertContains("Argument passed to when() is null", e.getMessage());
         }
     }    
     
@@ -163,7 +163,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doNothing().when(mock).simpleMethod();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.getMessage(), contains("Only void methods can doNothing()"));
+            assertContains("Only void methods can doNothing()", e.getMessage());
         }
     }
     

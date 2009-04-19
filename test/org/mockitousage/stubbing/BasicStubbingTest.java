@@ -50,7 +50,7 @@ public class BasicStubbingTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         
-        assertThat(mock.toString(), contains("Mock for IMethods"));
+        assertContains("Mock for IMethods", mock.toString());
         assertEquals("test", mockTwo.toString());
     }
     

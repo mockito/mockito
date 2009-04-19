@@ -85,14 +85,14 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
                 
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertThat(loggedInfo, contains("[Mockito] Warning - stubbed method called with different arguments"));
-                assertThat(loggedInfo, contains("Stubbed this way:"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(789);"));
-                assertThat(loggedInfo, contains(".someStubbing("));
+                assertContains("[Mockito] Warning - stubbed method called with different arguments", loggedInfo);
+                assertContains("Stubbed this way:", loggedInfo);
+                assertContains("mock.simpleMethod(789);", loggedInfo);
+                assertContains(".someStubbing(", loggedInfo);
                 
-                assertThat(loggedInfo, contains("But called with different arguments:"));
-                assertThat(loggedInfo, contains("mock.simpleMethod(10);"));
-                assertThat(loggedInfo, contains(".callStubbedMethodWithDifferentArgs("));
+                assertContains("But called with different arguments:", loggedInfo);
+                assertContains("mock.simpleMethod(10);", loggedInfo);
+                assertContains(".callStubbedMethodWithDifferentArgs(", loggedInfo);
             }
         });
     }

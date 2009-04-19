@@ -33,8 +33,8 @@ public class WarningsPrinterTest extends TestBase {
         p.print(logger);
 
         // then
-        assertThat(logger.getLoggedInfo(), contains("stub was not used"));
-        assertThat(logger.getLoggedInfo(), contains("simpleMethod()"));
+        assertContains("stub was not used", logger.getLoggedInfo());
+        assertContains("simpleMethod()", logger.getLoggedInfo());
     }
 
     @Test
@@ -47,8 +47,8 @@ public class WarningsPrinterTest extends TestBase {
         p.print(logger);
 
         // then
-        assertThat(logger.getLoggedInfo(), contains("was not stubbed"));
-        assertThat(logger.getLoggedInfo(), contains("differentMethod()"));
+        assertContains("was not stubbed", logger.getLoggedInfo());
+        assertContains("differentMethod()", logger.getLoggedInfo());
     }
 
     @Test
@@ -63,10 +63,10 @@ public class WarningsPrinterTest extends TestBase {
         p.print(logger);
 
         // then
-        assertThat(logger.getLoggedInfo(), contains("Stubbed this way"));
-        assertThat(logger.getLoggedInfo(), contains("simpleMethod(\"foo\")"));
-        assertThat(logger.getLoggedInfo(), contains("called with different arguments"));
-        assertThat(logger.getLoggedInfo(), contains("simpleMethod(\"bar\")"));
+        assertContains("Stubbed this way", logger.getLoggedInfo());
+        assertContains("simpleMethod(\"foo\")", logger.getLoggedInfo());
+        assertContains("called with different arguments", logger.getLoggedInfo());
+        assertContains("simpleMethod(\"bar\")", logger.getLoggedInfo());
     }
 
     @Test

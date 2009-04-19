@@ -51,7 +51,7 @@ public class DeprecatedStubbingTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         stub(mockTwo.toString()).toReturn("test");
         
-        assertThat(mock.toString(), contains("Mock for IMethods"));
+        assertContains("Mock for IMethods", mock.toString());
         assertEquals("test", mockTwo.toString());
     }
     

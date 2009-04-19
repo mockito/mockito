@@ -163,7 +163,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
             spy(new Foo() {});
             fail();
         } catch (MockitoException e) {
-            assertThat(e.getMessage(), contains("cannot mock"));
+            assertContains("cannot mock", e.getMessage());
         }
     }
     

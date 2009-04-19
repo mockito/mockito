@@ -52,16 +52,6 @@ public class TestBase extends Assert {
         org.junit.Assert.assertThat(message, actual, m);
     }
     
-    public static <T> Assertor<String> contains(final String substring) {
-        return new Assertor<String>() {
-            public void assertValue(String value) {
-                assertTrue("This substring: \n" + substring + 
-                        "\nshould be inside of:\n" + value
-                        , value.contains(substring));
-            }
-        };
-    }
-    
     public static <T> Assertor<String> endsWith(final String substring) {
         return new Assertor<String>() {
             public void assertValue(String value) {

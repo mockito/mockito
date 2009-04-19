@@ -64,8 +64,8 @@ public class InvocationMatcherTest extends TestBase {
         Matcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
-        assertThat(notNull.toString(), contains("simpleMethod(notNull())"));
-        assertThat(equals.toString(), contains("simpleMethod('x')"));
+        assertContains("simpleMethod(notNull())", notNull.toString());
+        assertContains("simpleMethod('x')", equals.toString());
     }
     
     @Test

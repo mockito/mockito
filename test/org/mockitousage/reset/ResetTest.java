@@ -52,7 +52,7 @@ public class ResetTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);
-        assertThat(mockTwo.toString(), contains("Mock for IMethods"));
+        assertContains("Mock for IMethods", mockTwo.toString());
     }
 
     @Test
