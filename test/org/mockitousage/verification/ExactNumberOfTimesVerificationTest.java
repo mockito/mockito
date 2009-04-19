@@ -38,8 +38,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocations e) {
-            assertThat(e, messageContains("Wanted 100 times"));
-            assertThat(e, messageContains("was 2"));
+            assertContains("Wanted 100 times", e.getMessage());
+            assertContains("was 2", e.getMessage());
         }
     }
 
@@ -53,8 +53,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertThat(e, messageContains("Wanted 1 time"));
-            assertThat(e, messageContains("was 2 times"));
+            assertContains("Wanted 1 time", e.getMessage());
+            assertContains("was 2 times", e.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(0)).clear();
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertThat(e, messageContains("Never wanted here"));
+            assertContains("Never wanted here", e.getMessage());
         }
     }
 

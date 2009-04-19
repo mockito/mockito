@@ -199,10 +199,10 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
         } catch (Exception e) {
-            assertThat(e, messageContains(
-                    "String cannot be returned by booleanObjectReturningMethod" +
+            assertContains("String cannot be returned by booleanObjectReturningMethod" +
                     "\n" +
-                    "booleanObjectReturningMethod should return Boolean"));
+                    "booleanObjectReturningMethod should return Boolean",
+                    e.getMessage());
         }
     }
     
@@ -212,7 +212,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn(null).when(mock).intReturningMethod();
             fail();
         } catch (Exception e) {
-            assertThat(e, messageContains("null cannot be returned by intReturningMethod"));
+            assertContains("null cannot be returned by intReturningMethod", e.getMessage());
         }
     }
     

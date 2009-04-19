@@ -58,7 +58,7 @@ public class VerificationInOrderTest extends TestBase {
             inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("differentMethod()"));
+            assertContains("differentMethod()", e.getMessage());
         }
     }
     

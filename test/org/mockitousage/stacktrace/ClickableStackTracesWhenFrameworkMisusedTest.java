@@ -36,8 +36,8 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("-> at "));
-            assertThat(e, messageContains("misplacedArgumentMatcherHere("));
+            assertContains("-> at ", e.getMessage());
+            assertContains("misplacedArgumentMatcherHere(", e.getMessage());
         }
     }
 
@@ -53,8 +53,8 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (UnfinishedStubbingException e) {
-            assertThat(e, messageContains("-> at "));
-            assertThat(e, messageContains("unfinishedStubbingHere("));
+            assertContains("-> at ", e.getMessage());
+            assertContains("unfinishedStubbingHere(", e.getMessage());
         }
     }
     

@@ -273,7 +273,7 @@ public class MatchersTest extends TestBase {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("oneArray(null)"));
+            assertContains("oneArray(null)", e.getMessage());
         }
     }
     
@@ -474,7 +474,7 @@ public class MatchersTest extends TestBase {
             verify(mock).oneArg(eq(1.0D, 0.1D));
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e, messageContains("eq(1.0, 0.1)"));
+            assertContains("eq(1.0, 0.1)", e.getMessage());
         }
     }
     

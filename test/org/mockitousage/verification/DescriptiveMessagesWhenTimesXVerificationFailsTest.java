@@ -31,9 +31,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             Mockito.verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocations e) {
-            assertThat(e, messageContains("mock.clear();"));
-            assertThat(e, messageContains("Wanted 100 times"));
-            assertThat(e, messageContains("was 3"));
+            assertContains("mock.clear();", e.getMessage());
+            assertContains("Wanted 100 times", e.getMessage());
+            assertContains("was 3", e.getMessage());
         }
     }
 
@@ -49,9 +49,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             Mockito.verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertThat(e, messageContains("mock.clear();"));
-            assertThat(e, messageContains("Wanted 1 time"));
-            assertThat(e, messageContains("was 4"));
+            assertContains("mock.clear();", e.getMessage());
+            assertContains("Wanted 1 time", e.getMessage());
+            assertContains("was 4", e.getMessage());
         }
     }
 }

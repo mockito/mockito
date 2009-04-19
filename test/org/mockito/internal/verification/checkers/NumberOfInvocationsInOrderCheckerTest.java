@@ -58,8 +58,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
             checker.check(invocations, wanted, 4);
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertThat(e, messageContains("Wanted 4 times"));
-            assertThat(e, messageContains("But was 2 times"));
+            assertContains("Wanted 4 times", e.getMessage());
+            assertContains("But was 2 times", e.getMessage());
         }
     }
     
@@ -73,8 +73,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
             checker.check(invocations, wanted, 1);
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertThat(e, messageContains("Wanted 1 time"));
-            assertThat(e, messageContains("But was 2 times"));
+            assertContains("Wanted 1 time", e.getMessage());
+            assertContains("But was 2 times", e.getMessage());
         }
     }
     

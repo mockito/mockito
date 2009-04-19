@@ -72,16 +72,6 @@ public class TestBase extends Assert {
         };
     }
 
-    public static <T> Assertor<Throwable> messageContains(final String text) {
-        return new Assertor<Throwable>() {
-            public void assertValue(Throwable value) {
-                assertTrue("This substring: \n" + text + 
-                        "\nshould occur in this exception message:" + value.getMessage()
-                        , ((Throwable) value).getMessage().contains(text));
-            }
-        };
-    }
-
     public static void assertContains(String sub, String string) {
         assertTrue("\n" +
                 "This substing:" +

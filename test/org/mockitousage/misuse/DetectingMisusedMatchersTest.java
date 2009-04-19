@@ -41,7 +41,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
             mock(IMethods.class);
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("Misplaced argument matcher"));
+            assertContains("Misplaced argument matcher", e.getMessage());
         }
     }
     

@@ -44,7 +44,7 @@ public class HamcrestMatchersTest extends TestBase {
             verify(mock).simpleMethod(argThat(new ContainsX()));
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e, messageContains("contains 'X'"));
+            assertContains("contains 'X'", e.getMessage());
         }
     }
 }

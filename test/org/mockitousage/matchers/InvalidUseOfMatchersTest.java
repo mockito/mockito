@@ -51,21 +51,21 @@ public class InvalidUseOfMatchersTest extends TestBase {
             mock.simpleMethod(AdditionalMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("No matchers found for Not(?)."));
+            assertContains("No matchers found for Not(?).", e.getMessage());
         }
 
         try {
             mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("2 matchers expected, 1 recorded."));
+            assertContains("2 matchers expected, 1 recorded.", e.getMessage());
         }
 
         try {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e, messageContains("3 matchers expected, 1 recorded."));
+            assertContains("3 matchers expected, 1 recorded.", e.getMessage());
         }
     }
 }

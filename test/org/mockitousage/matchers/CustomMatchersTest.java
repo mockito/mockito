@@ -127,7 +127,7 @@ public class CustomMatchersTest extends TestBase {
             verify(mock).simpleMethod(containsTest());
             fail();
         } catch (AssertionError e) {
-            assertThat(e, messageContains("<String that contains xxx>"));
+            assertContains("<String that contains xxx>", e.getMessage());
         }
     }
 
@@ -153,8 +153,8 @@ public class CustomMatchersTest extends TestBase {
                 }}));
             fail();
         } catch (AssertionError e) {
-            assertThat(e, messageContains("<custom argument matcher>"));
-            assertThat(e, messageContains("foo"));
+            assertContains("<custom argument matcher>", e.getMessage());
+            assertContains("foo", e.getMessage());
         }
     }
 }

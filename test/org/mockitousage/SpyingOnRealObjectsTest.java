@@ -174,7 +174,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
             spy(real);
             fail();
         } catch (MockitoException e) {
-            assertThat(e, messageContains("Most likely it is a private class that is not visible by Mockito"));
+            assertContains("Most likely it is a private class that is not visible by Mockito", e.getMessage());
         }
     }
 }
