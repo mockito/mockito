@@ -32,7 +32,6 @@ public class TestBase extends Assert {
     }
     
     public void makeStackTracesClean() {
-        //TODO in some tests this is not necessary do to latest changes
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     
