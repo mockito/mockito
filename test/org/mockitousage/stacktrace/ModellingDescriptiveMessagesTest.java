@@ -26,9 +26,16 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Test
     public void shouldSayWantedButNotInvoked() {
-        mock.simpleMethod();
         verify(mock).otherMethod();
     }
+    
+    @Test
+    public void shouldPointOutInteractionsOnMockWhenOrdinaryVerificationFails() {
+        mock.otherMethod();
+        mock.booleanObjectReturningMethod();
+        
+        verify(mock).simpleMethod();
+    }    
     
     @Test
     public void shouldShowActualAndExpected() {
@@ -128,5 +135,5 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         doReturn("asdf");
         
         verify(mock).simpleMethod();
-    }    
+    }   
 }

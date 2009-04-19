@@ -93,4 +93,15 @@ public class TestBase extends Assert {
                 "\n"
                 , string.contains(sub));
     }
+    
+    public static void assertNotContains(String sub, String string) {
+        assertFalse("\n" +
+                "This substing:" +
+                sub +
+                "\n" +
+                "should NOT be inside of:" +
+                string +
+                "\n"
+                , string.contains(sub));
+    }
 }

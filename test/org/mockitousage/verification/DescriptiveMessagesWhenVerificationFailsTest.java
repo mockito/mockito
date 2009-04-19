@@ -329,6 +329,19 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertThat(e, messageContains("iHavefunkyName.simpleMethod(10)"));
         }
     }
+    
+    @Test
+    public void shouldPrintInteractionsOnMockWhenOrdinaryVerificationFail() throws Exception {
+        mock.otherMethod();
+        mock.booleanReturningMethod();
+        
+        try {
+            verify(mock).simpleMethod();
+            fail();
+        } catch (WantedButNotInvoked e) {
+//            assertContains("")
+        }
+    }
 
     @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock; 
     

@@ -7,6 +7,8 @@ package org.mockito.exceptions;
 import static org.mockito.exceptions.Pluralizer.*;
 import static org.mockito.internal.util.StringJoiner.*;
 
+import java.util.List;
+
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -229,12 +231,33 @@ public class Reporter {
     }
     
     public void wantedButNotInvoked(PrintableInvocation wanted) {
-        throw new WantedButNotInvoked(join(
-                    "Wanted but not invoked:",
-                    wanted.toString(),
-                    new Location(),
-                    ""
-        ));
+        throw new WantedButNotInvoked(createWantedButNotInvokedMessage(wanted));
+    }
+
+    public void wantedButNotInvoked(PrintableInvocation wanted, List<? extends PrintableInvocation> invocations) {
+        String allInvocations;
+        if (invocations.isEmpty()) {
+            allInvocations = "Actually, there were zero interactions with this mock.\n";
+        } else {
+            StringBuilder sb = new StringBuilder("\nHowever, there were other interactions with this mock:\n");
+            for (PrintableInvocation i : invocations) {
+                 sb.append(i.getLocation());
+                 sb.append("\n");
+            }
+            allInvocations = sb.toString();
+        }
+        
+        String message = createWantedButNotInvokedMessage(wanted);
+        throw new WantedButNotInvoked(message + allInvocations);
+    }
+
+    private String createWantedButNotInvokedMessage(PrintableInvocation wanted) {
+        return join(
+                "Wanted but not invoked:",
+                wanted.toString(),
+                new Location(),
+                ""
+        );
     }
     
     public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {

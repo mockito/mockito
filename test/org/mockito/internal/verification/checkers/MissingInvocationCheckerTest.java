@@ -61,11 +61,14 @@ public class MissingInvocationCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWantedButNotInvoked() {
+        //given          
         assertTrue(finderStub.actualToReturn.isEmpty());
         finderStub.similarToReturn = null;
         
+        //when
         checker.check(invocations, wanted);
         
+        //then
         assertEquals(wanted, reporterStub.wanted);
         assertNull(reporterStub.actualLocation);
     }
@@ -88,7 +91,9 @@ public class MissingInvocationCheckerTest extends TestBase {
         private Object wanted;
         private String actual;
         private Location actualLocation;
-        @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
+        
+        @Override
+        public void wantedButNotInvoked(PrintableInvocation wanted, List<? extends PrintableInvocation> invocations) {
             this.wanted = wanted;
         }
         

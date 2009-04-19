@@ -31,16 +31,12 @@ public class MissingInvocationChecker {
         
         if (actualInvocations.isEmpty()) {
             Invocation similar = finder.findSimilarInvocation(invocations, wanted);
-            reportMissingInvocationError(wanted, similar);
-        }
-    }
-
-    private void reportMissingInvocationError(InvocationMatcher wanted, Invocation similar) {
-        if (similar != null) {
-            SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
-            reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getLocation());
-        } else {
-            reporter.wantedButNotInvoked(wanted);
+            if (similar != null) {
+                SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
+                reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getLocation());
+            } else {
+                reporter.wantedButNotInvoked(wanted, invocations);
+            }
         }
     }
 }
