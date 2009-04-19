@@ -151,7 +151,6 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).twoArgumentMethod(2, 1000);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            //TODO decide on messageContains matcher or assertContains
             assertContains("(2, 1000)", e.getMessage());
             assertContains("(2, 2)", e.getMessage());
         }
