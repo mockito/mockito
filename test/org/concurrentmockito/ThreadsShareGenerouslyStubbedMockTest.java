@@ -17,7 +17,7 @@ public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
     private IMethods mock;
 
     @Test
-    public void testShouldAllowVerifyingInThreads() throws Exception {
+    public void shouldAllowVerifyingInThreads() throws Exception {
         for(int i = 0; i < 50; i++) {
             performTest();
         }

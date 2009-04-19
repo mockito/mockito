@@ -24,7 +24,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
     }
     
     @Test 
-    public void testShouldReplaceObjectMethods() {
+    public void shouldReplaceObjectMethods() {
         Object mock = Mockito.mock(ObjectMethodsOverridden.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
         
@@ -37,7 +37,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
     }
     
     @Test 
-    public void testShouldReplaceObjectMethodsWhenOverridden() {
+    public void shouldReplaceObjectMethodsWhenOverridden() {
         Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         

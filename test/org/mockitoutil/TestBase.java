@@ -25,7 +25,6 @@ public class TestBase extends Assert {
         ConfigurationAccess.getConfig().overrideReturnValues(null);
     }
 
-    //TODO find out why performance dropped from 4.2 -> 4.3
     @Before
     public void init() {
         new StateMaster().validate();
@@ -33,6 +32,7 @@ public class TestBase extends Assert {
     }
     
     public void makeStackTracesClean() {
+        //TODO in some tests this is not necessary do to latest changes
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     

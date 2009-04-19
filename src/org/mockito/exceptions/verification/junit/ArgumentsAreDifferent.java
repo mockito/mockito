@@ -21,7 +21,7 @@ public class ArgumentsAreDifferent extends ComparisonFailure {
         
         unfilteredStackTrace = getStackTrace();
         StackTraceFilter filter = new StackTraceFilter();
-        filter.filterStackTrace(this);
+        filter.filterConditionally(this);
     }
     
     @Override

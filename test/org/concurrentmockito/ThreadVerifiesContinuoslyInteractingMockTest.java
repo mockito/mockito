@@ -17,7 +17,7 @@ public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {
     @Mock private IMethods mock;
 
     @Test
-    public void testShouldAllowVerifyingInThreads() throws Exception {
+    public void shouldAllowVerifyingInThreads() throws Exception {
         for(int i = 0; i < 100; i++) {
             performTest();
         }

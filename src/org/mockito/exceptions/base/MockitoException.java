@@ -25,7 +25,7 @@ public class MockitoException extends RuntimeException {
         unfilteredStackTrace = getStackTrace();
         
         StackTraceFilter filter = new StackTraceFilter();
-        filter.filterStackTrace(this);
+        filter.filterConditionally(this);
     }
 
     public StackTraceElement[] getUnfilteredStackTrace() {

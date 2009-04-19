@@ -23,7 +23,7 @@ public class ThrowsException implements Answer<Object> {
             throw throwable;
         }
         Throwable t = throwable.fillInStackTrace();
-        filter.filterStackTrace(t);
+        filter.filterConditionally(t);
         throw t;
     }
 

@@ -21,16 +21,15 @@ public class StackTraceFilter {
         return fromMockObject || fromOrgMockito && !isRunner;
     }
 
-    public void filterStackTrace(Throwable throwable) {
-        StackTraceElement[] filtered = filterStackTrace(throwable.getStackTrace());
+    public void filterConditionally(Throwable throwable) {
+        if (!config.cleansStackTrace()) {
+            return;
+        }
+        StackTraceElement[] filtered = filter(throwable.getStackTrace());
         throwable.setStackTrace(filtered);
     }
 
-    public StackTraceElement[] filterStackTrace(StackTraceElement[] target) {
-        if (!config.cleansStackTrace()) {
-            return target;
-        }
-            
+    public StackTraceElement[] filter(StackTraceElement[] target) {
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastToRemove = -1;

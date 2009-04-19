@@ -36,6 +36,21 @@ public class ExtraMatchers {
         };
     }
     
+    public static <T> Assertor<StackTraceElement[]> hasOnlyThoseClasses(final String ... classes) {
+        return new Assertor<StackTraceElement[]>() {
+            public void assertValue(StackTraceElement[] traceElements) {
+                assertEquals("Number of classes does not match." +
+                        "\nExpected: " + Arrays.toString(classes) + 
+                        "\nGot: " + Arrays.toString(traceElements),
+                        classes.length, traceElements.length);
+                
+                for (int i = 0; i < traceElements.length; i++) {
+                    assertEquals(classes[i], traceElements[i].getClassName());
+                }
+            }
+        };
+    }
+    
     public static <T> Assertor<Throwable> hasMethodInStackTraceAt(final int stackTraceIndex, final String method) {
         return new Assertor<Throwable>() {
 

@@ -17,7 +17,7 @@ public class MockitoAssertionError extends AssertionError {
         unfilteredStackTrace = getStackTrace();
         
         StackTraceFilter filter = new StackTraceFilter();
-        filter.filterStackTrace(this);
+        filter.filterConditionally(this);
     }
 
     public StackTraceElement[] getUnfilteredStackTrace() {

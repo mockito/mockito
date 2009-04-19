@@ -14,13 +14,12 @@ public class TraceBuilder {
     private String[] classes = {};
 
     public Throwable toThrowable() {
-        List<StackTraceElement> trace = toTraceList();
         RuntimeException exception = new RuntimeException();
-        exception.setStackTrace(trace.toArray(new StackTraceElement[0]));
+        exception.setStackTrace(toTraceArray());
         return exception;
     }
 
-    public List<StackTraceElement> toTraceList() {
+    private List<StackTraceElement> toTraceList() {
         assert methods.length == 0 || classes.length == 0;
         
         List<StackTraceElement> trace = new LinkedList<StackTraceElement>();
@@ -33,6 +32,10 @@ public class TraceBuilder {
         
         Collections.reverse(trace);
         return trace;
+    }
+    
+    public StackTraceElement[] toTraceArray() {
+        return toTraceList().toArray(new StackTraceElement[0]);
     }
 
     public TraceBuilder classes(String ... classes) {

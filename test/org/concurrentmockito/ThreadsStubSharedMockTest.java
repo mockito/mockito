@@ -17,7 +17,7 @@ public class ThreadsStubSharedMockTest extends TestBase {
 
     @Ignore("stubbing from multiple threads is not supported")
     @Test
-    public void testShouldStubFineConcurrently() throws Exception {
+    public void shouldStubFineConcurrently() throws Exception {
         for(int i = 0; i < 100; i++) {
             performTest();
         }

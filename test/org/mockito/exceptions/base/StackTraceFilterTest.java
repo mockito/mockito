@@ -15,55 +15,50 @@ public class StackTraceFilterTest extends TestBase {
     private StackTraceFilter filter = new StackTraceFilter();
     
     @Test
-    public void testShouldFilterOutCglibGarbage() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
-        
-        Throwable t = new TraceBuilder().classes(
+    public void shouldFilterOutCglibGarbage() {
+        StackTraceElement[] t = new TraceBuilder().classes(
             "MockitoExampleTest",
             "List$$EnhancerByMockitoWithCGLIB$$2c406024", 
             "MethodInterceptorFilter"
-        ).toThrowable();
+        ).toTraceArray();
         
-        filter.filterStackTrace(t);
+        StackTraceElement[] filtered = filter.filter(t);
         
-        assertThat(t, hasOnlyThoseClassesInStackTrace("MockitoExampleTest"));
+        assertThat(filtered, hasOnlyThoseClasses("MockitoExampleTest"));
     }
     
     @Test
-    public void testShouldFilterOutMockitoPackage() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
-        
-        Throwable t = new TraceBuilder().classes(
+    public void shouldFilterOutMockitoPackage() {
+        StackTraceElement[] t = new TraceBuilder().classes(
             "org.test.MockitoSampleTest",
             "org.test.TestSupport",
             "org.mockito.Mockito", 
             "org.test.TestSupport",
             "org.mockito.Mockito"
-        ).toThrowable();
+        ).toTraceArray();
             
-        filter.filterStackTrace(t);
+        StackTraceElement[] filtered = filter.filter(t);
         
-        assertThat(t, hasOnlyThoseClassesInStackTrace("org.test.TestSupport", "org.test.MockitoSampleTest"));
+        assertThat(filtered, hasOnlyThoseClasses("org.test.TestSupport", "org.test.MockitoSampleTest"));
     }
     
     @Test
-    public void testShouldIgnoreRunners() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
-        
-        Throwable t = new TraceBuilder().classes(
+    public void shouldIgnoreRunners() {
+        StackTraceElement[] t = new TraceBuilder().classes(
                 "org.mockito.runners.Runner",
                 "junit.stuff",
                 "org.test.MockitoSampleTest",
                 "org.mockito.Mockito"
-        ).toThrowable();
+        ).toTraceArray();
         
-        filter.filterStackTrace(t);
+        StackTraceElement[] filtered = filter.filter(t);
         
-        assertThat(t, hasOnlyThoseClassesInStackTrace("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
+        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
     }
     
+    //TODO remove this test when next TODO is finished
     @Test
-    public void testShouldNotFilterWhenConfigurationSaysNo() {
+    public void shouldFilterEvenIfConfigurationSaysNo() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         
         Throwable t = new TraceBuilder().classes(
@@ -71,7 +66,22 @@ public class StackTraceFilterTest extends TestBase {
             "org.mockito.Mockito" 
         ).toThrowable();
             
-        filter.filterStackTrace(t);
+        StackTraceElement[] filtered = filter.filter(t.getStackTrace());
+        
+        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest"));
+    }
+    
+    //TODO move to different class
+    @Test
+    public void shouldNotFilterConditionally() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
+        
+        Throwable t = new TraceBuilder().classes(
+                "org.test.MockitoSampleTest",
+                "org.mockito.Mockito" 
+        ).toThrowable();
+        
+        filter.filterConditionally(t);
         
         assertThat(t, hasOnlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
     }
