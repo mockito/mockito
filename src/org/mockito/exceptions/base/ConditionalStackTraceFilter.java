@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.mockito.exceptions.base;
+
+import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.internal.configuration.GlobalConfiguration;
+
+public class ConditionalStackTraceFilter {
+    
+    private IMockitoConfiguration config = new GlobalConfiguration();
+    private StackTraceFilter filter = new StackTraceFilter();
+    
+    public void filter(Throwable throwable) {
+        if (!config.cleansStackTrace()) {
+            return;
+        }
+        StackTraceElement[] filtered = filter.filter(throwable.getStackTrace());
+        throwable.setStackTrace(filtered);
+    }
+}

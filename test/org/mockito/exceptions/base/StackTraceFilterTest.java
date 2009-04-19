@@ -7,7 +7,6 @@ package org.mockito.exceptions.base;
 import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Test;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.TestBase;
 
 public class StackTraceFilterTest extends TestBase {
@@ -54,35 +53,5 @@ public class StackTraceFilterTest extends TestBase {
         StackTraceElement[] filtered = filter.filter(t);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
-    }
-    
-    //TODO remove this test when next TODO is finished
-    @Test
-    public void shouldFilterEvenIfConfigurationSaysNo() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
-        
-        Throwable t = new TraceBuilder().classes(
-            "org.test.MockitoSampleTest",
-            "org.mockito.Mockito" 
-        ).toThrowable();
-            
-        StackTraceElement[] filtered = filter.filter(t.getStackTrace());
-        
-        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest"));
-    }
-    
-    //TODO move to different class
-    @Test
-    public void shouldNotFilterConditionally() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
-        
-        Throwable t = new TraceBuilder().classes(
-                "org.test.MockitoSampleTest",
-                "org.mockito.Mockito" 
-        ).toThrowable();
-        
-        filter.filterConditionally(t);
-        
-        assertThat(t, hasOnlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
     }
 }

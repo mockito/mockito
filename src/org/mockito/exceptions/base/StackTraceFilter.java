@@ -7,26 +7,13 @@ package org.mockito.exceptions.base;
 import java.util.Arrays;
 import java.util.List;
 
-import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.internal.configuration.GlobalConfiguration;
-
 public class StackTraceFilter {
-    
-    private IMockitoConfiguration config = new GlobalConfiguration();
     
     public boolean isLastStackElementToRemove(StackTraceElement e) {
         boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
         boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
         boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
         return fromMockObject || fromOrgMockito && !isRunner;
-    }
-
-    public void filterConditionally(Throwable throwable) {
-        if (!config.cleansStackTrace()) {
-            return;
-        }
-        StackTraceElement[] filtered = filter(throwable.getStackTrace());
-        throwable.setStackTrace(filtered);
     }
 
     public StackTraceElement[] filter(StackTraceElement[] target) {

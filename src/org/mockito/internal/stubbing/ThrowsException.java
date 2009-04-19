@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.exceptions.base.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -12,7 +12,7 @@ import org.mockito.stubbing.Answer;
 public class ThrowsException implements Answer<Object> {
 
     private final Throwable throwable;
-    private final StackTraceFilter filter = new StackTraceFilter();
+    private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
     public ThrowsException(Throwable throwable) {
         this.throwable = throwable;
@@ -23,7 +23,7 @@ public class ThrowsException implements Answer<Object> {
             throw throwable;
         }
         Throwable t = throwable.fillInStackTrace();
-        filter.filterConditionally(t);
+        filter.filter(t);
         throw t;
     }
 
