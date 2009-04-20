@@ -81,6 +81,14 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
         }
         return true;
     }
+    
+    private boolean safelyArgumentsMatch(Object[] actualArgs) {
+        try {
+            return argumentsMatch(actualArgs);
+        } catch (Throwable t) {
+            return false;
+        }
+    }
 
     /**
      * similar means the same method name, same mock, unverified 
@@ -94,7 +102,7 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
         final boolean methodEquals = hasSameMethod(candidate);
-        final boolean overloadedButSameArgs = !methodEquals && argumentsMatch(candidate.getArguments());        
+        final boolean overloadedButSameArgs = !methodEquals && safelyArgumentsMatch(candidate.getArguments());        
         
         if (methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs) {
             return true;
