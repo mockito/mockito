@@ -35,5 +35,9 @@ public class AtMost implements VerificationMode {
         if (foundSize > maxNumberOfInvocations) {
             new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
+        
+        for (Invocation i : found) {
+            i.markVerified();
+        }
     }
 }

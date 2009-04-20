@@ -14,6 +14,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -82,28 +83,31 @@ public class AtMostXVerificationTest extends TestBase {
         }
     }
 
-    //TODO
-//    @Test
-//    public void shouldMarkInteractionsAsVerified() throws Exception {
-//        mock.clear();
-//        mock.clear();
-//        
-//        verify(mock, atMost(3)).clear();
-//        verifyNoMoreInteractions(mock);
-//    }
-//
-//    @Test
-//    public void shouldDetectUnverifiedInMarkInteractionsAsVerified() throws Exception {
-//        mock.clear();
-//        mock.clear();
-//        mock.add(120);
-//        
-//        verify(mock, atMost(3)).clear();
-//        try {
-//            verifyNoMoreInteractions(mock);
-//            fail();
-//        } catch(NoInteractionsWanted e) {
-//            assertContains("add(120)", e.getMessage());
-//        }
-//    }
+    @Test
+    public void shouldMarkInteractionsAsVerified() throws Exception {
+        mock.clear();
+        mock.clear();
+        
+        verify(mock, atMost(3)).clear();
+        verifyNoMoreInteractions(mock);
+    }
+
+    @Test
+    public void shouldDetectUnverifiedInMarkInteractionsAsVerified() throws Exception {
+        mock.clear();
+        mock.clear();
+        undesiredInteraction();
+        
+        verify(mock, atMost(3)).clear();
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch(NoInteractionsWanted e) {
+            assertContains("undesiredInteraction(", e.getMessage());
+        }
+    }
+
+    private void undesiredInteraction() {
+        mock.add("");
+    }
 }
