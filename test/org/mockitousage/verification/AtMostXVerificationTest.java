@@ -81,4 +81,29 @@ public class AtMostXVerificationTest extends TestBase {
             assertEquals("AtMost is not implemented to work with InOrder", e.getMessage());
         }
     }
+
+    //TODO
+//    @Test
+//    public void shouldMarkInteractionsAsVerified() throws Exception {
+//        mock.clear();
+//        mock.clear();
+//        
+//        verify(mock, atMost(3)).clear();
+//        verifyNoMoreInteractions(mock);
+//    }
+//
+//    @Test
+//    public void shouldDetectUnverifiedInMarkInteractionsAsVerified() throws Exception {
+//        mock.clear();
+//        mock.clear();
+//        mock.add(120);
+//        
+//        verify(mock, atMost(3)).clear();
+//        try {
+//            verifyNoMoreInteractions(mock);
+//            fail();
+//        } catch(NoInteractionsWanted e) {
+//            assertContains("add(120)", e.getMessage());
+//        }
+//    }
 }
