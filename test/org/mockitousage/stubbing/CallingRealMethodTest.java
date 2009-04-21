@@ -26,9 +26,9 @@ import org.mockitoutil.TestBase;
  */
 public class CallingRealMethodTest extends TestBase {
     
-    @Mock UnderTest mock;
+    @Mock TestedObject mock;
 
-    static class UnderTest {
+    static class TestedObject {
         String value;
 
         void setValue(String value) {
@@ -70,14 +70,14 @@ public class CallingRealMethodTest extends TestBase {
 
     @Test
     public void shouldCallRealMethodByDefault() {
-        UnderTest mock = mock(UnderTest.class, CALLS_REAL_METHODS);
+        TestedObject mock = mock(TestedObject.class, CALLS_REAL_METHODS);
 
         Assert.assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
     }
 
     @Test
     public void shouldNotCallRealMethodWhenStubbedLater() {
-        UnderTest mock = mock(UnderTest.class);
+        TestedObject mock = mock(TestedObject.class);
 
         when(mock.getValue()).thenCallRealMethod();
         when(mock.getValue()).thenReturn("FAKE_VALUE");
