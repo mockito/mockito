@@ -88,6 +88,19 @@ public interface NewOngoingStubbing<T> {
     NewOngoingStubbing<T> thenThrow(Throwable... throwables);
 
     /**
+     * TODO partial mocks warning
+     * Sets the real implementation to be called when the method is called on a mock object.  E.g.:
+     * <pre>
+     * when(mock.someMethod()).thenCallRealMethod();
+     * </pre>
+     *
+     * See examples in javadoc for {@link Mockito#when}
+     *
+     * @return ongoingStubbing object that allows stubbing consecutive calls
+     */
+    NewOngoingStubbing<T> thenCallRealMethod();
+
+    /**
      * Sets a generic Answer for the method. E.g:
      * <pre>
      * when(mock.someMethod(10)).thenAnswer(new Answer&lt;Integer&gt;() {

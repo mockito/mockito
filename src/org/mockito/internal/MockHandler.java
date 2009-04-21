@@ -18,6 +18,7 @@ import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.SequenceNumber;
+import org.mockito.internal.stubbing.CallsRealMethod;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.Returns;
@@ -59,14 +60,14 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
             //stubbing voids with stubVoid() or doAnswer() style
-            Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
+            Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), methodProxy);
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
-        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next());
+        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), methodProxy);
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
         
         mockingProgress.validateState();
@@ -180,6 +181,10 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
             }
             return stubbing;
         }        
+
+        public NewOngoingStubbing<T> thenCallRealMethod() {
+            return thenAnswer(new CallsRealMethod());
+        }
 
         public DeprecatedOngoingStubbing<T> toReturn(T value) {
             return toAnswer(new Returns(value));

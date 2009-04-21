@@ -38,12 +38,12 @@ public class MockReturnValuesTest extends TestBase {
     private Invocation invocationOf(Class<?> type, String methodName)
             throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName,
-                new Class[0]), new Object[0], 1);
+                new Class[0]), new Object[0], 1, null);
     }
 
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives()
-            throws Exception {
+            throws Throwable {
         MockReturnValues returnValues = new MockReturnValues();
         assertEquals(false, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "charMethod")));
@@ -59,7 +59,7 @@ public class MockReturnValuesTest extends TestBase {
     }
     
     @Test
-    public void shouldReturnEmptyArray() throws Exception{
+    public void shouldReturnEmptyArray() throws Throwable {
         String[] ret = (String[]) values.valueFor(invocationOf(StringMethods.class, "stringArrayMethod"));
         
         assertTrue(ret.getClass().isArray());
@@ -67,7 +67,7 @@ public class MockReturnValuesTest extends TestBase {
     }
     
     @Test
-    public void shouldReturnEmptyString() throws Exception{
+    public void shouldReturnEmptyString() throws Throwable {
         assertEquals("", values.valueFor(invocationOf(StringMethods.class, "stringMethod")));
     }
 }

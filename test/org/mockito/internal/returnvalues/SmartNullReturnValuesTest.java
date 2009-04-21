@@ -13,11 +13,11 @@ import org.mockitoutil.TestBase;
 public class SmartNullReturnValuesTest extends TestBase {
     
     private Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
-        return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1);
+        return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1, null);
     }
     
     @Test
-    public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Exception {
+    public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {
         SmartNullReturnValues returnValues = new SmartNullReturnValues();
         assertEquals(false  ,   returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0,  returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "charMethod")));
@@ -32,7 +32,7 @@ public class SmartNullReturnValuesTest extends TestBase {
     }
     
     @Test
-    public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Exception {
+    public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Throwable {
         ReturnValues returnValues = new SmartNullReturnValues();
         
         Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
@@ -44,7 +44,7 @@ public class SmartNullReturnValuesTest extends TestBase {
     }
     
     @Test
-    public void shouldReturnAnObjectThatAllowsObjectMethods() throws Exception {
+    public void shouldReturnAnObjectThatAllowsObjectMethods() throws Throwable {
         ReturnValues returnValues = new SmartNullReturnValues();
         
         Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));

@@ -13,7 +13,7 @@ import org.mockito.invocation.InvocationOnMock;
  */
 public class GloballyConfiguredReturnValues implements ReturnValues {
     
-    public Object valueFor(InvocationOnMock invocation) {
+    public Object valueFor(InvocationOnMock invocation) throws Throwable {
         return new GlobalConfiguration().getReturnValues().valueFor(invocation);
     }
 }

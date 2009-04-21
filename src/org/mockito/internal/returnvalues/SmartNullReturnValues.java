@@ -59,7 +59,7 @@ public class SmartNullReturnValues implements ReturnValues {
 
     private final ReturnValues delegate = new MoreEmptyReturnValues();
 
-    public Object valueFor(final InvocationOnMock invocation) {
+    public Object valueFor(final InvocationOnMock invocation) throws Throwable {
         Object defaultReturnValue = delegate.valueFor(invocation);
         if (defaultReturnValue != null) {
             return defaultReturnValue;

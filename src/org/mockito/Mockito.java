@@ -12,7 +12,9 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.internal.returnvalues.MockReturnValues;
 import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
+import org.mockito.internal.returnvalues.RealReturnValues;
 import org.mockito.internal.returnvalues.SmartNullReturnValues;
+import org.mockito.internal.stubbing.CallsRealMethod;
 import org.mockito.internal.stubbing.DoesNothing;
 import org.mockito.internal.stubbing.Returns;
 import org.mockito.internal.stubbing.Stubber;
@@ -506,6 +508,33 @@ public class Mockito extends Matchers {
      * <p>
      */
     public static final ReturnValues RETURNS_MOCKS = new MockReturnValues();
+
+    /**
+     * TODO THIS INTERFACE MIGHT CHANGE IN 1.8
+     * TODO mention partial mocks warning
+     * 
+     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * <p>
+     * {@link ReturnValues} defines the return values of unstubbed invocations.
+     * <p>
+     * This implementation can be helpful when working with legacy code.
+     * When this implementation is used, unstubbed methods will delegate to the real implementation.
+     * This is a way to create a partial mock object that calls real methods by default.
+     * <p>
+     * Example:
+     * <pre>
+     * Foo mock = mock(Foo.class, CALLS_REAL_METHODS);
+     *
+     * // this calls the real implementation of Foo.getSomething()
+     * value = mock.getSomething();
+     *
+     * when(mock.getSomething()).thenReturn(fakeValue);
+     *
+     * // now fakeValue is returned
+     * value = mock.getSomething();
+     * </pre>
+     */
+    public static final ReturnValues CALLS_REAL_METHODS = new RealReturnValues();
     
     /**
      * Creates mock object of given class or interface.
@@ -911,6 +940,26 @@ public class Mockito extends Matchers {
      */
     public static Stubber doThrow(Throwable toBeThrown) {
         return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
+    }
+
+    /**
+     * Use doCallRealMethod() when you want to call the real implementation of a method.
+     * <p>
+     * TODO mention partial mocks warning
+     * <p>
+     * Example:
+     * <pre>
+     *   Foo mock = mock(Foo.class);
+     *   doCallRealMethod().when(mock).someVoidMethod();
+     *
+     *   // this will call the real implementation of Foo.someVoidMethod()
+     *   mock.someVoidMethod();
+     * </pre>
+     *
+     * @return stubber - to select a method for stubbing
+     */
+    public static Stubber doCallRealMethod() {
+        return MOCKITO_CORE.doAnswer(new CallsRealMethod());
     }
     
     /**

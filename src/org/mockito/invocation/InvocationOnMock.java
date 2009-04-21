@@ -33,4 +33,9 @@ public interface InvocationOnMock {
      * @return arguments
      */
     Object[] getArguments();
+
+    /**
+     * invoke original method
+     */
+    Object invokeSuper() throws Throwable;
 }

@@ -19,5 +19,5 @@ public interface ReturnValues {
      * @param invocation placeholder for mock and a method
      * @return the return value
      */
-    Object valueFor(InvocationOnMock invocation);
+    Object valueFor(InvocationOnMock invocation) throws Throwable;
 }

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.cglib.proxy.MethodProxy;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
@@ -37,18 +39,20 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     private final Method method;
     private final Object[] arguments;
     private final Location location;
+    private final MethodProxy methodProxy;
 
     private boolean verified;
     private boolean verifiedInOrder;
     private Object[] rawArguments;
 
-    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber) {
+    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, MethodProxy methodProxy) {
         this.mock = mock;
         this.method = method;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
+        this.methodProxy = methodProxy;
     }
 
     //expands array varArgs that are given by runtime (1, [a, b]) into true varArgs (1, a, b);
@@ -236,5 +240,10 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public Object[] getRawArguments() {
         return this.rawArguments;
+    }
+
+	//TODO call it invokeReal or something along
+    public Object invokeSuper() throws Throwable {
+        return methodProxy.invokeSuper(mock, arguments);
     }
 }

@@ -47,7 +47,7 @@ public class MoreEmptyReturnValues implements ReturnValues {
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
      */
-    public Object valueFor(InvocationOnMock invocation) {
+    public Object valueFor(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.valueFor(invocation);
         if (ret != null) {
             return ret;

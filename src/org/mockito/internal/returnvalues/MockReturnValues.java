@@ -10,7 +10,7 @@ public class MockReturnValues implements ReturnValues {
     private MockitoCore mockitoCore = new MockitoCore();
     private ReturnValues delegate = new MoreEmptyReturnValues();
     
-    public Object valueFor(InvocationOnMock invocation){
+    public Object valueFor(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.valueFor(invocation);
         if (ret != null) {
             return ret;

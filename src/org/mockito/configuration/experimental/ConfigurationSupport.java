@@ -72,7 +72,15 @@ public class ConfigurationSupport {
      */
     @Deprecated
     public static Object defaultValueFor(InvocationOnMock invocation) {
-        return DEFAULT_RETURN_VALUES.valueFor(invocation);
+        Object retValue = null;
+        try {
+            retValue = DEFAULT_RETURN_VALUES.valueFor(invocation);
+        } catch (Throwable t) {
+            // impossible from EmptyReturnValues but to be safe:
+            throw new RuntimeException(t);
+        }
+
+        return retValue;
     }
 
     /**
