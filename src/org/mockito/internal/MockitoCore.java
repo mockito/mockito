@@ -90,7 +90,7 @@ public class MockitoCore {
         }
     }
     
-    public void assertMocksNotEmpty(Object[] mocks) {
+    private void assertMocksNotEmpty(Object[] mocks) {
         if (mocks == null || mocks.length == 0) {
             reporter.mocksHaveToBePassedToVerifyNoMoreInteractions();
         }

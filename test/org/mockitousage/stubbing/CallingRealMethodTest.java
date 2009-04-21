@@ -12,18 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-/**
- * Description: TODO: Enter a paragraph that summarizes what the class does and
- * why someone might want to utilize it
- * 
- * <p>
- * Copyright © 2000-2007, NetSuite, Inc.
- * </p>
- * 
- * @author amurkes
- * @version 2007.0
- * @since Apr 16, 2009
- */
 public class CallingRealMethodTest extends TestBase {
     
     @Mock TestedObject mock;
