@@ -45,7 +45,8 @@ import org.mockito.stubbing.Answer;
  *      11. Stubbing with callbacks <br/>
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
- *      14. (**New**) Changing default return values of unstubbed invocations <br/>
+ *      14. Changing default return values of unstubbed invocations <br/>
+ *      15. (**New**) Troubleshooting <br/>
  * </b>
  * 
  * <p>
@@ -432,7 +433,7 @@ import org.mockito.stubbing.Answer;
  * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
  * Typically you may get a NullPointerException because mock instances don't have fields initiated.
  * 
- * <h3>14. (**New**) Changing default return values of unstubbed invocations</h3>
+ * <h3>14. Changing default return values of unstubbed invocations</h3>
  * 
  * You can create a mock with specified strategy of for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -448,6 +449,15 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
+ * <h3>15. (**New**) Troubleshooting</h3>
+ * 
+ * First, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
+ * <p>
+ * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
+ * <p>
+ * If you are experiencing problems with the framework check out new {@link MockitoTroubleshooter}.
+ * Although Mockito performs framework validation every time you use it, {@link MockitoTroubleshooter} allows executing the validation explicitly.
+ * Read more in javadoc for {@link MockitoTroubleshooter} class to find out where it could be useful.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -882,10 +892,6 @@ public class Mockito extends Matchers {
      */
     public static void verifyZeroInteractions(Object... mocks) {
         MOCKITO_CORE.verifyNoMoreInteractions(mocks);
-    }
-
-    public static void assertMocksNotEmpty(Object[] mocks) {
-        MOCKITO_CORE.assertMocksNotEmpty(mocks);
     }
 
     /**
