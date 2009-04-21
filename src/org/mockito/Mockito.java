@@ -510,8 +510,8 @@ public class Mockito extends Matchers {
     public static final ReturnValues RETURNS_MOCKS = new MockReturnValues();
 
     /**
-     * TODO THIS INTERFACE MIGHT CHANGE IN 1.8
-     * TODO mention partial mocks warning
+     * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8
+     * TODO: mention partial mocks warning
      * 
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
      * <p>
@@ -945,7 +945,7 @@ public class Mockito extends Matchers {
     /**
      * Use doCallRealMethod() when you want to call the real implementation of a method.
      * <p>
-     * TODO mention partial mocks warning
+     * TODO: mention partial mocks warning
      * <p>
      * Example:
      * <pre>

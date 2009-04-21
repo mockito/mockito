@@ -23,10 +23,10 @@ import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Method call on a mock object. 
+ * Method call on a mock object.
  * <p>
- * Contains sequence number which should be
- * globally unique and is used for verification in order.
+ * Contains sequence number which should be globally unique and is used for
+ * verification in order.
  * <p>
  * Contains stack trace of invocation
  */
@@ -55,19 +55,18 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         this.methodProxy = methodProxy;
     }
 
-    //expands array varArgs that are given by runtime (1, [a, b]) into true varArgs (1, a, b);
-    private static Object[] expandVarArgs(final boolean isVarArgs,
-            final Object[] args) {
-        if (!isVarArgs || isVarArgs && args[args.length - 1] != null
-                && !args[args.length - 1].getClass().isArray()) {
+    // expands array varArgs that are given by runtime (1, [a, b]) into true
+    // varArgs (1, a, b);
+    private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
+        if (!isVarArgs || isVarArgs && args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
             return args == null ? new Object[0] : args;
         }
-            
+
         final int nonVarArgsCount = args.length - 1;
-        Object[] varArgs;  
+        Object[] varArgs;
         if (args[nonVarArgsCount] == null) {
-            //in case someone deliberately passed null varArg array
-            varArgs = new Object[] {null};
+            // in case someone deliberately passed null varArg array
+            varArgs = new Object[] { null };
         } else {
             varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
         }
@@ -97,7 +96,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     public boolean isVerified() {
         return verified;
     }
-    
+
     public Integer getSequenceNumber() {
         return sequenceNumber;
     }
@@ -110,7 +109,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     public boolean isVerifiedInOrder() {
         return verifiedInOrder;
     }
-    
+
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass())) {
             return false;
@@ -118,8 +117,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
         Invocation other = (Invocation) o;
 
-        return this.mock.equals(other.mock) && this.method.equals(other.method)
-                && this.equalArguments(other.arguments);
+        return this.mock.equals(other.mock) && this.method.equals(other.method) && this.equalArguments(other.arguments);
     }
 
     private boolean equalArguments(Object[] arguments) {
@@ -129,7 +127,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     public int hashCode() {
         throw new RuntimeException("hashCode() is not implemented");
     }
-    
+
     public String toString() {
         return toString(argumentsToMatchers(), false);
     }
@@ -140,7 +138,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public String toMultilineString() {
         return toString(argumentsToMatchers(), true);
-    }    
+    }
 
     protected String toString(List<Matcher> matchers, boolean forceMultiline) {
         String method = qualifiedMethodName();
@@ -161,13 +159,13 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         result.appendList("(", ", ", ");", matchers);
         return result.toString();
     }
-    
+
     private String getArgumentsBlock(List<Matcher> matchers) {
         Description result = new StringDescription();
         result.appendList("(\n    ", ",\n    ", "\n);", matchers);
         return result.toString();
     }
-    
+
     protected List<Matcher> argumentsToMatchers() {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
@@ -183,11 +181,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     public static boolean isToString(InvocationOnMock invocation) {
         return isToString(invocation.getMethod());
     }
-    
+
     public static boolean isToString(Method method) {
-        return method.getReturnType() == String.class 
-        && method.getParameterTypes().length == 0 
-        && method.getName().equals("toString");
+        return method.getReturnType() == String.class && method.getParameterTypes().length == 0 && method.getName().equals("toString");
     }
 
     public boolean isValidException(Throwable throwable) {
@@ -198,10 +194,10 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     public boolean isValidReturnType(Class clazz) {
         if (method.getReturnType().isPrimitive()) {
             return Primitives.primitiveTypeOf(clazz) == method.getReturnType();
@@ -242,7 +238,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         return this.rawArguments;
     }
 
-	//TODO call it invokeReal or something along
+    // TODO: call it invokeReal or something along
     public Object invokeSuper() throws Throwable {
         return methodProxy.invokeSuper(mock, arguments);
     }

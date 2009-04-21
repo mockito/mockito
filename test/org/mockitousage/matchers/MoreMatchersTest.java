@@ -33,7 +33,7 @@ public class MoreMatchersTest extends TestBase {
     
     @Test
     public void shouldHelpOutWithUnnecessaryCastingOfCollections() {
-//        TODO implement after 1.7
+//        TODO: implement after 1.7
 //        when(mock.listArgMethod(anyListOf(String.class))).thenReturn("list");
 //        when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("collection");
 //        

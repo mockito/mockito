@@ -38,7 +38,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
     @Ignore
     @Test
     public void shouldNotAllowVerifyingRestrictedMethods() {
-        //TODO after 1.7 exception message should mention those methods are not verifiable
+        //TODO: after 1.7 exception message should mention those methods are not verifiable
         verify(mock).toString();
         verify(mock).hashCode();
         verify(mock).equals(null);

@@ -88,7 +88,7 @@ public interface NewOngoingStubbing<T> {
     NewOngoingStubbing<T> thenThrow(Throwable... throwables);
 
     /**
-     * TODO partial mocks warning
+     * TODO: partial mocks warning
      * Sets the real implementation to be called when the method is called on a mock object.  E.g.:
      * <pre>
      * when(mock.someMethod()).thenCallRealMethod();

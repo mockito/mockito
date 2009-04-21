@@ -92,7 +92,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
     } 
     
     @Ignore("i don't know how to implement it nicely... yet :)")
-    //TODO related to enhancement 27
+    //TODO: related to enhancement 27
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowWantedAndActual() {
         try {
