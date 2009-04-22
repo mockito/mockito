@@ -77,4 +77,23 @@ public class ReflectionMatchersTest extends TestBase {
         Child wanted = new Child(234234, "foo", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
+
+    @Test
+    public void shouldMatchWhenFieldValuesEqualWithOneFieldExcluded() throws Exception {
+        Child wanted = new Child(1, "foo", 2, "excluded");
+        verify(mock).run(refEq(wanted, "childFieldTwo"));
+    }
+
+    @Test
+    public void shouldMatchWhenFieldValuesEqualWithTwoFieldsExcluded() throws Exception {
+        Child wanted = new Child(234234, "foo", 2, "excluded");
+        verify(mock).run(refEq(wanted, "childFieldTwo", "parentField"));
+        verify(mock).run(refEq(wanted, "parentField", "childFieldTwo"));
+    }
+    
+    @Test(expected=ArgumentsAreDifferent.class)
+    public void shouldNotMatchWithFieldsExclusion() throws Exception {
+        Child wanted = new Child(234234, "foo", 2, "excluded");
+        verify(mock).run(refEq(wanted, "childFieldTwo"));
+    }    
 }

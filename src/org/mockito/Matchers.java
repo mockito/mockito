@@ -413,6 +413,28 @@ public class Matchers {
     public static <T> T refEq(T value) {
         return reportMatcher(new ReflectionEquals(value)).<T>returnNull();
     }
+
+    /**
+     * Object argument that is reflection-equal to the given value with support for excluding
+     * selected fields from a class.
+     * <p>
+     * This matcher can be used when equals() is not implemented on compared objects.
+     * Matcher uses java reflection API to compare fields of wanted and actual object.
+     * <p>
+     * Works similarly to EqualsBuilder.reflectionEquals(this, other, exlucdeFields) from
+     * apache commons library.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @param value
+     *            the given value.
+     * @param excludeFields
+     *            fields to exclude.
+     * @return <code>null</code>.
+     */
+    public static <T> T refEq(T value, String... excludeFields) {
+        return reportMatcher(new ReflectionEquals(value, excludeFields)).<T>returnNull();
+    }
     
     /**
      * Object argument that is the same as the given value.
