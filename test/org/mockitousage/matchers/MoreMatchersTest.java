@@ -7,6 +7,11 @@ package org.mockitousage.matchers;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
@@ -32,12 +37,32 @@ public class MoreMatchersTest extends TestBase {
     }
     
     @Test
+    public void shouldHelpOutWithUnnecessaryCastingOfLists() {
+        //Below yields compiler warning:
+        //when(mock.listArgMethod(anyList())).thenReturn("list");
+        when(mock.listArgMethod(anyListOf(String.class))).thenReturn("list");
+        
+        assertEquals("list", mock.listArgMethod(new LinkedList<String>()));
+        assertEquals("list", mock.listArgMethod(Collections.<String>emptyList()));
+    }
+    
+    @Test
+    public void shouldHelpOutWithUnnecessaryCastingOfSets() {
+        //Below yields compiler warning:
+        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        when(mock.setArgMethod(anySetOf(String.class))).thenReturn("set");
+        
+        assertEquals("set", mock.setArgMethod(new HashSet<String>()));
+        assertEquals("set", mock.setArgMethod(Collections.<String>emptySet()));
+    }
+    
+    @Test
     public void shouldHelpOutWithUnnecessaryCastingOfCollections() {
-//        TODO: implement after 1.7
-//        when(mock.listArgMethod(anyListOf(String.class))).thenReturn("list");
-//        when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("collection");
-//        
-//        assertEquals("list", mock.listArgMethod(new LinkedList()));
-//        assertEquals(null, mock.listArgMethod(new LinkedList()));
+        //Below yields compiler warning:
+        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("col");
+        
+        assertEquals("col", mock.collectionArgMethod(new ArrayList<String>()));
+        assertEquals("col", mock.collectionArgMethod(Collections.<String>emptyList()));
     }
 }

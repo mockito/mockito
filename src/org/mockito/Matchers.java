@@ -232,6 +232,20 @@ public class Matchers {
     }    
     
     /**
+     * generic friendly alias to {@link Matchers#anyList()}.
+     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * <p>
+     * any List or null.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return empty List.
+     */
+    public static <T> List<T> anyListOf(Class<T> clazz) {
+        return (List) reportMatcher(Any.ANY).returnList();
+    }    
+    
+    /**
      * any Set or null
      * <p>
      * See examples in javadoc for {@link Matchers} class
@@ -240,6 +254,20 @@ public class Matchers {
      */
     public static Set anySet() {
         return reportMatcher(Any.ANY).returnSet();
+    }
+    
+    /**
+     * generic friendly alias to {@link Matchers#anySet()}.
+     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * <p>
+     * any Set or null
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return empty Set
+     */
+    public static <T> Set<T> anySetOf(Class<T> clazz) {
+        return (Set) reportMatcher(Any.ANY).returnSet();
     }
 
     /**
@@ -262,6 +290,20 @@ public class Matchers {
      */
     public static Collection anyCollection() {
         return reportMatcher(Any.ANY).returnList();
+    }    
+    
+    /**
+     * generic friendly alias to {@link Matchers#anyCollection()}. 
+     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.     
+     * <p>
+     * any Collection or null.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return empty Collection.
+     */
+    public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
+        return (Collection) reportMatcher(Any.ANY).returnList();
     }    
 
     /**

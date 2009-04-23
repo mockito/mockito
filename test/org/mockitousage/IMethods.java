@@ -195,6 +195,8 @@ public interface IMethods {
     Object objectArgMethod(Object str);
 
     Object listArgMethod(List<String> list);
-
+    
     Object collectionArgMethod(Collection<String> collection);
+
+    Object setArgMethod(Set<String> set);
 }
