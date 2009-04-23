@@ -411,7 +411,7 @@ public class Matchers {
      * @param value
      *            the given value.
      * @param excludeFields
-     *            fields to exclude.
+     *            fields to exclude, if field does not exist it is ignored.
      * @return <code>null</code>.
      */
     public static <T> T refEq(T value, String... excludeFields) {
