@@ -10,11 +10,6 @@ import org.mockito.ArgumentMatcher;
 public class ReflectionEquals extends ArgumentMatcher<Object>{
     private final Object wanted;
 	private final String[] excludeFields;
-    
-    public ReflectionEquals(Object wanted) {
-        this.wanted = wanted;
-		this.excludeFields = null;		
-    }
 
     public ReflectionEquals(Object wanted, String... excludeFields) {
         this.wanted = wanted;
