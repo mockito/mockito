@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Argument;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
@@ -145,5 +146,12 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     @Test
     public void shouldMentionFinalAndObjectMethodsWhenMisplacedArgumentMatcher() {
         when(mock.equals(anyObject())).thenReturn(false);
+    }
+    
+    @Test
+    public void shouldShowExampleOfCorrectArgumentCapturing() {
+        Argument<String> argument = new Argument<String>();
+        argument.capture();
+        argument.value();
     }
 }

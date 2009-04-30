@@ -6,48 +6,15 @@ package org.mockitousage.matchers;
 
 import static org.mockito.Mockito.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mockito;
+import org.mockito.Argument;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class ArgumentCaptorTest extends TestBase {
-
-    public class Argument<T> extends ArgumentMatcher<T> {
-        private LinkedList<Object> arguments = new LinkedList<Object>();
-
-        public boolean matches(Object argument) {
-            this.arguments.add(argument);
-            return true;
-        }
-        
-        public T capture() {
-            Mockito.argThat(this);
-            return null;
-        }
-
-        public T value() {
-            if (arguments.isEmpty()) {
-                assert false;
-            } else {
-                //TODO: after 1.7 nice instanceof check here?
-                return (T) arguments.getLast();
-            }
-            return (T) arguments;
-        }
-        
-        public T getLastValue() {
-            return value();
-        }
-
-        public List<T> allValues() {
-            return (List) arguments;
-        }
-    }
 
     class Person {
 
@@ -132,5 +99,16 @@ public class ArgumentCaptorTest extends TestBase {
         Argument<Person> argument = new Argument<Person>();
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(null, argument.value());
+    }
+    
+    @Test
+    public void shouldSaySomethingSmartWhenMisused() {
+        Argument<Person> argument = new Argument<Person>();
+        try {
+            argument.value();
+            fail();
+        } catch (MockitoException e) {
+            assertContains("Argument value has not yet been captured", e.getMessage());
+        }
     }
 }
