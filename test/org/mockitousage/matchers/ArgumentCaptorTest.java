@@ -108,7 +108,7 @@ public class ArgumentCaptorTest extends TestBase {
             argument.value();
             fail();
         } catch (MockitoException e) {
-            assertContains("Argument value has not yet been captured", e.getMessage());
+            assertContains("Argument value not yet captured", e.getMessage());
         }
     }
 }
