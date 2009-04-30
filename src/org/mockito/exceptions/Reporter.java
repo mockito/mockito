@@ -419,4 +419,15 @@ public class Reporter {
                 ""
                 ));
     }
+
+    public void argumentValueNotYetCaptured() {
+        throw new MockitoException(join(
+                "Argument value not yet captured!",
+                "Examples of correct argument capturing:",
+                "    Argument<Person> argument = new Argument<Person>();",
+                "    verify(mock).sendTo(argument.capture());",
+                "    assertEquals(\"John\", argument.value().getName());",
+                ""
+                ));
+    }
 }
