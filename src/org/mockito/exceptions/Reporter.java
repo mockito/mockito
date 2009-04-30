@@ -420,12 +420,16 @@ public class Reporter {
                 ));
     }
 
-    public void argumentValueNotYetCaptured() {
+    public void noArgumentValueWasCaptured() {
         throw new MockitoException(join(
-                "Argument value not yet captured!",
+                "No argument value was captured!",
+                "You might have forgotten to use argument.capture() in verify()...",
+                "...or you used capture() in stubbing but stubbed method was not called.",
+                "Be aware that it is recommended to use capture() only with verify()",
+                "",
                 "Examples of correct argument capturing:",
                 "    Argument<Person> argument = new Argument<Person>();",
-                "    verify(mock).sendTo(argument.capture());",
+                "    verify(mock).doSomething(argument.capture());",
                 "    assertEquals(\"John\", argument.value().getName());",
                 ""
                 ));

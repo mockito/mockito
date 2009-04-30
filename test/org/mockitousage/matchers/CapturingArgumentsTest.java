@@ -14,7 +14,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class ArgumentCaptorTest extends TestBase {
+public class CapturingArgumentsTest extends TestBase {
 
     class Person {
 
@@ -46,7 +46,7 @@ public class ArgumentCaptorTest extends TestBase {
     }
     
     interface EmailService {
-        void sendEmailTo(Person person);
+        boolean sendEmailTo(Person person);
     }
 
     EmailService emailService = mock(EmailService.class);
@@ -102,13 +102,24 @@ public class ArgumentCaptorTest extends TestBase {
     }
     
     @Test
+    public void shouldAllowCapturingForStubbing() {
+        //given
+        Argument<Person> argument = new Argument<Person>();
+        when(emailService.sendEmailTo(argument.capture())).thenReturn(false);
+        
+        //when
+        emailService.sendEmailTo(new Person(10));
+        
+        //then
+        assertEquals(10, argument.value().getAge());
+    }
+    
+    @Test
     public void shouldSaySomethingSmartWhenMisused() {
         Argument<Person> argument = new Argument<Person>();
         try {
             argument.value();
             fail();
-        } catch (MockitoException e) {
-            assertContains("Argument value not yet captured", e.getMessage());
-        }
+        } catch (MockitoException e) {}
     }
 }
