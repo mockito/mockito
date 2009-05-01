@@ -48,7 +48,7 @@ import org.mockito.stubbing.Answer;
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
  *      14. Changing default return values of unstubbed invocations <br/>
- *      15. **New**) Capturing arguments for further assertions <br/>
+ *      15. (**New**) Capturing arguments for further assertions <br/>
  *      16. (**New**) Troubleshooting <br/>
  * </b>
  * 
@@ -1224,7 +1224,6 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      */
     public static void validateMockitoUsage() {
-        MockingProgress mockingProgress = new ThreadSafeMockingProgress();
-        mockingProgress.validateState();
+        MOCKITO_CORE.validateMockitoUsage();
     }
 }

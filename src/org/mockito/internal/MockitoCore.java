@@ -122,4 +122,8 @@ public class MockitoCore {
         mockingProgress.stubbingStarted();
         return handler.voidMethodStubbable(mock);
     }
+
+    public void validateMockitoUsage() {
+        mockingProgress.validateState();
+    }
 }
