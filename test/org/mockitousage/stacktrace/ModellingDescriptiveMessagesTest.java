@@ -10,13 +10,16 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @Ignore
+@RunWith(MockitoJUnitRunner.class)
 public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Mock private IMethods mock;
@@ -26,6 +29,12 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         super.makeStackTracesClean();
     }
 
+    @Test
+    public void makeSureStateIsValidatedInTheVeryFirstTestThanksToTheRunner() {
+        //mess up the state:
+        verify(mock);
+    }
+    
     @Test
     public void shouldSayWantedButNotInvoked() {
         verify(mock).otherMethod();

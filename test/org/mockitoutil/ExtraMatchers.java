@@ -12,6 +12,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
+
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
 
@@ -108,5 +111,28 @@ public class ExtraMatchers {
                         value, containsSublist);
             }
         };
+    }
+    
+    public static <T> Assertor<Collection> contains(final Matcher<T> ... elements) {
+        return new Assertor<Collection>() {
+            
+            public void assertValue(Collection value) {
+                int matched = 0;
+                for (Matcher<T> m : elements) {
+                    for (Object el : value) {
+                        if (m.matches(el)) {
+                            matched++;
+                            continue;
+                        }
+                    }
+                }
+                
+                assertEquals("At least one of the matchers failed to match any of the elements", elements.length, matched);
+            }
+        };
+    }
+    
+    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
+        return CoreMatchers.is(type);
     }
 }

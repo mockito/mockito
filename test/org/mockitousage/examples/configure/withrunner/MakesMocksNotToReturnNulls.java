@@ -4,6 +4,7 @@
  */
 package org.mockitousage.examples.configure.withrunner;
 
+import org.junit.Ignore;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
@@ -12,6 +13,7 @@ import org.mockitousage.examples.configure.FriendlyReturnValues;
 
 //deprecated but will dump it eventually
 @SuppressWarnings("deprecation")
+@Ignore("somehow this class is picked up by a runner, therfore ignore it")
 public class MakesMocksNotToReturnNulls extends BlockJUnit4ClassRunner {
     
     public MakesMocksNotToReturnNulls(Class<?> clazz) throws InitializationError {

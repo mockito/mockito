@@ -4,12 +4,14 @@
  */
 package org.mockito.runners;
 
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.runners.FrameworkUsageValidator;
 
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
@@ -45,7 +47,16 @@ public class MockitoJUnitRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
+        //init annotated mocks before tests
         MockitoAnnotations.initMocks(target);
         return super.withBefores(method, target, statement);
+    }
+    
+    @Override
+    public void run(final RunNotifier notifier) {
+        //add listener that validates framework usage at the end of each test
+        notifier.addListener(new FrameworkUsageValidator(notifier));
+        
+        super.run(notifier);
     }
 }
