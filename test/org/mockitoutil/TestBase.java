@@ -31,7 +31,7 @@ public class TestBase extends Assert {
         MockitoAnnotations.initMocks(this);
     }
     
-    public void makeStackTracesClean() {
+    public static void makeStackTracesClean() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
     
