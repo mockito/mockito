@@ -186,6 +186,7 @@
       <group title="Main package" packages="org.mockito"/>
       <classpath refid="compile.classpath" />
     </javadoc>
+  	<copy todir="${javadoc.dir}/org/mockito" file="img/logo.jpg" />
   </target>
 
   <target name="repackage-tests">

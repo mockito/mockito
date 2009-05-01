@@ -30,9 +30,11 @@ import org.mockito.stubbing.Answer;
  * Mockito library enables mocks creation, verification and stubbing.
  * <p>
  * This javadoc content is also available on the <a href="http://mockito.org">http://mockito.org</a> web page. 
- * We try to keep all documentation in javadocs because it guarantees consistency between what's on the web and what's in the source code.
+ * All documentation is kept in javadocs because it guarantees consistency between what's on the web and what's in the source code.
  * Also, it makes possible to access documentation straight from the IDE even if you work offline.   
  * 
+ * <p align="left"><img src="logo.jpg"/></p>
+ *
  * <h1>Contents</h1>
  * 
  * <b> 
