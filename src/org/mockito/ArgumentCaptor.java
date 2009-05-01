@@ -3,11 +3,9 @@
  */
 package org.mockito;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import org.hamcrest.Description;
-import org.mockito.exceptions.Reporter;
+import org.mockito.internal.matchers.CapturingMatcher;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -28,18 +26,9 @@ import org.mockito.exceptions.Reporter;
  * <p>
  * See the full documentation on Mockito in javadoc for {@link Mockito} class.    
  */
-@SuppressWarnings("unchecked")
-public class ArgumentCaptor<T> extends ArgumentMatcher<T> {
+public class ArgumentCaptor<T> {
     
-    private LinkedList<Object> arguments = new LinkedList<Object>();
-
-    /**
-     * <b>Don't call this method directly.</b> It is used internally by the framework to store argument value. 
-     */
-    public boolean matches(Object argument) {
-        this.arguments.add(argument);
-        return true;
-    }
+    private CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
 
     /**
      * Use it to capture the argument. This method <b>must be used inside of verification</b>.
@@ -52,7 +41,7 @@ public class ArgumentCaptor<T> extends ArgumentMatcher<T> {
      * @return null
      */
     public T capture() {
-        Mockito.argThat(this);
+        Mockito.argThat(capturingMatcher);
         return null;
     }
 
@@ -66,12 +55,7 @@ public class ArgumentCaptor<T> extends ArgumentMatcher<T> {
      * @return captured argument value
      */
     public T getValue() {
-        if (arguments.isEmpty()) {
-            new Reporter().noArgumentValueWasCaptured();
-        } else {
-            return (T) arguments.getLast();
-        }
-        return (T) arguments;
+        return this.capturingMatcher.getLastValue();
     }
 
     /**
@@ -84,13 +68,6 @@ public class ArgumentCaptor<T> extends ArgumentMatcher<T> {
      * @return captured argument value
      */
     public List<T> getAllValues() {
-        return (List) arguments;
-    }
-
-    /**
-     * <b>Don't call this method directly.</b> It is used internally by the framework to print friendly matcher description.
-     */
-    public void describeTo(Description description) {
-        description.appendText("<Capturing argument>");
+        return this.capturingMatcher.getAllValues();
     }
 }
