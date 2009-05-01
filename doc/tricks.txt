@@ -1,4 +1,0 @@
-1. Favor iterables over iterators
- - testing favours iterable over iterator
-
-2. Be reasonable when testing loops. In most cases you don't need more than 2 examples of data to make sure the logic within a loop works correctly.  
