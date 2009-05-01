@@ -17,7 +17,6 @@
   <property name="lib.dir" value="lib" />
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
-  
     
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.all" value="mockito-all-${version}.jar" />
@@ -259,6 +258,14 @@
       <pom file="${target.dir}/mockito-core.pom" />
       <remoterepository refid="repo.local" />
     </deploy>
+  </target>
+  
+  <target name="bnd"> 
+    <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="ant.classpath"/> 
+    <bndwrap
+      classpath="src"
+      jars="target/mockito-core-snapshot.jar" 
+      output="out"/> 
   </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
