@@ -46,7 +46,7 @@ public class ArgumentCaptor<T> {
     }
 
     /**
-     * Returns the captured value of the argument
+     * Returns the captured value of the argument.
      * <p>
      * If the method was called multiple times then it returns the latest captured value
      * <p>
@@ -59,11 +59,18 @@ public class ArgumentCaptor<T> {
     }
 
     /**
-     * Returns the captured value of the argument
+     * Returns all captured values. Use it in case the verified method was called multiple times.
      * <p>
-     * If the method was called multiple times then it returns the latest captured value
-     * <p>
-     * See examples in javadoc for {@link ArgumentCaptor} class.
+     * Example: 
+     * <pre>
+     *   ArgumentCaptor&lt;Person&gt; peopleCaptor = new ArgumentCaptor&ltPerson&gt();
+     *   verify(mock, times(2)).doSomething(peopleCaptor.capture());
+     *   
+     *   List&lt;Person&gt; capturedPeople = peopleCaptor.getAllValues();
+     *   assertEquals("John", capturedPeople.get(0).getName());
+     *   assertEquals("Jane", capturedPeople.get(1).getName());
+     * </pre>
+     * See more examples in javadoc for {@link ArgumentCaptor} class.
      * 
      * @return captured argument value
      */
