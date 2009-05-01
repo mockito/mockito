@@ -44,12 +44,16 @@ import org.mockito.internal.util.Decamelizer;
  *   verify(mock).addAll(<b>listOfTwoElements()</b>);
  * </pre>
  *
- * Custom argument matchers can make the test less readable. 
+ * <b>Warning:</b> Be reasonable with using complicated argument matching, especially custom argument matchers, as it can make the test less readable. 
  * Sometimes it's better to implement equals() for arguments that are passed to mocks 
  * (Mockito naturally uses equals() for argument matching). 
- * This can make the test cleaner.
+ * This can make the test cleaner. 
  * <p>
- * Read more about {@link Matchers}
+ * Also, <b>sometimes {@link ArgumentCaptor} may be a better fit</b> than custom matcher.
+ * For example, if custom argument matcher is not likely to be reused
+ * or you just need it to assert on argument values to complete verification of behavior.
+ * <p>
+ * Read more about other matchers in javadoc for {@link Matchers} class
  * 
  * @param <T> type of argument
  */

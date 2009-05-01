@@ -7,9 +7,7 @@ package org.mockito;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.internal.returnvalues.MockReturnValues;
@@ -34,22 +32,22 @@ import org.mockito.stubbing.Answer;
  * <h1>Contents</h1>
  * 
  * <b> 
- *      1. Let's verify some behaviour! <br/> 
- *      2. How about some stubbing? <br/>
- *      3. Argument matchers <br/> 
- *      4. Verifying exact number of invocations / at least once / never <br/> 
- *      5. Stubbing void methods with exceptions <br/> 
- *      6. Verification in order <br/> 
- *      7. Making sure interaction(s) never happened on mock <br/> 
- *      8. Finding redundant invocations <br/> 
- *      9. Shorthand for mocks creation - &#064;Mock annotation <br/> 
- *      10. Stubbing consecutive calls (iterator-style stubbing) <br/> 
- *      11. Stubbing with callbacks <br/>
- *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
- *      13. Spying on real objects <br/>
- *      14. Changing default return values of unstubbed invocations <br/>
- *      15. (**New**) Capturing arguments for further assertions <br/>
- *      16. (**New**) Troubleshooting <br/>
+ *      <a href="#1">1. Let's verify some behaviour! </a><br/> 
+ *      <a href="#2">2. How about some stubbing? </a><br/>
+ *      <a href="#3">3. Argument matchers </a><br/>
+ *      <a href="#4">4. Verifying exact number of invocations / at least once / never </a><br/> 
+ *      <a href="#5">5. Stubbing void methods with exceptions </a><br/> 
+ *      <a href="#6">6. Verification in order </a><br/> 
+ *      <a href="#7">7. Making sure interaction(s) never happened on mock </a><br/> 
+ *      <a href="#8">8. Finding redundant invocations </a><br/> 
+ *      <a href="#9">9. Shorthand for mocks creation - &#064;Mock annotation </a><br/> 
+ *      <a href="#10">10. Stubbing consecutive calls (iterator-style stubbing) </a><br/> 
+ *      <a href="#11">11. Stubbing with callbacks </a><br/>
+ *      <a href="#12">12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids </a><br/>
+ *      <a href="#13">13. Spying on real objects </a><br/>
+ *      <a href="#14">14. Changing default return values of unstubbed invocations </a><br/>
+ *      <a href="#15">15. (**New**) Capturing arguments for further assertions </a><br/>
+ *      <a href="#16">16. (**New**) Troubleshooting & validating framework usage</a><br/>
  * </b>
  * 
  * <p>
@@ -57,7 +55,7 @@ import org.mockito.stubbing.Answer;
  * like add(), get(), clear() will be used). <br>
  * You probably wouldn't mock List class 'in real'.
  * 
- * <h3>1. Let's verify some behaviour!</h3>
+ * <h3 id="1">1. Let's verify some behaviour!</h3>
  * 
  * <pre>
  * //Let's import Mockito statically so that the code looks clearer
@@ -79,7 +77,7 @@ import org.mockito.stubbing.Answer;
  * Once created, mock will remember all interactions. Then you can selectively
  * verify whatever interaction you are interested in.
  * 
- * <h3>2. How about some stubbing?</h3>
+ * <h3 id="2">2. How about some stubbing?</h3>
  * 
  * <pre>
  * //You can mock concrete classes, not only interfaces
@@ -120,7 +118,10 @@ import org.mockito.stubbing.Answer;
  * 
  * </ul>
  * 
- * <h3>3. Argument matchers</h3>
+ * <h3 id="3">3. Argument matchers</h3>
+ * 
+ * Mockito verifies argument values in natural java style: by using an equals() method.
+ * Sometimes, when extra flexibility is required then you might use argument matchers:  
  * 
  * <pre>
  * //stubbing using built-in anyInt() argument matcher
@@ -141,7 +142,16 @@ import org.mockito.stubbing.Answer;
  * {@link Matchers Click here to see} more built-in matchers 
  * and examples of <b>custom argument matchers / hamcrest matchers</b>.
  * <p>
- * <b>Warning:</b>
+ * For information solely on <b>custom argument matchers</b> check out javadoc for {@link ArgumentMatcher} class.
+ * <p>
+ * Be reasonable with using complicated argument matching.
+ * The natural matching style using equals() with occasional anyX() matchers tend to give clean & simple tests.
+ * Sometimes it's just better to refactor the code to allow equals() matching or even implement equals() method to help out with testing.
+ * <p>
+ * Also, read <a href="#15">section 15</a> or javadoc for {@link ArgumentCaptor} class.
+ * {@link ArgumentCaptor} is a special implementation of an argument matcher that captures argument values for further assertions.  
+ * <p>
+ * <b>Warning on argument matchers:</b>
  * <p>
  * If you are using argument matchers, <b>all arguments</b> have to be provided
  * by matchers.
@@ -156,7 +166,7 @@ import org.mockito.stubbing.Answer;
  *   //above is incorrect - exception will be thrown because third argument is given without an argument matcher.
  * </pre>
  * 
- * <h3>4. Verifying exact number of invocations / at least x / never</h3>
+ * <h3 id="4">4. Verifying exact number of invocations / at least x / never</h3>
  * 
  * <pre>
  * //using mock 
@@ -191,7 +201,7 @@ import org.mockito.stubbing.Answer;
  * <b>times(1) is the default.</b> Therefore using times(1) explicitly can be
  * omitted.
  * 
- * <h3>5. Stubbing void methods with exceptions</h3>
+ * <h3 id="5">5. Stubbing void methods with exceptions</h3>
  * 
  * <pre>
  *   doThrow(new RuntimeException()).when(mockedList).clear();
@@ -206,7 +216,7 @@ import org.mockito.stubbing.Answer;
  * Currently stubVoid() is deprecated in favor of {@link Mockito#doThrow(Throwable)}.
  * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods. 
  * 
- * <h3>6. Verification in order</h3>
+ * <h3 id="6">6. Verification in order</h3>
  * 
  * <pre>
  * List firstMock = mock(List.class);
@@ -231,7 +241,7 @@ import org.mockito.stubbing.Answer;
  * Also, you can create InOrder object passing only mocks that are relevant for
  * in-order verification.
  * 
- * <h3>7. Making sure interaction(s) never happened on mock</h3>
+ * <h3 id="7">7. Making sure interaction(s) never happened on mock</h3>
  * 
  * <pre>
  * //using mocks - only mockOne is interacted
@@ -248,7 +258,7 @@ import org.mockito.stubbing.Answer;
  * 
  * </pre>
  * 
- * <h3>8. Finding redundant invocations</h3>
+ * <h3 id="8">8. Finding redundant invocations</h3>
  * 
  * <pre>
  * //using mocks
@@ -273,7 +283,7 @@ import org.mockito.stubbing.Answer;
  * communicates the intent well.
  * <p>
  * 
- * <h3>9. Shorthand for mocks creation - &#064;Mock annotation</h3>
+ * <h3 id="9">9. Shorthand for mocks creation - &#064;Mock annotation</h3>
  * 
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
@@ -303,7 +313,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
- * <h3> 10. Stubbing consecutive calls (iterator-style stubbing)</h3>
+ * <h3 id="10"> 10. Stubbing consecutive calls (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same
  * method call. Typical use case could be mocking iterators. 
@@ -336,7 +346,7 @@ import org.mockito.stubbing.Answer;
  *   .thenReturn("one", "two", "three");
  * </pre>
  * 
- * <h3> 11. Stubbing with callbacks</h3>
+ * <h3 id="11"> 11. Stubbing with callbacks</h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
@@ -358,7 +368,7 @@ import org.mockito.stubbing.Answer;
  * System.out.println(mock.someMethod("foo"));
  * </pre>
  * 
- * <h3> 12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
+ * <h3 id="12"> 12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods for stubbing voids (mostly)</h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
  * <p>
@@ -383,7 +393,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * {@link Mockito#doReturn(Object)}
  * 
- * <h3> 13. Spying on real objects</h3>
+ * <h3 id="13"> 13. Spying on real objects</h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
  * <p>
@@ -436,7 +446,7 @@ import org.mockito.stubbing.Answer;
  * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
  * Typically you may get a NullPointerException because mock instances don't have fields initiated.
  * 
- * <h3>14. Changing default return values of unstubbed invocations</h3>
+ * <h3 id="14">14. Changing default return values of unstubbed invocations</h3>
  * 
  * You can create a mock with specified strategy of for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -452,11 +462,32 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
- * <h3>15. (**New**) Capturing arguments for further assertions</h3>
+ * <h3 id="15">15. (**New**) Capturing arguments for further assertions</h3>
  * 
+ * Mockito verifies argument values in natural java style: by using an equals() method.
+ * This is also the recommended way of matching arguments because it makes tests clean & simple.
+ * In some situations though, it is helpful to assert on certain arguments after the actual verification.
+ * For example:
+ * <pre>
+ *   ArgumentCaptor&lt;Person&gt; argument = new ArgumentCaptor&lt;Person&gt;();
+ *   verify(mock).doSomething(argument.capture());
+ *   assertEquals("John", argument.getValue().getName());
+ * </pre>
  * 
+ * <b>Warning:</b> it is recommended to use ArgumentCaptor with verification <b>but not</b> with stubbing.
+ * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
+ * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
+ * <p>
+ * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
+ * Both techniques can be used for making sure certain arguments where passed to mocks. 
+ * However, ArgumentCaptor may be a better fit if:
+ * <ul>  
+ * <li>custom argument matcher is not likely to be reused</li>
+ * <li>you just need it to assert on argument values to complete verification</li>
+ * </ul>
+ * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  *  
- * <h3>16. (**New**) Troubleshooting</h3>
+ * <h3 id="16">16. (**New**) Troubleshooting & validating framework usage</h3>
  * 
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -1193,7 +1224,7 @@ public class Mockito extends Matchers {
      * <p>  
      * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. However, there's a gotcha so read on.
      * <p>
-     * {@link Mockito#validateMockitoUsage()} explicitly validates the framework state to detect invalid use of Mockito.
+     * <b>{@link Mockito#validateMockitoUsage()} explicitly validates the framework state to detect invalid use of Mockito.</b>
      * <p>
      * Examples of incorrect use:
      * <pre>
@@ -1219,7 +1250,8 @@ public class Mockito extends Matchers {
      * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.  
      * <p>
      * Bear in mind that <b>usually you shouldn't need to validateMockitoUsage()</b> 
-     * and framework validation triggered on next-time basis is just enough.
+     * and framework validation triggered on next-time basis is just enough,
+     * mainly because of enhanced exception message with clickable location of defect.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      */
