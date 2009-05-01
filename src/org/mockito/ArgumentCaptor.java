@@ -17,15 +17,18 @@ import org.mockito.exceptions.Reporter;
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
  * <pre>
- *   Argument&lt;Person&gt; argument = new Argument&ltPerson&gt();
+ *   ArgumentCaptor&lt;Person&gt; argument = new ArgumentCaptor&ltPerson&gt();
  *   verify(mock).doSomething(argument.capture());
- *   assertEquals("John", argument.value().getName());
+ *   assertEquals("John", argument.getValue().getName());
  * </pre>
  *
- * Warning: Usually, capturing arguments makes sense only with verification <b>but not</b> with stubbing.  
+ * Warning: it is recommended to use ArgumentCaptor with verification <b>but not</b> with stubbing.
+ * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
+ * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.   
  */
 @SuppressWarnings("unchecked")
-public class Argument<T> extends ArgumentMatcher<T> {
+public class ArgumentCaptor<T> extends ArgumentMatcher<T> {
+    
     private LinkedList<Object> arguments = new LinkedList<Object>();
 
     public boolean matches(Object argument) {
@@ -38,7 +41,7 @@ public class Argument<T> extends ArgumentMatcher<T> {
         return null;
     }
 
-    public T value() {
+    public T getValue() {
         if (arguments.isEmpty()) {
             new Reporter().noArgumentValueWasCaptured();
         } else {
@@ -47,7 +50,7 @@ public class Argument<T> extends ArgumentMatcher<T> {
         return (T) arguments;
     }
 
-    public List<T> allValues() {
+    public List<T> getAllValues() {
         return (List) arguments;
     }
     

@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Argument;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
@@ -150,8 +150,8 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Test
     public void shouldShowExampleOfCorrectArgumentCapturing() {
-        Argument<String> argument = new Argument<String>();
+        ArgumentCaptor<String> argument = new ArgumentCaptor<String>();
         argument.capture();
-        argument.value();
+        argument.getValue();
     }
 }

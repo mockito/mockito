@@ -430,7 +430,7 @@ public class Reporter {
                 "Examples of correct argument capturing:",
                 "    Argument<Person> argument = new Argument<Person>();",
                 "    verify(mock).doSomething(argument.capture());",
-                "    assertEquals(\"John\", argument.value().getName());",
+                "    assertEquals(\"John\", argument.getValue().getName());",
                 ""
                 ));
     }

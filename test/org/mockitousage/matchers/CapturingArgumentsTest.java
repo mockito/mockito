@@ -9,11 +9,11 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.Argument;
+import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class CapturingArgumentsTest extends TestBase {
 
     class Person {
@@ -58,10 +58,10 @@ public class CapturingArgumentsTest extends TestBase {
         emailer.email(12);
         
         //then
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         verify(emailService).sendEmailTo(argument.capture());
         
-        assertEquals(12, argument.value().getAge());
+        assertEquals(12, argument.getValue().getAge());
     }
     
     @Test
@@ -70,9 +70,9 @@ public class CapturingArgumentsTest extends TestBase {
         emailer.email(11, 12);
         
         //then
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
-        List<Person> allValues = argument.allValues();
+        List<Person> allValues = argument.getAllValues();
         
         assertEquals(11, allValues.get(0).getAge());
         assertEquals(12, allValues.get(1).getAge());
@@ -84,10 +84,25 @@ public class CapturingArgumentsTest extends TestBase {
         emailer.email(11, 12, 13);
         
         //then
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
         
-        assertEquals(13, argument.value().getAge());
+        assertEquals(13, argument.getValue().getAge());
+    }
+    
+    @Test
+    public void shouldPrintCaptorMatcher() {
+        //given
+        ArgumentCaptor<Person> person = new ArgumentCaptor<Person>();
+        
+        try {
+            //when
+            verify(emailService).sendEmailTo(person.capture());
+            fail();
+        } catch(WantedButNotInvoked e) {
+            //then
+            assertContains("<Capturing argument>", e.getMessage());
+        }
     }
     
     @Test
@@ -96,29 +111,29 @@ public class CapturingArgumentsTest extends TestBase {
         emailService.sendEmailTo(null);
         
         //then
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         verify(emailService).sendEmailTo(argument.capture());
-        assertEquals(null, argument.value());
+        assertEquals(null, argument.getValue());
     }
     
     @Test
     public void shouldAllowCapturingForStubbing() {
         //given
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         when(emailService.sendEmailTo(argument.capture())).thenReturn(false);
         
         //when
         emailService.sendEmailTo(new Person(10));
         
         //then
-        assertEquals(10, argument.value().getAge());
+        assertEquals(10, argument.getValue().getAge());
     }
     
     @Test
     public void shouldSaySomethingSmartWhenMisused() {
-        Argument<Person> argument = new Argument<Person>();
+        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
         try {
-            argument.value();
+            argument.getValue();
             fail();
         } catch (MockitoException e) {}
     }
