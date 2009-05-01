@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoTroubleshooter;
+import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
@@ -24,7 +24,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
     public void shouldValidateExplicitly() {
         verify(mock);
         try {
-            MockitoTroubleshooter.validateFrameworkState();
+            Mockito.validateMockitoUsage();
             fail();
         } catch (UnfinishedVerificationException e) {}
     }
@@ -33,7 +33,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
     public void shouldDetectUnfinishedStubbing() {
         when(mock.simpleMethod());
         try {
-            MockitoTroubleshooter.validateFrameworkState();
+            Mockito.validateMockitoUsage();
             fail();
         } catch (UnfinishedStubbingException e) {}
     }
@@ -42,7 +42,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
     public void shouldDetectMisplacedArgumentMatcher() {
         anyObject();
         try {
-            MockitoTroubleshooter.validateFrameworkState();
+            Mockito.validateMockitoUsage();
             fail();
         } catch (InvalidUseOfMatchersException e) {}
     }

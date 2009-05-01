@@ -7,7 +7,9 @@ package org.mockito;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
+import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.internal.returnvalues.MockReturnValues;
@@ -46,7 +48,8 @@ import org.mockito.stubbing.Answer;
  *      12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids <br/>
  *      13. Spying on real objects <br/>
  *      14. Changing default return values of unstubbed invocations <br/>
- *      15. (**New**) Troubleshooting <br/>
+ *      15. **New**) Capturing arguments for further assertions <br/>
+ *      16. (**New**) Troubleshooting <br/>
  * </b>
  * 
  * <p>
@@ -449,15 +452,20 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
- * <h3>15. (**New**) Troubleshooting</h3>
+ * <h3>15. (**New**) Capturing arguments for further assertions</h3>
  * 
- * First, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
+ * 
+ *  
+ * <h3>16. (**New**) Troubleshooting</h3>
+ * 
+ * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
+ * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
  * <p>
- * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
+ * In case of questions you may also post to mockito mailing list: 
+ * <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
  * <p>
- * If you are experiencing problems with the framework check out new {@link MockitoTroubleshooter}.
- * Although Mockito performs framework validation every time you use it, {@link MockitoTroubleshooter} allows executing the validation explicitly.
- * Read more in javadoc for {@link MockitoTroubleshooter} class to find out where it could be useful.
+ * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. 
+ * However, there's a gotcha so please read the javadoc for {@link Mockito#validateMockitoUsage()}
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -1176,5 +1184,47 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
+    }
+
+    /**
+     * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
+     * <p>
+     * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a> 
+     * <p>  
+     * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. However, there's a gotcha so read on.
+     * <p>
+     * {@link Mockito#validateMockitoUsage()} explicitly validates the framework state to detect invalid use of Mockito.
+     * <p>
+     * Examples of incorrect use:
+     * <pre>
+     * //Oups, someone forgot thenReturn() part:
+     * when(mock.get());
+     * 
+     * //Oups, someone put the verified method call inside verify() where it should be outside:
+     * verify(mock.execute());
+     * 
+     * //Oups, someone has used EasyMock for too long and forgot to specify the method to verify:
+     * verify(mock);
+     * </pre>
+     * 
+     * Mockito throws exceptions if you misuse it so that you know if your tests are written correctly. 
+     * The gotcha is that Mockito does the validation <b>next time</b> you use the framework (e.g. next time you verify, stub, call mock etc.). 
+     * But even though the exception might be thrown in the next test, 
+     * the exception <b>message contains a navigable stack trace element</b> with location of the defect. 
+     * Hence you can click and find the place where Mockito was misused.
+     * <p>
+     * Sometimes though, you might want to validate the framework usage explicitly. 
+     * For example, one of the users wanted to put {@link Mockito#validateMockitoUsage()} in his &#064;After method
+     * so that he knows immediately when he misused Mockito. 
+     * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.  
+     * <p>
+     * Bear in mind that <b>usually you shouldn't need to validateMockitoUsage()</b> 
+     * and framework validation triggered on next-time basis is just enough.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     */
+    public static void validateMockitoUsage() {
+        MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+        mockingProgress.validateState();
     }
 }
