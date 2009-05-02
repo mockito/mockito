@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.RunnerFactory;
+import org.mockito.internal.runners.RunnerImpl;
 
 
 /**
@@ -45,7 +46,7 @@ import org.mockito.internal.runners.RunnerFactory;
  */
 public class MockitoJUnitRunner extends Runner {
 
-    private final Runner runner;
+    private final RunnerImpl runner;
 
     public MockitoJUnitRunner(Class<?> klass) {
         runner = new RunnerFactory().create(klass);

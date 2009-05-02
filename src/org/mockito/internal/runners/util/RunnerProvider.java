@@ -2,7 +2,7 @@ package org.mockito.internal.runners.util;
 
 import java.lang.reflect.Constructor;
 
-import org.junit.runner.Runner;
+import org.mockito.internal.runners.RunnerImpl;
 
 public class RunnerProvider {
 
@@ -21,9 +21,9 @@ public class RunnerProvider {
         return hasJUnit45OrHigher;
     }
 
-    public Runner newInstance(String runnerClassName, Class<?> constructorParam) throws Throwable {
+    public RunnerImpl newInstance(String runnerClassName, Class<?> constructorParam) throws Exception {
         Class<?> runnerClass = Class.forName(runnerClassName);
         Constructor<?> constructor = runnerClass.getConstructor(Class.class.getClass());
-        return (Runner) constructor.newInstance(constructorParam);   
+        return (RunnerImpl) constructor.newInstance(constructorParam);   
     }
 }

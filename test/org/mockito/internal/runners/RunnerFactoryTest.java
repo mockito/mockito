@@ -3,7 +3,6 @@ package org.mockito.internal.runners;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
-import org.junit.runner.Runner;
 import org.junit.runners.model.InitializationError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
@@ -29,10 +28,10 @@ public class RunnerFactoryTest extends TestBase {
         RunnerFactory factory = new RunnerFactory(provider);
         
         //when
-        Runner runner = factory.create(RunnerFactoryTest.class);
+        RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(MockitoJUnit44RunnerImpl.class));
+        assertThat(runner, is(JUnit44RunnerImpl.class));
     }
     
     @Test
@@ -46,10 +45,10 @@ public class RunnerFactoryTest extends TestBase {
         RunnerFactory factory = new RunnerFactory(provider);
         
         //when
-        Runner runner = factory.create(RunnerFactoryTest.class);
+        RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(MockitoJUnit45AndUpRunner.class));
+        assertThat(runner, is(JUnit45AndHigherRunnerImpl.class));
     }
     
     @Test
@@ -59,7 +58,7 @@ public class RunnerFactoryTest extends TestBase {
             public boolean isJUnit45OrHigherAvailable() {
                 return false;
             }
-            public Runner newInstance(String runnerClassName, Class<?> constructorParam) throws Throwable {
+            public RunnerImpl newInstance(String runnerClassName, Class<?> constructorParam) throws Exception {
                 throw new InitializationError("Where is JUnit, dude?");
             }
         };

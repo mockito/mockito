@@ -5,10 +5,14 @@
 package org.mockito.runners;
 
 import org.junit.internal.runners.InitializationError;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.runners.MockitoJUnit44RunnerImpl;
+import org.mockito.internal.runners.JUnit44RunnerImpl;
+import org.mockito.internal.runners.RunnerImpl;
 
 
 /**
@@ -49,8 +53,21 @@ import org.mockito.internal.runners.MockitoJUnit44RunnerImpl;
  */
 @SuppressWarnings("deprecation")
 @Deprecated
-public class MockitoJUnit44Runner extends MockitoJUnit44RunnerImpl {
+public class MockitoJUnit44Runner extends Runner {
+
+    private RunnerImpl runner;
 
     public MockitoJUnit44Runner(Class<?> klass) throws InitializationError {
-        super(klass);
-    }}
+        this.runner = new JUnit44RunnerImpl(klass);
+    }
+
+    @Override
+    public Description getDescription() {
+        return runner.getDescription();
+    }
+
+    @Override
+    public void run(RunNotifier notifier) {
+        runner.run(notifier);
+    }
+}

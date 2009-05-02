@@ -1,27 +1,26 @@
 package org.mockito.internal.runners;
 
-import org.junit.runner.Runner;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
 
 public class RunnerFactory {
 
-    private final RunnerProvider classProvider;
+    private final RunnerProvider runnerProvider;
 
-    RunnerFactory(RunnerProvider classProvider) {
-        this.classProvider = classProvider;
+    RunnerFactory(RunnerProvider runnerProvider) {
+        this.runnerProvider = runnerProvider;
     }
 
     public RunnerFactory() {
         this(new RunnerProvider());
     }
 
-    public Runner create(Class<?> klass) {
+    public RunnerImpl create(Class<?> klass) {
         try {
-            if (classProvider.isJUnit45OrHigherAvailable()) {
-                return classProvider.newInstance("org.mockito.internal.runners.MockitoJUnit45AndUpRunner", klass);
+            if (runnerProvider.isJUnit45OrHigherAvailable()) {
+                return runnerProvider.newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
             } else {
-                return classProvider.newInstance("org.mockito.internal.runners.MockitoJUnit44RunnerImpl", klass);
+                return runnerProvider.newInstance("org.mockito.internal.runners.JUnit44RunnerImpl", klass);
             }
         } catch (Throwable t) {
             throw new MockitoException(

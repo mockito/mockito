@@ -6,30 +6,36 @@ package org.mockito.internal.runners;
 
 import org.junit.internal.runners.InitializationError;
 import org.junit.internal.runners.JUnit4ClassRunner;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 @SuppressWarnings("deprecation")
-//TODO: make it non visible for clients
-public class MockitoJUnit44RunnerImpl extends JUnit4ClassRunner {
+public class JUnit44RunnerImpl implements RunnerImpl {
 
-    public MockitoJUnit44RunnerImpl(Class<?> klass) throws InitializationError {
-        super(klass);
+    Runner runner;
+
+    public JUnit44RunnerImpl(Class<?> klass) throws InitializationError {
+        this.runner = new JUnit4ClassRunner(klass) {
+            @Override
+            protected Object createTest() throws Exception {
+                Object test = super.createTest();
+                MockitoAnnotations.initMocks(test);
+                return test;
+            }
+        };
     }
 
-    @Override
-    protected Object createTest() throws Exception {
-        Object test = super.createTest();
-        MockitoAnnotations.initMocks(test);
-        return test;
-    }
-
-    @Override
     public void run(RunNotifier notifier) {
         // add listener that validates framework usage at the end of each test
         notifier.addListener(new FrameworkUsageValidator(notifier));
 
-        super.run(notifier);
+        runner.run(notifier);
+    }
+
+    public Description getDescription() {
+        return runner.getDescription();
     }
 }

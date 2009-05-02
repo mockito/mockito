@@ -1,7 +1,7 @@
 package org.mockito.internal.runners.util;
 
 import org.junit.Test;
-import org.junit.runner.Runner;
+import org.mockito.internal.runners.RunnerImpl;
 import org.mockitoutil.TestBase;
 
 
@@ -21,7 +21,7 @@ public class RunnerProviderTest extends TestBase {
         //given
         RunnerProvider provider = new RunnerProvider();
         //when
-        Runner runner = provider.newInstance("org.mockito.internal.runners.MockitoJUnit45AndUpRunner", this.getClass());
+        RunnerImpl runner = provider.newInstance("org.mockito.internal.runners.JUnit45AndUpRunnerImpl", this.getClass());
         //then
         assertNotNull(runner);
     }
