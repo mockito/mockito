@@ -37,7 +37,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
             @Override
             public void runTest(RunNotifier notifier) {
-              //this is what happens when the test runs:
+                //this is what happens when the test runs:
                 //first, unused stubbing:
                 unusedStubbingThatQualifiesForWarning();
                 //then, let's make the test fail so that warnings are printed
