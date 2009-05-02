@@ -10,7 +10,6 @@ import org.junit.runners.model.Statement;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-//TODO: check out if this runner is still recommended in jUnit 4.6
 public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
 
     private Runner runner;
