@@ -55,5 +55,5 @@ public class MockitoTest extends TestBase {
         Mockito.inOrder("notMock");
     }
     
-    //TODO: after 1.7 stack filter does not work very well when it comes to threads?
+    //TODO: after 1.8 stack filter does not work very well when it comes to threads?
 }
