@@ -8,11 +8,13 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.MockitoLoggerImpl;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -29,14 +31,13 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     public void setup() throws InitializationError {
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub);
     }
     
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 //this is what happens when the test runs:
                 //first, unused stubbing:
                 unusedStubbingThatQualifiesForWarning();
@@ -48,16 +49,16 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 assertContains("mock.simpleMethod(123);", loggedInfo);
                 assertContains(".unusedStubbingThatQualifiesForWarning(", loggedInfo);
             }
-        };
+        });
         
         runner.run(notifier);
     }
 
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 callUnstubbedMethodThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
 
@@ -66,16 +67,16 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 assertContains("mock.simpleMethod(456);", loggedInfo);
                 assertContains(".callUnstubbedMethodThatQualifiesForWarning(", loggedInfo);
             }
-        };
+        });
         
         runner.run(notifier);
     }
     
     @Test
     public void shouldLogStubCalledWithDifferentArgumentsWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 someStubbing();
                 callStubbedMethodWithDifferentArgs();
                 notifier.fireTestFailure(null);
@@ -90,16 +91,16 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 assertContains("mock.simpleMethod(10);", loggedInfo);
                 assertContains(".callStubbedMethodWithDifferentArgs(", loggedInfo);
             }
-        };
+        });
         
         runner.run(notifier);
     }
     
     @Test
     public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 when(mock.simpleMethod(1)).thenReturn("foo");
                 mock.simpleMethod(1);
 
@@ -107,40 +108,39 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
                 
                 assertEquals("", loggerStub.getLoggedInfo());
             }
-        };
+        });
         
         runner.run(notifier);
     }
     
     @Test
     public void shouldNotLogWhenTestPasses() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 when(mock.simpleMethod()).thenReturn("foo");
                 
                 notifier.fireTestFinished(null);
                 
                 assertEquals("", loggerStub.getLoggedInfo());
             }
-        };
+        });
         
         runner.run(notifier);
     }
-    
     
     public void shouldClearDebuggingDataAfterwards() throws Exception {
         //given
         final DebuggingInfo debuggingInfo = new ThreadSafeMockingProgress().getDebuggingInfo();
 
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub) {
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
-            public void runTest(RunNotifier notifier) {
+            public void run(RunNotifier notifier) {
                 unusedStubbingThatQualifiesForWarning();
                 notifier.fireTestFailure(null);
                 assertTrue(debuggingInfo.hasData());
             }
-        };
+        });
         
         //when
         runner.run(notifier);
@@ -148,6 +148,23 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         //then
         assertFalse(debuggingInfo.hasData());
     }    
+    
+    @Test
+    public void shouldDelegateToGetDescription() throws Exception {
+        //given
+        final Description expectedDescription = Description.createSuiteDescription(this.getClass());
+        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+            public Description getDescription() {
+                return expectedDescription;
+            }
+        });
+        
+        //when
+        Description description = runner.getDescription();
+        
+        //then
+        assertEquals(expectedDescription, description);
+    }
 
     private void unusedStubbingThatQualifiesForWarning() {
         when(mock.simpleMethod(123)).thenReturn("foo");
@@ -177,5 +194,15 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         public String getLoggedInfo() {
             return loggedInfo.toString();
         }
+    }
+    
+    static class RunnerImplStub implements RunnerImpl {
+
+        public Description getDescription() {
+            return null;
+        }
+
+        public void run(RunNotifier notifier) {}
+
     }
 }

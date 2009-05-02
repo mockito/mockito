@@ -25,6 +25,7 @@ public class RunnerFactory {
         } catch (Throwable t) {
             throw new MockitoException(
                     "\n" +
+                    "\n" +
                     "MockitoRunner can only be used with JUnit 4.4 or higher.\n" +
                     "You can upgrade your JUnit version or write your own Runner (please consider contributing your runner to the Mockito community).\n" +
                     "Bear in mind that you can still enjoy all features of the framework without using runners (they are completely optional).\n" +

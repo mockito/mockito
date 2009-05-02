@@ -4,14 +4,17 @@
  */
 package org.mockito.runners;
 
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.InitializationError;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.runners.RunnerFactory;
+import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.internal.util.MockitoLoggerImpl;
 
@@ -83,22 +86,18 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
  */
-//TODO this runner fails badly when wrong JUnit is on the path
-public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
+public class VerboseMockitoJUnitRunner extends Runner {
 
     private final MockitoLogger logger;
+    private RunnerImpl runner;
     
-    public VerboseMockitoJUnitRunner(Class<?> klass) throws InitializationError {
-        this(klass, new MockitoLoggerImpl());
+    public VerboseMockitoJUnitRunner(Class<?> klass) {
+        this(klass, new MockitoLoggerImpl(), new RunnerFactory().create(klass));
     }
     
-    public VerboseMockitoJUnitRunner(Class<?> klass, MockitoLogger logger) throws InitializationError {
-        super(klass);
+    VerboseMockitoJUnitRunner(Class<?> klass, MockitoLogger logger, RunnerImpl runnerImpl) {
+        this.runner = runnerImpl;
         this.logger = logger;
-    }
-    
-    public void runTest(RunNotifier notifier) {
-        super.run(notifier);
     }
     
     @Override
@@ -108,7 +107,7 @@ public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
         
         beforeRun(notifier, debuggingInfo);
         
-        this.runTest(notifier);
+        runner.run(notifier);
         
         afterRun(debuggingInfo);
     }
@@ -127,5 +126,10 @@ public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
         };
         
         notifier.addListener(listener);
+    }
+
+    @Override
+    public Description getDescription() {
+        return runner.getDescription();
     }
 }
