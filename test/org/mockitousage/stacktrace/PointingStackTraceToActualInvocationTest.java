@@ -52,4 +52,14 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
             assertContains("first(", e.getMessage());
         }
     }   
+    
+    @Test
+    public void shouldNotPointStackTracesToRunnersCode() {
+        try {
+            verify(mock, times(0)).simpleMethod(1);
+            fail();
+        } catch (NeverWantedButInvoked e) {
+            assertNotContains(".runners.", e.getMessage());
+        }
+    }   
 }

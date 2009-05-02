@@ -4,12 +4,12 @@
  */
 package org.mockito.runners;
 
-import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.notification.RunNotifier;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.internal.runners.FrameworkUsageValidator;
+import org.junit.internal.runners.*;
+import org.junit.runner.*;
+import org.junit.runner.notification.*;
+import org.mockito.*;
+import org.mockito.internal.runners.*;
+
 
 /**
  * <b>JUnit 4.4</b> runner initializes mocks annotated with {@link Mock},
@@ -38,24 +38,28 @@ import org.mockito.internal.runners.FrameworkUsageValidator;
  * </pre>
  */
 @SuppressWarnings("deprecation")
-public class MockitoJUnit44Runner extends JUnit4ClassRunner {
+public class MockitoJUnit44Runner extends Runner {
+
+    private LegacyJUnitRunner legacyRunner;
 
     public MockitoJUnit44Runner(Class<?> klass) throws InitializationError {
-        super(klass);
+        legacyRunner = new LegacyJUnitRunner(klass, new TestCreationListener() {
+            public void testCreated(Object test) {
+                MockitoAnnotations.initMocks(test);
+            }
+        });
     }
 
     @Override
-    protected Object createTest() throws Exception {
-        Object test = super.createTest();
-        MockitoAnnotations.initMocks(test);
-        return test;
-    }
-    
-    @Override
     public void run(final RunNotifier notifier) {
-        //add listener that validates framework usage at the end of each test
+        // add listener that validates framework usage at the end of each test
         notifier.addListener(new FrameworkUsageValidator(notifier));
-        
-        super.run(notifier);
+
+        legacyRunner.run(notifier);
+    }
+
+    @Override
+    public Description getDescription() {
+        return legacyRunner.getDescription();
     }
 }

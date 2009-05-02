@@ -42,7 +42,7 @@ public class StackTraceFilterTest extends TestBase {
     }
     
     @Test
-    public void shouldIgnoreRunners() {
+    public void shouldKeepRunners() {
         StackTraceElement[] t = new TraceBuilder().classes(
                 "org.mockito.runners.Runner",
                 "junit.stuff",
@@ -53,5 +53,17 @@ public class StackTraceFilterTest extends TestBase {
         StackTraceElement[] filtered = filter.filter(t);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
+    }
+    
+    @Test
+    public void shouldKeepInternalRunners() {
+        StackTraceElement[] t = new TraceBuilder().classes(
+                "org.mockito.internal.runners.Runner",
+                "org.test.MockitoSampleTest"
+        ).toTraceArray();
+        
+        StackTraceElement[] filtered = filter.filter(t);
+        
+        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "org.mockito.internal.runners.Runner"));
     }
 }
