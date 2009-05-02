@@ -83,6 +83,7 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
  */
+//TODO this runner fails badly when wrong JUnit is on the path
 public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
 
     private final MockitoLogger logger;

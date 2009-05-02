@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 @SuppressWarnings("deprecation")
+//TODO: make it non visible for clients
 public class MockitoJUnit44RunnerImpl extends JUnit4ClassRunner {
 
     public MockitoJUnit44RunnerImpl(Class<?> klass) throws InitializationError {
