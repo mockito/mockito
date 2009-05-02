@@ -22,7 +22,6 @@ import org.mockito.internal.stubbing.ThrowsException;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
-import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -314,7 +313,7 @@ import org.mockito.stubbing.Answer;
  * MockitoAnnotations.initMocks(testClass);
  * </pre>
  * 
- * You can use built-in runners {@link MockitoJUnitRunner}, {@link MockitoJUnit44Runner}.
+ * You can use built-in runner: {@link MockitoJUnitRunner}.
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
@@ -1226,10 +1225,9 @@ public class Mockito extends Matchers {
      * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
      * <p>
      * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a> 
-     * <p>  
-     * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. However, there's a gotcha so read on.
      * <p>
-     * <b>{@link Mockito#validateMockitoUsage()} explicitly validates the framework state to detect invalid use of Mockito.</b>
+     * {@link Mockito#validateMockitoUsage()} <b>explicitly validates</b> the framework state to detect invalid use of Mockito.
+     * However, this feature is optional <b>because Mockito validates the usage all the time...</b> but there is a gotcha so read on.
      * <p>
      * Examples of incorrect use:
      * <pre>
@@ -1252,11 +1250,19 @@ public class Mockito extends Matchers {
      * Sometimes though, you might want to validate the framework usage explicitly. 
      * For example, one of the users wanted to put {@link Mockito#validateMockitoUsage()} in his &#064;After method
      * so that he knows immediately when he misused Mockito. 
-     * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.  
+     * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.
+     * One more benefit of having validateMockitoUsage() in &#064;After is that jUnit runner will always fail in the test method with defect
+     * whereas ordinary 'next-time' validation might fail the <b>next</b> test method. 
+     * But even though JUnit might report next test as red, don't worry about it 
+     * and just click at navigable stack trace element in the exception message to instantly locate the place where you misused mockito.   
      * <p>
-     * Bear in mind that <b>usually you shouldn't need to validateMockitoUsage()</b> 
-     * and framework validation triggered on next-time basis is just enough,
+     * <b>Built-in runner: {@link MockitoJUnitRunner}</b> does validateMockitoUsage() after each test method.
+     * <p>
+     * Bear in mind that <b>usually you don't have to validateMockitoUsage()</b> 
+     * and framework validation triggered on next-time basis should be just enough,
      * mainly because of enhanced exception message with clickable location of defect.
+     * However, I would recommend validateMockitoUsage() if you already have sufficient test infrastructure
+     * (like your own runner or base class for all tests) because adding a special action to &#064;After has zero cost.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      */

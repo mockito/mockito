@@ -4,27 +4,31 @@
  */
 package org.mockito.runners;
 
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.runners.FrameworkUsageValidator;
+import org.mockito.internal.runners.RunnerFactory;
+
 
 /**
- * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
- * <p>
- * JUnit 4.5 runner initializes mocks annotated with {@link Mock},
- * so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
- * Mocks are initialized before each test method. 
- * <p>
+ * Compatible with <b>JUnit 4.4</b> and higher, this runner adds following behavior:
+ * <ul>
+ *   <li>
+ *      Initializes mocks annotated with {@link Mock},
+ *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
+ *      Mocks are initialized before each test method.
+ *   <li>
+ *      validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
+ * </ul>
+ * 
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
+ * Explicitly validating framework usage is also optional because it is triggered automatically by Mockito every time you use the framework.
+ * See javadoc for {@link Mockito#validateMockitoUsage()}.
  * <p>
- * Read more in javadoc for {@link MockitoAnnotations}
- * <p>
- * Example:
+ * Read more about &#064;Mock annotation in javadoc for {@link MockitoAnnotations}
  * <pre>
  * <b>&#064;RunWith(MockitoJUnit44Runner.class)</b>
  * public class ExampleTest {
@@ -39,24 +43,21 @@ import org.mockito.internal.runners.FrameworkUsageValidator;
  * }
  * </pre>
  */
-public class MockitoJUnitRunner extends BlockJUnit4ClassRunner {
+public class MockitoJUnitRunner extends Runner {
 
-    public MockitoJUnitRunner(Class<?> klass) throws InitializationError {
-        super(klass);
+    private final Runner runner;
+
+    public MockitoJUnitRunner(Class<?> klass) {
+        runner = new RunnerFactory().create(klass);
     }
 
     @Override
-    protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
-        //init annotated mocks before tests
-        MockitoAnnotations.initMocks(target);
-        return super.withBefores(method, target, statement);
+    public void run(final RunNotifier notifier) {           
+        runner.run(notifier);
     }
-    
+
     @Override
-    public void run(final RunNotifier notifier) {
-        //add listener that validates framework usage at the end of each test
-        notifier.addListener(new FrameworkUsageValidator(notifier));
-        
-        super.run(notifier);
+    public Description getDescription() {
+        return runner.getDescription();
     }
 }

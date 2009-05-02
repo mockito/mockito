@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-@RunWith(org.mockito.runners.MockitoJUnit44Runner.class)
+@RunWith(org.mockito.runners.MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 @Ignore("this issue is a little bit unclear to me. Let's wait until we have some more data")
 public class ThreadReuseTest extends TestBase {

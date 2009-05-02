@@ -15,8 +15,8 @@ import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockitoutil.TestBase;
 
 @RunWith(MockitoJUnit44Runner.class)
-@SuppressWarnings("unchecked")
-public class JUnit4RunnerTest extends TestBase {
+@SuppressWarnings({"unchecked", "deprecation"})
+public class JUnit44RunnerTest extends TestBase {
     
     @Mock private List list;
     

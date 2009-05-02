@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mockito.internal.runners;
+package org.mockito.internal.runners.util;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;

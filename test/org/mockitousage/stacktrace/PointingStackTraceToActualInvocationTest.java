@@ -16,6 +16,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 //This is required to make sure stack trace is well filtered when runner is ON
+@SuppressWarnings("deprecation")
 @RunWith(MockitoJUnit44Runner.class)
 public class PointingStackTraceToActualInvocationTest extends TestBase {
     

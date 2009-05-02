@@ -4,21 +4,31 @@
  */
 package org.mockito.runners;
 
-import org.junit.internal.runners.*;
-import org.junit.runner.*;
-import org.junit.runner.notification.*;
-import org.mockito.*;
-import org.mockito.internal.runners.*;
+import org.junit.internal.runners.InitializationError;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.internal.runners.MockitoJUnit44RunnerImpl;
 
 
 /**
- * <b>JUnit 4.4</b> runner initializes mocks annotated with {@link Mock},
- * so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
- * Mocks are initialized before each test method. 
+ * <b>Deprecated: Simply use {@link MockitoJUnitRunner}</b>
  * <p>
+ * Compatible only with <b>JUnit 4.4</b>, this runner adds following behavior:
+ * <ul>
+ *   <li>
+ *      Initializes mocks annotated with {@link Mock},
+ *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
+ *      Mocks are initialized before each test method.
+ *   <li>
+ *      validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
+ * </ul>
+ * 
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
+ * Explicitly validating framework usage is also optional because it is triggered automatically by Mockito every time you use the framework.
+ * See javadoc for {@link Mockito#validateMockitoUsage()}.
  * <p>
- * Read more in javadoc for {@link MockitoAnnotations}
+ * Read more about &#064;Mock annotation in javadoc for {@link MockitoAnnotations}
  * <p>
  * Example:
  * <pre>
@@ -38,28 +48,9 @@ import org.mockito.internal.runners.*;
  * </pre>
  */
 @SuppressWarnings("deprecation")
-public class MockitoJUnit44Runner extends Runner {
-
-    private LegacyJUnitRunner legacyRunner;
+@Deprecated
+public class MockitoJUnit44Runner extends MockitoJUnit44RunnerImpl {
 
     public MockitoJUnit44Runner(Class<?> klass) throws InitializationError {
-        legacyRunner = new LegacyJUnitRunner(klass, new TestCreationListener() {
-            public void testCreated(Object test) {
-                MockitoAnnotations.initMocks(test);
-            }
-        });
-    }
-
-    @Override
-    public void run(final RunNotifier notifier) {
-        // add listener that validates framework usage at the end of each test
-        notifier.addListener(new FrameworkUsageValidator(notifier));
-
-        legacyRunner.run(notifier);
-    }
-
-    @Override
-    public Description getDescription() {
-        return legacyRunner.getDescription();
-    }
-}
+        super(klass);
+    }}
