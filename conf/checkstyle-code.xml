@@ -3,8 +3,9 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: mockito-code
-    Description: none
+    Checkstyle-Configuration: mockito
+    Description: 
+Slightly modified version of Sun Checks that better matches the default code formatter setting of Eclipse.
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
@@ -36,9 +37,7 @@
         <module name="ParameterName"/>
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
-        <module name="AvoidStarImport">
-            <property name="severity" value="ignore"/>
-        </module>
+        <module name="AvoidStarImport"/>
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports">
