@@ -97,27 +97,18 @@ public class VerboseMockitoJUnitRunner extends MockitoJUnitRunner {
         this.logger = logger;
     }
     
-    //this is what is really executed when the test runs
-    static interface JunitTestBody {
-        void run(RunNotifier notifier);
+    public void runTest(RunNotifier notifier) {
+        super.run(notifier);
     }
     
     @Override
     public void run(RunNotifier notifier) {
-        this.run(notifier, new JunitTestBody() {
-            public void run(RunNotifier notifier) {
-                VerboseMockitoJUnitRunner.super.run(notifier);
-            }
-        });
-    }
-    
-    public void run(RunNotifier notifier, JunitTestBody junitTestBody) {
         MockingProgress progress = new ThreadSafeMockingProgress();
         DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
         
         beforeRun(notifier, debuggingInfo);
         
-        junitTestBody.run(notifier);
+        this.runTest(notifier);
         
         afterRun(debuggingInfo);
     }
