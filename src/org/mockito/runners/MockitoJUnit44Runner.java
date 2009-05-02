@@ -4,15 +4,9 @@
  */
 package org.mockito.runners;
 
-import org.junit.internal.runners.InitializationError;
-import org.junit.runner.Description;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.runners.JUnit44RunnerImpl;
-import org.mockito.internal.runners.RunnerImpl;
 
 
 /**
