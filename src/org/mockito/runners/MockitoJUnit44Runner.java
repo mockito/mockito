@@ -53,21 +53,9 @@ import org.mockito.internal.runners.RunnerImpl;
  */
 @SuppressWarnings("deprecation")
 @Deprecated
-public class MockitoJUnit44Runner extends Runner {
+public class MockitoJUnit44Runner extends MockitoJUnitRunner {
 
-    private RunnerImpl runner;
-
-    public MockitoJUnit44Runner(Class<?> klass) throws InitializationError {
-        this.runner = new JUnit44RunnerImpl(klass);
-    }
-
-    @Override
-    public Description getDescription() {
-        return runner.getDescription();
-    }
-
-    @Override
-    public void run(RunNotifier notifier) {
-        runner.run(notifier);
+    public MockitoJUnit44Runner(Class<?> klass) {
+        super(klass);
     }
 }
