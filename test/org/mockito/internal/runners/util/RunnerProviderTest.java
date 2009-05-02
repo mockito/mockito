@@ -5,23 +5,23 @@ import org.junit.runner.Runner;
 import org.mockitoutil.TestBase;
 
 
-public class ClassProviderTest extends TestBase {
+public class RunnerProviderTest extends TestBase {
     
     @Test
     public void shouldKnowAboutJUnit45() throws Exception {
         //given
-        ClassProvider provider = new ClassProvider();
+        RunnerProvider provider = new RunnerProvider();
         //then
-        assertTrue(provider.hasJUnit45OrHigher());
+        assertTrue(provider.isJUnit45OrHigherAvailable());
         //I cannot test the opposite condition :(
     }
     
     @Test
     public void shouldCreateRunnerInstance() throws Throwable {
         //given
-        ClassProvider provider = new ClassProvider();
+        RunnerProvider provider = new RunnerProvider();
         //when
-        Runner runner = provider.newInstance("org.mockito.internal.runners.MockitoJUnit45AndUpRunner", ClassProviderTest.class);
+        Runner runner = provider.newInstance("org.mockito.internal.runners.MockitoJUnit45AndUpRunner", this.getClass());
         //then
         assertNotNull(runner);
     }

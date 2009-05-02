@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 
 import org.junit.runner.Runner;
 
-public class ClassProvider {
+public class RunnerProvider {
 
     private static boolean hasJUnit45OrHigher; 
 
@@ -17,7 +17,7 @@ public class ClassProvider {
         }
     }
     
-    public boolean hasJUnit45OrHigher() {
+    public boolean isJUnit45OrHigherAvailable() {
         return hasJUnit45OrHigher;
     }
 

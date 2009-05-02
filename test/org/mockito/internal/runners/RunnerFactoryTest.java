@@ -6,23 +6,23 @@ import org.junit.Test;
 import org.junit.runner.Runner;
 import org.junit.runners.model.InitializationError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.runners.util.ClassProvider;
+import org.mockito.internal.runners.util.RunnerProvider;
 import org.mockitoutil.TestBase;
 
 public class RunnerFactoryTest extends TestBase {
 
-    static class ClassProviderStub extends ClassProvider {
+    static class ClassProviderStub extends RunnerProvider {
         @Override
-        public boolean hasJUnit45OrHigher() {
-            return super.hasJUnit45OrHigher();
+        public boolean isJUnit45OrHigherAvailable() {
+            return super.isJUnit45OrHigherAvailable();
         }
     }
 
     @Test
     public void shouldCreateRunnerForJUnit44() {
         //given
-        ClassProvider provider = new ClassProvider() {
-            public boolean hasJUnit45OrHigher() {
+        RunnerProvider provider = new RunnerProvider() {
+            public boolean isJUnit45OrHigherAvailable() {
                 return false;
             }
         };
@@ -38,8 +38,8 @@ public class RunnerFactoryTest extends TestBase {
     @Test
     public void shouldCreateRunnerForJUnit45() {
         //given
-        ClassProvider provider = new ClassProvider() {
-            public boolean hasJUnit45OrHigher() {
+        RunnerProvider provider = new RunnerProvider() {
+            public boolean isJUnit45OrHigherAvailable() {
                 return true;
             }
         };
@@ -55,8 +55,8 @@ public class RunnerFactoryTest extends TestBase {
     @Test
     public void shouldThrowMeaningfulMockitoExceptionIfNoValidJUnitFound() {
         //given
-        ClassProvider provider = new ClassProvider() {
-            public boolean hasJUnit45OrHigher() {
+        RunnerProvider provider = new RunnerProvider() {
+            public boolean isJUnit45OrHigherAvailable() {
                 return false;
             }
             public Runner newInstance(String runnerClassName, Class<?> constructorParam) throws Throwable {
