@@ -199,9 +199,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
         } catch (Exception e) {
-            assertContains("String cannot be returned by booleanObjectReturningMethod" +
+            assertContains("String cannot be returned by booleanObjectReturningMethod()" +
                     "\n" +
-                    "booleanObjectReturningMethod should return Boolean",
+                    "booleanObjectReturningMethod() should return Boolean",
                     e.getMessage());
         }
     }

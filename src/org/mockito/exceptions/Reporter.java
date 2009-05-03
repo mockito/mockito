@@ -382,10 +382,10 @@ public class Reporter {
              ));
     }
 
-    public void wrongTypeOfReturnValue(String expectedType, String actualType, String method) {
+    public void wrongTypeOfReturnValue(String expectedType, String actualType, String methodName) {
         throw new WrongTypeOfReturnValue(join(
-                actualType + " cannot be returned by " + method,
-                method + " should return " + expectedType
+                actualType + " cannot be returned by " + methodName + "()",
+                methodName + "() should return " + expectedType
                 ));
     }
 
