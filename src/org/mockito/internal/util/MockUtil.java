@@ -26,6 +26,16 @@ public class MockUtil {
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
 
         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
+        
+        if (optionalInstance != null) {
+            try {
+                new ShallowCopyTool().copy(optionalInstance, mock);
+            } catch (UnableToCopyFieldValue e) {
+                //Ignore - spying should be used only occasionally and if some field cannot be copied then let's be it
+            }
+        }
+        
+        //TODO: does it make sense to set instance?
         filter.setInstance(optionalInstance != null ? optionalInstance : mock);
         return mock;
     }

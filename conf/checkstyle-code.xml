@@ -3,9 +3,8 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: mockito
-    Description: 
-Slightly modified version of Sun Checks that better matches the default code formatter setting of Eclipse.
+    Checkstyle-Configuration: mockito-code
+    Description: none
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
@@ -112,6 +111,7 @@ Slightly modified version of Sun Checks that better matches the default code for
         </module>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier">
+            <property name="severity" value="ignore"/>
             <property name="packageAllowed" value="true"/>
             <property name="protectedAllowed" value="true"/>
         </module>
