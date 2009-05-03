@@ -6,54 +6,76 @@ package org.mockitousage.spies;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 @Ignore
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {
 
+    @After
+    public void validateMockitoUsage() {
+        Mockito.validateMockitoUsage();
+    }
+    
     class Person {
-        private final String defaultName = "Default name";
+        private final Name defaultName = new Name("Default name");
 
         public String getName() {
-            return guessName();
+            return guessName().name;
         }
 
-        protected String guessName() {
+        Name guessName() {
             return defaultName;
         }
     }
+    
+    class Name {
+        private final String name;
 
-    @Mock
-    Person mock;
+        public Name(String name) {
+            this.name = name;
+        }
+    }
+
+    Person spy = spy(new Person());
 
     @Test
     public void shouldCallRealMethdsEvenDelegatedToOtherSelfMethod() {
         // when
-        String name = mock.getName();
+        String name = spy.getName();
 
         // then
         assertEquals("Default name", name);
+    }
+    
+    @Test
+    public void shouldAllowStubbingOfMethodsThatDelegateToOtherMethods() {
+        // when
+        when(spy.getName()).thenReturn("foo");
+        
+        // then
+        assertEquals("foo", spy.getName());
     }
 
     @Test
     public void shouldVerify() {
         // when
-        mock.getName();
+        spy.getName();
 
         // then
-        verify(mock).guessName();
+        verify(spy).guessName();
     }
 
     @Test
     public void shouldStub() {
         // given
-        when(mock.guessName()).thenReturn("John");
+        when(spy.guessName()).thenReturn(new Name("John"));
         // when
-        String name = mock.getName();
+        String name = spy.getName();
         // then
         assertEquals("John", name);
     }

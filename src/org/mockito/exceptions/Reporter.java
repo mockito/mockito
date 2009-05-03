@@ -79,7 +79,7 @@ public class Reporter {
                 "For example:",
                 "    when(mock.getArticles()).thenReturn(articles);",
                 "",
-                "Also, this error might show up because you verify final method, equals() or hashCode() method.",
+                "Also, this error might show up because you stub final/private/equals() or hashCode() method.",
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
@@ -93,7 +93,7 @@ public class Reporter {
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
                 "",
-                "Also, this error might show up because you stub a final method, equals() or hashCode() method.",
+                "Also, this error might show up because you verify final/private/equals() or hashCode() method.",
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
@@ -405,7 +405,7 @@ public class Reporter {
                 "    verify(mock).someMethod(contains(\"foo\"))",
                 "",
                 "Also, this error might show up because you use argument matchers with methods that cannot be mocked.",
-                "Following methods *cannot* be stubbed/verified: final methods, equals() and hashCode().",                
+                "Following methods *cannot* be stubbed/verified: final/private/equals()/hashCode() methods.",                
                 ""
                 ));
     }

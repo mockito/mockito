@@ -95,7 +95,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         } else if (MockUtil.isMock(instance)) {
             return returnValues.valueFor(invocation);
         } else {
-            return methodProxy.invoke(instance, args);
+            return methodProxy.invokeSuper(proxy, args);
         }
     }
 

@@ -29,7 +29,7 @@ public class MockUtil {
         
         if (optionalInstance != null) {
             try {
-                new ShallowCopyTool().copy(optionalInstance, mock);
+                new ShallowCopyTool().copyToMock(optionalInstance, mock);
             } catch (UnableToCopyFieldValue e) {
                 //Ignore - spying should be used only occasionally and if some field cannot be copied then let's be it
             }

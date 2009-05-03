@@ -61,6 +61,10 @@ public class TestBase extends Assert {
             }
         };
     }
+    
+    public static void assertNotEquals(Object expected, Object got) {
+        assertFalse(expected.equals(got));
+    }
 
     public static void assertContains(String sub, String string) {
         assertTrue("\n" +

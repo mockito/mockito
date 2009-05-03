@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -20,6 +21,7 @@ import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitoutil.TestBase;
 
+@Ignore
 @SuppressWarnings("unchecked")
 public class SpyingOnRealObjectsTest extends TestBase {
 

@@ -1,40 +1,72 @@
 package org.mockito.internal.util;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-
+@SuppressWarnings("unchecked")
 public class ShallowCopyToolTest extends TestBase {
 
     private ShallowCopyTool tool = new ShallowCopyTool();
     
     //TODO: inherited fields
-    class SomeObject {
-        private int fieldOne = 1;
-        String fieldTwo = "2";
-        protected Object fieldThree = new Object();
-        public SomeOtherObject fieldFour = new SomeOtherObject();
-        final int fieldFive;
-        public SomeObject(int fieldFiveValue) {
-            this.fieldFive = fieldFiveValue;
+    //TODO: if one field fails - should carry on
+    static class SomeObject {
+        private static int staticField = 900; 
+        private int privateField = 1;
+        private transient int privateTransientField = 100;
+        String defaultField = "2";
+        protected Object protectedField = new Object();
+        public SomeOtherObject instancePublicField = new SomeOtherObject();
+        final int finalField;
+        public SomeObject(int finalField) {
+            this.finalField = finalField;
         }
     }
     
-    class SomeOtherObject {}
+    static class SomeOtherObject {}
 
+    private SomeObject first = new SomeObject(100);
+    private SomeObject second = mock(SomeObject.class);
+    
     @Test
-    public void shouldShallowCopy() throws Exception {
+    public void shouldShallowCopyBasicFields() throws Exception {
         //given
-        SomeObject first = new SomeObject(100);
-        SomeObject second = new SomeObject(200);
-        assertEquals(200, second.fieldFive);
+        assertEquals(100, first.finalField);
+        assertNotEquals(100, second.finalField);
         
         //when
-        tool.copy(first, second);
+        tool.copyToMock(first, second);
         
         //then
-        assertEquals(100, second.fieldFive);
+        assertEquals(100, second.finalField);
+    }
+
+    @Test
+    public void shouldShallowCopyTransientPrivateFields() throws Exception {
+        //given
+        first.privateTransientField = 1000;
+        assertNotEquals(1000, second.privateTransientField);
+        
+        //when
+        tool.copyToMock(first, second);
+        
+        //then
+        assertEquals(1000, second.privateTransientField);
+    }
+    
+    @Test
+    public void shouldShallowCopyLinkedListIntoMock() throws Exception {
+        //given
+        LinkedList from = new LinkedList();
+        LinkedList to = mock(LinkedList.class);
+        
+        //when
+        tool.copyToMock(from, to);
+        
+        //then no exception is thrown
     }
 }
