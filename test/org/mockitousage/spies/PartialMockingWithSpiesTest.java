@@ -19,7 +19,14 @@ public class PartialMockingWithSpiesTest extends TestBase {
         Mockito.validateMockitoUsage();
     }
     
-    class Person {
+    class InheritMe {
+        private String inherited = "100$";
+        protected String getInherited() {
+            return inherited;
+        }
+    }
+    
+    class Person extends InheritMe {
         private final Name defaultName = new Name("Default name");
 
         public String getName() {
@@ -28,6 +35,10 @@ public class PartialMockingWithSpiesTest extends TestBase {
 
         Name guessName() {
             return defaultName;
+        }
+        
+        public String howMuchDidYouInherit() {
+            return getInherited();
         }
     }
     
@@ -76,5 +87,10 @@ public class PartialMockingWithSpiesTest extends TestBase {
         String name = spy.getName();
         // then
         assertEquals("John", name);
+    }
+    
+    @Test
+    public void shouldDealWithPrivateFieldsOfSubclasses() {
+        assertEquals("100$", spy.howMuchDidYouInherit());
     }
 }

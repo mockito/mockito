@@ -12,9 +12,13 @@ public class ShallowCopyToolTest extends TestBase {
 
     private ShallowCopyTool tool = new ShallowCopyTool();
 
-    // TODO: inherited fields
+    static class InheritMe {
+        protected String protectedInherited = "protected";
+        private String privateInherited = "private";
+    }
+    
     // TODO: if one field fails - should carry on
-    static class SomeObject {
+    static class SomeObject extends InheritMe {
         @SuppressWarnings("unused") 
         // required because static fields needs to be excluded from copying 
         private static int staticField = -100;
@@ -27,54 +31,6 @@ public class ShallowCopyToolTest extends TestBase {
 
         public SomeObject(int finalField) {
             this.finalField = finalField;
-        }
-        
-        public int hashCode() {
-            return 0;
-        }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final SomeObject other = (SomeObject) obj;
-            if (defaultField == null) {
-                if (other.defaultField != null) {
-                    return false;
-                }
-            } else if (!defaultField.equals(other.defaultField)) {
-                return false;
-            }
-            if (finalField != other.finalField) {
-                return false;
-            }
-            if (instancePublicField == null) {
-                if (other.instancePublicField != null) {
-                    return false;
-                }
-            } else if (!instancePublicField.equals(other.instancePublicField)) {
-                return false;
-            }
-            if (privateField != other.privateField) {
-                return false;
-            }
-            if (privateTransientField != other.privateTransientField) {
-                return false;
-            }
-            if (protectedField == null) {
-                if (other.protectedField != null) {
-                    return false;
-                }
-            } else if (!protectedField.equals(other.protectedField)) {
-                return false;
-            }
-            return true;
         }
     }
 
@@ -146,5 +102,22 @@ public class ShallowCopyToolTest extends TestBase {
         assertEquals(from.privateField, to.privateField);
         assertEquals(from.privateTransientField, to.privateTransientField);
         assertEquals(from.protectedField, to.protectedField);
+    }
+    
+    @Test
+    public void shouldCopyValuesOfInheritedFields() throws Exception {
+        //given
+        ((InheritMe) from).privateInherited = "foo";
+        ((InheritMe) from).protectedInherited = "bar";
+    
+        assertNotEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
+        assertNotEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
+        
+        //when
+        tool.copyToMock(from, to);
+        
+        //then
+        assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
+        assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
     }
 }

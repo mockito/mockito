@@ -3,31 +3,36 @@ package org.mockito.internal.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+@SuppressWarnings("unchecked")
 public class ShallowCopyTool {
 
     public <T> void copyToMock(T from, T mock) throws UnableToCopyFieldValue {
-        Class<? extends Object> classFrom = from.getClass();
-        Class<?> classTo = mock.getClass().getSuperclass();
-        assert classTo == classFrom : "Classes must have the same type: class from: " + classFrom + ", class to: " + classTo;
+        Class clazz = from.getClass();
+        Class mockSuperClass = mock.getClass().getSuperclass();
+        assert mockSuperClass == clazz : "Classes must have the same type: class of the object from: " + clazz + ", mock super class: " + mockSuperClass;
 
-        Field[] fieldsFrom = classFrom.getDeclaredFields();
-        Field[] fieldsTo = classTo.getDeclaredFields();
-        assert fieldsFrom.length == fieldsTo.length : "Objects should be of the same type";
+        while (clazz != Object.class) {
+            copyValues(from, mock, clazz);
+            clazz = clazz.getSuperclass();
+        }
+    }
 
-        for (int i = 0; i < fieldsFrom.length; i++) {
-            if (Modifier.isStatic(fieldsFrom[i].getModifiers())) {
+    private <T> void copyValues(T from, T mock, Class classFrom)
+            throws UnableToCopyFieldValue {
+        Field[] fields = classFrom.getDeclaredFields();
+
+        for (int i = 0; i < fields.length; i++) {
+            if (Modifier.isStatic(fields[i].getModifiers())) {
                 continue;
             }
             try {
-                fieldsFrom[i].setAccessible(true);
-                fieldsTo[i].setAccessible(true);
-                Object value = fieldsFrom[i].get(from);
-                fieldsTo[i].set(mock, value);
+                //TODO: undo
+                fields[i].setAccessible(true);
+                Object value = fields[i].get(from);
+                fields[i].set(mock, value);
             } catch (Throwable t) {
                 //TODO: add missing unit test
-                throw new UnableToCopyFieldValue(
-                        "Unable to copy value from field: " + fieldsFrom[i] + 
-                        " to field: " + fieldsTo[i], t); 
+                throw new UnableToCopyFieldValue("Unable to copy value to field: " + fields[i], t); 
             } 
         }
     }
