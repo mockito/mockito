@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.stubbing;
+package org.mockito.internal.stubbing.answers;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
@@ -11,6 +11,10 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.stubbing.answers.AnswersValidator;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockitoutil.TestBase;
 
 public class AnswersValidatorTest extends TestBase {

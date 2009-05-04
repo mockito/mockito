@@ -7,12 +7,10 @@ package org.mockitousage.spies;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
-@Ignore
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {
 

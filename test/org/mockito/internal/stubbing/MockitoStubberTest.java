@@ -12,6 +12,8 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.MockingProgressImpl;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockitoutil.TestBase;
 
 public class MockitoStubberTest extends TestBase{
