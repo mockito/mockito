@@ -16,6 +16,7 @@ import org.mockito.internal.creation.MethodInterceptorFilter;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.util.copy.LenientCopyTool;
 
 public class MockUtil {
 
@@ -28,11 +29,7 @@ public class MockUtil {
         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
         
         if (optionalInstance != null) {
-            try {
-                new ShallowCopyTool().copyToMock(optionalInstance, mock);
-            } catch (UnableToCopyFieldValue e) {
-                //Ignore - spying should be used only occasionally and if some field cannot be copied then let's be it
-            }
+            new LenientCopyTool().copyToMock(optionalInstance, mock);
         }
         
         //TODO: does it make sense to set instance?

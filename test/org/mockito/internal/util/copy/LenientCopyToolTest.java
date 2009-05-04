@@ -1,23 +1,25 @@
-package org.mockito.internal.util;
+package org.mockito.internal.util.copy;
 
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class ShallowCopyToolTest extends TestBase {
+public class LenientCopyToolTest extends TestBase {
 
-    private ShallowCopyTool tool = new ShallowCopyTool();
+    private LenientCopyTool tool = new LenientCopyTool();
 
     static class InheritMe {
         protected String protectedInherited = "protected";
         private String privateInherited = "private";
     }
     
-    // TODO: if one field fails - should carry on
     static class SomeObject extends InheritMe {
         @SuppressWarnings("unused") 
         // required because static fields needs to be excluded from copying 
@@ -119,5 +121,38 @@ public class ShallowCopyToolTest extends TestBase {
         //then
         assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
         assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
+    }
+    
+    @Test
+    public void shouldEnableAndThenDisableAccessibility() throws Exception {
+        //given
+        Field privateField = SomeObject.class.getDeclaredField("privateField");
+        assertFalse(privateField.isAccessible());
+        
+        //when
+        tool.copyToMock(from, to);
+        
+        //then
+        privateField = SomeObject.class.getDeclaredField("privateField");
+        assertFalse(privateField.isAccessible());
+    }
+    
+    @Test
+    public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
+        //given
+        final Queue<Boolean> sequence = new LinkedList<Boolean>(Arrays.asList(true, true, false, true));
+        tool.fieldCopier = new FieldCopier() {
+            public <T> void copyValue(T from, T to, Field field) throws IllegalAccessException {
+                if(!sequence.isEmpty() && !sequence.poll()) {
+                    throw new IllegalAccessException();
+                }
+            }
+        };
+        
+        //when
+        tool.copyToMock(from, to);
+        
+        //then
+        assertTrue(sequence.isEmpty());
     }
 }
