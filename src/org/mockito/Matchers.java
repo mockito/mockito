@@ -204,7 +204,8 @@ public class Matchers {
     
     /**
      * any object of specified class. 
-     * Sometimes looks better than anyObject() 
+     * <p>
+     * Sometimes looks better than anyObject() - especially when explicit casting is required
      * <p>
      * Alias to {@link Matchers#anyObject()}
      * <p>
@@ -213,6 +214,19 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
+        return (T) anyObject();
+    }
+    
+    /**
+     * any object or null 
+     * <p>
+     * Shorter alias to {@link Matchers#anyObject()}
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     * 
+     * @return <code>null</code>.
+     */
+    public static <T> T any() {
         return (T) anyObject();
     }
 

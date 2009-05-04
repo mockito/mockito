@@ -1,11 +1,10 @@
 package org.mockito.internal.util.copy;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
@@ -140,19 +139,18 @@ public class LenientCopyToolTest extends TestBase {
     @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
         //given
-        final Queue<Boolean> sequence = new LinkedList<Boolean>(Arrays.asList(true, true, false, true));
-        tool.fieldCopier = new FieldCopier() {
-            public <T> void copyValue(T from, T to, Field field) throws IllegalAccessException {
-                if(!sequence.isEmpty() && !sequence.poll()) {
-                    throw new IllegalAccessException();
-                }
-            }
-        };
+        tool.fieldCopier = mock(FieldCopier.class);
+        
+        doNothing().
+        doThrow(new IllegalAccessException()).
+        doNothing().
+        when(tool.fieldCopier).
+        copyValue(anyObject(), anyObject(), any(Field.class));
         
         //when
         tool.copyToMock(from, to);
         
         //then
-        assertTrue(sequence.isEmpty());
+        verify(tool.fieldCopier, atLeast(3)).copyValue(any(), any(), any(Field.class));
     }
 }
