@@ -402,6 +402,7 @@ import org.mockito.stubbing.Answer;
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
  * <p>
  * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
+ * 
  * <p>
  * Spying on real objects is often associated with "partial mocking" concept. 
  * However, Mockito spies are not partial mocks. Mockito spy is meant to help testing other classes - not the spy itself. 
