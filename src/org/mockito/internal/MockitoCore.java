@@ -8,9 +8,10 @@ import java.util.Arrays;
 
 import org.mockito.AncillaryTypes;
 import org.mockito.InOrder;
-import org.mockito.ReturnValues;
+import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
@@ -29,12 +30,10 @@ public class MockitoCore {
     private final Reporter reporter = new Reporter();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
-    public <T> T mock(Class<T> classToMock, AncillaryTypes implementing, String name,
-            T optionalInstance, ReturnValues returnValues) {
+    public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         mockingProgress.validateState();
         mockingProgress.resetOngoingStubbing();
-        return MockUtil.createMock(classToMock, implementing, mockingProgress, name,
-                optionalInstance, returnValues);
+        return MockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
     }
     
     public AncillaryTypes implementing(Class<?>...ancillaryTypes) {

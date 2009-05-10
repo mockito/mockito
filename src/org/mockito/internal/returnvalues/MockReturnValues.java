@@ -6,6 +6,7 @@ package org.mockito.internal.returnvalues;
 
 import org.mockito.ReturnValues;
 import org.mockito.internal.MockitoCore;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -29,7 +30,6 @@ public class MockReturnValues implements ReturnValues {
             return null;
         }
         
-        return mockitoCore.mock((Class) class1, null, null, null, this);
+        return mockitoCore.mock((Class) class1, new MockSettingsImpl().defaultBehavior(this));
     }
-
 }

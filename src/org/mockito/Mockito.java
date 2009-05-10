@@ -6,6 +6,7 @@ package org.mockito;
 
 
 import org.mockito.internal.MockitoCore;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
@@ -599,7 +600,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MOCKITO_CORE.mock(classToMock, null, null, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, configureWith().defaultBehavior(RETURNS_DEFAULTS));
     }
     
     /**
@@ -617,7 +618,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return MOCKITO_CORE.mock(classToMock, null, name, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, configureWith().name(name).defaultBehavior(RETURNS_DEFAULTS));
     }
     
     /**
@@ -640,7 +641,12 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return MOCKITO_CORE.mock(classToMock, null, null, (T) null, returnValues);
+        return MOCKITO_CORE.mock(classToMock, configureWith().defaultBehavior(returnValues));
+    }
+    
+    //TODO: javadoc
+    public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
+        return MOCKITO_CORE.mock(classToMock, mockSettings);
     }
     
     /**
@@ -705,7 +711,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MOCKITO_CORE.mock((Class<T>) object.getClass(), null, null, object, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock((Class<T>) object.getClass(), configureWith().spiedInstance(object).defaultBehavior(RETURNS_DEFAULTS));
     }
 
     /**
@@ -1269,5 +1275,9 @@ public class Mockito extends Matchers {
      */
     public static void validateMockitoUsage() {
         MOCKITO_CORE.validateMockitoUsage();
+    }
+
+    public static MockSettings configureWith() {
+        return new MockSettingsImpl();
     }
 }

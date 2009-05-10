@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.reset;
+package org.mockitousage.basicapi;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;

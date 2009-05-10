@@ -8,12 +8,11 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.mockito.AncillaryTypes;
-import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.creation.MethodInterceptorFilter;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
@@ -21,12 +20,14 @@ import org.mockito.internal.util.copy.LenientCopyTool;
 
 public class MockUtil {
 
-    public static <T> T createMock(Class<T> classToMock, AncillaryTypes ancillaryTypes, MockingProgress progress, String mockName,
-            T optionalInstance, ReturnValues returnValues) {
+    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, MockSettingsImpl settings) {
         validateType(classToMock);
-        MockHandler<T> mockHandler = new MockHandler<T>(new MockName(mockName, classToMock), progress, new MatchersBinder(), returnValues);
+        MockName mockName = new MockName(settings.getMockName(), classToMock);
+        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings.getReturnValues());
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
-        Class<?>[] interfaces = ancillaryTypes == null ? new Class<?>[0] : ancillaryTypes.implementing();
+        Class<?>[] ancillaryTypes = settings.getExtraInterfaces();
+        Class<?>[] interfaces = ancillaryTypes == null ? new Class<?>[0] : ancillaryTypes;
+        Object optionalInstance = settings.getSpiedInstance();
         
         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, interfaces);
         

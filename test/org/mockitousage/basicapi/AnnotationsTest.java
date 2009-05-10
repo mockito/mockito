@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage;
+package org.mockitousage.basicapi;
 
 import static org.mockito.Mockito.*;
 
@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
