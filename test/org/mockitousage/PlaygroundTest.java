@@ -42,7 +42,9 @@ public class PlaygroundTest extends TestBase {
     
     @Test
     public void partialMockInAction() {
-//        mock = mock(Foo.class)
+//        mock = mock(Foo.class, configuration() 
+//            .name("foo").defaultBehavior(RETURNS_SMART_NULLS).extraInterfaces()
+//            .
 //            .withName("foo")
 //            .withDefaultBehavior(RETURNS_SMART_NULLS)
 //            .withInterfaces(Bar.class);

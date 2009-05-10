@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.creation.jmock;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.Factory;
@@ -52,6 +55,31 @@ public class ClassImposterizerTest extends TestBase {
         Factory cglibFactoryTwo = (Factory) mockTwo;
         
         assertNotSame(cglibFactoryOne.getCallback(0), cglibFactoryTwo.getCallback(0));
+    }
+    
+    //TODO: try with 2 the same / different interfaces
+    @Test
+    public void ensureMockIsAllTypes() {
+        SomeClass mock = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, SomeInterface.class);
+        
+        assertThat(mock, is(instanceOf(SomeInterface.class)));
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowWhenClassPassedAsInterface() {
+        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeInterface.class, SomeClass.class);
+    }
+    
+    //TODO: different exception
+    @Test(expected = IllegalStateException.class)
+    public void shouldThrowWhenNullType() {
+        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, (Class<?>) null);
+    }
+    
+    //TODO: why nulls are ok?
+    @Test
+    public void ensureNoProblemsWithNullTypes() {
+        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, (Class<?>[]) null);
     }
     
     private interface SomeInterface {};

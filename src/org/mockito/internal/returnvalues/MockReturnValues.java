@@ -29,7 +29,7 @@ public class MockReturnValues implements ReturnValues {
             return null;
         }
         
-        return mockitoCore.mock((Class) class1, null, null, this);
+        return mockitoCore.mock((Class) class1, null, null, null, this);
     }
 
 }

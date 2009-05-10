@@ -6,6 +6,7 @@ package org.mockito.internal;
 
 import java.util.Arrays;
 
+import org.mockito.AncillaryTypes;
 import org.mockito.InOrder;
 import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
@@ -28,10 +29,16 @@ public class MockitoCore {
     private final Reporter reporter = new Reporter();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
-    public <T> T mock(Class<T> classToMock, String name, T optionalInstance, ReturnValues returnValues) {
+    public <T> T mock(Class<T> classToMock, AncillaryTypes implementing, String name,
+            T optionalInstance, ReturnValues returnValues) {
         mockingProgress.validateState();
         mockingProgress.resetOngoingStubbing();
-        return MockUtil.createMock(classToMock, mockingProgress, name, optionalInstance, returnValues);
+        return MockUtil.createMock(classToMock, implementing, mockingProgress, name,
+                optionalInstance, returnValues);
+    }
+    
+    public AncillaryTypes implementing(Class<?>...ancillaryTypes) {
+        return new AncillaryTypesImpl(ancillaryTypes);
     }
     
     public OngoingStubbing stub() {

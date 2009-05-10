@@ -51,10 +51,10 @@ public class ClassImposterizer  {
         return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers()) && !type.isAnonymousClass();
     }
     
-    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancilliaryTypes) {
+    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
         try {
             setConstructorsAccessible(mockedType, true);
-            Class<?> proxyClass = createProxyClass(mockedType);
+            Class<?> proxyClass = createProxyClass(mockedType, ancillaryTypes);
             return mockedType.cast(createProxy(proxyClass, interceptor));
         } finally {
             setConstructorsAccessible(mockedType, false);
@@ -67,7 +67,7 @@ public class ClassImposterizer  {
         }
     }
     
-    private <T> Class<?> createProxyClass(Class<?> mockedType) {
+    private <T> Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
@@ -83,9 +83,10 @@ public class ClassImposterizer  {
         enhancer.setUseFactory(true);
         if (mockedType.isInterface()) {
             enhancer.setSuperclass(Object.class);
-            enhancer.setInterfaces(prepend(mockedType));
+            enhancer.setInterfaces(prepend(mockedType, interfaces));
         } else {
             enhancer.setSuperclass(mockedType);
+            enhancer.setInterfaces(interfaces);
         }
         enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
         enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
@@ -96,6 +97,9 @@ public class ClassImposterizer  {
         }
         
         try {
+            //TODO this can throw IllegalStateException if interfaces is a bad parameter
+            //1. validate it and throw early
+            //2. catch and rethrow as MockitoException
             return enhancer.createClass(); 
         } catch (CodeGenerationException e) {
             if (Modifier.isPrivate(mockedType.getModifiers())) {

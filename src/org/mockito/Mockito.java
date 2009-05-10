@@ -599,7 +599,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MOCKITO_CORE.mock(classToMock, null, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, null, null, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -617,7 +617,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return MOCKITO_CORE.mock(classToMock, name, null, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock(classToMock, null, name, null, RETURNS_DEFAULTS);
     }
     
     /**
@@ -640,7 +640,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return MOCKITO_CORE.mock(classToMock, null, (T) null, returnValues);
+        return MOCKITO_CORE.mock(classToMock, null, null, (T) null, returnValues);
     }
     
     /**
@@ -705,7 +705,7 @@ public class Mockito extends Matchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MOCKITO_CORE.mock((Class<T>) object.getClass(), null, object, RETURNS_DEFAULTS);
+        return MOCKITO_CORE.mock((Class<T>) object.getClass(), null, null, object, RETURNS_DEFAULTS);
     }
 
     /**

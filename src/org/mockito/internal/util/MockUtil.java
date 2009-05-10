@@ -8,6 +8,7 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
+import org.mockito.AncillaryTypes;
 import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -20,13 +21,14 @@ import org.mockito.internal.util.copy.LenientCopyTool;
 
 public class MockUtil {
 
-    public static <T> T createMock(Class<T> classToMock, MockingProgress progress, String mockName, T optionalInstance,
-            ReturnValues returnValues) {
+    public static <T> T createMock(Class<T> classToMock, AncillaryTypes ancillaryTypes, MockingProgress progress, String mockName,
+            T optionalInstance, ReturnValues returnValues) {
         validateType(classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(new MockName(mockName, classToMock), progress, new MatchersBinder(), returnValues);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
-
-        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock);
+        Class<?>[] interfaces = ancillaryTypes == null ? new Class<?>[0] : ancillaryTypes.implementing();
+        
+        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, interfaces);
         
         if (optionalInstance != null) {
             new LenientCopyTool().copyToMock(optionalInstance, mock);
