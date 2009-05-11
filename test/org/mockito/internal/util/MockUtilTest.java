@@ -10,15 +10,55 @@ import java.util.List;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
+    
+    public class CreationValidatorStub extends CreationValidator {
+        private boolean extraInterfacesValidated;
+        private boolean typeValidated;
+        public void validateType(Class classToMock) {
+            typeValidated = true;
+        }
+        public void validateExtraInterfaces(Class classToMock, Class ... interfaces) {
+            extraInterfacesValidated = true;
+        }
+    }
 
-    @SuppressWarnings("unchecked")
+    @Before
+    public void setUp() {
+        MockUtil.creationValidator = new CreationValidatorStub();
+    }
+    
+    @After
+    public void restoreValidator() {
+        MockUtil.creationValidator = new CreationValidator();
+    }
+    
+    @Test 
+    public void shouldValidate() {
+        //given
+        assertFalse(((CreationValidatorStub) MockUtil.creationValidator).extraInterfacesValidated);
+        assertFalse(((CreationValidatorStub) MockUtil.creationValidator).typeValidated);
+
+        //when
+        MockUtil.createMock(IMethods.class, new ThreadSafeMockingProgress(), new MockSettingsImpl());
+        
+        //then
+        assertTrue(((CreationValidatorStub) MockUtil.creationValidator).extraInterfacesValidated);
+        assertTrue(((CreationValidatorStub) MockUtil.creationValidator).typeValidated);
+    }
+
     @Test 
     public void shouldGetHandler() {
         List mock = Mockito.mock(List.class);

@@ -434,4 +434,25 @@ public class Reporter {
                 ""
                 ));
     }
+
+    public void extraInterfacesDoesNotAcceptNullParameters() {
+        throw new MockitoException(join(
+                "extraInterfaces() does not accept null parameters."
+                ));
+    }
+
+    public void extraInterfacesAcceptsOnlyInterfaces(Class<?> wrongType) {
+        throw new MockitoException(join(
+                "extraInterfaces() accepts only interfaces.",
+                "You passed following type: " + wrongType.getSimpleName() + " which is not an interface."
+        ));
+    }
+
+    public void extraInterfacesCannotContainMockedType(Class<?> wrongType) {
+        throw new MockitoException(join(
+                "extraInterfaces() does not accept the same type as the mocked type.",
+                "You mocked following type: " + wrongType.getSimpleName(), 
+                "and you passed the same very interface to the extraInterfaces()"
+        ));
+    }
 }

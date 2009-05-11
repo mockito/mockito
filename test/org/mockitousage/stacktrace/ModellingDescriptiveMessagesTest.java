@@ -7,6 +7,9 @@ package org.mockitousage.stacktrace;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -162,5 +165,20 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         ArgumentCaptor<String> argument = new ArgumentCaptor<String>();
         argument.capture();
         argument.getValue();
+    }
+    
+    @Test
+    public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
+        mock(IMethods.class, configureWith().extraInterfaces(List.class, null));
+    }
+    
+    @Test
+    public void shouldScreamWhenNonInterfacePassed() {
+        mock(IMethods.class, configureWith().extraInterfaces(LinkedList.class));
+    }
+    
+    @Test
+    public void shouldScreamWhenExtraIsTheSame() {
+        mock(IMethods.class, configureWith().extraInterfaces(IMethods.class));
     }
 }

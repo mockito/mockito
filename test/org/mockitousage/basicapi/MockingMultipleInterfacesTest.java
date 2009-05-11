@@ -8,6 +8,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class MockingMultipleInterfacesTest extends TestBase {
@@ -24,5 +26,41 @@ public class MockingMultipleInterfacesTest extends TestBase {
         //then
         assertThat(mock, is(IFoo.class));
         assertThat(mock, is(IBar.class));
+    }
+    
+    @Test
+    public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
+        try {
+            //when
+            mock(Foo.class, configureWith().extraInterfaces(IFoo.class, null));
+            fail();
+        } catch (MockitoException e) {
+            //then
+            assertContains("extraInterfaces() does not accept null parameters", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldScreamWhenNonInterfacePassed() {
+        try {
+            //when
+            mock(Foo.class, configureWith().extraInterfaces(Foo.class));
+            fail();
+        } catch (MockitoException e) {
+            //then
+            assertContains("Foo which is not an interface", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldScreamWhenTheSameInterfacesPassed() {
+        try {
+            //when
+            mock(IMethods.class, configureWith().extraInterfaces(IMethods.class));
+            fail();
+        } catch (MockitoException e) {
+            //then
+            assertContains("You mocked following type: IMethods", e.getMessage());
+        }
     }
 }

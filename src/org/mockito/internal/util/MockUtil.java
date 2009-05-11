@@ -8,7 +8,6 @@ import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.creation.MethodInterceptorFilter;
@@ -19,9 +18,13 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.util.copy.LenientCopyTool;
 
 public class MockUtil {
+    
+    public static CreationValidator creationValidator = new CreationValidator();
 
     public static <T> T createMock(Class<T> classToMock, MockingProgress progress, MockSettingsImpl settings) {
-        validateType(classToMock);
+        creationValidator.validateType(classToMock);
+        creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
+        
         MockName mockName = new MockName(settings.getMockName(), classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings.getReturnValues());
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
@@ -46,12 +49,6 @@ public class MockUtil {
         MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
         newFilter.setInstance(mock);
         ((Factory) mock).setCallback(0, newFilter);
-    }
-
-    private static <T> void validateType(Class<T> classToMock) {
-        if (!ClassImposterizer.INSTANCE.canImposterise(classToMock)) {
-            new Reporter().cannotMockFinalClass(classToMock);
-        }
     }
 
     public static <T> MockHandler<T> getMockHandler(T mock) {

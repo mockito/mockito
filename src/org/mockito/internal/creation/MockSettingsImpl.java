@@ -2,6 +2,7 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 import org.mockito.ReturnValues;
+import org.mockito.exceptions.Reporter;
 
 public class MockSettingsImpl implements MockSettings {
 
@@ -11,6 +12,13 @@ public class MockSettingsImpl implements MockSettings {
     private Object spiedInstance;
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
+        for (Class<?> i : extraInterfaces) {
+            if (i == null) {
+                new Reporter().extraInterfacesDoesNotAcceptNullParameters();
+            } else if (!i.isInterface()) {
+                new Reporter().extraInterfacesAcceptsOnlyInterfaces(i);
+            }
+        }
         this.extraInterfaces = extraInterfaces;
         return this;
     }
