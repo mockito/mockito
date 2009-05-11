@@ -28,12 +28,13 @@ import org.mockito.stubbing.Answer;
 public class MockitoCore {
 
     private final Reporter reporter = new Reporter();
+    private final MockUtil mockUtil = new MockUtil();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         mockingProgress.validateState();
         mockingProgress.resetOngoingStubbing();
-        return MockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
+        return mockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
     }
     
     public AncillaryTypes implementing(Class<?>...ancillaryTypes) {
@@ -64,7 +65,7 @@ public class MockitoCore {
     public <T> T verify(T mock, VerificationMode mode) {
         if (mock == null) {
             reporter.nullPassedToVerify();
-        } else if (!MockUtil.isMock(mock)) {
+        } else if (!mockUtil.isMock(mock)) {
             reporter.notAMockPassedToVerify();
         }
         mockingProgress.verificationStarted(mode);
@@ -77,7 +78,7 @@ public class MockitoCore {
         mockingProgress.resetOngoingStubbing();
         
         for (T m : mocks) {
-            MockUtil.resetMock(m, mockingProgress);
+            mockUtil.resetMock(m, mockingProgress);
         }
     }
     
@@ -89,7 +90,7 @@ public class MockitoCore {
                 if (mock == null) {
                     reporter.nullPassedToVerifyNoMoreInteractions();
                 }
-                MockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+                mockUtil.getMockHandler(mock).verifyNoMoreInteractions();
             } catch (NotAMockException e) {
                 reporter.notAMockPassedToVerifyNoMoreInteractions();
             }
@@ -109,7 +110,7 @@ public class MockitoCore {
         for (Object mock : mocks) {
             if (mock == null) {
                 reporter.nullPassedWhenCreatingInOrder();
-            } else if (!MockUtil.isMock(mock)) {
+            } else if (!mockUtil.isMock(mock)) {
                 reporter.notAMockPassedWhenCreatingInOrder();
             }
         }
@@ -124,7 +125,7 @@ public class MockitoCore {
     }
     
     public <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        MockHandler<T> handler = MockUtil.getMockHandler(mock);
+        MockHandler<T> handler = mockUtil.getMockHandler(mock);
         mockingProgress.stubbingStarted();
         return handler.voidMethodStubbable(mock);
     }

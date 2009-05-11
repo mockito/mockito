@@ -35,7 +35,7 @@ public class DetectingFinalMethodsTest extends TestBase {
     @Test
     public void shouldFailWithUnfinishedStubbing() {
         withFinal = mock(WithFinal.class);
-        MockUtil.getMockHandler(withFinal);
+        new MockUtil().getMockHandler(withFinal);
         try {
             when(withFinal.foo()).thenReturn(null);
             fail();

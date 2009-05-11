@@ -21,13 +21,17 @@ public class StubberImpl implements Stubber {
     private final Reporter reporter = new Reporter();
 
     public <T> T when(T mock) {
+        MockUtil mockUtil = new MockUtil();
+        
         if (mock == null) {
             reporter.nullPassedToWhenMethod();
-        } else if (!MockUtil.isMock(mock)) {
-            reporter.notAMockPassedToWhenMethod();
+        } else {
+            if (!mockUtil.isMock(mock)) {
+                reporter.notAMockPassedToWhenMethod();
+            }
         }
         
-        MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
+        mockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
         return mock;
     }
 

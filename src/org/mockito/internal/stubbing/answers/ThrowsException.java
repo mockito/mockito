@@ -19,7 +19,7 @@ public class ThrowsException implements Answer<Object> {
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (MockUtil.isMock(throwable)) {
+        if (new MockUtil().isMock(throwable)) {
             throw throwable;
         }
         Throwable t = throwable.fillInStackTrace();

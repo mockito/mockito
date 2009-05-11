@@ -19,19 +19,18 @@ public class MockReturnValuesTest extends TestBase {
     }
 
     final class Baz {
-
     }
 
     @Test
     // FIXME split into separate
     public void shouldReturnMockValueForInterface() throws Exception {
         Object interfaceMock = values.returnValueFor(FooInterface.class);
-        assertTrue(MockUtil.isMock(interfaceMock));
+        assertTrue(new MockUtil().isMock(interfaceMock));
     }
 
     public void shouldReturnMockValueForClass() throws Exception {
         Object classMock = values.returnValueFor(BarClass.class);
-        assertTrue(MockUtil.isMock(classMock));
+        assertTrue(new MockUtil().isMock(classMock));
     }
 
     @Test

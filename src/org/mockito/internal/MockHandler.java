@@ -88,7 +88,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         if (answer != null) {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             return answer.answer(invocation);
-        } else if (MockUtil.isMock(instance)) {
+        } else if (new MockUtil().isMock(instance)) {
             return returnValues.valueFor(invocation);
         } else {
             Object ret = methodProxy.invokeSuper(proxy, args);

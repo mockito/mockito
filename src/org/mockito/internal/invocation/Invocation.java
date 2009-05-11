@@ -151,7 +151,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     }
 
     private String qualifiedMethodName() {
-        return MockUtil.getMockName(mock) + "." + method.getName();
+        return new MockUtil().getMockName(mock) + "." + method.getName();
     }
 
     private String getArgumentsLine(List<Matcher> matchers) {

@@ -55,7 +55,7 @@ public class EmptyReturnValues implements ReturnValues {
     public Object valueFor(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
-            MockName name = MockUtil.getMockName(mock);
+            MockName name = new MockUtil().getMockName(mock);
             if (name.isSurrogate()) {
                 return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
             } else {
