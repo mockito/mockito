@@ -936,6 +936,8 @@ public class Mockito extends Matchers {
      * that occurred before the test method, for example: in setUp(), &#064;Before method or in constructor.
      * Consider writing nice code that makes interactions only in test methods.  
      * <p>
+     * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified
@@ -1172,6 +1174,10 @@ public class Mockito extends Matchers {
      *   verify(mock, never()).someMethod();
      * </pre>
      * 
+     * <p>
+     * If you want to verify there were NO interactions with the mock 
+     * check out {@link Mockito#verifyZeroInteractions(Object...)}
+     * or {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
