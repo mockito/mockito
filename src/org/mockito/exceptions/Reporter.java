@@ -455,4 +455,10 @@ public class Reporter {
                 "and you passed the same very interface to the extraInterfaces()"
         ));
     }
+
+    public void extraInterfacesRequiresAtLeastOneInterface() {
+        throw new MockitoException(join(
+                "extraInterfaces() requires at least one interface."
+        ));
+    }
 }

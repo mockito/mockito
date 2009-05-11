@@ -12,6 +12,10 @@ public class MockSettingsImpl implements MockSettings {
     private Object spiedInstance;
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
+        if (extraInterfaces == null || extraInterfaces.length == 0) {
+            new Reporter().extraInterfacesRequiresAtLeastOneInterface();
+        }
+            
         for (Class<?> i : extraInterfaces) {
             if (i == null) {
                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();

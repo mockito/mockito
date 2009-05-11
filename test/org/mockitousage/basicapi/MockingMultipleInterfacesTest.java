@@ -41,6 +41,30 @@ public class MockingMultipleInterfacesTest extends TestBase {
     }
     
     @Test
+    public void shouldScreamWhenNoArgsPassed() {
+        try {
+            //when
+            mock(Foo.class, configureWith().extraInterfaces());
+            fail();
+        } catch (MockitoException e) {
+            //then
+            assertContains("extraInterfaces() requires at least one interface", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldScreamWhenNullPassedInsteadOfAnArray() {
+        try {
+            //when
+            mock(Foo.class, configureWith().extraInterfaces((Class[]) null));
+            fail();
+        } catch (MockitoException e) {
+            //then
+            assertContains("extraInterfaces() requires at least one interface", e.getMessage());
+        }
+    }
+    
+    @Test
     public void shouldScreamWhenNonInterfacePassed() {
         try {
             //when

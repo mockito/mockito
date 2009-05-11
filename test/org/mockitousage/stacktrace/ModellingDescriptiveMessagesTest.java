@@ -181,4 +181,14 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldScreamWhenExtraIsTheSame() {
         mock(IMethods.class, configureWith().extraInterfaces(IMethods.class));
     }
+    
+    @Test
+    public void shouldScreamWhenExtraInterfacesEmpty() {
+        mock(IMethods.class, configureWith().extraInterfaces());
+    }
+    
+    @Test
+    public void shouldScreamWhenExtraInterfacesIsANullArray() {
+        mock(IMethods.class, configureWith().extraInterfaces((Class[]) null));
+    }
 }

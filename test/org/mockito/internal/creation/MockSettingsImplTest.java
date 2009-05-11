@@ -11,46 +11,40 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class MockSettingsImplTest extends TestBase {
 
-    @Test
+    private MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();
+
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullInterface() {
-        try {
-            //when
-            new MockSettingsImpl().extraInterfaces(List.class, null);
-            fail();
-            //then
-        } catch (MockitoException e) {}
+        mockSettingsImpl.extraInterfaces(List.class, null);
     }
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowNonInterfaces() {
-        try {
-            //when
-            new MockSettingsImpl().extraInterfaces(List.class, LinkedList.class);
-            fail();
-            //then
-        } catch (MockitoException e) {}
+        mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
     }
     
-    @Test
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowUsingTheSameInterfaceAsExtra() {
-        try {
-            //when
-            new MockSettingsImpl().extraInterfaces(List.class, LinkedList.class);
-            fail();
-            //then
-        } catch (MockitoException e) {}
+        mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowEmptyExtraInterfaces() {
+        mockSettingsImpl.extraInterfaces();
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowNullArrayOfExtraInterfaces() {
+        mockSettingsImpl.extraInterfaces((Class[]) null);
     }
     
     @Test
     public void shouldAllowMultipleInterfaces() {
-        //given
-        MockSettingsImpl settings = new MockSettingsImpl();
-        
         //when
-        settings.extraInterfaces(List.class, Set.class);
+        mockSettingsImpl.extraInterfaces(List.class, Set.class);
         
         //then
-        assertEquals(List.class, settings.getExtraInterfaces()[0]);
-        assertEquals(Set.class, settings.getExtraInterfaces()[1]);
+        assertEquals(List.class, mockSettingsImpl.getExtraInterfaces()[0]);
+        assertEquals(Set.class, mockSettingsImpl.getExtraInterfaces()[1]);
     }
 }
