@@ -7,9 +7,9 @@ package org.mockito.internal;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.internal.creation.MockAwareInterceptor;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -32,7 +32,7 @@ import org.mockito.stubbing.Answer;
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> implements MockAwareInterceptor<T> {
+public class MockHandler<T> implements MethodInterceptor {
 
     private final RegisteredInvocations registeredInvocations;
     private final MockitoStubber mockitoStubber;
@@ -121,9 +121,5 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
-    }
-
-    public MockSettingsImpl getMockSettings() {
-        return mockSettings;
     }
 }

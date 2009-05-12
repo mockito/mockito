@@ -8,10 +8,11 @@ import java.lang.reflect.Method;
 
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 
+import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 @SuppressWarnings("unchecked")
-public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements MockAwareInterceptor {
+public class MethodInterceptorFilter<T extends MethodInterceptor> implements MethodInterceptor {
     
     private final Method equalsMethod;
     private final Method hashCodeMethod;
