@@ -36,11 +36,11 @@ public class MockUtil {
         MockName mockName = new MockName(settings.getMockName(), classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
-        Class<?>[] ancillaryTypes = settings.getExtraInterfaces();
-        Class<?>[] interfaces = ancillaryTypes == null ? new Class<?>[0] : ancillaryTypes;
+        Class<?>[] interfaces = settings.getExtraInterfaces();
+        Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
         Object optionalInstance = settings.getSpiedInstance();
         
-        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, interfaces);
+        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
         
         if (optionalInstance != null) {
             new LenientCopyTool().copyToMock(optionalInstance, mock);

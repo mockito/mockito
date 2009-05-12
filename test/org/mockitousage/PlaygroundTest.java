@@ -42,8 +42,16 @@ public class PlaygroundTest extends TestBase {
     
     @Test
     public void partialMockInAction() {
-//        mock = mock(Foo.class, configuration() 
-//            .name("foo").defaultBehavior(RETURNS_SMART_NULLS).extraInterfaces()
+//        mock = mock(Foo.class, withSettings() 
+//            .defaultBehavior(CALLS_REAL_METHODS)
+//            .constructor(constructor, 1, "foo");
+//        
+//        mock = mock(Foo.class, withSettings() 
+//            .defaultBehavior(CALLS_REAL_METHODS)
+//            .constructorArgs("some arg", 1);
+//
+//        spy = spy(Foo.class, "some arg", 1);
+//        
 //            .
 //            .withName("foo")
 //            .withDefaultBehavior(RETURNS_SMART_NULLS)

@@ -57,29 +57,11 @@ public class ClassImposterizerTest extends TestBase {
         assertNotSame(cglibFactoryOne.getCallback(0), cglibFactoryTwo.getCallback(0));
     }
     
-    //TODO: try with 2 the same / different interfaces
     @Test
-    public void ensureMockIsAllTypes() {
+    public void shouldUseAnicilliaryTypes() {
         SomeClass mock = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, SomeInterface.class);
         
         assertThat(mock, is(instanceOf(SomeInterface.class)));
-    }
-    
-    @Test(expected = IllegalStateException.class)
-    public void shouldThrowWhenClassPassedAsInterface() {
-        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeInterface.class, SomeClass.class);
-    }
-    
-    //TODO: different exception
-    @Test(expected = IllegalStateException.class)
-    public void shouldThrowWhenNullType() {
-        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, (Class<?>) null);
-    }
-    
-    //TODO: why nulls are ok?
-    @Test
-    public void ensureNoProblemsWithNullTypes() {
-        ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, (Class<?>[]) null);
     }
     
     private interface SomeInterface {};

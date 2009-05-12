@@ -97,9 +97,6 @@ public class ClassImposterizer  {
         }
         
         try {
-            //TODO this can throw IllegalStateException if interfaces is a bad parameter
-            //1. validate it and throw early
-            //2. catch and rethrow as MockitoException
             return enhancer.createClass(); 
         } catch (CodeGenerationException e) {
             if (Modifier.isPrivate(mockedType.getModifiers())) {
