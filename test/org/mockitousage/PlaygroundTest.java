@@ -52,7 +52,6 @@ public class PlaygroundTest extends TestBase {
 //
 //        spy = spy(Foo.class, "some arg", 1);
 //        
-//            .
 //            .withName("foo")
 //            .withDefaultBehavior(RETURNS_SMART_NULLS)
 //            .withInterfaces(Bar.class);

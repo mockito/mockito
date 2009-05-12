@@ -169,26 +169,26 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Test
     public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
-        mock(IMethods.class, configureWith().extraInterfaces(List.class, null));
+        mock(IMethods.class, withSettings().extraInterfaces(List.class, null));
     }
     
     @Test
     public void shouldScreamWhenNonInterfacePassed() {
-        mock(IMethods.class, configureWith().extraInterfaces(LinkedList.class));
+        mock(IMethods.class, withSettings().extraInterfaces(LinkedList.class));
     }
     
     @Test
     public void shouldScreamWhenExtraIsTheSame() {
-        mock(IMethods.class, configureWith().extraInterfaces(IMethods.class));
+        mock(IMethods.class, withSettings().extraInterfaces(IMethods.class));
     }
     
     @Test
     public void shouldScreamWhenExtraInterfacesEmpty() {
-        mock(IMethods.class, configureWith().extraInterfaces());
+        mock(IMethods.class, withSettings().extraInterfaces());
     }
     
     @Test
     public void shouldScreamWhenExtraInterfacesIsANullArray() {
-        mock(IMethods.class, configureWith().extraInterfaces((Class[]) null));
+        mock(IMethods.class, withSettings().extraInterfaces((Class[]) null));
     }
 }

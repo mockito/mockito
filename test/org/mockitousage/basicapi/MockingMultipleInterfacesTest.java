@@ -21,7 +21,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     @Test
     public void shouldAllowMultipleInterfaces() {
         //when
-        Foo mock = mock(Foo.class, configureWith().extraInterfaces(IFoo.class, IBar.class));
+        Foo mock = mock(Foo.class, withSettings().extraInterfaces(IFoo.class, IBar.class));
         
         //then
         assertThat(mock, is(IFoo.class));
@@ -32,7 +32,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
         try {
             //when
-            mock(Foo.class, configureWith().extraInterfaces(IFoo.class, null));
+            mock(Foo.class, withSettings().extraInterfaces(IFoo.class, null));
             fail();
         } catch (MockitoException e) {
             //then
@@ -44,7 +44,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     public void shouldScreamWhenNoArgsPassed() {
         try {
             //when
-            mock(Foo.class, configureWith().extraInterfaces());
+            mock(Foo.class, withSettings().extraInterfaces());
             fail();
         } catch (MockitoException e) {
             //then
@@ -56,7 +56,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     public void shouldScreamWhenNullPassedInsteadOfAnArray() {
         try {
             //when
-            mock(Foo.class, configureWith().extraInterfaces((Class[]) null));
+            mock(Foo.class, withSettings().extraInterfaces((Class[]) null));
             fail();
         } catch (MockitoException e) {
             //then
@@ -68,7 +68,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     public void shouldScreamWhenNonInterfacePassed() {
         try {
             //when
-            mock(Foo.class, configureWith().extraInterfaces(Foo.class));
+            mock(Foo.class, withSettings().extraInterfaces(Foo.class));
             fail();
         } catch (MockitoException e) {
             //then
@@ -80,7 +80,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
     public void shouldScreamWhenTheSameInterfacesPassed() {
         try {
             //when
-            mock(IMethods.class, configureWith().extraInterfaces(IMethods.class));
+            mock(IMethods.class, withSettings().extraInterfaces(IMethods.class));
             fail();
         } catch (MockitoException e) {
             //then

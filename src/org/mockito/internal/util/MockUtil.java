@@ -38,12 +38,12 @@ public class MockUtil {
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         Class<?>[] interfaces = settings.getExtraInterfaces();
         Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
-        Object optionalInstance = settings.getSpiedInstance();
+        Object spiedInstance = settings.getSpiedInstance();
         
         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
         
-        if (optionalInstance != null) {
-            new LenientCopyTool().copyToMock(optionalInstance, mock);
+        if (spiedInstance != null) {
+            new LenientCopyTool().copyToMock(spiedInstance, mock);
         }
         
         return mock;

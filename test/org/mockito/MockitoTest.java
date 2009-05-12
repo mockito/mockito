@@ -4,12 +4,13 @@
  */
 package org.mockito;
 
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockitoutil.TestBase;
 
@@ -53,6 +54,15 @@ public class MockitoTest extends TestBase {
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenCreatingInOrderObject() {
         Mockito.inOrder("notMock");
+    }
+    
+    @Test
+    public void shouldStartingMockSettingsContainDefaultBehavior() {
+        //when
+        MockSettingsImpl settings = (MockSettingsImpl) Mockito.withSettings();
+        
+        //then
+        assertEquals(Mockito.RETURNS_DEFAULTS, settings.getReturnValues());
     }
     
     //TODO: after 1.8 stack filter does not work very well when it comes to threads?
