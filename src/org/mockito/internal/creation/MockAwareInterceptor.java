@@ -12,6 +12,5 @@ import net.sf.cglib.proxy.MethodProxy;
 public interface MockAwareInterceptor<T> extends MethodInterceptor {
 
     Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable;
-    
-    void setInstance(T mock);
+
 }

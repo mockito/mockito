@@ -47,4 +47,22 @@ public class MockSettingsImplTest extends TestBase {
         assertEquals(List.class, mockSettingsImpl.getExtraInterfaces()[0]);
         assertEquals(Set.class, mockSettingsImpl.getExtraInterfaces()[1]);
     }
+    
+    @Test
+    public void shouldKnowIfIsASpy() throws Exception {
+        //when
+        mockSettingsImpl.spiedInstance(new Object());
+        
+        //then
+        assertTrue(mockSettingsImpl.isSpy());
+    }
+    
+    @Test
+    public void shouldKnowNotBeASpyIfNoSpiedInstance() throws Exception {
+        //when
+        mockSettingsImpl.spiedInstance(null);
+        
+        //then
+        assertFalse(mockSettingsImpl.isSpy());
+    }
 }

@@ -53,8 +53,4 @@ public class MethodInterceptorFilter<T extends MockAwareInterceptor> implements 
     public T getDelegate() {
         return delegate;
     }
-
-    public void setInstance(Object instance) {
-        delegate.setInstance(instance);
-    }
 }

@@ -57,4 +57,8 @@ public class MockSettingsImpl implements MockSettings {
         this.spiedInstance = spiedInstance;
         return this;
     }
+
+    public boolean isSpy() {
+        return spiedInstance != null;
+    }
 }

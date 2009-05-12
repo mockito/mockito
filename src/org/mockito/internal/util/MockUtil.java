@@ -34,7 +34,7 @@ public class MockUtil {
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         
         MockName mockName = new MockName(settings.getMockName(), classToMock);
-        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings.getReturnValues());
+        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
         MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
         Class<?>[] ancillaryTypes = settings.getExtraInterfaces();
         Class<?>[] interfaces = ancillaryTypes == null ? new Class<?>[0] : ancillaryTypes;
@@ -46,16 +46,13 @@ public class MockUtil {
             new LenientCopyTool().copyToMock(optionalInstance, mock);
         }
         
-        //TODO: does it make sense to set instance?
-        filter.setInstance(optionalInstance != null ? optionalInstance : mock);
         return mock;
     }
 
     public <T> void resetMock(T mock, MockingProgress progress) {
         MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
-        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler.getMockName(), progress, new MatchersBinder(), oldMockHandler.getReturnValues());
+        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
         MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
-        newFilter.setInstance(mock);
         ((Factory) mock).setCallback(0, newFilter);
     }
 

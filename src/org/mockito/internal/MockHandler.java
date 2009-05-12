@@ -9,8 +9,8 @@ import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.mockito.ReturnValues;
 import org.mockito.internal.creation.MockAwareInterceptor;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -21,7 +21,6 @@ import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
 import org.mockito.internal.util.MockName;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -40,19 +39,21 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
     private final MatchersBinder matchersBinder;
     private final MockingProgress mockingProgress;
     private final MockName mockName;
-    private final ReturnValues returnValues;
+    private final MockSettingsImpl mockSettings;
 
-    private T instance;
-
-    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, ReturnValues returnValues) {
+    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, MockSettingsImpl mockSettings) {
         this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
-        this.returnValues = returnValues;
+        this.mockSettings = mockSettings;
         this.mockitoStubber = new MockitoStubber(mockingProgress);
         this.registeredInvocations = new RegisteredInvocations();
     }
     
+    public MockHandler(MockHandler<T> oldMockHandler) {
+        this(oldMockHandler.mockName, oldMockHandler.mockingProgress, oldMockHandler.matchersBinder, oldMockHandler.mockSettings);
+    }
+
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
             //stubbing voids with stubVoid() or doAnswer() style
@@ -88,8 +89,8 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         if (answer != null) {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             return answer.answer(invocation);
-        } else if (new MockUtil().isMock(instance)) {
-            return returnValues.valueFor(invocation);
+        } else if (mockSettings.isSpy() == false) {
+            return mockSettings.getReturnValues().valueFor(invocation);
         } else {
             Object ret = methodProxy.invokeSuper(proxy, args);
             //redo setting invocation for potential stubbing in case of partial mocks / spies.
@@ -109,10 +110,6 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         return new VoidMethodStubbableImpl<T>(mock, mockitoStubber);
     }
 
-    public void setInstance(T instance) {
-        this.instance = instance;
-    }
-
     public List<Invocation> getRegisteredInvocations() {
         return registeredInvocations.getAll();
     }
@@ -126,7 +123,7 @@ public class MockHandler<T> implements MockAwareInterceptor<T> {
         mockitoStubber.setAnswersForStubbing(answers);
     }
 
-    public ReturnValues getReturnValues() {
-        return returnValues;
+    public MockSettingsImpl getMockSettings() {
+        return mockSettings;
     }
 }
