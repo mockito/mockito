@@ -6,7 +6,6 @@ package org.mockito.internal;
 
 import java.util.Arrays;
 
-import org.mockito.AncillaryTypes;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
@@ -35,10 +34,6 @@ public class MockitoCore {
         mockingProgress.validateState();
         mockingProgress.resetOngoingStubbing();
         return mockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
-    }
-    
-    public AncillaryTypes implementing(Class<?>...ancillaryTypes) {
-        return new AncillaryTypesImpl(ancillaryTypes);
     }
     
     public OngoingStubbing stub() {

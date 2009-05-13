@@ -6,9 +6,12 @@ package org.mockitousage.basicapi;
 
 import static org.mockito.Mockito.*;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +24,12 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class AnnotationsTest extends TestBase {
 
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface NotAMock {}
+
     @Mock List list;
     @Mock final Map map = new HashMap();
+    @NotAMock Set notAMock;
     
     @SuppressWarnings("deprecation")
     @MockitoAnnotations.Mock List listTwo;
@@ -73,14 +80,6 @@ public class AnnotationsTest extends TestBase {
     }
     
     class Base extends SuperBase {
-        @Mock private IMethods mock;
-        
-        public IMethods getBaseMock() {
-            return mock;
-        }
-    }
-    
-    class Base2 extends SuperBase {
         @Mock private IMethods mock;
         
         public IMethods getBaseMock() {

@@ -226,10 +226,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         return location;
     }
 
-    public boolean isVarArgs() {
-        return method.isVarArgs();
-    }
-
     public int getArgumentsCount() {
         return arguments.length;
     }

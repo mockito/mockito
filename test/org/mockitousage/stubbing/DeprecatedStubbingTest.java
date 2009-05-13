@@ -62,4 +62,16 @@ public class DeprecatedStubbingTest extends TestBase {
         
         verifyZeroInteractions(mock);
     }
+    
+    @Test
+    public void shouldAllowConsecutiveStubbing() throws Exception {
+        //when
+        stub(mock.simpleMethod())
+            .toReturn("100")
+            .toReturn("200");
+        
+        //then
+        assertEquals("100", mock.simpleMethod());
+        assertEquals("200", mock.simpleMethod());
+    }
 }
