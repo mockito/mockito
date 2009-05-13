@@ -12,6 +12,9 @@
   <property name="src.classes.dir" value="${target.dir}/classes" />
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
+  <property name="exploded.repackaged.sources" value="${target.dir}/exploded-repackaged-sources" />
+  <property name="exploded.thirdparty.sources" value="${target.dir}/exploded-thirdparty-sources" />
+	
   <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
   <property name="lib.dir" value="lib" />
@@ -100,7 +103,7 @@
 
   </target>
 
-  <target name="jar.all" depends="test">
+  <target name="jar.all" depends="test, prepare.sources">
     <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpathref="ant.classpath" />
     <jarjar jarfile="${target.dir}/${jar.all}">
         <manifest>
@@ -110,7 +113,7 @@
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
-      <fileset dir="${src.dir}" />
+      <zipfileset dir="${src.dir}" />
       <fileset dir="${lib.dir.run}" excludes="*.jar" />
       <zipfileset src="${lib.dir.run}/asm-3.1.jar" />
       <zipfileset src="${lib.dir.run}/objenesis-1.0.jar">
@@ -118,17 +121,20 @@
       </zipfileset>
       <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
         <exclude name="LICENSE.txt" />
+        <exclude name="**/*.java" />
       </zipfileset>
       <zipfileset src="${lib.dir.run}/cglib-2.2.jar">
         <exclude name="LICENSE" />
         <exclude name="NOTICE" />
       </zipfileset>
+      <fileset dir="${exploded.repackaged.sources}"/>
+      <fileset dir="${exploded.thirdparty.sources}"/>
       <rule pattern="net.sf.**" result="org.mockito.@1" />
-      <rule pattern="org.objectweb.**" result="org.mockito.@1" />      
+      <rule pattern="org.objectweb.**" result="org.mockito.@1" />
     </jarjar>
   </target>
-
-  <target name="jar" depends="jar.all">
+	
+  <target name="jar" depends="jar.all, prepare.sources">
     <jarjar jarfile="${target.dir}/${jar.core}">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
@@ -143,11 +149,21 @@
         <exclude name="LICENSE" />
         <exclude name="NOTICE" />
       </zipfileset>
+      <fileset dir="${exploded.repackaged.sources}"/>
       <rule pattern="net.sf.**" result="org.mockito.@1" />
       <rule pattern="org.objectweb.**" result="org.mockito.@1" />
     </jarjar>
   </target>
-
+	
+  <target name="prepare.sources">
+	<unzip dest="${exploded.repackaged.sources}">
+	  <fileset dir="${lib.dir}/repackaged-sources" />
+  	</unzip>
+	<unzip dest="${exploded.thirdparty.sources}">
+	  <fileset dir="${lib.dir}/thirdparty-sources" />
+  	</unzip>
+  </target>
+	
   <target name="prepare.package" depends="jar, javadoc">
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
@@ -238,7 +254,6 @@
       <fileset dir="${target.dir}/javadoc" />
     </copy>
   </target>
-  
   
   <target name="release.maven" depends="jar" description="releases binaries to sync with maven repository">
     <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
