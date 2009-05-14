@@ -6,7 +6,7 @@ package org.mockito.internal.creation.cglib;
 
 import java.lang.reflect.Field;
 
-import net.sf.cglib.proxy.MethodProxy;
+import org.mockito.cglib.proxy.MethodProxy;
 
 public class CGLIBHacker {
 

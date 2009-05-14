@@ -4,10 +4,9 @@
  */
 package org.mockito.internal.util;
 
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.Factory;
-
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.creation.MethodInterceptorFilter;

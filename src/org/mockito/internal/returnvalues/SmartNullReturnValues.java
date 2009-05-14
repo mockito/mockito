@@ -6,11 +6,10 @@ package org.mockito.internal.returnvalues;
 
 import java.lang.reflect.Method;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
 import org.mockito.Mockito;
 import org.mockito.ReturnValues;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.debugging.Location;

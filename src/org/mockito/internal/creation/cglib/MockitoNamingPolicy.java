@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import net.sf.cglib.core.DefaultNamingPolicy;
+import org.mockito.cglib.core.DefaultNamingPolicy;
 
 public class MockitoNamingPolicy extends DefaultNamingPolicy {
     

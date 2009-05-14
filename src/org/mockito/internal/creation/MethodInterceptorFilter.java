@@ -6,10 +6,9 @@ package org.mockito.internal.creation;
 
 import java.lang.reflect.Method;
 
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
-
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 
 @SuppressWarnings("unchecked")
 public class MethodInterceptorFilter<T extends MethodInterceptor> implements MethodInterceptor {

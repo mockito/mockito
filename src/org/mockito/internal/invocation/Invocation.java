@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.cglib.proxy.MethodProxy;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.matchers.ArrayEquals;

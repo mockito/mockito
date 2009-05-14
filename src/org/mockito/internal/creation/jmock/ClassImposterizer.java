@@ -9,16 +9,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import net.sf.cglib.core.CodeGenerationException;
-import net.sf.cglib.core.NamingPolicy;
-import net.sf.cglib.core.Predicate;
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.CallbackFilter;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.Factory;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.NoOp;
-
+import org.mockito.cglib.core.CodeGenerationException;
+import org.mockito.cglib.core.NamingPolicy;
+import org.mockito.cglib.core.Predicate;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.CallbackFilter;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 import org.objenesis.ObjenesisStd;

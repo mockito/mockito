@@ -7,11 +7,10 @@ package org.mockito.internal.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.NoOp;
-
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;

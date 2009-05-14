@@ -4,9 +4,8 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/hamcrest-core-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/run/objenesis-1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/run/asm-3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="lib/run/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/run/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="lib/run/cglib-and-asm-1.0.jar"/>
 	<classpathentry kind="output" path="target/eclipse-classes"/>
 </classpath>
