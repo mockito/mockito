@@ -1,0 +1,15 @@
+usePlugin('java')
+
+version = 1.0
+sourceCompatibility = 1.5
+targetCompatibility = 1.5
+
+srcRootName = "."
+srcDirNames = ["src"]
+
+defaultTasks "clean", "libs"
+
+dependencies {
+  addFlatDirResolver('lib', 'lib')
+  compile(':ant:1.7.0')
+}
