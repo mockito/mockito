@@ -23,6 +23,9 @@
   <property name="jar.all" value="mockito-all-${version}.jar" />
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
+	
+  <property name="junit.jar" value="junit-4.6.jar" />
+  <property name="cglib-and-asm.jar" value="cglib-and-asm-1.0.jar" />
 
   <path id="compile.classpath">
     <fileset dir="${lib.dir.run}" includes="*.jar" />
@@ -120,7 +123,7 @@
         <exclude name="LICENSE.txt" />
         <exclude name="**/*.java" />
       </zipfileset>
-      <zipfileset src="${lib.dir.run}/cglib-and-asm-1.0.jar"/>
+      <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
     </jarjar>
   </target>
 	
@@ -134,7 +137,7 @@
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
-      <zipfileset src="${lib.dir.run}/cglib-and-asm-1.0.jar"/>
+      <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
     </jarjar>
   </target>
 	
@@ -142,7 +145,8 @@
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
       <fileset dir="${lib.dir.run}">
-        <exclude name="cglib-and-asm*.jar" />
+        <exclude name="${cglib-and-asm.jar}" />
+      	<exclude name="${junit.jar}" />
       </fileset>
       <fileset dir="${target.dir}" includes="${jar.core}" />
     </copy>
@@ -193,7 +197,7 @@
         <formatter type="plain" usefile="false"/>      	
         <classpath>
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
-          <fileset dir="${lib.dir.run}" includes="junit*.jar" />
+          <fileset dir="${lib.dir.run}" includes="${junit.jar}" />
           <pathelement location="${target.dir}/${jar.tests}"/>
         </classpath>
         <jvmarg value="-ea" />
@@ -210,7 +214,7 @@
       <formatter type="plain" usefile="false" />
       <classpath>
         <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
-        <fileset dir="${lib.dir.run}" includes="junit-4.5.jar" />
+        <fileset dir="${lib.dir.run}" includes="${junit.jar}" />
         <pathelement location="${target.dir}/${jar.tests}"/>
       </classpath>
       <jvmarg value="-ea" />
