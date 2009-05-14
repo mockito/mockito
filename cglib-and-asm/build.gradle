@@ -21,6 +21,7 @@ destinationDir = 'build'
 dists {
   zip () {
     fileSet(dir: "src")
+    fileSet(dir: "licenses")
     baseName = archivesBaseName + '-sources'
   }
 }
