@@ -133,6 +133,10 @@
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Implementation-Version" value="${version}"/>
       </manifest>
+      <fileset dir="${lib.dir.run}" >
+        <include name="asm-license*"/>
+        <include name="cglib-license*"/>
+      </fileset>
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
