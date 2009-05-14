@@ -7,7 +7,7 @@ targetCompatibility = 1.5
 srcRootName = "."
 srcDirNames = ["src"]
 
-#Make sure sources also belong to the jar
+//Make sure sources also belong to the jar
 archive_jar.fileSet(dir: "src")
 
 defaultTasks "clean", "libs"
