@@ -7,12 +7,22 @@ targetCompatibility = 1.5
 srcRootName = "."
 srcDirNames = ["src"]
 
-//Make sure sources also belong to the jar
-archive_jar.fileSet(dir: "src")
-
-defaultTasks "clean", "libs"
-
 dependencies {
   addFlatDirResolver('lib', 'lib')
   compile(':ant:1.7.0')
 }
+
+archivesBaseName = 'cglib-and-asm'
+
+//Make sure sources also belong to the jar
+archive_jar.fileSet(dir: "src")
+destinationDir = 'build'
+
+dists {
+  zip () {
+    fileSet(dir: "src")
+    baseName = archivesBaseName + '-sources'
+  }
+}
+
+defaultTasks "clean", "dists"
