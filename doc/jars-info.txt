@@ -3,3 +3,4 @@ To use mockito either:
  - or put all jars from 'separate-jars' folder on your path
  
 All jars (even the dependencies) contain java source inside.
+However, for convenience of some IDEs there are also source distributions in sources folder

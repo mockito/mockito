@@ -4,5 +4,8 @@ Libraries used:
 
 Cglib - Apache License 2.0
 ASM - BSD license
+
+Mockito all distribution:
+
 Objenesis - MIT license
 Hamcrest - BSD license

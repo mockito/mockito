@@ -18,9 +18,14 @@
   <property name="lib.dir" value="lib" />
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
+  <property name="lib.dir.sources" value="${lib.dir}/sources" />
     
   <property name="jar.core" value="mockito-core-${version}.jar" />
+  <property name="jar.core.sources" value="mockito-core-${version}-sources.jar" />
+	
   <property name="jar.all" value="mockito-all-${version}.jar" />
+  <property name="jar.all.sources" value="mockito-all-${version}-sources.jar" />
+	
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
 	
@@ -121,7 +126,6 @@
       </zipfileset>
       <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
         <exclude name="LICENSE.txt" />
-        <exclude name="**/*.java" />
       </zipfileset>
       <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
     </jarjar>
@@ -145,7 +149,39 @@
     </jarjar>
   </target>
 	
-  <target name="prepare.package" depends="jar, javadoc">
+  <target name="sources" >
+    <jar jarfile="${target.dir}/${jar.core.sources}">
+    <manifest>
+      <attribute name="Built-By" value="${user.name}"/>
+      <attribute name="Implementation-Version" value="${version}"/>
+    </manifest>
+      <fileset dir="." file="LICENSE" />
+      <fileset dir="." file="NOTICE" />
+      <fileset dir="${src.dir}" />
+      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
+    </jar>
+  </target>
+	
+  <target name="sources-all" depends="sources" >
+    <jar jarfile="${target.dir}/${jar.all.sources}">
+        <manifest>
+          <attribute name="Built-By" value="${user.name}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+        </manifest>
+      <fileset dir="." file="LICENSE" />
+      <fileset dir="." file="NOTICE" />
+        <fileset dir="${lib.dir.run}" >
+          <include name="hamcrest-license*"/>
+          <include name="objenesis-license*"/>
+        </fileset>
+      <fileset dir="${src.dir}" />
+      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/objenesis-1.0-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/hamcrest-core-1.1-sources.jar" />
+    </jar>
+  </target>
+	
+  <target name="prepare.package" depends="jar, javadoc, sources-all">
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
       <fileset dir="${lib.dir.run}">
@@ -163,6 +199,10 @@
       <fileset dir="." includes="NOTICE" />
       <fileset dir="doc" includes="jars-info.txt" />
       <fileset dir="${target.dir}" includes="${jar.all}" />
+    </copy>
+  	<mkdir dir="${target.dir}/mockito.zip.tmp/sources" />
+    <copy todir="${target.dir}/mockito.zip.tmp/sources">
+      <fileset dir="${target.dir}" includes="*-sources.jar" />
     </copy>
   </target>
 
