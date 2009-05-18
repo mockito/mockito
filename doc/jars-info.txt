@@ -4,3 +4,5 @@ To use mockito either:
  
 All jars (even the dependencies) contain java source inside.
 However, for convenience of some IDEs there are also source distributions in sources folder
+
+We use springsource distros of hamcrest/objenesis because they are OSGI-fied
