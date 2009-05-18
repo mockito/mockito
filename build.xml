@@ -29,7 +29,7 @@
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
 	
-  <property name="junit.jar" value="junit-4.6.jar" />
+  <property name="junit.jar" value="com.springsource.org.junit-4.5.0.jar" />
   <property name="cglib-and-asm.jar" value="cglib-and-asm-1.0.jar" />
 
   <path id="compile.classpath">
@@ -120,11 +120,11 @@
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
       <zipfileset dir="${src.dir}" />
-      <fileset dir="${lib.dir.run}" excludes="*.jar" />
-      <zipfileset src="${lib.dir.run}/objenesis-1.0.jar">
+	  <fileset dir="${lib.dir.run}" excludes="*.jar" />
+      <zipfileset src="${lib.dir.run}/com.springsource.org.objenesis-1.0.0.jar">
         <exclude name="META-INF/maven/**"/>
       </zipfileset>
-      <zipfileset src="${lib.dir.run}/hamcrest-core-1.1.jar">
+      <zipfileset src="${lib.dir.run}/com.springsource.org.hamcrest.core-1.1.0.jar">
         <exclude name="LICENSE.txt" />
       </zipfileset>
       <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
@@ -296,12 +296,16 @@
     </deploy>
   </target>
   
-  <target name="bnd"> 
+  <target name="bnd" > 
     <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="ant.classpath"/> 
-    <bndwrap
-      classpath="src"
-      jars="target/mockito-core-snapshot.jar" 
-      output="out"/> 
+    <bnd
+         classpath="${target.dir}/${jar.core}"
+         eclipse="false"
+         failok="false"
+         exceptions="true"
+    	 sourcepath="${src.dir}"
+    	 destfile="${jar.core}-osgi"
+         files="conf/org.mockito.bnd"/>
   </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />

@@ -1,0 +1,24 @@
+-classpath= lib/run/com.springsource.org.junit-4.5.0.jar, \
+            lib/run/com.springsource.org.hamcrest.core-1.1.0.jar, \
+            lib/run/com.springsource.org.objenesis-1.0.0.jar
+-versionpolicy=[${version;==;${@}},${version;+;${@}})
+
+Bundle-Name= Mockito Mock Library for Java
+Bundle-SymbolicName= org.mockito
+Bundle-Version= ${version}
+Export-Package= !org.mockito.asm.*, \
+                !org.mockito.cglib.*, \
+                !org.mockito.internal.*, \
+                org.mockito.*;version=${version}
+
+# It seems the org.mockito.asm.util.* package is an optional asm import? Since
+# we are embedding asm, we are not going to import that package, since no one
+# should ever export it. 
+Import-Package= junit.*;resolution:=optional, \
+                org.apache.tools.ant.*;resolution:=optional, \
+                org.junit.*;resolution:=optional, \
+                org.hamcrest.*, \
+                org.objenesis.*, \
+                org.mockito.*, \
+                *
+Private-Package=org.mockito.*
