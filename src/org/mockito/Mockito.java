@@ -600,7 +600,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return MOCKITO_CORE.mock(classToMock, withSettings().defaultBehavior(RETURNS_DEFAULTS));
+        return mock(classToMock, withSettings().defaultBehavior(RETURNS_DEFAULTS));
     }
     
     /**
@@ -618,7 +618,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
-        return MOCKITO_CORE.mock(classToMock, withSettings()
+        return mock(classToMock, withSettings()
                 .name(name)
                 .defaultBehavior(RETURNS_DEFAULTS));
     }
@@ -643,10 +643,33 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return MOCKITO_CORE.mock(classToMock, withSettings().defaultBehavior(returnValues));
+        return mock(classToMock, withSettings().defaultBehavior(returnValues));
     }
     
-    //TODO: javadoc
+    
+    /**
+     * Creates a mock with some non-standard settings.
+     * <p>
+     * The number of configuration points for a mock grows 
+     * so we need a fluent way to introduce new configuration without adding more and more overloaded Mockito.mock() methods. 
+     * Hence {@link MockSettings}.
+     * <pre>
+     *   Listener mock = mock(Listener.class, withSettings()
+     *     .name("firstListner").defaultBehavior(RETURNS_SMART_NULLS);
+     *   );  
+     * </pre>
+     * <b>Use it carefully and occasionally</b>. What might be reason your test needs non-standard mocks? 
+     * Is the code under test so complicated that it requires non-standard mocks? 
+     * Wouldn't you prefer to refactor the code under test so it is testable in a simple way?
+     * <p>
+     * See also {@link Mockito#withSettings()}
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param classToMock class or interface to mock
+     * @param mockSettings additional mock settings
+     * @return mock object
+     */
     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         return MOCKITO_CORE.mock(classToMock, mockSettings);
     }
