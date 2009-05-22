@@ -6,7 +6,7 @@ package org.mockito.configuration;
 
 import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
-import org.mockito.internal.returnvalues.EmptyReturnValues;
+import org.mockito.internal.returnvalues.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -28,7 +28,7 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     }
 
     public Answer<Object> getDefaultAnswer() {
-        return new EmptyReturnValues();
+        return new ReturnsEmptyValues();
     }
     
     /* (non-Javadoc)

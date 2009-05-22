@@ -5,7 +5,7 @@
 package org.mockito.configuration;
 
 import org.mockito.ReturnValues;
-import org.mockito.internal.returnvalues.EmptyReturnValues;
+import org.mockito.internal.returnvalues.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -13,7 +13,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * In most cases you don't really need to configure Mockito. For example in case of working with legacy code, 
  * when you might want to have different 'mocking style' this interface might be helpful. 
- * A reason of configuring Mockito might be if you disagree with the {@link EmptyReturnValues} unstubbed mocks return.
+ * A reason of configuring Mockito might be if you disagree with the {@link ReturnsEmptyValues} unstubbed mocks return.
  * <p>
  * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class that implements this interface.
  * <p>

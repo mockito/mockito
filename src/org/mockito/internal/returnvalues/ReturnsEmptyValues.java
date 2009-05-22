@@ -28,7 +28,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
- * Used by default by every Mockito mock.
+ * Default answer of every Mockito mock.
  * <ul>
  * <li>
  *  Returns appropriate primitive for primitive-returning methods
@@ -47,7 +47,7 @@ import org.mockito.stubbing.Answer;
  * </li>
  * </ul>
  */
-public class EmptyReturnValues implements Answer<Object> {
+public class ReturnsEmptyValues implements Answer<Object> {
     
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)

@@ -10,10 +10,10 @@ import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public class MockReturnValues implements Answer<Object> {
+public class ReturnsMocks implements Answer<Object> {
     
     private MockitoCore mockitoCore = new MockitoCore();
-    private Answer<Object> delegate = new MoreEmptyReturnValues();
+    private Answer<Object> delegate = new ReturnsMoreEmptyValues();
     
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.answer(invocation);

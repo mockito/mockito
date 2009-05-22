@@ -22,11 +22,11 @@ import java.util.TreeSet;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-public class EmptyReturnValuesTest extends TestBase {
+public class ReturnsEmptyValuesTest extends TestBase {
     
     @SuppressWarnings("unchecked")
     @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {
-        EmptyReturnValues values = new EmptyReturnValues();
+        ReturnsEmptyValues values = new ReturnsEmptyValues();
         
         assertTrue(((Collection) values.returnValueFor(Collection.class)).isEmpty());
 
@@ -50,7 +50,7 @@ public class EmptyReturnValuesTest extends TestBase {
     }
     
     @Test public void shouldReturnPrimitive() {
-        EmptyReturnValues values = new EmptyReturnValues();
+        ReturnsEmptyValues values = new ReturnsEmptyValues();
         
         assertEquals(false, values.returnValueFor(Boolean.TYPE));
         assertEquals((char) 0, values.returnValueFor(Character.TYPE));

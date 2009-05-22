@@ -27,14 +27,14 @@ import org.mockito.stubbing.Answer;
  * SmartNull gives nicer exception message than NPE because it points out the
  * line where unstubbed method was called. You just click on the stack trace.
  * <p>
- * SmartNullReturnValues first tries to return ordinary return values (see
- * {@link MoreEmptyReturnValues}) then it tries to return SmartNull. If the
+ * ReturnsSmartNulls first tries to return ordinary return values (see
+ * {@link ReturnsMoreEmptyValues}) then it tries to return SmartNull. If the
  * return type is not mockable (e.g. final) then ordinary null is returned.
  * <p>
- * SmartNullReturnValues will be probably the default return values strategy in
+ * ReturnsSmartNulls will be probably the default return values strategy in
  * Mockito 2.0
  */
-public class SmartNullReturnValues implements Answer<Object> {
+public class ReturnsSmartNulls implements Answer<Object> {
 
     private final class ThrowingInterceptor implements MethodInterceptor {
         private final InvocationOnMock invocation;
@@ -54,7 +54,7 @@ public class SmartNullReturnValues implements Answer<Object> {
         }
     }
 
-    private final Answer<Object> delegate = new MoreEmptyReturnValues();
+    private final Answer<Object> delegate = new ReturnsMoreEmptyValues();
 
     public Object answer(final InvocationOnMock invocation) throws Throwable {
         Object defaultReturnValue = delegate.answer(invocation);

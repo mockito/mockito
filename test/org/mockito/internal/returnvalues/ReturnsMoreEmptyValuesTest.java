@@ -7,9 +7,9 @@ package org.mockito.internal.returnvalues;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-public class MoreEmptyReturnValuesTest extends TestBase {
+public class ReturnsMoreEmptyValuesTest extends TestBase {
 
-    private MoreEmptyReturnValues rv = new MoreEmptyReturnValues();
+    private ReturnsMoreEmptyValues rv = new ReturnsMoreEmptyValues();
 
     @Test
     public void shouldReturnEmptyArray() {

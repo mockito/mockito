@@ -10,7 +10,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
-public class SmartNullReturnValuesTest extends TestBase {
+public class ReturnsSmartNullsTest extends TestBase {
     
     private Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1, null);
@@ -18,7 +18,7 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {
-        Answer<Object> returnValues = new SmartNullReturnValues();
+        Answer<Object> returnValues = new ReturnsSmartNulls();
         assertEquals(false  ,   returnValues.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0,  returnValues.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
         assertEquals(0,         returnValues.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
@@ -33,7 +33,7 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Throwable {
-        Answer<Object> returnValues = new SmartNullReturnValues();
+        Answer<Object> returnValues = new ReturnsSmartNulls();
         
         Foo smartNull = (Foo) returnValues.answer(invocationOf(Foo.class, "get"));
         
@@ -45,7 +45,7 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnAnObjectThatAllowsObjectMethods() throws Throwable {
-        Answer<Object> returnValues = new SmartNullReturnValues();
+        Answer<Object> returnValues = new ReturnsSmartNulls();
         
         Foo smartNull = (Foo) returnValues.answer(invocationOf(Foo.class, "get"));
         

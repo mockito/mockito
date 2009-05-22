@@ -9,11 +9,11 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.returnvalues.EmptyReturnValues;
-import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
-import org.mockito.internal.returnvalues.MockReturnValues;
-import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
-import org.mockito.internal.returnvalues.SmartNullReturnValues;
+import org.mockito.internal.returnvalues.ReturnsEmptyValues;
+import org.mockito.internal.returnvalues.GloballyConfiguredAnswer;
+import org.mockito.internal.returnvalues.ReturnsMocks;
+import org.mockito.internal.returnvalues.ReturnsMoreEmptyValues;
+import org.mockito.internal.returnvalues.ReturnsSmartNulls;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
@@ -515,9 +515,9 @@ public class Mockito extends Matchers {
      * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration. 
-     * If there is no global configuration then it uses {@link EmptyReturnValues} (returns zeros, empty collections, nulls, etc.)
+     * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)
      */
-    public static final Answer RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
+    public static final Answer RETURNS_DEFAULTS = new GloballyConfiguredAnswer();
     
     /**
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
@@ -529,10 +529,10 @@ public class Mockito extends Matchers {
      * This implementation of ReturnValues makes unstubbed methods <b>return SmartNull instead of null</b>.
      * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
      * <p>
-     * SmartNullReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
+     * ReturnsSmartNulls first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
      * then it tries to return SmartNull. If the return type is final then plain null is returned.
      * <p>
-     * SmartNullReturnValues will be probably the default return values strategy in Mockito 2.0
+     * ReturnsSmartNulls will be probably the default return values strategy in Mockito 2.0
      * <p>
      * Example:
      * <pre>
@@ -549,7 +549,7 @@ public class Mockito extends Matchers {
      *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
      * </pre>
      */
-    public static final Answer RETURNS_SMART_NULLS = new SmartNullReturnValues();
+    public static final Answer RETURNS_SMART_NULLS = new ReturnsSmartNulls();
     
     /**
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
@@ -558,11 +558,11 @@ public class Mockito extends Matchers {
      * <p>
      * This implementation can be helpful when working with legacy code. 
      * <p>
-     * MockReturnValues first tries to return ordinary return values (see {@link MoreEmptyReturnValues})
+     * ReturnsMocks first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
      * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
      * <p>
      */
-    public static final Answer RETURNS_MOCKS = new MockReturnValues();
+    public static final Answer RETURNS_MOCKS = new ReturnsMocks();
 
     /**
      * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8

@@ -14,7 +14,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * See javadoc for {@link IMockitoConfiguration}
  */
-public class GloballyConfiguredReturnValues implements Answer<Object> {
+public class GloballyConfiguredAnswer implements Answer<Object> {
     
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return new GlobalConfiguration().getDefaultAnswer().answer(invocation);

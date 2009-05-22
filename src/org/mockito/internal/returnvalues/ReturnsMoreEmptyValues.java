@@ -15,7 +15,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
  * <p>
- * Current version of Mockito mocks by deafult use {@link EmptyReturnValues}  
+ * Current version of Mockito mocks by deafult use {@link ReturnsEmptyValues}  
  * <ul>
  * <li>
  *  Returns appropriate primitive for primitive-returning methods
@@ -40,9 +40,9 @@ import org.mockito.stubbing.Answer;
  * </li>
  * </ul>
  */
-public class MoreEmptyReturnValues implements Answer<Object> {
+public class ReturnsMoreEmptyValues implements Answer<Object> {
     
-    private Answer<Object> delegate = new EmptyReturnValues();
+    private Answer<Object> delegate = new ReturnsEmptyValues();
     
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)

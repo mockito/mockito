@@ -9,8 +9,8 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
-public class MockReturnValuesTest extends TestBase {
-    private MockReturnValues values = new MockReturnValues();
+public class ReturnsMocksTest extends TestBase {
+    private ReturnsMocks values = new ReturnsMocks();
 
     interface FooInterface {
     }
@@ -47,7 +47,7 @@ public class MockReturnValuesTest extends TestBase {
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives()
             throws Throwable {
-        MockReturnValues returnValues = new MockReturnValues();
+        ReturnsMocks returnValues = new ReturnsMocks();
         assertEquals(false, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
         assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
