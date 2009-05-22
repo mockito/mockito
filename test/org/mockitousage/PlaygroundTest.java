@@ -43,9 +43,16 @@ public class PlaygroundTest extends TestBase {
     @Test
     public void partialMockInAction() {
 //        mock = mock(Foo.class, withSettings() 
-//            .defaultBehavior(CALLS_REAL_METHODS)
-//            .createUsing(constructor, 1, "foo");
-//
+//            .defaultBehavior(CALLS_REAL_METHODS);
+
+//        mock = mock(Foo.class, withSettings() 
+//            .defaultMockAnswer(CALLS_REAL_METHODS);
+
+//        mock = mock(Foo.class, withSettings() 
+//            .defaultAnswer(CALLS_REAL_METHODS);
+
+//        mock = mock(Foo.class, CALLS_REAL_METHODS);
+
 //        mock = mock(Foo.class, withSettings() 
 //            .defaultBehavior(CALLS_REAL_METHODS)
 //            .createUsingDefaultConstructor();

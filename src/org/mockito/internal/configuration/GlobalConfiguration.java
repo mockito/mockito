@@ -8,10 +8,12 @@ import org.mockito.ReturnValues;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.stubbing.Answer;
 
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
+@SuppressWarnings("deprecation")//supressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration {
     
     private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
@@ -30,13 +32,7 @@ public class GlobalConfiguration implements IMockitoConfiguration {
     
     @SuppressWarnings("deprecation")
     private IMockitoConfiguration createConfig() {
-        IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration() {
-            @Override public ReturnValues getReturnValues() {
-                //For now, let's leave the deprecated way of getting return values, 
-                //it will go away, replaced simply by return new DefaultReturnValues()
-                return Configuration.instance().getReturnValues();
-            }
-        };
+        IMockitoConfiguration defaultConfiguration = new DefaultMockitoConfiguration();
         IMockitoConfiguration config = new ClassPathLoader().loadConfiguration();
         if (config != null) {
             return config;
@@ -59,5 +55,9 @@ public class GlobalConfiguration implements IMockitoConfiguration {
 
     public boolean cleansStackTrace() {
         return globalConfiguration.get().cleansStackTrace();
+    }
+
+    public Answer<Object> getDefaultAnswer() {
+        return globalConfiguration.get().getDefaultAnswer();
     }
 }

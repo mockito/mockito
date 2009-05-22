@@ -1,15 +1,15 @@
 package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
-import org.mockito.ReturnValues;
 import org.mockito.exceptions.Reporter;
+import org.mockito.stubbing.Answer;
 
 public class MockSettingsImpl implements MockSettings {
 
-    private ReturnValues returnValues;
     private Class<?>[] extraInterfaces;
     private String name;
     private Object spiedInstance;
+    private Answer<Object> defaultAnswer;
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
@@ -31,21 +31,12 @@ public class MockSettingsImpl implements MockSettings {
         return name;
     }
 
-    public ReturnValues getReturnValues() {
-        return returnValues;
-    }
-
     public Class<?>[] getExtraInterfaces() {
         return extraInterfaces;
     }
 
     public Object getSpiedInstance() {
         return spiedInstance;
-    }
-
-    public MockSettings defaultBehavior(ReturnValues returnValues) {
-        this.returnValues = returnValues;
-        return this;
     }
 
     public MockSettings name(String name) {
@@ -60,5 +51,14 @@ public class MockSettingsImpl implements MockSettings {
 
     public boolean isSpy() {
         return spiedInstance != null;
+    }
+
+    public MockSettings defaultAnswer(Answer defaultAnswer) {
+        this.defaultAnswer = defaultAnswer;
+        return this;
+    }
+
+    public Answer<Object> getDefaultAnswer() {
+        return defaultAnswer;
     }
 }

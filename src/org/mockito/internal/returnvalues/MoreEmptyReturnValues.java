@@ -7,8 +7,8 @@ package org.mockito.internal.returnvalues;
 import java.lang.reflect.Array;
 
 import org.mockito.Mockito;
-import org.mockito.ReturnValues;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * It's likely this implementation will be used by default by every Mockito 2.0 mock.
@@ -40,15 +40,15 @@ import org.mockito.invocation.InvocationOnMock;
  * </li>
  * </ul>
  */
-public class MoreEmptyReturnValues implements ReturnValues {
+public class MoreEmptyReturnValues implements Answer<Object> {
     
-    private ReturnValues delegate = new EmptyReturnValues();
+    private Answer<Object> delegate = new EmptyReturnValues();
     
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
      */
-    public Object valueFor(InvocationOnMock invocation) throws Throwable {
-        Object ret = delegate.valueFor(invocation);
+    public Object answer(InvocationOnMock invocation) throws Throwable {
+        Object ret = delegate.answer(invocation);
         if (ret != null) {
             return ret;
         }

@@ -7,7 +7,7 @@ package org.mockito.internal.stubbing.answers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public class CallsRealMethod implements Answer<Object> {
+public class CallsRealMethods implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return invocation.invokeSuper();
     }

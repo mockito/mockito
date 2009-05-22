@@ -461,4 +461,11 @@ public class Reporter {
                 "extraInterfaces() requires at least one interface."
         ));
     }
+
+    public void sayThatGetReturnValuesIsNowDeprecated() {
+        throw new MockitoException(join( 
+                "getReturnValues() is not used by the framework ever since verion 1.8", 
+                "Please implement getDefaultBehavior() instead",
+                "Sorry for inconvenience"));
+    }
 }

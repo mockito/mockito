@@ -7,9 +7,9 @@ package org.mockitousage.configuration;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -17,8 +17,8 @@ public class MockitoConfigurationTest extends TestBase {
     
     @Test
     public void shouldReadConfigurationClassFromClassPath() {
-        ConfigurationAccess.getConfig().overrideReturnValues(new ReturnValues() {
-            public Object valueFor(InvocationOnMock invocation) {
+        ConfigurationAccess.getConfig().overrideReturnValues(new Answer<Object>() {
+            public Object answer(InvocationOnMock invocation) {
                 return "foo";
             }});
 

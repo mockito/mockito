@@ -8,19 +8,17 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.mockito.Mockito;
-import org.mockito.ReturnValues;
-import org.mockito.internal.configuration.Configuration;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
+import org.mockito.stubbing.Answer;
 import org.mockitousage.configuration.SmartMock;
 
-@SuppressWarnings("deprecation")
 public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
-    private ReturnValues overriddenReturnValues = null;
+    private Answer<Object> overriddenReturnValues = null;
     private boolean cleansStackTrace;
 
     //for testing purposes, allow to override the configuration
-    public void overrideReturnValues(ReturnValues returnValues) {
+    public void overrideReturnValues(Answer<Object> returnValues) {
         this.overriddenReturnValues = returnValues;
     }
 
@@ -30,9 +28,9 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     }
 
     @Override
-    public ReturnValues getReturnValues() {
+    public Answer<Object> getDefaultAnswer() {
         if (overriddenReturnValues == null) {
-            return Configuration.instance().getReturnValues();
+            return super.getDefaultAnswer();
         } else {
             return overriddenReturnValues;
         }

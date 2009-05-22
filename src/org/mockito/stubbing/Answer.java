@@ -7,9 +7,10 @@ package org.mockito.stubbing;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Generic interface for stubbing methods with callbacks.
+ * Generic interface to be used for configuring mock's answer. 
+ * Answer specifies an action that is executed and a return value that is returned when you interact with the mock.   
  * <p>
- * Example:
+ * Example of stubbing a mock with custom answer: 
  * 
  * <pre>
  * when(mock.someMethod(anyString())).thenAnswer(new Answer() {

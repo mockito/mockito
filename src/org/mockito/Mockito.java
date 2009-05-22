@@ -13,11 +13,11 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
 import org.mockito.internal.returnvalues.GloballyConfiguredReturnValues;
 import org.mockito.internal.returnvalues.MockReturnValues;
 import org.mockito.internal.returnvalues.MoreEmptyReturnValues;
-import org.mockito.internal.returnvalues.RealReturnValues;
 import org.mockito.internal.returnvalues.SmartNullReturnValues;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
-import org.mockito.internal.stubbing.answers.CallsRealMethod;
+import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -510,14 +510,14 @@ public class Mockito extends Matchers {
     private static final MockitoCore MOCKITO_CORE = new MockitoCore();
     
     /**
-     * Default ReturnValues used by the framework.
+     * Answer of unstubbed invocations used by all Mockito mocks by default.
      * <p>
      * {@link ReturnValues} defines the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link EmptyReturnValues} (returns zeros, empty collections, nulls, etc.)
      */
-    public static final ReturnValues RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
+    public static final Answer RETURNS_DEFAULTS = new GloballyConfiguredReturnValues();
     
     /**
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
@@ -549,7 +549,7 @@ public class Mockito extends Matchers {
      *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
      * </pre>
      */
-    public static final ReturnValues RETURNS_SMART_NULLS = new SmartNullReturnValues();
+    public static final Answer RETURNS_SMART_NULLS = new SmartNullReturnValues();
     
     /**
      * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
@@ -562,7 +562,7 @@ public class Mockito extends Matchers {
      * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
      * <p>
      */
-    public static final ReturnValues RETURNS_MOCKS = new MockReturnValues();
+    public static final Answer RETURNS_MOCKS = new MockReturnValues();
 
     /**
      * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8
@@ -589,7 +589,7 @@ public class Mockito extends Matchers {
      * value = mock.getSomething();
      * </pre>
      */
-    public static final ReturnValues CALLS_REAL_METHODS = new RealReturnValues();
+    public static final Answer CALLS_REAL_METHODS = new CallsRealMethods();
     
     /**
      * Creates mock object of given class or interface.
@@ -600,7 +600,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return mock(classToMock, withSettings().defaultBehavior(RETURNS_DEFAULTS));
+        return mock(classToMock, withSettings().defaultAnswer(RETURNS_DEFAULTS));
     }
     
     /**
@@ -620,10 +620,19 @@ public class Mockito extends Matchers {
     public static <T> T mock(Class<T> classToMock, String name) {
         return mock(classToMock, withSettings()
                 .name(name)
-                .defaultBehavior(RETURNS_DEFAULTS));
+                .defaultAnswer(RETURNS_DEFAULTS));
     }
     
     /**
+     * @deprecated
+     * <b>Please use mock(Foo.class, defaultAnswer);</b>
+     * <p>
+     * See {@link Mockito#mock(Class, Answer)}
+     * <p>
+     * The reason why it is deprecated is that ReturnValues is being replaced by Answer
+     * for better consistency & interoperability of the framework. 
+     * Answer interface has been in Mockito for a while and it's the same as ReturnValues.
+     * <p>
      * Creates mock with a specified strategy for its return values. 
      * It's quite advanced feature and typically you don't need it to write decent tests.
      * However it can be helpful for working with legacy systems.
@@ -642,10 +651,33 @@ public class Mockito extends Matchers {
      *
      * @return mock object
      */
+    @Deprecated
     public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return mock(classToMock, withSettings().defaultBehavior(returnValues));
+        return mock(classToMock, withSettings().defaultAnswer(new AnswerReturnValuesAdapter(returnValues)));
     }
     
+    /**
+     * Creates mock with a specified strategy for its answers to interactions. 
+     * It's quite advanced feature and typically you don't need it to write decent tests.
+     * However it can be helpful for working with legacy systems.
+     * <p>
+     * Obviously the answer is used only when you <b>don't</b> stub the method call.
+     *
+     * <pre>
+     *   Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
+     *   Foo mockTwo = mock(Foo.class, new YourOwnAnswer()); 
+     * </pre>
+     * 
+     * <p>See examples in javadoc for {@link Mockito} class</p>
+     * 
+     * @param classToMock class or interface to mock
+     * @param returnValues default return values for unstubbed methods
+     *
+     * @return mock object
+     */
+    public static <T> T mock(Class<T> classToMock, Answer defaultAnswer) {
+        return mock(classToMock, withSettings().defaultAnswer(defaultAnswer));
+    }
     
     /**
      * Creates a mock with some non-standard settings.
@@ -738,7 +770,7 @@ public class Mockito extends Matchers {
     public static <T> T spy(T object) {
         return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
-                .defaultBehavior(RETURNS_DEFAULTS));
+                .defaultAnswer(RETURNS_DEFAULTS));
     }
 
     /**
@@ -1044,7 +1076,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doCallRealMethod() {
-        return MOCKITO_CORE.doAnswer(new CallsRealMethod());
+        return MOCKITO_CORE.doAnswer(new CallsRealMethods());
     }
     
     /**
@@ -1310,7 +1342,8 @@ public class Mockito extends Matchers {
         MOCKITO_CORE.validateMockitoUsage();
     }
 
+    //TODO: javadoc
     public static MockSettings withSettings() {
-        return new MockSettingsImpl().defaultBehavior(RETURNS_DEFAULTS);
+        return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
     }
 }

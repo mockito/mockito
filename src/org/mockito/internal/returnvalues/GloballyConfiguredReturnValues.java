@@ -4,16 +4,19 @@
  */
 package org.mockito.internal.returnvalues;
 
-import org.mockito.ReturnValues;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
- * ReturnValues from global configuration
+ * Globally configured Answer.
+ * <p>
+ * See javadoc for {@link IMockitoConfiguration}
  */
-public class GloballyConfiguredReturnValues implements ReturnValues {
+public class GloballyConfiguredReturnValues implements Answer<Object> {
     
-    public Object valueFor(InvocationOnMock invocation) throws Throwable {
-        return new GlobalConfiguration().getReturnValues().valueFor(invocation);
+    public Object answer(InvocationOnMock invocation) throws Throwable {
+        return new GlobalConfiguration().getDefaultAnswer().answer(invocation);
     }
 }

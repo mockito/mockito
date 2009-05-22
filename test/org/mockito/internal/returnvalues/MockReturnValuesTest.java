@@ -48,12 +48,12 @@ public class MockReturnValuesTest extends TestBase {
     public void shouldReturnTheUsualDefaultValuesForPrimitives()
             throws Throwable {
         MockReturnValues returnValues = new MockReturnValues();
-        assertEquals(false, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
-        assertEquals((char) 0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "charMethod")));
-        assertEquals(0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "intMethod")));
-        assertEquals(0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "longMethod")));
-        assertEquals(0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
-        assertEquals(0, returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
+        assertEquals(false, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
+        assertEquals((char) 0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
+        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
+        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
+        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
+        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
     
     interface StringMethods {
@@ -63,7 +63,7 @@ public class MockReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnEmptyArray() throws Throwable {
-        String[] ret = (String[]) values.valueFor(invocationOf(StringMethods.class, "stringArrayMethod"));
+        String[] ret = (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
         
         assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);
@@ -71,6 +71,6 @@ public class MockReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnEmptyString() throws Throwable {
-        assertEquals("", values.valueFor(invocationOf(StringMethods.class, "stringMethod")));
+        assertEquals("", values.answer(invocationOf(StringMethods.class, "stringMethod")));
     }
 }

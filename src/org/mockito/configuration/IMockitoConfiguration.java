@@ -6,6 +6,7 @@ package org.mockito.configuration;
 
 import org.mockito.ReturnValues;
 import org.mockito.internal.returnvalues.EmptyReturnValues;
+import org.mockito.stubbing.Answer;
 
 /**
  * Use it to configure Mockito. For now there are not many configuration options but it may change in future.
@@ -25,14 +26,29 @@ import org.mockito.internal.returnvalues.EmptyReturnValues;
  * <p>
  * If you have comments on Mockito configuration feature don't hesitate to write to mockito@googlegroups.com
  */
+@SuppressWarnings("deprecation")//supressed until ReturnValues are removed
 public interface IMockitoConfiguration {
 
     /**
+     * @deprecated
+     * <b>Please use {@link IMockitoConfiguration#getDefaultAnswer()}</b>
+     * Leave the implementation of this method empty - it's not going to be used anyway.
+     * <p>
+     * See javadoc {@link ReturnValues} for info why this method was deprecated
+     * <p>
      * Allows configuring the default return values of unstubbed invocations
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
      */
+    @Deprecated
     ReturnValues getReturnValues();
+    
+    /**
+     * Allows configuring the default return values of unstubbed invocations
+     * <p>
+     * See javadoc for {@link IMockitoConfiguration}
+     */    
+    Answer<Object> getDefaultAnswer();
 
     /**
      * Configures annotations for mocks

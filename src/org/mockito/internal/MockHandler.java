@@ -89,7 +89,7 @@ public class MockHandler<T> implements MethodInterceptor {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             return answer.answer(invocation);
         } else if (mockSettings.isSpy() == false) {
-            return mockSettings.getReturnValues().valueFor(invocation);
+            return mockSettings.getDefaultAnswer().answer(invocation);
         } else {
             Object ret = methodProxy.invokeSuper(proxy, args);
             //redo setting invocation for potential stubbing in case of partial mocks / spies.

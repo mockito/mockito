@@ -4,19 +4,19 @@
  */
 package org.mockito.internal.returnvalues;
 
-import org.mockito.ReturnValues;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-public class MockReturnValues implements ReturnValues {
+public class MockReturnValues implements Answer<Object> {
     
     private MockitoCore mockitoCore = new MockitoCore();
-    private ReturnValues delegate = new MoreEmptyReturnValues();
+    private Answer<Object> delegate = new MoreEmptyReturnValues();
     
-    public Object valueFor(InvocationOnMock invocation) throws Throwable {
-        Object ret = delegate.valueFor(invocation);
+    public Object answer(InvocationOnMock invocation) throws Throwable {
+        Object ret = delegate.answer(invocation);
         if (ret != null) {
             return ret;
         }
@@ -25,11 +25,11 @@ public class MockReturnValues implements ReturnValues {
     }
 
     @SuppressWarnings("unchecked")
-    Object returnValueFor(Class<?> class1) {
-        if (!ClassImposterizer.INSTANCE.canImposterise(class1)) {
+    Object returnValueFor(Class<?> clazz) {
+        if (!ClassImposterizer.INSTANCE.canImposterise(clazz)) {
             return null;
         }
         
-        return mockitoCore.mock((Class) class1, new MockSettingsImpl().defaultBehavior(this));
+        return mockitoCore.mock((Class) clazz, new MockSettingsImpl().defaultAnswer(this));
     }
 }

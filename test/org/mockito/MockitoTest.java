@@ -62,7 +62,7 @@ public class MockitoTest extends TestBase {
         MockSettingsImpl settings = (MockSettingsImpl) Mockito.withSettings();
         
         //then
-        assertEquals(Mockito.RETURNS_DEFAULTS, settings.getReturnValues());
+        assertEquals(Mockito.RETURNS_DEFAULTS, settings.getDefaultAnswer());
     }
     
     //TODO: after 1.8 stack filter does not work very well when it comes to threads?

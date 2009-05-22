@@ -19,13 +19,13 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.mockito.ReturnValues;
 import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockName;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
  * Used by default by every Mockito mock.
@@ -47,12 +47,12 @@ import org.mockito.invocation.InvocationOnMock;
  * </li>
  * </ul>
  */
-public class EmptyReturnValues implements ReturnValues {
+public class EmptyReturnValues implements Answer<Object> {
     
     /* (non-Javadoc)
      * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
      */
-    public Object valueFor(InvocationOnMock invocation) {
+    public Object answer(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {
             Object mock = invocation.getMock();
             MockName name = new MockUtil().getMockName(mock);

@@ -7,7 +7,6 @@ package org.mockito.internal.returnvalues;
 import java.lang.reflect.Method;
 
 import org.mockito.Mockito;
-import org.mockito.ReturnValues;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.Reporter;
@@ -15,12 +14,11 @@ import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 /**
- * Optional ReturnValues to be used with
- * {@link Mockito#mock(Class, ReturnValues)}
- * <p>
- * {@link ReturnValues} defines the return values of unstubbed calls.
+ * Optional Answer that can be used with
+ * {@link Mockito#mock(Class, Answer)}
  * <p>
  * This implementation can be helpful when working with legacy code. Unstubbed
  * methods often return null. If your code uses the object returned by an
@@ -36,7 +34,7 @@ import org.mockito.invocation.InvocationOnMock;
  * SmartNullReturnValues will be probably the default return values strategy in
  * Mockito 2.0
  */
-public class SmartNullReturnValues implements ReturnValues {
+public class SmartNullReturnValues implements Answer<Object> {
 
     private final class ThrowingInterceptor implements MethodInterceptor {
         private final InvocationOnMock invocation;
@@ -56,10 +54,10 @@ public class SmartNullReturnValues implements ReturnValues {
         }
     }
 
-    private final ReturnValues delegate = new MoreEmptyReturnValues();
+    private final Answer<Object> delegate = new MoreEmptyReturnValues();
 
-    public Object valueFor(final InvocationOnMock invocation) throws Throwable {
-        Object defaultReturnValue = delegate.valueFor(invocation);
+    public Object answer(final InvocationOnMock invocation) throws Throwable {
+        Object defaultReturnValue = delegate.answer(invocation);
         if (defaultReturnValue != null) {
             return defaultReturnValue;
         }

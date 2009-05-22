@@ -28,7 +28,7 @@ public class MocksCreationTest extends TestBase {
     public void shouldCombineMockNameAndSmartNulls() {
         //given
         IMethods mock = mock(IMethods.class, withSettings()
-            .defaultBehavior(RETURNS_SMART_NULLS)
+            .defaultAnswer(RETURNS_SMART_NULLS)
             .name("great mockie"));    
         
         //when
@@ -64,7 +64,7 @@ public class MocksCreationTest extends TestBase {
     public void shouldSpecifyMockNameViaSettings() {
         //given
         IMethods mock = mock(IMethods.class, withSettings().name("great mockie"));
-        
+
         //when
         String name = mock.toString();
         

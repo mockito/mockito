@@ -34,9 +34,6 @@ import org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChec
 import org.mockitousage.basicapi.ReplacingObjectMethodsTest;
 import org.mockitousage.basicapi.ResetTest;
 import org.mockitousage.basicapi.UsingVarargsTest;
-import org.mockitousage.examples.configure.withbaseclass.ConfiguringDefaultReturnValuesUsingBaseClassTest;
-import org.mockitousage.examples.configure.withrunner.ConfiguringDefaultReturnValuesUsingRunnerTest;
-import org.mockitousage.examples.configure.withstaticutility.ConfiguringSelectedMocksToReturnFakesTest;
 import org.mockitousage.examples.use.ExampleTest;
 import org.mockitousage.matchers.ComparableMatchersTest;
 import org.mockitousage.matchers.CustomMatchersTest;
@@ -78,9 +75,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 
         public void run() {
             Result result = JUnitCore.runClasses(
-                    ConfiguringDefaultReturnValuesUsingBaseClassTest.class,
-                    ConfiguringDefaultReturnValuesUsingRunnerTest.class,
-                    ConfiguringSelectedMocksToReturnFakesTest.class,
                     EqualsTest.class,
                     ListUtilTest.class,
                     MockingProgressImplTest.class,

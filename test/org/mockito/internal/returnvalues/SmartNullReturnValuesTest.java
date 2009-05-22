@@ -5,9 +5,9 @@
 package org.mockito.internal.returnvalues;
 
 import org.junit.Test;
-import org.mockito.ReturnValues;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
 public class SmartNullReturnValuesTest extends TestBase {
@@ -18,13 +18,13 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {
-        SmartNullReturnValues returnValues = new SmartNullReturnValues();
-        assertEquals(false  ,   returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
-        assertEquals((char) 0,  returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "charMethod")));
-        assertEquals(0,         returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "intMethod")));
-        assertEquals(0,         returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "longMethod")));
-        assertEquals(0,         returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
-        assertEquals(0,         returnValues.valueFor(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
+        Answer<Object> returnValues = new SmartNullReturnValues();
+        assertEquals(false  ,   returnValues.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
+        assertEquals((char) 0,  returnValues.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
+        assertEquals(0,         returnValues.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
+        assertEquals(0,         returnValues.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
+        assertEquals(0,         returnValues.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
+        assertEquals(0,         returnValues.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
     
     interface Foo {
@@ -33,9 +33,9 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Throwable {
-        ReturnValues returnValues = new SmartNullReturnValues();
+        Answer<Object> returnValues = new SmartNullReturnValues();
         
-        Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
+        Foo smartNull = (Foo) returnValues.answer(invocationOf(Foo.class, "get"));
         
         try {
             smartNull.get();
@@ -45,9 +45,9 @@ public class SmartNullReturnValuesTest extends TestBase {
     
     @Test
     public void shouldReturnAnObjectThatAllowsObjectMethods() throws Throwable {
-        ReturnValues returnValues = new SmartNullReturnValues();
+        Answer<Object> returnValues = new SmartNullReturnValues();
         
-        Foo smartNull = (Foo) returnValues.valueFor(invocationOf(Foo.class, "get"));
+        Foo smartNull = (Foo) returnValues.answer(invocationOf(Foo.class, "get"));
         
         //TODO: after 1.8 add functionality of printing params
         assertEquals("SmartNull returned by unstubbed get() method on mock", smartNull + "");
