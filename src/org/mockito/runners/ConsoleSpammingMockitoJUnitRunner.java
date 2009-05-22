@@ -86,16 +86,16 @@ import org.mockito.internal.util.MockitoLoggerImpl;
  * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
  */
-public class VerboseMockitoJUnitRunner extends Runner {
+public class ConsoleSpammingMockitoJUnitRunner extends Runner {
 
     private final MockitoLogger logger;
     private RunnerImpl runner;
     
-    public VerboseMockitoJUnitRunner(Class<?> klass) {
+    public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) {
         this(klass, new MockitoLoggerImpl(), new RunnerFactory().create(klass));
     }
     
-    VerboseMockitoJUnitRunner(Class<?> klass, MockitoLogger logger, RunnerImpl runnerImpl) {
+    ConsoleSpammingMockitoJUnitRunner(Class<?> klass, MockitoLogger logger, RunnerImpl runnerImpl) {
         this.runner = runnerImpl;
         this.logger = logger;
     }

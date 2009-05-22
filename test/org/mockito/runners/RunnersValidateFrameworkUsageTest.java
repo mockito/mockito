@@ -59,7 +59,7 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
     @Test
     public void shouldValidateWithVerboseRunner() throws Exception {
         //given
-        runner = new VerboseMockitoJUnitRunner(DummyTest.class);
+        runner = new ConsoleSpammingMockitoJUnitRunner(DummyTest.class);
         
         //when
         runner.run(notifier);

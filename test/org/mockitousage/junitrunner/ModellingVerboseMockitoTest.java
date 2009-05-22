@@ -10,11 +10,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.VerboseMockitoJUnitRunner;
+import org.mockito.runners.ConsoleSpammingMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@RunWith(VerboseMockitoJUnitRunner.class)
+@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 public class ModellingVerboseMockitoTest extends TestBase {
     
     @Mock private IMethods mock;

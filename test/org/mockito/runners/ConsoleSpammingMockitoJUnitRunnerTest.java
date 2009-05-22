@@ -19,11 +19,11 @@ import org.mockito.internal.util.MockitoLoggerImpl;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class VerboseMockitoJUnitRunnerTest extends TestBase {
+public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
     
-    private VerboseMockitoJUnitRunner runner;
+    private ConsoleSpammingMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;
 
@@ -35,7 +35,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 //this is what happens when the test runs:
@@ -56,7 +56,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
 
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 callUnstubbedMethodThatQualifiesForWarning();
@@ -74,7 +74,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldLogStubCalledWithDifferentArgumentsWhenTestFails() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 someStubbing();
@@ -98,7 +98,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 when(mock.simpleMethod(1)).thenReturn("foo");
@@ -115,7 +115,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldNotLogWhenTestPasses() throws Exception {
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 when(mock.simpleMethod()).thenReturn("foo");
@@ -133,7 +133,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
         //given
         final DebuggingInfo debuggingInfo = new ThreadSafeMockingProgress().getDebuggingInfo();
 
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 unusedStubbingThatQualifiesForWarning();
@@ -153,7 +153,7 @@ public class VerboseMockitoJUnitRunnerTest extends TestBase {
     public void shouldDelegateToGetDescription() throws Exception {
         //given
         final Description expectedDescription = Description.createSuiteDescription(this.getClass());
-        runner = new VerboseMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
             public Description getDescription() {
                 return expectedDescription;
             }
