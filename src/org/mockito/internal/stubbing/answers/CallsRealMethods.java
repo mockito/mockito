@@ -9,6 +9,6 @@ import org.mockito.stubbing.Answer;
 
 public class CallsRealMethods implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        return invocation.invokeSuper();
+        return invocation.callRealMethod();
     }
 }

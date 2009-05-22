@@ -10,6 +10,8 @@ public interface MockSettings {
 
     MockSettings spiedInstance(Object object);
 
+    @SuppressWarnings("unchecked")
+    //it's ok to supress it because having raw Answer here it makes nicer for clients 
     MockSettings defaultAnswer(Answer defaultAnswer);
     
 }

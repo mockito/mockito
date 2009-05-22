@@ -35,7 +35,10 @@ public interface InvocationOnMock {
     Object[] getArguments();
 
     /**
-     * invoke original method
+     * calls real method
+     *
+     * @return whatever the real method returns
+     * @throws Throwable in case real method throws 
      */
-    Object invokeSuper() throws Throwable;
+    Object callRealMethod() throws Throwable;
 }

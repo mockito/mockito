@@ -233,8 +233,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
         return this.rawArguments;
     }
 
-    // TODO: call it invokeReal or something along
-    public Object invokeSuper() throws Throwable {
+    public Object callRealMethod() throws Throwable {
         return methodProxy.invokeSuper(mock, arguments);
     }
 }
