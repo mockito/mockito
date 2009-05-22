@@ -22,6 +22,7 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     /* (non-Javadoc)
      * @see org.mockito.IMockitoConfiguration#getReturnValues()
      */
+    @Deprecated
     public ReturnValues getReturnValues() {
         throw new RuntimeException("\n" + "This method should not be used by the framework because it was deprecated"
                 + "\n" + "Please report the failure to the Mockito mailing list");

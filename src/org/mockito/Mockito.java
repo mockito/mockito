@@ -518,7 +518,7 @@ public class Mockito extends Matchers {
      * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)
      */
-    public static final Answer RETURNS_DEFAULTS = new GloballyConfiguredAnswer();
+    public static final Answer<Object> RETURNS_DEFAULTS = new GloballyConfiguredAnswer();
     
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -550,7 +550,7 @@ public class Mockito extends Matchers {
      *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
      * </pre>
      */
-    public static final Answer RETURNS_SMART_NULLS = new ReturnsSmartNulls();
+    public static final Answer<Object> RETURNS_SMART_NULLS = new ReturnsSmartNulls();
     
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -563,7 +563,7 @@ public class Mockito extends Matchers {
      * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
      * <p>
      */
-    public static final Answer RETURNS_MOCKS = new ReturnsMocks();
+    public static final Answer<Object> RETURNS_MOCKS = new ReturnsMocks();
 
     /**
      * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8 - decide whether to hide it or not?
@@ -590,7 +590,7 @@ public class Mockito extends Matchers {
      * value = mock.getSomething();
      * </pre>
      */
-    public static final Answer CALLS_REAL_METHODS = new CallsRealMethods();
+    public static final Answer<Object> CALLS_REAL_METHODS = new CallsRealMethods();
     
     /**
      * Creates mock object of given class or interface.
@@ -632,7 +632,7 @@ public class Mockito extends Matchers {
      * <p>
      * Why it is deprecated? ReturnValues is being replaced by Answer
      * for better consistency & interoperability of the framework. 
-     * Answer interface has been in Mockito for a while and it's the same as ReturnValues.
+     * Answer interface has been in Mockito for a while and it has the same responsibility as ReturnValues.
      * There's no point in mainting exactly the same interfaces.
      * <p>
      * Creates mock with a specified strategy for its return values. 

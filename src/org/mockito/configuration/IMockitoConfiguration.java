@@ -32,7 +32,15 @@ public interface IMockitoConfiguration {
     /**
      * @deprecated
      * <b>Please use {@link IMockitoConfiguration#getDefaultAnswer()}</b>
-     * Leave the implementation of this method empty - it's not going to be used anyway.
+     * <p>
+     * Steps: 
+     * <p>
+     * 1. Leave the implementation of getReturnValues() method empty - it's not going to be used anyway.
+     * <p>
+     * 2. Implement getDefaultAnswer() instead.
+     * <p>
+     * In rare cases your code might not compile with recent deprecation & changes.
+     * Very sorry for inconvenience but it had to be done in order to keep framework consistent.
      * <p>
      * See javadoc {@link ReturnValues} for info why this method was deprecated
      * <p>
