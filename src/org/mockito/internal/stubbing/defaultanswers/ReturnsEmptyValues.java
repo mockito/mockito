@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.returnvalues;
+package org.mockito.internal.stubbing.defaultanswers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +50,7 @@ import org.mockito.stubbing.Answer;
 public class ReturnsEmptyValues implements Answer<Object> {
     
     /* (non-Javadoc)
-     * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
+     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) {
         if (Invocation.isToString(invocation)) {

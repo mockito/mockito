@@ -13,7 +13,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("deprecation")
-public class StubbingConsecutiveReturnValuesTest extends TestBase {
+public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Mock private IMethods mock;
    

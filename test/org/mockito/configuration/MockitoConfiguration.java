@@ -14,12 +14,12 @@ import org.mockitousage.configuration.SmartMock;
 
 public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
-    private Answer<Object> overriddenReturnValues = null;
+    private Answer<Object> overriddenDefaultAnswer = null;
     private boolean cleansStackTrace;
 
     //for testing purposes, allow to override the configuration
-    public void overrideReturnValues(Answer<Object> returnValues) {
-        this.overriddenReturnValues = returnValues;
+    public void overrideDefaultAnswer(Answer<Object> defaultAnswer) {
+        this.overriddenDefaultAnswer = defaultAnswer;
     }
 
     //for testing purposes, allow to override the configuration
@@ -29,10 +29,10 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
 
     @Override
     public Answer<Object> getDefaultAnswer() {
-        if (overriddenReturnValues == null) {
+        if (overriddenDefaultAnswer == null) {
             return super.getDefaultAnswer();
         } else {
-            return overriddenReturnValues;
+            return overriddenDefaultAnswer;
         }
     }
     

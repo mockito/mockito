@@ -9,11 +9,6 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.returnvalues.ReturnsEmptyValues;
-import org.mockito.internal.returnvalues.GloballyConfiguredAnswer;
-import org.mockito.internal.returnvalues.ReturnsMocks;
-import org.mockito.internal.returnvalues.ReturnsMoreEmptyValues;
-import org.mockito.internal.returnvalues.ReturnsSmartNulls;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
@@ -21,6 +16,11 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -454,19 +454,19 @@ import org.mockito.stubbing.Answer;
  * 
  * <h3 id="14">14. Changing default return values of unstubbed invocations</h3>
  * 
- * You can create a mock with specified strategy of for its return values.
+ * You can create a mock with specified strategy for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
- * However, it can be helpful for working with legacy systems.
+ * However, it can be helpful for working with <b>legacy systems</b>.
  * <p>
- * Obviously those return values are used only when you don't stub the method call.
+ * Obviously those return values are used <b>only</b> when you don't stub the method call.
  * 
  * <pre>
  *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
- *   Foo mockTwo = mock(Foo.class, new YourOwnReturnValues()); 
+ *   Foo mockTwo = mock(Foo.class, new YourOwnAnswer()); 
  * </pre>
  * 
  * <p>
- * Read more about this interesting implementation of <i>ReturnValues</i>: {@link Mockito#RETURNS_SMART_NULLS}
+ * Read more about this interesting implementation of <i>Answer</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
  * <h3 id="15">15. (**New**) Capturing arguments for further assertions</h3>
  * 
@@ -510,9 +510,10 @@ public class Mockito extends Matchers {
     private static final MockitoCore MOCKITO_CORE = new MockitoCore();
     
     /**
-     * Answer of unstubbed invocations used by all Mockito mocks by default.
+     * The default Answer of every mock <b>if</b> the mock was not stubbed. 
+     * Typically it just returns some empty value. 
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed invocations. 
+     * {@link Answer} cab be used to define the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)
@@ -520,13 +521,13 @@ public class Mockito extends Matchers {
     public static final Answer RETURNS_DEFAULTS = new GloballyConfiguredAnswer();
     
     /**
-     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed invocations.
+     * {@link Answer} cab be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
-     * This implementation of ReturnValues makes unstubbed methods <b>return SmartNull instead of null</b>.
+     * This implementation of Answer <b>returns SmartNull instead of null</b>.
      * SmartNull gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
      * <p>
      * ReturnsSmartNulls first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
@@ -552,9 +553,9 @@ public class Mockito extends Matchers {
     public static final Answer RETURNS_SMART_NULLS = new ReturnsSmartNulls();
     
     /**
-     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed invocations.
+     * {@link Answer} cab be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code. 
      * <p>
@@ -565,12 +566,12 @@ public class Mockito extends Matchers {
     public static final Answer RETURNS_MOCKS = new ReturnsMocks();
 
     /**
-     * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8
+     * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8 - decide whether to hide it or not?
      * TODO: mention partial mocks warning
      * 
-     * Optional ReturnValues to be used with {@link Mockito#mock(Class, ReturnValues)}
+     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link ReturnValues} defines the return values of unstubbed invocations.
+     * {@link Answer} cab be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * When this implementation is used, unstubbed methods will delegate to the real implementation.
@@ -629,9 +630,10 @@ public class Mockito extends Matchers {
      * <p>
      * See {@link Mockito#mock(Class, Answer)}
      * <p>
-     * The reason why it is deprecated is that ReturnValues is being replaced by Answer
+     * Why it is deprecated? ReturnValues is being replaced by Answer
      * for better consistency & interoperability of the framework. 
      * Answer interface has been in Mockito for a while and it's the same as ReturnValues.
+     * There's no point in mainting exactly the same interfaces.
      * <p>
      * Creates mock with a specified strategy for its return values. 
      * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -671,7 +673,7 @@ public class Mockito extends Matchers {
      * <p>See examples in javadoc for {@link Mockito} class</p>
      * 
      * @param classToMock class or interface to mock
-     * @param returnValues default return values for unstubbed methods
+     * @param defaultAnswer default return values for unstubbed methods
      *
      * @return mock object
      */

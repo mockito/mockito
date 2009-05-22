@@ -43,7 +43,7 @@ public class AnswersValidatorTest extends TestBase {
     }
     
     @Test(expected = MockitoException.class)
-    public void shouldFailWhenReturnValueSetForVoidMethod() throws Throwable {
+    public void shouldFailWhenReturnValueIsSetForVoidMethod() throws Throwable {
         validator.validate(new Returns("one"), new InvocationBuilder().method("voidMethod").toInvocation());
     }
     

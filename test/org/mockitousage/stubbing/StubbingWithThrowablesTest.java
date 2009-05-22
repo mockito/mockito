@@ -118,7 +118,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }    
     
     @Test
-    public void shouldMixThrowablesAndReturnValuesOnDifferentMocks() throws Exception {
+    public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
         when(mock.getLast()).thenReturn("last");
         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();

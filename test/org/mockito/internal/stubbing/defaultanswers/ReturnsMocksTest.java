@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.returnvalues;
+package org.mockito.internal.stubbing.defaultanswers;
 
 import org.junit.Test;
 import org.mockito.internal.invocation.Invocation;
@@ -47,13 +47,13 @@ public class ReturnsMocksTest extends TestBase {
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives()
             throws Throwable {
-        ReturnsMocks returnValues = new ReturnsMocks();
-        assertEquals(false, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
-        assertEquals((char) 0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
-        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
-        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
-        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
-        assertEquals(0, returnValues.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
+        ReturnsMocks answer = new ReturnsMocks();
+        assertEquals(false, answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
+        assertEquals((char) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
+        assertEquals(0, answer.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
+        assertEquals(0, answer.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
+        assertEquals(0, answer.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
+        assertEquals(0, answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
     
     interface StringMethods {

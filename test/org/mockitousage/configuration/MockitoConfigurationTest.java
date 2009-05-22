@@ -17,7 +17,7 @@ public class MockitoConfigurationTest extends TestBase {
     
     @Test
     public void shouldReadConfigurationClassFromClassPath() {
-        ConfigurationAccess.getConfig().overrideReturnValues(new Answer<Object>() {
+        ConfigurationAccess.getConfig().overrideDefaultAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) {
                 return "foo";
             }});

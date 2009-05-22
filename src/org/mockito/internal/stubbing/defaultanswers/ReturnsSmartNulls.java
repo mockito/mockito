@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.returnvalues;
+package org.mockito.internal.stubbing.defaultanswers;
 
 import java.lang.reflect.Method;
 
@@ -23,7 +23,7 @@ import org.mockito.stubbing.Answer;
  * This implementation can be helpful when working with legacy code. Unstubbed
  * methods often return null. If your code uses the object returned by an
  * unstubbed call you get a NullPointerException. This implementation of
- * ReturnValues makes unstubbed methods return SmartNulls instead of nulls.
+ * Answer returns SmartNulls instead of nulls.
  * SmartNull gives nicer exception message than NPE because it points out the
  * line where unstubbed method was called. You just click on the stack trace.
  * <p>

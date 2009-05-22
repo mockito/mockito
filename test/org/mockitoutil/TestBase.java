@@ -22,7 +22,7 @@ public class TestBase extends Assert {
     @After
     public void cleanUpConfigInAnyCase() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
-        ConfigurationAccess.getConfig().overrideReturnValues(null);
+        ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
     }
 
     @Before

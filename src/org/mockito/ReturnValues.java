@@ -11,9 +11,10 @@ import org.mockito.stubbing.Answer;
  * @deprecated
  * <b>Just use {@link Answer} interface</b>
  * <p>
- * The reason why it is deprecated is that ReturnValues is being replaced by Answer
+ * Why it is deprecated? ReturnValues is being replaced by Answer
  * for better consistency & interoperability of the framework. 
  * Answer interface has been in Mockito for a while and it's the same as ReturnValues.
+ * There's no point in mainting exactly the same interfaces.
  * <p>
  * Configures return values for an unstubbed invocation
  * <p>

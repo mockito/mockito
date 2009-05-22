@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.returnvalues;
+package org.mockito.internal.stubbing.defaultanswers;
 
 import java.lang.reflect.Array;
 
@@ -45,7 +45,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object> {
     private Answer<Object> delegate = new ReturnsEmptyValues();
     
     /* (non-Javadoc)
-     * @see org.mockito.configuration.ReturnValues#valueFor(org.mockito.invocation.InvocationOnMock)
+     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.answer(invocation);

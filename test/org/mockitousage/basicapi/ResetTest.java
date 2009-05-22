@@ -92,7 +92,7 @@ public class ResetTest extends TestBase {
     }
     
     @Test
-    public void shouldMaintainPreviousReturnValuesStrategy() {
+    public void shouldMaintainPreviousDefaultAnswer() {
         //given
         mock = mock(IMethods.class, RETURNS_MOCKS);
         //when
