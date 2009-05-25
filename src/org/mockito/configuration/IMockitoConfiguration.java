@@ -52,7 +52,7 @@ public interface IMockitoConfiguration {
     ReturnValues getReturnValues();
     
     /**
-     * Allows configuring the default return values of unstubbed invocations
+     * Allows configuring the default answers of unstubbed invocations
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
      */    

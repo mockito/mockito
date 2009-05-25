@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
@@ -458,7 +457,7 @@ import org.mockito.stubbing.Answer;
  * It's quite advanced feature and typically you don't need it to write decent tests.
  * However, it can be helpful for working with <b>legacy systems</b>.
  * <p>
- * Obviously those return values are used <b>only</b> when you don't stub the method call.
+ * It is the default answer so it will be used <b>only when you don't</b> stub the method call.
  * 
  * <pre>
  *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
@@ -513,7 +512,7 @@ public class Mockito extends Matchers {
      * The default Answer of every mock <b>if</b> the mock was not stubbed. 
      * Typically it just returns some empty value. 
      * <p>
-     * {@link Answer} cab be used to define the return values of unstubbed invocations. 
+     * {@link Answer} can be used to define the return values of unstubbed invocations. 
      * <p>
      * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)
@@ -523,7 +522,7 @@ public class Mockito extends Matchers {
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link Answer} cab be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
@@ -555,7 +554,7 @@ public class Mockito extends Matchers {
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link Answer} cab be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code. 
      * <p>
@@ -571,7 +570,7 @@ public class Mockito extends Matchers {
      * 
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link Answer} cab be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of unstubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * When this implementation is used, unstubbed methods will delegate to the real implementation.
@@ -637,7 +636,7 @@ public class Mockito extends Matchers {
      * <p>
      * Creates mock with a specified strategy for its return values. 
      * It's quite advanced feature and typically you don't need it to write decent tests.
-     * However it can be helpful for working with legacy systems.
+     * However it can be helpful when working with legacy systems.
      * <p>
      * Obviously return values are used only when you don't stub the method call.
      *
@@ -661,9 +660,9 @@ public class Mockito extends Matchers {
     /**
      * Creates mock with a specified strategy for its answers to interactions. 
      * It's quite advanced feature and typically you don't need it to write decent tests.
-     * However it can be helpful for working with legacy systems.
+     * However it can be helpful when working with legacy systems.
      * <p>
-     * Obviously the answer is used only when you <b>don't</b> stub the method call.
+     * It is the default answer so it will be used <b>only when you don't</b> stub the method call.
      *
      * <pre>
      *   Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
@@ -673,7 +672,7 @@ public class Mockito extends Matchers {
      * <p>See examples in javadoc for {@link Mockito} class</p>
      * 
      * @param classToMock class or interface to mock
-     * @param defaultAnswer default return values for unstubbed methods
+     * @param defaultAnswer default answer for unstubbed methods
      *
      * @return mock object
      */

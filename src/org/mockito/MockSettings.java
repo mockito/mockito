@@ -7,11 +7,31 @@ package org.mockito;
 import org.mockito.stubbing.Answer;
 
 /**
- * @author SG0897539
- *
+ * Allows mock creation with additional mock settings. 
+ * <p>
+ * Don't use it too often. 
+ * Consider writing simple tests that use simple mocks. 
+ * Repeat after me: simple tests push simple, KISSy, readable & maintainable code.
+ * If you cannot write a test in a simple way - refactor the code under test.
+ * <p>
+ * Examples of mock settings:
+ * <pre>
+ *   //Creates mock with different default answer & name
+ *   Foo mock = mock(Foo.class, withSettings()
+ *       .defaultAnswer(RETURNS_SMART_NULLS)
+ *       .name("cool mockie"));
+ *       
+ *   //Creates mock with different default answer, descriptive name and extra interfaces
+ *   Foo mock = mock(Foo.class, withSettings()
+ *       .defaultAnswer(RETURNS_SMART_NULLS)
+ *       .name("cool mockie")
+ *       .extraInterfaces(Bar.class));    
+ * </pre>
+ * {@link MockSettings} has been introduced for two reasons. 
+ * Firstly, to make it easy to add another mock setting when the demand comes.
+ * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
 public interface MockSettings {
-    //TODO: validate javadoc
     
     /**
      * Specifies extra interfaces the mock should implement. Might be useful for legacy code or some corner cases.
@@ -30,9 +50,8 @@ public interface MockSettings {
      *   Baz baz = (Baz) foo;
      * </pre>
      * 
-     * 
      * @param interfaces extra interfaces the should implement.
-     * @return settings instance so that you can fluently specify other settings 
+     * @return settings instance so that you can fluently specify other settings
      */
     MockSettings extraInterfaces(Class<?>... interfaces);
 
@@ -56,10 +75,47 @@ public interface MockSettings {
      */
     MockSettings name(String name);
 
-    MockSettings spiedInstance(Object object);
+    /**
+     * Specifies the instance to spy on. Makes sense only for spies/partial mocks.
+     * <p>
+     * As usual you are going to read the partial mock warning:
+     * Object oriented programming is more less tackling complexity by dividing the complexity and moving it to specific objects.
+     * Partial mock is a sign that the code is not well designed. 
+     * It usually means that the complexity has been moved to a different method on the same object.
+     * Partial mocks are useful when dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+     * I wouldn't use them for new code.
+     * <p>
+     * Enough warnings about partial mocks, see an example how spiedInstance() works:
+     * <pre>
+     *   Foo foo = mock(Foo.class, spiedInstance(fooInstance));
+     *   
+     *   //Below does exactly the same:
+     *   Foo foo = spy(fooInstance);
+     * </pre>
+     * 
+     * @param instance to spy on
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings spiedInstance(Object instance);
 
+    /**
+     * Specifies default answers to interactions. 
+     * It's quite advanced feature and typically you don't need it to write decent tests.
+     * However it can be helpful when working with legacy systems.
+     * <p>
+     * It is the default answer so it will be used <b>only when you don't</b> stub the method call.
+     *
+     * <pre>
+     *   Foo mock = mock(Foo.class, withSettings().defaultAnswer(RETURNS_SMART_NULLS));
+     *   Foo mockTwo = mock(Foo.class, withSettings().defaultAnswer(new YourOwnAnswer()));
+     *   
+     *   //Below does exactly the same:
+     *   Foo mockTwo = mock(Foo.class, new YourOwnAnswer());
+     * </pre>
+     * 
+     * @param defaultAnswer default answer to be used by mock when not stubbed
+     * @return settings instance so that you can fluently specify other settings
+     */
     @SuppressWarnings("unchecked")
-    //it's ok to supress it because having raw Answer here it makes nicer for clients 
     MockSettings defaultAnswer(Answer defaultAnswer);
-    
 }
