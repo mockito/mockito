@@ -605,7 +605,7 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Creates mock with a name. Naming mocks can be helpful for debugging. 
+     * Specifies mock name. Naming mocks can be helpful for debugging - the name is used in all verification errors. 
      * <p>
      * Beware that naming mocks is not a solution for complex code which uses too many mocks or collaborators. 
      * <b>If you have too many mocks then refactor the code</b> so that it's easy to test/debug without necessity of naming mocks.
@@ -1344,7 +1344,36 @@ public class Mockito extends Matchers {
         MOCKITO_CORE.validateMockitoUsage();
     }
 
-    //TODO: javadoc
+    /**
+     * Allows mock creation with additional mock settings. 
+     * <p>
+     * Don't use it too often. 
+     * Consider writing simple tests that use simple mocks. 
+     * Repeat after me: simple tests push simple, KISSy, readable & maintainable code.
+     * If you cannot write a test in a simple way - refactor the code under test.
+     * <p>
+     * Examples of mock settings:
+     * <pre>
+     *   //Creates mock with different default answer & name
+     *   Foo mock = mock(Foo.class, withSettings()
+     *       .defaultAnswer(RETURNS_SMART_NULLS)
+     *       .name("cool mockie"));
+     *       
+     *   //Creates mock with different default answer, descriptive name and extra interfaces
+     *   Foo mock = mock(Foo.class, withSettings()
+     *       .defaultAnswer(RETURNS_SMART_NULLS)
+     *       .name("cool mockie")
+     *       .extraInterfaces(Bar.class));    
+     * </pre>
+     * {@link MockSettings} has been introduced for two reasons. 
+     * Firstly, to make it easy to add another mock settings when the demand comes.
+     * Secondly, to enable combining different mock settings without introducing zillions of overloaded mock() methods.
+     * <p>
+     * See javadoc for {@link MockSettings} to learn about possible mock settings.
+     * <p>
+     * 
+     * @return mock settings instance with defaults.
+     */
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
     }
