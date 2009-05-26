@@ -95,11 +95,11 @@ public class MockHandler<T> implements MethodInterceptor {
                 ret = mockSettings.getDefaultAnswer().answer(invocation);
             } catch (Throwable t) {
                 //TODO: this needs to be a different filter. 
+//                new ConditionalStackTraceFilter().filter(t);
                 //The one detects first stack trace element that is mockito internal
                 //detects last stack trace element that is mockito internal
                 //removes both of them and all inside
                 
-                new ConditionalStackTraceFilter().filter(t);
                 throw t;
             }
             //redo setting invocation for potential stubbing in case of partial mocks / spies.
