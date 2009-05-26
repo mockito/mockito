@@ -6,17 +6,17 @@ package org.mockitousage.spies;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {
 
-    @After
-    public void validateMockitoUsage() {
-        Mockito.validateMockitoUsage();
+    @Before
+    public void pleaseMakeStackTracesClean() {
+        makeStackTracesClean();
     }
     
     class InheritMe {
@@ -39,6 +39,15 @@ public class PartialMockingWithSpiesTest extends TestBase {
         
         public String howMuchDidYouInherit() {
             return getInherited();
+        }
+        
+        public String getNameButDelegateToMethodThatThrows() {
+            throwSomeException();
+            return guessName().name;
+        }
+
+        private void throwSomeException() {
+            throw new RuntimeException("boo");
         }
     }
     
@@ -68,6 +77,36 @@ public class PartialMockingWithSpiesTest extends TestBase {
         
         // then
         assertEquals("foo", spy.getName());
+    }
+
+    @Test
+    public void shouldAllowStubbingWithThrowablesMethodsThatDelegateToOtherMethods() {
+        // when
+        doThrow(new RuntimeException("appetite for destruction"))
+            .when(spy).getNameButDelegateToMethodThatThrows();
+        
+        // then
+        try {
+            spy.getNameButDelegateToMethodThatThrows();
+            fail();
+        } catch(Exception e) {
+            assertEquals("appetite for destruction", e.getMessage());
+        }
+    }
+    
+//    @Test
+    public void shouldStackTraceGetFilteredOnUserExceptions() {
+        try {
+            // when
+            spy.getNameButDelegateToMethodThatThrows();
+            fail();
+        } catch (Throwable t) {
+            assertThat(t, ExtraMatchers.hasMethodsInStackTrace(
+                    "throwSomeException",
+                    "getNameButDelegateToMethodThatThrows",
+                    "shouldStackTraceGetFilteredOnUserExceptions"
+                    ));
+        }
     }
 
     @Test

@@ -135,4 +135,15 @@ public class ExtraMatchers {
     public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
         return CoreMatchers.is(type);
     }
+
+    public static Assertor hasMethodsInStackTrace(final String ... methods) {
+        return new Assertor<Throwable>() {
+            public void assertValue(Throwable value) {
+                StackTraceElement[] trace = value.getStackTrace();
+                for (int i = 0; i < methods.length; i++) {
+                    assertEquals("Expected methods[" + i + "] to be in the stack trace.", methods[i], trace[i].getMethodName());
+                }
+            }
+        };
+    }
 }

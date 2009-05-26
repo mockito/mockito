@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.exceptions.base.ConditionalStackTraceFilter;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -79,19 +80,28 @@ public class MockHandler<T> implements MethodInterceptor {
         OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber, registeredInvocations);
         mockingProgress.reportOngoingStubbing(ongoingStubbing);
 
-        Answer<?> answer = mockitoStubber.findAnswerFor(invocation);
-        if (!invocation.isVoid() && answer == null) {
+        Answer<?> stubbedAnswer = mockitoStubber.findAnswerFor(invocation);
+        if (!invocation.isVoid() && stubbedAnswer == null) {
             //it is a return-value interaction but not stubbed. This *might* be a problem
             mockingProgress.getDebuggingInfo().addPotentiallyUnstubbed(invocationMatcher);
         }
         
-        if (answer != null) {
+        if (stubbedAnswer != null) {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
-            return answer.answer(invocation);
-        } else if (mockSettings.isSpy() == false) {
-            return mockSettings.getDefaultAnswer().answer(invocation);
+            return stubbedAnswer.answer(invocation);
         } else {
-            Object ret = methodProxy.invokeSuper(proxy, args);
+            Object ret = null;
+            try {
+                ret = mockSettings.getDefaultAnswer().answer(invocation);
+            } catch (Throwable t) {
+                //TODO: this needs to be a different filter. 
+                //The one detects first stack trace element that is mockito internal
+                //detects last stack trace element that is mockito internal
+                //removes both of them and all inside
+                
+                new ConditionalStackTraceFilter().filter(t);
+                throw t;
+            }
             //redo setting invocation for potential stubbing in case of partial mocks / spies.
             //Without it, the real method inside 'when' might have delegated 
             //to other self method and overwrite the intended stubbed method with a different one.

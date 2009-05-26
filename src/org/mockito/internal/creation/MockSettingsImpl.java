@@ -53,10 +53,6 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    public boolean isSpy() {
-        return spiedInstance != null;
-    }
-
     @SuppressWarnings("unchecked")
     public MockSettings defaultAnswer(Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
