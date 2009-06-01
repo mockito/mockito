@@ -25,6 +25,7 @@ public class StackTraceFilter {
      * Basically removes all bad from the middle. If any good are in the middle of bad those are also removed. 
      */
     public StackTraceElement[] filter(StackTraceElement[] target, int startWith) {
+        //TODO: after 1.8 profile
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastBad = -1;

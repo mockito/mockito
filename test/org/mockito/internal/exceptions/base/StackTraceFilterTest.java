@@ -114,4 +114,12 @@ public class StackTraceFilterTest extends TestBase {
                 "org.good.Trace"
                 ));
     }
+    
+    @Test
+    public void shouldReturnEmptyArrayWhenInputIsEmpty() throws Exception {
+        //when
+        StackTraceElement[] filtered = filter.filter(new StackTraceElement[0], 0);
+        //then
+        assertEquals(0, filtered.length);
+    }
 }
