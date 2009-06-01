@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockitousage.IMethods;
@@ -144,5 +145,22 @@ public class InvocationTest extends TestBase {
         Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
         assertFalse(invocation.isValidException(new Exception()));
         assertTrue(invocation.isValidException(new CharacterCodingException()));
+    }
+    
+    class Foo {
+        public String bark() {
+            return "woof";
+        }
+    }
+    
+    @Test
+    public void shouldBeAbleToCallRealMethod() throws Throwable {
+        //when
+        Invocation invocation = invocationOf(Foo.class, "bark", new RealMethod() {
+            public Object invoke(Object target, Object[] arguments) throws Throwable {
+                return new Foo().bark();
+            }});
+        //then
+        assertEquals("woof", invocation.callRealMethod());
     }
 }

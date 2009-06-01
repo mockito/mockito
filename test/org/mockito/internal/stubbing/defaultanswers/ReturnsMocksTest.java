@@ -5,7 +5,6 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
@@ -36,12 +35,6 @@ public class ReturnsMocksTest extends TestBase {
     @Test
     public void shouldReturnNullForFinalClass() throws Exception {
         assertNull(values.returnValueFor(Baz.class));
-    }
-
-    private Invocation invocationOf(Class<?> type, String methodName)
-            throws NoSuchMethodException {
-        return new Invocation(new Object(), type.getMethod(methodName,
-                new Class[0]), new Object[0], 1, null);
     }
 
     @Test

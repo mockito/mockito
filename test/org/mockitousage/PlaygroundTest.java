@@ -23,6 +23,20 @@ public class PlaygroundTest extends TestBase {
             return "foo";
         }
     }
+    
+    class Boo {
+        public void withLong(long y) {
+            
+        }
+    }
+    
+    @Test
+    public void should() throws Exception {
+        Boo boo = mock(Boo.class);
+        boo.withLong(100);
+        
+        verify(boo).withLong(new Long(100));
+    }
 
     Foo mock;
     @Mock IMethods mockTwo;

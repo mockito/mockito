@@ -2,11 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.exceptions.base;
+package org.mockito.internal.exceptions.base;
 
 import static org.mockitoutil.ExtraMatchers.*;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.TraceBuilder;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.TestBase;
 

@@ -12,9 +12,9 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.util.MockUtil;
@@ -38,20 +38,20 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     private final Method method;
     private final Object[] arguments;
     private final Location location;
-    private final MethodProxy methodProxy;
 
     private boolean verified;
     private boolean verifiedInOrder;
     private Object[] rawArguments;
+    private final RealMethod realMethod;
 
-    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, MethodProxy methodProxy) {
+    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, RealMethod realMethod) {
         this.mock = mock;
         this.method = method;
+        this.realMethod = realMethod;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
-        this.methodProxy = methodProxy;
     }
 
     // expands array varArgs that are given by runtime (1, [a, b]) into true
@@ -234,6 +234,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     }
 
     public Object callRealMethod() throws Throwable {
-        return methodProxy.invokeSuper(mock, arguments);
+        return realMethod.invoke(mock, arguments);
     }
 }

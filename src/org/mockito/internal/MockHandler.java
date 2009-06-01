@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
-import org.mockito.exceptions.base.ConditionalStackTraceFilter;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.stubbing.MockitoStubber;
@@ -57,14 +57,14 @@ public class MockHandler<T> implements MethodInterceptor {
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
             //stubbing voids with stubVoid() or doAnswer() style
-            Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), methodProxy);
+            Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), new FilteredCGLIBProxyRealMethod(methodProxy));
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
-        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), methodProxy);
+        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), new FilteredCGLIBProxyRealMethod(methodProxy));
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
         
         mockingProgress.validateState();
@@ -90,18 +90,8 @@ public class MockHandler<T> implements MethodInterceptor {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             return stubbedAnswer.answer(invocation);
         } else {
-            Object ret = null;
-            try {
-                ret = mockSettings.getDefaultAnswer().answer(invocation);
-            } catch (Throwable t) {
-                //TODO: this needs to be a different filter. 
-//                new ConditionalStackTraceFilter().filter(t);
-                //The one detects first stack trace element that is mockito internal
-                //detects last stack trace element that is mockito internal
-                //removes both of them and all inside
-                
-                throw t;
-            }
+            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+            
             //redo setting invocation for potential stubbing in case of partial mocks / spies.
             //Without it, the real method inside 'when' might have delegated 
             //to other self method and overwrite the intended stubbed method with a different one.

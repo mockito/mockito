@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

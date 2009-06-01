@@ -94,10 +94,8 @@ public class PartialMockingWithSpiesTest extends TestBase {
         }
     }
     
-//    @Test
-//    TODO: see the TODO comment in MockHandler about extra stack trace filter
+    @Test
     public void shouldStackTraceGetFilteredOnUserExceptions() {
-        spy.getNameButDelegateToMethodThatThrows();
         try {
             // when
             spy.getNameButDelegateToMethodThatThrows();
@@ -110,6 +108,11 @@ public class PartialMockingWithSpiesTest extends TestBase {
                     "shouldStackTraceGetFilteredOnUserExceptions"
                     ));
         }
+    }
+
+//    @Test //manual verification
+    public void verifyTheStackTrace() {
+        spy.getNameButDelegateToMethodThatThrows();
     }
 
     @Test

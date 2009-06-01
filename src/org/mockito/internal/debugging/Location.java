@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.exceptions.base.StackTraceFilter;
+import org.mockito.internal.exceptions.base.StackTraceFilter;
 
 public class Location  {
 
@@ -13,7 +13,7 @@ public class Location  {
     public Location() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceFilter filter = new StackTraceFilter();
-        this.firstTraceElement = filter.filter(stackTrace)[0];
+        this.firstTraceElement = filter.filter(stackTrace, 1)[0];
     }
 
     @Override

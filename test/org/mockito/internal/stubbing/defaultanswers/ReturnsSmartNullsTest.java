@@ -6,15 +6,10 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.junit.Test;
 import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
 public class ReturnsSmartNullsTest extends TestBase {
-    
-    private Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
-        return new Invocation(new Object(), type.getMethod(methodName, new Class[0]), new Object[0], 1, null);
-    }
     
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {

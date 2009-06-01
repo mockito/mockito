@@ -6,7 +6,7 @@ package org.mockito.exceptions.verification.junit;
 
 import junit.framework.ComparisonFailure;
 
-import org.mockito.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
 
 
 public class ArgumentsAreDifferent extends ComparisonFailure {

@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.realmethod.RealMethod;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
@@ -86,5 +88,15 @@ public class TestBase extends Assert {
                 string +
                 "\n"
                 , string.contains(sub));
+    }
+
+    protected static Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
+        return new Invocation(new Object(), type.getMethod(methodName,
+                new Class[0]), new Object[0], 1, null);
+    }
+    
+    protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
+        return new Invocation(new Object(), type.getMethod(methodName,
+                new Class[0]), new Object[0], 1, realMethod);
     }
 }

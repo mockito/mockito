@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions.base;
 
+import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
+
 
 
 public class MockitoAssertionError extends AssertionError {
