@@ -67,6 +67,11 @@ public class BDDMockito extends Mockito {
          * See original {@link NewOngoingStubbing#thenThrow(Throwable...)}
          */
         BDDMyOngoingStubbing<T> willThrow(Throwable... throwables);
+
+        /**
+         * See original {@link NewOngoingStubbing#thenCallRealMethod()}
+         */
+        BDDMyOngoingStubbing<T> willCallRealMethod();
     }
     
     public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
@@ -103,6 +108,10 @@ public class BDDMockito extends Mockito {
          */
         public BDDMyOngoingStubbing<T> willThrow(Throwable... throwables) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwables));
+        }
+
+        public BDDMyOngoingStubbing<T> willCallRealMethod() {
+            return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenCallRealMethod());
         }
     }
     
@@ -213,5 +222,12 @@ public class BDDMockito extends Mockito {
      */
     public static BDDStubber willReturn(Object toBeReturned) {
         return new BDDStubberImpl(Mockito.doReturn(toBeReturned));
+    }
+
+    /**
+     * see original {@link Mockito#doCallRealMethod()}
+     */
+    public static BDDStubber willCallRealMethod() {
+        return new BDDStubberImpl(Mockito.doCallRealMethod());
     }
 }

@@ -1060,7 +1060,13 @@ public class Mockito extends Matchers {
     /**
      * Use doCallRealMethod() when you want to call the real implementation of a method.
      * <p>
-     * TODO: mention partial mocks warning
+     *      * As usual you are going to read the partial mock warning:
+     * Object oriented programming is more less tackling complexity by dividing the complexity and placing it in separate, specific objects.
+     * Partial mock is a sign that the code is not well designed. 
+     * It usually means that the complexity has been moved to a different method on the same object.
+     * Partial mocks are useful when dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+     * I wouldn't use them for new code.
+
      * <p>
      * Example:
      * <pre>

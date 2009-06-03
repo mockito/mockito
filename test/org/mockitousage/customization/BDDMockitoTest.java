@@ -96,4 +96,32 @@ public class BDDMockitoTest extends TestBase {
         
         assertEquals("foo", mock.simpleMethod("foo"));
     }
+    
+    class Dog {
+        public String bark() {
+            return "woof";
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void shouldStubByDelegatingToRealMethod() throws Exception {
+        //given
+        Dog dog = mock(Dog.class);
+        //when
+        willCallRealMethod().given(dog).bark();
+        //then
+        assertEquals("woof", dog.bark());
+    }
+    
+    @Test
+    @SuppressWarnings("unchecked")
+    public void shouldStubByDelegatingToRealMethodUsingTypicalStubbingSyntax() throws Exception {
+        //given
+        Dog dog = mock(Dog.class);
+        //when
+        given(dog.bark()).willCallRealMethod();
+        //then
+        assertEquals("woof", dog.bark());
+    }
 }
