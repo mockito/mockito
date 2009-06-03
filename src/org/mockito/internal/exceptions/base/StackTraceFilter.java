@@ -24,13 +24,13 @@ public class StackTraceFilter {
      * [a+, b+, c-, d+, e+, f-, g+] -> [a+, b+, g+]
      * Basically removes all bad from the middle. If any good are in the middle of bad those are also removed. 
      */
-    public StackTraceElement[] filter(StackTraceElement[] target, int startWith) {
+    public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
         //TODO: after 1.8 profile
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastBad = -1;
         int firstBad = -1;
-        for (int i = startWith; i < unfilteredStackTrace.size(); i++) {
+        for (int i = 0; i < unfilteredStackTrace.size(); i++) {
             if (!this.isBad(unfilteredStackTrace.get(i))) {
                 continue;
             }
@@ -41,8 +41,8 @@ public class StackTraceFilter {
         }
         
         List<StackTraceElement> top;
-        if (firstBad != -1) {
-            top = unfilteredStackTrace.subList(startWith, firstBad);
+        if (keepTop && firstBad != -1) {
+            top = unfilteredStackTrace.subList(0, firstBad);
         } else {
             top = new LinkedList<StackTraceElement>();
         }

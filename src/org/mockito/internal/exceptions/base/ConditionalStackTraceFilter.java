@@ -16,7 +16,7 @@ public class ConditionalStackTraceFilter {
         if (!config.cleansStackTrace()) {
             return;
         }
-        StackTraceElement[] filtered = filter.filter(throwable.getStackTrace(), 0);
+        StackTraceElement[] filtered = filter.filter(throwable.getStackTrace(), true);
         throwable.setStackTrace(filtered);
     }
 }

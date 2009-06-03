@@ -21,7 +21,7 @@ public class StackTraceFilterTest extends TestBase {
             "List$$EnhancerByMockitoWithCGLIB$$2c406024"
         ).toTraceArray();
         
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, false);
         
         assertThat(filtered, hasOnlyThoseClasses("MockitoExampleTest"));
     }
@@ -33,7 +33,7 @@ public class StackTraceFilterTest extends TestBase {
             "org.mockito.Mockito"
         ).toTraceArray();
             
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, false);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest"));
     }
@@ -48,7 +48,7 @@ public class StackTraceFilterTest extends TestBase {
                 "org.mockito.Mockito"
         ).toTraceArray();
         
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, false);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.TestSupport", "org.test.MockitoSampleTest"));
     }
@@ -62,7 +62,7 @@ public class StackTraceFilterTest extends TestBase {
                 "org.mockito.Mockito"
         ).toTraceArray();
         
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, false);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
     }
@@ -74,13 +74,13 @@ public class StackTraceFilterTest extends TestBase {
                 "org.test.MockitoSampleTest"
         ).toTraceArray();
         
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, false);
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "org.mockito.internal.runners.Runner"));
     }
     
     @Test
-    public void shouldStartFilteringFromIndex() {
+    public void shouldStartFilteringAndKeepTop() {
         //given
         StackTraceElement[] t = new TraceBuilder().classes(
                 "org.test.Good",
@@ -88,17 +88,15 @@ public class StackTraceFilterTest extends TestBase {
                 "org.test.MockitoSampleTest"
         ).toTraceArray();
         
-        int startIndex = 1;
-        
         //when
-        StackTraceElement[] filtered = filter.filter(t, startIndex);
+        StackTraceElement[] filtered = filter.filter(t, true);
         
         //then
-        assertThat(filtered, hasOnlyThoseClasses("org.test.Good"));
+        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "org.test.Good"));
     }
 
     @Test
-    public void shouldKeepGoodTraceFromTheTopBecauseSpiesSometimesThrowExceptions() {
+    public void shouldKeepGoodTraceFromTheTopBecauseRealImplementationsOfSpiesSometimesThrowExceptions() {
         StackTraceElement[] t = new TraceBuilder().classes(
                 "org.good.Trace",
                 "org.yet.another.good.Trace",
@@ -106,7 +104,7 @@ public class StackTraceFilterTest extends TestBase {
                 "org.test.MockitoSampleTest"
         ).toTraceArray();
         
-        StackTraceElement[] filtered = filter.filter(t, 0);
+        StackTraceElement[] filtered = filter.filter(t, true);
         
         assertThat(filtered, hasOnlyThoseClasses(
                 "org.test.MockitoSampleTest",
@@ -118,7 +116,7 @@ public class StackTraceFilterTest extends TestBase {
     @Test
     public void shouldReturnEmptyArrayWhenInputIsEmpty() throws Exception {
         //when
-        StackTraceElement[] filtered = filter.filter(new StackTraceElement[0], 0);
+        StackTraceElement[] filtered = filter.filter(new StackTraceElement[0], false);
         //then
         assertEquals(0, filtered.length);
     }

@@ -709,10 +709,15 @@ public class Mockito extends Matchers {
      * <p>
      * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
      * <p>
-     * Spying on real objects is often associated with "partial mocking" concept. 
-     * However, Mockito spies are not partial mocks. Mockito spy is meant to help testing other classes - not the spy itself. 
-     * Therefore spy will not help if you intend to verify if method calls other method on the same object. 
-     * In this case I suggest being OO/SRPy (for example you might extract new class/interface...)
+     * As usual you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more less tackling complexity by spliting the complexity into separate, specific objects.
+     * How does partial mock fit into this paradigm? Well, it just doesn't... 
+     * Partial mock usually means that the complexity has been moved to a different method on the same object.
+     * Trust me, this is not the way you want to design your application. 
+     * <p>
+     * However, there are rare cases when partial mocks come handy: 
+     * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+     * I wouldn't use partial mocks in new code, though.
      * <p>
      * Example:
      * 
@@ -1060,13 +1065,17 @@ public class Mockito extends Matchers {
     /**
      * Use doCallRealMethod() when you want to call the real implementation of a method.
      * <p>
-     *      * As usual you are going to read the partial mock warning:
-     * Object oriented programming is more less tackling complexity by dividing the complexity and placing it in separate, specific objects.
-     * Partial mock is a sign that the code is not well designed. 
-     * It usually means that the complexity has been moved to a different method on the same object.
-     * Partial mocks are useful when dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * I wouldn't use them for new code.
-
+     * As usual you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more less tackling complexity by spliting the complexity into separate, specific objects.
+     * How does partial mock fit into this paradigm? Well, it just doesn't... 
+     * Partial mock usually means that the complexity has been moved to a different method on the same object.
+     * Trust me, this is not the way you want to design your application. 
+     * <p>
+     * However, there are rare cases when partial mocks come handy: 
+     * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+     * I wouldn't use partial mocks in new code, though.
+     * <p>
+     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks
      * <p>
      * Example:
      * <pre>
@@ -1076,6 +1085,8 @@ public class Mockito extends Matchers {
      *   // this will call the real implementation of Foo.someVoidMethod()
      *   mock.someVoidMethod();
      * </pre>
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
      *
      * @return stubber - to select a method for stubbing
      */
@@ -1099,6 +1110,8 @@ public class Mockito extends Matchers {
      *      }})
      *  .when(mock).someMethod();
      * </pre>
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
@@ -1137,6 +1150,8 @@ public class Mockito extends Matchers {
      *   //clear() does nothing, so the list still contains "one"
      *   spy.clear();
      * </pre>
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
      *   
      * @return stubber - to select a method for stubbing
      */
@@ -1180,6 +1195,8 @@ public class Mockito extends Matchers {
      * 
      * Above scenarios shows a tradeoff of Mockito's ellegant syntax. Note that the scenarios are very rare, though. 
      * Spying should be sporadic and overriding exception-stubbing is very rare.  
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
      * 
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
@@ -1202,7 +1219,7 @@ public class Mockito extends Matchers {
      * but only those that you are interested in testing in order.
      * <p>
      * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.  
-     *
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param mocks to be verified in order
