@@ -36,8 +36,10 @@ public interface InvocationOnMock {
 
     /**
      * calls real method
+     * <p>
+     * <b>Warning:</b> depending on the real implementation it might throw exceptions  
      *
-     * @return whatever the real method returns
+     * @return whatever the real method returns / throws
      * @throws Throwable in case real method throws 
      */
     Object callRealMethod() throws Throwable;

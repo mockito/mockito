@@ -4,8 +4,8 @@
  */
 package org.mockitousage.customization;
 
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Matchers.*;
-import static org.mockitousage.customization.BDDMockito.*;
 
 import org.junit.Test;
 import org.mockito.Mock;

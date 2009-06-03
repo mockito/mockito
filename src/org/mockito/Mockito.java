@@ -565,9 +565,6 @@ public class Mockito extends Matchers {
     public static final Answer<Object> RETURNS_MOCKS = new ReturnsMocks();
 
     /**
-     * TODO: THIS INTERFACE MIGHT CHANGE IN 1.8 - decide whether to hide it or not?
-     * TODO: mention partial mocks warning
-     * 
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
      * {@link Answer} can be used to define the return values of unstubbed invocations.
@@ -688,7 +685,7 @@ public class Mockito extends Matchers {
      * Hence {@link MockSettings}.
      * <pre>
      *   Listener mock = mock(Listener.class, withSettings()
-     *     .name("firstListner").defaultBehavior(RETURNS_SMART_NULLS);
+     *     .name("firstListner").defaultBehavior(RETURNS_SMART_NULLS));
      *   );  
      * </pre>
      * <b>Use it carefully and occasionally</b>. What might be reason your test needs non-standard mocks? 

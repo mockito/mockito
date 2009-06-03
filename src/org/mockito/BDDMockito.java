@@ -2,13 +2,44 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.customization;
+package org.mockito;
 
-import org.mockito.Mockito;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.stubbing.Answer;
 
+/**
+ * Behavior Driven Development style of stubbing that integrates nicely with //given //when //then comments.
+ * Start learning about BDD here: <link href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">http://en.wikipedia.org/wiki/Behavior_Driven_Development</link>
+ * <p>
+ * The entire test can look like:  
+ * <pre>
+ * public void shouldBuyBread() throws Exception {
+ *   //given
+ *   given(seller.askForBread()).willReturn(new Bread());
+ *   
+ *   //when
+ *   Goods goods = shopping.shopForBread();
+ *   
+ *   //then
+ *   assertThat(goods, containBread());
+ * }  
+ * </pre>
+ * 
+ * Stubbing voids with throwables:
+ * <pre>
+ *   //given
+ *   willThrow(new RuntimeException("boo")).given(mock).foo();
+ *   
+ *   //when
+ *   Result result = systemUnderTest.perform();
+ *   
+ *   //then
+ *   assertEquals(failure, result);
+ * </pre>
+ * <p>
+ * BDDMockito also shows how you can adjust the mocking syntax if you feel like 
+ */
 @SuppressWarnings("unchecked")
 public class BDDMockito extends Mockito {
     
