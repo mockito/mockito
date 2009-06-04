@@ -4,10 +4,8 @@
  */
 package org.mockito.internal.invocation;
 
-public interface CanPrintInMultilines {
+public interface PrintingFriendlyInocation {
 
-    String toString();
-    boolean printsInMultilines();
-    String toMultilineString();
+    String toString(PrintSettings printSettings);
 
 }

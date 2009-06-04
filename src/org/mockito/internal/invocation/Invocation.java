@@ -7,16 +7,20 @@ package org.mockito.internal.invocation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.MatchersPrinter;
+import org.mockito.internal.matchers.HasVerboseVariant;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
@@ -30,7 +34,7 @@ import org.mockito.invocation.InvocationOnMock;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, CanPrintInMultilines {
+public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInocation {
 
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
@@ -128,22 +132,15 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     }
 
     public String toString() {
-        return toString(argumentsToMatchers(), false);
+        return toString(argumentsToMatchers(), new PrintSettings());
     }
 
-    public boolean printsInMultilines() {
-        return toString().contains("\n");
-    }
-
-    public String toMultilineString() {
-        return toString(argumentsToMatchers(), true);
-    }
-
-    protected String toString(List<Matcher> matchers, boolean forceMultiline) {
+    protected String toString(List<Matcher> matchers, PrintSettings printSettings) {
+        MatchersPrinter matchersPrinter = new MatchersPrinter();
         String method = qualifiedMethodName();
-        String invocation = method + getArgumentsLine(matchers);
-        if (forceMultiline || (!matchers.isEmpty() && invocation.length() > MAX_LINE_LENGTH)) {
-            return method + getArgumentsBlock(matchers);
+        String invocation = method + matchersPrinter.getArgumentsLine(matchers, printSettings);
+        if (printSettings.isMultiline() || (!matchers.isEmpty() && invocation.length() > MAX_LINE_LENGTH)) {
+            return method + matchersPrinter.getArgumentsBlock(matchers, printSettings);
         } else {
             return invocation;
         }
@@ -151,18 +148,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     private String qualifiedMethodName() {
         return new MockUtil().getMockName(mock) + "." + method.getName();
-    }
-
-    private String getArgumentsLine(List<Matcher> matchers) {
-        Description result = new StringDescription();
-        result.appendList("(", ", ", ");", matchers);
-        return result.toString();
-    }
-
-    private String getArgumentsBlock(List<Matcher> matchers) {
-        Description result = new StringDescription();
-        result.appendList("(\n    ", ",\n    ", "\n);", matchers);
-        return result.toString();
     }
 
     protected List<Matcher> argumentsToMatchers() {
@@ -182,7 +167,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
     }
 
     public static boolean isToString(Method method) {
-        return method.getReturnType() == String.class && method.getParameterTypes().length == 0 && method.getName().equals("toString");
+        return method.getReturnType() == String.class && method.getParameterTypes().length == 0
+                && method.getName().equals("toString");
     }
 
     public boolean isValidException(Throwable throwable) {
@@ -235,5 +221,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, CanPri
 
     public Object callRealMethod() throws Throwable {
         return realMethod.invoke(mock, arguments);
+    }
+
+    public String toString(PrintSettings printSettings) {
+        return toString(argumentsToMatchers(), printSettings);
     }
 }

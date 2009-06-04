@@ -13,7 +13,7 @@ import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation, CanPrintInMultilines {
+public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInocation {
 
     private final Invocation invocation;
     private final List<Matcher> matchers;
@@ -44,25 +44,18 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
     }
     
     /* (non-Javadoc)
-     * @see org.mockito.internal.invocation.CanPrintInMultilines#toString()
+     * @see org.mockito.internal.invocation.PrintingFriendlyInocation#toString()
      */
     public String toString() {
-        return invocation.toString(matchers, false);
+        return invocation.toString(matchers, new PrintSettings());
     }
 
     /* (non-Javadoc)
-     * @see org.mockito.internal.invocation.CanPrintInMultilines#hasMultilinePrint()
+     * @see org.mockito.internal.invocation.PrintingFriendlyInocation#hasMultilinePrint()
      */
     public boolean printsInMultilines() {        
         return toString().contains("\n");
     }
-
-    /* (non-Javadoc)
-     * @see org.mockito.internal.invocation.CanPrintInMultilines#toMultilineString()
-     */
-    public String toMultilineString() {
-        return invocation.toString(matchers, true);
-    }    
 
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
@@ -117,5 +110,9 @@ public class InvocationMatcher implements PrintableInvocation, CanPrintInMultili
     
     public Location getLocation() {
         return invocation.getLocation();
+    }
+
+    public String toString(PrintSettings printSettings) {
+        return invocation.toString(matchers, printSettings);
     }
 }

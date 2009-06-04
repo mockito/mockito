@@ -31,4 +31,8 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         mockitoStubber.addAnswer(answer);
         return new ConsecutiveStubbing<T>(mockitoStubber);
     }
+
+    public RegisteredInvocations getRegisteredInvocations() {
+        return registeredInvocations;
+    }
 }

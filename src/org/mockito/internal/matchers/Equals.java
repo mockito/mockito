@@ -5,10 +5,10 @@
 package org.mockito.internal.matchers;
 
 import org.hamcrest.Description;
+import org.hamcrest.SelfDescribing;
 import org.mockito.ArgumentMatcher;
 
-
-public class Equals extends ArgumentMatcher<Object> {
+public class Equals extends ArgumentMatcher<Object> implements HasVerboseVariant {
 
     private final Object wanted;
 
@@ -24,20 +24,27 @@ public class Equals extends ArgumentMatcher<Object> {
     }
 
     public void describeTo(Description description) {
-        appendQuoting(description);
-        if (wanted == null) {
-            description.appendText("null");
-        } else {
-            description.appendText(wanted.toString());
-        }
-        appendQuoting(description);
+        description.appendText(describe(wanted));
     }
 
-    private void appendQuoting(Description description) {
+    public String describe(Object object) {
+        String text = quoting();
+        if (object == null) {
+            text+="null";
+        } else {
+            text+=object.toString();
+        }
+        text+= quoting();
+        return text;
+    }
+
+    private String quoting() {
         if (wanted instanceof String) {
-            description.appendText("\"");
+            return "\"";
         } else if (wanted instanceof Character) {
-            description.appendText("'");
+            return "'";
+        } else {
+            return "";
         }
     }
 
@@ -51,13 +58,18 @@ public class Equals extends ArgumentMatcher<Object> {
             return false;
         }
         Equals other = (Equals) o;
-        return this.wanted == null && other.wanted == null
-                || this.wanted != null
-                && this.wanted.equals(other.wanted);
+        return this.wanted == null && other.wanted == null || this.wanted != null && this.wanted.equals(other.wanted);
     }
 
     @Override
     public int hashCode() {
         throw new UnsupportedOperationException("hashCode() is not supported");
+    }
+
+    public SelfDescribing getVerboseVariant() {
+        return new SelfDescribing() {
+            public void describeTo(Description description) {
+                description.appendText(describe("("+ wanted.getClass().getSimpleName() +") " + wanted));
+            }};
     }
 }

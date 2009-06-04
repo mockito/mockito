@@ -5,17 +5,20 @@
 package org.mockito.internal;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.progress.DeprecatedOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.progress.OngoingStubbing;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.Stubber;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.stubbing.VoidMethodStubbable;
@@ -127,5 +130,14 @@ public class MockitoCore {
 
     public void validateMockitoUsage() {
         mockingProgress.validateState();
+    }
+
+    /**
+     * For testing purposes only. Is not the part of main API.
+     */
+    public Invocation getLastInvocation() {
+        OngoingStubbingImpl ongoingStubbing = ((OngoingStubbingImpl) mockingProgress.pullOngoingStubbing());
+        List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations().getAll();
+        return allInvocations.get(allInvocations.size()-1);
     }
 }

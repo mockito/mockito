@@ -199,4 +199,6 @@ public interface IMethods {
     Object collectionArgMethod(Collection<String> collection);
 
     Object setArgMethod(Set<String> set);
+
+    void longArg(long longArg);
 }

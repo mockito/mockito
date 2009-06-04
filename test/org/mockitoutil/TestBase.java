@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
+import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
@@ -41,6 +42,10 @@ public class TestBase extends Assert {
         new StateMaster().reset();
     }
     
+    protected Invocation getLastInvocation() {
+        return new MockitoCore().getLastInvocation();
+    }
+
     //I'm really tired of matchers, enter the assertor!
     protected static <T> void assertThat(T o, Assertor<T> a) {
         a.assertValue(o);
@@ -90,11 +95,11 @@ public class TestBase extends Assert {
                 , string.contains(sub));
     }
 
-    protected static Invocation invocationOf(Class<?> type, String methodName) throws NoSuchMethodException {
+    protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName,
-                new Class[0]), new Object[0], 1, null);
+                new Class[0]), args, 1, null);
     }
-    
+
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName,
                 new Class[0]), new Object[0], 1, realMethod);
