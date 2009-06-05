@@ -1,4 +1,4 @@
-package org.mockito.internal.invocation;
+package org.mockito.internal.reporting;
 
 import java.util.Arrays;
 import java.util.LinkedList;

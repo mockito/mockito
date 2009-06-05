@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.reporting.PrintSettings;
 
 public class PrintSettingsTest {
     

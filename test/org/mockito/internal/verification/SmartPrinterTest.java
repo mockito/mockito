@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.SmartPrinter;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

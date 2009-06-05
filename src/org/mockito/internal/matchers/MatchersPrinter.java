@@ -7,7 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
-import org.mockito.internal.invocation.PrintSettings;
+import org.mockito.internal.reporting.PrintSettings;
 
 @SuppressWarnings("unchecked")
 public class MatchersPrinter {

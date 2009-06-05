@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.PrintSettings;
+import org.mockito.internal.reporting.PrintSettings;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.reporting.PrintingFriendlyInocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

@@ -11,6 +11,8 @@ import java.util.List;
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.reporting.PrintSettings;
+import org.mockito.internal.reporting.PrintingFriendlyInocation;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInocation {

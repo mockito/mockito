@@ -10,7 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.verification.SmartPrinter;
+import org.mockito.internal.reporting.SmartPrinter;
 
 public class MissingInvocationChecker {
     

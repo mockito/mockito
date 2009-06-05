@@ -2,10 +2,8 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.verification;
+package org.mockito.internal.reporting;
 
-import org.mockito.internal.invocation.PrintSettings;
-import org.mockito.internal.invocation.PrintingFriendlyInocation;
 
 /**
  * Makes sure both wanted and actual are printed consistently (single line or multiline)
