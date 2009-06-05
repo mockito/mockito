@@ -8,7 +8,7 @@ import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 import org.mockito.ArgumentMatcher;
 
-public class Equals extends ArgumentMatcher<Object> implements HasVerboseVariant {
+public class Equals extends ArgumentMatcher<Object> implements CanPrintArgumentVerbosely {
 
     private final Object wanted;
 
@@ -66,7 +66,7 @@ public class Equals extends ArgumentMatcher<Object> implements HasVerboseVariant
         throw new UnsupportedOperationException("hashCode() is not supported");
     }
 
-    public SelfDescribing getVerboseVariant() {
+    public SelfDescribing getVerboseSelfDescribing() {
         return new SelfDescribing() {
             public void describeTo(Description description) {
                 description.appendText(describe("("+ wanted.getClass().getSimpleName() +") " + wanted));

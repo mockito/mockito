@@ -20,7 +20,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.MatchersPrinter;
-import org.mockito.internal.matchers.HasVerboseVariant;
+import org.mockito.internal.matchers.CanPrintArgumentVerbosely;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;

@@ -10,7 +10,7 @@ import org.hamcrest.SelfDescribing;
 import org.mockito.internal.debugging.Location;
 
 @SuppressWarnings("unchecked")
-public class LocalizedMatcher implements Matcher, HasVerboseVariant {
+public class LocalizedMatcher implements Matcher, CanPrintArgumentVerbosely {
 
     private final Matcher actualMatcher;
     private Location location;
@@ -41,9 +41,9 @@ public class LocalizedMatcher implements Matcher, HasVerboseVariant {
         return "Localized: " + this.actualMatcher;
     }
 
-    public SelfDescribing getVerboseVariant() {
-        if (actualMatcher instanceof HasVerboseVariant) {
-            return ((HasVerboseVariant) actualMatcher).getVerboseVariant();
+    public SelfDescribing getVerboseSelfDescribing() {
+        if (actualMatcher instanceof CanPrintArgumentVerbosely) {
+            return ((CanPrintArgumentVerbosely) actualMatcher).getVerboseSelfDescribing();
         } else {
             return this;
         }
