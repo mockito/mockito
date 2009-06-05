@@ -4,20 +4,23 @@
  */
 package org.mockito.internal.reporting;
 
+import org.hamcrest.Matcher;
 
 /**
  * Makes sure both wanted and actual are printed consistently (single line or multiline)
  * <p>
  * Makes arguments printed with types if necessary
  */
+@SuppressWarnings("unchecked")
 public class SmartPrinter {
 
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual) {
+    public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual, Matcher ... toBePrintedVerbosely) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
+        printSettings.setMatchersToBePrintedVerbosely(toBePrintedVerbosely);
         
         this.wanted = wanted.toString(printSettings);
         this.actual = actual.toString(printSettings);

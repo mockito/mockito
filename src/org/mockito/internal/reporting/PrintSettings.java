@@ -16,16 +16,13 @@ public class PrintSettings {
         this.multiline = multiline;
     }
 
-    public void setVerboseArguments(boolean verboseArguments) {
-    }
-
     public boolean isMultiline() {
         return multiline;
     }
 
     public static PrintSettings verboseMatchers(Matcher ... verboselyPrinted) {
         PrintSettings settings = new PrintSettings();
-        settings.verboseMatchers.addAll((List) Arrays.asList(verboselyPrinted));
+        settings.setMatchersToBePrintedVerbosely(verboselyPrinted);
         return settings;
     }
 
@@ -36,5 +33,9 @@ public class PrintSettings {
             }
         }
         return false;
+    }
+
+    public void setMatchersToBePrintedVerbosely(Matcher[] toBePrintedVerbosely) {
+        this.verboseMatchers = Arrays.asList(toBePrintedVerbosely);
     }
 }

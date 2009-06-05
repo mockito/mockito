@@ -6,12 +6,15 @@ package org.mockito.internal.verification.checkers;
 
 import java.util.List;
 
+import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
+import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
 
+@SuppressWarnings("unchecked")
 public class MissingInvocationChecker {
     
     private final Reporter reporter;
@@ -32,7 +35,9 @@ public class MissingInvocationChecker {
         if (actualInvocations.isEmpty()) {
             Invocation similar = finder.findSimilarInvocation(invocations, wanted);
             if (similar != null) {
-                SmartPrinter smartPrinter = new SmartPrinter(wanted, similar);
+                ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
+                Matcher[] toBePrintedVerbosely = argumentMatchingTool.getSuspiciouslyNotMatchingArgs(wanted.getMatchers(), similar.getArguments());
+                SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, toBePrintedVerbosely);
                 reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
             } else {
                 reporter.wantedButNotInvoked(wanted, invocations);
