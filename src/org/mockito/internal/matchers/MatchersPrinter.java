@@ -25,19 +25,14 @@ public class MatchersPrinter {
     }
 
     private List<SelfDescribing> applyPrintSettings(List<Matcher> matchers, PrintSettings printSettings) {
-        if (printSettings.isVerboseArguments()) {
-            List<SelfDescribing> withPrintSettings = new LinkedList<SelfDescribing>();
-            for (final Matcher matcher : matchers) {
-                if (matcher instanceof HasVerboseVariant) {
-                    withPrintSettings.add(((HasVerboseVariant) matcher).getVerboseVariant());
-                } else {
-                    withPrintSettings.add(matcher);
-                }
+        List<SelfDescribing> withPrintSettings = new LinkedList<SelfDescribing>();
+        for (final Matcher matcher : matchers) {
+            if (matcher instanceof HasVerboseVariant && printSettings.printsVerbosely(matcher)) {
+                withPrintSettings.add(((HasVerboseVariant) matcher).getVerboseVariant());
+            } else {
+                withPrintSettings.add(matcher);
             }
-            return withPrintSettings;
-        } else {
-            return (List) matchers;
         }
+        return withPrintSettings;
     }
-
 }

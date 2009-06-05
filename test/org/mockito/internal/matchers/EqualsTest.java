@@ -12,7 +12,6 @@ import org.mockitoutil.TestBase;
 
 public class EqualsTest extends TestBase {
     
-    @Test
     public void shouldBeEqual() {
         assertEquals(new Equals(null), new Equals(null));
         assertEquals(new Equals(new Integer(2)), new Equals(new Integer(2)));
