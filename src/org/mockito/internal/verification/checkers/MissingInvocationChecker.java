@@ -10,7 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
-import org.mockito.internal.verification.SyncingPrinter;
+import org.mockito.internal.verification.SmartPrinter;
 
 public class MissingInvocationChecker {
     
@@ -32,8 +32,8 @@ public class MissingInvocationChecker {
         if (actualInvocations.isEmpty()) {
             Invocation similar = finder.findSimilarInvocation(invocations, wanted);
             if (similar != null) {
-                SyncingPrinter syncingPrinter = new SyncingPrinter(wanted, similar);
-                reporter.argumentsAreDifferent(syncingPrinter.getWanted(), syncingPrinter.getActual(), similar.getLocation());
+                SmartPrinter smartPrinter = new SmartPrinter(wanted, similar);
+                reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
             } else {
                 reporter.wantedButNotInvoked(wanted, invocations);
             }

@@ -12,7 +12,7 @@ import org.mockito.internal.invocation.PrintingFriendlyInocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class SyncingPrinterTest extends TestBase {
+public class SmartPrinterTest extends TestBase {
 
     private PrintingFriendlyInocation multi;
     private PrintingFriendlyInocation shortie;
@@ -31,7 +31,7 @@ public class SyncingPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInMultilinesWhenFirstIsMulti() {
         //when
-        SyncingPrinter printer = new SyncingPrinter(multi, shortie);
+        SmartPrinter printer = new SmartPrinter(multi, shortie);
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -41,7 +41,7 @@ public class SyncingPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInMultilinesWhenSecondIsMulti() {
         //when
-        SyncingPrinter printer = new SyncingPrinter(shortie, multi);
+        SmartPrinter printer = new SmartPrinter(shortie, multi);
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -51,7 +51,7 @@ public class SyncingPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInMultilinesWhenBothAreMulti() {
         //when
-        SyncingPrinter printer = new SyncingPrinter(multi, multi);
+        SmartPrinter printer = new SmartPrinter(multi, multi);
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -61,7 +61,7 @@ public class SyncingPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInSingleLineWhenBothAreShort() {
         //when
-        SyncingPrinter printer = new SyncingPrinter(shortie, shortie);
+        SmartPrinter printer = new SmartPrinter(shortie, shortie);
         
         //then
         assertNotContains("\n", printer.getWanted().toString());
@@ -78,7 +78,7 @@ public class SyncingPrinterTest extends TestBase {
         Invocation withIntArg = getLastInvocation();
         
         //when
-        SyncingPrinter printer = new SyncingPrinter(withLongArg, withIntArg);
+        SmartPrinter printer = new SmartPrinter(withLongArg, withIntArg);
         
         //then
         assertContains("longArg((Long) 1)", printer.getWanted().toString());
