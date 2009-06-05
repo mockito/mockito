@@ -1,5 +1,6 @@
 package org.mockito.internal.invocation;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,15 +29,9 @@ public class PrintSettings {
         return verboseArguments;
     }
 
-    public static PrintSettings verboseMatchers() {
+    public static PrintSettings verboseMatchers(Matcher ... verboselyPrinted) {
         PrintSettings settings = new PrintSettings();
-        settings.verboseArguments = true;
-        return settings;
-    }
-
-    public static PrintSettings verboseMatchers(Matcher verboselyPrinted) {
-        PrintSettings settings = new PrintSettings();
-        settings.verboseMatchers.add(verboselyPrinted);
+        settings.verboseMatchers.addAll((List) Arrays.asList(verboselyPrinted));
         return settings;
     }
 

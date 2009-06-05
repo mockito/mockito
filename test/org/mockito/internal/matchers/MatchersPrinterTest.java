@@ -36,13 +36,22 @@ public class MatchersPrinterTest extends TestBase {
 
     @Test
     public void shouldGetVerboseArgumentsInBlock() {
-        String line = printer.getArgumentsBlock((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers());
+        //given
+        Equals verboselyPrinted = new Equals(1L);
+        Equals verboselyPrintedTwo = new Equals(2);
+        //when
+        String line = printer.getArgumentsBlock((List) Arrays.asList(verboselyPrinted, verboselyPrintedTwo), PrintSettings.verboseMatchers(verboselyPrinted, verboselyPrintedTwo));
+        //then
         assertEquals("(\n    (Long) 1,\n    (Integer) 2\n);", line);
     }
 
     @Test
     public void shouldGetVerboseArgumentsEvenIfSomeMatchersAreNotVerbose() {
-        String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), NotNull.NOT_NULL), PrintSettings.verboseMatchers());
+        //given
+        Equals verboselyPrinted = new Equals(1L);
+        //when
+        String line = printer.getArgumentsLine((List) Arrays.asList(verboselyPrinted, NotNull.NOT_NULL), PrintSettings.verboseMatchers(verboselyPrinted));
+        //then
         assertEquals("((Long) 1, notNull());", line);
     }
 }
