@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.reporting;
 
-import org.hamcrest.Matcher;
 
 /**
  * Makes sure both wanted and actual are printed consistently (single line or multiline)
@@ -17,7 +16,7 @@ public class SmartPrinter {
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual, Matcher ... toBePrintedVerbosely) {
+    public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual, Integer ... toBePrintedVerbosely) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
         printSettings.setMatchersToBePrintedVerbosely(toBePrintedVerbosely);

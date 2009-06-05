@@ -26,12 +26,14 @@ public class MatchersPrinter {
 
     private List<SelfDescribing> applyPrintSettings(List<Matcher> matchers, PrintSettings printSettings) {
         List<SelfDescribing> withPrintSettings = new LinkedList<SelfDescribing>();
+        int i = 0;
         for (final Matcher matcher : matchers) {
-            if (matcher instanceof CanPrintArgumentVerbosely && printSettings.printsVerbosely(matcher)) {
+            if (matcher instanceof CanPrintArgumentVerbosely && printSettings.printsVerbosely(i)) {
                 withPrintSettings.add(((CanPrintArgumentVerbosely) matcher).getVerboseSelfDescribing());
             } else {
                 withPrintSettings.add(matcher);
             }
+            i++;
         }
         return withPrintSettings;
     }

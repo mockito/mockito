@@ -36,7 +36,7 @@ public class MissingInvocationChecker {
             Invocation similar = finder.findSimilarInvocation(invocations, wanted);
             if (similar != null) {
                 ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
-                Matcher[] toBePrintedVerbosely = argumentMatchingTool.getSuspiciouslyNotMatchingArgs(wanted.getMatchers(), similar.getArguments());
+                Integer[] toBePrintedVerbosely = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
                 SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, toBePrintedVerbosely);
                 reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
             } else {

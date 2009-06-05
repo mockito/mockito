@@ -10,9 +10,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockito.internal.matchers.Equals;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class ArgumentMatchingToolTest {
+public class ArgumentMatchingToolTest extends TestBase {
 
     private ArgumentMatchingTool tool = new ArgumentMatchingTool();
 
@@ -22,7 +23,7 @@ public class ArgumentMatchingToolTest {
         List<Matcher> matchers = (List) Arrays.asList(new Equals(1));
 
         //when
-        Matcher[] suspicious = tool.getSuspiciouslyNotMatchingArgs(matchers, new Object[] {10, 20});
+        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
         
         //then
         assertEquals(0, suspicious.length);
@@ -34,7 +35,7 @@ public class ArgumentMatchingToolTest {
         List<Matcher> matchers = (List) Arrays.asList(new Equals(10), new Equals(20));
         
         //when
-        Matcher[] suspicious = tool.getSuspiciouslyNotMatchingArgs(matchers, new Object[] {10, 20});
+        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
         
         //then
         assertEquals(0, suspicious.length);
@@ -48,11 +49,11 @@ public class ArgumentMatchingToolTest {
         
         //when
         List<Matcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);
-        Matcher[] suspicious = tool.getSuspiciouslyNotMatchingArgs(matchers, new Object[] {10, longPretendingAnInt});
+        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, longPretendingAnInt});
         
         //then
         assertEquals(1, suspicious.length);
-        assertEquals(matcherInt20, suspicious[0]);
+        assertEquals(new Integer(1), suspicious[0]);
     }
     
     @Test
@@ -67,7 +68,7 @@ public class ArgumentMatchingToolTest {
             }});
         
         //when
-        Matcher[] suspicious = tool.getSuspiciouslyNotMatchingArgs(matchers, new Object[] {10});
+        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10});
         
         //then
         assertEquals(0, suspicious.length);

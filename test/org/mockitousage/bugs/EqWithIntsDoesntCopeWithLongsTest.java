@@ -7,12 +7,10 @@ package org.mockitousage.bugs;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
 
-@Ignore
 public class EqWithIntsDoesntCopeWithLongsTest extends TestBase {
 
     class Boo {
@@ -52,8 +50,8 @@ public class EqWithIntsDoesntCopeWithLongsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("withLongAndInt((Integer) 100,  200)", e.getMessage());
-            assertContains("withLongAndInt((Long) 100,  200)", e.getMessage());
+            assertContains("withLongAndInt((Integer) 100, 200)", e.getMessage());
+            assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
         }
     }
     
@@ -69,8 +67,8 @@ public class EqWithIntsDoesntCopeWithLongsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("withLongAndInt((Integer) 100,  200)", e.getMessage());
-            assertContains("withLongAndInt((Long) 100,  <any>)", e.getMessage());
+            assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
+            assertContains("withLongAndInt((Integer) 100, <any>)", e.getMessage());
         }
     }
 }

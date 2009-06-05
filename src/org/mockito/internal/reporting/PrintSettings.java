@@ -4,13 +4,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hamcrest.Matcher;
-
 @SuppressWarnings("unchecked")
 public class PrintSettings {
 
     private boolean multiline;
-    private List<Matcher> verboseMatchers = new LinkedList<Matcher>();
+    private List<Integer> verboseMatchers = new LinkedList<Integer>();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;
@@ -20,22 +18,17 @@ public class PrintSettings {
         return multiline;
     }
 
-    public static PrintSettings verboseMatchers(Matcher ... verboselyPrinted) {
+    public static PrintSettings verboseMatchers(Integer ... verboselyPrinted) {
         PrintSettings settings = new PrintSettings();
         settings.setMatchersToBePrintedVerbosely(verboselyPrinted);
         return settings;
     }
 
-    public boolean printsVerbosely(Matcher matcher) {
-        for (Matcher m : verboseMatchers) {
-            if (m == matcher) {
-                return true;
-            }
-        }
-        return false;
+    public boolean printsVerbosely(int argumentIndex) {
+        return verboseMatchers.contains(argumentIndex);
     }
 
-    public void setMatchersToBePrintedVerbosely(Matcher[] toBePrintedVerbosely) {
+    public void setMatchersToBePrintedVerbosely(Integer[] toBePrintedVerbosely) {
         this.verboseMatchers = Arrays.asList(toBePrintedVerbosely);
     }
 }

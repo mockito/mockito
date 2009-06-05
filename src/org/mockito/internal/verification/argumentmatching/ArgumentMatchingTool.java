@@ -16,20 +16,20 @@ public class ArgumentMatchingTool {
      * @param arguments
      * @return
      */
-    public Matcher[] getSuspiciouslyNotMatchingArgs(List<Matcher> matchers, Object[] arguments) {
+    public Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<Matcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
-            return new Matcher[0];
+            return new Integer[0];
         }
         
-        List<Matcher> suspicious = new LinkedList<Matcher>();
+        List<Integer> suspicious = new LinkedList<Integer>();
         int i = 0;
         for (Matcher m : matchers) {
             if (!safelyMatches(m, arguments[i]) && toStringEquals(m, arguments[i])) {
-                suspicious.add(m);
+                suspicious.add(i);
             }
             i++;
         }
-        return suspicious.toArray(new Matcher[0]);
+        return suspicious.toArray(new Integer[0]);
     }
 
     private boolean safelyMatches(Matcher m, Object arg) {
