@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.bugs;
+package org.mockitousage.verification;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
 
-public class EqWithIntsDoesntCopeWithLongsTest extends TestBase {
+public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
 
     class Boo {
         public void withLong(long x) {
@@ -69,6 +69,23 @@ public class EqWithIntsDoesntCopeWithLongsTest extends TestBase {
             //then
             assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
             assertContains("withLongAndInt((Integer) 100, <any>)", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldNotShowTypesWhenArgumentValueIsDifferent() throws Exception {
+        //given
+        Boo boo = mock(Boo.class);
+        boo.withLongAndInt(100, 200);
+        
+        try {
+            //when
+            verify(boo).withLongAndInt(eq(100L), eq(230));
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+            //then
+            assertContains("withLongAndInt(100, 200)", e.getMessage());
+            assertContains("withLongAndInt(100, 230)", e.getMessage());
         }
     }
 }

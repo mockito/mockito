@@ -6,7 +6,6 @@ package org.mockito.internal.verification.checkers;
 
 import java.util.List;
 
-import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
