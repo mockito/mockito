@@ -67,21 +67,4 @@ public class SmartPrinterTest extends TestBase {
         assertNotContains("\n", printer.getWanted().toString());
         assertNotContains("\n", printer.getActual().toString());
     }
-    
-    @Test
-    public void shouldPrintVerboseArgumentsWhenStringOutputIsTheSame() {
-        //given
-        mock.longArg(1);
-        Invocation withLongArg = getLastInvocation();
-        
-        mock.longArg(1);
-        Invocation withIntArg = getLastInvocation();
-        
-        //when
-        SmartPrinter printer = new SmartPrinter(withLongArg, withIntArg);
-        
-        //then
-        assertContains("longArg((Long) 1)", printer.getWanted().toString());
-        assertContains("longArg((Long) 1)", printer.getActual().toString());
-    }
 }

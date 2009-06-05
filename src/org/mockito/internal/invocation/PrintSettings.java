@@ -10,7 +10,6 @@ import org.hamcrest.Matcher;
 public class PrintSettings {
 
     private boolean multiline;
-    private boolean verboseArguments;
     private List<Matcher> verboseMatchers = new LinkedList<Matcher>();
 
     public void setMultiline(boolean multiline) {
@@ -18,15 +17,10 @@ public class PrintSettings {
     }
 
     public void setVerboseArguments(boolean verboseArguments) {
-        this.verboseArguments = verboseArguments;
     }
 
     public boolean isMultiline() {
         return multiline;
-    }
-
-    public boolean isVerboseArguments() {
-        return verboseArguments;
     }
 
     public static PrintSettings verboseMatchers(Matcher ... verboselyPrinted) {
@@ -36,9 +30,6 @@ public class PrintSettings {
     }
 
     public boolean printsVerbosely(Matcher matcher) {
-        if (isVerboseArguments()) {
-            return true;
-        }
         for (Matcher m : verboseMatchers) {
             if (m == matcher) {
                 return true;

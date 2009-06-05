@@ -20,7 +20,6 @@ public class SmartPrinter {
     public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
-        printSettings.setVerboseArguments(wanted.toString().equals(actual.toString()));
         
         this.wanted = wanted.toString(printSettings);
         this.actual = actual.toString(printSettings);
