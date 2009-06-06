@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
-import org.mockito.internal.reporting.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -51,8 +51,8 @@ public class InvocationMatcherTest extends TestBase {
     
     @Test
     public void shouldNotEqualIfNumberOfArgumentsDiffer() throws Exception {
-        PrintingFriendlyInocation withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
-        PrintingFriendlyInocation withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
+        PrintingFriendlyInvocation withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
+        PrintingFriendlyInvocation withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));

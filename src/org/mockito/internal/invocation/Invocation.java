@@ -17,7 +17,7 @@ import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.internal.reporting.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
@@ -31,7 +31,7 @@ import org.mockito.invocation.InvocationOnMock;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInocation {
+public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
 
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;

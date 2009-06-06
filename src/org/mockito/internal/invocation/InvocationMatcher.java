@@ -12,10 +12,10 @@ import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.internal.reporting.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInocation {
+public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInvocation {
 
     private final Invocation invocation;
     private final List<Matcher> matchers;
@@ -45,18 +45,8 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
         return this.matchers;
     }
     
-    /* (non-Javadoc)
-     * @see org.mockito.internal.invocation.PrintingFriendlyInocation#toString()
-     */
     public String toString() {
         return invocation.toString(matchers, new PrintSettings());
-    }
-
-    /* (non-Javadoc)
-     * @see org.mockito.internal.invocation.PrintingFriendlyInocation#hasMultilinePrint()
-     */
-    public boolean printsInMultilines() {        
-        return toString().contains("\n");
     }
 
     public boolean matches(Invocation actual) {

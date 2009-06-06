@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.reporting.PrintingFriendlyInocation;
+import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -15,8 +15,8 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class SmartPrinterTest extends TestBase {
 
-    private PrintingFriendlyInocation multi;
-    private PrintingFriendlyInocation shortie;
+    private PrintingFriendlyInvocation multi;
+    private PrintingFriendlyInvocation shortie;
     @Mock private IMethods mock;
 
     @Before

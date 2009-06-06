@@ -16,7 +16,7 @@ public class SmartPrinter {
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(PrintingFriendlyInocation wanted, PrintingFriendlyInocation actual, Integer ... toBePrintedVerbosely) {
+    public SmartPrinter(PrintingFriendlyInvocation wanted, PrintingFriendlyInvocation actual, Integer ... toBePrintedVerbosely) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
         printSettings.setMatchersToBePrintedVerbosely(toBePrintedVerbosely);

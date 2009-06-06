@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.reporting;
 
-public interface PrintingFriendlyInocation {
+public interface PrintingFriendlyInvocation {
 
     String toString(PrintSettings printSettings);
 
