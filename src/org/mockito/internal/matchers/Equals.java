@@ -66,7 +66,7 @@ public class Equals extends ArgumentMatcher<Object> implements CanPrintArgumentV
         throw new UnsupportedOperationException("hashCode() is not supported");
     }
 
-    public SelfDescribing getVerboseSelfDescribing() {
+    public SelfDescribing getSelfDescribingVerbosely() {
         return new SelfDescribing() {
             public void describeTo(Description description) {
                 description.appendText(describe("("+ wanted.getClass().getSimpleName() +") " + wanted));

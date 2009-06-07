@@ -29,7 +29,7 @@ public class MatchersPrinter {
         int i = 0;
         for (final Matcher matcher : matchers) {
             if (matcher instanceof CanPrintArgumentVerbosely && printSettings.printsVerbosely(i)) {
-                withPrintSettings.add(((CanPrintArgumentVerbosely) matcher).getVerboseSelfDescribing());
+                withPrintSettings.add(((CanPrintArgumentVerbosely) matcher).getSelfDescribingVerbosely());
             } else {
                 withPrintSettings.add(matcher);
             }

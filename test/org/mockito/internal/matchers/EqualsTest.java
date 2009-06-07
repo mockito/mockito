@@ -26,14 +26,14 @@ public class EqualsTest extends TestBase {
     
     @Test
     public void shouldGiveVerboselyDescribedVersionOfInt() throws Exception {
-        String descStr = describe(new Equals(100).getVerboseSelfDescribing());
+        String descStr = describe(new Equals(100).getSelfDescribingVerbosely());
         
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
     public void shouldGiveVerboselyDescribedVersionOfLong() throws Exception {
-        String descStr = describe(new Equals(100L).getVerboseSelfDescribing());
+        String descStr = describe(new Equals(100L).getSelfDescribingVerbosely());
         
         assertEquals("(Long) 100", descStr);
     }

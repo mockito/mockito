@@ -41,9 +41,9 @@ public class LocalizedMatcher implements Matcher, CanPrintArgumentVerbosely {
         return "Localized: " + this.actualMatcher;
     }
 
-    public SelfDescribing getVerboseSelfDescribing() {
+    public SelfDescribing getSelfDescribingVerbosely() {
         if (actualMatcher instanceof CanPrintArgumentVerbosely) {
-            return ((CanPrintArgumentVerbosely) actualMatcher).getVerboseSelfDescribing();
+            return ((CanPrintArgumentVerbosely) actualMatcher).getSelfDescribingVerbosely();
         } else {
             return this;
         }
