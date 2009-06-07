@@ -25,15 +25,15 @@ public class EqualsTest extends TestBase {
     }
     
     @Test
-    public void shouldGiveVerboselyDescribedVersionOfInt() throws Exception {
-        String descStr = describe(new Equals(100).getSelfDescribingVerbosely());
+    public void shouldDescribeWithExtraTypeInfo() throws Exception {
+        String descStr = describe(new Equals(100).withExtraTypeInfo());
         
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
-    public void shouldGiveVerboselyDescribedVersionOfLong() throws Exception {
-        String descStr = describe(new Equals(100L).getSelfDescribingVerbosely());
+    public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
+        String descStr = describe(new Equals(100L).withExtraTypeInfo());
         
         assertEquals("(Long) 100", descStr);
     }
@@ -69,7 +69,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypes() throws Exception {
         //when
-        CanDescribeVerbosely equals = new Equals(10);
+        ContainsExtraTypeInformation equals = new Equals(10);
         
         //then
         //TODO: null checks

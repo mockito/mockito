@@ -25,7 +25,7 @@ public class MatchersPrinterTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintVerboselyOnlyMarkedMatchers() {
+    public void shouldDescribeTypeInfoOnlyMarkedMatchers() {
         //when
         String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(1));
         //then

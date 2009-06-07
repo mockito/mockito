@@ -8,7 +8,7 @@ import java.util.List;
 public class PrintSettings {
 
     private boolean multiline;
-    private List<Integer> verboseMatchers = new LinkedList<Integer>();
+    private List<Integer> withTypeInfo = new LinkedList<Integer>();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;
@@ -18,17 +18,17 @@ public class PrintSettings {
         return multiline;
     }
 
-    public static PrintSettings verboseMatchers(Integer ... verboselyPrinted) {
+    public static PrintSettings verboseMatchers(Integer ... indexesOfMatchers) {
         PrintSettings settings = new PrintSettings();
-        settings.setMatchersToBePrintedVerbosely(verboselyPrinted);
+        settings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchers);
         return settings;
     }
 
-    public boolean printsVerbosely(int argumentIndex) {
-        return verboseMatchers.contains(argumentIndex);
+    public boolean extraTypeInfoFor(int argumentIndex) {
+        return withTypeInfo.contains(argumentIndex);
     }
 
-    public void setMatchersToBePrintedVerbosely(Integer[] toBePrintedVerbosely) {
-        this.verboseMatchers = Arrays.asList(toBePrintedVerbosely);
+    public void setMatchersToBeDescribedWithExtraTypeInfo(Integer[] indexesOfMatchers) {
+        this.withTypeInfo = Arrays.asList(indexesOfMatchers);
     }
 }

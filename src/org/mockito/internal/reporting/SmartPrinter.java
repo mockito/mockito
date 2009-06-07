@@ -16,10 +16,10 @@ public class SmartPrinter {
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(PrintingFriendlyInvocation wanted, PrintingFriendlyInvocation actual, Integer ... toBePrintedVerbosely) {
+    public SmartPrinter(PrintingFriendlyInvocation wanted, PrintingFriendlyInvocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
-        printSettings.setMatchersToBePrintedVerbosely(toBePrintedVerbosely);
+        printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
         
         this.wanted = wanted.toString(printSettings);
         this.actual = actual.toString(printSettings);
