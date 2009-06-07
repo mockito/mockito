@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.matchers;
 
-import org.hamcrest.SelfDescribing;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -75,12 +73,5 @@ public class EqualsTest extends TestBase {
         //TODO: null checks
         assertTrue(equals.typeMatches(10));
         assertFalse(equals.typeMatches(10L));
-    }
-    
-    private String describe(SelfDescribing m) {
-        StringDescription desc = new StringDescription();
-        m.describeTo(desc);
-        String descStr = desc.toString();
-        return descStr;
     }
 }

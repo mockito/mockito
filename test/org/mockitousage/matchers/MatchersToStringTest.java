@@ -7,10 +7,7 @@ package org.mockitousage.matchers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.Any;
@@ -29,42 +26,31 @@ import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MatchersToStringTest extends TestBase {
-    private Description description;
-
-    @Before
-    public void setup() {
-        description = new StringDescription();
-    }
 
     @Test
     public void sameToStringWithString() {
-        new Same("X").describeTo(description);
-        assertEquals("same(\"X\")", description.toString());
+        assertEquals("same(\"X\")", describe(new Same("X")));
 
     }
 
     @Test
     public void nullToString() {
-        Null.NULL.describeTo(description);
-        assertEquals("isNull()", description.toString());
+        assertEquals("isNull()", describe(Null.NULL));
     }
 
     @Test
     public void notNullToString() {
-        NotNull.NOT_NULL.describeTo(description);
-        assertEquals("notNull()", description.toString());
+        assertEquals("notNull()", describe(NotNull.NOT_NULL));
     }
 
     @Test
     public void anyToString() {
-        Any.ANY.describeTo(description);
-        assertEquals("<any>", description.toString());
+        assertEquals("<any>", describe(Any.ANY));
     }
 
     @Test
     public void sameToStringWithChar() {
-        new Same('x').describeTo(description);
-        assertEquals("same('x')", description.toString());
+        assertEquals("same('x')", describe(new Same('x')));
     }
 
     @Test
@@ -75,21 +61,18 @@ public class MatchersToStringTest extends TestBase {
                 return "X";
             }
         };
-        new Same(o).describeTo(description);
-        assertEquals("same(X)", description.toString());
+        assertEquals("same(X)", describe(new Same(o)));
     }
 
     @Test
     public void equalsToStringWithString() {
-        new Equals("X").describeTo(description);
-        assertEquals("\"X\"", description.toString());
+        assertEquals("\"X\"", describe(new Equals("X")));
 
     }
 
     @Test
     public void equalsToStringWithChar() {
-        new Equals('x').describeTo(description);
-        assertEquals("'x'", description.toString());
+        assertEquals("'x'", describe(new Equals('x')));
     }
 
     @Test
@@ -100,8 +83,7 @@ public class MatchersToStringTest extends TestBase {
                 return "X";
             }
         };
-        new Equals(o).describeTo(description);
-        assertEquals("X", description.toString());
+        assertEquals("X", describe(new Equals(o)));
     }
 
     @Test
@@ -109,14 +91,12 @@ public class MatchersToStringTest extends TestBase {
         List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
-        new Or(matchers).describeTo(description);
-        assertEquals("or(1, 2)", description.toString());
+        assertEquals("or(1, 2)", describe(new Or(matchers)));
     }
 
     @Test
     public void notToString() {
-        new Not(new Equals(1)).describeTo(description);
-        assertEquals("not(1)", description.toString());
+        assertEquals("not(1)", describe(new Not(new Equals(1))));
     }
 
     @Test
@@ -124,38 +104,32 @@ public class MatchersToStringTest extends TestBase {
         List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
-        new And(matchers).describeTo(description);
-        assertEquals("and(1, 2)", description.toString());
+        assertEquals("and(1, 2)", describe(new And(matchers)));
     }
 
     @Test
     public void startsWithToString() {
-        new StartsWith("AB").describeTo(description);
-        assertEquals("startsWith(\"AB\")", description.toString());
+        assertEquals("startsWith(\"AB\")", describe(new StartsWith("AB")));
     }
 
     @Test
     public void endsWithToString() {
-        new EndsWith("AB").describeTo(description);
-        assertEquals("endsWith(\"AB\")", description.toString());
+        assertEquals("endsWith(\"AB\")", describe(new EndsWith("AB")));
     }
 
     @Test
     public void containsToString() {
-        new Contains("AB").describeTo(description);
-        assertEquals("contains(\"AB\")", description.toString());
+        assertEquals("contains(\"AB\")", describe(new Contains("AB")));
     }
 
     @Test
     public void findToString() {
-        new Find("\\s+").describeTo(description);
-        assertEquals("find(\"\\\\s+\")", description.toString());
+        assertEquals("find(\"\\\\s+\")", describe(new Find("\\s+")));
     }
 
     @Test
     public void matchesToString() {
-        new Matches("\\s+").describeTo(description);
-        assertEquals("matches(\"\\\\s+\")", description.toString());
+        assertEquals("matches(\"\\\\s+\")", describe(new Matches("\\s+")));
     }
 
 }

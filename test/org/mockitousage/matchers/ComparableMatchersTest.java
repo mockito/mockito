@@ -6,8 +6,6 @@ package org.mockitousage.matchers;
 
 import java.math.BigDecimal;
 
-import org.hamcrest.Description;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 import org.mockito.internal.matchers.CompareEqual;
 import org.mockito.internal.matchers.CompareTo;
@@ -57,8 +55,6 @@ public class ComparableMatchersTest extends TestBase {
         assertEquals(equals, compareTo.matches("b"));
         assertEquals(higher, compareTo.matches("c"));
 
-        Description d = new StringDescription();
-        compareTo.describeTo(d);
-        assertEquals(name + "(b)", d.toString());
+        assertEquals(name + "(b)", describe(compareTo));
     }
 }

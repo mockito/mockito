@@ -7,6 +7,8 @@ package org.mockitoutil;
 import junit.framework.Assert;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.SelfDescribing;
+import org.hamcrest.StringDescription;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
@@ -103,5 +105,9 @@ public class TestBase extends Assert {
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new Invocation(new Object(), type.getMethod(methodName,
                 new Class[0]), new Object[0], 1, realMethod);
+    }
+
+    protected static String describe(SelfDescribing m) {
+        return StringDescription.toString(m);
     }
 }

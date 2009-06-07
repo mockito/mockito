@@ -1,7 +1,6 @@
 package org.mockito.internal.matchers;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -35,8 +34,7 @@ public class LocalizedMatcherTest extends TestBase {
         LocalizedMatcher m = new LocalizedMatcher((Matcher) equals10);
         
         //then
-        //TODO: find usages of StringDescription and use static method
-        assertEquals("(Integer) 10", StringDescription.toString(m.withExtraTypeInfo()));
+        assertEquals("(Integer) 10", describe(m.withExtraTypeInfo()));
     }
     
     @Test
