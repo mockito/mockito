@@ -2,6 +2,6 @@ package org.mockito.internal.matchers;
 
 import org.hamcrest.SelfDescribing;
 
-public interface CanPrintArgumentVerbosely {
+public interface CanDescribeVerbosely {
     SelfDescribing getSelfDescribingVerbosely();
 }

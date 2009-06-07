@@ -8,7 +8,7 @@ import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 import org.mockito.ArgumentMatcher;
 
-public class Equals extends ArgumentMatcher<Object> implements CanPrintArgumentVerbosely {
+public class Equals extends ArgumentMatcher<Object> implements CanDescribeVerbosely {
 
     private final Object wanted;
 

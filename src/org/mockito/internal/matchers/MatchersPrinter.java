@@ -28,8 +28,8 @@ public class MatchersPrinter {
         List<SelfDescribing> withPrintSettings = new LinkedList<SelfDescribing>();
         int i = 0;
         for (final Matcher matcher : matchers) {
-            if (matcher instanceof CanPrintArgumentVerbosely && printSettings.printsVerbosely(i)) {
-                withPrintSettings.add(((CanPrintArgumentVerbosely) matcher).getSelfDescribingVerbosely());
+            if (matcher instanceof CanDescribeVerbosely && printSettings.printsVerbosely(i)) {
+                withPrintSettings.add(((CanDescribeVerbosely) matcher).getSelfDescribingVerbosely());
             } else {
                 withPrintSettings.add(matcher);
             }
