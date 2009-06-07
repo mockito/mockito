@@ -10,7 +10,7 @@ import org.hamcrest.StringDescription;
 public class ArgumentMatchingTool {
 
     /**
-     * Suspiciously not matching arguments are those that don't much BUT the toString() representation is the same.
+     * Suspiciously not matching arguments are those that don't much, the toString() representation is the same but types are different.
      * 
      * @param matchers
      * @param arguments

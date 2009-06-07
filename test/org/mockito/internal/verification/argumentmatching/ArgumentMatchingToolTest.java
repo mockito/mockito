@@ -6,6 +6,7 @@ import java.util.List;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
@@ -52,6 +53,22 @@ public class ArgumentMatchingToolTest extends TestBase {
         //then
         assertEquals(1, suspicious.length);
         assertEquals(new Integer(1), suspicious[0]);
+    }
+    
+    @Ignore
+    @Test
+    public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {
+        //given
+        Equals matcherWithBadDescription = new Equals(20) {
+            public void describeTo(Description desc) {
+                desc.appendText("10");
+            }
+        };
+        
+        Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes((List) Arrays.asList(matcherWithBadDescription), new Object[] {10});
+        
+        //then
+        assertEquals(0, suspicious.length);
     }
     
     @Test
