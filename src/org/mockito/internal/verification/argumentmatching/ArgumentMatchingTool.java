@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.mockito.internal.matchers.CanDescribeVerbosely;
 
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
@@ -24,7 +25,10 @@ public class ArgumentMatchingTool {
         List<Integer> suspicious = new LinkedList<Integer>();
         int i = 0;
         for (Matcher m : matchers) {
-            if (!safelyMatches(m, arguments[i]) && toStringEquals(m, arguments[i])) {
+            if (m instanceof CanDescribeVerbosely 
+                    && !safelyMatches(m, arguments[i]) 
+                    && toStringEquals(m, arguments[i])
+                    && !((CanDescribeVerbosely) m).typeMatches(arguments[i])) {
                 suspicious.add(i);
             }
             i++;

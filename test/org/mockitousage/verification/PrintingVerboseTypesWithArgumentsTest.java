@@ -7,7 +7,6 @@ package org.mockitousage.verification;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
@@ -112,7 +111,6 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         }
     }
     
-    @Ignore
     @Test
     public void shouldNotShowTypesWhenTypesAreTheSameEvenIfToStringGivesTheSameResult() throws Exception {
         //given

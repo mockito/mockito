@@ -72,4 +72,8 @@ public class Equals extends ArgumentMatcher<Object> implements CanDescribeVerbos
                 description.appendText(describe("("+ wanted.getClass().getSimpleName() +") " + wanted));
             }};
     }
+
+    public boolean typeMatches(Object object) {
+        return object.getClass() == wanted.getClass();
+    }
 }

@@ -48,4 +48,12 @@ public class LocalizedMatcher implements Matcher, CanDescribeVerbosely {
             return this;
         }
     }
+
+    public boolean typeMatches(Object object) {
+        if (actualMatcher instanceof CanDescribeVerbosely) {
+            return ((CanDescribeVerbosely) actualMatcher).typeMatches(object);
+        } else {
+            return false;
+        }
+    }
 }

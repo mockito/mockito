@@ -65,7 +65,18 @@ public class EqualsTest extends TestBase {
         
         assertEquals("null", descStr);
     }
-
+    
+    @Test
+    public void shouldMatchTypes() throws Exception {
+        //when
+        CanDescribeVerbosely equals = new Equals(10);
+        
+        //then
+        //TODO: null checks
+        assertTrue(equals.typeMatches(10));
+        assertFalse(equals.typeMatches(10L));
+    }
+    
     private String describe(SelfDescribing m) {
         StringDescription desc = new StringDescription();
         m.describeTo(desc);
