@@ -70,8 +70,25 @@ public class EqualsTest extends TestBase {
         ContainsExtraTypeInformation equals = new Equals(10);
         
         //then
-        //TODO: null checks
         assertTrue(equals.typeMatches(10));
         assertFalse(equals.typeMatches(10L));
+    }
+    
+    @Test
+    public void shouldMatchTypesSafelyWhenActualIsNull() throws Exception {
+        //when
+        ContainsExtraTypeInformation equals = new Equals(null);
+        
+        //then
+        assertFalse(equals.typeMatches(10));
+    }
+
+    @Test
+    public void shouldMatchTypesSafelyWhenGivenIsNull() throws Exception {
+        //when
+        ContainsExtraTypeInformation equals = new Equals(10);
+        
+        //then
+        assertFalse(equals.typeMatches(null));
     }
 }

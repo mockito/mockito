@@ -74,6 +74,6 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
     }
 
     public boolean typeMatches(Object object) {
-        return object.getClass() == wanted.getClass();
+        return wanted != null && object != null && object.getClass() == wanted.getClass();
     }
 }
