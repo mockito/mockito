@@ -7,8 +7,10 @@ package org.mockitousage.verification;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
@@ -86,6 +88,44 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             //then
             assertContains("withLongAndInt(100, 200)", e.getMessage());
             assertContains("withLongAndInt(100, 230)", e.getMessage());
+        }
+    }
+    
+    class Foo {
+        
+        private final int x;
+
+        public Foo(int x) {
+            this.x = x;
+        }
+        
+        public boolean equals(Object obj) {
+            return x == ((Foo) obj).x;
+        }
+        
+        public int hashCode() {
+            return 1;
+        }
+        
+        public String toString() {
+            return "foo";
+        }
+    }
+    
+    @Ignore
+    @Test
+    public void shouldNotShowTypesWhenTypesAreTheSameEvenIfToStringGivesTheSameResult() throws Exception {
+        //given
+        IMethods mock = mock(IMethods.class);
+        mock.simpleMethod(new Foo(10));
+        
+        try {
+            //when
+            verify(mock).simpleMethod(new Foo(20));
+            fail();
+        } catch (ArgumentsAreDifferent e) {
+            //then
+            assertContains("simpleMethod(foo)", e.getMessage());
         }
     }
 }
