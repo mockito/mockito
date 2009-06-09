@@ -404,11 +404,15 @@ import org.mockito.stubbing.Answer;
  * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
  * 
  * <p>
- * Spying on real objects is often associated with "partial mocking" concept. 
- * However, Mockito spies are not partial mocks. Mockito spy is meant to help testing other classes - not the spy itself. 
- * Therefore spy will not help if you intend to verify if method calls other method on the same object. 
- * In this case I suggest being OO/SRPy (for example you might extract new class/interface...)
- * 
+ * Spying on real objects can be associated with "partial mocking" concept. 
+ * <b>Before the release 1.8</b>, Mockito spies were not real partial mocks. 
+ * The reason was we thought partial mock is a code smell. 
+ * At some point we found legitimate use cases for partial mocks 
+ * (3rd party interfaces, interim refactoring of legacy code, the full article is <a href=
+ * "http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring"
+ * >here</a>)
+ * <p>
+ *
  * <pre>
  *   List list = new LinkedList();
  *   List spy = spy(list);
@@ -573,6 +577,16 @@ public class Mockito extends Matchers {
      * When this implementation is used, unstubbed methods will delegate to the real implementation.
      * This is a way to create a partial mock object that calls real methods by default.
      * <p>
+     * As usual you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+     * How does partial mock fit into this paradigm? Well, it just doesn't... 
+     * Partial mock usually means that the complexity has been moved to a different method on the same object.
+     * In most cases, this is not the way you want to design your application.
+     * <p>
+     * However, there are rare cases when partial mocks come handy: 
+     * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+     * <p>
      * Example:
      * <pre>
      * Foo mock = mock(Foo.class, CALLS_REAL_METHODS);
@@ -710,14 +724,14 @@ public class Mockito extends Matchers {
      * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
      * <p>
      * As usual you are going to read <b>the partial mock warning</b>:
-     * Object oriented programming is more less tackling complexity by spliting the complexity into separate, specific objects.
+     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't... 
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
-     * Trust me, this is not the way you want to design your application. 
+     * In most cases, this is not the way you want to design your application.
      * <p>
      * However, there are rare cases when partial mocks come handy: 
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * I wouldn't use partial mocks in new code, though.
+     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
      * <p>
      * Example:
      * 
@@ -1066,14 +1080,14 @@ public class Mockito extends Matchers {
      * Use doCallRealMethod() when you want to call the real implementation of a method.
      * <p>
      * As usual you are going to read <b>the partial mock warning</b>:
-     * Object oriented programming is more less tackling complexity by spliting the complexity into separate, specific objects.
+     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't... 
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
-     * Trust me, this is not the way you want to design your application. 
+     * In most cases, this is not the way you want to design your application.
      * <p>
      * However, there are rare cases when partial mocks come handy: 
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * I wouldn't use partial mocks in new code, though.
+     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
      * <p>
      * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks
      * <p>
