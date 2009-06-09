@@ -50,8 +50,10 @@ import org.mockito.stubbing.Answer;
  *      <a href="#12">12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids </a><br/>
  *      <a href="#13">13. Spying on real objects </a><br/>
  *      <a href="#14">14. Changing default return values of unstubbed invocations </a><br/>
- *      <a href="#15">15. (**New**) Capturing arguments for further assertions </a><br/>
- *      <a href="#16">16. (**New**) Troubleshooting & validating framework usage</a><br/>
+ *      <a href="#15">15. (**New**) Capturing arguments for further assertions</a><br/>
+ *      <a href="#16">16. (**New**) Real partial mocks</a><br/>
+ *      <a href="#17">17. (**New**) Resetting mocks</a><br/>
+ *      <a href="#18">18. (**New**) Troubleshooting & validating framework usage</a><br/>
  * </b>
  * 
  * <p>
@@ -495,8 +497,63 @@ import org.mockito.stubbing.Answer;
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
+ * 
+ * <h3 id="16">16. (**New**) Real partial mocks</h3>
  *  
- * <h3 id="16">16. (**New**) Troubleshooting & validating framework usage</h3>
+ *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
+ *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
+ *  <a href="http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring">here</a>
+ *  <p>
+ *  <b>Before release 1.8</b> spy() was working slightly differently, e.g. it didn't produce real partial mocks and it was confusing for some users.
+ *  Read more about spying: <a href="#13">here</a> or in javadoc for {@link Mockito#spy(Object)} method. 
+ *  <p>
+ *  <pre>
+ *    //you can create partial mock with spy() method:    
+ *    List list = spy(new LinkedList());
+ *    
+ *    //you can enable partial mock capabilities selectively on mocks:
+ *    Foo mock = mock(Foo.class);
+ *    when(mock.someMethod()).thenCallRealMethod();
+ *    //However, be sure the real implementation is 'safe'.
+ *    //If real implementation throws exceptions or depends on specific state of the object then you're in trouble.
+ *  </pre>
+ *  
+ * As usual you are going to read <b>the partial mock warning</b>:
+ * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+ * How does partial mock fit into this paradigm? Well, it just doesn't... 
+ * Partial mock usually means that the complexity has been moved to a different method on the same object.
+ * In most cases, this is not the way you want to design your application.
+ * <p>
+ * However, there are rare cases when partial mocks come handy: 
+ * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
+ * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+ *  
+ * <h3 id="17">17. (**New**) Resetting mocks</h3>
+ *  
+ * Smart Mockito users hardly use this method because they know it could be a sign of poor tests.
+ * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
+ * <p>
+ * Instead of reset() please consider writing simple, small and focused test methods over lengthy, over-specified tests.
+ * <b>First potential code smell is reset() in the middle of the test method.</b> This probably means you're testing too much.
+ * Follow the whisper of your test methods: "Please keep us small & focused on single behavior". 
+ * There are several threads about it on mockito mailing list.
+ * <p>
+ * The only reason we added reset() method is to
+ * make it possible to work with container-injected mocks.
+ * See issue 55 (<a href="http://code.google.com/p/mockito/issues/detail?id=55">here</a>)
+ * or FAQ (<a href="http://code.google.com/p/mockito/wiki/FAQ">here</a>).
+ * <p>
+ * <b>Don't harm yourself.</b> reset() in the middle of the test method is a code smell (you're probably testing too much). 
+ * <pre>
+ *   List mock = mock(List.class);
+ *   when(mock.size()).thenReturn(10);
+ *   mock.add(1);
+ *   
+ *   reset(mock);
+ *   //at this point the mock forgot any interactions & stubbing
+ * </pre>
+ *  
+ * <h3 id="18">18. (**New**) Troubleshooting & validating framework usage</h3>
  * 
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -918,7 +975,7 @@ public class Mockito extends Matchers {
      * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
      * <p>
      * Instead of reset() please consider writing simple, small and focused test methods over lengthy, over-specified tests.
-     * First potential smell is reset() in the middle of the test method. This probably means you're testing too much.
+     * <b>First potential code smell is reset() in the middle of the test method.</b> This probably means you're testing too much.
      * Follow the whisper of your test methods: "Please keep us small & focused on single behavior". 
      * There are several threads about it on mockito mailing list.
      * <p>
@@ -926,6 +983,16 @@ public class Mockito extends Matchers {
      * make it possible to work with container-injected mocks.
      * See issue 55 (<a href="http://code.google.com/p/mockito/issues/detail?id=55">here</a>)
      * or FAQ (<a href="http://code.google.com/p/mockito/wiki/FAQ">here</a>).
+     * <p>
+     * <b>Don't harm yourself.</b> reset() in the middle of the test method is a code smell (you're probably testing too much). 
+     * <pre>
+     *   List mock = mock(List.class);
+     *   when(mock.size()).thenReturn(10);
+     *   mock.add(1);
+     *   
+     *   reset(mock);
+     *   //at this point the mock forgot any interactions & stubbing
+     * </pre>
      * 
      * @param <T>
      * @param mocks
