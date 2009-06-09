@@ -99,11 +99,19 @@ public interface NewOngoingStubbing<T> {
      * However, there are rare cases when partial mocks come handy: 
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
      * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
-     * <p>
      * <pre>
-     * when(mock.someMethod()).thenCallRealMethod();
+     *   // someMethod() must be safe (e.g. doesn't throw, doesn't have dependencies to the object state, etc.)
+     *   // if it isn't safe then you will have trouble stubbing it using this api. Use Mockito.doCallRealMethod() instead. 
+     *   when(mock.someMethod()).thenCallRealMethod();
+     *   
+     *   // calls real method:
+     *   mock.someMethod();
+     *   
      * </pre>
-     *
+     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks. 
+     * <b>Mockito.spy() is a recommended way of creating partial mocks.</b> 
+     * The reason is it guarantees real methods are called against correctly constructed object because you're responsible for constructing the object passed to spy() method.
+     * <p>
      * See examples in javadoc for {@link Mockito#when}
      *
      * @return ongoingStubbing object that allows stubbing consecutive calls

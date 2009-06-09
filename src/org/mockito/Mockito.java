@@ -504,7 +504,7 @@ import org.mockito.stubbing.Answer;
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
  *  <a href="http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring">here</a>
  *  <p>
- *  <b>Before release 1.8</b> spy() was working slightly differently, e.g. it didn't produce real partial mocks and it was confusing for some users.
+ *  <b>Before release 1.8</b> spy() was not producing real partial mocks and it was confusing for some users.
  *  Read more about spying: <a href="#13">here</a> or in javadoc for {@link Mockito#spy(Object)} method. 
  *  <p>
  *  <pre>
@@ -513,9 +513,9 @@ import org.mockito.stubbing.Answer;
  *    
  *    //you can enable partial mock capabilities selectively on mocks:
  *    Foo mock = mock(Foo.class);
- *    when(mock.someMethod()).thenCallRealMethod();
- *    //However, be sure the real implementation is 'safe'.
+ *    //Be sure the real implementation is 'safe'.
  *    //If real implementation throws exceptions or depends on specific state of the object then you're in trouble.
+ *    when(mock.someMethod()).thenCallRealMethod();
  *  </pre>
  *  
  * As usual you are going to read <b>the partial mock warning</b>:
@@ -530,7 +530,7 @@ import org.mockito.stubbing.Answer;
  *  
  * <h3 id="17">17. (**New**) Resetting mocks</h3>
  *  
- * Smart Mockito users hardly use this method because they know it could be a sign of poor tests.
+ * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
  * <p>
  * Instead of reset() please consider writing simple, small and focused test methods over lengthy, over-specified tests.
@@ -971,7 +971,7 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Smart Mockito users hardly use this method because they know it could be a sign of poor tests.
+     * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
      * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
      * <p>
      * Instead of reset() please consider writing simple, small and focused test methods over lengthy, over-specified tests.
@@ -1156,7 +1156,9 @@ public class Mockito extends Matchers {
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
      * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
      * <p>
-     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks
+     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks. 
+     * <b>Mockito.spy() is a recommended way of creating partial mocks.</b> 
+     * The reason is it guarantees real methods are called against correctly constructed object because you're responsible for constructing the object passed to spy() method.
      * <p>
      * Example:
      * <pre>
