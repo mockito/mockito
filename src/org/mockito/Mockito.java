@@ -874,6 +874,7 @@ public class Mockito extends Matchers {
      * @return DeprecatedOngoingStubbing object to set stubbed value/exception
      */
     @Deprecated
+    //TODO: needs to go to exported package
     public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
         return MOCKITO_CORE.stub(methodCall);
     }
@@ -1139,6 +1140,7 @@ public class Mockito extends Matchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
+    //TODO: needs to go to exported package
     public static Stubber doThrow(Throwable toBeThrown) {
         return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
     }

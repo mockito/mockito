@@ -76,6 +76,7 @@ public class BDDMockito extends Mockito {
     
     public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
 
+        //TODO: rename to OngoingStubbing and move to exported packages.
         private final NewOngoingStubbing<T> mockitoOngoingStubbing;
 
         public BDDOngoingStubbingImpl(NewOngoingStubbing<T> ongoingStubbing) {

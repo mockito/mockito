@@ -32,7 +32,7 @@ import org.mockito.stubbing.Answer;
  *
  * See examples in javadoc for {@link Mockito#when}
  */
-public interface NewOngoingStubbing<T> {
+public interface NewOngoingStubbing<T> extends OngoingStubbing {
 
     /**
      * Sets a return value to be returned when the method is called. E.g:
