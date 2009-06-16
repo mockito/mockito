@@ -6,10 +6,15 @@
 Bundle-Name= Mockito Mock Library for Java
 Bundle-SymbolicName= org.mockito
 Bundle-Version= ${version}
+
+#Notes on exported packages:
+#bnd task will not make org.hamcrest exported in mockito-core manifest but only in mockito-all manifest - this is exactly what I want
 Export-Package= !org.mockito.asm.*, \
                 !org.mockito.cglib.*, \
                 !org.mockito.internal.*, \
-                org.mockito.*;version=${version}
+                org.mockito.*;version=${version}, \
+                org.hamcrest.*, \
+                !org.hamcrest.internal
 
 # It seems the org.mockito.asm.util.* package is an optional asm import? Since
 # we are embedding asm, we are not going to import that package, since no one

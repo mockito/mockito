@@ -27,6 +27,7 @@
   <property name="jar.all.sources" value="mockito-all-${version}-sources.jar" />
 	
   <property name="jar.core.osgified" value="${jar.core}-osgified" />
+  <property name="jar.all.osgified" value="${jar.all}-osgified" />
 	
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
@@ -133,8 +134,8 @@
     </jarjar>
   </target>
 	
-  <target name="bnd" depends="jar" > 
-    <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="ant.classpath"/> 
+<taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="ant.classpath"/> 
+  <target name="bnd-core" depends="jar" > 
     <bnd
          classpath="${target.dir}/${jar.core}"
          eclipse="false"
@@ -142,17 +143,28 @@
          exceptions="true"
          sourcepath="${src.dir}"
          destfile="${target.dir}/${jar.core.osgified}"
-         files="conf/org.mockito.bnd"/>
+         files="conf/mockito.bnd"/>
   </target>
 	
-    <target name="osgify.manifests" depends="bnd"> 
+  <target name="bnd-all" depends="jar" > 
+    <bnd
+         classpath="${target.dir}/${jar.all}"
+         eclipse="false"
+         failok="false"
+         exceptions="true"
+         sourcepath="${src.dir}"
+         destfile="${target.dir}/${jar.all.osgified}"
+         files="conf/mockito.bnd"/>
+  </target>	
+	
+    <target name="osgify.manifests" depends="bnd-core, bnd-all"> 
         <zip update="true" destfile="${target.dir}/${jar.core}" >
           <zipfileset src="${target.dir}/${jar.core.osgified}" >
             <include name="META-INF/MANIFEST.MF"/>
           </zipfileset>
     	</zip>
         <zip update="true" destfile="${target.dir}/${jar.all}">
-          <zipfileset src="${target.dir}/${jar.core.osgified}" >
+          <zipfileset src="${target.dir}/${jar.all.osgified}" >
             <include name="META-INF/MANIFEST.MF"/>
           </zipfileset>
     	</zip>
@@ -162,7 +174,7 @@
           </zipfileset>
     	</zip>
         <zip update="true" destfile="${target.dir}/${jar.all.sources}">
-          <zipfileset src="${target.dir}/${jar.core.osgified}" >
+          <zipfileset src="${target.dir}/${jar.all.osgified}" >
             <include name="META-INF/MANIFEST.MF"/>
           </zipfileset>
     	</zip>
