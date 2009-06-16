@@ -2,17 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.matchers;
+package org.mockito.internal.matchers;
 
 import java.math.BigDecimal;
 
 import org.junit.Test;
-import org.mockito.internal.matchers.CompareEqual;
-import org.mockito.internal.matchers.CompareTo;
-import org.mockito.internal.matchers.GreaterOrEqual;
-import org.mockito.internal.matchers.GreaterThan;
-import org.mockito.internal.matchers.LessOrEqual;
-import org.mockito.internal.matchers.LessThan;
 import org.mockitoutil.TestBase;
 
 public class ComparableMatchersTest extends TestBase {

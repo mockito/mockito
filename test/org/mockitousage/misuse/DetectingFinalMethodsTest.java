@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 public class DetectingFinalMethodsTest extends TestBase {
@@ -35,7 +34,6 @@ public class DetectingFinalMethodsTest extends TestBase {
     @Test
     public void shouldFailWithUnfinishedStubbing() {
         withFinal = mock(WithFinal.class);
-        new MockUtil().getMockHandler(withFinal);
         try {
             when(withFinal.foo()).thenReturn(null);
             fail();
