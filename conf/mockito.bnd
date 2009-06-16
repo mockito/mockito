@@ -13,8 +13,8 @@ Export-Package= !org.mockito.asm.*, \
                 !org.mockito.cglib.*, \
                 !org.mockito.internal.*, \
                 org.mockito.*;version=${version}, \
-                org.hamcrest.*, \
-                !org.hamcrest.internal
+                !org.hamcrest.internal.*, \
+                org.hamcrest.* \
 
 # It seems the org.mockito.asm.util.* package is an optional asm import? Since
 # we are embedding asm, we are not going to import that package, since no one
