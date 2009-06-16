@@ -22,6 +22,8 @@ public interface AnnotationEngine {
      * <p>
      * You don't need to set the mock on the field. Mockito does it for you. 
      * If in doubts look for implementations of this interface.
+     * <p>
+     * For annotations that you don't care about just return null - then Mockito will not initialize this field
      * 
      * @param annotation annotation on the field, for example &#064;Mock
      * @param field field to create mock object for
