@@ -18,7 +18,6 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.stubbing.MockitoStubber;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
-import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
 import org.mockito.internal.util.MockName;
 import org.mockito.internal.verification.RegisteredInvocations;
@@ -26,6 +25,7 @@ import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.VoidMethodStubbable;
 
 /**
  * Invocation handler set on mock objects.

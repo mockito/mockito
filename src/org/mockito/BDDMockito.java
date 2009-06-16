@@ -4,9 +4,9 @@
  */
 package org.mockito;
 
-import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.stubbing.Stubber;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.NewOngoingStubbing;
+import org.mockito.stubbing.Stubber;
 
 /**
  * Behavior Driven Development style of stubbing that integrates nicely with //given //when //then comments.

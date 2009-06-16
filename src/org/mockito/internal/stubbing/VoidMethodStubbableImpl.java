@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.VoidMethodStubbable;
 
 public class VoidMethodStubbableImpl<T> implements VoidMethodStubbable<T> {
     private final T mock;

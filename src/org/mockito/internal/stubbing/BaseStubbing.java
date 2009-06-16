@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.NewOngoingStubbing;
 
 public abstract class BaseStubbing<T> implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
     public NewOngoingStubbing<T> thenReturn(T value) {

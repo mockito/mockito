@@ -49,7 +49,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
     public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {
         verify(withFinal).finalMethod(anyObject());
         try {
-            verify(withFinal).finalMethod(anyObject());
+            verify(withFinal);
             fail();
         } catch (UnfinishedVerificationException e) {}
     }

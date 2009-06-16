@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.NewOngoingStubbing;
 
 public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
     private final MockitoStubber mockitoStubber;

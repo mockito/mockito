@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.NewOngoingStubbing;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.NewOngoingStubbing;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     

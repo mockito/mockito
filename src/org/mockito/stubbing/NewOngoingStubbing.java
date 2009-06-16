@@ -2,10 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.progress;
+package org.mockito.stubbing;
 
 import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
+import org.mockito.internal.progress.OngoingStubbing;
 
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:

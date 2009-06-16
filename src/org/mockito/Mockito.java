@@ -6,10 +6,6 @@ package org.mockito;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.progress.DeprecatedOngoingStubbing;
-import org.mockito.internal.progress.NewOngoingStubbing;
-import org.mockito.internal.stubbing.Stubber;
-import org.mockito.internal.stubbing.VoidMethodStubbable;
 import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.DoesNothing;
@@ -24,6 +20,10 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.NewOngoingStubbing;
+import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidMethodStubbable;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>
