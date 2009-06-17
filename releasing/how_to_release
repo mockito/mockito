@@ -33,6 +33,19 @@ python mime-types.rb
 
 9. check if javadocs look beautiful over the web
 
-10. upload jars:
+10. deploy maven binaries: 
+
+ant release.maven
+
+10. rsync repository:
+rsync -rv -e "ssh -i path/to/ssh/key" maven/repository/ mockito@wamblee.org:/
+
+10. rename & copy metadata to the trunk:  
+cp maven/repository/org/mockito/mockito-all/maven-metadata.xml maven/mockito-all-metadata.xml
+cp maven/repository/org/mockito/mockito-core/maven-metadata.xml maven/mockito-core-metadata.xml
+
+copy mockito-*-metadata.xml to the trunk into maven dir
+
+11. upload jars:
 
 python upload_jars.py x.x
