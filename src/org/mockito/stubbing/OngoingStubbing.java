@@ -7,7 +7,6 @@ package org.mockito.stubbing;
 import org.mockito.Mockito;
 import org.mockito.internal.progress.IOngoingStubbing;
 
-//TODO: make osgi bundles core & all
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
  *
