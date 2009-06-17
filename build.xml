@@ -18,6 +18,9 @@
   <property name="lib.dir" value="lib" />
   <property name="lib.dir.build" value="${lib.dir}/build" />
   <property name="lib.dir.run" value="${lib.dir}/run" />
+  <property name="lib.dir.compile" value="${lib.dir}/compile" />
+  <property name="lib.dir.test" value="${lib.dir}/test" />
+  <property name="lib.dir.repackaged" value="${lib.dir}/repackaged" />
   <property name="lib.dir.sources" value="${lib.dir}/sources" />
     
   <property name="jar.core" value="mockito-core-${version}.jar" />
@@ -32,14 +35,14 @@
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
 	
-  <property name="junit.jar" value="com.springsource.org.junit-4.5.0.jar" />
-  <property name="cglib-and-asm.jar" value="cglib-and-asm-1.0.jar" />
-
   <path id="compile.classpath">
     <fileset dir="${lib.dir.run}" includes="*.jar" />
+    <fileset dir="${lib.dir.compile}" includes="*.jar" />
+    <fileset dir="${lib.dir.repackaged}" includes="*.jar" />
   </path>
 
   <path id="test.compile.classpath">
+  	<fileset dir="${lib.dir.test}" includes="*.jar" />
     <path refid="compile.classpath" />
     <pathelement location="${src.classes.dir}" />
   </path>
@@ -124,13 +127,14 @@
       <fileset dir="${src.classes.dir}" />
       <zipfileset dir="${src.dir}" />
 	  <fileset dir="${lib.dir.run}" excludes="*.jar" />
+      <fileset dir="${lib.dir.repackaged}" excludes="*.jar" />
       <zipfileset src="${lib.dir.run}/com.springsource.org.objenesis-1.0.0.jar">
         <exclude name="META-INF/maven/**"/>
       </zipfileset>
       <zipfileset src="${lib.dir.run}/com.springsource.org.hamcrest.core-1.1.0.jar">
         <exclude name="LICENSE.txt" />
       </zipfileset>
-      <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
+      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.0.jar" />
     </jarjar>
   </target>
 	
@@ -188,24 +192,21 @@
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Implementation-Version" value="${version}"/>
       </manifest>
-      <fileset dir="${lib.dir.run}" >
-        <include name="asm-license*"/>
-        <include name="cglib-license*"/>
-      </fileset>
+      <fileset dir="${lib.dir.repackaged}" includes="*.txt" />
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
       <fileset dir="${src.dir}" />
-      <zipfileset src="${lib.dir.run}/${cglib-and-asm.jar}"/>
+      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.0.jar"/>
     </jarjar>
   </target>
 	
   <target name="sources" >
     <jar jarfile="${target.dir}/${jar.core.sources}">
-    <manifest>
-      <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Implementation-Version" value="${version}"/>
-    </manifest>
+        <manifest>
+          <attribute name="Built-By" value="${user.name}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+        </manifest>
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.dir}" />
@@ -227,18 +228,18 @@
         </fileset>
       <fileset dir="${src.dir}" />
       <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
-      <zipfileset src="${lib.dir.sources}/objenesis-1.0-sources.jar" />
-      <zipfileset src="${lib.dir.sources}/hamcrest-core-1.1-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/com.springsource.org.hamcrest.core-1.1.0-sources.jar" >
+      	<exclude name="LICENSE.txt" />
+      </zipfileset>
+      <zipfileset src="${lib.dir.sources}/com.springsource.org.objenesis-1.0.0-sources.jar" />
     </jar>
   </target>
 	
   <target name="prepare.package" depends="jar, javadoc, sources-all, osgify.manifests">
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
-      <fileset dir="${lib.dir.run}">
-        <exclude name="${cglib-and-asm.jar}" />
-      	<exclude name="${junit.jar}" />
-      </fileset>
+      <fileset dir="${lib.dir.run}" />
+      <fileset dir="${lib.dir.repackaged}" includes="*.txt" />
       <fileset dir="${target.dir}" includes="${jar.core}" />
     </copy>
     <mkdir dir="${target.dir}/mockito.zip.tmp/javadoc" />
@@ -292,7 +293,8 @@
         <formatter type="plain" usefile="false"/>      	
         <classpath>
           <fileset dir="${target.dir}/tmp" includes="${jar.all}" />
-          <fileset dir="${lib.dir.run}" includes="${junit.jar}" />
+          <fileset dir="${lib.dir.test}" includes="*.jar" />
+          <fileset dir="${lib.dir.compile}" includes="*junit*.jar" />
           <pathelement location="${target.dir}/${jar.tests}"/>
         </classpath>
         <jvmarg value="-ea" />
@@ -309,7 +311,8 @@
       <formatter type="plain" usefile="false" />
       <classpath>
         <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
-        <fileset dir="${lib.dir.run}" includes="${junit.jar}" />
+      	<fileset dir="${lib.dir.test}" includes="*.jar" />
+      	<fileset dir="${lib.dir.compile}" includes="*junit*.jar" />
         <pathelement location="${target.dir}/${jar.tests}"/>
       </classpath>
       <jvmarg value="-ea" />
