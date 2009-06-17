@@ -22,7 +22,6 @@ import org.mockito.Mockito;
  *
  * See examples in javadoc for {@link Mockito#stubVoid}
  */
-//TODO: needs to go to exported package
 public interface VoidMethodStubbable<T> {
 
     /**

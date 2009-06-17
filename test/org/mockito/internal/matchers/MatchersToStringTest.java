@@ -9,19 +9,6 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.mockito.internal.matchers.And;
-import org.mockito.internal.matchers.Any;
-import org.mockito.internal.matchers.Contains;
-import org.mockito.internal.matchers.EndsWith;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.Find;
-import org.mockito.internal.matchers.Matches;
-import org.mockito.internal.matchers.Not;
-import org.mockito.internal.matchers.NotNull;
-import org.mockito.internal.matchers.Null;
-import org.mockito.internal.matchers.Or;
-import org.mockito.internal.matchers.Same;
-import org.mockito.internal.matchers.StartsWith;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")

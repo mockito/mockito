@@ -84,7 +84,4 @@ public class WarningsPrinterTest extends TestBase {
         assertNotContains("stub was not used", logger.getLoggedInfo());
         assertNotContains("was not stubbed", logger.getLoggedInfo());
     }
-
-    // TODO: after 1.8 consider writing a warning when someone tries to mock a
-    // class that has any final methods
 }
