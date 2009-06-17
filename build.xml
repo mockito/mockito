@@ -35,6 +35,8 @@
   <property name="jar.tests" value="mockito-tests.jar" />
   <property name="zip" value="mockito-${version}.zip" />
 	
+  <property name="maven.repository.dir" value="${basedir}/maven/repository" />
+  
   <path id="compile.classpath">
     <fileset dir="${lib.dir.run}" includes="*.jar" />
     <fileset dir="${lib.dir.compile}" includes="*.jar" />
@@ -329,7 +331,28 @@
     </copy>
   </target>
   
-  <target name="release.maven" depends="jar" description="releases binaries to sync with maven repository">
+  <target name="check.binaries">
+    <condition property="mockito.jars.exist">
+      <and>
+        <available file="${target.dir}/${jar.all}"/>
+        <available file="${target.dir}/${jar.all.sources}"/>
+        <available file="${target.dir}/${jar.core}"/>
+        <available file="${target.dir}/${jar.core.sources}"/>
+      </and>
+    </condition>
+
+    <fail unless="mockito.jars.exist" message="Mockito binaries don't exist. Issue ant at the command line to build."/>     
+  </target>
+
+  <target name="copy.maven.metadata" depends="check.binaries" >
+    <mkdir dir="${maven.repository.dir}/org/mockito/mockito-all" />
+    <copy file="maven/mockito-all-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-all/maven-metadata.xml" />
+   
+    <mkdir dir="${maven.repository.dir}/org/mockito/mockito-core" />
+    <copy file="maven/mockito-core-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-core/maven-metadata.xml" />
+  </target>
+
+  <target name="release.maven" depends="copy.maven.metadata" description="deploy binaries to sync with maven repository" >      
     <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
   	
     <filter token="version" value="${version}"/>
@@ -337,15 +360,17 @@
       <fileset dir="maven" includes="mockito-*.pom"/> 
     </copy>
   	
-    <remoteRepository id="repo.local" url="file:///${basedir}/maven/repository" />
+    <remoteRepository id="repo.local" url="file:///${maven.repository.dir}" />
   	
     <deploy file="${target.dir}/${jar.all}">
       <pom file="${target.dir}/mockito-all.pom" />
+      <attach file="${target.dir}/${jar.core.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
   	
     <deploy file="${target.dir}/${jar.core}" >
       <pom file="${target.dir}/mockito-core.pom" />
+      <attach file="${target.dir}/${jar.all.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
   </target>
