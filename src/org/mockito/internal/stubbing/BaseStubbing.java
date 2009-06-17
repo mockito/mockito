@@ -8,15 +8,15 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.NewOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
 
-public abstract class BaseStubbing<T> implements NewOngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
-    public NewOngoingStubbing<T> thenReturn(T value) {
+public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
+    public OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
     }
 
-    public NewOngoingStubbing<T> thenReturn(T value, T... values) {
-        NewOngoingStubbing<T> stubbing = thenReturn(value);            
+    public OngoingStubbing<T> thenReturn(T value, T... values) {
+        OngoingStubbing<T> stubbing = thenReturn(value);            
         if (values == null) {
             return stubbing.thenReturn(null);
         }
@@ -26,15 +26,15 @@ public abstract class BaseStubbing<T> implements NewOngoingStubbing<T>, Deprecat
         return stubbing;
     }
 
-    private NewOngoingStubbing<T> thenThrow(Throwable throwable) {
+    private OngoingStubbing<T> thenThrow(Throwable throwable) {
         return thenAnswer(new ThrowsException(throwable));
     }
 
-    public NewOngoingStubbing<T> thenThrow(Throwable... throwables) {
+    public OngoingStubbing<T> thenThrow(Throwable... throwables) {
         if (throwables == null) {
             thenThrow((Throwable) null);
         }
-        NewOngoingStubbing<T> stubbing = null;
+        OngoingStubbing<T> stubbing = null;
         for (Throwable t: throwables) {
             if (stubbing == null) {
                 stubbing = thenThrow(t);                    
@@ -46,7 +46,7 @@ public abstract class BaseStubbing<T> implements NewOngoingStubbing<T>, Deprecat
     }        
 
     //TODO: after 1.8 fail when someone tries to do it with a mock of an Interface
-    public NewOngoingStubbing<T> thenCallRealMethod() {
+    public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
     }
 

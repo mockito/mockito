@@ -10,9 +10,9 @@ import org.mockito.internal.verification.api.VerificationMode;
 
 public interface MockingProgress {
     
-    void reportOngoingStubbing(OngoingStubbing ongoingStubbing);
+    void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing);
 
-    OngoingStubbing pullOngoingStubbing();
+    IOngoingStubbing pullOngoingStubbing();
 
     void verificationStarted(VerificationMode verificationMode);
 

@@ -6,7 +6,7 @@ package org.mockito.internal.stubbing;
 
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.NewOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
 
 public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
     private final MockitoStubber mockitoStubber;
@@ -15,7 +15,7 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
         this.mockitoStubber = mockitoStubber;
     }
 
-    public NewOngoingStubbing<T> thenAnswer(Answer<?> answer) {
+    public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
         mockitoStubber.addConsecutiveAnswer(answer);
         return this;
     }

@@ -21,7 +21,7 @@ import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.NewOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.VoidMethodStubbable;
 
@@ -938,7 +938,7 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      * @param methodCall method to be stubbed
      */
-    public static <T> NewOngoingStubbing<T> when(T methodCall) {
+    public static <T> OngoingStubbing<T> when(T methodCall) {
         return MOCKITO_CORE.when(methodCall);
     }
 

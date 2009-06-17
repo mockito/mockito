@@ -5,7 +5,7 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
-import org.mockito.internal.progress.OngoingStubbing;
+import org.mockito.internal.progress.IOngoingStubbing;
 
 /**
  * Stubs a method call with return value or an exception. E.g:
@@ -29,7 +29,7 @@ import org.mockito.internal.progress.OngoingStubbing;
  *
  * See examples in javadoc for {@link Mockito#stub}
  */
-public interface DeprecatedOngoingStubbing<T> extends OngoingStubbing {
+public interface DeprecatedOngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Set a return value for the stubbed method. E.g:
@@ -41,7 +41,7 @@ public interface DeprecatedOngoingStubbing<T> extends OngoingStubbing {
      *
      * @param value return value
      *
-     * @return ongoingStubbing object that allows stubbing consecutive calls
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
      */
     DeprecatedOngoingStubbing<T> toReturn(T value);
 
@@ -58,7 +58,7 @@ public interface DeprecatedOngoingStubbing<T> extends OngoingStubbing {
      *
      * @param throwable to be thrown on method invocation
      *
-     * @return ongoingStubbing object that allows stubbing consecutive calls
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
      */
     DeprecatedOngoingStubbing<T> toThrow(Throwable throwable);
 
@@ -74,7 +74,7 @@ public interface DeprecatedOngoingStubbing<T> extends OngoingStubbing {
      *
      * @param answer the custom answer to execute.
      *
-     * @return ongoingStubbing object that allows stubbing consecutive calls
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
      */
     DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer);
 }
