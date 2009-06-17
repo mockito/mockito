@@ -3,8 +3,8 @@
             lib/run/com.springsource.org.objenesis-1.0.0.jar
 -versionpolicy=[${version;==;${@}},${version;+;${@}})
 
-Bundle-Name= Mockito Mock Library for Java
-Bundle-SymbolicName= org.mockito
+Bundle-Name= Mockito Mock Library for Java. Hamcrest-core & Objenesis included in the bundle.
+Bundle-SymbolicName= org.mockito.mockito-all
 Bundle-Version= ${version}
 
 #Notes on exported packages:

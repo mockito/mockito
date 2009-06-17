@@ -143,7 +143,7 @@
          exceptions="true"
          sourcepath="${src.dir}"
          destfile="${target.dir}/${jar.core.osgified}"
-         files="conf/mockito.bnd"/>
+         files="conf/mockito-core.bnd"/>
   </target>
 	
   <target name="bnd-all" depends="jar" > 
@@ -154,7 +154,7 @@
          exceptions="true"
          sourcepath="${src.dir}"
          destfile="${target.dir}/${jar.all.osgified}"
-         files="conf/mockito.bnd"/>
+         files="conf/mockito-all.bnd"/>
   </target>	
 	
     <target name="osgify.manifests" depends="bnd-core, bnd-all"> 
@@ -178,6 +178,8 @@
             <include name="META-INF/MANIFEST.MF"/>
           </zipfileset>
     	</zip>
+    	<delete file="${target.dir}/${jar.all.osgified}" />
+    	<delete file="${target.dir}/${jar.core.osgified}" />
   </target>
 	
   <target name="jar" depends="jar.all">
