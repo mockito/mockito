@@ -7,6 +7,7 @@ package org.mockitousage.bugs;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
@@ -20,6 +21,8 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     
     @Mock VarargMethod mock;
 
+    //TODO: not yet implemented, reverted fix for issue 62 as it introduced a regression
+    @Ignore
     @Test
     public void shouldAllowAnyObjectForVarArgs() {
         mock.run("a", "b");
@@ -33,6 +36,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
         verify(mock, never()).run(anyString(), eq("f"));
     }
     
+    @Ignore
     @Test
     public void shouldAllowAnyObjectForVarArgsStubbing() {
         when(mock.run((String[]) anyObject())).thenReturn("foo");

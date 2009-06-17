@@ -23,6 +23,16 @@ public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
     //TODO: not yet implemented
     @Ignore
     @Test
+    public void shouldVerifyCorrectlyWithAnyObjectSubstitutingVarargs() {
+        //when
+        table.newRow("qux", "foo", "bar", "baz");
+        table.newRow("abc", "def");
+        
+        //then
+        verify(table, times(2)).newRow(anyString(), (String[]) anyObject());
+    }
+
+    @Test
     public void shouldVerifyCorrectlyWithVarargs() {
         //when
         table.newRow("qux", "foo", "bar", "baz");
@@ -31,6 +41,5 @@ public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
         //then
         verify(table).newRow(anyString(), eq("foo"), anyString(), anyString());
         verify(table).newRow(anyString(), anyString());
-        verify(table, times(2)).newRow(anyString(), (String[]) anyObject());
     }
 }
