@@ -31,6 +31,9 @@ public class ClassImposterizer  {
     
     private ClassImposterizer() {}
     
+    //TODO: after 1.8, in order to provide decent exception message when objenesis is not found,
+    //have a constructor in this class that tries to instantiate ObjenesisStd and if it fails then show decent exception that dependency is missing
+    //TODO: after 1.8, for the same reason catch and give better feedback when hamcrest core is not found.
     private ObjenesisStd objenesis = new ObjenesisStd();
     
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
