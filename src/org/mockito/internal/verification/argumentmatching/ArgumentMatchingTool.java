@@ -16,10 +16,6 @@ public class ArgumentMatchingTool {
 
     /**
      * Suspiciously not matching arguments are those that don't much, the toString() representation is the same but types are different.
-     * 
-     * @param matchers
-     * @param arguments
-     * @return
      */
     public Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<Matcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
