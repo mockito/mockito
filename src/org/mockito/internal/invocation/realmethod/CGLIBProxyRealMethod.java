@@ -7,7 +7,7 @@ package org.mockito.internal.invocation.realmethod;
 import org.mockito.cglib.proxy.MethodProxy;
 
 
-public class CGLIBProxyRealMethod implements RealMethod {
+public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy {
 
     private final MethodProxy methodProxy;
 
@@ -17,5 +17,9 @@ public class CGLIBProxyRealMethod implements RealMethod {
 
     public Object invoke(Object target, Object[] arguments) throws Throwable {
         return methodProxy.invokeSuper(target, arguments);
+    }
+
+    public MethodProxy getMethodProxy() {
+        return methodProxy;
     }
 }

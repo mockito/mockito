@@ -43,7 +43,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     private boolean verified;
     private boolean verifiedInOrder;
     private Object[] rawArguments;
-    private final RealMethod realMethod;
+    final RealMethod realMethod;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, RealMethod realMethod) {
         this.mock = mock;
