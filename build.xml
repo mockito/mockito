@@ -345,6 +345,7 @@
   </target>
 
   <target name="copy.maven.metadata" depends="check.binaries" >
+  	<delete dir="${maven.repository.dir}"/>
     <mkdir dir="${maven.repository.dir}/org/mockito/mockito-all" />
     <copy file="maven/mockito-all-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-all/maven-metadata.xml" />
    
