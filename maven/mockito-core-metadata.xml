@@ -9,7 +9,8 @@
       <version>1.6</version>
       <version>1.7</version>
       <version>1.8.0-rc1</version>
+      <version>1.8.0-snapshot</version>
     </versions>
-    <lastUpdated>20090610163736</lastUpdated>
+    <lastUpdated>20090618220711</lastUpdated>
   </versioning>
 </metadata>
