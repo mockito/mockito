@@ -19,7 +19,7 @@ for dir in dirs
         next
       end
     else
-      paths << path if path !~ /\.html$/
+      paths << path if path !~ /\.html$/ and path !~ /\license.txt$/
     end
   end
 end
