@@ -30,7 +30,7 @@ f = open('version.properties', 'w')
 f.write('version=' + ver)
 f.close()
 
-run('ant test.release release.javadoc')
+run('ant test.release release.javadoc release.maven')
 
 run('svn add javadoc/*')
 run('svn ps -R svn:mime-type text/html javadoc/*')
