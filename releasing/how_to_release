@@ -1,12 +1,4 @@
 How to release version x.x
 
+ * check out clean trunk into 'mockito-java' folder 
  * run 'python release.py' from releasing folder
- * rename & copy metadata to the trunk:  
-   cp maven/repository/org/mockito/mockito-all/maven-metadata.xml maven/mockito-all-metadata.xml
-   cp maven/repository/org/mockito/mockito-core/maven-metadata.xml maven/mockito-core-metadata.xml
-
- * rsync repository:
-   #dry run: rsync -rvn -e "ssh -i path/to/ssh/key" maven/repository/ mockito@wamblee.org:/
-   rsync -rv -e "ssh -i path/to/ssh/key" maven/repository/ mockito@wamblee.org:/
-
- * update mockito-*-metadata.xml in maven folder in trunk

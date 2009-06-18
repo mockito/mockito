@@ -22,7 +22,8 @@ run('svn co ' + branch + ' ../../mockito-' + ver)
 
 print("Switching to ../../mockito-" + ver + " folder")
 
-os.chdir('../../mockito-' + ver)
+branch_work_dir = '../../mockito-' + ver
+os.chdir(branch_work_dir)
 
 print("Updating version.properties to " + ver)
 
@@ -58,3 +59,6 @@ sys.argv.append("--summary=Single jar, includes source")
 sys.argv.append('../target/mockito-all-' + ver + '.jar')
 
 google_upload.main()
+
+import release_maven
+release_maven.go(branch_work_dir)
