@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><metadata>
   <groupId>org.mockito</groupId>
   <artifactId>mockito-all</artifactId>
-  <version>1.8.0-rc1</version>
+  <version>1.1</version>
   <versioning>
     <versions>
       <version>1.1</version>
