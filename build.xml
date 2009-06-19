@@ -365,13 +365,13 @@
   	
     <deploy file="${target.dir}/${jar.all}">
       <pom file="${target.dir}/mockito-all.pom" />
-      <attach file="${target.dir}/${jar.core.sources}" classifier="sources" />
+      <attach file="${target.dir}/${jar.all.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
   	
     <deploy file="${target.dir}/${jar.core}" >
       <pom file="${target.dir}/mockito-core.pom" />
-      <attach file="${target.dir}/${jar.all.sources}" classifier="sources" />
+      <attach file="${target.dir}/${jar.core.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
   </target>
