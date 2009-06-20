@@ -201,4 +201,6 @@ public interface IMethods {
     Object setArgMethod(Set<String> set);
 
     void longArg(long longArg);
+
+    void intArgumentMethod(int i);
 }

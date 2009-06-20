@@ -42,6 +42,7 @@ import org.mockito.stubbing.Stubber;
  */
 @SuppressWarnings("unchecked")
 public class BDDMockito extends Mockito {
+//TODO: document in main Mockito class    
     
     /**
      * See original {@link OngoingStubbing}
