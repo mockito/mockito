@@ -17,7 +17,7 @@ import org.mockito.util.MockitoLoggerStub;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class WarningsPrinterTest extends TestBase {
+public class WarningsPrinterImplTest extends TestBase {
 
     @Mock
     private IMethods mock;
@@ -27,7 +27,7 @@ public class WarningsPrinterTest extends TestBase {
     public void shouldPrintUnusedStub() {
         // given
         Invocation unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
-        WarningsPrinter p = new WarningsPrinter(asList(unusedStub), Arrays.<InvocationMatcher> asList());
+        WarningsPrinterImpl p = new WarningsPrinterImpl(asList(unusedStub), Arrays.<InvocationMatcher> asList());
 
         // when
         p.print(logger);
@@ -41,7 +41,7 @@ public class WarningsPrinterTest extends TestBase {
     public void shouldPrintUnstubbedInvocation() {
         // given
         InvocationMatcher unstubbedInvocation = new InvocationBuilder().differentMethod().toInvocationMatcher();
-        WarningsPrinter p = new WarningsPrinter(Arrays.<Invocation> asList(), Arrays.<InvocationMatcher> asList(unstubbedInvocation));
+        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(), Arrays.<InvocationMatcher> asList(unstubbedInvocation));
 
         // when
         p.print(logger);
@@ -57,16 +57,13 @@ public class WarningsPrinterTest extends TestBase {
         Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
         InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
 
-        WarningsPrinter p = new WarningsPrinter(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
+        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
 
         // when
         p.print(logger);
 
         // then
-        assertContains("Stubbed this way", logger.getLoggedInfo());
-        assertContains("simpleMethod(\"foo\")", logger.getLoggedInfo());
-        assertContains("called with different arguments", logger.getLoggedInfo());
-        assertContains("simpleMethod(\"bar\")", logger.getLoggedInfo());
+        assertContains("different arguments", logger.getLoggedInfo());
     }
 
     @Test
@@ -75,7 +72,7 @@ public class WarningsPrinterTest extends TestBase {
         Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
         InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
 
-        WarningsPrinter p = new WarningsPrinter(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
+        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
 
         // when
         p.print(logger);

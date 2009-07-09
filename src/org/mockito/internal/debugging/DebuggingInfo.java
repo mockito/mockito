@@ -64,12 +64,22 @@ public class DebuggingInfo {
 
     public void printWarnings(MockitoLogger logger) {
         if (hasData()) {
-            WarningsPrinter warningsPrinter = new WarningsPrinter(unusedStubs, unstubbedInvocations);
-            warningsPrinter.print(logger);
+            new WarningsPrinterImpl(unusedStubs, unstubbedInvocations).print(logger);
         }
     }
 
     public boolean hasData() {
         return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
+    }
+
+    public String getWarnings() {
+        final StringBuilder sb = new StringBuilder();
+        if (hasData()) {
+            new WarningsPrinterImpl(unusedStubs, unstubbedInvocations).print(new MockitoLogger() {
+                public void log(Object what) {
+                    sb.append(what);
+                }});
+        }
+        return sb.toString();
     }
 }

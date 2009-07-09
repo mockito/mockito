@@ -14,12 +14,12 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.util.MockitoLogger;
 
-public class WarningsPrinter {
+public class WarningsPrinterImpl {
 
     private final List<Invocation> unusedStubs;
     private final List<InvocationMatcher> unstubbedInvocations;
 
-    public WarningsPrinter(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
+    public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
         this.unusedStubs = new LinkedList<Invocation>(unusedStubs);
         this.unstubbedInvocations = new LinkedList<InvocationMatcher>(unstubbedInvocations);
     }
@@ -50,7 +50,7 @@ public class WarningsPrinter {
 
     private String thisStubWasNotUsed(Invocation i) {
         return join(
-            "[Mockito] Warning - this stub was not used:",
+            "[Mockito hint] This stub was not used:",
             i,
             i.getLocation(),
             "");
@@ -58,7 +58,7 @@ public class WarningsPrinter {
 
     private String thisMethodWasNotStubbed(InvocationMatcher i) {
         return join(
-            "[Mockito] Warning - this method was not stubbed:",
+            "[Mockito hint] This method was not stubbed:",
             i,
             i.getInvocation().getLocation(),
             "");
@@ -66,14 +66,9 @@ public class WarningsPrinter {
 
     private String stubbedMethodCalledWithDifferentArguments(Invocation unused, InvocationMatcher unstubbed) {
         return join(
-                "[Mockito] Warning - stubbed method called with different arguments.",
-                "Stubbed this way:",
-                unused,
-                unused.getLocation(),
-                "",
-                "But called with different arguments:",
-                unstubbed,
-                unstubbed.getInvocation().getLocation(),
+                " *** Verbose stubbing warnings from Mockito *** ",
+                "stubbed here " + unused.getLocation(),
+                "BUT called with different arguments here " + unstubbed.getInvocation().getLocation(),
                 "");
     }
 }
