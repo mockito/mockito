@@ -15,7 +15,6 @@ public class PlaygroundTest extends TestBase {
     static class Foo {
         
         int doSomeThing() {
-            System.out.println(getStuff());
             return 0;
         }
 
