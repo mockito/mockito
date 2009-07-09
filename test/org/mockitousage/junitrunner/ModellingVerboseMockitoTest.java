@@ -10,11 +10,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.ConsoleSpammingMockitoJUnitRunner;
+import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
+@Ignore
+@RunWith(VerboseMockitoJUnitRunner.class)
 public class ModellingVerboseMockitoTest extends TestBase {
     
     @Mock private IMethods mock;
@@ -23,11 +24,12 @@ public class ModellingVerboseMockitoTest extends TestBase {
         super.makeStackTracesClean();
     }
     
-    @Ignore
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
-        when(mock.simpleMethod()).thenReturn("foo");
+        when(mock.simpleMethod(1)).thenReturn("foo");
         
-        fail();
+        String ret = mock.simpleMethod(2);
+        
+        assertEquals("foo", ret);
     }
 }
