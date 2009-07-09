@@ -12,7 +12,6 @@ import org.mockito.internal.reporting.SmartPrinter;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class SmartPrinterTest extends TestBase {
 
     private PrintingFriendlyInvocation multi;

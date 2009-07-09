@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class MockSettingsImplTest extends TestBase {
 
     private MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();

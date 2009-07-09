@@ -10,7 +10,6 @@ package org.mockito.internal.reporting;
  * <p>
  * Makes arguments printed with types if necessary
  */
-@SuppressWarnings("unchecked")
 public class SmartPrinter {
 
     private final String wanted;

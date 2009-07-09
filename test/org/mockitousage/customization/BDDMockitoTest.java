@@ -104,7 +104,6 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void shouldStubByDelegatingToRealMethod() throws Exception {
         //given
         Dog dog = mock(Dog.class);
@@ -115,7 +114,6 @@ public class BDDMockitoTest extends TestBase {
     }
     
     @Test
-    @SuppressWarnings("unchecked")
     public void shouldStubByDelegatingToRealMethodUsingTypicalStubbingSyntax() throws Exception {
         //given
         Dog dog = mock(Dog.class);

@@ -44,7 +44,6 @@ import org.mockito.MockitoAnnotations;
  * 
  * </pre>
  */
-@SuppressWarnings("deprecation")
 @Deprecated
 public class MockitoJUnit44Runner extends MockitoJUnitRunner {
 

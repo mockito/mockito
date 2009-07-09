@@ -11,8 +11,6 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import org.junit.Test;
-import org.mockito.internal.util.reflection.FieldCopier;
-import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")

@@ -13,7 +13,6 @@ import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
 
-@SuppressWarnings("unchecked")
 public class MissingInvocationChecker {
     
     private final Reporter reporter;
