@@ -8,10 +8,12 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class CapturingArgumentsTest extends TestBase {
@@ -136,5 +138,21 @@ public class CapturingArgumentsTest extends TestBase {
             argument.getValue();
             fail();
         } catch (MockitoException e) {}
+    }
+    
+    //TODO: not yet implemented
+    @Ignore
+    @Test
+    public void shouldCaptureInt() {
+        //given
+        IMethods mock = mock(IMethods.class);
+        ArgumentCaptor<Integer> argument = new ArgumentCaptor<Integer>();
+
+        //when
+        mock.intArgumentMethod(10);
+        
+        //then
+        verify(mock).intArgumentMethod(argument.capture());
+        assertEquals(10, (int) argument.getValue());
     }
 }
