@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.util.copy;
+package org.mockito.internal.util.reflection;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import org.junit.Test;
+import org.mockito.internal.util.reflection.FieldCopier;
+import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
