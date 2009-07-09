@@ -42,7 +42,7 @@ public class CovariantOverrideTest extends TestBase {
         assertEquals("foo", mock.callMe()); // Passes
     }
     
-    @Ignore//TODO: not yet implemented
+    @Ignore//TODO: after 1.8 - not yet implemented
     @Test 
     public void returnFoo4() {
         ReturnsString mock = mock(ReturnsString.class);

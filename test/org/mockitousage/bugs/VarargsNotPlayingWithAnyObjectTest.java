@@ -21,7 +21,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     
     @Mock VarargMethod mock;
 
-    //TODO: not yet implemented, reverted fix for issue 62 as it introduced a regression
+    //TODO: after 1.8. minor bug, loads of coding. Reverted fix for issue 62 as it introduced a regression
     @Ignore
     @Test
     public void shouldAllowAnyObjectForVarArgs() {

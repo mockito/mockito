@@ -20,7 +20,7 @@ public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
     @Mock
     TableBuilder table;
 
-    //TODO: not yet implemented
+    //TODO: after 1.8 - it's a minor bug but not very easy to fix.
     @Ignore
     @Test
     public void shouldVerifyCorrectlyWithAnyObjectSubstitutingVarargs() {
