@@ -45,7 +45,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
                 //assert
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("[Mockito] Warning - this stub was not used", loggedInfo);
+                assertContains("stub was not used", loggedInfo);
                 assertContains("mock.simpleMethod(123);", loggedInfo);
                 assertContains(".unusedStubbingThatQualifiesForWarning(", loggedInfo);
             }
@@ -63,7 +63,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
 
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("[Mockito] Warning - this method was not stubbed", loggedInfo);
+                assertContains("method was not stubbed", loggedInfo);
                 assertContains("mock.simpleMethod(456);", loggedInfo);
                 assertContains(".callUnstubbedMethodThatQualifiesForWarning(", loggedInfo);
             }
@@ -82,13 +82,8 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
                 
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("[Mockito] Warning - stubbed method called with different arguments", loggedInfo);
-                assertContains("Stubbed this way:", loggedInfo);
-                assertContains("mock.simpleMethod(789);", loggedInfo);
+                assertContains("with different arguments", loggedInfo);
                 assertContains(".someStubbing(", loggedInfo);
-                
-                assertContains("But called with different arguments:", loggedInfo);
-                assertContains("mock.simpleMethod(10);", loggedInfo);
                 assertContains(".callStubbedMethodWithDifferentArgs(", loggedInfo);
             }
         });
