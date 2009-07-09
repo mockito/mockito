@@ -1,10 +1,9 @@
 package org.mockito.internal.util.reflection;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import org.mockitoutil.TestBase;
 
-public class WhiteboxTest {
+public class WhiteboxTest extends TestBase {
 
     @Test
     public void shouldSetInternalStateOnHierarchy() {
