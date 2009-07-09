@@ -7,6 +7,7 @@ package org.mockito.exceptions.verification.junit;
 import junit.framework.ComparisonFailure;
 
 import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.util.RemoveFirstLine;
 
 
 public class ArgumentsAreDifferent extends ComparisonFailure {
@@ -31,5 +32,10 @@ public class ArgumentsAreDifferent extends ComparisonFailure {
     
     public StackTraceElement[] getUnfilteredStackTrace() {
         return unfilteredStackTrace;
+    }
+    
+    @Override
+    public String toString() {
+        return new RemoveFirstLine().of(super.toString());
     }
 }
