@@ -14,7 +14,7 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.util.copy.LenientCopyTool;
+import org.mockito.internal.util.reflection.LenientCopyTool;
 
 public class MockUtil {
     
