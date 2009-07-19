@@ -162,7 +162,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Test
     public void shouldShowExampleOfCorrectArgumentCapturing() {
-        ArgumentCaptor<String> argument = new ArgumentCaptor<String>();
+        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         argument.capture();
         argument.getValue();
     }

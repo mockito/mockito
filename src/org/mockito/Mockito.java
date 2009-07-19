@@ -480,7 +480,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
  * <pre>
- *   ArgumentCaptor&lt;Person&gt; argument = new ArgumentCaptor&lt;Person&gt;();
+ *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
  *   verify(mock).doSomething(argument.capture());
  *   assertEquals("John", argument.getValue().getName());
  * </pre>
