@@ -1,11 +1,10 @@
 package org.mockito.internal.progress;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 
-public class HandyReturnValuesTest {
+public class HandyReturnValuesTest extends TestBase {
 
     private HandyReturnValues h = new HandyReturnValues();
 
