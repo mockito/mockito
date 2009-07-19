@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import org.fest.assertions.Assertions;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -133,6 +134,20 @@ public class CapturingArgumentsTest extends TestBase {
         
         //then
         assertEquals(10, argument.getValue().getAge());
+    }
+    
+    @Test
+    public void shouldCaptureWhenStubbingOnlyWhenEntireInvocationMatches() {
+        //given
+        ArgumentCaptor<String> argument = new ArgumentCaptor<String>();
+        when(mock.simpleMethod(argument.capture(), eq(2))).thenReturn("blah");
+        
+        //when
+        mock.simpleMethod("foo", 200);
+        mock.simpleMethod("bar", 2);
+        
+        //then
+        Assertions.assertThat(argument.getAllValues()).containsOnly("bar");
     }
     
     @Test
