@@ -40,6 +40,8 @@ import org.mockito.internal.progress.HandyReturnValues;
  */
 public class ArgumentCaptor<T> {
     
+    HandyReturnValues handyReturnValues = new HandyReturnValues();
+
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<T> clazz;
 
@@ -79,7 +81,7 @@ public class ArgumentCaptor<T> {
      */
     public T capture() {
         Mockito.argThat(capturingMatcher);
-        return new HandyReturnValues().returnFor(clazz);
+        return handyReturnValues.returnFor(clazz);
     }
 
     /**

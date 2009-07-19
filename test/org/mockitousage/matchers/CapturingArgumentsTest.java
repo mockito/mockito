@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.fest.assertions.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -59,6 +58,7 @@ public class CapturingArgumentsTest extends TestBase {
     EmailService emailService = mock(EmailService.class);
     Emailer emailer = new Emailer(emailService);
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldAllowAssertionsOnCapturedArgument() {
         //when
@@ -77,7 +77,7 @@ public class CapturingArgumentsTest extends TestBase {
         emailer.email(11, 12);
         
         //then
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
         List<Person> allValues = argument.getAllValues();
         
@@ -91,7 +91,7 @@ public class CapturingArgumentsTest extends TestBase {
         emailer.email(11, 12, 13);
         
         //then
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
         
         assertEquals(13, argument.getValue().getAge());
@@ -100,7 +100,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void shouldPrintCaptorMatcher() {
         //given
-        ArgumentCaptor<Person> person = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> person = ArgumentCaptor.forClass(Person.class);
         
         try {
             //when
@@ -118,7 +118,7 @@ public class CapturingArgumentsTest extends TestBase {
         emailService.sendEmailTo(null);
         
         //then
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(null, argument.getValue());
     }
@@ -126,7 +126,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void shouldAllowCapturingForStubbing() {
         //given
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         when(emailService.sendEmailTo(argument.capture())).thenReturn(false);
         
         //when
@@ -139,7 +139,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void shouldCaptureWhenStubbingOnlyWhenEntireInvocationMatches() {
         //given
-        ArgumentCaptor<String> argument = new ArgumentCaptor<String>();
+        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         when(mock.simpleMethod(argument.capture(), eq(2))).thenReturn("blah");
         
         //when
@@ -152,7 +152,7 @@ public class CapturingArgumentsTest extends TestBase {
     
     @Test
     public void shouldSaySomethingSmartWhenMisused() {
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         try {
             argument.getValue();
             fail();
@@ -166,7 +166,7 @@ public class CapturingArgumentsTest extends TestBase {
         mock.simpleMethod("bar", 2);
         
         //when
-        ArgumentCaptor<String> captor = new ArgumentCaptor<String>();
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mock).simpleMethod(captor.capture(), eq(1));
         
         //then
@@ -175,11 +175,25 @@ public class CapturingArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldCaptureInt() {
+    public void shouldCaptureIntByCreatingCaptorWithPrimitiveWrapper() {
         //given
         IMethods mock = mock(IMethods.class);
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 
+        //when
+        mock.intArgumentMethod(10);
+        
+        //then
+        verify(mock).intArgumentMethod(argument.capture());
+        assertEquals(10, (int) argument.getValue());
+    }
+
+    @Test
+    public void shouldCaptureIntByCreatingCaptorWithPrimitive() throws Exception {
+        //given
+        IMethods mock = mock(IMethods.class);
+        ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
+        
         //when
         mock.intArgumentMethod(10);
         
