@@ -28,11 +28,11 @@ public class TestBase extends Assert {
     public void cleanUpConfigInAnyCase() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
+        new StateMaster().validate();
     }
 
     @Before
     public void init() {
-        new StateMaster().validate();
         MockitoAnnotations.initMocks(this);
     }
     

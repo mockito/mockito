@@ -1,5 +1,6 @@
 package org.mockito;
 
+import org.junit.After;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 import static org.mockito.ArgumentCaptor.*;
@@ -17,5 +18,10 @@ public class TestArgumentCaptorTest extends TestBase {
         assertNotNull(forClass(Long.class).capture());
         assertNotNull(forClass(Float.class).capture());
         assertNotNull(forClass(Double.class).capture());
+    }
+    
+    @After
+    public void yesIKnowSomeMatchersAreMisplaced() {
+        resetState();
     }
 }
