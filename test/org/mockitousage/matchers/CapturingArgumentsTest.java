@@ -174,13 +174,11 @@ public class CapturingArgumentsTest extends TestBase {
         assertEquals("foo", captor.getValue());
     }
     
-    //TODO: not yet implemented
-    @Ignore
     @Test
     public void shouldCaptureInt() {
         //given
         IMethods mock = mock(IMethods.class);
-        ArgumentCaptor<Integer> argument = new ArgumentCaptor<Integer>();
+        ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 
         //when
         mock.intArgumentMethod(10);

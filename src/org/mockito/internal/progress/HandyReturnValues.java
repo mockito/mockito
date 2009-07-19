@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.mockito.internal.util.Primitives;
+
 @SuppressWarnings("unchecked")
 public class HandyReturnValues {
 
@@ -32,6 +34,13 @@ public class HandyReturnValues {
 
     public String returnString() {
         return "";
+    }
+
+    public <T> T returnFor(Class<T> clazz) {
+        if (Primitives.isPrimitiveWrapper(clazz)) {
+            return Primitives.primitiveWrapperOf(clazz);
+        }
+        return null;
     }
 
     public Map returnMap() {

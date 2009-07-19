@@ -7,14 +7,15 @@ package org.mockito.internal.util;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class Primitives {
     
     public static boolean isPrimitiveWrapper(Class<?> type) {
         return wrapperReturnValues.containsKey(type);
     }
     
-    public static Object primitiveWrapperOf(Class<?> type) {
-        return wrapperReturnValues.get(type);
+    public static <T> T primitiveWrapperOf(Class<T> type) {
+        return (T) wrapperReturnValues.get(type);
     }
     
     public static Class<?> primitiveTypeOf(Class<?> clazz) {

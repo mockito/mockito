@@ -7,6 +7,7 @@ package org.mockito;
 import java.util.List;
 
 import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.progress.HandyReturnValues;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -16,7 +17,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
  * <pre>
- *   ArgumentCaptor&lt;Person&gt; argument = new ArgumentCaptor&lt;Person&gt;();
+ *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
  *   verify(mock).doSomething(argument.capture());
  *   assertEquals("John", argument.getValue().getName());
  * </pre>
@@ -39,7 +40,32 @@ import org.mockito.internal.matchers.CapturingMatcher;
  */
 public class ArgumentCaptor<T> {
     
-    private CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
+    private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
+    private final Class<T> clazz;
+
+    /**
+     * @deprecated
+     * 
+     * <b>Please use factory method {@link ArgumentCaptor#forClass(Class)} to create captors</b>
+     * <p>
+     * This is required to avoid NullPointerExceptions when autoUnboxing primitive types.
+     * See issue 99.
+     * <p>
+     * Example:
+     * <pre>
+     *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
+     *   verify(mock).doSomething(argument.capture());
+     *   assertEquals("John", argument.getValue().getName());
+     * </pre>
+     */
+    @Deprecated
+    public ArgumentCaptor() {
+        this.clazz = null;
+    }
+
+    ArgumentCaptor(Class<T> clazz) {
+        this.clazz = clazz;
+    }
 
     /**
      * Use it to capture the argument. This method <b>must be used inside of verification</b>.
@@ -53,7 +79,7 @@ public class ArgumentCaptor<T> {
      */
     public T capture() {
         Mockito.argThat(capturingMatcher);
-        return null;
+        return new HandyReturnValues().returnFor(clazz);
     }
 
     /**
@@ -74,7 +100,7 @@ public class ArgumentCaptor<T> {
      * <p>
      * Example: 
      * <pre>
-     *   ArgumentCaptor&lt;Person&gt; peopleCaptor = new ArgumentCaptor&lt;Person&gt;();
+     *   ArgumentCaptor&lt;Person&gt; peopleCaptor = ArgumentCaptor.forClass(Person.class);
      *   verify(mock, times(2)).doSomething(peopleCaptor.capture());
      *   
      *   List&lt;Person&gt; capturedPeople = peopleCaptor.getAllValues();
@@ -87,5 +113,9 @@ public class ArgumentCaptor<T> {
      */
     public List<T> getAllValues() {
         return this.capturingMatcher.getAllValues();
+    }
+
+    public static <T> ArgumentCaptor<T> forClass(Class<T> clazz) {
+        return new ArgumentCaptor<T>(clazz);
     }
 }
