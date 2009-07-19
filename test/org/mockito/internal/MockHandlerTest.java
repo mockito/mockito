@@ -7,11 +7,10 @@ package org.mockito.internal;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
-import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
@@ -20,22 +19,24 @@ public class MockHandlerTest extends TestBase {
     
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
-        MockingProgress state = new MockingProgressImpl();
-        state.verificationStarted(VerificationModeFactory.atLeastOnce());
-        MockHandler handler = new MockHandler(null, state, new ExceptionThrowingBinder(), null);
+        //given
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        MockHandler handler = new MockHandler();
+        handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
+        handler.matchersBinder = new MatchersBinder() {
+            public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+                throw new InvalidUseOfMatchersException();
+            }
+        };
         
         try {
-            handler.intercept(null, String.class.getDeclaredMethod("toString"), new Object[]{}, null);
+            //when
+            handler.handle(invocation);
+            
+            //then
             fail();
         } catch (InvalidUseOfMatchersException e) {}
         
-        assertNull(state.pullVerificationMode());
-    }
-    
-    private class ExceptionThrowingBinder extends MatchersBinder {
-        @Override
-        public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
-            throw new InvalidUseOfMatchersException("");
-        }
+        assertNull(handler.mockingProgress.pullVerificationMode());
     }
 }

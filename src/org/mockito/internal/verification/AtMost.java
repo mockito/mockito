@@ -10,6 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationMode;
@@ -17,6 +18,7 @@ import org.mockito.internal.verification.api.VerificationMode;
 public class AtMost implements VerificationMode {
 
     private final int maxNumberOfInvocations;
+    private final InvocationMarker invocationMarker = new InvocationMarker();
 
     public AtMost(int maxNumberOfInvocations) {
         if (maxNumberOfInvocations < 0) {
@@ -36,8 +38,6 @@ public class AtMost implements VerificationMode {
             new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
         
-        for (Invocation i : found) {
-            i.markVerified();
-        }
+        invocationMarker.markVerified(found, wanted);
     }
 }

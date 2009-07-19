@@ -89,21 +89,12 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return arguments;
     }
 
-    public void markVerified() {
-        verified = true;
-    }
-
     public boolean isVerified() {
         return verified;
     }
 
     public Integer getSequenceNumber() {
         return sequenceNumber;
-    }
-
-    public void markVerifiedInOrder() {
-        this.markVerified();
-        this.verifiedInOrder = true;
     }
 
     public boolean isVerifiedInOrder() {
@@ -222,5 +213,14 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
 
     public String toString(PrintSettings printSettings) {
         return toString(argumentsToMatchers(), printSettings);
+    }
+
+    void markVerified() {
+        this.verified = true;
+    }
+
+    void markVerifiedInOrder() {
+        markVerified();
+        this.verifiedInOrder = true;
     }
 }

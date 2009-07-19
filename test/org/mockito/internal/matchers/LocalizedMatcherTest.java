@@ -49,4 +49,17 @@ public class LocalizedMatcherTest extends TestBase {
         //then
         assertSame(m, m.withExtraTypeInfo());
     }
+    
+    @Test
+    public void shouldDelegateToCapturingMatcher() throws Exception {
+        //given
+        CapturingMatcher capturingMatcher = new CapturingMatcher();
+        LocalizedMatcher m = new LocalizedMatcher(capturingMatcher);
+        
+        //when
+        m.captureFrom("boo");
+        
+        //then
+        assertEquals("boo", capturingMatcher.getLastValue());
+    }
 }

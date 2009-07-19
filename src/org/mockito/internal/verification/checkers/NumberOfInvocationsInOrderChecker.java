@@ -11,12 +11,14 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
 
 public class NumberOfInvocationsInOrderChecker {
     
     private final Reporter reporter;
     private final InvocationsFinder finder;
+    private final InvocationMarker invocationMarker = new InvocationMarker();
     
     public NumberOfInvocationsInOrderChecker() {
         this(new InvocationsFinder(), new Reporter());
@@ -40,8 +42,6 @@ public class NumberOfInvocationsInOrderChecker {
             reporter.tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
         
-        for (Invocation i : chunk) {
-            i.markVerifiedInOrder();
-        }
+        invocationMarker.markVerifiedInOrder(chunk, wanted);
     }
 }

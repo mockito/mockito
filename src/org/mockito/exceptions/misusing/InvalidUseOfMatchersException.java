@@ -13,4 +13,8 @@ public class InvalidUseOfMatchersException extends MockitoException {
     public InvalidUseOfMatchersException(String message) {
         super(message);
     }
+
+    public InvalidUseOfMatchersException() {
+        super("");
+    }
 }

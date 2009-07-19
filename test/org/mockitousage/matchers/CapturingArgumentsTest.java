@@ -4,6 +4,7 @@
  */
 package org.mockitousage.matchers;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -18,6 +20,8 @@ import org.mockitoutil.TestBase;
 
 public class CapturingArgumentsTest extends TestBase {
 
+    @Mock IMethods mock;
+    
     class Person {
 
         private final Integer age;
@@ -138,6 +142,21 @@ public class CapturingArgumentsTest extends TestBase {
             argument.getValue();
             fail();
         } catch (MockitoException e) {}
+    }
+    
+    @Test
+    public void shouldCaptureWhenFullArgListMatches() throws Exception {
+        //given
+        mock.simpleMethod("foo", 1);
+        mock.simpleMethod("bar", 2);
+        
+        //when
+        ArgumentCaptor<String> captor = new ArgumentCaptor<String>();
+        verify(mock).simpleMethod(captor.capture(), eq(1));
+        
+        //then
+        assertEquals(1, captor.getAllValues().size());
+        assertEquals("foo", captor.getValue());
     }
     
     //TODO: not yet implemented

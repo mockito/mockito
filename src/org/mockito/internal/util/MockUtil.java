@@ -16,6 +16,7 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 
+@SuppressWarnings("unchecked")
 public class MockUtil {
     
     private final CreationValidator creationValidator;
@@ -34,7 +35,7 @@ public class MockUtil {
         
         MockName mockName = new MockName(settings.getMockName(), classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
-        MethodInterceptorFilter<MockHandler<T>> filter = new MethodInterceptorFilter<MockHandler<T>>(classToMock, mockHandler);
+        MethodInterceptorFilter filter = new MethodInterceptorFilter(classToMock, mockHandler);
         Class<?>[] interfaces = settings.getExtraInterfaces();
         Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
         Object spiedInstance = settings.getSpiedInstance();
@@ -51,7 +52,7 @@ public class MockUtil {
     public <T> void resetMock(T mock, MockingProgress progress) {
         MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
         MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
-        MethodInterceptorFilter<MockHandler<T>> newFilter = new MethodInterceptorFilter<MockHandler<T>>(Object.class, newMockHandler);
+        MethodInterceptorFilter newFilter = new MethodInterceptorFilter(Object.class, newMockHandler);
         ((Factory) mock).setCallback(0, newFilter);
     }
 
@@ -61,7 +62,7 @@ public class MockUtil {
         }
 
         if (isMockitoMock(mock)) {
-            return getInterceptor(mock).getDelegate();
+            return getInterceptor(mock).getMockHandler();
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
@@ -75,12 +76,11 @@ public class MockUtil {
         return mock != null && isMockitoMock(mock);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> MethodInterceptorFilter<MockHandler<T>> getInterceptor(T mock) {
+    private <T> MethodInterceptorFilter getInterceptor(T mock) {
         Factory factory = (Factory) mock;
         Callback callback = factory.getCallback(0);
         if (callback instanceof MethodInterceptorFilter) {
-            return (MethodInterceptorFilter<MockHandler<T>>) callback;
+            return (MethodInterceptorFilter) callback;
         }
         return null;
     }

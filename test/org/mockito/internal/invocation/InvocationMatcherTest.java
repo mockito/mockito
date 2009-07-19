@@ -8,13 +8,16 @@ import static java.util.Arrays.*;
 import static org.mockitoutil.ExtraMatchers.*;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
@@ -112,5 +115,20 @@ public class InvocationMatcherTest extends TestBase {
         Invocation overloadedInvocation = new InvocationBuilder().mock(mock).method(overloadedMethod).arg("bar").toInvocation();
         
         assertTrue(invocation.hasSimilarMethod(overloadedInvocation));
+    }
+    
+    @Test
+    public void shouldCaptureArgumentsFromInvocation() throws Exception {
+        //given
+        Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
+        CapturingMatcher capturingMatcher = new CapturingMatcher();
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) Arrays.asList(new Equals("1"), capturingMatcher));        
+        
+        //when
+        invocationMatcher.captureArgumentsFrom(invocation);
+        
+        //then
+        assertEquals(1, capturingMatcher.getAllValues().size());
+        assertEquals(100, capturingMatcher.getLastValue());
     }
 }
