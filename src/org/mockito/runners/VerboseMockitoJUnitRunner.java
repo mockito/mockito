@@ -29,6 +29,8 @@ import org.mockito.internal.util.reflection.Whitebox;
  * You've been warned. 
  * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
+ * <p>
+ * Experimental implementation - will change in future!
  */
 public class VerboseMockitoJUnitRunner extends Runner {
 

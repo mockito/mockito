@@ -54,6 +54,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
  *      <a href="#16">16. (**New**) Real partial mocks</a><br/>
  *      <a href="#17">17. (**New**) Resetting mocks</a><br/>
  *      <a href="#18">18. (**New**) Troubleshooting & validating framework usage</a><br/>
+ *      <a href="#19">19. (**New**) Aliases for behavior driven development</a><br/>
  * </b>
  * 
  * <p>
@@ -563,6 +564,39 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * <p>
  * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. 
  * However, there's a gotcha so please read the javadoc for {@link Mockito#validateMockitoUsage()}
+ * 
+ * <h3 id="19">19. (**New**) Aliases for behavior driven development</h3>
+ * 
+ * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
+ * This is exactly how we write our tests and we warmly encourage you to do so!
+ * <p>
+ * Start learning about BDD here: <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">http://en.wikipedia.org/wiki/Behavior_Driven_Development</a>
+ * <p>
+ * The problem is that current stubbing api with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
+ * It's because stubbing belongs to <b>given</b> component of the test and not to the <b>when</b> component of the test. 
+ * Hence {@link BDDMockito} class introduces an alias so that you stub method calls with {@link BDDMockito#given(Object)} method. 
+ * Now it really nicely integrates with the <b>given</b> component of a BDD style test!  
+ * <p>
+ * Here is how the test might look like: 
+ * <pre>
+ * import static org.mockito.BDDMockito.*;
+ * 
+ * Seller seller = mock(Seller.class);
+ * Shop shop = new Shop(seller);
+ * 
+ * public void shouldBuyBread() throws Exception {
+ *   //given  
+ *   given(seller.askForBread()).willReturn(new Bread());
+ *   
+ *   //when
+ *   Goods goods = shop.buyBread();
+ *   
+ *   //then
+ *   assertThat(goods, containBread());
+ * }  
+ * </pre>
+ * 
+ * 
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
