@@ -45,8 +45,6 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
                 notifier.fireTestFailure(null);
                 //assert
                 String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("stub was not used", loggedInfo);
-                assertContains("mock.simpleMethod(123);", loggedInfo);
                 assertContains(".unusedStubbingThatQualifiesForWarning(", loggedInfo);
             }
         });

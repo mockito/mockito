@@ -18,12 +18,18 @@ public class WarningsPrinterImpl {
 
     private final List<Invocation> unusedStubs;
     private final List<InvocationMatcher> unstubbedInvocations;
+    private final boolean warnAboutUnstubbed;
 
     public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
+        this(unusedStubs, unstubbedInvocations, true);
+    }
+
+    public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations, boolean warnAboutUnstubbed) {
+        this.warnAboutUnstubbed = warnAboutUnstubbed;
         this.unusedStubs = new LinkedList<Invocation>(unusedStubs);
         this.unstubbedInvocations = new LinkedList<InvocationMatcher>(unstubbedInvocations);
     }
-
+    
     public void print(MockitoLogger logger) {
         Iterator<Invocation> unusedIterator = unusedStubs.iterator();
         while(unusedIterator.hasNext()) {
@@ -43,17 +49,15 @@ public class WarningsPrinterImpl {
             logger.log(thisStubWasNotUsed(i));
         }
 
-        for (InvocationMatcher i1 : unstubbedInvocations) {
-            logger.log(thisMethodWasNotStubbed(i1));
+        if (warnAboutUnstubbed) {
+            for (InvocationMatcher i1 : unstubbedInvocations) {
+                logger.log(thisMethodWasNotStubbed(i1));
+            }
         }
     }
 
     private String thisStubWasNotUsed(Invocation i) {
-        return join(
-            "[Mockito hint] This stub was not used:",
-            i,
-            i.getLocation(),
-            "");
+        return "This stubbing was never used " + i.getLocation() + "\n";
     }
 
     private String thisMethodWasNotStubbed(InvocationMatcher i) {

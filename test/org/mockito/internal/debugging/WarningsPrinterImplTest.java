@@ -33,8 +33,7 @@ public class WarningsPrinterImplTest extends TestBase {
         p.print(logger);
 
         // then
-        assertContains("stub was not used", logger.getLoggedInfo());
-        assertContains("simpleMethod()", logger.getLoggedInfo());
+        assertContains("never used", logger.getLoggedInfo());
     }
 
     @Test

@@ -27,6 +27,8 @@ public class ModellingVerboseMockitoTest extends TestBase {
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
         when(mock.simpleMethod(1)).thenReturn("foo");
+        when(mock.otherMethod()).thenReturn("foo");
+        when(mock.booleanObjectReturningMethod()).thenReturn(false);
         
         String ret = mock.simpleMethod(2);
         

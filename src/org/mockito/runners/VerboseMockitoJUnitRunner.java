@@ -69,7 +69,7 @@ public class VerboseMockitoJUnitRunner extends Runner {
                 Throwable throwable = (Throwable) Whitebox.getInternalState(failure, "fThrownException");
                 
                 String newMessage = throwable.getMessage();
-                newMessage += "\n" + debuggingInfo.getWarnings() + "\n*** The actual failure is because of: ***\n";
+                newMessage += "\n" + debuggingInfo.getWarnings(false) + "\n*** The actual failure is because of: ***\n";
                 
                 Whitebox.setInternalState(throwable, "detailMessage", newMessage);
             }
