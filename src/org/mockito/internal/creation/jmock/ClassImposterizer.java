@@ -109,8 +109,10 @@ public class ClassImposterizer  {
             }
             throw new MockitoException("\n"
                     + "Mockito cannot mock this class: " + mockedType 
-                    + ".\n" 
-                    + "Mockito can only mock visible & non-final classes");
+                    + "\n" 
+                    + "Mockito can only mock visible & non-final classes."
+                    + "\n" 
+                    + "If you're not sure why you're getting this error, please report to the mailing list.", e);
         }
     }
     
