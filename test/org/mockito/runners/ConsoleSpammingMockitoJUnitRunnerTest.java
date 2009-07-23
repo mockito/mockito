@@ -7,6 +7,7 @@ package org.mockito.runners;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -52,6 +53,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         runner.run(notifier);
     }
 
+    @Ignore
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
         runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {

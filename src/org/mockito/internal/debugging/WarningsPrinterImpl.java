@@ -21,7 +21,7 @@ public class WarningsPrinterImpl {
     private final boolean warnAboutUnstubbed;
 
     public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
-        this(unusedStubs, unstubbedInvocations, true);
+        this(unusedStubs, unstubbedInvocations, false);
     }
 
     public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations, boolean warnAboutUnstubbed) {

@@ -40,7 +40,7 @@ public class WarningsPrinterImplTest extends TestBase {
     public void shouldPrintUnstubbedInvocation() {
         // given
         InvocationMatcher unstubbedInvocation = new InvocationBuilder().differentMethod().toInvocationMatcher();
-        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(), Arrays.<InvocationMatcher> asList(unstubbedInvocation));
+        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(), Arrays.<InvocationMatcher> asList(unstubbedInvocation), true);
 
         // when
         p.print(logger);

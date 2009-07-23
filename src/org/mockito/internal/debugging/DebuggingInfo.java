@@ -64,7 +64,7 @@ public class DebuggingInfo {
 
     public void printWarnings(MockitoLogger logger) {
         if (hasData()) {
-            new WarningsPrinterImpl(unusedStubs, unstubbedInvocations).print(logger);
+            new WarningsPrinterImpl(unusedStubs, unstubbedInvocations, false).print(logger);
         }
     }
 
