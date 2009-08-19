@@ -383,6 +383,6 @@
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
 
-  <!-- testing bazaar -->
+    <!-- yet another test of bzr -->
   
 </project>
