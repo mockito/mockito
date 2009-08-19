@@ -382,5 +382,7 @@
   
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
+
+  <!-- testing bazaar -->
   
 </project>
