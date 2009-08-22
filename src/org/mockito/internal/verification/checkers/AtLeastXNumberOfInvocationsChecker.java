@@ -15,9 +15,9 @@ import org.mockito.internal.invocation.InvocationsFinder;
 
 public class AtLeastXNumberOfInvocationsChecker {
     
-    private final Reporter reporter = new Reporter();
-    private final InvocationsFinder finder = new InvocationsFinder();
-    private final InvocationMarker invocationMarker = new InvocationMarker();
+    Reporter reporter = new Reporter();
+    InvocationsFinder finder = new InvocationsFinder();
+    InvocationMarker invocationMarker = new InvocationMarker();
 
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
         List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
@@ -28,6 +28,6 @@ public class AtLeastXNumberOfInvocationsChecker {
             reporter.tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);        
         }
         
-        invocationMarker.markVerified(invocations, wanted);
+        invocationMarker.markVerified(actualInvocations, wanted);
     }
 }
