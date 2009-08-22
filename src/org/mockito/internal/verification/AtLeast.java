@@ -22,8 +22,8 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
     final int wantedCount;
     
     public AtLeast(int wantedNumberOfInvocations) {
-        if (wantedNumberOfInvocations <= 0) {
-            throw new MockitoException("Negative value or zero are not allowed here");
+        if (wantedNumberOfInvocations < 0) {
+            throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedCount = wantedNumberOfInvocations;
     }

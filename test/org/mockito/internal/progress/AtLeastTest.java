@@ -17,7 +17,12 @@ public class AtLeastTest extends TestBase {
             VerificationModeFactory.atLeast(-50);
             fail();
         } catch (MockitoException e) {
-            assertEquals("Negative value or zero are not allowed here", e.getMessage());
+            assertEquals("Negative value is not allowed here", e.getMessage());
         }
+    }
+
+    @Test
+    public void shouldAllowZeroInvocations() throws Exception {
+        VerificationModeFactory.atLeast(0);
     }
 }
