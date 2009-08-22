@@ -34,7 +34,7 @@ public class AtLeastXVerificationTest extends TestBase {
         verify(mock, atLeast(1)).add(anyString());
 
         try {
-            verify(mock, atLeast(1)).add(anyString());
+            verify(mock, atLeast(2)).add(anyString());
             fail();
         } catch (MockitoAssertionError e) {}
     }
