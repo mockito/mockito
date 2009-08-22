@@ -358,8 +358,8 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
  * Yet another controversial feature which was not included in Mockito
- * originally. We recommend using simple stubbing with toReturn() or
- * toThrow() only. Those two should be <b>just enough</b> to test/test-drive
+ * originally. We recommend using simple stubbing with thenReturn() or
+ * thenThrow() only. Those two should be <b>just enough</b> to test/test-drive
  * any clean & simple code.
  * 
  * <pre>
@@ -1373,8 +1373,8 @@ public class Mockito extends Matchers {
      * 
      * <p>
      * If you want to verify there were NO interactions with the mock 
-     * check out {@link Mockito#verifyZeroInteractions(Object...)}
-     * or {@link Mockito#verifyNoMoreInteractions(Object...)}
+     * check out {@link Mockito#verifyZeroInteractions(Object[])}
+     * or {@link Mockito#verifyNoMoreInteractions(Object[])}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
