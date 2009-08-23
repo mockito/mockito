@@ -34,11 +34,33 @@ public class MethodInterceptorFilterTest extends TestBase {
 
     @Test
     public void shouldProvideOwnImplementationOfhashCode() throws Throwable {
-        //given
+        //when
         Object ret = filter.intercept(new MethodsImpl(), MethodsImpl.class.getMethod("hashCode"), new Object[0], null);
 
         //then
         assertTrue((Integer) ret != 0);
+        Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
+    }
+
+    @Test
+    public void shouldKnowWhenMockIsEqualAndNotDelegateToHandler() throws Throwable {
+        //when
+        MethodsImpl proxy = new MethodsImpl();
+        Object ret = filter.intercept(proxy, MethodsImpl.class.getMethod("equals", Object.class), new Object[] {proxy}, null);
+
+        //then
+        assertTrue((Boolean) ret);
+        Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
+    }
+
+    @Test
+    public void shouldKnowWhenMockIsNotEqualAndNotDelegateToHandler() throws Throwable {
+        //when
+        MethodsImpl proxy = new MethodsImpl();
+        Object ret = filter.intercept(proxy, MethodsImpl.class.getMethod("equals", Object.class), new Object[] {"some other object"}, null);
+
+        //then
+        assertFalse((Boolean) ret);
         Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
     }
 }
