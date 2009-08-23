@@ -49,8 +49,8 @@ public class MockUtil {
         return mock;
     }
 
-    public <T> void resetMock(T mock, MockingProgress progress) {
-        MockHandler<T> oldMockHandler = (MockHandler<T>) getMockHandler(mock);
+    public <T> void resetMock(T mock) {
+        MockHandler<T> oldMockHandler = getMockHandler(mock);
         MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
         MethodInterceptorFilter newFilter = new MethodInterceptorFilter(Object.class, newMockHandler);
         ((Factory) mock).setCallback(0, newFilter);
@@ -62,7 +62,7 @@ public class MockUtil {
         }
 
         if (isMockitoMock(mock)) {
-            return getInterceptor(mock).getMockHandler();
+            return (MockHandler) getInterceptor(mock).getMockHandler();
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }

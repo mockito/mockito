@@ -4,8 +4,6 @@
  */
 package org.mockito.internal;
 
-import java.util.List;
-
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -24,12 +22,14 @@ import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
+import java.util.List;
+
 /**
  * Invocation handler set on mock objects.
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> {
+public class MockHandler<T> implements IMockHandler {
 
     MockitoStubber mockitoStubber;
     MatchersBinder matchersBinder;

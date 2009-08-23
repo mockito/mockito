@@ -4,27 +4,23 @@
  */
 package org.mockito.internal;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.IOngoingStubbing;
+import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.api.VerificationMode;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidMethodStubbable;
+import org.mockito.stubbing.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
@@ -76,7 +72,7 @@ public class MockitoCore {
         mockingProgress.resetOngoingStubbing();
         
         for (T m : mocks) {
-            mockUtil.resetMock(m, mockingProgress);
+            mockUtil.resetMock(m);
         }
     }
     
@@ -112,8 +108,7 @@ public class MockitoCore {
                 reporter.notAMockPassedWhenCreatingInOrder();
             }
         }
-        InOrder inOrder = new InOrderImpl(Arrays.asList(mocks));
-        return inOrder;
+        return new InOrderImpl(Arrays.asList(mocks));
     }
     
     public Stubber doAnswer(Answer answer) {
@@ -134,6 +129,7 @@ public class MockitoCore {
 
     /**
      * For testing purposes only. Is not the part of main API.
+     * @return last invocation
      */
     public Invocation getLastInvocation() {
         OngoingStubbingImpl ongoingStubbing = ((OngoingStubbingImpl) mockingProgress.pullOngoingStubbing());
