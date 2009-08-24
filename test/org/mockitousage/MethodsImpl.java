@@ -377,4 +377,8 @@ public class MethodsImpl implements IMethods {
     public void intArgumentMethod(int i) {
       
     }
+
+    public boolean equals(String str) {
+        return false;
+    }
 }

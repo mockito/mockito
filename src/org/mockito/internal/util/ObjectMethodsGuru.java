@@ -9,5 +9,7 @@ public class ObjectMethodsGuru {
                 && method.getName().equals("toString");
     }
 
-    
+    public boolean isEqualsMethod(Method method) {
+        return method.getName().equals("equals") && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == Object.class;
+    }
 }

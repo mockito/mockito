@@ -203,4 +203,6 @@ public interface IMethods {
     void longArg(long longArg);
 
     void intArgumentMethod(int i);
+
+    boolean equals(String str);
 }
