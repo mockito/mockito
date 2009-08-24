@@ -20,6 +20,7 @@ import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
+import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -58,7 +59,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     // expands array varArgs that are given by runtime (1, [a, b]) into true
     // varArgs (1, a, b);
     private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
-        if (!isVarArgs || isVarArgs && args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
+        if (!isVarArgs || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
             return args == null ? new Object[0] : args;
         }
 
@@ -151,12 +152,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public static boolean isToString(InvocationOnMock invocation) {
-        return isToString(invocation.getMethod());
-    }
-
-    public static boolean isToString(Method method) {
-        return method.getReturnType() == String.class && method.getParameterTypes().length == 0
-                && method.getName().equals("toString");
+        return ObjectMethodsGuru.isToString(invocation.getMethod());
     }
 
     public boolean isValidException(Throwable throwable) {

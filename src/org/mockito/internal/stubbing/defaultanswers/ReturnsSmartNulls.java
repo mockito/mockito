@@ -12,7 +12,7 @@ import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.debugging.Location;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -45,7 +45,7 @@ public class ReturnsSmartNulls implements Answer<Object> {
         }
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            if (Invocation.isToString(method)) {
+            if (ObjectMethodsGuru.isToString(method)) {
                 return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
             }
             
