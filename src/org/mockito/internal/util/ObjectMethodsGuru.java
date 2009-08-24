@@ -1,8 +1,9 @@
 package org.mockito.internal.util;
 
 import java.lang.reflect.Method;
+import java.io.Serializable;
 
-public class ObjectMethodsGuru {
+public class ObjectMethodsGuru implements Serializable {
 
     public static boolean isToString(Method method) {
         return method.getReturnType() == String.class && method.getParameterTypes().length == 0

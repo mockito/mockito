@@ -1,7 +1,6 @@
 package org.mockito.internal.creation;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.mockito.Matchers.any;
 import org.mockito.Mockito;
@@ -25,14 +24,13 @@ public class MethodInterceptorFilterTest extends TestBase {
         filter.cglibHacker = Mockito.mock(CGLIBHacker.class);        
     }
 
-    @Ignore
     @Test
     public void shouldBeSerializable() throws Exception {
-        new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(filter);
+        new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(new MethodInterceptorFilter(null));
     }
 
     @Test
-    public void shouldProvideOwnImplementationOfhashCode() throws Throwable {
+    public void shouldProvideOwnImplementationOfHashCode() throws Throwable {
         //when
         Object ret = filter.intercept(new MethodsImpl(), MethodsImpl.class.getMethod("hashCode"), new Object[0], null);
 
@@ -42,24 +40,13 @@ public class MethodInterceptorFilterTest extends TestBase {
     }
 
     @Test
-    public void shouldKnowWhenMockIsEqualAndNotDelegateToHandler() throws Throwable {
+    public void shouldProvideOwnImplementationOfEquals() throws Throwable {
         //when
         MethodsImpl proxy = new MethodsImpl();
         Object ret = filter.intercept(proxy, MethodsImpl.class.getMethod("equals", Object.class), new Object[] {proxy}, null);
 
         //then
         assertTrue((Boolean) ret);
-        Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
-    }
-
-    @Test
-    public void shouldKnowWhenMockIsNotEqualAndNotDelegateToHandler() throws Throwable {
-        //when
-        MethodsImpl proxy = new MethodsImpl();
-        Object ret = filter.intercept(proxy, MethodsImpl.class.getMethod("equals", Object.class), new Object[] {"some other object"}, null);
-
-        //then
-        assertFalse((Boolean) ret);
         Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
     }
 }

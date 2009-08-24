@@ -5,10 +5,11 @@
 package org.mockito.internal.creation.cglib;
 
 import java.lang.reflect.Field;
+import java.io.Serializable;
 
 import org.mockito.cglib.proxy.MethodProxy;
 
-public class CGLIBHacker {
+public class CGLIBHacker implements Serializable {
 
     public void setMockitoNamingPolicy(MethodProxy methodProxy) {
         try {
