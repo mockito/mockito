@@ -205,4 +205,8 @@ public interface IMethods {
     void intArgumentMethod(int i);
 
     boolean equals(String str);
+
+    boolean equals();
+
+    int hashCode(String str);
 }

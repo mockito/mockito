@@ -9,7 +9,6 @@ import static org.mockito.Mockito.never;
 import org.mockito.internal.IMockHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.Invocation;
-import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
 
@@ -19,7 +18,7 @@ import java.io.ObjectOutputStream;
 public class MethodInterceptorFilterTest extends TestBase {
 
     IMockHandler mockHanlder = Mockito.mock(IMockHandler.class);
-    MethodInterceptorFilter filter = new MethodInterceptorFilter(IMethods.class, mockHanlder);
+    MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHanlder);
 
     @Before
     public void setUp() {

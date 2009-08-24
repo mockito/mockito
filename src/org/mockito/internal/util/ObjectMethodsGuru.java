@@ -12,4 +12,8 @@ public class ObjectMethodsGuru {
     public boolean isEqualsMethod(Method method) {
         return method.getName().equals("equals") && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == Object.class;
     }
+
+    public boolean isHashCodeMethod(Method method) {
+        return method.getName().equals("hashCode") && method.getParameterTypes().length == 0;
+    }
 }

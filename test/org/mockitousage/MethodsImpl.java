@@ -381,4 +381,12 @@ public class MethodsImpl implements IMethods {
     public boolean equals(String str) {
         return false;
     }
+
+    public boolean equals() {
+        return false;
+    }
+
+    public int hashCode(String str) {
+        return 0;
+    }
 }

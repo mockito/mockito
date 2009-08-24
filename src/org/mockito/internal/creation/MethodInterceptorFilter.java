@@ -19,22 +19,11 @@ import java.lang.reflect.Method;
 @SuppressWarnings("unchecked")
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
-    private final Method hashCodeMethod;
-
     private final IMockHandler mockHandler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
 
-    public MethodInterceptorFilter(Class toMock, IMockHandler mockHandler) {
-        try {
-            if (toMock.isInterface()) {
-                toMock = Object.class;
-            }
-            hashCodeMethod = toMock.getMethod("hashCode", (Class[]) null);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("\nSomething went really wrong. Object method could not be found!" +
-                "\n please report it to the mocking mailing list at http://mockito.org");
-        }
+    public MethodInterceptorFilter(IMockHandler mockHandler) {
         this.mockHandler = mockHandler;
     }
 
@@ -42,7 +31,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
             throws Throwable {
         if (objectMethodsGuru.isEqualsMethod(method)) {
             return proxy == args[0];
-        } else if (hashCodeMethod.equals(method)) {
+        } else if (objectMethodsGuru.isHashCodeMethod(method)) {
             return hashCodeForMock(proxy);
         }
 
