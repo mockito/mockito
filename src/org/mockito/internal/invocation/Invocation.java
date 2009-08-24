@@ -4,11 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
@@ -19,9 +14,14 @@ import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.Primitives;
 import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Method call on a mock object.
@@ -152,7 +152,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public static boolean isToString(InvocationOnMock invocation) {
-        return ObjectMethodsGuru.isToString(invocation.getMethod());
+        return new ObjectMethodsGuru().isToString(invocation.getMethod());
     }
 
     public boolean isValidException(Throwable throwable) {

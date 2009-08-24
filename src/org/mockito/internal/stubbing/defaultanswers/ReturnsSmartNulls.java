@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.lang.reflect.Method;
-
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
@@ -15,6 +13,8 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.lang.reflect.Method;
 
 /**
  * Optional Answer that can be used with
@@ -45,7 +45,7 @@ public class ReturnsSmartNulls implements Answer<Object> {
         }
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            if (ObjectMethodsGuru.isToString(method)) {
+            if (new ObjectMethodsGuru().isToString(method)) {
                 return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
             }
             

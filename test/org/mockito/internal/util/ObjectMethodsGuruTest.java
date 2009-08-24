@@ -1,9 +1,8 @@
 package org.mockito.internal.util;
 
-import org.mockitoutil.TestBase;
-import static org.mockito.internal.util.ObjectMethodsGuru.*;
-import org.mockitousage.IMethods;
 import org.junit.Test;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class ObjectMethodsGuruTest extends TestBase {
 
@@ -11,9 +10,9 @@ public class ObjectMethodsGuruTest extends TestBase {
     
     @Test
     public void shouldKnowToStringMethod() throws Exception {
-        assertFalse(isToString(Object.class.getMethod("equals", Object.class)));
-        assertFalse(isToString(IMethods.class.getMethod("toString", String.class)));
-        assertTrue(isToString(IMethods.class.getMethod("toString")));
+        assertFalse(guru.isToString(Object.class.getMethod("equals", Object.class)));
+        assertFalse(guru.isToString(IMethods.class.getMethod("toString", String.class)));
+        assertTrue(guru.isToString(IMethods.class.getMethod("toString")));
     }
 
     @Test

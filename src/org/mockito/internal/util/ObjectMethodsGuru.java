@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class ObjectMethodsGuru implements Serializable {
 
-    public static boolean isToString(Method method) {
+    public boolean isToString(Method method) {
         return method.getReturnType() == String.class && method.getParameterTypes().length == 0
                 && method.getName().equals("toString");
     }
