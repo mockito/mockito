@@ -20,6 +20,8 @@ public class OnlyVerificationTest extends TestBase {
 
     @Mock private List<Object> mock;
 
+    @Mock private List<Object> mock2;
+
 	@Test
 	public void shouldVerifyMethodWasInvokedExclusively() {
 		mock.clear();
@@ -60,4 +62,13 @@ public class OnlyVerificationTest extends TestBase {
 			fail();
 		} catch (WantedButNotInvoked e) {}
 	}
+
+	@Test
+	public void shouldVerifyMethodWasInvokedExclusivelyWhenTwoMocksInUse() {
+		mock.clear();
+		mock2.get(0);
+		verify(mock, only()).clear();
+		verify(mock2, only()).get(0);
+	}
+
 }
