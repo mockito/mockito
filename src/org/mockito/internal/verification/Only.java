@@ -16,7 +16,6 @@ public class Only implements VerificationMode {
 	private final InvocationMarker marker = new InvocationMarker();
 	private final Reporter reporter = new Reporter();
 
-	@Override
 	public void verify(VerificationData data) {
 		InvocationMatcher wantedMatcher = data.getWanted();
 		List<Invocation> invocations = data.getAllInvocations();
