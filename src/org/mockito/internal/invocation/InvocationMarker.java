@@ -10,10 +10,14 @@ public class InvocationMarker {
 
     public void markVerified(List<Invocation> invocations, CapturesArgumensFromInvocation wanted) {
         for (Invocation invocation : invocations) {
-            invocation.markVerified();
-            wanted.captureArgumentsFrom(invocation);
+            markVerified(invocation, wanted);
         }
     }
+
+	public void markVerified(Invocation invocation, CapturesArgumensFromInvocation wanted) {
+		invocation.markVerified();
+		wanted.captureArgumentsFrom(invocation);
+	}
 
     public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted) {
         markVerified(chunk, wanted);
