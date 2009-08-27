@@ -16,6 +16,10 @@ public class VerificationModeFactory {
         return new AtLeast(minNumberOfInvocations);
     }
 
+    public static VerificationMode only() {
+        return new Only();
+    }
+
     public static Times times(int wantedNumberOfInvocations) {
         return new Times(wantedNumberOfInvocations);
     }

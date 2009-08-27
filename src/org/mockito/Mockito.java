@@ -1414,7 +1414,7 @@ public class Mockito extends Matchers {
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
     }
-    
+
     /**
      * Allows at-most-x verification. E.g:
      * <pre>
@@ -1431,6 +1431,24 @@ public class Mockito extends Matchers {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
     }
 
+    /**
+     * Allows checking if given method was the only one invoked. E.g:
+     * <pre>
+     *   verify(mock, only()).someMethod();
+     * </pre>
+     * 
+     * <p>
+     * It is a shortened version for {@link Mockito#verifyNoMoreInteractions(Object[])}
+     * when only one method was invoked.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode only() {
+    	return VerificationModeFactory.only();
+    }
+    
     /**
      * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
      * <p>
