@@ -384,5 +384,6 @@
   <target name="build" depends="test"/>
 
     <!-- yet another test of bzr -->
-  
+    <!-- yet another test of bzr -->
+
 </project>
