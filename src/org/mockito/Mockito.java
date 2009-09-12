@@ -986,7 +986,9 @@ public class Mockito extends Matchers {
      * <pre>
      *   verify(mock, times(1)).someMethod("some arg");
      * </pre>
-     * 
+     * <p>
+     * Arguments passed are compared using equals() method.
+     * Read about {@link ArgumentCaptor} or {@link ArgumentMatcher} to find out other ways of matching / asserting arguments passed.
      * <p>
      * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
      * Let's say you've stubbed foo.bar(). 
@@ -1003,14 +1005,40 @@ public class Mockito extends Matchers {
     public static <T> T verify(T mock) {
         return MOCKITO_CORE.verify(mock, times(1));
     }
-    
+
+    /**
+     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
+     * <pre>
+     *   verify(mock, times(5)).someMethod("was called five times");
+     *
+     *   verify(mock, atLeast(2)).someMethod("was called at least two times");
+     *
+     *   //you can use flexible argument matchers, e.g:
+     *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
+     * </pre>
+     *
+     * <b>times(1) is the default</b> and can be omitted
+     * <p>
+     * Arguments passed are compared using equals() method.
+     * Read about {@link ArgumentCaptor} or {@link ArgumentMatcher} to find out other ways of matching / asserting arguments passed.
+     * <p>
+     *
+     * @param mock to be verified
+     * @param mode times(x), atLeastOnce() or never()
+     *
+     * @return mock object itself
+     */
+    public static <T> T verify(T mock, VerificationMode mode) {
+        return MOCKITO_CORE.verify(mock, mode);
+    }
+
     /**
      * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
-     * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
+     * Normally, you don't need to reset your mocks, just create new mocks for each test method.
      * <p>
      * Instead of reset() please consider writing simple, small and focused test methods over lengthy, over-specified tests.
      * <b>First potential code smell is reset() in the middle of the test method.</b> This probably means you're testing too much.
-     * Follow the whisper of your test methods: "Please keep us small & focused on single behavior". 
+     * Follow the whisper of your test methods: "Please keep us small & focused on single behavior".
      * There are several threads about it on mockito mailing list.
      * <p>
      * The only reason we added reset() method is to
@@ -1018,45 +1046,21 @@ public class Mockito extends Matchers {
      * See issue 55 (<a href="http://code.google.com/p/mockito/issues/detail?id=55">here</a>)
      * or FAQ (<a href="http://code.google.com/p/mockito/wiki/FAQ">here</a>).
      * <p>
-     * <b>Don't harm yourself.</b> reset() in the middle of the test method is a code smell (you're probably testing too much). 
+     * <b>Don't harm yourself.</b> reset() in the middle of the test method is a code smell (you're probably testing too much).
      * <pre>
      *   List mock = mock(List.class);
      *   when(mock.size()).thenReturn(10);
      *   mock.add(1);
-     *   
+     *
      *   reset(mock);
      *   //at this point the mock forgot any interactions & stubbing
      * </pre>
-     * 
+     *
      * @param <T>
      * @param mocks
      */
     public static <T> void reset(T ... mocks) {
         MOCKITO_CORE.reset(mocks);
-    }
- 
-    /**
-     * Verifies certain behavior happened at least once / exact number of times / never. E.g:
-     * <pre>
-     *   verify(mock, times(5)).someMethod("was called five times");
-     *   
-     *   verify(mock, atLeast(2)).someMethod("was called at least two times");
-     *   
-     *   //you can use flexible argument matchers, e.g:
-     *   verify(mock, atLeastOnce()).someMethod(<b>anyString()</b>);
-     * </pre>
-     * 
-     * <b>times(1) is the default</b> and can be omitted
-     * <p>
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param mock to be verified
-     * @param mode times(x), atLeastOnce() or never()
-     * 
-     * @return mock object itself
-     */
-    public static <T> T verify(T mock, VerificationMode mode) {
-        return MOCKITO_CORE.verify(mock, mode);
     }
 
     /**

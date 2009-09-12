@@ -204,7 +204,8 @@ public class Matchers {
     //TODO: after 1.8 check out Jay Fields' idea on any() matcher
     
     /**
-     * any object of specified class. 
+     * any kind object, not necessary of the given class.
+     * The class argument is provided only to avoid casting.
      * <p>
      * Sometimes looks better than anyObject() - especially when explicit casting is required
      * <p>
