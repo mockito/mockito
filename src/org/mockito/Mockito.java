@@ -70,11 +70,11 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * 
  * //mock creation
  * List mockedList = mock(List.class);
- * 
+ *
  * //using mock object
  * mockedList.add("one");
  * mockedList.clear();
- * 
+ *
  * //verification
  * verify(mockedList).add("one");
  * verify(mockedList).clear();
@@ -115,7 +115,8 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * false, ... for int/Integer, boolean/Boolean, ...). </li>
  * 
  * <li> Stubbing can be overridden: for example common stubbing can go to
- * fixture setup but the test methods can override it. </li>
+ * fixture setup but the test methods can override it.
+ * Please note that overridding stubbing is a potential code smell that points out too much stubbing</li>
  * 
  * <li> Once stubbed, the method will always return stubbed value regardless
  * of how many times it is called. </li>
@@ -954,6 +955,7 @@ public class Mockito extends Matchers {
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
+     * Please note that overridding stubbing is a potential code smell that points out too much stubbing.
      * <p>
      * Once stubbed, the method will always return stubbed value regardless
      * of how many times it is called.
@@ -1315,7 +1317,8 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * Above scenarios shows a tradeoff of Mockito's ellegant syntax. Note that the scenarios are very rare, though. 
-     * Spying should be sporadic and overriding exception-stubbing is very rare.  
+     * Spying should be sporadic and overriding exception-stubbing is very rare. Not to mention that in general
+     * overridding stubbing is a potential code smell that points out too much stubbing.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
