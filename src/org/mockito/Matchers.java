@@ -10,16 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hamcrest.Matcher;
-import org.mockito.internal.matchers.Any;
-import org.mockito.internal.matchers.Contains;
-import org.mockito.internal.matchers.EndsWith;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.InstanceOf;
-import org.mockito.internal.matchers.Matches;
-import org.mockito.internal.matchers.NotNull;
-import org.mockito.internal.matchers.Null;
-import org.mockito.internal.matchers.Same;
-import org.mockito.internal.matchers.StartsWith;
+import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
@@ -202,6 +193,18 @@ public class Matchers {
         return (T) reportMatcher(Any.ANY).returnNull();
     }
     //TODO: after 1.8 check out Jay Fields' idea on any() matcher
+
+    /**
+     * an vararg
+     * TODO: javadoc
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return <code>null</code>.
+     */
+    public static <T> T anyVararg() {
+        return (T) reportMatcher(AnyVararg.ANY_VARARG).returnNull();
+    }
     
     /**
      * any kind object, not necessary of the given class.

@@ -168,6 +168,8 @@ public interface IMethods {
     
     void varargs(String ... string);
 
+    void mixedVarargs(Object i, String ... string);
+
     List<String> listReturningMethod(Object ... objects);
     
     LinkedList<String> linkedListReturningMethod();

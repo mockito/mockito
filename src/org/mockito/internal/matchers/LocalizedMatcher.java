@@ -10,7 +10,7 @@ import org.hamcrest.SelfDescribing;
 import org.mockito.internal.debugging.Location;
 
 @SuppressWarnings("unchecked")
-public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, CapturesArguments {
+public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, CapturesArguments, MatcherDecorator {
 
     private final Matcher actualMatcher;
     private Location location;
@@ -21,7 +21,7 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
     }
 
     public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-        // yeah right...
+        // yeah right
     }
 
     public boolean matches(Object item) {
@@ -50,16 +50,18 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
     }
 
     public boolean typeMatches(Object object) {
-        if (actualMatcher instanceof ContainsExtraTypeInformation) {
-            return ((ContainsExtraTypeInformation) actualMatcher).typeMatches(object);
-        } else {
-            return false;
-        }
+        return actualMatcher instanceof ContainsExtraTypeInformation
+                && ((ContainsExtraTypeInformation) actualMatcher).typeMatches(object);
     }
 
     public void captureFrom(Object argument) {
         if (actualMatcher instanceof CapturesArguments) {
             ((CapturesArguments) actualMatcher).captureFrom(argument);
         }
+    }
+
+    //TODO: refactor other 'delegated interfaces' to use the MatcherDecorator feature
+    public Matcher getActualMatcher() {
+        return actualMatcher;
     }
 }

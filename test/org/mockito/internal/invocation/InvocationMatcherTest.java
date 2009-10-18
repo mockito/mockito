@@ -4,25 +4,24 @@
  */
 package org.mockito.internal.invocation;
 
-import static java.util.Arrays.*;
-import static org.mockitoutil.ExtraMatchers.*;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.AnyVararg;
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockitousage.IMethods;
+import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 import org.mockitoutil.TestBase;
+
+import java.lang.reflect.Method;
+import static java.util.Arrays.asList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {
@@ -122,7 +121,7 @@ public class InvocationMatcherTest extends TestBase {
         //given
         Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         CapturingMatcher capturingMatcher = new CapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) Arrays.asList(new Equals("1"), capturingMatcher));        
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
         
         //when
         invocationMatcher.captureArgumentsFrom(invocation);
@@ -130,5 +129,19 @@ public class InvocationMatcherTest extends TestBase {
         //then
         assertEquals(1, capturingMatcher.getAllValues().size());
         assertEquals(100, capturingMatcher.getLastValue());
+    }
+
+    @Test
+    public void shouldMatchVarargsUsingAnyVarargs() throws Exception {
+        //given
+        mock.varargs("1", "2");
+        Invocation invocation = getLastInvocation();
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(AnyVararg.ANY_VARARG));
+
+        //when
+        boolean match = invocationMatcher.matches(invocation);
+
+        //then
+        assertTrue(match);
     }
 }

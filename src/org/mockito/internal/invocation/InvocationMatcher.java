@@ -53,24 +53,12 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
                 && hasSameMethod(actual)
-                && (argumentsMatch(actual.getArguments()));
+                && new ArgumentsComparator().argumentsMatch(this, actual);
     }
 
-    private boolean argumentsMatch(Object[] actualArgs) {
-        if (actualArgs.length != matchers.size()) {
-            return false;
-        }
-        for (int i = 0; i < actualArgs.length; i++) {
-            if (!matchers.get(i).matches(actualArgs[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
     private boolean safelyArgumentsMatch(Object[] actualArgs) {
         try {
-            return argumentsMatch(actualArgs);
+            return new ArgumentsComparator().argumentsMatch(this, actualArgs);
         } catch (Throwable t) {
             return false;
         }
@@ -88,13 +76,10 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
         final boolean methodEquals = hasSameMethod(candidate);
-        final boolean overloadedButSameArgs = !methodEquals && safelyArgumentsMatch(candidate.getArguments());        
-        
-        if (methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs) {
-            return true;
-        }
-        
-        return false;
+        final boolean overloadedButSameArgs = !methodEquals && safelyArgumentsMatch(candidate.getArguments());
+
+        return methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs;
+
     }
 
     public boolean hasSameMethod(Invocation candidate) {
