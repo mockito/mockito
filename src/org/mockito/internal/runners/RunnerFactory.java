@@ -6,6 +6,7 @@ package org.mockito.internal.runners;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
+import org.mockito.internal.runners.util.TestMethodsFinder;
 
 public class RunnerFactory {
 
@@ -27,6 +28,14 @@ public class RunnerFactory {
                 return runnerProvider.newInstance("org.mockito.internal.runners.JUnit44RunnerImpl", klass);
             }
         } catch (Throwable t) {
+            if (!new TestMethodsFinder().hasTestMethods(klass)) {
+                throw new MockitoException(
+                    "\n" +
+                    "\n" +
+                    "No tests found in " + klass.getSimpleName() + "\n" +
+                    "Haven't you forgot @Test annotation?\n"
+                    , t);
+            }
             throw new MockitoException(
                     "\n" +
                     "\n" +

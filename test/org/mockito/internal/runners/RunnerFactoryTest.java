@@ -77,4 +77,22 @@ public class RunnerFactoryTest extends TestBase {
             assertContains("upgrade your JUnit version", e.getMessage());
         }
     }
+
+    static class NoTestMethods {}
+
+    @Test
+    public void shouldSaySomethingMeaningfulWhenNoTestMethods() {
+        //given
+        RunnerFactory factory = new RunnerFactory(new RunnerProvider());
+
+        //when
+        try {
+            factory.create(NoTestMethods.class);
+            fail();
+        }
+        //then
+        catch (MockitoException e) {
+            assertContains("No tests", e.getMessage());
+        }
+    }
 }

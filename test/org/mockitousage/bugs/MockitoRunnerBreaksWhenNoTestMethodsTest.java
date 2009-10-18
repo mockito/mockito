@@ -9,7 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
-//TODO before final 1.8
-@Ignore
 @RunWith(MockitoJUnitRunner.class)
-public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {}
+@Ignore("for demo only. this test cannot be enabled as it fails :)")
+public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
+    public void notATestMethod() {}
+}
