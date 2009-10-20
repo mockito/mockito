@@ -1442,11 +1442,13 @@ public class Mockito extends Matchers {
      * Allows checking if given method was the only one invoked. E.g:
      * <pre>
      *   verify(mock, only()).someMethod();
+     *   //above is a shorthand for following 2 lines of code:
+     *   verify(mock).someMethod();
+     *   verifyNoMoreInvocations(mock);
      * </pre>
      * 
      * <p>
-     * It is a shortened version for {@link Mockito#verifyNoMoreInteractions(Object[])}
-     * when only one method was invoked.
+     * See also {@link Mockito#verifyNoMoreInteractions(Object[])}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
