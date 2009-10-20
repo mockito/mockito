@@ -39,11 +39,12 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     private final Object mock;
     private final Method method;
     private final Object[] arguments;
-    private final Location location;
+    private final Object[] rawArguments;
 
+    private final Location location;
     private boolean verified;
     private boolean verifiedInOrder;
-    private Object[] rawArguments;
+
     final RealMethod realMethod;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, RealMethod realMethod) {
@@ -204,7 +205,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Object callRealMethod() throws Throwable {
-        return realMethod.invoke(mock, arguments);
+        return realMethod.invoke(mock, rawArguments);
     }
 
     public String toString(PrintSettings printSettings) {
