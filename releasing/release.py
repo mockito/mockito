@@ -1,6 +1,8 @@
 #This script is not really portable. It's just to automate some manual steps I usually do when releasing.
 #It might evolve into someting more robust but for now it's ok for me.
 
+raise "TODO: should do a tag at the end"
+
 import os
 
 def run(cmd):
