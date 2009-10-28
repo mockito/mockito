@@ -7,20 +7,27 @@ Bundle-Name= Mockito Mock Library for Java. Hamcrest-core & Objenesis included i
 Bundle-SymbolicName= org.mockito.mockito-all
 Bundle-Version= ${version}
 
-#Notes on exported packages:
-#bnd task will not make org.hamcrest exported in mockito-core manifest but only in mockito-all manifest - this is exactly what I want
 Export-Package= !org.mockito.asm.*, \
                 !org.mockito.cglib.*, \
                 !org.mockito.internal.*, \
                 org.mockito.*;version=${version}, \
-                !org.hamcrest.internal.*, \
-                org.hamcrest.* \
+                org.hamcrest;version=1.1, \
+                org.hamcrest.core;version=1.1, \
+                org.objenesis;version=1.0
 
 Import-Package= junit.*;resolution:=optional, \
-                org.apache.tools.ant.*;resolution:=optional, \
                 org.junit.*;resolution:=optional, \
-                org.hamcrest.*, \
-                org.objenesis.*, \
+                org.apache.tools.ant.*;resolution:=optional, \
+                org.hamcrest;version="[1.0,2.0)", \
+                org.objenesis;version="[1.0,2.0)", \
                 org.mockito.*, \
-                *
-Private-Package=org.mockito.*
+                #this stuff is used by Objenesis
+                COM.jrockit.reflect;resolution:=optional, \
+                jrockit.vm;resolution:=optional, \
+                sun.reflect;resolution:=optional
+                
+Private-Package: org.mockito.*, \
+                 org.hamcrest.*, \
+                 org.objenesis.*
+
+-removeheaders: Private-Package
