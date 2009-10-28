@@ -21,7 +21,6 @@ Import-Package= junit.*;resolution:=optional, \
                 org.hamcrest;version="[1.0,2.0)", \
                 org.objenesis;version="[1.0,2.0)", \
                 org.mockito.*, \
-                #this stuff is used by Objenesis
                 COM.jrockit.reflect;resolution:=optional, \
                 jrockit.vm;resolution:=optional, \
                 sun.reflect;resolution:=optional
