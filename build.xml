@@ -353,14 +353,22 @@
     <copy file="maven/mockito-core-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-core/maven-metadata.xml" />
   </target>
 
-  <target name="release.maven" depends="copy.maven.metadata" description="deploy binaries to sync with maven repository" >      
-    <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
-  	
-    <filter token="version" value="${version}"/>
-    <copy todir="${target.dir}" filtering="true">
-      <fileset dir="maven" includes="mockito-*.pom"/> 
-    </copy>
-  	
+  <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>
+
+    <target name="prepare.poms" >
+        <filter token="version" value="${version}"/>
+        <copy todir="${target.dir}" filtering="true">
+            <fileset dir="maven" includes="mockito-*.pom"/>
+        </copy>
+    </target>
+
+    <target  name="install.artifact" depends="check.binaries, prepare.poms" description="Installs maven artifact in local repo. Helpful for testing">
+      <install file="${target.dir}/${jar.all}">
+        <pom file="${target.dir}/mockito-all.pom" />
+    </install>
+  </target>
+
+  <target name="release.maven" depends="copy.maven.metadata, prepare.poms" description="deploy binaries to sync with maven repository" > 	
     <remoteRepository id="repo.local" url="file:///${maven.repository.dir}" />
   	
     <deploy file="${target.dir}/${jar.all}">
