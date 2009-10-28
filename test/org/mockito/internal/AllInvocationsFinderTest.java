@@ -43,6 +43,15 @@ public class AllInvocationsFinderTest extends TestBase {
         assertArgumentEquals(300, invocations.get(2));
     }
 
+    @Test
+    public void shouldNotCountDuplicatedInteractions() throws Exception {
+        mockOne.simpleMethod(100);
+
+        List<Invocation> invocations = finder.getAllInvocations(asList(mockOne, mockOne, mockOne));
+
+        assertEquals(1, invocations.size());
+    }
+
     private void assertArgumentEquals(Object argumentValue, Invocation invocation) {
         assertEquals(argumentValue, invocation.getArguments()[0]);
     }
