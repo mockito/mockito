@@ -18,6 +18,8 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 
+import java.io.*;
+
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
@@ -109,5 +111,24 @@ public class TestBase extends Assert {
 
     protected static String describe(SelfDescribing m) {
         return StringDescription.toString(m);
+    }
+
+    protected <T> T serializeAndBack(T obj) throws Exception {
+        ByteArrayOutputStream os = this.serializeMock(obj);
+        return (T) this.deserializeMock(os, Object.class);
+    }
+
+    protected <T> T deserializeMock(ByteArrayOutputStream serialized, Class<T> type) throws IOException,
+            ClassNotFoundException {
+        InputStream unserialize = new ByteArrayInputStream(serialized.toByteArray());
+        Object readObject = new ObjectInputStream(unserialize).readObject();
+        assertNotNull(readObject);
+        return type.cast(readObject);
+    }
+
+    protected ByteArrayOutputStream serializeMock(Object mock) throws IOException {
+        ByteArrayOutputStream serialized = new ByteArrayOutputStream();
+        new ObjectOutputStream(serialized).writeObject(mock);
+        return serialized;
     }
 }
