@@ -17,6 +17,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class MockHandlerTest extends TestBase {
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         //given

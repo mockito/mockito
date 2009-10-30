@@ -29,6 +29,7 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
         } catch (ArgumentsAreDifferent e) {}
     }
 
+    @SuppressWarnings("serial")
     private ArgumentMatcher<String> isStringWithTextFoo() {
         return new ArgumentMatcher<String>() {
             @Override

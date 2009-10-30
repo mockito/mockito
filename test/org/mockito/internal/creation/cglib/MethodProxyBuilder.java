@@ -15,6 +15,7 @@ import org.mockitousage.IMethods;
 
 public class MethodProxyBuilder {
 
+    @SuppressWarnings("serial")
     public MethodProxy build() {
         IMethods mock = mock(IMethods.class);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(new Answer<Object>() {

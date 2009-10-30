@@ -4,13 +4,11 @@
  */
 package org.mockito.internal.creation;
 
-import java.io.Serializable;
-
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.stubbing.Answer;
 
-public class MockSettingsImpl implements MockSettings, Serializable {
+public class MockSettingsImpl implements MockSettings {
 
     private static final long serialVersionUID = 4475297236197939568L;
     private Class<?>[] extraInterfaces;

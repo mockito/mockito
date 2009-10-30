@@ -27,6 +27,7 @@ public class InvocationMarkerTest extends TestBase {
         assertTrue(i.isVerified());
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldCaptureArguments() {
         //given

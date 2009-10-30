@@ -1,15 +1,13 @@
 package org.mockito.internal.verification.checkers;
 
-import org.junit.Test;
-import org.mockito.internal.invocation.*;
-import org.mockito.Mockito;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.any;
-import org.mockitoutil.TestBase;
-
-import java.util.List;
-import java.util.LinkedList;
 import static java.util.Arrays.asList;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.internal.invocation.*;
+import org.mockitoutil.TestBase;
 
 public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
 

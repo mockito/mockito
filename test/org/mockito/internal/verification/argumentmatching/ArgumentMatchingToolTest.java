@@ -58,6 +58,7 @@ public class ArgumentMatchingToolTest extends TestBase {
         assertEquals(new Integer(1), suspicious[0]);
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {
         //given

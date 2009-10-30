@@ -4,33 +4,25 @@
  */
 package org.mockito.internal;
 
+import java.util.List;
+
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.invocation.*;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.MockitoStubber;
-import org.mockito.internal.stubbing.OngoingStubbingImpl;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
+import org.mockito.internal.stubbing.*;
 import org.mockito.internal.util.MockName;
-import org.mockito.internal.verification.RegisteredInvocations;
-import org.mockito.internal.verification.VerificationDataImpl;
-import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.internal.verification.*;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> implements IMockHandler, Serializable {
+public class MockHandler<T> implements IMockHandler {
 
     private static final long serialVersionUID = -2917871070982574165L;
     

@@ -4,13 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
-import java.io.Serializable;
-
 import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 import org.mockito.ArgumentMatcher;
 
-public class Equals extends ArgumentMatcher<Object> implements ContainsExtraTypeInformation, Serializable {
+public class Equals extends ArgumentMatcher<Object> implements ContainsExtraTypeInformation {
 
     private static final long serialVersionUID = -3395637450058086891L;
     private final Object wanted;

@@ -4,9 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.hamcrest.SelfDescribing;
 
-public interface ContainsExtraTypeInformation {
+public interface ContainsExtraTypeInformation extends Serializable {
     SelfDescribing withExtraTypeInfo();
 
     boolean typeMatches(Object object);

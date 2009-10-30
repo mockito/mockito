@@ -4,25 +4,18 @@
  */
 package org.mockito.internal.invocation;
 
+import java.lang.reflect.Method;
+import java.util.*;
+
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.matchers.ArrayEquals;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.MatchersPrinter;
+import org.mockito.internal.matchers.*;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
-import org.mockito.internal.util.Primitives;
+import org.mockito.internal.util.*;
 import org.mockito.invocation.InvocationOnMock;
-
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Method call on a mock object.
@@ -33,7 +26,7 @@ import java.util.List;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, Serializable {
+public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private static final int MAX_LINE_LENGTH = 45;

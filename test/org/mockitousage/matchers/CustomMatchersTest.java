@@ -16,18 +16,21 @@ import org.mockitoutil.TestBase;
 
 public class CustomMatchersTest extends TestBase {
     
+    @SuppressWarnings("serial")
     private final class ContainsFoo extends ArgumentMatcher<String> {
         public boolean matches(Object arg) {
             return ((String) arg).contains("foo");
         }
     }
 
+    @SuppressWarnings("serial")
     private final class IsAnyBoolean extends ArgumentMatcher<Boolean> {
         public boolean matches(Object arg) {
             return true;
         }
     }
     
+    @SuppressWarnings("serial")
     private final class IsSorZ extends ArgumentMatcher<Character> {
         public boolean matches(Object arg) {
             Character character = (Character) arg;
@@ -35,6 +38,7 @@ public class CustomMatchersTest extends TestBase {
         }
     }
 
+    @SuppressWarnings("serial")
     private final class IsZeroOrOne<T extends Number> extends ArgumentMatcher<T> {
         public boolean matches(Object arg) {
             Number number = (Number) arg;
@@ -135,6 +139,7 @@ public class CustomMatchersTest extends TestBase {
         return argThat(new StringThatContainsXxx());
     }
     
+    @SuppressWarnings("serial")
     private final class StringThatContainsXxx extends ArgumentMatcher<String> {
         public boolean matches(Object argument) {
             String arg = (String) argument;
@@ -142,6 +147,7 @@ public class CustomMatchersTest extends TestBase {
         }
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldAnonymousCustomMatcherPrintDefaultDescription() {
         mock.simpleMethod("foo");

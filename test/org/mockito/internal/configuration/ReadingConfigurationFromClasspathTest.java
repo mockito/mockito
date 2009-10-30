@@ -14,6 +14,7 @@ import org.mockitoutil.TestBase;
 
 public class ReadingConfigurationFromClasspathTest extends TestBase {
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldReadConfigurationClassFromClassPath() {
         ConfigurationAccess.getConfig().overrideDefaultAnswer(new Answer<Object>() {

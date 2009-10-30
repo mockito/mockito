@@ -4,11 +4,11 @@
  */
 package org.mockitousage.bugs;
 
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
 //see bug 116

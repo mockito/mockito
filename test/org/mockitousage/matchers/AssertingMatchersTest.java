@@ -45,6 +45,7 @@ public class AssertingMatchersTest extends TestBase {
         }
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldUseCustomCharMatcher1() {
         mock.simpleMethod(new Article(12, "Fabulous article"));

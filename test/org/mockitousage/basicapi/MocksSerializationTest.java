@@ -4,7 +4,7 @@
  */
 package org.mockitousage.basicapi;
 
-import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 

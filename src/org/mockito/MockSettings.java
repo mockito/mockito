@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.io.Serializable;
+
 import org.mockito.stubbing.Answer;
 
 /**
@@ -31,7 +33,7 @@ import org.mockito.stubbing.Answer;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
-public interface MockSettings {
+public interface MockSettings extends Serializable {
     
     /**
      * Specifies extra interfaces the mock should implement. Might be useful for legacy code or some corner cases.

@@ -25,6 +25,7 @@ public class FilteredCGLIBProxyRealMethodTest extends TestBase {
         }
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows() throws Throwable {
         //given

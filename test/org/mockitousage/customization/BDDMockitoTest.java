@@ -35,6 +35,7 @@ public class BDDMockitoTest extends TestBase {
         } catch(RuntimeException e) {}
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldStubWithAnswer() throws Exception {
         given(mock.simpleMethod(anyString())).willAnswer(new Answer<String>() {
@@ -86,6 +87,7 @@ public class BDDMockitoTest extends TestBase {
         assertEquals("foo", mock.simpleMethod("bar"));
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldStubUsingDoAnswerStyle() throws Exception {
         willAnswer(new Answer<String>() {

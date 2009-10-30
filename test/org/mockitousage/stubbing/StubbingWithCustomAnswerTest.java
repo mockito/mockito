@@ -19,6 +19,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     @Mock
     private IMethods mock;
 
+    @SuppressWarnings("serial")
     @Test
     public void shouldAnswer() throws Exception {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
@@ -32,6 +33,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         assertEquals("simpleMethod-test", mock.simpleMethod("test"));
     }
 
+    @SuppressWarnings("serial")
     @Test
     public void shouldAnswerConsecutively() throws Exception {
         when(mock.simpleMethod())
@@ -88,6 +90,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     }
 
+    @SuppressWarnings("serial")
     private static class RecordCall implements Answer {
         private boolean called = false;
 

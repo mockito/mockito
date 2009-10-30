@@ -1,4 +1,6 @@
 package org.mockito.internal.matchers;
 
-public interface VarargMatcher {
+import java.io.Serializable;
+
+public interface VarargMatcher extends Serializable {
 }

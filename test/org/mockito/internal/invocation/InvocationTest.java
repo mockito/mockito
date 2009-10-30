@@ -153,6 +153,7 @@ public class InvocationTest extends TestBase {
         }
     }
     
+    @SuppressWarnings("serial")
     @Test
     public void shouldBeAbleToCallRealMethod() throws Throwable {
         //when

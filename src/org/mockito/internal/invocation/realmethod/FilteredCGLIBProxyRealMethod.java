@@ -5,13 +5,11 @@
  */
 package org.mockito.internal.invocation.realmethod;
 
-import java.io.Serializable;
-
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.creation.MockitoMethodProxy;
 import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
 
-public class FilteredCGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Serializable {
+public class FilteredCGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy {
 
     private static final long serialVersionUID = 3596550785818938496L;
     private final RealMethod realMethod;
