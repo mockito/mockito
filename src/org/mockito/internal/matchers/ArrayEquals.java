@@ -11,6 +11,8 @@ import org.hamcrest.Description;
 
 public class ArrayEquals extends Equals {
 
+    private static final long serialVersionUID = -7167812844261087583L;
+
     public ArrayEquals(Object wanted) {
         super(wanted);
     }

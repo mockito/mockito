@@ -4,22 +4,26 @@
  */
 package org.mockito.internal.invocation.realmethod;
 
+import java.io.Serializable;
+
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.MockitoMethodProxy;
 
 
-public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy {
+public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Serializable {
 
-    private final MethodProxy methodProxy;
+    private static final long serialVersionUID = -4596470901191501582L;
+    private final MockitoMethodProxy methodProxy;
 
-    public CGLIBProxyRealMethod(MethodProxy methodProxy) {
+    public CGLIBProxyRealMethod(MockitoMethodProxy methodProxy) {
         this.methodProxy = methodProxy;
     }
 
     public Object invoke(Object target, Object[] arguments) throws Throwable {
-        return methodProxy.invokeSuper(target, arguments);
+        return methodProxy.getMethodProxy().invokeSuper(target, arguments);
     }
 
     public MethodProxy getMethodProxy() {
-        return methodProxy;
+        return methodProxy.getMethodProxy();
     }
 }

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
@@ -16,8 +17,9 @@ import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInvocation, CapturesArgumensFromInvocation {
+public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInvocation, CapturesArgumensFromInvocation, Serializable {
 
+    private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;
     private final List<Matcher> matchers;
 

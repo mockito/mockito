@@ -8,6 +8,7 @@ import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
 
 public class ReflectionEquals extends ArgumentMatcher<Object> {
+    private static final long serialVersionUID = 2022780425116330014L;
     private final Object wanted;
     private final String[] excludeFields;
 

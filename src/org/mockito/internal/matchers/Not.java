@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatcher;
 @SuppressWarnings("unchecked")
 public class Not extends ArgumentMatcher {
 
+    private static final long serialVersionUID = 4627373642333593264L;
     private final Matcher first;
 
     public Not(Matcher first) {

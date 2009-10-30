@@ -4,6 +4,8 @@
  */
 package org.mockito.stubbing;
 
+import java.io.Serializable;
+
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -27,7 +29,7 @@ import org.mockito.invocation.InvocationOnMock;
  * 
  * @param <T> the type to return.
  */
-public interface Answer<T> {
+public interface Answer<T> extends Serializable {
     /**
      * @param invocation the invocation on the mock.
      *

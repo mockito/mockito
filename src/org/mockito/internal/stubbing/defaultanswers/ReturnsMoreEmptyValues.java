@@ -42,6 +42,7 @@ import org.mockito.stubbing.Answer;
  */
 public class ReturnsMoreEmptyValues implements Answer<Object> {
     
+    private static final long serialVersionUID = -2816745041482698471L;
     private Answer<Object> delegate = new ReturnsEmptyValues();
     
     /* (non-Javadoc)

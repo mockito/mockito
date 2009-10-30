@@ -18,6 +18,7 @@ import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,12 +33,13 @@ import java.util.List;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
+public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, Serializable {
 
+    private static final long serialVersionUID = 8240069639250980199L;
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
     private final Object mock;
-    private final Method method;
+    private final MockitoMethod method;
     private final Object[] arguments;
     private final Object[] rawArguments;
 
@@ -48,8 +50,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     final RealMethod realMethod;
 
     public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, RealMethod realMethod) {
+        this.method = new MockitoMethod(method);
         this.mock = mock;
-        this.method = method;
         this.realMethod = realMethod;
         this.arguments = expandVarArgs(method.isVarArgs(), args);
         this.rawArguments = args;
@@ -84,7 +86,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Method getMethod() {
-        return method;
+        return method.getMethod();
     }
 
     public Object[] getArguments() {

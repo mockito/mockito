@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class EndsWith extends ArgumentMatcher<String> {
 
+    private static final long serialVersionUID = 8556443228350129421L;
     private final String suffix;
 
     public EndsWith(String suffix) {

@@ -14,6 +14,7 @@ import org.mockito.exceptions.Reporter;
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> extends ArgumentMatcher<T> implements CapturesArguments {
     
+    private static final long serialVersionUID = 4274067078639307295L;
     private LinkedList<Object> arguments = new LinkedList<Object>();
 
     /* (non-Javadoc)

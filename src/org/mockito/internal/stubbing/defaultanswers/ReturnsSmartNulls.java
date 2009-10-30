@@ -36,6 +36,8 @@ import java.lang.reflect.Method;
  */
 public class ReturnsSmartNulls implements Answer<Object> {
 
+    private static final long serialVersionUID = 7618312406617949441L;
+
     private final class ThrowingInterceptor implements MethodInterceptor {
         private final InvocationOnMock invocation;
         private final Location location = new Location();

@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class NotNull extends ArgumentMatcher<Object> {
 
+    private static final long serialVersionUID = 7278261081285153228L;
     public static final NotNull NOT_NULL = new NotNull();
     
     private NotNull() {

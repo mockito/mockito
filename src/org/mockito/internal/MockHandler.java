@@ -22,6 +22,7 @@ import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,8 +30,10 @@ import java.util.List;
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandler<T> implements IMockHandler {
+public class MockHandler<T> implements IMockHandler, Serializable {
 
+    private static final long serialVersionUID = -2917871070982574165L;
+    
     MockitoStubber mockitoStubber;
     MatchersBinder matchersBinder;
     MockingProgress mockingProgress;

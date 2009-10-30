@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.util;
 
-public class MockName {
+import java.io.Serializable;
+
+public class MockName implements Serializable {
     
+    private static final long serialVersionUID = 8014974700844306925L;
     private final String mockName;
     private boolean surrogate;
 

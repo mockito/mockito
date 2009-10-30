@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 public class ObjectMethodsGuru implements Serializable {
 
+    private static final long serialVersionUID = -1286718569065470494L;
+
     public boolean isToString(Method method) {
         return method.getReturnType() == String.class && method.getParameterTypes().length == 0
                 && method.getName().equals("toString");

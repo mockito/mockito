@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class Null extends ArgumentMatcher<Object> {
 
+    private static final long serialVersionUID = 2823082637424390314L;
     public static final Null NULL = new Null();
 
     private Null() {

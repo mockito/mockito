@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class StartsWith extends ArgumentMatcher<String> {
 
+    private static final long serialVersionUID = -5978092285707998431L;
     private final String prefix;
 
     public StartsWith(String prefix) {

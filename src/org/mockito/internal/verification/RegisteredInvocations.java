@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.verification;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +14,9 @@ import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 
 
-public class RegisteredInvocations {
+public class RegisteredInvocations implements Serializable {
 
+    private static final long serialVersionUID = -2674402327380736290L;
     private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());
     
     public void add(Invocation invocation) {

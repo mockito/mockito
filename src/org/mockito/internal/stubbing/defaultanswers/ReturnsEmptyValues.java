@@ -49,6 +49,8 @@ import org.mockito.stubbing.Answer;
  */
 public class ReturnsEmptyValues implements Answer<Object> {
     
+    private static final long serialVersionUID = 1998191268711234347L;
+
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */

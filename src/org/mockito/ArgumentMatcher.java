@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.io.Serializable;
+
 import org.hamcrest.BaseMatcher;
 
 import org.hamcrest.Description;
@@ -57,7 +59,9 @@ import org.mockito.internal.util.Decamelizer;
  * 
  * @param <T> type of argument
  */
-public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
+public abstract class ArgumentMatcher<T> extends BaseMatcher<T> implements Serializable {
+
+    private static final long serialVersionUID = -2145234737829370369L;
 
     /**
      * Returns whether this matcher accepts the given argument.

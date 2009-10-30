@@ -12,6 +12,7 @@ import org.mockito.stubbing.Answer;
 
 public class ReturnsMocks implements Answer<Object> {
     
+    private static final long serialVersionUID = -6755257986994634579L;
     private MockitoCore mockitoCore = new MockitoCore();
     private Answer<Object> delegate = new ReturnsMoreEmptyValues();
     

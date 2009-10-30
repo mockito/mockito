@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class InstanceOf extends ArgumentMatcher<Object> {
 
+    private static final long serialVersionUID = 517358915876138366L;
     private final Class<?> clazz;
 
     public InstanceOf(Class<?> clazz) {

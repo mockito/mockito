@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class Matches extends ArgumentMatcher<Object> {
 
+    private static final long serialVersionUID = 8787704593379472029L;
     private final String regex;
 
     public Matches(String regex) {

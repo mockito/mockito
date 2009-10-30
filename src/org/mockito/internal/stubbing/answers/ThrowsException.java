@@ -11,6 +11,7 @@ import org.mockito.stubbing.Answer;
 
 public class ThrowsException implements Answer<Object> {
 
+    private static final long serialVersionUID = 1128820328555183980L;
     private final Throwable throwable;
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 

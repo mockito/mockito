@@ -6,6 +6,8 @@ package org.mockito.internal.matchers;
 
 public class LessThan<T extends Comparable<T>> extends CompareTo<T> {
 
+    private static final long serialVersionUID = -133860804462310942L;
+
     public LessThan(Comparable<T> value) {
         super(value);
     }

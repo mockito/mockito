@@ -11,6 +11,8 @@ import org.mockito.cglib.proxy.MethodProxy;
 
 public class CGLIBHacker implements Serializable {
 
+    private static final long serialVersionUID = -4389233991416356668L;
+
     public void setMockitoNamingPolicy(MethodProxy methodProxy) {
         try {
             Field createInfoField = reflectOnCreateInfo(methodProxy);

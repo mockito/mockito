@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatcher;
 @SuppressWarnings("unchecked")
 public class Or extends ArgumentMatcher {
 
+    private static final long serialVersionUID = 5888739035212283087L;
     private final List<Matcher> matchers;
 
     public Or(List<Matcher> matchers) {

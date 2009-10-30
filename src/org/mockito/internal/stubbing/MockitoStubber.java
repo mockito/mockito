@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +16,9 @@ import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class MockitoStubber {
+public class MockitoStubber implements Serializable {
 
+    private static final long serialVersionUID = -5334301962749537176L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
     private final List<Answer> answersForStubbing = new ArrayList<Answer>();

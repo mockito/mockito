@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatcher;
 @SuppressWarnings("unchecked")
 public class And extends ArgumentMatcher {
 
+    private static final long serialVersionUID = -4624719625691177501L;
     private final List<Matcher> matchers;
 
     public And(List<Matcher> matchers) {

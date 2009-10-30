@@ -28,6 +28,8 @@ import org.mockito.stubbing.Answer;
  * <p>
  */
 public class CallsRealMethods implements Answer<Object> {
+    private static final long serialVersionUID = 9057165148930624087L;
+
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return invocation.callRealMethod();
     }

@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 @SuppressWarnings("unchecked")
 public class Any extends ArgumentMatcher {
 
+    private static final long serialVersionUID = -4062420125651019029L;
     public static final Any ANY = new Any();    
     
     private Any() {}

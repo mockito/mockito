@@ -9,6 +9,7 @@ import org.mockito.stubbing.Answer;
 
 public class Returns implements Answer<Object> {
 
+    private static final long serialVersionUID = -6245608253574215396L;
     private final Object value;
 
     public Returns(Object value) {

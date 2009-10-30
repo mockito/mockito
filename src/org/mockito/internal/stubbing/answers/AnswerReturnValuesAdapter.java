@@ -12,6 +12,7 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("deprecation")
 public class AnswerReturnValuesAdapter implements Answer<Object> {
 
+    private static final long serialVersionUID = 1418158596876713469L;
     private final ReturnValues returnValues;
 
     public AnswerReturnValuesAdapter(ReturnValues returnValues) {

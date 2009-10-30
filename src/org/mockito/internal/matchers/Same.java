@@ -10,6 +10,7 @@ import org.mockito.ArgumentMatcher;
 
 public class Same extends ArgumentMatcher<Object> {
 
+    private static final long serialVersionUID = -1226959355938572597L;
     private final Object wanted;
 
     public Same(Object wanted) {

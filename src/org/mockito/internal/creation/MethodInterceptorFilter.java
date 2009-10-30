@@ -16,9 +16,9 @@ import org.mockito.internal.progress.SequenceNumber;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-@SuppressWarnings("unchecked")
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
+    private static final long serialVersionUID = 6182795666612683784L;
     private final IMockHandler mockHandler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
@@ -37,7 +37,8 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
 
         cglibHacker.setMockitoNamingPolicy(methodProxy);
         
-        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), new FilteredCGLIBProxyRealMethod(methodProxy));
+        FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(new MockitoMethodProxy(methodProxy));
+        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), realMethod);
         return mockHandler.handle(invocation);
     }
     

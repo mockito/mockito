@@ -9,6 +9,8 @@ import org.mockito.stubbing.Answer;
 
 public class DoesNothing implements Answer<Object> {
     
+    private static final long serialVersionUID = 4840880517740698416L;
+
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return null;
     }

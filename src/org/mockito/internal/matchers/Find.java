@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatcher;
 
 public class Find extends ArgumentMatcher<String> {
 
+    private static final long serialVersionUID = 8895781429480404872L;
     private final String regex;
 
     public Find(String regex) {

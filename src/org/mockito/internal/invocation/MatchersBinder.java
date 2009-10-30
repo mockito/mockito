@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hamcrest.Matcher;
@@ -11,7 +12,9 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 
 @SuppressWarnings("unchecked")
-public class MatchersBinder {
+public class MatchersBinder implements Serializable {
+
+    private static final long serialVersionUID = -311433939339443463L;
 
     public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
         List<Matcher> lastMatchers = argumentMatcherStorage.pullMatchers();
