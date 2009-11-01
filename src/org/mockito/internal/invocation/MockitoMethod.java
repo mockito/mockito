@@ -65,11 +65,14 @@ public class MockitoMethod implements Serializable {
     try {
       return declaringClass.getDeclaredMethod(methodName, parameterTypes);
     } catch (SecurityException e) {
-      // TODO real exception
-      throw new MockitoException("could not create method", e);
+      String message = String.format(
+          "The method %1$s.%2$s is probably private or protected and cannot be mocked.", declaringClass, methodName);
+      throw new MockitoException(message, e);
     } catch (NoSuchMethodException e) {
-      // TODO real exception
-      throw new MockitoException("could not create method", e);
+      String message = String.format( 
+        "The method %1$s.%2$s does not exists and you should not get to this point.\n" +
+        "Please report this as a defect with an example of how to reproduce it.", declaringClass, methodName);
+      throw new MockitoException(message, e);
     }
   }
 
