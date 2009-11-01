@@ -96,5 +96,6 @@ public class MockitoStubberTest extends TestBase{
         } catch (MockitoException e) {}
     }
     
-    @SuppressWarnings("serial") class MyException extends RuntimeException {};
+    @SuppressWarnings("serial") 
+    class MyException extends RuntimeException {};
 }

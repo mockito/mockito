@@ -19,6 +19,7 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class MocksSerializationTest extends TestBase implements Serializable {
 
     private static final long serialVersionUID = 6160482220413048624L;
@@ -28,12 +29,8 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // given
         IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class));
 
-        // when
-        //TODO simplify with serializeAndBack method
-        ByteArrayOutputStream serialized = serializeMock(mock);
-
-        // then
-        deserializeMock(serialized, IMethods.class);
+        // when-serialize then-deserialize
+        serializeAndBack(mock);
     }
 
     @Test
@@ -213,7 +210,6 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         verify(readObject, never()).objectArgMethod("never happened");
     }
 
-    @SuppressWarnings("serial")
     @Test
     public void shouldSerializeWithStubbingCallback() throws Exception {
 

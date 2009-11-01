@@ -12,9 +12,9 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class ReadingConfigurationFromClasspathTest extends TestBase {
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldReadConfigurationClassFromClassPath() {
         ConfigurationAccess.getConfig().overrideDefaultAnswer(new Answer<Object>() {

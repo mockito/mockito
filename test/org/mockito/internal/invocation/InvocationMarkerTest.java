@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.internal.util.ObjectBox;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class InvocationMarkerTest extends TestBase {
 
     @Test
@@ -27,7 +28,6 @@ public class InvocationMarkerTest extends TestBase {
         assertTrue(i.isVerified());
     }
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldCaptureArguments() {
         //given

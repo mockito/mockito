@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","serial"})
 public class ArgumentMatchingToolTest extends TestBase {
 
     private ArgumentMatchingTool tool = new ArgumentMatchingTool();
@@ -58,7 +58,6 @@ public class ArgumentMatchingToolTest extends TestBase {
         assertEquals(new Integer(1), suspicious[0]);
     }
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {
         //given

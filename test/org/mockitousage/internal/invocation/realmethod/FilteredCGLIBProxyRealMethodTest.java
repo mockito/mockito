@@ -12,6 +12,7 @@ import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class FilteredCGLIBProxyRealMethodTest extends TestBase {
 
     @Before
@@ -25,7 +26,6 @@ public class FilteredCGLIBProxyRealMethodTest extends TestBase {
         }
     }
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows() throws Throwable {
         //given

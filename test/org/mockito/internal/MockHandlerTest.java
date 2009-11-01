@@ -14,10 +14,9 @@ import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","serial"})
 public class MockHandlerTest extends TestBase {
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         //given

@@ -13,6 +13,7 @@ import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class CustomMatcherDoesYieldCCETest extends TestBase {
 
     @Mock private IMethods mock;
@@ -29,7 +30,6 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
         } catch (ArgumentsAreDifferent e) {}
     }
 
-    @SuppressWarnings("serial")
     private ArgumentMatcher<String> isStringWithTextFoo() {
         return new ArgumentMatcher<String>() {
             @Override

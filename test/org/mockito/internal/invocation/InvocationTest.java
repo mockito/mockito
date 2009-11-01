@@ -18,7 +18,7 @@ import org.mockito.internal.matchers.Equals;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","serial"})
 public class InvocationTest extends TestBase {
 
     private Invocation invocation;
@@ -153,7 +153,6 @@ public class InvocationTest extends TestBase {
         }
     }
     
-    @SuppressWarnings("serial")
     @Test
     public void shouldBeAbleToCallRealMethod() throws Throwable {
         //when
