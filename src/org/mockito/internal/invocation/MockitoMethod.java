@@ -23,13 +23,7 @@ public class MockitoMethod implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((declaringClass == null) ? 0 : declaringClass.hashCode());
-        result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
-        result = prime * result + Arrays.hashCode(parameterTypes);
-        result = prime * result + ((returnType == null) ? 0 : returnType.hashCode());
-        return result;
+        throw new RuntimeException("hashCode() not implemented");
     }
 
     @Override
