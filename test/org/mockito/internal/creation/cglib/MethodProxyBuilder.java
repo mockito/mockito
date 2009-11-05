@@ -4,9 +4,10 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.MockitoMethodProxy;
 import org.mockito.internal.invocation.ExposedInvocation;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -16,7 +17,7 @@ import org.mockitousage.IMethods;
 @SuppressWarnings("serial")
 public class MethodProxyBuilder {
 
-    public MethodProxy build() {
+    public MockitoMethodProxy build() {
         IMethods mock = mock(IMethods.class);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {

@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 import org.hamcrest.Matcher;
@@ -42,11 +41,11 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
 
     final RealMethod realMethod;
 
-    public Invocation(Object mock, Method method, Object[] args, int sequenceNumber, RealMethod realMethod) {
-        this.method = new MockitoMethod(method);
+    public Invocation(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
+        this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
-        this.arguments = expandVarArgs(method.isVarArgs(), args);
+        this.arguments = expandVarArgs(mockitoMethod.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
@@ -78,8 +77,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return mock;
     }
 
-    public Method getMethod() {
-        return method.getMethod();
+    public MockitoMethod getMethod() {
+        return method;
     }
 
     public Object[] getArguments() {

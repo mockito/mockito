@@ -124,4 +124,7 @@ public interface MockSettings extends Serializable {
      */
     @SuppressWarnings("unchecked")
     MockSettings defaultAnswer(Answer defaultAnswer);
+
+    MockSettings serializable();
+    
 }

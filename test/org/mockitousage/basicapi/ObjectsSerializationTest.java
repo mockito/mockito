@@ -4,21 +4,12 @@
  */
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
-
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
 
 import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.internal.matchers.Any;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class ObjectsSerializationTest extends TestBase implements Serializable {
 
     //Ok, this test has nothing to do with mocks but it shows fundamental feature of java serialization that

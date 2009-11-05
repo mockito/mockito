@@ -15,6 +15,12 @@ public class MockSettingsImpl implements MockSettings {
     private String name;
     private Object spiedInstance;
     private Answer<Object> defaultAnswer;
+    private boolean isSerializable;
+
+    public MockSettings serializable() {
+        this.isSerializable = true;
+        return this;
+    }
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
@@ -62,5 +68,9 @@ public class MockSettingsImpl implements MockSettings {
 
     public Answer<Object> getDefaultAnswer() {
         return defaultAnswer;
+    }
+
+    public boolean isSerializable() {
+        return isSerializable;
     }
 }

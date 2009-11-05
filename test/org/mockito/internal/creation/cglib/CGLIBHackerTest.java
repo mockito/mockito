@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 
 import org.junit.Test;
 import org.mockito.cglib.core.NamingPolicy;
-import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.MockitoMethodProxy;
 import org.mockitoutil.TestBase;
 import org.powermock.reflect.Whitebox;
 
@@ -17,28 +17,30 @@ public class CGLIBHackerTest extends TestBase {
     @Test
     public void shouldSetMockitoNamingPolicy() throws Exception {
         //given
-        MethodProxy methodProxy = new MethodProxyBuilder().build();
+        MockitoMethodProxy methodProxy = new MethodProxyBuilder().build();
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
         
         //then
-        Object createInfo = Whitebox.getInternalState(methodProxy, "createInfo");
+        Object realMethodProxy = Whitebox.invokeMethod(methodProxy, "getMethodProxy", new Object[0]);
+        Object createInfo = Whitebox.getInternalState(realMethodProxy, "createInfo");
         NamingPolicy namingPolicy = (NamingPolicy) Whitebox.getInternalState(createInfo, "namingPolicy");
-        assertEquals(namingPolicy, MockitoNamingPolicy.INSTANCE);
+        assertEquals(MockitoNamingPolicy.INSTANCE, namingPolicy);
     }
     
     @Test
     public void shouldSetMockitoNamingPolicyEvenIfMethodProxyIsProxied() throws Exception {
         //given
-        MethodProxy proxiedMethodProxy = spy(new MethodProxyBuilder().build());
+        MockitoMethodProxy proxiedMethodProxy = spy(new MethodProxyBuilder().build());
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(proxiedMethodProxy);
         
         //then
-        Object createInfo = Whitebox.getInternalState(proxiedMethodProxy, "createInfo");
+        Object realMethodProxy = Whitebox.invokeMethod(proxiedMethodProxy, "getMethodProxy", new Object[0]);
+        Object createInfo = Whitebox.getInternalState(realMethodProxy, "createInfo");
         NamingPolicy namingPolicy = (NamingPolicy) Whitebox.getInternalState(createInfo, "namingPolicy");
-        assertEquals(namingPolicy, MockitoNamingPolicy.INSTANCE);
+        assertEquals(MockitoNamingPolicy.INSTANCE, namingPolicy);
     }
 }

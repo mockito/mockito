@@ -7,6 +7,8 @@ package org.mockito.invocation;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
+import org.mockito.internal.invocation.MockitoMethod;
+
 /**
  * An invocation on a mock
  * <p>
@@ -26,7 +28,7 @@ public interface InvocationOnMock extends Serializable {
      * 
      * @return method
      */
-    Method getMethod();
+    MockitoMethod getMethod();
 
     /**
      * returns arguments passed to the method

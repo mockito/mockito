@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.invocation.realmethod;
 
-import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.creation.MockitoMethodProxy;
 
 
@@ -18,10 +17,10 @@ public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy {
     }
 
     public Object invoke(Object target, Object[] arguments) throws Throwable {
-        return methodProxy.getMethodProxy().invokeSuper(target, arguments);
+        return methodProxy.invokeSuper(target, arguments);
     }
 
-    public MethodProxy getMethodProxy() {
-        return methodProxy.getMethodProxy();
+    public MockitoMethodProxy getMethodProxy() {
+        return methodProxy;
     }
 }

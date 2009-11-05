@@ -39,7 +39,7 @@ public class InvocationBuilder {
             }
         }
         
-        Invocation i = new Invocation(mock, method, args, sequenceNumber, null);
+        Invocation i = new Invocation(mock, new DelegatingMockitoMethod(method), args, sequenceNumber, null);
         if (verified) {
             i.markVerified();
         }

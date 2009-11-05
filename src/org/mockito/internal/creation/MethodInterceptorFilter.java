@@ -10,6 +10,7 @@ import org.mockito.internal.IMockHandler;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 
@@ -34,11 +35,14 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         } else if (objectMethodsGuru.isHashCodeMethod(method)) {
             return hashCodeForMock(proxy);
         }
-
-        cglibHacker.setMockitoNamingPolicy(methodProxy);
         
-        FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(new MockitoMethodProxy(methodProxy));
-        Invocation invocation = new Invocation(proxy, method, args, SequenceNumber.next(), realMethod);
+        MockitoMethodProxy mockitoMethodProxy = mockHandler.createMockitoMethodProxy(methodProxy);
+        
+        cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
+        
+        FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
+        MockitoMethod mockitoMethod = mockHandler.createMockitoMethod(method);
+        Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return mockHandler.handle(invocation);
     }
     

@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 
 import java.io.*;
@@ -100,19 +100,20 @@ public class TestBase extends Assert {
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
-        return new Invocation(new Object(), type.getMethod(methodName,
-                new Class[0]), args, 1, null);
+        return new Invocation(new Object(), new DelegatingMockitoMethod(type.getMethod(methodName,
+                new Class[0])), args, 1, null);
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
-        return new Invocation(new Object(), type.getMethod(methodName,
-                new Class[0]), new Object[0], 1, realMethod);
+        return new Invocation(new Object(), new DelegatingMockitoMethod(type.getMethod(methodName,
+                new Class[0])), new Object[0], 1, realMethod);
     }
 
     protected static String describe(SelfDescribing m) {
         return StringDescription.toString(m);
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> T serializeAndBack(T obj) throws Exception {
         ByteArrayOutputStream os = this.serializeMock(obj);
         return (T) this.deserializeMock(os, Object.class);

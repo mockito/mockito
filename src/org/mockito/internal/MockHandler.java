@@ -4,9 +4,11 @@
  */
 package org.mockito.internal;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
-import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.*;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -19,22 +21,24 @@ import org.mockito.stubbing.VoidMethodStubbable;
 
 /**
  * Invocation handler set on mock objects.
- *
- * @param <T> type of mock object to handle
+ * 
+ * @param <T>
+ *            type of mock object to handle
  */
 public class MockHandler<T> implements IMockHandler {
 
     private static final long serialVersionUID = -2917871070982574165L;
-    
+
     MockitoStubber mockitoStubber;
     MatchersBinder matchersBinder;
     MockingProgress mockingProgress;
-    
+
     private final RegisteredInvocations registeredInvocations;
     private final MockName mockName;
     private final MockSettingsImpl mockSettings;
 
-    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder, MockSettingsImpl mockSettings) {
+    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder,
+                    MockSettingsImpl mockSettings) {
         this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
@@ -42,27 +46,31 @@ public class MockHandler<T> implements IMockHandler {
         this.mockitoStubber = new MockitoStubber(mockingProgress);
         this.registeredInvocations = new RegisteredInvocations();
     }
-    
+
     public MockHandler(MockHandler<T> oldMockHandler) {
-        this(oldMockHandler.mockName, oldMockHandler.mockingProgress, oldMockHandler.matchersBinder, oldMockHandler.mockSettings);
+        this(oldMockHandler.mockName, oldMockHandler.mockingProgress, oldMockHandler.matchersBinder,
+                        oldMockHandler.mockSettings);
     }
-    
-    //for tests
+
+    // for tests
     MockHandler() {
-        this(new MockName("mockie for tests", MockHandler.class), new ThreadSafeMockingProgress(), new MatchersBinder(), new MockSettingsImpl());
+        this(new MockName("mockie for tests", MockHandler.class), new ThreadSafeMockingProgress(),
+                        new MatchersBinder(), new MockSettingsImpl());
     }
-    
+
     public Object handle(Invocation invocation) throws Throwable {
         if (mockitoStubber.hasAnswersForStubbing()) {
-            //stubbing voids with stubVoid() or doAnswer() style
-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
+            // stubbing voids with stubVoid() or doAnswer() style
+            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
+                            .getArgumentMatcherStorage(), invocation);
             mockitoStubber.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
-        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(), invocation);
-        
+        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(),
+                        invocation);
+
         mockingProgress.validateState();
 
         if (verificationMode != null) {
@@ -78,20 +86,23 @@ public class MockHandler<T> implements IMockHandler {
 
         StubbedInvocationMatcher stubbedInvocation = mockitoStubber.findAnswerFor(invocation);
         if (!invocation.isVoid() && stubbedInvocation == null) {
-            //it is a return-value interaction but not stubbed. This *might* be a problem
+            // it is a return-value interaction but not stubbed. This *might* be
+            // a problem
             mockingProgress.getDebuggingInfo().addPotentiallyUnstubbed(invocationMatcher);
         }
-        
+
         if (stubbedInvocation != null) {
             mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
-            
-            //redo setting invocation for potential stubbing in case of partial mocks / spies.
-            //Without it, the real method inside 'when' might have delegated 
-            //to other self method and overwrite the intended stubbed method with a different one.
+
+            // redo setting invocation for potential stubbing in case of partial
+            // mocks / spies.
+            // Without it, the real method inside 'when' might have delegated
+            // to other self method and overwrite the intended stubbed method
+            // with a different one.
             mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
@@ -117,5 +128,17 @@ public class MockHandler<T> implements IMockHandler {
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
+    }
+
+    public MockitoMethodProxy createMockitoMethodProxy(MethodProxy methodProxy) {
+        if (mockSettings.isSerializable())
+            return new SerializableMockitoMethodProxy(methodProxy);
+        return new DelegatingMockitoMethodProxy(methodProxy);
+    }
+
+    public MockitoMethod createMockitoMethod(Method method) {
+        if (mockSettings.isSerializable())
+            return new SerializableMockitoMethod(method);
+        return new DelegatingMockitoMethod(method);
     }
 }
