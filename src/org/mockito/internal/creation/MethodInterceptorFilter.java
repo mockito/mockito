@@ -4,18 +4,17 @@
  */
 package org.mockito.internal.creation;
 
+import java.io.Serializable;
+import java.lang.reflect.Method;
+
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.IMockHandler;
-import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
-
-import java.io.Serializable;
-import java.lang.reflect.Method;
+import org.mockito.internal.util.ObjectMethodsGuru;
 
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
@@ -23,9 +22,11 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
     private final IMockHandler mockHandler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
+    private final MockSettingsImpl mockSettings;
 
-    public MethodInterceptorFilter(IMockHandler mockHandler) {
+    public MethodInterceptorFilter(IMockHandler mockHandler, MockSettingsImpl mockSettings) {
         this.mockHandler = mockHandler;
+        this.mockSettings = mockSettings;
     }
 
     public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
@@ -36,12 +37,12 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
             return hashCodeForMock(proxy);
         }
         
-        MockitoMethodProxy mockitoMethodProxy = mockHandler.createMockitoMethodProxy(methodProxy);
+        MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);
         
         cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
         
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
-        MockitoMethod mockitoMethod = mockHandler.createMockitoMethod(method);
+        MockitoMethod mockitoMethod = new SerializableMockitoMethod(method);
         Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return mockHandler.handle(invocation);
     }
@@ -52,5 +53,11 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
 
     private int hashCodeForMock(Object mock) {
         return System.identityHashCode(mock);
+    }
+
+    public MockitoMethodProxy createMockitoMethodProxy(MethodProxy methodProxy) {
+        if (mockSettings.isSerializable())
+            return new SerializableMockitoMethodProxy(methodProxy);
+        return new DelegatingMockitoMethodProxy(methodProxy);
     }
 }

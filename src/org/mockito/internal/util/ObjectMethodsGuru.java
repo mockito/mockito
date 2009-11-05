@@ -1,17 +1,17 @@
 package org.mockito.internal.util;
 
-import java.lang.reflect.Method;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 
-import org.mockito.internal.invocation.DelegatingMockitoMethod;
 import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMockitoMethod;
 
 public class ObjectMethodsGuru implements Serializable {
 
     private static final long serialVersionUID = -1286718569065470494L;
 
     public boolean isToString(Method method) {
-        return isToString(new DelegatingMockitoMethod(method));
+        return isToString(new SerializableMockitoMethod(method));
     }
 
     public boolean isToString(MockitoMethod method) {

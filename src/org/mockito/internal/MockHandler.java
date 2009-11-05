@@ -4,11 +4,9 @@
  */
 package org.mockito.internal;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
-import org.mockito.cglib.proxy.MethodProxy;
-import org.mockito.internal.creation.*;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -128,17 +126,5 @@ public class MockHandler<T> implements IMockHandler {
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
-    }
-
-    public MockitoMethodProxy createMockitoMethodProxy(MethodProxy methodProxy) {
-        if (mockSettings.isSerializable())
-            return new SerializableMockitoMethodProxy(methodProxy);
-        return new DelegatingMockitoMethodProxy(methodProxy);
-    }
-
-    public MockitoMethod createMockitoMethod(Method method) {
-        if (mockSettings.isSerializable())
-            return new SerializableMockitoMethod(method);
-        return new DelegatingMockitoMethod(method);
     }
 }

@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util;
 
+import static org.mockito.Mockito.*;
+
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Enhancer;
 import org.mockito.cglib.proxy.Factory;
@@ -35,7 +37,7 @@ public class MockUtil {
         
         MockName mockName = new MockName(settings.getMockName(), classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
-        MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHandler);
+        MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHandler, settings);
         Class<?>[] interfaces = settings.getExtraInterfaces();
         Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
         Object spiedInstance = settings.getSpiedInstance();
@@ -52,7 +54,8 @@ public class MockUtil {
     public <T> void resetMock(T mock) {
         MockHandler<T> oldMockHandler = getMockHandler(mock);
         MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
-        MethodInterceptorFilter newFilter = new MethodInterceptorFilter(newMockHandler);
+        MethodInterceptorFilter newFilter = new MethodInterceptorFilter(newMockHandler, 
+                        (MockSettingsImpl) withSettings().defaultAnswer(RETURNS_DEFAULTS));
         ((Factory) mock).setCallback(0, newFilter);
     }
 
