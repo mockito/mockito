@@ -6,24 +6,12 @@ package org.mockito;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
-import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.answers.DoesNothing;
-import org.mockito.internal.stubbing.answers.Returns;
-import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
+import org.mockito.internal.stubbing.answers.*;
+import org.mockito.internal.stubbing.defaultanswers.*;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidMethodStubbable;
+import org.mockito.stubbing.*;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>
@@ -55,6 +43,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
  *      <a href="#17">17. (**New**) Resetting mocks</a><br/>
  *      <a href="#18">18. (**New**) Troubleshooting & validating framework usage</a><br/>
  *      <a href="#19">19. (**New**) Aliases for behavior driven development</a><br/>
+ *      <a href="#20">20. (**New**) Serializable mocks</a><br/>
  * </b>
  * 
  * <p>
@@ -597,6 +586,41 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * }  
  * </pre>
  * 
+ * <h3 id="20">20. (**New**) Serializable mocks</h3>
+ * 
+ * With this feature you can use a mock in a place that requires dependencies to be serializable.
+ * <p>
+ * WARNING: This should rarely be used.  If you are unit testing it should be rare that you need this behaviour. 
+ * <p>
+ * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
+ * was in a web environment and the objects from the external dependency were being serialized to pass between layers. 
+ * <p>
+ * To create a mock that can be serialized the interface or class must implement the Serializable interface OR use the
+ * {@link #withSettings().extraInterfaces(Serializable.class)}.  When creating the mock for the interface or class use the
+ * withSettings().serializable() {@link org.mockito.MockSettings}.  
+ * 
+ * <pre>
+ * YourClass mock = mock(YourClass.class, withSettings().extraInterfaces(Serializable.class).serializable());
+ * </pre>
+ * 
+ * In the above example the first MockSettings that is added is the Serialiable interface.  If your class or interface
+ * implements Serializable this is not needed.  The second MockSettings, .serializable(), tells mockito to use internal
+ * classes that can be serialized.
+ * <p>
+ * The above mock can be serialized assuming all the normal <a href='http://www.uni-muenster.de/ZIV.BennoSueselbeck/java/jdk1.5.0_01/docs/api/java/io/Serializable.html'>
+ * serialization requirements</a> are met by the interface or class.
+ * <p>
+ * Making a real object spy serializable is a bit more effort as the spy(...) method does not have an overloaded version 
+ * which accepts MockSettings.  But no worries you simply use the same MockSettings that the spy(...) method uses plus the 
+ * serializable setting.
+ * 
+ * <pre>
+ * List<Object> list = new ArrayList<Object>();
+ * List<Object> spy = mock(ArrayList.class, withSettings()
+ *                 .spiedInstance(list)
+ *                 .defaultAnswer(CALLS_REAL_METHODS)
+ *                 .serializable());
+ * </pre>
  * 
  */
 @SuppressWarnings("unchecked")
