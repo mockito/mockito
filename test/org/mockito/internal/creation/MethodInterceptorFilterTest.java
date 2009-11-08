@@ -54,6 +54,7 @@ public class MethodInterceptorFilterTest extends TestBase {
         Mockito.verify(mockHanlder, never()).handle(any(Invocation.class));
     }
     
+    //TODO: move to separate factory
     @Test
     public void shouldCreateSerializableMethodProxyIfIsSerializableMock() throws Exception {
         MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHanlder, (MockSettingsImpl) withSettings().serializable());

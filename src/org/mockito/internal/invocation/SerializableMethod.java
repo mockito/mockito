@@ -6,9 +6,10 @@ import java.util.Arrays;
 
 import org.mockito.exceptions.base.MockitoException;
 
-public class SerializableMethod implements Serializable {
+public class SerializableMethod implements Serializable, MockitoMethod {
 
     private static final long serialVersionUID = 6005610965006048445L;
+    
     private Class<?> declaringClass;
     private String methodName;
     private Class<?>[] parameterTypes;

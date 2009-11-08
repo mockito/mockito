@@ -38,15 +38,15 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);
-        
         cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
         
+        MockitoMethod mockitoMethod = createMockitoMethod(method);
+        
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
-        SerializableMethod serializableMethod = new SerializableMethod(method);
-        Invocation invocation = new Invocation(proxy, serializableMethod, args, SequenceNumber.next(), realMethod);
+        Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return mockHandler.handle(invocation);
     }
-    
+   
     public IMockHandler getMockHandler() {
         return mockHandler;
     }
@@ -59,5 +59,13 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         if (mockSettings.isSerializable())
             return new SerializableMockitoMethodProxy(methodProxy);
         return new DelegatingMockitoMethodProxy(methodProxy);
+    }
+    
+    public MockitoMethod createMockitoMethod(Method method) {
+        if (mockSettings.isSerializable()) {
+            return new SerializableMethod(method);
+        } else {
+            return new DelegatingMethod(method); 
+        }
     }
 }

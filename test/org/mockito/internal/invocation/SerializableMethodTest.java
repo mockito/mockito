@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 
 public class SerializableMethodTest extends TestBase {
 
-    private SerializableMethod method;
+    private MockitoMethod method;
     private Method toStringMethod;
     private Class<?>[] args;
 
