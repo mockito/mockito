@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
         this(invocation, Collections.<Matcher>emptyList());
     }
 
-    public SerializableMethod getMethod() {
+    public Method getMethod() {
         return invocation.getMethod();
     }
     

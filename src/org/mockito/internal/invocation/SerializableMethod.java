@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.mockito.exceptions.base.MockitoException;
+
 public class SerializableMethod implements Serializable {
 
     private static final long serialVersionUID = 6005610965006048445L;
@@ -41,10 +43,22 @@ public class SerializableMethod implements Serializable {
 
     public boolean isVarArgs() {
         return isVarArgs;
-    }
-    
-    public boolean isDeclaredOnInterface() {
-        return declaringClass.isInterface();
+    }  
+
+    public Method getJavaMethod() {
+        try {
+            return declaringClass.getDeclaredMethod(methodName, parameterTypes);
+        } catch (SecurityException e) {
+            String message = String.format(
+                    "The method %1$s.%2$s is probably private or protected and cannot be mocked.\n" +
+                            "Please report this as a defect with an example of how to reproduce it.", declaringClass, methodName);
+            throw new MockitoException(message, e);
+        } catch (NoSuchMethodException e) {
+            String message = String.format(
+                    "The method %1$s.%2$s does not exists and you should not get to this point.\n" +
+                            "Please report this as a defect with an example of how to reproduce it.", declaringClass, methodName);
+            throw new MockitoException(message, e);
+        }
     }    
 
     @Override

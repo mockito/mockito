@@ -7,6 +7,8 @@ package org.mockitousage.stubbing;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -85,8 +87,21 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
         mock.voidMethod();
         assertTrue(call2.isCalled());
-
     }
+    
+    @Test
+    public void shouldMakeSureTheInterfaceDoesNotChange() throws Exception {
+        when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                assertTrue(invocation.getArguments().getClass().isArray());
+                assertEquals(Method.class, invocation.getMethod().getClass());
+                
+                return "assertions passed";
+            }
+        });
+
+        assertEquals("assertions passed", mock.simpleMethod("test"));
+    }    
 
     private static class RecordCall implements Answer {
         private boolean called = false;

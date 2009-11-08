@@ -4,17 +4,24 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
-import org.mockito.internal.util.*;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -78,8 +85,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return mock;
     }
 
-    public SerializableMethod getMethod() {
-        return method;
+    public Method getMethod() {
+        return method.getJavaMethod();
     }
 
     public Object[] getArguments() {
@@ -200,11 +207,15 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Object callRealMethod() throws Throwable {
-        if (this.getMethod().isDeclaredOnInterface()) {
+        if (isDeclaredOnInterface()) {
             new Reporter().cannotCallRealMethodOnInterface();
         }
         return realMethod.invoke(mock, rawArguments);
     }
+    
+    public boolean isDeclaredOnInterface() {
+        return this.getMethod().getDeclaringClass().isInterface();
+    }      
 
     public String toString(PrintSettings printSettings) {
         return toString(argumentsToMatchers(), printSettings);

@@ -11,9 +11,9 @@ import org.junit.Test;
 import org.mockitoutil.TestBase;
 
 
-public class SerializableMockitoMethodTest extends TestBase {
+public class SerializableMethodTest extends TestBase {
 
-    private SerializableMethod mockMethod;
+    private SerializableMethod method;
     private Method toStringMethod;
     private Class<?>[] args;
 
@@ -21,49 +21,49 @@ public class SerializableMockitoMethodTest extends TestBase {
     public void createMethodToTestWith() throws SecurityException, NoSuchMethodException {
         args = new Class<?>[0];
         toStringMethod = this.getClass().getMethod("toString", args);
-        mockMethod = new SerializableMethod(toStringMethod);
+        method = new SerializableMethod(toStringMethod);
     }
     
     @Test
     public void shouldBeSerializable() throws Exception {
         ByteArrayOutputStream serialized = new ByteArrayOutputStream();
-        new ObjectOutputStream(serialized).writeObject(mockMethod);
+        new ObjectOutputStream(serialized).writeObject(method);
     }
     
     @Test
     public void shouldBeAbleToRetrieveMethodExceptionTypes() throws Exception {
-        assertArrayEquals(toStringMethod.getExceptionTypes(), mockMethod.getExceptionTypes());
+        assertArrayEquals(toStringMethod.getExceptionTypes(), method.getExceptionTypes());
     }
     
     @Test
     public void shouldBeAbleToRetrieveMethodName() throws Exception {
-        assertEquals(toStringMethod.getName(), mockMethod.getName());
+        assertEquals(toStringMethod.getName(), method.getName());
     }
     
     @Test
     public void shouldBeAbleToCheckIsArgVargs() throws Exception {
-        assertEquals(toStringMethod.isVarArgs(), mockMethod.isVarArgs());
+        assertEquals(toStringMethod.isVarArgs(), method.isVarArgs());
     }
     
     @Test
     public void shouldBeAbleToGetParameterTypes() throws Exception {
-        assertArrayEquals(toStringMethod.getParameterTypes(), mockMethod.getParameterTypes());
+        assertArrayEquals(toStringMethod.getParameterTypes(), method.getParameterTypes());
     }
     
     @Test
     public void shouldBeAbleToGetReturnType() throws Exception {
-        assertEquals(toStringMethod.getReturnType(), mockMethod.getReturnType());
+        assertEquals(toStringMethod.getReturnType(), method.getReturnType());
     }
     
     @Test
     public void shouldBeEqualForTwoInstances() throws Exception {
-        assertTrue(new SerializableMethod(toStringMethod).equals(mockMethod));
+        assertTrue(new SerializableMethod(toStringMethod).equals(method));
     }
     
     @Test
     public void shouldNotBeEqualForSameMethodFromTwoDifferentClasses() throws Exception {
         Method testBaseToStringMethod = String.class.getMethod("toString", args);
-        assertFalse(new SerializableMethod(testBaseToStringMethod).equals(mockMethod));
+        assertFalse(new SerializableMethod(testBaseToStringMethod).equals(method));
     }
     
     //TODO: add tests for generated equals() method
