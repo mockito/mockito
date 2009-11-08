@@ -66,4 +66,6 @@ public class SerializableMockitoMethodTest extends TestBase {
         assertFalse(new SerializableMockitoMethod(testBaseToStringMethod).equals(mockMethod));
     }
     
+    //TODO: add tests for generated equals() method
+    
 }
