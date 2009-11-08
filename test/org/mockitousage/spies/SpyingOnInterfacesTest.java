@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
@@ -29,9 +28,8 @@ public class SpyingOnInterfacesTest extends TestBase {
         } catch (MockitoException e) {}
     }
     
-    @Ignore("not yet implemented")
     @Test
-    public void shouldFailFastWhenCallingRealMethodOnInterface2() throws Exception {
+    public void shouldFailInRuntimeWhenCallingRealMethodOnInterface() throws Exception {
         //given
         List list = mock(List.class);
         when(list.get(0)).thenAnswer(

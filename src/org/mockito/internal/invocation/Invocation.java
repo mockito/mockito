@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.*;
@@ -199,6 +200,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Object callRealMethod() throws Throwable {
+        if (this.getMethod().getDeclaringClass().isInterface()) {
+            new Reporter().cannotCallRealMethodOnInterface();
+        }
         return realMethod.invoke(mock, rawArguments);
     }
 

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
@@ -162,5 +163,18 @@ public class InvocationTest extends TestBase {
             }});
         //then
         assertEquals("woof", invocation.callRealMethod());
+    }
+    
+    @Test
+    public void shouldScreamWhenCallingRealMethodOnInterface() throws Throwable {
+        //given
+        Invocation invocationOnInterface = new InvocationBuilder().toInvocation();
+
+        try {
+            //when
+            invocationOnInterface.callRealMethod();
+            //then
+            fail();
+        } catch(MockitoException e) {}
     }
 }
