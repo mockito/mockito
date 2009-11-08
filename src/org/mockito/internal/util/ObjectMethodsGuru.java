@@ -3,15 +3,15 @@ package org.mockito.internal.util;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
+import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.invocation.SerializableMethod;
 
 public class ObjectMethodsGuru implements Serializable {
 
     private static final long serialVersionUID = -1286718569065470494L;
 
     public boolean isToString(Method method) {
-        return isToString(new SerializableMethod(method));
+        return isToString(new DelegatingMethod(method));
     }
 
     public boolean isToString(MockitoMethod method) {
