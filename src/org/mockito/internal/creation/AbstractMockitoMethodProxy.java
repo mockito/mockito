@@ -11,6 +11,7 @@ public abstract class AbstractMockitoMethodProxy implements MockitoMethodProxy {
         return getMethodProxy().invokeSuper(target, arguments);
     }
 
+    //TODO refactor back to CGLIBHacker and get rid of abstract class
     public void setNamingPolicyField(MockitoNamingPolicy namingPolicy) {
         try {
             MethodProxy methodProxy = getMethodProxy();
