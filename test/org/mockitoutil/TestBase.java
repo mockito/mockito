@@ -100,12 +100,12 @@ public class TestBase extends Assert {
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
-        return new Invocation(new Object(), new MockitoMethod(type.getMethod(methodName,
+        return new Invocation(new Object(), new SerializableMethod(type.getMethod(methodName,
                 new Class[0])), args, 1, null);
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
-        return new Invocation(new Object(), new MockitoMethod(type.getMethod(methodName,
+        return new Invocation(new Object(), new SerializableMethod(type.getMethod(methodName,
                 new Class[0])), new Object[0], 1, realMethod);
     }
 

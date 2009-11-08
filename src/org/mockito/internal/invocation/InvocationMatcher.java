@@ -35,7 +35,7 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
         this(invocation, Collections.<Matcher>emptyList());
     }
 
-    public MockitoMethod getMethod() {
+    public SerializableMethod getMethod() {
         return invocation.getMethod();
     }
     

@@ -32,7 +32,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     private static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
     private final Object mock;
-    private final MockitoMethod method;
+    private final SerializableMethod method;
     private final Object[] arguments;
     private final Object[] rawArguments;
 
@@ -42,11 +42,11 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
 
     final RealMethod realMethod;
 
-    public Invocation(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
-        this.method = mockitoMethod;
+    public Invocation(Object mock, SerializableMethod serializableMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
+        this.method = serializableMethod;
         this.mock = mock;
         this.realMethod = realMethod;
-        this.arguments = expandVarArgs(mockitoMethod.isVarArgs(), args);
+        this.arguments = expandVarArgs(serializableMethod.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
@@ -78,7 +78,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return mock;
     }
 
-    public MockitoMethod getMethod() {
+    public SerializableMethod getMethod() {
         return method;
     }
 

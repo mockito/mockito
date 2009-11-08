@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class MockitoMethod implements Serializable {
+public class SerializableMethod implements Serializable {
 
     private static final long serialVersionUID = 6005610965006048445L;
     private Class<?> declaringClass;
@@ -14,7 +14,7 @@ public class MockitoMethod implements Serializable {
     private Class<?>[] exceptionTypes;
     private boolean isVarArgs;
 
-    public MockitoMethod(Method method) {
+    public SerializableMethod(Method method) {
         declaringClass = method.getDeclaringClass();
         methodName = method.getName();
         parameterTypes = method.getParameterTypes();
@@ -60,7 +60,7 @@ public class MockitoMethod implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        MockitoMethod other = (MockitoMethod) obj;
+        SerializableMethod other = (SerializableMethod) obj;
         if (declaringClass == null) {
             if (other.declaringClass != null)
                 return false;

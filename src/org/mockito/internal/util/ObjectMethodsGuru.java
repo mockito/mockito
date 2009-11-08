@@ -3,17 +3,17 @@ package org.mockito.internal.util;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMethod;
 
 public class ObjectMethodsGuru implements Serializable {
 
     private static final long serialVersionUID = -1286718569065470494L;
 
     public boolean isToString(Method method) {
-        return isToString(new MockitoMethod(method));
+        return isToString(new SerializableMethod(method));
     }
 
-    public boolean isToString(MockitoMethod method) {
+    public boolean isToString(SerializableMethod method) {
         return method.getReturnType() == String.class && method.getParameterTypes().length == 0
                 && method.getName().equals("toString");
     }
