@@ -27,4 +27,13 @@ public class CreationValidator {
             }
         }
     }
+    
+    public void validateMockedType(Class classToMock, Object spiedInstance) {
+        if (classToMock == null || spiedInstance == null) {
+            return;
+        }
+        if (!classToMock.equals(spiedInstance.getClass())) {
+            new Reporter().mockedTypeIsInconsistentWithSpiedInstanceType(classToMock, spiedInstance);
+        }
+    }
 }

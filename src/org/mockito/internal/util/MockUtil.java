@@ -34,6 +34,7 @@ public class MockUtil {
     public <T> T createMock(Class<T> classToMock, MockingProgress progress, MockSettingsImpl settings) {
         creationValidator.validateType(classToMock);
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
+        creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
         
         MockName mockName = new MockName(settings.getMockName(), classToMock);
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);

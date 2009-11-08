@@ -461,4 +461,15 @@ public class Reporter {
                 "extraInterfaces() requires at least one interface."
         ));
     }
+
+    public void mockedTypeIsInconsistentWithSpiedInstanceType(Class<?> mockedType, Object spiedInstance) {
+        throw new MockitoException(join(
+                "Mocked type must be the same as the type of your spied instance.",
+                "Mocked type must be: " + spiedInstance.getClass().getSimpleName() + ", but is: " + mockedType.getSimpleName(),
+                "  //correct spying:",
+                "  spy = mock( ->ArrayList.class<- , withSettings().spiedInstance( ->new ArrayList()<- );",
+                "  //incorrect - types don't match:",
+                "  spy = mock( ->List.class<- , withSettings().spiedInstance( ->new ArrayList()<- );"
+        ));
+    }
 }

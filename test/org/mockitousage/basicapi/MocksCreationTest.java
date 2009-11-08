@@ -7,14 +7,17 @@ package org.mockitousage.basicapi;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("unchecked")
 public class MocksCreationTest extends TestBase {
 
     private class HasPrivateConstructor {};
@@ -70,5 +73,23 @@ public class MocksCreationTest extends TestBase {
         
         //then
         assertContains("great mockie", name);
+    }
+    
+    @Test
+    public void shouldScreamWhenSpyCreatedWithWrongType() {
+        //given
+        List list = new LinkedList();
+        try {
+            //when
+            mock(List.class, withSettings().spiedInstance(list));
+            fail();
+            //then
+        } catch (MockitoException e) {}
+    }
+
+    @Test
+    public void shouldAllowCreatingSpiesWithCorrectType() {
+        List list = new LinkedList();
+        mock(LinkedList.class, withSettings().spiedInstance(list));
     }
 }

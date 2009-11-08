@@ -4,20 +4,22 @@
  */
 package org.mockito.internal.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("unchecked")
 public class CreationValidatorTest extends TestBase {
 
     final class FinalClass {}
+    CreationValidator validator = new CreationValidator();
     
     @Test
     public void shouldNotAllowExtraInterfaceThatIsTheSameAsTheMockedType() throws Exception {
-        //given
-        CreationValidator validator = new CreationValidator();
-        
         try {
             //when
             validator.validateExtraInterfaces(IMethods.class, new Class<?>[] {IMethods.class});
@@ -27,30 +29,30 @@ public class CreationValidatorTest extends TestBase {
             assertContains("You mocked following type: IMethods", e.getMessage());
         }
     }
-    
-    @Test
-    public void shouldIgnoreIfExtraInterfacesAreNull() throws Exception {
-        //given
-        CreationValidator validator = new CreationValidator();
         
-        //when
-        validator.validateExtraInterfaces(IMethods.class, (Class[]) null);
-
-        //then ok
+    @Test
+    public void shouldNotAllowsInconsistentTypes() throws Exception {
+        try {
+            //when
+            validator.validateMockedType(List.class, new ArrayList());
+            fail();
+            //then
+        } catch(MockitoException e) {}
     }
     
     @Test
-    public void shouldNotAllowFinalClasses() throws Exception {
-        //given
-        CreationValidator validator = new CreationValidator();
-        
-        try {
-            //when
-            validator.validateType(FinalClass.class);
-            fail();
-        } catch (MockitoException e) {
-            //then
-            assertContains("Cannot mock/spy", e.getMessage());
-        }
+    public void shouldAllowOnlyConsistentTypes() throws Exception {
+        //when
+        validator.validateMockedType(ArrayList.class, new ArrayList());
+        //then no exception is thrown
+    }
+    
+    @Test
+    public void shouldValidationBeSafeWhenNullsPassed() throws Exception {
+        //when
+        validator.validateMockedType(null, new ArrayList());
+        //or
+        validator.validateMockedType(ArrayList.class, null);
+        //then no exception is thrown
     }
 }
