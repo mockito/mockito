@@ -475,9 +475,9 @@ public class Reporter {
 
     public void cannotCallRealMethodOnInterface() {
         throw new MockitoException(join(
-                "Cannot call real methond on java interface. Interface does not have any implementation!",
+                "Cannot call real method on java interface. Interface does not have any implementation!",
                 "Calling real methods is only possible when mocking concrete classes.",
-                "  //correct:",
+                "  //correct example:",
                 "  when(mockOfConcreteClass.doStuff()).thenCallRealMethod();"
         ));
     }
