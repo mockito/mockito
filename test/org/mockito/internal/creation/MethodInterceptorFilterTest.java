@@ -1,12 +1,12 @@
 package org.mockito.internal.creation;
 
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.withSettings;
+import static org.hamcrest.core.IsInstanceOf.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +15,9 @@ import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.IMockHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMethod;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
 
@@ -77,5 +80,29 @@ public class MethodInterceptorFilterTest extends TestBase {
         
         // then
         assertThat(mockitoMethodProxy, instanceOf(DelegatingMockitoMethodProxy.class));
+    }
+    
+    @Test
+    public void shouldCreateSerializableMethodIfIsSerializableMock() throws Exception {
+        MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHanlder, (MockSettingsImpl) withSettings().serializable());
+        Method method = new InvocationBuilder().toInvocation().getMethod();
+        
+        // when
+        MockitoMethod mockitoMethod = filter.createMockitoMethod(method);
+        
+        // then
+        assertThat(mockitoMethod, instanceOf(SerializableMethod.class));
+    }
+    
+    @Test
+    public void shouldCreateJustDelegatingMethodIfIsNotSerializableMock() throws Exception {
+        MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHanlder, (MockSettingsImpl) withSettings());
+        Method method = new InvocationBuilder().toInvocation().getMethod();
+        
+        // when
+        MockitoMethod mockitoMethod = filter.createMockitoMethod(method);
+        
+        // then
+        assertThat(mockitoMethod, instanceOf(DelegatingMethod.class));
     }
 }
