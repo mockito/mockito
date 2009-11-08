@@ -472,4 +472,13 @@ public class Reporter {
                 "  spy = mock( ->List.class<- , withSettings().spiedInstance( ->new ArrayList()<- );"
         ));
     }
+
+    public void cannotCallRealMethodOnInterface() {
+        throw new MockitoException(join(
+                "Cannot call real methond on java interface. Interface does not have any implementation!",
+                "Calling real methods is only possible when mocking concrete classes.",
+                "  //correct:",
+                "  when(mockOfConcreteClass.doStuff()).thenCallRealMethod();"
+        ));
+    }
 }

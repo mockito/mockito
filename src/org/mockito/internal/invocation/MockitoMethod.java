@@ -12,4 +12,6 @@ public interface MockitoMethod {
 
   boolean isVarArgs();
 
+  Class<?> getDeclaringClass();
+
 }

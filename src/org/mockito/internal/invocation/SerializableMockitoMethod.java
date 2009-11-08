@@ -25,23 +25,27 @@ public class SerializableMockitoMethod implements MockitoMethod, Serializable {
     }
 
     public String getName() {
-      return methodName;
+        return methodName;
     }
-    
+
     public Class<?> getReturnType() {
-      return returnType;
+        return returnType;
     }
-    
+
     public Class<?>[] getParameterTypes() {
-      return parameterTypes;
+        return parameterTypes;
     }
 
     public Class<?>[] getExceptionTypes() {
-      return exceptionTypes;
+        return exceptionTypes;
     }
 
     public boolean isVarArgs() {
-      return isVarArgs;
+        return isVarArgs;
+    }
+
+    public Class<?> getDeclaringClass() {
+        return declaringClass;
     }
 
     @Override

@@ -45,7 +45,6 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
         return stubbing;
     }        
 
-    //TODO: after 1.8 fail when someone tries to do it with a mock of an Interface
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
     }

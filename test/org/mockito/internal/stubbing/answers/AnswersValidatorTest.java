@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.mockito.Mockito.*;
+
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -13,6 +16,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("unchecked")
 public class AnswersValidatorTest extends TestBase {
 
     private AnswersValidator validator = new AnswersValidator();
@@ -82,5 +86,28 @@ public class AnswersValidatorTest extends TestBase {
     @Test(expected = MockitoException.class)
     public void shouldFailOnNullWithPrimitive() throws Throwable {
         validator.validate(new Returns(null), new InvocationBuilder().method("booleanReturningMethod").toInvocation());
+    }
+    
+    @Test
+    public void shouldFailWhenCallingRealMethodOnIterface() throws Throwable {
+        //given
+        Invocation inovcationOnIterface = new InvocationBuilder().method("simpleMethod").toInvocation();
+        try {
+            //when
+            validator.validate(new CallsRealMethods(), inovcationOnIterface);
+            //then
+            fail();
+        } catch (MockitoException e) {}
+    }
+            
+    @Test
+    public void shouldBeOKWhenCallingRealMethodOnConcreteClass() throws Throwable {
+        //given
+        ArrayList mock = mock(ArrayList.class);
+        mock.clear();
+        Invocation invocationOnClass = getLastInvocation();
+        //when
+        validator.validate(new CallsRealMethods(), invocationOnClass);
+        //then no exception is thrown
     }
 }
