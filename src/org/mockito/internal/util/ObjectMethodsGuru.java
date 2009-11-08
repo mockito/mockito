@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.invocation.SerializableMockitoMethod;
 
 public class ObjectMethodsGuru implements Serializable {
 
     private static final long serialVersionUID = -1286718569065470494L;
 
     public boolean isToString(Method method) {
-        return isToString(new SerializableMockitoMethod(method));
+        return isToString(new MockitoMethod(method));
     }
 
     public boolean isToString(MockitoMethod method) {

@@ -42,7 +42,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
         
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
-        MockitoMethod mockitoMethod = new SerializableMockitoMethod(method);
+        MockitoMethod mockitoMethod = new MockitoMethod(method);
         Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return mockHandler.handle(invocation);
     }

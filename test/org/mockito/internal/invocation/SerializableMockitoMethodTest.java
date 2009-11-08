@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 
 public class SerializableMockitoMethodTest extends TestBase {
 
-    private SerializableMockitoMethod mockMethod;
+    private MockitoMethod mockMethod;
     private Method toStringMethod;
     private Class<?>[] args;
 
@@ -21,7 +21,7 @@ public class SerializableMockitoMethodTest extends TestBase {
     public void createMethodToTestWith() throws SecurityException, NoSuchMethodException {
         args = new Class<?>[0];
         toStringMethod = this.getClass().getMethod("toString", args);
-        mockMethod = new SerializableMockitoMethod(toStringMethod);
+        mockMethod = new MockitoMethod(toStringMethod);
     }
     
     @Test
@@ -57,13 +57,13 @@ public class SerializableMockitoMethodTest extends TestBase {
     
     @Test
     public void shouldBeEqualForTwoInstances() throws Exception {
-        assertTrue(new SerializableMockitoMethod(toStringMethod).equals(mockMethod));
+        assertTrue(new MockitoMethod(toStringMethod).equals(mockMethod));
     }
     
     @Test
     public void shouldNotBeEqualForSameMethodFromTwoDifferentClasses() throws Exception {
         Method testBaseToStringMethod = String.class.getMethod("toString", args);
-        assertFalse(new SerializableMockitoMethod(testBaseToStringMethod).equals(mockMethod));
+        assertFalse(new MockitoMethod(testBaseToStringMethod).equals(mockMethod));
     }
     
     //TODO: add tests for generated equals() method
