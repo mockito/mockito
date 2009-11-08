@@ -590,6 +590,7 @@ import org.mockito.stubbing.*;
  * 
  * With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
+ * TODO: tune
  * WARNING: This should rarely be used.  If you are unit testing it should be rare that you need this behaviour. 
  * <p>
  * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
