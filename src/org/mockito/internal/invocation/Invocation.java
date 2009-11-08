@@ -200,7 +200,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Object callRealMethod() throws Throwable {
-        if (this.getMethod().getDeclaringClass().isInterface()) {
+        if (this.getMethod().isDeclaredOnInterface()) {
             new Reporter().cannotCallRealMethodOnInterface();
         }
         return realMethod.invoke(mock, rawArguments);

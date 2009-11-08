@@ -43,10 +43,10 @@ public class SerializableMockitoMethod implements MockitoMethod, Serializable {
     public boolean isVarArgs() {
         return isVarArgs;
     }
-
-    public Class<?> getDeclaringClass() {
-        return declaringClass;
-    }
+    
+    public boolean isDeclaredOnInterface() {
+        return declaringClass.isInterface();
+    }    
 
     @Override
     public int hashCode() {

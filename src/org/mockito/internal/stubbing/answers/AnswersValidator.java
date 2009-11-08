@@ -31,7 +31,7 @@ public class AnswersValidator {
     }
 
     private void validateMockingConcreteClass(CallsRealMethods answer, Invocation invocation) {
-        if (invocation.getMethod().getDeclaringClass().isInterface()) {
+        if (invocation.getMethod().isDeclaredOnInterface()) {
             reporter.cannotCallRealMethodOnInterface();
         }
     }

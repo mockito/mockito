@@ -2,16 +2,16 @@ package org.mockito.internal.invocation;
 
 public interface MockitoMethod {
 
-  Class<?> getReturnType();
+    Class<?> getReturnType();
 
-  Class<?>[] getParameterTypes();
+    Class<?>[] getParameterTypes();
 
-  String getName();
+    String getName();
 
-  Class<?>[] getExceptionTypes();
+    Class<?>[] getExceptionTypes();
 
-  boolean isVarArgs();
+    boolean isVarArgs();
 
-  Class<?> getDeclaringClass();
+    boolean isDeclaredOnInterface();
 
 }
