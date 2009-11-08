@@ -13,6 +13,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class AtLeastXVerificationTest extends TestBase {
 
     @Mock private List mock;
