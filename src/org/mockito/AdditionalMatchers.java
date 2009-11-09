@@ -458,6 +458,7 @@ public class AdditionalMatchers {
      *            the given array.
      * @return <code>null</code>.
      */
+    //TODO: do the right thing with eq() matcher and arrays
     public static short[] aryEq(short[] value) {
         return reportMatcher(new ArrayEquals(value)).returnNull();
     }
