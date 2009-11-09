@@ -18,6 +18,8 @@ import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.internal.util.MockitoLoggerImpl;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
  * <p>
@@ -89,11 +91,11 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
     private final MockitoLogger logger;
     private RunnerImpl runner;
     
-    public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) {
-        this(klass, new MockitoLoggerImpl(), new RunnerFactory().create(klass));
+    public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
+        this(new MockitoLoggerImpl(), new RunnerFactory().create(klass));
     }
     
-    ConsoleSpammingMockitoJUnitRunner(Class<?> klass, MockitoLogger logger, RunnerImpl runnerImpl) {
+    ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, RunnerImpl runnerImpl) {
         this.runner = runnerImpl;
         this.logger = logger;
     }

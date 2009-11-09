@@ -12,6 +12,8 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
 import org.mockitoutil.TestBase;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class RunnerFactoryTest extends TestBase {
 
     static class ClassProviderStub extends RunnerProvider {
@@ -22,7 +24,7 @@ public class RunnerFactoryTest extends TestBase {
     }
 
     @Test
-    public void shouldCreateRunnerForJUnit44() {
+    public void shouldCreateRunnerForJUnit44() throws Exception {
         //given
         RunnerProvider provider = new RunnerProvider() {
             public boolean isJUnit45OrHigherAvailable() {
@@ -39,7 +41,7 @@ public class RunnerFactoryTest extends TestBase {
     }
     
     @Test
-    public void shouldCreateRunnerForJUnit45() {
+    public void shouldCreateRunnerForJUnit45()  throws Exception{
         //given
         RunnerProvider provider = new RunnerProvider() {
             public boolean isJUnit45OrHigherAvailable() {
@@ -56,7 +58,8 @@ public class RunnerFactoryTest extends TestBase {
     }
     
     @Test
-    public void shouldThrowMeaningfulMockitoExceptionIfNoValidJUnitFound() {
+    public void
+    shouldThrowMeaningfulMockitoExceptionIfNoValidJUnitFound()  throws Exception{
         //given
         RunnerProvider provider = new RunnerProvider() {
             public boolean isJUnit45OrHigherAvailable() {
@@ -81,7 +84,7 @@ public class RunnerFactoryTest extends TestBase {
     static class NoTestMethods {}
 
     @Test
-    public void shouldSaySomethingMeaningfulWhenNoTestMethods() {
+    public void shouldSaySomethingMeaningfulWhenNoTestMethods()  throws Exception{
         //given
         RunnerFactory factory = new RunnerFactory(new RunnerProvider());
 
@@ -94,5 +97,25 @@ public class RunnerFactoryTest extends TestBase {
         catch (MockitoException e) {
             assertContains("No tests", e.getMessage());
         }
+    }
+
+    @Test
+    public void shouldForwardInvocationTargetException()  throws Exception{
+        //given
+        RunnerFactory factory = new RunnerFactory(new RunnerProvider()
+        {
+            @Override
+            public RunnerImpl newInstance(String runnerClassName, Class<?> constructorParam) throws Exception {
+                throw new InvocationTargetException(new RuntimeException());
+            }
+        });
+
+        //when
+        try {
+            factory.create(this.getClass());
+            fail();
+        }
+        //then
+        catch (InvocationTargetException e) {}
     }
 }

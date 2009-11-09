@@ -16,6 +16,8 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.reflection.Whitebox;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Experimental implementation that suppose to improve tdd/testing experience. 
  * Don't hesitate to send feedback to mockito@googlegroups.com
@@ -36,11 +38,11 @@ public class VerboseMockitoJUnitRunner extends Runner {
 
     private RunnerImpl runner;
     
-    public VerboseMockitoJUnitRunner(Class<?> klass) {
-        this(klass, new RunnerFactory().create(klass));
+    public VerboseMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
+        this(new RunnerFactory().create(klass));
     }
     
-    VerboseMockitoJUnitRunner(Class<?> klass, RunnerImpl runnerImpl) {
+    VerboseMockitoJUnitRunner(RunnerImpl runnerImpl) {
         this.runner = runnerImpl;
     }
     

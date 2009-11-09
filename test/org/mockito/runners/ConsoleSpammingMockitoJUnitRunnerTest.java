@@ -23,7 +23,7 @@ import org.mockitoutil.TestBase;
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
-    
+
     private ConsoleSpammingMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;
@@ -36,7 +36,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 //this is what happens when the test runs:
@@ -56,7 +56,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     @Ignore
     @Test
     public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 callUnstubbedMethodThatQualifiesForWarning();
@@ -74,7 +74,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldLogStubCalledWithDifferentArgumentsWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 someStubbing();
@@ -93,7 +93,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 when(mock.simpleMethod(1)).thenReturn("foo");
@@ -110,7 +110,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     @Test
     public void shouldNotLogWhenTestPasses() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 when(mock.simpleMethod()).thenReturn("foo");
@@ -128,7 +128,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         //given
         final DebuggingInfo debuggingInfo = new ThreadSafeMockingProgress().getDebuggingInfo();
 
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             @Override
             public void run(RunNotifier notifier) {
                 unusedStubbingThatQualifiesForWarning();
@@ -148,7 +148,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     public void shouldDelegateToGetDescription() throws Exception {
         //given
         final Description expectedDescription = Description.createSuiteDescription(this.getClass());
-        runner = new ConsoleSpammingMockitoJUnitRunner(this.getClass(), loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
             public Description getDescription() {
                 return expectedDescription;
             }

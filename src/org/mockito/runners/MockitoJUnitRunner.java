@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 
+import java.lang.reflect.InvocationTargetException;
+
 
 /**
  * Compatible with <b>JUnit 4.4</b> and higher, this runner adds following behavior:
@@ -48,7 +50,7 @@ public class MockitoJUnitRunner extends Runner {
 
     private final RunnerImpl runner;
 
-    public MockitoJUnitRunner(Class<?> klass) {
+    public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         runner = new RunnerFactory().create(klass);
     }
 

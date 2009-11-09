@@ -8,6 +8,8 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
 import org.mockito.internal.runners.util.TestMethodsFinder;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class RunnerFactory {
 
     private final RunnerProvider runnerProvider;
@@ -20,22 +22,24 @@ public class RunnerFactory {
         this(new RunnerProvider());
     }
 
-    public RunnerImpl create(Class<?> klass) {
+    public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
         try {
             if (runnerProvider.isJUnit45OrHigherAvailable()) {
                 return runnerProvider.newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
             } else {
                 return runnerProvider.newInstance("org.mockito.internal.runners.JUnit44RunnerImpl", klass);
             }
-        } catch (Throwable t) {
+        } catch (InvocationTargetException e) {
             if (!new TestMethodsFinder().hasTestMethods(klass)) {
                 throw new MockitoException(
                     "\n" +
                     "\n" +
                     "No tests found in " + klass.getSimpleName() + "\n" +
                     "Haven't you forgot @Test annotation?\n"
-                    , t);
+                    , e);
             }
+            throw e;
+        } catch (Throwable t) {
             throw new MockitoException(
                     "\n" +
                     "\n" +
