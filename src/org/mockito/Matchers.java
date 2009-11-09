@@ -212,7 +212,6 @@ public class Matchers {
      *   System.out.println(mock.foo(1, 2));
      *   //also prints 100
      *   System.out.println(mock.foo(1, 2, 3, 4));
-     *
      * </pre>
      * See examples in javadoc for {@link Matchers} class
      *
