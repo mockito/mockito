@@ -22,7 +22,7 @@ public class Primitives {
         return (Class<T>) primitiveTypes.get(clazz);
     }
     
-    public static <T> T primitiveValueFor(Class<T> primitiveType) {
+    public static <T> T primitiveValueOrNullFor(Class<T> primitiveType) {
         return (T) primitiveValues.get(primitiveType);
     }
     

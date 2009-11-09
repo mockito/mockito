@@ -11,12 +11,11 @@ import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
+import static org.mockito.AdditionalMatchers.*;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@Ignore
-//TODO
-public class NPEWithIsAClassMatcherTest extends TestBase {
+public class NPEWithCertainMatchersTest extends TestBase {
 
     @Mock IMethods mock;
     
@@ -44,5 +43,12 @@ public class NPEWithIsAClassMatcherTest extends TestBase {
         mock.intArgumentMethod(100);
         
         verify(mock).intArgumentMethod(eq(new Integer(100)));
+    }
+
+    @Test
+    public void shouldNotThrowNPEWhenIntegerPassedToSame() {
+        mock.intArgumentMethod(100);
+
+        verify(mock, never()).intArgumentMethod(same(new Integer(100)));
     }
 }

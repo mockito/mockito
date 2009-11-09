@@ -40,7 +40,7 @@ public class HandyReturnValues {
         if (isPrimitiveWrapper(clazz)) {
             return primitiveWrapperOf(clazz);
         } 
-        return primitiveValueFor(clazz);
+        return primitiveValueOrNullFor(clazz);
     }
 
     public Map returnMap() {
