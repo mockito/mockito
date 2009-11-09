@@ -195,9 +195,25 @@ public class Matchers {
     //TODO: after 1.8 check out Jay Fields' idea on any() matcher
 
     /**
-     * an vararg
-     * TODO: javadoc
+     * Any vararg, meaning any number and values of arguments.
      * <p>
+     * Example:
+     * <pre>
+     *   //verification:
+     *   mock.foo(1, 2);
+     *   mock.foo(1, 2, 3, 4);
+     *
+     *   verify(mock, times(2)).foo(anyVararg());
+     *
+     *   //stubbing:
+     *   when(mock.foo(anyVararg()).thenReturn(100);
+     *
+     *   //prints 100
+     *   System.out.println(mock.foo(1, 2));
+     *   //also prints 100
+     *   System.out.println(mock.foo(1, 2, 3, 4));
+     *
+     * </pre>
      * See examples in javadoc for {@link Matchers} class
      *
      * @return <code>null</code>.
