@@ -17,6 +17,7 @@ public class MockSettingsImpl implements MockSettings {
     private Answer<Object> defaultAnswer;
     private boolean isSerializable;
 
+    //TODO: serializable() should simply add Serializable interface
     public MockSettings serializable() {
         this.isSerializable = true;
         return this;

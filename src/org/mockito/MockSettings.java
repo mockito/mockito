@@ -125,6 +125,7 @@ public interface MockSettings extends Serializable {
     @SuppressWarnings("unchecked")
     MockSettings defaultAnswer(Answer defaultAnswer);
 
+    //TODO: javadoc
     MockSettings serializable();
     
 }
