@@ -276,6 +276,22 @@ public class MatchersTest extends TestBase {
             assertContains("oneArray(null)", e.getMessage());
         }
     }
+
+    @Test
+    public void shouldUseSmartEqualsForArrays() throws Exception {
+        //issue 143
+        mock.arrayMethod(new String[] {"one"});
+        verify(mock).arrayMethod(eq(new String[] {"one"}));
+        verify(mock).arrayMethod(new String[] {"one"});
+    }
+
+    @Test
+    public void shouldUseSmartEqualsForPrimitiveArrays() throws Exception {
+        //issue 143
+        mock.objectArgMethod(new int[] {1, 2});
+        verify(mock).objectArgMethod(eq(new int[] {1, 2}));
+        verify(mock).objectArgMethod(new int[] {1, 2});
+    }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void arrayEqualsShouldThrowArgumentsAreDifferentExceptionForNonMatchingArguments() {        

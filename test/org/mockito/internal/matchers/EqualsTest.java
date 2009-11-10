@@ -9,7 +9,8 @@ import org.mockitoutil.TestBase;
 
 
 public class EqualsTest extends TestBase {
-    
+
+    @Test
     public void shouldBeEqual() {
         assertEquals(new Equals(null), new Equals(null));
         assertEquals(new Equals(new Integer(2)), new Equals(new Integer(2)));
@@ -20,6 +21,12 @@ public class EqualsTest extends TestBase {
             fail();
         } catch (UnsupportedOperationException expected) {
         }
+    }
+
+    @Test
+    public void shouldArraysBeEqual() {
+        assertTrue(new Equals(new int[] {1, 2}).matches(new int[] {1, 2}));
+        assertFalse(new Equals(new Object[] {"1"}).matches(new Object[] {"1.0"}));
     }
     
     @Test

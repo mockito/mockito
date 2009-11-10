@@ -18,10 +18,7 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
     }
 
     public boolean matches(Object actual) {
-        if (this.wanted == null) {
-            return actual == null;
-        }
-        return wanted.equals(actual);
+        return Equality.areEqual(this.wanted, actual);
     }
 
     public void describeTo(Description description) {
