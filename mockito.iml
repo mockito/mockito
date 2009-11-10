@@ -15,7 +15,9 @@
           <root url="jar://$MODULE_DIR$/lib/run/com.springsource.org.hamcrest.core-1.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/sources/com.springsource.org.hamcrest.core-1.1.0-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
