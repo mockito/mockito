@@ -275,4 +275,18 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         readObject.matches("");
     }
 
+    class AlreadySerializable implements Serializable {}
+
+    @Test
+    public void shouldSerializeAlreadySerializableClass() throws Exception {
+        // given
+        AlreadySerializable mock = mock(AlreadySerializable.class, withSettings().serializable());
+        when(mock.toString()).thenReturn("foo");
+
+        // when
+        mock = serializeAndBack(mock);
+
+        // then
+        assertEquals("foo", mock.toString());
+    }
 }
