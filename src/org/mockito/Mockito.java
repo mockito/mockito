@@ -37,13 +37,13 @@ import org.mockito.stubbing.*;
  *      <a href="#11">11. Stubbing with callbacks </a><br/>
  *      <a href="#12">12. doThrow()|doAnswer()|doNothing()|doReturn() family of methods mostly for stubbing voids </a><br/>
  *      <a href="#13">13. Spying on real objects </a><br/>
- *      <a href="#14">14. (Since 1.7) Changing default return values of unstubbed invocations </a><br/>
- *      <a href="#15">15. (Since 1.8.0) Capturing arguments for further assertions</a><br/>
- *      <a href="#16">16. (Since 1.8.0) Real partial mocks</a><br/>
- *      <a href="#17">17. (Since 1.8.0) Resetting mocks</a><br/>
- *      <a href="#18">18. (Since 1.8.0) Troubleshooting & validating framework usage</a><br/>
- *      <a href="#19">19. (Since 1.8.0) Aliases for behavior driven development</a><br/>
- *      <a href="#20">20. (**New** since 1.8.1) Serializable mocks</a><br/>
+ *      <a href="#14">14. Changing default return values of unstubbed invocations (Since 1.7) </a><br/>
+ *      <a href="#15">15. Capturing arguments for further assertions (Since 1.8.0) </a><br/>
+ *      <a href="#16">16. Real partial mocks (Since 1.8.0) </a><br/>
+ *      <a href="#17">17. Resetting mocks (Since 1.8.0) </a><br/>
+ *      <a href="#18">18. Troubleshooting & validating framework usage (Since 1.8.0) </a><br/>
+ *      <a href="#19">19. Aliases for behavior driven development (Since 1.8.0) </a><br/>
+ *      <a href="#20">20. (**New**) Serializable mocks (Since 1.8.1) </a><br/>
  * </b>
  * 
  * <p>
@@ -448,7 +448,7 @@ import org.mockito.stubbing.*;
  * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
  * Typically you may get a NullPointerException because mock instances don't have fields initiated.
  * 
- * <h3 id="14">14. (Since 1.7) Changing default return values of unstubbed invocations</h3>
+ * <h3 id="14">14. Changing default return values of unstubbed invocations (Since 1.7) </h3>
  * 
  * You can create a mock with specified strategy for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -464,7 +464,7 @@ import org.mockito.stubbing.*;
  * <p>
  * Read more about this interesting implementation of <i>Answer</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
- * <h3 id="15">15. (Since 1.8.0) Capturing arguments for further assertions</h3>
+ * <h3 id="15">15. Capturing arguments for further assertions (Since 1.8.0) </h3>
  * 
  * Mockito verifies argument values in natural java style: by using an equals() method.
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
@@ -489,7 +489,7 @@ import org.mockito.stubbing.*;
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  * 
- * <h3 id="16">16. (Since 1.8.0) Real partial mocks</h3>
+ * <h3 id="16">16. Real partial mocks (Since 1.8.0) </h3>
  *  
  *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
@@ -519,7 +519,7 @@ import org.mockito.stubbing.*;
  * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
  * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
  *  
- * <h3 id="17">17. (Since 1.8.0) Resetting mocks</h3>
+ * <h3 id="17">17. Resetting mocks (Since 1.8.0) </h3>
  *  
  * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
@@ -544,7 +544,7 @@ import org.mockito.stubbing.*;
  *   //at this point the mock forgot any interactions & stubbing
  * </pre>
  *  
- * <h3 id="18">18. (Since 1.8.0) Troubleshooting & validating framework usage</h3>
+ * <h3 id="18">18. Troubleshooting & validating framework usage (Since 1.8.0) </h3>
  * 
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -555,7 +555,7 @@ import org.mockito.stubbing.*;
  * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. 
  * However, there's a gotcha so please read the javadoc for {@link Mockito#validateMockitoUsage()}
  * 
- * <h3 id="19">19. (Since 1.8.0) Aliases for behavior driven development</h3>
+ * <h3 id="19">19. Aliases for behavior driven development (Since 1.8.0) </h3>
  * 
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
@@ -586,7 +586,7 @@ import org.mockito.stubbing.*;
  * }  
  * </pre>
  * 
- * <h3 id="20">20. (**New** since 1.8.1) Serializable mocks</h3>
+ * <h3 id="20">20. (**New**) Serializable mocks (Since 1.8.1) </h3>
  * 
  * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>

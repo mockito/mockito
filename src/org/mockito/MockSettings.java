@@ -126,7 +126,7 @@ public interface MockSettings extends Serializable {
     MockSettings defaultAnswer(Answer defaultAnswer);
 
     /**
-     * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
+     * Configures the mock to be serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
      * <p>
      * WARNING: This should be rarely used in unit testing.
      * <p>
