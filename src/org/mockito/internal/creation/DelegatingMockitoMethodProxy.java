@@ -10,9 +10,7 @@ public class DelegatingMockitoMethodProxy extends AbstractMockitoMethodProxy {
         this.methodProxy = methodProxy;
     }
 
-    @Override
-    protected MethodProxy getMethodProxy() {
+    public MethodProxy getMethodProxy() {
         return methodProxy;
     }
-
 }
