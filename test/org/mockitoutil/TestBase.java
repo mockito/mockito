@@ -114,6 +114,7 @@ public class TestBase extends Assert {
     }
 
     @SuppressWarnings("unchecked")
+    //TODO use widely
     protected <T> T serializeAndBack(T obj) throws Exception {
         ByteArrayOutputStream os = this.serializeMock(obj);
         return (T) this.deserializeMock(os, Object.class);
