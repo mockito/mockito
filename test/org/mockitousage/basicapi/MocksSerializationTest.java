@@ -25,7 +25,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldAllowMockToBeSerializable() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
 
         // when-serialize then-deserialize
         serializeAndBack(mock);
@@ -34,7 +34,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldAllowMockAndBooleanValueToSerializable() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         when(mock.booleanReturningMethod()).thenReturn(true);
 
         // when
@@ -48,7 +48,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldAllowMockAndStringValueToBeSerializable() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         String value = "value";
         when(mock.stringReturningMethod()).thenReturn(value);
 
@@ -63,7 +63,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldAllMockAndSerializableValueToBeSerialized() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         List<?> value = Collections.emptyList();
         when(mock.objectReturningMethodNoArgs()).thenReturn(value);
 
@@ -77,7 +77,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldSerializeMethodCallWithParametersThatAreSerializable() throws Exception {
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         List<?> value = Collections.emptyList();
         when(mock.objectArgMethod(value)).thenReturn(value);
 
@@ -91,7 +91,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldSerializeMethodCallsUsingAnyStringMatcher() throws Exception {
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         List<?> value = Collections.emptyList();
         when(mock.objectArgMethod(anyString())).thenReturn(value);
 
@@ -105,7 +105,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldVerifyCalledNTimesForSerializedMock() throws Exception {
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         List<?> value = Collections.emptyList();
         when(mock.objectArgMethod(anyString())).thenReturn(value);
         mock.objectArgMethod("");
@@ -121,7 +121,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldVerifyEvenIfSomeMethodsCalledAfterSerialization() throws Exception {
         //given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
 
         // when
         mock.simpleMethod(1);
@@ -161,7 +161,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void shouldStubEvenIfSomeMethodsCalledAfterSerialization() throws Exception {
         //given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
 
         // when
         when(mock.simpleMethod(1)).thenReturn("foo");
@@ -176,8 +176,8 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldVerifyCallOrderForSerializedMock() throws Exception {
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
-        IMethods mock2 = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
+        IMethods mock2 = mock(IMethods.class, withSettings().serializable());
         mock.arrayReturningMethod();
         mock2.arrayReturningMethod();
 
@@ -195,7 +195,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldRememberInteractionsForSerializedMock() throws Exception {
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         List<?> value = Collections.emptyList();
         when(mock.objectArgMethod(anyString())).thenReturn(value);
         mock.objectArgMethod("happened");
@@ -212,7 +212,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     public void shouldSerializeWithStubbingCallback() throws Exception {
 
         // given
-        IMethods mock = mock(IMethods.class, withSettings().extraInterfaces(Serializable.class).serializable());
+        IMethods mock = mock(IMethods.class, withSettings().serializable());
         final String string = "return value";
         when(mock.objectArgMethod(anyString())).thenAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) {

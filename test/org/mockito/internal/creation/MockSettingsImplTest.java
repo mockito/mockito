@@ -7,10 +7,12 @@ package org.mockito.internal.creation;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.io.Serializable;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
+import org.fest.assertions.Assertions;
 
 public class MockSettingsImplTest extends TestBase {
 
@@ -49,5 +51,26 @@ public class MockSettingsImplTest extends TestBase {
         //then
         assertEquals(List.class, mockSettingsImpl.getExtraInterfaces()[0]);
         assertEquals(Set.class, mockSettingsImpl.getExtraInterfaces()[1]);
+    }
+
+    @Test
+    public void shouldSetMockToBeSerializable() throws Exception {
+        //when
+        mockSettingsImpl.serializable();
+
+        //then
+        Assertions.assertThat(mockSettingsImpl.getExtraInterfaces()).contains(Serializable.class);
+    }
+
+    @Test
+    public void shouldKnowIfIsSerializable() throws Exception {
+        //given
+        assertFalse(mockSettingsImpl.isSerializable());
+
+        //when
+        mockSettingsImpl.serializable();
+
+        //then
+        assertTrue(mockSettingsImpl.isSerializable());
     }
 }
