@@ -307,12 +307,12 @@
   </target>
   
   <target name="test.zip.release.separate.jars" depends="zip, repackage-tests" >
-    <delete dir="${target.dir}/tmp"/>
-    <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
+    <delete dir="${target.dir}/tmp2"/>
+    <unzip dest="${target.dir}/tmp2" src="${target.dir}/${zip}" />
     <junit fork="true" forkmode="once" haltonfailure="true">
       <formatter type="plain" usefile="false" />
       <classpath>
-        <fileset dir="${target.dir}/tmp/separate-jars" includes="*.jar" />
+        <fileset dir="${target.dir}/tmp2/separate-jars" includes="*.jar" />
       	<fileset dir="${lib.dir.test}" includes="*.jar" />
       	<fileset dir="${lib.dir.compile}" includes="*junit*.jar" />
         <pathelement location="${target.dir}/${jar.tests}"/>
