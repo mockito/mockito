@@ -17,7 +17,7 @@ if ok != "Y":
   print "Exited on user request"
   exit(1)
   
-ver = raw_input("Specify the version, e.g. 1.7:")
+ver = raw_input("Specify the version, e.g. 1.9:")
 
 branch = 'https://mockito.googlecode.com/svn/branches/' + ver
 run('svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk ' + branch)
