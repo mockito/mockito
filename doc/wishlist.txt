@@ -1,15 +1,15 @@
     //java cross reference tool online
 
-    //TODO I want to have ruby script that will collect all java code from examples in javadoc/documentation
+    //I want to have ruby script that will collect all java code from examples in javadoc/documentation
     // and create a test case that I can manually fix and run and make sure examples are valid.
     // Or better. Write examples as unit tests, annotate them in the way so that javadoc can be generated out of it.
     
-    //TODO check if performance can be tweaked (e.g: LL -> AL)
+    //heck if performance can be tweaked (e.g: LL -> AL)
     
-    //TODO pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
+    //pmd rule so that all that starts with should have @Test annotation (or all XTest have some annotations on public methods)
     
-    //TODO Felix had weird problem - check old emails - maybe we could do something about it (better exception message)
+    //Felix had weird problem - check old emails - maybe we could do something about it (better exception message)
     
-    //TODO make sure tests for mockito run quickly on slower machines
+    //make sure tests for mockito run quickly on slower machines
     //this test exposes the problem at least once in 10 runs
     //public class ThreadsShareAMockTest extends TestBase {      
