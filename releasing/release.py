@@ -7,6 +7,9 @@ def run(cmd):
   print("\nRunning command: " + cmd)
   assert os.system(cmd) == 0, "\nCommand failed: " + cmd
 
+ant_cmd = 'ant test.release release.javadoc release.maven'
+raw_input("It is wise to run following command first: \n\n" + ant_cmd + "\n\nIt's because ant some times provides wrong return code.\nAny key to continue")  
+
 run('ruby replace_headers.rb')
 
 ok = raw_input("Make sure NOW if all you need is checked in. Proceed? (Y/N):")
@@ -31,7 +34,7 @@ f = open('version.properties', 'w')
 f.write('version=' + ver)
 f.close()
 
-run('ant test.release release.javadoc release.maven')
+run(ant_cmd)
 
 run('svn add javadoc/*')
 run('svn ps -R svn:mime-type text/html javadoc/*')
