@@ -78,10 +78,14 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
         final boolean methodEquals = hasSameMethod(candidate);
+
+        if (!methodNameEquals || !isUnverified || !mockIsTheSame) {
+            return false;
+        }
+
         final boolean overloadedButSameArgs = !methodEquals && safelyArgumentsMatch(candidate.getArguments());
 
-        return methodNameEquals && isUnverified && mockIsTheSame && !overloadedButSameArgs;
-
+        return !overloadedButSameArgs;
     }
 
     public boolean hasSameMethod(Invocation candidate) {
