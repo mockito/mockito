@@ -588,32 +588,23 @@ import org.mockito.stubbing.*;
  * 
  * <h3 id="20">20. (**New**) Serializable mocks</h3>
  * 
- * With this feature you can use a mock in a place that requires dependencies to be serializable.
+ * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
- * TODO: tune
- * WARNING: This should rarely be used.  If you are unit testing it should be rare that you need this behaviour. 
+ * WARNING: This should be rarely used in unit testing. 
  * <p>
  * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
  * was in a web environment and the objects from the external dependency were being serialized to pass between layers. 
  * <p>
- * To create a mock that can be serialized the interface or class must implement the Serializable interface OR use the
- * {@link #withSettings().extraInterfaces(Serializable.class)}.  When creating the mock for the interface or class use the
- * withSettings().serializable() {@link org.mockito.MockSettings}.  
- * 
+ * To create serializable mock use {@link #withSettings().serializable()}:
  * <pre>
- * YourClass mock = mock(YourClass.class, withSettings().extraInterfaces(Serializable.class).serializable());
+ *   List serializableMock = mock(List.class, withSettings().serializable());
  * </pre>
- * 
- * In the above example the first MockSettings that is added is the Serialiable interface.  If your class or interface
- * implements Serializable this is not needed.  The second MockSettings, .serializable(), tells mockito to use internal
- * classes that can be serialized.
  * <p>
- * The above mock can be serialized assuming all the normal <a href='http://www.uni-muenster.de/ZIV.BennoSueselbeck/java/jdk1.5.0_01/docs/api/java/io/Serializable.html'>
- * serialization requirements</a> are met by the interface or class.
+ * The mock can be serialized assuming all the normal <a href='http://java.sun.com/j2se/1.5.0/docs/api/java/io/Serializable.html'>
+ * serialization requirements</a> are met by the class.
  * <p>
  * Making a real object spy serializable is a bit more effort as the spy(...) method does not have an overloaded version 
- * which accepts MockSettings.  But no worries you simply use the same MockSettings that the spy(...) method uses plus the 
- * serializable setting.
+ * which accepts MockSettings. No worries, you will hardly ever use it.
  * 
  * <pre>
  * List<Object> list = new ArrayList<Object>();
@@ -622,7 +613,6 @@ import org.mockito.stubbing.*;
  *                 .defaultAnswer(CALLS_REAL_METHODS)
  *                 .serializable());
  * </pre>
- * 
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {

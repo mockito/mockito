@@ -125,7 +125,20 @@ public interface MockSettings extends Serializable {
     @SuppressWarnings("unchecked")
     MockSettings defaultAnswer(Answer defaultAnswer);
 
-    //TODO: javadoc
+    /**
+     * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
+     * <p>
+     * WARNING: This should be rarely used in unit testing.
+     * <p>
+     * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
+     * was in a web environment and the objects from the external dependency were being serialized to pass between layers.
+     * <p>
+     * Example:
+     * <pre>
+     *   List serializableMock = mock(List.class, withSettings().serializable());
+     * </pre>
+     *
+     * @return settings instance so that you can fluently specify other settings
+     */
     MockSettings serializable();
-    
 }
