@@ -15,7 +15,7 @@ import org.mockito.internal.matchers.ContainsExtraTypeInformation;
 public class ArgumentMatchingTool {
 
     /**
-     * Suspiciously not matching arguments are those that don't much, the toString() representation is the same but types are different.
+     * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
     public Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<Matcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
