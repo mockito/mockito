@@ -1,8 +1,6 @@
 #This script is not really portable. It's just to automate some manual steps I usually do when releasing.
 #It might evolve into someting more robust but for now it's ok for me.
 
-raise "TODO: should do a tag at the end"
-
 import os
 
 def run(cmd):
@@ -39,6 +37,9 @@ run('svn add javadoc/*')
 run('svn ps -R svn:mime-type text/html javadoc/*')
 run('svn ps -R svn:mime-type text/css javadoc/stylesheet.css')
 run('svn ci -m "released javadoc, updated version"')
+
+tag = 'https://mockito.googlecode.com/svn/tags/' + ver 
+run('svn copy -m "Tagged new release" ' + branch + ' ' + tag)
 
 print("Uploading binaries to the googlecode")
 
