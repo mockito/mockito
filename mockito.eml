@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<excludeFolder url="file://$MODULE_DIR$/cglib-and-asm"/>
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+		<excludeFolder url="file://$MODULE_DIR$/target/eclipse-classes"/>
+		<excludeFolder url="file://$MODULE_DIR$/target/eclipse-classes"/>
+	</contentEntry>
+</component>
