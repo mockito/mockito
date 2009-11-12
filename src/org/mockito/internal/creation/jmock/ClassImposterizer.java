@@ -41,7 +41,7 @@ public class ClassImposterizer  {
     };
     
     public boolean canImposterise(Class<?> type) {
-        return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers()) && !type.isAnonymousClass();
+        return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
     }
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
@@ -60,7 +60,7 @@ public class ClassImposterizer  {
         }
     }
     
-    private <T> Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
+    private Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }

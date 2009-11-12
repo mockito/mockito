@@ -61,18 +61,28 @@ public class ClassImposterizerTest extends TestBase {
         
         assertThat(mock, is(instanceOf(SomeInterface.class)));
     }
-    
-    private interface SomeInterface {};
 
-    private class SomeClass {};
-    private class ClassWithoutConstructor {};
+    final class FinalClass {}
+    class SomeClass {}
+    interface SomeInterface {}
+
+    @Test
+    public void shouldKnowIfCanImposterize() throws Exception {
+        assertFalse(ClassImposterizer.INSTANCE.canImposterise(FinalClass.class));
+        assertFalse(ClassImposterizer.INSTANCE.canImposterise(int.class));
+
+        assertTrue(ClassImposterizer.INSTANCE.canImposterise(SomeClass.class));
+        assertTrue(ClassImposterizer.INSTANCE.canImposterise(SomeInterface.class));
+    } 
     
+    private class ClassWithoutConstructor {}
+
     private class ClassWithDodgyConstructor {
         public ClassWithDodgyConstructor() {
             throw new RuntimeException();
         }
-    };
-    
+    }
+
     private final class MethodInterceptorStub implements MethodInterceptor {
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {

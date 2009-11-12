@@ -155,21 +155,26 @@ public class SpyingOnRealObjectsTest extends TestBase {
         assertEquals("[foo]" , spy.toString());
     }
     
-    interface Foo {}
+    interface Foo {
+        String print();
+    }
     
     @Test
-    public void shouldDealWithAnonymousClasses() {
-        try {
-            spy(new Foo() {});
-            fail();
-        } catch (MockitoException e) {
-            assertContains("cannot mock", e.getMessage());
-        }
+    public void shouldAllowSpyingAnonymousClasses() {
+        //when
+        Foo spy = spy(new Foo() {
+            public String print() {
+                return "foo";
+            }
+        });
+
+        //then
+        assertEquals("foo", spy.print());
     }
     
     @Test
     public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
-        List real = Arrays.asList(new String[] {"first", "second"});
+        List real = Arrays.asList("first", "second");
         try {
             spy(real);
             fail();

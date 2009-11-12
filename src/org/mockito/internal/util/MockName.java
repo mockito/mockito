@@ -24,6 +24,10 @@ public class MockName implements Serializable {
 
     private static String toInstanceName(Class<?> clazz) {
         String className = clazz.getSimpleName();
+        if (className.length() == 0) {
+            //it's an anonymous class, let's get name from the parent
+            className = clazz.getSuperclass().getSimpleName();
+        }
         //lower case first letter
         return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
