@@ -10,10 +10,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.MockitoStubber;
-import org.mockito.internal.stubbing.OngoingStubbingImpl;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
+import org.mockito.internal.stubbing.*;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
@@ -112,14 +109,6 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         return new VoidMethodStubbableImpl<T>(mock, mockitoStubber);
     }
 
-    public List<Invocation> getRegisteredInvocations() {
-        return mockitoStubber.getInvocations();
-    }
-
-    public List<StubbedInvocationMatcher> getStubbedInvocations() {
-        return mockitoStubber.getStubbedInvocations();
-    }
-
     public MockSettingsImpl getMockSettings() {
         return mockSettings;
     }
@@ -127,5 +116,9 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
+    }
+
+    public InvocationContainer getInvocationContainer() {
+        return mockitoStubber;
     }
 }

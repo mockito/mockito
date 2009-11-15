@@ -18,7 +18,7 @@ import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class MockitoStubber implements Serializable {
+public class MockitoStubber implements InvocationContainer, Serializable {
 
     private static final long serialVersionUID = -5334301962749537176L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();

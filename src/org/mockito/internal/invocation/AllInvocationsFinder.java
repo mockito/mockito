@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.MockUtil;
@@ -25,7 +26,8 @@ public class AllInvocationsFinder {
     public List<Invocation> getAllInvocations(List<?> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
-            List<Invocation> fromSingleMock = new MockUtil().getMockHandler(mock).getRegisteredInvocations();
+            MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
+            List<Invocation> fromSingleMock = handler.getInvocationContainer().getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }
         
@@ -36,7 +38,8 @@ public class AllInvocationsFinder {
     public List<Invocation> getAllUnusedStubs(List<?> mocks) {
         List<Invocation> unused = new LinkedList<Invocation>();
         for (Object mock : mocks) {
-            List<StubbedInvocationMatcher> fromSingleMock = new MockUtil().getMockHandler(mock).getStubbedInvocations();
+            MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
+            List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();
             for(StubbedInvocationMatcher s : fromSingleMock) {
                 if (!s.wasUsed()) {
                      unused.add(s.getInvocation());

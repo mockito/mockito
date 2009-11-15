@@ -2,6 +2,7 @@ package org.mockito.internal;
 
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
@@ -18,7 +19,5 @@ public interface MockHandlerInterface<T> {
 
     void setAnswersForStubbing(List<Answer> answers);
 
-    List<Invocation> getRegisteredInvocations();
-
-    List<StubbedInvocationMatcher> getStubbedInvocations();
+    InvocationContainer getInvocationContainer();
 }
