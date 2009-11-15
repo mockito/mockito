@@ -6,6 +6,7 @@ package org.mockito;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.*;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -1554,5 +1555,14 @@ public class Mockito extends Matchers {
      */
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
+    }
+
+    /*
+     * Helps debugging failing tests.
+     * <p>
+     * TODO: add more info & examples.
+     */
+    public static MockitoDebugger debug() {
+        return new MockitoDebuggerImpl();
     }
 }

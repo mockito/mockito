@@ -229,4 +229,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         markVerified();
         this.verifiedInOrder = true;
     }
+
+    public StubInfo stubInfo() {
+        return new StubInfo();
+    }
 }
