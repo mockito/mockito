@@ -43,6 +43,7 @@ public class MockitoStubber implements Serializable {
     }
 
     public void addAnswer(Answer answer) {
+        registeredInvocations.removeLast();
         addAnswer(answer, false);
     }
 
@@ -105,9 +106,5 @@ public class MockitoStubber implements Serializable {
 
     public List<Invocation> getInvocations() {
         return registeredInvocations.getAll();
-    }
-
-    public RegisteredInvocations getRegisteredInvocations() {
-        return registeredInvocations;
     }
 }

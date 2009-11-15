@@ -21,13 +21,11 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     }
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        mockitoStubber.getRegisteredInvocations().removeLast();
         mockitoStubber.addAnswer(answer);
         return new ConsecutiveStubbing<T>(mockitoStubber);
     }
 
     public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-        mockitoStubber.getRegisteredInvocations().removeLast();
         mockitoStubber.addAnswer(answer);
         return new ConsecutiveStubbing<T>(mockitoStubber);
     }
