@@ -5,11 +5,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 import static org.mockito.BDDMockito.*;
 
 @Ignore
-public class DebuggingTestCasesTest {
+public class DebuggingTestCasesTest extends TestBase {
 
     IMethods mock = mock(IMethods.class);
     IMethods mockTwo = mock(IMethods.class);
