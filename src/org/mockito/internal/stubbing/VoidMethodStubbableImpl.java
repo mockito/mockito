@@ -11,25 +11,25 @@ import org.mockito.stubbing.VoidMethodStubbable;
 
 public class VoidMethodStubbableImpl<T> implements VoidMethodStubbable<T> {
     private final T mock;
-    private MockitoStubber mockitoStubber;
+    private InvocationContainerImpl invocationContainerImpl;
 
-    public VoidMethodStubbableImpl(T mock, MockitoStubber mockitoStubber) {
+    public VoidMethodStubbableImpl(T mock, InvocationContainerImpl invocationContainerImpl) {
         this.mock = mock;
-        this.mockitoStubber = mockitoStubber;
+        this.invocationContainerImpl = invocationContainerImpl;
     }
 
     public VoidMethodStubbable<T> toThrow(Throwable throwable) {
-        mockitoStubber.addAnswerForVoidMethod(new ThrowsException(throwable));
+        invocationContainerImpl.addAnswerForVoidMethod(new ThrowsException(throwable));
         return this;
     }
 
     public VoidMethodStubbable<T> toReturn() {
-        mockitoStubber.addAnswerForVoidMethod(new DoesNothing());
+        invocationContainerImpl.addAnswerForVoidMethod(new DoesNothing());
         return this;
     }
 
     public VoidMethodStubbable<T> toAnswer(Answer<?> answer) {
-        mockitoStubber.addAnswerForVoidMethod(answer);
+        invocationContainerImpl.addAnswerForVoidMethod(answer);
         return this;
     }
 

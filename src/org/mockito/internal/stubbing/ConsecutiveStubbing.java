@@ -9,19 +9,19 @@ import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 
 public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
-    private final MockitoStubber mockitoStubber;
+    private final InvocationContainerImpl invocationContainerImpl;
 
-    public ConsecutiveStubbing(MockitoStubber mockitoStubber) {
-        this.mockitoStubber = mockitoStubber;
+    public ConsecutiveStubbing(InvocationContainerImpl invocationContainerImpl) {
+        this.invocationContainerImpl = invocationContainerImpl;
     }
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        mockitoStubber.addConsecutiveAnswer(answer);
+        invocationContainerImpl.addConsecutiveAnswer(answer);
         return this;
     }
     
     public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-        mockitoStubber.addConsecutiveAnswer(answer);
+        invocationContainerImpl.addConsecutiveAnswer(answer);
         return this;
     }
 }

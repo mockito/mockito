@@ -29,7 +29,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
 
     private static final long serialVersionUID = -2917871070982574165L;
 
-    MockitoStubber mockitoStubber;
+    InvocationContainerImpl invocationContainerImpl;
     MatchersBinder matchersBinder = new MatchersBinder();
     MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
@@ -39,7 +39,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         this.mockSettings = mockSettings;
         this.mockingProgress = new ThreadSafeMockingProgress();
         this.matchersBinder = new MatchersBinder();
-        this.mockitoStubber = new MockitoStubber(mockingProgress);
+        this.invocationContainerImpl = new InvocationContainerImpl(mockingProgress);
     }
 
     // for tests
@@ -52,11 +52,11 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-        if (mockitoStubber.hasAnswersForStubbing()) {
+        if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
                             .getArgumentMatcherStorage(), invocation);
-            mockitoStubber.setMethodForStubbing(invocationMatcher);
+            invocationContainerImpl.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
@@ -67,16 +67,16 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         mockingProgress.validateState();
 
         if (verificationMode != null) {
-            VerificationDataImpl data = new VerificationDataImpl(mockitoStubber.getInvocations(), invocationMatcher);
+            VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl.getInvocations(), invocationMatcher);
             verificationMode.verify(data);
             return null;
         }
         
-        mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
-        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber);
+        invocationContainerImpl.setInvocationForPotentialStubbing(invocationMatcher);
+        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainerImpl);
         mockingProgress.reportOngoingStubbing(ongoingStubbing);
 
-        StubbedInvocationMatcher stubbedInvocation = mockitoStubber.findAnswerFor(invocation);
+        StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
         if (!invocation.isVoid() && stubbedInvocation == null) {
             // it is a return-value interaction but not stubbed. This *might* be
             // a problem
@@ -95,18 +95,18 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             // Without it, the real method inside 'when' might have delegated
             // to other self method and overwrite the intended stubbed method
             // with a different one.
-            mockitoStubber.resetInvocationForPotentialStubbing(invocationMatcher);
+            invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
     }
 
     public void verifyNoMoreInteractions() {
-        VerificationDataImpl data = new VerificationDataImpl(mockitoStubber.getInvocations(), null);
+        VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl.getInvocations(), null);
         VerificationModeFactory.noMoreInteractions().verify(data);
     }
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
-        return new VoidMethodStubbableImpl<T>(mock, mockitoStubber);
+        return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
     }
 
     public MockSettingsImpl getMockSettings() {
@@ -115,10 +115,10 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
 
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
-        mockitoStubber.setAnswersForStubbing(answers);
+        invocationContainerImpl.setAnswersForStubbing(answers);
     }
 
     public InvocationContainer getInvocationContainer() {
-        return mockitoStubber;
+        return invocationContainerImpl;
     }
 }

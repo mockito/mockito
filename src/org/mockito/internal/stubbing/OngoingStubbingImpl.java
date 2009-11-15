@@ -5,7 +5,6 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
@@ -14,24 +13,24 @@ import java.util.List;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     
-    private final MockitoStubber mockitoStubber;
+    private final InvocationContainerImpl invocationContainerImpl;
 
-    public OngoingStubbingImpl(MockitoStubber mockitoStubber) {
-        this.mockitoStubber = mockitoStubber;
+    public OngoingStubbingImpl(InvocationContainerImpl invocationContainerImpl) {
+        this.invocationContainerImpl = invocationContainerImpl;
     }
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        mockitoStubber.addAnswer(answer);
-        return new ConsecutiveStubbing<T>(mockitoStubber);
+        invocationContainerImpl.addAnswer(answer);
+        return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
 
     public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-        mockitoStubber.addAnswer(answer);
-        return new ConsecutiveStubbing<T>(mockitoStubber);
+        invocationContainerImpl.addAnswer(answer);
+        return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
 
     public List<Invocation> getRegisteredInvocations() {
         //TODO interface for tests
-        return mockitoStubber.getInvocations();
+        return invocationContainerImpl.getInvocations();
     }
 }
