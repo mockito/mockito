@@ -5,7 +5,6 @@
 package org.mockitoutil;
 
 import junit.framework.Assert;
-
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
@@ -15,7 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 
 import java.io.*;
@@ -87,7 +87,34 @@ public class TestBase extends Assert {
                 "\n"
                 , string.contains(sub));
     }
-    
+
+    public static void assertContainsIgnoringCase(String sub, String string) {
+        assertTrue("\n" +
+                "This substing:" +
+                sub +
+                "\n" +
+                "should be inside of:" +
+                string +
+                "\n"
+                , containsIgnoringCase(string, sub));
+    }
+
+    private static boolean containsIgnoringCase(String string, String sub) {
+        int subLength = sub.length();
+        if (string.length() < subLength) {
+            return false;
+        }
+        int i = 0;
+        while(i+subLength <= string.length()) {
+            boolean temp = string.substring(i, i+subLength).equalsIgnoreCase(sub);
+            if (temp) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
     public static void assertNotContains(String sub, String string) {
         assertFalse("\n" +
                 "This substing:" +
