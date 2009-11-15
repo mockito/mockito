@@ -133,7 +133,7 @@ public class MockitoCore {
      */
     public Invocation getLastInvocation() {
         OngoingStubbingImpl ongoingStubbing = ((OngoingStubbingImpl) mockingProgress.pullOngoingStubbing());
-        List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations().getAll();
+        List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations();
         return allInvocations.get(allInvocations.size()-1);
     }
 }

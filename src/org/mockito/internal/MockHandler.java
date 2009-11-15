@@ -76,7 +76,7 @@ public class MockHandler<T> implements IMockHandler {
         }
         
         mockitoStubber.setInvocationForPotentialStubbing(invocationMatcher);
-        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber, mockitoStubber.getRegisteredInvocations());
+        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(mockitoStubber);
         mockingProgress.reportOngoingStubbing(ongoingStubbing);
 
         StubbedInvocationMatcher stubbedInvocation = mockitoStubber.findAnswerFor(invocation);
