@@ -31,12 +31,10 @@ public class MockHandler<T> implements IMockHandler {
     MatchersBinder matchersBinder;
     MockingProgress mockingProgress;
 
-    private final MockName mockName;
     private final MockSettingsImpl mockSettings;
 
-    public MockHandler(MockName mockName, MockingProgress mockingProgress, MatchersBinder matchersBinder,
+    public MockHandler(MockingProgress mockingProgress, MatchersBinder matchersBinder,
                     MockSettingsImpl mockSettings) {
-        this.mockName = mockName;
         this.mockingProgress = mockingProgress;
         this.matchersBinder = matchersBinder;
         this.mockSettings = mockSettings;
@@ -44,13 +42,13 @@ public class MockHandler<T> implements IMockHandler {
     }
 
     public MockHandler(MockHandler<T> oldMockHandler) {
-        this(oldMockHandler.mockName, oldMockHandler.mockingProgress, oldMockHandler.matchersBinder,
+        this(oldMockHandler.mockingProgress, oldMockHandler.matchersBinder,
                         oldMockHandler.mockSettings);
     }
 
     // for tests
     MockHandler() {
-        this(new MockName("mockie for tests", MockHandler.class), new ThreadSafeMockingProgress(),
+        this(new ThreadSafeMockingProgress(),
                         new MatchersBinder(), new MockSettingsImpl());
     }
 
@@ -116,16 +114,16 @@ public class MockHandler<T> implements IMockHandler {
         return mockitoStubber.getInvocations();
     }
 
+    public List<StubbedInvocationMatcher> getStubbedInvocations() {
+        return mockitoStubber.getStubbedInvocations();
+    }
+
     public MockName getMockName() {
-        return mockName;
+        return mockSettings.getMockName();
     }
 
     @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
-    }
-
-    public List<StubbedInvocationMatcher> getStubbedInvocations() {
-        return mockitoStubber.getStubbedInvocations();
     }
 }

@@ -6,6 +6,7 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.util.MockName;
 import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
@@ -18,6 +19,7 @@ public class MockSettingsImpl implements MockSettings {
     private String name;
     private Object spiedInstance;
     private Answer<Object> defaultAnswer;
+    private MockName mockName;
 
     public MockSettings serializable() {
         return this.extraInterfaces(Serializable.class);
@@ -39,8 +41,8 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    public String getMockName() {
-        return name;
+    public MockName getMockName() {
+        return mockName;
     }
 
     public Class<?>[] getExtraInterfaces() {
@@ -75,5 +77,9 @@ public class MockSettingsImpl implements MockSettings {
         return
                 extraInterfaces != null
                 && Arrays.asList(extraInterfaces).contains(Serializable.class);
+    }
+
+    public void initiateMockName(Class classToMock) {
+        mockName = new MockName(name, classToMock);
     }
 }

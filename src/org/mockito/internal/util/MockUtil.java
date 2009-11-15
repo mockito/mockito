@@ -35,9 +35,10 @@ public class MockUtil {
         creationValidator.validateType(classToMock);
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
-        
-        MockName mockName = new MockName(settings.getMockName(), classToMock);
-        MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
+
+        settings.initiateMockName(classToMock);
+
+        MockHandler<T> mockHandler = new MockHandler<T>(progress, new MatchersBinder(), settings);
         MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHandler, settings);
         Class<?>[] interfaces = settings.getExtraInterfaces();
         Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;

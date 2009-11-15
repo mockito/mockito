@@ -32,6 +32,7 @@ public class AllInvocationsFinder {
         return new LinkedList<Invocation>(invocationsInOrder);
     }
 
+    //TODO belongs elsewhere
     public List<Invocation> getAllUnusedStubs(List<?> mocks) {
         List<Invocation> unused = new LinkedList<Invocation>();
         for (Object mock : mocks) {
