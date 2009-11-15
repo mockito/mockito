@@ -33,7 +33,8 @@ import org.mockito.invocation.InvocationOnMock;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
+public class
+        Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private static final int MAX_LINE_LENGTH = 45;

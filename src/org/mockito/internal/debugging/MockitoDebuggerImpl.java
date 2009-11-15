@@ -19,7 +19,7 @@ package org.mockito.internal.debugging;
                 System.out.println(i.toString());
                 System.out.println(" invoked: " + i.getLocation());
                 if (i.stubInfo() != null) {
-                    System.out.println(" stubbed: " + i.stubInfo().stubbingLocation());
+                    System.out.println(" stubbed: " + i.stubInfo().stubbedAt());
                 }
             }
             invocations = finder.getAllUnusedStubs(asList(mocks));

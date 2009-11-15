@@ -1,15 +1,17 @@
 package org.mockito.internal.invocation;
 
+import org.mockito.exceptions.PrintableInvocation;
+
 import java.io.Serializable;
 
 public class StubInfo implements Serializable {
-    private Invocation stubbing;
+    private PrintableInvocation stubbedAt;
 
-    public StubInfo(Invocation stubbing) {
-        this.stubbing = stubbing;
+    public StubInfo(PrintableInvocation stubbedAt) {
+        this.stubbedAt = stubbedAt;
     }
 
-    public String stubbingLocation() {
-        return stubbing.getLocation().toString();
+    public String stubbedAt() {
+        return stubbedAt.getLocation().toString();
     }
 }
