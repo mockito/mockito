@@ -32,7 +32,7 @@ public class MockitoCore {
     public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         mockingProgress.validateState();
         mockingProgress.resetOngoingStubbing();
-        return mockUtil.createMock(classToMock, mockingProgress, (MockSettingsImpl) mockSettings);
+        return mockUtil.createMock(classToMock, (MockSettingsImpl) mockSettings);
     }
     
     public IOngoingStubbing stub() {
@@ -118,7 +118,7 @@ public class MockitoCore {
     }
     
     public <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        MockHandler<T> handler = mockUtil.getMockHandler(mock);
+        MockHandlerInterface<T> handler = mockUtil.getMockHandler(mock);
         mockingProgress.stubbingStarted();
         return handler.voidMethodStubbable(mock);
     }

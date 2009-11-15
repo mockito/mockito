@@ -4,18 +4,23 @@
  */
 package org.mockito.internal;
 
-import java.util.List;
-
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.*;
-import org.mockito.internal.util.MockName;
-import org.mockito.internal.verification.*;
+import org.mockito.internal.stubbing.MockitoStubber;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
+import org.mockito.internal.verification.VerificationDataImpl;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
+
+import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
@@ -23,33 +28,30 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * @param <T>
  *            type of mock object to handle
  */
-public class MockHandler<T> implements MockitoInvocationHandler {
+public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInterface<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
     MockitoStubber mockitoStubber;
-    MatchersBinder matchersBinder;
-    MockingProgress mockingProgress;
+    MatchersBinder matchersBinder = new MatchersBinder();
+    MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     private final MockSettingsImpl mockSettings;
 
-    public MockHandler(MockingProgress mockingProgress, MatchersBinder matchersBinder,
-                    MockSettingsImpl mockSettings) {
-        this.mockingProgress = mockingProgress;
-        this.matchersBinder = matchersBinder;
+    public MockHandler(MockSettingsImpl mockSettings) {
         this.mockSettings = mockSettings;
-        this.mockitoStubber = new MockitoStubber(mockingProgress);        
-    }
-
-    public MockHandler(MockHandler<T> oldMockHandler) {
-        this(oldMockHandler.mockingProgress, oldMockHandler.matchersBinder,
-                        oldMockHandler.mockSettings);
+        this.mockingProgress = new ThreadSafeMockingProgress();
+        this.matchersBinder = new MatchersBinder();
+        this.mockitoStubber = new MockitoStubber(mockingProgress);
     }
 
     // for tests
     MockHandler() {
-        this(new ThreadSafeMockingProgress(),
-                        new MatchersBinder(), new MockSettingsImpl());
+        this(new MockSettingsImpl());
+    }
+
+    public MockHandler(MockHandlerInterface<T> oldMockHandler) {
+        this(oldMockHandler.getMockSettings());
     }
 
     public Object handle(Invocation invocation) throws Throwable {
@@ -118,8 +120,8 @@ public class MockHandler<T> implements MockitoInvocationHandler {
         return mockitoStubber.getStubbedInvocations();
     }
 
-    public MockName getMockName() {
-        return mockSettings.getMockName();
+    public MockSettingsImpl getMockSettings() {
+        return mockSettings;
     }
 
     @SuppressWarnings("unchecked")

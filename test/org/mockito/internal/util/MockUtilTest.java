@@ -42,7 +42,7 @@ public class MockUtilTest extends TestBase {
         assertFalse(creationValidator.typeValidated);
 
         //when
-        mockUtil.createMock(IMethods.class, new ThreadSafeMockingProgress(), new MockSettingsImpl());
+        mockUtil.createMock(IMethods.class, new MockSettingsImpl());
         
         //then
         assertTrue(creationValidator.extraInterfacesValidated);
