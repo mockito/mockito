@@ -13,7 +13,10 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
+import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
+
+import javax.management.openmbean.CompositeData;
 
 @SuppressWarnings("unchecked")
 public class MockitoStubber implements Serializable {
@@ -22,6 +25,7 @@ public class MockitoStubber implements Serializable {
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
     private final List<Answer> answersForStubbing = new ArrayList<Answer>();
+    private final RegisteredInvocations registeredInvocations = new RegisteredInvocations();
 
     private InvocationMatcher invocationForStubbing;
 
@@ -30,7 +34,12 @@ public class MockitoStubber implements Serializable {
     }
 
     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
+        registeredInvocations.add(invocation.getInvocation());
         this.invocationForStubbing = invocation;
+    }
+
+    public void resetInvocationForPotentialStubbing(InvocationMatcher invocationMatcher) {
+        this.invocationForStubbing = invocationMatcher;
     }
 
     public void addAnswer(Answer answer) {
@@ -40,20 +49,20 @@ public class MockitoStubber implements Serializable {
     public void addConsecutiveAnswer(Answer answer) {
         addAnswer(answer, true);
     }
-    
+
     private void addAnswer(Answer answer, boolean isConsecutive) {
         Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress.stubbingCompleted(invocation);
         AnswersValidator answersValidator = new AnswersValidator();
         answersValidator.validate(answer, invocation);
-        
+
         if (isConsecutive) {
             stubbed.getFirst().addAnswer(answer);
         } else {
             stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
         }
-    } 
-    
+    }
+
     Object answerTo(Invocation invocation) throws Throwable {
         return findAnswerFor(invocation).answer(invocation);
     }
@@ -64,14 +73,14 @@ public class MockitoStubber implements Serializable {
                 return s;
             }
         }
-        
+
         return null;
     }
 
     public void addAnswerForVoidMethod(Answer answer) {
         answersForStubbing.add(answer);
     }
-    
+
     public void setAnswersForStubbing(List<Answer> answers) {
         answersForStubbing.addAll(answers);
     }
@@ -88,9 +97,17 @@ public class MockitoStubber implements Serializable {
         }
         answersForStubbing.clear();
     }
-    
+
     @Override
     public String toString() {
         return "invocationForStubbing: " + invocationForStubbing;
+    }
+
+    public List<Invocation> getInvocations() {
+        return registeredInvocations.getAll();
+    }
+
+    public RegisteredInvocations getRegisteredInvocations() {
+        return registeredInvocations;
     }
 }
