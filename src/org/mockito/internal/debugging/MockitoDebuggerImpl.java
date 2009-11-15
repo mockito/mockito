@@ -22,9 +22,17 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
                 System.out.println(" stubbed: " + i.stubInfo().stubbingLocation());
             }
         }
-//        System.out.println("********************************");
-//        System.out.println("***       Unused stubs       ***");
-//        System.out.println("********************************");        
-//        List<Invocation> invocations = finder.getAllUnusedStubs(asList(mocks));
+        invocations = finder.getAllUnusedStubs(asList(mocks));
+        if (invocations.isEmpty()) {
+            return;
+        }
+        System.out.println("********************************");
+        System.out.println("***       Unused stubs       ***");
+        System.out.println("********************************");
+        invocations = finder.getAllUnusedStubs(asList(mocks));
+        for(Invocation i:invocations) {
+            System.out.println(i.toString());
+            System.out.println(" stubbed: " + i.getLocation());
+        }
     }
 }

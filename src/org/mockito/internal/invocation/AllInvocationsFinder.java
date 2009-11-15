@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.MockUtil;
 
 public class AllInvocationsFinder {
@@ -28,6 +30,19 @@ public class AllInvocationsFinder {
         }
         
         return new LinkedList<Invocation>(invocationsInOrder);
+    }
+
+    public List<Invocation> getAllUnusedStubs(List<?> mocks) {
+        List<Invocation> unused = new LinkedList<Invocation>();
+        for (Object mock : mocks) {
+            List<StubbedInvocationMatcher> fromSingleMock = new MockUtil().getMockHandler(mock).getStubbedInvocations();
+            for(StubbedInvocationMatcher s : fromSingleMock) {
+                if (!s.wasUsed()) {
+                     unused.add(s.getInvocation());
+                }
+            }
+        }
+        return unused;
     }
 
     private final class SequenceNumberComparator implements Comparator<Invocation> {

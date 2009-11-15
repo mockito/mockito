@@ -124,4 +124,8 @@ public class MockHandler<T> implements IMockHandler {
     public void setAnswersForStubbing(List<Answer> answers) {
         mockitoStubber.setAnswersForStubbing(answers);
     }
+
+    public List<StubbedInvocationMatcher> getStubbedInvocations() {
+        return mockitoStubber.getStubbedInvocations();
+    }
 }

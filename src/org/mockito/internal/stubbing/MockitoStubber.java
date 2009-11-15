@@ -108,4 +108,8 @@ public class MockitoStubber implements Serializable {
     public List<Invocation> getInvocations() {
         return registeredInvocations.getAll();
     }
+
+    public List<StubbedInvocationMatcher> getStubbedInvocations() {
+        return stubbed;
+    }
 }

@@ -17,6 +17,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
+    private Invocation stubUsedHere;
 
     public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
@@ -35,11 +36,15 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
     }
 
     public void markStubUsed(Invocation where) {
-        //TODO
+        this.stubUsedHere = where;
     }
 
     @Override
     public String toString() {
         return super.toString() + " stubbed with: " + answers;
+    }
+
+    public boolean wasUsed() {
+        return stubUsedHere != null;
     }
 }
