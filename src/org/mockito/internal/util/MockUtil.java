@@ -67,7 +67,7 @@ public class MockUtil {
         }
 
         if (isMockitoMock(mock)) {
-            return (MockHandler) getInterceptor(mock).getMockHandler();
+            return (MockHandler) getInterceptor(mock).getHandler();
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }

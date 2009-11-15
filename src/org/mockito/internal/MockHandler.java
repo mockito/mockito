@@ -23,7 +23,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
  * @param <T>
  *            type of mock object to handle
  */
-public class MockHandler<T> implements IMockHandler {
+public class MockHandler<T> implements MockitoInvocationHandler {
 
     private static final long serialVersionUID = -2917871070982574165L;
 

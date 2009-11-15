@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
-import org.mockito.internal.IMockHandler;
+import org.mockito.internal.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
@@ -19,13 +19,13 @@ import org.mockito.internal.util.ObjectMethodsGuru;
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
-    private final IMockHandler mockHandler;
+    private final MockitoInvocationHandler handler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockSettingsImpl mockSettings;
 
-    public MethodInterceptorFilter(IMockHandler mockHandler, MockSettingsImpl mockSettings) {
-        this.mockHandler = mockHandler;
+    public MethodInterceptorFilter(MockitoInvocationHandler handler, MockSettingsImpl mockSettings) {
+        this.handler = handler;
         this.mockSettings = mockSettings;
     }
 
@@ -44,11 +44,11 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
         Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
-        return mockHandler.handle(invocation);
+        return handler.handle(invocation);
     }
    
-    public IMockHandler getMockHandler() {
-        return mockHandler;
+    public MockitoInvocationHandler getHandler() {
+        return handler;
     }
 
     private int hashCodeForMock(Object mock) {
