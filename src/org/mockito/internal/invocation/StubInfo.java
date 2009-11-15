@@ -1,7 +1,15 @@
 package org.mockito.internal.invocation;
 
-public class StubInfo {
+import java.io.Serializable;
+
+public class StubInfo implements Serializable {
+    private Invocation stubbing;
+
+    public StubInfo(Invocation stubbing) {
+        this.stubbing = stubbing;
+    }
+
     public String stubbingLocation() {
-        return "foooo!";
+        return stubbing.getLocation().toString();
     }
 }

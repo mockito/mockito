@@ -11,12 +11,11 @@ import java.util.List;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.StubInfo;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
-
-import javax.management.openmbean.CompositeData;
 
 @SuppressWarnings("unchecked")
 public class MockitoStubber implements Serializable {
@@ -71,6 +70,8 @@ public class MockitoStubber implements Serializable {
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(invocation)) {
+                invocation.markStubbed(new StubInfo(s.getInvocation()));
+                s.markStubUsed(invocation);
                 return s;
             }
         }

@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -31,6 +32,10 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
+    }
+
+    public void markStubUsed(Invocation where) {
+        //TODO
     }
 
     @Override
