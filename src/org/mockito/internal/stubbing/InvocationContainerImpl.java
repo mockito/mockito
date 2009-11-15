@@ -70,8 +70,8 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
         for (StubbedInvocationMatcher s : stubbed) {
             if (s.matches(invocation)) {
-                invocation.markStubbed(new StubInfo(s.getInvocation()));
                 s.markStubUsed(invocation);
+                invocation.markStubbed(new StubInfo(s));
                 return s;
             }
         }

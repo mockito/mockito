@@ -7,7 +7,7 @@ package org.mockito.internal.stubbing;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -17,7 +17,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
-    private Invocation stubUsedHere;
+    private PrintableInvocation usedAt;
 
     public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
@@ -35,16 +35,16 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
         answers.add(answer);
     }
 
-    public void markStubUsed(Invocation where) {
-        this.stubUsedHere = where;
+    public void markStubUsed(PrintableInvocation usedAt) {
+        this.usedAt = usedAt;
+    }
+
+    public boolean wasUsed() {
+        return usedAt != null;
     }
 
     @Override
     public String toString() {
         return super.toString() + " stubbed with: " + answers;
-    }
-
-    public boolean wasUsed() {
-        return stubUsedHere != null;
     }
 }
