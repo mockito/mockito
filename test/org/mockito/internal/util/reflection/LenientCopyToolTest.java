@@ -24,8 +24,7 @@ public class LenientCopyToolTest extends TestBase {
     }
     
     static class SomeObject extends InheritMe {
-        @SuppressWarnings("unused") 
-        // required because static fields needs to be excluded from copying 
+        @SuppressWarnings("unused")
         private static int staticField = -100;
         private int privateField = -100;
         private transient int privateTransientField = -100;
@@ -156,5 +155,30 @@ public class LenientCopyToolTest extends TestBase {
         
         //then
         verify(tool.fieldCopier, atLeast(3)).copyValue(any(), any(), any(Field.class));
+    }
+    
+    @Test
+    public void shouldBeAbleToCopyFromRealObjectToRealObject() throws Exception {
+        
+        // given
+        from.defaultField = "defaultField";
+        from.instancePublicField = new SomeOtherObject();
+        from.privateField = 1;
+        from.privateTransientField = 2;
+        from.protectedField = "protectedField";
+        from.protectedInherited = "protectedInherited";
+        to = new SomeObject(0);
+        
+        // when
+        tool.copyToRealObject(from, to);
+        
+        // then
+        assertEquals(from.defaultField, to.defaultField);
+        assertEquals(from.instancePublicField, to.instancePublicField);
+        assertEquals(from.privateField, to.privateField);
+        assertEquals(from.privateTransientField, to.privateTransientField);
+        assertEquals(from.protectedField, to.protectedField);
+        assertEquals(from.protectedInherited, to.protectedInherited);
+        
     }
 }

@@ -13,14 +13,20 @@ public class LenientCopyTool {
     FieldCopier fieldCopier = new FieldCopier();
 
     public <T> void copyToMock(T from, T mock) {
-        Class clazz = from.getClass();
-        Class mockSuperClass = mock.getClass().getSuperclass();
-        assert mockSuperClass == clazz 
-            : "Classes must have the same type: class of the object from: " + clazz + ", mock super class: " + mockSuperClass;
+        copy(from, mock, from.getClass(), mock.getClass().getSuperclass());
+    }
 
-        while (clazz != Object.class) {
-            copyValues(from, mock, clazz);
-            clazz = clazz.getSuperclass();
+    public <T> void copyToRealObject(T from, T to) {
+        copy(from, to, from.getClass(), to.getClass());
+    }
+
+    private <T> void copy(T from, T to, Class fromClazz, Class toClass) {
+        assert toClass == fromClazz 
+            : "Classes must have the same type: class of the object from: " + fromClazz + ", mock super class: " + toClass;
+
+        while (fromClazz != Object.class) {
+            copyValues(from, to, fromClazz);
+            fromClazz = fromClazz.getSuperclass();
         }
     }
 
