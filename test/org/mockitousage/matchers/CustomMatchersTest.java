@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("serial")
 public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo extends ArgumentMatcher<String> {

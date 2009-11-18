@@ -14,7 +14,6 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @Ignore("that's just prototyping")
-@SuppressWarnings("serial")
 public class AssertingMatchersTest extends TestBase {
     
     private IMethods mock;

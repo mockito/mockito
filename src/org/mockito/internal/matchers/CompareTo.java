@@ -9,7 +9,6 @@ import org.mockito.ArgumentMatcher;
 
 
 public abstract class CompareTo<T extends Comparable<T>> extends ArgumentMatcher<T> {
-    private static final long serialVersionUID = 1857450785375711120L;
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {
