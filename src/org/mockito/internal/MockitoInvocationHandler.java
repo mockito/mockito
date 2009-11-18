@@ -7,7 +7,6 @@ package org.mockito.internal;
 import java.io.Serializable;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.stubbing.VoidMethodStubbable;
 
 public interface MockitoInvocationHandler extends Serializable {
 

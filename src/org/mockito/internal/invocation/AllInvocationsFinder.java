@@ -4,15 +4,10 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.MockUtil;
 
 public class AllInvocationsFinder {

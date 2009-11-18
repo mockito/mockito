@@ -4,19 +4,16 @@
  */
 package org.mockito.internal.util;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.RETURNS_DEFAULTS;
+import static org.mockito.Mockito.withSettings;
 
-import org.mockito.cglib.proxy.Callback;
-import org.mockito.cglib.proxy.Enhancer;
-import org.mockito.cglib.proxy.Factory;
+import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.creation.MethodInterceptorFilter;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
-import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 
 @SuppressWarnings("unchecked")

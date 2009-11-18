@@ -14,7 +14,6 @@ import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

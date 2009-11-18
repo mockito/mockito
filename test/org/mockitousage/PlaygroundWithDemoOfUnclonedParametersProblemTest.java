@@ -4,19 +4,20 @@
  */
 package org.mockitousage;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willAnswer;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 
 public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase {
 

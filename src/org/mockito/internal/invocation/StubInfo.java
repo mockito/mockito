@@ -5,6 +5,7 @@ import org.mockito.exceptions.PrintableInvocation;
 import java.io.Serializable;
 
 public class StubInfo implements Serializable {
+    private static final long serialVersionUID = 2125827349332068867L;
     private PrintableInvocation stubbedAt;
 
     public StubInfo(PrintableInvocation stubbedAt) {

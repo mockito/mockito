@@ -5,12 +5,9 @@
 package org.mockito.internal.verification;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.StubInfo;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
 
