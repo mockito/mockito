@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.internal.util.ObjectBox;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("serial")
 public class InvocationMarkerTest extends TestBase {
 
     @Test
