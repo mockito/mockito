@@ -213,23 +213,29 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
         // given
         IMethods mock = mock(IMethods.class, withSettings().serializable());
-        final String string = "return value";
-        when(mock.objectArgMethod(anyString())).thenAnswer(new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) {
-                invocation.getArguments();
-                invocation.getMock();
-                return string;
-            }
-        });
+        CustomAnswersMustImplementSerializableForSerializationToWork answer = 
+            new CustomAnswersMustImplementSerializableForSerializationToWork();
+        answer.string = "return value";
+        when(mock.objectArgMethod(anyString())).thenAnswer(answer);
 
         // when
         ByteArrayOutputStream serialized = serializeMock(mock);
 
         // then
         IMethods readObject = deserializeMock(serialized, IMethods.class);
-        assertEquals(string, readObject.objectArgMethod(""));
+        assertEquals(answer.string, readObject.objectArgMethod(""));
     }
 
+    class CustomAnswersMustImplementSerializableForSerializationToWork 
+        implements Answer<Object>, Serializable {
+        private String string;
+        public Object answer(InvocationOnMock invocation) throws Throwable {
+            invocation.getArguments();
+            invocation.getMock();
+            return string;
+        }
+    }
+  
     @SuppressWarnings("unchecked")
     @Test
     public void shouldSerializeWithRealObjectSpy() throws Exception {
