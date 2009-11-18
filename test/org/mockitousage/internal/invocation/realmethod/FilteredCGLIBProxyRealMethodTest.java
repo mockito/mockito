@@ -12,7 +12,6 @@ import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("serial")
 public class FilteredCGLIBProxyRealMethodTest extends TestBase {
 
     @Before
