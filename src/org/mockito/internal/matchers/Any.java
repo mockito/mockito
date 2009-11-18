@@ -4,11 +4,13 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
-public class Any extends ArgumentMatcher {
+public class Any extends ArgumentMatcher implements Serializable {
 
     private static final long serialVersionUID = -4062420125651019029L;
     public static final Any ANY = new Any();    
