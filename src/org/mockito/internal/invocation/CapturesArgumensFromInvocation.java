@@ -4,9 +4,8 @@
  */
 package org.mockito.internal.invocation;
 
-import java.io.Serializable;
 
-public interface CapturesArgumensFromInvocation extends Serializable {
+public interface CapturesArgumensFromInvocation {
     
     void captureArgumentsFrom(Invocation i);
     
