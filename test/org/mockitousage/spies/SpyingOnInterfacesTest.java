@@ -14,7 +14,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "serial"})
+@SuppressWarnings({"unchecked"})
 public class SpyingOnInterfacesTest extends TestBase {
 
     @Test

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.io.Serializable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -12,7 +13,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class StubbedInvocationMatcher extends InvocationMatcher implements Answer {
+public class StubbedInvocationMatcher extends InvocationMatcher implements Answer, Serializable {
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();

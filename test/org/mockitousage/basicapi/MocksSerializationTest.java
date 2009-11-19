@@ -120,7 +120,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldVerifyEvenIfSomeMethodsCalledAfterSerialization() throws Exception {
-        //given
+        // given
         IMethods mock = mock(IMethods.class, withSettings().serializable());
 
         // when
@@ -132,8 +132,9 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // then
         verify(readObject, times(2)).simpleMethod(1);
 
-        //this test is working because it seems that java serialization mechanism replaces all instances
-        //of serialized object in the object graph (if there are any)
+        // this test is working because it seems that java serialization
+        // mechanism replaces all instances
+        // of serialized object in the object graph (if there are any)
     }
 
     class Bar implements Serializable {
@@ -142,6 +143,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     class Foo implements Serializable {
         Bar bar;
+
         Foo() {
             bar = new Bar();
             bar.foo = this;
@@ -150,17 +152,17 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void shouldSerializationWork() throws Exception {
-        //given
+        // given
         Foo foo = new Foo();
-        //when
+        // when
         foo = serializeAndBack(foo);
-        //then
+        // then
         assertSame(foo, foo.bar.foo);
     }
 
     @Test
     public void shouldStubEvenIfSomeMethodsCalledAfterSerialization() throws Exception {
-        //given
+        // given
         IMethods mock = mock(IMethods.class, withSettings().serializable());
 
         // when
@@ -214,13 +216,9 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // given
         IMethods mock = mock(IMethods.class, withSettings().serializable());
         final String string = "return value";
-        when(mock.objectArgMethod(anyString())).thenAnswer(new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) {
-                invocation.getArguments();
-                invocation.getMock();
-                return string;
-            }
-        });
+        CustomAnswersMustImplementSerializableForSerializationToWork answer = new CustomAnswersMustImplementSerializableForSerializationToWork();
+        answer.string = "return value";
+        when(mock.objectArgMethod(anyString())).thenAnswer(answer);
 
         // when
         ByteArrayOutputStream serialized = serializeMock(mock);
@@ -228,6 +226,17 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // then
         IMethods readObject = deserializeMock(serialized, IMethods.class);
         assertEquals(string, readObject.objectArgMethod(""));
+        assertEquals(answer.string, readObject.objectArgMethod(""));
+    }
+
+    class CustomAnswersMustImplementSerializableForSerializationToWork implements Answer<Object>, Serializable {
+        private String string;
+
+        public Object answer(InvocationOnMock invocation) throws Throwable {
+            invocation.getArguments();
+            invocation.getMock();
+            return string;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -235,9 +244,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     public void shouldSerializeWithRealObjectSpy() throws Exception {
         // given
         List<Object> list = new ArrayList<Object>();
-        List<Object> spy = mock(ArrayList.class, withSettings()
-                        .spiedInstance(list)
-                        .defaultAnswer(CALLS_REAL_METHODS)
+        List<Object> spy = mock(ArrayList.class, withSettings().spiedInstance(list).defaultAnswer(CALLS_REAL_METHODS)
                         .serializable());
         when(spy.size()).thenReturn(100);
 
@@ -275,7 +282,8 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         readObject.matches("");
     }
 
-    class AlreadySerializable implements Serializable {}
+    class AlreadySerializable implements Serializable {
+    }
 
     @Test
     public void shouldSerializeAlreadySerializableClass() throws Exception {

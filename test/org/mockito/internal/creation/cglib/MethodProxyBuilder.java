@@ -14,7 +14,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 
-@SuppressWarnings("serial")
 public class MethodProxyBuilder {
 
     public MockitoMethodProxy build() {

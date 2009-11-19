@@ -8,10 +8,8 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import static org.mockito.AdditionalMatchers.*;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

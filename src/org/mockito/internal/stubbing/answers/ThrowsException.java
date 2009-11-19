@@ -4,12 +4,14 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import java.io.Serializable;
+
 import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public class ThrowsException implements Answer<Object> {
+public class ThrowsException implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 1128820328555183980L;
     private final Throwable throwable;

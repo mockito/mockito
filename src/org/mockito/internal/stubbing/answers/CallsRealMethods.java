@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import java.io.Serializable;
+
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -27,7 +29,7 @@ import org.mockito.stubbing.Answer;
  * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
  * <p>
  */
-public class CallsRealMethods implements Answer<Object> {
+public class CallsRealMethods implements Answer<Object>, Serializable {
     private static final long serialVersionUID = 9057165148930624087L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
