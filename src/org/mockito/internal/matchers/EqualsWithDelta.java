@@ -4,11 +4,13 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
 
 
-public class EqualsWithDelta extends ArgumentMatcher<Number>{
+public class EqualsWithDelta extends ArgumentMatcher<Number> implements Serializable    {
     private static final long serialVersionUID = 5066980489920383664L;
 
     private final Number wanted;

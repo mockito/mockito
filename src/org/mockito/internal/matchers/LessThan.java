@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.matchers;
 
-public class LessThan<T extends Comparable<T>> extends CompareTo<T> {
+import java.io.Serializable;
+
+public class LessThan<T extends Comparable<T>> extends CompareTo<T> implements Serializable {
 
     private static final long serialVersionUID = -133860804462310942L;
 
