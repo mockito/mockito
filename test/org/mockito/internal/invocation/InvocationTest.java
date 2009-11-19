@@ -19,7 +19,7 @@ import org.mockito.internal.matchers.Equals;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked","serial"})
+@SuppressWarnings({"unchecked"})
 public class InvocationTest extends TestBase {
 
     private Invocation invocation;

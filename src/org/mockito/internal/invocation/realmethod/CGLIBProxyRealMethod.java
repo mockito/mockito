@@ -4,10 +4,12 @@
  */
 package org.mockito.internal.invocation.realmethod;
 
+import java.io.Serializable;
+
 import org.mockito.internal.creation.MockitoMethodProxy;
 
 
-public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy {
+public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Serializable {
 
     private static final long serialVersionUID = -4596470901191501582L;
     private final MockitoMethodProxy methodProxy;
