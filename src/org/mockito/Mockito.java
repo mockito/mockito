@@ -596,7 +596,7 @@ import org.mockito.stubbing.*;
  * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
  * was in a web environment and the objects from the external dependency were being serialized to pass between layers. 
  * <p>
- * To create serializable mock use {@link #withSettings().serializable()}:
+ * To create serializable mock use {@link MockSettings#serializable()}:
  * <pre>
  *   List serializableMock = mock(List.class, withSettings().serializable());
  * </pre>
@@ -734,6 +734,7 @@ public class Mockito extends Matchers {
      * See examples in javadoc for {@link Mockito} class
      * 
      * @param classToMock class or interface to mock
+     * @param name of the mock 
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, String name) {
@@ -1075,7 +1076,7 @@ public class Mockito extends Matchers {
      * </pre>
      *
      * @param <T>
-     * @param mocks
+     * @param mocks to be reset
      */
     public static <T> void reset(T ... mocks) {
         MOCKITO_CORE.reset(mocks);
@@ -1396,8 +1397,8 @@ public class Mockito extends Matchers {
      * 
      * <p>
      * If you want to verify there were NO interactions with the mock 
-     * check out {@link Mockito#verifyZeroInteractions(Object[])}
-     * or {@link Mockito#verifyNoMoreInteractions(Object[])}
+     * check out {@link Mockito#verifyZeroInteractions(Object...)}
+     * or {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -1464,7 +1465,7 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * <p>
-     * See also {@link Mockito#verifyNoMoreInteractions(Object[])}
+     * See also {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -1479,7 +1480,7 @@ public class Mockito extends Matchers {
      * <p>
      * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a> 
      * <p>
-     * {@link Mockito#validateMockitoUsage()} <b>explicitly validates</b> the framework state to detect invalid use of Mockito.
+     * validateMockitoUsage() <b>explicitly validates</b> the framework state to detect invalid use of Mockito.
      * However, this feature is optional <b>because Mockito validates the usage all the time...</b> but there is a gotcha so read on.
      * <p>
      * Examples of incorrect use:
@@ -1501,7 +1502,7 @@ public class Mockito extends Matchers {
      * Hence you can click and find the place where Mockito was misused.
      * <p>
      * Sometimes though, you might want to validate the framework usage explicitly. 
-     * For example, one of the users wanted to put {@link Mockito#validateMockitoUsage()} in his &#064;After method
+     * For example, one of the users wanted to put validateMockitoUsage() in his &#064;After method
      * so that he knows immediately when he misused Mockito. 
      * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.
      * One more benefit of having validateMockitoUsage() in &#064;After is that jUnit runner will always fail in the test method with defect
