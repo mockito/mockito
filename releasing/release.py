@@ -8,11 +8,11 @@ def run(cmd):
   assert os.system(cmd) == 0, "\nCommand failed: " + cmd
 
 ant_cmd = 'ant test.release release.javadoc release.maven'
-raw_input("It is wise to run following command first: \n\n" + ant_cmd + "\n\nIt's because ant some times provides wrong return code.\nAny key to continue")  
+raw_input("It is wise to run following command first: \n\n" + ant_cmd + "\n\nIt's because ant some times provides wrong return code.\nAny key to continue")
 
 run('ruby replace_headers.rb')
 
-ok = raw_input("Make sure NOW if all you need is checked in. Proceed? (Y/N):")
+ok = raw_input("Make sure NOW if all you need is checked in.\nTHERE SHOULD BE NO CHANGED FILES!!!.\nProceed? (Y/N):")
 if ok != "Y": 
   print "Exited on user request"
   exit(1)
@@ -20,7 +20,8 @@ if ok != "Y":
 ver = raw_input("Specify the version, e.g. 1.9:")
 
 branch = 'https://mockito.googlecode.com/svn/branches/' + ver
-run('svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk ' + branch)
+
+run('svn copy -m "branched before release" .. ' + branch)
 run('svn co ' + branch + ' ../../mockito-' + ver)
 
 print("Switching to ../../mockito-" + ver + " folder")
