@@ -297,4 +297,15 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // then
         assertEquals("foo", mock.toString());
     }
+
+    @Test
+    public void shouldBeSerializeAndHaveExtraInterfaces() throws Exception {
+        //when
+        IMethods mock = mock(IMethods.class, withSettings().serializable().extraInterfaces(List.class));
+        IMethods mockTwo = mock(IMethods.class, withSettings().extraInterfaces(List.class).serializable());
+
+        //then
+        serializeAndBack((List) mock);
+        serializeAndBack((List) mockTwo);
+    }
 }

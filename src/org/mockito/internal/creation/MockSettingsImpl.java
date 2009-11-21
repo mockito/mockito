@@ -8,9 +8,6 @@ import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.stubbing.Answer;
 
-import java.util.Arrays;
-import java.io.Serializable;
-
 public class MockSettingsImpl implements MockSettings {
 
     private static final long serialVersionUID = 4475297236197939568L;
@@ -18,9 +15,11 @@ public class MockSettingsImpl implements MockSettings {
     private String name;
     private Object spiedInstance;
     private Answer<Object> defaultAnswer;
+    private boolean serializable;
 
     public MockSettings serializable() {
-        return this.extraInterfaces(Serializable.class);
+        serializable = true;
+        return this;
     }
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
@@ -72,8 +71,6 @@ public class MockSettingsImpl implements MockSettings {
     }
 
     public boolean isSerializable() {
-        return
-                extraInterfaces != null
-                && Arrays.asList(extraInterfaces).contains(Serializable.class);
+        return serializable;
     }
 }

@@ -18,6 +18,8 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 
+import java.io.Serializable;
+
 @SuppressWarnings("unchecked")
 public class MockUtil {
     
@@ -40,7 +42,14 @@ public class MockUtil {
         MockHandler<T> mockHandler = new MockHandler<T>(mockName, progress, new MatchersBinder(), settings);
         MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHandler, settings);
         Class<?>[] interfaces = settings.getExtraInterfaces();
-        Class<?>[] ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
+
+        Class<?>[] ancillaryTypes;
+        if (settings.isSerializable()) {
+            ancillaryTypes = interfaces == null ? new Class<?>[] {Serializable.class} : new ArrayUtils().concat(interfaces, Serializable.class);
+        } else {
+            ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
+        }
+
         Object spiedInstance = settings.getSpiedInstance();
         
         T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
