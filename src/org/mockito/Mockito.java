@@ -595,7 +595,7 @@ import org.mockito.stubbing.*;
  * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
  * was in a web environment and the objects from the external dependency were being serialized to pass between layers. 
  * <p>
- * To create serializable mock use {@link #withSettings().serializable()}:
+ * To create serializable mock use {@link MockSettings#serializable()}:
  * <pre>
  *   List serializableMock = mock(List.class, withSettings().serializable());
  * </pre>
