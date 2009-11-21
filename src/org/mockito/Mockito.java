@@ -822,7 +822,7 @@ public class Mockito extends Matchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
-        return MOCKITO_CORE.mock(classToMock, mockSettings);
+        return MOCKITO_CORE.mock(classToMock, mockSettings, true);
     }
     
     /**
@@ -894,7 +894,7 @@ public class Mockito extends Matchers {
     public static <T> T spy(T object) {
         return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
-                .defaultAnswer(CALLS_REAL_METHODS)); 
+                .defaultAnswer(CALLS_REAL_METHODS), true); 
     }
 
     /**

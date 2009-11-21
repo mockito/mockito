@@ -33,6 +33,6 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
             return null;
         }
         
-        return mockitoCore.mock((Class) clazz, new MockSettingsImpl().defaultAnswer(this));
+        return mockitoCore.mock(clazz, new MockSettingsImpl().defaultAnswer(this), false);
     }
 }
