@@ -26,14 +26,7 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
         // second test
         assertOngoingStubbingIsReset();
     }
-    
-    @Test
-    public void shouldResetOngoingStubbingOnMock() {
-        mock.booleanReturningMethod();
-        mock(IMethods.class);
-        assertOngoingStubbingIsReset();
-    }
-    
+
     @Test
     public void shouldResetOngoingStubbingOnInOrder() {
         mock.booleanReturningMethod();
@@ -46,14 +39,6 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
     public void shouldResetOngoingStubbingOnDoReturn() {
         mock.booleanReturningMethod();
         doReturn(false).when(mock).booleanReturningMethod();
-        assertOngoingStubbingIsReset();
-    }
-
-    @Test
-    public void shouldResetOngoingStubbingOnVerifyNoMoreInteractions() {
-        mock.booleanReturningMethod();
-        IMethods mock2 = mock(IMethods.class);
-        verifyNoMoreInteractions(mock2);
         assertOngoingStubbingIsReset();
     }
 

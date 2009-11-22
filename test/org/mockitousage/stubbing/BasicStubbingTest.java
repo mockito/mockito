@@ -64,6 +64,7 @@ public class BasicStubbingTest extends TestBase {
     
     @Test
     public void unfinishedStubbingCleansUpTheState() {
+        reset(mock);
         try {
             when("").thenReturn("");
             fail(); 
