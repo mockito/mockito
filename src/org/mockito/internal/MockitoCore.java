@@ -29,9 +29,11 @@ public class MockitoCore {
     private final MockUtil mockUtil = new MockUtil();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
-    public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
+    public <T> T mock(Class<T> classToMock, MockSettings mockSettings, boolean shouldResetOngoingStubbing) {
         mockingProgress.validateState();
-        mockingProgress.resetOngoingStubbing();
+        if (shouldResetOngoingStubbing) {
+            mockingProgress.resetOngoingStubbing();
+        }
         return mockUtil.createMock(classToMock, (MockSettingsImpl) mockSettings);
     }
     
