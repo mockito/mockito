@@ -11,9 +11,8 @@
       <version>1.8.0-rc1</version>
       <version>1.8.0-rc2</version>
       <version>1.8.0</version>
-      <version>1.8.1-rc1</version>
-      <version>1.8.1</version>
+      <version>1.8.0-snapshot</version>
     </versions>
-    <lastUpdated>20091121222509</lastUpdated>
+    <lastUpdated>20091111142432</lastUpdated>
   </versioning>
 </metadata>
