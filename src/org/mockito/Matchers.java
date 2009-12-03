@@ -476,8 +476,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T eq(T value) {
-        return (T) reportMatcher(new Equals(value)).<T>returnFor((Class) value.getClass());
-    }  
+        return (T) reportMatcher(new Equals(value)).<T>returnFor(value);
+    }
 
     /**
      * Object argument that is reflection-equal to the given value with support for excluding
@@ -513,7 +513,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T same(T value) {
-        return (T) reportMatcher(new Same(value)).<T>returnFor((Class) value.getClass());
+        return (T) reportMatcher(new Same(value)).<T>returnFor(value);
     }
 
     /**

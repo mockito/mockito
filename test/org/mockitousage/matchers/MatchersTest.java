@@ -496,9 +496,9 @@ public class MatchersTest extends TestBase {
     
     @Test
     public void sameMatcher() {
-        Object one = new String("1243");
-        Object two = new String("1243");
-        Object three = new String("1243");
+        Object one = "1243";
+        Object two = "1243";
+        Object three = "1243";
 
         assertNotSame(one, two);
         assertEquals(one, two);
@@ -510,5 +510,19 @@ public class MatchersTest extends TestBase {
         assertEquals("1", mock.oneArg(one));
         assertEquals("2", mock.oneArg(two));
         assertEquals(null, mock.oneArg(three));
+    }
+
+    @Test
+    public void eqMatcherAndNulls() {
+        mock.simpleMethod((Object) null);
+
+        verify(mock).simpleMethod((Object) eq(null));
+    }
+
+    @Test
+    public void sameMatcherAndNulls() {
+        mock.simpleMethod((Object) null);
+
+        verify(mock).simpleMethod(same(null));
     }
 }

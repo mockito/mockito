@@ -54,4 +54,8 @@ public class HandyReturnValues {
     public Set returnSet() {
         return new HashSet();
     }
+
+    public <T> T returnFor(T instance) {
+        return instance == null ? null : (T) returnFor(instance.getClass());
+    }
 }

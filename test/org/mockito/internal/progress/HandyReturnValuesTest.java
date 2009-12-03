@@ -40,5 +40,15 @@ public class HandyReturnValuesTest extends TestBase {
     public void shouldReturnNullForEverythingElse() throws Exception {
         assertNull(h.returnFor(Object.class));
         assertNull(h.returnFor(String.class));
+        assertNull(h.returnFor(null));
+    }
+
+    @Test
+    public void shouldReturnHandyValueForInstances() throws Exception {
+        assertNull(h.returnFor(new Object()));
+        assertNull(h.returnFor((Object) null));
+        
+        assertNotNull(h.returnFor(10.0));
+        assertNotNull(h.returnFor(Boolean.FALSE));
     }
 }
