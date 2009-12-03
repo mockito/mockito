@@ -496,9 +496,9 @@ public class MatchersTest extends TestBase {
     
     @Test
     public void sameMatcher() {
-        Object one = "1243";
-        Object two = "1243";
-        Object three = "1243";
+        Object one = new String("1243");
+        Object two = new String("1243");
+        Object three = new String("1243");
 
         assertNotSame(one, two);
         assertEquals(one, two);
