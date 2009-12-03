@@ -25,6 +25,7 @@ public class LenientCopyToolTest extends TestBase {
     
     static class SomeObject extends InheritMe {
         @SuppressWarnings("unused")
+        // required because static fields needs to be excluded from copying
         private static int staticField = -100;
         private int privateField = -100;
         private transient int privateTransientField = -100;
