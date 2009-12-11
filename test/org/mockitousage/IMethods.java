@@ -164,9 +164,9 @@ public interface IMethods {
 
     Object varargsObject(int i, Object... object);
     
-    void varargs(Object ... object);
+    int varargs(Object ... object);
     
-    void varargs(String ... string);
+    int varargs(String ... string);
 
     void mixedVarargs(Object i, String ... string);
 

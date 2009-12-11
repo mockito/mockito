@@ -8,12 +8,11 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.AnyVararg;
-import org.mockito.internal.matchers.CapturingMatcher;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.matchers.*;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockitousage.IMethods;
+
+import static org.mockito.Matchers.anyVararg;
 import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 import org.mockitoutil.TestBase;
 
@@ -34,11 +33,6 @@ public class InvocationMatcherTest extends TestBase {
         simpleMethod = new InvocationBuilder().mock(mock).simpleMethod().toInvocationMatcher();
     }
 
-    public void shouldBuildEqualsMatchersWhenNullPassed() throws Exception {
-        InvocationMatcher m = new InvocationMatcher(new InvocationBuilder().args("foo").toInvocation(), null);
-        assertThat(m.getMatchers(), hasExactlyInOrder(new Equals("foo")));
-    }
-    
     @Test
     public void shouldBeACitizenOfHashes() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
@@ -143,5 +137,18 @@ public class InvocationMatcherTest extends TestBase {
 
         //then
         assertTrue(match);
+    }
+
+    @Test
+    public void shouldMatchCaptureArgumentsWhenArgsCountDoesNOTMatch() throws Exception {
+        //given
+        mock.varargs();
+        Invocation invocation = getLastInvocation();
+
+        //when
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));
+
+        //then
+        invocationMatcher.captureArgumentsFrom(invocation);
     }
 }

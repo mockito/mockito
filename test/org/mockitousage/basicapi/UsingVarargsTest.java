@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class UsingVarargsTest extends TestBase {
@@ -22,15 +25,11 @@ public class UsingVarargsTest extends TestBase {
         String withStringVarargsReturningString(int value, String... s);
         void withObjectVarargs(int value, Object... o);
         boolean withBooleanVarargs(int value, boolean... b);
+        int foo(Object ... objects);
     }
     
-    IVarArgs mock;
+    @Mock IVarArgs mock;
 
-    @Before
-    public void setup() {
-        mock = Mockito.mock(IVarArgs.class);
-    }
-    
     @SuppressWarnings("deprecation")
     @Test
     public void shouldStubStringVarargs() {
@@ -165,4 +164,14 @@ public class UsingVarargsTest extends TestBase {
         String result = mixedVarargs.doSomething("one", "two", null);
         assertEquals("hello", result);
     }
+    
+    @Test
+    //See bug #157
+    public void shouldMatchEasilyEmptyVararg() throws Exception {
+        //when
+        when(mock.foo(anyVararg())).thenReturn(-1);
+
+        //then
+        assertEquals(-1, mock.foo());
+    } 
 }
