@@ -511,4 +511,18 @@ public class MatchersTest extends TestBase {
         assertEquals("2", mock.oneArg(two));
         assertEquals(null, mock.oneArg(three));
     }
+
+    @Test
+    public void eqMatcherAndNulls() {
+        mock.simpleMethod((Object) null);
+
+        verify(mock).simpleMethod((Object) eq(null));
+    }
+
+    @Test
+    public void sameMatcherAndNulls() {
+        mock.simpleMethod((Object) null);
+
+        verify(mock).simpleMethod(same(null));
+    }
 }

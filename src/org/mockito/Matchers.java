@@ -476,7 +476,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T eq(T value) {
-        return (T) reportMatcher(new Equals(value)).<T>returnFor((Class) value.getClass());
+        return (T) reportMatcher(new Equals(value)).<T>returnFor(value);
     }  
 
     /**
@@ -513,7 +513,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T same(T value) {
-        return (T) reportMatcher(new Same(value)).<T>returnFor((Class) value.getClass());
+        return (T) reportMatcher(new Same(value)).<T>returnFor(value);
     }
 
     /**

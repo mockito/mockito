@@ -306,12 +306,12 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
-    public void varargs(Object... object) {
-      
+    public int varargs(Object... object) {
+        return -1;
     }
 
-    public void varargs(String... string) {
-      
+    public int varargs(String... string) {
+        return -1;
     }
 
     public void mixedVarargs(Object i, String... string) {
