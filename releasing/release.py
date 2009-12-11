@@ -42,11 +42,11 @@ run('svn ps -R svn:mime-type text/html javadoc/*')
 run('svn ps -R svn:mime-type text/css javadoc/stylesheet.css')
 run('svn ci -m "released javadoc, updated version"')
 
+import release_maven
+release_maven.go(branch_work_dir)
+
 tag = 'https://mockito.googlecode.com/svn/tags/' + ver 
 run('svn copy -m "Tagged new release" ' + branch + ' ' + tag)
-
-tag = 'https://mockito.googlecode.com/svn/tags/latest'
-run('svn copy -m "Tagged latest release" ' + branch + ' ' + tag)
 
 print("Uploading binaries to the googlecode")
 
@@ -70,5 +70,9 @@ sys.argv.append('../target/mockito-all-' + ver + '.jar')
 
 google_upload.main()
 
-import release_maven
-release_maven.go(branch_work_dir)
+print("")
+print("Last step! Please perform rsync command from folder '" + work_dir + "'. This is how you do it:")
+print("Dry run:")
+print("rsync -rvn -e \"ssh -i ../rsync.mockito.key\" maven/repository/ mockito@wamblee.org:/")
+print("Run:")
+print("rsync -rv -e \"ssh -i ../rsync.mockito.key\" maven/repository/ mockito@wamblee.org:/")

@@ -9,23 +9,22 @@ def run(cmd):
 def go(work_dir):
     os.chdir(work_dir)
 
-    maven_folder_in_trunk = '../mockito-java/maven'
-    assert os.path.exists(maven_folder_in_trunk)
+    assert os.path.exists('maven')
     
-    print("Updating maven-metdata.xml files...")
-    shutil.copy('maven/repository/org/mockito/mockito-all/maven-metadata.xml', maven_folder_in_trunk + '/mockito-all-metadata.xml')
-    shutil.copy('maven/repository/org/mockito/mockito-core/maven-metadata.xml', maven_folder_in_trunk + '/mockito-core-metadata.xml')
+    print("Copying maven-metdata.xml files...")
+    shutil.copy('maven/repository/org/mockito/mockito-all/maven-metadata.xml', 'maven/mockito-all-metadata.xml')
+    shutil.copy('maven/repository/org/mockito/mockito-core/maven-metadata.xml', 'maven/mockito-core-metadata.xml')
     
     print("Checking-in maven-metdata.xml files...")
-    os.chdir(maven_folder_in_trunk)
-    run('svn ci -m "updated maven metadata so that versions history is properly maintained in the metadata"')
-    
-    print("")
-    print("Last step! Please perform rsync command from folder '" + work_dir + "'. This is how you do it:")
-    print("Dry run:")
-    print("rsync -rvn -e \"ssh -i ../rsync.mockito.key\" maven/repository/ mockito@wamblee.org:/")
-    print("Run:")
-    print("rsync -rv -e \"ssh -i ../rsync.mockito.key\" maven/repository/ mockito@wamblee.org:/")
+
+    run('svn ci -m "updated maven metadata so that versions history is properly maintained in the metadata" maven')
+
+    in_trunk_already = os.stat('maven') == os.stat('../mockito-java/maven')
+    if (not in_trunk_already):
+        print("Merging the changes to maven metadata files to trunk")
+        shutil.copy('maven/repository/org/mockito/mockito-all/maven-metadata.xml', '../mockito-java/maven/mockito-all-metadata.xml')
+        shutil.copy('maven/repository/org/mockito/mockito-core/maven-metadata.xml', '../mockito-java/maven/mockito-core-metadata.xml')
+        run('svn ci -m "updated maven metadata so that versions history is properly maintained in the metadata" ../mockito-java/maven')
     
 if (__name__ == '__main__'):
     go('..')
