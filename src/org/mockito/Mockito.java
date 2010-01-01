@@ -681,6 +681,30 @@ public class Mockito extends Matchers {
      * <p>
      * {@link Answer} can be used to define the return values of unstubbed invocations.
      * <p>
+     * ReturnsDeepStubs returns reusable deep stubbing.  If the return type
+     * cannot be mocked (e.g. is final) then plain null is returned.
+     *
+     * TODO: Explain how this is different from RETURNS_MOCKS
+     * <p>
+     * Example:
+     * <pre>
+     *    Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);
+     *
+     *    // stub here
+     *    when(mock.getBar().getName(), "DeepStub");
+     *
+     *    // verify
+     *    assertEquals("DeepStub", mock.getBar().getName());
+     * </pre>
+     * <p>
+     */
+    public static final Answer<Object> RETURNS_DEEP_STUBS = new ReturnsDeepStubs();
+
+    /**
+     * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
+     * <p>
+     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * <p>
      * This implementation can be helpful when working with legacy code.
      * When this implementation is used, unstubbed methods will delegate to the real implementation.
      * This is a way to create a partial mock object that calls real methods by default.
