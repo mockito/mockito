@@ -93,7 +93,7 @@ public class Reporter {
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
                 "",
-                "Also, this error might show up because you verify final/private/equals() or hashCode() method.",
+                "Also, this error might show up because you verify final or private methods.",
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
@@ -479,6 +479,23 @@ public class Reporter {
                 "Calling real methods is only possible when mocking concrete classes.",
                 "  //correct example:",
                 "  when(mockOfConcreteClass.doStuff()).thenCallRealMethod();"
+        ));
+    }
+
+    public void cannotVerifyToString() {
+        throw new MockitoException(join(
+                "Mockito cannot verify toString()",
+                "toString() is too often used behind of scenes  (i.e. during String concatenation, in IDE debugging views). " +
+                        "Verifying it may give inconsistent or hard to understand results. " +
+                        "Not to mention that verifying toString() most likely hints awkward design (hard to explain in a short exception message. Trust me...)",
+                "However, it is possible to stub toString(). Stubbing toString() smells a bit funny but there are rare, legitimate use cases."
+        ));
+    }
+
+    public void cannotVerifyEqualsOrHashCode() {
+                throw new MockitoException(join(
+                "Mockito cannot verify equals() and hashCode()",
+                "Mockito defines and depends upon a specific implementation of these methods. Redefining them might break Mockito. Not to mention that verifying equals() or hashCode() most likely hints awkward design (hard to explain in a short exception message. Trust me...)"
         ));
     }
 }

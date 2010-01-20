@@ -127,8 +127,12 @@ public class TestBase extends Assert {
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
+        Class[] types = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            types[i] = args[i].getClass();
+        }
         return new Invocation(new Object(), new SerializableMethod(type.getMethod(methodName,
-                new Class[0])), args, 1, null);
+                types)), args, 1, null);
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {

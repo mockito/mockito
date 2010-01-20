@@ -28,14 +28,6 @@ public class PlaygroundTest extends TestBase {
             
         }
     }
-    
-    @Test
-    public void should() throws Exception {
-        Boo boo = mock(Boo.class);
-
-        boo.toString();
-        verify(boo).toString();
-    }
 
     Foo mock;
     @Mock IMethods mockTwo;

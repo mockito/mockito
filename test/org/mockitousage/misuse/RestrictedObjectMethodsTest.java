@@ -8,7 +8,9 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -16,12 +18,21 @@ public class RestrictedObjectMethodsTest extends TestBase {
 
     @Mock IMethods mock;
 
-    @Ignore
-    @Test
-    public void shouldNotAllowVerifyingRestrictedMethods() {
-        //TODO: after 1.8 exception message should mention those methods are not verifiable
+    @Test(expected= MockitoException.class)
+    public void shouldNotVerifyToString() {
         verify(mock).toString();
+    }
+
+    @Ignore
+    @Test(expected= MockitoException.class)
+    public void shouldNotVerifyHashCode() {
         verify(mock).hashCode();
-        verify(mock).equals(null);
+    }
+
+    @Ignore
+    @Test(expected= MockitoException.class)
+    public void shouldNotVerifyEquals() {
+        InOrder inOrder = inOrder(mock);
+        inOrder.verify(mock).equals(null);
     }
 }

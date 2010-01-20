@@ -6,8 +6,10 @@ package org.mockito.internal.verification;
 
 import java.util.List;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.verification.api.VerificationData;
 
 public class VerificationDataImpl implements VerificationData {
@@ -18,6 +20,7 @@ public class VerificationDataImpl implements VerificationData {
     public VerificationDataImpl(List<Invocation> allInvocations, InvocationMatcher wanted) {
         this.allInvocations = allInvocations;
         this.wanted = wanted;
+        this.assertWantedIsVerifiable();
     }
 
     public List<Invocation> getAllInvocations() {
@@ -26,5 +29,18 @@ public class VerificationDataImpl implements VerificationData {
 
     public InvocationMatcher getWanted() {
         return wanted;
+    }
+
+    void assertWantedIsVerifiable() {
+        if (wanted == null) {
+            return;
+        }
+        ObjectMethodsGuru o = new ObjectMethodsGuru();
+        if (o.isToString(wanted.getMethod())) {
+            new Reporter().cannotVerifyToString();
+        }
+        if (o.isEqualsMethod(wanted.getMethod())) {
+            new Reporter().cannotVerifyEqualsOrHashCode();
+        }
     }
 }

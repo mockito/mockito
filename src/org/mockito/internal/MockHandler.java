@@ -67,7 +67,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         mockingProgress.validateState();
 
         if (verificationMode != null) {
-            VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl.getInvocations(), invocationMatcher);
+            VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl.getInvocations(), invocationMatcher);            
             verificationMode.verify(data);
             return null;
         }
