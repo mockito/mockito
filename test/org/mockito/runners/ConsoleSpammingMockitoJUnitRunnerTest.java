@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.Mock;
@@ -198,6 +200,8 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         }
 
         public void run(RunNotifier notifier) {}
+
+		public void filter(Filter filter) throws NoTestsRemainException {}
 
     }
 }

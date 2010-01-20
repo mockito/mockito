@@ -8,6 +8,8 @@ import org.junit.internal.runners.InitializationError;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
@@ -15,7 +17,7 @@ import org.mockito.internal.runners.util.FrameworkUsageValidator;
 @SuppressWarnings("deprecation")
 public class JUnit44RunnerImpl implements RunnerImpl {
 
-    Runner runner;
+	JUnit4ClassRunner runner;
 
     public JUnit44RunnerImpl(Class<?> klass) throws InitializationError {
         this.runner = new JUnit4ClassRunner(klass) {
@@ -38,4 +40,8 @@ public class JUnit44RunnerImpl implements RunnerImpl {
     public Description getDescription() {
         return runner.getDescription();
     }
+
+	public void filter(Filter filter) throws NoTestsRemainException {
+		runner.filter(filter);
+	}
 }

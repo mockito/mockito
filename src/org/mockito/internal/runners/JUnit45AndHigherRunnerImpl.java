@@ -5,7 +5,8 @@
 package org.mockito.internal.runners;
 
 import org.junit.runner.Description;
-import org.junit.runner.Runner;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -16,7 +17,7 @@ import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
 
-    private Runner runner;
+    private BlockJUnit4ClassRunner runner;
 
     public JUnit45AndHigherRunnerImpl(Class<?> klass) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(klass) {
@@ -39,4 +40,11 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
     public Description getDescription() {
         return runner.getDescription();
     }
+
+	@Override
+	public void filter(Filter filter) throws NoTestsRemainException {
+		runner.filter(filter);
+	}
+
+	
 }

@@ -4,7 +4,8 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockitousage.junitrunner.Filters.methodNameContains;
 
 import java.util.List;
 
@@ -24,5 +25,14 @@ public class JUnit45RunnerTest extends TestBase {
     public void shouldInitMocksUsingRunner() {
         list.add("test");
         verify(list).add("test");
+    }
+    
+    @Test
+    public void shouldFilterTestMethodsCorrectly() throws Exception{
+    	MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
+    	
+    	runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
+    	
+    	assertEquals(1, runner.testCount());
     }
 }
