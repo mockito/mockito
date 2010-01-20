@@ -41,10 +41,7 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
         return runner.getDescription();
     }
 
-	@Override
 	public void filter(Filter filter) throws NoTestsRemainException {
 		runner.filter(filter);
 	}
-
-	
 }
