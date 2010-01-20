@@ -32,9 +32,9 @@ public class PlaygroundTest extends TestBase {
     @Test
     public void should() throws Exception {
         Boo boo = mock(Boo.class);
-        boo.withLong(100);
-        
-        verify(boo).withLong(new Long(100));
+
+        boo.toString();
+        verify(boo).toString();
     }
 
     Foo mock;

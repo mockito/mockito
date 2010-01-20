@@ -4,8 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.junit.Assert.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -18,11 +16,11 @@ import org.mockitoutil.TestBase;
 import static org.mockito.Mockito.*;
 
 
-public class DeepStubbingTest extends TestBase {
+public class DeepMockingTest extends TestBase {
 
     @Test
     public void myTest() throws Exception {
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket(anyString(), eq(80))).thenReturn(null);
         sf.createSocket("what", 80);
     }
@@ -43,7 +41,7 @@ public class DeepStubbingTest extends TestBase {
     public void oneLevelDeep() throws Exception {
         OutputStream out = new ByteArrayOutputStream();
 
-        SocketFactory socketFactory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory socketFactory = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(socketFactory.createSocket().getOutputStream()).thenReturn(out);
 
         assertSame(out, socketFactory.createSocket().getOutputStream());
@@ -57,10 +55,10 @@ public class DeepStubbingTest extends TestBase {
         OutputStream out1 = new ByteArrayOutputStream();
         OutputStream out2 = new ByteArrayOutputStream();
 
-        SocketFactory sf1 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf1 = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf1.createSocket().getOutputStream()).thenReturn(out1);
 
-        SocketFactory sf2 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf2 = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf2.createSocket().getOutputStream()).thenReturn(out2);
 
         assertSame(out1, sf1.createSocket().getOutputStream());
@@ -76,7 +74,7 @@ public class DeepStubbingTest extends TestBase {
         OutputStream out2 = new ByteArrayOutputStream();
         OutputStream out3 = new ByteArrayOutputStream();
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket().getOutputStream()).thenReturn(out1);
         when(sf.createSocket("google.com", 80).getOutputStream()).thenReturn(out2);
         when(sf.createSocket("stackoverflow.com", 80).getOutputStream()).thenReturn(out3);
@@ -93,7 +91,7 @@ public class DeepStubbingTest extends TestBase {
     public void withAnyPatternArguments() throws Exception {
         OutputStream out = new ByteArrayOutputStream();
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket(anyString(), anyInt()).getOutputStream()).thenReturn(out);
 
         assertSame(out, sf.createSocket("google.com", 80).getOutputStream());
@@ -108,7 +106,7 @@ public class DeepStubbingTest extends TestBase {
         OutputStream out1 = new ByteArrayOutputStream();
         OutputStream out2 = new ByteArrayOutputStream();
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket(anyString(), eq(80)).getOutputStream()).thenReturn(out1);
         when(sf.createSocket(anyString(), eq(8080)).getOutputStream()).thenReturn(out2);
 
@@ -125,7 +123,7 @@ public class DeepStubbingTest extends TestBase {
     public void withSimplePrimitive() throws Exception {
         int a = 32;
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket().getPort()).thenReturn(a);
 
         assertEquals(a, sf.createSocket().getPort());
@@ -139,7 +137,7 @@ public class DeepStubbingTest extends TestBase {
     public void withPatternPrimitive() throws Exception {
         int a = 12, b = 23, c = 34;
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_MOCKS);
         when(sf.createSocket(eq("stackoverflow.com"), eq(80)).getPort()).thenReturn(a);
         when(sf.createSocket(eq("google.com"), anyInt()).getPort()).thenReturn(b);
         when(sf.createSocket(eq("stackoverflow.com"), eq(8080)).getPort()).thenReturn(c);

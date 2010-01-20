@@ -679,26 +679,41 @@ public class Mockito extends Matchers {
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link Answer} can be used to define the return values of unstubbed invocations.
-     * <p>
-     * ReturnsDeepStubs returns reusable deep stubbing.  If the return type
-     * cannot be mocked (e.g. is final) then plain null is returned.
-     *
-     * TODO: Explain how this is different from RETURNS_MOCKS
-     * <p>
-     * Example:
+     * Example that shows how deep mock works:
      * <pre>
-     *    Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);
+     *   Foo mock = mock(Foo.class, RETURNS_DEEP_MOCKS);
      *
-     *    // stub here
-     *    when(mock.getBar().getName(), "DeepStub");
+     *   // note that we're stubbing a chain of methods here: getBar().getName()
+     *   when(mock.getBar().getName()).thenReturn("deep");
      *
-     *    // verify
-     *    assertEquals("DeepStub", mock.getBar().getName());
+     *   // note that we're chaining method calls: getBar().getName()
+     *   assertEquals("deep", mock.getBar().getName());
+     * </pre>
+     *
+     * <strong>WARNING</strong><p>
+     * This feature should rarely be required for regular clean code! Leave it for legacy code.
+     * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful
+     * hints at violation of Law of Demeter or mocking a value object (a well known anti-pattern).
+     * <p>
+     * Good quote I've seen one day on the web: <strong>every time a mock returns a mock a fairy dies</strong>. 
+     * <p>
+     * How deep mocks work internally?
+     * <pre>
+     *   //this:
+     *   Foo mock = mock(Foo.class, RETURNS_DEEP_MOCKS);
+     *   when(mock.getBar().getName(), "deep");
+     *
+     *   //is equivalent of
+     *   Foo foo = mock(Foo.class);
+     *   Bar bar = mock(Bar.class);
+     *   when(foo.getBar()).thenReturn(bar);
+     *   when(bar.getName()).thenReturn("deep");
      * </pre>
      * <p>
+     * This feature will not work when any return type of methods included in the chain cannot be mocked
+     * (for example: is a primitive or a final class). This is because of java type system.   
      */
-    public static final Answer<Object> RETURNS_DEEP_STUBS = new ReturnsDeepStubs();
+    public static final Answer<Object> RETURNS_DEEP_MOCKS = new ReturnsDeepMocks();
 
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -733,7 +748,7 @@ public class Mockito extends Matchers {
      * </pre>
      */
     public static final Answer<Object> CALLS_REAL_METHODS = new CallsRealMethods();
-    
+
     /**
      * Creates mock object of given class or interface.
      * <p>

@@ -13,7 +13,7 @@ import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
 
-public class ReturnsDeepStubs implements Answer<Object>, Serializable {
+public class ReturnsDeepMocks implements Answer<Object>, Serializable {
     private static final long serialVersionUID = -6926328908792880098L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
