@@ -6,33 +6,60 @@ package org.mockitousage.misuse;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.verification.DummyVerificationMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.List;
+
 public class RestrictedObjectMethodsTest extends TestBase {
 
-    @Mock IMethods mock;
+    @Mock List mock;
 
-    @Test(expected= MockitoException.class)
-    public void shouldNotVerifyToString() {
-        verify(mock).toString();
+    @After
+    public void after() {
+        this.resetState();
     }
 
-    @Ignore
-    @Test(expected= MockitoException.class)
-    public void shouldNotVerifyHashCode() {
+    @Test
+    public void shouldScreamWhenVerifyToString() {
+        try {
+            verify(mock).toString();
+            fail();
+        } catch (MockitoException e) {
+            assertContains("cannot verify", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldBeSilentWhenVerifyHashCode() {
+        //because it leads to really wierd behavior sometimes
+        //it's because cglib & my code can occasionelly call those methods
+        // and when user has verification started at that time there will be a mess
         verify(mock).hashCode();
     }
 
-    @Ignore
-    @Test(expected= MockitoException.class)
-    public void shouldNotVerifyEquals() {
+    @Test
+    public void shouldBeSilentWhenVerifyEquals() {
+        //because it leads to really wierd behavior sometimes
+        //it's because cglib & my code can occasionelly call those methods
+        // and when user has verification started at that time there will be a mess
+        verify(mock).equals(null);
+    }
+
+    @Test
+    public void shouldBeSilentWhenVerifyEqualsInOrder() {
+        //because it leads to really wierd behavior sometimes
+        //it's because cglib & my code can occasionelly call those methods
+        // and when user has verification started at that time there will be a mess
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).equals(null);
-    }
+    }       
 }

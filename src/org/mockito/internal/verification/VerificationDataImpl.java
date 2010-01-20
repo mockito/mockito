@@ -39,8 +39,5 @@ public class VerificationDataImpl implements VerificationData {
         if (o.isToString(wanted.getMethod())) {
             new Reporter().cannotVerifyToString();
         }
-        if (o.isEqualsMethod(wanted.getMethod())) {
-            new Reporter().cannotVerifyEqualsOrHashCode();
-        }
     }
 }

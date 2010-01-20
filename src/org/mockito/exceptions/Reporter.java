@@ -79,7 +79,7 @@ public class Reporter {
                 "For example:",
                 "    when(mock.getArticles()).thenReturn(articles);",
                 "",
-                "Also, this error might show up because you stub final/private/equals() or hashCode() method.",
+                "Also, this error might show up because you stub either of: final/private/equals()/hashCode() methods.",
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
@@ -93,7 +93,7 @@ public class Reporter {
                 "Example of correct verification:",
                 "    verify(mock).doSomething()",
                 "",
-                "Also, this error might show up because you verify final or private methods.",
+                "Also, this error might show up because you verify either of: final/private/equals()/hashCode() methods.",
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
@@ -405,7 +405,7 @@ public class Reporter {
                 "    verify(mock).someMethod(contains(\"foo\"))",
                 "",
                 "Also, this error might show up because you use argument matchers with methods that cannot be mocked.",
-                "Following methods *cannot* be stubbed/verified: final/private/equals()/hashCode() methods.",                
+                "Following methods *cannot* be stubbed/verified: final/private/equals()/hashCode().",
                 ""
                 ));
     }
@@ -489,13 +489,6 @@ public class Reporter {
                         "Verifying it may give inconsistent or hard to understand results. " +
                         "Not to mention that verifying toString() most likely hints awkward design (hard to explain in a short exception message. Trust me...)",
                 "However, it is possible to stub toString(). Stubbing toString() smells a bit funny but there are rare, legitimate use cases."
-        ));
-    }
-
-    public void cannotVerifyEqualsOrHashCode() {
-                throw new MockitoException(join(
-                "Mockito cannot verify equals() and hashCode()",
-                "Mockito defines and depends upon a specific implementation of these methods. Redefining them might break Mockito. Not to mention that verifying equals() or hashCode() most likely hints awkward design (hard to explain in a short exception message. Trust me...)"
         ));
     }
 }
