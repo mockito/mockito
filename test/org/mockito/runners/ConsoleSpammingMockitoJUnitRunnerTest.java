@@ -24,7 +24,7 @@ import org.mockitoutil.TestBase;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
-    @Mock private IMethods mock;
+    private IMethods mock;
 
     private ConsoleSpammingMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
@@ -35,117 +35,9 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
     }
-    
-    @Test
-    public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                //this is what happens when the test runs:
-                //first, unused stubbing:
-                unusedStubbingThatQualifiesForWarning();
-                //then, let's make the test fail so that warnings are printed
-                notifier.fireTestFailure(null);
-                //assert
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains(".unusedStubbingThatQualifiesForWarning(", loggedInfo);
-            }
-        });
-        
-        runner.run(notifier);
-    }
 
-    @Ignore
-    @Test
-    public void shouldLogUnstubbedMethodWarningWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                callUnstubbedMethodThatQualifiesForWarning();
-                notifier.fireTestFailure(null);
-
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("method was not stubbed", loggedInfo);
-                assertContains("mock.simpleMethod(456);", loggedInfo);
-                assertContains(".callUnstubbedMethodThatQualifiesForWarning(", loggedInfo);
-            }
-        });
-        
-        runner.run(notifier);
-    }
-    
-    @Test
-    public void shouldLogStubCalledWithDifferentArgumentsWhenTestFails() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                someStubbing();
-                callStubbedMethodWithDifferentArgs();
-                notifier.fireTestFailure(null);
-                
-                String loggedInfo = loggerStub.getLoggedInfo();
-                assertContains("with different arguments", loggedInfo);
-                assertContains(".someStubbing(", loggedInfo);
-                assertContains(".callStubbedMethodWithDifferentArgs(", loggedInfo);
-            }
-        });
-        
-        runner.run(notifier);
-    }
-    
-    @Test
-    public void shouldNotLogAnythingWhenStubCalledCorrectly() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                when(mock.simpleMethod(1)).thenReturn("foo");
-                mock.simpleMethod(1);
-
-                notifier.fireTestFailure(null);
-                
-                assertEquals("", loggerStub.getLoggedInfo());
-            }
-        });
-        
-        runner.run(notifier);
-    }
-    
-    @Test
-    public void shouldNotLogWhenTestPasses() throws Exception {
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                when(mock.simpleMethod()).thenReturn("foo");
-                
-                notifier.fireTestFinished(null);
-                
-                assertEquals("", loggerStub.getLoggedInfo());
-            }
-        });
-        
-        runner.run(notifier);
-    }
-    
-    public void shouldClearDebuggingDataAfterwards() throws Exception {
-        //given
-        final DebuggingInfo debuggingInfo = new ThreadSafeMockingProgress().getDebuggingInfo();
-
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
-            @Override
-            public void run(RunNotifier notifier) {
-                unusedStubbingThatQualifiesForWarning();
-                notifier.fireTestFailure(null);
-                assertTrue(debuggingInfo.hasData());
-            }
-        });
-        
-        //when
-        runner.run(notifier);
-        
-        //then
-        assertFalse(debuggingInfo.hasData());
-    }    
-    
+    //TODO add sensible tests
+       
     @Test
     public void shouldDelegateToGetDescription() throws Exception {
         //given
@@ -163,22 +55,6 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         assertEquals(expectedDescription, description);
     }
 
-    private void unusedStubbingThatQualifiesForWarning() {
-        when(mock.simpleMethod(123)).thenReturn("foo");
-    }
-
-    private void callUnstubbedMethodThatQualifiesForWarning() {
-        mock.simpleMethod(456);
-    }
-    
-    private void someStubbing() {
-        when(mock.simpleMethod(789)).thenReturn("foo");
-    }
-    
-    private void callStubbedMethodWithDifferentArgs() {
-        mock.simpleMethod(10);
-    }
-    
     public class MockitoLoggerStub extends MockitoLoggerImpl {
         
         StringBuilder loggedInfo = new StringBuilder();

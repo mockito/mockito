@@ -49,6 +49,7 @@ public class VerboseMockitoJUnitRunner extends Runner {
     @Override
     public void run(RunNotifier notifier) {
         MockingProgress progress = new ThreadSafeMockingProgress();
+        //TODO this class should work like ConsoleSpammingRunner and we should kill off debuggingInfo
         DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
         
         beforeRun(notifier, debuggingInfo);

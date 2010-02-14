@@ -30,8 +30,9 @@ public class MockitoCore {
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
-        mockingProgress.validateState();
-        return mockUtil.createMock(classToMock, (MockSettingsImpl) mockSettings);
+        T mock = mockUtil.createMock(classToMock, (MockSettingsImpl) mockSettings);
+        mockingProgress.mockingStarted(mock, classToMock, mockSettings);
+        return mock;
     }
     
     public IOngoingStubbing stub() {

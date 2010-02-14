@@ -79,12 +79,12 @@ public class TestBase extends Assert {
 
     public static void assertContains(String sub, String string) {
         assertTrue("\n" +
-                "This substing:" +
+                "This substing:[" +
                 sub +
-                "\n" +
-                "should be inside of:" +
+                "]\n" +
+                "should be inside of:[" +
                 string +
-                "\n"
+                "]\n"
                 , string.contains(sub));
     }
 

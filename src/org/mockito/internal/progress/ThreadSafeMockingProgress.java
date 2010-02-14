@@ -6,8 +6,10 @@ package org.mockito.internal.progress;
 
 import java.io.Serializable;
 
+import org.mockito.MockSettings;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.internal.verification.api.VerificationMode;
 
 public class ThreadSafeMockingProgress implements MockingProgress, Serializable {
@@ -68,5 +70,13 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
 
     public DebuggingInfo getDebuggingInfo() {
         return threadSafely().getDebuggingInfo();
+    }
+
+    public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
+        threadSafely().mockingStarted(mock, classToMock, mockSettings);
+    }
+
+    public void setListener(MockingProgressListener listener) {
+        threadSafely().setListener(listener);
     }
 }

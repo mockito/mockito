@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.progress;
 
+import org.mockito.MockSettings;
 import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.listeners.MockingProgressListener;
+import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.verification.api.VerificationMode;
 
 public interface MockingProgress {
@@ -35,4 +38,8 @@ public interface MockingProgress {
     ArgumentMatcherStorage getArgumentMatcherStorage();
 
     DebuggingInfo getDebuggingInfo();
+
+    void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings);
+
+    void setListener(MockingProgressListener listener);
 }

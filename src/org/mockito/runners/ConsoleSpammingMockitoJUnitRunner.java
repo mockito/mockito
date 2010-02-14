@@ -10,7 +10,13 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.mockito.internal.debugging.DebuggingInfo;
+import org.mockito.MockSettings;
+import org.mockito.internal.debugging.WarningsPrinterImpl;
+import org.mockito.internal.invocation.AllInvocationsFinder;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.UnusedStubsFinder;
+import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.runners.RunnerFactory;
@@ -19,6 +25,10 @@ import org.mockito.internal.util.MockitoLogger;
 import org.mockito.internal.util.MockitoLoggerImpl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
@@ -103,29 +113,32 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
     @Override
     public void run(RunNotifier notifier) {
         MockingProgress progress = new ThreadSafeMockingProgress();
-        DebuggingInfo debuggingInfo = progress.getDebuggingInfo();
-        
-        beforeRun(notifier, debuggingInfo);
-        
-        runner.run(notifier);
-        
-        afterRun(debuggingInfo);
-    }
-
-    private void afterRun(final DebuggingInfo debuggingInfo) {
-        debuggingInfo.clearData();
-    }
-
-    private void beforeRun(RunNotifier notifier, final DebuggingInfo debuggingInfo) {
-        debuggingInfo.collectData();
+        final List createdMocks = new LinkedList();
+        progress.setListener(new MockingStartedListener() {
+            public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
+                createdMocks.add(mock);
+            }
+        });
 
         RunListener listener = new RunListener() {
             @Override public void testFailure(Failure failure) throws Exception {
-                debuggingInfo.printWarnings(logger);
+                //debuggingInfo.printWarnings(logger);
+                //Print warnings here!
+                List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
+                List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
+                List<InvocationMatcher> allMatchers = new LinkedList<InvocationMatcher>();
+                //TODO: this is dodgy, I shouldn't be forced to change the type into InvocationMatcher just to enable using has similar method!!!
+                for (Invocation i : all) {
+                    allMatchers.add(new InvocationMatcher(i));
+                }
+                //TODO: warnings printer is not consistent with debug().printInvocations()
+                new WarningsPrinterImpl(unused, allMatchers, false).print(logger);
             }
         };
-        
+
         notifier.addListener(listener);
+
+        runner.run(notifier);
     }
 
     @Override
