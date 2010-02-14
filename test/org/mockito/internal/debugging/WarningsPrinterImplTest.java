@@ -4,25 +4,13 @@
  */
 package org.mockito.internal.debugging;
 
-import static java.util.Arrays.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockito.util.MockitoLoggerStub;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class WarningsPrinterImplTest extends TestBase {
@@ -46,7 +34,7 @@ public class WarningsPrinterImplTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintUnusedStub() {
+    public void shouldPassCorrectWarningFlag() {
         // given
         WarningsPrinterImpl printer = new WarningsPrinterImpl(true, finder);
 

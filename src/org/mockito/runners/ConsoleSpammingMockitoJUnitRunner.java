@@ -10,26 +10,22 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.mockito.MockSettings;
 import org.mockito.internal.debugging.WarningsPrinterImpl;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.listeners.CollectCreatedMocks;
-import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.internal.util.MockitoLoggerImpl;
+import org.mockito.internal.util.ConsoleMockitoLogger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
@@ -103,7 +99,7 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
     private RunnerImpl runner;
     
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        this(new MockitoLoggerImpl(), new RunnerFactory().create(klass));
+        this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));
     }
     
     ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, RunnerImpl runnerImpl) {

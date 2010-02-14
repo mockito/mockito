@@ -12,7 +12,7 @@ import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.internal.runners.RunnerImpl;
-import org.mockito.internal.util.MockitoLoggerImpl;
+import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -49,7 +49,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         assertEquals(expectedDescription, description);
     }
 
-    public class MockitoLoggerStub extends MockitoLoggerImpl {
+    public class MockitoLoggerStub extends ConsoleMockitoLogger {
         
         StringBuilder loggedInfo = new StringBuilder();
         

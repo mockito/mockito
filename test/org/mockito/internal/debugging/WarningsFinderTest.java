@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.util.MockitoLoggerStub;
+import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -23,7 +23,7 @@ public class WarningsFinderTest extends TestBase {
 
     @Mock private IMethods mock;
     @Mock private FindingsListener listener;
-    private MockitoLoggerStub logger = new MockitoLoggerStub();
+    private SimpleMockitoLogger logger = new SimpleMockitoLogger();
 
     @Test
     public void shouldPrintUnusedStub() {

@@ -9,6 +9,7 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.util.MockitoLogger;
+import org.mockito.internal.util.SimpleMockitoLogger;
 
 public class WarningsPrinterImpl {
 
@@ -33,13 +34,8 @@ public class WarningsPrinterImpl {
     }
 
     public String print() {
-        //TODO: test and figure out if it is the best place for it
-        final StringBuilder sb = new StringBuilder();
-        this.print(new MockitoLogger() {
-            public void log(Object what) {
-                sb.append(what);
-            }
-        });
-        return sb.toString();
+        SimpleMockitoLogger logger = new SimpleMockitoLogger();
+        this.print(logger);
+        return logger.getLoggedInfo();
     }
 }
