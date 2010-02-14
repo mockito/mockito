@@ -8,15 +8,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WarningsFinder {
-    private List<Invocation> unusedStubs;
-    private List<InvocationMatcher> allInvocations;
+    private final List<Invocation> baseUnusedStubs;
+    private final List<InvocationMatcher> baseAllInvocations;
 
     public WarningsFinder(List<Invocation> unusedStubs, List<InvocationMatcher> allInvocations) {
-        this.unusedStubs = new LinkedList(unusedStubs);
-        this.allInvocations = new LinkedList(allInvocations);
+        this.baseUnusedStubs = unusedStubs;
+        this.baseAllInvocations = allInvocations;
     }
 
     public void find(FindingsListener findingsListener) {
+        List<Invocation> unusedStubs = new LinkedList(this.baseUnusedStubs);
+        List<InvocationMatcher> allInvocations = new LinkedList(this.baseAllInvocations);
+
         Iterator<Invocation> unusedIterator = unusedStubs.iterator();
         while(unusedIterator.hasNext()) {
             Invocation unused = unusedIterator.next();
