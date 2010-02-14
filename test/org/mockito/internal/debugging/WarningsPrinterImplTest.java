@@ -23,6 +23,8 @@ public class WarningsPrinterImplTest extends TestBase {
     private IMethods mock;
     private MockitoLoggerStub logger = new MockitoLoggerStub();
 
+    //TODO those tests should only deal with mocks
+
     @Test
     public void shouldPrintUnusedStub() {
         // given
