@@ -18,7 +18,7 @@ public class AllInvocationsFinder {
      * @param mocks mocks
      * @return invocations
      */
-    public List<Invocation> getAllInvocations(List<?> mocks) {
+    public List<Invocation> find(List<?> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
             MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
@@ -27,21 +27,6 @@ public class AllInvocationsFinder {
         }
         
         return new LinkedList<Invocation>(invocationsInOrder);
-    }
-
-    //TODO belongs elsewhere
-    public List<Invocation> getAllUnusedStubs(List<?> mocks) {
-        List<Invocation> unused = new LinkedList<Invocation>();
-        for (Object mock : mocks) {
-            MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
-            List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();
-            for(StubbedInvocationMatcher s : fromSingleMock) {
-                if (!s.wasUsed()) {
-                     unused.add(s.getInvocation());
-                }
-            }
-        }
-        return unused;
     }
 
     private final class SequenceNumberComparator implements Comparator<Invocation> {

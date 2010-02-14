@@ -35,7 +35,7 @@ public class AllInvocationsFinderTest extends TestBase {
         mockTwo.simpleMethod(200);
         mockOne.simpleMethod(300);
         
-        List<Invocation> invocations = finder.getAllInvocations(asList(mockOne, mockTwo));
+        List<Invocation> invocations = finder.find(asList(mockOne, mockTwo));
         
         assertEquals(3, invocations.size());
         assertArgumentEquals(100, invocations.get(0));
@@ -47,7 +47,7 @@ public class AllInvocationsFinderTest extends TestBase {
     public void shouldNotCountDuplicatedInteractions() throws Exception {
         mockOne.simpleMethod(100);
 
-        List<Invocation> invocations = finder.getAllInvocations(asList(mockOne, mockOne, mockOne));
+        List<Invocation> invocations = finder.find(asList(mockOne, mockOne, mockOne));
 
         assertEquals(1, invocations.size());
     }

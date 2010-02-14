@@ -23,7 +23,7 @@ public class InOrderWrapper implements VerificationMode {
     }
 
     public void verify(VerificationData data) {
-        List<Invocation> allInvocations = new AllInvocationsFinder().getAllInvocations(mocksToBeVerifiedInOrder);
+        List<Invocation> allInvocations = new AllInvocationsFinder().find(mocksToBeVerifiedInOrder);
         mode.verifyInOrder(new VerificationDataImpl(allInvocations, data.getWanted()));
     }
 }

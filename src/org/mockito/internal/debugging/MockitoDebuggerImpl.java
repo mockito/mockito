@@ -3,16 +3,20 @@ package org.mockito.internal.debugging;
 import org.mockito.MockitoDebugger;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.UnusedStubsFinder;
 
 import java.util.List;
 
 import static java.util.Arrays.*;
 
 public class MockitoDebuggerImpl implements MockitoDebugger {
+
+    private AllInvocationsFinder allInvocationsFinder = new AllInvocationsFinder();
+    private UnusedStubsFinder unusedStubsFinder = new UnusedStubsFinder();
+
     public String printInvocations(Object ... mocks) {
         String out = "";
-        AllInvocationsFinder finder = new AllInvocationsFinder();
-        List<Invocation> invocations = finder.getAllInvocations(asList(mocks));
+        List<Invocation> invocations = allInvocationsFinder.find(asList(mocks));
         out += line("********************************");
         out += line("*** Mockito interactions log ***");
         out += line("********************************");
@@ -23,14 +27,15 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
                 out += line(" stubbed: " + i.stubInfo().stubbedAt());
             }
         }
-        invocations = finder.getAllUnusedStubs(asList(mocks));
+
+        invocations = unusedStubsFinder.find(asList(mocks));
         if (invocations.isEmpty()) {
             return print(out);
         }
         out += line("********************************");
         out += line("***       Unused stubs       ***");
         out += line("********************************");
-        invocations = finder.getAllUnusedStubs(asList(mocks));
+        
         for(Invocation i:invocations) {
             out += line(i.toString());
             out += line(" stubbed: " + i.getLocation());
