@@ -7,7 +7,6 @@ package org.mockito.internal.progress;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.configuration.GlobalConfiguration;
-import org.mockito.internal.debugging.DebuggingInfo;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
@@ -21,8 +20,6 @@ public class MockingProgressImpl implements MockingProgress {
     private final Reporter reporter = new Reporter();
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
-    private final DebuggingInfo debuggingInfo = new DebuggingInfo();
-
     IOngoingStubbing iOngoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
@@ -87,7 +84,6 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void stubbingCompleted(Invocation invocation) {
-        debuggingInfo.addStubbedInvocation(invocation);        
         stubbingInProgress = null;
     }
     
@@ -105,10 +101,6 @@ public class MockingProgressImpl implements MockingProgress {
 
     public ArgumentMatcherStorage getArgumentMatcherStorage() {
         return argumentMatcherStorage;
-    }
-
-    public DebuggingInfo getDebuggingInfo() {
-        return debuggingInfo;
     }
 
     public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {

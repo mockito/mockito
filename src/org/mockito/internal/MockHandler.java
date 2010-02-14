@@ -77,14 +77,8 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         mockingProgress.reportOngoingStubbing(ongoingStubbing);
 
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
-        if (!invocation.isVoid() && stubbedInvocation == null) {
-            // it is a return-value interaction but not stubbed. This *might* be
-            // a problem
-            mockingProgress.getDebuggingInfo().addPotentiallyUnstubbed(invocationMatcher);
-        }
 
         if (stubbedInvocation != null) {
-            mockingProgress.getDebuggingInfo().reportUsedStub(invocationMatcher);
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {

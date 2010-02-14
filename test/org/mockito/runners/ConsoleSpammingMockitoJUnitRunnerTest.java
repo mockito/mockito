@@ -4,19 +4,13 @@
  */
 package org.mockito.runners;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
-import org.mockito.Mock;
-import org.mockito.internal.debugging.DebuggingInfo;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.MockitoLoggerImpl;
 import org.mockitousage.IMethods;
