@@ -8,10 +8,14 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 
 @SuppressWarnings("unchecked")
-public class CreationValidator {
+public class MockCreationValidator {
 
+    public boolean isTypeMockable(Class<?> clz) {
+        return ClassImposterizer.INSTANCE.canImposterise(clz);
+    }
+    
     public void validateType(Class classToMock) {
-        if (!ClassImposterizer.INSTANCE.canImposterise(classToMock)) {
+        if (!isTypeMockable(classToMock)) {
             new Reporter().cannotMockFinalClass(classToMock);
         }
     }

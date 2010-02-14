@@ -13,10 +13,10 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-public class CreationValidatorTest extends TestBase {
+public class MockCreationValidatorTest extends TestBase {
 
     final class FinalClass {}
-    CreationValidator validator = new CreationValidator();
+    MockCreationValidator validator = new MockCreationValidator();
     
     @Test
     public void shouldNotAllowExtraInterfaceThatIsTheSameAsTheMockedType() throws Exception {

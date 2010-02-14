@@ -1600,7 +1600,7 @@ public class Mockito extends Matchers {
     /*
      * Helps debugging failing tests. Not yet ready.
      */
-    static MockitoDebugger debug() {
+    public static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
 }

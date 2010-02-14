@@ -21,14 +21,14 @@ import java.io.Serializable;
 @SuppressWarnings("unchecked")
 public class MockUtil {
     
-    private final CreationValidator creationValidator;
+    private final MockCreationValidator creationValidator;
 
-    public MockUtil(CreationValidator creationValidator) {
+    public MockUtil(MockCreationValidator creationValidator) {
         this.creationValidator = creationValidator;
     }
     
     public MockUtil() {
-        this(new CreationValidator());
+        this(new MockCreationValidator());
     }
 
     public <T> T createMock(Class<T> classToMock, MockSettingsImpl settings) {

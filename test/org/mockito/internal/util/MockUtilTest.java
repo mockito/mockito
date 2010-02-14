@@ -20,7 +20,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
     
-    public class CreationValidatorStub extends CreationValidator {
+    public class CreationValidatorStub extends MockCreationValidator {
         private boolean extraInterfacesValidated;
         private boolean typeValidated;
         public void validateType(Class classToMock) {
