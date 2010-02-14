@@ -6,12 +6,11 @@ package org.mockitousage.junitrunner;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.ConsoleSpammingMockitoJUnitRunner;
 import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -21,8 +20,9 @@ import org.mockitoutil.TestBase;
 @Ignore
 public class ModellingVerboseMockitoTest extends TestBase {
     
-    @Mock private IMethods mock;
+    @Mock private IMethods mock;     
     
+    @Before
     public void cleanStackTraces() {
         super.makeStackTracesClean();
     }
@@ -33,16 +33,24 @@ public class ModellingVerboseMockitoTest extends TestBase {
         when(mock.otherMethod()).thenReturn("foo");
         when(mock.booleanObjectReturningMethod()).thenReturn(false);
 
+        //TODO: stubbed with those args here -> stubbed with certain args here 
         String ret = mock.simpleMethod(2);
 
         assertEquals("foo", ret);
+        //TODO: should show message from actual failure not at the bottom but at least below 'the actual failure is ...'
     }
+       
 
     @Test
     public void shouldNotLogAnythingWhenNoWarnings() throws Exception {
-        String ret = mock.simpleMethod(2);
-
-        assertEquals("foo", ret);
+        //stub
+        when(mock.simpleMethod()).thenReturn("foo");
+        //use stub:
+        mock.simpleMethod();
+        //verify:
+        verify(mock).simpleMethod();
+        //should be no warnings:
+        fail();
     }
 
 //    @After
