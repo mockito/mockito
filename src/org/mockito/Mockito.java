@@ -1598,11 +1598,9 @@ public class Mockito extends Matchers {
     }
 
     /*
-     * Helps debugging failing tests.
-     * <p>
-     * TODO: add more info & examples.
+     * Helps debugging failing tests. Not yet ready.
      */
-    public static MockitoDebugger debug() {
+    static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
 }
