@@ -7,6 +7,7 @@ package org.mockito.internal.invocation;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
@@ -108,5 +109,15 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
             }
             k++;
         }
+    }
+
+    public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
+        LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
+
+        for (Invocation i : invocations) {
+            out.add(new InvocationMatcher(i));
+        }
+
+        return out;
     }
 }

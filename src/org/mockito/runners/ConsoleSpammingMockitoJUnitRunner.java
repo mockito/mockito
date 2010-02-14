@@ -123,11 +123,7 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
                 //Print warnings here!
                 List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
                 List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
-                List<InvocationMatcher> allMatchers = new LinkedList<InvocationMatcher>();
-                //TODO: this is dodgy, I shouldn't be forced to change the type into InvocationMatcher just to enable using has similar method!!!
-                for (Invocation i : all) {
-                    allMatchers.add(new InvocationMatcher(i));
-                }
+                List<InvocationMatcher> allMatchers = InvocationMatcher.createFrom(all);
                 //TODO: warnings printer is not consistent with debug().printInvocations()
                 new WarningsPrinterImpl(unused, allMatchers, false).print(logger);
             }

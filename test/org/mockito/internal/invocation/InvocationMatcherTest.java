@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import org.fest.assertions.Assertions;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -150,5 +151,16 @@ public class InvocationMatcherTest extends TestBase {
 
         //then
         invocationMatcher.captureArgumentsFrom(invocation);
+    }
+
+    @Test
+    public void shouldCreateFromInvocations() throws Exception {
+        //given
+        Invocation i = new InvocationBuilder().toInvocation();
+        //when
+        List<InvocationMatcher> out = InvocationMatcher.createFrom(asList(i));
+        //then
+        assertEquals(1, out.size());
+        assertEquals(i, out.get(0).getInvocation());
     }
 }
