@@ -10,6 +10,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.mockito.internal.debugging.WarningsCollector;
 import org.mockito.internal.debugging.WarningsPrinterImpl;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
@@ -109,17 +110,16 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
     
     @Override
     public void run(RunNotifier notifier) {
-        MockingProgress progress = new ThreadSafeMockingProgress();
-        final List createdMocks = new LinkedList();
-        progress.setListener(new CollectCreatedMocks(createdMocks));
-
         RunListener listener = new RunListener() {
+            WarningsCollector warningsCollector;
+            
+            @Override
+            public void testStarted(Description description) throws Exception {
+                warningsCollector = new WarningsCollector();
+            }
+            
             @Override public void testFailure(Failure failure) throws Exception {                
-                List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
-                List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
-                List<InvocationMatcher> allMatchers = InvocationMatcher.createFrom(all);
-
-                new WarningsPrinterImpl(unused, allMatchers, false).print(logger);
+                logger.log(warningsCollector.getWarnings());
             }
         };
 

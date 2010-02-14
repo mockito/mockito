@@ -10,7 +10,9 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockSettings;
+import org.mockito.Mockito;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
+import org.mockito.internal.debugging.WarningsCollector;
 import org.mockito.internal.debugging.WarningsPrinterImpl;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
@@ -57,27 +59,26 @@ public class VerboseMockitoJUnitRunner extends Runner {
     }
     
     @Override
-    public void run(RunNotifier notifier) {
-        MockingProgress progress = new ThreadSafeMockingProgress();
-        final List createdMocks = new LinkedList();
-        progress.setListener(new CollectCreatedMocks(createdMocks));
+    public void run(RunNotifier notifier) {        
 
         //a listener that changes the failure's exception in a very hacky way...
         RunListener listener = new RunListener() {
-            @Override public void testFailure(final Failure failure) throws Exception {
+            
+            WarningsCollector warningsCollector;
+                       
+            @Override
+            public void testStarted(Description description) throws Exception {
+                warningsCollector = new WarningsCollector();
+            }
+            
+            @Override 
+            public void testFailure(final Failure failure) throws Exception {       
+                String warnings = warningsCollector.getWarnings();
+                
                 //TODO: this has to protect the use in case jUnit changes and this internal state logic fails
                 Throwable throwable = (Throwable) Whitebox.getInternalState(failure, "fThrownException");
 
-                List< Invocation > unused = new UnusedStubsFinder().find(createdMocks);
-                List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
-                List<InvocationMatcher> allInvocationMatchers = InvocationMatcher.createFrom(all);
-
-                String warnings = new WarningsPrinterImpl(unused, allInvocationMatchers, false).print();
-
-                String newMessage = throwable.getMessage();
-                newMessage += warnings + "\n*** The actual failure is because of: ***\n";
-
-                newMessage = "contains both: actual test failure *and* Mockito warnings.\n" +
+                String newMessage = "contains both: actual test failure *and* Mockito warnings.\n" +
                         warnings + "\n *** The actual failure is because of: ***\n";
 
                 ExceptionIncludingMockitoWarnings e = new ExceptionIncludingMockitoWarnings(newMessage, throwable);

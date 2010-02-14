@@ -19,19 +19,19 @@ public class LoggingListener implements FindingsListener {
         logger.log(join(
                 " *** Stubbing warnings from Mockito: *** ",
                 "",
-                "stubbed with those args here:   " + unused.getLocation(),
-                "BUT called with different args: " + unstubbed.getInvocation().getLocation(),
+                "stubbed with those args here   " + unused.getLocation(),
+                "BUT called with different args " + unstubbed.getInvocation().getLocation(),
                 ""));
     }
 
     public void foundUnusedStub(Invocation unused) {
-        logger.log("This stubbing was never used:   " + unused.getLocation() + "\n");
+        logger.log("This stubbing was never used   " + unused.getLocation() + "\n");
     }
 
     public void foundUnstubbed(InvocationMatcher unstubbed) {
         if (warnAboutUnstubbed) {
             logger.log(join(
-                    "This method was not stubbed:",
+                    "This method was not stubbed ",
                     unstubbed,
                     unstubbed.getInvocation().getLocation(),
                     ""));
