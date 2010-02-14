@@ -4,31 +4,22 @@
  */
 package org.mockito.runners;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.Filterable;
+import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
-import org.mockito.MockSettings;
-import org.mockito.Mockito;
-import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockito.internal.debugging.WarningsCollector;
-import org.mockito.internal.debugging.WarningsPrinterImpl;
-import org.mockito.internal.invocation.AllInvocationsFinder;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.UnusedStubsFinder;
-import org.mockito.internal.listeners.CollectCreatedMocks;
-import org.mockito.internal.listeners.MockingStartedListener;
-import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.util.junit.JUnitFailureHacker;
 import org.mockito.internal.util.reflection.Whitebox;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Experimental implementation that suppose to improve tdd/testing experience. 
@@ -46,7 +37,7 @@ import java.util.List;
  * <p>
  * Experimental implementation - will change in future!
  */
-public class VerboseMockitoJUnitRunner extends Runner {
+public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
 
     private RunnerImpl runner;
     
@@ -74,16 +65,7 @@ public class VerboseMockitoJUnitRunner extends Runner {
             @Override 
             public void testFailure(final Failure failure) throws Exception {       
                 String warnings = warningsCollector.getWarnings();
-                
-                //TODO: this has to protect the use in case jUnit changes and this internal state logic fails
-                Throwable throwable = (Throwable) Whitebox.getInternalState(failure, "fThrownException");
-
-                String newMessage = "contains both: actual test failure *and* Mockito warnings.\n" +
-                        warnings + "\n *** The actual failure is because of: ***\n";
-
-                ExceptionIncludingMockitoWarnings e = new ExceptionIncludingMockitoWarnings(newMessage, throwable);
-                e.setStackTrace(throwable.getStackTrace());
-                Whitebox.setInternalState(failure, "fThrownException", e);
+                new JUnitFailureHacker().appendWarnings(failure, warnings);                              
             }
         };
 
@@ -95,5 +77,10 @@ public class VerboseMockitoJUnitRunner extends Runner {
     @Override
     public Description getDescription() {
         return runner.getDescription();
+    }
+    
+    public void filter(Filter filter) throws NoTestsRemainException {
+        //filter is required because without it UnrootedTests show up in Eclipse
+        runner.filter(filter);
     }
 }
