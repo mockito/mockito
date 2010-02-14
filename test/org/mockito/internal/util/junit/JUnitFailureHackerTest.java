@@ -35,5 +35,40 @@ public class JUnitFailureHackerTest extends TestBase {
         
         //then
         assertContains("unused stubbing blah", failure.getException().getMessage());        
+    }   
+    
+    @Test
+    public void shouldNotAppendWhenNoWarnings() throws Exception {
+        RuntimeException ex = new RuntimeException("foo");
+        Failure failure = new Failure(Description.EMPTY, ex);
+        
+        //when
+        hacker.appendWarnings(failure, "");
+        
+        //then
+        assertEquals(ex, failure.getException());        
+    }
+    
+    @Test
+    public void shouldNotAppendWhenNullWarnings() throws Exception {
+        RuntimeException ex = new RuntimeException("foo");
+        Failure failure = new Failure(Description.EMPTY, ex);
+        
+        //when
+        hacker.appendWarnings(failure, null);
+        
+        //then
+        assertEquals(ex, failure.getException());        
+    }
+    
+    @Test
+    public void shouldPrintTheWarningSoICanSeeIt() throws Exception {
+        Failure failure = new Failure(Description.EMPTY, new RuntimeException("foo"));
+        
+        //when
+        hacker.appendWarnings(failure, "unused stubbing blah");
+        
+        //then
+        System.out.println(failure.getException());        
     }
 }

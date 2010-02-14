@@ -7,6 +7,9 @@ import org.mockito.internal.util.reflection.Whitebox;
 public class JUnitFailureHacker {
 
     public void appendWarnings(Failure failure, String warnings) {
+        if (isEmpty(warnings)) {
+            return;
+        }
         //TODO: this has to protect the use in case jUnit changes and this internal state logic fails
         Throwable throwable = (Throwable) Whitebox.getInternalState(failure, "fThrownException");
 
@@ -16,5 +19,9 @@ public class JUnitFailureHacker {
         ExceptionIncludingMockitoWarnings e = new ExceptionIncludingMockitoWarnings(newMessage, throwable);
         e.setStackTrace(throwable.getStackTrace());
         Whitebox.setInternalState(failure, "fThrownException", e);
+    }
+
+    private boolean isEmpty(String warnings) {
+        return warnings == null || warnings.isEmpty(); 
     }   
 }
