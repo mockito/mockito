@@ -16,6 +16,7 @@ import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
+import org.mockito.internal.listeners.CollectCreatedMocks;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -59,11 +60,7 @@ public class VerboseMockitoJUnitRunner extends Runner {
     public void run(RunNotifier notifier) {
         MockingProgress progress = new ThreadSafeMockingProgress();
         final List createdMocks = new LinkedList();
-        progress.setListener(new MockingStartedListener() {
-            public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
-                createdMocks.add(mock);
-            }
-        });
+        progress.setListener(new CollectCreatedMocks(createdMocks));
 
         //a listener that changes the failure's exception in a very hacky way...
         RunListener listener = new RunListener() {
