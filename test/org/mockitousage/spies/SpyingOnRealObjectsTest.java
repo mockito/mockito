@@ -30,12 +30,17 @@ public class SpyingOnRealObjectsTest extends TestBase {
     public void shouldVerify() {
         spy.add("one");
         spy.add("two");
-        
+
         assertEquals("one", spy.get(0));
         assertEquals("two", spy.get(1));
-        
+
         verify(spy).add("one");
         verify(spy).add("two");
+    }
+
+    @Test
+    public void shouldBeAbleToMockObjectBecauseWhyNot() {
+        spy(new Object());
     }
     
     @Test

@@ -72,15 +72,4 @@ public class DebuggingInfo {
     public boolean hasData() {
         return !unusedStubs.isEmpty() || !unstubbedInvocations.isEmpty();
     }
-
-    public String getWarnings(boolean warnAboutUnstubbed) {
-        final StringBuilder sb = new StringBuilder();
-        if (hasData()) {
-            new WarningsPrinterImpl(unusedStubs, unstubbedInvocations, warnAboutUnstubbed).print(new MockitoLogger() {
-                public void log(Object what) {
-                    sb.append(what);
-                }});
-        }
-        return sb.toString();
-    }
 }

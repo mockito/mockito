@@ -21,9 +21,6 @@ public class LenientCopyTool {
     }
 
     private <T> void copy(T from, T to, Class fromClazz, Class toClass) {
-        assert toClass == fromClazz 
-            : "Classes must have the same type: class of the object from: " + fromClazz + ", mock super class: " + toClass;
-
         while (fromClazz != Object.class) {
             copyValues(from, to, fromClazz);
             fromClazz = fromClazz.getSuperclass();

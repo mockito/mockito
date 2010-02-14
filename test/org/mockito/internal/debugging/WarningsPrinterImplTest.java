@@ -62,7 +62,7 @@ public class WarningsPrinterImplTest extends TestBase {
         p.print(logger);
 
         // then
-        assertContains("different arguments", logger.getLoggedInfo());
+        assertContains("different arg", logger.getLoggedInfo());
     }
 
     @Test

@@ -57,7 +57,7 @@ public class WarningsPrinterImpl {
     }
 
     private String thisStubWasNotUsed(Invocation i) {
-        return "This stubbing was never used " + i.getLocation() + "\n";
+        return "This stubbing was never used:   " + i.getLocation() + "\n";
     }
 
     private String thisMethodWasNotStubbed(InvocationMatcher i) {
@@ -70,9 +70,21 @@ public class WarningsPrinterImpl {
 
     private String stubbedMethodCalledWithDifferentArguments(Invocation unused, InvocationMatcher unstubbed) {
         return join(
-                " *** Verbose stubbing warnings from Mockito *** ",
-                "stubbed here " + unused.getLocation(),
-                "BUT called with different arguments here " + unstubbed.getInvocation().getLocation(),
+                " *** Stubbing warnings from Mockito: *** ",
+                "",
+                "stubbed with those args here:   " + unused.getLocation(),
+                "BUT called with different args: " + unstubbed.getInvocation().getLocation(),
                 "");
+    }
+
+    public String print() {
+        //TODO: test and figure out if it is the best place for it
+        final StringBuilder sb = new StringBuilder();
+        this.print(new MockitoLogger() {
+            public void log(Object what) {
+                sb.append(what);
+            }
+        });
+        return sb.toString();
     }
 }
