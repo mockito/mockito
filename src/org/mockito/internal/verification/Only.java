@@ -12,7 +12,7 @@ import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 public class Only implements VerificationMode {
 

@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 public class VerificationModeFactory {
     

@@ -13,7 +13,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.InOrderWrapper;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.

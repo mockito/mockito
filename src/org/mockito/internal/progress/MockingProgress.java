@@ -7,7 +7,7 @@ package org.mockito.internal.progress;
 import org.mockito.MockSettings;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.listeners.MockingProgressListener;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 public interface MockingProgress {
     

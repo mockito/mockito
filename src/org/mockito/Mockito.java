@@ -10,9 +10,9 @@ import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.*;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
+import org.mockito.verification.VerificationMode;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>

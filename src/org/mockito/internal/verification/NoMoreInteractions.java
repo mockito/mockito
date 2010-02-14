@@ -8,7 +8,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 public class NoMoreInteractions implements VerificationMode {
 

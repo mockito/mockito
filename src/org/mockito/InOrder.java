@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Allows verification in order. E.g:

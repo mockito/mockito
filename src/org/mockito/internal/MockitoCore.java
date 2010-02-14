@@ -16,8 +16,8 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.stubbing.*;
+import org.mockito.verification.VerificationMode;
 
 import java.util.Arrays;
 import java.util.List;

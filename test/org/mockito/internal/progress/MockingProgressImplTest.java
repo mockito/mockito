@@ -10,7 +10,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
 import java.util.List;

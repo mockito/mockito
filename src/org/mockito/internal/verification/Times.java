@@ -11,11 +11,11 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
-import org.mockito.internal.verification.api.VerificationMode;
 import org.mockito.internal.verification.checkers.MissingInvocationChecker;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker;
 import org.mockito.internal.verification.checkers.NumberOfInvocationsChecker;
 import org.mockito.internal.verification.checkers.NumberOfInvocationsInOrderChecker;
+import org.mockito.verification.VerificationMode;
 
 public class Times implements VerificationInOrderMode, VerificationMode {
     

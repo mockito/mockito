@@ -12,7 +12,7 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.internal.listeners.MockingStartedListener;
-import org.mockito.internal.verification.api.VerificationMode;
+import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {

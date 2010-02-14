@@ -15,11 +15,9 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.debugging.WarningsCollector;
-import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.junit.JUnitFailureHacker;
-import org.mockito.internal.util.reflection.Whitebox;
 
 /**
  * Experimental implementation that suppose to improve tdd/testing experience. 

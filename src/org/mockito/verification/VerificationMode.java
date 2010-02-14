@@ -2,9 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.verification.api;
+package org.mockito.verification;
 
 import org.mockito.Mockito;
+import org.mockito.internal.verification.api.VerificationData;
 
 /**
  * Allows verifying that certain behavior happened at least once / exact number
