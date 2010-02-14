@@ -70,10 +70,9 @@ public class VerboseMockitoJUnitRunner extends Runner {
 
                 List< Invocation > unused = new UnusedStubsFinder().find(createdMocks);
                 List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
-                List<InvocationMatcher> allMatchers = InvocationMatcher.createFrom(all);
+                List<InvocationMatcher> allInvocationMatchers = InvocationMatcher.createFrom(all);
 
-                //TODO: warnings printer is not consistent with debug().printInvocations()
-                String warnings = new WarningsPrinterImpl(unused, allMatchers, false).print();
+                String warnings = new WarningsPrinterImpl(unused, allInvocationMatchers, false).print();
 
                 String newMessage = throwable.getMessage();
                 newMessage += warnings + "\n*** The actual failure is because of: ***\n";

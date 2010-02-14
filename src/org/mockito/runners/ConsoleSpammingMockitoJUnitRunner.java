@@ -118,13 +118,11 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner {
         progress.setListener(new CollectCreatedMocks(createdMocks));
 
         RunListener listener = new RunListener() {
-            @Override public void testFailure(Failure failure) throws Exception {
-                //debuggingInfo.printWarnings(logger);
-                //Print warnings here!
+            @Override public void testFailure(Failure failure) throws Exception {                
                 List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
                 List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
                 List<InvocationMatcher> allMatchers = InvocationMatcher.createFrom(all);
-                //TODO: warnings printer is not consistent with debug().printInvocations()
+
                 new WarningsPrinterImpl(unused, allMatchers, false).print(logger);
             }
         };
