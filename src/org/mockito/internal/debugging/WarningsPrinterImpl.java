@@ -17,43 +17,36 @@ import org.mockito.internal.util.MockitoLogger;
 public class WarningsPrinterImpl {
 
     private final List<Invocation> unusedStubs;
-    private final List<InvocationMatcher> unstubbedInvocations;
+    private List<InvocationMatcher> allInvocations;
     private final boolean warnAboutUnstubbed;
 
     public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations) {
         this(unusedStubs, unstubbedInvocations, false);
     }
 
-    public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> unstubbedInvocations, boolean warnAboutUnstubbed) {
+    public WarningsPrinterImpl(List<Invocation> unusedStubs, List<InvocationMatcher> allInvocations, boolean warnAboutUnstubbed) {
+        this.allInvocations = allInvocations;
+        this.unusedStubs = unusedStubs;
         this.warnAboutUnstubbed = warnAboutUnstubbed;
-        this.unusedStubs = new LinkedList<Invocation>(unusedStubs);
-        this.unstubbedInvocations = new LinkedList<InvocationMatcher>(unstubbedInvocations);
     }
     
-    public void print(MockitoLogger logger) {
-        Iterator<Invocation> unusedIterator = unusedStubs.iterator();
-        while(unusedIterator.hasNext()) {
-            Invocation unused = unusedIterator.next();
-            Iterator<InvocationMatcher> unstubbedIterator = unstubbedInvocations.iterator();
-            while(unstubbedIterator.hasNext()) {
-                InvocationMatcher unstubbed = unstubbedIterator.next();
-                if(unstubbed.hasSimilarMethod(unused)) { 
-                    logger.log(stubbedMethodCalledWithDifferentArguments(unused, unstubbed));
-                    unusedIterator.remove();
-                    unstubbedIterator.remove();
-                } 
+    public void print(final MockitoLogger logger) {
+        WarningsFinder finder = new WarningsFinder(unusedStubs, allInvocations);
+        finder.find(new FindingsListener() {
+            public void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed) {
+                logger.log(stubbedMethodCalledWithDifferentArguments(unused, unstubbed));
             }
-        }
-        
-        for (Invocation i : unusedStubs) {
-            logger.log(thisStubWasNotUsed(i));
-        }
 
-        if (warnAboutUnstubbed) {
-            for (InvocationMatcher i1 : unstubbedInvocations) {
-                logger.log(thisMethodWasNotStubbed(i1));
+            public void foundUnusedStub(Invocation unused) {
+                logger.log(thisStubWasNotUsed(unused));
             }
-        }
+
+            public void foundUstubbed(InvocationMatcher unstubbed) {
+                if (warnAboutUnstubbed) {
+                    logger.log(thisMethodWasNotStubbed(unstubbed));
+                }
+            }
+        });       
     }
 
     private String thisStubWasNotUsed(Invocation i) {

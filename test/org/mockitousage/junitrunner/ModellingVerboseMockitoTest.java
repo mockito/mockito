@@ -18,7 +18,7 @@ import org.mockitoutil.TestBase;
 
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(VerboseMockitoJUnitRunner.class)
-@Ignore
+//@Ignore
 public class ModellingVerboseMockitoTest extends TestBase {
     
     @Mock private IMethods mock;
