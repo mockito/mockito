@@ -39,7 +39,7 @@ public class WarningsFinder {
         }
 
         for (InvocationMatcher i : allInvocations) {
-            findingsListener.foundUstubbed(i);
+            findingsListener.foundUnstubbed(i);
         }
     }
 }

@@ -8,5 +8,5 @@ public interface FindingsListener {
 
     void foundUnusedStub(Invocation unused);
 
-    void foundUstubbed(InvocationMatcher unstubbed);
+    void foundUnstubbed(InvocationMatcher unstubbed);
 }

@@ -18,7 +18,6 @@ import java.util.Arrays;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class WarningsFinderTest extends TestBase {
 
@@ -49,7 +48,7 @@ public class WarningsFinderTest extends TestBase {
         finder.find(listener);
 
         // then
-        verify(listener, only()).foundUstubbed(unstubbedInvocation);
+        verify(listener, only()).foundUnstubbed(unstubbedInvocation);
     }
 
     @Test

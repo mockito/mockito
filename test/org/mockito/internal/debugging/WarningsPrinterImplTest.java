@@ -5,81 +5,57 @@
 package org.mockito.internal.debugging;
 
 import static java.util.Arrays.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.util.MockitoLogger;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockito.util.MockitoLoggerStub;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class WarningsPrinterImplTest extends TestBase {
 
-    @Mock
-    private IMethods mock;
-    private MockitoLoggerStub logger = new MockitoLoggerStub();
+    @Mock private MockitoLogger logger;
+    @Mock private WarningsFinder finder;
 
-    //TODO those tests should only deal with mocks
+    @Test
+    public void shouldUseFinderCorrectly() {
+        // given
+        WarningsPrinterImpl printer = new WarningsPrinterImpl(false, finder);
+
+        // when
+        printer.print(logger);
+
+        // then
+        ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
+        verify(finder).find(arg.capture());
+        assertEquals(logger, arg.getValue().getLogger());
+        assertEquals(false, arg.getValue().isWarnAboutUnstubbed());
+    }
 
     @Test
     public void shouldPrintUnusedStub() {
         // given
-        Invocation unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
-        WarningsPrinterImpl p = new WarningsPrinterImpl(asList(unusedStub), Arrays.<InvocationMatcher> asList());
+        WarningsPrinterImpl printer = new WarningsPrinterImpl(true, finder);
 
         // when
-        p.print(logger);
+        printer.print(logger);
 
         // then
-        assertContains("never used", logger.getLoggedInfo());
-    }
-
-    @Test
-    public void shouldPrintUnstubbedInvocation() {
-        // given
-        InvocationMatcher unstubbedInvocation = new InvocationBuilder().differentMethod().toInvocationMatcher();
-        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(), Arrays.<InvocationMatcher> asList(unstubbedInvocation), true);
-
-        // when
-        p.print(logger);
-
-        // then
-        assertContains("was not stubbed", logger.getLoggedInfo());
-        assertContains("differentMethod()", logger.getLoggedInfo());
-    }
-
-    @Test
-    public void shouldPrintStubWasUsedWithDifferentArgs() {
-        // given
-        Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
-        InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
-
-        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
-
-        // when
-        p.print(logger);
-
-        // then
-        assertContains("different arg", logger.getLoggedInfo());
-    }
-
-    @Test
-    public void shouldNotPrintRedundantInformation() {
-        // given
-        Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
-        InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
-
-        WarningsPrinterImpl p = new WarningsPrinterImpl(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
-
-        // when
-        p.print(logger);
-
-        // then
-        assertNotContains("stub was not used", logger.getLoggedInfo());
-        assertNotContains("was not stubbed", logger.getLoggedInfo());
+        ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
+        verify(finder).find(arg.capture());
+        assertEquals(true, arg.getValue().isWarnAboutUnstubbed());
     }
 }
