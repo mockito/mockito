@@ -46,4 +46,17 @@ public class WarningsPrinterImplTest extends TestBase {
         verify(finder).find(arg.capture());
         assertEquals(true, arg.getValue().isWarnAboutUnstubbed());
     }
+
+    @Test
+    public void shouldPrintToString() {
+        // given
+        WarningsPrinterImpl printer = spy(new WarningsPrinterImpl(true, finder));
+
+        // when
+        String out = printer.print();
+
+        // then
+        verify(printer).print((MockitoLogger) notNull());
+        assertNotNull(out);
+    }
 }
