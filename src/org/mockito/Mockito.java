@@ -679,9 +679,9 @@ public class Mockito extends Matchers {
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * Example that shows how deep mock works:
+     * Example that shows how deep stub works:
      * <pre>
-     *   Foo mock = mock(Foo.class, RETURNS_DEEP_MOCKS);
+     *   Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);
      *
      *   // note that we're stubbing a chain of methods here: getBar().getName()
      *   when(mock.getBar().getName()).thenReturn("deep");
@@ -689,6 +689,8 @@ public class Mockito extends Matchers {
      *   // note that we're chaining method calls: getBar().getName()
      *   assertEquals("deep", mock.getBar().getName());
      * </pre>
+     * 
+     * <strong>Verification API does not support 'chaining'</strong> so deep stub doesn't change how you do verification.
      *
      * <strong>WARNING</strong><p>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.
@@ -697,10 +699,10 @@ public class Mockito extends Matchers {
      * <p>
      * Good quote I've seen one day on the web: <strong>every time a mock returns a mock a fairy dies</strong>. 
      * <p>
-     * How deep mocks work internally?
+     * How deep stub work internally?
      * <pre>
      *   //this:
-     *   Foo mock = mock(Foo.class, RETURNS_DEEP_MOCKS);
+     *   Foo mock = mock(Foo.class, RETURNS_DEEP_STUBS);
      *   when(mock.getBar().getName(), "deep");
      *
      *   //is equivalent of
@@ -713,7 +715,7 @@ public class Mockito extends Matchers {
      * This feature will not work when any return type of methods included in the chain cannot be mocked
      * (for example: is a primitive or a final class). This is because of java type system.   
      */
-    public static final Answer<Object> RETURNS_DEEP_MOCKS = new ReturnsDeepMocks();
+    public static final Answer<Object> RETURNS_DEEP_STUBS = new ReturnsDeepStubs();
 
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
