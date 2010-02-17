@@ -93,20 +93,32 @@ public class MockitoAnnotations {
         AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
+            boolean alreadyAssigned = false;
             for(Annotation annotation : field.getAnnotations()) {
                 Object mock = annotationEngine.createMockFor(annotation, field);
                 if (mock != null) {
+                    throwIfAlreadyAssigned(field, alreadyAssigned);
+                    alreadyAssigned = true;
                     boolean wasAccessible = field.isAccessible();
                     field.setAccessible(true);
                     try {
                         field.set(testClass, mock);
                     } catch (IllegalAccessException e) {
-                        throw new MockitoException("Problems initiating mocks annotated with " + annotation, e);
+                        throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
+                                + annotation, e);
                     } finally {
                         field.setAccessible(wasAccessible);
                     }    
                 }
             }
+        }
+    }
+
+    private static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
+        if (alreadyAssigned) {
+            throw new MockitoException("You cannot have more than one Mockito annotation on a field!\n" +
+            		"The field '" + field.getName() + "' has multiple Mockito annotations.\n" +
+            		"For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
         }
     }
 }
