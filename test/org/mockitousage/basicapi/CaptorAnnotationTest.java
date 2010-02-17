@@ -97,7 +97,7 @@ public class CaptorAnnotationTest extends TestBase {
     public static class ToManyAnnotations {
         @Captor
         @Mock
-        ArgumentCaptor<List> missingGenerics;
+        ArgumentCaptor<List> missingGenericsField;
     }
 
     @Test
@@ -106,11 +106,9 @@ public class CaptorAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new ToManyAnnotations());
             fail();
         } catch (MockitoException e) {
-            assertEquals(
-                    "Cannot have more than one Mockito annotation on field. For info how to use annotations see examples in javadoc for MockitoAnnotations class.",
-                    e.getMessage());
+            assertContains("missingGenericsField", e.getMessage());
+            assertContains("multiple Mockito annotations", e.getMessage());            
         }
-
     }
 
     @Test
