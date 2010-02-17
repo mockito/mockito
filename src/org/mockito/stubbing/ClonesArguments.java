@@ -5,6 +5,8 @@ import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.InvocationOnMock;
 import org.objenesis.ObjenesisHelper;
 
+//TODO this needs documentation and further analysis - what if someone changes the answer?
+//we might think about implementing it straight on MockSettings
 public class ClonesArguments implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object[] arguments = invocation.getArguments();
