@@ -618,7 +618,7 @@ import org.mockito.verification.VerificationMode;
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
     
-    private static final MockitoCore MOCKITO_CORE = new MockitoCore();
+    static final MockitoCore MOCKITO_CORE = new MockitoCore();
     
     /**
      * The default Answer of every mock <b>if</b> the mock was not stubbed. 
@@ -629,7 +629,7 @@ public class Mockito extends Matchers {
      * This implementation first tries the global configuration. 
      * If there is no global configuration then it uses {@link ReturnsEmptyValues} (returns zeros, empty collections, nulls, etc.)
      */
-    public static final Answer<Object> RETURNS_DEFAULTS = new GloballyConfiguredAnswer();
+    public static final Answer<Object> RETURNS_DEFAULTS = Answers.RETURNS_DEFAULTS.get();
     
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -661,7 +661,7 @@ public class Mockito extends Matchers {
      *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
      * </pre>
      */
-    public static final Answer<Object> RETURNS_SMART_NULLS = new ReturnsSmartNulls();
+    public static final Answer<Object> RETURNS_SMART_NULLS = Answers.RETURNS_SMART_NULLS.get();
     
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -674,7 +674,7 @@ public class Mockito extends Matchers {
      * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
      * <p>
      */
-    public static final Answer<Object> RETURNS_MOCKS = new ReturnsMocks();
+    public static final Answer<Object> RETURNS_MOCKS = Answers.RETURNS_MOCKS.get();
 
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -715,7 +715,7 @@ public class Mockito extends Matchers {
      * This feature will not work when any return type of methods included in the chain cannot be mocked
      * (for example: is a primitive or a final class). This is because of java type system.   
      */
-    public static final Answer<Object> RETURNS_DEEP_STUBS = new ReturnsDeepStubs();
+    public static final Answer<Object> RETURNS_DEEP_STUBS = Answers.RETURNS_DEEP_STUBS.get();
 
     /**
      * Optional Answer to be used with {@link Mockito#mock(Class, Answer)}
@@ -749,7 +749,7 @@ public class Mockito extends Matchers {
      * value = mock.getSomething();
      * </pre>
      */
-    public static final Answer<Object> CALLS_REAL_METHODS = new CallsRealMethods();
+    public static final Answer<Object> CALLS_REAL_METHODS = Answers.CALLS_REAL_METHODS.get();
 
     /**
      * Creates mock object of given class or interface.

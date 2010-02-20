@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.mockito.Mockito;
-import org.mockito.internal.configuration.DefaultAnnotationEngine;
+import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.configuration.SmartMock;
 
@@ -16,6 +16,7 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
 
     private Answer<Object> overriddenDefaultAnswer = null;
     private boolean cleansStackTrace;
+    private AnnotationEngine overriddenEngine;
 
     //for testing purposes, allow to override the configuration
     public void overrideDefaultAnswer(Answer<Object> defaultAnswer) {
@@ -25,6 +26,11 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     //for testing purposes, allow to override the configuration
     public void overrideCleansStackTrace(boolean cleansStackTrace) {
         this.cleansStackTrace = cleansStackTrace;
+    }
+    
+    //for testing purposes, allow to override the annotation engine
+    public void overrideAnnotationEngine(AnnotationEngine engine) {
+        this.overriddenEngine = engine;
     }
 
     @Override
@@ -38,7 +44,10 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     
     @Override
     public AnnotationEngine getAnnotationEngine() {
-        return new DefaultAnnotationEngine() {
+        if (this.overriddenEngine != null) {
+            return this.overriddenEngine;
+        }
+        return new InjectingAnnotationEngine() {
             @Override
             public Object createMockFor(Annotation annotation, Field field) {
                 if (annotation instanceof SmartMock) {

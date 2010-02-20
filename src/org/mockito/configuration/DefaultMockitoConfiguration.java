@@ -5,7 +5,7 @@
 package org.mockito.configuration;
 
 import org.mockito.ReturnValues;
-import org.mockito.internal.configuration.DefaultAnnotationEngine;
+import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
 
@@ -36,7 +36,7 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
      * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
      */
     public AnnotationEngine getAnnotationEngine() {
-        return new DefaultAnnotationEngine();
+        return new InjectingAnnotationEngine();
     }
 
     /* (non-Javadoc)

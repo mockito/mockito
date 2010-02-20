@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import org.mockito.configuration.AnnotationEngine;
+import org.mockito.configuration.DefaultMockitoConfiguration;
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -70,7 +72,7 @@ public class MockitoAnnotations {
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     @Deprecated
-    public @interface Mock {}
+    public @interface Mock {}    
     
     /**
      * Initializes objects annotated with &#064;Mock for given testClass.
@@ -89,36 +91,44 @@ public class MockitoAnnotations {
         }
     }
 
-    private static void scan(Object testClass, Class<?> clazz) {
+    static void scan(Object testClass, Class<?> clazz) {
         AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            boolean alreadyAssigned = false;
-            for(Annotation annotation : field.getAnnotations()) {
-                Object mock = annotationEngine.createMockFor(annotation, field);
-                if (mock != null) {
-                    throwIfAlreadyAssigned(field, alreadyAssigned);
-                    alreadyAssigned = true;
-                    boolean wasAccessible = field.isAccessible();
-                    field.setAccessible(true);
-                    try {
-                        field.set(testClass, mock);
-                    } catch (IllegalAccessException e) {
-                        throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
-                                + annotation, e);
-                    } finally {
-                        field.setAccessible(wasAccessible);
-                    }    
-                }
+            if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
+                //this means user has his own annotation engine and we have to respect that.
+                //we will do annotation processing the old way so that we are backwards compatible
+                processAnnotationDeprecatedWay(annotationEngine, testClass, field);                
+            } 
+            //act 'the new' way
+            annotationEngine.process(clazz, testClass);
+        }
+    }
+
+    static void processAnnotationDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Field field) {
+        boolean alreadyAssigned = false;
+        for(Annotation annotation : field.getAnnotations()) {
+            Object mock = annotationEngine.createMockFor(annotation, field);
+            if (mock != null) {
+                throwIfAlreadyAssigned(field, alreadyAssigned);
+                alreadyAssigned = true;
+                boolean wasAccessible = field.isAccessible();
+                field.setAccessible(true);
+                try {
+                    field.set(testClass, mock);
+                } catch (IllegalAccessException e) {
+                    throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
+                            + annotation, e);
+                } finally {
+                    field.setAccessible(wasAccessible);
+                }    
             }
         }
     }
 
-    private static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
+    static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
         if (alreadyAssigned) {
-            throw new MockitoException("You cannot have more than one Mockito annotation on a field!\n" +
-            		"The field '" + field.getName() + "' has multiple Mockito annotations.\n" +
-            		"For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
+            new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
 }

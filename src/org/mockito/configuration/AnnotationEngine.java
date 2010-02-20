@@ -17,6 +17,9 @@ import org.mockito.MockitoAnnotations;
 public interface AnnotationEngine {
 
     /**
+     * @Deprecated
+     * Please use AnnotationProcessor 'execute' method instead that is more robust
+     * <p>
      * Creates mock, ArgumentCaptor or wraps field instance in spy object.
      * Only if of correct annotation type.
      *
@@ -24,6 +27,16 @@ public interface AnnotationEngine {
      * @param field
      * @return
      */
+    @Deprecated
     Object createMockFor(Annotation annotation, Field field);
 
+    /**
+     * Allows extending the interface to perform action on specific fields on the test class
+     * <p>
+     * See the implementation of this method to figure out what is it for
+     * 
+     * @param context
+     * @param testClass 
+     */
+    void process(Class<?> context, Object testClass);
 }

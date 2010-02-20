@@ -491,4 +491,15 @@ public class Reporter {
                 "However, it is possible to stub toString(). Stubbing toString() smells a bit funny but there are rare, legitimate use cases."
         ));
     }
+
+    public void moreThanOneAnnotationNotAllowed(String fieldName) {
+        throw new MockitoException("You cannot have more than one Mockito annotation on a field!\n" +
+                "The field '" + fieldName + "' has multiple Mockito annotations.\n" +
+                "For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
+    }
+
+    public void unsupportedCombinationOfAnnotations(String undesiredAnnotationOne, String undesiredAnnotationTwo) {
+        throw new MockitoException("This combination of annotations is not permitted on a single field:\n" +
+                "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);   
+    }
 }

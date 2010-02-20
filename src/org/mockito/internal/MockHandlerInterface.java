@@ -7,6 +7,7 @@ import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
+@SuppressWarnings("unchecked")
 public interface MockHandlerInterface<T> {
 
     MockSettingsImpl getMockSettings();
@@ -14,7 +15,7 @@ public interface MockHandlerInterface<T> {
     void verifyNoMoreInteractions();
 
     VoidMethodStubbable<T> voidMethodStubbable(T mock);
-
+    
     void setAnswersForStubbing(List<Answer> answers);
 
     InvocationContainer getInvocationContainer();
