@@ -34,7 +34,7 @@
         </example>
     </rule>
     
-    <rule name="TestClassShouldExtendTestBase"
+    <!-- rule name="TestClassShouldExtendTestBase"
         message="Test Class should extend TestBase to detect invalid state problems quickly"
         class="net.sourceforge.pmd.rules.XPathRule">
 
@@ -60,6 +60,6 @@
                 public class BasicVerificationTest {             
             ]]>
         </example>
-    </rule>   
+    </rule -->   
     
 </ruleset>
