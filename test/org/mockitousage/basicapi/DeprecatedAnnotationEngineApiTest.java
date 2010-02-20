@@ -22,7 +22,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
         ConfigurationAccess.getConfig().overrideAnnotationEngine(null);
     }
     
-    class SimpleTest {
+    class SimpleTestCase {
         @InjectMock Tested tested = new Tested();
         @Mock Dependency mock;
     }
@@ -41,7 +41,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
         //given
         AnnotationEngine defaultEngine = new DefaultMockitoConfiguration().getAnnotationEngine();
         ConfigurationAccess.getConfig().overrideAnnotationEngine(defaultEngine);
-        SimpleTest test = new SimpleTest();
+        SimpleTestCase test = new SimpleTestCase();
         
         //when
         MockitoAnnotations.initMocks(test);
@@ -57,7 +57,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
         //given
         AnnotationEngine customizedEngine = new DefaultAnnotationEngine() { /**/ };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);
-        SimpleTest test = new SimpleTest();
+        SimpleTestCase test = new SimpleTestCase();
         
         //when
         MockitoAnnotations.initMocks(test);

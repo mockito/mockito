@@ -12,11 +12,11 @@ import java.util.*;
 
 public class MockInjectionTest extends TestBase {
 
-	private SuperUnderTest superUnderTestWithoutInjection = new SuperUnderTest();
-	@InjectMock private SuperUnderTest superUnderTest = new SuperUnderTest();
-	@InjectMock private BaseUnderTest baseUnderTest = new BaseUnderTest();
-	@InjectMock private SubUnderTest subUnderTest = new SubUnderTest();
-	@InjectMock private OtherBaseUnderTest otherBaseUnderTest = new OtherBaseUnderTest();
+	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
+	@InjectMock private SuperUnderTesting superUnderTest = new SuperUnderTesting();
+	@InjectMock private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
+	@InjectMock private SubUnderTesting subUnderTest = new SubUnderTesting();
+	@InjectMock private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
 	@Mock private Map map;
 	@Mock private List list;
 	@Mock private Set set;
@@ -62,7 +62,7 @@ public class MockInjectionTest extends TestBase {
 		assertSame(searchTree, otherBaseUnderTest.getSearchTree());
 	}
 
-	class SuperUnderTest {
+	class SuperUnderTesting {
 
 		private List aList;
 
@@ -71,7 +71,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class BaseUnderTest extends SuperUnderTest {
+	class BaseUnderTesting extends SuperUnderTesting {
 		private Map aMap;
 
 		public Map getAMap() {
@@ -79,7 +79,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class OtherBaseUnderTest extends SuperUnderTest {
+	class OtherBaseUnderTesting extends SuperUnderTesting {
 		private TreeSet searchTree;
 
 		public TreeSet getSearchTree() {
@@ -87,7 +87,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class SubUnderTest extends BaseUnderTest {
+	class SubUnderTesting extends BaseUnderTesting {
 		private Set histogram1;
 		private Set histogram2;
 
