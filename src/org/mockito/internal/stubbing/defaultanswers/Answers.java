@@ -6,7 +6,6 @@ import org.mockito.stubbing.Answer;
 /**
  * Enumeration of pre-configured mock answers
  */
-//TODO should be AnswersEnum?
 public enum Answers {
 
     RETURNS_DEFAULTS(new GloballyConfiguredAnswer()),
