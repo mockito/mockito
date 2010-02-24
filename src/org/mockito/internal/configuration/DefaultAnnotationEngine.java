@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.FieldSetter;
 
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
@@ -81,19 +82,14 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
             for(Annotation annotation : field.getAnnotations()) {           
                 Object mock = createMockFor(annotation, field);
                 if (mock != null) {
-                    throwIfAlreadyAssigned(field, alreadyAssigned);
-                    alreadyAssigned = true;
-                    //TODO this is deprecated all over the place
-                    boolean wasAccessible = field.isAccessible();
-                    field.setAccessible(true);
+                    throwIfAlreadyAssigned(field, alreadyAssigned);                    
+                    alreadyAssigned = true;                    
                     try {
-                        field.set(testClass, mock);
-                    } catch (IllegalAccessException e) {
+                        new FieldSetter(testClass, field).set(mock);
+                    } catch (Exception e) {
                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                                 + annotation, e);
-                    } finally {
-                        field.setAccessible(wasAccessible);
-                    }    
+                    }
                 }        
             }
         }

@@ -17,6 +17,7 @@ import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -105,23 +106,20 @@ public class MockitoAnnotations {
         }
     }
 
+    @SuppressWarnings("deprecation")
     static void processAnnotationDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Field field) {
         boolean alreadyAssigned = false;
         for(Annotation annotation : field.getAnnotations()) {
             Object mock = annotationEngine.createMockFor(annotation, field);
             if (mock != null) {
                 throwIfAlreadyAssigned(field, alreadyAssigned);
-                alreadyAssigned = true;
-                boolean wasAccessible = field.isAccessible();
-                field.setAccessible(true);
+                alreadyAssigned = true;                
                 try {
-                    field.set(testClass, mock);
-                } catch (IllegalAccessException e) {
+                    new FieldSetter(testClass, field).set(mock);
+                } catch (Exception e) {
                     throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                             + annotation, e);
-                } finally {
-                    field.setAccessible(wasAccessible);
-                }    
+                }
             }
         }
     }

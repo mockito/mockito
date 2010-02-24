@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldSetter;
 
 /**
  * Initializes mock/spies dependencies for fields annotated with &#064;InjectMock
@@ -61,15 +62,11 @@ public class DefaultInjectionEngine {
         }
     }
 
-    private void inject(Field field, Object fieldInstance, Object matchingMock) {
-        boolean wasAccessible = field.isAccessible();
-        field.setAccessible(true);
+    private void inject(Field field, Object fieldInstance, Object matchingMock) {        
         try {
-            field.set(fieldInstance, matchingMock);
-        } catch (IllegalAccessException e) {
+            new FieldSetter(fieldInstance, field).set(matchingMock);            
+        } catch (Exception e) {
             throw new MockitoException("Problems injecting dependency in " + field.getName(), e);
-        } finally {
-            field.setAccessible(wasAccessible);
         }
     }
 
