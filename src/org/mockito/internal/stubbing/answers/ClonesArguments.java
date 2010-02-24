@@ -1,8 +1,9 @@
-package org.mockito.stubbing;
+package org.mockito.internal.stubbing.answers;
 
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.objenesis.ObjenesisHelper;
 
 //TODO this needs documentation and further analysis - what if someone changes the answer?

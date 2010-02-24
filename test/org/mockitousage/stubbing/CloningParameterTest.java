@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.stubbing.ClonesArguments;
+import org.mockito.internal.stubbing.answers.ClonesArguments;
 import org.mockitoutil.TestBase;
 
 public class CloningParameterTest extends TestBase {
