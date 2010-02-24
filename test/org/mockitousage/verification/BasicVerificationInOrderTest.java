@@ -13,6 +13,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -148,7 +149,7 @@ public class BasicVerificationInOrderTest extends TestBase {
     
     /* ------------- */
     
-    @Test(expected=WantedButNotInvoked.class)
+    @Test(expected=ArgumentsAreDifferent.class)
     public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
         inOrder.verify(mockOne).simpleMethod(100);
     }
