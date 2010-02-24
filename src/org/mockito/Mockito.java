@@ -941,32 +941,54 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Stubs a method call with return value or an exception. E.g:
+     *
+     * <pre>
+     * stub(mock.someMethod()).toReturn(10);
+     *
+     * //you can use flexible argument matchers, e.g:
+     * stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
+     *
+     * //setting exception to be thrown:
+     * stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
+     *
+     * //you can stub with different behavior for consecutive method calls.
+     * //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.
+     * stub(mock.someMethod("some arg"))
+     *  .toThrow(new RuntimeException())
+     *  .toReturn("foo");
+     * </pre>
+     * <p>
+     * Some users find stub() confusing therefore {@link Mockito#when(Object)} is recommended over stub()
      * <pre>
      *   //Instead of:
      *   stub(mock.count()).toReturn(10);
      * 
-     *   //Please do:
+     *   //You can do:
      *   when(mock.count()).thenReturn(10);
      * </pre> 
-     * 
-     * Many users found stub() confusing therefore stub() has been deprecated in favor of {@link Mockito#when(Object)} 
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
      * <p>
-     * How to fix deprecation warnings? Typically it's just few minutes of search & replace job:
-     * <pre>
-     *   Mockito.stub;  <i>replace with:</i>  Mockito.when;
-     *   stub(          <i>replace with:</i>  when(
-     *   .toReturn(     <i>replace with:</i>  .thenReturn(
-     *   .toThrow(      <i>replace with:</i>  .thenThrow(
-     *   .toAnswer(     <i>replace with:</i>  .thenAnswer(
-     * </pre>
-     * If you're an existing user then sorry for making your code littered with deprecation warnings. 
-     * This change was required to make Mockito better.
+     * Stubbing can be overridden: for example common stubbing can go to fixture
+     * setup but the test methods can override it.
+     * Please note that overridding stubbing is a potential code smell that points out too much stubbing.
+     * <p>
+     * Once stubbed, the method will always return stubbed value regardless
+     * of how many times it is called.
+     * <p>
+     * Last stubbing is more important - when you stubbed the same method with
+     * the same arguments many times.
+     * <p>
+     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
+     * Let's say you've stubbed foo.bar(). 
+     * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
+     * If your code doesn't care what get(0) returns then it should not be stubbed. 
+     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>. 
      * 
      * @param methodCall
      *            method call
      * @return DeprecatedOngoingStubbing object to set stubbed value/exception
      */
-    @Deprecated
     public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
         return MOCKITO_CORE.stub(methodCall);
     }

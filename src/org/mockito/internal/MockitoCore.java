@@ -44,7 +44,6 @@ public class MockitoCore {
         return stubbing;
     }
 
-    @Deprecated
     public <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
         mockingProgress.stubbingStarted();
         return (DeprecatedOngoingStubbing) stub();
