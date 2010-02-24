@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;

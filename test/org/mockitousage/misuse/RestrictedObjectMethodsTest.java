@@ -6,19 +6,16 @@ package org.mockitousage.misuse;
 
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.verification.DummyVerificationMode;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-
+@SuppressWarnings("unchecked")
 public class RestrictedObjectMethodsTest extends TestBase {
 
     @Mock List mock;

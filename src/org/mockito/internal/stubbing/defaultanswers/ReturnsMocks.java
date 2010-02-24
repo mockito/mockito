@@ -27,7 +27,6 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
         return returnValueFor(invocation.getMethod().getReturnType());
     }
 
-    @SuppressWarnings("unchecked")
     Object returnValueFor(Class<?> clazz) {
         if (!ClassImposterizer.INSTANCE.canImposterise(clazz)) {
             return null;

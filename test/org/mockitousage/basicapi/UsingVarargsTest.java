@@ -4,18 +4,16 @@
  */
 package org.mockitousage.basicapi;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class UsingVarargsTest extends TestBase {

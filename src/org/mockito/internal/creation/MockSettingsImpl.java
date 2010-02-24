@@ -9,6 +9,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.MockName;
 import org.mockito.stubbing.Answer;
 
+@SuppressWarnings("unchecked")
 public class MockSettingsImpl implements MockSettings {
 
     private static final long serialVersionUID = 4475297236197939568L;
@@ -62,7 +63,6 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public MockSettings defaultAnswer(Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
         return this;
@@ -75,7 +75,7 @@ public class MockSettingsImpl implements MockSettings {
     public boolean isSerializable() {
         return serializable;
     }
-
+    
     public void initiateMockName(Class classToMock) {
         mockName = new MockName(name, classToMock);
     }

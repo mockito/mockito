@@ -23,12 +23,12 @@ import org.mockito.internal.util.reflection.FieldSetter;
  * <p/>
  * See {@link MockitoAnnotations}
  */
+@SuppressWarnings("deprecation")
 public class DefaultAnnotationEngine implements AnnotationEngine {
 
     /* (non-Javadoc)
     * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
     */
-    @SuppressWarnings("deprecation")
     public Object createMockFor(Annotation annotation, Field field) {
         if (annotation instanceof Mock) {
             return processAnnotationOn((Mock) annotation, field);
@@ -58,7 +58,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         mockSettings.defaultAnswer(annotation.answer().get());
         return Mockito.mock(field.getType(), mockSettings);
     }
-
+    
     private Object processAnnotationOn(org.mockito.MockitoAnnotations.Mock annotation, Field field) {
         return Mockito.mock(field.getType(), field.getName());
     }

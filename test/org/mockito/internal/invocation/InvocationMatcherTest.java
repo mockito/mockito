@@ -4,24 +4,25 @@
  */
 package org.mockito.internal.invocation;
 
-import org.fest.assertions.Assertions;
+import static java.util.Arrays.*;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.AnyVararg;
+import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.LocalizedMatcher;
+import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockitousage.IMethods;
-
-import static org.mockito.Matchers.anyVararg;
-import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 import org.mockitoutil.TestBase;
-
-import java.lang.reflect.Method;
-import static java.util.Arrays.asList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {

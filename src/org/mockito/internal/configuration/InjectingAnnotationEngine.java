@@ -87,7 +87,6 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMock.class)) {
-                InjectMock injectMockAnnotation = (InjectMock) field.getAnnotation(InjectMock.class);
                 testedFields.add(field);
             }
         }

@@ -10,6 +10,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class MockInjectionTest extends TestBase {
 
 	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
@@ -17,9 +18,8 @@ public class MockInjectionTest extends TestBase {
 	@InjectMock private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
 	@InjectMock private SubUnderTesting subUnderTest = new SubUnderTesting();
 	@InjectMock private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
-	@Mock private Map map;
-	@Mock private List list;
-	@Mock private Set set;
+	@Mock private Map map;	
+    @Mock private List list;
 	@Mock private Set histogram1;
 	@Mock private Set histogram2;
 	@Spy private TreeSet searchTree = new TreeSet();

@@ -24,6 +24,7 @@ import java.io.*;
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
+@SuppressWarnings("unchecked")
 public class TestBase extends Assert {
 
     @After
@@ -125,7 +126,7 @@ public class TestBase extends Assert {
                 "\n"
                 , string.contains(sub));
     }
-
+    
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
         Class[] types = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -144,7 +145,6 @@ public class TestBase extends Assert {
         return StringDescription.toString(m);
     }
 
-    @SuppressWarnings("unchecked")
     //TODO use widely
     protected <T> T serializeAndBack(T obj) throws Exception {
         ByteArrayOutputStream os = this.serializeMock(obj);

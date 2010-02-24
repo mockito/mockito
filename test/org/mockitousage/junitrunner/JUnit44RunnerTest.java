@@ -4,21 +4,17 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockitousage.junitrunner.Filters.methodNameContains;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockitousage.junitrunner.Filters.*;
 
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.junit.runner.manipulation.Filter;
 import org.mockito.InjectMock;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnit44Runner;
-import org.mockitoutil.TestBase;
 
 @RunWith(MockitoJUnit44Runner.class)
 @SuppressWarnings( { "unchecked", "deprecation" })

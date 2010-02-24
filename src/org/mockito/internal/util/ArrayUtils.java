@@ -1,5 +1,6 @@
 package org.mockito.internal.util;
 
+@SuppressWarnings("unchecked")
 public class ArrayUtils {
     public Class<?>[] concat(Class<?>[] interfaces, Class<?> clazz) {
         int length = interfaces.length;

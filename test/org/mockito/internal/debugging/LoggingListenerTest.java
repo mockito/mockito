@@ -1,15 +1,13 @@
 package org.mockito.internal.debugging;
 
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 public class LoggingListenerTest extends TestBase {
 

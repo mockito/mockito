@@ -17,7 +17,7 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {
 
     private static final long serialVersionUID = 6160482220413048624L;
@@ -236,7 +236,6 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         }
     }
   
-    @SuppressWarnings("unchecked")
     @Test
     public void shouldSerializeWithRealObjectSpy() throws Exception {
         // given

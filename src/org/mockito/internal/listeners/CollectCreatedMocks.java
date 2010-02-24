@@ -4,7 +4,9 @@ import org.mockito.MockSettings;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class CollectCreatedMocks implements MockingStartedListener {
+    
     private List toBeFilled;
 
     public CollectCreatedMocks(List toBeFilled) {

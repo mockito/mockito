@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.stubbing.defaultanswers.Answers;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

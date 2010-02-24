@@ -11,9 +11,11 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class SpyAnnotationTest extends TestBase {
     //TODO check if works when base class has initMocks()
-	@Spy
+	
+    @Spy
 	final List spiedList = new ArrayList();
 
 	@Test
@@ -29,7 +31,8 @@ public class SpyAnnotationTest extends TestBase {
 		class FailingSpy {
 			@Spy private List mySpy;
 
-			public List getMySpy() {
+			@SuppressWarnings("unused")
+            public List getMySpy() {
 				return mySpy;
 			}
 		}

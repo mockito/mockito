@@ -13,13 +13,10 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
-    private IMethods mock;
-
     private ConsoleSpammingMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
     private RunNotifier notifier;

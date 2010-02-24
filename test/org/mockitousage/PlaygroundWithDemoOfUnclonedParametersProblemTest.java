@@ -19,6 +19,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("unchecked")
 public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase {
 
     ImportManager importManager;
