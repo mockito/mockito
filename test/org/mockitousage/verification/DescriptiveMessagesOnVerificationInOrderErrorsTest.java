@@ -8,11 +8,9 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -91,22 +89,25 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         }
     } 
     
-    @Ignore("i don't know how to implement it nicely... yet. See the enhancement 27")
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowWantedAndActual() {
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (ArgumentsAreDifferent e) {
-            String expected = 
-                    "\n" +
-                    "Arguments are different!" +
-                    "\n" +
-                    "IMethods.simpleMethod(999);"; 
-            
-            assertEquals(expected, e.getMessage());
-            
-            assertEquals(null, e.getCause());
+        } catch (org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {           
+            assertContains("has different arguments", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void shouldNotSayArgumentsAreDifferent() {
+        //this is the last invocation so any next verification in order should simply say wanted but not invoked
+        inOrder.verify(three).simpleMethod(3);
+        try {
+            inOrder.verify(one).simpleMethod(999);
+            fail();
+        } catch (VerificationInOrderFailure e) {
+            assertContains("Wanted but not invoked", e.getMessage());
         }
     } 
     

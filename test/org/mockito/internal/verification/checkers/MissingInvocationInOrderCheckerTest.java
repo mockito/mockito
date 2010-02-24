@@ -12,10 +12,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
+import org.mockito.internal.reporting.SmartPrinter;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationInOrderCheckerTest extends TestBase {
@@ -51,6 +53,17 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         
         assertEquals(wanted, reporterStub.wanted);
     }
+
+    @Test
+    public void shouldReportArgumentsAreDifferent() throws Exception {
+        assertTrue(finderStub.findInvocations(invocations, wanted).isEmpty());
+        finderStub.similarToReturn = new InvocationBuilder().toInvocation();
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        SmartPrinter printer = new SmartPrinter(wanted, finderStub.similarToReturn, 0);
+        assertEquals(printer.getWanted(), reporterStub.wantedString);
+        assertEquals(printer.getActual(), reporterStub.actual);
+        assertEquals(finderStub.similarToReturn.getLocation(), reporterStub.actualLocation);
+     }
     
     @Test
     public void shouldReportWantedDiffersFromActual() throws Exception {
@@ -66,6 +79,9 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     class ReporterStub extends Reporter {
         private PrintableInvocation wanted;
         private PrintableInvocation previous;
+        private String wantedString;
+        private String actual;
+        private Location actualLocation;
         
         @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
             this.wanted = wanted;
@@ -74,6 +90,12 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         
         @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
             this.wanted = wanted;
+        }
+
+        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
+            this.wantedString = wanted;
+            this.actual = actual;
+            this.actualLocation = actualLocation;
         }
     }
 }

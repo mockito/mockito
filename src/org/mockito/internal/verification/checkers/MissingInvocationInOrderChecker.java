@@ -10,6 +10,8 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.reporting.SmartPrinter;
+import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
 import org.mockito.verification.VerificationMode;
 
 public class MissingInvocationInOrderChecker {
@@ -35,7 +37,26 @@ public class MissingInvocationInOrderChecker {
         
         Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations);
         if (previousInOrder == null) {
-            reporter.wantedButNotInvoked(wanted);
+            /**
+             * It is ofcourse possible to have an issue where the arguments are different
+             * rather that not invoked in order. Issue related to
+             * http://code.google.com/p/mockito/issues/detail?id=27. If the previous order
+             * is missing, then this method checks if the arguments are different or if the order
+             * is not invoked.
+             */
+             List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+             if (actualInvocations == null || actualInvocations.isEmpty())  {
+                 Invocation similar = finder.findSimilarInvocation(invocations, wanted);
+                 if (similar != null) {
+                     Integer[] indicesOfSimilarMatchingArguments =
+                             new ArgumentMatchingTool().getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(),
+                                     similar.getArguments());
+                     SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indicesOfSimilarMatchingArguments);
+                     reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
+                 } else {
+                     reporter.wantedButNotInvoked(wanted);
+                 }
+             }
         } else {
             reporter.wantedButNotInvokedInOrder(wanted, previousInOrder);
         }
