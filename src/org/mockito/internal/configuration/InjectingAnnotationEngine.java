@@ -11,9 +11,9 @@ import java.util.Set;
 
 import org.mockito.Captor;
 import org.mockito.InjectMock;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
@@ -45,7 +45,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(InjectMock.class)) {
-//                assertNoAnnotations(field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+                assertNoAnnotations(field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 injectMocks(testClass);
             }
         }

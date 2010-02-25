@@ -12,10 +12,8 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public class WrongSetOfAnnotationsTest extends TestBase {
-	
-	//TODO unsupported combinations of annotations (spy - captor, spy - mock)
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowMockAndSpy() throws Exception {
@@ -31,8 +29,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
         });
     }
     
-//    @Test(expected=MockitoException.class)
-    //TODO
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowMockAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMock @Mock List mock;
@@ -53,8 +50,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
         });
     }
     
-    //@Test(expected=MockitoException.class)
-    //TODO
+    @Test(expected=MockitoException.class)
     public void shouldNotAllowCaptorAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMock @Captor ArgumentCaptor captor;
