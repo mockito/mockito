@@ -45,7 +45,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(InjectMock.class)) {
-                assertNoAnnotations(field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+//                assertNoAnnotations(field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 injectMocks(testClass);
             }
         }

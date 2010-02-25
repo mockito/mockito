@@ -1,4 +1,4 @@
-package org.mockitousage.basicapi;
+package org.mockitousage.annotation;
 
 import org.junit.Before;
 import org.junit.Test;

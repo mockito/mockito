@@ -17,6 +17,7 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
+import org.mockito.internal.util.MockUtil;
 
 import java.io.*;
 
@@ -163,5 +164,9 @@ public class TestBase extends Assert {
         ByteArrayOutputStream serialized = new ByteArrayOutputStream();
         new ObjectOutputStream(serialized).writeObject(mock);
         return serialized;
+    }
+
+    protected boolean isMock(Object o) {
+        return new MockUtil().isMock(o);
     }
 }
