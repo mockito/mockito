@@ -1,4 +1,4 @@
-package org.mockitousage.basicapi;
+package org.mockitousage.annotation;
 
 import static org.mockito.Mockito.*;
 
@@ -13,7 +13,6 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class SpyAnnotationTest extends TestBase {
-    //TODO check if works when base class has initMocks()
 	
     @Spy
 	final List spiedList = new ArrayList();
