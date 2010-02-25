@@ -50,6 +50,4 @@ import static java.lang.annotation.ElementType.FIELD;
 @Documented
 @Target( { FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InjectMock {
-    //TODO should also inject spies
-}
+public @interface InjectMock {}
