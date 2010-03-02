@@ -1,12 +1,11 @@
 package org.mockitousage.debugging;
 
+import static org.mockito.BDDMockito.*;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.BDDMockito.*;
 
 public class PrintingInvocationsWhenEverythingOkTest extends TestBase {
 
@@ -38,7 +37,7 @@ public class PrintingInvocationsWhenEverythingOkTest extends TestBase {
 
     @After
     public void printInvocations() {
-        String log = Mockito.debug().printInvocations(mock, mockTwo);
+        String log = NewMockito.debug().printInvocations(mock, mockTwo);
         //asking
         assertContains("giveMeSomeString(\"arg\")", log);
         assertContains(".businessLogicWithAsking(", log);

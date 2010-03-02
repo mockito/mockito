@@ -1622,9 +1622,10 @@ public class Mockito extends Matchers {
     }
 
     /*
-     * Helps debugging failing tests. Not yet ready.
+     * Helps debugging failing tests. Experimental - use at your own risk. 
      */
-    public static MockitoDebugger debug() {
+    @Deprecated
+    static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
 }

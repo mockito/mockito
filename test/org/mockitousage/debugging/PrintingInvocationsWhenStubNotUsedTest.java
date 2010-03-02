@@ -2,7 +2,6 @@ package org.mockitousage.debugging;
 
 import org.junit.After;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
 
@@ -38,7 +37,7 @@ public class PrintingInvocationsWhenStubNotUsedTest extends TestBase {
 
     @After
     public void printInvocations() {
-        String log = Mockito.debug().printInvocations(mock, mockTwo);
+        String log = NewMockito.debug().printInvocations(mock, mockTwo);
         //asking
         assertContains("giveMeSomeString(\"arg\")", log);
         assertContains(".businessLogicWithAsking(", log);
