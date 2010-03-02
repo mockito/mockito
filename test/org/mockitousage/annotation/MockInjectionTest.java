@@ -6,11 +6,12 @@ import org.mockito.InjectMock;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
 import java.util.*;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public class MockInjectionTest extends TestBase {
 
 	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
@@ -61,6 +62,13 @@ public class MockInjectionTest extends TestBase {
 		MockitoAnnotations.initMocks(this);
 		assertSame(searchTree, otherBaseUnderTest.getSearchTree());
 	}
+	
+    @Test(expected=MockitoException.class)
+    public void shouldProvideDecentExceptionWhenInjectMockInstanceIsNull() throws Exception {
+        MockitoAnnotations.initMocks(new Object() {
+           @InjectMock Object iAmNull = null; 
+        });
+    }
 
 	class SuperUnderTesting {
 

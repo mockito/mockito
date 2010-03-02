@@ -31,7 +31,8 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 try {
                     Object instance = field.get(testClass);
                     if (instance == null) {
-                        throw new MockitoException("Cannot create a @Spy for '" + field.getName() + "' field because the instance is missing\n" +
+                        throw new MockitoException("Cannot create a @Spy for '" + field.getName() + "' field because the *instance* is missing\n" +
+                        		  "The instance must be created *before* initMocks();\n" +
                                   "Example of correct usage of @Spy:\n" +
                             	  "   @Spy List mock = new LinkedList();\n" +
                             	  "   //also, don't forget about MockitoAnnotations.initMocks();");

@@ -17,6 +17,7 @@ import org.mockito.Spy;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.FieldReader;
 
 /**
  * See {@link MockitoAnnotations}
@@ -87,6 +88,9 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMock.class)) {
+                if(new FieldReader(testClass, field).isNull()) {
+                    new Reporter().injectMockAnnotationFieldIsNull(field.getName());
+                }
                 testedFields.add(field);
             }
         }

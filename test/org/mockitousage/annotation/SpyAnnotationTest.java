@@ -11,7 +11,7 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
 	
     @Spy
@@ -30,7 +30,6 @@ public class SpyAnnotationTest extends TestBase {
 		class FailingSpy {
 			@Spy private List mySpy;
 
-			@SuppressWarnings("unused")
             public List getMySpy() {
 				return mySpy;
 			}
@@ -44,6 +43,10 @@ public class SpyAnnotationTest extends TestBase {
         spiedList.get(10); // see shouldInitSpy
     }
 	
-	//TODO unsupported combinations of annotations (spy - captor, spy - mock)
-	//TODO unsupported combinations of annotations (captor - mock)
+	@Test(expected=MockitoException.class)
+    public void shouldProvideDecentExceptionWhenSpyInstanceIsNull() throws Exception {
+        MockitoAnnotations.initMocks(new Object() {
+            @Spy String spy = null;
+        });
+    }
 }
