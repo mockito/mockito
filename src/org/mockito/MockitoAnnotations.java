@@ -21,8 +21,10 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
+ * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
+ * <p>  
  * <ul>
- * <li>Allows shorthand mock creation.</li> 
+ * <li>Allows shorthand creation of objects required for testing.</li> 
  * <li>Minimizes repetitive mock creation code.</li> 
  * <li>Makes the test class more readable.</li>
  * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
@@ -49,8 +51,10 @@ import org.mockito.runners.MockitoJUnitRunner;
  *       }
  *   }
  * </pre>
- * 
- * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated mocks.
+ * <p>
+ * Read also about other annotations &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMock}
+ * <p>
+ * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated fields.
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
@@ -76,7 +80,8 @@ public class MockitoAnnotations {
     public @interface Mock {}    
     
     /**
-     * Initializes objects annotated with &#064;Mock for given testClass.
+     * Initializes objects annotated with Mockito annotations for given testClass:
+     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMock} 
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */

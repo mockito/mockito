@@ -36,6 +36,8 @@ import org.mockito.internal.progress.HandyReturnValues;
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  * <p>
+ * There is an <b>annotation</b> that you might find useful: &#64;{@link Captor}
+ * <p>
  * See the full documentation on Mockito in javadoc for {@link Mockito} class.    
  */
 public class ArgumentCaptor<T> {

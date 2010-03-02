@@ -11,9 +11,14 @@ import static java.lang.annotation.ElementType.FIELD;
  * <ul>
  * <li>Allows shorthand mock and spy injection.</li>
  * <li>Minimizes repetitive mock and spy injection.</li>
- * <li>Makes the test class more readable.</li>
  * </ul>
- *
+ * <p>
+ * Currently it only supports setter injection. If you prefer constructor injection - please contribute a patch.
+ * <p>
+ * Mockito tries to inject by type (using name in case types are the same). 
+ * Mockito does not throw anything when injection fails - you will have to satisfy the dependencies manually.  
+ * <p>
+ * Example:
  * <pre>
  *   public class ArticleManagerTest extends SampleBaseTestCase {
  *
@@ -33,14 +38,12 @@ import static java.lang.annotation.ElementType.FIELD;
  *
  *       &#064;Before public void initMocks() {
  *           MockitoAnnotations.initMocks(this);
- *           MockitoAnnotations.injectMocks(this);
  *       }
  *   }
  * </pre>
  *
  * <b>The field annotated with &#064;InjectMock must be initialized.</b>
- * Mocks and spies must also be initialized with <code>MockitoAnnotations.initMocks(this)</code>.
- *
+ * <p>
  * <b><code>MockitoAnnotations.injectMocks(this)</code></b> method has to called to initialize annotated objects.
  * <p>
  * In above example, <code>injectMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.

@@ -44,7 +44,8 @@ import org.mockito.verification.VerificationMode;
  *      <a href="#17">17. Resetting mocks (Since 1.8.0) </a><br/>
  *      <a href="#18">18. Troubleshooting & validating framework usage (Since 1.8.0) </a><br/>
  *      <a href="#19">19. Aliases for behavior driven development (Since 1.8.0) </a><br/>
- *      <a href="#20">20. (**New**) Serializable mocks (Since 1.8.1) </a><br/>
+ *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
+ *      <a href="#21">21. (**New**) New annotations: &#064;Captor, &#064;Spy, &#064;InjectMock (Since 1.8.3) </a><br/>
  * </b>
  * 
  * <p>
@@ -614,6 +615,19 @@ import org.mockito.verification.VerificationMode;
  *                 .defaultAnswer(CALLS_REAL_METHODS)
  *                 .serializable());
  * </pre>
+ * 
+ * <h3 id="21">21. (**New**) New annotations: &#064;Captor, &#064;Spy, &#064;InjectMock (Since 1.8.3) </h3>
+ * <p>
+ * Release 1.8.3 brings new annotations that may be helpful on occasion:
+ * 
+ * <ul>
+ * <li>&#064;{@link Captor} simplifies creation of {@link ArgumentCaptor} 
+ * - useful when the argument to capture is a nasty generic class and you want to avoid compiler warnings
+ * <li>&#064;{@link Spy} - you can use it instead {@link Mockito#spy(Object)}. 
+ * <li>&#064;{@link InjectMock} - injects mocks into tested object automatically.
+ * </ul>
+ * <p>
+ * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}  
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {

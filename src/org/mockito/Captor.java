@@ -19,7 +19,11 @@ import java.lang.annotation.*;
  *       MockitoAnnotations.init(this);
  *    }
  *
- *    ...
+ *    &#64;Test public void shouldDoSomethingUseful() {
+ *       //...
+ *       verify(mock.doStuff(captor.capture()));
+ *       assertEquals("foo", captor.getValue());
+ *    }
  * }
  * </pre>
  * <p>
