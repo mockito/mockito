@@ -489,6 +489,8 @@ public class Matchers {
      * Works similarly to EqualsBuilder.reflectionEquals(this, other, exlucdeFields) from
      * apache commons library.
      * <p>
+     * <b>Warning</b> The equality check is shallow!
+     * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
