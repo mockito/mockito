@@ -705,8 +705,8 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * <strong>Verification API does not support 'chaining'</strong> so deep stub doesn't change how you do verification.
-     *
-     * <strong>WARNING</strong><p>
+     * <p>
+     * <strong>WARNING: </strong>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.
      * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful
      * hints at violation of Law of Demeter or mocking a value object (a well known anti-pattern).
