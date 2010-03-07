@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -25,14 +25,14 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSpyAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-            @InjectMock @Spy List mock;
+            @InjectMocks @Spy List mock;
         });
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowMockAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-            @InjectMock @Mock List mock;
+            @InjectMocks @Mock List mock;
         });
     }
     
@@ -53,7 +53,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     @Test(expected=MockitoException.class)
     public void shouldNotAllowCaptorAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-            @InjectMock @Captor ArgumentCaptor captor;
+            @InjectMocks @Captor ArgumentCaptor captor;
         });
     }
     

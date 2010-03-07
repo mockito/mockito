@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
@@ -12,7 +12,7 @@ import org.mockitoutil.TestBase;
 public class SpyInjectionTest extends TestBase {
 
     @Spy List spy = new LinkedList();
-    @InjectMock HasSpy hasSpy = new HasSpy();
+    @InjectMocks HasSpy hasSpy = new HasSpy();
     
     static class HasSpy {
         private List spy;

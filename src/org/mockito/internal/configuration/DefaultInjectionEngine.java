@@ -11,7 +11,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
 
 /**
- * Initializes mock/spies dependencies for fields annotated with &#064;InjectMock
+ * Initializes mock/spies dependencies for fields annotated with &#064;InjectMocks
  * <p/>
  * See {@link org.mockito.MockitoAnnotations}
  */

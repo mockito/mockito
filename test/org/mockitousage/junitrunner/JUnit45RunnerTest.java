@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -20,7 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @SuppressWarnings("unchecked")
 public class JUnit45RunnerTest {
 
-	@InjectMock private ListDependent listDependent = new ListDependent();
+	@InjectMocks private ListDependent listDependent = new ListDependent();
     @Mock private List list;
 
     @Test

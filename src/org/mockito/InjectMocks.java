@@ -26,7 +26,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *       &#064;Mock private ArticleDatabase database;
  *       &#064;Spy private UserProvider userProvider = new ConsumerUserProvider();
  *
- *       &#064;InjectMock private ArticleManager manager = new ArticleManager();
+ *       &#064;InjectMocks private ArticleManager manager = new ArticleManager();
  *
  *       &#064;Test public void shouldDoSomething() {
  *           manager.initiateArticle();
@@ -42,7 +42,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *   }
  * </pre>
  *
- * <b>The field annotated with &#064;InjectMock must be initialized.</b>
+ * <b>The field annotated with &#064;InjectMocks must be initialized.</b>
  * <p>
  * <b><code>MockitoAnnotations.injectMocks(this)</code></b> method has to called to initialize annotated objects.
  * <p>
@@ -53,4 +53,4 @@ import static java.lang.annotation.ElementType.FIELD;
 @Documented
 @Target( { FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InjectMock {}
+public @interface InjectMocks {}

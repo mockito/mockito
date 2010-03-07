@@ -504,11 +504,11 @@ public class Reporter {
     }
 
     public void injectMockAnnotationFieldIsNull(String field) {
-        throw new MockitoException("Field '" + field + "' annotated with @InjectMock is null.\n" +
+        throw new MockitoException("Field '" + field + "' annotated with @InjectMocks is null.\n" +
                 "Please make sure the instance is created *before* MockitoAnnotations.initMocks();\n" +
                 "Example of correct usage:\n" +
                 "   class SomeTest {\n" +
-                "      @InjectMock private Foo foo = new Foo();\n" +
+                "      @InjectMocks private Foo foo = new Foo();\n" +
                 "      \n" +
                 "      @Before public void setUp() {\n" +
                 "         MockitoAnnotations.initMock(this);\n"

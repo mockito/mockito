@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.mockito.Captor;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -45,7 +45,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         //this injects mocks
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
-            if (field.isAnnotationPresent(InjectMock.class)) {
+            if (field.isAnnotationPresent(InjectMocks.class)) {
                 assertNoAnnotations(field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 injectMocks(testClass);
             }
@@ -55,14 +55,14 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
     void assertNoAnnotations(Field field, Class ... annotations) {
         for (Class annotation : annotations) {
             if (field.isAnnotationPresent(annotation)) {
-                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMock.class.getSimpleName());
+                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
             }
         }        
     }
 
     /**
      * Initializes mock/spies dependencies for objects annotated with
-     * &#064;InjectMock for given testClass.
+     * &#064;InjectMocks for given testClass.
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      * 
@@ -87,7 +87,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Set<Field> testedFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            if (null != field.getAnnotation(InjectMock.class)) {
+            if (null != field.getAnnotation(InjectMocks.class)) {
                 if(new FieldReader(testClass, field).isNull()) {
                     new Reporter().injectMockAnnotationFieldIsNull(field.getName());
                 }

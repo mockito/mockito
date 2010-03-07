@@ -6,7 +6,7 @@ package org.mockitousage.annotation;
 
 import org.junit.After;
 import org.junit.Test;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.configuration.AnnotationEngine;
@@ -23,7 +23,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
     }
     
     class SimpleTestCase {
-        @InjectMock Tested tested = new Tested();
+        @InjectMocks Tested tested = new Tested();
         @Mock Dependency mock;
     }
     

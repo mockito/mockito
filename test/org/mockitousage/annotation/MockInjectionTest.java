@@ -2,7 +2,7 @@ package org.mockitousage.annotation;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMock;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -15,10 +15,10 @@ import java.util.*;
 public class MockInjectionTest extends TestBase {
 
 	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
-	@InjectMock private SuperUnderTesting superUnderTest = new SuperUnderTesting();
-	@InjectMock private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
-	@InjectMock private SubUnderTesting subUnderTest = new SubUnderTesting();
-	@InjectMock private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
+	@InjectMocks private SuperUnderTesting superUnderTest = new SuperUnderTesting();
+	@InjectMocks private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
+	@InjectMocks private SubUnderTesting subUnderTest = new SubUnderTesting();
+	@InjectMocks private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
 	@Mock private Map map;	
     @Mock private List list;
 	@Mock private Set histogram1;
@@ -66,7 +66,7 @@ public class MockInjectionTest extends TestBase {
     @Test(expected=MockitoException.class)
     public void shouldProvideDecentExceptionWhenInjectMockInstanceIsNull() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-           @InjectMock Object iAmNull = null; 
+           @InjectMocks Object iAmNull = null; 
         });
     }
 

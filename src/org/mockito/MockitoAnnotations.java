@@ -52,7 +52,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  *   }
  * </pre>
  * <p>
- * Read also about other annotations &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMock}
+ * Read also about other annotations &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks}
  * <p>
  * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated fields.
  * <p>
@@ -81,7 +81,7 @@ public class MockitoAnnotations {
     
     /**
      * Initializes objects annotated with Mockito annotations for given testClass:
-     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMock} 
+     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks} 
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */
