@@ -43,7 +43,7 @@ run('svn ps -R svn:mime-type text/css javadoc/stylesheet.css')
 run('svn ci -m "released javadoc, updated version"')
 
 import release_maven
-release_maven.go(branch_work_dir)
+release_maven.go('.')
 
 tag = 'https://mockito.googlecode.com/svn/tags/' + ver 
 run('svn copy -m "Tagged new release" ' + branch + ' ' + tag)
