@@ -21,7 +21,7 @@ public class ReturnsMocksTest extends TestBase {
     }
 
     @Test
-    // FIXME split into separate
+    //TODO split into separate
     public void shouldReturnMockValueForInterface() throws Exception {
         Object interfaceMock = values.returnValueFor(FooInterface.class);
         assertTrue(new MockUtil().isMock(interfaceMock));
