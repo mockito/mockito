@@ -16,7 +16,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 
-@SuppressWarnings({"deprecation", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class SpyAnnotationEngine implements AnnotationEngine {
 
     @Override
@@ -24,6 +24,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         return null;
     }
     
+    @SuppressWarnings("deprecation")
     @Override
     public void process(Class<?> context, Object testClass) {
         Field[] fields = context.getDeclaredFields();
