@@ -83,17 +83,6 @@ public class CaptorAnnotationTest extends TestBase {
         } catch (MockitoException e) {}
     }
 
-//TODO: do we need this? Asked the author of the patch if he doesn't come back we will delete it (17-02-2010)    
-//    public static class WrongWildcardGenerics {
-//        @Captor
-//        ArgumentCaptor<? extends List> wrongType;
-//    }
-//
-//    @Test
-//    public void shouldScreamWhenWildCardGenericsAreUsedWrong() {
-//        MockitoAnnotations.initMocks(new WrongWildcardGenerics());        
-//    }
-
     public static class ToManyAnnotations {
         @Captor
         @Mock
