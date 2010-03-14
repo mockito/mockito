@@ -185,6 +185,8 @@ public class Matchers {
     /**
      * any Object or null.
      * <p>
+     * Has aliases: {@link #any()} and {@link #any(Class clazz)}
+     * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
      * @return <code>null</code>.
