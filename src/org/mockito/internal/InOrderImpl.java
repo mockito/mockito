@@ -58,4 +58,9 @@ public class InOrderImpl implements InOrder, InOrderContext {
     public void markVerified(Invocation i) {        
         inOrderContext.markVerified(i);
     }
+
+    @Override
+    public void verifyNoMoreInteractions() {
+                
+    }
 }

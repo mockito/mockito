@@ -58,4 +58,29 @@ public interface InOrder {
      * @return mock object itself
      */
     <T> T verify(T mock, VerificationMode mode);
+
+    
+    /**
+     * Verifies that no more interactions happened <b>in order</b>. 
+     * Different from {@link Mockito#verifyNoMoreInteractions(Object...)} because the order of verification matters.
+     * <p>
+     * Example:
+     * <pre>
+     * mock.foo(); //1st
+     * mock.bar(); //2nd
+     * mock.baz(); //3rd
+     * 
+     * InOrder inOrder = inOrder(mock);
+     * 
+     * inOrder.verify(mock).bar(); //2n
+     * inOrder.verify(mock).baz(); //3rd (last method)
+     * 
+     * //passes because there are no more interactions after last method:
+     * inOrder.verifyNoMoreInteractions();
+     * 
+     * //however this fails because 1st method was not verified:
+     * Mockito.verifyNoMoreInteractions(mock);
+     * </pre>
+     */
+    void verifyNoMoreInteractions();
 }
