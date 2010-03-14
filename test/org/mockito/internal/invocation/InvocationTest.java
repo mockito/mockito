@@ -51,14 +51,10 @@ public class InvocationTest extends TestBase {
     }
     
     @Test
-    public void shouldNotBeACitizenOfHashes() {
+    public void shouldBeACitizenOfHashes() {
         Map map = new HashMap();
-        try {
-            map.put(invocation, "one");
-            fail();
-        } catch (RuntimeException e) {
-            assertEquals("hashCode() is not implemented", e.getMessage());
-        }
+        map.put(invocation, "one");
+        assertEquals("one", map.get(invocation));
     }
     
     @Test
@@ -109,17 +105,6 @@ public class InvocationTest extends TestBase {
                 "    1" +
                 "\n" +
                 ");"));
-    }
-    
-    @Test
-    public void shouldMarkVerifiedWhenMarkingVerifiedInOrder() throws Exception {
-        assertFalse(invocation.isVerified());
-        assertFalse(invocation.isVerifiedInOrder());
-        
-        invocation.markVerifiedInOrder();
-        
-        assertTrue(invocation.isVerified());
-        assertTrue(invocation.isVerifiedInOrder());
     }
     
     @Test

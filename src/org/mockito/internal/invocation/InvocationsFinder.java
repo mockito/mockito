@@ -10,6 +10,7 @@ import java.util.List;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.verification.api.InOrderContext;
 
 public class InvocationsFinder {
 
@@ -17,8 +18,8 @@ public class InvocationsFinder {
         return ListUtil.filter(invocations, new RemoveNotMatching(wanted));
     }
 
-    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> unverified = removeVerifiedInOrder(invocations);
+    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted, InOrderContext orderingContext) {
+        List<Invocation> unverified = removeVerifiedInOrder(invocations, orderingContext);
         return ListUtil.filter(unverified, new RemoveNotMatching(wanted));
     }
 
@@ -36,13 +37,14 @@ public class InvocationsFinder {
      * 
      * if wanted is 1 and mode is times(x), where x != 2 then returns
      * 1,1,1
+     * @param data 
      */
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> unverified = removeVerifiedInOrder(invocations);
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+        List<Invocation> unverified = removeVerifiedInOrder(invocations, context);
         List<Invocation> firstChunk = getFirstMatchingChunk(wanted, unverified);
         
         if (wantedCount != firstChunk.size()) {
-            return this.findAllMatchingUnverifiedChunks(invocations, wanted);
+            return this.findAllMatchingUnverifiedChunks(invocations, wanted, context);
         } else {
             return firstChunk;
         }
@@ -100,8 +102,8 @@ public class InvocationsFinder {
         }
     }
     
-    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
-        LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder());
+    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
+        LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder(context));
         
         if (verifiedOnly.isEmpty()) {
             return null;
@@ -110,10 +112,10 @@ public class InvocationsFinder {
         }
     }
     
-    private List<Invocation> removeVerifiedInOrder(List<Invocation> invocations) {
+    private List<Invocation> removeVerifiedInOrder(List<Invocation> invocations, InOrderContext orderingContext) {
         List<Invocation> unverified = new LinkedList<Invocation>();
         for (Invocation i : invocations) {
-            if (i.isVerifiedInOrder()) {
+            if (orderingContext.isVerified(i)) {
                 unverified.clear();
             } else {
                 unverified.add(i);
@@ -135,8 +137,14 @@ public class InvocationsFinder {
     }
 
     private class RemoveUnverifiedInOrder implements Filter<Invocation> {
+        private final InOrderContext orderingContext;
+
+        public RemoveUnverifiedInOrder(InOrderContext orderingContext) {
+            this.orderingContext = orderingContext;
+        }
+
         public boolean isOut(Invocation invocation) {
-            return !invocation.isVerifiedInOrder();
+            return !orderingContext.isVerified(invocation);
         }
     }
 }

@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.verification.InOrderContextImpl;
+import org.mockito.internal.verification.api.InOrderContext;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -26,6 +28,7 @@ public class InvocationsFinderTest extends TestBase {
     private Invocation simpleMethodInvocationTwo;
     private Invocation differentMethodInvocation;
     private InvocationsFinder finder;
+    InOrderContext context = new InOrderContextImpl();
     
     @Mock private IMethods mock;
 
@@ -94,21 +97,21 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldFindAllMatchingUnverifiedChunks() throws Exception {
-        List<Invocation> allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation));
+        List<Invocation> allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
         assertThat(allMatching, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
         
-        simpleMethodInvocation.markVerifiedInOrder();
-        allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation));
+        context.markVerified(simpleMethodInvocation);
+        allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
         assertThat(allMatching, hasExactlyInOrder(simpleMethodInvocationTwo));
         
-        simpleMethodInvocationTwo.markVerifiedInOrder();
-        allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation));
+        context.markVerified(simpleMethodInvocationTwo);
+        allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
         assertTrue(allMatching.isEmpty());
     }
     
     @Test
     public void shouldFindMatchingChunk() throws Exception {
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2);
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
     }
     
@@ -117,7 +120,7 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1);
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }
     
@@ -126,19 +129,19 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1);
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }
     
     @Test
     public void shouldFindPreviousInOrder() throws Exception {
-        Invocation previous = finder.findPreviousVerifiedInOrder(invocations);
+        Invocation previous = finder.findPreviousVerifiedInOrder(invocations, context);
         assertNull(previous);
         
-        simpleMethodInvocation.markVerifiedInOrder();
-        simpleMethodInvocationTwo.markVerifiedInOrder();
+        context.markVerified(simpleMethodInvocation);
+        context.markVerified(simpleMethodInvocationTwo);
         
-        previous = finder.findPreviousVerifiedInOrder(invocations);
+        previous = finder.findPreviousVerifiedInOrder(invocations, context);
         assertSame(simpleMethodInvocationTwo, previous);
     }
 }

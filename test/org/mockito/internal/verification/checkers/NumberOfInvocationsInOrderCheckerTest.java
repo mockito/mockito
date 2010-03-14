@@ -15,6 +15,8 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.verification.InOrderContextImpl;
+import org.mockito.internal.verification.api.InOrderContext;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
@@ -24,6 +26,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
     private InvocationsFinderStub finderStub;
+    private InOrderContext context = new InOrderContextImpl();
     
     @Before
     public void setup() {
@@ -36,16 +39,16 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     }
     
     @Test
-    public void shouldPassIfWantedIsZeroAndMatchingChunkIsEmpty() throws Exception {
+    public void shouldPassIfWantedIsZeroAndMatchingChunkIsEmpty() throws Exception {        
         assertTrue(finderStub.validMatchingChunkToReturn.isEmpty());
-        checker.check(invocations, wanted, 0);
+        checker.check(invocations, wanted, 0, context);
     }
     
     @Test
     public void shouldPassIfChunkMatches() throws Exception {
         finderStub.validMatchingChunkToReturn.add(wanted.getInvocation());
         
-        checker.check(invocations, wanted, 1);
+        checker.check(invocations, wanted, 1, context);
     }
     
     @Test
@@ -55,7 +58,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            checker.check(invocations, wanted, 4);
+            checker.check(invocations, wanted, 4, context);
             fail();
         } catch (VerificationInOrderFailure e) {
             assertContains("Wanted 4 times", e.getMessage());
@@ -70,7 +73,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
-            checker.check(invocations, wanted, 1);
+            checker.check(invocations, wanted, 1, context);
             fail();
         } catch (VerificationInOrderFailure e) {
             assertContains("Wanted 1 time", e.getMessage());
@@ -81,11 +84,11 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     @Test
     public void shouldMarkAsVerifiedInOrder() throws Exception {
         Invocation invocation = new InvocationBuilder().toInvocation();
-        assertFalse(invocation.isVerifiedInOrder());
+        assertFalse(context.isVerified(invocation));
         finderStub.validMatchingChunkToReturn.addAll(asList(invocation)); 
         
-        checker.check(invocations, wanted, 1);
+        checker.check(invocations, wanted, 1, context);
         
-        assertTrue(invocation.isVerifiedInOrder());
+        assertTrue(context.isVerified(invocation));
     }
 }

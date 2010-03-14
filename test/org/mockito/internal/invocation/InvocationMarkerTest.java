@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.internal.util.ObjectBox;
+import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockitoutil.TestBase;
 
 public class InvocationMarkerTest extends TestBase {
@@ -44,21 +45,22 @@ public class InvocationMarkerTest extends TestBase {
         //then
         assertEquals(i, box.getObject());
     }
-
+    
     @Test
     public void shouldMarkInvocationsAsVerifiedInOrder() {
         //given
+        InOrderContextImpl context = new InOrderContextImpl();
         InvocationMarker marker = new InvocationMarker();
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
-        assertFalse(i.isVerifiedInOrder());
+        assertFalse(context.isVerified(i));
         assertFalse(i.isVerified());
         
         //when
-        marker.markVerifiedInOrder(Arrays.asList(i), im);
+        marker.markVerifiedInOrder(Arrays.asList(i), im, context);
         
         //then
-        assertTrue(i.isVerifiedInOrder());
+        assertTrue(context.isVerified(i));
         assertTrue(i.isVerified());
     }
 }

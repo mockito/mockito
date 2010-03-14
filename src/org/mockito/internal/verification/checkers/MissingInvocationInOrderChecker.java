@@ -11,6 +11,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
+import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
 import org.mockito.verification.VerificationMode;
 
@@ -28,17 +29,17 @@ public class MissingInvocationInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode) {
-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted);
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
+        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
         
         if (!chunk.isEmpty()) {
             return;
         }
         
-        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations);
+        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations, context);
         if (previousInOrder == null) {
             /**
-             * It is ofcourse possible to have an issue where the arguments are different
+             * It is of course possible to have an issue where the arguments are different
              * rather that not invoked in order. Issue related to
              * http://code.google.com/p/mockito/issues/detail?id=27. If the previous order
              * is missing, then this method checks if the arguments are different or if the order

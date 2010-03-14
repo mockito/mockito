@@ -10,6 +10,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.checkers.MissingInvocationChecker;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker;
@@ -37,17 +38,17 @@ public class Times implements VerificationInOrderMode, VerificationMode {
         numberOfInvocations.check(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
-    public void verifyInOrder(VerificationData data) {
+    public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
         if (wantedCount > 0) {
             MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
-            missingInvocation.check(allInvocations, wanted, this);
+            missingInvocation.check(allInvocations, wanted, this, data.getOrderingContext());
         }
         NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
-        numberOfCalls.check(allInvocations, wanted, wantedCount);
-    }
+        numberOfCalls.check(allInvocations, wanted, wantedCount, data.getOrderingContext());
+    }    
     
     @Override
     public String toString() {

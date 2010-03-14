@@ -6,6 +6,8 @@ package org.mockito.internal.invocation;
 
 import java.util.List;
 
+import org.mockito.internal.verification.api.InOrderContext;
+
 public class InvocationMarker {
 
     public void markVerified(List<Invocation> invocations, CapturesArgumensFromInvocation wanted) {
@@ -19,11 +21,11 @@ public class InvocationMarker {
 		wanted.captureArgumentsFrom(invocation);
 	}
 
-    public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted) {
+    public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);
         
         for (Invocation i : chunk) {
-            i.markVerifiedInOrder();
+            context.markVerified(i);
         }
     }
 }

@@ -18,6 +18,8 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.reporting.SmartPrinter;
+import org.mockito.internal.verification.InOrderContextImpl;
+import org.mockito.internal.verification.api.InOrderContext;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationInOrderCheckerTest extends TestBase {
@@ -27,6 +29,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
     private InvocationsFinderStub finderStub;
+    private InOrderContext context = new InOrderContextImpl();
     
     @Before
     public void setup() {
@@ -43,13 +46,13 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
     }
     
     @Test
     public void shouldReportWantedButNotInvoked() throws Exception {
         assertTrue(finderStub.allMatchingUnverifiedChunksToReturn.isEmpty());
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
         
         assertEquals(wanted, reporterStub.wanted);
     }
@@ -58,7 +61,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     public void shouldReportArgumentsAreDifferent() throws Exception {
         assertTrue(finderStub.findInvocations(invocations, wanted).isEmpty());
         finderStub.similarToReturn = new InvocationBuilder().toInvocation();
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
         SmartPrinter printer = new SmartPrinter(wanted, finderStub.similarToReturn, 0);
         assertEquals(printer.getWanted(), reporterStub.wantedString);
         assertEquals(printer.getActual(), reporterStub.actual);
@@ -70,7 +73,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         Invocation previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder());
+        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
         
         assertEquals(wanted, reporterStub.wanted);
         assertEquals(previous, reporterStub.previous);

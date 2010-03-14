@@ -10,6 +10,7 @@ import java.util.List;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.verification.api.InOrderContext;
 
 class InvocationsFinderStub extends InvocationsFinder {
     
@@ -24,12 +25,12 @@ class InvocationsFinderStub extends InvocationsFinder {
     List<Invocation> invocations;
     
     @Override
-    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted) {
+    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted, InOrderContext context) {
         return allMatchingUnverifiedChunksToReturn;
     }
     
     @Override
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
         return validMatchingChunkToReturn;
     }
 
@@ -49,7 +50,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations) {
+    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
         return previousInOrderToReturn;
     }
 }

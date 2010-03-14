@@ -10,9 +10,10 @@ import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.internal.verification.api.InOrderContext;
 
 public class NumberOfInvocationsInOrderChecker {
     
@@ -29,8 +30,8 @@ public class NumberOfInvocationsInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount);
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount, context);
         
         int actualCount = chunk.size();
         
@@ -42,6 +43,6 @@ public class NumberOfInvocationsInOrderChecker {
             reporter.tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
         
-        invocationMarker.markVerifiedInOrder(chunk, wanted);
+        invocationMarker.markVerifiedInOrder(chunk, wanted, context);
     }
 }

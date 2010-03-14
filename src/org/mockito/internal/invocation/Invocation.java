@@ -45,7 +45,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
 
     private final Location location;
     private boolean verified;
-    private boolean verifiedInOrder;
 
     final RealMethod realMethod;
     private StubInfo stubInfo;
@@ -102,10 +101,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return sequenceNumber;
     }
 
-    public boolean isVerifiedInOrder() {
-        return verifiedInOrder;
-    }
-
     public boolean equals(Object o) {
         if (o == null || !o.getClass().equals(this.getClass())) {
             return false;
@@ -120,8 +115,9 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return Arrays.equals(arguments, this.arguments);
     }
 
+    @Override
     public int hashCode() {
-        throw new RuntimeException("hashCode() is not implemented");
+        return 1;
     }
 
     public String toString() {
@@ -224,11 +220,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
 
     void markVerified() {
         this.verified = true;
-    }
-
-    void markVerifiedInOrder() {
-        markVerified();
-        this.verifiedInOrder = true;
     }
 
     public StubInfo stubInfo() {

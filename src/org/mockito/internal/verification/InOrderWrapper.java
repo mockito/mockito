@@ -6,24 +6,27 @@ package org.mockito.internal.verification;
 
 import java.util.List;
 
+import org.mockito.internal.InOrderImpl;
 import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;
 
 public class InOrderWrapper implements VerificationMode {
 
     private final VerificationInOrderMode mode;
-    private final List<Object> mocksToBeVerifiedInOrder;
+    private final InOrderImpl inOrder;
 
-    public InOrderWrapper(VerificationInOrderMode mode, List<Object> mocksToBeVerifiedInOrder) {
+    public InOrderWrapper(VerificationInOrderMode mode, InOrderImpl inOrder) {
         this.mode = mode;
-        this.mocksToBeVerifiedInOrder = mocksToBeVerifiedInOrder;
+        this.inOrder = inOrder;        
     }
 
     public void verify(VerificationData data) {
-        List<Invocation> allInvocations = new AllInvocationsFinder().find(mocksToBeVerifiedInOrder);
-        mode.verifyInOrder(new VerificationDataImpl(allInvocations, data.getWanted()));
+        List<Invocation> allInvocations = new AllInvocationsFinder().find(inOrder.getMocksToBeVerifiedInOrder());
+        VerificationDataInOrderImpl dataInOrder = new VerificationDataInOrderImpl(inOrder, allInvocations, data.getWanted());
+        mode.verifyInOrder(dataInOrder);
     }
 }
