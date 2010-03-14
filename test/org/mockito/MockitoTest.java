@@ -21,7 +21,7 @@ public class MockitoTest extends TestBase {
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
         Mockito.when(mock.add("test")).thenReturn(true);
-        //FIXME Consider to move to separate test
+        //TODO Consider to move to separate test
         assertNull(new ThreadSafeMockingProgress().pullOngoingStubbing());
     }
     
