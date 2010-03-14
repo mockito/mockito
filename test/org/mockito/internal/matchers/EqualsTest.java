@@ -16,11 +16,7 @@ public class EqualsTest extends TestBase {
         assertEquals(new Equals(new Integer(2)), new Equals(new Integer(2)));
         assertFalse(new Equals(null).equals(null));
         assertFalse(new Equals(null).equals("Test"));
-        try {
-            new Equals(null).hashCode();
-            fail();
-        } catch (UnsupportedOperationException expected) {
-        }
+        assertEquals(1, new Equals(null).hashCode());
     }
 
     @Test
