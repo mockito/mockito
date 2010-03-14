@@ -1436,7 +1436,11 @@ public class Mockito extends Matchers {
      * Verification in order is flexible - <b>you don't have to verify all interactions</b> one-by-one
      * but only those that you are interested in testing in order.
      * <p>
-     * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.  
+     * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.
+     * <p>
+     * InOrder verification is 'greedy'. You will hardly every notice it but 
+     * if you want to find out more search for 'greedy' on the Mockito 
+     * <a href="http://code.google.com/p/mockito/w/list">wiki pages</a>.  
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -1491,7 +1495,7 @@ public class Mockito extends Matchers {
      *   verify(mock, atLeastOnce()).someMethod("some arg");
      * </pre>
      * Alias to atLeast(1)
-     * 
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
      * @return verification mode
