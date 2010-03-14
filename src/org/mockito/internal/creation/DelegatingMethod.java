@@ -43,7 +43,7 @@ public class DelegatingMethod implements MockitoMethod {
     
     @Override
     public int hashCode() {
-        throw new RuntimeException("hashCode() not implemented");
+        return 1;
     }
     
     @Override
