@@ -63,7 +63,7 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("hashCode() is not supported");
+        return 1;
     }
 
     public SelfDescribing withExtraTypeInfo() {
