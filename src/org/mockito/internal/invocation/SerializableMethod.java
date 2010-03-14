@@ -68,7 +68,7 @@ public class SerializableMethod implements Serializable, MockitoMethod {
 
     @Override
     public int hashCode() {
-        throw new RuntimeException("hashCode() not implemented");
+        return 1;
     }
 
     @Override
