@@ -20,6 +20,7 @@ import org.mockito.stubbing.Answer;
  * <pre>
  *   &#064;Mock(answer = RETURNS_DEEP_STUBS) UserProvider userProvider;
  * </pre>
+ * <b>This is not the full list</b> of Answers available in Mockito. Some interesting answers can be found in org.mockito.stubbing.answers package.
  */
 public enum Answers {
 
