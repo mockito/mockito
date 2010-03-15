@@ -5,14 +5,12 @@
 package org.mockito;
 
 import static java.lang.annotation.ElementType.*;
-import static org.mockito.internal.stubbing.defaultanswers.Answers.*;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.mockito.internal.stubbing.defaultanswers.Answers;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -56,7 +54,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @Documented
 public @interface Mock {
 
-    Answers answer() default RETURNS_DEFAULTS;
+    Answers answer() default Answers.RETURNS_DEFAULTS;
 
     String name() default "";
 

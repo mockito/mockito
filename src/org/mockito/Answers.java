@@ -2,21 +2,25 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.stubbing.defaultanswers;
+package org.mockito;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
 import org.mockito.stubbing.Answer;
 
 /**
  * Enumeration of pre-configured mock answers
  * <p>
- * @deprecated - please use Answers from top Mockito package: {@link org.mockito.Answers}
+ * You can use it to pass extra parameters to &#064;Mock annotation, see more info here: {@link Mock}
  * <p>
- * <b>WARNING</b> Those answers no longer are used by the framework!!! Please use {@link org.mockito.Answers}
- * <p>
- * See {@link Mock} for more information.
+ * Example:
+ * <pre>
+ *   &#064;Mock(answer = RETURNS_DEEP_STUBS) UserProvider userProvider;
+ * </pre>
  */
-@Deprecated
 public enum Answers {
 
     RETURNS_DEFAULTS(new GloballyConfiguredAnswer()),
@@ -24,7 +28,7 @@ public enum Answers {
     RETURNS_MOCKS(new ReturnsMocks()),
     RETURNS_DEEP_STUBS(new ReturnsDeepStubs()),
     CALLS_REAL_METHODS(new CallsRealMethods())
-	;
+    ;
 
     private Answer<Object> implementation;
 

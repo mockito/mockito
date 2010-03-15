@@ -5,16 +5,19 @@
 package org.mockitousage.annotation;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.internal.stubbing.defaultanswers.Answers.RETURNS_MOCKS;
-import static org.mockito.internal.stubbing.defaultanswers.Answers.RETURNS_DEFAULTS;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.Answers;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -70,8 +73,8 @@ public class AnnotationsTest extends TestBase {
         assertNotNull(sub.getSuperBaseMock());
     }
     
-    @Mock(answer = RETURNS_MOCKS, name = "i have a name") IMethods namedAndReturningMocks;
-    @Mock(answer = RETURNS_DEFAULTS) IMethods returningDefaults;
+    @Mock(answer = Answers.RETURNS_MOCKS, name = "i have a name") IMethods namedAndReturningMocks;
+    @Mock(answer = Answers.RETURNS_DEFAULTS) IMethods returningDefaults;
     @Mock(extraInterfaces = {List.class}) IMethods hasExtraInterfaces;
     @Mock() IMethods noExtraConfig;
 
