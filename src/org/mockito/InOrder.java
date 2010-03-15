@@ -16,6 +16,9 @@ import org.mockito.verification.VerificationMode;
  * inOrder.verify(secondMock).add("was called second");
  * </pre>
  * 
+ * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
+ * <p>
+ * 
  * See examples in javadoc for {@link Mockito} class
  */
 public interface InOrder {

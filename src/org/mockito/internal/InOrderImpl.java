@@ -61,6 +61,6 @@ public class InOrderImpl implements InOrder, InOrderContext {
 
     @Override
     public void verifyNoMoreInteractions() {
-                
+        mockitoCore.verifyNoMoreInteractionsInOrder(mocksToBeVerifiedInOrder, this);
     }
 }

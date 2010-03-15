@@ -4,11 +4,15 @@
  */
 package org.mockito.internal;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.progress.IOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
@@ -16,11 +20,17 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.stubbing.*;
+import org.mockito.internal.verification.VerificationDataImpl;
+import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.internal.verification.api.VerificationDataInOrder;
+import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
-
-import java.util.Arrays;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
@@ -54,7 +64,6 @@ public class MockitoCore {
         return (OngoingStubbing) stub();
     }
     
-    
     public <T> T verify(T mock, VerificationMode mode) {
         if (mock == null) {
             reporter.nullPassedToVerify();
@@ -83,12 +92,21 @@ public class MockitoCore {
                 if (mock == null) {
                     reporter.nullPassedToVerifyNoMoreInteractions();
                 }
-                mockUtil.getMockHandler(mock).verifyNoMoreInteractions();
+                List<Invocation> invocations = mockUtil.getMockHandler(mock).getInvocationContainer().getInvocations();
+                VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+                VerificationModeFactory.noMoreInteractions().verify(data);
             } catch (NotAMockException e) {
                 reporter.notAMockPassedToVerifyNoMoreInteractions();
             }
         }
     }
+
+    public void verifyNoMoreInteractionsInOrder(List<Object> mocks, InOrderContext inOrderContext) {
+        mockingProgress.validateState();
+        AllInvocationsFinder finder = new AllInvocationsFinder();
+        VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, finder.find(mocks), null);
+        VerificationModeFactory.noMoreInteractions().verifyInOrder(data);
+    }    
     
     private void assertMocksNotEmpty(Object[] mocks) {
         if (mocks == null || mocks.length == 0) {

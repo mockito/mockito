@@ -64,6 +64,41 @@ public class InvocationsFinderTest extends TestBase {
     }
     
     @Test
+    public void shouldFindFirstUnverifiedInOrder() throws Exception {
+        //given
+        InOrderContextImpl context = new InOrderContextImpl();
+        assertSame(simpleMethodInvocation, finder.findFirstUnverifiedInOrder(context, invocations));        
+        
+        //when
+        context.markVerified(simpleMethodInvocationTwo);
+        context.markVerified(simpleMethodInvocation);
+        
+        //then
+        assertSame(differentMethodInvocation, finder.findFirstUnverifiedInOrder(context, invocations));
+        
+        //when
+        context.markVerified(differentMethodInvocation);
+        
+        //then
+        assertNull(finder.findFirstUnverifiedInOrder(context, invocations));
+    }
+    
+    @Test
+    public void shouldFindFirstUnverifiedInOrderAndRespectSequenceNumber() throws Exception {
+        //given
+        InOrderContextImpl context = new InOrderContextImpl();
+        assertSame(simpleMethodInvocation, finder.findFirstUnverifiedInOrder(context, invocations));        
+        
+        //when
+        //skipping verification of first invocation, then:
+        context.markVerified(simpleMethodInvocationTwo);
+        context.markVerified(differentMethodInvocation);
+        
+        //then
+        assertSame(null, finder.findFirstUnverifiedInOrder(context, invocations));        
+    }
+    
+    @Test
     public void shouldFindFirstUnverifiedInvocationOnMock() throws Exception {
         assertSame(simpleMethodInvocation, finder.findFirstUnverified(invocations, simpleMethodInvocation.getMock()));
         assertNull(finder.findFirstUnverified(invocations, "different mock"));

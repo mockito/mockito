@@ -28,6 +28,7 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.invocation.Invocation;
 
 /**
  * Reports verification and misusing errors.
@@ -344,6 +345,16 @@ public class Reporter {
     
     public void noMoreInteractionsWanted(PrintableInvocation undesired) {
         throw new NoInteractionsWanted(join(
+                "No interactions wanted here:",
+                new Location(),
+                "But found this interaction:",
+                undesired.getLocation(),
+                ""
+                ));
+    }
+    
+    public void noMoreInteractionsWantedInOrder(Invocation undesired) {
+        throw new VerificationInOrderFailure(join(
                 "No interactions wanted here:",
                 new Location(),
                 "But found this interaction:",

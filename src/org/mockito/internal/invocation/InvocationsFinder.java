@@ -147,4 +147,31 @@ public class InvocationsFinder {
             return !orderingContext.isVerified(invocation);
         }
     }
+
+    /**
+     * i3 is unverified here:
+     * 
+     * i1, i2, i3
+     *     v
+     *     
+     * all good here:
+     * 
+     * i1, i2, i3
+     *     v   v
+     * 
+     * @param context
+     * @param orderedInvocations
+     * @return
+     */
+    public Invocation findFirstUnverifiedInOrder(InOrderContext context, List<Invocation> orderedInvocations) {        
+        Invocation candidate = null;
+        for(Invocation i : orderedInvocations) {
+            if (!context.isVerified(i)) {
+                candidate = candidate != null ? candidate : i;
+            } else {
+                candidate = null;
+            }
+        }
+        return candidate;
+    }
 }

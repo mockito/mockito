@@ -16,8 +16,6 @@ public interface MockHandlerInterface<T> {
 
     MockSettingsImpl getMockSettings();
 
-    void verifyNoMoreInteractions();
-
     VoidMethodStubbable<T> voidMethodStubbable(T mock);
     
     void setAnswersForStubbing(List<Answer> answers);

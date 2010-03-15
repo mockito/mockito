@@ -4,20 +4,23 @@
  */
 package org.mockito.internal;
 
+import java.util.List;
+
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.*;
+import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
 import org.mockito.internal.verification.VerificationDataImpl;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
-
-import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
@@ -92,11 +95,6 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
-    }
-
-    public void verifyNoMoreInteractions() {
-        VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl.getInvocations(), null);
-        VerificationModeFactory.noMoreInteractions().verify(data);
     }
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
