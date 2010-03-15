@@ -58,7 +58,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         mockSettings.defaultAnswer(annotation.answer().get());
         return Mockito.mock(field.getType(), mockSettings);
     }
-    
+
     @SuppressWarnings("deprecation")
     private Object processAnnotationOn(org.mockito.MockitoAnnotations.Mock annotation, Field field) {
         return Mockito.mock(field.getType(), field.getName());
