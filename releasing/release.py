@@ -45,8 +45,14 @@ run('svn ci -m "released javadoc, updated version"')
 import release_maven
 release_maven.go('.')
 
-tag = 'https://mockito.googlecode.com/svn/tags/' + ver 
+print("Tagging...")
+tag = 'https://mockito.googlecode.com/svn/tags/' + ver
 run('svn copy -m "Tagged new release" ' + branch + ' ' + tag)
+print("Removing 'latest' tag...")
+latest_tag = 'https://mockito.googlecode.com/svn/tags/' + latest_tag
+run('svn delete -m "Removed previous latest tag" ' + latest_tag)
+print("Creating new 'latest' tag...")
+run('svn copy -m "Tagged latest release" ' + branch + ' ' + latest_tag)
 
 print("Uploading binaries to the googlecode")
 
@@ -71,7 +77,7 @@ sys.argv.append('../target/mockito-all-' + ver + '.jar')
 google_upload.main()
 
 print("")
-print("Last step! Please perform rsync command from folder '" + work_dir + "'. This is how you do it:")
+print("Last step! Please perform rsync command from folder '" + branch_work_dir + "'. This is how you do it:")
 print("Dry run:")
 print("rsync -rvn -e \"ssh -i ../rsync.mockito.key\" maven/repository/ mockito@wamblee.org:/")
 print("Run:")
