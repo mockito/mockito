@@ -20,6 +20,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.InOrderContext;
@@ -70,7 +71,7 @@ public class MockitoCore {
         } else if (!mockUtil.isMock(mock)) {
             reporter.notAMockPassedToVerify();
         }
-        mockingProgress.verificationStarted(mode);
+        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, mode));
         return mock;
     }
     
