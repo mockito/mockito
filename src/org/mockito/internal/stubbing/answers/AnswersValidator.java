@@ -44,7 +44,7 @@ public class AnswersValidator {
 
     private void validateReturnValue(Returns answer, Invocation invocation) {
         if (invocation.isVoid()) {
-            reporter.cannotStubVoidMethodWithAReturnValue();
+            reporter.cannotStubVoidMethodWithAReturnValue(invocation.getMethod().getName());
         }
         
         if (answer.returnsNull() && invocation.returnsPrimitive()) {
