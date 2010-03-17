@@ -49,7 +49,7 @@ print("Tagging...")
 tag = 'https://mockito.googlecode.com/svn/tags/' + ver
 run('svn copy -m "Tagged new release" ' + branch + ' ' + tag)
 print("Removing 'latest' tag...")
-latest_tag = 'https://mockito.googlecode.com/svn/tags/' + latest_tag
+latest_tag = 'https://mockito.googlecode.com/svn/tags/latest'
 run('svn delete -m "Removed previous latest tag" ' + latest_tag)
 print("Creating new 'latest' tag...")
 run('svn copy -m "Tagged latest release" ' + branch + ' ' + latest_tag)
