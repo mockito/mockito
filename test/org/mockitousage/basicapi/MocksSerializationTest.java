@@ -30,6 +30,17 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         // when-serialize then-deserialize
         serializeAndBack(mock);
     }
+
+    @Test
+    public void shouldAllowMethodDelegation() throws Exception {
+        // given
+        Bar barMock = mock(Bar.class, withSettings().serializable());
+        Foo fooMock = mock(Foo.class);
+        when(barMock.doSomething()).thenAnswer(new ThrowsException(new RuntimeException()));
+
+        //when-serialize then-deserialize
+        serializeAndBack(barMock);
+    }
     
     @Test
     public void shouldAllowMockToBeSerializable() throws Exception {
@@ -147,6 +158,10 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     class Bar implements Serializable {
         Foo foo;
+
+        public Foo doSomething() {
+            return foo;
+        }
     }
 
     class Foo implements Serializable {
