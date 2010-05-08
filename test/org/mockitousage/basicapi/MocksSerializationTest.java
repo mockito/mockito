@@ -12,6 +12,7 @@ import java.util.*;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.internal.matchers.Any;
+import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
@@ -22,6 +23,14 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     private static final long serialVersionUID = 6160482220413048624L;
 
+    @Test
+    public void shouldAllowThrowsExceptionToBeSerializable() throws Exception {
+        // given
+        Bar mock = mock(Bar.class, new ThrowsException(new RuntimeException()));
+        // when-serialize then-deserialize
+        serializeAndBack(mock);
+    }
+    
     @Test
     public void shouldAllowMockToBeSerializable() throws Exception {
         // given

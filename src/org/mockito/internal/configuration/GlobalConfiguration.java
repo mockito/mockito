@@ -10,12 +10,15 @@ import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.stubbing.Answer;
 
+import java.io.Serializable;
+
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
 @SuppressWarnings("deprecation")//supressed until ReturnValues are removed
-public class GlobalConfiguration implements IMockitoConfiguration {
-
+public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
+    static final long serialVersionUID = -2860353062105505938L;
+    
     private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing

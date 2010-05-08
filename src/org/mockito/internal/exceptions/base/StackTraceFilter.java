@@ -4,12 +4,14 @@
  */
 package org.mockito.internal.exceptions.base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StackTraceFilter {
+public class StackTraceFilter implements Serializable {
+    static final long serialVersionUID = -5499819791513105700L;
     
     public boolean isBad(StackTraceElement e) {
         boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
