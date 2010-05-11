@@ -16,7 +16,7 @@ import java.lang.annotation.*;
  *
  *    &#64;Before
  *    public void init(){
- *       MockitoAnnotations.init(this);
+ *       MockitoAnnotations.initMocks(this);
  *    }
  *
  *    &#64;Test public void shouldDoSomethingUseful() {

@@ -17,7 +17,7 @@ import java.lang.annotation.*;
  *    &#64;Spy Foo spyOnFoo = new Foo();
  *    &#64;Before
  *    public void init(){
- *       MockitoAnnotations.init(this);
+ *       MockitoAnnotations.initMocks(this);
  *    }
  *    ...
  * }
@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * Foo spyOnFoo = Mockito.spy(new Foo());
  * </pre>
  * 
- * <b>Warning</b> if you call <code>MockitoAnnotations.init(this)</code> in a
+ * <b>Warning</b> if you call <code>MockitoAnnotations.initMocks(this)</code> in a
  * super class <b>constructor</b> then this will not work. It is because fields
  * in subclass are only instantiated after super class constructor has returned.
  * It's better to use &#64;Before.
