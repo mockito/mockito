@@ -21,8 +21,8 @@ import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.VoidMethodStubbable;
-import org.mockito.verification.FluentVerificationMode;
 import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationWithTimeout;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -1482,23 +1482,6 @@ public class Mockito extends Matchers {
     }
     
     /**
-     * Allows verifying with timeout. May be useful for testing concurrency.
-     * <pre>
-     *   //passes when someMethod() is called within given time span 
-     *   verify(mock, timeout(100)).someMethod();
-     * </pre>
-     * 
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param millis - time span in millis
-     * 
-     * @return verification mode
-     */
-    public static FluentVerificationMode timeout(int millis) {
-        return new Timeout(millis, VerificationModeFactory.atLeastOnce());
-    }    
-    
-    /**
      * Alias to times(0), see {@link Mockito#times(int)}
      * <p>
      * Verifies that interaction did not happen. E.g:
@@ -1582,9 +1565,28 @@ public class Mockito extends Matchers {
      * 
      * @return verification mode
      */
+    //TODO make exception message nicer
     public static VerificationMode only() {
     	return VerificationModeFactory.only();
-    }
+    }    
+    
+    /**
+     * Allows verifying with timeout. May be useful for testing concurrency.
+     * <pre>
+     *   //passes when someMethod() is called within given time span 
+     *   verify(mock, timeout(100)).someMethod();
+     *   //TODO decide what is the default for timeout() - atLeastOnce() or times(1)
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param millis - time span in millis
+     * 
+     * @return verification mode
+     */
+    public static Timeout timeout(int millis) {
+        return new VerificationWithTimeout(millis, VerificationModeFactory.atLeastOnce());
+    }       
     
     /**
      * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>

@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -40,7 +42,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         
         //then
         verify(mock, never()).clear();
-        verify(mock, timeout(40)).clear();
+        verify(mock, timeout(40).atLeast(1)).clear();
     }
 
     @Test
@@ -54,26 +56,74 @@ public class VerificationWithTimeoutTest extends TestBase {
         //then
         verify(mock, never()).clear();
         try {
-            verify(mock, timeout(20)).clear();
+            verify(mock, timeout(20).atLeastOnce()).clear();
             fail();
         } catch (MockitoAssertionError e) {}
     }
     
-//    @Test
-//    public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
-//        //given
-//        Thread t = waitAndExerciseMock(40);
-//        
-//        //when
-//        t.start();
-//        
-//        //then
-//        verify(mock, never()).clear();
-//        try {
-//            verify(mock, timeout(20)).clear();
-//            fail();
-//        } catch (MockitoAssertionError e) {}
-//    }
+    @Test
+    public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
+        //given
+        Thread t1 = waitAndExerciseMock(20);
+        Thread t2 = waitAndExerciseMock(20);
+        
+        //when
+        t1.start();
+        t2.start();
+        
+        //then
+        verify(mock, timeout(1).never()).clear();
+        verify(mock, timeout(100).times(2)).clear();
+        verifyNoMoreInteractions(mock);
+    }
+    
+    @Test
+    public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
+        //given
+        Thread t1 = waitAndExerciseMock(20);
+        Thread t2 = waitAndExerciseMock(20);
+        
+        //when
+        t1.start();
+        t2.start();
+        
+        //then
+        verify(mock, timeout(1).never()).clear();
+        try {
+            verify(mock, timeout(100).times(3)).clear();
+            fail();
+        } catch (TooLittleActualInvocations e) {}
+    }
+    
+    @Test
+    public void shouldAllowMixingOnlyWithTimeout() throws Exception {
+        //given
+        Thread t1 = waitAndExerciseMock(20);
+        
+        //when
+        t1.start();
+        
+        //then
+        verify(mock, never()).clear();
+        verify(mock, timeout(40).only()).clear();
+    }
+    
+    @Test
+    public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
+        //given
+        Thread t1 = waitAndExerciseMock(20);        
+        
+        //when
+        t1.start();
+        mock.add("foo");
+        
+        //then
+        verify(mock, never()).clear();
+        try {
+            verify(mock, timeout(40).only()).clear();
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
 
     private Thread waitAndExerciseMock(final int sleep) {
         Thread t = new Thread() { 
