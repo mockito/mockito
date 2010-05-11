@@ -6,12 +6,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.VerificationDataImpl;
-import org.mockito.internal.verification.concurrent.ConcurrentVerifier;
 import org.mockitoutil.TestBase;
 
 public class TimeoutTest extends TestBase {
     
-    @Mock ConcurrentVerifier verifier;
     @Mock VerificationMode mode;
     @Mock VerificationDataImpl data;
     MockitoAssertionError error = new MockitoAssertionError(""); 
