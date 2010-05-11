@@ -39,8 +39,7 @@ public class VerificationWithTimeoutImpl {
         try {
             Thread.sleep(sleep);
         } catch (InterruptedException ie) {
-            // TODO
-            throw new MockitoException("TODO");
+            // oups. not much luck.
         }
     }
     
