@@ -73,11 +73,15 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         //if verificationMode is not null then someone is doing verify()        
         if (verificationMode != null) {
             //We need to check if verification was started on the correct mock 
-            // - see VerifyingWithAnExtraCallToADifferentMockTest
-            if (verificationMode instanceof MockAwareVerificationMode && ((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
+            // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
+            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {                
                 VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);            
                 verificationMode.verify(data);
                 return null;
+            } else {
+                // this means there is an invocation on a different mock. Re-adding verification mode 
+                // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
+                mockingProgress.verificationStarted(verificationMode);
             }
         }
         
@@ -97,7 +101,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             // mocks / spies.
             // Without it, the real method inside 'when' might have delegated
             // to other self method and overwrite the intended stubbed method
-            // with a different one.
+            // with a different one. The reset is required to avoid runtime exception that validates return type with stubbed method signature.
             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
