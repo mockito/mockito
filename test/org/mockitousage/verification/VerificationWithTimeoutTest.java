@@ -11,7 +11,9 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
@@ -41,8 +43,14 @@ public class VerificationWithTimeoutTest extends TestBase {
         t.start();
         
         //then
-        verify(mock, never()).clear();
-        verify(mock, timeout(40).atLeast(1)).clear();
+        verify(mock, timeout(100)).clear();
+        
+        verify(mock, timeout(100).atLeastOnce()).clear();
+        verify(mock, timeout(100).times(1)).clear();
+        
+        
+        verify(mock).clear();
+        verify(mock, times(1)).clear();
     }
 
     @Test

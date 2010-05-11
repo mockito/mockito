@@ -21,8 +21,8 @@ import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.VoidMethodStubbable;
-import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -56,7 +56,8 @@ import org.mockito.verification.VerificationMode;
  *      <a href="#18">18. Troubleshooting & validating framework usage (Since 1.8.0) </a><br/>
  *      <a href="#19">19. Aliases for behavior driven development (Since 1.8.0) </a><br/>
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
- *      <a href="#21">21. (**New**) New annotations: &#064;Captor, &#064;Spy, &#064;InjectMocks (Since 1.8.3) </a><br/>
+ *      <a href="#21">21. New annotations: &#064;Captor, &#064;Spy, &#064;InjectMocks (Since 1.8.3) </a><br/>
+ *      <a href="#22">22. (**New**) Verification with timeout (Since 1.8.5) </a><br/>
  * </b>
  * 
  * <p>
@@ -638,7 +639,32 @@ import org.mockito.verification.VerificationMode;
  * <li>&#064;{@link InjectMocks} - injects mocks into tested object automatically.
  * </ul>
  * <p>
- * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}  
+ * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}
+ * <p>
+ * <h3 id="22">22. (**New**) Verification with timeout (Since 1.8.5)  </h3>
+ * <p>
+ * Allows verifying with timeout. May be useful for testing in concurrent conditions.
+ * <p>
+ * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system.
+ * <p>
+ * Examples:
+ * <p>
+ * <pre>
+ *   //passes when someMethod() is called within given time span 
+ *   verify(mock, timeout(100)).someMethod();
+ *   //above is an alias to:
+ *   verify(mock, timeout(100).times(1)).someMethod();
+ *   
+ *   //passes when someMethod() is called *exactly* 2 times within given time span
+ *   verify(mock, timeout(100).times(2)).someMethod();
+ *
+ *   //passes when someMethod() is called *at lest* 2 times within given time span
+ *   verify(mock, timeout(100).atLeast(2)).someMethod();
+ *   
+ *   //verifies someMethod() within given time span using given verification mode
+ *   //useful only if you have your own custom verification modes.
+ *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
+ * </pre>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -1571,11 +1597,14 @@ public class Mockito extends Matchers {
     }    
     
     /**
-     * Allows verifying with timeout. May be useful for testing concurrency.
+     * Allows verifying with timeout. May be useful for testing in concurrent conditions.
+     * <p>
+     * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
      * <pre>
      *   //passes when someMethod() is called within given time span 
      *   verify(mock, timeout(100)).someMethod();
-     *   //TODO decide what is the default for timeout() - atLeastOnce() or times(1)
+     *   //above is an alias to:
+     *   verify(mock, timeout(100).times(1)).someMethod();
      *   
      *   //passes when someMethod() is called *exactly* 2 times within given time span
      *   verify(mock, timeout(100).times(2)).someMethod();
@@ -1583,7 +1612,7 @@ public class Mockito extends Matchers {
      *   //passes when someMethod() is called *at lest* 2 times within given time span
      *   verify(mock, timeout(100).atLeast(2)).someMethod();
      *   
-     *   //verifies someMethod() times within given time span using given verification mode
+     *   //verifies someMethod() within given time span using given verification mode
      *   //useful only if you have your own custom verification modes.
      *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
      * </pre>
@@ -1594,8 +1623,8 @@ public class Mockito extends Matchers {
      * 
      * @return verification mode
      */
-    public static Timeout timeout(int millis) {
-        return new VerificationWithTimeout(millis, VerificationModeFactory.atLeastOnce());
+    public static VerificationWithTimeout timeout(int millis) {
+        return new Timeout(millis, VerificationModeFactory.times(1));
     }       
     
     /**

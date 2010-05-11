@@ -1,54 +1,115 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.verification;
 
-import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.VerificationWithTimeoutImpl;
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.Mockito;
 
-//TODO: must be called Timeout
-public class VerificationWithTimeout implements Timeout {
+/**
+ * VerificationWithTimeout is a {@link VerificationMode} that allows combining existing verification modes with 'timeout'. E.g:
+ * 
+ * <pre>
+ * verify(mock, timeout(100).times(5)).foo();
+ * 
+ * verify(mock, timeout(100).never()).bar();
+ * 
+ * verify(mock, timeout(200).atLeastOnce()).baz();
+ * </pre>
+ * 
+ * <p>
+ * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
+ */
+public interface VerificationWithTimeout extends VerificationMode {
+        
+    /**
+     * Allows verifying exact number of invocations within given timeout
+     * <pre>
+     *   verify(mock, timeout(100).times(2)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param wantedNumberOfInvocations wanted number of invocations 
+     * 
+     * @return verification mode
+     */
+    public VerificationMode times(int wantedNumberOfInvocations);
+    
+    /**
+     * Alias to times(0), see {@link times(int)}
+     * <p>
+     * Verifies that interaction did not happen within given timeout. E.g:
+     * <pre>
+     *   verify(mock, timeout(100).never()).someMethod();
+     * </pre>
+     * 
+     * <p>
+     * If you want to verify there were NO interactions with the mock 
+     * check out {@link verifyNoMoreInteractions(Object...)}
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public VerificationMode never();
+    
+    /**
+     * Allows at-least-once verification withing given timeout. E.g:
+     * <pre>
+     *   verify(mock, timeout(100).atLeastOnce()).someMethod("some arg");
+     * </pre>
+     * Alias to atLeast(1)
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public VerificationMode atLeastOnce();
 
-    VerificationWithTimeoutImpl impl;
+    /**
+     * Allows at-least-x verification withing given timeout. E.g:
+     * <pre>
+     *   verify(mock, timeout(100).atLeast(3)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param minNumberOfInvocations minimum number of invocations 
+     * 
+     * @return verification mode
+     */
+    public VerificationMode atLeast(int minNumberOfInvocations);
 
-    public VerificationWithTimeout(int millis, VerificationMode delegate) {
-        this(10, millis, delegate);
-    }
+    /**
+     * Allows at-most-x verification within given timeout. E.g:
+     * <pre>
+     *   verify(mock, timeout(100).atMost(3)).someMethod("some arg");
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param maxNumberOfInvocations max number of invocations 
+     * 
+     * @return verification mode
+     */
+    public VerificationMode atMost(int maxNumberOfInvocations);
 
-    VerificationWithTimeout(int treshhold, int millis, VerificationMode delegate) {
-        this.impl = new VerificationWithTimeoutImpl(treshhold, millis, delegate);
-    }
-
-    @Override
-    public void verify(VerificationData data) {
-        impl.verify(data);
-    }
-
-    @Override
-    public VerificationMode atLeast(int minNumberOfInvocations) {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.atLeast(minNumberOfInvocations));
-    }
-
-    @Override
-    public VerificationMode atLeastOnce() {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.atLeastOnce());
-    }
-
-    @Override
-    public VerificationMode atMost(int maxNumberOfInvocations) {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.atMost(maxNumberOfInvocations));
-    }
-
-    @Override
-    public VerificationMode never() {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.times(0));
-    }
-
-    @Override
-    public VerificationMode only() {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.only());
-    }
-
-    @Override
-    public VerificationMode times(int wantedNumberOfInvocations) {
-        return new VerificationWithTimeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.times(wantedNumberOfInvocations));
-    }
+    /**
+     * Allows checking if given method was the only one invoked. E.g:
+     * <pre>
+     *   verify(mock, only()).someMethod();
+     *   //above is a shorthand for following 2 lines of code:
+     *   verify(mock).someMethod();
+     *   verifyNoMoreInvocations(mock);
+     * </pre>
+     * 
+     * <p>
+     * See also {@link Mockito#verifyNoMoreInteractions(Object...)}
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public VerificationMode only();       
 }

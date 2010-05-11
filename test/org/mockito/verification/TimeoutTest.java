@@ -21,7 +21,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void shouldPassWhenVerificationPasses() {
-        VerificationWithTimeout t = new VerificationWithTimeout(1, 3, mode);
+        Timeout t = new Timeout(1, 3, mode);
         
         doNothing().when(mode).verify(data);
         
@@ -30,7 +30,7 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void shouldFailBecauseVerificationFails() {
-        VerificationWithTimeout t = new VerificationWithTimeout(1, 2, mode);
+        Timeout t = new Timeout(1, 2, mode);
         
         doThrow(error).
         doThrow(error).
@@ -45,7 +45,7 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void shouldPassEvenIfFirstVerificationFails() {
-        VerificationWithTimeout t = new VerificationWithTimeout(1, 2, mode);
+        Timeout t = new Timeout(1, 2, mode);
         
         doThrow(error).
         doThrow(error).
@@ -57,7 +57,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void shouldTryToVerifyCorrectNumberOfTimes() {
-        VerificationWithTimeout t = new VerificationWithTimeout(1, 4, mode);
+        Timeout t = new Timeout(1, 4, mode);
         
         doThrow(error).when(mode).verify(data);
         
@@ -70,20 +70,20 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void shouldCreateCorrectType() {
-        VerificationWithTimeout t = new VerificationWithTimeout(25, 50, mode);
+        Timeout t = new Timeout(25, 50, mode);
         
-        assertCorrectMode(t.atLeastOnce(), VerificationWithTimeout.class, 50, 25, AtLeast.class);
-        assertCorrectMode(t.atLeast(5), VerificationWithTimeout.class, 50, 25, AtLeast.class);
-        assertCorrectMode(t.times(5), VerificationWithTimeout.class, 50, 25, Times.class);
-        assertCorrectMode(t.never(), VerificationWithTimeout.class, 50, 25, Times.class);
-        assertCorrectMode(t.only(), VerificationWithTimeout.class, 50, 25, Only.class);
-        assertCorrectMode(t.atMost(10), VerificationWithTimeout.class, 50, 25, AtMost.class);
+        assertCorrectMode(t.atLeastOnce(), Timeout.class, 50, 25, AtLeast.class);
+        assertCorrectMode(t.atLeast(5), Timeout.class, 50, 25, AtLeast.class);
+        assertCorrectMode(t.times(5), Timeout.class, 50, 25, Times.class);
+        assertCorrectMode(t.never(), Timeout.class, 50, 25, Times.class);
+        assertCorrectMode(t.only(), Timeout.class, 50, 25, Only.class);
+        assertCorrectMode(t.atMost(10), Timeout.class, 50, 25, AtMost.class);
     }
     
     private void assertCorrectMode(VerificationMode t, Class expectedType, int expectedTimeout, int expectedTreshold, Class expectedDelegateType) {
         assertEquals(expectedType, t.getClass());
-        assertEquals(expectedTimeout, ((VerificationWithTimeout) t).impl.getTimeout());
-        assertEquals(expectedTreshold, ((VerificationWithTimeout) t).impl.getTreshhold());
-        assertEquals(expectedDelegateType, ((VerificationWithTimeout) t).impl.getDelegate().getClass());
+        assertEquals(expectedTimeout, ((Timeout) t).impl.getTimeout());
+        assertEquals(expectedTreshold, ((Timeout) t).impl.getTreshhold());
+        assertEquals(expectedDelegateType, ((Timeout) t).impl.getDelegate().getClass());
     }
 }
