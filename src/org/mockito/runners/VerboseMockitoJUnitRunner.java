@@ -39,7 +39,6 @@ public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
 
     private RunnerImpl runner;
 
-    //TODO: all runners have an issue: they don't filter the stack trace correctly
     public VerboseMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new RunnerFactory().create(klass));
     }
