@@ -17,6 +17,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.progress.IOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.MockUtil;
@@ -93,7 +94,7 @@ public class MockitoCore {
                 if (mock == null) {
                     reporter.nullPassedToVerifyNoMoreInteractions();
                 }
-                List<Invocation> invocations = mockUtil.getMockHandler(mock).getInvocationContainer().getInvocations();
+                InvocationContainer invocations = mockUtil.getMockHandler(mock).getInvocationContainer();
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 VerificationModeFactory.noMoreInteractions().verify(data);
             } catch (NotAMockException e) {

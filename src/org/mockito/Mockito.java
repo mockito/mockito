@@ -7,11 +7,22 @@ package org.mockito;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
-import org.mockito.internal.stubbing.answers.*;
-import org.mockito.internal.stubbing.defaultanswers.*;
+import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidMethodStubbable;
+import org.mockito.verification.FluentVerificationMode;
+import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -1469,6 +1480,23 @@ public class Mockito extends Matchers {
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return VerificationModeFactory.times(wantedNumberOfInvocations);
     }
+    
+    /**
+     * Allows verifying with timeout. May be useful for testing concurrency.
+     * <pre>
+     *   //passes when someMethod() is called within given time span 
+     *   verify(mock, timeout(100)).someMethod();
+     * </pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param millis - time span in millis
+     * 
+     * @return verification mode
+     */
+    public static FluentVerificationMode timeout(int millis) {
+        return new Timeout(millis, VerificationModeFactory.atLeastOnce());
+    }    
     
     /**
      * Alias to times(0), see {@link Mockito#times(int)}

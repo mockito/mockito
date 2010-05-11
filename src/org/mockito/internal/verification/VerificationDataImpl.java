@@ -9,22 +9,23 @@ import java.util.List;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.verification.api.VerificationData;
 
 public class VerificationDataImpl implements VerificationData {
 
-    private final List<Invocation> allInvocations;
     private final InvocationMatcher wanted;
+    private final InvocationContainer invocations;
 
-    public VerificationDataImpl(List<Invocation> allInvocations, InvocationMatcher wanted) {
-        this.allInvocations = allInvocations;
+    public VerificationDataImpl(InvocationContainer invocations, InvocationMatcher wanted) {
+        this.invocations = invocations;
         this.wanted = wanted;
         this.assertWantedIsVerifiable();
     }
 
     public List<Invocation> getAllInvocations() {
-        return allInvocations;
+        return invocations.getInvocations();
     }
 
     public InvocationMatcher getWanted() {
