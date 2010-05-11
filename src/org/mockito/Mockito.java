@@ -1576,6 +1576,16 @@ public class Mockito extends Matchers {
      *   //passes when someMethod() is called within given time span 
      *   verify(mock, timeout(100)).someMethod();
      *   //TODO decide what is the default for timeout() - atLeastOnce() or times(1)
+     *   
+     *   //passes when someMethod() is called *exactly* 2 times within given time span
+     *   verify(mock, timeout(100).times(2)).someMethod();
+     *
+     *   //passes when someMethod() is called *at lest* 2 times within given time span
+     *   verify(mock, timeout(100).atLeast(2)).someMethod();
+     *   
+     *   //verifies someMethod() times within given time span using given verification mode
+     *   //useful only if you have your own custom verification modes.
+     *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
      * </pre>
      * 
      * See examples in javadoc for {@link Mockito} class

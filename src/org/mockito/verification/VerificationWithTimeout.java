@@ -4,6 +4,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationWithTimeoutImpl;
 import org.mockito.internal.verification.api.VerificationData;
 
+//TODO: must be called Timeout
 public class VerificationWithTimeout implements Timeout {
 
     VerificationWithTimeoutImpl impl;
