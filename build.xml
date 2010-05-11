@@ -73,13 +73,13 @@
   </target>
 
   <target name="compile" depends="clean, prepare">
-    <javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
+    <javac srcdir="src" destdir="${src.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true" nowarn="true">
       <classpath refid="compile.classpath" />
     </javac>
   </target>
 
   <target name="compile.test" depends="compile">
-    <javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true">
+    <javac srcdir="test" destdir="${test.classes.dir}" source="1.5" target="1.5" debug="true" deprecation="true" nowarn="true">
       <classpath refid="test.compile.classpath" />
     </javac>
   </target>
