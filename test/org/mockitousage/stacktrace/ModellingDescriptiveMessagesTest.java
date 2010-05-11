@@ -146,7 +146,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Test
     public void shouldMentionFinalAndObjectMethodsWhenMissingMockCall() {
-        when(mock.equals(null)).thenReturn(false);
+        when("".equals(null)).thenReturn(false);
     }
     
     @Test

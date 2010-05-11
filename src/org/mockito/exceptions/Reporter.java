@@ -76,13 +76,14 @@ public class Reporter {
 
     public void missingMethodInvocation() {
         throw new MissingMethodInvocationException(join(
-                "when() requires an argument which has to be a method call on a mock.",
+                "when() requires an argument which has to be 'a method call on a mock'.",
                 "For example:",
                 "    when(mock.getArticles()).thenReturn(articles);",
                 "",
-                "Also, this error might show up because you stub either of: final/private/equals()/hashCode() methods.",
-                "Those methods *cannot* be stubbed/verified.",
-                ""
+                "Also, this error might show up because:",
+                "1. you stub either of: final/private/equals()/hashCode() methods.",
+                "   Those methods *cannot* be stubbed/verified.",
+                "2. inside when() you don't call method on mock but on some other object."
         ));
     }
 
@@ -114,7 +115,7 @@ public class Reporter {
     
     public void nullPassedToVerify() {
         throw new NullInsteadOfMockException(join(
-                "Argument passed to verify() is null!",
+                "Argument passed to verify() should be a mock but is null!",
                 "Examples of correct verifications:",
                 "    verify(mock).someMethod();",
                 "    verify(mock, times(10)).someMethod();",
