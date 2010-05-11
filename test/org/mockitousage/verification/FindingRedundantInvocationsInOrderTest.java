@@ -29,6 +29,21 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
     
     @Test
+    public void shouldSayNoInteractionsWanted() throws Exception {
+        //when
+        mock.simpleMethod();
+        
+        //then
+        InOrder inOrder = inOrder(mock);
+        try {
+            inOrder.verifyNoMoreInteractions();
+            fail();
+        } catch(VerificationInOrderFailure e) {
+            assertContains("No interactions wanted", e.getMessage());
+        }
+    }
+    
+    @Test
     public void shouldVerifyNoMoreInteractionsInOrder() throws Exception {
         //when
         mock.simpleMethod();
