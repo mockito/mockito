@@ -647,6 +647,8 @@ import org.mockito.verification.VerificationMode;
  * <p>
  * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system.
  * <p>
+ * Not yet implemented to work with InOrder verification.
+ * <p>
  * Examples:
  * <p>
  * <pre>
@@ -1600,6 +1602,8 @@ public class Mockito extends Matchers {
      * Allows verifying with timeout. May be useful for testing in concurrent conditions.
      * <p>
      * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
+     * <p>
+     * Not yet implemented to work with InOrder verification.
      * <pre>
      *   //passes when someMethod() is called within given time span 
      *   verify(mock, timeout(100)).someMethod();

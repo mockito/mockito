@@ -74,6 +74,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         if (verificationMode != null) {
             //We need to check if verification was started on the correct mock 
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
+            //TODO: can I avoid this cast here?
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {                
                 VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);            
                 verificationMode.verify(data);

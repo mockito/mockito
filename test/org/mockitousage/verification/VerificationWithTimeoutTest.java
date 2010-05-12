@@ -4,16 +4,17 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
@@ -131,6 +132,24 @@ public class VerificationWithTimeoutTest extends TestBase {
             verify(mock, timeout(40).only()).clear();
             fail();
         } catch (NoInteractionsWanted e) {}
+    }
+    
+    //TODO not yet implemented
+    @Ignore
+    @Test
+    public void shouldAllowTimeoutVerificationInOrder() throws Exception {
+        //given
+        Thread t1 = waitAndExerciseMock(20);        
+        
+        //when
+        t1.start();
+        mock.add("foo");
+        
+        //then
+        InOrder inOrder = inOrder(mock);
+        inOrder.verify(mock).add(anyString());
+        inOrder.verify(mock, never()).clear();
+        inOrder.verify(mock, timeout(40)).clear();                             
     }
 
     private Thread waitAndExerciseMock(final int sleep) {
