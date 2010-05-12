@@ -63,6 +63,7 @@ public class TimeoutTest extends TestBase {
         
         try {
             t.verify(data);
+            fail();
         } catch (MockitoAssertionError e) {};
         
         verify(mode, times(5)).verify(data);
