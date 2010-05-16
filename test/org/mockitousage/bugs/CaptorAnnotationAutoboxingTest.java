@@ -17,6 +17,7 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
     
     interface Fun {
         void doFun(double prmitive);
+        void moreFun(int howMuch);
     }
     
     @Mock Fun fun;
@@ -30,5 +31,12 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
         //then
         verify(fun).doFun(captor.capture());
         assertEquals((Double) 1.0, captor.getValue());
+    }
+
+    @Captor ArgumentCaptor<Integer> intCaptor;
+    
+    @Test
+    public void shouldAutoboxAllPrimitives() {
+        verify(fun, never()).moreFun(intCaptor.capture());
     }
 }

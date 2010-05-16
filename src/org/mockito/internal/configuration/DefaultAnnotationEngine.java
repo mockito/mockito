@@ -6,8 +6,6 @@ package org.mockito.internal.configuration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -19,12 +17,14 @@ import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldSetter;
+import org.mockito.internal.util.reflection.GenericMaster;
 
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
  * <p/>
  * See {@link MockitoAnnotations}
  */
+@SuppressWarnings("unchecked")
 public class DefaultAnnotationEngine implements AnnotationEngine {
 
     /* (non-Javadoc)
@@ -65,7 +65,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
     private Object processAnnotationOn(org.mockito.MockitoAnnotations.Mock annotation, Field field) {
         return Mockito.mock(field.getType(), field.getName());
     }
-
+    
     private Object processAnnotationOn(Captor annotation, Field field) {
         Class<?> type = field.getType();
         if (!ArgumentCaptor.class.isAssignableFrom(type)) {
@@ -73,20 +73,9 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
                     + field.getName() + "' has wrong type\n"
                     + "For info how to use @Captor annotations see examples in javadoc for MockitoAnnotations class.");
         }
-        Type generic = field.getGenericType();
-        if (generic != null && generic instanceof ParameterizedType) {
-            Type actual = ((ParameterizedType) generic).getActualTypeArguments()[0];
-            return ArgumentCaptor.forClass(typeToClass(actual));
-        }
-        return ArgumentCaptor.forClass(Object.class);    
-    }       
-
-    private Class typeToClass(Type actual) {
-        if (actual.equals(Double.class)) {
-            return Double.class;
-        }
-        return Object.class;
-    }
+        Class cls = new GenericMaster().getGenericType(field);        
+        return ArgumentCaptor.forClass(cls);    
+    }           
 
     @Override
     public void process(Class<?> clazz, Object testClass) {
