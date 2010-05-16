@@ -12,6 +12,7 @@
   <property name="src.classes.dir" value="${target.dir}/classes" />
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
+  <property name="test.reports.dir.html" value="${target.dir}/reports/junit.html" />
 	
   <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
@@ -93,9 +94,21 @@
       <batchtest todir="${test.reports.dir}">
         <fileset dir="${test.classes.dir}" includes="**/*Test.class" />
       </batchtest>
-    </junit>
-    
+    </junit>	
+	
+	<antcall target="junit.report" />
+   
     <fail if="mockito.tests.failed" message="Tests failed."/>
+  </target>
+  
+  <target name="junit.report">
+    <mkdir dir="${test.reports.dir.html}" />
+	<junitreport todir="${test.reports.dir.html}">
+	  <fileset dir="${test.reports.dir}">
+		<include name="*.xml"/>
+	  </fileset>
+	  <report format="frames" todir="${test.reports.dir.html}"/>
+	</junitreport>
   </target>
 
   <target name="pmd" depends="prepare">
