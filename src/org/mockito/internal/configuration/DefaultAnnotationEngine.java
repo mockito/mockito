@@ -77,7 +77,6 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         return ArgumentCaptor.forClass(cls);    
     }           
 
-    @Override
     public void process(Class<?> clazz, Object testClass) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {

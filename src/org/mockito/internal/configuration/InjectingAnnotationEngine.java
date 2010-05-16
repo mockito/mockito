@@ -35,7 +35,6 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         return delegate.createMockFor(annotation, field);
     }
     
-    @Override
     public void process(Class<?> context, Object testClass) {
         //this will create @Mocks, @Captors, etc:
         delegate.process(context, testClass);

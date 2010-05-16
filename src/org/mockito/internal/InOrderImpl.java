@@ -49,17 +49,14 @@ public class InOrderImpl implements InOrder, InOrderContext {
         return mockitoCore.verify(mock, new InOrderWrapper((VerificationInOrderMode) mode, this));
     }
 
-    @Override
     public boolean isVerified(Invocation i) {
         return inOrderContext.isVerified(i);
     }
 
-    @Override
     public void markVerified(Invocation i) {        
         inOrderContext.markVerified(i);
     }
 
-    @Override
     public void verifyNoMoreInteractions() {
         mockitoCore.verifyNoMoreInteractionsInOrder(mocksToBeVerifiedInOrder, this);
     }

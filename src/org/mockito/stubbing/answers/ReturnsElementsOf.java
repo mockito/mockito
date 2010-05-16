@@ -35,7 +35,6 @@ public class ReturnsElementsOf implements Answer {
         this.elements = new LinkedList(elements);
     }
 
-    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         if (elements.size() == 1)
             return elements.get(0);

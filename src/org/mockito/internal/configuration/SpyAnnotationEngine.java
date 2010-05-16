@@ -19,13 +19,11 @@ import org.mockito.internal.util.MockUtil;
 @SuppressWarnings({"unchecked"})
 public class SpyAnnotationEngine implements AnnotationEngine {
 
-    @Override
     public Object createMockFor(Annotation annotation, Field field) {
         return null;
     }
     
     @SuppressWarnings("deprecation")
-    @Override
     public void process(Class<?> context, Object testClass) {
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {

@@ -17,7 +17,6 @@ public class MockAwareVerificationMode implements VerificationMode {
         this.mode = mode;
     }
 
-    @Override
     public void verify(VerificationData data) {
         mode.verify(data);
     }
