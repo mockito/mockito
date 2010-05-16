@@ -101,14 +101,15 @@ public class MockitoAnnotations {
         AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
+            //below can be removed later, when we get rid of deprecated stuff
             if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
                 //this means user has his own annotation engine and we have to respect that.
                 //we will do annotation processing the old way so that we are backwards compatible
                 processAnnotationDeprecatedWay(annotationEngine, testClass, field);                
             } 
-            //act 'the new' way
-            annotationEngine.process(clazz, testClass);
         }
+        //act 'the new' way
+        annotationEngine.process(clazz, testClass);
     }
 
     @SuppressWarnings("deprecation")

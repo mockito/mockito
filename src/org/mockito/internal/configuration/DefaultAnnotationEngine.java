@@ -6,6 +6,8 @@ package org.mockito.internal.configuration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -71,9 +73,20 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
                     + field.getName() + "' has wrong type\n"
                     + "For info how to use @Captor annotations see examples in javadoc for MockitoAnnotations class.");
         }
-        return ArgumentCaptor.forClass(Object.class); // Object.class due to
-                                                      // erasure
+        Type generic = field.getGenericType();
+        if (generic != null && generic instanceof ParameterizedType) {
+            Type actual = ((ParameterizedType) generic).getActualTypeArguments()[0];
+            return ArgumentCaptor.forClass(typeToClass(actual));
+        }
+        return ArgumentCaptor.forClass(Object.class);    
     }       
+
+    private Class typeToClass(Type actual) {
+        if (actual.equals(Double.class)) {
+            return Double.class;
+        }
+        return Object.class;
+    }
 
     @Override
     public void process(Class<?> clazz, Object testClass) {
