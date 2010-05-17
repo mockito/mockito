@@ -28,6 +28,8 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.exceptions.VerificationAwareInvocation;
+import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
 
 /**
@@ -343,15 +345,21 @@ public class Reporter {
                 "Verification in order failure:" + message
                 ));
     }
-    
-    public void noMoreInteractionsWanted(PrintableInvocation undesired) {
+
+    public void noMoreInteractionsWanted(Invocation undesired, List<VerificationAwareInvocation> invocations) {
+        ScenarioPrinter scenarioPrinter = new ScenarioPrinter();
+        String scenario = scenarioPrinter.print(invocations);
+        
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
                 new Location(),
                 "But found this interaction:",
                 undesired.getLocation(),
+                "***",
+                "For your reference, here is the list of all invocations ([?] - means unverified).",
+                scenario,
                 ""
-                ));
+        ));
     }
     
     public void noMoreInteractionsWantedInOrder(Invocation undesired) {

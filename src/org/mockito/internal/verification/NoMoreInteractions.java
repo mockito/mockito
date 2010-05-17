@@ -16,11 +16,11 @@ import org.mockito.verification.VerificationMode;
 
 public class NoMoreInteractions implements VerificationMode, VerificationInOrderMode {
 
+    @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
-        Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());
-        
+        Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());                       
         if (unverified != null) {
-            new Reporter().noMoreInteractionsWanted(unverified);
+            new Reporter().noMoreInteractionsWanted(unverified, (List) data.getAllInvocations());
         }
     }
 

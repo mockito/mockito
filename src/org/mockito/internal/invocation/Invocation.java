@@ -13,6 +13,7 @@ import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
+import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
@@ -33,7 +34,7 @@ import org.mockito.invocation.InvocationOnMock;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation {
+public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private static final int MAX_LINE_LENGTH = 45;
