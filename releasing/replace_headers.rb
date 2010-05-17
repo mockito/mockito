@@ -19,7 +19,7 @@ for dir in dirs
         next
       end
     else
-      paths << path if path !~ /\.html$/ and path !~ /\license.txt$/
+      paths << path if path !~ /\.html$/ and path !~ /.txt$/
     end
   end
 end
@@ -31,6 +31,7 @@ paths.each do |path|
 
     current_hdr = Regexp.new('.*\*/.*package org\.', Regexp::MULTILINE)
     first_hdr = Regexp.new('.*?\*/.*?[\n\r]+?', Regexp::MULTILINE)
+	ignore_hdr = /NON-STANDARD LICENCE HEADER HERE - THAT'S OK/
 	
 	def printToFile(f, out) 
 	  f.pos = 0           
@@ -38,7 +39,9 @@ paths.each do |path|
 	  f.truncate(f.pos) 
 	end
 	
-    if (out !~ current_hdr)     
+	if (out =~ ignore_hdr)
+	  #this means we're ok with non-standard header
+    elsif (out !~ current_hdr)     
 	  puts "header is missing for file: #{path} - replacing"
       out = header + out
 	  printToFile(f, out)
