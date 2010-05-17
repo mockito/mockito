@@ -1,8 +1,4 @@
-/*
- * Copyright (c) 2007 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
-
+//NON-STANDARD LICENCE HEADER HERE - THAT'S OK
 //Class comes from Apache Commons Lang, added some tiny changes  
 
 /*
