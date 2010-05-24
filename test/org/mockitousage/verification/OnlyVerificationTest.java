@@ -58,9 +58,19 @@ public class OnlyVerificationTest extends TestBase {
 		mock.get(0);
 		mock.get(2);
 		try {
-			verify(mock, only()).get(1);
+			verify(mock, only()).get(999);
 			fail();
 		} catch (WantedButNotInvoked e) {}
+	}
+	
+	@Test
+	public void shouldFailIfExtraMethodWithDifferentArgsFound() {
+	    mock.get(0);
+	    mock.get(2);
+	    try {
+	        verify(mock, only()).get(2);
+	        fail();
+	    } catch (NoInteractionsWanted e) {}
 	}
 
 	@Test
