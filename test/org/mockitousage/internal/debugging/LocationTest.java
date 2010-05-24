@@ -9,6 +9,7 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.base.StackTraceFilter;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("serial")
 public class LocationTest extends TestBase {
 
     @Test
