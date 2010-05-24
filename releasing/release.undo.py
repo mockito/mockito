@@ -6,14 +6,14 @@ import shutil
 
 def run(cmd):
   print("\nRunning command: " + cmd)
-  if os.system(cmd) == 0: print("\nWarning, command failed: " + cmd
+  if os.system(cmd) == 0: print("\nWarning, command failed: " + cmd)
   
-ver = raw_input("Specify the version, e.g. 1.9:")
+ver = raw_input("Specify the version to try to delete, e.g. 1.9:")
 
 branch = 'https://mockito.googlecode.com/svn/branches/' + ver
-branch = 'https://mockito.googlecode.com/svn/tags/' + ver
+tag = 'https://mockito.googlecode.com/svn/tags/' + ver
 
-run('svn rm "removed botched branch" ' + branch)
-run('svn rm "removed botched tag" ' + tag)
+run('svn delete -m "removed botched branch" ' + branch)
+run('svn delete -m "removed botched tag" ' + tag)
 
-shutil.rmtree("../../mockito-1.8.5", true)
+shutil.rmtree("../../mockito-1.8.5", 1)
