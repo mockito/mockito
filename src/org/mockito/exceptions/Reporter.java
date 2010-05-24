@@ -355,8 +355,6 @@ public class Reporter {
                 new Location(),
                 "But found this interaction:",
                 undesired.getLocation(),
-                "***",
-                "For your reference, here is the list of all invocations ([?] - means unverified).",
                 scenario,
                 ""
         ));

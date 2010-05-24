@@ -93,6 +93,18 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
     
     @Test
+    public void shouldNotContainAllInvocationsWhenSingleUnwantedFound() throws Exception {
+        mock.add(1);
+        
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+            assertNotContains("list of all invocations", e.getMessage());
+        }
+    }    
+    
+    @Test
     public void shouldVerifyOneMockButFailOnOther() throws Exception {
         List list = mock(List.class);
         Map map = mock(Map.class);

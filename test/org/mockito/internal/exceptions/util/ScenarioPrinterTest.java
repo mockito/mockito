@@ -26,6 +26,17 @@ public class ScenarioPrinterTest extends TestBase {
         //then
         assertContains("1. -> at", out);
         assertContains("2. [?]-> at", out);
-        //TODO add more tests and scenarios that print decent stuff when nothing is verified or there are no verifications at all
+    }
+    
+    @Test
+    public void shouldNotPrintInvocationsWhenSingleUnwanted() {
+        //given
+        Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
+        
+        //when
+        String out = sp.print((List) asList(unverified));
+        
+        //then
+        assertContains("Actually, above is the only interaction with this mock.", out);
     }
 }
