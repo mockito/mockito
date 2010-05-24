@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import org.mockito.Mockito;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.stubbing.Answer;
 
@@ -14,7 +15,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * <b>WARNING</b> Those answers no longer are used by the framework!!! Please use {@link org.mockito.Answers}
  * <p>
- * See {@link Mock} for more information.
+ * See {@link Mockito} for more information.
  */
 @Deprecated
 public enum Answers {

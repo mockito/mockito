@@ -37,7 +37,7 @@ public interface VerificationWithTimeout extends VerificationMode {
     public VerificationMode times(int wantedNumberOfInvocations);
     
     /**
-     * Alias to times(0), see {@link times(int)}
+     * Alias to times(0), see {@link #times(int)}
      * <p>
      * Verifies that interaction did not happen within given timeout. E.g:
      * <pre>
@@ -46,7 +46,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * 
      * <p>
      * If you want to verify there were NO interactions with the mock 
-     * check out {@link verifyNoMoreInteractions(Object...)}
+     * check out {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 

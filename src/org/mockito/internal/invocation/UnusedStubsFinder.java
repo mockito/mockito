@@ -16,7 +16,6 @@ public class UnusedStubsFinder {
      * Finds all unused stubs for given mocks
      * 
      * @param mocks
-     * @return
      */
     public List<Invocation> find(List<?> mocks) {
         List<Invocation> unused = new LinkedList<Invocation>();

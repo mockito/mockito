@@ -37,7 +37,6 @@ public class InvocationsFinder {
      * 
      * if wanted is 1 and mode is times(x), where x != 2 then returns
      * 1,1,1
-     * @param data 
      */
     public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations, context);
@@ -161,7 +160,6 @@ public class InvocationsFinder {
      * 
      * @param context
      * @param orderedInvocations
-     * @return
      */
     public Invocation findFirstUnverifiedInOrder(InOrderContext context, List<Invocation> orderedInvocations) {        
         Invocation candidate = null;

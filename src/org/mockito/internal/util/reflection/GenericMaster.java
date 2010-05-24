@@ -15,7 +15,6 @@ public class GenericMaster {
      * Finds the generic type (parametrized type) of the field. If the field is not generic it returns Object.class. 
      * 
      * @param field
-     * @return
      */
     public Class getGenericType(Field field) {        
         Type generic = field.getGenericType();
