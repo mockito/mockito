@@ -21,7 +21,7 @@ ver = raw_input("Specify the version, e.g. 1.9:")
 
 branch = 'https://mockito.googlecode.com/svn/branches/' + ver
 
-run('svn copy -m "branched before release" .. ' + branch)
+run('svn copy -m "branched before release" https://mockito.googlecode.com/svn/trunk ' + branch)
 run('svn co ' + branch + ' ../../mockito-' + ver)
 
 print("Switching to ../../mockito-" + ver + " folder")
