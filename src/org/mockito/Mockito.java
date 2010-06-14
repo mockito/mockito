@@ -177,6 +177,12 @@ import org.mockito.verification.VerificationMode;
  *   //above is incorrect - exception will be thrown because third argument is given without an argument matcher.
  * </pre>
  * 
+ * <p>
+ * Matcher methods like anyObject(), eq() <b>do not</b> return matchers.
+ * Internally, they record a matcher on a stack and return a dummy value (usually null).
+ * This implementation is due static type safety imposed by java compiler.
+ * The consequence is that you cannot use anyObject(), eq() methods outside of verified/stubbed method.
+ * 
  * <h3 id="4">4. Verifying exact number of invocations / at least x / never</h3>
  * 
  * <pre>
