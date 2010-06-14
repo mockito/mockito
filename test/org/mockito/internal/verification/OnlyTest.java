@@ -56,6 +56,7 @@ public class OnlyTest {
         //when
         try {
             only.verify(new VerificationDataStub(new InvocationBuilder().toInvocationMatcher(), invocation));
+            fail();
         } catch (MockitoAssertionError e) {}
         
         //then
