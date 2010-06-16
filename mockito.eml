@@ -3,6 +3,7 @@
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$">
 		<excludeFolder url="file://$MODULE_DIR$/target/eclipse-classes"/>
+		<excludeFolder url="file://$MODULE_DIR$/target/eclipse-classes"/>
 	</contentEntry>
 	<lib name="com.springsource.org.hamcrest.core-1.1.0.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/run/com.springsource.org.hamcrest.core-1.1.0.jar!/"/>
