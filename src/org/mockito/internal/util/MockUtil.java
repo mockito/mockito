@@ -81,7 +81,7 @@ public class MockUtil {
     }
 
     private <T> boolean isMockitoMock(T mock) {
-        return Enhancer.isEnhanced(mock.getClass()) && getInterceptor(mock) != null;
+        return getInterceptor(mock) != null;
     }
 
     public boolean isMock(Object mock) {
@@ -89,6 +89,9 @@ public class MockUtil {
     }
 
     private <T> MethodInterceptorFilter getInterceptor(T mock) {
+        if (!(mock instanceof Factory)) {
+            return null;
+        }
         Factory factory = (Factory) mock;
         Callback callback = factory.getCallback(0);
         if (callback instanceof MethodInterceptorFilter) {
