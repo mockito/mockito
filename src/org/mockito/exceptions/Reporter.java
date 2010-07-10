@@ -447,7 +447,7 @@ public class Reporter {
                 "Be aware that it is recommended to use capture() only with verify()",
                 "",
                 "Examples of correct argument capturing:",
-                "    Argument<Person> argument = new Argument<Person>();",
+                "    ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);",
                 "    verify(mock).doSomething(argument.capture());",
                 "    assertEquals(\"John\", argument.getValue().getName());",
                 ""
