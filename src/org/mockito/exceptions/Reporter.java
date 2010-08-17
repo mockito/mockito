@@ -72,6 +72,7 @@ public class Reporter {
                 "Hints:",
                 " 1. missing thenReturn()",
                 " 2. although stubbed methods may return mocks, you cannot inline mock creation (mock()) call inside a thenReturn method (see issue 53)",
+                " 3. you are trying to stub a final method, you naughty boy developer!",
                 ""
         ));
     }
@@ -385,7 +386,8 @@ public class Reporter {
                 "'" + methodName + "' is a *void method* and it *cannot* be stubbed with a *return value*!",
                 "Voids are usually stubbed with Throwables:",
                 "    doThrow(exception).when(mock).someVoidMethod();",
-                "If the method you are trying to stub is *overloaded* then make sure you are calling the right overloaded version."
+                "If the method you are trying to stub is *overloaded* then make sure you are calling the right overloaded version.",
+                "This exception might also occur when somewhere in your test you are stubbing *final methods*."
              ));
     }
 
