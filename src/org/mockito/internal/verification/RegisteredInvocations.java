@@ -22,8 +22,11 @@ public class RegisteredInvocations implements Serializable {
     }
 
     public void removeLast() {
-        int last = invocations.size() - 1;
-        invocations.remove(last);
+        //TODO: add specific test for synchronization of this block (it is tested by InvocationContainerImplTest at the moment)
+        synchronized (invocations) {
+            int last = invocations.size() - 1;
+            invocations.remove(last);
+        }
     }
 
     public List<Invocation> getAll() {
