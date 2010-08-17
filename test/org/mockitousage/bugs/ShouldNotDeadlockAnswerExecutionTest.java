@@ -1,4 +1,5 @@
 package org.mockitousage.bugs;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +12,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 //see bug 190
-public class ShouldNotDeadlockAnswerExecution {
+public class ShouldNotDeadlockAnswerExecutionTest {
 
     @Test
     public void failIfMockIsSharedBetweenThreads() throws Exception {
@@ -65,47 +66,48 @@ public class ShouldNotDeadlockAnswerExecution {
         }
     }
 
-}
+    static class LockingAnswer implements Answer<String> {
 
-class LockingAnswer implements Answer<String> {
+        private AtomicInteger counter;
 
-    private AtomicInteger counter;
-
-    public LockingAnswer(AtomicInteger counter) {
-        this.counter = counter;
-    }
-
-    /**
-     * Decrement counter and wait until counter has value 0
-     */
-    public String answer(InvocationOnMock invocation) throws Throwable {
-        counter.decrementAndGet();
-
-        while (counter.get() != 0) {
-            Thread.sleep(10);
+        public LockingAnswer(AtomicInteger counter) {
+            this.counter = counter;
         }
 
-        return null;
+        /**
+         * Decrement counter and wait until counter has value 0
+         */
+        public String answer(InvocationOnMock invocation) throws Throwable {
+            counter.decrementAndGet();
+
+            while (counter.get() != 0) {
+                Thread.sleep(10);
+            }
+
+            return null;
+        }
+
+    }
+
+    static class ServiceRunner implements Runnable {
+
+        private Service service;
+
+        public ServiceRunner(Service service) {
+            this.service = service;
+        }
+
+        public void run() {
+            service.verySlowMethod();
+        }
+
+    }
+
+    static interface Service {
+
+        String verySlowMethod();
+
     }
 
 }
 
-class ServiceRunner implements Runnable {
-
-    private Service service;
-
-    public ServiceRunner(Service service) {
-        this.service = service;
-    }
-
-    public void run() {
-        service.verySlowMethod();
-    }
-
-}
-
-interface Service {
-
-    String verySlowMethod();
-
-}
