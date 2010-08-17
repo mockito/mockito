@@ -24,25 +24,21 @@ public class PlaygroundTest extends TestBase {
     }
     
     class Boo {
-        public void withLong(long y) {
-            
+        final public Object withLong(long y) {
+                         return "";
+        }
+
+        public Object foo() {
+                   return "";
         }
     }
 
     Foo mock;
     @Mock IMethods mockTwo;
     
-    @Ignore
     @Test
     public void spyInAction() {
-        mock = spy(new Foo());
-// mock = spy(Foo.class, new Konstructor() {} );
-// mock = spy(Foo.class, Konstructor.guess());
-// mock = spy(Foo.class, Konstructor.withArguments("1", "2"));
-        
-        when(mock.getStuff()).thenReturn("aha!");
-        
-        mock.doSomeThing();
+
     }
     
     @Test
