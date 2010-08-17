@@ -72,7 +72,7 @@ public class Reporter {
                 "Hints:",
                 " 1. missing thenReturn()",
                 " 2. although stubbed methods may return mocks, you cannot inline mock creation (mock()) call inside a thenReturn method (see issue 53)",
-                " 3. you are trying to stub a final method, you naughty boy developer!",
+                " 3. you are trying to stub a final method, you naughty developer!",
                 ""
         ));
     }
