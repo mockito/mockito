@@ -406,7 +406,11 @@ public class Reporter {
     public void wrongTypeOfReturnValue(String expectedType, String actualType, String methodName) {
         throw new WrongTypeOfReturnValue(join(
                 actualType + " cannot be returned by " + methodName + "()",
-                methodName + "() should return " + expectedType
+                methodName + "() should return " + expectedType,
+                "***",
+                "This exception *might* occur in wrongly written multi-threaded tests.",
+                "Please refer to Mockito FAQ on limitations of concurrency testing.",
+                ""
                 ));
     }
 
