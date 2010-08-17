@@ -1,10 +1,8 @@
 package org.mockitousage.bugs;
 
-import static java.util.Collections.synchronizedList;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static java.util.Collections.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,11 +14,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/**
- * Race condition test in Mockito.
- *
- * @author Ivan Koblik
- */
 @Ignore
 public class MultithreadedStubbingHalfManualTest {
 
@@ -92,7 +85,7 @@ public class MultithreadedStubbingHalfManualTest {
             }
 
             try {
-                Thread.sleep(10 / ((i % 10) + 1));
+                Thread.sleep(10 / ((i % 10) + 1)); //NOPMD
             } catch (InterruptedException e) {
             }
         }

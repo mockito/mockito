@@ -28,7 +28,7 @@ public class InvocationContainerImplTest {
             t[i] = new Thread() {
                 public void run() {
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(10); //NOPMD
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
