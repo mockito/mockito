@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,10 +57,12 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         AnswersValidator answersValidator = new AnswersValidator();
         answersValidator.validate(answer, invocation);
 
-        if (isConsecutive) {
-            stubbed.getFirst().addAnswer(answer);
-        } else {
-            stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+        synchronized (stubbed) {
+            if (isConsecutive) {
+                stubbed.getFirst().addAnswer(answer);
+            } else {
+                stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+            }
         }
     }
 
@@ -68,11 +71,13 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
-        for (StubbedInvocationMatcher s : stubbed) {
-            if (s.matches(invocation)) {
-                s.markStubUsed(invocation);
-                invocation.markStubbed(new StubInfo(s));
-                return s;
+        synchronized (stubbed) {
+            for (StubbedInvocationMatcher s : stubbed) {
+                if (s.matches(invocation)) {
+                    s.markStubUsed(invocation);
+                    invocation.markStubbed(new StubInfo(s));
+                    return s;
+                }
             }
         }
 
