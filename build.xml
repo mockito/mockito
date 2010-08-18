@@ -401,7 +401,7 @@
   <target name="release.snapshot" depends="release.maven, release.snapshot.svn" /> 	        
   
   <target name="release.snapshot.svn" >
-    <!-- <loadproperties srcfile="../mockito.hudson.pwd" /> -->
+    <!-- <loadproperties srcfile="../../mockito.hudson.pwd" /> -->
     <property name="mockito.hudson.pwd" value="cX5rc5fn9wH2" />
     
     <copy todir="maven/snapshots">
