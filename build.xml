@@ -398,9 +398,10 @@
     </deploy>
   </target>
   
-  <target name="release.snapshot" depends="release.maven, release.snapshot.svn" /> 	
+  <target name="release.snapshot" depends="release.maven, release.snapshot.svn" /> 	    
   
-  <target name="release.snapshot.svn" > 	
+  <target name="release.snapshot.svn" >
+    <loadproperties srcfile="../mockito.hudson.pwd" /> 	
     <copy todir="maven/snapshots">
 		<fileset dir="maven/repository" includes="**/*" />		
     </copy> 
