@@ -2,7 +2,7 @@
  Copyright (c) 2007 Mockito contributors 
  This program is made available under the terms of the MIT License.
 -->
-<project name="mockito" basedir="." default="all">
+<project name="mockito" basedir="." default="build.and.deploy.snapshot">
 
   <loadproperties srcfile="version.properties" />
     
@@ -417,9 +417,6 @@
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
-  
-  <!-- to make Hudson happy -->
-  <target name="build" depends="build.and.deploy.snapshot"/>
   
   <target name="build.and.deploy.snapshot" depends="test, release.snapshot.svn"/>
 
