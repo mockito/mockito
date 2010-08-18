@@ -376,7 +376,7 @@
         </copy>
     </target>
 
-    <target  name="install.artifact" depends="check.binaries, prepare.poms" description="Installs maven artifact in local repo. Helpful for testing">
+    <target name="install.artifact" depends="check.binaries, prepare.poms" description="Installs maven artifact in local repo. Helpful for testing">
       <install file="${target.dir}/${jar.all}">
         <pom file="${target.dir}/mockito-all.pom" />
     </install>
@@ -418,6 +418,7 @@
   
   <!-- to make Hudson happy -->
   <target name="build" depends="test"/>
-    
+  
+  <target name="build.and.deploy" depends="test, release.snapshot.svn"/>
 
 </project>
