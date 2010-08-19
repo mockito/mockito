@@ -418,6 +418,6 @@
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, release.snapshot.svn"/>
+  <target name="build.and.deploy.snapshot" depends="test, release.snapshot"/>
 
 </project>
