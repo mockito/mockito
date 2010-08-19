@@ -401,8 +401,8 @@
   <target name="release.snapshot" depends="release.maven, release.snapshot.svn" /> 	        
   
   <target name="release.snapshot.svn" >
-    <!-- <loadproperties srcfile="../../mockito.hudson.pwd" /> -->
-    <property name="mockito.hudson.pwd" value="cX5rc5fn9wH2" />
+    <loadproperties srcfile="../../mockito.hudson.pwd" />
+    <!--<property name="mockito.hudson.pwd" value="cX5rc5fn9wH2" />-->
     
     <copy todir="maven/snapshots">
 		<fileset dir="maven/repository" includes="**/*" />		
@@ -418,6 +418,8 @@
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, release.snapshot"/>
+  <target name="build.and.deploy.snapshot" depends="test, prepare.package, release.snapshot"/>
+  
+  <target name="hudson.build" depends="build.and.deploy.snapshot" />
 
 </project>
