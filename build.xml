@@ -408,7 +408,7 @@
 		<fileset dir="maven/repository" includes="**/*" />		
     </copy> 
     <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant.classpath" />
-    <svn svnkit="true" username="mockito.hudson" password="${mockito.hudson.pwd}">
+    <svn javahl="false" username="mockito.hudson" password="${mockito.hudson.pwd}">
       <add dir="maven/snapshots" recurse="true" force="true" />
       <commit dir="maven/snapshots" recurse="true" message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
     </svn>
