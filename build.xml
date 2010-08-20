@@ -9,6 +9,7 @@
   <property name="src.dir" value="src" />
   <property name="test.src.dir" value="test" />
   <property name="target.dir" value="target" />
+  <property name="snapshots" value="${target.dir}/snapshots" />
   <property name="src.classes.dir" value="${target.dir}/classes" />
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
@@ -398,7 +399,7 @@
     </deploy>
   </target>
   
-  <target name="release.snapshot" depends="prepare.snapshot.svn, release.maven, release.snapshot.svn" /> 	        
+  <target name="deploy.snapshot" depends="prepare.snapshot.svn, release.maven, deploy.snapshot.svn" /> 	        
   
   <macrodef name="svnx">
 	<attribute name="cmd"/>
@@ -419,28 +420,28 @@
     <svnx cmd='up maven' />    
   </target>
   
-  <target name="release.snapshot.svn" >        
+  <target name="deploy.snapshot.svn" >        
     <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant.classpath" />
-	<loadproperties srcfile="../../mockito.hudson.pwd" />
-	  
-    <property name="s" value="maven/snapshots/org/mockito" />    
+	<loadproperties srcfile="../../mockito.hudson.pwd" />	     
     
     <!-- DELETING PREVIOUS SNAPSHOT (NO COMMITTING YET...) -->
     
     <!-- 
+    <property name="s" value="maven/snapshots/org/mockito" />    
     <svnx cmd='delete -force ${s}/mockito-core/${version}/mockito* ${s}/mockito-all/${version}/mockito*' failonerror='false' />
-    -->
+    -->   
         
     <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
+      <checkout destPath="${snapshots}" url="https://mockito.googlecode.com/svn/maven/snapshots" />
       <delete force="true" >
-        <fileset dir="maven/snapshots" >
+        <fileset dir="${snapshots}" >
 			<include name="**/mockito-core-*" />
 			<include name="**/mockito-all-*" />
         </fileset>
       </delete>      
     </svn>
           
-    <copy todir="maven/snapshots">
+    <copy todir="${snapshots}">
 		<fileset dir="maven/repository" includes="**/*" />		
     </copy>         
        
@@ -453,9 +454,9 @@
     -->   
     
     <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
-      <add force="true" recurse="true" dir="maven/snapshots" />
-      <commit dir="maven/snapshots" recurse="true" 
-      message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
+      <add force="true" recurse="true" dir="${snapshots}" />
+      <commit dir="${snapshots}" recurse="true" 
+        message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
     </svn>
   </target>
   
@@ -463,7 +464,7 @@
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, prepare.package, release.snapshot" />
+  <target name="build.and.deploy.snapshot" depends="test, prepare.package, deploy.snapshot" />
   
   <target name="hudson.build" depends="build.and.deploy.snapshot" />
 
