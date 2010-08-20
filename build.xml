@@ -2,7 +2,7 @@
  Copyright (c) 2007 Mockito contributors 
  This program is made available under the terms of the MIT License.
 -->
-<project name="mockito" basedir="." default="build.and.deploy.snapshot">
+<project name="mockito" basedir="." default="all">
 
   <loadproperties srcfile="version.properties" />
     
@@ -398,19 +398,64 @@
     </deploy>
   </target>
   
-  <target name="release.snapshot" depends="release.maven, release.snapshot.svn" /> 	        
+  <target name="release.snapshot" depends="prepare.snapshot.svn, release.maven, release.snapshot.svn" /> 	        
   
-  <target name="release.snapshot.svn" >
-    <loadproperties srcfile="../../mockito.hudson.pwd" />
-    <echo>Debug: ${mockito.hudson.pwd}</echo>
+  <macrodef name="svnx">
+	<attribute name="cmd"/>
+	<attribute name="failonerror" default="true"/>	
+	<sequential>
+	  <loadproperties srcfile="../../mockito.hudson.pwd" />
+	  <echo>Running: svn @{cmd}</echo>
+	  <exec executable="cmd" osfamily="windows" failonerror="@{failonerror}" output="svnout.log">
+        <arg line='/c svn @{cmd} --username mockito.hudson --password ${mockito.hudson.pwd}'/>
+      </exec>
+      <exec executable="svn" osfamily="unix" failonerror="@{failonerror}" output="svnout.log">
+        <arg line="@{cmd} --username mockito.hudson --password ${mockito.hudson.pwd}"/>
+      </exec>
+	</sequential>
+  </macrodef>
+  
+  <target name="prepare.snapshot.svn" >        
+    <svnx cmd='up maven' />    
+  </target>
+  
+  <target name="release.snapshot.svn" >        
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant.classpath" />
+	<loadproperties srcfile="../../mockito.hudson.pwd" />
+	  
+    <property name="s" value="maven/snapshots/org/mockito" />    
     
+    <!-- DELETING PREVIOUS SNAPSHOT (NO COMMITTING YET...) -->
+    
+    <!-- 
+    <svnx cmd='delete -force ${s}/mockito-core/${version}/mockito* ${s}/mockito-all/${version}/mockito*' failonerror='false' />
+    -->
+        
+    <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
+      <delete force="true" >
+        <fileset dir="maven/snapshots" >
+			<include name="**/mockito-core-*" />
+			<include name="**/mockito-all-*" />
+        </fileset>
+      </delete>      
+    </svn>
+          
     <copy todir="maven/snapshots">
 		<fileset dir="maven/repository" includes="**/*" />		
-    </copy> 
-    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant.classpath" />
-    <svn javahl="false" username="mockito.hudson" password="${mockito.hudson.pwd}">
-      <add dir="maven/snapshots" recurse="true" force="true" />
-      <commit dir="maven/snapshots" recurse="true" message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
+    </copy>         
+       
+    <!-- 1. ADDING NEW SNAPSHOT (NO COMMITTING YET...) -->
+    <!-- 2. COMMIT !!! -->       
+       
+    <!-- 
+    <svnx cmd='add -force maven/snapshots/*' />
+    <svnx cmd='ci maven/snapshots -m "${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!"' />        
+    -->   
+    
+    <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
+      <add force="true" recurse="true" dir="maven/snapshots" />
+      <commit dir="maven/snapshots" recurse="true" 
+      message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
     </svn>
   </target>
   
@@ -418,7 +463,7 @@
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, prepare.package, release.snapshot"/>
+  <target name="build.and.deploy.snapshot" depends="test, prepare.package, release.snapshot" />
   
   <target name="hudson.build" depends="build.and.deploy.snapshot" />
 
