@@ -16,6 +16,8 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 
+import static org.mockito.Mockito.withSettings;
+
 @SuppressWarnings({"unchecked"})
 public class SpyAnnotationEngine implements AnnotationEngine {
 
@@ -45,7 +47,10 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                         // instance has been spied earlier
                         Mockito.reset(instance);
                     } else {
-                        field.set(testClass, Mockito.spy(instance));
+                        field.set(testClass, Mockito.mock(instance.getClass(), withSettings()
+                                .spiedInstance(instance)
+                                .defaultAnswer(Mockito.CALLS_REAL_METHODS)
+                                .name(field.getName())));
                     }
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating spied field " + field.getName(), e);
