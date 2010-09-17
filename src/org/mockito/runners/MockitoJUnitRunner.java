@@ -36,7 +36,7 @@ import java.lang.reflect.InvocationTargetException;
  * <p>
  * Read more about &#064;Mock annotation in javadoc for {@link MockitoAnnotations}
  * <pre>
- * <b>&#064;RunWith(MockitoJUnit44Runner.class)</b>
+ * <b>&#064;RunWith(MockitoJUnitRunner.class)</b>
  * public class ExampleTest {
  * 
  *     &#064;Mock

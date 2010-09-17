@@ -31,7 +31,7 @@ import java.lang.reflect.InvocationTargetException;
  * <p>
  * Example:
  * <pre>
- * &#064;RunWith(MockitoJUnit44Runner.class)
+ * &#064;RunWith(MockitoJUnitRunner.class)
  * public class ExampleTest {
  * 
  *     &#064;Mock
