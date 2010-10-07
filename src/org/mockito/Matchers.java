@@ -241,7 +241,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
-        return (T) anyObject();
+        return (T) reportMatcher(Any.ANY).returnFor(clazz);
     }
     
     /**
