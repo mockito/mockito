@@ -11,24 +11,24 @@ import org.mockito.internal.exceptions.base.StackTraceFilter;
 public class Location implements Serializable {
 
     private static final long serialVersionUID = -9054861157390980624L;
-    private final String where;
+    private final Throwable stackTraceHolder;
+    private final StackTraceFilter stackTraceFilter;
 
     public Location() {
         this(new StackTraceFilter());
     }
 
-    public Location(StackTraceFilter filter) {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        StackTraceElement[] filtered = filter.filter(stackTrace, false);
-        if (filtered.length == 0) {
-            where = "-> at <<unknown line>>";
-        } else {
-            where = "-> at " + filtered[0].toString();
-        }
+    public Location(StackTraceFilter stackTraceFilter) {
+        this.stackTraceFilter = stackTraceFilter;
+        stackTraceHolder = new Throwable();
     }
-
+	
     @Override
     public String toString() {
-        return where;
+        StackTraceElement[] filtered = stackTraceFilter.filter(stackTraceHolder.getStackTrace(), false);
+        if (filtered.length == 0) {
+            return "-> at <<unknown line>>";
+        }
+        return "-> at " + filtered[0].toString();
     }
 }
