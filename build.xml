@@ -464,7 +464,7 @@
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, prepare.package, deploy.snapshot" />
+  <target name="build.and.deploy.snapshot" depends="test, prepare.package" />
   
   <target name="hudson.build" depends="build.and.deploy.snapshot" />
 
