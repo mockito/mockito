@@ -83,7 +83,8 @@ public class PlaygroundTest extends TestBase {
         
 //        when(mock.getStuff()).thenReturn("aha!");
 //        when(mock.doSomeThing()).thenCallRealMethod();
-//        
+//
+        
 //        mock.doSomeThing();
     }
     
