@@ -58,7 +58,6 @@
 
   <path id="ant.classpath">
     <fileset dir="${lib.dir.build}" includes="*.jar" />
-    <fileset dir="${lib.dir.build}/svnant" includes="*.jar" />
   </path>
 
   <target name="prepare">
@@ -399,73 +398,37 @@
     </deploy>
   </target>
   
-  <target name="deploy.snapshot" depends="prepare.snapshot.svn, release.maven, deploy.snapshot.svn" /> 	        
-  
-  <macrodef name="svnx">
-	<attribute name="cmd"/>
-	<attribute name="failonerror" default="true"/>	
-	<sequential>
-	  <loadproperties srcfile="../../mockito.hudson.pwd" />
-	  <echo>Running: svn @{cmd}</echo>
-	  <exec executable="cmd" osfamily="windows" failonerror="@{failonerror}" output="svnout.log">
-        <arg line='/c svn @{cmd} --username mockito.hudson --password ${mockito.hudson.pwd}'/>
-      </exec>
-      <exec executable="svn" osfamily="unix" failonerror="@{failonerror}" output="svnout.log">
-        <arg line="@{cmd} --username mockito.hudson --password ${mockito.hudson.pwd}"/>
-      </exec>
-	</sequential>
-  </macrodef>
-  
-  <target name="prepare.snapshot.svn" >        
-    <svnx cmd='up maven' />    
-  </target>
-  
-  <target name="deploy.snapshot.svn" >        
-    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="ant.classpath" />
-	<loadproperties srcfile="../../mockito.hudson.pwd" />	     
-    
-    <!-- DELETING PREVIOUS SNAPSHOT (NO COMMITTING YET...) -->
-    
-    <!-- 
-    <property name="s" value="maven/snapshots/org/mockito" />    
-    <svnx cmd='delete -force ${s}/mockito-core/${version}/mockito* ${s}/mockito-all/${version}/mockito*' failonerror='false' />
-    -->   
-        
-    <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
-      <checkout destPath="${snapshots}" url="https://mockito.googlecode.com/svn/maven/snapshots" />
-      <delete force="true" >
-        <fileset dir="${snapshots}" >
-			<include name="**/mockito-core-*" />
-			<include name="**/mockito-all-*" />
-        </fileset>
-      </delete>      
-    </svn>
-          
+  <target name="deploy.snapshot" depends="release.maven, deploy.snapshot.hg" /> 	        
+
+  <target name="deploy.snapshot.hg" >
+    <taskdef resource="net/sourceforge/ant4hg/taskdefs/antlib.xml" classpathref="ant.classpath" />
+
+    <loadproperties srcfile="../../mockito.hudson.pwd" />
+
+    <mkdir dir="${snapshots}" />
+
+    <hg cmd="clone" source="https://mockito.hudson:${mockito.hudson.pwd}@snapshots.mockito.googlecode.com/hg/"
+      destination="${snapshots}" />
+
+    <hg cmd="remove" dir="${snapshots}/org/mockito/mockito-core/${version}" force="true"  />
+    <hg cmd="remove" dir="${snapshots}/org/mockito/mockito-all/${version}" force="true"  />
+
     <copy todir="${snapshots}">
-		<fileset dir="maven/repository" includes="**/*" />		
-    </copy>         
-       
-    <!-- 1. ADDING NEW SNAPSHOT (NO COMMITTING YET...) -->
-    <!-- 2. COMMIT !!! -->       
-       
-    <!-- 
-    <svnx cmd='add -force maven/snapshots/*' />
-    <svnx cmd='ci maven/snapshots -m "${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!"' />        
-    -->   
-    
-    <svn username="mockito.hudson" password="${mockito.hudson.pwd}">
-      <add force="true" recurse="true" dir="${snapshots}" />
-      <commit dir="${snapshots}" recurse="true" 
-        message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
-    </svn>
+		  <fileset dir="maven/repository" includes="**/*" />
+    </copy>
+
+    <hg cmd="add" dir="${snapshots}" />
+    <hg cmd="commit" dir="${snapshots}" message="${user.name} deployed new snapshot to please maven fan-boys and give new features to the community!" />
+    <hg cmd="push" dir="${snapshots}" />
+
   </target>
   
   <target name="test.release" depends="test.zip.release, test.zip.release.separate.jars" description="builds zip, unzips it and runs tests against jars" />
   
   <target name="all" depends="zip" description="cleans, builds, tests, jars, zips, bundles maven" />
   
-  <target name="build.and.deploy.snapshot" depends="test, prepare.package" />
+  <target name="build.and.deploy.snapshot" depends="test, prepare.package, deploy.snapshot" />
   
-  <target name="hudson.build" depends="build.and.deploy.snapshot" />
+  <target name="hudson.build" depends="test, prepare.package" />
 
 </project>
