@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.util.reflection;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.AccessibleObject;
 
 public class AccessibilityChanger {
     
@@ -13,20 +13,20 @@ public class AccessibilityChanger {
     /**
      * safely disables access
      */
-    public void safelyDisableAccess(Field field) {
+    public void safelyDisableAccess(AccessibleObject accessibleObject) {
         assert wasAccessible != null;
         try {
-            field.setAccessible(wasAccessible);
+            accessibleObject.setAccessible(wasAccessible);
         } catch (Throwable t) {
             //ignore
         }
     }
 
     /**
-     * changes the field accessibility and returns true if accessibility was changed
+     * changes the accessibleObject accessibility and returns true if accessibility was changed
      */
-    public void enableAccess(Field field) {
-        wasAccessible = field.isAccessible();
-        field.setAccessible(true);
+    public void enableAccess(AccessibleObject accessibleObject) {
+        wasAccessible = accessibleObject.isAccessible();
+        accessibleObject.setAccessible(true);
     }
 }

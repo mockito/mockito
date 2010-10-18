@@ -4,9 +4,6 @@
  */
 package org.mockito.internal.configuration;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -15,6 +12,10 @@ import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldInitializer;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import static org.mockito.Mockito.withSettings;
 
@@ -34,7 +35,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 boolean wasAccessible = field.isAccessible();
                 field.setAccessible(true);
                 try {
-                    Object instance = field.get(testClass);
+                    Object instance = new FieldInitializer(testClass, field).initialize();
                     if (instance == null) {
                         throw new MockitoException("Cannot create a @Spy for '" + field.getName() + "' field because the *instance* is missing\n" +
                         		  "The instance must be created *before* initMocks();\n" +

@@ -4,20 +4,15 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.*;
+import org.mockito.configuration.AnnotationEngine;
+import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.base.MockitoException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.configuration.AnnotationEngine;
-import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.reflection.FieldReader;
 
 /**
  * See {@link MockitoAnnotations}
@@ -87,9 +82,9 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {
-                if(new FieldReader(testClass, field).isNull()) {
+                /*if(new FieldReader(testClass, field).isNull()) {
                     new Reporter().injectMockAnnotationFieldIsNull(field.getName());
-                }
+                }*/
                 testedFields.add(field);
             }
         }

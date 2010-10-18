@@ -4,22 +4,29 @@
  */
 package org.mockitousage.annotation;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.doReturn;
+
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
-	
+
     @Spy
-	final List spiedList = new ArrayList();
+    final List spiedList = new ArrayList();
+
+    @Spy
+    NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
+
+    @Spy
+    NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
 
 	@Test
     public void shouldInitSpies() throws Exception {
@@ -29,14 +36,35 @@ public class SpyAnnotationTest extends TestBase {
         assertTrue(spiedList.isEmpty());
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldFailIfFieldIsNotInitialized() throws Exception {
-		class FailingSpy {
-			@Spy private List mySpy;
+    @Test
+    public void shouldInitSpyIfNestedStaticClass() throws Exception {
+		assertNotNull(staticTypeWithNoArgConstructor);
+		assertNotNull(staticTypeWithoutDefinedConstructor);
+    }
 
-            public List getMySpy() {
-				return mySpy;
-			}
+    @Test(expected = MockitoException.class)
+    public void shouldFailIfTypeIsAnInterface() throws Exception {
+		class FailingSpy {
+			@Spy private List spyTypeIsInterface;
+		}
+
+		MockitoAnnotations.initMocks(new FailingSpy());
+    }
+
+    @Test(expected = MockitoException.class)
+    public void shouldFailIfTypeIsAbstract() throws Exception {
+		class FailingSpy {
+			@Spy private AbstractList spyTypeIsAbstract;
+		}
+
+		MockitoAnnotations.initMocks(new FailingSpy());
+    }
+
+    @Test(expected = MockitoException.class)
+    public void shouldFailIfTypeIsInnerClass() throws Exception {
+		class FailingSpy {
+			@Spy private List spyTypeIsInner;
+            class TheInnerClass { }
 		}
 
 		MockitoAnnotations.initMocks(new FailingSpy());
@@ -46,11 +74,11 @@ public class SpyAnnotationTest extends TestBase {
     public void shouldResetSpies() throws Exception {
         spiedList.get(10); // see shouldInitSpy
     }
-	
-	@Test(expected=MockitoException.class)
-    public void shouldProvideDecentExceptionWhenSpyInstanceIsNull() throws Exception {
-        MockitoAnnotations.initMocks(new Object() {
-            @Spy String spy = null;
-        });
+
+    static class NestedClassWithoutDefinedConstructor { }
+
+    static class NestedClassWithNoArgConstructor {
+        NestedClassWithNoArgConstructor() { }
+        NestedClassWithNoArgConstructor(String _1arg) { }
     }
 }

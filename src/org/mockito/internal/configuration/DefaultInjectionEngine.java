@@ -4,15 +4,16 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldInitializer;
+import org.mockito.internal.util.reflection.FieldSetter;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.FieldSetter;
 
 /**
  * Initializes mock/spies dependencies for fields annotated with &#064;InjectMocks
@@ -31,16 +32,7 @@ public class DefaultInjectionEngine {
     //   - else don't fail, user will then provide dependencies
 	public void injectMocksOnFields(Set<Field> testClassFields, Set<Object> mocks, Object testClass) {
         for (Field field : testClassFields) {
-            Object fieldInstance = null;
-            boolean wasAccessible = field.isAccessible();
-            field.setAccessible(true);
-            try {
-                fieldInstance = field.get(testClass);
-            } catch (IllegalAccessException e) {
-                throw new MockitoException("Problems injecting dependencies in " + field.getName(), e);
-            } finally {
-                field.setAccessible(wasAccessible);
-            }
+            Object fieldInstance = new FieldInitializer(testClass, field).initialize();
 
             // for each field in the class hierarchy
             Class<?> fieldClass = fieldInstance.getClass();
@@ -66,9 +58,9 @@ public class DefaultInjectionEngine {
         }
     }
 
-    private void inject(Field field, Object fieldInstance, Object matchingMock) {        
+    private void inject(Field field, Object fieldInstance, Object matchingMock) {
         try {
-            new FieldSetter(fieldInstance, field).set(matchingMock);            
+            new FieldSetter(fieldInstance, field).set(matchingMock);
         } catch (Exception e) {
             throw new MockitoException("Problems injecting dependency in " + field.getName(), e);
         }
@@ -93,4 +85,5 @@ public class DefaultInjectionEngine {
         }
         return mockTypeMatches;
     }
+
 }

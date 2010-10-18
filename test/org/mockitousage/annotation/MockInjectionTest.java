@@ -10,10 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class MockInjectionTest extends TestBase {
@@ -23,7 +25,15 @@ public class MockInjectionTest extends TestBase {
 	@InjectMocks private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
 	@InjectMocks private SubUnderTesting subUnderTest = new SubUnderTesting();
 	@InjectMocks private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
-	@Mock private Map map;	
+
+    private BaseUnderTesting baseUnderTestingInstance = new BaseUnderTesting();
+    @InjectMocks private BaseUnderTesting initializedBase = baseUnderTestingInstance;
+    @InjectMocks private BaseUnderTesting notInitializedBase;
+
+    @Spy @InjectMocks private SuperUnderTesting initializedSpy = new SuperUnderTesting();
+    @Spy @InjectMocks private SuperUnderTesting notInitializedSpy;
+
+    @Mock private Map map;
     @Mock private List list;
 	@Mock private Set histogram1;
 	@Mock private Set histogram2;
@@ -34,6 +44,26 @@ public class MockInjectionTest extends TestBase {
 		// initMocks called in TestBase Before method, so instances ar not the same
 		MockitoAnnotations.initMocks(this);
 	}
+
+    @Test
+    public void shouldKeepSameInstanceIfFieldInitialized() {
+        assertSame(baseUnderTestingInstance, initializedBase);
+    }
+
+    @Test
+    public void shouldInitializeAnnotatedFieldIfNull() {
+        assertNotNull(notInitializedBase);
+    }                                          
+
+    @Test
+    public void shouldIInjectMocksInSpy() {
+        assertNotNull(initializedSpy.getAList());
+    }
+    @Test
+    public void shouldInitializeSpyIfNullAndInjectMocks() {
+        assertNotNull(notInitializedSpy);
+        assertNotNull(notInitializedSpy.getAList());
+    }
 
 	@Test
 	public void shouldInjectMocksIfAnnotated() {
@@ -67,14 +97,17 @@ public class MockInjectionTest extends TestBase {
 		assertSame(searchTree, otherBaseUnderTest.getSearchTree());
 	}
 	
-    @Test(expected=MockitoException.class)
-    public void shouldProvideDecentExceptionWhenInjectMockInstanceIsNull() throws Exception {
-        MockitoAnnotations.initMocks(new Object() {
-           @InjectMocks Object iAmNull = null; 
-        });
+    @Test
+    public void shouldInstantiateInjectMockFieldIfPossible() throws Exception {
+        assertNotNull(notInitializedBase);
     }
 
-	class SuperUnderTesting {
+    @Test
+    public void shouldKeepInstanceOnInjectMockFieldIfPresent() throws Exception {
+        assertSame(baseUnderTestingInstance, initializedBase);
+    }
+
+    static class SuperUnderTesting {
 
 		private List aList;
 
@@ -83,7 +116,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class BaseUnderTesting extends SuperUnderTesting {
+	static class BaseUnderTesting extends SuperUnderTesting {
 		private Map aMap;
 
 		public Map getAMap() {
@@ -91,7 +124,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class OtherBaseUnderTesting extends SuperUnderTesting {
+	static class OtherBaseUnderTesting extends SuperUnderTesting {
 		private TreeSet searchTree;
 
 		public TreeSet getSearchTree() {
@@ -99,7 +132,7 @@ public class MockInjectionTest extends TestBase {
 		}
 	}
 
-	class SubUnderTesting extends BaseUnderTesting {
+	static class SubUnderTesting extends BaseUnderTesting {
 		private Set histogram1;
 		private Set histogram2;
 

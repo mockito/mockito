@@ -17,10 +17,14 @@ import static java.lang.annotation.ElementType.FIELD;
  * <li>Minimizes repetitive mock and spy injection.</li>
  * </ul>
  * <p>
- * Currently it only supports setter injection. If you prefer constructor injection - please contribute a patch.
+ * Currently it only supports field injection. If you prefer constructor injection - please contribute a patch.
+ * </p>
+ *
  * <p>
  * Mockito tries to inject by type (using name in case types are the same). 
- * Mockito does not throw anything when injection fails - you will have to satisfy the dependencies manually.  
+ * Mockito does not throw anything when injection fails - you will have to satisfy the dependencies manually.
+ * </p>
+ *
  * <p>
  * Example:
  * <pre>
@@ -46,13 +50,32 @@ import static java.lang.annotation.ElementType.FIELD;
  *   }
  * </pre>
  *
- * <b>The field annotated with &#064;InjectMocks must be initialized.</b>
+ * <b>The field annotated with &#064;InjectMocks can be initialized by Mockito if a zero argument constructor
+ * can be found in the type (even private). <u>But Mockito cannot instantiate inner classes, local classes, 
+ * abstract classes and interfaces.</u></b>
+ *
+ * For example this class can be instantiated by Mockito :
+ * <pre>public class Bar {
+ *    private Bar() {}
+ *    public Bar(String publicConstructorWithOneArg) {}
+ * }</pre>
+ * </p>
+ *
+ * </p>
+ *
+ * <p>
+ * Note that &#064;InjectMocks is compatible with spies created using the &#64;Spy annotation.
+ * </p>
+ *
  * <p>
  * <b><code>MockitoAnnotations.injectMocks(this)</code></b> method has to called to initialize annotated objects.
+ * <p>
+ *
  * <p>
  * In above example, <code>injectMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
  * For JUnit3 <code>injectMocks()</code> can go to <code>setup()</code> method of a base class.
  * You can also put injectMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link org.mockito.runners.MockitoJUnitRunner}
+ * </p>
  */
 @Documented
 @Target( { FIELD })

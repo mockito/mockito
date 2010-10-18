@@ -4,14 +4,6 @@
  */
 package org.mockito;
 
-import static java.lang.annotation.ElementType.*;
-
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Field;
-
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.exceptions.Reporter;
@@ -19,6 +11,14 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
