@@ -312,5 +312,9 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="hg4idea" />
   </component>
+  <component name="hg4idea.settings">
+    <option name="shouldMerge" value="false" />
+    <option name="shouldPull" value="false" />
+  </component>
 </project>
 
