@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldInitializer;
@@ -32,7 +33,12 @@ public class DefaultInjectionEngine {
     //   - else don't fail, user will then provide dependencies
 	public void injectMocksOnFields(Set<Field> testClassFields, Set<Object> mocks, Object testClass) {
         for (Field field : testClassFields) {
-            Object fieldInstance = new FieldInitializer(testClass, field).initialize();
+            Object fieldInstance = null;
+            try {
+                fieldInstance = new FieldInitializer(testClass, field).initialize();
+            } catch (MockitoException e) {
+                new Reporter().cannotInitializeForInjectMocksAnnotation(field.getName(), e);
+            }
 
             // for each field in the class hierarchy
             Class<?> fieldClass = fieldInstance.getClass();

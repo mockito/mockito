@@ -538,4 +538,16 @@ public class Reporter {
             "   //also, don't forget about MockitoAnnotations.initMocks();",
                 ""), details);
     }
+
+    public void cannotInitializeForInjectMocksAnnotation(String fieldName, Exception details) {
+        throw new MockitoException(join("Cannot instianate @InjectMocks field named '" + fieldName + "'.",
+            "You haven't provided the instance for spying at field declaration so I tried to construct the instance.",
+            "However, I failed because: " + details.getMessage(),
+            "Examples of correct usage of @InjectMocks:",
+            "   @InjectMocks Service service = new Service();",
+            "   @InjectMocks Service service; //only if Service has parameterless constructor",
+            "   //also, don't forget about MockitoAnnotations.initMocks();",
+            "   //and... don't forget about some @Mocks for injection :)",
+                ""), details);
+    }
 }

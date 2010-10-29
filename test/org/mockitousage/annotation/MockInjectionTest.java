@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
@@ -105,6 +106,24 @@ public class MockInjectionTest extends TestBase {
     @Test
     public void shouldKeepInstanceOnInjectMockFieldIfPresent() throws Exception {
         assertSame(baseUnderTestingInstance, initializedBase);
+    }
+
+    @Test
+    public void shouldReportNicely() throws Exception {
+        Object failing = new Object() {
+            @InjectMocks
+            ThrowingConstructor c;
+        };
+        try {
+            MockitoAnnotations.initMocks(failing);
+            fail();
+        } catch (MockitoException e) {
+            assertContains("correct usage of @InjectMocks", e.getMessage());
+        }
+    }
+
+    static class ThrowingConstructor {
+        ThrowingConstructor() { throw new RuntimeException("aha");};
     }
 
     static class SuperUnderTesting {
