@@ -17,7 +17,7 @@ import static java.lang.annotation.ElementType.FIELD;
  * <li>Minimizes repetitive mock and spy injection.</li>
  * </ul>
  * <p>
- * Currently it only supports field injection. If you prefer constructor injection - please contribute a patch.
+ * Currently it injects fields via reflection. If you prefer constructor/setter injection - please contribute a patch.
  * </p>
  *
  * <p>
@@ -50,9 +50,9 @@ import static java.lang.annotation.ElementType.FIELD;
  *   }
  * </pre>
  *
- * <b>The field annotated with &#064;InjectMocks can be initialized by Mockito if a zero argument constructor
- * can be found in the type (even private). <u>But Mockito cannot instantiate inner classes, local classes, 
- * abstract classes and interfaces.</u></b>
+ * <b>The field annotated with &#064;InjectMocks can be initiatialized explicitly (just like in the example).
+ * Alternatively, if you don't provide the instance Mockito will try to find zero argument constructor (even private) and create an instance for you.
+ * <u>But Mockito cannot instantiate inner classes, local classes, abstract classes and interfaces.</u></b>
  *
  * For example this class can be instantiated by Mockito :
  * <pre>public class Bar {
@@ -64,7 +64,7 @@ import static java.lang.annotation.ElementType.FIELD;
  * </p>
  *
  * <p>
- * Note that &#064;InjectMocks is compatible with spies created using the &#64;Spy annotation.
+ * Note that &#064;InjectMocks will only inject mocks/spies created using the &#64;Spy or &#64;Mock annotation.
  * </p>
  *
  * <p>

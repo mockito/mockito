@@ -36,6 +36,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 field.setAccessible(true);
                 try {
                     Object instance = new FieldInitializer(testClass, field).initialize();
+                    //TODO: delete below:
                     if (instance == null) {
                         throw new MockitoException("Cannot create a @Spy for '" + field.getName() + "' field because the *instance* is missing\n" +
                         		  "The instance must be created *before* initMocks();\n" +

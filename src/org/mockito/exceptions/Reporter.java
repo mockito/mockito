@@ -537,6 +537,6 @@ public class Reporter {
                 "      \n" +
                 "      @Before public void setUp() {\n" +
                 "         MockitoAnnotations.initMock(this);\n"
-                );   
+                );
     }
 }
