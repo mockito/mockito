@@ -4,6 +4,7 @@
  */
 package org.mockitousage.annotation;
 
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -12,8 +13,10 @@ import org.mockitoutil.TestBase;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -42,32 +45,47 @@ public class SpyAnnotationTest extends TestBase {
 		assertNotNull(staticTypeWithoutDefinedConstructor);
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldFailIfTypeIsAnInterface() throws Exception {
 		class FailingSpy {
 			@Spy private List spyTypeIsInterface;
 		}
 
-		MockitoAnnotations.initMocks(new FailingSpy());
+        try {
+            MockitoAnnotations.initMocks(new FailingSpy());
+            fail();
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("an interface");
+        }
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldFailIfTypeIsAbstract() throws Exception {
 		class FailingSpy {
 			@Spy private AbstractList spyTypeIsAbstract;
 		}
 
-		MockitoAnnotations.initMocks(new FailingSpy());
+        try {
+            MockitoAnnotations.initMocks(new FailingSpy());
+            fail();
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("abstract class");
+        }
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldFailIfTypeIsInnerClass() throws Exception {
 		class FailingSpy {
-			@Spy private List spyTypeIsInner;
+			@Spy private TheInnerClass spyTypeIsInner;
             class TheInnerClass { }
 		}
 
-		MockitoAnnotations.initMocks(new FailingSpy());
+        try {
+            MockitoAnnotations.initMocks(new FailingSpy());
+            fail();
+        } catch (MockitoException e) {
+            Assertions.assertThat(e.getMessage()).contains("inner class");
+        }
     }
 
 	@Test(expected = IndexOutOfBoundsException.class)

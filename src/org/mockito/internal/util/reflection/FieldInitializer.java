@@ -83,25 +83,25 @@ public class FieldInitializer {
 
     private void checkNotLocal(Field field) {
         if(field.getType().isLocalClass()) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the type " + field.getType() + " is a local class");
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is a local class.");
         }
     }
 
     private void checkNotInner(Field field) {
         if(field.getType().isMemberClass() && !Modifier.isStatic(field.getType().getModifiers())) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the type " + field.getType() + " is an inner class");
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an inner class.");
         }
     }
 
     private void checkNotInterface(Field field) {
         if(field.getType().isInterface()) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the type " + field.getType() + " is an interface");
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an interface.");
         }
     }
 
     private void checkNotAbstract(Field field) {
         if(Modifier.isAbstract(field.getType().getModifiers())) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the type " + field.getType() + " is an inner class");
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + " is an abstract class.");
         }
     }
 

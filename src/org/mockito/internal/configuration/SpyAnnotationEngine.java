@@ -4,10 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
@@ -32,23 +29,18 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class)) {
                 assertNoAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
-                boolean wasAccessible = field.isAccessible();
-                field.setAccessible(true);
+                Object instance = null;
                 try {
-                    Object instance = new FieldInitializer(testClass, field).initialize();
-                    //TODO: delete below:
-                    if (instance == null) {
-                        throw new MockitoException("Cannot create a @Spy for '" + field.getName() + "' field because the *instance* is missing\n" +
-                        		  "The instance must be created *before* initMocks();\n" +
-                                  "Example of correct usage of @Spy:\n" +
-                            	  "   @Spy List mock = new LinkedList();\n" +
-                            	  "   //also, don't forget about MockitoAnnotations.initMocks();");
-
-                    }
-                    if (new MockUtil().isMock(instance)) { 
+                    instance = new FieldInitializer(testClass, field).initialize();
+                } catch (MockitoException e) {
+                    new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e.getMessage());
+                }
+                try {
+                    if (new MockUtil().isMock(instance)) {
                         // instance has been spied earlier
                         Mockito.reset(instance);
                     } else {
+                        field.setAccessible(true);
                         field.set(testClass, Mockito.mock(instance.getClass(), withSettings()
                                 .spiedInstance(instance)
                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
@@ -56,8 +48,6 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                     }
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating spied field " + field.getName(), e);
-                } finally {
-                    field.setAccessible(wasAccessible);
                 }
             }
         }

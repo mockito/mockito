@@ -528,15 +528,14 @@ public class Reporter {
                 "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);   
     }
 
-    public void injectMockAnnotationFieldIsNull(String field) {
-        throw new MockitoException("Field '" + field + "' annotated with @InjectMocks is null.\n" +
-                "Please make sure the instance is created *before* MockitoAnnotations.initMocks();\n" +
-                "Example of correct usage:\n" +
-                "   class SomeTest {\n" +
-                "      @InjectMocks private Foo foo = new Foo();\n" +
-                "      \n" +
-                "      @Before public void setUp() {\n" +
-                "         MockitoAnnotations.initMock(this);\n"
-                );
+    public void cannotInitializeForSpyAnnotation(String fieldName, String details) {
+        throw new MockitoException(join("Cannot instianate a @Spy for '" + fieldName + "' field.",
+            "You haven't provided the instance for spying at field declaration so I tried to construct the instance.",
+            "However, I failed because: " + details,
+            "Examples of correct usage of @Spy:",
+            "   @Spy List mock = new LinkedList();",
+            "   @Spy Foo foo; //only if Foo has parameterless constructor",
+            "   //also, don't forget about MockitoAnnotations.initMocks();",
+                ""));
     }
 }
