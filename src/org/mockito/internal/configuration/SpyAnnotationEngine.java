@@ -33,7 +33,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 try {
                     instance = new FieldInitializer(testClass, field).initialize();
                 } catch (MockitoException e) {
-                    new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e.getMessage());
+                    new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e);
                 }
                 try {
                     if (new MockUtil().isMock(instance)) {

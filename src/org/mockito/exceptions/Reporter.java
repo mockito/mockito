@@ -528,14 +528,14 @@ public class Reporter {
                 "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);   
     }
 
-    public void cannotInitializeForSpyAnnotation(String fieldName, String details) {
+    public void cannotInitializeForSpyAnnotation(String fieldName, Exception details) {
         throw new MockitoException(join("Cannot instianate a @Spy for '" + fieldName + "' field.",
             "You haven't provided the instance for spying at field declaration so I tried to construct the instance.",
-            "However, I failed because: " + details,
+            "However, I failed because: " + details.getMessage(),
             "Examples of correct usage of @Spy:",
             "   @Spy List mock = new LinkedList();",
             "   @Spy Foo foo; //only if Foo has parameterless constructor",
             "   //also, don't forget about MockitoAnnotations.initMocks();",
-                ""));
+                ""), details);
     }
 }

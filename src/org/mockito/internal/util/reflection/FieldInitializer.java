@@ -67,13 +67,13 @@ public class FieldInitializer {
             Object newFieldInstance = constructor.newInstance(noArg);
             new FieldSetter(testClass, field).set(newFieldInstance);
         } catch (NoSuchMethodException e) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the type " + field.getType() + " has no default constructor", e);
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' has no default constructor", e);
         } catch (InvocationTargetException e) {
-            throw new MockitoException("Cannot instantiate field \"" + field.getName() + "\", the default constructor of type " + field.getType() + " has raised an exception : " + e.getTargetException().toString(), e);
+            throw new MockitoException("the default constructor of type '" + field.getType().getSimpleName() + "' has raised an exception (see the stack trace for cause): " + e.getTargetException().toString(), e);
         } catch (InstantiationException e) {
-            throw new MockitoException("Unexpected InstantiationException for field : \"" + field.getName() + "\"", e);
+            throw new MockitoException("InstantiationException (see the stack trace for cause): " + e.toString(), e);
         } catch (IllegalAccessException e) {
-            throw new MockitoException("Unexpected IllegalAccessException for field : \"" + field.getName() + "\"", e);
+            throw new MockitoException("IllegalAccessException (see the stack trace for cause): " + e.toString(), e);
         } finally {
             if(constructor != null) {
                 changer.safelyDisableAccess(constructor);

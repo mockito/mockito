@@ -13,20 +13,16 @@ import org.mockitoutil.TestBase;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
 
-    @Spy
-    final List spiedList = new ArrayList();
+    @Spy final List spiedList = new ArrayList();
 
-    @Spy
-    NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
+    @Spy NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
 
     @Spy
     NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
@@ -56,6 +52,36 @@ public class SpyAnnotationTest extends TestBase {
             fail();
         } catch (Exception e) {
             Assertions.assertThat(e.getMessage()).contains("an interface");
+        }
+    }
+
+    @Test
+    public void shouldReportWhenNoArgConstructor() throws Exception {
+		class FailingSpy {
+	        @Spy
+            NoValidConstructor noValidConstructor;
+		}
+
+        try {
+            MockitoAnnotations.initMocks(new FailingSpy());
+            fail();
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("default constructor");
+        }
+    }
+    
+    @Test
+    public void shouldReportWhenConstructorThrows() throws Exception {
+		class FailingSpy {
+	        @Spy
+            ThrowingConstructor throwingConstructor;
+		}
+
+        try {
+            MockitoAnnotations.initMocks(new FailingSpy());
+            fail();
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("raised an exception");
         }
     }
 
@@ -97,6 +123,14 @@ public class SpyAnnotationTest extends TestBase {
 
     static class NestedClassWithNoArgConstructor {
         NestedClassWithNoArgConstructor() { }
-        NestedClassWithNoArgConstructor(String _1arg) { }
+        NestedClassWithNoArgConstructor(String f) { }
+    }
+
+    static class NoValidConstructor {
+        NoValidConstructor(String f) { }
+    }
+
+    static class ThrowingConstructor {
+        ThrowingConstructor() { throw new RuntimeException("boo!"); }
     }
 }
