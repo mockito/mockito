@@ -37,6 +37,9 @@ import org.mockito.stubbing.Answer;
  *  Returns description of mock for toString() method
  * </li>
  * <li>
+ *  Returns non-zero for Comparable#compareTo(T other) method (see issue 184)
+ * </li>
+ * <li>
  *  Returns null for everything else
  * </li>
  * </ul>
