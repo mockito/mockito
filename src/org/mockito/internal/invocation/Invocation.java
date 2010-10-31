@@ -152,8 +152,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return matchers;
     }
 
-    public static boolean isToString(InvocationOnMock invocation) {
-        return new ObjectMethodsGuru().isToString(invocation.getMethod());
+    public boolean isToString() {
+        return new ObjectMethodsGuru().isToString(getMethod());
     }
 
     public boolean isValidException(Throwable throwable) {
