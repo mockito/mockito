@@ -71,12 +71,6 @@ public class InvalidStateDetectionTest extends TestBase {
 
         when(mock.simpleMethod());
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedStubbingException.class);
-        
-        when(mock.simpleMethod());
-        detectsAndCleansUp(new OnMockCreation(), UnfinishedStubbingException.class);
-        
-        when(mock.simpleMethod());
-        detectsAndCleansUp(new OnSpyCreation(), UnfinishedStubbingException.class);
     }
     
     @Test

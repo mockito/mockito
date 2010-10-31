@@ -64,22 +64,27 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void validateState() {
-        //State is cool when GlobalConfiguration is already loaded
-        //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.configuration.MockitoConfiguration class 
-        GlobalConfiguration.validate();
+        validateMostStuff();
         
-        if (verificationMode != null) {
-            Location location = verificationMode.getLocation();
-            verificationMode = null;
-            reporter.unfinishedVerificationException(location);
-        }
-        
+        //validate stubbing:
         if (stubbingInProgress != null) {
             Location temp = stubbingInProgress;
             stubbingInProgress = null;
             reporter.unfinishedStubbing(temp);
         }
-      
+    }
+
+    private void validateMostStuff() {
+        //State is cool when GlobalConfiguration is already loaded
+        //this cannot really be tested functionally because I cannot dynamically mess up org.mockito.configuration.MockitoConfiguration class
+        GlobalConfiguration.validate();
+
+        if (verificationMode != null) {
+            Location location = verificationMode.getLocation();
+            verificationMode = null;
+            reporter.unfinishedVerificationException(location);
+        }
+
         getArgumentMatcherStorage().validateState();
     }
 
@@ -107,7 +112,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (listener != null && listener instanceof MockingStartedListener) {
             ((MockingStartedListener) listener).mockingStarted(mock, classToMock, mockSettings);
         }
-        validateState();
+        validateMostStuff();
     }
 
     public void setListener(MockingProgressListener listener) {
