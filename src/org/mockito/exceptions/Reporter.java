@@ -106,10 +106,11 @@ public class Reporter {
         throw exception;
     }
     
-    public void notAMockPassedToVerify() {
+    public void notAMockPassedToVerify(Class type) {
         throw new NotAMockException(join(
-                "Argument passed to verify() is not a mock!",
-                "Examples of correct verifications:",
+                "Argument passed to verify() is of type " + type.getSimpleName() + " and is not a mock!",
+                "Make sure you place the parenthesis correctly!",
+                "See the examples of correct verifications:",
                 "    verify(mock).someMethod();",
                 "    verify(mock, times(10)).someMethod();",
                 "    verify(mock, atLeastOnce()).someMethod();"

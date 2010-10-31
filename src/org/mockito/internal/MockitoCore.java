@@ -70,7 +70,7 @@ public class MockitoCore {
         if (mock == null) {
             reporter.nullPassedToVerify();
         } else if (!mockUtil.isMock(mock)) {
-            reporter.notAMockPassedToVerify();
+            reporter.notAMockPassedToVerify(mock.getClass());
         }
         mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, mode));
         return mock;
