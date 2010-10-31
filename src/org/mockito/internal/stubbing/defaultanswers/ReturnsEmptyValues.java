@@ -24,6 +24,7 @@ import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockName;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -56,7 +57,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) {
-        if (Invocation.isToString(invocation)) {
+        if (new ObjectMethodsGuru().isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
             MockName name = new MockUtil().getMockName(mock);
             if (name.isSurrogate()) {

@@ -35,7 +35,7 @@ public class RegisteredInvocations implements Serializable {
 
     private static class RemoveToString implements Filter<Invocation> {
         public boolean isOut(Invocation invocation) {
-            return Invocation.isToString(invocation);
+            return invocation.isToString();
         }
     }
 }
