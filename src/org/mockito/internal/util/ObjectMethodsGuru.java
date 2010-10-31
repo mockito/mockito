@@ -30,4 +30,9 @@ public class ObjectMethodsGuru implements Serializable {
     public boolean isHashCodeMethod(Method method) {
         return method.getName().equals("hashCode") && method.getParameterTypes().length == 0;
     }
+
+    public boolean isCompareToMethod(Method method) {
+        return Comparable.class.isAssignableFrom(method.getDeclaringClass()) && method.getName().equals("compareTo")
+                && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == method.getDeclaringClass();
+    }
 }

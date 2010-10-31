@@ -4,30 +4,20 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.junit.Test;
+import org.mockito.internal.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
+import static org.mockito.Mockito.mock;
+
+@SuppressWarnings("unchecked")
 public class ReturnsEmptyValuesTest extends TestBase {
-    
-    @SuppressWarnings("unchecked")
+
+    ReturnsEmptyValues values = new ReturnsEmptyValues();
+
     @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {
-        ReturnsEmptyValues values = new ReturnsEmptyValues();
-        
         assertTrue(((Collection) values.returnValueFor(Collection.class)).isEmpty());
 
         assertTrue(((Set) values.returnValueFor(Set.class)).isEmpty());
@@ -45,13 +35,11 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertTrue(((HashMap) values.returnValueFor(HashMap.class)).isEmpty());
         assertTrue(((TreeMap) values.returnValueFor(TreeMap.class)).isEmpty());
         assertTrue(((LinkedHashMap) values.returnValueFor(LinkedHashMap.class)).isEmpty());
-        
+
         assertNull(values.returnValueFor(String.class));
     }
-    
+
     @Test public void shouldReturnPrimitive() {
-        ReturnsEmptyValues values = new ReturnsEmptyValues();
-        
         assertEquals(false, values.returnValueFor(Boolean.TYPE));
         assertEquals((char) 0, values.returnValueFor(Character.TYPE));
         assertEquals(0, values.returnValueFor(Byte.TYPE));
@@ -61,4 +49,18 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertEquals(0, values.returnValueFor(Float.TYPE));
         assertEquals(0, values.returnValueFor(Double.TYPE));
     }
+
+    @Test public void shouldReturnNonZeroForCompareToMethod() {
+        //given
+        Date d = mock(Date.class);
+        d.compareTo(new Date());
+        Invocation compareTo = this.getLastInvocation();
+
+        //when
+        Object result = values.answer(compareTo);
+        
+        //then
+        assertTrue(result != (Object) 0);
+    }
+
 }

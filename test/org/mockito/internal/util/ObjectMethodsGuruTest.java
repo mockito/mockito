@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.Date;
+
 public class ObjectMethodsGuruTest extends TestBase {
 
     ObjectMethodsGuru guru = new ObjectMethodsGuru();
@@ -32,5 +34,27 @@ public class ObjectMethodsGuruTest extends TestBase {
         assertFalse(guru.isHashCodeMethod(IMethods.class.getMethod("toString")));
         assertFalse(guru.isHashCodeMethod(IMethods.class.getMethod("hashCode", String.class)));
         assertTrue(guru.isHashCodeMethod(Object.class.getDeclaredMethod("hashCode")));
+    }
+
+    interface HasCompareToButDoesNotImplementComparable {
+        public int compareTo(HasCompareToButDoesNotImplementComparable other);
+    }
+
+    interface HasCompare extends Comparable {
+        public int foo(HasCompare other);
+        public int compareTo(HasCompare other, String redHerring);
+        public int compareTo(String redHerring);
+        public int compareTo(HasCompare redHerring);
+    }
+
+    @Test
+    public void shouldKnowCompareToMethod() throws Exception {
+        assertFalse(guru.isCompareToMethod(Date.class.getMethod("toString")));
+        assertFalse(guru.isCompareToMethod(HasCompare.class.getMethod("foo", HasCompare.class)));
+        assertFalse(guru.isCompareToMethod(HasCompare.class.getMethod("compareTo", HasCompare.class, String.class)));
+        assertFalse(guru.isCompareToMethod(HasCompare.class.getMethod("compareTo", String.class)));
+        assertFalse(guru.isCompareToMethod(HasCompareToButDoesNotImplementComparable.class.getDeclaredMethod("compareTo", HasCompareToButDoesNotImplementComparable.class)));
+
+        assertTrue(guru.isCompareToMethod(HasCompare.class.getMethod("compareTo", HasCompare.class)));
     }
 }

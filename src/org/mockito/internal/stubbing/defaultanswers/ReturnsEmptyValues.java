@@ -52,12 +52,13 @@ import org.mockito.stubbing.Answer;
 public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = 1998191268711234347L;
+    ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
 
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) {
-        if (new ObjectMethodsGuru().isToString(invocation.getMethod())) {
+        if (methodsGuru.isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
             MockName name = new MockUtil().getMockName(mock);
             if (name.isSurrogate()) {
@@ -65,6 +66,11 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             } else {
                 return name.toString();
             }
+        } else if (methodsGuru.isCompareToMethod(invocation.getMethod())) {
+            //see issue 184.
+            //mocks by default should not return 0 for compareTo because they are not the same. Hence we return 1 (anything but 0 is good).
+            //Only for compareTo() method by the Comparable interface
+            return 1;
         }
         
         Class<?> returnType = invocation.getMethod().getReturnType();
