@@ -6,14 +6,13 @@ package org.mockito.internal.configuration;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.configuration.injection.FinalMockCandidateFilter;
+import org.mockito.internal.configuration.injection.MockCandidateFilter;
+import org.mockito.internal.configuration.injection.NameBasedCandidateFilter;
+import org.mockito.internal.configuration.injection.TypeBasedCandidateFilter;
 import org.mockito.internal.util.reflection.FieldInitializer;
-import org.mockito.internal.util.reflection.FieldSetter;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,7 +22,7 @@ import java.util.Set;
  */
 public class DefaultInjectionEngine {
 	
-    private final MockUtil mockUtil = new MockUtil();
+    private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
 
     // for each tested
     // - for each field of tested
@@ -50,46 +49,9 @@ public class DefaultInjectionEngine {
     }
 
     private void injectMockCandidate(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object fieldInstance) {
-        // TODO refactor using a CoR, maybe configured with config.
         for(Field field : awaitingInjectionClazz.getDeclaredFields()) {
-            List<Object> mockCandidates = selectMockCondidatesOnType(mocks, field.getType());
-            if(mockCandidates.size() > 1) {
-                mockCandidates = selectMockCandidateOnName(mockCandidates, field.getName());
-            }
-            if(mockCandidates.size() == 1) {
-                inject(field, fieldInstance, mockCandidates.get(0));
-            } else {
-                // don't fail, the user need to provide other dependencies
-            }
+            mockCandidateFilter.filterCandidate(mocks, field, fieldInstance).thenInject();
         }
-    }
-
-    private void inject(Field field, Object fieldInstance, Object matchingMock) {
-        try {
-            new FieldSetter(fieldInstance, field).set(matchingMock);
-        } catch (Exception e) {
-            throw new MockitoException("Problems injecting dependency in " + field.getName(), e);
-        }
-    }
-
-    private List<Object> selectMockCandidateOnName(Collection<Object> mocks, String fieldName) {
-        List<Object> mockNameMatches = new ArrayList<Object>();
-        for (Object mock : mocks) {
-            if(fieldName.equals(mockUtil.getMockName(mock).toString())) {
-                mockNameMatches.add(mock);
-            }
-        }
-		return mockNameMatches;
-    }
-
-    private List<Object> selectMockCondidatesOnType(Collection<Object> mocks, Class<?> fieldClass) {
-        List<Object> mockTypeMatches = new ArrayList<Object>();
-        for (Object mock : mocks) {
-            if(fieldClass.isAssignableFrom(mock.getClass())) {
-                mockTypeMatches.add(mock);
-            }
-        }
-        return mockTypeMatches;
     }
 
 }
