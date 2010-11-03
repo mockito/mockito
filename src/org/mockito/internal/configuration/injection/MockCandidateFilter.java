@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface MockCandidateFilter {
 
-    Injecter filterCandidate(
+    OngoingInjecter filterCandidate(
             Collection<Object> mocks,
             Field fieldToBeInjected,
             Object fieldInstance

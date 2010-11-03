@@ -15,7 +15,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
         this.next = next;
     }
 
-    public Injecter filterCandidate(Collection<Object> mocks, Field field, Object fieldInstance) {
+    public OngoingInjecter filterCandidate(Collection<Object> mocks, Field field, Object fieldInstance) {
         List<Object> mockNameMatches = new ArrayList<Object>();
         if(mocks.size() > 1) {
             for (Object mock : mocks) {

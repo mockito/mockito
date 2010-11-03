@@ -21,7 +21,7 @@ import java.util.Set;
  * See {@link org.mockito.MockitoAnnotations}
  */
 public class DefaultInjectionEngine {
-	
+
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
 
     // for each tested
@@ -30,7 +30,7 @@ public class DefaultInjectionEngine {
     //   - if more than *one* find mock candidate on name
     //   - if one mock candidate then set mock
     //   - else don't fail, user will then provide dependencies
-	public void injectMocksOnFields(Set<Field> testClassFields, Set<Object> mocks, Object testClass) {
+    public void injectMocksOnFields(Set<Field> testClassFields, Set<Object> mocks, Object testClass) {
         for (Field field : testClassFields) {
             Object fieldInstance = null;
             try {
