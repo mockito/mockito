@@ -56,4 +56,20 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     	assertEquals("SmartNull returned by unstubbed withArgs(oompa, lumpa) method on mock", smartNull + "");
     }
+
+    @Test
+	public void shouldPrintTheParametersOnSmartNullPointerExceptionMessage() throws Throwable {
+    	Answer<Object> answer = new ReturnsSmartNulls();
+
+        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
+
+        try {
+            smartNull.get();
+            fail();
+        } catch (SmartNullPointerException ex) {
+        	String message = ex.getMessage();
+        	assertTrue("Exception message should include oompa and lumpa, but was: " + message,
+        			message.contains("oompa, lumpa"));
+        }
+	}
 }

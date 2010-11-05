@@ -4,8 +4,8 @@
  */
 package org.mockito.exceptions;
 
-import static org.mockito.exceptions.Pluralizer.*;
-import static org.mockito.internal.util.StringJoiner.*;
+import static org.mockito.exceptions.Pluralizer.pluralize;
+import static org.mockito.internal.util.StringJoiner.join;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class Reporter {
                 ));
 
     }
-    
+
     public void unfinishedStubbing(Location location) {
         throw new UnfinishedStubbingException(join(
                 "Unfinished stubbing detected here:",
@@ -101,10 +101,10 @@ public class Reporter {
                 "Those methods *cannot* be stubbed/verified.",
                 ""
         ));
-        
+
         throw exception;
     }
-    
+
     public void notAMockPassedToVerify(Class type) {
         throw new NotAMockException(join(
                 "Argument passed to verify() is of type " + type.getSimpleName() + " and is not a mock!",
@@ -115,7 +115,7 @@ public class Reporter {
                 "    verify(mock, atLeastOnce()).someMethod();"
         ));
     }
-    
+
     public void nullPassedToVerify() {
         throw new NullInsteadOfMockException(join(
                 "Argument passed to verify() should be a mock but is null!",
@@ -125,8 +125,8 @@ public class Reporter {
                 "    verify(mock, atLeastOnce()).someMethod();",
                 "Also, if you use @Mock annotation don't miss initMocks()"
         ));
-    }    
-    
+    }
+
     public void notAMockPassedToWhenMethod() {
         throw new NotAMockException(join(
                 "Argument passed to when() is not a mock!",
@@ -134,16 +134,16 @@ public class Reporter {
                 "    doThrow(new RuntimeException()).when(mock).someMethod();"
         ));
     }
-    
+
     public void nullPassedToWhenMethod() {
         throw new NullInsteadOfMockException(join(
                 "Argument passed to when() is null!",
                 "Example of correct stubbing:",
-                "    doThrow(new RuntimeException()).when(mock).someMethod();",                
+                "    doThrow(new RuntimeException()).when(mock).someMethod();",
                 "Also, if you use @Mock annotation don't miss initMocks()"
         ));
     }
-    
+
     public void mocksHaveToBePassedToVerifyNoMoreInteractions() {
         throw new MockitoException(join(
                 "Method requires argument(s)!",
@@ -161,7 +161,7 @@ public class Reporter {
             "    verifyZeroInteractions(mockOne, mockTwo);"
         ));
     }
-    
+
     public void nullPassedToVerifyNoMoreInteractions() {
         throw new NullInsteadOfMockException(join(
                 "Argument(s) passed is null!",
@@ -178,8 +178,8 @@ public class Reporter {
                 "For example:",
                 "    InOrder inOrder = inOrder(mockOne, mockTwo);"
                 ));
-    } 
-    
+    }
+
     public void nullPassedWhenCreatingInOrder() {
         throw new NullInsteadOfMockException(join(
                 "Argument(s) passed is null!",
@@ -188,7 +188,7 @@ public class Reporter {
                 "    InOrder inOrder = inOrder(mockOne, mockTwo);"
                 ));
     }
-    
+
     public void mocksHaveToBePassedWhenCreatingInOrder() {
         throw new MockitoException(join(
                 "Method requires argument(s)!",
@@ -197,7 +197,7 @@ public class Reporter {
                 "    InOrder inOrder = inOrder(mockOne, mockTwo);"
                 ));
     }
-    
+
     public void inOrderRequiresFamiliarMock() {
         throw new MockitoException(join(
                 "InOrder can only verify mocks that were passed in during creation of InOrder.",
@@ -206,12 +206,12 @@ public class Reporter {
                 "    inOrder.verify(mockOne).doStuff();"
                 ));
     }
-    
+
     public void invalidUseOfMatchers(int expectedMatchersCount, int recordedMatchersCount) {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers!",
                 expectedMatchersCount + " matchers expected, " + recordedMatchersCount + " recorded.",
-                "This exception may occur if matchers are combined with raw values:",        
+                "This exception may occur if matchers are combined with raw values:",
                 "    //incorrect:",
                 "    someMethod(anyObject(), \"raw String\");",
                 "When using matchers, all arguments have to be provided by matchers.",
@@ -221,10 +221,10 @@ public class Reporter {
                 "",
                 "For more info see javadoc for Matchers class."
         ));
-    }    
+    }
 
     public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
-        String message = join("Argument(s) are different! Wanted:", 
+        String message = join("Argument(s) are different! Wanted:",
                 wanted,
                 new Location(),
                 "Actual invocation has different arguments:",
@@ -232,14 +232,14 @@ public class Reporter {
                 actualLocation,
                 ""
                 );
-        
+
         if (JUnitTool.hasJUnit()) {
             throw JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
         } else {
             throw new ArgumentsAreDifferent(message);
         }
     }
-    
+
     public void wantedButNotInvoked(PrintableInvocation wanted) {
         throw new WantedButNotInvoked(createWantedButNotInvokedMessage(wanted));
     }
@@ -256,7 +256,7 @@ public class Reporter {
             }
             allInvocations = sb.toString();
         }
-        
+
         String message = createWantedButNotInvokedMessage(wanted);
         throw new WantedButNotInvoked(message + allInvocations);
     }
@@ -269,7 +269,7 @@ public class Reporter {
                 ""
         );
     }
-    
+
     public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
         throw new VerificationInOrderFailure(join(
                     "Verification in order failure",
@@ -299,7 +299,7 @@ public class Reporter {
                 ""
         );
     }
-    
+
     public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
@@ -309,8 +309,8 @@ public class Reporter {
                 firstUndesired,
                 ""
         ));
-    }    
-    
+    }
+
     public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerificationInOrderFailure(join(
@@ -320,28 +320,28 @@ public class Reporter {
 
     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
             Location lastActualInvocation) {
-        String ending = 
+        String ending =
             (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
-            
+
             String message = join(
                     wanted.toString(),
                     "Wanted " + discrepancy.getPluralizedWantedCount() + ":",
                     new Location(),
-                    "But was " + discrepancy.getPluralizedActualCount() + ":", 
+                    "But was " + discrepancy.getPluralizedActualCount() + ":",
                     ending
             );
             return message;
     }
-   
+
     public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
-        
+
         throw new TooLittleActualInvocations(message);
     }
-    
+
     public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
-        
+
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
@@ -350,7 +350,7 @@ public class Reporter {
     public void noMoreInteractionsWanted(Invocation undesired, List<VerificationAwareInvocation> invocations) {
         ScenarioPrinter scenarioPrinter = new ScenarioPrinter();
         String scenario = scenarioPrinter.print(invocations);
-        
+
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
                 new Location(),
@@ -360,7 +360,7 @@ public class Reporter {
                 ""
         ));
     }
-    
+
     public void noMoreInteractionsWantedInOrder(Invocation undesired) {
         throw new VerificationInOrderFailure(join(
                 "No interactions wanted here:",
@@ -370,7 +370,7 @@ public class Reporter {
                 ""
                 ));
     }
-    
+
     public void cannotMockFinalClass(Class<?> clazz) {
         throw new MockitoException(join(
                 "Cannot mock/spy " + clazz.toString(),
@@ -435,10 +435,11 @@ public class Reporter {
                 ));
     }
 
-    public void smartNullPointerException(Location location) {
+    public void smartNullPointerException(Object obj, Location location) {
         throw new SmartNullPointerException(join(
                 "You have a NullPointerException here:",
                 new Location(),
+                obj,
                 "Because this method was *not* stubbed correctly:",
                 location,
                 ""
@@ -476,7 +477,7 @@ public class Reporter {
     public void extraInterfacesCannotContainMockedType(Class<?> wrongType) {
         throw new MockitoException(join(
                 "extraInterfaces() does not accept the same type as the mocked type.",
-                "You mocked following type: " + wrongType.getSimpleName(), 
+                "You mocked following type: " + wrongType.getSimpleName(),
                 "and you passed the same very interface to the extraInterfaces()"
         ));
     }
@@ -525,7 +526,7 @@ public class Reporter {
 
     public void unsupportedCombinationOfAnnotations(String undesiredAnnotationOne, String undesiredAnnotationTwo) {
         throw new MockitoException("This combination of annotations is not permitted on a single field:\n" +
-                "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);   
+                "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);
     }
 
     public void cannotInitializeForSpyAnnotation(String fieldName, Exception details) {
