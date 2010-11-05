@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
@@ -13,9 +17,6 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
-import java.lang.reflect.Method;
 
 /**
  * Optional Answer that can be used with
@@ -49,12 +50,17 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             if (new ObjectMethodsGuru().isToString(method)) {
-                return "SmartNull returned by unstubbed " + invocation.getMethod().getName() + "() method on mock";
+                return "SmartNull returned by unstubbed " + formatMethodCall()  + " method on mock";
             }
-            
+
             new Reporter().smartNullPointerException(location);
             return null;
         }
+
+		private String formatMethodCall() {
+			String args = Arrays.toString(invocation.getArguments());
+			return invocation.getMethod().getName() + "(" + args.substring(1, args.length() - 1) +	")";
+		}
     }
 
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();

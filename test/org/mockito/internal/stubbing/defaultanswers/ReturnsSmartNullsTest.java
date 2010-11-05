@@ -10,7 +10,7 @@ import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
 public class ReturnsSmartNullsTest extends TestBase {
-    
+
     @Test
     public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
@@ -21,30 +21,39 @@ public class ReturnsSmartNullsTest extends TestBase {
         assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
         assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
-    
+
     interface Foo {
         Foo get();
+        Foo withArgs(String oneArg, String otherArg);
     }
-    
+
     @Test
     public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
-        
+
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
-        
+
         try {
             smartNull.get();
             fail();
         } catch (SmartNullPointerException expected) {}
     }
-    
+
     @Test
     public void shouldReturnAnObjectThatAllowsObjectMethods() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
-        
+
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
-        
-        //TODO: after 1.8 add functionality of printing params
+
         assertEquals("SmartNull returned by unstubbed get() method on mock", smartNull + "");
+    }
+
+    @Test
+    public void shouldPrintTheParametersWhenCallingAMethodWithArgs() throws Throwable {
+    	Answer<Object> answer = new ReturnsSmartNulls();
+
+    	Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
+
+    	assertEquals("SmartNull returned by unstubbed withArgs(oompa, lumpa) method on mock", smartNull + "");
     }
 }
