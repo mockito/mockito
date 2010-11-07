@@ -50,41 +50,45 @@ public class SmartNullsStubbingTest extends TestBase {
         Bar getSomeInterface() {
             return null;
         }
-        
+
+        Bar getBarWithParams(int x, String y) {
+            return null;
+        }
+
         void boo() {}
     }
-    
+
     @Test
     public void shouldThrowSmartNPEWhenMethodReturnsClass() throws Exception {
         Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
-        Foo foo = mock.getSomeClass(); 
+        Foo foo = mock.getSomeClass();
         try {
             foo.boo();
             fail();
         } catch (SmartNullPointerException e) {}
     }
-    
+
     @Test
     public void shouldThrowSmartNPEWhenMethodReturnsInterface() throws Exception {
         Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
-        Bar bar = mock.getSomeInterface(); 
+        Bar bar = mock.getSomeInterface();
         try {
             bar.boo();
             fail();
         } catch (SmartNullPointerException e) {}
     }
-    
-    
+
+
     @Test
     public void shouldReturnOrdinaryEmptyValuesForOrdinaryTypes() throws Exception {
         IMethods mock = mock(IMethods.class, RETURNS_SMART_NULLS);
-        
+
         assertEquals("", mock.stringReturningMethod());
         assertEquals(0, mock.intReturningMethod());
         assertEquals(true, mock.listReturningMethod().isEmpty());
         assertEquals(0, mock.arrayReturningMethod().length);
     }
-    
+
     @Test
     public void shouldNotThrowSmartNullPointerOnToString() {
         Object smartNull = mock.objectReturningMethod();
@@ -98,5 +102,19 @@ public class SmartNullsStubbingTest extends TestBase {
     public void shouldNotThrowSmartNullPointerOnObjectMethods() {
         Object smartNull = mock.objectReturningMethod();
         smartNull.toString();
+    }
+
+    @Test
+    public void shouldShowParameters() {
+        Foo foo = mock(Foo.class, RETURNS_SMART_NULLS);
+        Bar smartNull = foo.getBarWithParams(10, "yes sir");
+
+        try {
+            //TODO: make sure the message is clear
+            smartNull.boo();
+            fail();
+        } catch (Exception e) {
+            assertContains("yes sir", e.getMessage());
+        }
     }
 }
