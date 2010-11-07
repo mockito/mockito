@@ -30,7 +30,7 @@ public class ClassPathLoader {
                     "MockitoConfiguration class must implement org.mockito.configuration.IMockitoConfiguration interface.", e);
         } catch (Exception e) {
             throw new MockitoConfigurationException("\n" +
-                    "Unable to instantianate org.mockito.configuration.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
+                    "Unable to instantiate org.mockito.configuration.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
         }
     }
 }
