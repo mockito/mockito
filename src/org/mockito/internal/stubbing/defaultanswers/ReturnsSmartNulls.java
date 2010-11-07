@@ -50,17 +50,13 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             if (new ObjectMethodsGuru().isToString(method)) {
-                return "SmartNull returned by unstubbed " + formatMethodCall()  + " method on mock";
+                return "SmartNull returned by this unstubbed method call on a mock:\n" +
+                        invocation.toString();
             }
 
             new Reporter().smartNullPointerException(invocation.toString(), location);
             return null;
         }
-
-		private String formatMethodCall() {
-			String args = Arrays.toString(invocation.getArguments());
-			return invocation.getMethod().getName() + "(" + args.substring(1, args.length() - 1) +	")";
-		}
     }
 
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();

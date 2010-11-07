@@ -45,7 +45,8 @@ public class ReturnsSmartNullsTest extends TestBase {
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
 
-        assertEquals("SmartNull returned by unstubbed get() method on mock", smartNull + "");
+        assertContains("SmartNull returned by", smartNull + "");
+        assertContains("foo.get()", smartNull + "");
     }
 
     @Test
@@ -54,7 +55,9 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     	Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
-    	assertEquals("SmartNull returned by unstubbed withArgs(oompa, lumpa) method on mock", smartNull + "");
+        assertContains("foo.withArgs", smartNull + "");
+        assertContains("oompa", smartNull + "");
+        assertContains("lumpa", smartNull + "");
     }
 
     @Test
