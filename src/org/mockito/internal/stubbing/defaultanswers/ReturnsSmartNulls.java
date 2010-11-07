@@ -53,7 +53,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
                 return "SmartNull returned by unstubbed " + formatMethodCall()  + " method on mock";
             }
 
-            new Reporter().smartNullPointerException(obj, location);
+            new Reporter().smartNullPointerException(invocation.toString(), location);
             return null;
         }
 

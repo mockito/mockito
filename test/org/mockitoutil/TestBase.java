@@ -21,6 +21,8 @@ import org.mockito.internal.util.MockUtil;
 
 import java.io.*;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
@@ -133,7 +135,7 @@ public class TestBase extends Assert {
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new Invocation(new Object(), new SerializableMethod(type.getMethod(methodName,
+        return new Invocation(mock(type), new SerializableMethod(type.getMethod(methodName,
                 types)), args, 1, null);
     }
 

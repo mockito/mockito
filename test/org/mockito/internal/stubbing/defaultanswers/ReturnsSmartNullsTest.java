@@ -66,10 +66,9 @@ public class ReturnsSmartNullsTest extends TestBase {
         try {
             smartNull.get();
             fail();
-        } catch (SmartNullPointerException ex) {
-        	String message = ex.getMessage();
-        	assertTrue("Exception message should include oompa and lumpa, but was: " + message,
-        			message.contains("oompa, lumpa"));
+        } catch (SmartNullPointerException e) {
+        	assertContains("oompa", e.getMessage());
+        	assertContains("lumpa", e.getMessage());
         }
 	}
 }

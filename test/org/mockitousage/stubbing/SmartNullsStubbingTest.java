@@ -110,11 +110,24 @@ public class SmartNullsStubbingTest extends TestBase {
         Bar smartNull = foo.getBarWithParams(10, "yes sir");
 
         try {
-            //TODO: make sure the message is clear
             smartNull.boo();
             fail();
         } catch (Exception e) {
             assertContains("yes sir", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldShowParametersWhenParamsAreHuge() {
+        Foo foo = mock(Foo.class, RETURNS_SMART_NULLS);
+        String longStr = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+        Bar smartNull = foo.getBarWithParams(10, longStr);
+
+        try {
+            smartNull.boo();
+            fail();
+        } catch (Exception e) {
+            assertContains("Lorem Ipsum", e.getMessage());
         }
     }
 }
