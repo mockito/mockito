@@ -44,7 +44,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
 
         //then
         assertEquals(10, mock.compareTo(new Date()));
-        verify(mock, atLeastOnce()).compareTo(new Date());
+        verify(mock, atLeastOnce()).compareTo(any(Date.class));
     }
 
     @Test
