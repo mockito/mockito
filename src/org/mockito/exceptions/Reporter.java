@@ -149,7 +149,8 @@ public class Reporter {
                 "Method requires argument(s)!",
                 "Pass mocks that should be verified, e.g:",
                 "    verifyNoMoreInteractions(mockOne, mockTwo);",
-                "    verifyZeroInteractions(mockOne, mockTwo);"
+                "    verifyZeroInteractions(mockOne, mockTwo);",
+                ""
                 ));
     }
 
@@ -158,7 +159,8 @@ public class Reporter {
             "Argument(s) passed is not a mock!",
             "Examples of correct verifications:",
             "    verifyNoMoreInteractions(mockOne, mockTwo);",
-            "    verifyZeroInteractions(mockOne, mockTwo);"
+            "    verifyZeroInteractions(mockOne, mockTwo);",
+            ""
         ));
     }
 
@@ -356,8 +358,7 @@ public class Reporter {
                 new Location(),
                 "But found this interaction:",
                 undesired.getLocation(),
-                scenario,
-                ""
+                scenario
         ));
     }
 
