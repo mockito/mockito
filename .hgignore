@@ -4,3 +4,4 @@ mockito.ipr
 mockito.iws
 mockito.iml
 glob:maven/repository
+glob:*.iws
