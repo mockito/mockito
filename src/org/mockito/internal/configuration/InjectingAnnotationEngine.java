@@ -77,6 +77,13 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         new DefaultInjectionEngine().injectMocksOnFields(mockDependents, mocks, testClass);
     }
 
+    /**
+     * Scan fields annotated by &#064;InjectMocks
+     *
+     * @param testClass
+     * @param clazz
+     * @return
+     */
     private static Set<Field> scanForInjection(Object testClass, Class<?> clazz) {
         Set<Field> testedFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
@@ -94,7 +101,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
             if (null != field.getAnnotation(Spy.class) || null != field.getAnnotation(org.mockito.Mock.class)
-                    || null != field.getAnnotation(Mock.class)) {
+                    || null != field.getAnnotation(org.mockito.MockitoAnnotations.Mock.class)) {
                 Object fieldInstance = null;
                 boolean wasAccessible = field.isAccessible();
                 field.setAccessible(true);
