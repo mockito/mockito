@@ -24,14 +24,14 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     }
     
     @SuppressWarnings("deprecation")
-    public void process(Class<?> context, Object testClass) {
+    public void process(Class<?> context, Object testInstance) {
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class)) {
                 assertNoAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 Object instance = null;
                 try {
-                    instance = new FieldInitializer(testClass, field).initialize();
+                    instance = new FieldInitializer(testInstance, field).initialize();
                 } catch (MockitoException e) {
                     new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e);
                 }
@@ -41,7 +41,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                         Mockito.reset(instance);
                     } else {
                         field.setAccessible(true);
-                        field.set(testClass, Mockito.mock(instance.getClass(), withSettings()
+                        field.set(testInstance, Mockito.mock(instance.getClass(), withSettings()
                                 .spiedInstance(instance)
                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
                                 .name(field.getName())));

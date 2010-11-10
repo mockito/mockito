@@ -89,27 +89,30 @@ public class MockitoAnnotations {
         if (testClass == null) {
             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
-        
+
+        AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Class<?> clazz = testClass.getClass();
-        while (clazz != Object.class) {
-            scan(testClass, clazz);
-            clazz = clazz.getSuperclass();
+
+        //below can be removed later, when we get rid of deprecated stuff
+        if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
+            //this means user has his own annotation engine and we have to respect that.
+            //we will do annotation processing the old way so that we are backwards compatible
+            while (clazz != Object.class) {
+                scanDeprecatedWay(annotationEngine, testClass, clazz);
+                clazz = clazz.getSuperclass();
+            }
         }
+
+        //anyway act 'the new' way
+        annotationEngine.process(testClass.getClass(), testClass);
     }
 
-    static void scan(Object testClass, Class<?> clazz) {
-        AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
+    static void scanDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
+
         for (Field field : fields) {
-            //below can be removed later, when we get rid of deprecated stuff
-            if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
-                //this means user has his own annotation engine and we have to respect that.
-                //we will do annotation processing the old way so that we are backwards compatible
-                processAnnotationDeprecatedWay(annotationEngine, testClass, field);                
-            } 
+            processAnnotationDeprecatedWay(annotationEngine, testClass, field);
         }
-        //act 'the new' way
-        annotationEngine.process(clazz, testClass);
     }
 
     @SuppressWarnings("deprecation")

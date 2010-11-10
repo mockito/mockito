@@ -4,25 +4,23 @@
  */
 package org.mockito.internal.configuration;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockSettings;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.internal.util.reflection.GenericMaster;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
- * <p/>
- * See {@link MockitoAnnotations}
+ *
+ * <p>
+ * The {@link #process(Class, Object)} method implementation <strong>does not</strong> process super classes!
+ *
+ * @see {@link MockitoAnnotations}
  */
 @SuppressWarnings("unchecked")
 public class DefaultAnnotationEngine implements AnnotationEngine {
@@ -77,7 +75,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         return ArgumentCaptor.forClass(cls);    
     }           
 
-    public void process(Class<?> clazz, Object testClass) {
+    public void process(Class<?> clazz, Object testInstance) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             boolean alreadyAssigned = false;
@@ -87,7 +85,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
                     throwIfAlreadyAssigned(field, alreadyAssigned);                    
                     alreadyAssigned = true;                    
                     try {
-                        new FieldSetter(testClass, field).set(mock);
+                        new FieldSetter(testInstance, field).set(mock);
                     } catch (Exception e) {
                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                                 + annotation, e);
