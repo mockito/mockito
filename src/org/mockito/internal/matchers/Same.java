@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.matchers;
 
-import java.io.Serializable;
-
 import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
+
+import java.io.Serializable;
 
 
 public class Same extends ArgumentMatcher<Object> implements Serializable {
@@ -26,7 +26,7 @@ public class Same extends ArgumentMatcher<Object> implements Serializable {
     public void describeTo(Description description) {
         description.appendText("same(");
         appendQuoting(description);
-        description.appendText(wanted.toString());
+        description.appendText(wanted == null ? "null" : wanted.toString());
         appendQuoting(description);
         description.appendText(")");
     }
