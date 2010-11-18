@@ -659,10 +659,16 @@ import org.mockito.verification.VerificationMode;
  * <li>&#064;{@link Captor} simplifies creation of {@link ArgumentCaptor} 
  * - useful when the argument to capture is a nasty generic class and you want to avoid compiler warnings
  * <li>&#064;{@link Spy} - you can use it instead {@link Mockito#spy(Object)}. 
- * <li>&#064;{@link InjectMocks} - injects mocks into tested object automatically.
+ * <li>&#064;{@link InjectMocks} - injects mock or spy fields into tested object automatically.
  * </ul>
+ *
  * <p>
- * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}
+ * Note that &#064;{@link InjectMocks} can only be used in combination with the &#064;{@link Spy} annotation, it means
+ * that Mockito will inject mocks in a partial mock under testing. As a remainder, please read point 16 about partial mocks.
+ *
+ * <p>
+ * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}.
+ * As for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
  * <p>
  * <h3 id="22">22. (**New**) Verification with timeout (Since 1.8.5)  </h3>
  * <p>
@@ -690,6 +696,49 @@ import org.mockito.verification.VerificationMode;
  *   //useful only if you have your own custom verification modes.
  *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
  * </pre>
+ *
+ * <h3 id="21">23. (**New**) Automatic initialisation of &#064;Spy, &#064;InjectMocks fields (Since 1.8.6) </h3>
+ * <p>
+ * Mockito will now try to initialise &#064;{@link Spy} and &#064;{@link InjectMocks} fields if and only if the type has
+ * a zero-arg argument, even private.
+ *
+ * <p>
+ * This is especially useful if you are testing an object with a Joshua Bloch Builder Pattern (see Effective Java Ed. 2008, &#167;2.Item 2)
+ *
+ * <p>
+ * Example :
+ *
+ * <pre>
+ * // The type to test
+ * public class TooMuchComplicated {
+ *   private List subItems;
+ *   // other collaborators
+ *
+ *   public void someBehaviourToTest() {}
+ *
+ *   // no-argument constructor
+ *   private TooMuchComplicated()
+ *
+ *   private TooMuchComplicated(Builder builder) {}
+ *
+ *   public static class Builder {
+ *     public Builder withSubItems(Object subItems ...) {}
+ *     // other builder methods
+ *     public TooMuchComplicated build() { return new TooMuchComplicated(this); }
+ *   }
+ * }
+ *
+ * // In your test
+ * &#064;RunWith(MockitoJUnitRunner.class)
+ * public class TooMuchComplicatedTest {
+ *   &#064;Mock List subItems;
+ *   // other mocked collaborators
+ *   &#064;InjectMocks TooMuchComplicated tested;
+ *
+ *   // tests
+ * }
+ * </pre>
+ *
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
