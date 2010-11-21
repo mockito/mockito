@@ -8,6 +8,8 @@
 		<excludeFolder url="file://$MODULE_DIR$/target/eclipse-classes"/>
 	</contentEntry>
 	<lib name="com.springsource.org.hamcrest.core-1.1.0.jar" scope="COMPILE">
+		<srcroot url="jar://$MODULE_DIR$/lib/run/com.springsource.org.hamcrest.core-1.1.0.jar!/"/>
+		<relative-module-src project-related="jar://$PROJECT_DIR$/lib/run/com.springsource.org.hamcrest.core-1.1.0.jar!/"/>
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/run/com.springsource.org.hamcrest.core-1.1.0.jar!/"/>
 	</lib>
 	<lib name="com.springsource.org.objenesis-1.0.0.jar" scope="COMPILE">
