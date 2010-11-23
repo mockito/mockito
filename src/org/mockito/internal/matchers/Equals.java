@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
-import java.io.Serializable;
-
 import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;
 import org.mockito.ArgumentMatcher;
+
+import java.io.Serializable;
 
 public class Equals extends ArgumentMatcher<Object> implements ContainsExtraTypeInformation, Serializable {
 
@@ -29,11 +29,7 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
 
     public String describe(Object object) {
         String text = quoting();
-        if (object == null) {
-            text+="null";
-        } else {
-            text+=object.toString();
-        }
+        text+="" + object;
         text+= quoting();
         return text;
     }
