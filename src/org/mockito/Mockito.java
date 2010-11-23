@@ -57,7 +57,8 @@ import org.mockito.verification.VerificationMode;
  *      <a href="#19">19. Aliases for behavior driven development (Since 1.8.0) </a><br/>
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
  *      <a href="#21">21. New annotations: &#064;Captor, &#064;Spy, &#064;InjectMocks (Since 1.8.3) </a><br/>
- *      <a href="#22">22. (**New**) Verification with timeout (Since 1.8.5) </a><br/>
+ *      <a href="#22">22. (New) Verification with timeout (Since 1.8.5) </a><br/>
+ *      <a href="#23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</a><br/>
  * </b>
  * 
  * <p>
@@ -668,7 +669,7 @@ import org.mockito.verification.VerificationMode;
  *
  * <p>
  * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}.
- * As for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
+ * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
  * <p>
  * <h3 id="22">22. (**New**) Verification with timeout (Since 1.8.5)  </h3>
  * <p>
@@ -697,46 +698,22 @@ import org.mockito.verification.VerificationMode;
  *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
  * </pre>
  *
- * <h3 id="21">23. (**New**) Automatic initialisation of &#064;Spy, &#064;InjectMocks fields (Since 1.8.6) </h3>
+ * <h3 id="23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</h3>
  * <p>
- * Mockito will now try to initialise &#064;{@link Spy} and &#064;{@link InjectMocks} fields if and only if the type has
- * a zero-arg argument, even private.
- *
+ * Mockito will now try to instantiate &#064;{@link Spy} and &#064;{@link InjectMocks} fields if you haven't provided instance at declaration
+ * *and* if the type has a zero-arg argument (even private).
  * <p>
- * This is especially useful if you are testing an object with a Joshua Bloch Builder Pattern (see Effective Java Ed. 2008, &#167;2.Item 2)
- *
+ * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)} or {@link MockitoJUnitRunner}.
  * <p>
- * Example :
- *
+ * Read more about available {@link MockitoAnnotations}
  * <pre>
- * // The type to test
- * public class TooMuchComplicated {
- *   private List subItems;
- *   // other collaborators
+ * //instead:
+ * &#064;Spy BeerDrinker drinker = new BeerDrinker();
+ * //you can write:
+ * &#064;Spy BeerDrinker drinker;
  *
- *   public void someBehaviourToTest() {}
- *
- *   // no-argument constructor
- *   private TooMuchComplicated()
- *
- *   private TooMuchComplicated(Builder builder) {}
- *
- *   public static class Builder {
- *     public Builder withSubItems(Object subItems ...) {}
- *     // other builder methods
- *     public TooMuchComplicated build() { return new TooMuchComplicated(this); }
- *   }
- * }
- *
- * // In your test
- * &#064;RunWith(MockitoJUnitRunner.class)
- * public class TooMuchComplicatedTest {
- *   &#064;Mock List subItems;
- *   // other mocked collaborators
- *   &#064;InjectMocks TooMuchComplicated tested;
- *
- *   // tests
- * }
+ * //same applies to &#064;InjectMocks annotation:
+ * &#064;InjectMocks LocalPub;
  * </pre>
  *
  */

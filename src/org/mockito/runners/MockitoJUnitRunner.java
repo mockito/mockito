@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 
 
 /**
- * Compatible with <b>JUnit 4.4</b> and higher, this runner adds following behavior:
+ * Compatible with <b>JUnit 4.4 and higher</b>, this runner adds following behavior:
  * <ul>
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
