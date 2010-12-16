@@ -23,14 +23,14 @@ public class ParentTestMockInjectionTest {
         assertNotNull(it.sut.daoFromSub);
     }
 
-
     @Ignore
-    public abstract class BaseTest {
+    public static abstract class BaseTest {
         @Mock protected DaoA daoFromParent;
     }
 
-    public class ImplicitTest extends BaseTest {
-        @InjectMocks private SystemUnderTest sut = new SystemUnderTest();
+    @Ignore("JUnit : don't this test!")
+    public static class ImplicitTest extends BaseTest {
+        @InjectMocks private TestedSystem sut = new TestedSystem();
 
         @Mock private DaoB daoFromSub;
 
@@ -45,7 +45,7 @@ public class ParentTestMockInjectionTest {
         }
     }
 
-    public class SystemUnderTest {
+    public static class TestedSystem {
         private DaoA daoFromParent;
         private DaoB daoFromSub;
 
@@ -56,11 +56,11 @@ public class ParentTestMockInjectionTest {
     }
 
 
-    public class DaoA {
+    public static class DaoA {
         public void doQuery() { }
     }
 
-    public class DaoB {
+    public static class DaoB {
         public void doQuery() { }
     }
 
