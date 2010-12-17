@@ -13,6 +13,8 @@ import org.mockito.internal.configuration.injection.TypeBasedCandidateFilter;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
@@ -23,6 +25,20 @@ import java.util.Set;
 public class DefaultInjectionEngine {
 
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
+    private Comparator<Field> supertypesLast = new Comparator<Field>() {
+        public int compare(Field field1, Field field2) {
+            Class<?> field1Type = field1.getType();
+            Class<?> field2Type = field2.getType();
+
+            if(field1Type.isAssignableFrom(field2Type)) {
+                return -1;
+            }
+            if(field2Type.isAssignableFrom(field1Type)) {
+                return 1;
+            }
+            return 0;
+        }
+    };
 
     // for each tested
     // - for each field of tested
@@ -49,7 +65,10 @@ public class DefaultInjectionEngine {
     }
 
     private void injectMockCandidate(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object fieldInstance) {
-        for(Field field : awaitingInjectionClazz.getDeclaredFields()) {
+        Field[] declaredFields = awaitingInjectionClazz.getDeclaredFields();
+        Arrays.sort(declaredFields, supertypesLast);
+
+        for(Field field : declaredFields) {
             mockCandidateFilter.filterCandidate(mocks, field, fieldInstance).thenInject();
         }
     }
