@@ -21,7 +21,7 @@ public class FinalMockCandidateFilter implements MockCandidateFilter {
             final Object matchingMock = mocks.iterator().next();
 
             return new OngoingInjecter() {
-                public boolean thenInject() {
+                public Object thenInject() {
                     try {
                         if (!new BeanPropertySetter(fieldInstance, field).set(matchingMock)) {
                             new FieldSetter(fieldInstance, field).set(matchingMock);
@@ -29,14 +29,14 @@ public class FinalMockCandidateFilter implements MockCandidateFilter {
                     } catch (Exception e) {
                         throw new MockitoException("Problems injecting dependency in " + field.getName(), e);
                     }
-                    return true;
+                    return matchingMock;
                 }
             };
         }
 
         return new OngoingInjecter() {
-            public boolean thenInject() {
-                return false;
+            public Object thenInject() {
+                return null;
             }
         };
 

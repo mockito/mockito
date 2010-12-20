@@ -12,8 +12,8 @@ public interface OngoingInjecter {
      * Please check the actual implementation.
      * </p>
      *
-     * @return <code>true</code> if injected, <code>false</code> otherwise.
+     * @return the mock that was injected, <code>null</code> otherwise.
      */
-    boolean thenInject();
+    Object thenInject();
 
 }
