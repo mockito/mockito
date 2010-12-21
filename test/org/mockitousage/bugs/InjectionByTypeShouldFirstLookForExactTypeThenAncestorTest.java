@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,6 +21,7 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
 
     @InjectMocks private Service illegalInjectionExample = new Service();
     @InjectMocks private ServiceWithReversedOrder reversedOrderService = new ServiceWithReversedOrder();
+    @InjectMocks private WithNullObjectField withNullObjectField = new WithNullObjectField();
 
     @Test
     public void just_for_information_fields_are_read_in_declaration_order_see_Service() {
@@ -41,22 +43,26 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
         assertSame(mockedBean, reversedOrderService.mockShouldGoInHere);
     }
 
+    @Test
+    public void should_not_inject_the_object() {
+        assertNull(withNullObjectField.keepMeNull);
+        assertSame(mockedBean, withNullObjectField.injectMePlease);
+    }
+
     public static class Bean {}
+
     public static class Service {
-
         public final Object mockShouldNotGoInHere = REFERENCE;
-
         public Bean mockShouldGoInHere;
-
     }
 
     public static class ServiceWithReversedOrder {
-
         public Bean mockShouldGoInHere;
-
         public final Object mockShouldNotGoInHere = REFERENCE;
-
     }
 
-
+    class WithNullObjectField{
+        Bean injectMePlease;
+        Object keepMeNull = null;
+    }
 }
