@@ -19,6 +19,7 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
     @Mock private Bean mockedBean;
 
     @InjectMocks private Service illegalInjectionExample = new Service();
+    @InjectMocks private ServiceWithReversedOrder reversedOrderService = new ServiceWithReversedOrder();
 
     @Test
     public void just_for_information_fields_are_read_in_declaration_order_see_Service() {
@@ -34,12 +35,26 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
         assertSame(mockedBean, illegalInjectionExample.mockShouldGoInHere);
     }
 
+    @Test
+    public void should_match_be_consistent_regardless_of_order() {
+        assertSame(REFERENCE, reversedOrderService.mockShouldNotGoInHere);
+        assertSame(mockedBean, reversedOrderService.mockShouldGoInHere);
+    }
+
     public static class Bean {}
     public static class Service {
 
         public final Object mockShouldNotGoInHere = REFERENCE;
 
         public Bean mockShouldGoInHere;
+
+    }
+
+    public static class ServiceWithReversedOrder {
+
+        public Bean mockShouldGoInHere;
+
+        public final Object mockShouldNotGoInHere = REFERENCE;
 
     }
 
