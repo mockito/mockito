@@ -85,8 +85,8 @@ public interface VerificationWithTimeout extends VerificationMode {
      * @deprecated
      *
      * <b>Deprecated</b>
-     *
      * validation with timeout combined with atMost simply does not make sense...
+     * The test would have passed immediately in the concurrent environment
      * <p>
      * To avoid compilation erros upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
      * <p>
