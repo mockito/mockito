@@ -82,7 +82,6 @@ public class TimeoutTest extends TestBase {
         assertCorrectMode(t.times(5), Timeout.class, 50, 25, Times.class);
         assertCorrectMode(t.never(), Timeout.class, 50, 25, Times.class);
         assertCorrectMode(t.only(), Timeout.class, 50, 25, Only.class);
-        assertCorrectMode(t.atMost(10), Timeout.class, 50, 25, AtMost.class);
     }
     
     private void assertCorrectMode(VerificationMode t, Class expectedType, int expectedTimeout, int expectedTreshold, Class expectedDelegateType) {

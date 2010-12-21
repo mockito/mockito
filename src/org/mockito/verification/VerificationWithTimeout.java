@@ -82,17 +82,21 @@ public interface VerificationWithTimeout extends VerificationMode {
     public VerificationMode atLeast(int minNumberOfInvocations);
 
     /**
-     * Allows at-most-x verification within given timeout. E.g:
-     * <pre>
-     *   verify(mock, timeout(100).atMost(3)).someMethod("some arg");
-     * </pre>
-     * 
-     * See examples in javadoc for {@link Mockito} class
-     * 
-     * @param maxNumberOfInvocations max number of invocations 
-     * 
+     * @deprecated
+     *
+     * <b>Deprecated</b>
+     *
+     * validation with timeout combined with atMost simply does not make sense...
+     * <p>
+     * To avoid compilation erros upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
+     * <p>
+     * In future release we will remove timeout(x).atMost(y) from the API.
+     * <p>
+     * Do you want to find out more? See <a href="http://code.google.com/p/mockito/issues/detail?id=235">issue 235</a>
+     *
      * @return verification mode
      */
+    @Deprecated
     public VerificationMode atMost(int maxNumberOfInvocations);
 
     /**

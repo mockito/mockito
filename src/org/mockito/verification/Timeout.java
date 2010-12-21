@@ -4,6 +4,8 @@
  */
 package org.mockito.verification;
 
+import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationWithTimeoutImpl;
 import org.mockito.internal.verification.api.VerificationData;
@@ -39,7 +41,8 @@ public class Timeout implements VerificationWithTimeout {
     }
 
     public VerificationMode atMost(int maxNumberOfInvocations) {
-        return new Timeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.atMost(maxNumberOfInvocations));
+        new Reporter().atMostShouldNotBeUsedWithTimeout();
+        return null;
     }
 
     public VerificationMode never() {
