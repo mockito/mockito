@@ -89,8 +89,8 @@ public class VerificationWithTimeoutTest extends TestBase {
     @Test
     public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
         //given
-        Thread t1 = waitAndExerciseMock(20);
-        Thread t2 = waitAndExerciseMock(20);
+        Thread t1 = waitAndExerciseMock(30);
+        Thread t2 = waitAndExerciseMock(30);
         
         //when
         t1.start();
