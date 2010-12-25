@@ -4,8 +4,6 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -14,6 +12,8 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.*;
 
 public class InvalidUsageTest extends TestBase {
 
@@ -65,7 +65,7 @@ public class InvalidUsageTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowableVararg() throws Exception {
-        when(mock.simpleMethod()).thenThrow(null);
+        when(mock.simpleMethod()).thenThrow((Throwable) null);
     }    
 
     @Test(expected=MockitoException.class)

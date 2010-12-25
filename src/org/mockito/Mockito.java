@@ -7,23 +7,15 @@ package org.mockito;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
-import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
-import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.answers.DoesNothing;
-import org.mockito.internal.stubbing.answers.Returns;
-import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidMethodStubbable;
-import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.stubbing.*;
 import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationWithTimeout;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>
@@ -1366,6 +1358,27 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Use doThrow() when you want to stub the void method with an exception class.
+     * <p>
+     * A new exception instance will be created for each method invocation.
+     * <p>
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
+     * <p>
+     * Example:
+     *
+     * <pre>
+     *   doThrow(RuntimeException.class).when(mock).someVoidMethod();
+     * </pre>
+     *
+     * @param toBeThrown to be thrown when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     */
+    public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
+        return MOCKITO_CORE.doAnswer(new ThrowsExceptionClass(toBeThrown));
+    }
+
+
+    /**
      * Use doCallRealMethod() when you want to call the real implementation of a method.
      * <p>
      * As usual you are going to read <b>the partial mock warning</b>:
@@ -1770,4 +1783,5 @@ public class Mockito extends Matchers {
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
+
 }

@@ -4,11 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,6 +13,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.io.IOException;
+
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("serial")
 public class StubbingUsingDoReturnTest extends TestBase {
@@ -126,7 +127,15 @@ public class StubbingUsingDoReturnTest extends TestBase {
         assertEquals("bar", mock.simpleMethod());
         assertEquals("bar", mock.simpleMethod());
     }
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldAllowChainedStubbingWithExceptionClass() throws Exception {
+        doReturn("whatever").doThrow(IllegalArgumentException.class).when(mock).simpleMethod();
+
+        assertEquals("whatever", mock.simpleMethod());
+        mock.simpleMethod();
+    }
+
     @Test
     public void shouldAllowChainedStubbingOnVoidMethods() {
         doNothing().

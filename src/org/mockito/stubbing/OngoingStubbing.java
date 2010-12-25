@@ -87,6 +87,31 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      */
     OngoingStubbing<T> thenThrow(Throwable... throwables);
 
+    /**
+     * Sets Throwable classes to be thrown when the method is called. E.g:
+     * <pre>
+     * when(mock.someMethod()).thenThrow(RuntimeException.class);
+     * </pre>
+     *
+     * <p>
+     * Each throwable class will be instantiated for each method invocation.
+     * <p>
+     * If throwableClasses contain a checked exception then it has to
+     * match one of the checked exceptions of method signature.
+     * <p>
+     * You can specify throwableClasses to be thrown for consecutive calls.
+     * In that case the last throwable determines the behavior of further consecutive calls.
+     * <p>
+     * if throwable is null then exception will be thrown.
+     * <p>
+     * See examples in javadoc for {@link Mockito#when}
+     *
+     * @param throwableClasses to be thrown on method invocation
+     *
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     */
+    OngoingStubbing<T> thenThrow(Class<? extends Throwable>... throwableClasses);
+
     /**     
      * Sets the real implementation to be called when the method is called on a mock object.
      * <p>
@@ -133,4 +158,5 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * @return iOngoingStubbing object that allows stubbing consecutive calls
      */
     OngoingStubbing<T> thenAnswer(Answer<?> answer);
+
 }

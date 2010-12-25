@@ -4,7 +4,13 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitoutil.TestBase;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -12,12 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockitoutil.TestBase;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"serial", "unchecked", "all"})
 public class StubbingWithThrowablesTest extends TestBase {
@@ -105,7 +106,22 @@ public class StubbingWithThrowablesTest extends TestBase {
         } catch (Error e) {
             assertEquals(error, e);
         }
-    }    
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldInstantiateExceptionClassOnInteraction() {
+        when(mock.add(null)).thenThrow(IllegalArgumentException.class);
+
+        mock.add(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldInstantiateExceptionClassWithOngoingStubbingOnInteraction() {
+        Mockito.doThrow(IllegalArgumentException.class).when(mock).add(null);
+
+        mock.add(null);
+    }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
@@ -114,7 +130,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
-        when(mock.add("monkey island")).thenThrow(null);
+        when(mock.add("monkey island")).thenThrow((Throwable) null);
     }    
     
     @Test

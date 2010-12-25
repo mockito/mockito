@@ -4,16 +4,17 @@
  */
 package org.mockito.internal.stubbing;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class StubberImpl implements Stubber {
@@ -43,6 +44,11 @@ public class StubberImpl implements Stubber {
 
     public Stubber doThrow(Throwable toBeThrown) {
         answers.add(new ThrowsException(toBeThrown));
+        return this;
+    }
+
+    public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
+        answers.add(new ThrowsExceptionClass(toBeThrown));
         return this;
     }
 

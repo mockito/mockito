@@ -84,7 +84,21 @@ public interface Stubber {
      * @return stubber - to select a method for stubbing
      */
     Stubber doThrow(Throwable toBeThrown);
-    
+
+    /**
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class<? extends Throwable>)} style:
+     * <pre>
+     *   doThrow(RuntimeException.class).
+     *   doThrow(IllegalArgumentException.class)
+     *   .when(mock).someVoidMethod();
+     * </pre>
+     * See javadoc for {@link Mockito#doThrow(Class)}
+     *
+     * @param toBeThrown exception class to be thrown when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     */
+    Stubber doThrow(Class<? extends Throwable> toBeThrown);
+
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer)} style:
      * <pre>
