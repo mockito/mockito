@@ -4,17 +4,17 @@
  */
 package org.mockito;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -537,6 +537,18 @@ public class Matchers {
     }
 
     /**
+     * null argument.
+     * The class argument is provided to avoid casting.
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return <code>null</code>.
+     */
+    public static <T> T isNull(Class<T> clazz) {
+        return (T) reportMatcher(Null.NULL).returnNull();
+    }
+
+    /**
      * not null argument.
      * <p>
      * alias to {@link Matchers#isNotNull()}
@@ -547,6 +559,20 @@ public class Matchers {
      */
     public static Object notNull() {
         return reportMatcher(NotNull.NOT_NULL).returnNull();
+    }
+
+    /**
+     * not null argument, not necessary of the given class.
+     * The class argument is provided to avoid casting.
+     * <p>
+     * alias to {@link Matchers#isNotNull(Class)}
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return <code>null</code>.
+     */
+    public static <T> T notNull(Class<T> clazz) {
+        return (T) reportMatcher(NotNull.NOT_NULL).returnNull();
     }
     
     /**
@@ -560,6 +586,20 @@ public class Matchers {
      */
     public static Object isNotNull() {
         return notNull();
+    }
+
+    /**
+     * not null argument, not necessary of the given class.
+     * The class argument is provided to avoid casting.
+     * <p>
+     * alias to {@link Matchers#notNull(Class)}
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @return <code>null</code>.
+     */
+    public static <T> T isNotNull(Class<T> clazz) {
+        return notNull(clazz);
     }
 
     /**
