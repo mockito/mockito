@@ -78,7 +78,7 @@ implements CallbackFilter
         }
     }
 
-    public int accept(Method method)
+    public int accept(Method method, List<Method> allMethods)
     {
         return ((Integer)methodMap.get(method)).intValue();
     }

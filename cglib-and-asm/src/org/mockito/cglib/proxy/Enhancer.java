@@ -15,12 +15,10 @@
  */
 package org.mockito.cglib.proxy;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.mockito.asm.Attribute;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;
@@ -61,7 +59,7 @@ import org.mockito.cglib.core.*;
 public class Enhancer extends AbstractClassGenerator
 {
     private static final CallbackFilter ALL_ZERO = new CallbackFilter(){
-        public int accept(Method method) {
+        public int accept(Method method, List<Method> allMethods) {
             return 0;
         }
     };
@@ -884,7 +882,7 @@ public class Enhancer extends AbstractClassGenerator
         while (it1.hasNext()) {
             MethodInfo method = (MethodInfo)it1.next();
             Method actualMethod = (it2 != null) ? (Method)it2.next() : null;
-            int index = filter.accept(actualMethod);
+            int index = filter.accept(actualMethod, actualMethods);
             if (index >= callbackTypes.length) {
                 throw new IllegalArgumentException("Callback filter returned an index that is too large: " + index);
             }
