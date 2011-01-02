@@ -20,7 +20,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings({"serial", "unchecked", "all"})
+@SuppressWarnings({"serial", "unchecked", "all", "deprecation"})
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
@@ -131,7 +131,12 @@ public class StubbingWithThrowablesTest extends TestBase {
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
         when(mock.add("monkey island")).thenThrow((Throwable) null);
-    }    
+    }
+
+    @Test(expected=MockitoException.class)
+    public void shouldNotAllowSettingNullThrowableArray() throws Exception {
+        when(mock.add("monkey island")).thenThrow((Throwable[]) null);
+    }
     
     @Test
     public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
@@ -212,8 +217,20 @@ public class StubbingWithThrowablesTest extends TestBase {
         } catch (NoInteractionsWanted e) {}
     }
     
-    private class ExceptionOne extends RuntimeException {};
-    private class ExceptionTwo extends RuntimeException {};
-    private class ExceptionThree extends RuntimeException {};
-    private class ExceptionFour extends RuntimeException {};
+    private class ExceptionOne extends RuntimeException {}
+    private class ExceptionTwo extends RuntimeException {}
+    private class ExceptionThree extends RuntimeException {}
+    private class ExceptionFour extends RuntimeException {}
+
+    public class NaughtyException extends RuntimeException {
+        public NaughtyException() {
+            throw new RuntimeException("boo!");
+        }
+    }
+
+    @Test(expected = NaughtyException.class)
+    public void shouldShowDecentMessageWhenExcepionIsNaughty() throws Exception {
+        when(mock.add("")).thenThrow(NaughtyException.class);
+        mock.add("");
+    }
 }
