@@ -41,8 +41,7 @@ public class CovariantOverrideTest extends TestBase {
         when(mock.callMe()).thenReturn("foo");
         assertEquals("foo", mock.callMe()); // Passes
     }
-    
-    @Ignore //we don't know how to implement it - covariant override
+
     @Test 
     public void returnFoo4() {
         ReturnsString mock = mock(ReturnsString.class);
