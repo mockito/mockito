@@ -1358,7 +1358,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Use doThrow() when you want to stub the void method with an exception class.
+     * Use doThrow() when you want to stub the void method to throw exception of specified class.
      * <p>
      * A new exception instance will be created for each method invocation.
      * <p>
