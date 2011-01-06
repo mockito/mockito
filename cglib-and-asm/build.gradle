@@ -32,7 +32,7 @@ task copyToMockito {
   }
   copy {
     from jarSources.archivePath
-    into "../lib/sources/repackaged"
+    into "../lib/sources"
   }
 }
 
