@@ -1,28 +1,39 @@
-usePlugin('java')
+apply plugin: 'java'
 
-version = 1.0
+version = 1.1
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
-srcRootName = "."
-srcDirNames = ["src"]
+sourceSets.main.java.srcDir("src")
+
+repositories {
+  flatDir dirs: 'lib'
+}
 
 dependencies {
-  addFlatDirResolver('lib', 'lib')
   compile(':ant:1.7.0')
 }
 
-archivesBaseName = 'cglib-and-asm'
+jar {
+  baseName = 'cglib-and-asm'
+  from "src"
+}
 
-//Make sure sources also belong to the jar
-archive_jar.fileSet(dir: "src")
+task jarSources(type: Zip) {
+    classifier = 'sources'
+    from 'src', 'licenses'
+    extension = 'jar'
+}
 
-dists {
-  zip () {
-    fileSet(dir: "src")
-    fileSet(dir: "licenses")
-    baseName = archivesBaseName + '-sources'
+task copyToMockito {
+  copy {
+    from jar.archivePath
+    into "../lib/repackaged"
+  }
+  copy {
+    from jarSources.archivePath
+    into "../lib/sources/repackaged"
   }
 }
 
-defaultTasks "clean", "dists"
+defaultTasks "clean", "build", "jarSources", "copyToMockito"
