@@ -4,12 +4,12 @@
  */
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static org.mockito.Mockito.*;
+
+//see issue 101
 public class CovariantOverrideTest extends TestBase {
    
     public static interface ReturnsObject {
