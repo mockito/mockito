@@ -26,9 +26,11 @@
   <property name="lib.dir.sources" value="${lib.dir}/sources" />
     
   <property name="jar.core" value="mockito-core-${version}.jar" />
+  <property name="jar.core.javadoc" value="mockito-core-${version}-javadoc.jar" />
   <property name="jar.core.sources" value="mockito-core-${version}-sources.jar" />
 	
   <property name="jar.all" value="mockito-all-${version}.jar" />
+  <property name="jar.all.javadoc" value="mockito-all-${version}-javadoc.jar" />
   <property name="jar.all.sources" value="mockito-all-${version}-sources.jar" />
 	
   <property name="jar.core.osgified" value="${jar.core}-osgified" />
@@ -230,6 +232,16 @@
     </jar>
   </target>
 	
+  <target name="javadoc.jar" depends="javadoc">
+    <jar jarfile="${target.dir}/${jar.core.javadoc}">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+      </manifest>
+      <fileset dir="${javadoc.dir}" />
+    </jar>
+  </target>
+	
   <target name="sources-all" depends="sources" >
     <jar jarfile="${target.dir}/${jar.all.sources}">
         <manifest>
@@ -250,8 +262,18 @@
       <zipfileset src="${lib.dir.sources}/com.springsource.org.objenesis-1.0.0-sources.jar" />
     </jar>
   </target>
+
+  <target name="javadoc-all.jar" depends="javadoc">
+    <jar jarfile="${target.dir}/${jar.all.javadoc}">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+      </manifest>
+      <fileset dir="${javadoc.dir}" />
+    </jar>
+  </target>
 	
-  <target name="prepare.package" depends="jar, javadoc, sources-all, osgify.manifests">
+  <target name="prepare.package" depends="jar, javadoc, javadoc.jar, javadoc-all.jar, sources-all, osgify.manifests">
     <mkdir dir="${target.dir}/mockito.zip.tmp/separate-jars" />
     <copy todir="${target.dir}/mockito.zip.tmp/separate-jars">
       <fileset dir="${lib.dir.run}" />
@@ -349,8 +371,10 @@
     <condition property="mockito.jars.exist">
       <and>
         <available file="${target.dir}/${jar.all}"/>
+        <available file="${target.dir}/${jar.all.javadoc}"/>
         <available file="${target.dir}/${jar.all.sources}"/>
         <available file="${target.dir}/${jar.core}"/>
+        <available file="${target.dir}/${jar.core.javadoc}"/>
         <available file="${target.dir}/${jar.core.sources}"/>
       </and>
     </condition>
@@ -387,12 +411,14 @@
   	
     <deploy file="${target.dir}/${jar.all}">
       <pom file="${target.dir}/mockito-all.pom" />
+      <attach file="${target.dir}/${jar.all.javadoc}" classifier="javadoc" />
       <attach file="${target.dir}/${jar.all.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
   	
     <deploy file="${target.dir}/${jar.core}" >
       <pom file="${target.dir}/mockito-core.pom" />
+      <attach file="${target.dir}/${jar.core.javadoc}" classifier="javadoc" />
       <attach file="${target.dir}/${jar.core.sources}" classifier="sources" />
       <remoterepository refid="repo.local" />
     </deploy>
