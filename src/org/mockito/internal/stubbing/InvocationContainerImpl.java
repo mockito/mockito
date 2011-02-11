@@ -4,12 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfo;
@@ -17,6 +11,11 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.stubbing.Answer;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
@@ -116,5 +115,9 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public List<StubbedInvocationMatcher> getStubbedInvocations() {
         return stubbed;
+    }
+
+    public Object invokedMock() {
+        return invocationForStubbing.getInvocation().getMock();
     }
 }

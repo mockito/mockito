@@ -11,6 +11,8 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.Set;
+
 import static org.mockito.BDDMockito.*;
 
 public class BDDMockitoTest extends TestBase {
@@ -154,5 +156,14 @@ public class BDDMockitoTest extends TestBase {
         given(dog.bark()).willCallRealMethod();
         //then
         assertEquals("woof", dog.bark());
+    }
+
+    @Test
+    public void shouldAllStubbedMockReferenceAccess() throws Exception {
+        Set expectedMock = mock(Set.class);
+
+        Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
+
+        assertEquals(expectedMock, returnedMock);
     }
 }

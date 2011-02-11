@@ -33,4 +33,8 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         //TODO interface for tests
         return invocationContainerImpl.getInvocations();
     }
+
+    public <M> M getMock() {
+        return (M) invocationContainerImpl.invokedMock();
+    }
 }

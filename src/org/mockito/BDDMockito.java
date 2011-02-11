@@ -89,6 +89,8 @@ public class BDDMockito extends Mockito {
          * See original {@link OngoingStubbing#thenCallRealMethod()}
          */
         BDDMyOngoingStubbing<T> willCallRealMethod();
+
+        <M> M getMock();
     }
     
     public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
@@ -135,6 +137,10 @@ public class BDDMockito extends Mockito {
 
         public BDDMyOngoingStubbing<T> willCallRealMethod() {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenCallRealMethod());
+        }
+
+        public <M> M getMock() {
+            return (M) mockitoOngoingStubbing.getMock();
         }
     }
     

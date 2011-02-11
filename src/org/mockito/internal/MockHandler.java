@@ -4,24 +4,20 @@
  */
 package org.mockito.internal;
 
-import java.util.List;
-
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.InvocationContainer;
-import org.mockito.internal.stubbing.InvocationContainerImpl;
-import org.mockito.internal.stubbing.OngoingStubbingImpl;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
+import org.mockito.internal.stubbing.*;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
+
+import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
@@ -85,11 +81,13 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
                 mockingProgress.verificationStarted(verificationMode);
             }
         }
-        
+
+        // prepare invocation for stubbing
         invocationContainerImpl.setInvocationForPotentialStubbing(invocationMatcher);
         OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainerImpl);
         mockingProgress.reportOngoingStubbing(ongoingStubbing);
 
+        // look for existing answer for this invocation
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
 
         if (stubbedInvocation != null) {

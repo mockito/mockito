@@ -12,7 +12,8 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.answers.Returns;
 
 import java.util.LinkedList;
-import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Author: Szczepan Faber
@@ -58,5 +59,12 @@ public class InvocationContainerImplTest {
         if (exceptions.size() != 0) {
             throw exceptions.getFirst();
         }
+    }
+
+    @Test
+    public void shouldReturnInvokedMock() throws Exception {
+        container.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+
+        assertEquals(invocation.getMock(), container.invokedMock());
     }
 }

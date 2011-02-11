@@ -159,4 +159,11 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      */
     OngoingStubbing<T> thenAnswer(Answer<?> answer);
 
+    /**
+     * Returns the mock that was used for this stub.
+     *
+     * @param <M> The mock type given by the variable type.
+     * @return Mock used in this ongoing stubbing.
+     */
+    <M> M getMock();
 }

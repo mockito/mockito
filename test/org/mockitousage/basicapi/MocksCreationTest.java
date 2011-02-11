@@ -4,18 +4,19 @@
  */
 package org.mockitousage.basicapi;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class MocksCreationTest extends TestBase {
@@ -92,4 +93,10 @@ public class MocksCreationTest extends TestBase {
         List list = new LinkedList();
         mock(LinkedList.class, withSettings().spiedInstance(list));
     }
+
+    @Test
+    public void shouldAllowInlineMockCreation() throws Exception {
+        when(mock(Set.class).isEmpty()).thenReturn(false);
+    }
+
 }

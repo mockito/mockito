@@ -24,4 +24,8 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
         invocationContainerImpl.addConsecutiveAnswer(answer);
         return this;
     }
+
+    public <M> M getMock() {
+        return (M) invocationContainerImpl.invokedMock();
+    }
 }
