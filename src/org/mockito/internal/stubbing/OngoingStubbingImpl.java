@@ -24,6 +24,10 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
 
+    public OngoingStubbing<T> then(Answer<?> answer) {
+        return thenAnswer(answer);
+    }
+
     public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
         invocationContainerImpl.addAnswer(answer);
         return new ConsecutiveStubbing<T>(invocationContainerImpl);

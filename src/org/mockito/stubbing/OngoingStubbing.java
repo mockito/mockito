@@ -160,10 +160,28 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
     OngoingStubbing<T> thenAnswer(Answer<?> answer);
 
     /**
+     * Sets a generic Answer for the method.
+     *
+     * This method is an alias of {@link #thenAnswer(Answer)}.
+     *
+     * @param answer the custom answer to execute.
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     *
+     * @see #thenAnswer(Answer)
+     */
+    OngoingStubbing<T> then(Answer<?> answer);
+
+    /**
      * Returns the mock that was used for this stub.
+     *
+     * This code allows fast mock creation and stubbing. E.g:
+     * <pre>
+     * Set mockedSet = when(mock(Set.class).isEmpty()).thenReturn(false).getMock();
+     * </pre>
      *
      * @param <M> The mock type given by the variable type.
      * @return Mock used in this ongoing stubbing.
      */
     <M> M getMock();
+
 }
