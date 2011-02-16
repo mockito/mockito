@@ -4,17 +4,20 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public class StubbingWithCustomAnswerTest extends TestBase {
@@ -32,6 +35,16 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         });
 
         assertEquals("simpleMethod-test", mock.simpleMethod("test"));
+    }
+
+    @Test
+    public void shouldAnswerWithThenAnswerAlias() throws Exception {
+        RecordCall recordCall = new RecordCall();
+        Set mockedSet = when(mock(Set.class).isEmpty()).then(recordCall).getMock();
+
+        mockedSet.isEmpty();
+
+        assertTrue(recordCall.isCalled());
     }
 
     @Test
@@ -88,20 +101,20 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         mock.voidMethod();
         assertTrue(call2.isCalled());
     }
-    
+
     @Test
     public void shouldMakeSureTheInterfaceDoesNotChange() throws Exception {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
                 assertTrue(invocation.getArguments().getClass().isArray());
                 assertEquals(Method.class, invocation.getMethod().getClass());
-                
+
                 return "assertions passed";
             }
         });
 
         assertEquals("assertions passed", mock.simpleMethod("test"));
-    }    
+    }
 
     private static class RecordCall implements Answer {
         private boolean called = false;

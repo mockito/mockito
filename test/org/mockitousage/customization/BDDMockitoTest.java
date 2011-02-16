@@ -58,6 +58,16 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
+    public void shouldStubWithWillAnswerAlias() throws Exception {
+        given(mock.simpleMethod(anyString())).will(new Answer<String>() {
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                return (String) invocation.getArguments()[0];
+            }});
+
+        assertEquals("foo", mock.simpleMethod("foo"));
+    }
+
+    @Test
     public void shouldStubConsecutively() throws Exception {
        given(mock.simpleMethod(anyString()))
            .willReturn("foo")
