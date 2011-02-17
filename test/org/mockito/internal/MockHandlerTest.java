@@ -37,6 +37,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings({"unchecked","serial"})
 public class MockHandlerTest extends TestBase {
     
+	@SuppressWarnings("rawtypes")
 	private static final Answer SOME_ANSWER = mock(Answer.class);
 	private static final StubbedInvocationMatcher SOME_RETURN_VALUE = mock(StubbedInvocationMatcher.class);
 	private static final Invocation SOME_INVOCATION = mock(Invocation.class);
@@ -47,7 +48,8 @@ public class MockHandlerTest extends TestBase {
     public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
         //given
         Invocation invocation = new InvocationBuilder().toInvocation();
-        MockHandler handler = new MockHandler();
+        @SuppressWarnings("rawtypes")
+		MockHandler<?> handler = new MockHandler();
         handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
         handler.matchersBinder = new MatchersBinder() {
             public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
@@ -69,7 +71,7 @@ public class MockHandlerTest extends TestBase {
     @Test
     public void shouldNotifyInvocationHandlerDuringStubVoid() throws Throwable {
     	// given
-    	MockHandler handler = createHandlerWithListeners(listener1, listener2);
+    	MockHandler<?> handler = createHandlerWithListeners(listener1, listener2);
     	stubWithInvocationDuringStubVoid(handler);
     	
     	
@@ -169,7 +171,7 @@ public class MockHandlerTest extends TestBase {
     	stubHandlerStateWithPreviousStubVoidInvocation(handler);
 	}
 
-	private void stubHandlerStateWithPreviousStubVoidInvocation(MockHandler handler) {
+	private void stubHandlerStateWithPreviousStubVoidInvocation(MockHandler<?> handler) {
 		StubbedInvocationMatcher invocationContainer = mock(StubbedInvocationMatcher.class);
 		given(handler.matchersBinder.bindMatchers(any(ArgumentMatcherStorage.class), any(Invocation.class))).willReturn(invocationContainer);
 		
@@ -179,6 +181,7 @@ public class MockHandlerTest extends TestBase {
 		given(invocation.isVoid()).willReturn(true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void stubWithPreviouslySetVoidAnswer(MockHandler handler) {
 		List<Answer<?>> answers = new ArrayList<Answer<?>>();
     	answers.add(new DoesNothing());
