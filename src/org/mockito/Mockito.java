@@ -51,6 +51,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#21">21. New annotations: &#064;Captor, &#064;Spy, &#064;InjectMocks (Since 1.8.3) </a><br/>
  *      <a href="#22">22. (New) Verification with timeout (Since 1.8.5) </a><br/>
  *      <a href="#23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</a><br/>
+ *      <a href="#24">24. (**New**) Inline mock creation and stubbing (Since 1.9)</a><br/>
  * </b>
  * 
  * <p>
@@ -707,6 +708,14 @@ import org.mockito.verification.VerificationWithTimeout;
  * //same applies to &#064;InjectMocks annotation:
  * &#064;InjectMocks LocalPub;
  * </pre>
+ *
+ * <h3> id="24">24. (**New**) Inline mock creation and stubbing (Since 1.9)
+ * <p>
+ * Mockito will now allow you to create mocks when stubbing. Example :
+ * <pre>
+ * Car car = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
+ * </pre>
+ *
  *
  */
 @SuppressWarnings("unchecked")
