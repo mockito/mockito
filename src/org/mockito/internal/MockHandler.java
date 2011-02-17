@@ -4,20 +4,25 @@
  */
 package org.mockito.internal;
 
+import java.util.List;
+
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.*;
+import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
+import org.mockito.invocation.InvocationListener;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
-
-import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
@@ -52,6 +57,8 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     }
 
     public Object handle(Invocation invocation) throws Throwable {
+    	notifyInvocationListener(invocation);
+    	
         if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
@@ -122,4 +129,10 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     public InvocationContainer getInvocationContainer() {
         return invocationContainerImpl;
     }
+    
+	private void notifyInvocationListener(Invocation invocation) {
+		for (InvocationListener listener : mockSettings.getInvocationListener()) {
+    		listener.invoking(invocation);
+    	}
+	}
 }

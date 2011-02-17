@@ -4,9 +4,15 @@
  */
 package org.mockito.internal.creation;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.debugging.LogInvocationsToStdOutListener;
 import org.mockito.internal.util.MockName;
+import org.mockito.invocation.InvocationListener;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
@@ -19,6 +25,7 @@ public class MockSettingsImpl implements MockSettings {
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
+    private Set<InvocationListener> invocationListener = new HashSet<InvocationListener>();
 
     public MockSettings serializable() {
         this.serializable = true;
@@ -79,4 +86,38 @@ public class MockSettingsImpl implements MockSettings {
     public void initiateMockName(Class classToMock) {
         mockName = new MockName(name, classToMock);
     }
+
+	public MockSettings verboseLogging() {
+		if (doesNotHaveListenerOfClass(LogInvocationsToStdOutListener.class)) {
+			callback(new LogInvocationsToStdOutListener());
+		}
+		return this;
+	}
+
+	public MockSettings callback(InvocationListener listener) {
+		validateListener(listener);
+		this.invocationListener.add(listener);
+		return this;
+	}
+
+	/** Returns the registered invocation listener, never {@code null} */
+	public Collection<InvocationListener> getInvocationListener() {
+		return this.invocationListener;
+	}
+	
+	private boolean doesNotHaveListenerOfClass(Class<?> clazz) {
+		for (InvocationListener listener : invocationListener) {
+			if (listener.getClass().equals(clazz)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private void validateListener(InvocationListener listener) {
+		if (listener == null) {
+			new Reporter().nullInvocationListenerAdded();
+		}
+	}
 }
+

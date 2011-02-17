@@ -13,6 +13,7 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.invocation.InvocationListener;
 
 import java.lang.reflect.Field;
 import java.util.List;
