@@ -4,25 +4,36 @@
  */
 package org.mockito.internal;
 
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import org.junit.*;
-import org.mockito.*;
-import org.mockito.exceptions.misusing.*;
-import org.mockito.internal.creation.*;
-import org.mockito.internal.invocation.*;
-import org.mockito.internal.progress.*;
-import org.mockito.internal.stubbing.*;
-import org.mockito.internal.stubbing.answers.*;
-import org.mockito.internal.verification.*;
-import org.mockito.invocation.*;
-import org.mockito.stubbing.*;
-import org.mockito.verification.*;
-import org.mockitoutil.*;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.progress.ArgumentMatcherStorage;
+import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.verification.MockAwareVerificationMode;
+import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.InvocationListener;
+import org.mockito.stubbing.Answer;
+import org.mockito.verification.VerificationMode;
+import org.mockitoutil.TestBase;
 @SuppressWarnings({"unchecked","serial"})
 public class MockHandlerTest extends TestBase {
     
@@ -111,6 +122,24 @@ public class MockHandlerTest extends TestBase {
 		verify(listener2).invoking(SOME_INVOCATION);
 	}
 	
+	@Test(expected=MockitoException.class)
+    public void shouldThrowMockitoExceptionWhenInvocationHandlerThrowsAnything() throws Throwable {
+    	// given
+		InvocationListener throwingListener = mock(InvocationListener.class);
+		doThrow(new RuntimeException()).when(throwingListener).invoking(SOME_INVOCATION);
+    	MockHandler<?> handler = createCorrectlyStubbedHandler(throwingListener);
+    	
+    	// when
+		handler.handle(SOME_INVOCATION);
+    }
+
+	private MockHandler<?> createCorrectlyStubbedHandler(
+			InvocationListener throwingListener) {
+		MockHandler<?> handler = createHandlerWithListeners(throwingListener);
+    	stubOrdinaryInvocationWithGivenReturnValue(handler);
+		return handler;
+	}
+
 	private void stubOrdinaryInvocationWithGivenReturnValue(MockHandler<?> handler) {
 		stubOrdinaryInvocationWithReturnValue(handler, SOME_RETURN_VALUE);
 	}
