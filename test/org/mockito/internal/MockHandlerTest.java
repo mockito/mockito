@@ -23,6 +23,7 @@ import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.invocation.StubInfo;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -31,15 +32,18 @@ import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationListener;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 @SuppressWarnings({"unchecked","serial"})
 public class MockHandlerTest extends TestBase {
     
+	private static final String SOME_RETURN_VALUE = "some return value";
+	private static final String SOME_LOCATION = "some location";
 	@SuppressWarnings("rawtypes")
 	private static final Answer SOME_ANSWER = mock(Answer.class);
-	private static final StubbedInvocationMatcher SOME_RETURN_VALUE = mock(StubbedInvocationMatcher.class);
+	private static final StubbedInvocationMatcher SOME_INVOCATION_MATCHER = mock(StubbedInvocationMatcher.class);
 	private static final Invocation SOME_INVOCATION = mock(Invocation.class);
 	@Mock private InvocationListener listener1;
 	@Mock private InvocationListener listener2;
@@ -67,47 +71,64 @@ public class MockHandlerTest extends TestBase {
         
         assertNull(handler.mockingProgress.pullVerificationMode());
     }
+	
+	// TODO test exception
+	// TODO listener are not notified of error 
     
     @Test
     public void shouldNotifyInvocationHandlerDuringStubVoid() throws Throwable {
     	// given
     	MockHandler<?> handler = createHandlerWithListeners(listener1, listener2);
     	stubWithInvocationDuringStubVoid(handler);
+    	Invocation invocation = createInvocationWithStubbingLocation(SOME_LOCATION);
     	
     	
-    	handler.handle(SOME_INVOCATION);
+		handler.handle(invocation);
     	
     	// then
-    	verify(listener1).invoking(SOME_INVOCATION);
-    	verify(listener2).invoking(SOME_INVOCATION);
+    	verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+    	verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
     }
+
+	private Invocation createInvocationWithStubbingLocation(String stubbingLocation) {
+		Invocation invocation = mock(Invocation.class);
+		
+		StubInfo stubInfo = mock(StubInfo.class);
+		given(invocation.stubInfo()).willReturn(stubInfo);
+		
+		given(stubInfo.stubbedAt()).willReturn(stubbingLocation);
+		
+		return invocation;
+	}
 
 	@Test
     public void shouldNotifyInvocationHandlerDuringVerification() throws Throwable {
     	// given
     	MockHandler<?> handler = createHandlerWithListeners(listener1, listener2);
     	stubProgressWithVerification(handler);
+    	Invocation invocation = createInvocationWithStubbingLocation(SOME_LOCATION);
     	
     	// when
-		handler.handle(SOME_INVOCATION);
+		handler.handle(invocation);
     	
     	// then
-    	verify(listener1).invoking(SOME_INVOCATION);
-    	verify(listener2).invoking(SOME_INVOCATION);
+    	verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+    	verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
     }
     
 	@Test
     public void shouldNotifyInvocationHandlerDuringOrdinaryInvocationWithGivenReturnValue() throws Throwable {
     	// given
     	MockHandler<?> handler = createHandlerWithListeners(listener1, listener2);
-    	stubOrdinaryInvocationWithGivenReturnValue(handler);
+    	stubOrdinaryInvocationWithReturnValue(handler, SOME_RETURN_VALUE);
+    	Invocation invocation = createInvocationWithStubbingLocation(SOME_LOCATION);
     	
     	// when
-		handler.handle(SOME_INVOCATION);
+		handler.handle(invocation);
     	
     	// then
-    	verify(listener1).invoking(SOME_INVOCATION);
-    	verify(listener2).invoking(SOME_INVOCATION);
+    	verify(listener1).invokingWithReturnValue(invocation, SOME_RETURN_VALUE, SOME_LOCATION);
+    	verify(listener2).invokingWithReturnValue(invocation, SOME_RETURN_VALUE, SOME_LOCATION);
     }
 
 	@Test
@@ -115,20 +136,21 @@ public class MockHandlerTest extends TestBase {
 		// given
 		MockHandler<?> handler = createHandlerWithListeners(listener1, listener2);
 		stubOrdinaryInvocationWithDefaultReturnValue(handler);
+    	Invocation invocation = createInvocationWithStubbingLocation(SOME_LOCATION);
 		
 		// when
-		handler.handle(SOME_INVOCATION);
+		handler.handle(invocation);
 		
 		// then
-		verify(listener1).invoking(SOME_INVOCATION);
-		verify(listener2).invoking(SOME_INVOCATION);
+		verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+		verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
 	}
 	
 	@Test(expected=MockitoException.class)
     public void shouldThrowMockitoExceptionWhenInvocationHandlerThrowsAnything() throws Throwable {
     	// given
 		InvocationListener throwingListener = mock(InvocationListener.class);
-		doThrow(new RuntimeException()).when(throwingListener).invoking(SOME_INVOCATION);
+		doThrow(new RuntimeException()).when(throwingListener).invokingWithReturnValue(any(Invocation.class), any(String.class), any(String.class));
     	MockHandler<?> handler = createCorrectlyStubbedHandler(throwingListener);
     	
     	// when
@@ -143,15 +165,21 @@ public class MockHandlerTest extends TestBase {
 	}
 
 	private void stubOrdinaryInvocationWithGivenReturnValue(MockHandler<?> handler) {
-		stubOrdinaryInvocationWithReturnValue(handler, SOME_RETURN_VALUE);
+		stubOrdinaryInvocationWithInvocationMatcher(handler, SOME_INVOCATION_MATCHER);
+	}
+	
+	private void stubOrdinaryInvocationWithReturnValue(MockHandler<?> handler, Object returnValue) throws Throwable {
+		StubbedInvocationMatcher matcher = mock(StubbedInvocationMatcher.class);
+		given(matcher.answer(any(InvocationOnMock.class))).willReturn(returnValue);
+		stubOrdinaryInvocationWithInvocationMatcher(handler, matcher);
 	}
 	
 	private void stubOrdinaryInvocationWithDefaultReturnValue(MockHandler<?> handler) {
 		given(handler.getMockSettings().getDefaultAnswer()).willReturn(SOME_ANSWER);
-		stubOrdinaryInvocationWithReturnValue(handler, null);
+		stubOrdinaryInvocationWithInvocationMatcher(handler, null);
 	}
 
-	private void stubOrdinaryInvocationWithReturnValue(MockHandler<?> handler,
+	private void stubOrdinaryInvocationWithInvocationMatcher(MockHandler<?> handler,
 			StubbedInvocationMatcher value) {
 		handler.invocationContainerImpl = mock(InvocationContainerImpl.class);
 		given(handler.invocationContainerImpl.findAnswerFor(any(Invocation.class))).willReturn(value);

@@ -5,6 +5,7 @@
 package org.mockito.invocation;
 
 import org.mockito.MockSettings;
+import org.mockito.exceptions.PrintableInvocation;
 
 /**
  * This listener can be notified of method invocations on a mock.
@@ -18,8 +19,13 @@ public interface InvocationListener {
 	 * 
 	 * Exceptions during this callback are treated as fatal errors. 
 	 * 
+	 * TODO update documentation to parameters
+	 * 
 	 * @param invocation information on the happening method call, never {@code null}.
 	 * @throws RuntimeException on fatal errors
 	 */
-	void invoking(InvocationOnMock invocation);
+	void invokingWithReturnValue(PrintableInvocation invocation, Object returnValue, String locationOfStubbing);
+	
+	void invokingWithException(PrintableInvocation invocation, Exception exception, String locationOfStubbing);
+
 }

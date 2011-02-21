@@ -59,9 +59,19 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-    	notifyAllInvocationListener(invocation);
-    	
-        if (invocationContainerImpl.hasAnswersForStubbing()) {
+    	try {
+    		Object returnValue = handleAllTypesOfInvocations(invocation);
+    		notifyAllListenerOfInvocationWithReturnValue(invocation, returnValue);
+    		return returnValue;
+    	} catch(Exception e) {
+    		notifyAllListenerOfInvocationWithException(invocation, e);
+    		throw e;
+    	}
+    }
+
+	private Object handleAllTypesOfInvocations(Invocation invocation)
+			throws Throwable {
+		if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
                             .getArgumentMatcherStorage(), invocation);
@@ -113,7 +123,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
-    }
+	}
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
@@ -132,18 +142,37 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         return invocationContainerImpl;
     }
     
-	private void notifyAllInvocationListener(Invocation invocation) {
+	private void notifyAllListenerOfInvocationWithReturnValue(Invocation invocation, Object returnValue) {
 		for (InvocationListener listener : mockSettings.getInvocationListener()) {
-			notifyInvocationListener(invocation, listener);
+			notifyListenerOfInvocationWithReturnValue(invocation, returnValue, listener);
     	} 
 	}
 
-	private void notifyInvocationListener(Invocation invocation, InvocationListener listener) {
+	private void notifyAllListenerOfInvocationWithException(Invocation invocation, Exception exception) {
+		for (InvocationListener listener : mockSettings.getInvocationListener()) {
+			notifyListenerOfInvocationWithException(invocation, exception, listener);
+		} 
+	}
+	
+	private void notifyListenerOfInvocationWithReturnValue(Invocation invocation, Object returnValue, InvocationListener listener) {
 		try {
-		listener.invoking(invocation);
+			listener.invokingWithReturnValue(invocation, returnValue, getStubbingLocationOrNull(invocation));
 		} catch(RuntimeException e) {
 			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
-					"The listener has the class " + listener.getClass().getName()),e);
+					"The listener has the class " + listener.getClass().getName()), e);
 		}
+	}
+	
+	private void notifyListenerOfInvocationWithException(Invocation invocation, Exception exception, InvocationListener listener) {
+		try {
+			listener.invokingWithException(invocation, exception, getStubbingLocationOrNull(invocation));
+		} catch(RuntimeException e) {
+			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
+					"The listener has the class " + listener.getClass().getName()), e);
+		}
+	}
+
+	private String getStubbingLocationOrNull(Invocation invocation) {
+		return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt();
 	}
 }
