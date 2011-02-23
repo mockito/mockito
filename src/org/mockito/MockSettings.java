@@ -165,16 +165,17 @@ public interface MockSettings extends Serializable {
      * notified every time a method on this mock is called.
      * <p>
      * Multiple listeners may be added, but the same object is only added once.
-     * The order, in which the listeners are notified, is not guaranteed. 
+     * The order, in which the listeners are added, is not guaranteed to be the
+     * order in which the listeners are notified. 
      * 
      * Example:
      * <pre>
      *  List mockWithListener = mock(List.class, withSettings().callback(new YourInvocationListener()));
      * </pre>
      * 
-     * See the listeners {@link InvocationListener interface} for more details.
+     * See the {@link InvocationListener listeners interface} for more details.
      * 
-     * @param The invocation listener to add as callback. May not be null.
+     * @param listener The invocation listener to add as callback. May not be null.
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings callback(InvocationListener listener);
