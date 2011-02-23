@@ -195,13 +195,12 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 	static class FooImpl implements Foo {
 
 		public String giveMeSomeString(String param) {
-			// TODO Auto-generated method stub
+			// nothing to do
 			return null;
 		}
 
 		public void doSomething(String param) {
-			// TODO Auto-generated method stub
-
+			// nothing to do
 		}
 
 	}
