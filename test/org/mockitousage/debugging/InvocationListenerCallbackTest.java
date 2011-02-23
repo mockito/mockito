@@ -5,7 +5,6 @@
 package org.mockitousage.debugging;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.doThrow;
@@ -15,6 +14,9 @@ import static org.mockito.Mockito.withSettings;
 
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.internal.matchers.Contains;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.InstanceOf;
 import org.mockito.invocation.InvocationListener;
 import org.mockitousage.debugging.VerboseLoggingOfInvocationsOnMockTest.ThirdPartyException;
 import org.mockitoutil.TestBase;
@@ -31,23 +33,26 @@ public class InvocationListenerCallbackTest extends TestBase {
 	@Test
 	public void givenInvocationReturningValue_shouldCallSingleListenerWithCorrectCallback() throws Exception {
 		// given
-		InvocationListener listener = mock(InvocationListener.class);
+		// Cannot use a mockito-mock here: during stubbing, the listener will be called
+		// and mockito will confuse the mocks.
+		RememberingListener listener = new RememberingListener();
 		Foo foo = mock(Foo.class, withSettings().callback(listener));
 		given(foo.giveMeSomeString(SOME_STRING_ARGUMENT)).willReturn(SOME_RETURN_VALUE);
 
 		// when
 		foo.giveMeSomeString(SOME_STRING_ARGUMENT);
 
-		// then
-		verify(listener).invokingWithReturnValue(isA(PrintableInvocation.class), eq(SOME_RETURN_VALUE),
-				contains(getClass().getSimpleName().toString()));
+		assertHasBeenNotified(listener, new InstanceOf(PrintableInvocation.class),
+				new Equals(SOME_RETURN_VALUE), new Contains(getClass().getSimpleName().toString()));
 	}
 
 	@Test
 	public void givenInvocationReturningValue_shouldCallMultipleListeners() throws Exception {
 		// given
-		InvocationListener listener1 = mock(InvocationListener.class);
-		InvocationListener listener2 = mock(InvocationListener.class);
+		// Cannot use a mockito-mock here: during stubbing, the listener will be called
+		// and mockito will confuse the mocks.
+		RememberingListener listener1 = new RememberingListener();
+		RememberingListener listener2 = new RememberingListener();
 		Foo foo = mock(Foo.class, withSettings().callback(listener1).callback(listener2));
 		given(foo.giveMeSomeString(SOME_STRING_ARGUMENT)).willReturn(SOME_RETURN_VALUE);
 
@@ -55,10 +60,10 @@ public class InvocationListenerCallbackTest extends TestBase {
 		foo.giveMeSomeString(SOME_STRING_ARGUMENT);
 
 		// then
-		verify(listener1).invokingWithReturnValue(isA(PrintableInvocation.class), eq(SOME_RETURN_VALUE),
-				isA(String.class));
-		verify(listener2).invokingWithReturnValue(isA(PrintableInvocation.class), eq(SOME_RETURN_VALUE),
-				isA(String.class));
+		assertHasBeenNotified(listener1, new InstanceOf(PrintableInvocation.class),
+				new Equals(SOME_RETURN_VALUE), new Contains(getClass().getSimpleName().toString()));
+		assertHasBeenNotified(listener2, new InstanceOf(PrintableInvocation.class),
+				new Equals(SOME_RETURN_VALUE), new Contains(getClass().getSimpleName().toString()));
 	}
 
 	@Test
@@ -100,5 +105,30 @@ public class InvocationListenerCallbackTest extends TestBase {
 			verify(listener2).invokingWithException(isA(PrintableInvocation.class), isA(RuntimeException.class),
 					isA(String.class));
 		}
+	}
+	
+	private void assertHasBeenNotified(RememberingListener listener, InstanceOf m, Equals m2, Contains m3) {
+		assertThat(listener.invocation, m);
+		assertThat(listener.returnValue, m2);
+		assertThat(listener.locationOfStubbing, m3);
+	}
+
+	static class RememberingListener implements InvocationListener {
+		
+		PrintableInvocation invocation;
+		Object returnValue;
+		String locationOfStubbing;
+
+		public void invokingWithReturnValue(PrintableInvocation invocation, Object returnValue,
+				String locationOfStubbing) {
+			this.invocation = invocation;
+			this.returnValue = returnValue;
+			this.locationOfStubbing = locationOfStubbing;
+		}
+
+		public void invokingWithException(PrintableInvocation invocation, Exception exception, String locationOfStubbing) {
+			throw new UnsupportedOperationException();
+		}
+		
 	}
 }
