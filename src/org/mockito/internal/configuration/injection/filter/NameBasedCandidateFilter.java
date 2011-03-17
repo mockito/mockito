@@ -1,4 +1,4 @@
-package org.mockito.internal.configuration.injection;
+package org.mockito.internal.configuration.injection.filter;
 
 import org.mockito.internal.util.MockUtil;
 

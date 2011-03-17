@@ -3,10 +3,17 @@ package org.mockito.internal.util.reflection;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+
+
 
 public class FieldInitializerTest {
 
@@ -24,39 +31,39 @@ public class FieldInitializerTest {
     private InnerClassType instantiatedInnerClassType = new InnerClassType();
 
     @Test
-    public void shouldKeepSameInstanceIfFieldInitialized() throws Exception {
+    public void should_keep_same_instance_if_field_initialized() throws Exception {
         final StaticClass backupInstance = alreadyInstantiated;
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("alreadyInstantiated"));
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("alreadyInstantiated"));
         assertSame(backupInstance, fieldInitializer.initialize());
     }
 
     @Test
-    public void shouldInstantiateFieldWhenTypeHasNoConstructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("noConstructor"));
+    public void should_instantiate_field_when_type_has_no_constructor() throws Exception {
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noConstructor"));
         assertNotNull(fieldInitializer.initialize());
     }
 
     @Test
-    public void shouldInstantiateFieldWithDefaultConstructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("defaultConstructor"));
+    public void should_instantiate_field_with_default_constructor() throws Exception {
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("defaultConstructor"));
         assertNotNull(fieldInitializer.initialize());
     }
 
     @Test
-    public void shouldInstantiateFieldWithPrivateDefaultConstructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("privateDefaultConstructor"));
+    public void should_instantiate_field_with_private_default_constructor() throws Exception {
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("privateDefaultConstructor"));
         assertNotNull(fieldInitializer.initialize());
     }
 
     @Test(expected = MockitoException.class)
-    public void shouldFailToInstantiateFieldIfNoDefaultConstructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("noDefaultConstructor"));
+    public void should_fail_to_instantiate_field_if_no_default_constructor() throws Exception {
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noDefaultConstructor"));
         fieldInitializer.initialize();
     }
 
     @Test
-    public void shouldFailToInstantiateFieldIfDefaultConstructorThrowsException() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, this.getClass().getDeclaredField("throwingExDefaultConstructor"));
+    public void should_fail_to_instantiate_field_if_default_constructor_throws_exception() throws Exception {
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("throwingExDefaultConstructor"));
         try {
             fieldInitializer.initialize();
             fail();
@@ -68,27 +75,29 @@ public class FieldInitializerTest {
     }
 
     @Test(expected = MockitoException.class)
-    public void shouldFailForAbstractField() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("abstractType"));
+    public void should_fail_for_abstract_field() throws Exception {
+        new FieldInitializer(this, field("abstractType"));
     }
 
-    public void shouldNotFailIfAbstractFieldIsInstantiated() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("instantiatedAbstractType"));
-    }
-
-    @Test(expected = MockitoException.class)
-    public void shouldFailForInterfaceField() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("interfaceType"));
-    }
-
-    public void shouldNotFailIfInterfaceFieldIsInstantiated() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("instantiatedInterfaceType"));
+    @Test
+    public void should_not_fail_if_abstract_field_is_instantiated() throws Exception {
+        new FieldInitializer(this, field("instantiatedAbstractType"));
     }
 
     @Test(expected = MockitoException.class)
-    public void shouldFailForLocalTypeField() throws Exception {
+    public void should_fail_for_interface_field() throws Exception {
+        new FieldInitializer(this, field("interfaceType"));
+    }
+
+    @Test
+    public void should_not_fail_if_interface_field_is_instantiated() throws Exception {
+        new FieldInitializer(this, field("instantiatedInterfaceType"));
+    }
+
+    @Test(expected = MockitoException.class)
+    public void should_fail_for_local_type_field() throws Exception {
         // when
-        class LocalType { };
+        class LocalType { }
 
         class TheTestWithLocalType {
             @InjectMocks LocalType field;
@@ -100,9 +109,10 @@ public class FieldInitializerTest {
         new FieldInitializer(testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"));
     }
 
-    public void shouldNotFailIfLocalTypeFieldIsInstantiated() throws Exception {
+    @Test
+    public void should_not_fail_if_local_type_field_is_instantiated() throws Exception {
         // when
-        class LocalType { };
+        class LocalType { }
 
         class TheTestWithLocalType {
             @InjectMocks LocalType field = new LocalType();
@@ -115,12 +125,27 @@ public class FieldInitializerTest {
     }
 
     @Test(expected = MockitoException.class)
-    public void shouldFailForInnerClassField() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("innerClassType"));
+    public void should_fail_for_inner_class_field() throws Exception {
+        new FieldInitializer(this, field("innerClassType"));
     }
 
-    public void shouldNotFailIfInnerClassFieldIsInstantiated() throws Exception {
-        new FieldInitializer(this, this.getClass().getDeclaredField("instantiatedInnerClassType"));
+    @Test
+    public void should_not_fail_if_inner_class_field_is_instantiated() throws Exception {
+        new FieldInitializer(this, field("instantiatedInnerClassType"));
+    }
+
+    @Test
+    public void can_instantiate_class_with_parameterized_constructor() throws Exception {
+        ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class[].class)))
+                        .willReturn(new Object[] { null }).getMock();
+
+        new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
+
+        assertNotNull(noDefaultConstructor);
+    }
+
+    private Field field(String fieldName) throws NoSuchFieldException {
+        return this.getClass().getDeclaredField(fieldName);
     }
 
     static class StaticClass {

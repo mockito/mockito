@@ -1,4 +1,4 @@
-package org.mockito.internal.configuration.injection;
+package org.mockito.internal.configuration.injection.filter;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.BeanPropertySetter;

@@ -6,78 +6,82 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Initialize a field with type instance if a default constructor can be found.
  *
  * <p>
- * If the given field is already initialize
+ * If the given field is already initialized, then <strong>the actual instance is returned</strong>.
  * This initializer doesn't work with inner classes, local classes, interfaces or abstract types.
  * </p>
  *
  */
 public class FieldInitializer {
 
-    private Object testClass;
+    private Object fieldOwner;
     private Field field;
+    private ConstructorInstantiator instantiator;
 
 
     /**
-     * Initialize the given field on the given instance.
+     * Prepare initializer with the given field on the given instance.
      *
      * <p>
      * This constructor fail fast if the field type cannot be handled.
      * </p>
      *
-     * @param testClass Instance of the test.
+     * @param fieldOwner Instance of the test.
      * @param field Field to be initialize.
      */
-    public FieldInitializer(Object testClass, Field field) {
-        if(new FieldReader(testClass, field).isNull()) {
+    public FieldInitializer(Object fieldOwner, Field field) {
+        this(fieldOwner, field, new NoArgConstructorInstantiator(fieldOwner, field));
+    }
+
+    /**
+     * Prepare initializer with the given field on the given instance.
+     *
+     * <p>
+     * This constructor fail fast if the field type cannot be handled.
+     * </p>
+     *
+     * @param fieldOwner Instance of the test.
+     * @param field Field to be initialize.
+     */
+    public FieldInitializer(Object fieldOwner, Field field, ConstructorArgumentResolver resolver) {
+        this(fieldOwner, field, new ParameterizedConstructorInstantiator(fieldOwner, field, resolver));
+    }
+
+    private FieldInitializer(Object fieldOwner, Field field, ConstructorInstantiator instantiator) {
+        if(new FieldReader(fieldOwner, field).isNull()) {
             checkNotLocal(field);
             checkNotInner(field);
             checkNotInterface(field);
             checkNotAbstract(field);
         }
-        this.testClass = testClass;
+        this.fieldOwner = fieldOwner;
         this.field = field;
+        this.instantiator = instantiator;
     }
 
+    /**
+     * Initialize field if no initialized and return the actual instance.
+     *
+     * @return Actual field instance.
+     */
     public Object initialize() {
         final AccessibilityChanger changer = new AccessibilityChanger();
         changer.enableAccess(field);
 
         try {
-            return acquireFieldInstance(testClass, field);
+            return acquireFieldInstance();
         } catch(IllegalAccessException e) {
-            throw new MockitoException("Problems injecting dependencies in " + field.getName(), e);
+            throw new MockitoException("Problems initializing field '" + field.getName() + "' of type '" + field.getType().getSimpleName() + "'", e);
         } finally {
             changer.safelyDisableAccess(field);
-        }
-    }
-
-    private void initializeField(Object testClass, Field field) {
-        final AccessibilityChanger changer = new AccessibilityChanger();
-        Constructor<?> constructor = null;
-        try {
-            constructor = field.getType().getDeclaredConstructor();
-            changer.enableAccess(constructor);
-
-            final Object[] noArg = new Object[0];
-            Object newFieldInstance = constructor.newInstance(noArg);
-            new FieldSetter(testClass, field).set(newFieldInstance);
-        } catch (NoSuchMethodException e) {
-            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' has no default constructor", e);
-        } catch (InvocationTargetException e) {
-            throw new MockitoException("the default constructor of type '" + field.getType().getSimpleName() + "' has raised an exception (see the stack trace for cause): " + e.getTargetException().toString(), e);
-        } catch (InstantiationException e) {
-            throw new MockitoException("InstantiationException (see the stack trace for cause): " + e.toString(), e);
-        } catch (IllegalAccessException e) {
-            throw new MockitoException("IllegalAccessException (see the stack trace for cause): " + e.toString(), e);
-        } finally {
-            if(constructor != null) {
-                changer.safelyDisableAccess(constructor);
-            }
         }
     }
 
@@ -105,13 +109,142 @@ public class FieldInitializer {
         }
     }
 
-    private Object acquireFieldInstance(Object testClass, Field field) throws IllegalAccessException {
-        Object fieldInstance = field.get(testClass);
+    private Object acquireFieldInstance() throws IllegalAccessException {
+        Object fieldInstance = field.get(fieldOwner);
         if(fieldInstance != null) {
             return fieldInstance;
         }
 
-        initializeField(testClass, field);
-        return field.get(testClass);
+        instantiator.instantiate();
+        return field.get(fieldOwner);
+    }
+
+    public interface ConstructorArgumentResolver {
+        Object[] resolveTypeInstances(Class<?>... argTypes);
+    }
+
+    private interface ConstructorInstantiator {
+        Object instantiate();
+    }
+
+    /**
+     * Constructor instantiating strategy for no-arg constructor.
+     *
+     * <p>
+     * If a no-arg constructor can be found then the instance is created using
+     * this constructor.
+     * Otherwise a technical MockitoException is thrown.
+     * </p>
+     */
+    static class NoArgConstructorInstantiator implements ConstructorInstantiator {
+        private Object testClass;
+        private Field field;
+
+        /**
+         * Internal, checks are done by FieldInitializer.
+         * Fields are assumed to be accessible.
+         */
+        NoArgConstructorInstantiator(Object testClass, Field field) {
+            this.testClass = testClass;
+            this.field = field;
+        }
+
+        public Object instantiate() {
+            final AccessibilityChanger changer = new AccessibilityChanger();
+            Constructor<?> constructor = null;
+            try {
+                constructor = field.getType().getDeclaredConstructor();
+                changer.enableAccess(constructor);
+
+                final Object[] noArg = new Object[0];
+                Object newFieldInstance = constructor.newInstance(noArg);
+                new FieldSetter(testClass, field).set(newFieldInstance);
+
+                return field.get(testClass);
+            } catch (NoSuchMethodException e) {
+                throw new MockitoException("the type '" + field.getType().getSimpleName() + "' has no default constructor", e);
+            } catch (InvocationTargetException e) {
+                throw new MockitoException("the default constructor of type '" + field.getType().getSimpleName() + "' has raised an exception (see the stack trace for cause): " + e.getTargetException().toString(), e);
+            } catch (InstantiationException e) {
+                throw new MockitoException("InstantiationException (see the stack trace for cause): " + e.toString(), e);
+            } catch (IllegalAccessException e) {
+                throw new MockitoException("IllegalAccessException (see the stack trace for cause): " + e.toString(), e);
+            } finally {
+                if(constructor != null) {
+                    changer.safelyDisableAccess(constructor);
+                }
+            }
+        }
+    }
+
+    /**
+     * Constructor instantiating strategy for parameterized constructors.
+     *
+     * <p>
+     * Choose the constructor with the highest number of parameters, then
+     * call the ConstructorArgResolver to get actual argument instances.
+     * If the resolver fail, then a technical MockitoException is thrown is thrown.
+     * Otherwise the instance is created with the resolved arguments.
+     * </p>
+     */
+    static class ParameterizedConstructorInstantiator implements ConstructorInstantiator {
+        private Object testClass;
+        private Field field;
+        private ConstructorArgumentResolver resolver;
+        private Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
+            public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
+                return constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
+            }
+        };
+
+        /**
+         * Internal, checks are done by FieldInitializer.
+         * Fields are assumed to be accessible.
+         */
+        ParameterizedConstructorInstantiator(Object testClass, Field field, ConstructorArgumentResolver resolver) {
+            this.testClass = testClass;
+            this.field = field;
+            this.resolver = resolver;
+        }
+
+        public Object instantiate() {
+            final AccessibilityChanger changer = new AccessibilityChanger();
+            Constructor<?> constructor = null;
+            try {
+                constructor = biggestConstructor(field.getType());
+                checkParameterized(constructor, field);
+                changer.enableAccess(constructor);
+
+                final Object[] args = resolver.resolveTypeInstances(constructor.getParameterTypes());
+                Object newFieldInstance = constructor.newInstance(args);
+                new FieldSetter(testClass, field).set(newFieldInstance);
+
+                return field.get(testClass);
+            } catch (IllegalArgumentException e) {
+                throw new MockitoException("internal error : resolver provided incorrect types for constructor " + constructor + " of type " + field.getType().getSimpleName(), e);
+            } catch (InvocationTargetException e) {
+                throw new MockitoException("the constructor of type '" + field.getType().getSimpleName() + "' has raised an exception (see the stack trace for cause): " + e.getTargetException().toString(), e);
+            } catch (InstantiationException e) {
+                throw new MockitoException("InstantiationException (see the stack trace for cause): " + e.toString(), e);
+            } catch (IllegalAccessException e) {
+                throw new MockitoException("IllegalAccessException (see the stack trace for cause): " + e.toString(), e);
+            } finally {
+                if(constructor != null) {
+                    changer.safelyDisableAccess(constructor);
+                }
+            }
+        }
+
+        private void checkParameterized(Constructor<?> constructor, Field field) {
+            if(constructor.getParameterTypes().length == 0) {
+                throw new MockitoException("the field " + field.getName() + " of type " + field.getType() + " has no parameterized constructor");
+            }
+        }
+
+        private Constructor<?> biggestConstructor(Class<?> clazz) {
+            final List<Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
+            Collections.sort(constructors, byParameterNumber);
+            return constructors.get(0);
+        }
     }
 }
