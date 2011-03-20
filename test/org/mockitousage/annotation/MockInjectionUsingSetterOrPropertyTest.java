@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressWarnings({"unchecked", "unused"})
-public class MockInjectionTest extends TestBase {
+public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
 	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
 	@InjectMocks private SuperUnderTesting superUnderTest = new SuperUnderTesting();

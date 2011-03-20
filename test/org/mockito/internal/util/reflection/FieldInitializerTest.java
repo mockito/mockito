@@ -34,25 +34,37 @@ public class FieldInitializerTest {
     public void should_keep_same_instance_if_field_initialized() throws Exception {
         final StaticClass backupInstance = alreadyInstantiated;
         FieldInitializer fieldInitializer = new FieldInitializer(this, field("alreadyInstantiated"));
-        assertSame(backupInstance, fieldInitializer.initialize());
+        FieldInitializationReport report = fieldInitializer.initialize();
+
+        assertSame(backupInstance, report.fieldInstance());
+        assertFalse(report.fieldWasInitialized());
     }
 
     @Test
     public void should_instantiate_field_when_type_has_no_constructor() throws Exception {
         FieldInitializer fieldInitializer = new FieldInitializer(this, field("noConstructor"));
-        assertNotNull(fieldInitializer.initialize());
+        FieldInitializationReport report = fieldInitializer.initialize();
+
+        assertNotNull(report.fieldInstance());
+        assertTrue(report.fieldWasInitialized());
     }
 
     @Test
     public void should_instantiate_field_with_default_constructor() throws Exception {
         FieldInitializer fieldInitializer = new FieldInitializer(this, field("defaultConstructor"));
-        assertNotNull(fieldInitializer.initialize());
+        FieldInitializationReport report = fieldInitializer.initialize();
+
+        assertNotNull(report.fieldInstance());
+        assertTrue(report.fieldWasInitialized());
     }
 
     @Test
     public void should_instantiate_field_with_private_default_constructor() throws Exception {
         FieldInitializer fieldInitializer = new FieldInitializer(this, field("privateDefaultConstructor"));
-        assertNotNull(fieldInitializer.initialize());
+        FieldInitializationReport report = fieldInitializer.initialize();
+
+        assertNotNull(report.fieldInstance());
+        assertTrue(report.fieldWasInitialized());
     }
 
     @Test(expected = MockitoException.class)
@@ -137,7 +149,7 @@ public class FieldInitializerTest {
     @Test
     public void can_instantiate_class_with_parameterized_constructor() throws Exception {
         ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class[].class)))
-                        .willReturn(new Object[] { null }).getMock();
+                        .willReturn(new Object[]{null}).getMock();
 
         new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
 

@@ -693,12 +693,12 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</h3>
  * <p>
- * Mockito will now try to instantiate &#064;{@link Spy} and &#064;{@link InjectMocks} fields if you haven't provided instance at declaration
- * *and* if the type has a zero-arg argument (even private).
+ * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
+ * using constructor injection, setter injection, or field injection.
  * <p>
  * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)} or {@link MockitoJUnitRunner}.
  * <p>
- * Read more about available {@link MockitoAnnotations}
+ * Read more about available tricks {@link InjectMocks}
  * <pre>
  * //instead:
  * &#064;Spy BeerDrinker drinker = new BeerDrinker();

@@ -51,8 +51,8 @@ public class FieldInitializer {
      * @param fieldOwner Instance of the test.
      * @param field Field to be initialize.
      */
-    public FieldInitializer(Object fieldOwner, Field field, ConstructorArgumentResolver resolver) {
-        this(fieldOwner, field, new ParameterizedConstructorInstantiator(fieldOwner, field, resolver));
+    public FieldInitializer(Object fieldOwner, Field field, ConstructorArgumentResolver argResolver) {
+        this(fieldOwner, field, new ParameterizedConstructorInstantiator(fieldOwner, field, argResolver));
     }
 
     private FieldInitializer(Object fieldOwner, Field field, ConstructorInstantiator instantiator) {
@@ -72,7 +72,7 @@ public class FieldInitializer {
      *
      * @return Actual field instance.
      */
-    public Object initialize() {
+    public FieldInitializationReport initialize() {
         final AccessibilityChanger changer = new AccessibilityChanger();
         changer.enableAccess(field);
 
@@ -109,17 +109,34 @@ public class FieldInitializer {
         }
     }
 
-    private Object acquireFieldInstance() throws IllegalAccessException {
+    private FieldInitializationReport acquireFieldInstance() throws IllegalAccessException {
         Object fieldInstance = field.get(fieldOwner);
         if(fieldInstance != null) {
-            return fieldInstance;
+            return new FieldInitializationReport(fieldInstance, false);
         }
 
         instantiator.instantiate();
-        return field.get(fieldOwner);
+        return new FieldInitializationReport(field.get(fieldOwner), true);
     }
 
+    /**
+     * Represents the strategy used to resolve actual instances
+     * to be given to a constructor given the argument types.
+     */
     public interface ConstructorArgumentResolver {
+
+        /**
+         * Try to resolve instances from types.
+         *
+         * <p>
+         * Checks on the real argument type or on the correct argument number
+         * will happen during the field initialization {@link FieldInitializer#initialize()}.
+         * I.e the only responsibility of this method, is to provide instances <strong>if possible</strong>.
+         * </p>
+         *
+         * @param argTypes Constructor argument types, should not be null.
+         * @return The argument instances to be given to the constructor, should not be null.
+         */
         Object[] resolveTypeInstances(Class<?>... argTypes);
     }
 
@@ -183,14 +200,14 @@ public class FieldInitializer {
      * <p>
      * Choose the constructor with the highest number of parameters, then
      * call the ConstructorArgResolver to get actual argument instances.
-     * If the resolver fail, then a technical MockitoException is thrown is thrown.
+     * If the argResolver fail, then a technical MockitoException is thrown is thrown.
      * Otherwise the instance is created with the resolved arguments.
      * </p>
      */
     static class ParameterizedConstructorInstantiator implements ConstructorInstantiator {
         private Object testClass;
         private Field field;
-        private ConstructorArgumentResolver resolver;
+        private ConstructorArgumentResolver argResolver;
         private Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
             public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
                 return constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
@@ -201,10 +218,10 @@ public class FieldInitializer {
          * Internal, checks are done by FieldInitializer.
          * Fields are assumed to be accessible.
          */
-        ParameterizedConstructorInstantiator(Object testClass, Field field, ConstructorArgumentResolver resolver) {
+        ParameterizedConstructorInstantiator(Object testClass, Field field, ConstructorArgumentResolver argumentResolver) {
             this.testClass = testClass;
             this.field = field;
-            this.resolver = resolver;
+            this.argResolver = argumentResolver;
         }
 
         public Object instantiate() {
@@ -215,13 +232,13 @@ public class FieldInitializer {
                 checkParameterized(constructor, field);
                 changer.enableAccess(constructor);
 
-                final Object[] args = resolver.resolveTypeInstances(constructor.getParameterTypes());
+                final Object[] args = argResolver.resolveTypeInstances(constructor.getParameterTypes());
                 Object newFieldInstance = constructor.newInstance(args);
                 new FieldSetter(testClass, field).set(newFieldInstance);
 
                 return field.get(testClass);
             } catch (IllegalArgumentException e) {
-                throw new MockitoException("internal error : resolver provided incorrect types for constructor " + constructor + " of type " + field.getType().getSimpleName(), e);
+                throw new MockitoException("internal error : argResolver provided incorrect types for constructor " + constructor + " of type " + field.getType().getSimpleName(), e);
             } catch (InvocationTargetException e) {
                 throw new MockitoException("the constructor of type '" + field.getType().getSimpleName() + "' has raised an exception (see the stack trace for cause): " + e.getTargetException().toString(), e);
             } catch (InstantiationException e) {

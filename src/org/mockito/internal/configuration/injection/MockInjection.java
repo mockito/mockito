@@ -42,6 +42,9 @@ public class MockInjection {
         return new OngoingMockInjection(fields, ofInstance);
     }
 
+    /**
+     * Ongoing configuration of the mock injector.
+     */
     public static class OngoingMockInjection {
         private Set<Field> fields = new HashSet<Field>();
         private Set<Object> mocks = new HashSet<Object>();

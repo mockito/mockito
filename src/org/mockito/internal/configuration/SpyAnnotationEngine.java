@@ -9,6 +9,7 @@ import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.annotation.Annotation;
@@ -31,7 +32,8 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 assertNoAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 Object instance = null;
                 try {
-                    instance = new FieldInitializer(testInstance, field).initialize();
+                    FieldInitializationReport report = new FieldInitializer(testInstance, field).initialize();
+                    instance = report.fieldInstance();
                 } catch (MockitoException e) {
                     new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e);
                 }

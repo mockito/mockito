@@ -6,6 +6,7 @@ import org.mockito.internal.configuration.injection.filter.FinalMockCandidateFil
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
+import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.reflect.Field;
@@ -64,28 +65,36 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         Set<Object> mocksToBeInjected = new HashSet<Object>(mockCandidates);
-        Object fieldInstanceNeedingInjection = null;
+        FieldInitializationReport report = null;
         try {
-            fieldInstanceNeedingInjection = new FieldInitializer(fieldOwner, field).initialize();
+            report = new FieldInitializer(fieldOwner, field).initialize();
         } catch (MockitoException e) {
             new Reporter().cannotInitializeForInjectMocksAnnotation(field.getName(), e);
         }
 
+
         // for each field in the class hierarchy
-        Class<?> fieldClass = fieldInstanceNeedingInjection.getClass();
+        boolean injectionOccurred = false;
+        Class<?> fieldClass = report.fieldClass();
+        Object fieldInstanceNeedingInjection = report.fieldInstance();
         while (fieldClass != Object.class) {
-            injectMockCandidate(fieldClass, mocksToBeInjected, fieldInstanceNeedingInjection);
+            injectionOccurred |= injectMockCandidate(fieldClass, mocksToBeInjected, fieldInstanceNeedingInjection);
             fieldClass = fieldClass.getSuperclass();
         }
-        return false;
+        return injectionOccurred;
     }
 
 
-    private void injectMockCandidate(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object instance) {
+    private boolean injectMockCandidate(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object instance) {
+        boolean injectionOccurred = false;
         for(Field field : orderedInstanceFieldsFrom(awaitingInjectionClazz)) {
             Object injected = mockCandidateFilter.filterCandidate(mocks, field, instance).thenInject();
-            mocks.remove(injected);
+            if(injected != null) {
+                injectionOccurred |= true;
+                mocks.remove(injected);
+            }
         }
+        return injectionOccurred;
     }
 
     private Field[] orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {

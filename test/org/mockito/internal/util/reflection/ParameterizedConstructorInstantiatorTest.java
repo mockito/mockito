@@ -84,7 +84,7 @@ public class ParameterizedConstructorInstantiatorTest {
             new ParameterizedConstructorInstantiator(this, field("withMultipleConstructor"), resolver).instantiate();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.getMessage()).contains("resolver").contains("incorrect types");
+            assertThat(e.getMessage()).contains("argResolver").contains("incorrect types");
         }
     }
 
