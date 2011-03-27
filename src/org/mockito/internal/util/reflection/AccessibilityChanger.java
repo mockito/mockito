@@ -14,7 +14,7 @@ public class AccessibilityChanger {
      * safely disables access
      */
     public void safelyDisableAccess(AccessibleObject accessibleObject) {
-        assert wasAccessible != null;
+        assert wasAccessible != null : "accessibility info shall not be null";
         try {
             accessibleObject.setAccessible(wasAccessible);
         } catch (Throwable t) {

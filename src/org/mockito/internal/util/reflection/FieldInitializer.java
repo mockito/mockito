@@ -229,7 +229,6 @@ public class FieldInitializer {
             Constructor<?> constructor = null;
             try {
                 constructor = biggestConstructor(field.getType());
-                checkParameterized(constructor, field);
                 changer.enableAccess(constructor);
 
                 final Object[] args = argResolver.resolveTypeInstances(constructor.getParameterTypes());
@@ -261,7 +260,10 @@ public class FieldInitializer {
         private Constructor<?> biggestConstructor(Class<?> clazz) {
             final List<Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
             Collections.sort(constructors, byParameterNumber);
-            return constructors.get(0);
+
+            Constructor<?> constructor = constructors.get(0);
+            checkParameterized(constructor, field);
+            return constructor;
         }
     }
 }
