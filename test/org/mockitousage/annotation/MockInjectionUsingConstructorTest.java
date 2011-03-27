@@ -72,6 +72,7 @@ public class MockInjectionUsingConstructorTest {
 
         try {
             MockitoAnnotations.initMocks(new ATest());
+            fail();
         } catch (MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
             Assertions.assertThat(e.getCause()).isInstanceOf(IllegalStateException.class);
