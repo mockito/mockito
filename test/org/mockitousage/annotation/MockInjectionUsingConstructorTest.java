@@ -1,11 +1,13 @@
 package org.mockitousage.annotation;
 
-import org.junit.Ignore;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.examples.use.ArticleCalculator;
@@ -62,9 +64,18 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    @Ignore("Work should be done on error reporting on this matter")
     public void should_report_failure_only_when_object_initialization_throws_exception() throws Exception {
+        class ATest {
+            @Mock Set set;
+            @InjectMocks FailingConstructor failingConstructor;
+        }
 
+        try {
+            MockitoAnnotations.initMocks(new ATest());
+        } catch (MockitoException e) {
+            Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
+            Assertions.assertThat(e.getCause()).isInstanceOf(IllegalStateException.class);
+        }
     }
 
     private static int articleVisitorInstantiationCount = 0;
@@ -74,6 +85,12 @@ public class MockInjectionUsingConstructorTest {
         public ArticleVisitor(ArticleCalculator calculator) {
             articleVisitorInstantiationCount++;
             articleVisitorMockInjectedInstances.add(calculator);
+        }
+    }
+
+    private static class FailingConstructor {
+        FailingConstructor(Set set) {
+            throw new IllegalStateException("always fail");
         }
     }
 

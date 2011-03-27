@@ -1,11 +1,13 @@
 package org.mockito.internal.configuration.injection;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +48,10 @@ public class ConstructorInjection extends MockInjectionStrategy {
 
             return report.fieldWasInitialized();
         } catch (MockitoException e) {
+            if(e.getCause() instanceof InvocationTargetException) {
+                Throwable realCause = e.getCause().getCause();
+                new Reporter().fieldInitialisationThrewException(field, realCause);
+            }
             return false;
         }
 

@@ -14,6 +14,7 @@ import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.mockito.exceptions.Pluralizer.pluralize;
@@ -535,7 +536,7 @@ public class Reporter {
             "However, I failed because: " + details.getMessage(),
             "Examples of correct usage of @InjectMocks:",
             "   @InjectMocks Service service = new Service();",
-            "   @InjectMocks Service service; //only if Service has parameterless constructor",
+            "   @InjectMocks Service service;",
             "   //also, don't forget about MockitoAnnotations.initMocks();",
             "   //and... don't forget about some @Mocks for injection :)",
                 ""), details);
@@ -550,5 +551,14 @@ public class Reporter {
                 "In future release we will remove timeout(x).atMost(y) from the API.",
                 "If you want to find out more please refer to issue 235",
                 ""));
+    }
+
+    public void fieldInitialisationThrewException(Field field, Throwable details) {
+        throw new MockitoException(join(
+                "Cannot instantiate @InjectMocks field named '" + field.getName() + "' of type '" + field.getType() +  "'.",
+                "You haven't provided the instance at field declaration so I tried to construct the instance.",
+                "However the constructor or the initialization block threw an exception : " + details.getMessage(),
+                ""), details);
+
     }
 }

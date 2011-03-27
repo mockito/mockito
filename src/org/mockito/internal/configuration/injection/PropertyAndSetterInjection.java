@@ -10,6 +10,7 @@ import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -69,6 +70,10 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         try {
             report = new FieldInitializer(fieldOwner, field).initialize();
         } catch (MockitoException e) {
+            if(e.getCause() instanceof InvocationTargetException) {
+                Throwable realCause = e.getCause().getCause();
+                new Reporter().fieldInitialisationThrewException(field, realCause);
+            }
             new Reporter().cannotInitializeForInjectMocksAnnotation(field.getName(), e);
         }
 

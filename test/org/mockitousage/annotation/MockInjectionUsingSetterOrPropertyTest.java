@@ -4,6 +4,7 @@
  */
 package org.mockitousage.annotation;
 
+import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -115,19 +116,19 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Test
     public void shouldReportNicely() throws Exception {
         Object failing = new Object() {
-            @InjectMocks
-            ThrowingConstructor c;
+            @InjectMocks ThrowingConstructor failingConstructor;
         };
         try {
             MockitoAnnotations.initMocks(failing);
             fail();
         } catch (MockitoException e) {
-            assertContains("correct usage of @InjectMocks", e.getMessage());
+            Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
+            Assertions.assertThat(e.getCause()).isInstanceOf(RuntimeException.class);
         }
     }
 
     static class ThrowingConstructor {
-        ThrowingConstructor() { throw new RuntimeException("aha");};
+        ThrowingConstructor() { throw new RuntimeException("aha"); };
     }
 
     static class SuperUnderTesting {
