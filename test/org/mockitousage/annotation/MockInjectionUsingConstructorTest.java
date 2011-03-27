@@ -1,6 +1,7 @@
 package org.mockitousage.annotation;
 
 import org.fest.assertions.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -52,9 +53,9 @@ public class MockInjectionUsingConstructorTest {
 
     @Test
     public void constructor_is_called_for_each_test() throws Exception {
-        int number_of_test_before_including_this_one = 4;
-        assertEquals(number_of_test_before_including_this_one, articleVisitorInstantiationCount);
-        assertEquals(number_of_test_before_including_this_one, articleVisitorMockInjectedInstances.size());
+        int minimum_number_of_test_before = 3;
+        Assertions.assertThat(articleVisitorInstantiationCount).isGreaterThan(minimum_number_of_test_before);
+        Assertions.assertThat(articleVisitorMockInjectedInstances.size()).isGreaterThan(minimum_number_of_test_before);
     }
 
     @Test
@@ -65,10 +66,6 @@ public class MockInjectionUsingConstructorTest {
 
     @Test
     public void should_report_failure_only_when_object_initialization_throws_exception() throws Exception {
-        class ATest {
-            @Mock Set set;
-            @InjectMocks FailingConstructor failingConstructor;
-        }
 
         try {
             MockitoAnnotations.initMocks(new ATest());
@@ -94,5 +91,12 @@ public class MockInjectionUsingConstructorTest {
             throw new IllegalStateException("always fail");
         }
     }
+
+    @Ignore("don't run this code in the test runner")
+    private static class ATest {
+        @Mock Set set;
+        @InjectMocks FailingConstructor failingConstructor;
+    }
+
 
 }
