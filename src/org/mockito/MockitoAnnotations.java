@@ -93,7 +93,7 @@ public class MockitoAnnotations {
         AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
         Class<?> clazz = testClass.getClass();
 
-        //below can be removed later, when we get rid of deprecated stuff
+        //below can be removed later, when we get read rid of deprecated stuff
         if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
             //this means user has his own annotation engine and we have to respect that.
             //we will do annotation processing the old way so that we are backwards compatible

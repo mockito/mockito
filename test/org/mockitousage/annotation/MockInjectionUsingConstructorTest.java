@@ -56,7 +56,6 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    @Ignore("Works must be done on the spy annotation engine and the injection engine")
     public void objects_created_with_constructor_initialization_can_be_spied() throws Exception {
         assertFalse(mockUtil.isMock(articleManager));
         assertTrue(mockUtil.isMock(spiedArticleManager));

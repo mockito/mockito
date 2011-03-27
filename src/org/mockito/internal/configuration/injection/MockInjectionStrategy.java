@@ -8,6 +8,18 @@ import java.util.Set;
  */
 public abstract class MockInjectionStrategy {
 
+    /**
+     * NOP Strategy that will always try the next strategy.
+     */
+    public static final MockInjectionStrategy nop() {
+        return new MockInjectionStrategy() {
+            protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+                return false;
+            }
+        };
+    }
+
+
     private MockInjectionStrategy nextStrategy;
 
     /**
@@ -21,7 +33,11 @@ public abstract class MockInjectionStrategy {
      * @return The passed strategy instance to allow chaining.
      */
     public MockInjectionStrategy thenTry(MockInjectionStrategy strategy) {
-        nextStrategy = strategy;
+        if(nextStrategy != null) {
+            nextStrategy.thenTry(strategy);
+        } else {
+            nextStrategy = strategy;
+        }
         return strategy;
     }
 
@@ -65,6 +81,6 @@ public abstract class MockInjectionStrategy {
     protected abstract boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates);
 
     private boolean relayProcessToNextStrategy(Field field, Object fieldOwner, Set<Object> mockCandidates) {
-        return nextStrategy != null && nextStrategy.processInjection(field, fieldOwner, mockCandidates);
+        return nextStrategy != null && nextStrategy.process(field, fieldOwner, mockCandidates);
     }
 }

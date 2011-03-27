@@ -49,7 +49,8 @@ public class MockInjection {
         private Set<Field> fields = new HashSet<Field>();
         private Set<Object> mocks = new HashSet<Object>();
         private Object fieldOwner;
-        private MockInjectionStrategy injectionStrategies;
+        private MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
+        private MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();
 
         private OngoingMockInjection(Field field, Object fieldOwner) {
             this(Collections.singleton(field), fieldOwner);
@@ -66,27 +67,24 @@ public class MockInjection {
         }
 
         public OngoingMockInjection tryConstructorInjection() {
-            appendStrategy(new ConstructorInjection());
+            injectionStrategies.thenTry(new ConstructorInjection());
             return this;
         }
 
         public OngoingMockInjection tryPropertyOrFieldInjection() {
-            appendStrategy(new PropertyAndSetterInjection());
+            injectionStrategies.thenTry(new PropertyAndSetterInjection());
             return this;
         }
 
-        private void appendStrategy(MockInjectionStrategy strategy) {
-            if(injectionStrategies == null) {
-                injectionStrategies = strategy;
-            } else {
-                injectionStrategies.thenTry(strategy);
-            }
-
+        public OngoingMockInjection handleSpyAnnotation() {
+            postInjectionStrategies.thenTry(new SpyOnInjectedFieldsHandler());
+            return this;
         }
 
         public void apply() {
             for (Field field : fields) {
                 injectionStrategies.process(field, fieldOwner, mocks);
+                postInjectionStrategies.process(field, fieldOwner, mocks);
             }
         }
     }
