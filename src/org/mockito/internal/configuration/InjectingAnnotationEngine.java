@@ -58,14 +58,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
     private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
-            //this injects mocks
-            Field[] fields = classContext.getDeclaredFields();
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(InjectMocks.class)) {
-                    assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
-                    injectMocks(testInstance);
-                }
-            }
+            injectMocks(testInstance);
             classContext = classContext.getSuperclass();
         }
     }
@@ -101,16 +94,16 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      */
     public void injectMocks(final Object testClass) {
         Class<?> clazz = testClass.getClass();
-        Set<Field> mockDependents = new HashSet<Field>();
+        Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = new HashSet<Object>();
         
         while (clazz != Object.class) {
-            mockDependents.addAll(scanForInjection(testClass, clazz));
+            mockDependentFields.addAll(scanForInjection(testClass, clazz));
             mocks.addAll(scanMocks(testClass, clazz));
             clazz = clazz.getSuperclass();
         }
         
-        new DefaultInjectionEngine().injectMocksOnFields(mockDependents, mocks, testClass);
+        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClass);
     }
 
     /**
@@ -120,19 +113,20 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      * @param clazz
      * @return
      */
-    private static Set<Field> scanForInjection(final Object testClass, final Class<?> clazz) {
-        Set<Field> testedFields = new HashSet<Field>();
+    private Set<Field> scanForInjection(final Object testClass, final Class<?> clazz) {
+        Set<Field> mockDependentFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {
-                testedFields.add(field);
+                assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
+                mockDependentFields.add(field);
             }
         }
 
-        return testedFields;
+        return mockDependentFields;
     }
 
-    private static Set<Object> scanMocks(final Object testClass, final Class<?> clazz) {
+    private Set<Object> scanMocks(final Object testClass, final Class<?> clazz) {
         Set<Object> mocks = new HashSet<Object>();
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
@@ -144,7 +138,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
                 try {
                     fieldInstance = field.get(testClass);
                 } catch (IllegalAccessException e) {
-                    throw new MockitoException("Problems injecting dependencies in " + field.getName(), e);
+                    throw new MockitoException("Problems reading this field dependency " + field.getName() + " for injection", e);
                 } finally {
                     field.setAccessible(wasAccessible);
                 }

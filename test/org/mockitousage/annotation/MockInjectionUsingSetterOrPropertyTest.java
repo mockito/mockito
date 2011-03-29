@@ -4,6 +4,7 @@
  */
 package org.mockitousage.annotation;
 
+import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @SuppressWarnings({"unchecked", "unused"})
-public class MockInjectionTest extends TestBase {
+public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
 	private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
 	@InjectMocks private SuperUnderTesting superUnderTest = new SuperUnderTesting();
@@ -39,8 +41,9 @@ public class MockInjectionTest extends TestBase {
 	@Mock private Set histogram1;
 	@Mock private Set histogram2;
 	@Spy private TreeSet searchTree = new TreeSet();
+    private MockUtil mockUtil = new MockUtil();
 
-	@Before
+    @Before
 	public void init() {
 		// initMocks called in TestBase Before method, so instances ar not the same
 		MockitoAnnotations.initMocks(this);
@@ -59,11 +62,13 @@ public class MockInjectionTest extends TestBase {
     @Test
     public void shouldIInjectMocksInSpy() {
         assertNotNull(initializedSpy.getAList());
+        assertTrue(mockUtil.isMock(initializedSpy));
     }
     @Test
     public void shouldInitializeSpyIfNullAndInjectMocks() {
         assertNotNull(notInitializedSpy);
         assertNotNull(notInitializedSpy.getAList());
+        assertTrue(mockUtil.isMock(notInitializedSpy));
     }
 
 	@Test
@@ -111,19 +116,19 @@ public class MockInjectionTest extends TestBase {
     @Test
     public void shouldReportNicely() throws Exception {
         Object failing = new Object() {
-            @InjectMocks
-            ThrowingConstructor c;
+            @InjectMocks ThrowingConstructor failingConstructor;
         };
         try {
             MockitoAnnotations.initMocks(failing);
             fail();
         } catch (MockitoException e) {
-            assertContains("correct usage of @InjectMocks", e.getMessage());
+            Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
+            Assertions.assertThat(e.getCause()).isInstanceOf(RuntimeException.class);
         }
     }
 
     static class ThrowingConstructor {
-        ThrowingConstructor() { throw new RuntimeException("aha");};
+        ThrowingConstructor() { throw new RuntimeException("aha"); };
     }
 
     static class SuperUnderTesting {

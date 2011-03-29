@@ -28,7 +28,7 @@ public class ParentTestMockInjectionTest {
         @Mock protected DaoA daoFromParent;
     }
 
-    @Ignore("JUnit : don't this test!")
+    @Ignore("JUnit test under test : don't test this!")
     public static class ImplicitTest extends BaseTest {
         @InjectMocks private TestedSystem sut = new TestedSystem();
 
