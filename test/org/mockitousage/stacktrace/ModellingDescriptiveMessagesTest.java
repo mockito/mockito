@@ -191,4 +191,10 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldScreamWhenExtraInterfacesIsANullArray() {
         mock(IMethods.class, withSettings().extraInterfaces((Class[]) null));
     }
+
+    @Test
+    public void shouldMentionSpiesWhenVoidMethodIsToldToReturnValue() {
+        List list = mock(List.class);
+        doReturn("foo").when(list).clear();
+    }
 }

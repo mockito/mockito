@@ -461,7 +461,8 @@ import org.mockito.verification.VerificationWithTimeout;
  * 
  * <h4>Important gotcha on spying real objects!</h4>
  * 
- * 1. Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
+ * 1. Sometimes it's impossible or impractical to use {@link Mockito#when(Object)} for stubbing spies.
+ * Therefore when using spies please consider doReturn|Answer|Throw() family of methods for stubbing. Example:
  * 
  * <pre>
  *   List list = new LinkedList();
@@ -1014,7 +1015,8 @@ public class Mockito extends Matchers {
      * 
      * <h4>Important gotcha on spying real objects!</h4>
      * 
-     * 1. Sometimes it's impossible to use {@link Mockito#when(Object)} for stubbing spies. Example:
+     * 1. Sometimes it's impossible or impractical to use {@link Mockito#when(Object)} for stubbing spies.
+     * Therefore when using spies please consider doReturn|Answer|Throw() family of methods for stubbing. Example:
      * 
      * <pre>
      *   List list = new LinkedList();
