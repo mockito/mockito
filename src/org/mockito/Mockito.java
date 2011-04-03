@@ -119,7 +119,9 @@ import org.mockito.verification.VerificationWithTimeout;
  * of how many times it is called. </li>
  * 
  * <li> Last stubbing is more important - when you stubbed the same method with
- * the same arguments many times. </li>
+ * the same arguments many times.
+ * Other words: <b>the order of stubbing matters</b> but it is only meaningful rarely,
+ * e.g. when stubbing exactly the same method calls or sometimes when argument matchers are used, etc.</li>
  * 
  * </ul>
  * 
