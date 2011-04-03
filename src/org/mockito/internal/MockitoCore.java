@@ -151,4 +151,17 @@ public class MockitoCore {
         List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations();
         return allInvocations.get(allInvocations.size()-1);
     }
+
+    public Object[] ignoreStubs(Object... mocks) {
+        for (Object m : mocks) {
+            InvocationContainer invocationContainer = new MockUtil().getMockHandler(m).getInvocationContainer();
+            List<Invocation> ins = invocationContainer.getInvocations();
+            for (Invocation in : ins) {
+                if (in.stubInfo() != null) {
+                    in.ignoreForVerification();
+                }
+            }
+        }
+        return mocks;
+    }
 }
