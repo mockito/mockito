@@ -6,6 +6,7 @@ package org.mockitousage.verification;
 
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.internal.invocation.CapturesArgumensFromInvocation;
 import org.mockito.internal.invocation.Invocation;
@@ -44,32 +45,22 @@ public class NoMoreInteractionsExcludingStubsTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
-//    @Test
-//    public void shouldIgnoringStubsDetectNulls() throws Exception {
-//        //given
-//
-//        //when
-//        ignoreStubs(mock, null);
-//
-//        //then
-//    }
-//
-//    @Test
-//    public void shouldIgnoringStubsDetectNonMocks() throws Exception {
-//        //given
-//
-//        //when
-//        ignoreStubs(mock, new Object());
-//
-//        //then
-//    }
+    @Test(expected = NotAMockException.class)
+    public void shouldIgnoringStubsDetectNulls() throws Exception {
+        ignoreStubs(mock, null);
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void shouldIgnoringStubsDetectNonMocks() throws Exception {
+        ignoreStubs(mock, new Object());
+    }
 
     /**
      * Ignores stubbed methods of given mocks for the sake of verification.
      * <p>
-     * Other words: all *stubbed* methods of given mocks are made *verfied* so that they don't get in a way during verifyNoMoreInteractions().
+     * Other words: all *stubbed* methods of given mocks are marked *verfied* so that they don't get in a way during verifyNoMoreInteractions().
      * <p>
-     * This method changes the input mocks! This method returns input mocks for convenience. 
+     * This method <b>changes the input mocks</b>! This method returns input mocks just for convenience.
      * <p>
      * Example:
      * <pre>
@@ -95,7 +86,7 @@ public class NoMoreInteractionsExcludingStubsTest extends TestBase {
      *  //verifyNoMoreInteractions() fails because get() methods were not accounted for.
      *  try { verifyNoMoreInteractions(mock1, mock2); } catch (NoInteractionsWanted e);
      *
-     *  //However, if ignore stubbed methods then we can verifyNoMoreInteractions() 
+     *  //However, if we ignore stubbed methods then we can verifyNoMoreInteractions()
      *  verifyNoMoreInteractions(ignoreStubs(mock1, mock2));
      *
      *  //Remember that ignoreStubs() *changes* the input mocks and returns them for convenience.
