@@ -728,7 +728,14 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="25">25. Verification ignoring stubs (Since 1.9)
  * <p>
- * Mockito will now allow to ignore stubbing for the sake of verification. Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder()
+ * Mockito will now allow to ignore stubbing for the sake of verification.
+ * Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder().
+ * Helps avoiding redundant verification of stubbed calls - typically we're not interested in verifying stubs.
+ * <p>
+ * <b>Warning</b>, ignoreStubs() might lead to overuse of verifyNoMoreInteractions(ignoreStubs(...));
+ * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions()
+ * for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
+ * <p>Some examples:
  * <pre>
  * verify(mock).foo();
  * verify(mockTwo).bar();
@@ -742,8 +749,6 @@ import org.mockito.verification.VerificationWithTimeout;
  * inOrder.verify(mockTwo).bar();
  * inOrder.verifyNoMoreInteractions();
  * </pre>
- * <b>Warning</b>, ignoreStubs() might lead to overuse verifyNoMoreInteractions(ignoreStubs(...));
- * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions() for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
  * <p>
  * Advanced examples and more details can be found in javadoc for {@link Mockito#ignoreStubs(Object...)}
  */
@@ -1595,11 +1600,13 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Ignores stubbed methods of given mocks for the sake of verification. Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder()
+     * Ignores stubbed methods of given mocks for the sake of verification.
+     * Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder().
+     * Helps avoiding redundant verification of stubbed calls - typically we're not interested in verifying stubs.
      * <p>
-     * <b>Warning</b>, ignoreStubs() might lead to overuse verifyNoMoreInteractions(ignoreStubs(...));
-     * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions() for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
-     * <p>
+     * <b>Warning</b>, ignoreStubs() might lead to overuse of verifyNoMoreInteractions(ignoreStubs(...));
+     * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions()
+     * for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
      * Other words: all *stubbed* methods of given mocks are marked *verfied* so that they don't get in a way during verifyNoMoreInteractions().
      * <p>
      * This method <b>changes the input mocks</b>! This method returns input mocks just for convenience.
