@@ -20,7 +20,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
-public class NoMoreInteractionsExcludingStubsTest extends TestBase {
+public class VerificationExcludingStubsTest extends TestBase {
 
     @Mock IMethods mock;
 
