@@ -50,8 +50,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
  *      <a href="#21">21. New annotations: &#064;Captor, &#064;Spy, &#064;InjectMocks (Since 1.8.3) </a><br/>
  *      <a href="#22">22. (New) Verification with timeout (Since 1.8.5) </a><br/>
- *      <a href="#23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</a><br/>
- *      <a href="#24">24. (**New**) Inline mock creation and stubbing (Since 1.9)</a><br/>
+ *      <a href="#23">23. (**New**) Automatic instantiation of &#064;Spies, &#064;InjectMocks and constructor injection goodness (Since 1.9)</a><br/>
+ *      <a href="#24">24. (**New**) One-liner stubs (Since 1.9)</a><br/>
  * </b>
  * 
  * <p>
@@ -691,14 +691,14 @@ import org.mockito.verification.VerificationWithTimeout;
  *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
  * </pre>
  *
- * <h3 id="23">23. (**New**) Automatic instantiation of &#064;Spy, &#064;InjectMocks fields (Since 1.9)</h3>
+ * <h3 id="23">23. (**New**) Automatic instantiation of &#064;Spies, &#064;InjectMocks and constructor injection goodness (Since 1.9)</h3>
  * <p>
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
- * using constructor injection, setter injection, or field injection.
+ * using <b>constructor</b> injection, <b>setter</b> injection, or <b>field</b> injection.
  * <p>
  * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)} or {@link MockitoJUnitRunner}.
  * <p>
- * Read more about available tricks {@link InjectMocks}
+ * Read more about available tricks and the rules of injection in the javadoc for {@link InjectMocks}
  * <pre>
  * //instead:
  * &#064;Spy BeerDrinker drinker = new BeerDrinker();
@@ -709,9 +709,11 @@ import org.mockito.verification.VerificationWithTimeout;
  * &#064;InjectMocks LocalPub;
  * </pre>
  *
- * <h3> id="24">24. (**New**) Inline mock creation and stubbing (Since 1.9)
+ * <h3 id="24">24. (**New**) One-liner stubs (Since 1.9)
  * <p>
- * Mockito will now allow you to create mocks when stubbing. Example :
+ * Mockito will now allow you to create mocks when stubbing.
+ * Basically, it allows to create a stub in one line of code.
+ * Example :
  * <pre>
  * Car car = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
  * </pre>

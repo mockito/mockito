@@ -162,7 +162,15 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
     /**
      * Sets a generic Answer for the method.
      *
-     * This method is an alias of {@link #thenAnswer(Answer)}.
+     * This method is an alias of {@link #thenAnswer(Answer)}. This alias allows
+     * more readable tests on occasion, for example:
+     * <pre>
+     * //using 'then' alias:
+     * when(mock.foo()).then(returnCoolValue());
+     *
+     * //versus good old 'thenAnswer:
+     * when(mock.foo()).thenAnswer(byReturningCoolValue());
+     * </pre>
      *
      * @param answer the custom answer to execute.
      * @return iOngoingStubbing object that allows stubbing consecutive calls

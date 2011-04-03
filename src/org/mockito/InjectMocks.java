@@ -30,12 +30,12 @@ import static java.lang.annotation.ElementType.FIELD;
  *
  *     <li><strong>Property setter injection</strong>; mocks will first be resolved by type,
  *     then (using name if there is several property of the same type).
- *     <p><u>Note:</u> If type wasn't initialized before and have a no-arg constructor,
+ *     <p><u>Note:</u> If &#064;InjectMocks instance wasn't initialized before and have a no-arg constructor,
  *     then it will be initialized with this constructor.</p></li>
  *
  *     <li><strong>Field injection</strong>; mocks will first be resolved by type,
  *     then (using name if there is several property of the same type).
- *     <p><u>Note:</u> If type wasn't initialized before and have a no-arg constructor,
+ *     <p><u>Note:</u> If &#064;InjectMocks instance wasn't initialized before and have a no-arg constructor,
  *     then it will be initialized with this constructor.</p></li>
  * </ol>
  * </p>
