@@ -52,6 +52,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#22">22. (New) Verification with timeout (Since 1.8.5) </a><br/>
  *      <a href="#23">23. (**New**) Automatic instantiation of &#064;Spies, &#064;InjectMocks and constructor injection goodness (Since 1.9)</a><br/>
  *      <a href="#24">24. (**New**) One-liner stubs (Since 1.9)</a><br/>
+ *      <a href="#25">25. (**New**) Verification ignoring stubs (Since 1.9)</a><br/>
  * </b>
  * 
  * <p>
@@ -716,12 +717,35 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
- * Example :
+ * This can be helpful to keep test code clean.
+ * For example, some boring stub can be created & stubbed at field initialization in a test:
  * <pre>
- * Car car = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
+ * public class CarTest {
+ *   Car boringStubbedCar = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
+ *
+ *   &#064;Test public void should... {}
  * </pre>
  *
+ * <h3 id="25">25. Verification ignoring stubs (Since 1.9)
+ * <p>
+ * Mockito will now allow to ignore stubbing for the sake of verification. Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder()
+ * <pre>
+ * verify(mock).foo();
+ * verify(mockTwo).bar();
  *
+ * //ignores all stubbed methods:
+ * verifyNoMoreInvocations(ignoreStubs(mock, mockTwo));
+ *
+ * //creates InOrder that will ignore stubbed
+ * InOrder inOrder = inOrder(ignoreStubs(mock, mockTwo));
+ * inOrder.verify(mock).foo();
+ * inOrder.verify(mockTwo).bar();
+ * inOrder.verifyNoMoreInteractions();
+ * </pre>
+ * <b>Warning</b>, ignoreStubs() might lead to overuse verifyNoMoreInteractions(ignoreStubs(...));
+ * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions() for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
+ * <p>
+ * Advanced examples and more details can be found in javadoc for {@link Mockito#ignoreStubs(Object...)}
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -1571,11 +1595,17 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Ignores stubbed methods of given mocks for the sake of verification.
+     * Ignores stubbed methods of given mocks for the sake of verification. Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder()
+     * <p>
+     * <b>Warning</b>, ignoreStubs() might lead to overuse verifyNoMoreInteractions(ignoreStubs(...));
+     * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions() for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * Other words: all *stubbed* methods of given mocks are marked *verfied* so that they don't get in a way during verifyNoMoreInteractions().
      * <p>
      * This method <b>changes the input mocks</b>! This method returns input mocks just for convenience.
+     * <p>
+     * Ignored stubs will also be ignored for verification inOrder, including {@link org.mockito.InOrder#verifyNoMoreInteractions()}.
+     * See the second example.
      * <p>
      * Example:
      * <pre>
@@ -1606,7 +1636,22 @@ public class Mockito extends Matchers {
      *
      *  //Remember that ignoreStubs() *changes* the input mocks and returns them for convenience.
      * <pre>
+     * Ignoring stubs can be used with <b>verification in order</b>:
+     * <pre>
+     *  List list = mock(List.class);
+     *  when(mock.get(0)).thenReturn("foo");
      *
+     *  list.add(0);
+     *  System.out.println(list.get(0)); //we don't want to verify this
+     *  list.clear();
+     *
+     *  InOrder inOrder = inOrder(ignoreStubs(list));
+     *  inOrder.verify(list).add(0);
+     *  inOrder.verify(list).clear();
+     *  inOrder.verifyNoMoreInteractions();
+     * </pre>
+     *
+     * @since 1.9
      * @param mocks input mocks that will be changed
      * @return the same mocks that were passed in as parameters
      */

@@ -181,10 +181,15 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Returns the mock that was used for this stub.
-     *
-     * This code allows fast mock creation and stubbing. E.g:
+     * <p>
+     * It allows to create a stub in one line of code.
+     * This can be helpful to keep test code clean.
+     * For example, some boring stub can be created & stubbed at field initialization in a test:
      * <pre>
-     * Set mockedSet = when(mock(Set.class).isEmpty()).thenReturn(false).getMock();
+     * public class CarTest {
+     *   Car boringStubbedCar = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
+     *
+     *   &#064;Test public void should... {}
      * </pre>
      *
      * @param <M> The mock type given by the variable type.
