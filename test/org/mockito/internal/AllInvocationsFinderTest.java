@@ -4,17 +4,17 @@
  */
 package org.mockito.internal;
 
-import static java.util.Arrays.*;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.finder.AllInvocationsFinder;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.internal.invocation.AllInvocationsFinder;
-import org.mockito.internal.invocation.Invocation;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
 
 public class AllInvocationsFinderTest extends TestBase {
     

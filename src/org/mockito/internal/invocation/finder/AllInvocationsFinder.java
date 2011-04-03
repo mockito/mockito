@@ -2,16 +2,13 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.invocation;
-
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+package org.mockito.internal.invocation.finder;
 
 import org.mockito.internal.MockHandlerInterface;
+import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockUtil;
+
+import java.util.*;
 
 public class AllInvocationsFinder {
     

@@ -5,13 +5,13 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.MockitoDebugger;
-import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.UnusedStubsFinder;
+import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 
 import java.util.List;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 public class MockitoDebuggerImpl implements MockitoDebugger {
 

@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.List;
-
 import org.mockito.internal.InOrderImpl;
-import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;
+
+import java.util.List;
 
 public class InOrderWrapper implements VerificationMode {
 
@@ -25,8 +25,8 @@ public class InOrderWrapper implements VerificationMode {
     }
 
     public void verify(VerificationData data) {
-        List<Invocation> allInvocations = new AllInvocationsFinder().find(inOrder.getMocksToBeVerifiedInOrder());
-        VerificationDataInOrderImpl dataInOrder = new VerificationDataInOrderImpl(inOrder, allInvocations, data.getWanted());
+        List<Invocation> invocations = new VerifiableInvocationsFinder().find(inOrder.getMocksToBeVerifiedInOrder());
+        VerificationDataInOrderImpl dataInOrder = new VerificationDataInOrderImpl(inOrder, invocations, data.getWanted());
         mode.verifyInOrder(dataInOrder);
     }
 }

@@ -5,12 +5,11 @@
 package org.mockitousage.verification;
 
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.internal.invocation.CapturesArgumensFromInvocation;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
@@ -45,6 +44,24 @@ public class NoMoreInteractionsExcludingStubsTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
+    @Test
+    public void shouldExcludeFromVerificationInOrder() throws Exception {
+        //given
+        when(mock.simpleMethod()).thenReturn("foo");
+
+        //when
+        mock.objectArgMethod("1");
+        mock.objectArgMethod("2");
+        mock.simpleMethod(); //calling the stub
+
+        //then
+        InOrder inOrder = inOrder(ignoreStubs(mock));
+        inOrder.verify(mock).objectArgMethod("1");
+        inOrder.verify(mock).objectArgMethod("2");
+        inOrder.verifyNoMoreInteractions();
+        verifyNoMoreInteractions(mock);
+    }
+
     @Test(expected = NotAMockException.class)
     public void shouldIgnoringStubsDetectNulls() throws Exception {
         ignoreStubs(mock, null);
@@ -66,7 +83,7 @@ public class NoMoreInteractionsExcludingStubsTest extends TestBase {
      * <pre>
      *  //mocking lists for the sake of the example (if you mock List in real you will burn in hell)
      *  List mock1 = mock(List.class), mock2 = mock(List.class);
-     * 
+     *
      *  //stubbing mocks:
      *  when(mock1.get(0)).thenReturn(10);
      *  when(mock2.get(0)).thenReturn(20);
@@ -100,17 +117,11 @@ public class NoMoreInteractionsExcludingStubsTest extends TestBase {
             InvocationContainer invocationContainer = new MockUtil().getMockHandler(m).getInvocationContainer();
             List<Invocation> ins = invocationContainer.getInvocations();
             for (Invocation in : ins) {
-                InvocationMarker invocationMarker = new InvocationMarker();
                 if (in.stubInfo() != null) {
-                    invocationMarker.markVerified(in, new CapturesArgumensFromInvocation() {
-                        public void captureArgumentsFrom(Invocation i) {
-                            //don't capture
-                        }
-                    });
+                    in.ignoreForVerification();
                 }
             }
         }
         return mocks;
     }
-
 }

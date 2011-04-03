@@ -4,16 +4,13 @@
  */
 package org.mockito.internal;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.AllInvocationsFinder;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.progress.IOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -27,12 +24,11 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidMethodStubbable;
+import org.mockito.stubbing.*;
 import org.mockito.verification.VerificationMode;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
@@ -105,7 +101,7 @@ public class MockitoCore {
 
     public void verifyNoMoreInteractionsInOrder(List<Object> mocks, InOrderContext inOrderContext) {
         mockingProgress.validateState();
-        AllInvocationsFinder finder = new AllInvocationsFinder();
+        VerifiableInvocationsFinder finder = new VerifiableInvocationsFinder();
         VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, finder.find(mocks), null);
         VerificationModeFactory.noMoreInteractions().verifyInOrder(data);
     }    
