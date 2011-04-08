@@ -4,14 +4,14 @@
  */
 package org.mockito;
 
-import static java.lang.annotation.ElementType.*;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.mockito.runners.MockitoJUnitRunner;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * <ul>
@@ -27,11 +27,12 @@ import org.mockito.runners.MockitoJUnitRunner;
  *       &#064;Mock private ArticleCalculator calculator;
  *       &#064;Mock(name = "dbMock") private ArticleDatabase database;
  *       &#064;Mock(answer = RETURNS_MOCKS) private UserProvider userProvider;
+ *       &#064;Mock(extraInterfaces = {Queue.class, Observer.class}) private  articleMonitor;
  *
  *       private ArticleManager manager;
  *
  *       &#064;Before public void setup() {
- *           manager = new ArticleManager(userProvider, database, calculator);
+ *           manager = new ArticleManager(userProvider, database, calculator, articleMonitor);
  *       }
  *   }
  *
