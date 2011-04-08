@@ -9,10 +9,7 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
@@ -55,6 +52,16 @@ public class MoreMatchersTest extends TestBase {
 
         assertEquals("set", mock.setArgMethod(new HashSet<String>()));
         assertEquals("set", mock.setArgMethod(Collections.<String>emptySet()));
+    }
+
+    @Test
+    public void shouldHelpOutWithUnnecessaryCastingOfMaps() {
+        //Below yields compiler warning:
+        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("map");
+
+        assertEquals("map", mock.forMap(new HashMap<String, String>()));
+        assertEquals("map", mock.forMap(Collections.<String, String>emptyMap()));
     }
 
     @Test

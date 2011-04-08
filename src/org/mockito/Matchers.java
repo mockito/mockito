@@ -238,6 +238,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
+     * @param clazz The type to avoid casting
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
@@ -287,6 +288,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
+     * @param clazz Type owned by the list to avoid casting
      * @return empty List.
      */
     public static <T> List<T> anyListOf(Class<T> clazz) {
@@ -312,6 +314,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
+     * @param clazz Type owned by the Set to avoid casting
      * @return empty Set
      */
     public static <T> Set<T> anySetOf(Class<T> clazz) {
@@ -327,7 +330,23 @@ public class Matchers {
      */
     public static Map anyMap() {
         return reportMatcher(Any.ANY).returnMap();
-    }    
+    }
+
+    /**
+     * generic friendly alias to {@link Matchers#anyMap()}.
+     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * <p>
+     * any Map or null
+     * <p>
+     * See examples in javadoc for {@link Matchers} class
+     *
+     * @param keyClazz Type of the map key to avoid casting
+     * @param valueClazz Type of the value to avoid casting
+     * @return empty Map.
+     */
+    public static <K, V>  Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
+        return reportMatcher(Any.ANY).returnMap();
+    }
     
     /**
      * any Collection or null.
@@ -348,6 +367,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
+     * @param clazz Type owned by the collection to avoid casting
      * @return empty Collection.
      */
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
@@ -542,6 +562,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
+     * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
     public static <T> T isNull(Class<T> clazz) {
@@ -569,6 +590,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
+     * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
     public static <T> T notNull(Class<T> clazz) {
@@ -596,6 +618,7 @@ public class Matchers {
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
+     * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
     public static <T> T isNotNull(Class<T> clazz) {
