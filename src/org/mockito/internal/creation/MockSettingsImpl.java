@@ -4,16 +4,15 @@
  */
 package org.mockito.internal.creation;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LogInvocationsToStdOutListener;
 import org.mockito.internal.util.MockName;
 import org.mockito.invocation.InvocationListener;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl implements MockSettings {
@@ -25,7 +24,7 @@ public class MockSettingsImpl implements MockSettings {
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
-    private Set<InvocationListener> invocationListener = new HashSet<InvocationListener>();
+    private List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
     public MockSettings serializable() {
         this.serializable = true;
@@ -88,36 +87,44 @@ public class MockSettingsImpl implements MockSettings {
     }
 
 	public MockSettings verboseLogging() {
-		if (doesNotHaveListenerOfClass(LogInvocationsToStdOutListener.class)) {
-			callback(new LogInvocationsToStdOutListener());
-		}
+        if (!invocationListenersContainsType(LogInvocationsToStdOutListener.class)) {
+            invocationListeners(new LogInvocationsToStdOutListener());
+        }
+        return this;
+	}
+
+    public MockSettings invocationListeners(InvocationListener... listeners) {
+        if (listeners == null || listeners.length == 0) {
+            new Reporter().invocationListenersRequiresAtLeastOneListener();
+        }
+        for (InvocationListener listener : listeners) {
+            if (listener == null) {
+                new Reporter().invocationListenerDoesNotAcceptNullParameters();
+            }
+            this.invocationListeners.add(listener);
+        }
 		return this;
 	}
 
-	public MockSettings callback(InvocationListener listener) {
-		validateListener(listener);
-		this.invocationListener.add(listener);
-		return this;
-	}
-
-	/** Returns the registered invocation listener, never {@code null} */
-	public Collection<InvocationListener> getInvocationListener() {
-		return this.invocationListener;
-	}
-	
-	private boolean doesNotHaveListenerOfClass(Class<?> clazz) {
-		for (InvocationListener listener : invocationListener) {
+	private boolean invocationListenersContainsType(Class<?> clazz) {
+		for (InvocationListener listener : invocationListeners) {
 			if (listener.getClass().equals(clazz)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
-	
-	private void validateListener(InvocationListener listener) {
-		if (listener == null) {
-			new Reporter().nullInvocationListenerAdded();
-		}
-	}
+
+    public List<InvocationListener> getInvocationListeners() {
+        return this.invocationListeners;
+    }
+
+    public boolean containsInvocationListener(InvocationListener invocationListener) {
+        return invocationListeners.contains(invocationListener);
+    }
+
+    public boolean hasInvocationListeners() {
+        return !invocationListeners.isEmpty();
+    }
 }
 

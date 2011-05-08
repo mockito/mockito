@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
-import java.io.Serializable;
-
 import org.mockito.invocation.InvocationListener;
 import org.mockito.stubbing.Answer;
+
+import java.io.Serializable;
 
 /**
  * Allows mock creation with additional mock settings. 
@@ -170,13 +170,13 @@ public interface MockSettings extends Serializable {
      * 
      * Example:
      * <pre>
-     *  List mockWithListener = mock(List.class, withSettings().callback(new YourInvocationListener()));
+     *  List mockWithListener = mock(List.class, withSettings().invocationListeners(new YourInvocationListener()));
      * </pre>
      * 
-     * See the {@link InvocationListener listeners interface} for more details.
+     * See the {@link InvocationListener listener interface} for more details.
      * 
-     * @param listener The invocation listener to add as callback. May not be null.
+     * @param listeners The invocation listeners to add. May not be null.
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings callback(InvocationListener listener);
+    MockSettings invocationListeners(InvocationListener... listeners);
 }

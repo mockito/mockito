@@ -19,6 +19,6 @@ public class ReporterTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldThrowCorrectExceptionForNullInvocationListener() throws Exception {
-    	new Reporter().nullInvocationListenerAdded();
+    	new Reporter().invocationListenerDoesNotAcceptNullParameters();
     }
 }

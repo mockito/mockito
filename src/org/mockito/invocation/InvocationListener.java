@@ -17,7 +17,7 @@ public interface InvocationListener {
 	/**
 	 * Called when a method on the listener's mock was invoked and returned normally.
 	 * 
-	 * Exceptions during this callback are treated as fatal errors. 
+	 * Exceptions during this invocationListeners are treated as fatal errors.
 	 * 
 	 * @param invocation information on the happening method call, never {@code null}
 	 * @param returnValue whatever it was that the method returned, may be {@code null}
@@ -35,7 +35,7 @@ public interface InvocationListener {
 	 * Note that the exception is not necessarily caused by stubbing the method with it, but may also
 	 * be the result of incorrect usage of the mockito API or even a bug inside mockito.
 	 * 
-	 * Exceptions during this callback are treated as fatal errors. 
+	 * Exceptions during this invocationListeners are treated as fatal errors.
 	 * 
 	 * @param invocation information on the happening method call, never {@code null}
 	 * @param exception the exception that was thrown

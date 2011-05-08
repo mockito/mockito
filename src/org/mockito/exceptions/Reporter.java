@@ -13,7 +13,6 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.invocation.InvocationListener;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -567,5 +566,17 @@ public class Reporter {
                 "However the constructor or the initialization block threw an exception : " + details.getMessage(),
                 ""), details);
 
+    }
+
+    public void invocationListenerDoesNotAcceptNullParameters() {
+        throw new MockitoException(join(
+                "invocationListeners() does not accept null parameters"
+        ));
+    }
+
+    public void invocationListenersRequiresAtLeastOneListener() {
+        throw new MockitoException(join(
+                "invocationListeners() requires at least one listener"
+        ));
     }
 }

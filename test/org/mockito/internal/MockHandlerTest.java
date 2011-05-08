@@ -4,27 +4,12 @@
  */
 package org.mockito.internal;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.invocation.StubInfo;
+import org.mockito.internal.invocation.*;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -37,6 +22,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class MockHandlerTest extends TestBase {
@@ -255,7 +248,7 @@ public class MockHandlerTest extends TestBase {
 
 	@SuppressWarnings("rawtypes")
 	private void stubWithPreviouslySetVoidAnswer(MockHandler handler) {
-		List<Answer<?>> answers = new ArrayList<Answer<?>>();
+		List<Answer> answers = new ArrayList<Answer>();
 		answers.add(new DoesNothing());
 		handler.setAnswersForStubbing(answers);
 	}
@@ -264,7 +257,7 @@ public class MockHandlerTest extends TestBase {
 		@SuppressWarnings("rawtypes")
 		MockHandler<?> handler = new MockHandler(mock(MockSettingsImpl.class));
 		handler.matchersBinder = mock(MatchersBinder.class);
-		given(handler.getMockSettings().getInvocationListener()).willReturn(Arrays.asList(listener));
+		given(handler.getMockSettings().getInvocationListeners()).willReturn(Arrays.asList(listener));
 		return handler;
 	}
 }

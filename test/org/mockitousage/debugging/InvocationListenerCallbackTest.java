@@ -4,14 +4,6 @@
  */
 package org.mockitousage.debugging;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.withSettings;
-
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.matchers.Contains;
@@ -20,6 +12,11 @@ import org.mockito.internal.matchers.InstanceOf;
 import org.mockito.invocation.InvocationListener;
 import org.mockitousage.debugging.VerboseLoggingOfInvocationsOnMockTest.ThirdPartyException;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.*;
 
 /**
  * Ensures that custom listeners can be registered and will be called every time
@@ -36,7 +33,7 @@ public class InvocationListenerCallbackTest extends TestBase {
 		// Cannot use a mockito-mock here: during stubbing, the listener will be called
 		// and mockito will confuse the mocks.
 		RememberingListener listener = new RememberingListener();
-		Foo foo = mock(Foo.class, withSettings().callback(listener));
+		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
 		given(foo.giveMeSomeString(SOME_STRING_ARGUMENT)).willReturn(SOME_RETURN_VALUE);
 
 		// when
@@ -53,7 +50,7 @@ public class InvocationListenerCallbackTest extends TestBase {
 		// and mockito will confuse the mocks.
 		RememberingListener listener1 = new RememberingListener();
 		RememberingListener listener2 = new RememberingListener();
-		Foo foo = mock(Foo.class, withSettings().callback(listener1).callback(listener2));
+		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1).invocationListeners(listener2));
 		given(foo.giveMeSomeString(SOME_STRING_ARGUMENT)).willReturn(SOME_RETURN_VALUE);
 
 		// when
@@ -71,7 +68,7 @@ public class InvocationListenerCallbackTest extends TestBase {
 		// given
 		InvocationListener listener = mock(InvocationListener.class);
 		RuntimeException expectedException = new ThirdPartyException();
-		Foo foo = mock(Foo.class, withSettings().callback(listener));
+		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
 		doThrow(expectedException).when(foo).doSomething(SOME_STRING_ARGUMENT);
 
 		// when
@@ -91,7 +88,7 @@ public class InvocationListenerCallbackTest extends TestBase {
 		// given
 		InvocationListener listener1 = mock(InvocationListener.class);
 		InvocationListener listener2 = mock(InvocationListener.class);
-		Foo foo = mock(Foo.class, withSettings().callback(listener1).callback(listener2));
+		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1).invocationListeners(listener2));
 		doThrow(new ThirdPartyException()).when(foo).doSomething(SOME_STRING_ARGUMENT);
 
 		// when

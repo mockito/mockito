@@ -4,23 +4,23 @@
  */
 package org.mockito.internal.creation;
 
-import static org.mockito.Mockito.mock;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
+import org.fest.assertions.Assertions;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LogInvocationsToStdOutListener;
 import org.mockito.invocation.InvocationListener;
 import org.mockitoutil.TestBase;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 public class MockSettingsImplTest extends TestBase {
 
     private MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();
     
-    private static final InvocationListener SOME_LISTENER = mock(InvocationListener.class);
+    @Mock private InvocationListener invocationListener;
 
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingNullInterface() {
@@ -77,64 +77,86 @@ public class MockSettingsImplTest extends TestBase {
         //then
         assertTrue(mockSettingsImpl.isSerializable());
     }
-    
+
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    // issue 148
+
+
     @Test
     public void shouldAddVerboseLoggingListener() {
         //given
-        assertTrue(mockSettingsImpl.getInvocationListener().isEmpty());
+        assertFalse(mockSettingsImpl.hasInvocationListeners());
 
         //when
         mockSettingsImpl.verboseLogging();
 
         //then
-        assertEquals(1, mockSettingsImpl.getInvocationListener().size());
-        assertTrue(getListener(mockSettingsImpl) instanceof LogInvocationsToStdOutListener);
+        assertContainsType(mockSettingsImpl.getInvocationListeners(), LogInvocationsToStdOutListener.class);
     }
 
     @Test
     public void shouldAddVerboseLoggingListenerOnlyOnce() {
     	//given
-    	assertTrue(mockSettingsImpl.getInvocationListener().isEmpty());
+    	assertFalse(mockSettingsImpl.hasInvocationListeners());
     	
     	//when
     	mockSettingsImpl.verboseLogging().verboseLogging();
     	
     	//then
-    	assertEquals(1, mockSettingsImpl.getInvocationListener().size());
+    	Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
-    	mockSettingsImpl.callback(null);
+    	mockSettingsImpl.invocationListeners(null);
     }
 
     @Test
     public void shouldAddInvocationListener() {
     	//given
-    	assertTrue(mockSettingsImpl.getInvocationListener().isEmpty());
+    	assertFalse(mockSettingsImpl.hasInvocationListeners());
     	
     	//when
-    	mockSettingsImpl.callback(SOME_LISTENER);
+    	mockSettingsImpl.invocationListeners(invocationListener);
     	
     	//then
-    	assertEquals(1, mockSettingsImpl.getInvocationListener().size());
-    	assertSame(SOME_LISTENER, getListener(mockSettingsImpl));
+        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
     }
     
     @Test
-    public void shouldAddInvocationListenerOnlyOnce() {
+    public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
     	//given
-    	assertTrue(mockSettingsImpl.getInvocationListener().isEmpty());
+    	assertFalse(mockSettingsImpl.hasInvocationListeners());
     	
     	//when
-    	mockSettingsImpl.callback(SOME_LISTENER).callback(SOME_LISTENER);
+    	mockSettingsImpl.invocationListeners(invocationListener, invocationListener).invocationListeners(invocationListener);
     	
     	//then
-    	assertEquals(1, mockSettingsImpl.getInvocationListener().size());
+    	Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
     }
-    
+
+    @Test
+    public void shouldReportErrorWhenAddingNoInvocationListeners() throws Exception {
+        try {
+            mockSettingsImpl.invocationListeners();
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("at least one listener");
+        }
+    }
+
+    @Test
+    public void shouldReportErrorWhenAddingANullInvocationListener() throws Exception {
+        try {
+            mockSettingsImpl.invocationListeners(invocationListener, null);
+        } catch (Exception e) {
+            Assertions.assertThat(e.getMessage()).contains("does not accept null");
+        }
+    }
+
     private InvocationListener getListener(MockSettingsImpl settings) {
-    	return settings.getInvocationListener().iterator().next();
+    	return settings.getInvocationListeners().iterator().next();
     }
     
 }

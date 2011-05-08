@@ -4,21 +4,18 @@
  */
 package org.mockitousage.debugging;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the verbose logging of invocation on mock methods.
@@ -38,8 +35,7 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 
 	private PrintStream original;
 
-	@Mock
-	UnrelatedClass unrelatedMock;
+	@Mock UnrelatedClass unrelatedMock;
 	
 	@Before
 	public void setUp() {
@@ -88,8 +84,7 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
-		given(foo.giveMeSomeString(SOME_STRING_VALUE)).willReturn(
-				SOME_RETURN_VALUE);
+		given(foo.giveMeSomeString(SOME_STRING_VALUE)).willReturn(SOME_RETURN_VALUE);
 
 		// when
 		foo.giveMeSomeString(SOME_STRING_VALUE);
@@ -107,8 +102,7 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
-		doThrow(new ThirdPartyException()).when(foo).doSomething(
-				SOME_STRING_VALUE);
+		doThrow(new ThirdPartyException()).when(foo).doSomething(SOME_STRING_VALUE);
 
 		try {
 			// when
@@ -155,8 +149,8 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 		foo.doSomething(SOME_STRING_VALUE);
 	}
 
-	private void assertStreamContainsClassName(Class<?> clazz,
-			ByteArrayOutputStream baos) {
+
+    private void assertStreamContainsClassName(Class<?> clazz,ByteArrayOutputStream baos) {
 		assertContains(clazz.getName().toString(), baos.toString());
 	}
 
@@ -166,16 +160,12 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 		return baos;
 	}
 
-	private void assertStreamContainsMockName(Object mock,
-			ByteArrayOutputStream baos) {
-		assertContains(new MockUtil().getMockName(mock).toString(),
-				baos.toString());
+	private void assertStreamContainsMockName(Object mock, ByteArrayOutputStream baos) {
+		assertContains(new MockUtil().getMockName(mock).toString(), baos.toString());
 	}
 
-	private void assertStreamDoesNotContainMockName(Object mock,
-			ByteArrayOutputStream baos) {
-		assertNotContains(new MockUtil().getMockName(mock).toString(),
-				baos.toString());
+	private void assertStreamDoesNotContainMockName(Object mock, ByteArrayOutputStream baos) {
+		assertNotContains(new MockUtil().getMockName(mock).toString(), baos.toString());
 	}
 
 	private static class UnrelatedClass {
