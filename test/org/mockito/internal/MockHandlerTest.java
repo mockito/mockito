@@ -19,6 +19,7 @@ import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationListener;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.invocation.MethodCallReport;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
@@ -82,8 +83,8 @@ public class MockHandlerTest extends TestBase {
 		handler.handle(invocation);
 
 		// then
-		verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
-		verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+		verify(listener1).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
+		verify(listener2).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
 	}
 
 	private Invocation createInvocationWithStubbingLocation(String stubbingLocation) {
@@ -108,8 +109,8 @@ public class MockHandlerTest extends TestBase {
 		handler.handle(invocation);
 
 		// then
-		verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
-		verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+		verify(listener1).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
+		verify(listener2).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
 	}
 
 	@Test
@@ -123,8 +124,8 @@ public class MockHandlerTest extends TestBase {
 		handler.handle(invocation);
 
 		// then
-		verify(listener1).invokingWithReturnValue(invocation, SOME_RETURN_VALUE, SOME_LOCATION);
-		verify(listener2).invokingWithReturnValue(invocation, SOME_RETURN_VALUE, SOME_LOCATION);
+		verify(listener1).reportInvocation(MethodCallReport.of(invocation, SOME_RETURN_VALUE, SOME_LOCATION));
+		verify(listener2).reportInvocation(MethodCallReport.of(invocation, SOME_RETURN_VALUE, SOME_LOCATION));
 	}
 
 	@Test
@@ -140,8 +141,8 @@ public class MockHandlerTest extends TestBase {
 			fail("Exception was not rethrown.");
 		} catch (RuntimeException e) {
 			// then
-			verify(listener1).invokingWithException(invocation, SOME_EXCEPTION, SOME_LOCATION);
-			verify(listener2).invokingWithException(invocation, SOME_EXCEPTION, SOME_LOCATION);
+			verify(listener1).reportInvocation(MethodCallReport.of(invocation, SOME_EXCEPTION, SOME_LOCATION));
+			verify(listener2).reportInvocation(MethodCallReport.of(invocation, SOME_EXCEPTION, SOME_LOCATION));
 		}
 	}
 
@@ -173,16 +174,15 @@ public class MockHandlerTest extends TestBase {
 		handler.handle(invocation);
 
 		// then
-		verify(listener1).invokingWithReturnValue(invocation, null, SOME_LOCATION);
-		verify(listener2).invokingWithReturnValue(invocation, null, SOME_LOCATION);
+		verify(listener1).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
+		verify(listener2).reportInvocation(MethodCallReport.of(invocation, null, SOME_LOCATION));
 	}
 
 	@Test(expected = MockitoException.class)
 	public void shouldThrowMockitoExceptionWhenInvocationHandlerThrowsAnything() throws Throwable {
 		// given
 		InvocationListener throwingListener = mock(InvocationListener.class);
-		doThrow(SOME_EXCEPTION).when(throwingListener).invokingWithReturnValue(any(Invocation.class),
-				any(String.class), any(String.class));
+		doThrow(SOME_EXCEPTION).when(throwingListener).reportInvocation(any(MethodCallReport.class));
 		MockHandler<?> handler = createCorrectlyStubbedHandler(throwingListener);
 
 		// when

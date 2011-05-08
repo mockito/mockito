@@ -6,7 +6,7 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LogInvocationsToStdOutListener;
+import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockName;
 import org.mockito.invocation.InvocationListener;
 import org.mockito.stubbing.Answer;
@@ -87,8 +87,8 @@ public class MockSettingsImpl implements MockSettings {
     }
 
 	public MockSettings verboseLogging() {
-        if (!invocationListenersContainsType(LogInvocationsToStdOutListener.class)) {
-            invocationListeners(new LogInvocationsToStdOutListener());
+        if (!invocationListenersContainsType(VerboseMockInvocationLogger.class)) {
+            invocationListeners(new VerboseMockInvocationLogger());
         }
         return this;
 	}

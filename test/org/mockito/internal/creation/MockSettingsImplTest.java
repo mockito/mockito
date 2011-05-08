@@ -8,7 +8,7 @@ import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.debugging.LogInvocationsToStdOutListener;
+import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.invocation.InvocationListener;
 import org.mockitoutil.TestBase;
 
@@ -93,7 +93,7 @@ public class MockSettingsImplTest extends TestBase {
         mockSettingsImpl.verboseLogging();
 
         //then
-        assertContainsType(mockSettingsImpl.getInvocationListeners(), LogInvocationsToStdOutListener.class);
+        assertContainsType(mockSettingsImpl.getInvocationListeners(), VerboseMockInvocationLogger.class);
     }
 
     @Test

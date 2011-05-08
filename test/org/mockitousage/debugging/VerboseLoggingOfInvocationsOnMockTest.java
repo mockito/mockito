@@ -4,16 +4,17 @@
  */
 package org.mockitousage.debugging;
 
+import org.fest.assertions.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
-import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -26,20 +27,18 @@ import static org.mockito.Mockito.*;
  * in the parallel setting.
  * Maybe, the test class should be @Ignore'd by default ...
  */
-public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
+public class VerboseLoggingOfInvocationsOnMockTest {
 
-	private static final String SOME_RETURN_VALUE = "some return value";
-	private static final String ANOTHER_STRING_VALUE = "another string value";
-	private static final String OTHER_STRING_VALUE = "other string value";
-	private static final String SOME_STRING_VALUE = "some string value";
+    private ByteArrayOutputStream output;
+    private PrintStream original;
 
-	private PrintStream original;
+    @Mock UnrelatedClass unrelatedMock;
 
-	@Mock UnrelatedClass unrelatedMock;
-	
-	@Before
+    @Before
 	public void setUp() {
 		original = System.out;
+        output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
 	}
 
 	@After
@@ -49,132 +48,120 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 
 	@Test
 	public void shouldNotPrintInvocationOnMockWithoutSetting() {
-		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
 
 		// when
-		foo.giveMeSomeString(SOME_STRING_VALUE);
-		unrelatedMock.unrelatedMethod(ANOTHER_STRING_VALUE);
+		foo.giveMeSomeString("Klipsch");
+		unrelatedMock.unrelatedMethod("Apple");
 
 		// then
-		assertStreamDoesNotContainMockName(unrelatedMock, baos);
-		assertNotContains("unrelatedMethod", baos.toString());
-		assertNotContains(ANOTHER_STRING_VALUE, baos.toString());
+        Assertions.assertThat(printed())
+                .doesNotContain(mockName(unrelatedMock))
+                .doesNotContain("unrelatedMethod")
+                .doesNotContain("Apple");
 	}
 
 	@Test
 	public void shouldPrintUnstubbedInvocationOnMockToStdOut() {
-		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
 
 		// when
-		foo.doSomething(SOME_STRING_VALUE);
+		foo.doSomething("Klipsch");
 
 		// then
-		assertStreamContainsClassName(getClass(), baos);
-		assertStreamContainsMockName(foo, baos);
-		assertContains("doSomething", baos.toString());
-		assertContains(SOME_STRING_VALUE, baos.toString());
+        Assertions.assertThat(printed())
+                .contains(getClass().getName())
+                .contains(mockName(foo))
+				.contains("doSomething")
+				.contains("Klipsch");
 	}
 
 	@Test
 	public void shouldPrintStubbedInvocationOnMockToStdOut() {
-		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
-		given(foo.giveMeSomeString(SOME_STRING_VALUE)).willReturn(SOME_RETURN_VALUE);
+		given(foo.giveMeSomeString("Klipsch")).willReturn("earbuds");
 
 		// when
-		foo.giveMeSomeString(SOME_STRING_VALUE);
+		foo.giveMeSomeString("Klipsch");
 
 		// then
-		assertStreamContainsClassName(getClass(), baos);
-		assertStreamContainsMockName(foo, baos);
-		assertContains("giveMeSomeString", baos.toString());
-		assertContains(SOME_STRING_VALUE, baos.toString());
-		assertContains(SOME_RETURN_VALUE, baos.toString());
+        Assertions.assertThat(printed())
+                .contains(getClass().getName())
+                .contains(mockName(foo))
+				.contains("giveMeSomeString")
+				.contains("Klipsch")
+				.contains("earbuds");
 	}
 
 	@Test
 	public void shouldPrintThrowingInvocationOnMockToStdOut() {
-		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
-		doThrow(new ThirdPartyException()).when(foo).doSomething(SOME_STRING_VALUE);
+		doThrow(new ThirdPartyException()).when(foo).doSomething("Klipsch");
 
 		try {
 			// when
-			foo.doSomething(SOME_STRING_VALUE);
-			fail("Exception erwartet.");
+			foo.doSomething("Klipsch");
+			fail("Exception excepted.");
 		} catch (ThirdPartyException e) {
 			// then
-			assertStreamContainsClassName(getClass(), baos);
-			assertStreamContainsMockName(foo, baos);
-			assertContains("doSomething", baos.toString());
-			assertContains(SOME_STRING_VALUE, baos.toString());
-			assertStreamContainsClassName(ThirdPartyException.class, baos);
+            Assertions.assertThat(printed())
+                    .contains(getClass().getName())
+                    .contains(mockName(foo))
+					.contains("doSomething")
+					.contains("Klipsch")
+                    .contains(ThirdPartyException.class.getName());
 		}
 	}
 
 	@Test
 	public void shouldPrintRealInvocationOnSpyToStdOut() {
-		ByteArrayOutputStream baos = setUpStreamAsStdOut();
 		// given
 		FooImpl fooSpy = mock(FooImpl.class,
 				withSettings().spiedInstance(new FooImpl()).verboseLogging());
-		doCallRealMethod().when(fooSpy).doSomething(SOME_STRING_VALUE);
+		doCallRealMethod().when(fooSpy).doSomething("Klipsch");
 		
 		// when
-		fooSpy.doSomething(SOME_STRING_VALUE);
+		fooSpy.doSomething("Klipsch");
 		
 		// then
-		assertStreamContainsClassName(getClass(), baos);
-		assertStreamContainsMockName(fooSpy, baos);
-		assertContains("doSomething", baos.toString());
-		assertContains(SOME_STRING_VALUE, baos.toString());
+        Assertions.assertThat(printed())
+                .contains(getClass().getName())
+                .contains(mockName(fooSpy))
+				.contains("doSomething")
+				.contains("Klipsch");
 	}
 
-	@Test
+    @Test
 	public void usage() {
 		// given
 		Foo foo = mock(Foo.class, withSettings().verboseLogging());
-		given(foo.giveMeSomeString(ANOTHER_STRING_VALUE)).willReturn(
-				SOME_RETURN_VALUE);
+		given(foo.giveMeSomeString("Apple")).willReturn(
+                "earbuds");
 
 		// when
-		foo.giveMeSomeString(OTHER_STRING_VALUE);
-		foo.giveMeSomeString(ANOTHER_STRING_VALUE);
-		foo.doSomething(SOME_STRING_VALUE);
+		foo.giveMeSomeString("Shure");
+		foo.giveMeSomeString("Apple");
+		foo.doSomething("Klipsch");
 	}
 
+    private String printed() {
+        return output.toString();
+    }
 
-    private void assertStreamContainsClassName(Class<?> clazz,ByteArrayOutputStream baos) {
-		assertContains(clazz.getName().toString(), baos.toString());
-	}
+    private String mockName(Object mock) {
+        return new MockUtil().getMockName(mock).toString();
+    }
 
-	private ByteArrayOutputStream setUpStreamAsStdOut() {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(baos));
-		return baos;
-	}
+    private static class UnrelatedClass {
+        void unrelatedMethod(String anotherStringValue) {
+        }
+    }
 
-	private void assertStreamContainsMockName(Object mock, ByteArrayOutputStream baos) {
-		assertContains(new MockUtil().getMockName(mock).toString(), baos.toString());
-	}
-
-	private void assertStreamDoesNotContainMockName(Object mock, ByteArrayOutputStream baos) {
-		assertNotContains(new MockUtil().getMockName(mock).toString(), baos.toString());
-	}
-
-	private static class UnrelatedClass {
-		void unrelatedMethod(String anotherStringValue) {
-
-		}
-	}
-
-	/**
+    /**
 	 * An exception that isn't defined by Mockito or the JDK and therefore does
 	 * not appear in the logging result by chance alone.
 	 */
@@ -183,15 +170,11 @@ public class VerboseLoggingOfInvocationsOnMockTest extends TestBase {
 	}
 
 	static class FooImpl implements Foo {
-
 		public String giveMeSomeString(String param) {
-			// nothing to do
 			return null;
 		}
 
 		public void doSomething(String param) {
-			// nothing to do
 		}
-
 	}
 }

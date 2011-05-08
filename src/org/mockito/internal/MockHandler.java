@@ -16,6 +16,7 @@ import org.mockito.internal.util.StringJoiner;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.InvocationListener;
+import org.mockito.invocation.MethodCallReport;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
@@ -69,23 +70,27 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
 			throws Throwable {
 		if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
-                            .getArgumentMatcherStorage(), invocation);
+            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+                    mockingProgress.getArgumentMatcherStorage(),
+                    invocation
+            );
             invocationContainerImpl.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
-        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(),
-                        invocation);
+        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+                mockingProgress.getArgumentMatcherStorage(),
+                invocation
+        );
 
         mockingProgress.validateState();
 
-        //if verificationMode is not null then someone is doing verify()        
+        // if verificationMode is not null then someone is doing verify()
         if (verificationMode != null) {
-            //We need to check if verification was started on the correct mock 
+            // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
-            //TODO: can I avoid this cast here?
+            // TODO: can I avoid this cast here?
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {                
                 VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);            
                 verificationMode.verify(data);
@@ -152,7 +157,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
 	
 	private void notifyListenerOfInvocationWithReturnValue(Invocation invocation, Object returnValue, InvocationListener listener) {
 		try {
-			listener.invokingWithReturnValue(invocation, returnValue, getStubbingLocationOrNull(invocation));
+			listener.reportInvocation(MethodCallReport.of(invocation, returnValue, getStubbingLocationOrNull(invocation)));
 		} catch(RuntimeException e) {
 			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
 					"The listener has the class " + listener.getClass().getName()), e);
@@ -161,7 +166,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
 	
 	private void notifyListenerOfInvocationWithException(Invocation invocation, Exception exception, InvocationListener listener) {
 		try {
-			listener.invokingWithException(invocation, exception, getStubbingLocationOrNull(invocation));
+			listener.reportInvocation(MethodCallReport.of(invocation, exception, getStubbingLocationOrNull(invocation)));
 		} catch(RuntimeException e) {
 			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
 					"The listener has the class " + listener.getClass().getName()), e);
