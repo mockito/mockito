@@ -4,9 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.Enhancer;
@@ -16,6 +13,9 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {

@@ -1,8 +1,8 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.invocation.InvocationListener;
-import org.mockito.invocation.MethodCallReport;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MethodInvocationReport;
 
 import java.io.PrintStream;
 
@@ -26,64 +26,39 @@ public class VerboseMockInvocationLogger implements InvocationListener {
         this.printStream = printStream;
     }
 
-    public void reportInvocation(MethodCallReport methodCallReport) {
-        if (methodCallReport.threwException()) {
-            onCallWithThrowable(
-                    methodCallReport.getInvocation(),
-                    methodCallReport.getThrowable(),
-                    methodCallReport.getLocationOfStubbing()
-            );
+    public void reportInvocation(MethodInvocationReport methodInvocationReport) {
+        printHeader();
+        printStubInfo(methodInvocationReport);
+        printInvocation(methodInvocationReport.getInvocation());
+        printReturnedValueOrThrowable(methodInvocationReport);
+        printFooter();
+    }
+
+    private void printReturnedValueOrThrowable(MethodInvocationReport methodInvocationReport) {
+        if (methodInvocationReport.threwException()) {
+            String message = methodInvocationReport.getThrowable().getMessage() == null ? "" : " with message " + methodInvocationReport.getThrowable().getMessage();
+            printlnIndented("has thrown: " + methodInvocationReport.getThrowable().getClass() + message);
         } else {
-            onNormalCall(
-                    methodCallReport.getInvocation(),
-                    methodCallReport.getReturnedValue(),
-                    methodCallReport.getLocationOfStubbing()
-            );
+            String type = (methodInvocationReport.getReturnedValue() == null) ? "" : " (" + methodInvocationReport.getReturnedValue().getClass().getName() + ")";
+            printlnIndented("has returned: \"" + methodInvocationReport.getReturnedValue() + "\"" + type);
         }
     }
 
-    private void onNormalCall(PrintableInvocation invocation, Object returnedValue, String locationOfStubbing) {
-		printHeader();
-		printCommonInfos(invocation);
-		printlnIndented("has returned: \"" + returnedValue + "\"" + ((returnedValue == null) ? "" : " (" + returnedValue.getClass().getName() + ")"));
-		if (locationOfStubbing == null) {
-			printMethodHasNotBeenStubbed();
-		} else {
-			printMethodHasBeenStubbed(locationOfStubbing);
-		}
-		printFooter();
-	}
+    private void printStubInfo(MethodInvocationReport methodInvocationReport) {
+        if (methodInvocationReport.getLocationOfStubbing() != null) {
+            printlnIndented("stubbed: " + methodInvocationReport.getLocationOfStubbing());
+        }
+    }
 
-	private void onCallWithThrowable(PrintableInvocation invocation, Throwable throwable, String locationOfStubbing) {
-		printHeader();
-		printCommonInfos(invocation);
-		printlnIndented("has thrown: " + throwable.getClass() + " with message " + throwable.getMessage());
-		if (locationOfStubbing == null) {
-			printMethodHasNotBeenStubbed();
-		} else {
-			printMethodHasBeenStubbed(locationOfStubbing);
-		}
-		printFooter();
-	}
-
-	private void printHeader() {
+    private void printHeader() {
 		mockInvocationsCounter++;
 		printStream.println("############ Logging method invocation #" + mockInvocationsCounter + " on mock/spy ########");
 	}
-	
-	private void printMethodHasNotBeenStubbed() {
-		printlnIndented("Method has not been stubbed.");
-	}
 
-	private void printMethodHasBeenStubbed(String locationOfStubbing) {
-		printlnIndented("Method has been stubbed.");
-		printlnIndented(locationOfStubbing);
-	}
-
-	private void printCommonInfos(PrintableInvocation invocation) {
+    private void printInvocation(PrintableInvocation invocation) {
 		printStream.println(invocation.toString());
 //		printStream.println("Handling method call on a mock/spy.");
-		printlnIndented(invocation.getLocation().toString());
+		printlnIndented("invoked: " + invocation.getLocation().toString());
 	}
 
 	private void printFooter() {

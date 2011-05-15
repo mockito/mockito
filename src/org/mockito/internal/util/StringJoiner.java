@@ -8,6 +8,10 @@ public class StringJoiner {
 
     public static String join(Object ... linesToBreak) {
         StringBuilder out = new StringBuilder("\n");
+        return join(out, linesToBreak);
+    }
+
+    private static String join(StringBuilder out, Object[] linesToBreak) {
         for (Object line : linesToBreak) {
             out.append(line.toString()).append("\n");
         }

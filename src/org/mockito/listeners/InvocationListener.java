@@ -2,7 +2,7 @@
  * Copyright (c) 2011 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.invocation;
+package org.mockito.listeners;
 
 import org.mockito.MockSettings;
 
@@ -20,9 +20,9 @@ public interface InvocationListener {
      * Exceptions caused by this invocationListener will raise a {@link org.mockito.exceptions.base.MockitoException}.
      * </p>
 	 *
-	 * @param methodCallReport Information about the method call that just happened.
+	 * @param methodInvocationReport Information about the method call that just happened.
      *
-     * @see MethodCallReport
+     * @see MethodInvocationReport
 	 */
-	void reportInvocation(MethodCallReport methodCallReport);
+	void reportInvocation(MethodInvocationReport methodInvocationReport);
 }

@@ -8,7 +8,7 @@ import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockName;
-import org.mockito.invocation.InvocationListener;
+import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;

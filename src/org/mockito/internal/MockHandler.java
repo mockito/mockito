@@ -4,7 +4,6 @@
  */
 package org.mockito.internal;
 
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -12,11 +11,8 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.*;
-import org.mockito.internal.util.StringJoiner;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
-import org.mockito.invocation.InvocationListener;
-import org.mockito.invocation.MethodCallReport;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
@@ -56,18 +52,6 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-    	try {
-    		Object returnValue = handleAllTypesOfInvocations(invocation);
-    		notifyAllListenerOfInvocationWithReturnValue(invocation, returnValue);
-    		return returnValue;
-    	} catch(Exception e) {
-    		notifyAllListenerOfInvocationWithException(invocation, e);
-    		throw e;
-    	}
-    }
-
-	private Object handleAllTypesOfInvocations(Invocation invocation)
-			throws Throwable {
 		if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
@@ -91,12 +75,12 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             // TODO: can I avoid this cast here?
-            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {                
-                VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);            
+            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
+                VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
-                // this means there is an invocation on a different mock. Re-adding verification mode 
+                // this means there is an invocation on a different mock. Re-adding verification mode
                 // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
                 mockingProgress.verificationStarted(verificationMode);
             }
@@ -142,38 +126,5 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     public InvocationContainer getInvocationContainer() {
         return invocationContainerImpl;
     }
-    
-	private void notifyAllListenerOfInvocationWithReturnValue(Invocation invocation, Object returnValue) {
-		for (InvocationListener listener : mockSettings.getInvocationListeners()) {
-			notifyListenerOfInvocationWithReturnValue(invocation, returnValue, listener);
-    	} 
-	}
-
-	private void notifyAllListenerOfInvocationWithException(Invocation invocation, Exception exception) {
-		for (InvocationListener listener : mockSettings.getInvocationListeners()) {
-			notifyListenerOfInvocationWithException(invocation, exception, listener);
-		} 
-	}
-	
-	private void notifyListenerOfInvocationWithReturnValue(Invocation invocation, Object returnValue, InvocationListener listener) {
-		try {
-			listener.reportInvocation(MethodCallReport.of(invocation, returnValue, getStubbingLocationOrNull(invocation)));
-		} catch(RuntimeException e) {
-			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
-					"The listener has the class " + listener.getClass().getName()), e);
-		}
-	}
-	
-	private void notifyListenerOfInvocationWithException(Invocation invocation, Exception exception, InvocationListener listener) {
-		try {
-			listener.reportInvocation(MethodCallReport.of(invocation, exception, getStubbingLocationOrNull(invocation)));
-		} catch(RuntimeException e) {
-			throw new MockitoException(StringJoiner.join("An invocation listener threw an exception.",
-					"The listener has the class " + listener.getClass().getName()), e);
-		}
-	}
-
-	private String getStubbingLocationOrNull(Invocation invocation) {
-		return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt();
-	}
 }
+

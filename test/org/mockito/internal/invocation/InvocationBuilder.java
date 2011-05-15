@@ -4,13 +4,16 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.Mockito;
+import org.mockitousage.IMethods;
+
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.Mockito;
-import org.mockitousage.IMethods;
-
+/**
+ * Build an invocation.
+ */
 @SuppressWarnings("unchecked")
 public class InvocationBuilder {
 
@@ -21,6 +24,13 @@ public class InvocationBuilder {
     private Method method;
     private boolean verified;
 
+    /**
+     * Build the invocation
+     *
+     * If the method was not specified, use IMethods methods.
+     *
+     * @return invocation
+     */
     public Invocation toInvocation() {
         if (method == null) {
             List<Class> argTypes = new LinkedList<Class>();

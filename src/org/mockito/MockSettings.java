@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.invocation.InvocationListener;
+import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;

@@ -8,8 +8,10 @@ import org.fest.assertions.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.*;
  * in the parallel setting.
  * Maybe, the test class should be @Ignore'd by default ...
  */
+@RunWith(MockitoJUnitRunner.class)
 public class VerboseLoggingOfInvocationsOnMockTest {
 
     private ByteArrayOutputStream output;
@@ -43,7 +46,7 @@ public class VerboseLoggingOfInvocationsOnMockTest {
 
 	@After
 	public void tearDown() {
-		System.setOut(original);
+        System.setOut(original);
 	}
 
 	@Test

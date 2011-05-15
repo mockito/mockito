@@ -4,83 +4,104 @@
  */
 package org.mockito.internal.debugging;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.invocation.MethodCallReport;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.StubInfo;
+import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 public class VerboseMockInvocationLoggerTest {
 
     private VerboseMockInvocationLogger listener;
-    private ByteArrayOutputStream output;
-    private PrintableInvocation invocation;
 
-    @Before public void init_Listener() throws Exception {
+    private ByteArrayOutputStream output;
+    private Invocation invocation = new InvocationBuilder().toInvocation();
+    private PrintableInvocation stubbedInvocation = new InvocationBuilder().toInvocation();
+
+    @Before
+    public void init_Listener() throws Exception {
         output = new ByteArrayOutputStream();
         listener = new VerboseMockInvocationLogger(new PrintStream(output));
     }
 
-    @Before public void init_Invocation() {
-        invocation = mock(PrintableInvocation.class);
-        given(invocation.getLocation()).willReturn(mock(Location.class));
+    @After
+    public void tearDown() throws Exception {
+        System.out.println(output);
     }
 
     @Test
-	public void shouldPrintToSystemOut() {
-		assertThat(new VerboseMockInvocationLogger().printStream).isSameAs(System.out);
-	}
+    public void should_print_to_system_out() {
+        assertThat(new VerboseMockInvocationLogger().printStream).isSameAs(System.out);
+    }
 
-	@Test
-	public void shouldPrintInvocationWithReturnValueToStream() {
+    @Test
+    public void should_print_invocation_with_return_value() {
         // when
-		listener.reportInvocation(MethodCallReport.of(invocation, "return value", "location of stubbing"));
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "return value"));
 
-		// then
+        // then
         assertThat(printed())
                 .contains(invocation.toString())
                 .contains(invocation.getLocation().toString())
-                .contains("return value")
-                .contains("location of stubbing");
-	}
+                .contains("return value");
+    }
 
-	@Test
-	public void shouldPrintInvocationWithExceptionToStream() {
-		// when
-		listener.reportInvocation(MethodCallReport.of(invocation, new ThirdPartyException(), "location of stubbing"));
+    @Test
+    public void should_print_invocation_with_exception() {
+        // when
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
 
-		// then
+        // then
         assertThat(printed())
-				.contains(invocation.toString())
-				.contains(invocation.getLocation().toString())
-				.contains(ThirdPartyException.class.getName())
-				.contains("location of stubbing");
-	}
+                .contains(invocation.toString())
+                .contains(invocation.getLocation().toString())
+                .contains(ThirdPartyException.class.getName());
+    }
 
-	@Test
-	public void shouldLogNumberOfInteractions() {
-		// when & then
-        listener.reportInvocation(MethodCallReport.of(invocation, new ThirdPartyException(), "location of stubbing"));
-		assertThat(printed()).contains("#1");
+    @Test
+    public void should_print_if_method_has_not_been_stubbed() throws Exception {
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));
 
-        listener.reportInvocation(MethodCallReport.of(invocation, new ThirdPartyException(), "other location"));
-		assertThat(printed()).contains("#2");
+        assertThat(printed()).doesNotContain("stubbed");
+    }
 
-        listener.reportInvocation(MethodCallReport.of(invocation, new ThirdPartyException(), "location of stubbing"));
-		assertThat(printed()).contains("#3");
-	}
+    @Test
+    public void should_print_stubbed_info_if_availbable() throws Exception {
+        invocation.markStubbed(new StubInfo(stubbedInvocation));
+
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));
+
+        assertThat(printed())
+                .contains("stubbed")
+                .contains(stubbedInvocation.getLocation().toString());
+    }
+
+    @Test
+    public void should_log_count_of_interactions() {
+        // when & then
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        assertThat(printed()).contains("#1");
+
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        assertThat(printed()).contains("#2");
+
+        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        assertThat(printed()).contains("#3");
+    }
 
     private String printed() {
         return output.toString();
     }
 
-	private static class ThirdPartyException extends Exception {
-		private static final long serialVersionUID = 3022739107688491354L;
-	}
+    private static class ThirdPartyException extends Exception {
+        private static final long serialVersionUID = 3022739107688491354L;
+    }
 }

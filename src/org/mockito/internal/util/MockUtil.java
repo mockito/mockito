@@ -4,11 +4,10 @@
  */
 package org.mockito.internal.util;
 
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
-import static org.mockito.Mockito.withSettings;
-
-import org.mockito.cglib.proxy.*;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.InvocationNotifierHandler;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.creation.MethodInterceptorFilter;
@@ -17,6 +16,9 @@ import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 
 import java.io.Serializable;
+
+import static org.mockito.Mockito.RETURNS_DEFAULTS;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -39,7 +41,8 @@ public class MockUtil {
         settings.initiateMockName(classToMock);
 
         MockHandler<T> mockHandler = new MockHandler<T>(settings);
-        MethodInterceptorFilter filter = new MethodInterceptorFilter(mockHandler, settings);
+        InvocationNotifierHandler<T> invocationNotifierHandler = new InvocationNotifierHandler<T>(mockHandler, settings);
+        MethodInterceptorFilter filter = new MethodInterceptorFilter(invocationNotifierHandler, settings);
         Class<?>[] interfaces = settings.getExtraInterfaces();
 
         Class<?>[] ancillaryTypes;

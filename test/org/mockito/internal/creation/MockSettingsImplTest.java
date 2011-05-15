@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
-import org.mockito.invocation.InvocationListener;
+import org.mockito.listeners.InvocationListener;
 import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;

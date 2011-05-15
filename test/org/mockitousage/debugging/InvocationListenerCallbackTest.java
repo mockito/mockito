@@ -4,121 +4,95 @@
  */
 package org.mockitousage.debugging;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.matchers.Contains;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.InstanceOf;
-import org.mockito.invocation.InvocationListener;
-import org.mockito.invocation.MethodCallReport;
-import org.mockitousage.debugging.VerboseLoggingOfInvocationsOnMockTest.ThirdPartyException;
-import org.mockitoutil.TestBase;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MethodInvocationReport;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.isA;
+import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.*;
+
 
 /**
  * Ensures that custom listeners can be registered and will be called every time
  * a method on a mock is invoked.
  */
-public class InvocationListenerCallbackTest extends TestBase {
+public class InvocationListenerCallbackTest {
+
+    // Cannot use a mockito-mock here: during stubbing, the listener1 will be called
+    // and mockito will confuse the mocks.
+    private RememberingListener listener1 = new RememberingListener();
+    private RememberingListener listener2 = new RememberingListener();
 
     @Test
-	public void givenInvocationReturningValue_shouldCallSingleListenerWithCorrectCallback() throws Exception {
-		// given
-		// Cannot use a mockito-mock here: during stubbing, the listener will be called
-		// and mockito will confuse the mocks.
-		RememberingListener listener = new RememberingListener();
-		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
-		given(foo.giveMeSomeString("argument")).willReturn("returned");
+    public void should_call_single_listener_when_mock_return_normally() throws Exception {
+        // given
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1));
+        willReturn("basil").given(foo).giveMeSomeString("herb");
 
-		// when
-		foo.giveMeSomeString("argument");
+        // when
+        foo.giveMeSomeString("herb");
 
-		assertHasBeenNotified(listener, new InstanceOf(PrintableInvocation.class),
-				new Equals("returned"), new Contains(getClass().getSimpleName()));
-	}
+        // then
+        assertThatHasBeenNotified(listener1, "basil", getClass().getSimpleName());
+    }
 
-	@Test
-	public void givenInvocationReturningValue_shouldCallMultipleListeners() throws Exception {
-		// given
-		// Cannot use a mockito-mock here: during stubbing, the listener will be called
-		// and mockito will confuse the mocks.
-		RememberingListener listener1 = new RememberingListener();
-		RememberingListener listener2 = new RememberingListener();
-		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
-		given(foo.giveMeSomeString("argument")).willReturn("returned");
+    @Test
+    public void should_call_all_listener_when_mock_return_normally() throws Exception {
+        // given
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
+        given(foo.giveMeSomeString("herb")).willReturn("rosemary");
 
-		// when
-		foo.giveMeSomeString("argument");
+        // when
+        foo.giveMeSomeString("herb");
 
-		// then
-		assertHasBeenNotified(listener1, new InstanceOf(PrintableInvocation.class),
-				new Equals("returned"), new Contains(getClass().getSimpleName()));
-		assertHasBeenNotified(listener2, new InstanceOf(PrintableInvocation.class),
-				new Equals("returned"), new Contains(getClass().getSimpleName()));
-	}
+        // then
+        assertThatHasBeenNotified(listener1, "rosemary", getClass().getSimpleName());
+        assertThatHasBeenNotified(listener2, "rosemary", getClass().getSimpleName());
+    }
 
-	@Test
-    @Ignore("not anymore, waiting complete refactoring to be removed")
-	public void givenInvocationThrowingException_shouldCallSingleListenerWithCorrectCallback() throws Exception {
-		// given
-		InvocationListener listener = mock(InvocationListener.class);
-		RuntimeException expectedException = new ThirdPartyException();
-		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
-		doThrow(expectedException).when(foo).doSomething("argument");
 
-		// when
-		try {
-			foo.doSomething("argument");
-			fail("Exception expected.");
-		} catch (ThirdPartyException actualException) {
-			// then
-			assertSame(expectedException, actualException);
-			verify(listener).reportInvocation(isA(MethodCallReport.class));
-		}
-	}
+    @Test
+    public void should_call_all_listener_when_mock_throws_exception() throws Exception {
+        // given
+        InvocationListener listener1 = mock(InvocationListener.class, "listener1");
+        InvocationListener listener2 = mock(InvocationListener.class, "listener2");
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
+        doThrow(new OvenNotWorking()).when(foo).doSomething("cook");
 
-	@Test
-	public void givenInvocationThrowingException_shouldCallMultipleListeners() throws Exception {
-		// given
-		InvocationListener listener1 = mock(InvocationListener.class, "listener1");
-		InvocationListener listener2 = mock(InvocationListener.class, "listener2");
-		Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
-		doThrow(new ThirdPartyException()).when(foo).doSomething("argument");
-
-		// when
-		try {
-			foo.doSomething("argument");
-			fail("Exception expected.");
-		} catch (ThirdPartyException actualException) {
-			// then
+        // when
+        try {
+            foo.doSomething("cook");
+            fail("Exception expected.");
+        } catch (OvenNotWorking actualException) {
+            // then
             InOrder orderedVerify = inOrder(listener1, listener2);
-            orderedVerify.verify(listener1).reportInvocation(any(MethodCallReport.class));
-			orderedVerify.verify(listener2).reportInvocation(any(MethodCallReport.class));
-		}
-	}
-	
-	private void assertHasBeenNotified(RememberingListener listener, InstanceOf m, Equals m2, Contains m3) {
-		assertThat(listener.invocation, m);
-		assertThat(listener.returnValue, m2);
-		assertThat(listener.locationOfStubbing, m3);
-	}
+            orderedVerify.verify(listener1).reportInvocation(any(MethodInvocationReport.class));
+            orderedVerify.verify(listener2).reportInvocation(any(MethodInvocationReport.class));
+        }
+    }
 
-	static class RememberingListener implements InvocationListener {
-		
-		PrintableInvocation invocation;
-		Object returnValue;
-		String locationOfStubbing;
+    static class OvenNotWorking extends RuntimeException { }
 
-		public void reportInvocation(MethodCallReport mcr) {
-			this.invocation = mcr.getInvocation();
-			this.returnValue = mcr.getReturnedValue();
-			this.locationOfStubbing = mcr.getLocationOfStubbing();
-		}
+    private void assertThatHasBeenNotified(RememberingListener listener, Object returned, String location) {
+        assertThat(listener.returnValue).isEqualTo(returned);
+        assertThat(listener.invocation).isNotNull();
+        assertThat(listener.locationOfStubbing).contains(getClass().getSimpleName());
+    }
 
-	}
+    private static class RememberingListener implements InvocationListener {
+        PrintableInvocation invocation;
+        Object returnValue;
+        String locationOfStubbing;
+
+        public void reportInvocation(MethodInvocationReport mcr) {
+            this.invocation = mcr.getInvocation();
+            this.returnValue = mcr.getReturnedValue();
+            this.locationOfStubbing = mcr.getLocationOfStubbing();
+        }
+    }
 }
