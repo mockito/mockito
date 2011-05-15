@@ -4,9 +4,10 @@
  */
 package org.mockito;
 
-import java.io.Serializable;
-
+import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
+
+import java.io.Serializable;
 
 /**
  * Allows mock creation with additional mock settings. 
@@ -82,7 +83,7 @@ public interface MockSettings extends Serializable {
      * Sets the real implementation to be called when the method is called on a mock object.
      * <p>
      * As usual you are going to read <b>the partial mock warning</b>:
-     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+     * Object oriented programming is more or less about tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't... 
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
      * In most cases, this is not the way you want to design your application.
@@ -141,4 +142,41 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings serializable();
+    
+    /**
+     * Enables real-time logging of method invocations on this mock. Can be used
+     * during test debugging in order to find wrong interactions with this mock.
+     * <p>
+     * Invocations are logged as they happen to the standard output stream.
+     * <p>
+     * Calling this method multiple times makes no difference.
+     * <p>
+     * Example:
+     * <pre>
+     * List mockWithLogger = mock(List.class, withSettings().verboseLogging());
+     * </pre>
+     * 
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings verboseLogging();
+    
+    /**
+     * Registers a listener for method invocations on this mock. The listener is
+     * notified every time a method on this mock is called.
+     * <p>
+     * Multiple listeners may be added, but the same object is only added once.
+     * The order, in which the listeners are added, is not guaranteed to be the
+     * order in which the listeners are notified. 
+     * 
+     * Example:
+     * <pre>
+     *  List mockWithListener = mock(List.class, withSettings().invocationListeners(new YourInvocationListener()));
+     * </pre>
+     * 
+     * See the {@link InvocationListener listener interface} for more details.
+     * 
+     * @param listeners The invocation listeners to add. May not be null.
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings invocationListeners(InvocationListener... listeners);
 }

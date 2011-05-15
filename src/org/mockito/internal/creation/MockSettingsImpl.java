@@ -6,8 +6,13 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockName;
+import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl implements MockSettings {
@@ -19,6 +24,7 @@ public class MockSettingsImpl implements MockSettings {
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
+    private List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
     public MockSettings serializable() {
         this.serializable = true;
@@ -79,4 +85,46 @@ public class MockSettingsImpl implements MockSettings {
     public void initiateMockName(Class classToMock) {
         mockName = new MockName(name, classToMock);
     }
+
+	public MockSettings verboseLogging() {
+        if (!invocationListenersContainsType(VerboseMockInvocationLogger.class)) {
+            invocationListeners(new VerboseMockInvocationLogger());
+        }
+        return this;
+	}
+
+    public MockSettings invocationListeners(InvocationListener... listeners) {
+        if (listeners == null || listeners.length == 0) {
+            new Reporter().invocationListenersRequiresAtLeastOneListener();
+        }
+        for (InvocationListener listener : listeners) {
+            if (listener == null) {
+                new Reporter().invocationListenerDoesNotAcceptNullParameters();
+            }
+            this.invocationListeners.add(listener);
+        }
+		return this;
+	}
+
+	private boolean invocationListenersContainsType(Class<?> clazz) {
+		for (InvocationListener listener : invocationListeners) {
+			if (listener.getClass().equals(clazz)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+    public List<InvocationListener> getInvocationListeners() {
+        return this.invocationListeners;
+    }
+
+    public boolean containsInvocationListener(InvocationListener invocationListener) {
+        return invocationListeners.contains(invocationListener);
+    }
+
+    public boolean hasInvocationListeners() {
+        return !invocationListeners.isEmpty();
+    }
 }
+

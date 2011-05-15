@@ -5,6 +5,8 @@
 package org.mockitoutil;
 
 import junit.framework.Assert;
+import org.fest.assertions.Assertions;
+import org.fest.assertions.Condition;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
@@ -20,6 +22,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.util.MockUtil;
 
 import java.io.*;
+import java.util.Collection;
 
 import static org.mockito.Mockito.mock;
 
@@ -83,7 +86,7 @@ public class TestBase extends Assert {
 
     public static void assertContains(String sub, String string) {
         assertTrue("\n" +
-                "This substing:[" +
+                "This substring:[" +
                 sub +
                 "]\n" +
                 "should be inside of:[" +
@@ -94,7 +97,7 @@ public class TestBase extends Assert {
 
     public static void assertContainsIgnoringCase(String sub, String string) {
         assertTrue("\n" +
-                "This substing:" +
+                "This substring:" +
                 sub +
                 "\n" +
                 "should be inside of:" +
@@ -121,7 +124,7 @@ public class TestBase extends Assert {
 
     public static void assertNotContains(String sub, String string) {
         assertFalse("\n" +
-                "This substing:" +
+                "This substring:" +
                 sub +
                 "\n" +
                 "should NOT be inside of:" +
@@ -170,5 +173,19 @@ public class TestBase extends Assert {
 
     protected boolean isMock(Object o) {
         return new MockUtil().isMock(o);
+    }
+
+    protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
+        Assertions.assertThat(list).satisfies(new Condition<Collection<?>>() {
+            @Override
+            public boolean matches(Collection<?> objects) {
+                for (Object object : objects) {
+                    if (clazz.isAssignableFrom(object.getClass())) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 }

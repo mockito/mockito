@@ -5,6 +5,7 @@
 package org.mockito.exceptions;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
@@ -14,5 +15,10 @@ public class ReporterTest extends TestBase {
     @Test(expected=TooLittleActualInvocations.class)
     public void shouldLetPassingNullLastActualStackTrace() throws Exception {
         new Reporter().tooLittleActualInvocations(new Discrepancy(1, 2), new InvocationBuilder().toInvocation(), null);
+    }
+    
+    @Test(expected=MockitoException.class)
+    public void shouldThrowCorrectExceptionForNullInvocationListener() throws Exception {
+    	new Reporter().invocationListenerDoesNotAcceptNullParameters();
     }
 }

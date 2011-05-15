@@ -52,31 +52,35 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-        if (invocationContainerImpl.hasAnswersForStubbing()) {
+		if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress
-                            .getArgumentMatcherStorage(), invocation);
+            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+                    mockingProgress.getArgumentMatcherStorage(),
+                    invocation
+            );
             invocationContainerImpl.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress.pullVerificationMode();
 
-        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(mockingProgress.getArgumentMatcherStorage(),
-                        invocation);
+        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
+                mockingProgress.getArgumentMatcherStorage(),
+                invocation
+        );
 
         mockingProgress.validateState();
 
-        //if verificationMode is not null then someone is doing verify()        
+        // if verificationMode is not null then someone is doing verify()
         if (verificationMode != null) {
-            //We need to check if verification was started on the correct mock 
+            // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
-            //TODO: can I avoid this cast here?
-            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {                
-                VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);            
+            // TODO: can I avoid this cast here?
+            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
+                VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
-                // this means there is an invocation on a different mock. Re-adding verification mode 
+                // this means there is an invocation on a different mock. Re-adding verification mode
                 // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
                 mockingProgress.verificationStarted(verificationMode);
             }
@@ -104,7 +108,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
-    }
+	}
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
@@ -123,3 +127,4 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         return invocationContainerImpl;
     }
 }
+
