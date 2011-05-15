@@ -78,12 +78,6 @@ public class MockSettingsImplTest extends TestBase {
         assertTrue(mockSettingsImpl.isSerializable());
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    // issue 148
-
-
     @Test
     public void shouldAddVerboseLoggingListener() {
         //given
@@ -141,6 +135,7 @@ public class MockSettingsImplTest extends TestBase {
     public void shouldReportErrorWhenAddingNoInvocationListeners() throws Exception {
         try {
             mockSettingsImpl.invocationListeners();
+            fail();
         } catch (Exception e) {
             Assertions.assertThat(e.getMessage()).contains("at least one listener");
         }
@@ -150,6 +145,7 @@ public class MockSettingsImplTest extends TestBase {
     public void shouldReportErrorWhenAddingANullInvocationListener() throws Exception {
         try {
             mockSettingsImpl.invocationListeners(invocationListener, null);
+            fail();
         } catch (Exception e) {
             Assertions.assertThat(e.getMessage()).contains("does not accept null");
         }

@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Matchers.any;
@@ -89,6 +90,7 @@ public class InvocationNotifierHandlerTest {
         // when
         try {
             notifier.handle(invocation);
+            fail();
         } finally {
             // then
             verify(listener1).reportInvocation(new NotifiedMethodInvocationReport(invocation, parseException));
@@ -102,6 +104,7 @@ public class InvocationNotifierHandlerTest {
 
         try {
             notifier.handle(invocation);
+            fail();
         } catch (MockitoException me) {
             assertThat(me.getMessage())
                     .contains("invocation listener")
