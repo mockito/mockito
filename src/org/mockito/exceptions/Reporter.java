@@ -13,6 +13,7 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 import org.mockito.listeners.InvocationListener;
 
@@ -584,4 +585,13 @@ public class Reporter {
                 "threw an exception : " + listenerThrowable.getClass().getName() + listenerThrowable.getMessage()), listenerThrowable);
     }
 
+    public void cannotInjectDependency(Field field, Object matchingMock, Exception details) {
+        throw new MockitoException(join(
+                "Mockito couldn't inject mock dependency '" + new MockUtil().getMockName(matchingMock) + "' on field ",
+                "'" + field + "'",
+                "whose type '" + field.getDeclaringClass().getCanonicalName() + "' was annotated by @InjectMocks in your test.",
+                "Also I failed because: " + details.getCause().getMessage(),
+                ""
+        ), details);
+    }
 }

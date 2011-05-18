@@ -65,11 +65,11 @@ public class BeanPropertySetter {
                 }
             }
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Problems setting value:[" + value + "] on object: [" + target + "] the setter of property [" + field.getName() + "] threw an exception", e.getTargetException());
+            throw new RuntimeException("Setter '" + writeMethod + "' of '" + target + "' with value '" + value + "' threw exception : '" + e.getTargetException() + "'", e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Problems setting value:[" + value + "] on object: [" + target + "] the setter of property [" + field.getName() + "] is not accessible", e);
+            throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
         } catch (IntrospectionException e) {
-            throw new RuntimeException("Problems setting value: [" + value + "] on object: [" + target + "] for property : [" + field.getName() + "], cannot introspect " + target.getClass(), e);
+            throw new RuntimeException("Something went wrong when trying to infer by introspection the setter of property '" + field.getName() + "' on type '" + target.getClass() + "'" + target.getClass(), e);
         } finally {
             if(writeMethod != null) {
                 changer.safelyDisableAccess(writeMethod);

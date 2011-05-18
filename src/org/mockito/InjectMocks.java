@@ -73,7 +73,8 @@ import static java.lang.annotation.ElementType.FIELD;
  * <u>Mockito cannot instantiate inner classes, local classes, abstract classes and of course interfaces.</u>
  *
  * <p>The same stands for setters or fields, they can be declared with private
- * visibility, Mockito will see them through reflection.</p>
+ * visibility, Mockito will see them through reflection.
+ * However fields that are static or final will be ignored.</p>
  *
  * <p>So on the field that needs injection, for example constructor injection will happen here :</p>
  * <pre>

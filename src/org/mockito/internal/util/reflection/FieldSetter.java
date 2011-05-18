@@ -21,8 +21,11 @@ public class FieldSetter {
         changer.enableAccess(field);
         try {
             field.set(target, value);
-        } catch (Exception e) {
-            throw new RuntimeException("Problems setting value: [" + value + "] on object: [" + target + "] at field: [" + field + "]");
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with value: '" + value + "', \n" +
+                    "reason : " + e.getMessage(), e);
         }
         changer.safelyDisableAccess(field);
     }

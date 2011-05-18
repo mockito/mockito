@@ -2,19 +2,15 @@ package org.mockito.internal.configuration.injection;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.injection.filter.FinalMockCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.*;
+import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Inject mocks using first setters then fields, if no setters available.
@@ -48,7 +44,7 @@ import java.util.Set;
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
-    private Comparator<Field> supertypesLast = new Comparator<Field>() {
+    private Comparator<Field> superTypesLast = new Comparator<Field>() {
         public int compare(Field field1, Field field2) {
             Class<?> field1Type = field1.getType();
             Class<?> field2Type = field2.getType();
@@ -60,6 +56,12 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                 return -1;
             }
             return 0;
+        }
+    };
+
+    private ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
+        public boolean isOut(Field object) {
+            return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
         }
     };
 
@@ -102,9 +104,12 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         return injectionOccurred;
     }
 
-    private Field[] orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {
-        Field[] declaredFields = awaitingInjectionClazz.getDeclaredFields();
-        Arrays.sort(declaredFields, supertypesLast);
+    private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {
+        List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
+        declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
+
+        Collections.sort(declaredFields, superTypesLast);
+
         return declaredFields;
     }
 
