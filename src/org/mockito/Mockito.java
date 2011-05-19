@@ -642,8 +642,8 @@ import org.mockito.verification.VerificationWithTimeout;
  * which accepts MockSettings. No worries, you will hardly ever use it.
  * 
  * <pre>
- * List<Object> list = new ArrayList<Object>();
- * List<Object> spy = mock(ArrayList.class, withSettings()
+ * List@lt;Object&gt; list = new ArrayList&lt;Object&gt;();
+ * List&lt;Object&gt; spy = mock(ArrayList.class, withSettings()
  *                 .spiedInstance(list)
  *                 .defaultAnswer(CALLS_REAL_METHODS)
  *                 .serializable());
