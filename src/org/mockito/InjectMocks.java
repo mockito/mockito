@@ -127,14 +127,14 @@ import static java.lang.annotation.ElementType.FIELD;
  * </p>
  *
  * <p>
- * <b><code>MockitoAnnotations.injectMocks(this)</code></b> method has to called to initialize annotated objects.
+ * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated objects.
  * A <code>MockitoJUnitRunner</code> can also be used to initialize mocks instead of the &#64;Before approach.
  * <p>
  *
  * <p>
- * In above example, <code>injectMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
- * For JUnit3 <code>injectMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also put injectMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link org.mockito.runners.MockitoJUnitRunner}
+ * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
+ * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
+ * You can also put initMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link org.mockito.runners.MockitoJUnitRunner}
  * </p>
  */
 @Documented
