@@ -7,6 +7,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ public class IOOBExceptionShouldNotBeThrownWhenNotCodingFluentlyTest {
 
         try {
             mapOngoingStubbing.thenReturn("second stubbing");
+            fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage())
                     .contains("Incorrect use of API detected here")
