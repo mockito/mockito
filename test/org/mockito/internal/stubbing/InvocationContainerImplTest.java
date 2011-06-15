@@ -10,10 +10,13 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Author: Szczepan Faber
@@ -51,8 +54,8 @@ public class InvocationContainerImplTest {
         }
 
         //when
-        for (int i = 0; i < t.length; i++ ) {
-            t[i].join();
+        for (Thread aT : t) {
+            aT.join();
         }
 
         //then
@@ -66,5 +69,14 @@ public class InvocationContainerImplTest {
         container.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
 
         assertEquals(invocation.getMock(), container.invokedMock());
+    }
+
+    @Test
+    public void should_tell_if_has_invocation_for_potential_stubbing() throws Exception {
+        container.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
+        assertTrue(container.hasInvocationForPotentialStubbing());
+
+        container.addAnswer(new ReturnsEmptyValues());
+        assertFalse(container.hasInvocationForPotentialStubbing());
     }
 }

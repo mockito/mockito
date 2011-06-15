@@ -67,6 +67,19 @@ public class Reporter {
         ));
     }
 
+    public void incorrectUseOfApi() {
+        throw new MockitoException(join(
+                "Incorrect use of API detected here:",
+                new Location(),
+                "",
+                "You probably stored a reference to OngoingStubbing returned by when() and called stubbing methods like thenReturn() on this reference more than once.",
+                "Examples of correct usage:",
+                "    when(mock.isOk()).thenReturn(true).thenReturn(false).thenThrow(exception);",
+                "    when(mock.isOk()).thenReturn(true, false).thenThrow(exception);",
+                ""
+        ));
+    }
+
     public void missingMethodInvocation() {
         throw new MissingMethodInvocationException(join(
                 "when() requires an argument which has to be 'a method call on a mock'.",

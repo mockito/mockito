@@ -4,12 +4,14 @@
  */
 package org.mockito.internal.verification;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.ListUtil;
 import org.mockito.internal.util.ListUtil.Filter;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class RegisteredInvocations implements Serializable {
@@ -31,6 +33,10 @@ public class RegisteredInvocations implements Serializable {
 
     public List<Invocation> getAll() {
         return ListUtil.filter(new LinkedList<Invocation>(invocations), new RemoveToString());
+    }
+
+    public boolean isEmpty() {
+        return invocations.isEmpty();
     }
 
     private static class RemoveToString implements Filter<Invocation> {

@@ -95,6 +95,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return !answersForStubbing.isEmpty();
     }
 
+    public boolean hasInvocationForPotentialStubbing() {
+        return !registeredInvocations.isEmpty();
+    }
+
     public void setMethodForStubbing(InvocationMatcher invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();

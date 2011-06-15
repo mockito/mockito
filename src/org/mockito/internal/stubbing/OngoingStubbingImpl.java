@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
@@ -20,6 +21,10 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     }
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
+        if(!invocationContainerImpl.hasInvocationForPotentialStubbing()) {
+            new Reporter().incorrectUseOfApi();
+        }
+
         invocationContainerImpl.addAnswer(answer);
         return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
