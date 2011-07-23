@@ -714,7 +714,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * &#064;InjectMocks LocalPub;
  * </pre>
  *
- * <h3 id="24">24. (**New**) One-liner stubs (Since 1.9)
+ * <h3 id="24">24. (**New**) One-liner stubs (Since 1.9)</h3>
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
@@ -727,7 +727,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   &#064;Test public void should... {}
  * </pre>
  *
- * <h3 id="25">25. Verification ignoring stubs (Since 1.9)
+ * <h3 id="25">25. Verification ignoring stubs (Since 1.9)</h3>
  * <p>
  * Mockito will now allow to ignore stubbing for the sake of verification.
  * Sometimes useful when coupled with verifyNoMoreInteractions() or verification inOrder().
