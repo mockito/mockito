@@ -6,6 +6,7 @@
     <artifactId>mockito-all</artifactId>
     <version>@version@</version>
     <name>Mockito</name>
+    <packaging>jar</packaging>
     <url>http://www.mockito.org</url>
     <description>Mock objects library for java</description>
     <licenses>
