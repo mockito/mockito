@@ -19,4 +19,10 @@
     <scm>
         <url>http://code.google.com/p/mockito/source/browse/</url>
     </scm>
+    <developers>
+        <developer>
+            <id>szczepiq</id>
+            <name>Szczepan Faber</name>
+        </developer>
+    </developers>
 </project>
