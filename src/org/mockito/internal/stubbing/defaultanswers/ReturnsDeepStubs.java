@@ -5,15 +5,17 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.mockito.Mockito;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     
@@ -28,12 +30,19 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return getMock(invocation);
     }
 
-    private Object getMock(InvocationOnMock invocation) {
+    private Object getMock(InvocationOnMock invocation) throws Throwable {
+    	MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
+    	InvocationContainerImpl container = (InvocationContainerImpl)handler.getInvocationContainer();
+    	List<StubbedInvocationMatcher> stubbedInvocations = container.getStubbedInvocations();
+    	for (StubbedInvocationMatcher stubbedInvocationMatcher : stubbedInvocations) {
+    		if(container.getInvocationForStubbing().matches(stubbedInvocationMatcher.getInvocation())) {
+    			return stubbedInvocationMatcher.answer(invocation);
+    		}
+		}
+    	
         Class<?> clz = invocation.getMethod().getReturnType();
         final Object mock = Mockito.mock(clz, this);
 
-        MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
-        InvocationContainerImpl container = (InvocationContainerImpl)handler.getInvocationContainer();
         container.addAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return mock;

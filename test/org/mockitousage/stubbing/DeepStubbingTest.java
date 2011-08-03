@@ -5,7 +5,14 @@
 
 package org.mockitousage.stubbing;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -24,6 +31,10 @@ public class DeepStubbingTest extends TestBase {
 
         public Address getAddress() {
             return address;
+        }
+        
+        public Address getAddress(String addressName) {
+        	return address;
         }
         
         public FinalClass getFinalClass() {
@@ -200,7 +211,16 @@ public class DeepStubbingTest extends TestBase {
         
         //then
         verify(person.getAddress().getStreet()).getName();
-    }   
+    }
+    
+    @Test
+	public void shouldVerificationWorkWithArgumentMatchersInNestedCalls() throws Exception {
+		//given
+    	person.getAddress("111 Mock Lane").getStreet();
+		
+		//then
+    	verify(person.getAddress(anyString())).getStreet();
+	}
     
     @Test
     public void shouldFailGracefullyWhenClassIsFinal() throws Exception {
