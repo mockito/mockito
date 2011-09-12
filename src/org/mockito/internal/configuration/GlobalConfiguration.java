@@ -59,6 +59,10 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public boolean cleansStackTrace() {
         return globalConfiguration.get().cleansStackTrace();
     }
+    
+    public boolean enableClassCache() {
+        return globalConfiguration.get().enableClassCache();
+    }
 
     public Answer<Object> getDefaultAnswer() {
         return globalConfiguration.get().getDefaultAnswer();
