@@ -18,9 +18,6 @@ import org.mockito.internal.util.reflection.LenientCopyTool;
 
 import java.io.Serializable;
 
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
-import static org.mockito.Mockito.withSettings;
-
 @SuppressWarnings("unchecked")
 public class MockUtil {
     
@@ -41,9 +38,7 @@ public class MockUtil {
 
         settings.initiateMockName(classToMock);
 
-        MockHandler<T> mockHandler = new MockHandler<T>(settings);
-        InvocationNotifierHandler<T> invocationNotifierHandler = new InvocationNotifierHandler<T>(mockHandler, settings);
-        MethodInterceptorFilter filter = new MethodInterceptorFilter(invocationNotifierHandler, settings);
+        MethodInterceptorFilter filter = newMethodInterceptorFilter(settings);
         Class<?>[] interfaces = settings.getExtraInterfaces();
 
         Class<?>[] ancillaryTypes;
@@ -66,10 +61,14 @@ public class MockUtil {
 
     public <T> void resetMock(T mock) {
         MockHandlerInterface<T> oldMockHandler = getMockHandler(mock);
-        MockHandler<T> newMockHandler = new MockHandler<T>(oldMockHandler);
-        MethodInterceptorFilter newFilter = new MethodInterceptorFilter(newMockHandler, 
-                        (MockSettingsImpl) withSettings().defaultAnswer(RETURNS_DEFAULTS));
+        MethodInterceptorFilter newFilter = newMethodInterceptorFilter(oldMockHandler.getMockSettings());
         ((Factory) mock).setCallback(0, newFilter);
+    }
+
+    private <T> MethodInterceptorFilter newMethodInterceptorFilter(MockSettingsImpl settings) {
+        MockHandler<T> mockHandler = new MockHandler<T>(settings);
+        InvocationNotifierHandler<T> invocationNotifierHandler = new InvocationNotifierHandler<T>(mockHandler, settings);
+        return new MethodInterceptorFilter(invocationNotifierHandler, settings);
     }
 
     public <T> MockHandlerInterface<T> getMockHandler(T mock) {
