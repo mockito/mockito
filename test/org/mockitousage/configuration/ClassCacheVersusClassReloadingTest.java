@@ -100,18 +100,26 @@ public class ClassCacheVersusClassReloadingTest {
         private ReloadClassPredicate reloadClassPredicate;
 
         public SimplePerRealmReloadingClassLoader(ReloadClassPredicate reloadClassPredicate) {
-            super(new URL[]{obtainClassPath(SimplePerRealmReloadingClassLoader.class)});
+            super(new URL[]{obtainClassPath(), obtainClassPath("org.mockito.Mockito")});
             this.reloadClassPredicate = reloadClassPredicate;
         }
 
         public SimplePerRealmReloadingClassLoader(ClassLoader parentClassLoader, ReloadClassPredicate reloadClassPredicate) {
-            super(new URL[]{obtainClassPath(SimplePerRealmReloadingClassLoader.class)}, parentClassLoader);
+            super(new URL[]{
+                    obtainClassPath(),
+                    obtainClassPath("org.mockito.Mockito")
+            }, parentClassLoader);
             this.reloadClassPredicate = reloadClassPredicate;
         }
 
-        private static URL obtainClassPath(Class<SimplePerRealmReloadingClassLoader> aClass) {
-            String path = aClass.getName().replace('.', '/') + ".class";
-            String url = aClass.getClassLoader().getResource(path).toExternalForm();
+        private static URL obtainClassPath() {
+            String className = SimplePerRealmReloadingClassLoader.class.getName();
+            return obtainClassPath(className);
+        }
+
+        private static URL obtainClassPath(String className) {
+            String path = className.replace('.', '/') + ".class";
+            String url = SimplePerRealmReloadingClassLoader.class.getClassLoader().getResource(path).toExternalForm();
 
             try {
                 return new URL(url.substring(0, url.length() - path.length()));
