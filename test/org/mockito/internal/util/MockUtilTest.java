@@ -79,4 +79,11 @@ public class MockUtilTest extends TestBase {
         assertFalse(mockUtil.isMock("i mock a mock"));
         assertTrue(mockUtil.isMock(Mockito.mock(List.class)));
     }
+
+    @Test
+    public void shouldValidateSpy() {
+        assertFalse(mockUtil.isSpy("i mock a mock"));
+        assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
+        assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
+    }
 }

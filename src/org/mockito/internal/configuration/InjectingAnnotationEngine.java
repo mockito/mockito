@@ -9,6 +9,8 @@ import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldReader;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,7 +22,7 @@ import java.util.Set;
  */
 @SuppressWarnings({"deprecation", "unchecked"})
 public class InjectingAnnotationEngine implements AnnotationEngine {
-    
+    MockUtil mockUtil = new MockUtil();
     AnnotationEngine delegate = new DefaultAnnotationEngine();
     AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 
@@ -86,35 +88,35 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
 
     /**
      * Initializes mock/spies dependencies for objects annotated with
-     * &#064;InjectMocks for given testClass.
+     * &#064;InjectMocks for given testClassInstance.
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      * 
-     * @param testClass
+     * @param testClassInstance
      *            Test class, usually <code>this</code>
      */
-    public void injectMocks(final Object testClass) {
-        Class<?> clazz = testClass.getClass();
+    public void injectMocks(final Object testClassInstance) {
+        Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = new HashSet<Object>();
         
         while (clazz != Object.class) {
-            mockDependentFields.addAll(scanForInjection(testClass, clazz));
-            mocks.addAll(scanMocks(testClass, clazz));
+            mockDependentFields.addAll(scanForInjection(testClassInstance, clazz));
+            mocks.addAll(scanMocks(testClassInstance, clazz));
             clazz = clazz.getSuperclass();
         }
         
-        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClass);
+        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
     }
 
     /**
      * Scan fields annotated by &#064;InjectMocks
      *
-     * @param testClass
-     * @param clazz
-     * @return
+     * @param testClassInstance Instance of the test
+     * @param clazz Current class in the hierarchy of the test
+     * @return Fields that depends on Mock
      */
-    private Set<Field> scanForInjection(final Object testClass, final Class<?> clazz) {
+    private Set<Field> scanForInjection(final Object testClassInstance, final Class<?> clazz) {
         Set<Field> mockDependentFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -127,27 +129,35 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         return mockDependentFields;
     }
 
-    private Set<Object> scanMocks(final Object testClass, final Class<?> clazz) {
+    private Set<Object> scanMocks(final Object testClassInstance, final Class<?> clazz) {
         Set<Object> mocks = new HashSet<Object>();
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
-            if (null != field.getAnnotation(Spy.class) || null != field.getAnnotation(org.mockito.Mock.class)
-                    || null != field.getAnnotation(org.mockito.MockitoAnnotations.Mock.class)) {
-                Object fieldInstance = null;
-                boolean wasAccessible = field.isAccessible();
-                field.setAccessible(true);
-                try {
-                    fieldInstance = field.get(testClass);
-                } catch (IllegalAccessException e) {
-                    throw new MockitoException("Problems reading this field dependency " + field.getName() + " for injection", e);
-                } finally {
-                    field.setAccessible(wasAccessible);
-                }
+            FieldReader fieldReader = new FieldReader(testClassInstance, field);
+            if (containsMockOrSpy(field, fieldReader)) {
+                Object fieldInstance = fieldReader.read();
+//                boolean wasAccessible = field.isAccessible();
+//                field.setAccessible(true);
+//                try {
+//                    fieldInstance = field.get(testClassInstance);
+//                } catch (IllegalAccessException e) {
+//                    throw new MockitoException("Problems reading this field dependency " + field.getName() + " for injection", e);
+//                } finally {
+//                    field.setAccessible(wasAccessible);
+//                }
                 if (fieldInstance != null) {
                     mocks.add(fieldInstance);
                 }
             }
         }
         return mocks;
+    }
+
+    private boolean containsMockOrSpy(Field field, FieldReader fieldReader) {
+        return null != field.getAnnotation(Spy.class)
+                || null != field.getAnnotation(Mock.class)
+                || null != field.getAnnotation(MockitoAnnotations.Mock.class)
+                || mockUtil.isMock(fieldReader.read())
+                || mockUtil.isSpy(fieldReader.read());
     }
 }

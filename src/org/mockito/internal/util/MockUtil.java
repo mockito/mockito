@@ -39,6 +39,20 @@ public class MockUtil {
         settings.initiateMockName(classToMock);
 
         MethodInterceptorFilter filter = newMethodInterceptorFilter(settings);
+        Class<?>[] ancillaryTypes = prepareAncillaryTypes(settings);
+
+
+        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
+
+        Object spiedInstance = settings.getSpiedInstance();
+        if (spiedInstance != null) {
+            new LenientCopyTool().copyToMock(spiedInstance, mock);
+        }
+        
+        return mock;
+    }
+
+    private Class<?>[] prepareAncillaryTypes(MockSettingsImpl settings) {
         Class<?>[] interfaces = settings.getExtraInterfaces();
 
         Class<?>[] ancillaryTypes;
@@ -47,16 +61,10 @@ public class MockUtil {
         } else {
             ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
         }
-
-        Object spiedInstance = settings.getSpiedInstance();
-        
-        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
-        
-        if (spiedInstance != null) {
-            new LenientCopyTool().copyToMock(spiedInstance, mock);
+        if (settings.getSpiedInstance() != null) {
+            ancillaryTypes = new ArrayUtils().concat(ancillaryTypes, MockitoSpy.class);
         }
-        
-        return mock;
+        return ancillaryTypes;
     }
 
     public <T> void resetMock(T mock) {
@@ -83,12 +91,16 @@ public class MockUtil {
         }
     }
 
-    private <T> boolean isMockitoMock(T mock) {
-        return getInterceptor(mock) != null;
-    }
-
     public boolean isMock(Object mock) {
         return mock != null && isMockitoMock(mock);
+    }
+
+    public boolean isSpy(Object mock) {
+        return mock instanceof MockitoSpy && isMock(mock);
+    }
+
+    private <T> boolean isMockitoMock(T mock) {
+        return getInterceptor(mock) != null;
     }
 
     private <T> MethodInterceptorFilter getInterceptor(T mock) {
