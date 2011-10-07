@@ -6,7 +6,6 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.mockito.Mockito;
 import org.mockito.internal.MockHandlerInterface;
@@ -32,14 +31,20 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private Object getMock(InvocationOnMock invocation) throws Throwable {
     	MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
-    	InvocationContainerImpl container = (InvocationContainerImpl)handler.getInvocationContainer();
-    	List<StubbedInvocationMatcher> stubbedInvocations = container.getStubbedInvocations();
-    	for (StubbedInvocationMatcher stubbedInvocationMatcher : stubbedInvocations) {
+    	InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
+
+        // matches invocation for verification
+        for (StubbedInvocationMatcher stubbedInvocationMatcher : container.getStubbedInvocations()) {
     		if(container.getInvocationForStubbing().matches(stubbedInvocationMatcher.getInvocation())) {
     			return stubbedInvocationMatcher.answer(invocation);
     		}
 		}
-    	
+
+        // deep stub
+        return recordDeepStubMock(invocation, container);
+    }
+
+    private Object recordDeepStubMock(InvocationOnMock invocation, InvocationContainerImpl container) {
         Class<?> clz = invocation.getMethod().getReturnType();
         final Object mock = Mockito.mock(clz, this);
 

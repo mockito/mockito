@@ -9,14 +9,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Locale;
 
 import javax.net.SocketFactory;
 
@@ -46,6 +44,10 @@ public class DeepStubbingTest extends TestBase {
         Street street;
 
         public Street getStreet() {
+            return street;
+        }
+
+        public Street getStreet(Locale locale) {
             return street;
         }
     }
@@ -217,9 +219,12 @@ public class DeepStubbingTest extends TestBase {
 	public void shouldVerificationWorkWithArgumentMatchersInNestedCalls() throws Exception {
 		//given
     	person.getAddress("111 Mock Lane").getStreet();
-		
+    	person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
+
 		//then
     	verify(person.getAddress(anyString())).getStreet();
+    	verify(person.getAddress(anyString()).getStreet(Locale.CHINESE), never()).getName();
+    	verify(person.getAddress(anyString()).getStreet(eq(Locale.ITALIAN))).getName();
 	}
     
     @Test
