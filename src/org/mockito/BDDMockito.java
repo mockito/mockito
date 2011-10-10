@@ -197,6 +197,11 @@ public class BDDMockito extends Mockito {
         BDDStubber willThrow(Class<? extends Throwable> toBeThrown);
 
         /**
+         * See original {@link Stubber#doCallRealMethod()}
+         */
+        BDDStubber willCallRealMethod();
+
+        /**
          * See original {@link Stubber#when(Object)}
          */
         <T> T given(T mock);
@@ -250,6 +255,13 @@ public class BDDMockito extends Mockito {
          */
         public BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
+        }
+
+        /* (non-Javadoc)
+         * @see BDDMockito.BDDStubber#willCallRealMethod()
+         */
+        public BDDStubber willCallRealMethod() {
+            return new BDDStubberImpl(mockitoStubber.doCallRealMethod());
         }
     }
     

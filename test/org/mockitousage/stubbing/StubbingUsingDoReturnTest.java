@@ -13,6 +13,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
+import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
 
 import java.io.IOException;
@@ -127,6 +128,16 @@ public class StubbingUsingDoReturnTest extends TestBase {
         
         assertEquals("bar", mock.simpleMethod());
         assertEquals("bar", mock.simpleMethod());
+    }
+
+    @Test
+    public void shouldAllowDoCallRealMethodInChainedStubbing() throws Exception {
+        MethodsImpl methods = mock(MethodsImpl.class);
+        doReturn("A").doCallRealMethod()
+                .when(methods).simpleMethod();
+
+        assertEquals("A", methods.simpleMethod());
+        assertEquals(null, methods.simpleMethod());
     }
 
     @Test(expected = IllegalArgumentException.class)
