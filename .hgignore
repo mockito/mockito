@@ -9,6 +9,8 @@ glob:maven/repository
 glob:*.iws
 glob:cglib-and-asm/.gradle
 glob:cglib-and-asm/build
+glob:build
+glob:.gradle
 
 syntax: regexp
 ^\.project$
