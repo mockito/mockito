@@ -316,14 +316,12 @@
   	<copy todir="${javadoc.dir}/org/mockito" file="img/logo.jpg" />
   </target>
 
-  <target name="repackage-tests">
-    <jarjar jarfile="${target.dir}/${jar.tests}">
+  <target name="repackage-tests" depends="compile.test">
+    <jar jarfile="${target.dir}/${jar.tests}">
       <fileset dir="${test.classes.dir}"/>
-      <rule pattern="net.sf.**" result="org.mockito.@1" />
-      <rule pattern="org.objectweb.**" result="org.mockito.@1" />
-    </jarjar>
-  </target>  
-  
+    </jar>
+  </target>
+
   <target name="test.zip.release" depends="zip, repackage-tests" >
     <delete dir="${target.dir}/tmp"/>
     <unzip dest="${target.dir}/tmp" src="${target.dir}/${zip}" />
