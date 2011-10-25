@@ -5,15 +5,21 @@
 
 package org.mockito.internal.creation.jmock;
 
-import java.lang.reflect.*;
-import java.util.List;
-
-import org.mockito.cglib.core.*;
+import org.mockito.cglib.core.CodeGenerationException;
+import org.mockito.cglib.core.NamingPolicy;
+import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 import org.objenesis.ObjenesisStd;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
+
+import static org.mockito.internal.util.StringJoiner.join;
 
 /**
  * Thanks to jMock guys for this handy class that wraps all the cglib magic. 
@@ -51,6 +57,11 @@ public class ClassImposterizer  {
             setConstructorsAccessible(mockedType, true);
             Class<?> proxyClass = createProxyClass(mockedType, ancillaryTypes);
             return mockedType.cast(createProxy(proxyClass, interceptor));
+        } catch (ClassCastException cce) {
+            throw new MockitoException(join(
+                "ClassCastException occurred when creating the proxy.",
+                "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
+            ), cce);
         } finally {
             setConstructorsAccessible(mockedType, false);
         }
