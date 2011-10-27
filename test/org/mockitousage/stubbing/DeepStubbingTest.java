@@ -4,21 +4,23 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import org.fest.assertions.Assertions;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockitoutil.TestBase;
 
+import javax.net.SocketFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Locale;
 
-import javax.net.SocketFactory;
-
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 
 public class DeepStubbingTest extends TestBase {
@@ -57,9 +59,13 @@ public class DeepStubbingTest extends TestBase {
         public String getName() {
             return name;
         }
+
+        public String getLongName() {
+            return name;
+        }
     }    
     
-    static final class FinalClass {};    
+    static final class FinalClass {}
     
     @Test
     public void myTest() throws Exception {
@@ -215,7 +221,7 @@ public class DeepStubbingTest extends TestBase {
     }
     
     @Test
-	public void shouldVerificationWorkWithArgumentMatchersInNestedCalls() throws Exception {
+	public void verification_work_with_argument_Matchers_in_nested_calls() throws Exception {
 		//given
     	person.getAddress("111 Mock Lane").getStreet();
     	person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
@@ -225,7 +231,78 @@ public class DeepStubbingTest extends TestBase {
     	verify(person.getAddress(anyString()).getStreet(Locale.CHINESE), never()).getName();
     	verify(person.getAddress(anyString()).getStreet(eq(Locale.ITALIAN))).getName();
 	}
-    
+
+    @Test
+    public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() throws Exception {
+        when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
+
+        person.getAddress("the docks").getStreet().getName();
+
+        assertSame(person.getAddress("the docks").getStreet(), person.getAddress(anyString()).getStreet());
+        assertSame(person.getAddress(anyString()).getStreet(), person.getAddress(anyString()).getStreet());
+        assertSame(person.getAddress("the docks").getStreet(), person.getAddress("the docks").getStreet());
+        assertSame(person.getAddress(anyString()).getStreet(), person.getAddress("the docks").getStreet());
+        assertSame(person.getAddress("111 Mock Lane").getStreet(), person.getAddress("the docks").getStreet());
+    }
+
+    @Test
+    public void times_never_atLeast_atMost_verificationModes_should_work() throws Exception {
+        when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
+
+        person.getAddress("the docks").getStreet().getName();
+        person.getAddress("the docks").getStreet().getName();
+        person.getAddress("the docks").getStreet().getName();
+        person.getAddress("the docks").getStreet(Locale.ITALIAN).getName();
+
+        verify(person.getAddress("the docks").getStreet(), times(3)).getName();
+        verify(person.getAddress("the docks").getStreet(Locale.CHINESE), never()).getName();
+        verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atMost(1)).getName();
+    }
+
+
+    @Test
+    public void inOrder_only_work_on_the_very_last_mock_but_it_works() throws Exception {
+        when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
+        when(person.getAddress(anyString()).getStreet(Locale.ITALIAN).getName()).thenReturn("deep");
+        when(person.getAddress(anyString()).getStreet(Locale.CHINESE).getName()).thenReturn("deep");
+
+        person.getAddress("the docks").getStreet().getName();
+        person.getAddress("the docks").getStreet().getLongName();
+        person.getAddress("the docks").getStreet(Locale.ITALIAN).getName();
+        person.getAddress("the docks").getStreet(Locale.CHINESE).getName();
+
+        InOrder inOrder = inOrder(
+                person.getAddress("the docks").getStreet(),
+                person.getAddress("the docks").getStreet(Locale.CHINESE),
+                person.getAddress("the docks").getStreet(Locale.ITALIAN)
+        );
+        inOrder.verify(person.getAddress("the docks").getStreet(), times(1)).getName();
+        inOrder.verify(person.getAddress("the docks").getStreet()).getLongName();
+        inOrder.verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atLeast(1)).getName();
+        inOrder.verify(person.getAddress("the docks").getStreet(Locale.CHINESE)).getName();
+    }
+
+    @Test
+    public void verificationMode_only_work_on_the_last_returned_mock() throws Exception {
+        // 1st invocation on Address mock (stubbing)
+        when(person.getAddress("the docks").getStreet().getName()).thenReturn("deep");
+
+        // 2nd invocation on Address mock (real)
+        person.getAddress("the docks").getStreet().getName();
+        // 3rd invocation on Address mock (verification)
+        // (Address mock is not in verification mode)
+        verify(person.getAddress("the docks").getStreet()).getName();
+
+        try {
+            verify(person.getAddress("the docks"), times(1)).getStreet();
+            fail();
+        } catch (TooManyActualInvocations e) {
+            Assertions.assertThat(e.getMessage())
+                    .contains("Wanted 1 time")
+                    .contains("But was 3 times");
+        }
+    }
+
     @Test
     public void shouldFailGracefullyWhenClassIsFinal() throws Exception {
         //when        

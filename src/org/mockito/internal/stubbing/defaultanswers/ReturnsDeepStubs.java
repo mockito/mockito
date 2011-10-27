@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.io.Serializable;
-
 import org.mockito.Mockito;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -15,6 +13,16 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.io.Serializable;
+
+/**
+ * Returning deep stub implementation.
+ *
+ * Will return previously created mock if the invocation matches.
+ *
+ * @see Mockito#RETURNS_DEEP_STUBS
+ * @see org.mockito.Answers#RETURNS_DEEP_STUBS
+ */
 public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = -6926328908792880098L;
@@ -23,8 +31,11 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> clz = invocation.getMethod().getReturnType();
-        if (!new MockCreationValidator().isTypeMockable(clz))
+
+        if (!new MockCreationValidator().isTypeMockable(clz)) {
             return delegate.answer(invocation);
+        }
+
         return getMock(invocation);
     }
 

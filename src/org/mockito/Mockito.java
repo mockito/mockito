@@ -826,15 +826,58 @@ public class Mockito extends Matchers {
      *   // note that we're chaining method calls: getBar().getName()
      *   assertEquals("deep", mock.getBar().getName());
      * </pre>
+     * </p>
      * 
-     * <strong>Verification API does not support 'chaining'</strong> so deep stub doesn't change how you do verification.
      * <p>
      * <strong>WARNING: </strong>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.
      * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful
      * hints at violation of Law of Demeter or mocking a value object (a well known anti-pattern).
+     * </p>
+     *
      * <p>
-     * Good quote I've seen one day on the web: <strong>every time a mock returns a mock a fairy dies</strong>. 
+     * Good quote I've seen one day on the web: <strong>every time a mock returns a mock a fairy dies</strong>.
+     * </p>
+     *
+     * <p>
+     * Please note that this answer will return existing mocks that matches the stub. This
+     * behavior is ok with deep stubs and allows verification to work on the last mock of the chain.
+     * <pre>
+     *   when(mock.getBar(anyString()).getThingy().getName()).thenReturn("deep");
+     *
+     *   mock.getBar("candy bar").getThingy().getName();
+     *
+     *   assertSame(mock.getBar(anyString()).getThingy().getName(), mock.getBar(anyString()).getThingy().getName());
+     *   verify(mock.getBar("candy bar").getThingy()).getName();
+     *   verify(mock.getBar(anyString()).getThingy()).getName();
+     * </pre>
+     * </p>
+     *
+     * <p>
+     * Verification only works with the last mock in the chain. You can use verification modes.
+     * <pre>
+     *   when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
+     *   when(person.getAddress(anyString()).getStreet(Locale.ITALIAN).getName()).thenReturn("deep");
+     *   when(person.getAddress(anyString()).getStreet(Locale.CHINESE).getName()).thenReturn("deep");
+     *
+     *   person.getAddress("the docks").getStreet().getName();
+     *   person.getAddress("the docks").getStreet().getLongName();
+     *   person.getAddress("the docks").getStreet(Locale.ITALIAN).getName();
+     *   person.getAddress("the docks").getStreet(Locale.CHINESE).getName();
+     *
+     *   // note that we are actually referring to the very last mock in the stubbing chain.
+     *   InOrder inOrder = inOrder(
+     *       person.getAddress("the docks").getStreet(),
+     *       person.getAddress("the docks").getStreet(Locale.CHINESE),
+     *       person.getAddress("the docks").getStreet(Locale.ITALIAN)
+     *   );
+     *   inOrder.verify(person.getAddress("the docks").getStreet(), times(1)).getName();
+     *   inOrder.verify(person.getAddress("the docks").getStreet()).getLongName();
+     *   inOrder.verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atLeast(1)).getName();
+     *   inOrder.verify(person.getAddress("the docks").getStreet(Locale.CHINESE)).getName();
+     * </pre>
+     * </p>
+     *
      * <p>
      * How deep stub work internally?
      * <pre>
@@ -848,9 +891,12 @@ public class Mockito extends Matchers {
      *   when(foo.getBar()).thenReturn(bar);
      *   when(bar.getName()).thenReturn("deep");
      * </pre>
+     * </p>
+     *
      * <p>
      * This feature will not work when any return type of methods included in the chain cannot be mocked
-     * (for example: is a primitive or a final class). This is because of java type system.   
+     * (for example: is a primitive or a final class). This is because of java type system.
+     * </p>
      */
     public static final Answer<Object> RETURNS_DEEP_STUBS = Answers.RETURNS_DEEP_STUBS.get();
 
@@ -1190,6 +1236,8 @@ public class Mockito extends Matchers {
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * @param methodCall method to be stubbed
+     * @return OngoingStubbing object used to stub fluently.
+     *         <strong>Do not</strong> create a reference to this returned object.
      */
     public static <T> OngoingStubbing<T> when(T methodCall) {
         return MOCKITO_CORE.when(methodCall);
@@ -1276,7 +1324,7 @@ public class Mockito extends Matchers {
      *   //at this point the mock forgot any interactions & stubbing
      * </pre>
      *
-     * @param <T>
+     * @param <T> The Type of the mocks
      * @param mocks to be reset
      */
     public static <T> void reset(T ... mocks) {
