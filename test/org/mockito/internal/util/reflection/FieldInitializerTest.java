@@ -42,6 +42,7 @@ public class FieldInitializerTest {
 
         assertSame(backupInstance, report.fieldInstance());
         assertFalse(report.fieldWasInitialized());
+        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
@@ -51,6 +52,7 @@ public class FieldInitializerTest {
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
+        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
@@ -60,6 +62,7 @@ public class FieldInitializerTest {
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
+        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
@@ -69,6 +72,7 @@ public class FieldInitializerTest {
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
+        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test(expected = MockitoException.class)

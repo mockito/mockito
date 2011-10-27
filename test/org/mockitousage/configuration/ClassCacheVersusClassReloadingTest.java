@@ -7,6 +7,7 @@ package org.mockitousage.configuration;
 
 import org.fest.assertions.Condition;
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.ConfigurationAccess;
 
 import java.net.MalformedURLException;
@@ -29,9 +30,15 @@ public class ClassCacheVersusClassReloadingTest {
 
         try {
             doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
-            fail("should have raised a ClasCastException when Objenis Cache is enabled");
-        } catch (ClassCastException e) {
-            assertThat(e).satisfies(thatCceIsThrownFrom("org.mockito.internal.creation.jmock.ClassImposterizer.imposterise"));
+            fail("should have raised a ClassCastException when Objenis Cache is enabled");
+        } catch (MockitoException e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("classloading")
+                    .containsIgnoringCase("objenesis")
+                    .containsIgnoringCase("MockitoConfiguration");
+            assertThat(e.getCause())
+                    .satisfies(thatCceIsThrownFrom("java.lang.Class.cast"))
+                    .satisfies(thatCceIsThrownFrom("org.mockito.internal.creation.jmock.ClassImposterizer.imposterise"));
         }
     }
 
@@ -47,14 +54,21 @@ public class ClassCacheVersusClassReloadingTest {
         return new Condition<Throwable>() {
             @Override
             public boolean matches(Throwable throwable) {
-                return throwable.getStackTrace()[1].toString().contains(stacktraceElementDescription);
+                StackTraceElement[] stackTrace = throwable.getStackTrace();
+                for (StackTraceElement stackTraceElement : stackTrace) {
+                    if (stackTraceElement.toString().contains(stacktraceElementDescription)) {
+                        return true;
+                    }
+                }
+
+                return false;
             }
         };
     }
 
     public static class DoTheMocking implements Callable {
         public Object call() throws Exception {
-            Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.MethodsImpl");
+            Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
             return mock(clazz);
         }
     }
@@ -68,7 +82,7 @@ public class ClassCacheVersusClassReloadingTest {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
             public boolean needReload(String qualifiedName) {
                 return "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking".equals(qualifiedName)
-                    || "org.mockitousage.MethodsImpl".equals(qualifiedName);
+                    || "org.mockitousage.configuration.ClassToBeMocked".equals(qualifiedName);
             }
         };
     }
@@ -88,8 +102,7 @@ public class ClassCacheVersusClassReloadingTest {
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
             public boolean needReload(String qualifiedName) {
-                return qualifiedName.contains("org.mockito")
-                        && !qualifiedName.contains("org.mockito.cglib");
+                return (!qualifiedName.contains("org.mockito.cglib") && qualifiedName.contains("org.mockito"));
             }
         };
     }
@@ -111,7 +124,7 @@ public class ClassCacheVersusClassReloadingTest {
         public SimplePerRealmReloadingClassLoader(ClassLoader parentClassLoader, ReloadClassPredicate reloadClassPredicate) {
             super(new URL[]{
                     obtainClassPath(),
-                    obtainClassPath("org.mockito.Mockito")
+                    obtainClassPath("org.mockito.Mockito"),
             }, parentClassLoader);
             this.reloadClassPredicate = reloadClassPredicate;
         }
@@ -136,7 +149,8 @@ public class ClassCacheVersusClassReloadingTest {
         public Class<?> loadClass(String qualifiedName) throws ClassNotFoundException {
             if(reloadClassPredicate.needReload(qualifiedName)) {
                 // return customLoadClass(qualifiedName);
-                return findClass(qualifiedName);
+                Class<?> foundClass = findClass(qualifiedName);
+                return foundClass;
             }
             return super.loadClass(qualifiedName);
         }

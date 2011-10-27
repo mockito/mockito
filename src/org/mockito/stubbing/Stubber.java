@@ -66,7 +66,7 @@ public interface Stubber {
      * 
      *  See examples in javadoc for {@link Mockito}
      * 
-     * @param mock
+     * @param mock The mock
      * @return select method for stubbing
      */
     <T> T when(T mock);
@@ -135,4 +135,13 @@ public interface Stubber {
      * @return stubber - to select a method for stubbing
      */
     Stubber doReturn(Object toBeReturned);
+
+    /**
+     * Use it for stubbing consecutive calls in {@link Mockito#doCallRealMethod()} style.
+     * <p>
+     * See javadoc for {@link Mockito#doCallRealMethod()}
+     *
+     * @return stubber - to select a method for stubbing
+     */
+    Stubber doCallRealMethod();
 }

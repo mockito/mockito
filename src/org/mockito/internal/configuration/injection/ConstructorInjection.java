@@ -51,12 +51,13 @@ public class ConstructorInjection extends MockInjectionStrategy {
             SimpleArgumentResolver simpleArgumentResolver = new SimpleArgumentResolver(mockCandidates);
             FieldInitializationReport report = new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
 
-            return report.fieldWasInitialized();
+            return report.fieldWasInitializedUsingContructorArgs();
         } catch (MockitoException e) {
             if(e.getCause() instanceof InvocationTargetException) {
                 Throwable realCause = e.getCause().getCause();
                 new Reporter().fieldInitialisationThrewException(field, realCause);
             }
+            // other causes should be fine
             return false;
         }
 

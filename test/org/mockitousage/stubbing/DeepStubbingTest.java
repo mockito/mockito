@@ -4,11 +4,16 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Locale;
 
 import javax.net.SocketFactory;
 
@@ -25,6 +30,10 @@ public class DeepStubbingTest extends TestBase {
             return address;
         }
         
+        public Address getAddress(String addressName) {
+        	return address;
+        }
+        
         public FinalClass getFinalClass() {
             return null;
         }
@@ -34,6 +43,10 @@ public class DeepStubbingTest extends TestBase {
         Street street;
 
         public Street getStreet() {
+            return street;
+        }
+
+        public Street getStreet(Locale locale) {
             return street;
         }
     }
@@ -199,7 +212,19 @@ public class DeepStubbingTest extends TestBase {
         
         //then
         verify(person.getAddress().getStreet()).getName();
-    }   
+    }
+    
+    @Test
+	public void shouldVerificationWorkWithArgumentMatchersInNestedCalls() throws Exception {
+		//given
+    	person.getAddress("111 Mock Lane").getStreet();
+    	person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
+
+		//then
+    	verify(person.getAddress(anyString())).getStreet();
+    	verify(person.getAddress(anyString()).getStreet(Locale.CHINESE), never()).getName();
+    	verify(person.getAddress(anyString()).getStreet(eq(Locale.ITALIAN))).getName();
+	}
     
     @Test
     public void shouldFailGracefullyWhenClassIsFinal() throws Exception {

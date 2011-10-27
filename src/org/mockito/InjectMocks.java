@@ -71,6 +71,7 @@ import static java.lang.annotation.ElementType.FIELD;
  * a parameterized constructor only or a no-arg constructor only, or both.
  * All these constructors can be package protected, protected or private, however
  * <u>Mockito cannot instantiate inner classes, local classes, abstract classes and of course interfaces.</u>
+ * <u>Beware of private nest static classes too.</u>
  *
  * <p>The same stands for setters or fields, they can be declared with private
  * visibility, Mockito will see them through reflection.

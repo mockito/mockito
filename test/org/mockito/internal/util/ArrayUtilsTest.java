@@ -11,6 +11,7 @@ import org.mockitoutil.TestBase;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ArrayUtilsTest extends TestBase {
 
@@ -26,11 +27,11 @@ public class ArrayUtilsTest extends TestBase {
     }
 
     @Test
-    public void shouldConcatenateItemToFullArray() throws Exception {
+    public void shouldConcatenateItemsToFullArray() throws Exception {
         //when
-        Class<?>[] items = utils.concat(new Class[] {Serializable.class, Map.class}, List.class);
+        Class<?>[] items = utils.concat(new Class[] {Serializable.class, Map.class}, List.class, Set.class);
 
         //then
-        Assertions.assertThat(items).containsOnly(Serializable.class, Map.class, List.class);
+        Assertions.assertThat(items).containsOnly(Serializable.class, Map.class, List.class, Set.class);
     }
 }

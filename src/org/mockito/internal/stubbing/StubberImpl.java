@@ -5,10 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.stubbing.answers.DoesNothing;
-import org.mockito.internal.stubbing.answers.Returns;
-import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
+import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
@@ -59,6 +56,11 @@ public class StubberImpl implements Stubber {
 
     public Stubber doAnswer(Answer answer) {
         answers.add(answer);
+        return this;
+    }
+
+    public Stubber doCallRealMethod() {
+        answers.add(new CallsRealMethods());
         return this;
     }
 }

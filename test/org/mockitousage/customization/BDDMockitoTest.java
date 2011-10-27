@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
+import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
 
 import java.util.Set;
@@ -75,6 +76,16 @@ public class BDDMockitoTest extends TestBase {
        
        assertEquals("foo", mock.simpleMethod("whatever"));
        assertEquals("bar", mock.simpleMethod("whatever"));
+    }
+
+    @Test
+    public void shouldStubConsecutivelyWithCallRealMethod() throws Exception {
+        MethodsImpl mock = mock(MethodsImpl.class);
+        willReturn("foo").willCallRealMethod()
+                .given(mock).simpleMethod();
+
+       assertEquals("foo", mock.simpleMethod());
+       assertEquals(null, mock.simpleMethod());
     }
     
     @Test
