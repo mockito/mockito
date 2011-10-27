@@ -4,13 +4,14 @@
  */
 package org.mockitousage.bugs;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
 //see bug 212
 // @Ignore("needs fixing")
@@ -38,6 +39,7 @@ public class ParentClassNotPublicVeryWeirdBugTest {
         ClassForMocking clazzMock = mock(ClassForMocking.class);
         try {
             Mockito.when(clazzMock.isValid()).thenReturn(true);
+            fail();
         } catch (MissingMethodInvocationException e) {
             assertThat(e.getMessage())
                     .contains("the parent of the mocked class is not public.")
