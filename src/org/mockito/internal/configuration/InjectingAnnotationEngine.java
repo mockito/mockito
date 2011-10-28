@@ -7,7 +7,6 @@ package org.mockito.internal.configuration;
 import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
 
@@ -101,7 +100,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         
         while (clazz != Object.class) {
             mockDependentFields.addAll(scanForInjection(testClassInstance, clazz));
-            mocks.addAll(scanMocks(testClassInstance, clazz));
+            mocks.addAll(scanAndPrepareMocks(testClassInstance, clazz));
             clazz = clazz.getSuperclass();
         }
         
@@ -114,6 +113,8 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      * @param testClassInstance Instance of the test
      * @param clazz Current class in the hierarchy of the test
      * @return Fields that depends on Mock
+     *
+     * @see #scanAndPrepareMocks(Object, Class)
      */
     private Set<Field> scanForInjection(final Object testClassInstance, final Class<?> clazz) {
         Set<Field> mockDependentFields = new HashSet<Field>();
@@ -128,24 +129,28 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         return mockDependentFields;
     }
 
-    private Set<Object> scanMocks(final Object testClassInstance, final Class<?> clazz) {
+    /**
+     * Scan mocks for the given <code>testClassInstance</code> and <code>clazz</code> in the type hierarchy.
+     *
+     * <p>
+     *     Actually the preparation of mocks consists only in defining a MockName if not already set.
+     * </p>
+     *
+     * @param testClassInstance The test instance
+     * @param clazz The class in the type hierarchy of this instance.
+     * @return A prepared set of mock
+     */
+    private Set<Object> scanAndPrepareMocks(final Object testClassInstance, final Class<?> clazz) {
         Set<Object> mocks = new HashSet<Object>();
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
             FieldReader fieldReader = new FieldReader(testClassInstance, field);
             if (containsMockOrSpy(field, fieldReader)) {
-                Object fieldInstance = fieldReader.read();
-//                boolean wasAccessible = field.isAccessible();
-//                field.setAccessible(true);
-//                try {
-//                    fieldInstance = field.get(testClassInstance);
-//                } catch (IllegalAccessException e) {
-//                    throw new MockitoException("Problems reading this field dependency " + field.getName() + " for injection", e);
-//                } finally {
-//                    field.setAccessible(wasAccessible);
-//                }
-                if (fieldInstance != null) {
-                    mocks.add(fieldInstance);
+                Object mockInstance = fieldReader.read();
+
+                if (mockInstance != null) {
+                    mockUtil.redefineMockNameIfSurrogate(mockInstance, field.getName());
+                    mocks.add(mockInstance);
                 }
             }
         }

@@ -126,5 +126,9 @@ public class MockSettingsImpl implements MockSettings {
     public boolean hasInvocationListeners() {
         return !invocationListeners.isEmpty();
     }
+
+    public void redefineMockName(String newName) {
+        mockName = new MockName(newName);
+    }
 }
 
