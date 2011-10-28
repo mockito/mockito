@@ -6,9 +6,8 @@ package org.mockito.internal.configuration;
 
 import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
-import org.mockito.exceptions.Reporter;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.FieldReader;
+import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
+import org.mockito.internal.configuration.injection.scanner.MockScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,9 +19,8 @@ import java.util.Set;
  */
 @SuppressWarnings({"deprecation", "unchecked"})
 public class InjectingAnnotationEngine implements AnnotationEngine {
-    MockUtil mockUtil = new MockUtil();
-    AnnotationEngine delegate = new DefaultAnnotationEngine();
-    AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
+    private AnnotationEngine delegate = new DefaultAnnotationEngine();
+    private AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 
     /***
      * Create a mock using {@link DefaultAnnotationEngine}
@@ -76,13 +74,6 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         }
     }
 
-    void assertNoAnnotations(final Field field, final Class ... annotations) {
-        for (Class annotation : annotations) {
-            if (field.isAnnotationPresent(annotation)) {
-                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
-            }
-        }        
-    }
 
     /**
      * Initializes mock/spies dependencies for objects annotated with
@@ -99,69 +90,12 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Set<Object> mocks = new HashSet<Object>();
         
         while (clazz != Object.class) {
-            mockDependentFields.addAll(scanForInjection(testClassInstance, clazz));
-            mocks.addAll(scanAndPrepareMocks(testClassInstance, clazz));
+            new InjectMocksScanner(testClassInstance, clazz).addTo(mockDependentFields);
+            new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
             clazz = clazz.getSuperclass();
         }
         
         new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
     }
 
-    /**
-     * Scan fields annotated by &#064;InjectMocks
-     *
-     * @param testClassInstance Instance of the test
-     * @param clazz Current class in the hierarchy of the test
-     * @return Fields that depends on Mock
-     *
-     * @see #scanAndPrepareMocks(Object, Class)
-     */
-    private Set<Field> scanForInjection(final Object testClassInstance, final Class<?> clazz) {
-        Set<Field> mockDependentFields = new HashSet<Field>();
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            if (null != field.getAnnotation(InjectMocks.class)) {
-                assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
-                mockDependentFields.add(field);
-            }
-        }
-
-        return mockDependentFields;
-    }
-
-    /**
-     * Scan mocks for the given <code>testClassInstance</code> and <code>clazz</code> in the type hierarchy.
-     *
-     * <p>
-     *     Actually the preparation of mocks consists only in defining a MockName if not already set.
-     * </p>
-     *
-     * @param testClassInstance The test instance
-     * @param clazz The class in the type hierarchy of this instance.
-     * @return A prepared set of mock
-     */
-    private Set<Object> scanAndPrepareMocks(final Object testClassInstance, final Class<?> clazz) {
-        Set<Object> mocks = new HashSet<Object>();
-        for (Field field : clazz.getDeclaredFields()) {
-            // mock or spies only
-            FieldReader fieldReader = new FieldReader(testClassInstance, field);
-            if (containsMockOrSpy(field, fieldReader)) {
-                Object mockInstance = fieldReader.read();
-
-                if (mockInstance != null) {
-                    mockUtil.redefineMockNameIfSurrogate(mockInstance, field.getName());
-                    mocks.add(mockInstance);
-                }
-            }
-        }
-        return mocks;
-    }
-
-    private boolean containsMockOrSpy(Field field, FieldReader fieldReader) {
-        return null != field.getAnnotation(Spy.class)
-                || null != field.getAnnotation(Mock.class)
-                || null != field.getAnnotation(MockitoAnnotations.Mock.class)
-                || mockUtil.isMock(fieldReader.read())
-                || mockUtil.isSpy(fieldReader.read());
-    }
 }
