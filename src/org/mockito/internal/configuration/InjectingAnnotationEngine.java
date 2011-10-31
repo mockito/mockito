@@ -90,7 +90,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Set<Object> mocks = new HashSet<Object>();
         
         while (clazz != Object.class) {
-            new InjectMocksScanner(testClassInstance, clazz).addTo(mockDependentFields);
+            new InjectMocksScanner(clazz).addTo(mockDependentFields);
             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
             clazz = clazz.getSuperclass();
         }
