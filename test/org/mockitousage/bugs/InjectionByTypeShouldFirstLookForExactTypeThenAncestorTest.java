@@ -49,7 +49,7 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
     }
 
     @Test
-    public void should_not_inject_the_object() {
+    public void should_inject_the_mock_only_once_and_in_the_correct_type() {
         assertNull(withNullObjectField.keepMeNull);
         assertSame(mockedBean, withNullObjectField.injectMePlease);
     }
