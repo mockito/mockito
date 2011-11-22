@@ -478,11 +478,16 @@ import org.mockito.verification.VerificationWithTimeout;
  *   //You have to use doReturn() for stubbing
  *   doReturn("foo").when(spy).get(0);
  * </pre>
- * 
- * 2. Watch out for final methods. 
+ *
+ * 2. Mockito <b>*does not*</b> delegate calls to the passed real instance, instead it actually creates a copy of it.
+ * So if you keep the real instance and interact with it, don't expect the spied to be aware of those interaction
+ * and their effect on real instance state.
+ * The corollary is that when an <b>*unstubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
+ * you won't see any effects on the real instance.
+ *
+ * 3. Watch out for final methods.
  * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
- * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
- * Typically you may get a NullPointerException because mock instances don't have fields initiated.
+ * Also you won't be able to verify those method as well.
  * 
  * <h3 id="14">14. Changing default return values of unstubbed invocations (Since 1.7) </h3>
  * 
@@ -666,7 +671,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * that Mockito will inject mocks in a partial mock under testing. As a remainder, please read point 16 about partial mocks.
  *
  * <p>
- * All new annotations are *only* processed on {@link MockitoAnnotations#initMocks(Object)}.
+ * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
  * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
  * <p>
  * <h3 id="22">22. (**New**) Verification with timeout (Since 1.8.5)  </h3>
@@ -685,10 +690,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *   //above is an alias to:
  *   verify(mock, timeout(100).times(1)).someMethod();
  *   
- *   //passes when someMethod() is called *exactly* 2 times within given time span
+ *   //passes when someMethod() is called <b>*exactly*</b> 2 times within given time span
  *   verify(mock, timeout(100).times(2)).someMethod();
  *
- *   //passes when someMethod() is called *at lest* 2 times within given time span
+ *   //passes when someMethod() is called <b>*at lest*</b> 2 times within given time span
  *   verify(mock, timeout(100).atLeast(2)).someMethod();
  *   
  *   //verifies someMethod() within given time span using given verification mode
@@ -1046,26 +1051,30 @@ public class Mockito extends Matchers {
      * </pre>
      * 
      * <h4>Important gotcha on spying real objects!</h4>
-     * 
+     *
      * 1. Sometimes it's impossible or impractical to use {@link Mockito#when(Object)} for stubbing spies.
      * Therefore when using spies please consider doReturn|Answer|Throw() family of methods for stubbing. Example:
-     * 
+     *
      * <pre>
      *   List list = new LinkedList();
      *   List spy = spy(list);
-     *   
+     *
      *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
      *   when(spy.get(0)).thenReturn("foo");
-     *   
+     *
      *   //You have to use doReturn() for stubbing
      *   doReturn("foo").when(spy).get(0);
      * </pre>
-     * 
-     * 2. Watch out for final methods. 
+     *
+     * 2. Mockito <b>*does not*</b> delegate calls to the passed real instance, instead it actually creates a copy of it.
+     * So if you keep the real instance and interact with it, don't expect the spied to be aware of those interaction
+     * and their effect on real instance state.
+     * The corollary is that when an <b>*unstubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
+     * you won't see any effects on the real instance.
+     *
+     * 3. Watch out for final methods.
      * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
-     * What will happen is the real method will be called *on mock* but *not on the real instance* you passed to the spy() method.
-     * Typically you may get a NullPointerException because mock instances don't have fields initiated.
-     * 
+     * Also you won't be able to verify those method as well.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -1608,7 +1617,7 @@ public class Mockito extends Matchers {
      * <b>Warning</b>, ignoreStubs() might lead to overuse of verifyNoMoreInteractions(ignoreStubs(...));
      * Bear in mind that Mockito does not recommend bombarding every test with verifyNoMoreInteractions()
      * for the reasons outlined in javadoc for {@link Mockito#verifyNoMoreInteractions(Object...)}
-     * Other words: all *stubbed* methods of given mocks are marked *verfied* so that they don't get in a way during verifyNoMoreInteractions().
+     * Other words: all <b>*stubbed*</b> methods of given mocks are marked <b>*verfied*</b> so that they don't get in a way during verifyNoMoreInteractions().
      * <p>
      * This method <b>changes the input mocks</b>! This method returns input mocks just for convenience.
      * <p>
@@ -1642,7 +1651,7 @@ public class Mockito extends Matchers {
      *  //However, if we ignore stubbed methods then we can verifyNoMoreInteractions()
      *  verifyNoMoreInteractions(ignoreStubs(mock1, mock2));
      *
-     *  //Remember that ignoreStubs() *changes* the input mocks and returns them for convenience.
+     *  //Remember that ignoreStubs() <b>*changes*</b> the input mocks and returns them for convenience.
      * <pre>
      * Ignoring stubs can be used with <b>verification in order</b>:
      * <pre>
@@ -1784,10 +1793,10 @@ public class Mockito extends Matchers {
      *   //above is an alias to:
      *   verify(mock, timeout(100).times(1)).someMethod();
      *   
-     *   //passes when someMethod() is called *exactly* 2 times within given time span
+     *   //passes when someMethod() is called <b>*exactly*</b> 2 times within given time span
      *   verify(mock, timeout(100).times(2)).someMethod();
      *
-     *   //passes when someMethod() is called *at lest* 2 times within given time span
+     *   //passes when someMethod() is called <b>*at lest*</b> 2 times within given time span
      *   verify(mock, timeout(100).atLeast(2)).someMethod();
      *   
      *   //verifies someMethod() within given time span using given verification mode
