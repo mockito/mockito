@@ -29,7 +29,7 @@ import java.util.*;
  *   <li>for each field in @InjectMocks type ordered from sub-type to super-type
  *     <ul>
  *     <li>find mock candidate by type
- *     <li>if more than *one* candidate find mock candidate on name
+ *     <li>if more than <b>*one*</b> candidate find mock candidate on name
  *     <li>if one mock candidate then
  *       <ul>
  *       <li>set mock by property setter if possible

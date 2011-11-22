@@ -680,7 +680,7 @@ public class Matchers {
     /**
      * Allows creating custom argument matchers.
      * <p>
-     * In rare cases when the parameter is a primitive then you *must* use relevant intThat(), floatThat(), etc. method.
+     * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
      * This way you will avoid NullPointerException during autounboxing  
      * <p>
      * See examples in javadoc for {@link ArgumentMatcher} class
