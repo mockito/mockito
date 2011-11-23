@@ -21,7 +21,7 @@ import java.util.Set;
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
  * {@link Mockito} extends Matchers so to get access to all matchers just import Mockito class statically.
- * <pre>
+ * <pre class="code"><code class="java">
  *  //stubbing using anyInt() argument matcher
  *  when(mockedList.get(anyInt())).thenReturn("element");
  *  
@@ -30,7 +30,7 @@ import java.util.Set;
  *  
  *  //you can also verify using argument matcher
  *  verify(mockedList).get(anyInt());
- * </pre>
+ * </code></pre>
  * Scroll down to see all methods - full list of matchers.
  * <p>
  * <b>Warning:</b>
@@ -38,13 +38,13 @@ import java.util.Set;
  * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
  * <p>
  * E.g: (example shows verification but the same applies to stubbing):
- * <pre>
+ * <pre class="code"><code class="java">
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
  *   //above is correct - eq() is also an argument matcher
  *   
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
- * </pre>
+ * </code></pre>
  * <p>
  * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
@@ -70,7 +70,7 @@ import java.util.Set;
  * <p>
  * Example:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *      public boolean matches(Object list) {
  *          return ((List) list).size() == 2;
@@ -84,14 +84,14 @@ import java.util.Set;
  *   mock.addAll(Arrays.asList("one", "two"));
  *   
  *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
- * </pre>
+ * </code></pre>
  * 
  * To keep it readable you may want to extract method, e.g:
- * <pre>
+ * <pre class="code"><code class="java">
  *   verify(mock).addAll(<b>argThat(new IsListOfTwoElements())</b>);
  *   //becomes
  *   verify(mock).addAll(<b>listOfTwoElements()</b>);
- * </pre>
+ * </code></pre>
  *
  * <b>Warning:</b> Be reasonable with using complicated argument matching, especially custom argument matchers, as it can make the test less readable. 
  * Sometimes it's better to implement equals() for arguments that are passed to mocks 
@@ -249,7 +249,7 @@ public class Matchers {
      * Any vararg, meaning any number and values of arguments.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   //verification:
      *   mock.foo(1, 2);
      *   mock.foo(1, 2, 3, 4);
@@ -263,7 +263,7 @@ public class Matchers {
      *   System.out.println(mock.foo(1, 2));
      *   //also prints 100
      *   System.out.println(mock.foo(1, 2, 3, 4));
-     * </pre>
+     * </code></pre>
      * See examples in javadoc for {@link Matchers} class
      *
      * @return <code>null</code>.

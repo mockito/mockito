@@ -11,7 +11,7 @@ import org.mockito.internal.progress.IOngoingStubbing;
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
  *
- * <pre>
+ * <pre class="code"><code class="java">
  * <b>when</b>(mock.someMethod()).<b>thenReturn</b>(10);
  *
  * //you can use flexible argument matchers, e.g:
@@ -29,7 +29,7 @@ import org.mockito.internal.progress.IOngoingStubbing;
  * //There is a shorter way of consecutive stubbing:
  * when(mock.someMethod()).thenReturn(1,2,3);
  * when(mock.otherMethod()).thenThrow(exc1, exc2);
- * </pre>
+ * </code></pre>
  *
  * See examples in javadoc for {@link Mockito#when}
  */
@@ -37,9 +37,9 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Sets a return value to be returned when the method is called. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenReturn(10);
-     * </pre>
+     * </code></pre>
      *
      * See examples in javadoc for {@link Mockito#when}
      *
@@ -51,9 +51,9 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Sets consecutive return values to be returned when the method is called. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenReturn(1, 2, 3);
-     * </pre>
+     * </code></pre>
      *
      * Last return value in the sequence (in example: 3) determines the behavior of further consecutive calls.
      * <p>
@@ -68,9 +68,9 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenThrow(new RuntimeException());
-     * </pre>
+     * </code></pre>
      *
      * If throwables contain a checked exception then it has to
      * match one of the checked exceptions of method signature.
@@ -90,9 +90,9 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Sets Throwable classes to be thrown when the method is called. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenThrow(RuntimeException.class);
-     * </pre>
+     * </code></pre>
      *
      * <p>
      * Each throwable class will be instantiated for each method invocation.
@@ -125,7 +125,7 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * However, there are rare cases when partial mocks come handy: 
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
      * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
-     * <pre>
+     * <pre class="code"><code class="java">
      *   // someMethod() must be safe (e.g. doesn't throw, doesn't have dependencies to the object state, etc.)
      *   // if it isn't safe then you will have trouble stubbing it using this api. Use Mockito.doCallRealMethod() instead. 
      *   when(mock.someMethod()).thenCallRealMethod();
@@ -133,7 +133,7 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      *   // calls real method:
      *   mock.someMethod();
      *   
-     * </pre>
+     * </code></pre>
      * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks. 
      * <b>Mockito.spy() is a recommended way of creating partial mocks.</b> 
      * The reason is it guarantees real methods are called against correctly constructed object because you're responsible for constructing the object passed to spy() method.
@@ -146,13 +146,13 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
      * Sets a generic Answer for the method. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      * when(mock.someMethod(10)).thenAnswer(new Answer&lt;Integer&gt;() {
      *     public Integer answer(InvocationOnMock invocation) throws Throwable {
      *         return (Integer) invocation.getArguments()[0];
      *     }
      * }
-     * </pre>
+     * </code></pre>
      *
      * @param answer the custom answer to execute.
      *
@@ -165,13 +165,13 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      *
      * This method is an alias of {@link #thenAnswer(Answer)}. This alias allows
      * more readable tests on occasion, for example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * //using 'then' alias:
      * when(mock.foo()).then(returnCoolValue());
      *
      * //versus good old 'thenAnswer:
      * when(mock.foo()).thenAnswer(byReturningCoolValue());
-     * </pre>
+     * </code></pre>
      *
      * @param answer the custom answer to execute.
      * @return iOngoingStubbing object that allows stubbing consecutive calls
@@ -186,12 +186,12 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * It allows to create a stub in one line of code.
      * This can be helpful to keep test code clean.
      * For example, some boring stub can be created & stubbed at field initialization in a test:
-     * <pre>
+     * <pre class="code"><code class="java">
      * public class CarTest {
      *   Car boringStubbedCar = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
      *
      *   &#064;Test public void should... {}
-     * </pre>
+     * </code></pre>
      *
      * @param <M> The mock type given by the variable type.
      * @return Mock used in this ongoing stubbing.

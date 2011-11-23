@@ -21,7 +21,7 @@ import org.mockito.stubbing.Stubber;
  * Now it really nicely integrates with the <b>given</b> component of a BDD style test!    
  * <p>
  * Here is how the test might look like: 
- * <pre>
+ * <pre class="code"><code class="java">
  * import static org.mockito.BDDMockito.*;
  * 
  * Seller seller = mock(Seller.class);
@@ -37,10 +37,10 @@ import org.mockito.stubbing.Stubber;
  *   //then
  *   assertThat(goods, containBread());
  * }  
- * </pre>
+ * </code></pre>
  * 
  * Stubbing voids with throwables:
- * <pre>
+ * <pre class="code"><code class="java">
  *   //given
  *   willThrow(new RuntimeException("boo")).given(mock).foo();
  *   
@@ -49,7 +49,7 @@ import org.mockito.stubbing.Stubber;
  *   
  *   //then
  *   assertEquals(failure, result);
- * </pre>
+ * </code></pre>
  * <p>
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style. 
  */

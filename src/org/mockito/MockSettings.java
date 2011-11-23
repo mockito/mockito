@@ -19,7 +19,7 @@ import java.io.Serializable;
  * If you cannot write a test in a simple way - refactor the code under test.
  * <p>
  * Examples of mock settings:
- * <pre>
+ * <pre class="code"><code class="java">
  *   //Creates mock with different default answer & name
  *   Foo mock = mock(Foo.class, withSettings()
  *       .defaultAnswer(RETURNS_SMART_NULLS)
@@ -30,7 +30,7 @@ import java.io.Serializable;
  *       .defaultAnswer(RETURNS_SMART_NULLS)
  *       .name("cool mockie")
  *       .extraInterfaces(Bar.class));    
- * </pre>
+ * </code></pre>
  * {@link MockSettings} has been introduced for two reasons. 
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
@@ -46,13 +46,13 @@ public interface MockSettings extends Serializable {
      * If you happen to use it often than please make sure you are really producing simple, clean & readable code.
      * <p>   
      * Examples:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   Foo foo = mock(Foo.class, withSettings().extraInterfaces(Bar.class, Baz.class));
      *   
      *   //now, the mock implements extra interfaces, so following casting is possible:
      *   Bar bar = (Bar) foo;
      *   Baz baz = (Baz) foo;
-     * </pre>
+     * </code></pre>
      * 
      * @param interfaces extra interfaces the should implement.
      * @return settings instance so that you can fluently specify other settings
@@ -68,12 +68,12 @@ public interface MockSettings extends Serializable {
      * <b>If you use &#064;Mock annotation then you've got naming mocks for free!</b> &#064;Mock uses field name as mock name. {@link Mock Read more.}
      * <p>
      * Examples:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   Foo foo = mock(Foo.class, withSettings().name("foo"));
      *   
      *   //Below does exactly the same:
      *   Foo foo = mock(Foo.class, "foo");
-     * </pre>
+     * </code></pre>
      * @param name the name of the mock, later used in all verification errors
      * @return settings instance so that you can fluently specify other settings
      */
@@ -94,12 +94,12 @@ public interface MockSettings extends Serializable {
      * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
      * <p>
      * Enough warnings about partial mocks, see an example how spiedInstance() works:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   Foo foo = mock(Foo.class, spiedInstance(fooInstance));
      *   
      *   //Below does exactly the same:
      *   Foo foo = spy(fooInstance);
-     * </pre>
+     * </code></pre>
      * 
      * @param instance to spy on
      * @return settings instance so that you can fluently specify other settings
@@ -113,13 +113,13 @@ public interface MockSettings extends Serializable {
      * <p>
      * It is the default answer so it will be used <b>only when you don't</b> stub the method call.
      *
-     * <pre>
+     * <pre class="code"><code class="java">
      *   Foo mock = mock(Foo.class, withSettings().defaultAnswer(RETURNS_SMART_NULLS));
      *   Foo mockTwo = mock(Foo.class, withSettings().defaultAnswer(new YourOwnAnswer()));
      *   
      *   //Below does exactly the same:
      *   Foo mockTwo = mock(Foo.class, new YourOwnAnswer());
-     * </pre>
+     * </code></pre>
      * 
      * @param defaultAnswer default answer to be used by mock when not stubbed
      * @return settings instance so that you can fluently specify other settings
@@ -136,9 +136,9 @@ public interface MockSettings extends Serializable {
      * was in a web environment and the objects from the external dependency were being serialized to pass between layers.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   List serializableMock = mock(List.class, withSettings().serializable());
-     * </pre>
+     * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
      */
@@ -153,9 +153,9 @@ public interface MockSettings extends Serializable {
      * Calling this method multiple times makes no difference.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * List mockWithLogger = mock(List.class, withSettings().verboseLogging());
-     * </pre>
+     * </code></pre>
      * 
      * @return settings instance so that you can fluently specify other settings
      */
@@ -170,9 +170,9 @@ public interface MockSettings extends Serializable {
      * order in which the listeners are notified. 
      * 
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      *  List mockWithListener = mock(List.class, withSettings().invocationListeners(new YourInvocationListener()));
-     * </pre>
+     * </code></pre>
      * 
      * See the {@link InvocationListener listener interface} for more details.
      * 

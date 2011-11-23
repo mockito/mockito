@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ASMPluginConfiguration">
+    <asm skipDebug="false" skipFrames="false" skipCode="false" expandFrames="false" />
+    <groovy codeStyle="LEGACY" />
+  </component>
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
   </component>
@@ -429,6 +433,9 @@
       </item>
     </group>
   </component>
+  <component name="ProjectKey">
+    <option name="state" value="project://696c8b71-c75e-4a50-a27d-f4396686a575" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/mockito.iml" filepath="$PROJECT_DIR$/mockito.iml" />
@@ -446,5 +453,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="hg4idea" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
 

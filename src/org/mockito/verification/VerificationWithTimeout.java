@@ -10,13 +10,13 @@ import org.mockito.Mockito;
 /**
  * VerificationWithTimeout is a {@link VerificationMode} that allows combining existing verification modes with 'timeout'. E.g:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  * verify(mock, timeout(100).times(5)).foo();
  * 
  * verify(mock, timeout(100).never()).bar();
  * 
  * verify(mock, timeout(200).atLeastOnce()).baz();
- * </pre>
+ * </code></pre>
  * 
  * <p>
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
@@ -25,9 +25,9 @@ public interface VerificationWithTimeout extends VerificationMode {
         
     /**
      * Allows verifying exact number of invocations within given timeout
-     * <pre>
+     * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).times(2)).someMethod("some arg");
-     * </pre>
+     * </code></pre>
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -41,9 +41,9 @@ public interface VerificationWithTimeout extends VerificationMode {
      * Alias to times(0), see {@link #times(int)}
      * <p>
      * Verifies that interaction did not happen within given timeout. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).never()).someMethod();
-     * </pre>
+     * </code></pre>
      * 
      * <p>
      * If you want to verify there were NO interactions with the mock 
@@ -57,9 +57,9 @@ public interface VerificationWithTimeout extends VerificationMode {
     
     /**
      * Allows at-least-once verification withing given timeout. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).atLeastOnce()).someMethod("some arg");
-     * </pre>
+     * </code></pre>
      * Alias to atLeast(1)
      * <p>
      * See examples in javadoc for {@link Mockito} class
@@ -70,9 +70,9 @@ public interface VerificationWithTimeout extends VerificationMode {
 
     /**
      * Allows at-least-x verification withing given timeout. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).atLeast(3)).someMethod("some arg");
-     * </pre>
+     * </code></pre>
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -102,12 +102,12 @@ public interface VerificationWithTimeout extends VerificationMode {
 
     /**
      * Allows checking if given method was the only one invoked. E.g:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   verify(mock, only()).someMethod();
      *   //above is a shorthand for following 2 lines of code:
      *   verify(mock).someMethod();
      *   verifyNoMoreInvocations(mock);
-     * </pre>
+     * </code></pre>
      * 
      * <p>
      * See also {@link Mockito#verifyNoMoreInteractions(Object...)}

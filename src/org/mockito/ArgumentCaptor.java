@@ -17,11 +17,11 @@ import org.mockito.internal.progress.HandyReturnValues;
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
- * <pre>
+ * <pre class="code"><code class="java">
  *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
  *   verify(mock).doSomething(argument.capture());
  *   assertEquals("John", argument.getValue().getName());
- * </pre>
+ * </code></pre>
  *
  * <p>
  * <b>Warning:</b> it is recommended to use ArgumentCaptor with verification <b>but not</b> with stubbing.
@@ -62,11 +62,11 @@ public class ArgumentCaptor<T> {
      * See issue 99.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
      *   verify(mock).doSomething(argument.capture());
      *   assertEquals("John", argument.getValue().getName());
-     * </pre>
+     * </code></pre>
      */
     @Deprecated
     public ArgumentCaptor() {
@@ -109,14 +109,14 @@ public class ArgumentCaptor<T> {
      * Returns all captured values. Use it in case the verified method was called multiple times.
      * <p>
      * Example: 
-     * <pre>
+     * <pre class="code"><code class="java">
      *   ArgumentCaptor&lt;Person&gt; peopleCaptor = ArgumentCaptor.forClass(Person.class);
      *   verify(mock, times(2)).doSomething(peopleCaptor.capture());
      *   
      *   List&lt;Person&gt; capturedPeople = peopleCaptor.getAllValues();
      *   assertEquals("John", capturedPeople.get(0).getName());
      *   assertEquals("Jane", capturedPeople.get(1).getName());
-     * </pre>
+     * </code></pre>
      * See more examples in javadoc for {@link ArgumentCaptor} class.
      * 
      * @return captured argument value

@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 /**
  * Stubs void method with an exception. E.g:
  *
- * <pre>
+ * <pre class="code"><code class="java">
  * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
  *
  * //you can stub with different behavior for consecutive method calls.
@@ -19,7 +19,7 @@ import org.mockito.Mockito;
  *  .toThrow(new RuntimeException())
  *  .toReturn()
  *  .on().someMethod();
- * </pre>
+ * </code></pre>
  *
  * See examples in javadoc for {@link Mockito#stubVoid}
  */
@@ -28,9 +28,9 @@ public interface VoidMethodStubbable<T> {
     /**
      * Stubs void method with an exception. E.g:
      *
-     * <pre>
+     * <pre class="code"><code class="java">
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
-     * </pre>
+     * </code></pre>
      *
      * If throwable is a checked exception then it has to
      * match one of the checked exceptions of method signature.
@@ -49,12 +49,12 @@ public interface VoidMethodStubbable<T> {
      * <b>Only use this method if you're stubbing consecutive calls.</b>
      * <p>
      * For example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * stubVoid(mock)
      *   .toReturn()
      *   .toThrow(new RuntimeException())
      *   .on().foo(10);
-     * </pre>
+     * </code></pre>
      * <ul>
      * <li>first time foo(10) is called the mock will 'just return' (e.g. don't throw any exception)</li>
      * <li>second time foo(10) is called the mock will throw RuntimeException</li>
@@ -71,7 +71,7 @@ public interface VoidMethodStubbable<T> {
      * Stubs a void method with generic {@link Answer}
      * <p>
      * For Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * stubVoid(mock)
      *   .toAnswer(new Answer() {
      *                 public Object answer(InvocationOnMOck invocation) {
@@ -82,7 +82,7 @@ public interface VoidMethodStubbable<T> {
      *                 }
      *             })
      *    .on().accept(any());
-     * </pre>
+     * </code></pre>
      *
      * @param answer the custom answer to execute.
      *
@@ -93,9 +93,9 @@ public interface VoidMethodStubbable<T> {
     /**
      * Choose void method for stubbing. E.g:
      *
-     * <pre>
+     * <pre class="code"><code class="java">
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
-     * </pre>
+     * </code></pre>
      *
      * See examples in javadoc for {@link Mockito#stubVoid}
      *

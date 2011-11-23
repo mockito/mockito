@@ -34,7 +34,7 @@ import java.util.List;
  * versa.</p>
  *
  * <p>Typical use for the code is as follows:</p>
- * <pre>
+ * <pre class="code"><code class="java">
  * public boolean equals(Object obj) {
  *   if (obj == null) { return false; }
  *   if (obj == this) { return true; }
@@ -49,7 +49,7 @@ import java.util.List;
  *                 .append(field3, rhs.field3)
  *                 .isEquals();
  *  }
- * </pre>
+ * </code></pre>
  *
  * <p> Alternatively, there is a method that uses reflection to determine
  * the fields to test. Because these fields are usually private, the method,
@@ -59,11 +59,11 @@ import java.util.List;
  * also slower than testing explicitly.</p>
  *
  * <p> A typical invocation for this method would look like:</p>
- * <pre>
+ * <pre class="code"><code class="java">
  * public boolean equals(Object obj) {
  *   return EqualsBuilder.reflectionEquals(this, obj);
  * }
- * </pre>
+ * </code></pre>
  *
  * @author <a href="mailto:steve.downey@netfolio.com">Steve Downey</a>
  * @author Stephen Colebourne

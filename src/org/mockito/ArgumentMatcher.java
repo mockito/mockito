@@ -18,7 +18,7 @@ import org.mockito.internal.util.Decamelizer;
  * <p>
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  * class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *     public boolean matches(Object list) {
  *         return ((List) list).size() == 2;
@@ -32,15 +32,15 @@ import org.mockito.internal.util.Decamelizer;
  * mock.addAll(Arrays.asList(&quot;one&quot;, &quot;two&quot;));
  * 
  * verify(mock).addAll(argThat(new IsListOfTwoElements()));
- * </pre>
+ * </code></pre>
  * 
  * To keep it readable you may want to extract method, e.g:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  *   verify(mock).addAll(<b>argThat(new IsListOfTwoElements())</b>);
  *   //becomes
  *   verify(mock).addAll(<b>listOfTwoElements()</b>);
- * </pre>
+ * </code></pre>
  *
  * <b>Warning:</b> Be reasonable with using complicated argument matching, especially custom argument matchers, as it can make the test less readable. 
  * Sometimes it's better to implement equals() for arguments that are passed to mocks 
