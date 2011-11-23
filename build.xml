@@ -18,12 +18,12 @@
   <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
   <property name="lib.dir" value="lib" />
-  <property name="lib.dir.build" value="${lib.dir}/build" />
-  <property name="lib.dir.run" value="${lib.dir}/run" />
-  <property name="lib.dir.compile" value="${lib.dir}/compile" />
-  <property name="lib.dir.test" value="${lib.dir}/test" />
-  <property name="lib.dir.repackaged" value="${lib.dir}/repackaged" />
-  <property name="lib.dir.sources" value="${lib.dir}/sources" />
+  <property name="lib.dir.build" value="lib/build" />
+  <property name="lib.dir.run" value="lib/run" />
+  <property name="lib.dir.compile" value="lib/compile" />
+  <property name="lib.dir.test" value="lib/test" />
+  <property name="lib.dir.repackaged" value="lib/repackaged" />
+  <property name="lib.dir.sources" value="lib/sources" />
     
   <property name="jar.core" value="mockito-core-${version}.jar" />
   <property name="jar.core.javadoc" value="mockito-core-${version}-javadoc.jar" />
@@ -303,17 +303,34 @@
   </target>
 
   <target name="javadoc">
-    <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}" 
+    <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}"
+             stylesheetfile="javadoc/stylesheet.css" header=""
       author="true" version="true" use="true" windowtitle="Mockito API">
       <doctitle>
         <![CDATA[
           <h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito API.</h1>
         ]]>
       </doctitle>
+      <header>
+        <![CDATA[
+          <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
+          <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
+          <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
+
+          <script type="text/javascript">
+              $.beautyOfCode.init({
+                theme : 'Eclipse',
+                brushes: ['Java']
+              });
+          </script>
+        ]]>
+      </header>
       <group title="Main package" packages="org.mockito"/>
       <classpath refid="compile.classpath" />
     </javadoc>
-  	<copy todir="${javadoc.dir}/org/mockito" file="img/logo.jpg" />
+  	<copy todir="${javadoc.dir}/org/mockito" file="javadoc/img/logo.jpg" />
+  	<copy todir="${javadoc.dir}/js" file="javadoc/js/jquery-1.7.min.js" />
+  	<copy todir="${javadoc.dir}/js" file="javadoc/js/jquery.beautyOfCode-min.js" />
   </target>
 
   <target name="repackage-tests" depends="compile.test">

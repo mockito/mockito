@@ -10,12 +10,12 @@ import org.mockito.verification.VerificationMode;
 /**
  * Allows verification in order. E.g:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  * InOrder inOrder = inOrder(firstMock, secondMock);
  * 
  * inOrder.verify(firstMock).add("was called first");
  * inOrder.verify(secondMock).add("was called second");
- * </pre>
+ * </code></pre>
  * 
  * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
  * <p>
@@ -29,12 +29,12 @@ public interface InOrder {
      * Alias to <code>inOrder.verify(mock, times(1))</code>
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * InOrder inOrder = inOrder(firstMock, secondMock);
      * 
      * inOrder.verify(firstMock).someMethod("was called first");
      * inOrder.verify(secondMock).someMethod("was called second");
-     * </pre>
+     * </code></pre>
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -47,12 +47,12 @@ public interface InOrder {
     /**
      * Verifies interaction in order. E.g:
      * 
-     * <pre>
+     * <pre class="code"><code class="java">
      * InOrder inOrder = inOrder(firstMock, secondMock);
      * 
      * inOrder.verify(firstMock, times(2)).someMethod("was called first two times");
      * inOrder.verify(secondMock, atLeastOnce()).someMethod("was called second at least once");
-     * </pre>
+     * </code></pre>
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
@@ -69,7 +69,7 @@ public interface InOrder {
      * Different from {@link Mockito#verifyNoMoreInteractions(Object...)} because the order of verification matters.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      * mock.foo(); //1st
      * mock.bar(); //2nd
      * mock.baz(); //3rd
@@ -84,7 +84,7 @@ public interface InOrder {
      * 
      * //however this fails because 1st method was not verified:
      * Mockito.verifyNoMoreInteractions(mock);
-     * </pre>
+     * </code></pre>
      */
     void verifyNoMoreInteractions();
 }

@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 /**
  * Allows shorthand {@link org.mockito.ArgumentCaptor} creation on fields.
  * <p>Example:
- * <pre>
+ * <pre class="code"><code class="java">
  * public class Test{
  *
  *    &#64;Captor ArgumentCaptor&lt;AsyncCallback&lt;Foo&gt;&gt; captor;
@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  *       assertEquals("foo", captor.getValue());
  *    }
  * }
- * </pre>
+ * </code></pre>
  * <p>
  * One of the advantages of using &#64;Captor annotation is that you can avoid warnings related capturing complex generic types.
  */
