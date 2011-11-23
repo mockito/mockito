@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
-import java.util.List;
-
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.progress.HandyReturnValues;
+
+import java.util.List;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -35,6 +35,11 @@ import org.mockito.internal.progress.HandyReturnValues;
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
+ * <p>
+ * This utility class <b>*don't do any type checks*</b>, the generic signatures are only there to avoid casting
+ * in your code. If you want specific types, then you should do that the captured values.
+ * This behavior might change (type checks could be added) in a
+ * future major release.
  * <p>
  * There is an <b>annotation</b> that you might find useful: &#64;{@link Captor}
  * <p>
@@ -119,6 +124,17 @@ public class ArgumentCaptor<T> {
         return this.capturingMatcher.getAllValues();
     }
 
+    /**
+     * Build a new <code>ArgumentCaptor</code>.
+     * <p>
+     * Note that an <code>ArgumentCaptor</code> <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
+     *
+     * @param clazz Type matching the parameter to be captured.
+     * @param <T> Type of clazz
+     * @return A new ArgumentCaptor
+     */
     public static <T> ArgumentCaptor<T> forClass(Class<T> clazz) {
         return new ArgumentCaptor<T>(clazz);
     }
