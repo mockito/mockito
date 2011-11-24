@@ -1665,7 +1665,7 @@ public class Mockito extends Matchers {
      *  verifyNoMoreInteractions(ignoreStubs(mock1, mock2));
      *
      *  //Remember that ignoreStubs() <b>*changes*</b> the input mocks and returns them for convenience.
-     * <pre class="code"><code class="java">
+     * </code></pre>
      * Ignoring stubs can be used with <b>verification in order</b>:
      * <pre class="code"><code class="java">
      *  List list = mock(List.class);
