@@ -13,7 +13,9 @@ How to build mockito?
 ---------------------------
 How to release mockito?
 ---------------------------
-1. [In progress] Use gradle. Run: 'gradlew test.release release.maven release'
+# [In progress] Use gradle. Run:
+# gradlew release
+# check-in any changes
 
 ---------------------------
 More info.
@@ -22,15 +24,70 @@ We will move fully into gradle at some point. For now, ant import in gradle work
 """
 }
 
-task release << {
-
+task release {
+    if (gradle.startParameter.taskNames == ['release']) {
+        gradle.startParameter.taskNames = ['updateLicenseHeaders', 'checkDirtyChanges']
+    }
 }
 
-task replaceHeaders << {
+gradle.taskGraph.whenReady {
+    //validate the existence of project properties
+    if (it.hasTask(':uploadToGoogle')) {
+        assert project.hasProperty('googleUser') : "Google upload not possible - googleUser property not provided. Pass -PgoogleUser=someone via command line"
+        assert project.hasProperty('googlePwd') : "Google upload not possible - googlePwd property not provided. Pass -PgooglePwd=secret via command line"
+
+        assert project.uploadToGoogle.inputs
+    }
+}
+
+task uploadToGoogle {
+    mockitoZip = file("target/mockito-${version}.zip")
+    mockitoAllJar = file("target/mockito-all-${version}.jar")
+
+    validateInputExists = { assert mockitoZip.exists() && mockitoAllJar.exists() : "" +
+        "Google upload not possible - no binaries to upload. Please run 'ant test.release release.maven' first.\n" +
+        "" }
+
+    inputs.files mockitoZip, mockitoAllJar
+    doLast {
+        ant {
+            //declare ant task
+            taskdef(name:"gcupload", classname:"net.bluecow.googlecode.ant.GoogleCodeUploadTask") {
+                classpath {
+                    fileset(dir: 'lib/build', includes: 'ant-googlecode-*.jar')
+                }
+            }
+
+            //acquire the user/password (usually supplied via command line)
+            def googleUser = project.getProperty('googleUser')
+            def googlePwd  = project.getProperty('googlePwd')
+
+            //upload zip
+            logger.lifecycle "Uploading $mockitoZip ..."
+
+            gcupload username:googleUser, password:googlePwd, projectname:"mockito",
+                filename:mockitoZip, targetfilename:mockitoZip.name, summary:"All jars, source and javadocs",
+                labels:"Featured"
+
+            logger.lifecycle "Uploading $mockitoAllJar ..."
+
+            //upload jar
+            gcupload username:googleUser, password:googlePwd, projectname:"mockito",
+                filename:mockitoAllJar, targetfilename:mockitoAllJar.name, summary:"Single jar, includes source",
+                labels:"Featured"
+        }
+    }
+}
+
+task checkDirtyChanges << {
+    //to be implemented
+}
+
+task updateLicenseHeaders << {
     def files = fileTree('test') + fileTree('src')
     files = files.filter { !it.name.endsWith('.html') && !it.name.endsWith('.txt')}
 
-    println "Found ${files.files.size()} files to verify license"
+    logger.lifecycle("Updating licence headers in source... Found ${files.files.size()} files to check the license.")
 
     def header = """/*
  * Copyright (c) 2007 Mockito contributors
@@ -46,10 +103,10 @@ task replaceHeaders << {
         if (content =~ ignoreHdr) {
           //this means we're ok with non-standard header
         } else if (!(content =~ currentHdr)) {
-          println "header is missing for file: ${file} - replacing"
+          logger.lifecycle "missing header in: ${file} - prepending..."
           file.text = header + content
         } else if (!content.find(currentHdr)?.contains(header)) {
-          println "header is different for file: ${file} - replacing"
+          logger.lifecycle "different header in: ${file} - replacing..."
           content = content.replaceFirst(currentHdr, header + "package org.")
           file.text = content
         }
