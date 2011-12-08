@@ -22,6 +22,10 @@ public class MockName implements Serializable {
         }
     }
 
+    public MockName(String mockName) {
+        this.mockName = mockName;
+    }
+
     private static String toInstanceName(Class<?> clazz) {
         String className = clazz.getSimpleName();
         if (className.length() == 0) {

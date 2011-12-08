@@ -20,7 +20,7 @@ import java.util.Set;
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  * <p>
  * {@link Mockito} extends Matchers so to get access to all matchers just import Mockito class statically.
- * <pre>
+ * <pre class="code"><code class="java">
  *  //stubbing using anyInt() argument matcher
  *  when(mockedList.get(anyInt())).thenReturn("element");
  *  
@@ -29,7 +29,7 @@ import java.util.Set;
  *  
  *  //you can also verify using argument matcher
  *  verify(mockedList).get(anyInt());
- * </pre>
+ * </code></pre>
  * Scroll down to see all methods - full list of matchers.
  * <p>
  * <b>Warning:</b>
@@ -37,19 +37,26 @@ import java.util.Set;
  * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
  * <p>
  * E.g: (example shows verification but the same applies to stubbing):
- * <pre>
+ * <pre class="code"><code class="java">
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
  *   //above is correct - eq() is also an argument matcher
  *   
  *   verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  *   //above is incorrect - exception will be thrown because third argument is given without argument matcher.
- * </pre>
+ * </code></pre>
  * <p>
- * Matcher methods like anyObject(), eq() <b>do not</b> return matchers.
+ * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
  * This implementation is due static type safety imposed by java compiler.
- * The consequence is that you cannot use anyObject(), eq() methods outside of verified/stubbed method.
- * 
+ * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
+ *
+ * <p>
+ * <b>Warning 2:</b>
+ * <p>
+ * The any family methods <b>*don't do any type checks*</b>, those are only here to avoid casting
+ * in your code. If you want to perform type checks use the {@link #isA(Class)} method.
+ * This <b>might</b> however change (type checks could be added) in a future major release.
+ *
  * <h1>Custom Argument Matchers</h1>
  * 
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}.
@@ -62,7 +69,7 @@ import java.util.Set;
  * <p>
  * Example:
  * 
- * <pre>
+ * <pre class="code"><code class="java">
  *   class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *      public boolean matches(Object list) {
  *          return ((List) list).size() == 2;
@@ -76,14 +83,14 @@ import java.util.Set;
  *   mock.addAll(Arrays.asList("one", "two"));
  *   
  *   verify(mock).addAll(argThat(new IsListOfTwoElements()));
- * </pre>
+ * </code></pre>
  * 
  * To keep it readable you may want to extract method, e.g:
- * <pre>
+ * <pre class="code"><code class="java">
  *   verify(mock).addAll(<b>argThat(new IsListOfTwoElements())</b>);
  *   //becomes
  *   verify(mock).addAll(<b>listOfTwoElements()</b>);
- * </pre>
+ * </code></pre>
  *
  * <b>Warning:</b> Be reasonable with using complicated argument matching, especially custom argument matchers, as it can make the test less readable. 
  * Sometimes it's better to implement equals() for arguments that are passed to mocks 
@@ -100,7 +107,11 @@ public class Matchers {
     private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     /**
-     * any boolean, Boolean or null.
+     * Any <code>boolean</code>, <code>Boolean</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -111,7 +122,11 @@ public class Matchers {
     }
 
     /**
-     * any byte, Byte or null
+     * Any <code>byte</code>, <code>Byte</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -122,7 +137,11 @@ public class Matchers {
     }
 
     /**
-     * any char, Character or null.
+     * Any <code>char</code>, <code>Character</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -133,7 +152,11 @@ public class Matchers {
     }
 
     /**
-     * any int, Integer or null.
+     * Any int, Integer or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -144,7 +167,11 @@ public class Matchers {
     }
 
     /**
-     * any long, Long or null.
+     * Any <code>long</code>, <code>Long</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -155,7 +182,11 @@ public class Matchers {
     }
 
     /**
-     * any float, Float or null.
+     * Any <code>float</code>, <code>Float</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -166,7 +197,11 @@ public class Matchers {
     }
 
     /**
-     * any double, Double or null.
+     * Any <code>double</code>, <code>Double</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -177,7 +212,11 @@ public class Matchers {
     }
 
     /**
-     * any short, Short or null.
+     * Any <code>short</code>, <code>Short</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -188,7 +227,11 @@ public class Matchers {
     }
 
     /**
-     * any Object or null.
+     * Any <code>Object</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * Has aliases: {@link #any()} and {@link #any(Class clazz)}
      * <p>
@@ -205,7 +248,7 @@ public class Matchers {
      * Any vararg, meaning any number and values of arguments.
      * <p>
      * Example:
-     * <pre>
+     * <pre class="code"><code class="java">
      *   //verification:
      *   mock.foo(1, 2);
      *   mock.foo(1, 2, 3, 4);
@@ -219,7 +262,7 @@ public class Matchers {
      *   System.out.println(mock.foo(1, 2));
      *   //also prints 100
      *   System.out.println(mock.foo(1, 2, 3, 4));
-     * </pre>
+     * </code></pre>
      * See examples in javadoc for {@link Matchers} class
      *
      * @return <code>null</code>.
@@ -229,12 +272,16 @@ public class Matchers {
     }
     
     /**
-     * any kind object, not necessary of the given class.
+     * Any kind object, not necessary of the given class.
      * The class argument is provided only to avoid casting.
      * <p>
-     * Sometimes looks better than anyObject() - especially when explicit casting is required
+     * Sometimes looks better than <code>anyObject()</code> - especially when explicit casting is required
      * <p>
      * Alias to {@link Matchers#anyObject()}
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -246,9 +293,13 @@ public class Matchers {
     }
     
     /**
-     * any object or null 
+     * Any object or <code>null</code>.
      * <p>
      * Shorter alias to {@link Matchers#anyObject()}
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -259,7 +310,11 @@ public class Matchers {
     }
 
     /**
-     * any String or null.
+     * Any <code>String</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -270,7 +325,11 @@ public class Matchers {
     }
     
     /**
-     * any List or null.
+     * Any <code>List</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -281,10 +340,14 @@ public class Matchers {
     }    
     
     /**
-     * generic friendly alias to {@link Matchers#anyList()}.
+     * Generic friendly alias to {@link Matchers#anyList()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * any List or null.
+     * Any <code>List</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -296,7 +359,11 @@ public class Matchers {
     }    
     
     /**
-     * any Set or null
+     * Any <code>Set</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -307,10 +374,14 @@ public class Matchers {
     }
     
     /**
-     * generic friendly alias to {@link Matchers#anySet()}.
+     * Generic friendly alias to {@link Matchers#anySet()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * any Set or null
+     * Any <code>Set</code> or <code>null</code>
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -322,7 +393,11 @@ public class Matchers {
     }
 
     /**
-     * any Map or null.
+     * Any <code>Map</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -333,10 +408,14 @@ public class Matchers {
     }
 
     /**
-     * generic friendly alias to {@link Matchers#anyMap()}.
+     * Generic friendly alias to {@link Matchers#anyMap()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * any Map or null
+     * Any <code>Map</code> or <code>null</code>
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -349,7 +428,11 @@ public class Matchers {
     }
     
     /**
-     * any Collection or null.
+     * Any <code>Collection</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -360,10 +443,14 @@ public class Matchers {
     }    
     
     /**
-     * generic friendly alias to {@link Matchers#anyCollection()}. 
+     * Generic friendly alias to {@link Matchers#anyCollection()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.     
      * <p>
-     * any Collection or null.
+     * Any <code>Collection</code> or <code>null</code>.
+     * <p>
+     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * in your code. This might however change (type checks could be added) in a
+     * future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -375,7 +462,7 @@ public class Matchers {
     }    
 
     /**
-     * Object argument that implements the given class. 
+     * <code>Object</code> argument that implements the given class.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -390,7 +477,7 @@ public class Matchers {
     }
 
     /**
-     * boolean argument that is equal to the given value.
+     * <code>boolean</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -403,7 +490,7 @@ public class Matchers {
     }
 
     /**
-     * byte argument that is equal to the given value.
+     * <code>byte</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -416,7 +503,7 @@ public class Matchers {
     }
 
     /**
-     * char argument that is equal to the given value.
+     * <code>char</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -429,7 +516,7 @@ public class Matchers {
     }
 
     /**
-     * double argument that is equal to the given value.
+     * <code>double</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -442,7 +529,7 @@ public class Matchers {
     }
 
     /**
-     * float argument that is equal to the given value.
+     * <code>float</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -455,7 +542,7 @@ public class Matchers {
     }
     
     /**
-     * int argument that is equal to the given value.
+     * <code>int</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -468,7 +555,7 @@ public class Matchers {
     }
 
     /**
-     * long argument that is equal to the given value.
+     * <code>long</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -481,7 +568,7 @@ public class Matchers {
     }
 
     /**
-     * short argument that is equal to the given value.
+     * <code>short</code> argument that is equal to the given value.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -546,7 +633,7 @@ public class Matchers {
     }
 
     /**
-     * null argument.
+     * <code>null</code> argument.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -557,7 +644,7 @@ public class Matchers {
     }
 
     /**
-     * null argument.
+     * <code>null</code> argument.
      * The class argument is provided to avoid casting.
      * <p>
      * See examples in javadoc for {@link Matchers} class
@@ -570,7 +657,7 @@ public class Matchers {
     }
 
     /**
-     * not null argument.
+     * Not <code>null</code> argument.
      * <p>
      * alias to {@link Matchers#isNotNull()}
      * <p>
@@ -583,7 +670,7 @@ public class Matchers {
     }
 
     /**
-     * not null argument, not necessary of the given class.
+     * Not <code>null</code> argument, not necessary of the given class.
      * The class argument is provided to avoid casting.
      * <p>
      * alias to {@link Matchers#isNotNull(Class)}
@@ -598,7 +685,7 @@ public class Matchers {
     }
     
     /**
-     * not null argument.
+     * Not <code>null</code> argument.
      * <p>
      * alias to {@link Matchers#notNull()}
      * <p>
@@ -611,7 +698,7 @@ public class Matchers {
     }
 
     /**
-     * not null argument, not necessary of the given class.
+     * Not <code>null</code> argument, not necessary of the given class.
      * The class argument is provided to avoid casting.
      * <p>
      * alias to {@link Matchers#notNull(Class)}
@@ -626,7 +713,7 @@ public class Matchers {
     }
 
     /**
-     * String argument that contains the given substring.
+     * <code>String</code> argument that contains the given substring.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -639,7 +726,7 @@ public class Matchers {
     }
 
     /**
-     * String argument that matches the given regular expression.
+     * <code>String</code> argument that matches the given regular expression.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -652,7 +739,7 @@ public class Matchers {
     }
 
     /**
-     * String argument that ends with the given suffix.
+     * <code>String</code> argument that ends with the given suffix.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -665,7 +752,7 @@ public class Matchers {
     }
 
     /**
-     * String argument that starts with the given prefix.
+     * <code>String</code> argument that starts with the given prefix.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -680,8 +767,8 @@ public class Matchers {
     /**
      * Allows creating custom argument matchers.
      * <p>
-     * In rare cases when the parameter is a primitive then you *must* use relevant intThat(), floatThat(), etc. method.
-     * This way you will avoid NullPointerException during autounboxing  
+     * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
+     * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
      * <p>
      * See examples in javadoc for {@link ArgumentMatcher} class
      * 
@@ -693,7 +780,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Character</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -705,7 +792,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Boolean</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -717,7 +804,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Byte</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -729,7 +816,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Short</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -741,7 +828,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Integer</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -753,7 +840,7 @@ public class Matchers {
     }
 
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Long</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -765,7 +852,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Float</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -777,7 +864,7 @@ public class Matchers {
     }
     
     /**
-     * Allows creating custom argument matchers.
+     * Allows creating custom <code>Double</code> argument matchers.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 

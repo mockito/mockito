@@ -15,12 +15,12 @@ import org.mockito.stubbing.Answer;
  * Returns elements of the collection. Keeps returning the last element forever.
  * Might be useful on occasion when you have a collection of elements to return.
  * <p>
- * <pre>
+ * <pre class="code"><code class="java">
  *   //this:
  *   when(mock.foo()).thenReturn(1, 2, 3);
  *   //is equivalent to:
  *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
- * <pre>
+ * <pre class="code"><code class="java">
  */
 @SuppressWarnings("unchecked")
 public class ReturnsElementsOf implements Answer {

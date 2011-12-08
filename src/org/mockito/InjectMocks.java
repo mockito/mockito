@@ -42,7 +42,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *
  * <p>
  * Example:
- * <pre>
+ * <pre class="code"><code class="java">
  *   public class ArticleManagerTest extends SampleBaseTestCase {
  *
  *       &#064;Mock private ArticleCalculator calculator;
@@ -63,7 +63,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *           MockitoAnnotations.initMocks(this);
  *       }
  *   }
- * </pre>
+ * </code></pre>
  * </p>
  *
  * <p>
@@ -78,16 +78,16 @@ import static java.lang.annotation.ElementType.FIELD;
  * However fields that are static or final will be ignored.</p>
  *
  * <p>So on the field that needs injection, for example constructor injection will happen here :</p>
- * <pre>
+ * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       ArticleManager(ArticleCalculator calculator, ArticleDatabase database) {
  *           // parameterized constructor
  *       }
  *   }
- * </pre>
+ * </code></pre>
  *
  * <p>Property setter injection will happen here :</p>
- * <pre>
+ * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       ArticleManager() {
  *           // no-arg constructor
@@ -97,19 +97,19 @@ import static java.lang.annotation.ElementType.FIELD;
  *           // setter
  *       }
  *   }
- * </pre>
+ * </code></pre>
  *
  * <p>Field injection will be used here :</p>
- * <pre>
+ * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       private ArticleDatabase database;
  *       private ArticleCalculator calculator;
  *   }
- * </pre>
+ * </code></pre>
  * </p>
  *
  * <p>And finally, no injection will happen on the type in this case:</p>
- * <pre>
+ * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       private ArticleDatabase database;
  *       private ArticleCalculator calculator;
@@ -119,7 +119,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *           // flag is not mockable anyway
  *       }
  *   }
- * </pre>
+ * </code></pre>
  * </p>
  *
  *

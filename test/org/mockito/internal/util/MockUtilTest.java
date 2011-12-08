@@ -5,6 +5,7 @@
 
 package org.mockito.internal.util;
 
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.Enhancer;
@@ -85,5 +86,21 @@ public class MockUtilTest extends TestBase {
         assertFalse(mockUtil.isSpy("i mock a mock"));
         assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
         assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
+    }
+
+    @Test
+    public void should_redefine_MockName_if_surrogate() {
+        List mock = Mockito.mock(List.class);
+        mockUtil.redefineMockNameIfSurrogate(mock, "newName");
+
+        Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("newName");
+    }
+
+    @Test
+    public void should_not_redefine_MockName_if_surrogate() {
+        List mock = Mockito.mock(List.class, "original");
+        mockUtil.redefineMockNameIfSurrogate(mock, "newName");
+
+        Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");
     }
 }

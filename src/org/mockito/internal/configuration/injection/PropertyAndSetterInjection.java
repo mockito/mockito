@@ -29,7 +29,7 @@ import java.util.*;
  *   <li>for each field in @InjectMocks type ordered from sub-type to super-type
  *     <ul>
  *     <li>find mock candidate by type
- *     <li>if more than *one* candidate find mock candidate on name
+ *     <li>if more than <b>*one*</b> candidate find mock candidate on name
  *     <li>if one mock candidate then
  *       <ul>
  *       <li>set mock by property setter if possible
@@ -72,7 +72,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
 
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
-        Set<Object> mocksToBeInjected = new HashSet<Object>(mockCandidates);
+        // Set<Object> mocksToBeInjected = new HashSet<Object>(mockCandidates);
         FieldInitializationReport report = null;
         try {
             report = new FieldInitializer(fieldOwner, field).initialize();
@@ -90,7 +90,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
         while (fieldClass != Object.class) {
-            injectionOccurred |= injectMockCandidate(fieldClass, mocksToBeInjected, fieldInstanceNeedingInjection);
+            injectionOccurred |= injectMockCandidate(fieldClass, new HashSet<Object>(mockCandidates), fieldInstanceNeedingInjection);
             fieldClass = fieldClass.getSuperclass();
         }
         return injectionOccurred;
