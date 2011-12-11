@@ -10,6 +10,7 @@ glob:*.iws
 glob:cglib-and-asm/.gradle
 glob:cglib-and-asm/build
 glob:build
+glob:.DS_Store
 glob:.gradle
 
 syntax: regexp
