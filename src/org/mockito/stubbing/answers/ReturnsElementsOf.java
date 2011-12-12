@@ -20,19 +20,18 @@ import org.mockito.stubbing.Answer;
  *   when(mock.foo()).thenReturn(1, 2, 3);
  *   //is equivalent to:
  *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
- * <pre class="code"><code class="java">
+ * </code></pre>
  */
-@SuppressWarnings("unchecked")
-public class ReturnsElementsOf implements Answer {
+public class ReturnsElementsOf implements Answer<Object> {
 
-    final LinkedList elements;
+    private final LinkedList<Object> elements;
 
-    public ReturnsElementsOf(Collection elements) {
+    public ReturnsElementsOf(Collection<?> elements) {
         if (elements == null) {
             throw new MockitoException("ReturnsElementsOf does not accept null as constructor argument.\n" +
             		"Please pass a collection instance");
         }
-        this.elements = new LinkedList(elements);
+        this.elements = new LinkedList<Object>(elements);
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
