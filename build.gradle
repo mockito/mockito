@@ -41,6 +41,7 @@ gradle.taskGraph.whenReady {
 }
 
 task uploadToGoogle {
+    def version = '1.9.0'
     mockitoZip = file("target/mockito-${version}.zip")
     mockitoAllJar = file("target/mockito-all-${version}.jar")
 
