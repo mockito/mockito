@@ -16,11 +16,11 @@ import org.mockito.verification.VerificationMode;
 
 import java.util.List;
 
-public class TimesNow implements VerificationMode, VerificationInOrderMode {
+public class Calls implements VerificationMode, VerificationInOrderMode {
 
     final int wantedCount;
 
-    public TimesNow( int wantedNumberOfInvocations ) {
+    public Calls(int wantedNumberOfInvocations) {
         if( wantedNumberOfInvocations <= 0 ) {
             throw new MockitoException( "Negative and zero values are not allowed here" );
         }
@@ -28,7 +28,7 @@ public class TimesNow implements VerificationMode, VerificationInOrderMode {
     }
 
     public void verify(VerificationData data) {
-        throw new MockitoException( "timesNow is only intended to work with InOrder" );
+        throw new MockitoException( "calls is only intended to work with InOrder" );
     }
 
     public void verifyInOrder(VerificationDataInOrder data) {

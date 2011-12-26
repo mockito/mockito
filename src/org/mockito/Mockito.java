@@ -1824,7 +1824,7 @@ public class Mockito extends Matchers {
     /**
      * Allows non-greedy verification in order.  For example
      * <pre class="code"><code class="java">
-     *   inOrder.verify( mock, timesNow( 2 )).someMethod( "some arg" );
+     *   inOrder.verify( mock, calls( 2 )).someMethod( "some arg" );
      * </code></pre>
      * <ul>
      * <li>will not fail if the method is called 3 times, unlike times( 2 )</li>
@@ -1834,8 +1834,8 @@ public class Mockito extends Matchers {
      * @param wantedNumberOfInvocations number of invocations to verify
      * @return  verification mode
      */
-    public static VerificationMode timesNow( int wantedNumberOfInvocations ){
-        return VerificationModeFactory.timesNow( wantedNumberOfInvocations );
+    public static VerificationMode calls( int wantedNumberOfInvocations ){
+        return VerificationModeFactory.calls( wantedNumberOfInvocations );
     }
     
     /**
