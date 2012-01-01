@@ -86,7 +86,7 @@ public interface Stubber {
     Stubber doThrow(Throwable toBeThrown);
 
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class<? extends Throwable>)} style:
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class)} style:
      * <pre class="code"><code class="java">
      *   doThrow(RuntimeException.class).
      *   doThrow(IllegalArgumentException.class)

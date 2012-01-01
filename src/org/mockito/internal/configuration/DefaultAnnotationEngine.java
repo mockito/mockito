@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
  * <p>
  * The {@link #process(Class, Object)} method implementation <strong>does not</strong> process super classes!
  *
- * @see {@link MockitoAnnotations}
+ * @see MockitoAnnotations
  */
 @SuppressWarnings("unchecked")
 public class DefaultAnnotationEngine implements AnnotationEngine {
