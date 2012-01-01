@@ -303,12 +303,18 @@
   </target>
 
   <target name="javadoc">
-    <javadoc sourcepath="${src.dir}" destdir="${javadoc.dir}"
-             stylesheetfile="javadoc/stylesheet.css" header=""
-      author="true" version="true" use="true" windowtitle="Mockito API">
+    <javadoc
+            sourcepath="${src.dir}"
+            destdir="${javadoc.dir}"
+            stylesheetfile="javadoc/stylesheet.css"
+            header=""
+            author="true"
+            version="true"
+            use="true"
+            windowtitle="Mockito ${version} API">
       <doctitle>
         <![CDATA[
-          <h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito API.</h1>
+          <h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${version} API.</h1>
         ]]>
       </doctitle>
       <header>
