@@ -23,7 +23,7 @@ public class LenientCopyToolTest extends TestBase {
         private String privateInherited = "private";
     }
     
-    static class SomeObject extends InheritMe {
+    public static class SomeObject extends InheritMe {
         @SuppressWarnings("unused")
         // required because static fields needs to be excluded from copying
         private static int staticField = -100;
@@ -39,7 +39,7 @@ public class LenientCopyToolTest extends TestBase {
         }
     }
 
-    static class SomeOtherObject {
+    public static class SomeOtherObject {
     }
 
     private SomeObject from = new SomeObject(100);
