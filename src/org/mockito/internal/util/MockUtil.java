@@ -4,22 +4,20 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.cglib.proxy.Callback;
-import org.mockito.cglib.proxy.Factory;
+import java.io.Serializable;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.IMockMaker;
 import org.mockito.internal.InvocationNotifierHandler;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
-import org.mockito.internal.creation.MethodInterceptorFilter;
+import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.reflection.LenientCopyTool;
-
-import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
-    
+
+    private static final IMockMaker mockMaker = ClassPathLoader.getMockMaker();
     private final MockCreationValidator creationValidator;
 
     public MockUtil(MockCreationValidator creationValidator) {
@@ -35,13 +33,10 @@ public class MockUtil {
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
 
-        settings.initiateMockName(classToMock);
-
-        MethodInterceptorFilter filter = newMethodInterceptorFilter(settings);
-        Class<?>[] ancillaryTypes = prepareAncillaryTypes(settings);
-
-
-        T mock = ClassImposterizer.INSTANCE.imposterise(filter, classToMock, ancillaryTypes);
+        InvocationNotifierHandler<T> mockHandler = new InvocationNotifierHandler<T>(
+                new MockHandler<T>(settings), settings);
+        Class<?>[] extraInterfaces = prepareAncillaryTypes(settings);
+        T mock = mockMaker.createMock(classToMock, extraInterfaces, mockHandler, settings);
 
         Object spiedInstance = settings.getSpiedInstance();
         if (spiedInstance != null) {
@@ -67,15 +62,12 @@ public class MockUtil {
     }
 
     public <T> void resetMock(T mock) {
-        MockHandlerInterface<T> oldMockHandler = getMockHandler(mock);
-        MethodInterceptorFilter newFilter = newMethodInterceptorFilter(oldMockHandler.getMockSettings());
-        ((Factory) mock).setCallback(0, newFilter);
-    }
-
-    private <T> MethodInterceptorFilter newMethodInterceptorFilter(MockSettingsImpl settings) {
-        MockHandler<T> mockHandler = new MockHandler<T>(settings);
-        InvocationNotifierHandler<T> invocationNotifierHandler = new InvocationNotifierHandler<T>(mockHandler, settings);
-        return new MethodInterceptorFilter(invocationNotifierHandler, settings);
+        InvocationNotifierHandler oldHandler
+                = (InvocationNotifierHandler) mockMaker.getHandler(mock);
+        MockSettingsImpl settings = oldHandler.getMockSettings();
+        InvocationNotifierHandler<T> newHandler = new InvocationNotifierHandler<T>(
+                new MockHandler<T>(settings), settings);
+        mockMaker.resetMock(mock, newHandler, settings);
     }
 
     public <T> MockHandlerInterface<T> getMockHandler(T mock) {
@@ -84,7 +76,7 @@ public class MockUtil {
         }
 
         if (isMockitoMock(mock)) {
-            return (MockHandlerInterface) getInterceptor(mock).getHandler();
+            return (MockHandlerInterface) mockMaker.getHandler(mock);
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
@@ -99,19 +91,7 @@ public class MockUtil {
     }
 
     private <T> boolean isMockitoMock(T mock) {
-        return getInterceptor(mock) != null;
-    }
-
-    private <T> MethodInterceptorFilter getInterceptor(T mock) {
-        if (!(mock instanceof Factory)) {
-            return null;
-        }
-        Factory factory = (Factory) mock;
-        Callback callback = factory.getCallback(0);
-        if (callback instanceof MethodInterceptorFilter) {
-            return (MethodInterceptorFilter) callback;
-        }
-        return null;
+        return mockMaker.getHandler(mock) != null;
     }
 
     public MockName getMockName(Object mock) {

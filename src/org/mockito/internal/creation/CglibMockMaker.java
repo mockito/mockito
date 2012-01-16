@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2012 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.mockito.internal.creation;
+
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.Factory;
+import org.mockito.internal.IMockMaker;
+import org.mockito.internal.MockitoInvocationHandler;
+import org.mockito.internal.creation.jmock.ClassImposterizer;
+
+/**
+ * A MockMaker that uses cglib to generate mocks on a JVM.
+ */
+public final class CglibMockMaker implements IMockMaker {
+
+    public <T> T createMock(Class<T> typeToMock, Class<?>[] extraInterfaces,
+            MockitoInvocationHandler handler, MockSettingsImpl settings) {
+        settings.initiateMockName(typeToMock);
+        return ClassImposterizer.INSTANCE.imposterise(
+                new MethodInterceptorFilter(handler, settings), typeToMock, extraInterfaces);
+    }
+    
+    public void resetMock(Object mock, MockitoInvocationHandler newHandler, MockSettingsImpl settings) {
+        ((Factory) mock).setCallback(0, new MethodInterceptorFilter(newHandler, settings));
+    }
+
+    public MockitoInvocationHandler getHandler(Object mock) {
+        if (!(mock instanceof Factory)) {
+            return null;
+        }
+        Factory factory = (Factory) mock;
+        Callback callback = factory.getCallback(0);
+        if (!(callback instanceof MethodInterceptorFilter)) {
+            return null;
+        }
+        return ((MethodInterceptorFilter) callback).getHandler();
+    }
+}

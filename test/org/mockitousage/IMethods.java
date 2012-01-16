@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.text.ChangedCharSetException;
-
 public interface IMethods {
 
     boolean booleanReturningMethod();
@@ -156,7 +154,7 @@ public interface IMethods {
 
     String oneArray(Object[] array);
     
-    String canThrowException() throws ChangedCharSetException, CharacterCodingException; 
+    String canThrowException() throws CharacterCodingException; 
 
     String oneArray(String[] array);
 

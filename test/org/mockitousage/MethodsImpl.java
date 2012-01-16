@@ -4,10 +4,13 @@
  */
 package org.mockitousage;
 
-import javax.swing.text.ChangedCharSetException;
 import java.io.IOException;
-import java.util.*;
 import java.nio.charset.CharacterCodingException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MethodsImpl implements IMethods {
     public boolean booleanReturningMethod() {
@@ -290,7 +293,7 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
-    public String canThrowException() throws ChangedCharSetException, CharacterCodingException {
+    public String canThrowException() throws CharacterCodingException {
         return null;
     }
 
