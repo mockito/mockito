@@ -2,12 +2,20 @@
  * Copyright (c) 2012 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal;
+package org.mockito.plugins;
 
-import org.mockito.plugins.MockSettingsInfo;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.internal.Incubating;
 
-public interface IMockMaker {
+/**
+ * The facility to create mocks. By default, a cglib/asm based implementation is used.
+ * It is possible to configure your own mock maker so that dynamic proxies are created without cglib/asm.
+ * For example, the android users can use a MockMaker that can work with Dalvik virtual machine
+ * and hence bring Mockito to android apps developers.
+ *
+ * TODO: way more documentation and examples.
+ */
+@Incubating
+public interface MockMaker {
 
     /**
      * Returns a new instance of {@code typeToMock} that implements the

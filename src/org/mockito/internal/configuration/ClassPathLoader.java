@@ -7,7 +7,7 @@ package org.mockito.internal.configuration;
 import java.util.ServiceLoader;
 import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
-import org.mockito.internal.IMockMaker;
+import org.mockito.plugins.MockMaker;
 import org.mockito.internal.creation.CglibMockMaker;
 
 public class ClassPathLoader {
@@ -42,8 +42,8 @@ public class ClassPathLoader {
      * the classpath to find a mock maker plugin if one is available, allowing
      * mockito to run on alternative platforms like Android.
      */
-    public static IMockMaker getMockMaker() {
-        for (IMockMaker mockMaker : ServiceLoader.load(IMockMaker.class)) {
+    public static MockMaker getMockMaker() {
+        for (MockMaker mockMaker : ServiceLoader.load(MockMaker.class)) {
             return mockMaker; // return the first one service loader finds (if any)
         }
         return new CglibMockMaker(); // default implementation

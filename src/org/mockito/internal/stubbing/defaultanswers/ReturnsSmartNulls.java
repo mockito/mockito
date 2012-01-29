@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 import org.mockito.Mockito;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.IMockMaker;
+import org.mockito.plugins.MockMaker;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.Location;
@@ -40,7 +40,7 @@ import org.mockito.stubbing.Answer;
 public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 7618312406617949441L;
-    private static IMockMaker mockMaker = ClassPathLoader.getMockMaker();
+    private static MockMaker mockMaker = ClassPathLoader.getMockMaker();
 
     private final class ThrowingInterceptor implements MockitoInvocationHandler {
         private final InvocationOnMock invocation;

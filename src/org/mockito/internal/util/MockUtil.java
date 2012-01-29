@@ -6,7 +6,7 @@ package org.mockito.internal.util;
 
 import java.io.Serializable;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.IMockMaker;
+import org.mockito.plugins.MockMaker;
 import org.mockito.internal.InvocationNotifierHandler;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
@@ -17,7 +17,7 @@ import org.mockito.internal.util.reflection.LenientCopyTool;
 @SuppressWarnings("unchecked")
 public class MockUtil {
 
-    private static final IMockMaker mockMaker = ClassPathLoader.getMockMaker();
+    private static final MockMaker mockMaker = ClassPathLoader.getMockMaker();
     private final MockCreationValidator creationValidator;
 
     public MockUtil(MockCreationValidator creationValidator) {
