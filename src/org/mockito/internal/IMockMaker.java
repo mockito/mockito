@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.plugins.MockSettingsInfo;
 
 public interface IMockMaker {
 
@@ -14,7 +14,7 @@ public interface IMockMaker {
      * returned instance will be delegated to {@code handler}.
      */
     <T> T createMock(Class<T> typeToMock, Class<?>[] extraInterfaces,
-            MockitoInvocationHandler handler, MockSettingsImpl settings);
+            MockitoInvocationHandler handler, MockSettingsInfo settings);
 
     /**
      * Returns the handler for the {@code mock}, or null if {@code mock} was not
@@ -26,5 +26,5 @@ public interface IMockMaker {
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
      */
     public void resetMock(Object mock, MockitoInvocationHandler newHandler,
-            MockSettingsImpl settings);
+                          MockSettingsInfo settings);
 }

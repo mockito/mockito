@@ -33,6 +33,8 @@ public class MockUtil {
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
 
+        settings.initiateMockName(classToMock);
+
         InvocationNotifierHandler<T> mockHandler = new InvocationNotifierHandler<T>(
                 new MockHandler<T>(settings), settings);
         Class<?>[] extraInterfaces = prepareAncillaryTypes(settings);
