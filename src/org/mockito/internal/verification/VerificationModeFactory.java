@@ -25,6 +25,10 @@ public class VerificationModeFactory {
         return new Times(wantedNumberOfInvocations);
     }
 
+    public static Calls calls(int wantedNumberOfInvocations) {
+        return new Calls( wantedNumberOfInvocations );
+    }
+
     public static NoMoreInteractions noMoreInteractions() {
         return new NoMoreInteractions();
     }

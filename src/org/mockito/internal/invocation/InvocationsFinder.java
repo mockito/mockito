@@ -62,6 +62,15 @@ public class InvocationsFinder {
         return firstChunk;
     }
     
+    public Invocation findFirstMatchingUnverifiedInvocation( List<Invocation> invocations, InvocationMatcher wanted, InOrderContext context ){
+        for( Invocation invocation : removeVerifiedInOrder( invocations, context )){
+            if( wanted.matches( invocation )){
+                return invocation;
+            }
+        }
+        return null;
+    }
+    
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation firstSimilar = null;
         for (Invocation invocation : invocations) {

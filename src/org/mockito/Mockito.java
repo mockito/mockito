@@ -1822,6 +1822,23 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Allows non-greedy verification in order.  For example
+     * <pre class="code"><code class="java">
+     *   inOrder.verify( mock, calls( 2 )).someMethod( "some arg" );
+     * </code></pre>
+     * <ul>
+     * <li>will not fail if the method is called 3 times, unlike times( 2 )</li>
+     * <li>will not mark the third invocation as verified, unlike atLeast( 2 )</li>
+     * </ul>
+     * This verification mode can only be used with in order verification.
+     * @param wantedNumberOfInvocations number of invocations to verify
+     * @return  verification mode
+     */
+    public static VerificationMode calls( int wantedNumberOfInvocations ){
+        return VerificationModeFactory.calls( wantedNumberOfInvocations );
+    }
+    
+    /**
      * Allows checking if given method was the only one invoked. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, only()).someMethod();
