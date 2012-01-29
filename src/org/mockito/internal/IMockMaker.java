@@ -5,6 +5,7 @@
 package org.mockito.internal;
 
 import org.mockito.plugins.MockSettingsInfo;
+import org.mockito.plugins.MockitoInvocationHandler;
 
 public interface IMockMaker {
 
@@ -20,11 +21,11 @@ public interface IMockMaker {
      * Returns the handler for the {@code mock}, or null if {@code mock} was not
      * a mock object created by {@link #createMock}.
      */
-    public MockitoInvocationHandler getHandler(Object mock);
+    MockitoInvocationHandler getHandler(Object mock);
 
     /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
      */
-    public void resetMock(Object mock, MockitoInvocationHandler newHandler,
+    void resetMock(Object mock, MockitoInvocationHandler newHandler,
                           MockSettingsInfo settings);
 }

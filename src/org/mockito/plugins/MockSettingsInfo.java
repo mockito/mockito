@@ -5,11 +5,12 @@
 
 package org.mockito.plugins;
 
+import org.mockito.internal.Incubating;
+
 /**
- * This API is incubating. It may change.
- * <p>
  * Informs about the mock settings
  */
+@Incubating
 public interface MockSettingsInfo {
 
     /**

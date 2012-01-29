@@ -7,7 +7,7 @@ package org.mockito.internal.creation;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.internal.IMockMaker;
-import org.mockito.internal.MockitoInvocationHandler;
+import org.mockito.plugins.MockitoInvocationHandler;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.plugins.MockSettingsInfo;
 

@@ -5,23 +5,18 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 
 import org.mockito.Mockito;
-import org.mockito.cglib.proxy.MethodInterceptor;
-import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.IMockMaker;
-import org.mockito.internal.MockHandler;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.plugins.MockitoInvocationHandler;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -47,12 +42,11 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
     private static final long serialVersionUID = 7618312406617949441L;
     private static IMockMaker mockMaker = ClassPathLoader.getMockMaker();
 
-    private final class ThrowingInterceptor extends MockHandler<Object> {
+    private final class ThrowingInterceptor implements MockitoInvocationHandler {
         private final InvocationOnMock invocation;
         private final Location location = new Location();
 
         private ThrowingInterceptor(InvocationOnMock invocation) {
-            super(new MockSettingsImpl());
             this.invocation = invocation;
         }
 
@@ -77,7 +71,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
         Class<?> type = invocation.getMethod().getReturnType();
         if (!type.isPrimitive() && !Modifier.isFinal(type.getModifiers())) {
             ThrowingInterceptor handler = new ThrowingInterceptor(invocation);
-            return mockMaker.createMock(type, new Class[0], handler, handler.getMockSettings());
+            return mockMaker.createMock(type, new Class[0], handler, new MockSettingsImpl());
         }
         return null;
     }
