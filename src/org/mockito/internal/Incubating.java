@@ -9,7 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicates the type or method is work in progress and might chagnge.
+ * Indicates the type or method is work in progress and might change.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Incubating {
