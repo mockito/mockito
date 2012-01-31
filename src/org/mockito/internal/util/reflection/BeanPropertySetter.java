@@ -4,18 +4,17 @@
  */
 package org.mockito.internal.util.reflection;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 /**
  * This utility class will call the setter of the property to inject a new value.
  */
 public class BeanPropertySetter {
+
+    private static final String SET_PREFIX = "set";
 
     private final Object target;
     private boolean reportNoSetterFound;
@@ -54,26 +53,17 @@ public class BeanPropertySetter {
         AccessibilityChanger changer = new AccessibilityChanger();
         Method writeMethod = null;
         try {
-            BeanInfo targetInfo = Introspector.getBeanInfo(target.getClass());
-            PropertyDescriptor[] propertyDescriptors = targetInfo.getPropertyDescriptors();
+            writeMethod = target.getClass().getMethod(setterName(field.getName()), field.getType());
 
-            for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-                if(propertyNameMatchFieldName(propertyDescriptor)
-                        && propertyTypeMatchFieldType(propertyDescriptor)) {
-                    writeMethod = propertyDescriptor.getWriteMethod();
-                    if(writeMethod != null) {
-                        changer.enableAccess(writeMethod);
-                        writeMethod.invoke(target, value);
-                        return true;
-                    }
-                }
-            }
+            changer.enableAccess(writeMethod);
+            writeMethod.invoke(target, value);
+            return true;
         } catch (InvocationTargetException e) {
             throw new RuntimeException("Setter '" + writeMethod + "' of '" + target + "' with value '" + value + "' threw exception : '" + e.getTargetException() + "'", e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
-        } catch (IntrospectionException e) {
-            throw new RuntimeException("Something went wrong when trying to infer by introspection the setter of property '" + field.getName() + "' on type '" + target.getClass() + "'" + target.getClass(), e);
+        } catch (NoSuchMethodException e) {
+            reportNoSetterFound();
         } finally {
             if(writeMethod != null) {
                 changer.safelyDisableAccess(writeMethod);
@@ -84,18 +74,25 @@ public class BeanPropertySetter {
         return false;
     }
 
+    /**
+     * Retrieve the setter name from the field name.
+     *
+     * <p>Implementation is based on the code of {@link java.beans.Introspector}.</p>
+     *
+     * @param fieldName the Field name
+     * @return Setter name.
+     */
+    private String setterName(String fieldName) {
+        return new StringBuilder(SET_PREFIX)
+                .append(fieldName.substring(0, 1).toUpperCase(Locale.ENGLISH))
+                .append(fieldName.substring(1))
+                .toString();
+    }
+
     private void reportNoSetterFound() {
         if(reportNoSetterFound) {
             throw new RuntimeException("Problems setting value on object: [" + target + "] for property : [" + field.getName() + "], setter not found");
         }
-    }
-
-    private boolean propertyTypeMatchFieldType(PropertyDescriptor pd) {
-        return field.getType().equals(pd.getPropertyType());
-    }
-
-    private boolean propertyNameMatchFieldName(PropertyDescriptor pd) {
-        return field.getName().equals(pd.getName());
     }
 
 }
