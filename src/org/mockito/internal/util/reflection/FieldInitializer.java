@@ -212,8 +212,8 @@ public class FieldInitializer {
         private Object testClass;
         private Field field;
         private ConstructorArgumentResolver argResolver;
-        private Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
-            public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
+        private Comparator<Constructor> byParameterNumber = new Comparator<Constructor>() {
+            public int compare(Constructor constructorA, Constructor constructorB) {
                 return constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
             }
         };
@@ -262,7 +262,7 @@ public class FieldInitializer {
         }
 
         private Constructor<?> biggestConstructor(Class<?> clazz) {
-            final List<Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
+            final List<Constructor> constructors = Arrays.asList(clazz.getDeclaredConstructors());
             Collections.sort(constructors, byParameterNumber);
 
             Constructor<?> constructor = constructors.get(0);

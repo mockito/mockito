@@ -21,7 +21,6 @@ import org.mockito.stubbing.Answer;
  */
 public class ReturnsFirstArgument implements Answer<Object> {
 
-	@Override
 	public Object answer(InvocationOnMock invocation) throws Throwable {
 		Object[] arguments = invocation.getArguments();
 		if (arguments.length == 0) {
