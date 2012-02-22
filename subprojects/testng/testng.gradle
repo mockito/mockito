@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group = 'org.mockito'
+archivesBaseName = 'mockito-testng'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-core:1.9.0'
+    //not sure what we need more? Probably testNg.
+    testCompile 'junit:junit:4.10' //or testNg?
+}
