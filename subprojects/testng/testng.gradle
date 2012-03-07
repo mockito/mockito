@@ -14,5 +14,7 @@ repositories {
 dependencies {
     compile 'org.mockito:mockito-core:1.9.0'
     //not sure what we need more? Probably testNg.
-    testCompile 'junit:junit:4.10' //or testNg?
+    compile 'org.testng:testng:6.3.1'
+
+    testCompile 'org.easytesting:fest-assert:1.4'
 }

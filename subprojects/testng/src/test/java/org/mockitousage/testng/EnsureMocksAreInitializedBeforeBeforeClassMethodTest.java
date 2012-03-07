@@ -1,8 +1,8 @@
 package org.mockitousage.testng;
 
-import org.junit.BeforeClass;
 import org.mockito.Mock;
 import org.mockito.testng.MockitoTestNGListener;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
