@@ -5,7 +5,11 @@
 package org.mockitousage.misuse;
 
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.validateMockitoUsage;
+import static org.mockito.Mockito.verify;
+
+import java.util.Observer;
 
 import org.junit.After;
 import org.junit.Test;
@@ -33,6 +37,14 @@ public class DetectingMisusedMatchersTest extends TestBase {
     private void misplacedArgumentMatcher() {
         anyObject();
     }
+    
+    private void misplacedIntArgumentMatcher() {
+        anyInt();
+    }
+    
+    private void misplacedBooleanArgumentMatcher() {
+        anyBoolean();
+    }
 
     @Test
     public void shouldFailFastWhenArgumentMatchersAbused() {
@@ -44,6 +56,28 @@ public class DetectingMisusedMatchersTest extends TestBase {
             assertContains("Misplaced argument matcher", e.getMessage());
         }
     }
+    
+    @Test
+    public void shouldReportArgumentLocationsWhenArgumentMatchersMisused() {
+        try {
+        	Observer observer = mock(Observer.class);
+        	
+        	misplacedIntArgumentMatcher();
+        	misplacedArgumentMatcher();
+        	misplacedBooleanArgumentMatcher();
+        	
+        	observer.update(null, null);
+        	
+        	validateMockitoUsage();
+        	fail();
+        } catch (InvalidUseOfMatchersException e) {
+            assertContains("DetectingMisusedMatchersTest.misplacedIntArgumentMatcher", e.getMessage());
+            assertContains("DetectingMisusedMatchersTest.misplacedArgumentMatcher", e.getMessage());
+            assertContains("DetectingMisusedMatchersTest.misplacedBooleanArgumentMatcher", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+   
     
     @Test
     public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {

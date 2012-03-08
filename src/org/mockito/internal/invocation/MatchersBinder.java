@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 
 @SuppressWarnings("unchecked")
@@ -25,12 +26,12 @@ public class MatchersBinder implements Serializable {
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(Invocation invocation, List<Matcher> matchers) {
+    private void validateMatchers(Invocation invocation, List<? extends Matcher> matchers) {
         if (!matchers.isEmpty()) {
             int recordedMatchersSize = matchers.size();
             int expectedMatchersSize = invocation.getArgumentsCount();
             if (expectedMatchersSize != recordedMatchersSize) {
-                new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize);
+                new Reporter().invalidUseOfMatchers(expectedMatchersSize, (List<LocalizedMatcher>)matchers);
             }
         }
     }

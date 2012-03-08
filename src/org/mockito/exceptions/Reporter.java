@@ -5,6 +5,7 @@
 
 package org.mockito.exceptions;
 
+import org.hamcrest.Matcher;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
@@ -14,11 +15,13 @@ import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 import org.mockito.listeners.InvocationListener;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.exceptions.Pluralizer.pluralize;
@@ -217,10 +220,11 @@ public class Reporter {
                 ));
     }
 
-    public void invalidUseOfMatchers(int expectedMatchersCount, int recordedMatchersCount) {
+    public void invalidUseOfMatchers(int expectedMatchersCount, List<LocalizedMatcher> recordedMatchers) {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers!",
-                expectedMatchersCount + " matchers expected, " + recordedMatchersCount + " recorded.",
+                expectedMatchersCount + " matchers expected, " + recordedMatchers.size()+ " recorded:" +
+                createLocalizedMatchersDescription(recordedMatchers),
                 "This exception may occur if matchers are combined with raw values:",
                 "    //incorrect:",
                 "    someMethod(anyObject(), \"raw String\");",
@@ -231,6 +235,13 @@ public class Reporter {
                 "",
                 "For more info see javadoc for Matchers class."
         ));
+    }
+
+    private String createLocalizedMatchersDescription(List<LocalizedMatcher> matchers) {
+        List<String> description = new ArrayList<String>();
+        for (LocalizedMatcher matcher : matchers)
+			description.add(matcher.getLocation().toString());
+        return join(description.toArray());
     }
 
     public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
