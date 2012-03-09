@@ -34,9 +34,9 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     }
 
     /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#pullMatchers()
+     * @see org.mockito.internal.progress.ArgumentMatcherStorage#pullLocalizedMatchers()
      */
-    public List<Matcher> pullMatchers() {
+    public List<LocalizedMatcher> pullLocalizedMatchers() {
         if (matcherStack.isEmpty()) {
             return Collections.emptyList();
         }
@@ -47,8 +47,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     }
 
     /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
-     */
+    * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
+    */
     public HandyReturnValues reportAnd() {
         assertStateFor("And(?)", TWO_SUB_MATCHERS);
         And and = new And(popLastArgumentMatchers(TWO_SUB_MATCHERS));

@@ -5,6 +5,7 @@
 package org.mockito.internal.progress;
 
 import org.hamcrest.Matcher;
+import org.mockito.internal.matchers.LocalizedMatcher;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ArgumentMatcherStorage {
 
     HandyReturnValues reportMatcher(Matcher matcher);
 
-    List<Matcher> pullMatchers();
+    List<LocalizedMatcher> pullLocalizedMatchers();
 
     HandyReturnValues reportAnd();
 
