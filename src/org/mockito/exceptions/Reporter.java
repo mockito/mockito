@@ -671,4 +671,21 @@ public class Reporter {
                 ""
         ), details);
     }
+
+	public void mockedTypeIsInconsistentWithDelegatedInstanceType(Class mockedType, Object delegatedInstance) {
+		throw new MockitoException(join(
+                "Mocked type must be the same as the type of your delegated instance.",
+                "Mocked type must be: " + delegatedInstance.getClass().getSimpleName() + ", but is: " + mockedType.getSimpleName(),
+                "  //correct delegate:",
+                "  spy = mock( ->List.class<- , withSettings().delegatedInstance( ->new ArrayList()<- );",
+                "  //incorrect - types don't match:",
+                "  spy = mock( ->List.class<- , withSettings().delegatedInstance( ->new HashSet()<- );"
+        ));
+	}
+
+	public void spyAndDelegateAreMutuallyExclusive() {
+		throw new MockitoException(join(
+				"Settings should not define a spy instance and a delegated instance at the same time."
+				)) ;
+	}
 }
