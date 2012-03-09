@@ -19,7 +19,7 @@ public class RegisteredInvocations implements Serializable {
 
     private static final long serialVersionUID = -2674402327380736290L;
     private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());
-    
+
     public void add(Invocation invocation) {
         invocations.add(invocation);
     }
@@ -33,7 +33,12 @@ public class RegisteredInvocations implements Serializable {
     }
 
     public List<Invocation> getAll() {
-        return ListUtil.filter(new LinkedList<Invocation>(invocations), new RemoveToString());
+    	List<Invocation> copiedList;
+    	synchronized (invocations) {
+			copiedList = new LinkedList<Invocation>(invocations) ;
+		}
+
+        return ListUtil.filter(copiedList, new RemoveToString());
     }
 
     public boolean isEmpty() {
