@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.progress;
 
-import java.util.List;
-
 import org.hamcrest.Matcher;
+
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
