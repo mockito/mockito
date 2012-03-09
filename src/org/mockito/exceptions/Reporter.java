@@ -5,7 +5,6 @@
 
 package org.mockito.exceptions;
 
-import org.hamcrest.Matcher;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
@@ -22,6 +21,7 @@ import org.mockito.listeners.InvocationListener;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.exceptions.Pluralizer.pluralize;
@@ -224,7 +224,8 @@ public class Reporter {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers!",
                 expectedMatchersCount + " matchers expected, " + recordedMatchers.size()+ " recorded:" +
-                createLocalizedMatchersDescription(recordedMatchers),
+                locationsOf(recordedMatchers),
+                "",
                 "This exception may occur if matchers are combined with raw values:",
                 "    //incorrect:",
                 "    someMethod(anyObject(), \"raw String\");",
@@ -237,7 +238,7 @@ public class Reporter {
         ));
     }
 
-    private String createLocalizedMatchersDescription(List<LocalizedMatcher> matchers) {
+    private Object locationsOf(Collection<LocalizedMatcher> matchers) {
         List<String> description = new ArrayList<String>();
         for (LocalizedMatcher matcher : matchers)
 			description.add(matcher.getLocation().toString());
