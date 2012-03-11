@@ -6,8 +6,8 @@
 package org.mockito.internal.verification;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.util.ListUtil;
-import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.util.collections.ListUtil.Filter;
 
 import java.io.Serializable;
 import java.util.Collections;

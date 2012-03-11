@@ -12,6 +12,7 @@ import java.util.Set;
 
 import static org.mockito.internal.util.Checks.checkItemsNotNull;
 import static org.mockito.internal.util.Checks.checkNotNull;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * Internal injection configuration utility.
@@ -52,7 +53,7 @@ public class MockInjection {
      */
     public static class OngoingMockInjection {
         private Set<Field> fields = new HashSet<Field>();
-        private Set<Object> mocks = new HashSet<Object>();
+        private Set<Object> mocks = newMockSafeHashSet();
         private Object fieldOwner;
         private MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
         private MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();

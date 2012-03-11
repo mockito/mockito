@@ -7,8 +7,9 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.Set;
+
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * Scan mocks, and prepare them if needed.
@@ -48,7 +49,7 @@ public class MockScanner {
      * @return A prepared set of mock
      */
     private Set<Object> scan() {
-        Set<Object> mocks = new HashSet<Object>();
+        Set<Object> mocks = newMockSafeHashSet();
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
             FieldReader fieldReader = new FieldReader(instance, field);
