@@ -2,11 +2,15 @@ package org.mockitousage.stubbing;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockitousage.IMethods;
+import org.mockitousage.MethodsImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
@@ -53,4 +57,16 @@ public class StubbingWithDelegate {
 		assertEquals(1, mockedList.size()) ;
 		assertEquals(1, delegatedList.size()) ;
 	}
+
+    @Test
+    public void null_wrapper_dont_throw_exception_from_org_mockito_package() throws Exception {
+        IMethods methods = mock(IMethods.class, withSettings().forwardTo(new MethodsImpl()));
+
+        try {
+            byte b = methods.byteObjectReturningMethod(); // real method returns null
+            fail();
+        } catch (Exception e) {
+            assertThat(e.toString()).doesNotContain("org.mockito");
+        }
+    }
 }

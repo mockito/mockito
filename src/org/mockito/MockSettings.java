@@ -205,7 +205,7 @@ public interface MockSettings extends Serializable, MockSettingsInfo {
      * <ul>
      *     <li>Final classes but with an interface</li>
      *     <li>Already custom proxied object</li>
-     *     <li>Special objects with a finalize method, that should be executed 2 times</li>
+     *     <li>Special objects with a finalize method, i.e. to avoid executing it 2 times</li>
      *     <li>...</li>
      * </ul>
      * Sets the real implementation to be called when the method is called on a mock object.

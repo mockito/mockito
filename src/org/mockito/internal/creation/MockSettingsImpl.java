@@ -7,7 +7,7 @@ package org.mockito.internal.creation;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsDelegate;
+import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.internal.util.MockName;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
@@ -139,7 +139,7 @@ public class MockSettingsImpl implements MockSettings {
 
 	public MockSettings forwardTo(Object delegatedInstance) {
 		this.delegatedInstance = delegatedInstance ;
-		return defaultAnswer(new ReturnsDelegate(this.delegatedInstance)) ;
+		return defaultAnswer(new ForwardsInvocations(this.delegatedInstance)) ;
 	}
 }
 
