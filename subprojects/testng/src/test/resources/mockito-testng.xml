@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Mockito TestNG usage" parallel="none">
-    <test verbose="1" name="sandbox" annotations="JDK">
+    <test verbose="1" name="Mockito TestNG Integration" annotations="JDK">
         <classes>
             <class name="org.mockitousage.testng.MockFieldsShouldBeResetBetweenTestMethodsTest"/>
             <class name="org.mockitousage.testng.CaptorAnnotatedFieldShouldBeClearedTest"/>

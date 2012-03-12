@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -22,6 +23,8 @@ public class MockFieldsShouldBeResetBetweenTestMethodsTest {
     @Mock List<String> list;
     @Spy HashMap hashMap;
     @InjectMocks SomeType someType;
+
+    @Mock Observable will_be_nulled;
 
     @Test
     public void behaviour_A_without_infection_from_behaviour_B() throws Exception {
@@ -47,5 +50,10 @@ public class MockFieldsShouldBeResetBetweenTestMethodsTest {
         assertThat(list.get(0)).isEqualTo("B");
 
         list.add("something else after B");
+    }
+
+    @Test
+    public void dont_fail_when_reseting_null_field() throws Exception {
+        will_be_nulled = null;
     }
 }
