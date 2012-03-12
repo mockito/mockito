@@ -65,7 +65,6 @@ public abstract class Fields {
             this.instanceFields = instanceFields;
         }
 
-        // TODO get Filter out of ListFilter
         public InstanceFields filter(Filter<InstanceField> withFilter) {
             return new InstanceFields(instance, ListUtil.filter(instanceFields, withFilter));
         }
