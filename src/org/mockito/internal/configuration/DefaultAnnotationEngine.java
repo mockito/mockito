@@ -4,15 +4,18 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.*;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldSetter;
-import org.mockito.internal.util.reflection.GenericMaster;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
@@ -24,56 +27,36 @@ import java.lang.reflect.Field;
  */
 @SuppressWarnings("unchecked")
 public class DefaultAnnotationEngine implements AnnotationEngine {
+    private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>> annotationProcessorMap = new HashMap<Class<? extends Annotation>, FieldAnnotationProcessor<?>>();
+
+    public DefaultAnnotationEngine() {
+        registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
+        registerAnnotationProcessor(MockitoAnnotations.Mock.class, new MockitoAnnotationsMockAnnotationProcessor());
+        registerAnnotationProcessor(Captor.class, new CaptorAnnotationProcessor());
+    }
 
     /* (non-Javadoc)
     * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
     */
     @SuppressWarnings("deprecation")
     public Object createMockFor(Annotation annotation, Field field) {
-        if (annotation instanceof Mock) {
-            return processAnnotationOn((Mock) annotation, field);
-        }
-        if (annotation instanceof MockitoAnnotations.Mock) {
-            return processAnnotationOn((MockitoAnnotations.Mock) annotation, field);
-        }
-        if (annotation instanceof Captor) {
-            return processAnnotationOn((Captor) annotation, field);
-        }        
-
-        return null;
-    }
-    
-    private Object processAnnotationOn(Mock annotation, Field field) {
-        MockSettings mockSettings = Mockito.withSettings();
-        if (annotation.extraInterfaces().length > 0) { // never null
-            mockSettings.extraInterfaces(annotation.extraInterfaces());
-        }
-        if ("".equals(annotation.name())) {
-            mockSettings.name(field.getName());
-        } else {
-            mockSettings.name(annotation.name());
-        }
-
-        // see @Mock answer default value
-        mockSettings.defaultAnswer(annotation.answer().get());
-        return Mockito.mock(field.getType(), mockSettings);
+        return forAnnotation(annotation).process(annotation, field);
     }
 
-    @SuppressWarnings("deprecation")
-    private Object processAnnotationOn(org.mockito.MockitoAnnotations.Mock annotation, Field field) {
-        return Mockito.mock(field.getType(), field.getName());
-    }
-    
-    private Object processAnnotationOn(Captor annotation, Field field) {
-        Class<?> type = field.getType();
-        if (!ArgumentCaptor.class.isAssignableFrom(type)) {
-            throw new MockitoException("@Captor field must be of the type ArgumentCaptor.\n" + "Field: '"
-                    + field.getName() + "' has wrong type\n"
-                    + "For info how to use @Captor annotations see examples in javadoc for MockitoAnnotations class.");
+    private <A extends Annotation> FieldAnnotationProcessor<A> forAnnotation(A annotation) {
+        if (annotationProcessorMap.containsKey(annotation.annotationType())) {
+            return (FieldAnnotationProcessor<A>) annotationProcessorMap.get(annotation.annotationType());
         }
-        Class cls = new GenericMaster().getGenericType(field);        
-        return ArgumentCaptor.forClass(cls);    
-    }           
+        return new FieldAnnotationProcessor<A>() {
+            public Object process(A annotation, Field field) {
+                return null;
+            }
+        };
+    }
+
+    private <A extends Annotation> void registerAnnotationProcessor(Class<A> annotationClass, FieldAnnotationProcessor<A> fieldAnnotationProcessor) {
+        annotationProcessorMap.put(annotationClass, fieldAnnotationProcessor);
+    }
 
     public void process(Class<?> clazz, Object testInstance) {
         Field[] fields = clazz.getDeclaredFields();
@@ -100,4 +83,5 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
             new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
+
 }
