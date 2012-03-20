@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.creation.CglibMockMaker;
 import org.mockito.plugins.MockMaker;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.ServiceConfigurationError;
 
 public class ClassPathLoader {
     private static final MockMaker mockMaker = findPlatformMockMaker();
@@ -81,7 +81,7 @@ public class ClassPathLoader {
         try {
             resources = loader.getResources("mockito-extensions/" + service.getName());
         } catch (IOException e) {
-            throw new ServiceConfigurationError("Failed to load " + service, e);
+            throw new MockitoException("Failed to load " + service, e);
         }
 
         List<T> result = new ArrayList<T>();
@@ -96,7 +96,7 @@ public class ClassPathLoader {
                     }
                 }
             } catch (Exception e) {
-                throw new ServiceConfigurationError(
+                throw new MockitoException(
                         "Failed to load " + service + " using " + resource, e);
             } finally {
                 closeQuietly(in);
