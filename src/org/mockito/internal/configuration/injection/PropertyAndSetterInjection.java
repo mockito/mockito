@@ -8,7 +8,7 @@ package org.mockito.internal.configuration.injection;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.*;
-import org.mockito.internal.util.ListUtil;
+import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
@@ -16,6 +16,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
+
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * Inject mocks using first setters then fields, if no setters available.
@@ -90,11 +92,12 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
         while (fieldClass != Object.class) {
-            injectionOccurred |= injectMockCandidate(fieldClass, new HashSet<Object>(mockCandidates), fieldInstanceNeedingInjection);
+            injectionOccurred |= injectMockCandidate(fieldClass, newMockSafeHashSet(mockCandidates), fieldInstanceNeedingInjection);
             fieldClass = fieldClass.getSuperclass();
         }
         return injectionOccurred;
     }
+
 
 
     private boolean injectMockCandidate(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object instance) {

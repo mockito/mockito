@@ -7,6 +7,7 @@ package org.mockito.internal.creation;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
+import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.internal.util.MockName;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
@@ -21,6 +22,7 @@ public class MockSettingsImpl implements MockSettings {
     private Class<?>[] extraInterfaces;
     private String name;
     private Object spiedInstance;
+    private Object delegatedInstance ;
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
@@ -35,7 +37,7 @@ public class MockSettingsImpl implements MockSettings {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
             new Reporter().extraInterfacesRequiresAtLeastOneInterface();
         }
-            
+
         for (Class<?> i : extraInterfaces) {
             if (i == null) {
                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();
@@ -57,6 +59,10 @@ public class MockSettingsImpl implements MockSettings {
 
     public Object getSpiedInstance() {
         return spiedInstance;
+    }
+
+    public Object getDelegatedInstance() {
+    	return this.delegatedInstance ;
     }
 
     public MockSettings name(String name) {
@@ -81,7 +87,7 @@ public class MockSettingsImpl implements MockSettings {
     public boolean isSerializable() {
         return serializable;
     }
-    
+
     public void initiateMockName(Class classToMock) {
         mockName = new MockName(name, classToMock);
     }
@@ -130,5 +136,10 @@ public class MockSettingsImpl implements MockSettings {
     public void redefineMockName(String newName) {
         mockName = new MockName(newName);
     }
+
+	public MockSettings forwardTo(Object delegatedInstance) {
+		this.delegatedInstance = delegatedInstance ;
+		return defaultAnswer(new ForwardsInvocations(this.delegatedInstance)) ;
+	}
 }
 

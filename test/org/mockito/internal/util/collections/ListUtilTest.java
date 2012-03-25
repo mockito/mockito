@@ -3,17 +3,17 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.util;
+package org.mockito.internal.util.collections;
 
-import static java.util.Arrays.*;
-import static org.mockitoutil.ExtraMatchers.*;
+import org.junit.Test;
+import org.mockito.internal.util.collections.ListUtil.Filter;
+import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Test;
-import org.mockito.internal.util.ListUtil.Filter;
-import org.mockitoutil.TestBase;
+import static java.util.Arrays.asList;
+import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 
 @SuppressWarnings("unchecked")
 public class ListUtilTest extends TestBase {

@@ -7,18 +7,35 @@ package org.mockito.exceptions;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.*;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
+import org.mockito.exceptions.verification.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.SmartNullPointerException;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 import org.mockito.listeners.InvocationListener;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.exceptions.Pluralizer.pluralize;
@@ -217,10 +234,12 @@ public class Reporter {
                 ));
     }
 
-    public void invalidUseOfMatchers(int expectedMatchersCount, int recordedMatchersCount) {
+    public void invalidUseOfMatchers(int expectedMatchersCount, List<LocalizedMatcher> recordedMatchers) {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers!",
-                expectedMatchersCount + " matchers expected, " + recordedMatchersCount + " recorded.",
+                expectedMatchersCount + " matchers expected, " + recordedMatchers.size()+ " recorded:" +
+                locationsOf(recordedMatchers),
+                "",
                 "This exception may occur if matchers are combined with raw values:",
                 "    //incorrect:",
                 "    someMethod(anyObject(), \"raw String\");",
@@ -229,8 +248,46 @@ public class Reporter {
                 "    //correct:",
                 "    someMethod(anyObject(), eq(\"String by matcher\"));",
                 "",
-                "For more info see javadoc for Matchers class."
+                "For more info see javadoc for Matchers class.",
+                ""
         ));
+    }
+
+    public void incorrectUseOfAdditionalMatchers(String additionalMatcherName, int expectedSubMatchersCount, Collection<LocalizedMatcher> matcherStack) {
+        throw new InvalidUseOfMatchersException(join(
+                "Invalid use of argument matchers inside additional matcher " + additionalMatcherName + " !",
+                new Location(),
+                "",
+                expectedSubMatchersCount + " sub matchers expected, " + matcherStack.size() + " recorded:",
+                locationsOf(matcherStack),
+                "",
+                "This exception may occur if matchers are combined with raw values:",
+                "    //incorrect:",
+                "    someMethod(AdditionalMatchers.and(isNotNull(), \"raw String\");",
+                "When using matchers, all arguments have to be provided by matchers.",
+                "For example:",
+                "    //correct:",
+                "    someMethod(AdditionalMatchers.and(isNotNull(), eq(\"raw String\"));",
+                "",
+                "For more info see javadoc for Matchers and AdditionalMatchers classes.",
+                ""
+        ));
+    }
+
+    public void reportNoSubMatchersFound(String additionalMatcherName) {
+        throw new InvalidUseOfMatchersException(join(
+                "No matchers found for additional matcher " + additionalMatcherName,
+                new Location(),
+                ""
+        ));
+    }
+
+
+    private Object locationsOf(Collection<LocalizedMatcher> matchers) {
+        List<String> description = new ArrayList<String>();
+        for (LocalizedMatcher matcher : matchers)
+			description.add(matcher.getLocation().toString());
+        return join(description.toArray());
     }
 
     public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
@@ -437,10 +494,10 @@ public class Reporter {
         throw new MockitoAssertionError(join("Wanted at most " + pluralize(maxNumberOfInvocations) + " but was " + foundSize));
     }
 
-    public void misplacedArgumentMatcher(Location location) {
+    public void misplacedArgumentMatcher(List<LocalizedMatcher> lastMatchers) {
         throw new InvalidUseOfMatchersException(join(
                 "Misplaced argument matcher detected here:",
-                location,
+                locationsOf(lastMatchers),
                 "",
                 "You cannot use argument matchers outside of verification or stubbing.",
                 "Examples of correct usage of argument matchers:",
@@ -614,4 +671,21 @@ public class Reporter {
                 ""
         ), details);
     }
+
+	public void mockedTypeIsInconsistentWithDelegatedInstanceType(Class mockedType, Object delegatedInstance) {
+		throw new MockitoException(join(
+                "Mocked type must be the same as the type of your delegated instance.",
+                "Mocked type must be: " + delegatedInstance.getClass().getSimpleName() + ", but is: " + mockedType.getSimpleName(),
+                "  //correct delegate:",
+                "  spy = mock( ->List.class<- , withSettings().delegatedInstance( ->new ArrayList()<- );",
+                "  //incorrect - types don't match:",
+                "  spy = mock( ->List.class<- , withSettings().delegatedInstance( ->new HashSet()<- );"
+        ));
+	}
+
+	public void spyAndDelegateAreMutuallyExclusive() {
+		throw new MockitoException(join(
+				"Settings should not define a spy instance and a delegated instance at the same time."
+				)) ;
+	}
 }

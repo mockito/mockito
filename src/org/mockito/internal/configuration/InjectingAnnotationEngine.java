@@ -14,6 +14,8 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+
 /**
  * See {@link MockitoAnnotations}
  */
@@ -87,7 +89,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
     public void injectMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
-        Set<Object> mocks = new HashSet<Object>();
+        Set<Object> mocks = newMockSafeHashSet();
         
         while (clazz != Object.class) {
             new InjectMocksScanner(clazz).addTo(mockDependentFields);

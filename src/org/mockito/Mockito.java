@@ -694,7 +694,9 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * <h3 id="22"><a name="verificationtimeout">22. (**New**) Verification with timeout (Since 1.8.5)  </a></h3>
  * <p>
- * Allows verifying with timeout. May be useful for testing in concurrent conditions.
+ * Allows verifying with timeout. It causes a verify to wait for a specified period of time for a desired
+ * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
+ * conditions.
  * <p>
  * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system.
  * <p>
@@ -711,7 +713,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   //passes when someMethod() is called <b>*exactly*</b> 2 times within given time span
  *   verify(mock, timeout(100).times(2)).someMethod();
  *
- *   //passes when someMethod() is called <b>*at lest*</b> 2 times within given time span
+ *   //passes when someMethod() is called <b>*at least*</b> 2 times within given time span
  *   verify(mock, timeout(100).atLeast(2)).someMethod();
  *   
  *   //verifies someMethod() within given time span using given verification mode
@@ -1127,7 +1129,8 @@ public class Mockito extends Matchers {
      * <h4>Important gotcha on spying real objects!</h4>
      * <ol>
      * <li>Sometimes it's impossible or impractical to use {@link Mockito#when(Object)} for stubbing spies.
-     * Therefore when using spies please consider <code>doReturn</code>|<code>Answer</code>|<code>Throw()</code> family of methods for stubbing. Example:
+     * Therefore when using spies please consider <code>doReturn</code>|<code>Answer</code>|<code>Throw()</code>|<code>CallRealMethod</code>
+     * family of methods for stubbing. Example:
      *
      * <pre class="code"><code class="java">
      *   List list = new LinkedList();
@@ -1884,7 +1887,9 @@ public class Mockito extends Matchers {
     }    
     
     /**
-     * Allows verifying with timeout. May be useful for testing in concurrent conditions.
+     * Allows verifying with timeout. It causes a verify to wait for a specified period of time for a desired
+     * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
+     * conditions.
      * <p>
      * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
      * <p>
@@ -1898,7 +1903,7 @@ public class Mockito extends Matchers {
      *   //passes when someMethod() is called <b>*exactly*</b> 2 times within given time span
      *   verify(mock, timeout(100).times(2)).someMethod();
      *
-     *   //passes when someMethod() is called <b>*at lest*</b> 2 times within given time span
+     *   //passes when someMethod() is called <b>*at least*</b> 2 times within given time span
      *   verify(mock, timeout(100).atLeast(2)).someMethod();
      *   
      *   //verifies someMethod() within given time span using given verification mode

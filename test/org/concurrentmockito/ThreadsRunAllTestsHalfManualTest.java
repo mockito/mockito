@@ -3,9 +3,6 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.concurrentmockito;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -27,8 +24,8 @@ import org.mockito.internal.matchers.MatchersToStringTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.TimesTest;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValuesTest;
-import org.mockito.internal.util.ListUtilTest;
 import org.mockito.internal.util.MockUtilTest;
+import org.mockito.internal.util.collections.ListUtilTest;
 import org.mockito.internal.verification.RegisteredInvocationsTest;
 import org.mockito.internal.verification.checkers.MissingInvocationCheckerTest;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderCheckerTest;
@@ -66,6 +63,9 @@ import org.mockitousage.verification.VerificationInOrderTest;
 import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
 import org.mockitousage.verification.VerificationUsingMatchersTest;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     

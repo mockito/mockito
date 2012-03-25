@@ -5,7 +5,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.internal.invocation.Invocation;
-import org.mockito.internal.util.IdentitySet;
+import org.mockito.internal.util.collections.IdentitySet;
 import org.mockito.internal.verification.api.InOrderContext;
 
 public class InOrderContextImpl implements InOrderContext {

@@ -4,15 +4,16 @@
  */
 package org.mockito.internal.util;
 
-import java.io.Serializable;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.plugins.MockMaker;
 import org.mockito.internal.InvocationNotifierHandler;
 import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.mockito.plugins.MockMaker;
+
+import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -23,7 +24,7 @@ public class MockUtil {
     public MockUtil(MockCreationValidator creationValidator) {
         this.creationValidator = creationValidator;
     }
-    
+
     public MockUtil() {
         this(new MockCreationValidator());
     }
@@ -32,6 +33,8 @@ public class MockUtil {
         creationValidator.validateType(classToMock);
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
+        creationValidator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance()) ;
+        creationValidator.validateMutualExclusionForSpyOrDelegate(settings) ;
 
         settings.initiateMockName(classToMock);
 
@@ -44,7 +47,7 @@ public class MockUtil {
         if (spiedInstance != null) {
             new LenientCopyTool().copyToMock(spiedInstance, mock);
         }
-        
+
         return mock;
     }
 

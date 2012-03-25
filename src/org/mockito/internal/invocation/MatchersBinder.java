@@ -5,12 +5,13 @@
 
 package org.mockito.internal.invocation;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
+
+import java.io.Serializable;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MatchersBinder implements Serializable {
@@ -18,19 +19,19 @@ public class MatchersBinder implements Serializable {
     private static final long serialVersionUID = -311433939339443463L;
 
     public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
-        List<Matcher> lastMatchers = argumentMatcherStorage.pullMatchers();
+        List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, lastMatchers);
+        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<Matcher>)(List) lastMatchers);
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(Invocation invocation, List<Matcher> matchers) {
-        if (!matchers.isEmpty()) {
-            int recordedMatchersSize = matchers.size();
+    private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
+        if (!lastMatchers.isEmpty()) {
+            int recordedMatchersSize = lastMatchers.size();
             int expectedMatchersSize = invocation.getArgumentsCount();
             if (expectedMatchersSize != recordedMatchersSize) {
-                new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize);
+                new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
             }
         }
     }

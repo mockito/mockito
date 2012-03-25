@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.debugging.Location;
-import org.mockito.internal.util.ListUtil;
-import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.internal.verification.api.InOrderContext;
 
 public class InvocationsFinder {
