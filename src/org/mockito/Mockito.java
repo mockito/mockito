@@ -39,7 +39,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#9">9. Shorthand for mocks creation - <code>&#064;Mock</code> annotation </a><br/>
  *      <a href="#10">10. Stubbing consecutive calls (iterator-style stubbing) </a><br/> 
  *      <a href="#11">11. Stubbing with callbacks </a><br/>
- *      <a href="#12">12. <code>doThrow()</code>|<code>doAnswer()</code>|<code>doNothing()</code>|<code>doReturn()</code> family of methods mostly for stubbing voids </a><br/>
+ *      <a href="#12">12. <code>doReturn()</code>|<code>doThrow()</code>|<code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a><br/>
  *      <a href="#13">13. Spying on real objects </a><br/>
  *      <a href="#14">14. Changing default return values of unstubbed invocations (Since 1.7) </a><br/>
  *      <a href="#15">15. Capturing arguments for further assertions (Since 1.8.0) </a><br/>
@@ -50,9 +50,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
  *      <a href="#21">21. New annotations: <code>&#064;Captor</code>, <code>&#064;Spy</code>, <code>&#064;InjectMocks</code> (Since 1.8.3) </a><br/>
  *      <a href="#22">22. (New) Verification with timeout (Since 1.8.5) </a><br/>
- *      <a href="#23">23. (**New**) Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9)</a><br/>
- *      <a href="#24">24. (**New**) One-liner stubs (Since 1.9)</a><br/>
- *      <a href="#25">25. (**New**) Verification ignoring stubs (Since 1.9)</a><br/>
+ *      <a href="#23">23. (**New**) Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9.0)</a><br/>
+ *      <a href="#24">24. (**New**) One-liner stubs (Since 1.9.0)</a><br/>
+ *      <a href="#25">25. (**New**) Verification ignoring stubs (Since 1.9.0)</a><br/>
+ *      <a href="#26">26. (**New**) Mocking details (Since 1.9.1)</a><br/>
  * </b>
  * 
  * <p>
@@ -60,7 +61,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * like <code>add()</code>, <code>get()</code>, <code>clear()</code> will be used). <br>
  * You probably wouldn't mock List class 'in real'.
  * 
- * <h3 id="1">1. Let's verify some behaviour!</h3>
+ * <h3 id="1"><a name="verify">1. Let's verify some behaviour!</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //Let's import Mockito statically so that the code looks clearer
@@ -82,7 +83,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Once created, mock will remember all interactions. Then you can selectively
  * verify whatever interaction you are interested in.
  * 
- * <h3 id="2">2. How about some stubbing?</h3>
+ * <h3 id="2"><a name="stubbing">2. How about some stubbing?</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //You can mock concrete classes, not only interfaces
@@ -126,7 +127,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * 
  * </ul>
  * 
- * <h3 id="3">3. Argument matchers</h3>
+ * <h3 id="3"><a name="matchers">3. Argument matchers</a></h3>
  * 
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * Sometimes, when extra flexibility is required then you might use argument matchers:  
@@ -180,7 +181,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * This implementation is due static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  * 
- * <h3 id="4">4. Verifying exact number of invocations / at least x / never</h3>
+ * <h3 id="4"><a name="verifyexactly">4. Verifying exact number of invocations / at least x / never</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //using mock 
@@ -215,7 +216,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <b>times(1) is the default.</b> Therefore using times(1) explicitly can be
  * omitted.
  * 
- * <h3 id="5">5. Stubbing void methods with exceptions</h3>
+ * <h3 id="5"><a name="stubexceptions">5. Stubbing void methods with exceptions</a></h3>
  * 
  * <pre class="code"><code class="java">
  *   doThrow(new RuntimeException()).when(mockedList).clear();
@@ -230,7 +231,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable)}.
  * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods. 
  * 
- * <h3 id="6">6. Verification in order</h3>
+ * <h3 id="6"><a name="verifyinorder">6. Verification in order</a></h3>
  * 
  * <pre class="code"><code class="java">
  * // A. Single mock whose methods must be invoked in a particular order
@@ -272,7 +273,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Also, you can create InOrder object passing only mocks that are relevant for
  * in-order verification.
  * 
- * <h3 id="7">7. Making sure interaction(s) never happened on mock</h3>
+ * <h3 id="7"><a name="verifynever">7. Making sure interaction(s) never happened on mock</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //using mocks - only mockOne is interacted
@@ -289,7 +290,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * 
  * </code></pre>
  * 
- * <h3 id="8">8. Finding redundant invocations</h3>
+ * <h3 id="8"><a name="findredundant">8. Finding redundant invocations</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //using mocks
@@ -314,7 +315,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * communicates the intent well.
  * <p>
  * 
- * <h3 id="9">9. Shorthand for mocks creation - <code>&#064;Mock</code> annotation</h3>
+ * <h3 id="9"><a name="mockannotation">9. Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
  * 
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
@@ -344,7 +345,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Read more here: {@link MockitoAnnotations}
  * 
- * <h3 id="10"> 10. Stubbing consecutive calls (iterator-style stubbing)</h3>
+ * <h3 id="10"><a name="stubrepeated"> 10. Stubbing consecutive calls (iterator-style stubbing)</a></h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same
  * method call. Typical use case could be mocking iterators. 
@@ -377,7 +378,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   .thenReturn("one", "two", "three");
  * </code></pre>
  * 
- * <h3 id="11"> 11. Stubbing with callbacks</h3>
+ * <h3 id="11"><a name="stubanswer"> 11. Stubbing with callbacks</a></h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
@@ -399,7 +400,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * System.out.println(mock.someMethod("foo"));
  * </code></pre>
  * 
- * <h3 id="12"> 12. <code>doThrow()</code>|<code>doAnswer()</code>|<code>doNothing()</code>|<code>doReturn()</code> family of methods for stubbing voids (mostly)</h3>
+ * <h3 id="12"><a name="stubdo"> 12. <code>doReturn()</code>|<code>doThrow()</code>|<code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a></h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
  * <p>
@@ -413,18 +414,32 @@ import org.mockito.verification.VerificationWithTimeout;
  *   //following throws RuntimeException:
  *   mockedList.clear();
  * </code></pre>
- * 
- * Read more about other methods:
+ *
+ * <p>
+ * You can use <code>doThrow()</code>, <code>doAnswer()</code>,  <code>doNothing()</code>,  <code>doReturn()</code> and <code>doCallRealMethod()</code> in place
+ * of the corresponding call with <code>when()</code>, for any method.  It is necessary when you
+ * <ul>
+ *     <li>stub void methods</li>
+ *     <li>stub methods on spy objects (see below)</li>
+ *     <li>stub the same method more than once, to change the behaviour of a mock in the middle of a test.</li>
+ * </ul>
+ * but you may prefer to use these methods in place of the alternative with <code>when()</code>, for all of your stubbing calls.
+ * <p>
+ * Read more about these methods:
+ * <p>
+ * {@link Mockito#doReturn(Object)}
  * <p>
  * {@link Mockito#doThrow(Throwable)}
+ * <p>
+ * {@link Mockito#doThrow(Class)}
  * <p>
  * {@link Mockito#doAnswer(Answer)}
  * <p>
  * {@link Mockito#doNothing()}
  * <p>
- * {@link Mockito#doReturn(Object)}
- * 
- * <h3 id="13"> 13. Spying on real objects</h3>
+ * {@link Mockito#doCallRealMethod()}
+ *
+ * <h3 id="13"><a name="spy"> 13. Spying on real objects</a></h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called (unless a method was stubbed).
  * <p>
@@ -492,7 +507,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </li>
  * </ol>
  *
- * <h3 id="14">14. Changing default return values of unstubbed invocations (Since 1.7) </h3>
+ * <h3 id="14"><a name="defaultreturn">14. Changing default return values of unstubbed invocations (Since 1.7) </a></h3>
  * 
  * You can create a mock with specified strategy for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -508,7 +523,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Read more about this interesting implementation of <i>Answer</i>: {@link Mockito#RETURNS_SMART_NULLS}
  * 
- * <h3 id="15">15. Capturing arguments for further assertions (Since 1.8.0) </h3>
+ * <h3 id="15"><a name="captors">15. Capturing arguments for further assertions (Since 1.8.0) </a></h3>
  * 
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
@@ -533,7 +548,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  * 
- * <h3 id="16">16. Real partial mocks (Since 1.8.0) </h3>
+ * <h3 id="16"><a name="partialmocks">16. Real partial mocks (Since 1.8.0) </a></h3>
  *  
  *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
@@ -563,7 +578,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
  * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
  *  
- * <h3 id="17">17. Resetting mocks (Since 1.8.0) </h3>
+ * <h3 id="17"><a name="resetting">17. Resetting mocks (Since 1.8.0) </a></h3>
  *  
  * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
@@ -588,7 +603,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   //at this point the mock forgot any interactions & stubbing
  * </code></pre>
  *  
- * <h3 id="18">18. Troubleshooting & validating framework usage (Since 1.8.0) </h3>
+ * <h3 id="18"><a name="frameworkvalidate">18. Troubleshooting & validating framework usage (Since 1.8.0) </a></h3>
  * 
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -599,7 +614,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>. 
  * However, there's a gotcha so please read the javadoc for {@link Mockito#validateMockitoUsage()}
  * 
- * <h3 id="19">19. Aliases for behavior driven development (Since 1.8.0) </h3>
+ * <h3 id="19"><a name="bddmockito">19. Aliases for behavior driven development (Since 1.8.0) </a></h3>
  * 
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
@@ -630,7 +645,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * }  
  * </code></pre>
  * 
- * <h3 id="20">20. (**New**) Serializable mocks (Since 1.8.1) </h3>
+ * <h3 id="20"><a name="serializablemocks">20. (**New**) Serializable mocks (Since 1.8.1) </a></h3>
  * 
  * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
@@ -658,7 +673,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *                 .serializable());
  * </code></pre>
  * 
- * <h3 id="21">21. (**New**) New annotations: <code>&#064;Captor</code>, <code>&#064;Spy</code>, <code>&#064;InjectMocks</code> (Since 1.8.3) </h3>
+ * <h3 id="21"><a name="annotations183">21. (**New**) New annotations: <code>&#064;Captor</code>, <code>&#064;Spy</code>, <code>&#064;InjectMocks</code> (Since 1.8.3)</a></h3>
  * <p>
  * Release 1.8.3 brings new annotations that may be helpful on occasion:
  * 
@@ -677,7 +692,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
  * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
  * <p>
- * <h3 id="22">22. (**New**) Verification with timeout (Since 1.8.5)  </h3>
+ * <h3 id="22"><a name="verificationtimeout">22. (**New**) Verification with timeout (Since 1.8.5)  </a></h3>
  * <p>
  * Allows verifying with timeout. May be useful for testing in concurrent conditions.
  * <p>
@@ -704,7 +719,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   verify(mock, new Timeout(100, yourOwnVerificationMode)).someMethod();
  * </code></pre>
  *
- * <h3 id="23">23. (**New**) Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9)</h3>
+ * <h3 id="23"><a name="autoinstantiate">23. (**New**) Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9.0)</a></h3>
  * <p>
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
  * using <b>constructor</b> injection, <b>setter</b> injection, or <b>field</b> injection.
@@ -722,7 +737,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * &#064;InjectMocks LocalPub;
  * </code></pre>
  *
- * <h3 id="24">24. (**New**) One-liner stubs (Since 1.9)</h3>
+ * <h3 id="24"><a name="onelinestub">24. (**New**) One-liner stubs (Since 1.9.0)</a></h3>
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
@@ -735,7 +750,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   &#064;Test public void should... {}
  * </code></pre>
  *
- * <h3 id="25">25. Verification ignoring stubs (Since 1.9)</h3>
+ * <h3 id="25"><a name="verifyignorestubs">25. Verification ignoring stubs (Since 1.9.0)</a></h3>
  * <p>
  * Mockito will now allow to ignore stubbing for the sake of verification.
  * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
@@ -760,6 +775,15 @@ import org.mockito.verification.VerificationWithTimeout;
  * </code></pre>
  * <p>
  * Advanced examples and more details can be found in javadoc for {@link Mockito#ignoreStubs(Object...)}
+ *
+ * <h3 id="26"><a name="mockingdetails">26. Mocking details (Since 1.9.1)</a></h3>
+ * <p>
+ * To identify whether a particular object is a mock or a spy, you can write
+ * <pre class="code"><code class="java">
+ *     MockingDetails.of( someObject ).isMock();
+ *     MockingDetails.of( someObject ).isSpy();
+ * </code></pre>
+ * Both the <code>isMock()</code> and <code>isSpy()</code> methods return <code>boolean</code>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
