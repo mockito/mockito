@@ -11,7 +11,7 @@ import org.testng.ITestResult;
 import java.util.List;
 import java.util.WeakHashMap;
 
-import static org.mockito.internal.util.reflection.Fields.notAnnotatedBy;
+import static org.mockito.internal.util.reflection.Fields.annotatedBy;
 
 public class MockitoBeforeTestNGMethod {
 
@@ -44,7 +44,7 @@ public class MockitoBeforeTestNGMethod {
     }
 
     private void initializeCaptors(Object instance) {
-        List<InstanceField> instanceFields = Fields.allFieldsInHierarchy(instance).filter(notAnnotatedBy(Captor.class)).instanceFields();
+        List<InstanceField> instanceFields = Fields.allDeclaredFieldsOf(instance).filter(annotatedBy(Captor.class)).instanceFields();
         for (InstanceField instanceField : instanceFields) {
             new CaptorAnnotationProcessor().process(instanceField.annotation(Captor.class), instanceField.jdkField());
         }

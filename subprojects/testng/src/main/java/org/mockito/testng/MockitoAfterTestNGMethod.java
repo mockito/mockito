@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.internal.util.reflection.Fields.notAnnotatedBy;
+import static org.mockito.internal.util.reflection.Fields.annotatedBy;
 
 public class MockitoAfterTestNGMethod {
 
@@ -32,10 +32,10 @@ public class MockitoAfterTestNGMethod {
     }
 
     private Collection<Object> instanceMocksOf(Object instance) {
-        return Fields.allFieldsInHierarchy(instance)
-                                            .filter(notAnnotatedBy(Mock.class,
-                                                                   Spy.class,
-                                                                   MockitoAnnotations.Mock.class))
+        return Fields.allDeclaredFieldsOf(instance)
+                                            .filter(annotatedBy(Mock.class,
+                                                                Spy.class,
+                                                                MockitoAnnotations.Mock.class))
                                             .notNull()
                                             .assignedValues();
     }
