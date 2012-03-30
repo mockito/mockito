@@ -4,19 +4,29 @@
  */
 package org.mockito.plugins;
 
-import java.io.Serializable;
-
 import org.mockito.internal.Incubating;
 import org.mockito.internal.invocation.Invocation;
 
+import java.io.Serializable;
+
 /**
- * Handles the invocation on a mock
+ * Mockito handler of an invocation on a mock.
  *
- * TODO - should it extend serializable?
+ * <p>Takes an invocation object and handles it.
+ * The Invocation instance should be created by the mock maker internal filter.</p>
  */
+// TODO XXX Invocation is concrete and in another package, could we use a Factory and use an interface instead.
+// see MethodInterceptorFilter
 @Incubating
 public interface MockitoInvocationHandler extends Serializable {
 
+    /**
+     * Handles the invocation.
+     *
+     * @param invocation The invocation to handle
+     * @return Result
+     * @throws Throwable Throwable
+     */
     @Incubating
     Object handle(Invocation invocation) throws Throwable;
 
