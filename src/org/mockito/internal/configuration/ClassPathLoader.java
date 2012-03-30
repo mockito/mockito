@@ -21,8 +21,45 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * Loads configuration or extension points available in the classpath.
+ *
+ * <p>
+ * <ul>
+ *     <li>
+ *         Can load the mockito configuration. The user who want to provide his own mockito configuration
+ *         should write the class <code>org.mockito.configuration.MockitoConfiguration</code> that implements
+ *         {@link IMockitoConfiguration}. For example :
+ *         <pre class="code"><code class="java">
+ * package org.mockito.configuration;
+ *
+ * //...
+ *
+ * public class MockitoConfiguration implements IMockitoConfiguration {
+ *     boolean enableClassCache() { return false; }
+ *
+ *     // ...
+ * }
+ *     </code></pre>
+ *     </li>
+ *     <li>
+ *         Can load available mockito extensions. Currently Mockito only have one extension point the
+ *         {@link MockMaker}. This extension point allows a user to provide his own bytecode engine to build mocks.
+ *         <br>Suppose you wrote an extension to create mocks with some <em>Awesome</em> library, in order to tell
+ *         Mockito to use it you need to put in your classpath
+ *         <ol style="list-style-type: lower-alpha">
+ *             <li>The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
+ *             <li>A file named <code>org.mockito.plugins.MockMaker</code> in a folder named
+ *             <code>mockito-extensions</code>, the content of this file need to have <strong>one</strong> line with
+ *             the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
+ *         </ol>
+ *     </li>
+ * </ul>
+ * </p>
+ */
 public class ClassPathLoader {
     private static final MockMaker mockMaker = findPlatformMockMaker();
+    public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
 
     /**
      * @return configuration loaded from classpath or null
@@ -32,7 +69,7 @@ public class ClassPathLoader {
         //Trying to get config from classpath
         Class configClass;
         try {
-            configClass = (Class) Class.forName("org.mockito.configuration.MockitoConfiguration");
+            configClass = (Class) Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
         } catch (ClassNotFoundException e) {
             //that's ok, it means there is no global config, using default one.
             return null;
@@ -41,16 +78,17 @@ public class ClassPathLoader {
         try {
             return (IMockitoConfiguration) configClass.newInstance();
         } catch (ClassCastException e) {
-            throw new MockitoConfigurationException("\n" +
-                    "MockitoConfiguration class must implement org.mockito.configuration.IMockitoConfiguration interface.", e);
+            throw new MockitoConfigurationException("MockitoConfiguration class must implement " + IMockitoConfiguration.class.getName() + " interface.", e);
         } catch (Exception e) {
-            throw new MockitoConfigurationException("\n" +
-                    "Unable to instantiate org.mockito.configuration.MockitoConfiguration class. Does it have a safe, no-arg constructor?", e);
+            throw new MockitoConfigurationException("Unable to instantiate " + MOCKITO_CONFIGURATION_CLASS_NAME +" class. Does it have a safe, no-arg constructor?", e);
         }
     }
 
     /**
-     * Returns the best mock maker available for the current runtime.
+     * Returns the implementation of the mock maker available for the current runtime.
+     *
+     * <p>Returns {@link CglibMockMaker} if no {@link MockMaker} extension exists
+     * or is visible in the current classpath.</p>
      */
     public static MockMaker getMockMaker() {
         return mockMaker;
@@ -60,7 +98,7 @@ public class ClassPathLoader {
      * Scans the classpath to find a mock maker plugin if one is available,
      * allowing mockito to run on alternative platforms like Android.
      */
-    private static MockMaker findPlatformMockMaker() {
+    static MockMaker findPlatformMockMaker() {
         for (MockMaker mockMaker : loadImplementations(MockMaker.class)) {
             return mockMaker; // return the first one service loader finds (if any)
         }
@@ -91,12 +129,12 @@ public class ClassPathLoader {
                 in = resource.openStream();
                 for (String line : readerToLines(new InputStreamReader(in, "UTF-8"))) {
                     String name = stripCommentAndWhitespace(line);
-                    if (!name.isEmpty()) {
+                    if (name.length() != 0) {
                         result.add(service.cast(loader.loadClass(name).newInstance()));
                     }
                 }
             } catch (Exception e) {
-                throw new MockitoException(
+                throw new MockitoConfigurationException(
                         "Failed to load " + service + " using " + resource, e);
             } finally {
                 closeQuietly(in);
@@ -105,7 +143,7 @@ public class ClassPathLoader {
         return result;
     }
 
-    static List<String> readerToLines(Reader reader) throws IOException {
+    private static List<String> readerToLines(Reader reader) throws IOException {
         List<String> result = new ArrayList<String>();
         BufferedReader lineReader = new BufferedReader(reader);
         String line;
@@ -115,7 +153,7 @@ public class ClassPathLoader {
         return result;
     }
 
-    static String stripCommentAndWhitespace(String line) {
+    private static String stripCommentAndWhitespace(String line) {
         int hash = line.indexOf('#');
         if (hash != -1) {
             line = line.substring(0, hash);
@@ -123,7 +161,7 @@ public class ClassPathLoader {
         return line.trim();
     }
 
-    static void closeQuietly(InputStream in) {
+    private static void closeQuietly(InputStream in) {
         if (in != null) {
             try {
                 in.close();
