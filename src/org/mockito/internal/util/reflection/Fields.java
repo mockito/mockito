@@ -2,8 +2,8 @@ package org.mockito.internal.util.reflection;
 
 import org.mockito.internal.Incubating;
 import org.mockito.internal.util.Checks;
-import org.mockito.internal.util.ListUtil;
-import org.mockito.internal.util.ListUtil.Filter;
+import org.mockito.internal.util.collections.ListUtil.Filter;
+import org.mockito.internal.util.collections.ListUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
