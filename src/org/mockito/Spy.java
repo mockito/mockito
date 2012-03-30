@@ -56,7 +56,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <h4>Important gotcha on spying real objects!</h4>
  * <ol>
  * <li>Sometimes it's impossible or impractical to use {@link Mockito#when(Object)} for stubbing spies.
- * Therefore when using spies please consider <code>doReturn</code>|<code>Answer</code>|<code>Throw()</code>|<code>CallRealMethod</code>
+ * Therefore for spies it is recommended to always use <code>doReturn</code>|<code>Answer</code>|<code>Throw()</code>|<code>CallRealMethod</code>
  * family of methods for stubbing. Example:
  *
  * <pre class="code"><code class="java">
