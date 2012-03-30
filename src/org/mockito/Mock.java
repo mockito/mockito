@@ -4,16 +4,16 @@
  */
 package org.mockito;
 
-import org.mockito.runners.MockitoJUnitRunner;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Mark a field as a mock.
+ *
  * <ul>
  * <li>Allows shorthand mock creation.</li>
  * <li>Minimizes repetitive mock creation code.</li>
@@ -25,7 +25,7 @@ import static java.lang.annotation.ElementType.FIELD;
  *   public class ArticleManagerTest extends SampleBaseTestCase {
  *
  *       &#064;Mock private ArticleCalculator calculator;
- *       &#064;Mock(name = "dbMock") private ArticleDatabase database;
+ *       &#064;Mock(name = "database") private ArticleDatabase dbMock;
  *       &#064;Mock(answer = RETURNS_MOCKS) private UserProvider userProvider;
  *       &#064;Mock(extraInterfaces = {Queue.class, Observer.class}) private  articleMonitor;
  *
@@ -44,14 +44,22 @@ import static java.lang.annotation.ElementType.FIELD;
  *   }
  * </code></pre>
  *
- * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated mocks.
  * <p>
+ * <strong><code>MockitoAnnotations.initMocks(this)</code></strong> method has to be called to initialize annotated objects.
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * You can also put initMocks() in your JUnit runner (&#064;RunWith) or use built-in runners: {@link MockitoJUnitRunner}
+ * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
+ * {@link org.mockito.runners.MockitoJUnitRunner}.
+ * </p>
+ *
+ * @see Mockito#mock(Class)
+ * @see Spy
+ * @see InjectMocks
+ * @see MockitoAnnotations#initMocks(Object)
+ * @see org.mockito.runners.MockitoJUnitRunner
  */
-@Target( { FIELD })
-@Retention(RetentionPolicy.RUNTIME)
+@Target(FIELD)
+@Retention(RUNTIME)
 @Documented
 public @interface Mock {
 

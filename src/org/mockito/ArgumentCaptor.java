@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Use it to capture argument values for further assertions.
+ *
  * <p>
  * Mockito verifies argument values in natural java style: by using an equals() method.
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
@@ -23,9 +24,10 @@ import java.util.List;
  * </code></pre>
  *
  * <p>
- * <b>Warning:</b> it is recommended to use ArgumentCaptor with verification <b>but not</b> with stubbing.
+ * <strong>Warning:</strong> it is recommended to use ArgumentCaptor with verification <strong>but not</strong> with stubbing.
  * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
  * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
+ *
  * <p>
  * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
  * Both techniques can be used for making sure certain arguments where passed to mocks. 
@@ -35,15 +37,20 @@ import java.util.List;
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
+ *
  * <p>
- * This utility class <b>*don't do any type checks*</b>, the generic signatures are only there to avoid casting
+ * This utility class <strong>*don't do any type checks*</strong>, the generic signatures are only there to avoid casting
  * in your code. If you want specific types, then you should do that the captured values.
  * This behavior might change (type checks could be added) in a
  * future major release.
+ *
  * <p>
- * There is an <b>annotation</b> that you might find useful: &#64;{@link Captor}
+ * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
+ *
  * <p>
- * See the full documentation on Mockito in javadoc for {@link Mockito} class.    
+ * See the full documentation on Mockito in javadoc for {@link Mockito} class.
+ *
+ * @see Captor
  */
 public class ArgumentCaptor<T> {
     
