@@ -143,7 +143,7 @@ public class ClassPathLoader {
         return result;
     }
 
-    private static List<String> readerToLines(Reader reader) throws IOException {
+    static List<String> readerToLines(Reader reader) throws IOException {
         List<String> result = new ArrayList<String>();
         BufferedReader lineReader = new BufferedReader(reader);
         String line;
@@ -153,7 +153,7 @@ public class ClassPathLoader {
         return result;
     }
 
-    private static String stripCommentAndWhitespace(String line) {
+    static String stripCommentAndWhitespace(String line) {
         int hash = line.indexOf('#');
         if (hash != -1) {
             line = line.substring(0, hash);
