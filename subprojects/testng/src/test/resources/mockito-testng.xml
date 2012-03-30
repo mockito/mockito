@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Mockito TestNG usage" parallel="none">
+    <test verbose="1" name="Mockito TestNG Integration" annotations="JDK">
+        <classes>
+            <class name="org.mockitousage.testng.MockFieldsShouldBeResetBetweenTestMethodsTest"/>
+            <class name="org.mockitousage.testng.CaptorAnnotatedFieldShouldBeClearedTest"/>
+            <class name="org.mockitousage.testng.TestWithoutListenerShouldNotInitializeAnnotatedFieldsTest"/>
+            <class name="org.mockitousage.testng.EnsureMocksAreInitializedBeforeBeforeClassMethodTest"/>
+            <class name="org.mockitousage.testng.ResetMocksInParentTestClassTooTest"/>
+            <class name="org.mockitousage.testng.AnnotatedFieldsShouldBeInitializedByMockitoTestNGListenerTest"/>
+            <class name="org.mockitousage.testng.InitializeChildTestWhenParentHasListenerTest"/>
+            <class name="org.mockitousage.testng.DontResetMocksIfNoListenerTest"/>
+            <class name="org.mockitousage.testng.ConfigurationMethodTest"/>
+            <class name="org.mockitousage.testng.failuretests.TestNGShouldFailWhenMockitoListenerFailsTest"/>
+        </classes>
+    </test>
+</suite>
