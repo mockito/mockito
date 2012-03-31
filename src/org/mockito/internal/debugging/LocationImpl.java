@@ -7,8 +7,9 @@ package org.mockito.internal.debugging;
 import java.io.Serializable;
 
 import org.mockito.internal.exceptions.base.StackTraceFilter;
+import org.mockito.invocation.Location;
 
-public class LocationImpl implements Serializable {
+public class LocationImpl implements Location, Serializable {
 
     private static final long serialVersionUID = -9054861157390980624L;
     private final Throwable stackTraceHolder;

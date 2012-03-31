@@ -28,7 +28,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
             out += line(i.toString());
             out += line(" invoked: " + i.getLocation());
             if (i.stubInfo() != null) {
-                out += line(" stubbed: " + i.stubInfo().stubbedAt());
+                out += line(" stubbed: " + i.stubInfo().stubbedAt().toString());
             }
         }
 

@@ -6,7 +6,7 @@ package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.StubInfo;
+import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.RegisteredInvocations;
@@ -74,7 +74,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             for (StubbedInvocationMatcher s : stubbed) {
                 if (s.matches(invocation)) {
                     s.markStubUsed(invocation);
-                    invocation.markStubbed(new StubInfo(s));
+                    invocation.markStubbed(new StubInfoImpl(s));
                     return s;
                 }
             }

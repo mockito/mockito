@@ -58,7 +58,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
         }
 
         public String getLocationOfStubbing() {
-            return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt();
+            return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt().toString();
         }
 
 

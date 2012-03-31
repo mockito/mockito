@@ -1,7 +1,6 @@
 package org.mockito.invocation;
 
-import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.StubInfo;
+import org.mockito.internal.invocation.StubInfoImpl;
 
 /**
  * by Szczepan Faber, created at: 3/31/12
@@ -12,7 +11,7 @@ public interface PublicInvocation extends InvocationOnMock {
 
     int getSequenceNumber();
 
-    LocationImpl getLocation();
+    Location getLocation();
 
     Object[] getRawArguments();
 

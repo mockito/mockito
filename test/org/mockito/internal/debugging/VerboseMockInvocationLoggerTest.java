@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.StubInfo;
+import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 
 import java.io.ByteArrayOutputStream;
@@ -75,7 +75,7 @@ public class VerboseMockInvocationLoggerTest {
 
     @Test
     public void should_print_stubbed_info_if_availbable() throws Exception {
-        invocation.markStubbed(new StubInfo(stubbedInvocation));
+        invocation.markStubbed(new StubInfoImpl(stubbedInvocation));
 
         listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));
 

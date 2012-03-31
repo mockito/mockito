@@ -13,6 +13,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.PublicInvocation;
+import org.mockito.invocation.StubInfo;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
