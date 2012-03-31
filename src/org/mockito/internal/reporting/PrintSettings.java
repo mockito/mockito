@@ -17,6 +17,7 @@ import java.util.List;
 
 public class PrintSettings {
 
+    public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
     private List<Integer> withTypeInfo = new LinkedList<Integer>();
 
@@ -46,7 +47,7 @@ public class PrintSettings {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
         String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
         String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
-        if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > Invocation.MAX_LINE_LENGTH)) {
+        if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH)) {
             return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, this);
         } else {
             return invocationString;

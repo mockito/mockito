@@ -30,7 +30,6 @@ import java.util.Arrays;
 public class Invocation implements PublicInvocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
-    public static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
     private final Object mock;
     private final MockitoMethod method;
