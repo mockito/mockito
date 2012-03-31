@@ -7,6 +7,8 @@ package org.mockito.internal.verification;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockitousage.IMethods;
@@ -14,24 +16,23 @@ import org.mockitoutil.TestBase;
 
 public class SmartPrinterTest extends TestBase {
 
-    private PrintingFriendlyInvocation multi;
-    private PrintingFriendlyInvocation shortie;
+    private InvocationMatcher multi;
+    private InvocationMatcher shortie;
     @Mock private IMethods mock;
 
     @Before
     public void setup() throws Exception {
         mock.varargs("first very long argument", "second very long argument", "another very long argument");
-        multi = getLastInvocation();
-        multi.toString();
-        
+        multi = new InvocationMatcher(getLastInvocation());
+
         mock.varargs("short arg");
-        shortie = getLastInvocation();
+        shortie = new InvocationMatcher(getLastInvocation());
     }
 
     @Test
     public void shouldPrintBothInMultilinesWhenFirstIsMulti() {
         //when
-        SmartPrinter printer = new SmartPrinter(multi, shortie);
+        SmartPrinter printer = new SmartPrinter(multi, shortie.getInvocation());
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -41,7 +42,7 @@ public class SmartPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInMultilinesWhenSecondIsMulti() {
         //when
-        SmartPrinter printer = new SmartPrinter(shortie, multi);
+        SmartPrinter printer = new SmartPrinter(shortie, multi.getInvocation());
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -51,7 +52,7 @@ public class SmartPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInMultilinesWhenBothAreMulti() {
         //when
-        SmartPrinter printer = new SmartPrinter(multi, multi);
+        SmartPrinter printer = new SmartPrinter(multi, multi.getInvocation());
         
         //then
         assertContains("\n", printer.getWanted().toString());
@@ -61,7 +62,7 @@ public class SmartPrinterTest extends TestBase {
     @Test
     public void shouldPrintBothInSingleLineWhenBothAreShort() {
         //when
-        SmartPrinter printer = new SmartPrinter(shortie, shortie);
+        SmartPrinter printer = new SmartPrinter(shortie, shortie.getInvocation());
         
         //then
         assertNotContains("\n", printer.getWanted().toString());
