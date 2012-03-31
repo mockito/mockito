@@ -8,9 +8,9 @@ import static java.util.Arrays.*;
 
 import org.junit.Test;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
+import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
 public class NoMoreInteractionsTest extends TestBase {
@@ -21,7 +21,7 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrder() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        InvocationImpl i = new InvocationBuilder().toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(context.isVerified(i));
         
         try {
@@ -36,7 +36,7 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrderAndPass() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        InvocationImpl i = new InvocationBuilder().toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
         context.markVerified(i);
         assertTrue(context.isVerified(i));
         
@@ -49,8 +49,8 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrderMultipleInvoctions() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        InvocationImpl i = new InvocationBuilder().seq(1).toInvocation();
-        InvocationImpl i2 = new InvocationBuilder().seq(2).toInvocation();
+        Invocation i = new InvocationBuilder().seq(1).toInvocation();
+        Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
 
         //when
         context.markVerified(i2);
@@ -63,8 +63,8 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrderMultipleInvoctionsAndThrow() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        InvocationImpl i = new InvocationBuilder().seq(1).toInvocation();
-        InvocationImpl i2 = new InvocationBuilder().seq(2).toInvocation();
+        Invocation i = new InvocationBuilder().seq(1).toInvocation();
+        Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
         
         try {
             //when     

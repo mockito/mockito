@@ -7,12 +7,13 @@ package org.mockito.internal.invocation;
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.matchers.VarargMatcher;
+import org.mockito.invocation.Invocation;
 
 import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class ArgumentsComparator {
-    public boolean argumentsMatch(InvocationMatcher invocationMatcher, InvocationImpl actual) {
+    public boolean argumentsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
         Object[] actualArgs = actual.getArguments();
         return argumentsMatch(invocationMatcher, actualArgs) || varArgsMatch(invocationMatcher, actual);
     }
@@ -30,7 +31,7 @@ public class ArgumentsComparator {
     }
 
     //ok, this method is a little bit messy but the vararg business unfortunately is messy...      
-    private boolean varArgsMatch(InvocationMatcher invocationMatcher, InvocationImpl actual) {
+    private boolean varArgsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
         if (!actual.getMethod().isVarArgs()) {
             //if the method is not vararg forget about it
             return false;

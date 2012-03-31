@@ -6,12 +6,12 @@ package org.mockito.internal.verification.api;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 
 public interface VerificationData {
 
-    List<InvocationImpl> getAllInvocations();
+    List<Invocation> getAllInvocations();
 
     InvocationMatcher getWanted();   
     

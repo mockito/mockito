@@ -10,9 +10,9 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.internal.listeners.MockingStartedListener;
+import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -89,7 +89,7 @@ public class MockingProgressImpl implements MockingProgress {
         getArgumentMatcherStorage().validateState();
     }
 
-    public void stubbingCompleted(InvocationImpl invocation) {
+    public void stubbingCompleted(Invocation invocation) {
         stubbingInProgress = null;
     }
     

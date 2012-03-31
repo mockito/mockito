@@ -18,6 +18,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
@@ -25,7 +26,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     private NumberOfInvocationsInOrderChecker checker;
     private Reporter reporter;
     private InvocationMatcher wanted;
-    private LinkedList<InvocationImpl> invocations;
+    private LinkedList<Invocation> invocations;
     private InvocationsFinderStub finderStub;
     private InOrderContext context = new InOrderContextImpl();
     
@@ -54,8 +55,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldReportTooLittleInvocations() throws Exception {
-        InvocationImpl first = new InvocationBuilder().toInvocation();
-        InvocationImpl second = new InvocationBuilder().toInvocation();
+        Invocation first = new InvocationBuilder().toInvocation();
+        Invocation second = new InvocationBuilder().toInvocation();
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
@@ -69,8 +70,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldReportTooManyInvocations() throws Exception {
-        InvocationImpl first = new InvocationBuilder().toInvocation();
-        InvocationImpl second = new InvocationBuilder().toInvocation();
+        Invocation first = new InvocationBuilder().toInvocation();
+        Invocation second = new InvocationBuilder().toInvocation();
         finderStub.validMatchingChunkToReturn.addAll(asList(first, second)); 
         
         try {
@@ -84,7 +85,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldMarkAsVerifiedInOrder() throws Exception {
-        InvocationImpl invocation = new InvocationBuilder().toInvocation();
+        Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(context.isVerified(invocation));
         finderStub.validMatchingChunkToReturn.addAll(asList(invocation)); 
         

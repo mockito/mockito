@@ -6,22 +6,22 @@ package org.mockito.internal.verification.api;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 
 public class VerificationDataInOrderImpl implements VerificationDataInOrder {
 
     private final InOrderContext inOrder;
-    private final List<InvocationImpl> allInvocations;
+    private final List<Invocation> allInvocations;
     private final InvocationMatcher wanted;
 
-    public VerificationDataInOrderImpl(InOrderContext inOrder, List<InvocationImpl> allInvocations, InvocationMatcher wanted) {
+    public VerificationDataInOrderImpl(InOrderContext inOrder, List<Invocation> allInvocations, InvocationMatcher wanted) {
         this.inOrder = inOrder;
         this.allInvocations = allInvocations;
         this.wanted = wanted;        
     }
 
-    public List<InvocationImpl> getAllInvocations() {
+    public List<Invocation> getAllInvocations() {
         return allInvocations;
     }
 

@@ -14,6 +14,7 @@ import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
+import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 public class MissingInvocationInOrderChecker {
@@ -30,8 +31,8 @@ public class MissingInvocationInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
-        List<InvocationImpl> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
+        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
         
         if (!chunk.isEmpty()) {
             return;
@@ -46,9 +47,9 @@ public class MissingInvocationInOrderChecker {
              * is missing, then this method checks if the arguments are different or if the order
              * is not invoked.
              */
-             List<InvocationImpl> actualInvocations = finder.findInvocations(invocations, wanted);
+             List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
              if (actualInvocations == null || actualInvocations.isEmpty())  {
-                 InvocationImpl similar = finder.findSimilarInvocation(invocations, wanted);
+                 Invocation similar = finder.findSimilarInvocation(invocations, wanted);
                  if (similar != null) {
                      Integer[] indicesOfSimilarMatchingArguments =
                              new ArgumentMatchingTool().getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(),

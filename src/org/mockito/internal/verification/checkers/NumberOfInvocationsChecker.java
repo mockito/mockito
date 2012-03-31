@@ -10,10 +10,10 @@ import java.util.List;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
+import org.mockito.invocation.Invocation;
 
 public class NumberOfInvocationsChecker {
     
@@ -30,8 +30,8 @@ public class NumberOfInvocationsChecker {
         this.finder = finder;
     }
     
-    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<InvocationImpl> actualInvocations = finder.findInvocations(invocations, wanted);
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {

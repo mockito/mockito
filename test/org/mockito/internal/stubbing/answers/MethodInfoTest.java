@@ -1,8 +1,8 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.invocation.Invocation;
 
 import java.nio.charset.CharacterCodingException;
 
@@ -16,7 +16,7 @@ public class MethodInfoTest {
     @Test
     public void shouldKnowValidThrowables() throws Exception {
         //when
-        InvocationImpl invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
         MethodInfo info = new MethodInfo(invocation);
 
         //then

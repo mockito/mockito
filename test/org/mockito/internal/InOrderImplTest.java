@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -24,7 +24,7 @@ public class InOrderImplTest extends TestBase {
     public void shouldMarkVerifiedInOrder() throws Exception {
         //given
         InOrderImpl impl = new InOrderImpl((List) asList(mock));
-        InvocationImpl i = new InvocationBuilder().toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(impl.isVerified(i));
         
         //when

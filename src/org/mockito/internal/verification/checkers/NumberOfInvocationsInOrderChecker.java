@@ -10,11 +10,11 @@ import java.util.List;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.Invocation;
 
 public class NumberOfInvocationsInOrderChecker {
     
@@ -31,8 +31,8 @@ public class NumberOfInvocationsInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
-        List<InvocationImpl> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount, context);
+    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+        List<Invocation> chunk = finder.findMatchingChunk(invocations, wanted, wantedCount, context);
         
         int actualCount = chunk.size();
         

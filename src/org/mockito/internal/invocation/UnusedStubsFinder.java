@@ -8,6 +8,7 @@ package org.mockito.internal.invocation;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.invocation.Invocation;
 
 import java.util.*;
 
@@ -18,8 +19,8 @@ public class UnusedStubsFinder {
      * 
      * @param mocks
      */
-    public List<InvocationImpl> find(List<?> mocks) {
-        List<InvocationImpl> unused = new LinkedList<InvocationImpl>();
+    public List<Invocation> find(List<?> mocks) {
+        List<Invocation> unused = new LinkedList<Invocation>();
         for (Object mock : mocks) {
             MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
             List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();

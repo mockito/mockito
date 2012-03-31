@@ -9,7 +9,6 @@ import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.progress.IOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
@@ -24,6 +23,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
+import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.*;
 import org.mockito.verification.VerificationMode;
 
@@ -146,17 +146,17 @@ public class MockitoCore {
      * For testing purposes only. Is not the part of main API.
      * @return last invocation
      */
-    public InvocationImpl getLastInvocation() {
+    public Invocation getLastInvocation() {
         OngoingStubbingImpl ongoingStubbing = ((OngoingStubbingImpl) mockingProgress.pullOngoingStubbing());
-        List<InvocationImpl> allInvocations = ongoingStubbing.getRegisteredInvocations();
+        List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations();
         return allInvocations.get(allInvocations.size()-1);
     }
 
     public Object[] ignoreStubs(Object... mocks) {
         for (Object m : mocks) {
             InvocationContainer invocationContainer = new MockUtil().getMockHandler(m).getInvocationContainer();
-            List<InvocationImpl> ins = invocationContainer.getInvocations();
-            for (InvocationImpl in : ins) {
+            List<Invocation> ins = invocationContainer.getInvocations();
+            for (Invocation in : ins) {
                 if (in.stubInfo() != null) {
                     in.ignoreForVerification();
                 }

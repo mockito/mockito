@@ -17,6 +17,7 @@ import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockitoutil.TestBase;
@@ -43,7 +44,7 @@ public class MockHandlerTest extends TestBase {
 		MockHandler<?> handler = new MockHandler();
 		handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
 		handler.matchersBinder = new MatchersBinder() {
-			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, InvocationImpl invocation) {
+			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
 				throw new InvalidUseOfMatchersException();
 			}
 		};

@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -25,7 +26,7 @@ public class WarningsFinderTest extends TestBase {
     @Test
     public void shouldPrintUnusedStub() {
         // given
-        InvocationImpl unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
+        Invocation unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
 
         // when
         WarningsFinder finder = new WarningsFinder(asList(unusedStub), Arrays.<InvocationMatcher>asList());
@@ -51,7 +52,7 @@ public class WarningsFinderTest extends TestBase {
     @Test
     public void shouldPrintStubWasUsedWithDifferentArgs() {
         // given
-        InvocationImpl stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
+        Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
         InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
 
         // when

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 import org.junit.Test;
 import org.mockito.internal.matchers.*;
@@ -22,7 +23,7 @@ public class ArgumentsComparatorTest extends TestBase {
     @Test
     public void shouldKnowWhenArgumentsMatch() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().args("1", 100).toInvocation();
+        Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         InvocationMatcher invocationMatcher = new InvocationBuilder().args("1", 100).toInvocationMatcher();
 
         //when
@@ -35,7 +36,7 @@ public class ArgumentsComparatorTest extends TestBase {
     @Test
     public void shouldKnowWhenArgsDifferent() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().args("1", 100).toInvocation();
+        Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         InvocationMatcher invocationMatcher = new InvocationBuilder().args("100", 100).toInvocationMatcher();
 
         //when
@@ -48,7 +49,7 @@ public class ArgumentsComparatorTest extends TestBase {
     @Test
     public void shouldKnowWhenActualArgsSizeIsDifferent() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().args("100", 100).toInvocation();
+        Invocation invocation = new InvocationBuilder().args("100", 100).toInvocation();
         InvocationMatcher invocationMatcher = new InvocationBuilder().args("100").toInvocationMatcher();
 
         //when
@@ -61,7 +62,7 @@ public class ArgumentsComparatorTest extends TestBase {
     @Test
     public void shouldKnowWhenMatchersSizeIsDifferent() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().args("100").toInvocation();
+        Invocation invocation = new InvocationBuilder().args("100").toInvocation();
         InvocationMatcher invocationMatcher = new InvocationBuilder().args("100", 100).toInvocationMatcher();
 
         //when
@@ -75,7 +76,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldKnowWhenVarargsMatch() {
         //given
         mock.varargs("1", "2", "3");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("1"), Any.ANY, new InstanceOf(String.class)));
 
         //when
@@ -89,7 +90,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldKnowWhenVarargsDifferent() {
         //given
         mock.varargs("1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("100"), Any.ANY));
 
         //when
@@ -103,7 +104,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldNotAllowAnyObjectMatchEntireVararg() {
         //given
         mock.varargs("1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(Any.ANY));
 
         //when
@@ -117,7 +118,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldAllowAnyVarargMatchEntireVararg() {
         //given
         mock.varargs("1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(AnyVararg.ANY_VARARG));
 
         //when
@@ -131,7 +132,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldNotAllowAnyObjectWithMixedVarargs() {
         //given
         mock.mixedVarargs(1, "1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1)));
 
         //when
@@ -145,7 +146,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldAllowAnyObjectWithMixedVarargs() {
         //given
         mock.mixedVarargs(1, "1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), AnyVararg.ANY_VARARG));
 
         //when
@@ -159,7 +160,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldNotMatchWhenSomeOtherArgumentDoesNotMatch() {
         //given
         mock.mixedVarargs(1, "1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(100), AnyVararg.ANY_VARARG));
 
         //when
@@ -173,7 +174,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldAnyObjectVarargDealWithDifferentSizeOfArgs() {
         //given
         mock.mixedVarargs(1, "1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1)));
 
         //when
@@ -187,7 +188,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldMatchAnyVarargEvenIfOneOfTheArgsIsNull() {
         //given
         mock.mixedVarargs(null, null, "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(null), AnyVararg.ANY_VARARG));
 
         //when
@@ -201,7 +202,7 @@ public class ArgumentsComparatorTest extends TestBase {
     public void shouldMatchAnyVarargEvenIfMatcherIsDecorated() {
         //given
         mock.varargs("1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));
 
         //when

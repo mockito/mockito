@@ -27,10 +27,10 @@ import org.mockito.exceptions.verification.junit.JUnitTool;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
+import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 
 import java.lang.reflect.Field;
@@ -414,7 +414,7 @@ public class Reporter {
                 ));
     }
 
-    public void noMoreInteractionsWanted(InvocationImpl undesired, List<VerificationAwareInvocation> invocations) {
+    public void noMoreInteractionsWanted(Invocation undesired, List<VerificationAwareInvocation> invocations) {
         ScenarioPrinter scenarioPrinter = new ScenarioPrinter();
         String scenario = scenarioPrinter.print(invocations);
 
@@ -427,7 +427,7 @@ public class Reporter {
         ));
     }
 
-    public void noMoreInteractionsWantedInOrder(InvocationImpl undesired) {
+    public void noMoreInteractionsWantedInOrder(Invocation undesired) {
         throw new VerificationInOrderFailure(join(
                 "No interactions wanted here:",
                 new LocationImpl(),

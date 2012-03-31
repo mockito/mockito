@@ -11,6 +11,7 @@ import static org.mockito.Matchers.eq;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.invocation.*;
+import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
 public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
@@ -20,8 +21,8 @@ public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
         //given
         AtLeastXNumberOfInvocationsChecker c = new AtLeastXNumberOfInvocationsChecker();
         c.invocationMarker = Mockito.mock(InvocationMarker.class);
-        InvocationImpl invocation = new InvocationBuilder().simpleMethod().toInvocation();
-        InvocationImpl invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
+        Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
+        Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         //when
         c.check(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);

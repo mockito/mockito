@@ -16,13 +16,14 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings({"unchecked"})
 public class InvocationTest extends TestBase {
 
-    private InvocationImpl invocation;
+    private Invocation invocation;
 
     @Before
     public void setup() throws Exception {
@@ -31,9 +32,9 @@ public class InvocationTest extends TestBase {
 
     @Test
     public void shouldKnowIfIsEqualTo() {
-        InvocationImpl equal =                  new InvocationBuilder().args(" ").mock("mock").toInvocation();
-        InvocationImpl nonEqual =               new InvocationBuilder().args("X").mock("mock").toInvocation();
-        InvocationImpl withNewStringInstance =  new InvocationBuilder().args(new String(" ")).mock("mock").toInvocation();
+        Invocation equal =                  new InvocationBuilder().args(" ").mock("mock").toInvocation();
+        Invocation nonEqual =               new InvocationBuilder().args("X").mock("mock").toInvocation();
+        Invocation withNewStringInstance =  new InvocationBuilder().args(new String(" ")).mock("mock").toInvocation();
 
         assertFalse(invocation.equals(null));
         assertFalse(invocation.equals(""));
@@ -44,7 +45,7 @@ public class InvocationTest extends TestBase {
     
     @Test
     public void shouldEqualToNotConsiderSequenceNumber() {
-        InvocationImpl equal = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
+        Invocation equal = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
         
         assertTrue(invocation.equals(equal));
         assertTrue(invocation.getSequenceNumber() != equal.getSequenceNumber());
@@ -109,7 +110,7 @@ public class InvocationTest extends TestBase {
     
     @Test
     public void shouldTransformArgumentsToMatchers() throws Exception {
-        InvocationImpl i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
+        Invocation i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
         List matchers = ArgumentsProcessor.argumentsToMatchers(i.getArguments());
 
         assertEquals(2, matchers.size());
@@ -126,7 +127,7 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldBeAbleToCallRealMethod() throws Throwable {
         //when
-        InvocationImpl invocation = invocationOf(Foo.class, "bark", new RealMethod() {
+        Invocation invocation = invocationOf(Foo.class, "bark", new RealMethod() {
             public Object invoke(Object target, Object[] arguments) throws Throwable {
                 return new Foo().bark();
             }});
@@ -137,7 +138,7 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldScreamWhenCallingRealMethodOnInterface() throws Throwable {
         //given
-        InvocationImpl invocationOnInterface = new InvocationBuilder().toInvocation();
+        Invocation invocationOnInterface = new InvocationBuilder().toInvocation();
 
         try {
             //when

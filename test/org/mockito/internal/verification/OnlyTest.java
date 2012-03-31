@@ -11,25 +11,25 @@ import java.util.List;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
 
 public class OnlyTest {
 
     Only only = new Only();
     
     public class VerificationDataStub implements VerificationData {
-        private final InvocationImpl invocation;
+        private final Invocation invocation;
         private final InvocationMatcher wanted;
 
-        public VerificationDataStub(InvocationMatcher wanted, InvocationImpl invocation) {
+        public VerificationDataStub(InvocationMatcher wanted, Invocation invocation) {
             this.invocation = invocation;
             this.wanted = wanted;
         }
 
-        public List<InvocationImpl> getAllInvocations() {
+        public List<Invocation> getAllInvocations() {
             return Arrays.asList(invocation);
         }
 
@@ -41,7 +41,7 @@ public class OnlyTest {
     @Test
     public void shouldMarkAsVerified() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().toInvocation();
+        Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
         
         //when
@@ -54,7 +54,7 @@ public class OnlyTest {
     @Test
     public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
         //given
-        InvocationImpl invocation = new InvocationBuilder().toInvocation();
+        Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
         
         //when

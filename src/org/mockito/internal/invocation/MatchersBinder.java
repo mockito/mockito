@@ -9,6 +9,7 @@ import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
+import org.mockito.invocation.Invocation;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +19,7 @@ public class MatchersBinder implements Serializable {
 
     private static final long serialVersionUID = -311433939339443463L;
 
-    public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, InvocationImpl invocation) {
+    public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
@@ -26,7 +27,7 @@ public class MatchersBinder implements Serializable {
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(InvocationImpl invocation, List<LocalizedMatcher> lastMatchers) {
+    private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
         if (!lastMatchers.isEmpty()) {
             int recordedMatchersSize = lastMatchers.size();
             int expectedMatchersSize = invocation.getArguments().length;

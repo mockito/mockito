@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 public class AtMost implements VerificationMode {
@@ -29,11 +29,11 @@ public class AtMost implements VerificationMode {
     }
 
     public void verify(VerificationData data) {
-        List<InvocationImpl> invocations = data.getAllInvocations();
+        List<Invocation> invocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
         InvocationsFinder finder = new InvocationsFinder();
-        List<InvocationImpl> found = finder.findInvocations(invocations, wanted);
+        List<Invocation> found = finder.findInvocations(invocations, wanted);
         int foundSize = found.size();
         if (foundSize > maxNumberOfInvocations) {
             new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);

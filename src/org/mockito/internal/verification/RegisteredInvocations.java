@@ -9,6 +9,7 @@ import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.collections.ListUtil.Filter;
+import org.mockito.invocation.Invocation;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -19,9 +20,9 @@ import java.util.List;
 public class RegisteredInvocations implements Serializable {
 
     private static final long serialVersionUID = -2674402327380736290L;
-    private final List<InvocationImpl> invocations = Collections.synchronizedList(new LinkedList<InvocationImpl>());
+    private final List<Invocation> invocations = Collections.synchronizedList(new LinkedList<Invocation>());
 
-    public void add(InvocationImpl invocation) {
+    public void add(Invocation invocation) {
         invocations.add(invocation);
     }
 
@@ -33,8 +34,8 @@ public class RegisteredInvocations implements Serializable {
         }
     }
 
-    public List<InvocationImpl> getAll() {
-    	List<InvocationImpl> copiedList;
+    public List<Invocation> getAll() {
+    	List<Invocation> copiedList;
     	synchronized (invocations) {
 			copiedList = new LinkedList<InvocationImpl>(invocations) ;
 		}
@@ -46,8 +47,8 @@ public class RegisteredInvocations implements Serializable {
         return invocations.isEmpty();
     }
 
-    private static class RemoveToString implements Filter<InvocationImpl> {
-        public boolean isOut(InvocationImpl invocation) {
+    private static class RemoveToString implements Filter<Invocation> {
+        public boolean isOut(Invocation invocation) {
             return new ObjectMethodsGuru().isToString(invocation.getMethod());
         }
     }

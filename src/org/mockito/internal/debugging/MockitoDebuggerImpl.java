@@ -8,6 +8,7 @@ import org.mockito.MockitoDebugger;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
+import org.mockito.invocation.Invocation;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
 
     public String printInvocations(Object ... mocks) {
         String out = "";
-        List<InvocationImpl> invocations = allInvocationsFinder.find(asList(mocks));
+        List<Invocation> invocations = allInvocationsFinder.find(asList(mocks));
         out += line("********************************");
         out += line("*** Mockito interactions log ***");
         out += line("********************************");

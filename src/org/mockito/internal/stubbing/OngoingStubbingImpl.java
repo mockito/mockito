@@ -5,7 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
@@ -38,7 +38,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
 
-    public List<InvocationImpl> getRegisteredInvocations() {
+    public List<Invocation> getRegisteredInvocations() {
         //TODO interface for tests
         return invocationContainerImpl.getInvocations();
     }

@@ -6,8 +6,8 @@
 package org.mockito.internal.progress;
 
 import org.mockito.MockSettings;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.listeners.MockingProgressListener;
+import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -23,7 +23,7 @@ public interface MockingProgress {
 
     void stubbingStarted();
 
-    void stubbingCompleted(InvocationImpl invocation);
+    void stubbingCompleted(Invocation invocation);
     
     void validateState();
 

@@ -21,6 +21,7 @@ import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationInOrderCheckerTest extends TestBase {
@@ -28,7 +29,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     private MissingInvocationInOrderChecker checker;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
-    private LinkedList<InvocationImpl> invocations;
+    private LinkedList<Invocation> invocations;
     private InvocationsFinderStub finderStub;
     private InOrderContext context = new InOrderContextImpl();
     
@@ -44,7 +45,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
 
     @Test
     public void shouldPassWhenMatchingInteractionFound() throws Exception {
-        InvocationImpl actual = new InvocationBuilder().toInvocation();
+        Invocation actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);

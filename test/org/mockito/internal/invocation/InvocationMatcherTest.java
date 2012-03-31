@@ -21,6 +21,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.NotNull;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -37,8 +38,8 @@ public class InvocationMatcherTest extends TestBase {
 
     @Test
     public void shouldBeACitizenOfHashes() throws Exception {
-        InvocationImpl invocation = new InvocationBuilder().toInvocation();
-        InvocationImpl invocationTwo = new InvocationBuilder().args("blah").toInvocation();
+        Invocation invocation = new InvocationBuilder().toInvocation();
+        Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
         
         Map map = new HashMap();
         map.put(new InvocationMatcher(invocation), "one");
@@ -69,22 +70,22 @@ public class InvocationMatcherTest extends TestBase {
     
     @Test
     public void shouldKnowIfIsSimilarTo() throws Exception {
-        InvocationImpl same = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
+        Invocation same = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
         assertTrue(simpleMethod.hasSimilarMethod(same));
         
-        InvocationImpl different = new InvocationBuilder().mock(mock).differentMethod().toInvocation();
+        Invocation different = new InvocationBuilder().mock(mock).differentMethod().toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(different));
     }
     
     @Test
     public void shouldNotBeSimilarToVerifiedInvocation() throws Exception {
-        InvocationImpl verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
+        Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(verified));
     }
        
     @Test
     public void shouldNotBeSimilarIfMocksAreDifferent() throws Exception {
-        InvocationImpl onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
+        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(onDifferentMock));
     }    
     
@@ -96,7 +97,7 @@ public class InvocationMatcherTest extends TestBase {
         String sameArg = "test";
         
         InvocationMatcher invocation = new InvocationBuilder().method(method).arg(sameArg).toInvocationMatcher();
-        InvocationImpl overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg(sameArg).toInvocation();
+        Invocation overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg(sameArg).toInvocation();
         
         assertFalse(invocation.hasSimilarMethod(overloadedInvocation));
     } 
@@ -107,7 +108,7 @@ public class InvocationMatcherTest extends TestBase {
         Method overloadedMethod = IMethods.class.getMethod("simpleMethod", Object.class);
         
         InvocationMatcher invocation = new InvocationBuilder().mock(mock).method(method).arg("foo").toInvocationMatcher();
-        InvocationImpl overloadedInvocation = new InvocationBuilder().mock(mock).method(overloadedMethod).arg("bar").toInvocation();
+        Invocation overloadedInvocation = new InvocationBuilder().mock(mock).method(overloadedMethod).arg("bar").toInvocation();
         
         assertTrue(invocation.hasSimilarMethod(overloadedInvocation));
     }
@@ -115,7 +116,7 @@ public class InvocationMatcherTest extends TestBase {
     @Test
     public void shouldCaptureArgumentsFromInvocation() throws Exception {
         //given
-        InvocationImpl invocation = new InvocationBuilder().args("1", 100).toInvocation();
+        Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         CapturingMatcher capturingMatcher = new CapturingMatcher();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
         
@@ -131,7 +132,7 @@ public class InvocationMatcherTest extends TestBase {
     public void shouldMatchVarargsUsingAnyVarargs() throws Exception {
         //given
         mock.varargs("1", "2");
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(AnyVararg.ANY_VARARG));
 
         //when
@@ -145,7 +146,7 @@ public class InvocationMatcherTest extends TestBase {
     public void shouldMatchCaptureArgumentsWhenArgsCountDoesNOTMatch() throws Exception {
         //given
         mock.varargs();
-        InvocationImpl invocation = getLastInvocation();
+        Invocation invocation = getLastInvocation();
 
         //when
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));
@@ -157,7 +158,7 @@ public class InvocationMatcherTest extends TestBase {
     @Test
     public void shouldCreateFromInvocations() throws Exception {
         //given
-        InvocationImpl i = new InvocationBuilder().toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
         //when
         List<InvocationMatcher> out = InvocationMatcher.createFrom(asList(i));
         //then

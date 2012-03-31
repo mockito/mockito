@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 
 public interface FindingsListener {
-    void foundStubCalledWithDifferentArgs(InvocationImpl unused, InvocationMatcher unstubbed);
+    void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed);
 
-    void foundUnusedStub(InvocationImpl unused);
+    void foundUnusedStub(Invocation unused);
 
     void foundUnstubbed(InvocationMatcher unstubbed);
 }

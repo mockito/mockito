@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.util.MockitoLogger;
+import org.mockito.invocation.Invocation;
 
 import static org.mockito.internal.util.StringJoiner.join;
 
@@ -19,7 +19,7 @@ public class LoggingListener implements FindingsListener {
         this.logger = logger;
     }
 
-    public void foundStubCalledWithDifferentArgs(InvocationImpl unused, InvocationMatcher unstubbed) {
+    public void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed) {
         logger.log(join(
                 " *** Stubbing warnings from Mockito: *** ",
                 "",
@@ -28,7 +28,7 @@ public class LoggingListener implements FindingsListener {
                 ""));
     }
 
-    public void foundUnusedStub(InvocationImpl unused) {
+    public void foundUnusedStub(Invocation unused) {
         logger.log("This stubbing was never used   " + unused.getLocation() + "\n");
     }
 

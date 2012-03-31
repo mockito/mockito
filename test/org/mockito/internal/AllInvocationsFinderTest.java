@@ -7,8 +7,8 @@ package org.mockito.internal;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -36,7 +36,7 @@ public class AllInvocationsFinderTest extends TestBase {
         mockTwo.simpleMethod(200);
         mockOne.simpleMethod(300);
         
-        List<InvocationImpl> invocations = finder.find(asList(mockOne, mockTwo));
+        List<Invocation> invocations = finder.find(asList(mockOne, mockTwo));
         
         assertEquals(3, invocations.size());
         assertArgumentEquals(100, invocations.get(0));
@@ -48,12 +48,12 @@ public class AllInvocationsFinderTest extends TestBase {
     public void shouldNotCountDuplicatedInteractions() throws Exception {
         mockOne.simpleMethod(100);
 
-        List<InvocationImpl> invocations = finder.find(asList(mockOne, mockOne, mockOne));
+        List<Invocation> invocations = finder.find(asList(mockOne, mockOne, mockOne));
 
         assertEquals(1, invocations.size());
     }
 
-    private void assertArgumentEquals(Object argumentValue, InvocationImpl invocation) {
+    private void assertArgumentEquals(Object argumentValue, Invocation invocation) {
         assertEquals(argumentValue, invocation.getArguments()[0]);
     }
 }
