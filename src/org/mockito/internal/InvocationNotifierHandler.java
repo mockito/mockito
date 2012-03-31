@@ -6,9 +6,9 @@ package org.mockito.internal;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.plugins.MockitoInvocationHandler;
 import org.mockito.stubbing.Answer;
@@ -32,7 +32,7 @@ public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, M
         this.invocationListeners = settings.getInvocationListeners();
     }
 
-    public Object handle(InvocationImpl invocation) throws Throwable {
+    public Object handle(Invocation invocation) throws Throwable {
         try {
             Object returnedValue = mockHandler.handle(invocation);
             notifyMethodCall(invocation, returnedValue);
@@ -44,7 +44,7 @@ public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, M
     }
 
 
-	private void notifyMethodCall(InvocationImpl invocation, Object returnValue) {
+	private void notifyMethodCall(Invocation invocation, Object returnValue) {
 		for (InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
@@ -54,7 +54,7 @@ public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, M
         }
 	}
 
-    private void notifyMethodCallException(InvocationImpl invocation, Throwable exception) {
+    private void notifyMethodCallException(Invocation invocation, Throwable exception) {
 		for (InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, exception));

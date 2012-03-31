@@ -25,7 +25,7 @@ public class InvocationMarker {
     public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);
         
-        for (InvocationImpl i : chunk) {
+        for (Invocation i : chunk) {
             context.markVerified(i);
         }
     }

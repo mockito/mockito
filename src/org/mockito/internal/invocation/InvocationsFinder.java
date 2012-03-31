@@ -74,7 +74,7 @@ public class InvocationsFinder {
     
     public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         Invocation firstSimilar = null;
-        for (InvocationImpl invocation : invocations) {
+        for (Invocation invocation : invocations) {
             if (!wanted.hasSimilarMethod(invocation)) {
                 continue;
             }
@@ -112,7 +112,7 @@ public class InvocationsFinder {
         }
     }
     
-    public InvocationImpl findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
+    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
         LinkedList<Invocation> verifiedOnly = ListUtil.filter(invocations, new RemoveUnverifiedInOrder(context));
         
         if (verifiedOnly.isEmpty()) {

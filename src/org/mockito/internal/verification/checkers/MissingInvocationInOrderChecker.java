@@ -8,7 +8,6 @@ package org.mockito.internal.verification.checkers;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
@@ -38,7 +37,7 @@ public class MissingInvocationInOrderChecker {
             return;
         }
         
-        InvocationImpl previousInOrder = finder.findPreviousVerifiedInOrder(invocations, context);
+        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations, context);
         if (previousInOrder == null) {
             /**
              * It is of course possible to have an issue where the arguments are different

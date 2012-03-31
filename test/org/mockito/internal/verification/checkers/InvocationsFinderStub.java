@@ -8,7 +8,6 @@ package org.mockito.internal.verification.checkers;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
@@ -18,7 +17,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     
     Invocation similarToReturn;
     Invocation firstUnverifiedToReturn;
-    InvocationImpl previousInOrderToReturn;
+    Invocation previousInOrderToReturn;
     
     final List<Invocation> actualToReturn = new LinkedList<Invocation>();
     final List<Invocation> validMatchingChunkToReturn = new LinkedList<Invocation>();
@@ -52,7 +51,7 @@ class InvocationsFinderStub extends InvocationsFinder {
     }
     
     @Override
-    public InvocationImpl findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
+    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
         return previousInOrderToReturn;
     }
 }

@@ -72,7 +72,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWantedDiffersFromActual() throws Exception {
-        InvocationImpl previous = new InvocationBuilder().toInvocation();
+        Invocation previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);

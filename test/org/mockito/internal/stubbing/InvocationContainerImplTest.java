@@ -5,12 +5,12 @@
 package org.mockito.internal.stubbing;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
+import org.mockito.invocation.Invocation;
 
 import java.util.LinkedList;
 
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class InvocationContainerImplTest {
 
     InvocationContainerImpl container = new InvocationContainerImpl(new ThreadSafeMockingProgress());
-    InvocationImpl invocation = new InvocationBuilder().toInvocation();
+    Invocation invocation = new InvocationBuilder().toInvocation();
     LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
 
     @Test

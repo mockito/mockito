@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.invocation.Invocation;
 import org.mockito.plugins.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.*;
@@ -45,7 +46,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         MockitoMethod mockitoMethod = createMockitoMethod(method);
         
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
-        InvocationImpl invocation = new InvocationImpl(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
+        Invocation invocation = new InvocationImpl(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return handler.handle(invocation);
     }
    

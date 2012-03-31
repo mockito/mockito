@@ -6,6 +6,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
 import java.lang.reflect.Method;
@@ -32,7 +33,7 @@ public class InvocationBuilder {
      *
      * @return invocation
      */
-    public InvocationImpl toInvocation() {
+    public Invocation toInvocation() {
         if (method == null) {
             List<Class> argTypes = new LinkedList<Class>();
             for (Object arg : args) {
@@ -50,7 +51,7 @@ public class InvocationBuilder {
             }
         }
         
-        InvocationImpl i = new InvocationImpl(mock, new SerializableMethod(method), args, sequenceNumber, null);
+        Invocation i = new InvocationImpl(mock, new SerializableMethod(method), args, sequenceNumber, null);
         if (verified) {
             i.markVerified();
         }

@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 
@@ -40,7 +39,7 @@ public class WarningsFinder {
             }
         }
 
-        for (InvocationImpl i : unusedStubs) {
+        for (Invocation i : unusedStubs) {
             findingsListener.foundUnusedStub(i);
         }
 

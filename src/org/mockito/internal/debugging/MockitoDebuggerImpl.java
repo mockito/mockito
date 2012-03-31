@@ -5,7 +5,6 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.MockitoDebugger;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.invocation.Invocation;
@@ -25,7 +24,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
         out += line("********************************");
         out += line("*** Mockito interactions log ***");
         out += line("********************************");
-        for(InvocationImpl i:invocations) {
+        for(Invocation i:invocations) {
             out += line(i.toString());
             out += line(" invoked: " + i.getLocation());
             if (i.stubInfo() != null) {
@@ -41,7 +40,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
         out += line("***       Unused stubs       ***");
         out += line("********************************");
         
-        for(InvocationImpl i:invocations) {
+        for(Invocation i:invocations) {
             out += line(i.toString());
             out += line(" stubbed: " + i.getLocation());
         }

@@ -33,13 +33,13 @@ import static org.mockito.Mockito.mock;
 public class MockHandlerTest extends TestBase {
 
 	private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
-	private InvocationImpl invocation = mock(InvocationImpl.class);
+	private Invocation invocation = mock(InvocationImpl.class);
 
 
 	@Test
 	public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
 		// given
-		InvocationImpl invocation = new InvocationBuilder().toInvocation();
+		Invocation invocation = new InvocationBuilder().toInvocation();
 		@SuppressWarnings("rawtypes")
 		MockHandler<?> handler = new MockHandler();
 		handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());

@@ -5,7 +5,7 @@
 package org.mockito.plugins;
 
 import org.mockito.internal.Incubating;
-import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.invocation.Invocation;
 
 import java.io.Serializable;
 
@@ -28,6 +28,6 @@ public interface MockitoInvocationHandler extends Serializable {
      * @throws Throwable Throwable
      */
     @Incubating
-    Object handle(InvocationImpl invocation) throws Throwable;
+    Object handle(Invocation invocation) throws Throwable;
 
 }

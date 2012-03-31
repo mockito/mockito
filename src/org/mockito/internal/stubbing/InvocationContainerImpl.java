@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.progress.MockingProgress;
@@ -66,11 +65,11 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         }
     }
 
-    Object answerTo(InvocationImpl invocation) throws Throwable {
+    Object answerTo(Invocation invocation) throws Throwable {
         return findAnswerFor(invocation).answer(invocation);
     }
 
-    public StubbedInvocationMatcher findAnswerFor(InvocationImpl invocation) {
+    public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
                 if (s.matches(invocation)) {
