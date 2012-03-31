@@ -118,13 +118,6 @@ public class InvocationTest extends TestBase {
         assertEquals(ArrayEquals.class, matchers.get(1).getClass());
     }
     
-    @Test
-    public void shouldKnowValidThrowables() throws Exception {
-        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
-        assertFalse(invocation.isValidException(new Exception()));
-        assertTrue(invocation.isValidException(new CharacterCodingException()));
-    }
-    
     class Foo {
         public String bark() {
             return "woof";

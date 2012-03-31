@@ -17,8 +17,8 @@ import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.invocation.PublicInvocation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.List;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, VerificationAwareInvocation {
+public class Invocation implements PublicInvocation, PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private static final int MAX_LINE_LENGTH = 45;
@@ -153,48 +153,8 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return matchers;
     }
 
-    public boolean isValidException(Throwable throwable) {
-        Class<?>[] exceptions = this.getMethod().getExceptionTypes();
-        Class<?> throwableClass = throwable.getClass();
-        for (Class<?> exception : exceptions) {
-            if (exception.isAssignableFrom(throwableClass)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isValidReturnType(Class clazz) {
-        if (method.getReturnType().isPrimitive()) {
-            return Primitives.primitiveTypeOf(clazz) == method.getReturnType();
-        } else {
-            return method.getReturnType().isAssignableFrom(clazz);
-        }
-    }
-
-    public boolean isVoid() {
-        return this.method.getReturnType() == Void.TYPE;
-    }
-
-    public String printMethodReturnType() {
-        return method.getReturnType().getSimpleName();
-    }
-
-    public String getMethodName() {
-        return method.getName();
-    }
-
-    public boolean returnsPrimitive() {
-        return method.getReturnType().isPrimitive();
-    }
-
     public Location getLocation() {
         return location;
-    }
-
-    public int getArgumentsCount() {
-        return arguments.length;
     }
 
     public Object[] getRawArguments() {
@@ -202,21 +162,17 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
     }
 
     public Object callRealMethod() throws Throwable {
-        if (isDeclaredOnInterface()) {
+        if (this.getMethod().getDeclaringClass().isInterface()) {
             new Reporter().cannotCallRealMethodOnInterface();
         }
         return realMethod.invoke(mock, rawArguments);
     }
-    
-    public boolean isDeclaredOnInterface() {
-        return this.getMethod().getDeclaringClass().isInterface();
-    }      
 
     public String toString(PrintSettings printSettings) {
         return toString(argumentsToMatchers(), printSettings);
     }
 
-    void markVerified() {
+    public void markVerified() {
         this.verified = true;
     }
 

@@ -25,7 +25,7 @@ public class AnswersValidatorTest extends TestBase {
     @Test
     public void shouldValidateNullThrowable() throws Throwable {
         try {
-            validator.validate(new ThrowsException(null), null);
+            validator.validate(new ThrowsException(null), new InvocationBuilder().toInvocation());
             fail();
         } catch (MockitoException e) {}
     }

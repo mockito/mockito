@@ -29,7 +29,7 @@ public class MatchersBinder implements Serializable {
     private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
         if (!lastMatchers.isEmpty()) {
             int recordedMatchersSize = lastMatchers.size();
-            int expectedMatchersSize = invocation.getArgumentsCount();
+            int expectedMatchersSize = invocation.getArguments().length;
             if (expectedMatchersSize != recordedMatchersSize) {
                 new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
             }

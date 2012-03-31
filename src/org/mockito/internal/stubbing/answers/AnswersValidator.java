@@ -5,14 +5,15 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.invocation.PublicInvocation;
 import org.mockito.stubbing.Answer;
 
 public class AnswersValidator {
 
     private Reporter reporter = new Reporter();
     
-    public void validate(Answer<?> answer, Invocation invocation) {
+    public void validate(Answer<?> answer, PublicInvocation theInvocation) {
+        MethodInfo invocation = new MethodInfo(theInvocation);
         if (answer instanceof ThrowsException) {
             validateException((ThrowsException) answer, invocation);
         }
@@ -30,33 +31,33 @@ public class AnswersValidator {
         }
     }
 
-    private void validateMockingConcreteClass(CallsRealMethods answer, Invocation invocation) {
-        if (invocation.isDeclaredOnInterface()) {
+    private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {
+        if (methodInfo.isDeclaredOnInterface()) {
             reporter.cannotCallRealMethodOnInterface();
         }
     }
 
-    private void validateDoNothing(DoesNothing answer, Invocation invocation) {
-        if (!invocation.isVoid()) {
+    private void validateDoNothing(DoesNothing answer, MethodInfo methodInfo) {
+        if (!methodInfo.isVoid()) {
             reporter.onlyVoidMethodsCanBeSetToDoNothing();
         }
     }
 
-    private void validateReturnValue(Returns answer, Invocation invocation) {
-        if (invocation.isVoid()) {
-            reporter.cannotStubVoidMethodWithAReturnValue(invocation.getMethod().getName());
+    private void validateReturnValue(Returns answer, MethodInfo methodInfo) {
+        if (methodInfo.isVoid()) {
+            reporter.cannotStubVoidMethodWithAReturnValue(methodInfo.getMethodName());
         }
         
-        if (answer.returnsNull() && invocation.returnsPrimitive()) {
-            reporter.wrongTypeOfReturnValue(invocation.printMethodReturnType(), "null", invocation.getMethodName());
+        if (answer.returnsNull() && methodInfo.returnsPrimitive()) {
+            reporter.wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), "null", methodInfo.getMethodName());
         } 
 
-        if (!answer.returnsNull() && !invocation.isValidReturnType(answer.getReturnType())) {
-            reporter.wrongTypeOfReturnValue(invocation.printMethodReturnType(), answer.printReturnType(), invocation.getMethodName());
+        if (!answer.returnsNull() && !methodInfo.isValidReturnType(answer.getReturnType())) {
+            reporter.wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), answer.printReturnType(), methodInfo.getMethodName());
         }
     }
 
-    private void validateException(ThrowsException answer, Invocation invocation) {
+    private void validateException(ThrowsException answer, MethodInfo methodInfo) {
         Throwable throwable = answer.getThrowable();
         if (throwable == null) {
             reporter.cannotStubWithNullThrowable();
@@ -66,7 +67,7 @@ public class AnswersValidator {
             return;
         }
         
-        if (!invocation.isValidException(throwable)) {
+        if (!methodInfo.isValidException(throwable)) {
             reporter.checkedExceptionInvalid(throwable);
         }
     }

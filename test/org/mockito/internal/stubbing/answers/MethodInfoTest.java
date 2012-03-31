@@ -1,0 +1,26 @@
+package org.mockito.internal.stubbing.answers;
+
+import org.junit.Test;
+import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+
+import java.nio.charset.CharacterCodingException;
+
+import static org.junit.Assert.*;
+
+/**
+ * by Szczepan Faber, created at: 3/31/12
+ */
+public class MethodInfoTest {
+
+    @Test
+    public void shouldKnowValidThrowables() throws Exception {
+        //when
+        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+        MethodInfo info = new MethodInfo(invocation);
+
+        //then
+        assertFalse(info.isValidException(new Exception()));
+        assertTrue(info.isValidException(new CharacterCodingException()));
+    }
+}
