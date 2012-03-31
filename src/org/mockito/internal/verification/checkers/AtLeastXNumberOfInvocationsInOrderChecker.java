@@ -8,12 +8,12 @@ package org.mockito.internal.verification.checkers;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 
 public class AtLeastXNumberOfInvocationsInOrderChecker {
     
@@ -32,7 +32,7 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
         int actualCount = chunk.size();
         
         if (wantedCount > actualCount) {
-            LocationImpl lastLocation = finder.getLastLocation(chunk);
+            Location lastLocation = finder.getLastLocation(chunk);
             reporter.tooLittleActualInvocationsInOrder(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);
         }
         

@@ -14,11 +14,11 @@ import org.junit.Test;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockitoutil.TestBase;
 
 public class NumberOfInvocationsCheckerTest extends TestBase {
@@ -122,15 +122,15 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int wantedCount;
         private int actualCount;
         private PrintableInvocation wanted;
-        private LocationImpl location;
-        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
+        private Location location;
+        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
                     this.location = lastActualLocation;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
@@ -138,7 +138,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         }
         
         @Override
-        public void neverWantedButInvoked(PrintableInvocation wanted, LocationImpl firstUndesired) {
+        public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
             this.wanted = wanted;
             this.location = firstUndesired;
         }

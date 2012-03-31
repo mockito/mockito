@@ -13,10 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationCheckerTest extends TestBase {
@@ -91,14 +91,14 @@ public class MissingInvocationCheckerTest extends TestBase {
     class ReporterStub extends Reporter {
         private Object wanted;
         private String actual;
-        private LocationImpl actualLocation;
+        private Location actualLocation;
         
         @Override
         public void wantedButNotInvoked(PrintableInvocation wanted, List<? extends PrintableInvocation> invocations) {
             this.wanted = wanted;
         }
         
-        @Override public void argumentsAreDifferent(String wanted, String actual, LocationImpl actualLocation) {
+        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
                     this.wanted = wanted;
                     this.actual = actual;
                     this.actualLocation = actualLocation;

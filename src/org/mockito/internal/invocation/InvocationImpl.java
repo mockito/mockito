@@ -13,6 +13,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
 import java.lang.reflect.Method;
@@ -36,7 +37,7 @@ public class InvocationImpl implements Invocation, PrintableInvocation, Invocati
     private final Object[] arguments;
     private final Object[] rawArguments;
 
-    private final LocationImpl location;
+    private final Location location;
     private boolean verified;
     private boolean isIgnoredForVerification;
 
@@ -96,7 +97,7 @@ public class InvocationImpl implements Invocation, PrintableInvocation, Invocati
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
-    public LocationImpl getLocation() {
+    public Location getLocation() {
         return location;
     }
 

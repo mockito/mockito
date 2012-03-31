@@ -13,6 +13,7 @@ import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -23,7 +24,7 @@ public class MockingProgressImpl implements MockingProgress {
     
     IOngoingStubbing iOngoingStubbing;
     private Localized<VerificationMode> verificationMode;
-    private LocationImpl stubbingInProgress = null;
+    private Location stubbingInProgress = null;
     private MockingProgressListener listener;
 
     public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
@@ -69,7 +70,7 @@ public class MockingProgressImpl implements MockingProgress {
         
         //validate stubbing:
         if (stubbingInProgress != null) {
-            LocationImpl temp = stubbingInProgress;
+            Location temp = stubbingInProgress;
             stubbingInProgress = null;
             reporter.unfinishedStubbing(temp);
         }
@@ -81,7 +82,7 @@ public class MockingProgressImpl implements MockingProgress {
         GlobalConfiguration.validate();
 
         if (verificationMode != null) {
-            LocationImpl location = verificationMode.getLocation();
+            Location location = verificationMode.getLocation();
             verificationMode = null;
             reporter.unfinishedVerificationException(location);
         }

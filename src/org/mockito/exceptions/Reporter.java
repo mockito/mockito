@@ -31,6 +31,7 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 
 import java.lang.reflect.Field;
@@ -68,7 +69,7 @@ public class Reporter {
 
     }
 
-    public void unfinishedStubbing(LocationImpl location) {
+    public void unfinishedStubbing(Location location) {
         throw new UnfinishedStubbingException(join(
                 "Unfinished stubbing detected here:",
                 location,
@@ -114,7 +115,7 @@ public class Reporter {
         ));
     }
 
-    public void unfinishedVerificationException(LocationImpl location) {
+    public void unfinishedVerificationException(Location location) {
         UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
                 "Missing method call for verify(mock) here:",
                 location,
@@ -290,7 +291,7 @@ public class Reporter {
         return join(description.toArray());
     }
 
-    public void argumentsAreDifferent(String wanted, String actual, LocationImpl actualLocation) {
+    public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
         String message = join("Argument(s) are different! Wanted:",
                 wanted,
                 new LocationImpl(),
@@ -350,13 +351,13 @@ public class Reporter {
         ));
     }
 
-    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
+    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new TooManyActualInvocations(message);
     }
 
     private String createTooManyInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
-            LocationImpl firstUndesired) {
+            Location firstUndesired) {
         return join(
                 wanted.toString(),
                 "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
@@ -367,7 +368,7 @@ public class Reporter {
         );
     }
 
-    public void neverWantedButInvoked(PrintableInvocation wanted, LocationImpl firstUndesired) {
+    public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
                 "Never wanted here:",
@@ -378,7 +379,7 @@ public class Reporter {
         ));
     }
 
-    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
+    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
@@ -386,7 +387,7 @@ public class Reporter {
     }
 
     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
-            LocationImpl lastActualInvocation) {
+            Location lastActualInvocation) {
         String ending =
             (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
 
@@ -400,13 +401,13 @@ public class Reporter {
             return message;
     }
 
-    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
+    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new TooLittleActualInvocations(message);
     }
 
-    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
+    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new VerificationInOrderFailure(join(
@@ -511,7 +512,7 @@ public class Reporter {
                 ));
     }
 
-    public void smartNullPointerException(String invocation, LocationImpl location) {
+    public void smartNullPointerException(String invocation, Location location) {
         throw new SmartNullPointerException(join(
                 "You have a NullPointerException here:",
                 new LocationImpl(),

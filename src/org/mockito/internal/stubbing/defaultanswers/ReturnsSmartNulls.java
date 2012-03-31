@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.invocation.Location;
 import org.mockito.plugins.MockMaker;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -44,7 +45,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
     private final class ThrowingInterceptor implements MockitoInvocationHandler {
         private final InvocationOnMock invocation;
-        private final LocationImpl location = new LocationImpl();
+        private final Location location = new LocationImpl();
 
         private ThrowingInterceptor(InvocationOnMock invocation) {
             this.invocation = invocation;

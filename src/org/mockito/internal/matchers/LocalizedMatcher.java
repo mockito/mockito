@@ -8,13 +8,14 @@ import java.io.Serializable;
 
 import org.hamcrest.*;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.invocation.Location;
 
 @SuppressWarnings("unchecked")
 public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, CapturesArguments, MatcherDecorator, Serializable {
 
     private static final long serialVersionUID = 6748641229659825725L;
     private final Matcher actualMatcher;
-    private LocationImpl location;
+    private Location location;
 
     public LocalizedMatcher(Matcher actualMatcher) {
         this.actualMatcher = actualMatcher;
@@ -33,7 +34,7 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         actualMatcher.describeTo(description);
     }
 
-    public LocationImpl getLocation() {
+    public Location getLocation() {
         return location;
     }
     

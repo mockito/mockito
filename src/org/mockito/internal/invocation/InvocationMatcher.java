@@ -13,10 +13,10 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements PrintableInvocation, CapturesArgumensFromInvocation, Serializable {
@@ -111,7 +111,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return false;
     }
     
-    public LocationImpl getLocation() {
+    public Location getLocation() {
         return invocation.getLocation();
     }
 

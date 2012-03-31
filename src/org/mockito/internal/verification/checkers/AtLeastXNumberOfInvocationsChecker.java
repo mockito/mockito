@@ -8,11 +8,11 @@ package org.mockito.internal.verification.checkers;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 
 public class AtLeastXNumberOfInvocationsChecker {
     
@@ -25,7 +25,7 @@ public class AtLeastXNumberOfInvocationsChecker {
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            LocationImpl lastLocation = finder.getLastLocation(actualInvocations);
+            Location lastLocation = finder.getLastLocation(actualInvocations);
             reporter.tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);        
         }
         

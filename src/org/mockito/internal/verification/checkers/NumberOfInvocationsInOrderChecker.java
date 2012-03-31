@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 
 public class NumberOfInvocationsInOrderChecker {
     
@@ -37,10 +37,10 @@ public class NumberOfInvocationsInOrderChecker {
         int actualCount = chunk.size();
         
         if (wantedCount > actualCount) {
-            LocationImpl lastInvocation = finder.getLastLocation(chunk);
+            Location lastInvocation = finder.getLastLocation(chunk);
             reporter.tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } else if (wantedCount < actualCount) {
-            LocationImpl firstUndesired = chunk.get(wantedCount).getLocation();
+            Location firstUndesired = chunk.get(wantedCount).getLocation();
             reporter.tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
         

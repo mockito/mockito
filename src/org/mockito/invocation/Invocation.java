@@ -1,9 +1,11 @@
 package org.mockito.invocation;
 
+import org.mockito.exceptions.PrintableInvocation;
+
 /**
  * by Szczepan Faber, created at: 3/31/12
  */
-public interface Invocation extends InvocationOnMock {
+public interface Invocation extends InvocationOnMock, PrintableInvocation {
 
     boolean isVerified();
 
