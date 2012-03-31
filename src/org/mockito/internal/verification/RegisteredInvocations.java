@@ -6,6 +6,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 
@@ -47,7 +48,7 @@ public class RegisteredInvocations implements Serializable {
 
     private static class RemoveToString implements Filter<Invocation> {
         public boolean isOut(Invocation invocation) {
-            return invocation.isToString();
+            return new ObjectMethodsGuru().isToString(invocation.getMethod());
         }
     }
 }

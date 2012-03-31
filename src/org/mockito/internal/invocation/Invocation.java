@@ -17,7 +17,6 @@ import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -152,10 +151,6 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
             }
         }
         return matchers;
-    }
-
-    public boolean isToString() {
-        return new ObjectMethodsGuru().isToString(getMethod());
     }
 
     public boolean isValidException(Throwable throwable) {
