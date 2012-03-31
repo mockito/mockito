@@ -32,7 +32,7 @@ public class AllInvocationsFinder {
 
     private final class SequenceNumberComparator implements Comparator<Invocation> {
         public int compare(Invocation o1, Invocation o2) {
-            return o1.getSequenceNumber().compareTo(o2.getSequenceNumber());
+            return Integer.valueOf(o1.getSequenceNumber()).compareTo(o2.getSequenceNumber());
         }
     }
 }

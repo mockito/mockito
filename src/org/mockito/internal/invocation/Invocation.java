@@ -100,7 +100,7 @@ public class Invocation implements PrintableInvocation, InvocationOnMock, Printi
         return verified || isIgnoredForVerification;
     }
 
-    public Integer getSequenceNumber() {
+    public int getSequenceNumber() {
         return sequenceNumber;
     }
 
