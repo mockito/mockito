@@ -111,7 +111,7 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldTransformArgumentsToMatchers() throws Exception {
         Invocation i = new InvocationBuilder().args("foo", new String[] {"bar"}).toInvocation();
-        List matchers = i.argumentsToMatchers();
+        List matchers = Invocation.argumentsToMatchers(i.getArguments());
 
         assertEquals(2, matchers.size());
         assertEquals(Equals.class, matchers.get(0).getClass());

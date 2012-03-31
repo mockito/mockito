@@ -13,10 +13,7 @@ import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.internal.reporting.PrintingFriendlyInvocation;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.PublicInvocation;
 
@@ -34,10 +31,10 @@ import java.util.List;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PublicInvocation, PrintableInvocation, InvocationOnMock, PrintingFriendlyInvocation, VerificationAwareInvocation {
+public class Invocation implements PublicInvocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
-    private static final int MAX_LINE_LENGTH = 45;
+    public static final int MAX_LINE_LENGTH = 45;
     private final int sequenceNumber;
     private final Object mock;
     private final MockitoMethod method;
@@ -123,25 +120,10 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
     }
 
     public String toString() {
-        return toString(argumentsToMatchers(), new PrintSettings());
+        return new PrintSettings().print(argumentsToMatchers(getArguments()), this);
     }
 
-    protected String toString(List<Matcher> matchers, PrintSettings printSettings) {
-        MatchersPrinter matchersPrinter = new MatchersPrinter();
-        String method = qualifiedMethodName();
-        String invocation = method + matchersPrinter.getArgumentsLine(matchers, printSettings);
-        if (printSettings.isMultiline() || (!matchers.isEmpty() && invocation.length() > MAX_LINE_LENGTH)) {
-            return method + matchersPrinter.getArgumentsBlock(matchers, printSettings);
-        } else {
-            return invocation;
-        }
-    }
-
-    private String qualifiedMethodName() {
-        return new MockUtil().getMockName(mock) + "." + method.getName();
-    }
-
-    protected List<Matcher> argumentsToMatchers() {
+    public static List<Matcher> argumentsToMatchers(Object[] arguments) {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
@@ -166,10 +148,6 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
             new Reporter().cannotCallRealMethodOnInterface();
         }
         return realMethod.invoke(mock, rawArguments);
-    }
-
-    public String toString(PrintSettings printSettings) {
-        return toString(argumentsToMatchers(), printSettings);
     }
 
     public void markVerified() {

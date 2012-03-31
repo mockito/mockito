@@ -23,8 +23,8 @@ public class SmartPrinter {
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
         
-        this.wanted = wanted.toString(printSettings);
-        this.actual = actual.toString(printSettings);
+        this.wanted = printSettings.print(wanted);
+        this.actual = printSettings.print(actual);
     }
 
     public String getWanted() {

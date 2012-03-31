@@ -16,10 +16,9 @@ import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.internal.reporting.PrintingFriendlyInvocation;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyInvocation, CapturesArgumensFromInvocation, Serializable {
+public class InvocationMatcher implements PrintableInvocation, CapturesArgumensFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;
@@ -28,7 +27,7 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
-            this.matchers = invocation.argumentsToMatchers();
+            this.matchers = Invocation.argumentsToMatchers(invocation.getArguments());
         } else {
             this.matchers = matchers;
         }
@@ -51,7 +50,7 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
     }
     
     public String toString() {
-        return invocation.toString(matchers, new PrintSettings());
+        return new PrintSettings().print(matchers, invocation);
     }
 
     public boolean matches(Invocation actual) {
@@ -113,10 +112,6 @@ public class InvocationMatcher implements PrintableInvocation, PrintingFriendlyI
     
     public Location getLocation() {
         return invocation.getLocation();
-    }
-
-    public String toString(PrintSettings printSettings) {
-        return invocation.toString(matchers, printSettings);
     }
 
     public void captureArgumentsFrom(Invocation i) {
