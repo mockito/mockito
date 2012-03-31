@@ -5,22 +5,17 @@
 
 package org.mockito.internal.invocation;
 
-import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.Location;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.matchers.ArrayEquals;
-import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.PublicInvocation;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Method call on a mock object.
@@ -52,32 +47,10 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
         this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
-        this.arguments = expandVarArgs(mockitoMethod.isVarArgs(), args);
+        this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new Location();
-    }
-
-    // expands array varArgs that are given by runtime (1, [a, b]) into true
-    // varArgs (1, a, b);
-    private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
-        if (!isVarArgs || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
-            return args == null ? new Object[0] : args;
-        }
-
-        final int nonVarArgsCount = args.length - 1;
-        Object[] varArgs;
-        if (args[nonVarArgsCount] == null) {
-            // in case someone deliberately passed null varArg array
-            varArgs = new Object[] { null };
-        } else {
-            varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
-        }
-        final int varArgsCount = varArgs.length;
-        Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
-        System.arraycopy(args, 0, newArgs, 0, nonVarArgsCount);
-        System.arraycopy(varArgs, 0, newArgs, nonVarArgsCount, varArgsCount);
-        return newArgs;
     }
 
     public Object getMock() {
@@ -120,19 +93,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
     }
 
     public String toString() {
-        return new PrintSettings().print(argumentsToMatchers(getArguments()), this);
-    }
-
-    public static List<Matcher> argumentsToMatchers(Object[] arguments) {
-        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
-        for (Object arg : arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
-        }
-        return matchers;
+        return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
     public Location getLocation() {

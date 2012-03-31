@@ -5,6 +5,7 @@
 package org.mockito.internal.reporting;
 
 import org.hamcrest.Matcher;
+import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.matchers.MatchersPrinter;
@@ -53,7 +54,7 @@ public class PrintSettings {
     }
 
     public String print(Invocation invocation) {
-        return print(Invocation.argumentsToMatchers(invocation.getArguments()), invocation);
+        return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
     }
 
     public String print(InvocationMatcher invocationMatcher) {

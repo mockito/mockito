@@ -27,7 +27,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
     public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
-            this.matchers = Invocation.argumentsToMatchers(invocation.getArguments());
+            this.matchers = ArgumentsProcessor.argumentsToMatchers(invocation.getArguments());
         } else {
             this.matchers = matchers;
         }

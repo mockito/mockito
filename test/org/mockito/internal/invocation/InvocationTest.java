@@ -6,7 +6,6 @@
 package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
-import java.nio.charset.CharacterCodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,20 +97,20 @@ public class InvocationTest extends TestBase {
     @Test
     public void shouldPrintArgumentsInMultilinesWhenGetsTooBig() {
         invocation = new InvocationBuilder().args("veeeeery long string that makes it ugly in one line", 1).toInvocation();
-        assertThat(invocation.toString(), endsWith( 
+        assertThat(invocation.toString(), endsWith(
                 "simpleMethod(" +
-                "\n" +
-                "    \"veeeeery long string that makes it ugly in one line\"," +
-                "\n" +
-                "    1" +
-                "\n" +
-                ");"));
+                        "\n" +
+                        "    \"veeeeery long string that makes it ugly in one line\"," +
+                        "\n" +
+                        "    1" +
+                        "\n" +
+                        ");"));
     }
     
     @Test
     public void shouldTransformArgumentsToMatchers() throws Exception {
-        Invocation i = new InvocationBuilder().args("foo", new String[] {"bar"}).toInvocation();
-        List matchers = Invocation.argumentsToMatchers(i.getArguments());
+        Invocation i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
+        List matchers = ArgumentsProcessor.argumentsToMatchers(i.getArguments());
 
         assertEquals(2, matchers.size());
         assertEquals(Equals.class, matchers.get(0).getClass());
