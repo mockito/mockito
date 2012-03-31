@@ -8,7 +8,7 @@ package org.mockito.internal.verification.checkers;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
@@ -32,11 +32,11 @@ public class NonGreedyNumberOfInvocationsInOrderChecker {
         this.marker = marker;
     }
     
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
         int actualCount = 0;
         LocationImpl lastLocation = null;
         while( actualCount < wantedCount ){
-            Invocation next = finder.findFirstMatchingUnverifiedInvocation( invocations, wanted, context );
+            InvocationImpl next = finder.findFirstMatchingUnverifiedInvocation( invocations, wanted, context );
             if( next == null ){
                 reporter.tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastLocation );
             }

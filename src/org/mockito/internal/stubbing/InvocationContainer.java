@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 
 import java.util.List;
 
 //TODO move to different package
 public interface InvocationContainer {
-    List<Invocation> getInvocations();
+    List<InvocationImpl> getInvocations();
 
     List<StubbedInvocationMatcher> getStubbedInvocations();
 }

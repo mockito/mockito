@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
@@ -27,8 +27,8 @@ public class WarningsCollector {
     }
 
     public String getWarnings() {
-        List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
-        List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
+        List<InvocationImpl> unused = new UnusedStubsFinder().find(createdMocks);
+        List<InvocationImpl> all = new AllInvocationsFinder().find(createdMocks);
         List<InvocationMatcher> allInvocationMatchers = InvocationMatcher.createFrom(all);
 
         String warnings = new WarningsPrinterImpl(unused, allInvocationMatchers, false).print();

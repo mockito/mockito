@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.verification.api;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 
 public interface InOrderContext {
 
-    boolean isVerified(Invocation invocation);
+    boolean isVerified(InvocationImpl invocation);
 
-    void markVerified(Invocation i);
+    void markVerified(InvocationImpl i);
 
 }

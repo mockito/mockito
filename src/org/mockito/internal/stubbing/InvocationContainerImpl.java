@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.progress.MockingProgress;
@@ -51,7 +51,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     public void addAnswer(Answer answer, boolean isConsecutive) {
-        Invocation invocation = invocationForStubbing.getInvocation();
+        InvocationImpl invocation = invocationForStubbing.getInvocation();
         mockingProgress.stubbingCompleted(invocation);
         AnswersValidator answersValidator = new AnswersValidator();
         answersValidator.validate(answer, invocation);
@@ -65,11 +65,11 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         }
     }
 
-    Object answerTo(Invocation invocation) throws Throwable {
+    Object answerTo(InvocationImpl invocation) throws Throwable {
         return findAnswerFor(invocation).answer(invocation);
     }
 
-    public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
+    public StubbedInvocationMatcher findAnswerFor(InvocationImpl invocation) {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
                 if (s.matches(invocation)) {
@@ -113,7 +113,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return "invocationForStubbing: " + invocationForStubbing;
     }
 
-    public List<Invocation> getInvocations() {
+    public List<InvocationImpl> getInvocations() {
         return registeredInvocations.getAll();
     }
 

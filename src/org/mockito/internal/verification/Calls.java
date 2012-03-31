@@ -6,7 +6,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
@@ -32,7 +32,7 @@ public class Calls implements VerificationMode, VerificationInOrderMode {
     }
 
     public void verifyInOrder(VerificationDataInOrder data) {
-        List<Invocation> allInvocations = data.getAllInvocations();
+        List<InvocationImpl> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
         MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();

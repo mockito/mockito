@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
@@ -28,7 +28,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     private MissingInvocationInOrderChecker checker;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
-    private LinkedList<Invocation> invocations;
+    private LinkedList<InvocationImpl> invocations;
     private InvocationsFinderStub finderStub;
     private InOrderContext context = new InOrderContextImpl();
     
@@ -39,12 +39,12 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         checker = new MissingInvocationInOrderChecker(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
+        invocations = new LinkedList<InvocationImpl>(asList(new InvocationBuilder().toInvocation()));
     }                                                                    
 
     @Test
     public void shouldPassWhenMatchingInteractionFound() throws Exception {
-        Invocation actual = new InvocationBuilder().toInvocation();
+        InvocationImpl actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
@@ -71,7 +71,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWantedDiffersFromActual() throws Exception {
-        Invocation previous = new InvocationBuilder().toInvocation();
+        InvocationImpl previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);

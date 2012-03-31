@@ -8,50 +8,50 @@ package org.mockito.internal.verification.checkers;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
 
 class InvocationsFinderStub extends InvocationsFinder {
     
-    Invocation similarToReturn;
-    Invocation firstUnverifiedToReturn;
-    Invocation previousInOrderToReturn;
+    InvocationImpl similarToReturn;
+    InvocationImpl firstUnverifiedToReturn;
+    InvocationImpl previousInOrderToReturn;
     
-    final List<Invocation> actualToReturn = new LinkedList<Invocation>();
-    final List<Invocation> validMatchingChunkToReturn = new LinkedList<Invocation>();
-    final List<Invocation> allMatchingUnverifiedChunksToReturn = new LinkedList<Invocation>();
+    final List<InvocationImpl> actualToReturn = new LinkedList<InvocationImpl>();
+    final List<InvocationImpl> validMatchingChunkToReturn = new LinkedList<InvocationImpl>();
+    final List<InvocationImpl> allMatchingUnverifiedChunksToReturn = new LinkedList<InvocationImpl>();
     
-    List<Invocation> invocations;
+    List<InvocationImpl> invocations;
     
     @Override
-    public List<Invocation> findAllMatchingUnverifiedChunks(List<Invocation> invocations, InvocationMatcher wanted, InOrderContext context) {
+    public List<InvocationImpl> findAllMatchingUnverifiedChunks(List<InvocationImpl> invocations, InvocationMatcher wanted, InOrderContext context) {
         return allMatchingUnverifiedChunksToReturn;
     }
     
     @Override
-    public List<Invocation> findMatchingChunk(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+    public List<InvocationImpl> findMatchingChunk(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
         return validMatchingChunkToReturn;
     }
 
-    @Override public List<Invocation> findInvocations(List<Invocation> invocations, InvocationMatcher wanted) {
+    @Override public List<InvocationImpl> findInvocations(List<InvocationImpl> invocations, InvocationMatcher wanted) {
         this.invocations = invocations;
         return actualToReturn;
     }
     
-    @Override public Invocation findSimilarInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
+    @Override public InvocationImpl findSimilarInvocation(List<InvocationImpl> invocations, InvocationMatcher wanted) {
         this.invocations = invocations;
         return similarToReturn;
     }
     
-    @Override public Invocation findFirstUnverified(List<Invocation> invocations) {
+    @Override public InvocationImpl findFirstUnverified(List<InvocationImpl> invocations) {
         this.invocations = invocations;
         return firstUnverifiedToReturn;
     }
     
     @Override
-    public Invocation findPreviousVerifiedInOrder(List<Invocation> invocations, InOrderContext context) {
+    public InvocationImpl findPreviousVerifiedInOrder(List<InvocationImpl> invocations, InOrderContext context) {
         return previousInOrderToReturn;
     }
 }

@@ -8,7 +8,7 @@ package org.mockito.internal.stubbing;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.MockingProgress;
@@ -21,7 +21,7 @@ public class MockitoStubberTest extends TestBase{
 
     private InvocationContainerImpl invocationContainerImpl;
     private MockingProgress state;
-    private Invocation simpleMethod;
+    private InvocationImpl simpleMethod;
 
     @Before
     public void setup() {
@@ -56,7 +56,7 @@ public class MockitoStubberTest extends TestBase{
         invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         invocationContainerImpl.addAnswer(new Returns("simpleMethod"));
         
-        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
+        InvocationImpl differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         invocationContainerImpl.addAnswer(new ThrowsException(new MyException()));
         

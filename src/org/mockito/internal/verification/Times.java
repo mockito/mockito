@@ -8,7 +8,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
@@ -40,7 +40,7 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     }
     
     public void verifyInOrder(VerificationDataInOrder data) {
-        List<Invocation> allInvocations = data.getAllInvocations();
+        List<InvocationImpl> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
         if (wantedCount > 0) {

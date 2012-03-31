@@ -21,10 +21,10 @@ import org.mockito.internal.reporting.PrintSettings;
 public class InvocationMatcher implements PrintableInvocation, CapturesArgumensFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;
-    private final Invocation invocation;
+    private final InvocationImpl invocation;
     private final List<Matcher> matchers;
 
-    public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
+    public InvocationMatcher(InvocationImpl invocation, List<Matcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
             this.matchers = ArgumentsProcessor.argumentsToMatchers(invocation.getArguments());
@@ -33,7 +33,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         }
     }
     
-    public InvocationMatcher(Invocation invocation) {
+    public InvocationMatcher(InvocationImpl invocation) {
         this(invocation, Collections.<Matcher>emptyList());
     }
 
@@ -41,7 +41,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return invocation.getMethod();
     }
     
-    public Invocation getInvocation() {
+    public InvocationImpl getInvocation() {
         return this.invocation;
     }
     
@@ -53,7 +53,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return new PrintSettings().print(matchers, invocation);
     }
 
-    public boolean matches(Invocation actual) {
+    public boolean matches(InvocationImpl actual) {
         return invocation.getMock().equals(actual.getMock())
                 && hasSameMethod(actual)
                 && new ArgumentsComparator().argumentsMatch(this, actual);
@@ -71,7 +71,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
      * similar means the same method name, same mock, unverified 
      * and: if arguments are the same cannot be overloaded
      */
-    public boolean hasSimilarMethod(Invocation candidate) {
+    public boolean hasSimilarMethod(InvocationImpl candidate) {
         String wantedMethodName = getMethod().getName();
         String currentMethodName = candidate.getMethod().getName();
         
@@ -89,7 +89,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return !overloadedButSameArgs;
     }
 
-    public boolean hasSameMethod(Invocation candidate) {        
+    public boolean hasSameMethod(InvocationImpl candidate) {
         //not using method.equals() for 1 good reason:
         //sometimes java generates forwarding methods when generics are in play see JavaGenericsForwardingMethodsTest
         Method m1 = invocation.getMethod();
@@ -114,7 +114,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return invocation.getLocation();
     }
 
-    public void captureArgumentsFrom(Invocation i) {
+    public void captureArgumentsFrom(InvocationImpl i) {
         int k = 0;
         for (Matcher m : matchers) {
             if (m instanceof CapturesArguments && i.getArguments().length > k) {
@@ -124,10 +124,10 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         }
     }
 
-    public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
+    public static List<InvocationMatcher> createFrom(List<InvocationImpl> invocations) {
         LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
 
-        for (Invocation i : invocations) {
+        for (InvocationImpl i : invocations) {
             out.add(new InvocationMatcher(i));
         }
 

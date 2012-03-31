@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.internal.creation.MockitoMethodProxy;
 import org.mockito.internal.invocation.ExposedInvocation;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
@@ -23,7 +23,7 @@ public class MethodProxyBuilder {
                 return invocation;
             }});
         
-        Invocation i = (Invocation) mock.objectReturningMethodNoArgs();
+        InvocationImpl i = (InvocationImpl) mock.objectReturningMethodNoArgs();
         return new ExposedInvocation(i).getMethodProxy();
     }
 }

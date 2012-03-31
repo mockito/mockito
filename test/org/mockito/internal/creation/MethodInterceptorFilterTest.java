@@ -16,9 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.plugins.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
@@ -47,7 +47,7 @@ public class MethodInterceptorFilterTest extends TestBase {
 
         //then
         assertTrue((Integer) ret != 0);
-        Mockito.verify(handler, never()).handle(any(Invocation.class));
+        Mockito.verify(handler, never()).handle(any(InvocationImpl.class));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class MethodInterceptorFilterTest extends TestBase {
 
         //then
         assertTrue((Boolean) ret);
-        Mockito.verify(handler, never()).handle(any(Invocation.class));
+        Mockito.verify(handler, never()).handle(any(InvocationImpl.class));
     }
     
     //TODO: move to separate factory

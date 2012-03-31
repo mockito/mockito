@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.util.MockUtil;
@@ -54,7 +54,7 @@ public class TestBase extends Assert {
         new StateMaster().reset();
     }
     
-    protected Invocation getLastInvocation() {
+    protected InvocationImpl getLastInvocation() {
         return new MockitoCore().getLastInvocation();
     }
 
@@ -134,17 +134,17 @@ public class TestBase extends Assert {
                 , string.contains(sub));
     }
     
-    protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
+    protected static InvocationImpl invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
         Class[] types = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new Invocation(mock(type), new SerializableMethod(type.getMethod(methodName,
+        return new InvocationImpl(mock(type), new SerializableMethod(type.getMethod(methodName,
                 types)), args, 1, null);
     }
 
-    protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
-        return new Invocation(new Object(), new SerializableMethod(type.getMethod(methodName,
+    protected static InvocationImpl invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
+        return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
                 new Class[0])), new Object[0], 1, realMethod);
     }
 

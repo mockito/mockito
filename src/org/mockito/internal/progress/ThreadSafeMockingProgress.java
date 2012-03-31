@@ -8,7 +8,7 @@ package org.mockito.internal.progress;
 import java.io.Serializable;
 
 import org.mockito.MockSettings;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.verification.VerificationMode;
 
@@ -49,7 +49,7 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
         threadSafely().validateState();
     }
 
-    public void stubbingCompleted(Invocation invocation) {
+    public void stubbingCompleted(InvocationImpl invocation) {
         threadSafely().stubbingCompleted(invocation);
     }
     

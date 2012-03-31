@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitousage.IMethods;
@@ -25,7 +25,7 @@ public class WarningsFinderTest extends TestBase {
     @Test
     public void shouldPrintUnusedStub() {
         // given
-        Invocation unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
+        InvocationImpl unusedStub = new InvocationBuilder().simpleMethod().toInvocation();
 
         // when
         WarningsFinder finder = new WarningsFinder(asList(unusedStub), Arrays.<InvocationMatcher>asList());
@@ -41,7 +41,7 @@ public class WarningsFinderTest extends TestBase {
         InvocationMatcher unstubbedInvocation = new InvocationBuilder().differentMethod().toInvocationMatcher();
 
         // when
-        WarningsFinder finder = new WarningsFinder(Arrays.<Invocation>asList(), Arrays.<InvocationMatcher>asList(unstubbedInvocation));
+        WarningsFinder finder = new WarningsFinder(Arrays.<InvocationImpl>asList(), Arrays.<InvocationMatcher>asList(unstubbedInvocation));
         finder.find(listener);
 
         // then
@@ -51,11 +51,11 @@ public class WarningsFinderTest extends TestBase {
     @Test
     public void shouldPrintStubWasUsedWithDifferentArgs() {
         // given
-        Invocation stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
+        InvocationImpl stub = new InvocationBuilder().arg("foo").mock(mock).toInvocation();
         InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
 
         // when
-        WarningsFinder finder = new WarningsFinder(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
+        WarningsFinder finder = new WarningsFinder(Arrays.<InvocationImpl> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
         finder.find(listener);
 
         // then

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
 
@@ -20,7 +20,7 @@ import org.mockitoutil.TestBase;
 public class AnswersValidatorTest extends TestBase {
 
     private AnswersValidator validator = new AnswersValidator();
-    private Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+    private InvocationImpl invocation = new InvocationBuilder().method("canThrowException").toInvocation();
 
     @Test
     public void shouldValidateNullThrowable() throws Throwable {
@@ -91,7 +91,7 @@ public class AnswersValidatorTest extends TestBase {
     @Test
     public void shouldFailWhenCallingRealMethodOnIterface() throws Throwable {
         //given
-        Invocation inovcationOnIterface = new InvocationBuilder().method("simpleMethod").toInvocation();
+        InvocationImpl inovcationOnIterface = new InvocationBuilder().method("simpleMethod").toInvocation();
         try {
             //when
             validator.validate(new CallsRealMethods(), inovcationOnIterface);
@@ -105,7 +105,7 @@ public class AnswersValidatorTest extends TestBase {
         //given
         ArrayList mock = mock(ArrayList.class);
         mock.clear();
-        Invocation invocationOnClass = getLastInvocation();
+        InvocationImpl invocationOnClass = getLastInvocation();
         //when
         validator.validate(new CallsRealMethods(), invocationOnClass);
         //then no exception is thrown

@@ -9,7 +9,7 @@ import static java.util.Arrays.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
 
@@ -21,8 +21,8 @@ public class ScenarioPrinterTest extends TestBase {
     @Test
     public void shouldPrintInvocations() {
         //given
-        Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
-        Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
+        InvocationImpl verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
+        InvocationImpl unverified = new InvocationBuilder().differentMethod().toInvocation();
         
         //when
         String out = sp.print((List) asList(verified, unverified));
@@ -35,7 +35,7 @@ public class ScenarioPrinterTest extends TestBase {
     @Test
     public void shouldNotPrintInvocationsWhenSingleUnwanted() {
         //given
-        Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
+        InvocationImpl unverified = new InvocationBuilder().differentMethod().toInvocation();
         
         //when
         String out = sp.print((List) asList(unverified));

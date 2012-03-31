@@ -32,7 +32,7 @@ public class InvocationBuilder {
      *
      * @return invocation
      */
-    public Invocation toInvocation() {
+    public InvocationImpl toInvocation() {
         if (method == null) {
             List<Class> argTypes = new LinkedList<Class>();
             for (Object arg : args) {
@@ -50,7 +50,7 @@ public class InvocationBuilder {
             }
         }
         
-        Invocation i = new Invocation(mock, new SerializableMethod(method), args, sequenceNumber, null);
+        InvocationImpl i = new InvocationImpl(mock, new SerializableMethod(method), args, sequenceNumber, null);
         if (verified) {
             i.markVerified();
         }

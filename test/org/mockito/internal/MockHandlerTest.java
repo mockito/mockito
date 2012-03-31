@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -32,18 +32,18 @@ import static org.mockito.Mockito.mock;
 public class MockHandlerTest extends TestBase {
 
 	private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
-	private Invocation invocation = mock(Invocation.class);
+	private InvocationImpl invocation = mock(InvocationImpl.class);
 
 
 	@Test
 	public void shouldRemoveVerificationModeEvenWhenInvalidMatchers() throws Throwable {
 		// given
-		Invocation invocation = new InvocationBuilder().toInvocation();
+		InvocationImpl invocation = new InvocationBuilder().toInvocation();
 		@SuppressWarnings("rawtypes")
 		MockHandler<?> handler = new MockHandler();
 		handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
 		handler.matchersBinder = new MatchersBinder() {
-			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, InvocationImpl invocation) {
 				throw new InvalidUseOfMatchersException();
 			}
 		};
@@ -90,7 +90,7 @@ public class MockHandlerTest extends TestBase {
 
 	private void stubOrdinaryInvocationWithInvocationMatcher(MockHandler<?> handler, StubbedInvocationMatcher value) {
 		handler.invocationContainerImpl = mock(InvocationContainerImpl.class);
-		given(handler.invocationContainerImpl.findAnswerFor(any(Invocation.class))).willReturn(value);
+		given(handler.invocationContainerImpl.findAnswerFor(any(InvocationImpl.class))).willReturn(value);
 	}
 
 

@@ -45,7 +45,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         MockitoMethod mockitoMethod = createMockitoMethod(method);
         
         FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
-        Invocation invocation = new Invocation(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
+        InvocationImpl invocation = new InvocationImpl(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return handler.handle(invocation);
     }
    

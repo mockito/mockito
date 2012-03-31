@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.util.ObjectMethodsGuru;
@@ -24,7 +24,7 @@ public class VerificationDataImpl implements VerificationData {
         this.assertWantedIsVerifiable();
     }
 
-    public List<Invocation> getAllInvocations() {
+    public List<InvocationImpl> getAllInvocations() {
         return invocations.getInvocations();
     }
 

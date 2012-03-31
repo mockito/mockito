@@ -5,7 +5,7 @@
 package org.mockito.internal;
 
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
@@ -52,7 +52,7 @@ public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInte
         this(oldMockHandler.getMockSettings());
     }
 
-    public Object handle(Invocation invocation) throws Throwable {
+    public Object handle(InvocationImpl invocation) throws Throwable {
 		if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(

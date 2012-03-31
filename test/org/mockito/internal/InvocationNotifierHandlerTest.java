@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
@@ -45,7 +45,7 @@ public class InvocationNotifierHandlerTest {
     @Mock private InvocationListener listener2;
     @Spy private CustomListener customListener;
 
-    @Mock private Invocation invocation;
+    @Mock private InvocationImpl invocation;
     @Mock private MockHandler mockHandler;
 
     private InvocationNotifierHandler notifier;

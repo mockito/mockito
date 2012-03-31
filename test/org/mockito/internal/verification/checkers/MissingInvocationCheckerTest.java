@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitoutil.TestBase;
@@ -27,7 +27,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     private ReporterStub reporterStub;
     
     private InvocationMatcher wanted;
-    private List<Invocation> invocations;
+    private List<InvocationImpl> invocations;
 
     @Before
     public void setup() {
@@ -77,7 +77,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldReportWantedInvocationDiffersFromActual() {
         assertTrue(finderStub.actualToReturn.isEmpty());
-        Invocation actualInvocation = new InvocationBuilder().toInvocation();
+        InvocationImpl actualInvocation = new InvocationBuilder().toInvocation();
         finderStub.similarToReturn = actualInvocation;
         
         checker.check(invocations, wanted);

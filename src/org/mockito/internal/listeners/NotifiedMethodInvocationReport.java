@@ -5,14 +5,14 @@
 package org.mockito.internal.listeners;
 
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.listeners.MethodInvocationReport;
 
 /**
  * Report on a method call
  */
 public class NotifiedMethodInvocationReport implements MethodInvocationReport {
-        private final Invocation invocation;
+        private final InvocationImpl invocation;
         private Object returnedValue;
         private Throwable throwable;
 
@@ -24,7 +24,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
          * @param invocation Information on the method call
          * @param returnedValue The value returned by the method invocation
          */
-        public NotifiedMethodInvocationReport(Invocation invocation, Object returnedValue) {
+        public NotifiedMethodInvocationReport(InvocationImpl invocation, Object returnedValue) {
             this.invocation = invocation;
             this.returnedValue = returnedValue;
         }
@@ -36,7 +36,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
          * @param invocation Information on the method call
          * @param throwable Tha throwable raised by the method invocation
          */
-        public NotifiedMethodInvocationReport(Invocation invocation, Throwable throwable) {
+        public NotifiedMethodInvocationReport(InvocationImpl invocation, Throwable throwable) {
             this.invocation = invocation;
             this.throwable = throwable;
         }

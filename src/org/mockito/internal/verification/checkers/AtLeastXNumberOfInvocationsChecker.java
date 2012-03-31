@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationsFinder;
@@ -20,8 +20,8 @@ public class AtLeastXNumberOfInvocationsChecker {
     InvocationsFinder finder = new InvocationsFinder();
     InvocationMarker invocationMarker = new InvocationMarker();
 
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount) {
+        List<InvocationImpl> actualInvocations = finder.findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {

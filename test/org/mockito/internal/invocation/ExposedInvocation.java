@@ -11,7 +11,7 @@ public class ExposedInvocation {
 
     private final MockitoMethodProxy methodProxy;
 
-    public ExposedInvocation(Invocation toBeExposed) {
+    public ExposedInvocation(InvocationImpl toBeExposed) {
          methodProxy = ((HasCGLIBMethodProxy) toBeExposed.realMethod).getMethodProxy();
     }
 

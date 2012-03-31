@@ -18,8 +18,8 @@ public class UnusedStubsFinder {
      * 
      * @param mocks
      */
-    public List<Invocation> find(List<?> mocks) {
-        List<Invocation> unused = new LinkedList<Invocation>();
+    public List<InvocationImpl> find(List<?> mocks) {
+        List<InvocationImpl> unused = new LinkedList<InvocationImpl>();
         for (Object mock : mocks) {
             MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
             List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();

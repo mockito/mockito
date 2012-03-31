@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
@@ -23,10 +23,10 @@ public class Only implements VerificationMode {
 	@SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
 		InvocationMatcher wantedMatcher = data.getWanted();
-		List<Invocation> invocations = data.getAllInvocations();
-		List<Invocation> chunk = finder.findInvocations(invocations,wantedMatcher);
+		List<InvocationImpl> invocations = data.getAllInvocations();
+		List<InvocationImpl> chunk = finder.findInvocations(invocations,wantedMatcher);
 		if (invocations.size() != 1 && chunk.size() > 0) {			
-			Invocation unverified = finder.findFirstUnverified(invocations);
+			InvocationImpl unverified = finder.findFirstUnverified(invocations);
 			reporter.noMoreInteractionsWanted(unverified, (List) invocations);
 		} else if (invocations.size() != 1 || chunk.size() == 0) {
 			reporter.wantedButNotInvoked(wantedMatcher);

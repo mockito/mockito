@@ -17,7 +17,7 @@ public class InvocationMarkerTest extends TestBase {
     public void shouldMarkInvocationAsVerified() {
         //given
         InvocationMarker marker = new InvocationMarker();
-        Invocation i = new InvocationBuilder().toInvocation();
+        InvocationImpl i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(i.isVerified());
         
@@ -32,10 +32,10 @@ public class InvocationMarkerTest extends TestBase {
     public void shouldCaptureArguments() {
         //given
         InvocationMarker marker = new InvocationMarker();
-        Invocation i = new InvocationBuilder().toInvocation();
+        InvocationImpl i = new InvocationBuilder().toInvocation();
         final ObjectBox box = new ObjectBox();
         CapturesArgumensFromInvocation c = new CapturesArgumensFromInvocation() {
-            public void captureArgumentsFrom(Invocation i) {
+            public void captureArgumentsFrom(InvocationImpl i) {
                 box.put(i);
             }};
         
@@ -51,7 +51,7 @@ public class InvocationMarkerTest extends TestBase {
         //given
         InOrderContextImpl context = new InOrderContextImpl();
         InvocationMarker marker = new InvocationMarker();
-        Invocation i = new InvocationBuilder().toInvocation();
+        InvocationImpl i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(context.isVerified(i));
         assertFalse(i.isVerified());

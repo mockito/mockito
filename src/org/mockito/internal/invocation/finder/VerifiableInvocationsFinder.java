@@ -5,7 +5,7 @@
 
 package org.mockito.internal.invocation.finder;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.util.collections.ListUtil;
 
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class VerifiableInvocationsFinder {
 
-    public List<Invocation> find(List<?> mocks) {
-        List<Invocation> invocations = new AllInvocationsFinder().find(mocks);
+    public List<InvocationImpl> find(List<?> mocks) {
+        List<InvocationImpl> invocations = new AllInvocationsFinder().find(mocks);
         return ListUtil.filter(invocations, new RemoveIgnoredForVerification());
     }
 
-    static class RemoveIgnoredForVerification implements ListUtil.Filter<Invocation>{
-        public boolean isOut(Invocation i) {
+    static class RemoveIgnoredForVerification implements ListUtil.Filter<InvocationImpl>{
+        public boolean isOut(InvocationImpl i) {
             return i.isIgnoredForVerification();
         }
     }

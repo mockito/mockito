@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 
 import java.util.Iterator;
@@ -13,21 +13,21 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class WarningsFinder {
-    private final List<Invocation> baseUnusedStubs;
+    private final List<InvocationImpl> baseUnusedStubs;
     private final List<InvocationMatcher> baseAllInvocations;
 
-    public WarningsFinder(List<Invocation> unusedStubs, List<InvocationMatcher> allInvocations) {
+    public WarningsFinder(List<InvocationImpl> unusedStubs, List<InvocationMatcher> allInvocations) {
         this.baseUnusedStubs = unusedStubs;
         this.baseAllInvocations = allInvocations;
     }
     
     public void find(FindingsListener findingsListener) {
-        List<Invocation> unusedStubs = new LinkedList(this.baseUnusedStubs);
+        List<InvocationImpl> unusedStubs = new LinkedList(this.baseUnusedStubs);
         List<InvocationMatcher> allInvocations = new LinkedList(this.baseAllInvocations);
 
-        Iterator<Invocation> unusedIterator = unusedStubs.iterator();
+        Iterator<InvocationImpl> unusedIterator = unusedStubs.iterator();
         while(unusedIterator.hasNext()) {
-            Invocation unused = unusedIterator.next();
+            InvocationImpl unused = unusedIterator.next();
             Iterator<InvocationMatcher> unstubbedIterator = allInvocations.iterator();
             while(unstubbedIterator.hasNext()) {
                 InvocationMatcher unstubbed = unstubbedIterator.next();
@@ -39,7 +39,7 @@ public class WarningsFinder {
             }
         }
 
-        for (Invocation i : unusedStubs) {
+        for (InvocationImpl i : unusedStubs) {
             findingsListener.foundUnusedStub(i);
         }
 

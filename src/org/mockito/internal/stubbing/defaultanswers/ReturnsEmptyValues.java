@@ -22,7 +22,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.mockito.internal.creation.ClassNameFinder;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.MockName;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.ObjectMethodsGuru;

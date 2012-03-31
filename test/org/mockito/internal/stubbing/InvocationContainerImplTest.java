@@ -5,7 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class InvocationContainerImplTest {
 
     InvocationContainerImpl container = new InvocationContainerImpl(new ThreadSafeMockingProgress());
-    Invocation invocation = new InvocationBuilder().toInvocation();
+    InvocationImpl invocation = new InvocationBuilder().toInvocation();
     LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
 
     @Test

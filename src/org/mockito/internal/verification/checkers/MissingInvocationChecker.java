@@ -8,7 +8,7 @@ package org.mockito.internal.verification.checkers;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
@@ -28,11 +28,11 @@ public class MissingInvocationChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<Invocation> invocations, InvocationMatcher wanted) {
-        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted) {
+        List<InvocationImpl> actualInvocations = finder.findInvocations(invocations, wanted);
         
         if (actualInvocations.isEmpty()) {
-            Invocation similar = finder.findSimilarInvocation(invocations, wanted);
+            InvocationImpl similar = finder.findSimilarInvocation(invocations, wanted);
             if (similar != null) {
                 ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
                 Integer[] indexesOfSuspiciousArgs = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());

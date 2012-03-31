@@ -24,10 +24,10 @@ import org.mockitoutil.TestBase;
 
 public class InvocationsFinderTest extends TestBase {
     
-    private LinkedList<Invocation> invocations = new LinkedList<Invocation>();
-    private Invocation simpleMethodInvocation;
-    private Invocation simpleMethodInvocationTwo;
-    private Invocation differentMethodInvocation;
+    private LinkedList<InvocationImpl> invocations = new LinkedList<InvocationImpl>();
+    private InvocationImpl simpleMethodInvocation;
+    private InvocationImpl simpleMethodInvocationTwo;
+    private InvocationImpl differentMethodInvocation;
     private InvocationsFinder finder;
     InOrderContext context = new InOrderContextImpl();
     
@@ -44,7 +44,7 @@ public class InvocationsFinderTest extends TestBase {
 
     @Test
     public void shouldFindActualInvocations() throws Exception {
-        List<Invocation> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
+        List<InvocationImpl> actual = finder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
         assertThat(actual, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
         
         actual = finder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation));
@@ -107,19 +107,19 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldFindFirstSimilarInvocationByName() throws Exception {
-        Invocation overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
+        InvocationImpl overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod));
+        InvocationImpl found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod));
         assertSame(found, simpleMethodInvocation);
     }
     
     @Test
     public void shouldFindInvocationWithTheSameMethod() throws Exception {
-        Invocation overloadedDifferentMethod = new InvocationBuilder().differentMethod().arg("test").toInvocation();
+        InvocationImpl overloadedDifferentMethod = new InvocationBuilder().differentMethod().arg("test").toInvocation();
         
         invocations.add(overloadedDifferentMethod);
         
-        Invocation found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod));
+        InvocationImpl found = finder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod));
         assertSame(found, overloadedDifferentMethod);
     }
     
@@ -128,12 +128,12 @@ public class InvocationsFinderTest extends TestBase {
         LocationImpl last = finder.getLastLocation(invocations);
         assertSame(differentMethodInvocation.getLocation(), last);
         
-        assertNull(finder.getLastLocation(Collections.<Invocation>emptyList()));
+        assertNull(finder.getLastLocation(Collections.<InvocationImpl>emptyList()));
     } 
     
     @Test
     public void shouldFindAllMatchingUnverifiedChunks() throws Exception {
-        List<Invocation> allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
+        List<InvocationImpl> allMatching = finder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
         assertThat(allMatching, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
         
         context.markVerified(simpleMethodInvocation);
@@ -147,31 +147,31 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldFindMatchingChunk() throws Exception {
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
+        List<InvocationImpl> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
     }
     
     @Test
     public void shouldReturnAllChunksWhenModeIsAtLeastOnce() throws Exception {
-        Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
+        InvocationImpl simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
+        List<InvocationImpl> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }
     
     @Test
     public void shouldReturnAllChunksWhenWantedCountDoesntMatch() throws Exception {
-        Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
+        InvocationImpl simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
         
-        List<Invocation> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
+        List<InvocationImpl> chunk = finder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
         assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
     }
     
     @Test
     public void shouldFindPreviousInOrder() throws Exception {
-        Invocation previous = finder.findPreviousVerifiedInOrder(invocations, context);
+        InvocationImpl previous = finder.findPreviousVerifiedInOrder(invocations, context);
         assertNull(previous);
         
         context.markVerified(simpleMethodInvocation);

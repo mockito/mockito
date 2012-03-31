@@ -5,7 +5,7 @@
 package org.mockito.internal.reporting;
 
 
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 
 /**
@@ -18,7 +18,7 @@ public class SmartPrinter {
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(InvocationMatcher wanted, Invocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+    public SmartPrinter(InvocationMatcher wanted, InvocationImpl actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);

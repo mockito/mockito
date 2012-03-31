@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
@@ -26,8 +26,8 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
         this.orderingContext = orderingContext;
     }
 
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, orderingContext);
+    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, int wantedCount) {
+        List<InvocationImpl> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, orderingContext);
         
         int actualCount = chunk.size();
         

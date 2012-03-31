@@ -5,12 +5,12 @@
 
 package org.mockito.exceptions;
 
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.invocation.Location;
 
 public interface PrintableInvocation {
     
     String toString();
     
-    LocationImpl getLocation();
+    Location getLocation();
     
 }

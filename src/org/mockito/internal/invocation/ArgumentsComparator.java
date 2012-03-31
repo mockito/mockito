@@ -12,7 +12,7 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class ArgumentsComparator {
-    public boolean argumentsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
+    public boolean argumentsMatch(InvocationMatcher invocationMatcher, InvocationImpl actual) {
         Object[] actualArgs = actual.getArguments();
         return argumentsMatch(invocationMatcher, actualArgs) || varArgsMatch(invocationMatcher, actual);
     }
@@ -30,7 +30,7 @@ public class ArgumentsComparator {
     }
 
     //ok, this method is a little bit messy but the vararg business unfortunately is messy...      
-    private boolean varArgsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
+    private boolean varArgsMatch(InvocationMatcher invocationMatcher, InvocationImpl actual) {
         if (!actual.getMethod().isVarArgs()) {
             //if the method is not vararg forget about it
             return false;

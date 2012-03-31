@@ -15,7 +15,7 @@ import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitoutil.TestBase;
@@ -25,7 +25,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     private NumberOfInvocationsChecker checker;
     private ReporterStub reporterStub;
     private InvocationMatcher wanted;
-    private LinkedList<Invocation> invocations;
+    private LinkedList<InvocationImpl> invocations;
     private InvocationsFinderStub finderStub;
     
     @Before
@@ -35,7 +35,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         checker = new NumberOfInvocationsChecker(reporterStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
+        invocations = new LinkedList<InvocationImpl>(asList(new InvocationBuilder().toInvocation()));
     }
 
     @Test
@@ -51,8 +51,8 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportWithLastInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
+        InvocationImpl first = new InvocationBuilder().toInvocation();
+        InvocationImpl second = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second));
         
@@ -72,9 +72,9 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
-        Invocation third = new InvocationBuilder().toInvocation();
+        InvocationImpl first = new InvocationBuilder().toInvocation();
+        InvocationImpl second = new InvocationBuilder().toInvocation();
+        InvocationImpl third = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second, third));
         
@@ -97,7 +97,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportNeverWantedButInvoked() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        InvocationImpl invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         
         checker.check(invocations, wanted, 0);
@@ -108,7 +108,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldMarkInvocationsAsVerified() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        InvocationImpl invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         assertFalse(invocation.isVerified());
         

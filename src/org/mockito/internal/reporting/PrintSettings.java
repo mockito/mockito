@@ -6,7 +6,7 @@ package org.mockito.internal.reporting;
 
 import org.hamcrest.Matcher;
 import org.mockito.internal.invocation.ArgumentsProcessor;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
@@ -43,7 +43,7 @@ public class PrintSettings {
         this.withTypeInfo = Arrays.asList(indexesOfMatchers);
     }
 
-    public String print(List<Matcher> matchers, Invocation invocation) {
+    public String print(List<Matcher> matchers, InvocationImpl invocation) {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
         String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
         String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
@@ -54,7 +54,7 @@ public class PrintSettings {
         }
     }
 
-    public String print(Invocation invocation) {
+    public String print(InvocationImpl invocation) {
         return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
     }
 

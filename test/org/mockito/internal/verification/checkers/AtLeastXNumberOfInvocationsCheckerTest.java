@@ -20,8 +20,8 @@ public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
         //given
         AtLeastXNumberOfInvocationsChecker c = new AtLeastXNumberOfInvocationsChecker();
         c.invocationMarker = Mockito.mock(InvocationMarker.class);
-        Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
-        Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
+        InvocationImpl invocation = new InvocationBuilder().simpleMethod().toInvocation();
+        InvocationImpl invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         //when
         c.check(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);

@@ -27,7 +27,7 @@ import java.util.Arrays;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class Invocation implements PublicInvocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
+public class InvocationImpl implements PublicInvocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private final int sequenceNumber;
@@ -43,7 +43,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
     final RealMethod realMethod;
     private StubInfo stubInfo;
 
-    public Invocation(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
+    public InvocationImpl(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
         this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
@@ -78,7 +78,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
             return false;
         }
 
-        Invocation other = (Invocation) o;
+        InvocationImpl other = (InvocationImpl) o;
 
         return this.mock.equals(other.mock) && this.method.equals(other.method) && this.equalArguments(other.arguments);
     }

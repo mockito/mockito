@@ -10,10 +10,10 @@ import java.lang.reflect.Modifier;
 import org.mockito.Mockito;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.plugins.MockMaker;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.plugins.MockitoInvocationHandler;
@@ -50,7 +50,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
             this.invocation = invocation;
         }
 
-        public Object handle(Invocation nullDereference) throws Throwable {
+        public Object handle(InvocationImpl nullDereference) throws Throwable {
             if (new ObjectMethodsGuru().isToString(nullDereference.getMethod())) {
                 return "SmartNull returned by this unstubbed method call on a mock:\n" +
                         invocation.toString();

@@ -6,7 +6,7 @@
 package org.mockito.internal.invocation.finder;
 
 import org.mockito.internal.MockHandlerInterface;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.util.MockUtil;
 
 import java.util.*;
@@ -19,19 +19,19 @@ public class AllInvocationsFinder {
      * @param mocks mocks
      * @return invocations
      */
-    public List<Invocation> find(List<?> mocks) {
-        Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
+    public List<InvocationImpl> find(List<?> mocks) {
+        Set<InvocationImpl> invocationsInOrder = new TreeSet<InvocationImpl>(new SequenceNumberComparator());
         for (Object mock : mocks) {
             MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
-            List<Invocation> fromSingleMock = handler.getInvocationContainer().getInvocations();
+            List<InvocationImpl> fromSingleMock = handler.getInvocationContainer().getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }
         
-        return new LinkedList<Invocation>(invocationsInOrder);
+        return new LinkedList<InvocationImpl>(invocationsInOrder);
     }
 
-    private final class SequenceNumberComparator implements Comparator<Invocation> {
-        public int compare(Invocation o1, Invocation o2) {
+    private final class SequenceNumberComparator implements Comparator<InvocationImpl> {
+        public int compare(InvocationImpl o1, InvocationImpl o2) {
             return Integer.valueOf(o1.getSequenceNumber()).compareTo(o2.getSequenceNumber());
         }
     }

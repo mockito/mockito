@@ -7,6 +7,6 @@ package org.mockito.internal.invocation;
 
 public interface CapturesArgumensFromInvocation {
     
-    void captureArgumentsFrom(Invocation i);
+    void captureArgumentsFrom(InvocationImpl i);
     
 }

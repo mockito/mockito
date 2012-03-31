@@ -8,7 +8,7 @@ package org.mockito.internal.verification.checkers;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
@@ -30,14 +30,14 @@ public class MissingInvocationInOrderChecker {
         this.reporter = reporter;
     }
     
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
+    public void check(List<InvocationImpl> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
+        List<InvocationImpl> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
         
         if (!chunk.isEmpty()) {
             return;
         }
         
-        Invocation previousInOrder = finder.findPreviousVerifiedInOrder(invocations, context);
+        InvocationImpl previousInOrder = finder.findPreviousVerifiedInOrder(invocations, context);
         if (previousInOrder == null) {
             /**
              * It is of course possible to have an issue where the arguments are different
@@ -46,9 +46,9 @@ public class MissingInvocationInOrderChecker {
              * is missing, then this method checks if the arguments are different or if the order
              * is not invoked.
              */
-             List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+             List<InvocationImpl> actualInvocations = finder.findInvocations(invocations, wanted);
              if (actualInvocations == null || actualInvocations.isEmpty())  {
-                 Invocation similar = finder.findSimilarInvocation(invocations, wanted);
+                 InvocationImpl similar = finder.findSimilarInvocation(invocations, wanted);
                  if (similar != null) {
                      Integer[] indicesOfSimilarMatchingArguments =
                              new ArgumentMatchingTool().getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(),

@@ -8,7 +8,7 @@ package org.mockito.internal.stubbing.defaultanswers;
 import java.util.*;
 
 import org.junit.Test;
-import org.mockito.internal.invocation.Invocation;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockitoutil.TestBase;
 
 import static org.mockito.Mockito.mock;
@@ -55,7 +55,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         //given
         Date d = mock(Date.class);
         d.compareTo(new Date());
-        Invocation compareTo = this.getLastInvocation();
+        InvocationImpl compareTo = this.getLastInvocation();
 
         //when
         Object result = values.answer(compareTo);
