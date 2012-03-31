@@ -11,6 +11,7 @@ glob:cglib-and-asm/.gradle
 glob:cglib-and-asm/build
 glob:build
 glob:.gradle
+glob:.DS_Store
 
 syntax: regexp
 ^\.project$
