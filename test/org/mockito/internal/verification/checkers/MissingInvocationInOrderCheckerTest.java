@@ -40,7 +40,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         checker = new MissingInvocationInOrderChecker(finderStub, reporterStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<InvocationImpl>(asList(new InvocationBuilder().toInvocation()));
+        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }                                                                    
 
     @Test

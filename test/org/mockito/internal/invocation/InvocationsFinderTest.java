@@ -129,7 +129,7 @@ public class InvocationsFinderTest extends TestBase {
         Location last = finder.getLastLocation(invocations);
         assertSame(differentMethodInvocation.getLocation(), last);
         
-        assertNull(finder.getLastLocation(Collections.<InvocationImpl>emptyList()));
+        assertNull(finder.getLastLocation(Collections.<Invocation>emptyList()));
     } 
     
     @Test

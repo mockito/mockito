@@ -42,7 +42,7 @@ public class WarningsFinderTest extends TestBase {
         InvocationMatcher unstubbedInvocation = new InvocationBuilder().differentMethod().toInvocationMatcher();
 
         // when
-        WarningsFinder finder = new WarningsFinder(Arrays.<InvocationImpl>asList(), Arrays.<InvocationMatcher>asList(unstubbedInvocation));
+        WarningsFinder finder = new WarningsFinder(Arrays.<Invocation>asList(), Arrays.<InvocationMatcher>asList(unstubbedInvocation));
         finder.find(listener);
 
         // then
@@ -56,7 +56,7 @@ public class WarningsFinderTest extends TestBase {
         InvocationMatcher wrongArg = new InvocationBuilder().arg("bar").mock(mock).toInvocationMatcher();
 
         // when
-        WarningsFinder finder = new WarningsFinder(Arrays.<InvocationImpl> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
+        WarningsFinder finder = new WarningsFinder(Arrays.<Invocation> asList(stub), Arrays.<InvocationMatcher> asList(wrongArg));
         finder.find(listener);
 
         // then

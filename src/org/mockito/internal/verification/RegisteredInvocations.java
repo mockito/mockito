@@ -37,7 +37,7 @@ public class RegisteredInvocations implements Serializable {
     public List<Invocation> getAll() {
     	List<Invocation> copiedList;
     	synchronized (invocations) {
-			copiedList = new LinkedList<InvocationImpl>(invocations) ;
+			copiedList = new LinkedList<Invocation>(invocations) ;
 		}
 
         return ListUtil.filter(copiedList, new RemoveToString());

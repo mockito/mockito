@@ -37,7 +37,7 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
         checker = new NumberOfInvocationsInOrderChecker(finderStub, reporter);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<InvocationImpl>(asList(new InvocationBuilder().toInvocation()));
+        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }
     
     @Test

@@ -28,7 +28,7 @@ public class AllInvocationsFinder {
             invocationsInOrder.addAll(fromSingleMock);
         }
         
-        return new LinkedList<InvocationImpl>(invocationsInOrder);
+        return new LinkedList<Invocation>(invocationsInOrder);
     }
 
     private final class SequenceNumberComparator implements Comparator<Invocation> {

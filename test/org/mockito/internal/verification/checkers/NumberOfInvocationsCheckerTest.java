@@ -36,7 +36,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         checker = new NumberOfInvocationsChecker(reporterStub, finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<InvocationImpl>(asList(new InvocationBuilder().toInvocation()));
+        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
     }
 
     @Test
