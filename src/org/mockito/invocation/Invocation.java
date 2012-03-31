@@ -1,11 +1,9 @@
 package org.mockito.invocation;
 
-import org.mockito.internal.invocation.StubInfoImpl;
-
 /**
  * by Szczepan Faber, created at: 3/31/12
  */
-public interface PublicInvocation extends InvocationOnMock {
+public interface Invocation extends InvocationOnMock {
 
     boolean isVerified();
 

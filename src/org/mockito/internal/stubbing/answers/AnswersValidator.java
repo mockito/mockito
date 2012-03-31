@@ -5,14 +5,14 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.invocation.PublicInvocation;
+import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 
 public class AnswersValidator {
 
     private Reporter reporter = new Reporter();
     
-    public void validate(Answer<?> answer, PublicInvocation theInvocation) {
+    public void validate(Answer<?> answer, Invocation theInvocation) {
         MethodInfo invocation = new MethodInfo(theInvocation);
         if (answer instanceof ThrowsException) {
             validateException((ThrowsException) answer, invocation);

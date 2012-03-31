@@ -11,8 +11,8 @@ import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
+import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.invocation.PublicInvocation;
 import org.mockito.invocation.StubInfo;
 
 import java.lang.reflect.Method;
@@ -27,7 +27,7 @@ import java.util.Arrays;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class InvocationImpl implements PublicInvocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
+public class InvocationImpl implements Invocation, PrintableInvocation, InvocationOnMock, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private final int sequenceNumber;

@@ -1,7 +1,7 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.mockito.internal.util.Primitives;
-import org.mockito.invocation.PublicInvocation;
+import org.mockito.invocation.Invocation;
 
 import java.lang.reflect.Method;
 
@@ -12,7 +12,7 @@ public class MethodInfo {
 
     private Method method;
 
-    public MethodInfo(PublicInvocation theInvocation) {
+    public MethodInfo(Invocation theInvocation) {
         this.method = theInvocation.getMethod();
     }
 
