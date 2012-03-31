@@ -5,7 +5,7 @@
 package org.mockitousage.internal.debugging;
 
 import org.junit.Test;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.base.StackTraceFilter;
 import org.mockitoutil.TestBase;
 
@@ -14,7 +14,7 @@ public class LocationTest extends TestBase {
 
     @Test
     public void shouldLocationNotContainGetStackTraceMethod() {
-        assertContains("shouldLocationNotContainGetStackTraceMethod", new Location().toString());
+        assertContains("shouldLocationNotContainGetStackTraceMethod", new LocationImpl().toString());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class LocationTest extends TestBase {
         };
 
         //when
-        String loc = new Location(filterReturningEmptyArray).toString();
+        String loc = new LocationImpl(filterReturningEmptyArray).toString();
 
         //then
         assertEquals("-> at <<unknown line>>", loc);

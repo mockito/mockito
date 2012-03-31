@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -85,7 +85,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         private PrintableInvocation previous;
         private String wantedString;
         private String actual;
-        private Location actualLocation;
+        private LocationImpl actualLocation;
         
         @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
             this.wanted = wanted;
@@ -96,7 +96,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
             this.wanted = wanted;
         }
 
-        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
+        @Override public void argumentsAreDifferent(String wanted, String actual, LocationImpl actualLocation) {
             this.wantedString = wanted;
             this.actual = actual;
             this.actualLocation = actualLocation;

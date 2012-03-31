@@ -8,17 +8,17 @@ import java.io.Serializable;
 
 import org.mockito.internal.exceptions.base.StackTraceFilter;
 
-public class Location implements Serializable {
+public class LocationImpl implements Serializable {
 
     private static final long serialVersionUID = -9054861157390980624L;
     private final Throwable stackTraceHolder;
     private final StackTraceFilter stackTraceFilter;
 
-    public Location() {
+    public LocationImpl() {
         this(new StackTraceFilter());
     }
 
-    public Location(StackTraceFilter stackTraceFilter) {
+    public LocationImpl(StackTraceFilter stackTraceFilter) {
         this.stackTraceFilter = stackTraceFilter;
         stackTraceHolder = new Throwable();
     }

@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.PrintableInvocation;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
 
@@ -110,7 +110,7 @@ public class InvocationMatcher implements PrintableInvocation, CapturesArgumensF
         return false;
     }
     
-    public Location getLocation() {
+    public LocationImpl getLocation() {
         return invocation.getLocation();
     }
 

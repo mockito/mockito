@@ -9,10 +9,10 @@ import java.lang.reflect.Modifier;
 
 import org.mockito.Mockito;
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.plugins.MockMaker;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.debugging.Location;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
@@ -44,7 +44,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
     private final class ThrowingInterceptor implements MockitoInvocationHandler {
         private final InvocationOnMock invocation;
-        private final Location location = new Location();
+        private final LocationImpl location = new LocationImpl();
 
         private ThrowingInterceptor(InvocationOnMock invocation) {
             this.invocation = invocation;

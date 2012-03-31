@@ -7,18 +7,18 @@ package org.mockito.internal.matchers;
 import java.io.Serializable;
 
 import org.hamcrest.*;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 
 @SuppressWarnings("unchecked")
 public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, CapturesArguments, MatcherDecorator, Serializable {
 
     private static final long serialVersionUID = 6748641229659825725L;
     private final Matcher actualMatcher;
-    private Location location;
+    private LocationImpl location;
 
     public LocalizedMatcher(Matcher actualMatcher) {
         this.actualMatcher = actualMatcher;
-        this.location = new Location();
+        this.location = new LocationImpl();
     }
 
     public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
@@ -33,7 +33,7 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         actualMatcher.describeTo(description);
     }
 
-    public Location getLocation() {
+    public LocationImpl getLocation() {
         return location;
     }
     

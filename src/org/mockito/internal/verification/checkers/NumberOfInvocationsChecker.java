@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationMarker;
@@ -35,13 +35,13 @@ public class NumberOfInvocationsChecker {
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            Location lastInvocation = finder.getLastLocation(actualInvocations);
+            LocationImpl lastInvocation = finder.getLastLocation(actualInvocations);
             reporter.tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } else if (wantedCount == 0 && actualCount > 0) {
-            Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
+            LocationImpl firstUndesired = actualInvocations.get(wantedCount).getLocation();
             reporter.neverWantedButInvoked(wanted, firstUndesired); 
         } else if (wantedCount < actualCount) {
-            Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
+            LocationImpl firstUndesired = actualInvocations.get(wantedCount).getLocation();
             reporter.tooManyActualInvocations(wantedCount, actualCount, wanted, firstUndesired);
         }
         

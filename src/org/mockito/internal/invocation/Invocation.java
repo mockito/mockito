@@ -7,7 +7,7 @@ package org.mockito.internal.invocation;
 
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
@@ -36,7 +36,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
     private final Object[] arguments;
     private final Object[] rawArguments;
 
-    private final Location location;
+    private final LocationImpl location;
     private boolean verified;
     private boolean isIgnoredForVerification;
 
@@ -50,7 +50,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
         this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
-        this.location = new Location();
+        this.location = new LocationImpl();
     }
 
     public Object getMock() {
@@ -96,7 +96,7 @@ public class Invocation implements PublicInvocation, PrintableInvocation, Invoca
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
-    public Location getLocation() {
+    public LocationImpl getLocation() {
         return location;
     }
 

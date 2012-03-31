@@ -8,18 +8,18 @@ package org.mockito.internal.debugging;
 public class Localized<T> {
 
     private final T object;
-    private final Location location;
+    private final LocationImpl location;
 
     public Localized(T object) {
         this.object = object;
-        location = new Location();
+        location = new LocationImpl();
     }
 
     public T getObject() {
         return object;
     }
 
-    public Location getLocation() {
+    public LocationImpl getLocation() {
         return location;
     }
 }

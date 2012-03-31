@@ -24,7 +24,7 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.JUnitTool;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.invocation.Invocation;
@@ -68,7 +68,7 @@ public class Reporter {
 
     }
 
-    public void unfinishedStubbing(Location location) {
+    public void unfinishedStubbing(LocationImpl location) {
         throw new UnfinishedStubbingException(join(
                 "Unfinished stubbing detected here:",
                 location,
@@ -88,7 +88,7 @@ public class Reporter {
     public void incorrectUseOfApi() {
         throw new MockitoException(join(
                 "Incorrect use of API detected here:",
-                new Location(),
+                new LocationImpl(),
                 "",
                 "You probably stored a reference to OngoingStubbing returned by when() and called stubbing methods like thenReturn() on this reference more than once.",
                 "Examples of correct usage:",
@@ -114,7 +114,7 @@ public class Reporter {
         ));
     }
 
-    public void unfinishedVerificationException(Location location) {
+    public void unfinishedVerificationException(LocationImpl location) {
         UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
                 "Missing method call for verify(mock) here:",
                 location,
@@ -256,7 +256,7 @@ public class Reporter {
     public void incorrectUseOfAdditionalMatchers(String additionalMatcherName, int expectedSubMatchersCount, Collection<LocalizedMatcher> matcherStack) {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers inside additional matcher " + additionalMatcherName + " !",
-                new Location(),
+                new LocationImpl(),
                 "",
                 expectedSubMatchersCount + " sub matchers expected, " + matcherStack.size() + " recorded:",
                 locationsOf(matcherStack),
@@ -277,7 +277,7 @@ public class Reporter {
     public void reportNoSubMatchersFound(String additionalMatcherName) {
         throw new InvalidUseOfMatchersException(join(
                 "No matchers found for additional matcher " + additionalMatcherName,
-                new Location(),
+                new LocationImpl(),
                 ""
         ));
     }
@@ -290,10 +290,10 @@ public class Reporter {
         return join(description.toArray());
     }
 
-    public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
+    public void argumentsAreDifferent(String wanted, String actual, LocationImpl actualLocation) {
         String message = join("Argument(s) are different! Wanted:",
                 wanted,
-                new Location(),
+                new LocationImpl(),
                 "Actual invocation has different arguments:",
                 actual,
                 actualLocation,
@@ -332,7 +332,7 @@ public class Reporter {
         return join(
                 "Wanted but not invoked:",
                 wanted.toString(),
-                new Location(),
+                new LocationImpl(),
                 ""
         );
     }
@@ -342,7 +342,7 @@ public class Reporter {
                     "Verification in order failure",
                     "Wanted but not invoked:",
                     wanted.toString(),
-                    new Location(),
+                    new LocationImpl(),
                     "Wanted anywhere AFTER following interaction:",
                     previous.toString(),
                     previous.getLocation(),
@@ -350,35 +350,35 @@ public class Reporter {
         ));
     }
 
-    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new TooManyActualInvocations(message);
     }
 
     private String createTooManyInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
-            Location firstUndesired) {
+            LocationImpl firstUndesired) {
         return join(
                 wanted.toString(),
                 "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
-                new Location(),
+                new LocationImpl(),
                 "But was " + pluralize(actualCount) + ". Undesired invocation:",
                 firstUndesired,
                 ""
         );
     }
 
-    public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
+    public void neverWantedButInvoked(PrintableInvocation wanted, LocationImpl firstUndesired) {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
                 "Never wanted here:",
-                new Location(),
+                new LocationImpl(),
                 "But invoked here:",
                 firstUndesired,
                 ""
         ));
     }
 
-    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
@@ -386,27 +386,27 @@ public class Reporter {
     }
 
     private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
-            Location lastActualInvocation) {
+            LocationImpl lastActualInvocation) {
         String ending =
             (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
 
             String message = join(
                     wanted.toString(),
                     "Wanted " + discrepancy.getPluralizedWantedCount() + ":",
-                    new Location(),
+                    new LocationImpl(),
                     "But was " + discrepancy.getPluralizedActualCount() + ":",
                     ending
             );
             return message;
     }
 
-    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new TooLittleActualInvocations(message);
     }
 
-    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new VerificationInOrderFailure(join(
@@ -420,7 +420,7 @@ public class Reporter {
 
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
-                new Location(),
+                new LocationImpl(),
                 "But found this interaction:",
                 undesired.getLocation(),
                 scenario
@@ -430,7 +430,7 @@ public class Reporter {
     public void noMoreInteractionsWantedInOrder(Invocation undesired) {
         throw new VerificationInOrderFailure(join(
                 "No interactions wanted here:",
-                new Location(),
+                new LocationImpl(),
                 "But found this interaction:",
                 undesired.getLocation(),
                 ""
@@ -511,10 +511,10 @@ public class Reporter {
                 ));
     }
 
-    public void smartNullPointerException(String invocation, Location location) {
+    public void smartNullPointerException(String invocation, LocationImpl location) {
         throw new SmartNullPointerException(join(
                 "You have a NullPointerException here:",
-                new Location(),
+                new LocationImpl(),
                 "because this method call was *not* stubbed correctly:",
                 location,
                 invocation,

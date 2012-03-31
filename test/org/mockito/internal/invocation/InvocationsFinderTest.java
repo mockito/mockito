@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockitousage.IMethods;
@@ -125,7 +125,7 @@ public class InvocationsFinderTest extends TestBase {
     
     @Test
     public void shouldGetLastStackTrace() throws Exception {
-        Location last = finder.getLastLocation(invocations);
+        LocationImpl last = finder.getLastLocation(invocations);
         assertSame(differentMethodInvocation.getLocation(), last);
         
         assertNull(finder.getLastLocation(Collections.<Invocation>emptyList()));

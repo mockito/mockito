@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.debugging.Location;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.Invocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -121,15 +121,15 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int wantedCount;
         private int actualCount;
         private PrintableInvocation wanted;
-        private Location location;
-        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+        private LocationImpl location;
+        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, LocationImpl lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
                     this.location = lastActualLocation;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, LocationImpl firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
@@ -137,7 +137,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         }
         
         @Override
-        public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
+        public void neverWantedButInvoked(PrintableInvocation wanted, LocationImpl firstUndesired) {
             this.wanted = wanted;
             this.location = firstUndesired;
         }
