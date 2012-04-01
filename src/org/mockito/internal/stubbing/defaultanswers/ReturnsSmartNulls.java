@@ -17,7 +17,7 @@ import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.stubbing.Answer;
 
 /**

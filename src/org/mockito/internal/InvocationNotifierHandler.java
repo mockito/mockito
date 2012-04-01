@@ -10,7 +10,7 @@ import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 

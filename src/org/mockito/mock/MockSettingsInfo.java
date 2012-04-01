@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.plugins;
+package org.mockito.mock;
 
 import org.mockito.internal.Incubating;
 

@@ -7,9 +7,9 @@ package org.mockito.internal.creation;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
-import org.mockito.plugins.MockSettingsInfo;
+import org.mockito.mock.MockSettingsInfo;
 
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.

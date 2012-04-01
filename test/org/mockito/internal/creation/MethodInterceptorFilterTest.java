@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.invocation.InvocationImpl;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.MockitoMethod;

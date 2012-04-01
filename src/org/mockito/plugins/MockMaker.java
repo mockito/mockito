@@ -5,6 +5,8 @@
 package org.mockito.plugins;
 
 import org.mockito.internal.Incubating;
+import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.mock.MockSettingsInfo;
 
 /**
  * The facility to create mocks.
@@ -27,8 +29,8 @@ import org.mockito.internal.Incubating;
  *     the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
  * </ol></p>
  *
- * @see MockSettingsInfo
- * @see MockitoInvocationHandler
+ * @see org.mockito.mock.MockSettingsInfo
+ * @see org.mockito.invocation.MockitoInvocationHandler
  * @see org.mockito.internal.configuration.ClassPathLoader
  */
 @Incubating

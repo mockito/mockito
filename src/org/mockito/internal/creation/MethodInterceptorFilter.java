@@ -11,13 +11,13 @@ import java.lang.reflect.Method;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.invocation.Invocation;
-import org.mockito.plugins.MockitoInvocationHandler;
+import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
-import org.mockito.plugins.MockSettingsInfo;
+import org.mockito.mock.MockSettingsInfo;
 
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 

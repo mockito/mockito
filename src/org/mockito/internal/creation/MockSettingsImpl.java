@@ -22,7 +22,7 @@ public class MockSettingsImpl implements MockSettings {
     private Class<?>[] extraInterfaces;
     private String name;
     private Object spiedInstance;
-    private Object delegatedInstance ;
+    private Object delegatedInstance;
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
