@@ -7,10 +7,10 @@ package org.mockito.internal.debugging;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 
 import java.io.ByteArrayOutputStream;
@@ -24,7 +24,7 @@ public class VerboseMockInvocationLoggerTest {
 
     private ByteArrayOutputStream output;
     private Invocation invocation = new InvocationBuilder().toInvocation();
-    private PrintableInvocation stubbedInvocation = new InvocationBuilder().toInvocation();
+    private DescribedInvocation stubbedInvocation = new InvocationBuilder().toInvocation();
 
     @Before
     public void init_Listener() throws Exception {

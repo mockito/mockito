@@ -30,6 +30,7 @@ import org.mockito.internal.junit.JUnitTool;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
@@ -308,17 +309,17 @@ public class Reporter {
         }
     }
 
-    public void wantedButNotInvoked(PrintableInvocation wanted) {
+    public void wantedButNotInvoked(DescribedInvocation wanted) {
         throw new WantedButNotInvoked(createWantedButNotInvokedMessage(wanted));
     }
 
-    public void wantedButNotInvoked(PrintableInvocation wanted, List<? extends PrintableInvocation> invocations) {
+    public void wantedButNotInvoked(DescribedInvocation wanted, List<? extends DescribedInvocation> invocations) {
         String allInvocations;
         if (invocations.isEmpty()) {
             allInvocations = "Actually, there were zero interactions with this mock.\n";
         } else {
             StringBuilder sb = new StringBuilder("\nHowever, there were other interactions with this mock:\n");
-            for (PrintableInvocation i : invocations) {
+            for (DescribedInvocation i : invocations) {
                  sb.append(i.getLocation());
                  sb.append("\n");
             }
@@ -329,7 +330,7 @@ public class Reporter {
         throw new WantedButNotInvoked(message + allInvocations);
     }
 
-    private String createWantedButNotInvokedMessage(PrintableInvocation wanted) {
+    private String createWantedButNotInvokedMessage(DescribedInvocation wanted) {
         return join(
                 "Wanted but not invoked:",
                 wanted.toString(),
@@ -338,7 +339,7 @@ public class Reporter {
         );
     }
 
-    public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
+    public void wantedButNotInvokedInOrder(DescribedInvocation wanted, DescribedInvocation previous) {
         throw new VerificationInOrderFailure(join(
                     "Verification in order failure",
                     "Wanted but not invoked:",
@@ -351,12 +352,12 @@ public class Reporter {
         ));
     }
 
-    public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+    public void tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new TooManyActualInvocations(message);
     }
 
-    private String createTooManyInvocationsMessage(int wantedCount, int actualCount, PrintableInvocation wanted,
+    private String createTooManyInvocationsMessage(int wantedCount, int actualCount, DescribedInvocation wanted,
             Location firstUndesired) {
         return join(
                 wanted.toString(),
@@ -368,7 +369,7 @@ public class Reporter {
         );
     }
 
-    public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
+    public void neverWantedButInvoked(DescribedInvocation wanted, Location firstUndesired) {
         throw new NeverWantedButInvoked(join(
                 wanted.toString(),
                 "Never wanted here:",
@@ -379,14 +380,14 @@ public class Reporter {
         ));
     }
 
-    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+    public void tooManyActualInvocationsInOrder(int wantedCount, int actualCount, DescribedInvocation wanted, Location firstUndesired) {
         String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, firstUndesired);
         throw new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
                 ));
     }
 
-    private String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted,
+    private String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted,
             Location lastActualInvocation) {
         String ending =
             (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
@@ -401,13 +402,13 @@ public class Reporter {
             return message;
     }
 
-    public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new TooLittleActualInvocations(message);
     }
 
-    public void tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new VerificationInOrderFailure(join(

@@ -11,10 +11,10 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitoutil.TestBase;
@@ -119,16 +119,16 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     class ReporterStub extends Reporter {
         private int wantedCount;
         private int actualCount;
-        private PrintableInvocation wanted;
+        private DescribedInvocation wanted;
         private Location location;
-        @Override public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+        @Override public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
                     this.location = lastActualLocation;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, PrintableInvocation wanted, Location firstUndesired) {
+        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, Location firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
@@ -136,7 +136,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         }
         
         @Override
-        public void neverWantedButInvoked(PrintableInvocation wanted, Location firstUndesired) {
+        public void neverWantedButInvoked(DescribedInvocation wanted, Location firstUndesired) {
             this.wanted = wanted;
             this.location = firstUndesired;
         }

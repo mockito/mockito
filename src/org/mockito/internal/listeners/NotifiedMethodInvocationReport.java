@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.listeners;
 
-import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
 
@@ -41,7 +41,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
             this.throwable = throwable;
         }
 
-        public PrintableInvocation getInvocation() {
+        public DescribedInvocation getInvocation() {
             return invocation;
         }
 

@@ -5,6 +5,7 @@
 package org.mockito.listeners;
 
 import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 
 /**
  * Represent a method call on a mock.
@@ -17,6 +18,10 @@ import org.mockito.exceptions.PrintableInvocation;
  */
 public interface MethodInvocationReport {
     /**
+     * The return type is deprecated, please assign the return value from this method
+     * to the {@link DescribedInvocation} type. Sorry for inconvenience but we had to move
+     * {@link PrintableInvocation} to better place to keep the API consistency.
+     *
      * @return Information on the method call, never {@code null}
      */
     PrintableInvocation getInvocation();

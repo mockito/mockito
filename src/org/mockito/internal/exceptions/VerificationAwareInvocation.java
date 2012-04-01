@@ -5,10 +5,9 @@
 
 package org.mockito.internal.exceptions;
 
-import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 
-
-public interface VerificationAwareInvocation extends PrintableInvocation {
+public interface VerificationAwareInvocation extends DescribedInvocation {
     
     boolean isVerified();
     

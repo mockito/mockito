@@ -6,7 +6,7 @@ package org.mockitousage.debugging;
 
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 
@@ -85,7 +85,7 @@ public class InvocationListenerCallbackTest {
     }
 
     private static class RememberingListener implements InvocationListener {
-        PrintableInvocation invocation;
+        DescribedInvocation invocation;
         Object returnValue;
         String locationOfStubbing;
 

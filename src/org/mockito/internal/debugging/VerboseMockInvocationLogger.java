@@ -5,7 +5,7 @@
 
 package org.mockito.internal.debugging;
 
-import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 
@@ -60,7 +60,7 @@ public class VerboseMockInvocationLogger implements InvocationListener {
 		printStream.println("############ Logging method invocation #" + mockInvocationsCounter + " on mock/spy ########");
 	}
 
-    private void printInvocation(PrintableInvocation invocation) {
+    private void printInvocation(DescribedInvocation invocation) {
 		printStream.println(invocation.toString());
 //		printStream.println("Handling method call on a mock/spy.");
 		printlnIndented("invoked: " + invocation.getLocation().toString());

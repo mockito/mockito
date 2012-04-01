@@ -11,15 +11,14 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.VerificationModeBuilder;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitoutil.TestBase;
@@ -82,18 +81,18 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     }
     
     class ReporterStub extends Reporter {
-        private PrintableInvocation wanted;
-        private PrintableInvocation previous;
+        private DescribedInvocation wanted;
+        private DescribedInvocation previous;
         private String wantedString;
         private String actual;
         private Location actualLocation;
         
-        @Override public void wantedButNotInvokedInOrder(PrintableInvocation wanted, PrintableInvocation previous) {
+        @Override public void wantedButNotInvokedInOrder(DescribedInvocation wanted, DescribedInvocation previous) {
             this.wanted = wanted;
             this.previous = previous;
         }
         
-        @Override public void wantedButNotInvoked(PrintableInvocation wanted) {
+        @Override public void wantedButNotInvoked(DescribedInvocation wanted) {
             this.wanted = wanted;
         }
 

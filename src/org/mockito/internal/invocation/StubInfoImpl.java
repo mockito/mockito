@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.exceptions.PrintableInvocation;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
@@ -12,9 +12,9 @@ import java.io.Serializable;
 
 public class StubInfoImpl implements StubInfo, Serializable {
     private static final long serialVersionUID = 2125827349332068867L;
-    private PrintableInvocation stubbedAt;
+    private DescribedInvocation stubbedAt;
 
-    public StubInfoImpl(PrintableInvocation stubbedAt) {
+    public StubInfoImpl(DescribedInvocation stubbedAt) {
         this.stubbedAt = stubbedAt;
     }
 

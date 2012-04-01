@@ -12,14 +12,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements PrintableInvocation, CapturesArgumensFromInvocation, Serializable {
+public class InvocationMatcher implements DescribedInvocation, CapturesArgumensFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;

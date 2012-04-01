@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -18,7 +18,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
-    private PrintableInvocation usedAt;
+    private DescribedInvocation usedAt;
 
     public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
@@ -38,7 +38,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
         answers.add(answer);
     }
 
-    public void markStubUsed(PrintableInvocation usedAt) {
+    public void markStubUsed(DescribedInvocation usedAt) {
         this.usedAt = usedAt;
     }
 
