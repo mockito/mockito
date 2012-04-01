@@ -4,33 +4,19 @@
  */
 package org.mockito.exceptions.verification.junit;
 
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
-
+@Deprecated
+/**
+ * @Deprecated. This class has been moved to internal packages because it was never meant to be public.
+ * If you need it for extending Mockito please let us know. You can still use {@link org.mockito.internal.junit.JUnitTool}.
+ * However, the package clearly states that the class in a part of a public API so it can change.
+ */
 public class JUnitTool {
-
-    private static boolean hasJUnit;
-
-    static {
-        try {
-            Class.forName("junit.framework.ComparisonFailure");
-            hasJUnit = true;
-        } catch (Throwable t) {
-            hasJUnit = false;
-        }
-    }
     
     public static boolean hasJUnit() {
-        return hasJUnit;
+        return org.mockito.internal.junit.JUnitTool.hasJUnit();
     }
 
     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
-        try {
-            Class<?> clazz = Class.forName("org.mockito.exceptions.verification.junit.ArgumentsAreDifferent");
-            AssertionError throwable = (AssertionError) clazz.getConstructors()[0].newInstance(message, wanted, actual);
-            return throwable;
-        } catch (Throwable t) {
-//            throw the default exception in case of problems
-            return new ArgumentsAreDifferent(message);
-        }
+        return org.mockito.internal.junit.JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
     }
 }
