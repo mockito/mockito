@@ -4,29 +4,14 @@
  */
 package org.mockito.exceptions;
 
-public class Discrepancy {
-
-    private final int wantedCount;
-    private final int actualCount;
-
+@Deprecated
+/**
+ * @Deprecated. This class has been moved to internal packages because it was never meant to be public.
+ * If you need it for extending Mockito please let us know. You can still use {@link org.mockito.internal.reporting.Discrepancy}.
+ * However, the package clearly states that the class in a part of a public API so it can change.
+ */
+public class Discrepancy extends org.mockito.internal.reporting.Discrepancy {
     public Discrepancy(int wantedCount, int actualCount) {
-        this.wantedCount = wantedCount;
-        this.actualCount = actualCount;
-    }
-
-    public int getWantedCount() {
-        return wantedCount;
-    }
-    
-    public String getPluralizedWantedCount() {
-        return Pluralizer.pluralize(wantedCount);
-    }
-
-    public int getActualCount() {
-        return actualCount;
-    }
-
-    public String getPluralizedActualCount() {
-        return Pluralizer.pluralize(actualCount);
+        super(wantedCount, actualCount);
     }
 }

@@ -386,7 +386,7 @@ public class Reporter {
                 ));
     }
 
-    private String createTooLittleInvocationsMessage(Discrepancy discrepancy, PrintableInvocation wanted,
+    private String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted,
             Location lastActualInvocation) {
         String ending =
             (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
@@ -401,13 +401,13 @@ public class Reporter {
             return message;
     }
 
-    public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new TooLittleActualInvocations(message);
     }
 
-    public void tooLittleActualInvocationsInOrder(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+    public void tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
         String message = createTooLittleInvocationsMessage(discrepancy, wanted, lastActualLocation);
 
         throw new VerificationInOrderFailure(join(

@@ -11,10 +11,8 @@ import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.Discrepancy;
 import org.mockito.exceptions.PrintableInvocation;
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
@@ -123,7 +121,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int actualCount;
         private PrintableInvocation wanted;
         private Location location;
-        @Override public void tooLittleActualInvocations(Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
+        @Override public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, PrintableInvocation wanted, Location lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;

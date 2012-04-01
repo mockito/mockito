@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.verification.checkers;
 
-import org.mockito.exceptions.Discrepancy;
+import org.mockito.internal.reporting.Discrepancy;
 
 public class AtLeastDiscrepancy extends Discrepancy {
 
