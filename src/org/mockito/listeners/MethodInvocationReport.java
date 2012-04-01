@@ -24,7 +24,7 @@ public interface MethodInvocationReport {
      *
      * @return Information on the method call, never {@code null}
      */
-    PrintableInvocation getInvocation();
+    DescribedInvocation getInvocation();
 
     /**
      * @return The resulting value of the method invocation, may be <code>null</code>
