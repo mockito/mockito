@@ -1,8 +1,15 @@
 package org.mockito.invocation;
 
+import org.mockito.internal.Incubating;
+
 /**
- * by Szczepan Faber, created at: 4/1/12
+ * The information about stubbing, for example the location of stubbing.
  */
+@Incubating
 public interface StubInfo {
+
+    /**
+     * @return the location where the invocation was stubbed.
+     */
     Location stubbedAt();
 }

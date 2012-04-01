@@ -1,10 +1,16 @@
 package org.mockito.invocation;
 
+import org.mockito.internal.Incubating;
+
 /**
- * by Szczepan Faber, created at: 4/1/12
+ * Describes the location of something in the source code.
  */
+@Incubating
 public interface Location {
 
+    /**
+     * @return the location
+     */
     String toString();
 
 }
