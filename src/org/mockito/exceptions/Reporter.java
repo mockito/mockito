@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.mockito.exceptions.Pluralizer.pluralize;
+import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.util.StringJoiner.join;
 
 /**
@@ -360,7 +360,7 @@ public class Reporter {
             Location firstUndesired) {
         return join(
                 wanted.toString(),
-                "Wanted " + Pluralizer.pluralize(wantedCount) + ":",
+                "Wanted " + pluralize(wantedCount) + ":",
                 new LocationImpl(),
                 "But was " + pluralize(actualCount) + ". Undesired invocation:",
                 firstUndesired,
