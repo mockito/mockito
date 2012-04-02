@@ -15,10 +15,16 @@ public class MockingDetailsTest {
 
     @Mock TestClass mock1;
     @Spy TestClass spy1;
+    TestClass mock2;
+    TestClass spy2;
+    TestClass nonMock;
     
     @Before
     public void setUp(){
         initMocks( this );
+        mock2 = mock( TestClass.class );
+        spy2 = spy( new TestClass());
+        nonMock = new TestClass();
     }
     
     @Test
@@ -28,15 +34,35 @@ public class MockingDetailsTest {
 
     @Test
     public void shouldReturnTrue_FromIsMock_ForDirectMock(){
-        TestClass mock2 = mock( TestClass.class );
         assertTrue(MockingDetails.of(mock2).isMock());
     }
 
     @Test
+    public void shouldReturnTrue_FromIsMock_ForAnnotatedSpy(){
+        assertTrue(MockingDetails.of(spy1).isMock());
+    }
+
+    @Test
+    public void shouldReturnTrue_FromIsMock_ForDirectSpy(){
+
+        assertTrue(MockingDetails.of(spy2).isMock());
+    }
+
+    @Test
     public void shouldReturnFalse_FromIsMock_ForNonMock(){
-        TestClass nonMock = new TestClass();
         assertFalse(MockingDetails.of(nonMock).isMock());
     }
+
+    @Test
+    public void shouldReturnFalse_FromIsSpy_ForAnnotatedMock(){
+        assertFalse(MockingDetails.of(mock1).isSpy());
+    }
+
+    @Test
+    public void shouldReturnFalse_FromIsSpy_ForDirectMock(){
+        assertFalse(MockingDetails.of(mock2).isSpy());
+    }
+
 
     @Test
     public void shouldReturnTrue_FromIsSpy_ForAnnotatedSpy(){
@@ -45,13 +71,11 @@ public class MockingDetailsTest {
 
     @Test
     public void shouldReturnTrue_FromIsSpy_ForDirectSpy(){
-        TestClass spy2 = spy( new TestClass());
         assertTrue(MockingDetails.of(spy2).isSpy());
     }
 
     @Test
-    public void shouldReturnFalse_FromIsSpy_ForNonSpy(){
-        TestClass nonSpy = new TestClass();
-        assertFalse(MockingDetails.of(nonSpy).isSpy());
+    public void shouldReturnFalse_FromIsSpy_ForNonMock(){
+        assertFalse(MockingDetails.of(nonMock).isSpy());
     }
 }
