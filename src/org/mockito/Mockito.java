@@ -785,7 +785,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *     MockingDetails.of( someObject ).isMock();
  *     MockingDetails.of( someObject ).isSpy();
  * </code></pre>
- * Both the <code>isMock()</code> and <code>isSpy()</code> methods return <code>boolean</code>.
+ * Both the <code>isMock()</code> and <code>isSpy()</code> methods return <code>boolean</code>.  As a spy
+ * is considered a special kind of mock, <code>isMock()</code> returns true if the object is a spy.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
