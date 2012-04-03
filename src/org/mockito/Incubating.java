@@ -3,8 +3,9 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal;
+package org.mockito;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -24,5 +25,6 @@ import java.lang.annotation.RetentionPolicy;
  * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface Incubating {
 }

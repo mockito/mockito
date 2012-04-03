@@ -4,7 +4,7 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.internal.Incubating;
+import org.mockito.Incubating;
 import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.mock.MockSettingsInfo;
 

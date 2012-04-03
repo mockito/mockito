@@ -1,6 +1,6 @@
 package org.mockito.invocation;
 
-import org.mockito.internal.Incubating;
+import org.mockito.Incubating;
 
 /**
  * A method call on a mock object. Contains all information and state needed for the Mockito framework to operate.

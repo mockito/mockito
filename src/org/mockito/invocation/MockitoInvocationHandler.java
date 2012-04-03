@@ -4,8 +4,7 @@
  */
 package org.mockito.invocation;
 
-import org.mockito.internal.Incubating;
-import org.mockito.invocation.Invocation;
+import org.mockito.Incubating;
 
 import java.io.Serializable;
 

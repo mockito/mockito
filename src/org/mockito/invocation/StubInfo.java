@@ -1,6 +1,6 @@
 package org.mockito.invocation;
 
-import org.mockito.internal.Incubating;
+import org.mockito.Incubating;
 
 /**
  * The information about stubbing, for example the location of stubbing.

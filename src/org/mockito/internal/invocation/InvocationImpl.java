@@ -24,7 +24,7 @@ import java.util.Arrays;
  * Contains stack trace of invocation
  */
 @SuppressWarnings("unchecked")
-public class InvocationImpl implements Invocation, DescribedInvocation, InvocationOnMock, VerificationAwareInvocation {
+public class InvocationImpl implements Invocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 8240069639250980199L;
     private final int sequenceNumber;

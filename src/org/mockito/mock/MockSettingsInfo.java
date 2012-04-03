@@ -5,7 +5,7 @@
 
 package org.mockito.mock;
 
-import org.mockito.internal.Incubating;
+import org.mockito.Incubating;
 
 /**
  * Informs about the mock settings

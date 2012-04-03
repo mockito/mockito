@@ -1,6 +1,6 @@
 package org.mockito.internal.util.reflection;
 
-import org.mockito.internal.Incubating;
+import org.mockito.Incubating;
 import org.mockito.internal.util.Checks;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.internal.util.collections.ListUtil;
