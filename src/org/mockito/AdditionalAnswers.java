@@ -4,8 +4,12 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.answers.ReturnsIdentity;
 
 /**
+ * Additional answers provides factory methods for less common answers.
  *
+ * <p>Currently offer answers that can return the parameter of an invocation at a certain position.
  *
+ * <p>See factory methods for more information : {@link #returnsFirstArg}, {@link #returnsSecondArg},
+ * {@link #returnsLastArg} and {@link #returnsArgAtPosition(int)}
  *
  * @since 1.9.5
  */
