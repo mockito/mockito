@@ -8,7 +8,7 @@ import org.mockito.internal.util.reflection.GenericMaster;
 import java.lang.reflect.Field;
 
 /**
- * Instantiate {@link ‡ArgumentCaptor} a field annotated by &#64;Captor.
+ * Instantiate {@link ArgumentCaptor} a field annotated by &#64;Captor.
  */
 public class CaptorAnnotationProcessor implements FieldAnnotationProcessor<Captor> {
     public Object process(Captor annotation, Field field) {
