@@ -32,6 +32,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 
@@ -690,4 +691,39 @@ public class Reporter {
 				"Settings should not define a spy instance and a delegated instance at the same time."
 				)) ;
 	}
+
+    public void invalidArgumentRangeAtIdentityAnswerCreationTime() {
+        throw new MockitoException(join("Invalid argument index.",
+                                        "The index need to be a positive number that indicates the position of the argument to return.",
+                                        "However it is possible to use the -1 value to indicates that the last argument should be",
+                                        "returned."));
+    }
+
+    public int invalidArgumentIndexRangeAtInvocationTime(InvocationOnMock invocation, boolean willReturnLastParameter, int argumentIndex) {
+        throw new MockitoException(
+                join("Invalid argument index for the current invocation of method : ",
+                     " -> " + new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName(),
+                     "",
+                     (willReturnLastParameter ?
+                             "Last parameter wanted" :
+                             "Wanted parameter at position " + argumentIndex) + possibleArgumentTypesOf(invocation),
+                     "The index need to be a positive number that indicates a valid position of the argument in the invocation.",
+                     "However it is possible to use the -1 value to indicates that the last argument should be returned.",
+                     ""));
+    }
+
+    private StringBuilder possibleArgumentTypesOf(InvocationOnMock invocation) {
+        Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
+        if (parameterTypes.length == 0) {
+            return new StringBuilder(" but the method has no arguments.\n");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder(" but possible argument indexes for this method are :\n");
+        for (int i = 0, parameterTypesLength = parameterTypes.length; i < parameterTypesLength; i++) {
+            stringBuilder.append("    [").append(i).append("] ").append(parameterTypes[i].getSimpleName()).append("\n");
+        }
+        return stringBuilder;
+    }
+
+
 }

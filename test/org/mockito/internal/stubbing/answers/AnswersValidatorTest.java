@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
-import java.util.ArrayList;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
+
+import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
 public class AnswersValidatorTest extends TestBase {
