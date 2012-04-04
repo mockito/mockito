@@ -6,19 +6,22 @@ package org.mockito.internal.stubbing.answers;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
+import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.answers.ReturnsIdentity;
-import org.mockitoutil.TestBase;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
-public class AnswersValidatorTest extends TestBase {
+public class AnswersValidatorTest {
 
     private AnswersValidator validator = new AnswersValidator();
     private Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
@@ -66,7 +69,7 @@ public class AnswersValidatorTest extends TestBase {
     public void should_allow_correct_type_of_return_value() throws Throwable {
         validator.validate(new Returns("one"), new InvocationBuilder().simpleMethod().toInvocation());
         validator.validate(new Returns(false), new InvocationBuilder().method("booleanReturningMethod").toInvocation());
-        validator.validate(new Returns(new Boolean(true)), new InvocationBuilder().method("booleanObjectReturningMethod").toInvocation());
+        validator.validate(new Returns(Boolean.TRUE), new InvocationBuilder().method("booleanObjectReturningMethod").toInvocation());
         validator.validate(new Returns(1), new InvocationBuilder().method("integerReturningMethod").toInvocation());
         validator.validate(new Returns(1L), new InvocationBuilder().method("longReturningMethod").toInvocation());
         validator.validate(new Returns(1L), new InvocationBuilder().method("longObjectReturningMethod").toInvocation());
@@ -92,10 +95,10 @@ public class AnswersValidatorTest extends TestBase {
     @Test
     public void should_fail_when_calling_real_method_on_interface() throws Throwable {
         //given
-        Invocation inovcationOnIterface = new InvocationBuilder().method("simpleMethod").toInvocation();
+        Invocation invocationOnInterface = new InvocationBuilder().method("simpleMethod").toInvocation();
         try {
             //when
-            validator.validate(new CallsRealMethods(), inovcationOnIterface);
+            validator.validate(new CallsRealMethods(), invocationOnInterface);
             //then
             fail();
         } catch (MockitoException e) {}
@@ -106,10 +109,90 @@ public class AnswersValidatorTest extends TestBase {
         //given
         ArrayList mock = mock(ArrayList.class);
         mock.clear();
-        Invocation invocationOnClass = getLastInvocation();
+        Invocation invocationOnClass = new MockitoCore().getLastInvocation();
         //when
         validator.validate(new CallsRealMethods(), invocationOnClass);
         //then no exception is thrown
+    }
+
+    @Test
+    public void should_allow_possible_argument_types() throws Exception {
+        validator.validate(
+                new ReturnsIdentity(0),
+                new InvocationBuilder().method("intArgumentReturningInt").argTypes(int.class).arg(1000).toInvocation()
+        );
+        validator.validate(
+                new ReturnsIdentity(0),
+                new InvocationBuilder().method("toString").argTypes(String.class).arg("whatever").toInvocation()
+        );
+        validator.validate(
+                new ReturnsIdentity(2),
+                new InvocationBuilder().method("varargsObject")
+                                       .argTypes(int.class, Object[].class)
+                                       .args(1000, "Object", "Object")
+                                       .toInvocation()
+        );
+        validator.validate(
+                new ReturnsIdentity(1),
+                new InvocationBuilder().method("threeArgumentMethod")
+                                       .argTypes(int.class, Object.class, String.class)
+                                       .args(1000, "Object", "String")
+                                       .toInvocation()
+        );
+    }
+
+    @Test
+    public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() throws Throwable {
+        try {
+            validator.validate(new ReturnsIdentity(30), new InvocationBuilder().method("oneArg").arg("A").toInvocation());
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("invalid argument index")
+                    .containsIgnoringCase("iMethods.oneArg")
+                    .containsIgnoringCase("[0] String")
+                    .containsIgnoringCase("position")
+                    .contains("30");
+        }
+    }
+
+    @Test
+    public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() throws Throwable {
+        try {
+            validator.validate(
+                    new ReturnsIdentity(ReturnsIdentity.LAST_ARGUMENT),
+                    new InvocationBuilder().simpleMethod().toInvocation()
+            );
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("invalid argument index")
+                    .containsIgnoringCase("iMethods.simpleMethod")
+                    .containsIgnoringCase("no arguments")
+                    .containsIgnoringCase("last parameter wanted");
+        }
+    }
+
+    @Test
+    public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() throws Throwable {
+        try {
+            validator.validate(
+                    new ReturnsIdentity(2),
+                    new InvocationBuilder().method("varargsReturningString")
+                                           .argTypes(Object[].class)
+                                           .args("anyString", new Object(), "anyString")
+                                           .toInvocation()
+            );
+            fail();
+        } catch (WrongTypeOfReturnValue e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("argument of type")
+                    .containsIgnoringCase("Object")
+                    .containsIgnoringCase("varargsReturningString")
+                    .containsIgnoringCase("should return")
+                    .containsIgnoringCase("String")
+                    .containsIgnoringCase("possible argument indexes");
+        }
     }
 
 }

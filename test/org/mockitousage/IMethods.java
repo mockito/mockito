@@ -163,7 +163,9 @@ public interface IMethods {
     Object varargsObject(int i, Object... object);
     
     int varargs(Object ... object);
-    
+
+    String varargsReturningString(Object ... object);
+
     int varargs(String ... string);
 
     void mixedVarargs(Object i, String ... string);
@@ -204,9 +206,15 @@ public interface IMethods {
 
     void intArgumentMethod(int i);
 
+    int intArgumentReturningInt(int i);
+
     boolean equals(String str);
 
     boolean equals();
 
     int hashCode(String str);
+
+    int toIntPrimitive(Integer i);
+
+    Integer toIntWrapper(int i);
 }

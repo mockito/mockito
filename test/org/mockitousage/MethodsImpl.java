@@ -313,6 +313,10 @@ public class MethodsImpl implements IMethods {
         return -1;
     }
 
+    public String varargsReturningString(Object... object) {
+        return null;
+    }
+
     public int varargs(String... string) {
         return -1;
     }
@@ -388,6 +392,10 @@ public class MethodsImpl implements IMethods {
       
     }
 
+    public int intArgumentReturningInt(int i) {
+        return 0;
+    }
+
     public boolean equals(String str) {
         return false;
     }
@@ -398,5 +406,13 @@ public class MethodsImpl implements IMethods {
 
     public int hashCode(String str) {
         return 0;
+    }
+
+    public int toIntPrimitive(Integer i) {
+        return 0;
+    }
+
+    public Integer toIntWrapper(int i) {
+        return null;
     }
 }

@@ -6,6 +6,7 @@ package org.mockito.internal.util;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
+import org.mockito.internal.util.collections.ArrayUtils;
 import org.mockitoutil.TestBase;
 
 import java.io.Serializable;

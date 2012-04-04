@@ -13,6 +13,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
  * Build an invocation.
  */
@@ -25,6 +27,7 @@ public class InvocationBuilder {
     private Object mock = Mockito.mock(IMethods.class);
     private Method method;
     private boolean verified;
+    private List<Class<?>> argTypes;
 
     /**
      * Build the invocation
@@ -35,15 +38,17 @@ public class InvocationBuilder {
      */
     public Invocation toInvocation() {
         if (method == null) {
-            List<Class> argTypes = new LinkedList<Class>();
-            for (Object arg : args) {
-                if (arg == null) {
-                    argTypes.add(Object.class);
-                } else {
-                    argTypes.add(arg.getClass());
+            if (argTypes == null) {
+                argTypes = new LinkedList<Class<?>>();
+                for (Object arg : args) {
+                    if (arg == null) {
+                        argTypes.add(Object.class);
+                    } else {
+                        argTypes.add(arg.getClass());
+                    }
                 }
             }
-            
+
             try {
                 method = IMethods.class.getMethod(methodName, argTypes.toArray(new Class[argTypes.size()]));
             } catch (Exception e) {
@@ -103,5 +108,10 @@ public class InvocationBuilder {
     
     public InvocationBuilder differentMethod() {
         return this.method("differentMethod");
+    }
+
+    public InvocationBuilder argTypes(Class<?>... argTypes) {
+        this.argTypes = asList(argTypes);
+        return this;
     }
 }

@@ -10,6 +10,7 @@ import org.mockito.internal.MockHandler;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.util.collections.ArrayUtils;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.plugins.MockMaker;
 

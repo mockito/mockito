@@ -702,11 +702,11 @@ public class Reporter {
     public int invalidArgumentIndexRangeAtInvocationTime(InvocationOnMock invocation, boolean willReturnLastParameter, int argumentIndex) {
         throw new MockitoException(
                 join("Invalid argument index for the current invocation of method : ",
-                     " -> " + new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName(),
+                     " -> " + new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName() + "()",
                      "",
                      (willReturnLastParameter ?
                              "Last parameter wanted" :
-                             "Wanted parameter at position " + argumentIndex) + possibleArgumentTypesOf(invocation),
+                             "Wanted parameter at position " + argumentIndex) + " but " + possibleArgumentTypesOf(invocation),
                      "The index need to be a positive number that indicates a valid position of the argument in the invocation.",
                      "However it is possible to use the -1 value to indicates that the last argument should be returned.",
                      ""));
@@ -715,15 +715,41 @@ public class Reporter {
     private StringBuilder possibleArgumentTypesOf(InvocationOnMock invocation) {
         Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
         if (parameterTypes.length == 0) {
-            return new StringBuilder(" but the method has no arguments.\n");
+            return new StringBuilder("the method has no arguments.\n");
         }
 
-        StringBuilder stringBuilder = new StringBuilder(" but possible argument indexes for this method are :\n");
+        StringBuilder stringBuilder = new StringBuilder("the possible argument indexes for this method are :\n");
         for (int i = 0, parameterTypesLength = parameterTypes.length; i < parameterTypesLength; i++) {
-            stringBuilder.append("    [").append(i).append("] ").append(parameterTypes[i].getSimpleName()).append("\n");
+            stringBuilder.append("    [").append(i);
+
+            if (invocation.getMethod().isVarArgs() && i == parameterTypesLength - 1) {
+                stringBuilder.append("+] ").append(parameterTypes[i].getComponentType().getSimpleName()).append("  <- Vararg").append("\n");
+            } else {
+                stringBuilder.append("] ").append(parameterTypes[i].getSimpleName()).append("\n");
+            }
         }
         return stringBuilder;
     }
 
-
+    public void wrongTypeOfArgumentToReturn(InvocationOnMock invocation, String expectedType, Class actualType, int argumentIndex) {
+        throw new WrongTypeOfReturnValue(join(
+                "The argument of type '" + actualType.getSimpleName() + "' cannot be returned because the following ",
+                "method should return the type '" + expectedType + "'",
+                " -> " + new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName() + "()",
+                "",
+                "The reason for this error can be :",
+                "1. The wanted argument position is incorrect.",
+                "2. The answer is used on the wrong interaction.",
+                "",
+                "Position of the wanted argument is " + argumentIndex + " and " + possibleArgumentTypesOf(invocation),
+                "***",
+                "However if you're still unsure why you're getting above error read on.",
+                "Due to the nature of the syntax above problem might occur because:",
+                "1. This exception *might* occur in wrongly written multi-threaded tests.",
+                "   Please refer to Mockito FAQ on limitations of concurrency testing.",
+                "2. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - ",
+                "   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.",
+                ""
+        ));
+    }
 }

@@ -10,37 +10,29 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class Primitives {
     
+    public static <T> Class<T> primitiveTypeOf(Class<T> clazz) {
+        if(clazz.isPrimitive()) {
+            return clazz;
+        }
+        return (Class<T>) primitiveTypes.get(clazz);
+    }
+
     public static boolean isPrimitiveWrapper(Class<?> type) {
         return wrapperReturnValues.containsKey(type);
     }
-    
+
     public static <T> T primitiveWrapperOf(Class<T> type) {
         return (T) wrapperReturnValues.get(type);
     }
-    
-    public static <T> Class<T> primitiveTypeOf(Class<T> clazz) {
-        return (Class<T>) primitiveTypes.get(clazz);
-    }
-    
+
     public static <T> T primitiveValueOrNullFor(Class<T> primitiveType) {
         return (T) primitiveValues.get(primitiveType);
     }
-    
-    private static Map<Class<?>, Object> wrapperReturnValues = new HashMap<Class<?>, Object>();
+    private static Map<Class<?>, Class<?>> wrapperTypes = new HashMap<Class<?>, Class<?>>();
     private static Map<Class<?>, Class<?>> primitiveTypes = new HashMap<Class<?>, Class<?>>();
+    private static Map<Class<?>, Object> wrapperReturnValues = new HashMap<Class<?>, Object>();
     private static Map<Class<?>, Object> primitiveValues = new HashMap<Class<?>, Object>();
-    
-    static {
-        wrapperReturnValues.put(Boolean.class, Boolean.FALSE);
-        wrapperReturnValues.put(Character.class, new Character((char) 0));
-        wrapperReturnValues.put(Byte.class, new Byte((byte) 0));
-        wrapperReturnValues.put(Short.class, new Short((short) 0));
-        wrapperReturnValues.put(Integer.class, new Integer(0));
-        wrapperReturnValues.put(Long.class, new Long(0));
-        wrapperReturnValues.put(Float.class, new Float(0));
-        wrapperReturnValues.put(Double.class, new Double(0));
-    }
-    
+
     static {
         primitiveTypes.put(Boolean.class, Boolean.TYPE);
         primitiveTypes.put(Character.class, Character.TYPE);
@@ -50,6 +42,17 @@ public class Primitives {
         primitiveTypes.put(Long.class, Long.TYPE);
         primitiveTypes.put(Float.class, Float.TYPE);
         primitiveTypes.put(Double.class, Double.TYPE);
+    }
+
+    static {
+        wrapperReturnValues.put(Boolean.class, Boolean.FALSE);
+        wrapperReturnValues.put(Character.class, new Character((char) 0));
+        wrapperReturnValues.put(Byte.class, new Byte((byte) 0));
+        wrapperReturnValues.put(Short.class, new Short((short) 0));
+        wrapperReturnValues.put(Integer.class, new Integer(0));
+        wrapperReturnValues.put(Long.class, new Long(0));
+        wrapperReturnValues.put(Float.class, new Float(0));
+        wrapperReturnValues.put(Double.class, new Double(0));
     }
 
     static {

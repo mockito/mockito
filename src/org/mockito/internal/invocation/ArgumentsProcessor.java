@@ -3,6 +3,7 @@ package org.mockito.internal.invocation;
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.util.collections.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
 public class ArgumentsProcessor {
     // expands array varArgs that are given by runtime (1, [a, b]) into true
     // varArgs (1, a, b);
-    static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
-        if (!isVarArgs || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
+    public static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
+        if (!isVarArgs || new ArrayUtils().isEmpty(args) || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
             return args == null ? new Object[0] : args;
         }
 

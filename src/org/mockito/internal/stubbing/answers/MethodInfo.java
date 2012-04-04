@@ -29,8 +29,8 @@ public class MethodInfo {
     }
 
     public boolean isValidReturnType(Class clazz) {
-        if (method.getReturnType().isPrimitive()) {
-            return Primitives.primitiveTypeOf(clazz) == method.getReturnType();
+        if (method.getReturnType().isPrimitive() || clazz.isPrimitive()) {
+            return Primitives.primitiveTypeOf(clazz) == Primitives.primitiveTypeOf(method.getReturnType());
         } else {
             return method.getReturnType().isAssignableFrom(clazz);
         }

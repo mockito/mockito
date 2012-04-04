@@ -7,28 +7,46 @@ package org.mockito.internal.stubbing.answers;
 import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.answers.ReturnsIdentity;
 
 public class AnswersValidator {
 
     private Reporter reporter = new Reporter();
     
-    public void validate(Answer<?> answer, Invocation theInvocation) {
-        MethodInfo invocation = new MethodInfo(theInvocation);
+    public void validate(Answer<?> answer, Invocation invocation) {
+        MethodInfo methodInfo = new MethodInfo(invocation);
         if (answer instanceof ThrowsException) {
-            validateException((ThrowsException) answer, invocation);
+            validateException((ThrowsException) answer, methodInfo);
         }
         
         if (answer instanceof Returns) {
-            validateReturnValue((Returns) answer, invocation);
+            validateReturnValue((Returns) answer, methodInfo);
         }
         
         if (answer instanceof DoesNothing) {
-            validateDoNothing((DoesNothing) answer, invocation);
+            validateDoNothing((DoesNothing) answer, methodInfo);
         }
         
         if (answer instanceof CallsRealMethods) {
-            validateMockingConcreteClass((CallsRealMethods) answer, invocation);
+            validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
         }
+
+        if (answer instanceof ReturnsIdentity) {
+            ReturnsIdentity returnsIdentity = (ReturnsIdentity) answer;
+            validateReturnArgIdentity(returnsIdentity, invocation);
+        }
+    }
+
+    private void validateReturnArgIdentity(ReturnsIdentity returnsIdentity, Invocation invocation) {
+        returnsIdentity.validateIndexWithinInvocationRange(invocation);
+
+        MethodInfo methodInfo = new MethodInfo(invocation);
+        if (!methodInfo.isValidReturnType(returnsIdentity.returnedTypeOnSignature(invocation))) {
+            new Reporter().wrongTypeOfArgumentToReturn(invocation, methodInfo.printMethodReturnType(),
+                                                       returnsIdentity.returnedTypeOnSignature(invocation),
+                                                       returnsIdentity.wantedArgumentIndex());
+        }
+
     }
 
     private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {

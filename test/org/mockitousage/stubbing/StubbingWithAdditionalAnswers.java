@@ -7,10 +7,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsArgAtPosition;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.AdditionalAnswers.returnsLastArg;
 import static org.mockito.AdditionalAnswers.returnsSecondArg;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyVararg;
@@ -34,8 +36,17 @@ public class StubbingWithAdditionalAnswers {
 
     @Test
     public void can_return_expanded_arguments_of_invocation() throws Exception {
-        given(iMethods.objectReturningMethod(anyVararg())).will(returnsSecondArg());
+        given(iMethods.varargsObject(eq(1), anyVararg())).will(returnsArgAtPosition(3));
 
-        assertThat(iMethods.objectReturningMethod("bob", "alice", "carl")).isEqualTo("alice");
+        assertThat(iMethods.varargsObject(1, "bob", "alexander", "alice", "carl")).isEqualTo("alice");
+    }
+
+    @Test
+    public void can_return_primitives_or_wrappers() throws Exception {
+        given(iMethods.toIntPrimitive(anyInt())).will(returnsFirstArg());
+        given(iMethods.toIntWrapper(anyInt())).will(returnsFirstArg());
+
+        assertThat(iMethods.toIntPrimitive(1)).isEqualTo(1);
+        assertThat(iMethods.toIntWrapper(1)).isEqualTo(1);
     }
 }
