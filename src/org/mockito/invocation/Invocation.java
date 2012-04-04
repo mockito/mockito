@@ -9,6 +9,8 @@ import org.mockito.Incubating;
  * The javadoc does not have lots of examples or documentation because its audience is different.
  * Vast majority of users don't need to use the Invocation. It's mostly useful for other framework authors
  * that extend Mockito.
+ *
+ * @since 1.9.5
  */
 @Incubating
 public interface Invocation extends InvocationOnMock, DescribedInvocation {

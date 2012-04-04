@@ -5,6 +5,9 @@ import org.mockito.stubbing.answers.ReturnsIdentity;
 
 /**
  *
+ *
+ *
+ * @since 1.9.5
  */
 @SuppressWarnings("unchecked")
 public class AdditionalAnswers {
@@ -25,6 +28,8 @@ public class AdditionalAnswers {
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the first argument of the invocation.
+     *
+     * @since 1.9.5
      */
     public static <T> Answer<T> returnsFirstArg() {
         return (Answer<T>) RETURNS_FIRST_ARGUMENT;
@@ -43,6 +48,8 @@ public class AdditionalAnswers {
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
+     *
+     * @since 1.9.5
      */
     public static <T> Answer<T> returnsSecondArg() {
         return (Answer<T>) RETURNS_SECOND_ARGUMENT;
@@ -61,6 +68,8 @@ public class AdditionalAnswers {
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the last argument of the invocation.
+     *
+     * @since 1.9.5
      */
     public static <T> Answer<T> returnsLastArg() {
         return (Answer<T>) RETURNS_LAST_ARGUMENT;
@@ -79,10 +88,11 @@ public class AdditionalAnswers {
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
+     *
+     * @since 1.9.5
      */
     public static <T> Answer<T> returnsArgAtPosition(int position) {
         return (Answer<T>) new ReturnsIdentity(position);
     }
-
 
 }

@@ -13,6 +13,7 @@ import java.io.Serializable;
  * <p>If this number equals -1 then the last argument is returned.</p>
  *
  * @see org.mockito.AdditionalAnswers
+ * @since 1.9.5
  */
 public class ReturnsIdentity implements Answer<Object>, Serializable {
 

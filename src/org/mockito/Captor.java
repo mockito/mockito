@@ -32,6 +32,7 @@ import java.lang.annotation.*;
  * One of the advantages of using &#64;Captor annotation is that you can avoid warnings related capturing complex generic types.
  *
  * @see ArgumentCaptor
+ * @since 1.8.3
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

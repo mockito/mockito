@@ -29,9 +29,13 @@ import org.mockito.mock.MockSettingsInfo;
  *     the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
  * </ol></p>
  *
+ * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
+ * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
+ *
  * @see org.mockito.mock.MockSettingsInfo
  * @see org.mockito.invocation.MockitoInvocationHandler
  * @see org.mockito.internal.configuration.ClassPathLoader
+ * @since 1.9.5
  */
 @Incubating
 public interface MockMaker {
@@ -47,6 +51,7 @@ public interface MockMaker {
      * @param settings Mock creation settings.
      * @param <T> Type of the mock to return, actually the <code>typeToMock</code>.
      * @return The mock instance.
+     * @since 1.9.5
      */
     <T> T createMock(
             Class<T> typeToMock,
@@ -61,6 +66,7 @@ public interface MockMaker {
      *
      * @param mock The mock instance.
      * @return The invocation handler if this object is a mock, otherwise <code>null</code>.
+     * @since 1.9.5
      */
     MockitoInvocationHandler getHandler(Object mock);
 
@@ -74,6 +80,7 @@ public interface MockMaker {
      * @param mock The mock instance whose invocation handler shall be replaced.
      * @param newHandler The new invocation handler instance.
      * @param settings The mock settings.
+     * @since 1.9.5
      */
     void resetMock(
             Object mock,

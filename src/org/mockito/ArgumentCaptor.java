@@ -51,6 +51,7 @@ import java.util.List;
  * See the full documentation on Mockito in javadoc for {@link Mockito} class.
  *
  * @see Captor
+ * @since 1.8.0
  */
 public class ArgumentCaptor<T> {
     

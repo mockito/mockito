@@ -142,6 +142,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see Spy
  * @see MockitoAnnotations#initMocks(Object)
  * @see org.mockito.runners.MockitoJUnitRunner
+ * @since 1.8.3
  */
 @Documented
 @Target(FIELD)

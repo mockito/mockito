@@ -157,6 +157,7 @@ public interface MockSettings extends Serializable, MockSettingsInfo {
      * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
+     * @since 1.8.1
      */
     MockSettings serializable();
 
@@ -241,10 +242,12 @@ public interface MockSettings extends Serializable, MockSettingsInfo {
      *
      *   //You have to use doReturn() for stubbing
      *   doReturn("foo").when(listWithDelegate).get(0);
-     * </code>
+     * </code></pre>
      *
      * @param delegate The delegate to forward calls to.
      * @return settings instance so that you can fluently specify other settings
+     *
+     * @since 1.9.5
      */
     MockSettings forwardTo(Object delegate) ;
 }

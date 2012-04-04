@@ -97,6 +97,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see InjectMocks
  * @see MockitoAnnotations#initMocks(Object)
  * @see org.mockito.runners.MockitoJUnitRunner
+ * @since 1.8.3
  */
 @Retention(RUNTIME)
 @Target(FIELD)

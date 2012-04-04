@@ -10,6 +10,11 @@ import org.mockito.stubbing.Answer;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
+/**
+ * Internal answer to forward invocations on a real instance.
+ *
+ * @since 1.9.5
+ */
 public class ForwardsInvocations implements Answer<Object>, Serializable {
 
 	private static final long serialVersionUID = -8343690268123254910L;

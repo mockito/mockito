@@ -109,6 +109,7 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * @param throwableClasses to be thrown on method invocation
      *
      * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @since 1.9.0
      */
     OngoingStubbing<T> thenThrow(Class<? extends Throwable>... throwableClasses);
 
@@ -176,6 +177,7 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * @return iOngoingStubbing object that allows stubbing consecutive calls
      *
      * @see #thenAnswer(Answer)
+     * @since 1.9.0
      */
     OngoingStubbing<T> then(Answer<?> answer);
 
@@ -194,6 +196,7 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      *
      * @param <M> The mock type given by the variable type.
      * @return Mock used in this ongoing stubbing.
+     * @since 1.9.0
      */
     <M> M getMock();
 
