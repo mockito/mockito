@@ -66,7 +66,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="1">1. <a name="verification">Let's verify some behaviour!</a></h3>
+ * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //Let's import Mockito statically so that the code looks clearer
@@ -91,7 +91,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="2">2. <a name="stubbing">How about some stubbing?</a></h3>
+ * <h3 id="2">2. <a class="meaningful_link" href="#stubbing">How about some stubbing?</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //You can mock concrete classes, not only interfaces
@@ -137,7 +137,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="3">3. <a name="argument_matchers">Argument matchers</a></h3>
+ * <h3 id="3">3. <a class="meaningful_link" href="#argument_matchers">Argument matchers</a></h3>
  *
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * Sometimes, when extra flexibility is required then you might use argument matchers:  
@@ -194,8 +194,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="4">4. <a name="exact_verification">Verifying exact number of invocations</a> /
- * <a name="at_least_verification">at least x</a> / never</h3>
+ * <h3 id="4">4. <a class="meaningful_link" href="#exact_verification">Verifying exact number of invocations</a> /
+ * <a class="meaningful_link" href="#at_least_verification">at least x</a> / never</h3>
  * 
  * <pre class="code"><code class="java">
  * //using mock 
@@ -233,7 +233,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="5">5. <a name="stubbing_with_exceptions">Stubbing void methods with exceptions</a></h3>
+ * <h3 id="5">5. <a class="meaningful_link" href="#stubbing_with_exceptions">Stubbing void methods with exceptions</a></h3>
  * 
  * <pre class="code"><code class="java">
  *   doThrow(new RuntimeException()).when(mockedList).clear();
@@ -251,7 +251,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="6">6. <a name="in_order_verification">Verification in order</a></h3>
+ * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification">Verification in order</a></h3>
  * 
  * <pre class="code"><code class="java">
  * // A. Single mock whose methods must be invoked in a particular order
@@ -296,7 +296,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="7">7. <a name="never_verification">Making sure interaction(s) never happened on mock</a></h3>
+ * <h3 id="7">7. <a class="meaningful_link" href="#never_verification">Making sure interaction(s) never happened on mock</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //using mocks - only mockOne is interacted
@@ -316,7 +316,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="8">8. <a name="finding_redundant_invocations">Finding redundant invocations</a></h3>
+ * <h3 id="8">8. <a class="meaningful_link" href="#finding_redundant_invocations">Finding redundant invocations</a></h3>
  * 
  * <pre class="code"><code class="java">
  * //using mocks
@@ -344,7 +344,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="9">9. <a name="mock_annotation">Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
+ * <h3 id="9">9. <a class="meaningful_link" href="#mock_annotation">Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
  * 
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
@@ -377,7 +377,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="10">10. <a name="stubbing_consecutive_calls">Stubbing consecutive calls</a> (iterator-style stubbing)</h3>
+ * <h3 id="10">10. <a class="meaningful_link" href="#stubbing_consecutive_calls">Stubbing consecutive calls</a> (iterator-style stubbing)</h3>
  * 
  * Sometimes we need to stub with different return value/exception for the same
  * method call. Typical use case could be mocking iterators. 
@@ -413,7 +413,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="11">11. <a name="answer_stubs">Stubbing with callbacks</a></h3>
+ * <h3 id="11">11. <a class="meaningful_link" href="#answer_stubs">Stubbing with callbacks</a></h3>
  * 
  * Allows stubbing with generic {@link Answer} interface.
 *  <p>
@@ -438,7 +438,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="12">12. <a name="do_family_methods_stubs"><code>doReturn()</code>|<code>doThrow()</code>|
+ * <h3 id="12">12. <a class="meaningful_link" href="#do_family_methods_stubs"><code>doReturn()</code>|<code>doThrow()</code>|
  * <code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a></h3>
  * 
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not
@@ -483,7 +483,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="13">13. <a name="spy">Spying on real objects</a></h3>
+ * <h3 id="13">13. <a class="meaningful_link" href="#spy">Spying on real objects</a></h3>
  * 
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called
  * (unless a method was stubbed).
@@ -556,7 +556,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="14">14. Changing <a name="defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
+ * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
  * 
  * You can create a mock with specified strategy for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
@@ -575,7 +575,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="15">15. <a name="captors">Capturing arguments</a> for further assertions (Since 1.8.0)</h3>
+ * <h3 id="15">15. <a class="meaningful_link" href="#captors">Capturing arguments</a> for further assertions (Since 1.8.0)</h3>
  * 
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
@@ -603,7 +603,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="16">16. <a name="partial_mocks">Real partial mocks</a> (Since 1.8.0)</h3>
+ * <h3 id="16">16. <a class="meaningful_link" href="#partial_mocks">Real partial mocks</a> (Since 1.8.0)</h3>
  *  
  *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
@@ -636,7 +636,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="17">17. <a name="resetting_mocks">Resetting mocks</a> (Since 1.8.0)</h3>
+ * <h3 id="17">17. <a class="meaningful_link" href="#resetting_mocks">Resetting mocks</a> (Since 1.8.0)</h3>
  *  
  * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method. 
@@ -664,7 +664,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="18">18. <a name="framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
+ * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
  * 
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -678,7 +678,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="19">19. <a name="bdd_mockito">Aliases for behavior driven development</a> (Since 1.8.0)</h3>
+ * <h3 id="19">19. <a class="meaningful_link" href="#bdd_mockito">Aliases for behavior driven development</a> (Since 1.8.0)</h3>
  * 
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
@@ -712,7 +712,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="20">20. <a name="serializable_mocks">Serializable mocks</a> (Since 1.8.1)</h3>
+ * <h3 id="20">20. <a class="meaningful_link" href="#serializable_mocks">Serializable mocks</a> (Since 1.8.1)</h3>
  * 
  * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
@@ -743,9 +743,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="21">21. New annotations: <a name="captor_annotation"><code>&#064;Captor</code></a>,
- * <a name="spy_annotation"><code>&#064;Spy</code></a>,
- * <a name="injectmocks_annotation"><code>&#064;InjectMocks</code></a> (Since 1.8.3)</h3>
+ * <h3 id="21">21. New annotations: <a class="meaningful_link" href="#captor_annotation"><code>&#064;Captor</code></a>,
+ * <a class="meaningful_link" href="#spy_annotation"><code>&#064;Spy</code></a>,
+ * <a class="meaningful_link" href="#injectmocks_annotation"><code>&#064;InjectMocks</code></a> (Since 1.8.3)</h3>
  *
  * <p>
  * Release 1.8.3 brings new annotations that may be helpful on occasion:
@@ -765,7 +765,11 @@ import org.mockito.verification.VerificationWithTimeout;
  * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
  * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
  * <p>
- * <h3 id="22"><a name="verification_timeout">22. (**New**) Verification with timeout (Since 1.8.5)  </a></h3>
+ *
+ *
+ *
+ *
+ * <h3 id="22">22. <a class="meaningful_link" href="#verification_timeout">Verification with timeout</a> (Since 1.8.5)</h3>
  * <p>
  * Allows verifying with timeout. It causes a verify to wait for a specified period of time for a desired
  * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
@@ -797,8 +801,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="23">23. (New) <a name="automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
- * <code>&#064;InjectMocks</code></a> and <a name="constructor_injection">constructor injection goodness</a> (Since 1.9.0)</h3>
+ * <h3 id="23">23. (New) <a class="meaningful_link" href="#automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
+ * <code>&#064;InjectMocks</code></a> and <a class="meaningful_link" href="#constructor_injection">constructor injection goodness</a> (Since 1.9.0)</h3>
  *
  * <p>
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
@@ -820,7 +824,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="24">24. (New) <a name="one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="24">24. (New) <a class="meaningful_link" href="#one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
@@ -836,7 +840,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="25">25. (New) <a name="ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="25">25. (New) <a class="meaningful_link" href="#ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow to ignore stubbing for the sake of verification.
  * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
@@ -865,7 +869,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="26">26. (**New**) <a name="mocking_details">Mocking details</a> (Since 1.9.5)</h3>
+ * <h3 id="26">26. (**New**) <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Since 1.9.5)</h3>
  * <p>
  * To identify whether a particular object is a mock or a spy, you can write
  * <pre class="code"><code class="java">
@@ -878,7 +882,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="27">27. (**New**) <a name="forwarding_call_to_real_instance">Forward calls to real instance</a> (Since 1.9.5)</h3>
+ * <h3 id="27">27. (**New**) <a class="meaningful_link" href="#forwarding_call_to_real_instance">Forward calls to real instance</a> (Since 1.9.5)</h3>
  * <p>Now mockito offer a specific way to forward calls to a concrete instance. This is different than than a
  * spy because the spy creation syntax discard the to be spied instance.
  *
@@ -918,7 +922,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="28">28. (**New**) <a name="mock_maker_plugin">Introduction of the internal <code>MockMaker</code> API</a> (Since 1.9.5)</h3>
+ * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin">Introduction of the internal <code>MockMaker</code> API</a> (Since 1.9.5)</h3>
  * <p>Thanks to Google Android guys, we now have a brand new extension that allows anyone to write his own mock maker engine.
  *
  * <p>How does that work ?
