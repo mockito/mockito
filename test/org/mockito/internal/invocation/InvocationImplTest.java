@@ -5,11 +5,6 @@
 
 package org.mockito.internal.invocation;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -20,8 +15,13 @@ import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @SuppressWarnings({"unchecked"})
-public class InvocationTest extends TestBase {
+public class InvocationImplTest extends TestBase {
 
     private Invocation invocation;
 

@@ -15,8 +15,8 @@ import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
 import org.mockito.internal.MockHandlerTest;
 import org.mockito.internal.creation.jmock.ClassImposterizerTest;
+import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
-import org.mockito.internal.invocation.InvocationTest;
 import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.ComparableMatchersTest;
 import org.mockito.internal.matchers.EqualsTest;
@@ -90,7 +90,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     ClassImposterizerTest.class,
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,
-                    InvocationTest.class,
+                    InvocationImplTest.class,
                     MockitoTest.class,
                     MockUtilTest.class,
                     ReporterTest.class,

@@ -10,7 +10,7 @@ import org.mockito.internal.exceptions.base.StackTraceFilter;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("serial")
-public class LocationTest extends TestBase {
+public class LocationImplTest extends TestBase {
 
     @Test
     public void shouldLocationNotContainGetStackTraceMethod() {
