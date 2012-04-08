@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.invocation.InvocationImpl;
-import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.MockitoMethod;
@@ -27,7 +27,7 @@ import org.mockitoutil.TestBase;
 
 public class MethodInterceptorFilterTest extends TestBase {
 
-    MockitoInvocationHandler handler = Mockito.mock(MockitoInvocationHandler.class);
+    MockHandlerInterface handler = Mockito.mock(MockHandlerInterface.class);
     MethodInterceptorFilter filter = new MethodInterceptorFilter(handler, (MockSettingsImpl) withSettings());
 
     @Before

@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.MockHandlerInterface;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
@@ -22,12 +23,12 @@ import org.mockito.mock.MockSettingsInfo;
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
-    private final MockitoInvocationHandler handler;
+    private final MockHandlerInterface handler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockSettingsInfo mockSettings;
 
-    public MethodInterceptorFilter(MockitoInvocationHandler handler, MockSettingsInfo mockSettings) {
+    public MethodInterceptorFilter(MockHandlerInterface handler, MockSettingsInfo mockSettings) {
         this.handler = handler;
         this.mockSettings = mockSettings;
     }

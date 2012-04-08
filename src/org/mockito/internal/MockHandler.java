@@ -26,7 +26,7 @@ import java.util.List;
  * @param <T>
  *            type of mock object to handle
  */
-public class MockHandler<T> implements MockitoInvocationHandler, MockHandlerInterface<T> {
+public class MockHandler<T> implements MockHandlerInterface<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
