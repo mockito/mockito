@@ -10,14 +10,9 @@ import java.lang.reflect.Modifier;
 import org.mockito.Mockito;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
-import org.mockito.plugins.MockMaker;
-import org.mockito.internal.configuration.ClassPathLoader;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -41,26 +36,6 @@ import org.mockito.stubbing.Answer;
 public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 7618312406617949441L;
-    private static MockMaker mockMaker = ClassPathLoader.getMockMaker();
-
-    private final class ThrowingInterceptor implements MockitoInvocationHandler {
-        private final InvocationOnMock invocation;
-        private final Location location = new LocationImpl();
-
-        private ThrowingInterceptor(InvocationOnMock invocation) {
-            this.invocation = invocation;
-        }
-
-        public Object handle(Invocation nullDereference) throws Throwable {
-            if (new ObjectMethodsGuru().isToString(nullDereference.getMethod())) {
-                return "SmartNull returned by this unstubbed method call on a mock:\n" +
-                        invocation.toString();
-            }
-
-            new Reporter().smartNullPointerException(invocation.toString(), location);
-            return null;
-        }
-    }
 
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();
 
@@ -71,9 +46,29 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
         }
         Class<?> type = invocation.getMethod().getReturnType();
         if (!type.isPrimitive() && !Modifier.isFinal(type.getModifiers())) {
-            ThrowingInterceptor handler = new ThrowingInterceptor(invocation);
-            return mockMaker.createMock(type, new Class[0], handler, new MockSettingsImpl());
+            final Location location = new LocationImpl();
+            return Mockito.mock(type, new ThrowsSmartNullPointer(invocation, location));
         }
         return null;
+    }
+
+    private static class ThrowsSmartNullPointer implements Answer {
+        private final InvocationOnMock unstubbedInvocation;
+        private final Location location;
+
+        public ThrowsSmartNullPointer(InvocationOnMock unstubbedInvocation, Location location) {
+            this.unstubbedInvocation = unstubbedInvocation;
+            this.location = location;
+        }
+
+        public Object answer(InvocationOnMock currentInvocation) throws Throwable {
+            if (new ObjectMethodsGuru().isToString(currentInvocation.getMethod())) {
+                return "SmartNull returned by this unstubbed method call on a mock:\n" +
+                        unstubbedInvocation.toString();
+            }
+
+            new Reporter().smartNullPointerException(unstubbedInvocation.toString(), location);
+            return null;
+        }
     }
 }
