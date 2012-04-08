@@ -699,7 +699,7 @@ public class Reporter {
                                         "returned."));
     }
 
-    public int invalidArgumentIndexRangeAtInvocationTime(InvocationOnMock invocation, boolean willReturnLastParameter, int argumentIndex) {
+    public int invalidArgumentPositionRangeAtInvocationTime(InvocationOnMock invocation, boolean willReturnLastParameter, int argumentIndex) {
         throw new MockitoException(
                 join("Invalid argument index for the current invocation of method : ",
                      " -> " + new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName() + "()",

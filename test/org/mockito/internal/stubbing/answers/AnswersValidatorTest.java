@@ -10,7 +10,7 @@ import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.answers.ReturnsIdentity;
+import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
@@ -118,22 +118,22 @@ public class AnswersValidatorTest {
     @Test
     public void should_allow_possible_argument_types() throws Exception {
         validator.validate(
-                new ReturnsIdentity(0),
+                new ReturnsArgumentAt(0),
                 new InvocationBuilder().method("intArgumentReturningInt").argTypes(int.class).arg(1000).toInvocation()
         );
         validator.validate(
-                new ReturnsIdentity(0),
+                new ReturnsArgumentAt(0),
                 new InvocationBuilder().method("toString").argTypes(String.class).arg("whatever").toInvocation()
         );
         validator.validate(
-                new ReturnsIdentity(2),
+                new ReturnsArgumentAt(2),
                 new InvocationBuilder().method("varargsObject")
                                        .argTypes(int.class, Object[].class)
                                        .args(1000, "Object", "Object")
                                        .toInvocation()
         );
         validator.validate(
-                new ReturnsIdentity(1),
+                new ReturnsArgumentAt(1),
                 new InvocationBuilder().method("threeArgumentMethod")
                                        .argTypes(int.class, Object.class, String.class)
                                        .args(1000, "Object", "String")
@@ -144,7 +144,7 @@ public class AnswersValidatorTest {
     @Test
     public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() throws Throwable {
         try {
-            validator.validate(new ReturnsIdentity(30), new InvocationBuilder().method("oneArg").arg("A").toInvocation());
+            validator.validate(new ReturnsArgumentAt(30), new InvocationBuilder().method("oneArg").arg("A").toInvocation());
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage())
@@ -160,7 +160,7 @@ public class AnswersValidatorTest {
     public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() throws Throwable {
         try {
             validator.validate(
-                    new ReturnsIdentity(ReturnsIdentity.LAST_ARGUMENT),
+                    new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT),
                     new InvocationBuilder().simpleMethod().toInvocation()
             );
             fail();
@@ -177,7 +177,7 @@ public class AnswersValidatorTest {
     public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() throws Throwable {
         try {
             validator.validate(
-                    new ReturnsIdentity(2),
+                    new ReturnsArgumentAt(2),
                     new InvocationBuilder().method("varargsReturningString")
                                            .argTypes(Object[].class)
                                            .args("anyString", new Object(), "anyString")

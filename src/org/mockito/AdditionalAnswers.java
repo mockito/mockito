@@ -1,7 +1,7 @@
 package org.mockito;
 
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.answers.ReturnsIdentity;
+import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
 /**
  * Additional answers provides factory methods for less common answers.
@@ -15,9 +15,9 @@ import org.mockito.stubbing.answers.ReturnsIdentity;
  */
 @SuppressWarnings("unchecked")
 public class AdditionalAnswers {
-    private static final ReturnsIdentity RETURNS_FIRST_ARGUMENT = new ReturnsIdentity(0);
-    private static final ReturnsIdentity RETURNS_SECOND_ARGUMENT = new ReturnsIdentity(1);
-    private static final ReturnsIdentity RETURNS_LAST_ARGUMENT = new ReturnsIdentity(-1);
+    private static final ReturnsArgumentAt RETURNS_FIRST_ARGUMENT = new ReturnsArgumentAt(0);
+    private static final ReturnsArgumentAt RETURNS_SECOND_ARGUMENT = new ReturnsArgumentAt(1);
+    private static final ReturnsArgumentAt RETURNS_LAST_ARGUMENT = new ReturnsArgumentAt(-1);
 
     /**
      * Returns the first parameter of an invocation.
@@ -96,7 +96,7 @@ public class AdditionalAnswers {
      * @since 1.9.5
      */
     public static <T> Answer<T> returnsArgAtPosition(int position) {
-        return (Answer<T>) new ReturnsIdentity(position);
+        return (Answer<T>) new ReturnsArgumentAt(position);
     }
 
 }

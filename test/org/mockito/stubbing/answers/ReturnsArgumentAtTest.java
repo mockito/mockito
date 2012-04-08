@@ -9,35 +9,35 @@ import java.lang.reflect.Method;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-public class ReturnsIdentityTest {
+public class ReturnsArgumentAtTest {
 	@Test
 	public void should_be_able_to_return_the_first_parameter() throws Throwable {
-		assertThat(new ReturnsIdentity(0).answer(invocationWith("A", "B"))).isEqualTo("A");
+		assertThat(new ReturnsArgumentAt(0).answer(invocationWith("A", "B"))).isEqualTo("A");
 	}
 
 	@Test
 	public void should_be_able_to_return_the_second_parameter()
 			throws Throwable {
-		assertThat(new ReturnsIdentity(1).answer(invocationWith("A", "B", "C"))).isEqualTo("B");
+		assertThat(new ReturnsArgumentAt(1).answer(invocationWith("A", "B", "C"))).isEqualTo("B");
 	}
 
 	@Test
 	public void should_be_able_to_return_the_last_parameter() throws Throwable {
-		assertThat(new ReturnsIdentity(-1).answer(invocationWith("A"))).isEqualTo("A");
-		assertThat(new ReturnsIdentity(-1).answer(invocationWith("A", "B"))).isEqualTo("B");
+		assertThat(new ReturnsArgumentAt(-1).answer(invocationWith("A"))).isEqualTo("A");
+		assertThat(new ReturnsArgumentAt(-1).answer(invocationWith("A", "B"))).isEqualTo("B");
 	}
 
 	@Test
 	public void should_be_able_to_return_the_specified_parameter() throws Throwable {
-		assertThat(new ReturnsIdentity(0).answer(invocationWith("A", "B", "C"))).isEqualTo("A");
-		assertThat(new ReturnsIdentity(1).answer(invocationWith("A", "B", "C"))).isEqualTo("B");
-		assertThat(new ReturnsIdentity(2).answer(invocationWith("A", "B", "C"))).isEqualTo("C");
+		assertThat(new ReturnsArgumentAt(0).answer(invocationWith("A", "B", "C"))).isEqualTo("A");
+		assertThat(new ReturnsArgumentAt(1).answer(invocationWith("A", "B", "C"))).isEqualTo("B");
+		assertThat(new ReturnsArgumentAt(2).answer(invocationWith("A", "B", "C"))).isEqualTo("C");
 	}
 
 	@Test
 	public void should_raise_an_exception_if_index_is_not_in_allowed_range_at_creation_time() throws Throwable {
         try {
-            new ReturnsIdentity(-30);
+            new ReturnsArgumentAt(-30);
             fail();
         } catch (Exception e) {
             assertThat(e.getMessage())

@@ -7,7 +7,7 @@ package org.mockito.internal.stubbing.answers;
 import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.answers.ReturnsIdentity;
+import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
 public class AnswersValidator {
 
@@ -31,20 +31,20 @@ public class AnswersValidator {
             validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
         }
 
-        if (answer instanceof ReturnsIdentity) {
-            ReturnsIdentity returnsIdentity = (ReturnsIdentity) answer;
-            validateReturnArgIdentity(returnsIdentity, invocation);
+        if (answer instanceof ReturnsArgumentAt) {
+            ReturnsArgumentAt returnsArgumentAt = (ReturnsArgumentAt) answer;
+            validateReturnArgIdentity(returnsArgumentAt, invocation);
         }
     }
 
-    private void validateReturnArgIdentity(ReturnsIdentity returnsIdentity, Invocation invocation) {
-        returnsIdentity.validateIndexWithinInvocationRange(invocation);
+    private void validateReturnArgIdentity(ReturnsArgumentAt returnsArgumentAt, Invocation invocation) {
+        returnsArgumentAt.validateIndexWithinInvocationRange(invocation);
 
         MethodInfo methodInfo = new MethodInfo(invocation);
-        if (!methodInfo.isValidReturnType(returnsIdentity.returnedTypeOnSignature(invocation))) {
+        if (!methodInfo.isValidReturnType(returnsArgumentAt.returnedTypeOnSignature(invocation))) {
             new Reporter().wrongTypeOfArgumentToReturn(invocation, methodInfo.printMethodReturnType(),
-                                                       returnsIdentity.returnedTypeOnSignature(invocation),
-                                                       returnsIdentity.wantedArgumentIndex());
+                                                       returnsArgumentAt.returnedTypeOnSignature(invocation),
+                                                       returnsArgumentAt.wantedArgumentPosition());
         }
 
     }
