@@ -68,8 +68,7 @@ public class MockUtil {
     }
 
     public <T> void resetMock(T mock) {
-        InvocationNotifierHandler oldHandler
-                = (InvocationNotifierHandler) mockMaker.getHandler(mock);
+        InvocationNotifierHandler oldHandler = (InvocationNotifierHandler) getMockHandler(mock);
         MockSettingsImpl settings = oldHandler.getMockSettings();
         InvocationNotifierHandler<T> newHandler = new InvocationNotifierHandler<T>(
                 new MockHandler<T>(settings), settings);

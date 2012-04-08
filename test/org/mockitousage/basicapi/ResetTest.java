@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -29,6 +30,16 @@ public class ResetTest extends TestBase {
             fail();
         } catch (MissingMethodInvocationException e) {
         }
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void resettingNonMockIsSafe() {
+        reset("");
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void resettingNullIsSafe() {
+        reset(new Object[] {null});
     }
 
     @Test
