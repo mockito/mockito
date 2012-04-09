@@ -8,7 +8,7 @@ import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
-import org.mockito.internal.util.MockName;
+import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
@@ -28,7 +28,7 @@ public class MockSettingsImpl implements MockSettings {
     private Object spiedInstance;
     private Object delegatedInstance;
     private Answer<Object> defaultAnswer;
-    private MockName mockName;
+    private MockNameImpl mockName;
     private boolean serializable;
     private List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
@@ -53,11 +53,11 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    public MockName getMockName() {
+    public MockNameImpl getMockName() {
         return mockName;
     }
 
-    public MockName mockName() {
+    public MockNameImpl mockName() {
         return mockName;
     }
 
@@ -97,7 +97,7 @@ public class MockSettingsImpl implements MockSettings {
     }
 
     public void initiateMockName(Class classToMock) {
-        mockName = new MockName(name, classToMock);
+        mockName = new MockNameImpl(name, classToMock);
     }
 
 	public MockSettings verboseLogging() {
@@ -142,7 +142,7 @@ public class MockSettingsImpl implements MockSettings {
     }
 
     public void redefineMockName(String newName) {
-        mockName = new MockName(newName);
+        mockName = new MockNameImpl(newName);
     }
 
 	public MockSettings forwardTo(Object delegatedInstance) {

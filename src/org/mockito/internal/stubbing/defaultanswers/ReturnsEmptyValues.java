@@ -22,7 +22,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.mockito.internal.creation.ClassNameFinder;
-import org.mockito.internal.util.MockName;
+import org.mockito.internal.util.MockNameImpl;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
@@ -63,7 +63,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     public Object answer(InvocationOnMock invocation) {
         if (methodsGuru.isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
-            MockName name = new MockUtil().getMockName(mock);
+            MockNameImpl name = new MockUtil().getMockName(mock);
             if (name.isSurrogate()) {
                 return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
             } else {

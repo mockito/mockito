@@ -6,14 +6,14 @@ package org.mockito.internal.util;
 
 import java.io.Serializable;
 
-public class MockName implements Serializable {
+public class MockNameImpl implements Serializable {
     
     private static final long serialVersionUID = 8014974700844306925L;
     private final String mockName;
     private boolean surrogate;
 
     @SuppressWarnings("unchecked")
-    public MockName(String mockName, Class classToMock) {
+    public MockNameImpl(String mockName, Class classToMock) {
         if (mockName == null) {
             this.mockName = toInstanceName(classToMock);
             this.surrogate = true;
@@ -22,7 +22,7 @@ public class MockName implements Serializable {
         }
     }
 
-    public MockName(String mockName) {
+    public MockNameImpl(String mockName) {
         this.mockName = mockName;
     }
 

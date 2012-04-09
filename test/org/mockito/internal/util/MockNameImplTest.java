@@ -7,12 +7,12 @@ package org.mockito.internal.util;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-public class MockNameTest extends TestBase {
+public class MockNameImplTest extends TestBase {
 
     @Test
     public void shouldProvideTheNameForClass() throws Exception {
         //when
-        String name = new MockName(null, SomeClass.class).toString();
+        String name = new MockNameImpl(null, SomeClass.class).toString();
         //then
         assertEquals("someClass", name);
     }
@@ -22,7 +22,7 @@ public class MockNameTest extends TestBase {
         //given
         SomeInterface anonymousInstance = new SomeInterface() {};
         //when
-        String name = new MockName(null, anonymousInstance.getClass()).toString();
+        String name = new MockNameImpl(null, anonymousInstance.getClass()).toString();
         //then
         assertEquals("someInterface", name);
     }
@@ -30,7 +30,7 @@ public class MockNameTest extends TestBase {
     @Test
     public void shouldProvideTheGivenName() throws Exception {
         //when
-        String name = new MockName("The Hulk", SomeClass.class).toString();
+        String name = new MockNameImpl("The Hulk", SomeClass.class).toString();
         //then
         assertEquals("The Hulk", name);
     }

@@ -6,7 +6,7 @@
 package org.mockito.mock;
 
 import org.mockito.Incubating;
-import org.mockito.internal.util.MockName;
+import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
@@ -37,7 +37,7 @@ public interface MockSettingsInfo {
     /**
      * the name of this mock, as printed on verification errors; see {@link org.mockito.MockSettings#name}.
      */
-    MockName getMockName();
+    MockNameImpl getMockName();
 
     void redefineMockName(String newName);
 
