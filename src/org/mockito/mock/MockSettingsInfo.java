@@ -37,7 +37,7 @@ public interface MockSettingsInfo {
     /**
      * the name of this mock, as printed on verification errors; see {@link org.mockito.MockSettings#name}.
      */
-    MockNameImpl getMockName();
+    MockName getMockName();
 
     void redefineMockName(String newName);
 

@@ -11,6 +11,7 @@ import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.mockito.mock.MockName;
 import org.mockito.mock.MockSettingsInfo;
 import org.mockito.plugins.MockMaker;
 
@@ -100,7 +101,7 @@ public class MockUtil {
         return mockMaker.getHandler(mock) != null;
     }
 
-    public MockNameImpl getMockName(Object mock) {
+    public MockName getMockName(Object mock) {
         return getMockHandler(mock).getMockSettings().getMockName();
     }
 

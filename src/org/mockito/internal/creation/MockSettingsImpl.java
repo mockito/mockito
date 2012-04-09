@@ -10,6 +10,7 @@ import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MockSettingsImpl implements MockSettings {
     private Object spiedInstance;
     private Object delegatedInstance;
     private Answer<Object> defaultAnswer;
-    private MockNameImpl mockName;
+    private MockName mockName;
     private boolean serializable;
     private List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
@@ -53,11 +54,11 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    public MockNameImpl getMockName() {
+    public MockName getMockName() {
         return mockName;
     }
 
-    public MockNameImpl mockName() {
+    public MockName mockName() {
         return mockName;
     }
 
