@@ -106,7 +106,7 @@ public class MockUtil {
     }
 
     public void maybeRedefineMockName(Object mock, String newName) {
-        if (getMockName(mock).isSurrogate()) {
+        if (getMockName(mock).isDefault()) {
             getMockHandler(mock).getMockSettings().redefineMockName(newName);
         }
     }

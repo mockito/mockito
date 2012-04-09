@@ -91,7 +91,7 @@ public class MockUtilTest extends TestBase {
     }
 
     @Test
-    public void should_redefine_MockName_if_surrogate() {
+    public void should_redefine_MockName_if_default() {
         List mock = Mockito.mock(List.class);
         mockUtil.maybeRedefineMockName(mock, "newName");
 
@@ -99,7 +99,7 @@ public class MockUtilTest extends TestBase {
     }
 
     @Test
-    public void should_not_redefine_MockName_if_surrogate() {
+    public void should_not_redefine_MockName_if_default() {
         List mock = Mockito.mock(List.class, "original");
         mockUtil.maybeRedefineMockName(mock, "newName");
 

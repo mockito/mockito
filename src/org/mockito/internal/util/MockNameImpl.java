@@ -12,13 +12,13 @@ public class MockNameImpl implements MockName, Serializable {
     
     private static final long serialVersionUID = 8014974700844306925L;
     private final String mockName;
-    private boolean surrogate;
+    private boolean defaultName;
 
     @SuppressWarnings("unchecked")
     public MockNameImpl(String mockName, Class classToMock) {
         if (mockName == null) {
             this.mockName = toInstanceName(classToMock);
-            this.surrogate = true;
+            this.defaultName = true;
         } else {
             this.mockName = mockName;
         }
@@ -38,8 +38,8 @@ public class MockNameImpl implements MockName, Serializable {
         return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
     
-    public boolean isSurrogate() {
-        return surrogate;
+    public boolean isDefault() {
+        return defaultName;
     }
     
     @Override

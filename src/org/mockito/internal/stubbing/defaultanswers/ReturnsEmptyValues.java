@@ -64,7 +64,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         if (methodsGuru.isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
             MockName name = new MockUtil().getMockName(mock);
-            if (name.isSurrogate()) {
+            if (name.isDefault()) {
                 return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
             } else {
                 return name.toString();
