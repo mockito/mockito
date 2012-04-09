@@ -7,17 +7,17 @@ package org.mockito.internal;
 import java.util.List;
 
 import org.mockito.Incubating;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.mock.MockSettingsInfo;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
 @SuppressWarnings("unchecked")
 public interface MockHandlerInterface<T> extends MockitoInvocationHandler {
 
-    MockSettingsImpl getMockSettings();
+    MockSettingsInfo getMockSettings();
 
     VoidMethodStubbable<T> voidMethodStubbable(T mock);
     

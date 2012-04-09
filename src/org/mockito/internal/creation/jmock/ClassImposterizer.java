@@ -16,6 +16,7 @@ import org.objenesis.ObjenesisStd;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.internal.util.StringJoiner.join;
@@ -49,6 +50,10 @@ public class ClassImposterizer  {
     
     public boolean canImposterise(Class<?> type) {
         return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+    }
+
+    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
+        return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
     }
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {

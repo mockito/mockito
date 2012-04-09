@@ -17,7 +17,9 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
@@ -28,7 +30,7 @@ public class MockUtilTest extends TestBase {
         public void validateType(Class classToMock) {
             typeValidated = true;
         }
-        public void validateExtraInterfaces(Class classToMock, Class ... interfaces) {
+        public void validateExtraInterfaces(Class classToMock, Collection<Class> interfaces) {
             extraInterfacesValidated = true;
         }
     }
@@ -91,7 +93,7 @@ public class MockUtilTest extends TestBase {
     @Test
     public void should_redefine_MockName_if_surrogate() {
         List mock = Mockito.mock(List.class);
-        mockUtil.redefineMockNameIfSurrogate(mock, "newName");
+        mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("newName");
     }
@@ -99,7 +101,7 @@ public class MockUtilTest extends TestBase {
     @Test
     public void should_not_redefine_MockName_if_surrogate() {
         List mock = Mockito.mock(List.class, "original");
-        mockUtil.redefineMockNameIfSurrogate(mock, "newName");
+        mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");
     }

@@ -13,12 +13,14 @@ import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.mock.MockSettingsInfo;
 
+import java.util.Set;
+
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.
  */
 public final class CglibMockMaker implements MockMaker {
 
-    public <T> T createMock(Class<T> typeToMock, Class<?>[] extraInterfaces,
+    public <T> T createMock(Class<T> typeToMock, Set<Class> extraInterfaces,
             MockitoInvocationHandler handler, MockSettingsInfo settings) {
         MockHandlerInterface mockitoHandler = cast(handler);
         return ClassImposterizer.INSTANCE.imposterise(

@@ -5,12 +5,12 @@
 package org.mockito.internal;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.mock.MockSettingsInfo;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
@@ -27,7 +27,7 @@ public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, M
     private List<InvocationListener> invocationListeners;
     private MockHandler<T> mockHandler;
 
-    public InvocationNotifierHandler(MockHandler<T> mockHandler, MockSettingsImpl settings) {
+    public InvocationNotifierHandler(MockHandler<T> mockHandler, MockSettingsInfo settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }
@@ -64,7 +64,7 @@ public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, M
         }
 	}
 
-    public MockSettingsImpl getMockSettings() {
+    public MockSettingsInfo getMockSettings() {
         return mockHandler.getMockSettings();
     }
 

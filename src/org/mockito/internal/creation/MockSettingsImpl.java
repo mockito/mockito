@@ -13,13 +13,17 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
+import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl implements MockSettings {
 
     private static final long serialVersionUID = 4475297236197939568L;
-    private Class<?>[] extraInterfaces;
+    private Set<Class> extraInterfaces = new LinkedHashSet<Class>();
     private String name;
     private Object spiedInstance;
     private Object delegatedInstance;
@@ -33,19 +37,19 @@ public class MockSettingsImpl implements MockSettings {
         return this;
     }
 
-    public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
+    public MockSettings extraInterfaces(Class... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
             new Reporter().extraInterfacesRequiresAtLeastOneInterface();
         }
 
-        for (Class<?> i : extraInterfaces) {
+        for (Class i : extraInterfaces) {
             if (i == null) {
                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();
             } else if (!i.isInterface()) {
                 new Reporter().extraInterfacesAcceptsOnlyInterfaces(i);
             }
         }
-        this.extraInterfaces = extraInterfaces;
+        this.extraInterfaces = newSet(extraInterfaces);
         return this;
     }
 
@@ -53,7 +57,11 @@ public class MockSettingsImpl implements MockSettings {
         return mockName;
     }
 
-    public Class<?>[] getExtraInterfaces() {
+    public MockName mockName() {
+        return mockName;
+    }
+
+    public Set<Class> getExtraInterfaces() {
         return extraInterfaces;
     }
 
@@ -138,8 +146,8 @@ public class MockSettingsImpl implements MockSettings {
     }
 
 	public MockSettings forwardTo(Object delegatedInstance) {
-		this.delegatedInstance = delegatedInstance ;
-		return defaultAnswer(new ForwardsInvocations(this.delegatedInstance)) ;
+		this.delegatedInstance = delegatedInstance;
+		return defaultAnswer(new ForwardsInvocations(this.delegatedInstance));
 	}
 }
 

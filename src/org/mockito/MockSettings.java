@@ -249,5 +249,5 @@ public interface MockSettings extends Serializable, MockSettingsInfo {
      *
      * @since 1.9.5
      */
-    MockSettings forwardTo(Object delegate) ;
+    MockSettings forwardTo(Object delegate);
 }

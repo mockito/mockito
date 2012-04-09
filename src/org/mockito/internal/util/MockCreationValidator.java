@@ -8,6 +8,8 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 
+import java.util.Collection;
+
 @SuppressWarnings("unchecked")
 public class MockCreationValidator {
 
@@ -21,7 +23,7 @@ public class MockCreationValidator {
         }
     }
 
-    public void validateExtraInterfaces(Class classToMock, Class ... extraInterfaces) {
+    public void validateExtraInterfaces(Class classToMock, Collection<Class> extraInterfaces) {
         if (extraInterfaces == null) {
             return;
         }

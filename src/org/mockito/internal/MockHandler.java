@@ -4,7 +4,6 @@
  */
 package org.mockito.internal;
 
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
@@ -13,7 +12,7 @@ import org.mockito.internal.stubbing.*;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.mock.MockSettingsInfo;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
@@ -34,22 +33,13 @@ public class MockHandler<T> implements MockHandlerInterface<T> {
     MatchersBinder matchersBinder = new MatchersBinder();
     MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
-    private final MockSettingsImpl mockSettings;
+    private final MockSettingsInfo mockSettings;
 
-    public MockHandler(MockSettingsImpl mockSettings) {
+    public MockHandler(MockSettingsInfo mockSettings) {
         this.mockSettings = mockSettings;
         this.mockingProgress = new ThreadSafeMockingProgress();
         this.matchersBinder = new MatchersBinder();
         this.invocationContainerImpl = new InvocationContainerImpl(mockingProgress);
-    }
-
-    // for tests
-    MockHandler() {
-        this(new MockSettingsImpl());
-    }
-
-    public MockHandler(MockHandlerInterface<T> oldMockHandler) {
-        this(oldMockHandler.getMockSettings());
     }
 
     public Object handle(Invocation invocation) throws Throwable {
@@ -115,7 +105,7 @@ public class MockHandler<T> implements MockHandlerInterface<T> {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
     }
 
-    public MockSettingsImpl getMockSettings() {
+    public MockSettingsInfo getMockSettings() {
         return mockSettings;
     }
 

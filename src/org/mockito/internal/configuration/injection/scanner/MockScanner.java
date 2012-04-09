@@ -66,7 +66,7 @@ public class MockScanner {
         if (isAnnotatedByMockOrSpy(field)) {
             return instance;
         } else if (isMockOrSpy(instance)) {
-            mockUtil.redefineMockNameIfSurrogate(instance, field.getName());
+            mockUtil.maybeRedefineMockName(instance, field.getName());
             return instance;
         }
         return null;

@@ -38,7 +38,7 @@ public class MockitoCore {
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
     public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
-        T mock = mockUtil.createMock(classToMock, (MockSettingsImpl) mockSettings);
+        T mock = mockUtil.createMock(classToMock, mockSettings);
         mockingProgress.mockingStarted(mock, classToMock, mockSettings);
         return mock;
     }

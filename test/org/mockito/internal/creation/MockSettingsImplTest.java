@@ -53,8 +53,9 @@ public class MockSettingsImplTest extends TestBase {
         mockSettingsImpl.extraInterfaces(List.class, Set.class);
         
         //then
-        assertEquals(List.class, mockSettingsImpl.getExtraInterfaces()[0]);
-        assertEquals(Set.class, mockSettingsImpl.getExtraInterfaces()[1]);
+        assertEquals(2, mockSettingsImpl.getExtraInterfaces().size());
+        assertTrue(mockSettingsImpl.getExtraInterfaces().contains(List.class));
+        assertTrue(mockSettingsImpl.getExtraInterfaces().contains(Set.class));
     }
 
     @Test

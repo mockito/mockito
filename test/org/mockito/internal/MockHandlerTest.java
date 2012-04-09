@@ -41,7 +41,7 @@ public class MockHandlerTest extends TestBase {
 		// given
 		Invocation invocation = new InvocationBuilder().toInvocation();
 		@SuppressWarnings("rawtypes")
-		MockHandler<?> handler = new MockHandler();
+		MockHandler<?> handler = new MockHandler(new MockSettingsImpl());
 		handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
 		handler.matchersBinder = new MatchersBinder() {
 			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {

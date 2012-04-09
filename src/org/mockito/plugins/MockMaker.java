@@ -8,6 +8,8 @@ import org.mockito.Incubating;
 import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.mock.MockSettingsInfo;
 
+import java.util.Set;
+
 /**
  * The facility to create mocks.
  *
@@ -72,17 +74,17 @@ public interface MockMaker {
      */
     <T> T createMock(
             Class<T> typeToMock,
-            Class<?>[] extraInterfaces,
+            Set<Class> extraInterfaces,
             MockitoInvocationHandler handler,
             MockSettingsInfo settings
     );
 
     /**
-     * Returns the handler for the {@code mock}. The passed mock object is guaranteed to be a Mockito mock,
-     * created by the {@link #createMock} method.
+     * Returns the handler for the {@code mock}.
      *
      * @param mock The mock instance.
-     * @return should never return null.
+     * @return may return null - it means that there is no handler attached to provided object.
+     *   This means the passed object is not really a Mockito mock.
      * @since 1.9.5
      */
     MockitoInvocationHandler getHandler(Object mock);

@@ -5,12 +5,15 @@
 package org.mockito.internal.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static java.util.Arrays.asList;
 
 @SuppressWarnings("unchecked")
 public class MockCreationValidatorTest extends TestBase {
@@ -22,7 +25,7 @@ public class MockCreationValidatorTest extends TestBase {
     public void shouldNotAllowExtraInterfaceThatIsTheSameAsTheMockedType() throws Exception {
         try {
             //when
-            validator.validateExtraInterfaces(IMethods.class, new Class<?>[] {IMethods.class});
+            validator.validateExtraInterfaces(IMethods.class, (Collection) asList(IMethods.class));
             fail();
         } catch (MockitoException e) {
             //then

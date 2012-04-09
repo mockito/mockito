@@ -12,9 +12,12 @@ import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.collections.ArrayUtils;
 import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.mockito.mock.MockSettingsInfo;
 import org.mockito.plugins.MockMaker;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -30,7 +33,8 @@ public class MockUtil {
         this(new MockCreationValidator());
     }
 
-    public <T> T createMock(Class<T> classToMock, MockSettingsImpl settings) {
+    public <T> T createMock(Class<T> classToMock, MockSettingsInfo settingsInfo) {
+        MockSettingsImpl settings = (MockSettingsImpl) settingsInfo;
         creationValidator.validateType(classToMock);
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
@@ -41,7 +45,7 @@ public class MockUtil {
 
         InvocationNotifierHandler<T> mockHandler = new InvocationNotifierHandler<T>(
                 new MockHandler<T>(settings), settings);
-        Class<?>[] extraInterfaces = prepareAncillaryTypes(settings);
+        Set<Class> extraInterfaces = prepareAncillaryTypes(settings);
         T mock = mockMaker.createMock(classToMock, extraInterfaces, mockHandler, settings);
 
         Object spiedInstance = settings.getSpiedInstance();
@@ -52,24 +56,22 @@ public class MockUtil {
         return mock;
     }
 
-    private Class<?>[] prepareAncillaryTypes(MockSettingsImpl settings) {
-        Class<?>[] interfaces = settings.getExtraInterfaces();
+    private Set<Class> prepareAncillaryTypes(MockSettingsImpl settings) {
+        Set<Class> interfaces = settings.getExtraInterfaces();
 
-        Class<?>[] ancillaryTypes;
-        if (settings.isSerializable()) {
-            ancillaryTypes = interfaces == null ? new Class<?>[] {Serializable.class} : new ArrayUtils().concat(interfaces, Serializable.class);
-        } else {
-            ancillaryTypes = interfaces == null ? new Class<?>[0] : interfaces;
+        Set<Class> ancillaryTypes = new HashSet<Class>(interfaces);
+        if(settings.isSerializable()) {
+            ancillaryTypes.add(Serializable.class);
         }
         if (settings.getSpiedInstance() != null) {
-            ancillaryTypes = new ArrayUtils().concat(ancillaryTypes, MockitoSpy.class);
+            ancillaryTypes.add(MockitoSpy.class);
         }
         return ancillaryTypes;
     }
 
     public <T> void resetMock(T mock) {
         InvocationNotifierHandler oldHandler = (InvocationNotifierHandler) getMockHandler(mock);
-        MockSettingsImpl settings = oldHandler.getMockSettings();
+        MockSettingsInfo settings = oldHandler.getMockSettings();
         InvocationNotifierHandler<T> newHandler = new InvocationNotifierHandler<T>(
                 new MockHandler<T>(settings), settings);
         mockMaker.resetMock(mock, newHandler, settings);
@@ -103,7 +105,7 @@ public class MockUtil {
         return getMockHandler(mock).getMockSettings().getMockName();
     }
 
-    public void redefineMockNameIfSurrogate(Object mock, String newName) {
+    public void maybeRedefineMockName(Object mock, String newName) {
         if (getMockName(mock).isSurrogate()) {
             getMockHandler(mock).getMockSettings().redefineMockName(newName);
         }
