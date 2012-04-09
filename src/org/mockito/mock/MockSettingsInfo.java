@@ -6,7 +6,6 @@
 package org.mockito.mock;
 
 import org.mockito.Incubating;
-import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
@@ -44,8 +43,4 @@ public interface MockSettingsInfo {
     Set<Class> getExtraInterfaces();
 
     Object getSpiedInstance();
-
-    //TODO SF - forward needs to be consistently named with delegate
-    //also figure this thing out.
-    Object getDelegatedInstance();
 }

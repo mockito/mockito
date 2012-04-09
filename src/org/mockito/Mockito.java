@@ -882,13 +882,13 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="27">27. (**New**) <a class="meaningful_link" href="#forwarding_call_to_real_instance">Forward calls to real instance</a> (Since 1.9.5)</h3>
- * <p>Now mockito offer a specific way to forward calls to a concrete instance. This is different than than a
- * spy because the spy creation syntax discard the to be spied instance.
+ * <h3 id="27">27. (**New**) <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
+ * <p>Now mockito offer a specific way to delegate calls to a concrete instance. This is different than the
+ * spy because the regular spy contains all the state of the spied instance. TODO SF - add more information.
  *
  * <p>Note that this feature only makes sense only for spies or partial mocks of objects <strong>that are difficult to
  * mock or spy</strong> using the usual spy API.
- * Possible use cases :
+ * Possible use cases:
  * <ul>
  *     <li>Final classes but with an interface</li>
  *     <li>Already custom proxied object</li>
@@ -896,28 +896,29 @@ import org.mockito.verification.VerificationWithTimeout;
  *     <li>...</li>
  * </ul>
  *
- * Possible example with an object interacting with native objects and spy that would not work :
+ * Possible example with an object interacting with native objects and spy that would not work:
  * <pre class="code"><code class="java">
  *   InteractingWithNativeStuff theSpy = spy(interactingWithNativeStuff);
  *
  *   // Some time after the GC collect interactingWithNativeStuff as it not anymore used,
  *   // the finalizer is executed, for example to call a C++ destructor.
  *
- *   // Later on, it's finally the psy to be garbage collected, finalize method is called again,
+ *   // Later on, it's finally the spy to be garbage collected, finalize method is called again,
  *   // unfortunately the second interaction with the native objects will crash the JVM.
  * </code></pre>
  * Now with the forwarding feature in place :
  * <pre class="code"><code class="java">
- *   InteractingWithNativeStuff native = mock(InteractingWithNativeStuff.class, withSettings().forwardTo(interactingWithNativeStuff));
+ *   InteractingWithNativeStuff native = mock(InteractingWithNativeStuff.class, AdditionalAnswers.delegateTo(interactingWithNativeStuff));
  *
- *   // OK, the mock keeps a reference to the interactingWithNativeStuff, so the finalize method never kick-in.
+ *   //TODO SF - I don't quite follow this example... spied instance is also something we hold in the MockSettings...
+ *   // OK, the mock keeps a reference to the interactingWithNativeStuff, so the finalize method never kicks in.
  * </code></pre>
  *
  * <p>Friendly reminder that final Methods cannot be mocked, so if <code>finalize</code> is <code>final</code> the
  * real code will still be executed.
  *
  * <p>
- * See more information there {@link MockSettings#forwardTo}.
+ * See more information there {@link AdditionalAnswers#delegatesTo(Object)}.
  *
  *
  *

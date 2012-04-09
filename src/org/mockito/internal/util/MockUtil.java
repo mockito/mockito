@@ -38,8 +38,8 @@ public class MockUtil {
         creationValidator.validateType(classToMock);
         creationValidator.validateExtraInterfaces(classToMock, settings.getExtraInterfaces());
         creationValidator.validateMockedType(classToMock, settings.getSpiedInstance());
-        creationValidator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance()) ;
-        creationValidator.validateMutualExclusionForSpyOrDelegate(settings) ;
+        //TODO SF - add this validation and also add missing coverage
+//        creationValidator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance()) ;
 
         settings.initiateMockName(classToMock);
 

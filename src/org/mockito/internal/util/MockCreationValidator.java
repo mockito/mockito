@@ -52,11 +52,4 @@ public class MockCreationValidator {
             new Reporter().mockedTypeIsInconsistentWithDelegatedInstanceType(classToMock, delegatedInstance);
         }
     }
-
-	public void validateMutualExclusionForSpyOrDelegate(MockSettingsImpl settings) {
-		if (settings.getDelegatedInstance() != null && settings.getSpiedInstance() != null) {
-			new Reporter().spyAndDelegateAreMutuallyExclusive() ;
-		}
-
-	}
 }

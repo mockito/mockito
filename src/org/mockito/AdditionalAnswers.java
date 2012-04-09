@@ -1,5 +1,6 @@
 package org.mockito;
 
+import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
@@ -99,4 +100,49 @@ public class AdditionalAnswers {
         return (Answer<T>) new ReturnsArgumentAt(position);
     }
 
+    /**
+     * An answer that directly forwards the calls to the delegate.
+     *
+     * Makes sense only for spies or partial mocks of objects that are difficult to mock or spy using the usual spy API.
+     * Possible use cases:
+     * <ul>
+     *     <li>Final classes but with an interface</li>
+     *     <li>Already custom proxied object</li>
+     *     <li>Special objects with a finalize method, i.e. to avoid executing it 2 times</li>
+     *     <li>...</li>
+     * </ul>
+     * Sets the real implementation to be called when the method is called on a mock object.
+     * <p>
+     * <pre class="code"><code class="java">
+     *   final class DontMessTheCodeOfThisList implements list { ... }
+     *
+     *   DontMessTheCodeOfThisList awesomeList = new DontMessTheCodeOfThisList();
+     *
+     *   List listWithDelegate = mock(List.class, delegatesTo(awesomeList));
+     * </code></pre>
+     *
+     * <p>
+     * This features suffer from the same drawback as the spy.
+     * The mock will call the delegate if you use regular when().then() stubbing style.
+     * Since the real implementation is called this might have some side effects.
+     * Therefore you should to use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
+     *
+     * <pre class="code"><code class="java">
+     *   List listWithDelegate = mock(List.class, AdditionalAnswers.delegatesTo(awesomeList));
+     *
+     *   //Impossible: real method is called so listWithDelegate.get(0) throws IndexOutOfBoundsException (the list is yet empty)
+     *   when(listWithDelegate.get(0)).thenReturn("foo");
+     *
+     *   //You have to use doReturn() for stubbing
+     *   doReturn("foo").when(listWithDelegate).get(0);
+     * </code></pre>
+     *
+     * @param delegate The delegate to forward calls to.
+     * @return the answer
+     *
+     * @since 1.9.5
+     */
+    public static <T> Answer<T> delegatesTo(Object delegate) {
+        return (Answer<T>) new ForwardsInvocations(delegate);
+    }
 }

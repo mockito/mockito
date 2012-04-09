@@ -27,7 +27,6 @@ public class MockSettingsImpl implements MockSettings {
     private Set<Class> extraInterfaces = new LinkedHashSet<Class>();
     private String name;
     private Object spiedInstance;
-    private Object delegatedInstance;
     private Answer<Object> defaultAnswer;
     private MockName mockName;
     private boolean serializable;
@@ -68,10 +67,6 @@ public class MockSettingsImpl implements MockSettings {
 
     public Object getSpiedInstance() {
         return spiedInstance;
-    }
-
-    public Object getDelegatedInstance() {
-    	return this.delegatedInstance ;
     }
 
     public MockSettings name(String name) {
@@ -145,10 +140,5 @@ public class MockSettingsImpl implements MockSettings {
     public void redefineMockName(String newName) {
         mockName = new MockNameImpl(newName);
     }
-
-	public MockSettings forwardTo(Object delegatedInstance) {
-		this.delegatedInstance = delegatedInstance;
-		return defaultAnswer(new ForwardsInvocations(this.delegatedInstance));
-	}
 }
 
