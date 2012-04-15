@@ -9,7 +9,7 @@ import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
-import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
-public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, InternalMockHandler<T> {
+public class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
 
     private List<InvocationListener> invocationListeners;
     private MockHandlerImpl<T> mockHandler;

@@ -12,7 +12,7 @@ import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.invocation.MockHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
@@ -51,7 +51,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         return handler.handle(invocation);
     }
    
-    public MockitoInvocationHandler getHandler() {
+    public MockHandler getHandler() {
         return handler;
     }
 

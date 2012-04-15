@@ -16,4 +16,4 @@ import java.io.Serializable;
  * Mockito will provide you with the implementation via other {@link org.mockito.plugins.MockMaker} methods.
  */
 @Incubating
-public interface MockitoInvocationHandler extends Serializable {}
+public interface MockHandler extends Serializable {}

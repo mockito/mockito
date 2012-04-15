@@ -9,13 +9,13 @@ import java.util.List;
 import org.mockito.Incubating;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
 @SuppressWarnings("unchecked")
-public interface InternalMockHandler<T> extends MockitoInvocationHandler {
+public interface InternalMockHandler<T> extends MockHandler {
 
     MockCreationSettings getMockSettings();
 

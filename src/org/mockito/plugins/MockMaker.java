@@ -5,10 +5,8 @@
 package org.mockito.plugins;
 
 import org.mockito.Incubating;
-import org.mockito.invocation.MockitoInvocationHandler;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-
-import java.util.Set;
 
 /**
  * The facility to create mocks.
@@ -43,7 +41,7 @@ import java.util.Set;
  * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
  *
  * @see org.mockito.mock.MockCreationSettings
- * @see org.mockito.invocation.MockitoInvocationHandler
+ * @see org.mockito.invocation.MockHandler
  * @since 1.9.5
  */
 @Incubating
@@ -62,7 +60,7 @@ public interface MockMaker {
      * </ul>
      *
      * @param settings - mock creation settings like type to mock, extra interfaces and so on.
-     * @param handler See {@link MockitoInvocationHandler}.
+     * @param handler See {@link org.mockito.invocation.MockHandler}.
      *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
      *                {@link #getHandler(Object)} will return this instance.
      * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
@@ -71,7 +69,7 @@ public interface MockMaker {
      */
     <T> T createMock(
             MockCreationSettings<T> settings,
-            MockitoInvocationHandler handler
+            MockHandler handler
     );
 
     /**
@@ -82,7 +80,7 @@ public interface MockMaker {
      *   This means the passed object is not really a Mockito mock.
      * @since 1.9.5
      */
-    MockitoInvocationHandler getHandler(Object mock);
+    MockHandler getHandler(Object mock);
 
     /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
@@ -100,7 +98,7 @@ public interface MockMaker {
      */
     void resetMock(
             Object mock,
-            MockitoInvocationHandler newHandler,
+            MockHandler newHandler,
             MockCreationSettings settings
     );
 }
