@@ -5,7 +5,7 @@
 
 package org.mockito.internal.invocation;
 
-import org.mockito.internal.MockHandlerInterface;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
@@ -22,7 +22,7 @@ public class UnusedStubsFinder {
     public List<Invocation> find(List<?> mocks) {
         List<Invocation> unused = new LinkedList<Invocation>();
         for (Object mock : mocks) {
-            MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
+            InternalMockHandler<Object> handler = new MockUtil().getMockHandler(mock);
             List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();
             for(StubbedInvocationMatcher s : fromSingleMock) {
                 if (!s.wasUsed()) {

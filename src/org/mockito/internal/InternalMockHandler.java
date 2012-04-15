@@ -15,7 +15,7 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
 @SuppressWarnings("unchecked")
-public interface MockHandlerInterface<T> extends MockitoInvocationHandler {
+public interface InternalMockHandler<T> extends MockitoInvocationHandler {
 
     MockCreationSettings getMockSettings();
 

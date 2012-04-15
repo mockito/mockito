@@ -5,7 +5,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.Mockito;
-import org.mockito.internal.MockHandlerInterface;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockCreationValidator;
@@ -40,7 +40,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object getMock(InvocationOnMock invocation) throws Throwable {
-    	MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
+    	InternalMockHandler<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
     	InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
         // matches invocation for verification

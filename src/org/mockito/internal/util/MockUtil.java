@@ -5,9 +5,9 @@
 package org.mockito.internal.util;
 
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.InvocationNotifierHandler;
 import org.mockito.internal.MockHandlerImpl;
-import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.reflection.LenientCopyTool;
@@ -41,13 +41,13 @@ public class MockUtil {
         mockMaker.resetMock(mock, newHandler, settings);
     }
 
-    public <T> MockHandlerInterface<T> getMockHandler(T mock) {
+    public <T> InternalMockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
 
         if (isMockitoMock(mock)) {
-            return (MockHandlerInterface) mockMaker.getHandler(mock);
+            return (InternalMockHandler) mockMaker.getHandler(mock);
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }

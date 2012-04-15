@@ -7,7 +7,6 @@ package org.mockito.internal;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -142,7 +141,7 @@ public class MockitoCore {
     }
     
     public <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        MockHandlerInterface<T> handler = mockUtil.getMockHandler(mock);
+        InternalMockHandler<T> handler = mockUtil.getMockHandler(mock);
         mockingProgress.stubbingStarted();
         return handler.voidMethodStubbable(mock);
     }

@@ -7,13 +7,11 @@ package org.mockito.internal.creation;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.MockHandlerInterface;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
-
-import java.util.Set;
 
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.
@@ -21,17 +19,17 @@ import java.util.Set;
 public final class CglibMockMaker implements MockMaker {
 
     public <T> T createMock(MockCreationSettings<T> settings, MockitoInvocationHandler handler) {
-        MockHandlerInterface mockitoHandler = cast(handler);
+        InternalMockHandler mockitoHandler = cast(handler);
         return ClassImposterizer.INSTANCE.imposterise(
                 new MethodInterceptorFilter(mockitoHandler, settings), settings.getTypeToMock(), settings.getExtraInterfaces());
     }
 
-    private MockHandlerInterface cast(MockitoInvocationHandler handler) {
-        if (!(handler instanceof MockHandlerInterface)) {
+    private InternalMockHandler cast(MockitoInvocationHandler handler) {
+        if (!(handler instanceof InternalMockHandler)) {
             throw new MockitoException("At the moment you cannot provide own implementations of MockitoInvocationHandler." +
                     "\nPlease see the javadocs for the MockMaker interface.");
         }
-        return (MockHandlerInterface) handler;
+        return (InternalMockHandler) handler;
     }
 
     public void resetMock(Object mock, MockitoInvocationHandler newHandler, MockCreationSettings settings) {

@@ -20,9 +20,9 @@ import java.util.List;
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
  *
- * Also imposterize MockHandlerImpl, delegate all call of MockHandlerInterface to the real mockHandler
+ * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
-public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, MockHandlerInterface<T>  {
+public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, InternalMockHandler<T> {
 
     private List<InvocationListener> invocationListeners;
     private MockHandlerImpl<T> mockHandler;

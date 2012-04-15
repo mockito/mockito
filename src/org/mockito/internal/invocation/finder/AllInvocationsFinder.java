@@ -5,8 +5,7 @@
 
 package org.mockito.internal.invocation.finder;
 
-import org.mockito.internal.MockHandlerInterface;
-import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
@@ -23,7 +22,7 @@ public class AllInvocationsFinder {
     public List<Invocation> find(List<?> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
-            MockHandlerInterface<Object> handler = new MockUtil().getMockHandler(mock);
+            InternalMockHandler<Object> handler = new MockUtil().getMockHandler(mock);
             List<Invocation> fromSingleMock = handler.getInvocationContainer().getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }
