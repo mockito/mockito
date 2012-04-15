@@ -69,8 +69,8 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
         return threadSafely().getArgumentMatcherStorage();
     }
     
-    public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
-        threadSafely().mockingStarted(mock, classToMock, mockSettings);
+    public void mockingStarted(Object mock, Class classToMock) {
+        threadSafely().mockingStarted(mock, classToMock);
     }
 
     public void setListener(MockingProgressListener listener) {

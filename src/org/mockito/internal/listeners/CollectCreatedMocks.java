@@ -17,7 +17,7 @@ public class CollectCreatedMocks implements MockingStartedListener {
         this.toBeFilled = toBeFilled;
     }
 
-    public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
+    public void mockingStarted(Object mock, Class classToMock) {
         toBeFilled.add(mock);
     }
 }

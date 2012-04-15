@@ -110,9 +110,9 @@ public class MockingProgressImpl implements MockingProgress {
         return argumentMatcherStorage;
     }
 
-    public void mockingStarted(Object mock, Class classToMock, MockSettings mockSettings) {
+    public void mockingStarted(Object mock, Class classToMock) {
         if (listener != null && listener instanceof MockingStartedListener) {
-            ((MockingStartedListener) listener).mockingStarted(mock, classToMock, mockSettings);
+            ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
         }
         validateMostStuff();
     }

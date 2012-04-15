@@ -59,10 +59,10 @@ public class MockingProgressImplTest extends TestBase {
         mockingProgress.setListener(listener);
 
         //when
-        mockingProgress.mockingStarted("foo", List.class, new MockSettingsImpl());
+        mockingProgress.mockingStarted("foo", List.class);
 
         //then
-        verify(listener).mockingStarted(eq("foo"), eq(List.class), (MockSettingsImpl) notNull());
+        verify(listener).mockingStarted(eq("foo"), eq(List.class));
     }
 
     @Test
@@ -71,6 +71,6 @@ public class MockingProgressImplTest extends TestBase {
         mockingProgress.setListener(null);
 
         //then no exception is thrown:
-        mockingProgress.mockingStarted(null, null, null);
+        mockingProgress.mockingStarted(null, null);
     }
 }

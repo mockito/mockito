@@ -48,7 +48,7 @@ public class MockitoCore {
         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
         MockCreationSettings<T> creationSettings = impl.confirm(typeToMock);
         T mock = mockUtil.createMock(creationSettings);
-        mockingProgress.mockingStarted(mock, typeToMock, settings); //TODO SF review if we need to pass it
+        mockingProgress.mockingStarted(mock, typeToMock);
         return mock;
     }
     
