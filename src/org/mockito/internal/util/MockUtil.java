@@ -6,19 +6,14 @@ package org.mockito.internal.util;
 
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InvocationNotifierHandler;
-import org.mockito.internal.MockHandler;
+import org.mockito.internal.MockHandlerImpl;
 import org.mockito.internal.MockHandlerInterface;
 import org.mockito.internal.configuration.ClassPathLoader;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -27,7 +22,7 @@ public class MockUtil {
 
     public <T> T createMock(MockCreationSettings<T> settings) {
         InvocationNotifierHandler<T> mockHandler = new InvocationNotifierHandler<T>(
-                new MockHandler<T>(settings), settings);
+                new MockHandlerImpl<T>(settings), settings);
         T mock = mockMaker.createMock(settings, mockHandler);
 
         Object spiedInstance = settings.getSpiedInstance();
@@ -42,7 +37,7 @@ public class MockUtil {
         InvocationNotifierHandler oldHandler = (InvocationNotifierHandler) getMockHandler(mock);
         MockCreationSettings settings = oldHandler.getMockSettings();
         InvocationNotifierHandler<T> newHandler = new InvocationNotifierHandler<T>(
-                new MockHandler<T>(settings), settings);
+                new MockHandlerImpl<T>(settings), settings);
         mockMaker.resetMock(mock, newHandler, settings);
     }
 

@@ -46,7 +46,7 @@ public class InvocationNotifierHandlerTest {
     @Spy private CustomListener customListener;
 
     @Mock private Invocation invocation;
-    @Mock private MockHandler mockHandler;
+    @Mock private MockHandlerImpl mockHandler;
 
     private InvocationNotifierHandler notifier;
 

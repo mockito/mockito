@@ -13,7 +13,7 @@ import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
-import org.mockito.internal.MockHandlerTest;
+import org.mockito.internal.MockHandlerImplTest;
 import org.mockito.internal.creation.jmock.ClassImposterizerTest;
 import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
@@ -79,7 +79,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     ListUtilTest.class,
                     MockingProgressImplTest.class,
                     TimesTest.class,
-                    MockHandlerTest.class,
+                    MockHandlerImplTest.class,
                     AllInvocationsFinderTest.class,
                     ReturnsEmptyValuesTest.class,
                     NumberOfInvocationsCheckerTest.class,

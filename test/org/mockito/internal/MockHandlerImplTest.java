@@ -30,7 +30,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings({ "unchecked", "serial" })
-public class MockHandlerTest extends TestBase {
+public class MockHandlerImplTest extends TestBase {
 
 	private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
 	private Invocation invocation = mock(InvocationImpl.class);
@@ -41,7 +41,7 @@ public class MockHandlerTest extends TestBase {
 		// given
 		Invocation invocation = new InvocationBuilder().toInvocation();
 		@SuppressWarnings("rawtypes")
-		MockHandler<?> handler = new MockHandler(new MockSettingsImpl());
+        MockHandlerImpl<?> handler = new MockHandlerImpl(new MockSettingsImpl());
 		handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
 		handler.matchersBinder = new MatchersBinder() {
 			public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
@@ -69,7 +69,7 @@ public class MockHandlerTest extends TestBase {
 		// given
 		InvocationListener throwingListener = mock(InvocationListener.class);
 		doThrow(new Throwable()).when(throwingListener).reportInvocation(any(MethodInvocationReport.class));
-		MockHandler<?> handler = createCorrectlyStubbedHandler(throwingListener);
+		MockHandlerImpl<?> handler = createCorrectlyStubbedHandler(throwingListener);
 
 		// when
 		handler.handle(invocation);
@@ -77,19 +77,19 @@ public class MockHandlerTest extends TestBase {
 
 
 
-	private MockHandler<?> createCorrectlyStubbedHandler(InvocationListener throwingListener) {
-		MockHandler<?> handler = createHandlerWithListeners(throwingListener);
+	private MockHandlerImpl<?> createCorrectlyStubbedHandler(InvocationListener throwingListener) {
+		MockHandlerImpl<?> handler = createHandlerWithListeners(throwingListener);
 		stubOrdinaryInvocationWithGivenReturnValue(handler);
 		return handler;
 	}
 
-	private void stubOrdinaryInvocationWithGivenReturnValue(MockHandler<?> handler) {
+	private void stubOrdinaryInvocationWithGivenReturnValue(MockHandlerImpl<?> handler) {
 		stubOrdinaryInvocationWithInvocationMatcher(handler, stubbedInvocationMatcher);
 	}
 
 
 
-	private void stubOrdinaryInvocationWithInvocationMatcher(MockHandler<?> handler, StubbedInvocationMatcher value) {
+	private void stubOrdinaryInvocationWithInvocationMatcher(MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
 		handler.invocationContainerImpl = mock(InvocationContainerImpl.class);
 		given(handler.invocationContainerImpl.findAnswerFor(any(InvocationImpl.class))).willReturn(value);
 	}
@@ -97,9 +97,9 @@ public class MockHandlerTest extends TestBase {
 
 
 
-	private MockHandler<?> createHandlerWithListeners(InvocationListener... listener) {
+	private MockHandlerImpl<?> createHandlerWithListeners(InvocationListener... listener) {
 		@SuppressWarnings("rawtypes")
-		MockHandler<?> handler = new MockHandler(mock(MockSettingsImpl.class));
+        MockHandlerImpl<?> handler = new MockHandlerImpl(mock(MockSettingsImpl.class));
 		handler.matchersBinder = mock(MatchersBinder.class);
 		given(handler.getMockSettings().getInvocationListeners()).willReturn(Arrays.asList(listener));
 		return handler;

@@ -25,7 +25,7 @@ import java.util.List;
  * @param <T>
  *            type of mock object to handle
  */
-public class MockHandler<T> implements MockHandlerInterface<T> {
+public class MockHandlerImpl<T> implements MockHandlerInterface<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
@@ -35,7 +35,7 @@ public class MockHandler<T> implements MockHandlerInterface<T> {
 
     private final MockCreationSettings mockSettings;
 
-    public MockHandler(MockCreationSettings mockSettings) {
+    public MockHandlerImpl(MockCreationSettings mockSettings) {
         this.mockSettings = mockSettings;
         this.mockingProgress = new ThreadSafeMockingProgress();
         this.matchersBinder = new MatchersBinder();

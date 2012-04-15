@@ -20,14 +20,14 @@ import java.util.List;
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
  *
- * Also imposterize MockHandler, delegate all call of MockHandlerInterface to the real mockHandler
+ * Also imposterize MockHandlerImpl, delegate all call of MockHandlerInterface to the real mockHandler
  */
 public class InvocationNotifierHandler<T> implements MockitoInvocationHandler, MockHandlerInterface<T>  {
 
     private List<InvocationListener> invocationListeners;
-    private MockHandler<T> mockHandler;
+    private MockHandlerImpl<T> mockHandler;
 
-    public InvocationNotifierHandler(MockHandler<T> mockHandler, MockCreationSettings settings) {
+    public InvocationNotifierHandler(MockHandlerImpl<T> mockHandler, MockCreationSettings settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }
