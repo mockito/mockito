@@ -73,7 +73,9 @@ public interface MockMaker {
     );
 
     /**
-     * Returns the handler for the {@code mock}.
+     * Returns the handler for the {@code mock}. <b>Do not</b> provide your own implementations at this time
+     * because the work on the {@link MockHandler} api is not completed.
+     * Use the instance provided to you by Mockito at {@link #createMock} or {@link #resetMock}.
      *
      * @param mock The mock instance.
      * @return may return null - it means that there is no handler attached to provided object.
