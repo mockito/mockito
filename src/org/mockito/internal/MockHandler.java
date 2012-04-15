@@ -12,7 +12,7 @@ import org.mockito.internal.stubbing.*;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
-import org.mockito.mock.MockSettingsInfo;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
@@ -33,9 +33,9 @@ public class MockHandler<T> implements MockHandlerInterface<T> {
     MatchersBinder matchersBinder = new MatchersBinder();
     MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
-    private final MockSettingsInfo mockSettings;
+    private final MockCreationSettings mockSettings;
 
-    public MockHandler(MockSettingsInfo mockSettings) {
+    public MockHandler(MockCreationSettings mockSettings) {
         this.mockSettings = mockSettings;
         this.mockingProgress = new ThreadSafeMockingProgress();
         this.matchersBinder = new MatchersBinder();
@@ -105,7 +105,7 @@ public class MockHandler<T> implements MockHandlerInterface<T> {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
     }
 
-    public MockSettingsInfo getMockSettings() {
+    public MockCreationSettings getMockSettings() {
         return mockSettings;
     }
 

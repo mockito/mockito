@@ -5,7 +5,7 @@
 package org.mockito;
 
 import org.mockito.listeners.InvocationListener;
-import org.mockito.mock.MockSettingsInfo;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -36,7 +36,7 @@ import java.io.Serializable;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
-public interface MockSettings extends Serializable, MockSettingsInfo {
+public interface MockSettings extends Serializable {
 
     /**
      * Specifies extra interfaces the mock should implement. Might be useful for legacy code or some corner cases.

@@ -6,7 +6,7 @@ package org.mockito.plugins;
 
 import org.mockito.Incubating;
 import org.mockito.invocation.MockitoInvocationHandler;
-import org.mockito.mock.MockSettingsInfo;
+import org.mockito.mock.MockCreationSettings;
 
 import java.util.Set;
 
@@ -42,7 +42,7 @@ import java.util.Set;
  * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
  * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
  *
- * @see org.mockito.mock.MockSettingsInfo
+ * @see org.mockito.mock.MockCreationSettings
  * @see org.mockito.invocation.MockitoInvocationHandler
  * @since 1.9.5
  */
@@ -52,8 +52,8 @@ public interface MockMaker {
     /**
      * If you want to provide your own implementation of {@code MockMaker} this method should:
      * <ul>
-     *     <li>Create a proxy object that implements {@code typeToMock} and potentially also {@code extraInterfaces}.</li>
-     *     <li>You may use the information from {@code settings} to configure your proxy object.</li>
+     *     <li>Create a proxy object that implements {@code settings.typeToMock} and potentially also {@code settings.extraInterfaces}.</li>
+     *     <li>You may use the information from {@code settings} to create/configure your proxy object.</li>
      *     <li>Your proxy object should carry the {@code hander} with it. For example, if you generate byte code
      *     to create the proxy you could generate an extra field to keep the {@code hanlder} with the generated object.
      *     Your implementation of {@code MockHandler} is required to provide this instance of {@code handler} when
@@ -61,22 +61,17 @@ public interface MockMaker {
      *     </li>
      * </ul>
      *
-     * @param typeToMock The type of the mock, could be a <strong>class</strong> or an <strong>interface</strong>.
-     * @param extraInterfaces Interfaces the mock should implements as well,
-     *                        never <code>null</code>, interfaces only (no classes).
+     * @param settings - mock creation settings like type to mock, extra interfaces and so on.
      * @param handler See {@link MockitoInvocationHandler}.
      *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
      *                {@link #getHandler(Object)} will return this instance.
-     * @param settings Mock creation settings.
-     * @param <T> Type of the mock to return, actually the <code>typeToMock</code>.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
      * @return The mock instance.
      * @since 1.9.5
      */
     <T> T createMock(
-            Class<T> typeToMock,
-            Set<Class> extraInterfaces,
-            MockitoInvocationHandler handler,
-            MockSettingsInfo settings
+            MockCreationSettings<T> settings,
+            MockitoInvocationHandler handler
     );
 
     /**
@@ -106,6 +101,6 @@ public interface MockMaker {
     void resetMock(
             Object mock,
             MockitoInvocationHandler newHandler,
-            MockSettingsInfo settings
+            MockCreationSettings settings
     );
 }

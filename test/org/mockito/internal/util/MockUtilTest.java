@@ -24,35 +24,9 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
     
-    public class CreationValidatorStub extends MockCreationValidator {
-        private boolean extraInterfacesValidated;
-        private boolean typeValidated;
-        public void validateType(Class classToMock) {
-            typeValidated = true;
-        }
-        public void validateExtraInterfaces(Class classToMock, Collection<Class> interfaces) {
-            extraInterfacesValidated = true;
-        }
-    }
+    private MockUtil mockUtil = new MockUtil();
 
-    private CreationValidatorStub creationValidator = new CreationValidatorStub();
-    private MockUtil mockUtil = new MockUtil(creationValidator);
-
-    @Test 
-    public void shouldValidate() {
-        //given
-        assertFalse(creationValidator.extraInterfacesValidated);
-        assertFalse(creationValidator.typeValidated);
-
-        //when
-        mockUtil.createMock(IMethods.class, new MockSettingsImpl());
-        
-        //then
-        assertTrue(creationValidator.extraInterfacesValidated);
-        assertTrue(creationValidator.typeValidated);
-    }
-
-    @Test 
+    @Test
     public void shouldGetHandler() {
         List mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockHandler(mock));

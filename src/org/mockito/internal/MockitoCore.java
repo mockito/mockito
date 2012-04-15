@@ -7,6 +7,7 @@ package org.mockito.internal;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -24,6 +25,7 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.*;
 import org.mockito.verification.VerificationMode;
 
@@ -37,9 +39,16 @@ public class MockitoCore {
     private final MockUtil mockUtil = new MockUtil();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
     
-    public <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
-        T mock = mockUtil.createMock(classToMock, mockSettings);
-        mockingProgress.mockingStarted(mock, classToMock, mockSettings);
+    public <T> T mock(Class<T> typeToMock, MockSettings settings) {
+        if (!MockSettingsImpl.class.isInstance(settings)) {
+            throw new IllegalArgumentException(
+                    "Unexpected implementation of '" + settings.getClass().getCanonicalName() + "'\n"
+                    + "At the moment, you cannot provide your own implementations that class.");
+        }
+        MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
+        MockCreationSettings<T> creationSettings = impl.confirm(typeToMock);
+        T mock = mockUtil.createMock(creationSettings);
+        mockingProgress.mockingStarted(mock, typeToMock, settings); //TODO SF review if we need to pass it
         return mock;
     }
     

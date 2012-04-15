@@ -12,7 +12,8 @@ import java.io.Serializable;
  * Mockito handler of an invocation on a mock. This is a core part of the API, the heart of Mockito.
  * See also the {@link org.mockito.plugins.MockMaker}.
  * <p>
- * This api is work in progress, hence a marker interface.
+ * This api is work in progress, hence a marker interface. Do not provide your own implementations.
+ * Mockito will provide you with the implementation via other {@link org.mockito.plugins.MockMaker} methods.
  */
 @Incubating
 public interface MockitoInvocationHandler extends Serializable {}

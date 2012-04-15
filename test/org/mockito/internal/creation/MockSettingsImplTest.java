@@ -151,16 +151,4 @@ public class MockSettingsImplTest extends TestBase {
             Assertions.assertThat(e.getMessage()).contains("does not accept null");
         }
     }
-
-    @Test
-    public void should_redefine_mockName() throws Exception {
-        mockSettingsImpl.redefineMockName("my name is ...");
-
-        assertEquals("my name is ...", mockSettingsImpl.getMockName().toString());
-    }
-
-    private InvocationListener getListener(MockSettingsImpl settings) {
-    	return settings.getInvocationListeners().iterator().next();
-    }
-    
 }

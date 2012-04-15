@@ -18,7 +18,7 @@ import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
-import org.mockito.mock.MockSettingsInfo;
+import org.mockito.mock.MockCreationSettings;
 
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
@@ -26,9 +26,9 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
     private final MockHandlerInterface handler;
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
-    private final MockSettingsInfo mockSettings;
+    private final MockCreationSettings mockSettings;
 
-    public MethodInterceptorFilter(MockHandlerInterface handler, MockSettingsInfo mockSettings) {
+    public MethodInterceptorFilter(MockHandlerInterface handler, MockCreationSettings mockSettings) {
         this.handler = handler;
         this.mockSettings = mockSettings;
     }

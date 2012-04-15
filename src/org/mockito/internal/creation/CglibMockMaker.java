@@ -8,10 +8,10 @@ import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.MockHandlerInterface;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 import org.mockito.invocation.MockitoInvocationHandler;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
-import org.mockito.mock.MockSettingsInfo;
 
 import java.util.Set;
 
@@ -20,11 +20,10 @@ import java.util.Set;
  */
 public final class CglibMockMaker implements MockMaker {
 
-    public <T> T createMock(Class<T> typeToMock, Set<Class> extraInterfaces,
-            MockitoInvocationHandler handler, MockSettingsInfo settings) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockitoInvocationHandler handler) {
         MockHandlerInterface mockitoHandler = cast(handler);
         return ClassImposterizer.INSTANCE.imposterise(
-                new MethodInterceptorFilter(mockitoHandler, settings), typeToMock, extraInterfaces);
+                new MethodInterceptorFilter(mockitoHandler, settings), settings.getTypeToMock(), settings.getExtraInterfaces());
     }
 
     private MockHandlerInterface cast(MockitoInvocationHandler handler) {
@@ -35,7 +34,7 @@ public final class CglibMockMaker implements MockMaker {
         return (MockHandlerInterface) handler;
     }
 
-    public void resetMock(Object mock, MockitoInvocationHandler newHandler, MockSettingsInfo settings) {
+    public void resetMock(Object mock, MockitoInvocationHandler newHandler, MockCreationSettings settings) {
         ((Factory) mock).setCallback(0, new MethodInterceptorFilter(cast(newHandler), settings));
     }
 
