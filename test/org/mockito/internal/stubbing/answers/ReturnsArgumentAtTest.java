@@ -1,6 +1,7 @@
-package org.mockito.stubbing.answers;
+package org.mockito.internal.stubbing.answers;
 
 import org.junit.Test;
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockitousage.IMethods;
 

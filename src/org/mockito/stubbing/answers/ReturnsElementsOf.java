@@ -5,11 +5,6 @@
 package org.mockito.stubbing.answers;
 
 import java.util.Collection;
-import java.util.LinkedList;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * Returns elements of the collection. Keeps returning the last element forever.
@@ -21,23 +16,14 @@ import org.mockito.stubbing.Answer;
  *   //is equivalent to:
  *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
  * </code></pre>
+ *
+ * @deprecated Use {@link org.mockito.AdditionalAnswers#returnsElementsOf}
  */
-public class ReturnsElementsOf implements Answer<Object> {
+@Deprecated
+public class ReturnsElementsOf extends org.mockito.internal.stubbing.answers.ReturnsElementsOf {
 
-    private final LinkedList<Object> elements;
-
+    @Deprecated
     public ReturnsElementsOf(Collection<?> elements) {
-        if (elements == null) {
-            throw new MockitoException("ReturnsElementsOf does not accept null as constructor argument.\n" +
-            		"Please pass a collection instance");
-        }
-        this.elements = new LinkedList<Object>(elements);
-    }
-
-    public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (elements.size() == 1)
-            return elements.get(0);
-        else 
-            return elements.poll();
+        super(elements);
     }
 }

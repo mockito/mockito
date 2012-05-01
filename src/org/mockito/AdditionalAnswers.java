@@ -1,8 +1,11 @@
 package org.mockito;
 
+import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.answers.ReturnsArgumentAt;
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
+
+import java.util.Collection;
 
 /**
  * Additional answers provides factory methods for less common answers.
@@ -10,7 +13,7 @@ import org.mockito.stubbing.answers.ReturnsArgumentAt;
  * <p>Currently offer answers that can return the parameter of an invocation at a certain position.
  *
  * <p>See factory methods for more information : {@link #returnsFirstArg}, {@link #returnsSecondArg},
- * {@link #returnsLastArg} and {@link #returnsArgAtPosition(int)}
+ * {@link #returnsLastArg} and {@link #returnsArgAt}
  *
  * @since 1.9.5
  */
@@ -88,15 +91,15 @@ public class AdditionalAnswers {
      * <code>then|do|will{@link org.mockito.stubbing.Answer}</code> methods. For example :
      * </p>
      *
-     * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAtPosition(3));
-     * daAnswer(returnsArgAtPosition(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
+     * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(3));
+     * daAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
      *
      * @since 1.9.5
      */
-    public static <T> Answer<T> returnsArgAtPosition(int position) {
+    public static <T> Answer<T> returnsArgAt(int position) {
         return (Answer<T>) new ReturnsArgumentAt(position);
     }
 
@@ -144,5 +147,26 @@ public class AdditionalAnswers {
      */
     public static <T> Answer<T> delegatesTo(Object delegate) {
         return (Answer<T>) new ForwardsInvocations(delegate);
+    }
+
+    /**
+     * Returns elements of the collection. Keeps returning the last element forever.
+     * Might be useful on occasion when you have a collection of elements to return.
+     * <p>
+     * <pre class="code"><code class="java">
+     *   //this:
+     *   when(mock.foo()).thenReturn(1, 2, 3);
+     *
+     *   //is equivalent to:
+     *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
+     * </code></pre>
+     *
+     * @param elements The collection of elements to return.
+     * @return the answer
+     *
+     * @since 1.9.5
+     */
+    public static <T> Answer<T> returnsElementsOf(Collection<?> elements) {
+        return (Answer<T>) new ReturnsElementsOf(elements);
     }
 }

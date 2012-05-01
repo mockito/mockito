@@ -7,7 +7,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.AdditionalAnswers.returnsArgAtPosition;
+import static org.mockito.AdditionalAnswers.returnsArgAt;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.AdditionalAnswers.returnsLastArg;
 import static org.mockito.AdditionalAnswers.returnsSecondArg;
@@ -36,7 +36,7 @@ public class StubbingWithAdditionalAnswers {
 
     @Test
     public void can_return_expanded_arguments_of_invocation() throws Exception {
-        given(iMethods.varargsObject(eq(1), anyVararg())).will(returnsArgAtPosition(3));
+        given(iMethods.varargsObject(eq(1), anyVararg())).will(returnsArgAt(3));
 
         assertThat(iMethods.varargsObject(1, "bob", "alexander", "alice", "carl")).isEqualTo("alice");
     }

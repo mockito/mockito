@@ -7,7 +7,6 @@ package org.mockito.internal.stubbing.answers;
 import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
 public class AnswersValidator {
 

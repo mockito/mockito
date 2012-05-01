@@ -1,4 +1,4 @@
-package org.mockito.stubbing.answers;
+package org.mockito.internal.stubbing.answers;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.InvocationOnMock;

@@ -10,7 +10,6 @@ import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.answers.ReturnsArgumentAt;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
