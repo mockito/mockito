@@ -406,10 +406,14 @@
   <target name="copy.maven.metadata" depends="check.binaries" >
   	<delete dir="${maven.repository.dir}"/>
     <mkdir dir="${maven.repository.dir}/org/mockito/mockito-all" />
-    <copy file="maven/mockito-all-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-all/maven-metadata.xml" />
-   
+
+    <get src="http://search.maven.org/remotecontent?filepath=org/mockito/mockito-all/maven-metadata.xml"
+         dest="${maven.repository.dir}/org/mockito/mockito-all/maven-metadata.xml"/>
+
     <mkdir dir="${maven.repository.dir}/org/mockito/mockito-core" />
-    <copy file="maven/mockito-core-metadata.xml" tofile="${maven.repository.dir}/org/mockito/mockito-core/maven-metadata.xml" />
+
+    <get src="http://search.maven.org/remotecontent?filepath=org/mockito/mockito-core/maven-metadata.xml"
+         dest="${maven.repository.dir}/org/mockito/mockito-core/maven-metadata.xml"/>
   </target>
 
   <taskdef resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="ant.classpath"/>

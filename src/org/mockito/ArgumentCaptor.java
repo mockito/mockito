@@ -43,10 +43,8 @@ import java.util.List;
  * in your code. If you want specific types, then you should do that the captured values.
  * This behavior might change (type checks could be added) in a
  * future major release.
- *
  * <p>
  * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
- *
  * <p>
  * See the full documentation on Mockito in javadoc for {@link Mockito} class.
  *

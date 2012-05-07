@@ -196,7 +196,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="4">4. <a class="meaningful_link" href="#exact_verification">Verifying exact number of invocations</a> /
  * <a class="meaningful_link" href="#at_least_verification">at least x</a> / never</h3>
- * 
+ *
  * <pre class="code"><code class="java">
  * //using mock 
  * mockedList.add("once");
@@ -317,7 +317,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="8">8. <a class="meaningful_link" href="#finding_redundant_invocations">Finding redundant invocations</a></h3>
- * 
+ *
  * <pre class="code"><code class="java">
  * //using mocks
  * mockedList.add("one");
@@ -345,7 +345,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="9">9. <a class="meaningful_link" href="#mock_annotation">Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
- * 
+ *
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
  * <li>Makes the test class more readable.</li>
@@ -414,9 +414,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="11">11. <a class="meaningful_link" href="#answer_stubs">Stubbing with callbacks</a></h3>
- * 
+ *
  * Allows stubbing with generic {@link Answer} interface.
-*  <p>
+ * <p>
  * Yet another controversial feature which was not included in Mockito
  * originally. We recommend using simple stubbing with <code>thenReturn()</code> or
  * <code>thenThrow()</code> only. Those two should be <b>just enough</b> to test/test-drive
@@ -440,7 +440,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="12">12. <a class="meaningful_link" href="#do_family_methods_stubs"><code>doReturn()</code>|<code>doThrow()</code>|
  * <code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a></h3>
- * 
+ *
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not
  * like void methods inside brackets...
  * <p>
@@ -557,7 +557,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
- * 
+ *
  * You can create a mock with specified strategy for its return values.
  * It's quite advanced feature and typically you don't need it to write decent tests.
  * However, it can be helpful for working with <b>legacy systems</b>.
@@ -665,7 +665,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
- * 
+ *
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: 
  * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
  * <p>
@@ -713,7 +713,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="20">20. <a class="meaningful_link" href="#serializable_mocks">Serializable mocks</a> (Since 1.8.1)</h3>
- * 
+ *
  * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
  * WARNING: This should be rarely used in unit testing. 
@@ -1020,7 +1020,7 @@ public class Mockito extends Matchers {
      *   assertEquals("deep", mock.getBar().getName());
      * </code></pre>
      * </p>
-     * 
+     *
      * <p>
      * <strong>WARNING: </strong>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.

@@ -7,7 +7,7 @@ def run(cmd):
   print("\nRunning command: " + cmd)
   assert os.system(cmd) == 0, "\nCommand failed: " + cmd
 
-ant_cmd = 'ant test.release release.javadoc release.maven'
+ant_cmd = 'ant test.release release.maven'
 raw_input("It is wise to run following command first: \n\n" + ant_cmd + "\n\nIt's because ant some times provides wrong return code.\nAny key to continue")
 
 run('ruby replace_headers.rb')
@@ -54,27 +54,6 @@ run('svn delete -m "Removed previous latest tag" ' + latest_tag)
 print("Creating new 'latest' tag...")
 run('svn copy -m "Tagged latest release" ' + branch + ' ' + latest_tag)
 
-print("Uploading binaries to the googlecode")
-
-os.chdir('releasing')
-
-import google_upload
-import sys
-
-sys.argv.append('--project=mockito')
-sys.argv.append('--user=szczepiq')
-base_args = sys.argv[:]
-
-sys.argv.append('--summary=All jars, source and javadocs')
-sys.argv.append('../target/mockito-' + ver + '.zip')
-
-google_upload.main()
-
-sys.argv = base_args
-sys.argv.append("--summary=Single jar, includes source")
-sys.argv.append('../target/mockito-all-' + ver + '.jar')
-
-google_upload.main()
 
 print("")
 print("Last step! Please perform rsync command from folder '" + branch_work_dir + "'. This is how you do it:")
