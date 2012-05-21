@@ -1,4 +1,4 @@
-package org.mockito.internal;
+package org.mockito.internal.handler;
 
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;

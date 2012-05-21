@@ -6,9 +6,9 @@ package org.mockito.internal.util;
 
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.MockHandlerFactory;
 import org.mockito.internal.configuration.ClassPathLoader;
 import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.handler.MockHandlerFactory;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;

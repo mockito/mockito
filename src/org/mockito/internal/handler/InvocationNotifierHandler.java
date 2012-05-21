@@ -2,14 +2,15 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal;
+package org.mockito.internal.handler;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
-import org.mockito.listeners.InvocationListener;
 import org.mockito.invocation.MockHandler;
+import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
