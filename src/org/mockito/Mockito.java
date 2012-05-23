@@ -55,7 +55,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#25">25. (New) Verification ignoring stubs (Since 1.9.0)</a><br/>
  *      <a href="#26">26. (**New**) Mocking details (Since 1.9.5)</a><br/>
  *      <a href="#27">27. (**New**) Delegate calls to real instance (Since 1.9.5)</a><br/>
- *      <a href="#28">28. (**New**) Introduction of the internal <code>MockMaker</code> API (Since 1.9.5)</a><br/>
+ *      <a href="#28">28. (**New**) <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  * </b>
  * 
  * <p>
@@ -897,10 +897,15 @@ import org.mockito.verification.VerificationWithTimeout;
  *   <li>
  *     The regular spy ({@link #spy(Object)}) contains <strong>all</strong> state from the spied instance
  *     and the methods are invoked on the spy. The spied instance is only used at mock creation to copy the state from.
+ *     If you call a method on a regular spy and it internally calls other methods on this spy, those calls are remembered
+ *     for verifications, and they can be effectively stubbed.
  *   </li>
  *   <li>
  *     The mock that delegates simply delegates all methods to the delegate.
  *     The delegate is used all the time as methods are delegated onto it.
+ *     If you call a method on a mock that delegates and it internally calls other methods on this mock,
+ *     those calls are <strong>not</strong> remembered for verifications, stubbing does not have effect on them, too.
+ *     Mock that delegates is less powerful than the regular spy but it is useful when the regular spy cannot be created.
  *   </li>
  * </ul>
  *
@@ -910,26 +915,13 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin">Introduction of the internal <code>MockMaker</code> API</a> (Since 1.9.5)</h3>
- * <p>Thanks to Google Android guys, we now have a brand new extension that allows anyone to write his own mock maker engine.
- *
- * <p>How does that work ?
- * <ul>
- *     <li>For a Mockito user : Just put the alternate MockMaker plugin, say mockito-dex-maker.jar</li>
- *     <li>For a Mockito developer :
- *         <ol style="list-style-type: lower-alpha">
- *             <li>Write the implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- *             <li>Place a file named <code>org.mockito.plugins.MockMaker</code> in a folder named
- *             <code>mockito-extensions</code>, the content of this file need to have <strong>one</strong> line with
- *             the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- *         </ol>
- *     </li>
- * </ul>
- *
- * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
- * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
- *
- * Take a look at the API : {@link org.mockito.plugins.MockMaker}
+ * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
+ * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
+ *   that allows replacing the proxy generation engine. By default, Mockito uses cglib to create dynamic proxies.
+ * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
+ *   to use Mockito for Android testing with a help of dexmaker.
+ * <p>For more details, motivations and examples please refer to
+ * the docs for {@link org.mockito.plugins.MockMaker}.
  *
  */
 @SuppressWarnings("unchecked")

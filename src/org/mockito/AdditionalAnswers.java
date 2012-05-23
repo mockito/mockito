@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.stubbing.Answer;
-import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 
 import java.util.Collection;
 
@@ -123,12 +123,17 @@ public class AdditionalAnswers {
      * The difference with the regular spy:
      * <ul>
      *   <li>
-     *     The regular spy ({@link Mockito#spy(Object)} contains <strong>all</strong> state from the spied instance
+     *     The regular spy ({@link Mockito#spy(Object)}) contains <strong>all</strong> state from the spied instance
      *     and the methods are invoked on the spy. The spied instance is only used at mock creation to copy the state from.
+     *     If you call a method on a regular spy and it internally calls other methods on this spy, those calls are remembered
+     *     for verifications, and they can be effectively stubbed.
      *   </li>
      *   <li>
      *     The mock that delegates simply delegates all methods to the delegate.
      *     The delegate is used all the time as methods are delegated onto it.
+     *     If you call a method on a mock that delegates and it internally calls other methods on this mock,
+     *     those calls are <strong>not</strong> remembered for verifications, stubbing does not have effect on them, too.
+     *     Mock that delegates is less powerful than the regular spy but it is useful when the regular spy cannot be created.
      *   </li>
      * </ul>
      * An example with a final class that we want to delegate to:
