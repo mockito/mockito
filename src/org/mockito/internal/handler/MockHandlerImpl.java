@@ -26,7 +26,7 @@ import java.util.List;
  * @param <T>
  *            type of mock object to handle
  */
-public class MockHandlerImpl<T> implements InternalMockHandler<T> {
+class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
@@ -90,7 +90,7 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
-            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
 
             // redo setting invocation for potential stubbing in case of partial
             // mocks / spies.

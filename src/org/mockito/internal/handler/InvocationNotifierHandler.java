@@ -23,12 +23,12 @@ import java.util.List;
  *
  * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
-public class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
+class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
 
     private List<InvocationListener> invocationListeners;
-    private MockHandlerImpl<T> mockHandler;
+    private InternalMockHandler<T> mockHandler;
 
-    public InvocationNotifierHandler(MockHandlerImpl<T> mockHandler, MockCreationSettings settings) {
+    public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }

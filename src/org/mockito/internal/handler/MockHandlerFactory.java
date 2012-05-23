@@ -1,6 +1,6 @@
 package org.mockito.internal.handler;
 
-import org.mockito.invocation.MockHandler;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.mock.MockCreationSettings;
 
 /**
@@ -8,8 +8,11 @@ import org.mockito.mock.MockCreationSettings;
  */
 public class MockHandlerFactory {
 
-    public MockHandler create(MockCreationSettings settings) {
-        return new InvocationNotifierHandler(
-                new MockHandlerImpl(settings), settings);
+    public InternalMockHandler create(MockCreationSettings settings) {
+        InternalMockHandler handler = new MockHandlerImpl(settings);
+        InternalMockHandler nullResultGuardian = new NullResultGuardian(handler);
+        InternalMockHandler notifier = new InvocationNotifierHandler(nullResultGuardian, settings);
+
+        return notifier;
     }
 }
