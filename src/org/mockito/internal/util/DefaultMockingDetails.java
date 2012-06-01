@@ -10,7 +10,7 @@ import org.mockito.MockingDetails;
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
  * a wrapper for {@link org.mockito.internal.util.MockUtil}.
  */
-public class DefaultMockingDetails extends MockingDetails {
+public class DefaultMockingDetails implements MockingDetails {
 
     private Object toInspect;
     private MockUtil delegate;

@@ -871,13 +871,15 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="26">26. (**New**) <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Since 1.9.5)</h3>
  * <p>
- * To identify whether a particular object is a mock or a spy, you can write
+ * To identify whether a particular object is a mock or a spy:
  * <pre class="code"><code class="java">
- *     MockingDetails.of( someObject ).isMock();
- *     MockingDetails.of( someObject ).isSpy();
+ *     Mockito.mockingDetails(someObject).isMock();
+ *     Mockito.mockingDetails(someObject).isSpy();
  * </code></pre>
  * Both the {@link MockingDetails#isMock} and {@link MockingDetails#isSpy()} methods return <code>boolean</code>.
- * As a spy is considered a special kind of mock, <code>isMock()</code> returns true if the object is a spy.
+ * As a spy is just a different kind of mock, <code>isMock()</code> returns true if the object is a spy.
+ * In future Mockito versions MockingDetails may grow and provide other useful information about the mock,
+ * e.g. invocations, stubbing info, etc.
  *
  *
  *
@@ -1158,6 +1160,22 @@ public class Mockito extends Matchers {
         return mock(classToMock, withSettings()
                 .name(name)
                 .defaultAnswer(RETURNS_DEFAULTS));
+    }
+
+    /**
+     * Returns a MockingDetails instance that enables inspecting a particular object for Mockito related information.
+     * Can be used to find out if given object is a Mockito mock
+     * or to find out if a given mock is a spy or mock.
+     * <p>
+     * In future Mockito versions MockingDetails may grow and provide other useful information about the mock,
+     * e.g. invocations, stubbing info, etc.
+     *
+     * @param toInspect - object to inspect
+     * @return A {@link org.mockito.MockingDetails} instance.
+     * @since 1.9.5
+     */
+    public static MockingDetails mockingDetails(Object toInspect) {
+        return MOCKITO_CORE.mockingDetails(toInspect);
     }
     
     /**
