@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
 import org.mockito.stubbing.Answer;
-import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 
 import java.util.Collection;
 
@@ -109,27 +109,45 @@ public class AdditionalAnswers {
 
     /**
      * An answer that directly forwards the calls to the delegate.
-     *
-     * Makes sense only for spies or partial mocks of objects that are difficult to mock or spy using the usual spy API.
-     * Possible use cases:
+     * <p>
+     * Useful for spies or partial mocks of objects that are difficult to mock
+     * or spy using the usual spy API. Possible use cases:
      * <ul>
      *     <li>Final classes but with an interface</li>
      *     <li>Already custom proxied object</li>
      *     <li>Special objects with a finalize method, i.e. to avoid executing it 2 times</li>
-     *     <li>...</li>
      * </ul>
-     * Sets the real implementation to be called when the method is called on a mock object.
+     * For more details including the use cases reported by users take a look at
+     * <a link="http://code.google.com/p/mockito/issues/detail?id=145">issue 145</a>.
+     * <p>
+     * The difference with the regular spy:
+     * <ul>
+     *   <li>
+     *     The regular spy ({@link Mockito#spy(Object)}) contains <strong>all</strong> state from the spied instance
+     *     and the methods are invoked on the spy. The spied instance is only used at mock creation to copy the state from.
+     *     If you call a method on a regular spy and it internally calls other methods on this spy, those calls are remembered
+     *     for verifications, and they can be effectively stubbed.
+     *   </li>
+     *   <li>
+     *     The mock that delegates simply delegates all methods to the delegate.
+     *     The delegate is used all the time as methods are delegated onto it.
+     *     If you call a method on a mock that delegates and it internally calls other methods on this mock,
+     *     those calls are <strong>not</strong> remembered for verifications, stubbing does not have effect on them, too.
+     *     Mock that delegates is less powerful than the regular spy but it is useful when the regular spy cannot be created.
+     *   </li>
+     * </ul>
+     * An example with a final class that we want to delegate to:
      * <p>
      * <pre class="code"><code class="java">
-     *   final class DontMessTheCodeOfThisList implements list { ... }
+     *   final class DontYouDareToMockMe implements list { ... }
      *
-     *   DontMessTheCodeOfThisList awesomeList = new DontMessTheCodeOfThisList();
+     *   DontYouDareToMockMe awesomeList = new DontYouDareToMockMe();
      *
-     *   List listWithDelegate = mock(List.class, delegatesTo(awesomeList));
+     *   List mock = mock(List.class, delegatesTo(awesomeList));
      * </code></pre>
      *
      * <p>
-     * This features suffer from the same drawback as the spy.
+     * This feature suffers from the same drawback as the spy.
      * The mock will call the delegate if you use regular when().then() stubbing style.
      * Since the real implementation is called this might have some side effects.
      * Therefore you should to use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:

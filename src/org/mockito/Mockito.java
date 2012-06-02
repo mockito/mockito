@@ -54,8 +54,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#24">24. (New) One-liner stubs (Since 1.9.0)</a><br/>
  *      <a href="#25">25. (New) Verification ignoring stubs (Since 1.9.0)</a><br/>
  *      <a href="#26">26. (**New**) Mocking details (Since 1.9.5)</a><br/>
- *      <a href="#27">27. (**New**) Forward calls to real instance (Since 1.9.5)</a><br/>
- *      <a href="#28">28. (**New**) Introduction of the internal <code>MockMaker</code> API (Since 1.9.5)</a><br/>
+ *      <a href="#27">27. (**New**) Delegate calls to real instance (Since 1.9.5)</a><br/>
+ *      <a href="#28">28. (**New**) <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  * </b>
  * 
  * <p>
@@ -885,66 +885,45 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  * <h3 id="27">27. (**New**) <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
- * <p>Now mockito offer a specific way to delegate calls to a concrete instance. This is different than the
- * spy because the regular spy contains all the state of the spied instance. TODO SF - add more information.
  *
- * <p>Note that this feature only makes sense only for spies or partial mocks of objects <strong>that are difficult to
- * mock or spy</strong> using the usual spy API.
+ * <p>Useful for spies or partial mocks of objects <strong>that are difficult to mock or spy</strong> using the usual spy API.
  * Possible use cases:
  * <ul>
  *     <li>Final classes but with an interface</li>
  *     <li>Already custom proxied object</li>
  *     <li>Special objects with a finalize method, i.e. to avoid executing it 2 times</li>
- *     <li>...</li>
  * </ul>
  *
- * Possible example with an object interacting with native objects and spy that would not work:
- * <pre class="code"><code class="java">
- *   InteractingWithNativeStuff theSpy = spy(interactingWithNativeStuff);
- *
- *   // Some time after the GC collect interactingWithNativeStuff as it not anymore used,
- *   // the finalizer is executed, for example to call a C++ destructor.
- *
- *   // Later on, it's finally the spy to be garbage collected, finalize method is called again,
- *   // unfortunately the second interaction with the native objects will crash the JVM.
- * </code></pre>
- * Now with the forwarding feature in place :
- * <pre class="code"><code class="java">
- *   InteractingWithNativeStuff native = mock(InteractingWithNativeStuff.class, AdditionalAnswers.delegateTo(interactingWithNativeStuff));
- *
- *   //TODO SF - I don't quite follow this example... spied instance is also something we hold in the MockSettings...
- *   // OK, the mock keeps a reference to the interactingWithNativeStuff, so the finalize method never kicks in.
- * </code></pre>
- *
- * <p>Friendly reminder that final Methods cannot be mocked, so if <code>finalize</code> is <code>final</code> the
- * real code will still be executed.
+ * <p>The difference with the regular spy:
+ * <ul>
+ *   <li>
+ *     The regular spy ({@link #spy(Object)}) contains <strong>all</strong> state from the spied instance
+ *     and the methods are invoked on the spy. The spied instance is only used at mock creation to copy the state from.
+ *     If you call a method on a regular spy and it internally calls other methods on this spy, those calls are remembered
+ *     for verifications, and they can be effectively stubbed.
+ *   </li>
+ *   <li>
+ *     The mock that delegates simply delegates all methods to the delegate.
+ *     The delegate is used all the time as methods are delegated onto it.
+ *     If you call a method on a mock that delegates and it internally calls other methods on this mock,
+ *     those calls are <strong>not</strong> remembered for verifications, stubbing does not have effect on them, too.
+ *     Mock that delegates is less powerful than the regular spy but it is useful when the regular spy cannot be created.
+ *   </li>
+ * </ul>
  *
  * <p>
- * See more information there {@link AdditionalAnswers#delegatesTo(Object)}.
+ * See more information in docs for {@link AdditionalAnswers#delegatesTo(Object)}.
  *
  *
  *
  *
- * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin">Introduction of the internal <code>MockMaker</code> API</a> (Since 1.9.5)</h3>
- * <p>Thanks to Google Android guys, we now have a brand new extension that allows anyone to write his own mock maker engine.
- *
- * <p>How does that work ?
- * <ul>
- *     <li>For a Mockito user : Just put the alternate MockMaker plugin, say mockito-dex-maker.jar</li>
- *     <li>For a Mockito developer :
- *         <ol style="list-style-type: lower-alpha">
- *             <li>Write the implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- *             <li>Place a file named <code>org.mockito.plugins.MockMaker</code> in a folder named
- *             <code>mockito-extensions</code>, the content of this file need to have <strong>one</strong> line with
- *             the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- *         </ol>
- *     </li>
- * </ul>
- *
- * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
- * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
- *
- * Take a look at the API : {@link org.mockito.plugins.MockMaker}
+ * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
+ * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
+ *   that allows replacing the proxy generation engine. By default, Mockito uses cglib to create dynamic proxies.
+ * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
+ *   to use Mockito for Android testing with a help of dexmaker.
+ * <p>For more details, motivations and examples please refer to
+ * the docs for {@link org.mockito.plugins.MockMaker}.
  *
  */
 @SuppressWarnings("unchecked")

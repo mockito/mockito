@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal;
+package org.mockito.internal.handler;
 
 import org.junit.Before;
 import org.junit.Test;
