@@ -1,57 +1,75 @@
-//apply from: 'release.gradle'
-ant.importBuild 'build.xml'
-
 task printHelp << {
     println """
 ---------------------------
 How to build mockito?
 ---------------------------
-1. Use gradle. To see available tasks run './gradlew tasks' (or if you're on Windows: 'gradlew tasks')
-2. Alternatively, use ant. Run ant -p to see available tasks.
-   -actually, gradle script imports the ant build so either way you build the results should be more like the same :)
+# Use ant tasks, 'ant -p' for available tasks, 'ant' to build.
 
 ---------------------------
 How to release mockito?
 ---------------------------
-# [In progress] Use gradle. Run:
-# gradlew release
-# check-in any changes
+# Make sure that the version.properties has the version you want to release.
+# Release documentation via 'gradlew releaseDocs'
+# Execute './gradlew release' (linux/mac) or 'gradlew release' (win). In case of errors follow the instructions.
+# Review the google code stuff
+## Mark all fixed issues with given release with the correct Milestone-ReleaseX label.
+### Usually you can use 'advanced search', all open issues, with status 'Fixed, Verified, Done', then sort by 'Milestone' column up.
+Items on the top that not yet have the 'milestone' set are the candidates.
+## Update the release notes wiki. Mention the prominent features with links to documentation; mention prominent contributors.
+## Update the main page (it might have references to previous release, search the page for links to previous version).
 
 ---------------------------
 More info.
 ---------------------------
-We will move fully into gradle at some point. For now, ant import in gradle works for us just fine.
+# At some point we will move fully into gradle. For now the Mockito project tells the 'migration story' and demonstrates how ant and gradle can coexist together.
 """
 }
 
-task release {
-    if (gradle.startParameter.taskNames == ['release']) {
-        gradle.startParameter.taskNames = ['updateLicenseHeaders', 'checkDirtyChanges']
-    }
+task release
+
+if (gradle.startParameter.taskNames == ['release']) {
+    gradle.startParameter.taskNames = ['updateLicenseHeaders', 'assertCleanCopy', 'uploadToGoogle']
 }
+
 
 gradle.taskGraph.whenReady {
     //validate the existence of project properties
     if (it.hasTask(':uploadToGoogle')) {
-        assert project.hasProperty('googleUser') : "Google upload not possible - googleUser property not provided. Pass -PgoogleUser=someone via command line"
-        assert project.hasProperty('googlePwd') : "Google upload not possible - googlePwd property not provided. Pass -PgooglePwd=secret via command line"
-
-        assert project.uploadToGoogle.inputs
+        project.tasks.uploadToGoogle.assertUploadPossible()
     }
 }
 
-task uploadToGoogle {
-    def version = '1.9.5'
+//TODO SF read from the file
+def version = '1.9.5-rc1'
+
+task uploadToGoogle(type: UploadToGoogle) {
     mockitoZip = file("target/mockito-${version}.zip")
     mockitoAllJar = file("target/mockito-all-${version}.jar")
+}
 
-    validateInputExists = { assert mockitoZip.exists() && mockitoAllJar.exists() : "" +
-        "Google upload not possible - no binaries to upload. Please run 'ant test.release release.maven' first.\n" +
-        "" }
+task buildMockito(type: Exec) {
+    commandLine 'ant', 'clean', 'test.release', 'release.maven'
+}
 
-    inputs.files mockitoZip, mockitoAllJar
-    doLast {
-        ant {
+class UploadToGoogle extends DefaultTask {
+
+    @InputFile File mockitoZip
+    @InputFile File mockitoAllJar
+
+    void assertUploadPossible() {
+        def googleUser = project.hasProperty('googleUser')
+        def googlePwd = project.hasProperty('googlePwd')
+
+        assert googleUser && googlePwd : """Google upload not possible - googleUser or googlePwd property not provided.
+Pass -PgoogleUser=someone -PgooglePwd=secret via command line"""
+
+        assert mockitoZip.exists() && mockitoAllJar.exists() : "" +
+                "Google upload not possible - no binaries to upload. Please run 'gradlew build' first."
+    }
+
+    @TaskAction
+    void upload() {
+        project.ant {
             //declare ant task
             taskdef(name:"gcupload", classname:"net.bluecow.googlecode.ant.GoogleCodeUploadTask") {
                 classpath {
@@ -80,8 +98,18 @@ task uploadToGoogle {
     }
 }
 
-task checkDirtyChanges << {
-    //to be implemented
+task assertCleanCopy << {
+    def output = new ByteArrayOutputStream()
+    exec {
+        commandLine "hg", "status"
+        standardOutput = output
+        errorOutput = output
+    }
+    assert output.toString().empty : """
+Please commit outstanding files.
+----- 'hg st' output -----
+$output----- end of output -----
+"""
 }
 
 task updateLicenseHeaders << {
@@ -91,9 +119,9 @@ task updateLicenseHeaders << {
     logger.lifecycle("Updating licence headers in source... Found ${files.files.size()} files to check the license.")
 
     def header = """/*
- * Copyright (c) 2007 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
+* Copyright (c) 2007 Mockito contributors
+* This program is made available under the terms of the MIT License.
+*/
 """
     files.each { File file ->
         def currentHdr = /(?sm).*?\/\*.*?\*\/.*?package org\./
@@ -112,6 +140,33 @@ task updateLicenseHeaders << {
           file.text = content
         }
     }
+}
+
+task releaseDocs {
+  doLast {
+    def docsRepo = file("../docs")
+    def docsDir = file("$docsRepo/$version")
+    assert docsDir.directory || docsDir.mkdirs() : "Expected to find cloned 'docs' repo at: '$docsRepo'. Problems creating docs output dir."
+
+    exec {
+      commandLine 'ant', 'javadoc'
+    }
+
+    copy {
+      from 'target/javadoc'
+      into docsDir
+    }
+
+    exec {
+        commandLine 'hg', 'add'
+        workingDir docsDir
+    }
+
+    exec {
+        commandLine 'hg', 'push'
+        workingDir docsDir
+    }
+  }
 }
 
 defaultTasks 'printHelp'
