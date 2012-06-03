@@ -21,12 +21,11 @@ import org.mockito.mock.MockCreationSettings;
  * <h3>Using the extension point</h3>
  *
  * <p>Suppose you wrote an extension to create mocks with some <em>Awesome</em> library, in order to tell
- * Mockito to use it you need to put in your classpath
+ * Mockito to use it you need to put in your <strong>classpath</strong>:
  * <ol style="list-style-type: lower-alpha">
- *     <li>The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- *     <li>A file named <code>org.mockito.plugins.MockMaker</code> in a folder named
- *     <code>mockito-extensions</code>, the content of this file need to have <strong>one</strong> line with
- *     the qualified name <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
+ *     <li>The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code> that extends the <code>MockMaker</code>.</li>
+ *     <li>A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
+ *     exactly a <strong>one</strong> line with the qualified name: <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
  * </ol></p>
  *
  * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
