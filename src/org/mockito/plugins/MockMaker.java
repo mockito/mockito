@@ -18,14 +18,6 @@ import org.mockito.mock.MockCreationSettings;
  * For example, the android users can use a MockMaker that can work with Dalvik virtual machine
  * and hence bring Mockito to android apps developers.</p>
  *
- * <h3>Implementing custom {@code MockMaker}</h3>
- *
- * <ul>
- *     <li>Implement {@link #createMock)}. Do not provide your own implementation of  </li>
- *     <li></li>
- *     <li></li>
- * </ul>
- *
  * <h3>Using the extension point</h3>
  *
  * <p>Suppose you wrote an extension to create mocks with some <em>Awesome</em> library, in order to tell
