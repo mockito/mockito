@@ -119,9 +119,9 @@ task updateLicenseHeaders << {
     logger.lifecycle("Updating licence headers in source... Found ${files.files.size()} files to check the license.")
 
     def header = """/*
-* Copyright (c) 2007 Mockito contributors
-* This program is made available under the terms of the MIT License.
-*/
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 """
     files.each { File file ->
         def currentHdr = /(?sm).*?\/\*.*?\*\/.*?package org\./
