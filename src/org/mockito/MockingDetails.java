@@ -10,6 +10,7 @@ package org.mockito;
  *
  * @since 1.9.5
  */
+@Incubating
 public interface MockingDetails {
     
     /**
