@@ -9,9 +9,9 @@ How to build mockito?
 How to release mockito?
 ---------------------------
 # Make sure that the version.properties has the version you want to release.
-# Release documentation via 'gradlew releaseDocs'
-# Execute './gradlew release' (linux/mac) or 'gradlew release' (win). In case of errors follow the instructions.
-# Review the google code stuff
+# Release documentation via 'gradlew releaseDocs'.
+# Build and push binaries to googlce code via 'gradlew release'. In case of errors follow the instructions.
+# Review the google code project:
 ## Mark all fixed issues with given release with the correct Milestone-ReleaseX label.
 ### Usually you can use 'advanced search', all open issues, with status 'Fixed, Verified, Done', then sort by 'Milestone' column up.
 Items on the top that not yet have the 'milestone' set are the candidates.
@@ -28,7 +28,7 @@ More info.
 task release
 
 if (gradle.startParameter.taskNames == ['release']) {
-    gradle.startParameter.taskNames = ['updateLicenseHeaders', 'assertCleanCopy', 'uploadToGoogle']
+    gradle.startParameter.taskNames = ['releaseDocs', 'updateLicenseHeaders', 'assertCleanCopy', 'uploadToGoogle']
 }
 
 
@@ -145,6 +145,7 @@ task updateLicenseHeaders << {
 task releaseDocs {
   doLast {
     def docsRepo = file("../docs")
+    //TODO SF validate if this is a correct repo via hg
     def docsDir = file("$docsRepo/$version")
     assert docsDir.directory || docsDir.mkdirs() : "Expected to find cloned 'docs' repo at: '$docsRepo'. Problems creating docs output dir."
 
@@ -163,8 +164,14 @@ task releaseDocs {
     }
 
     exec {
-        commandLine 'hg', 'push'
+        commandLine 'hg', 'ci', '-m', 'Released the docs.'
         workingDir docsDir
+    }
+
+    //TODO SF assert clean copy
+    exec {
+        commandLine 'hg', 'push'
+        workingDir docsRepo
     }
   }
 }
