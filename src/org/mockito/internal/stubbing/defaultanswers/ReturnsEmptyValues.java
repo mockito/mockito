@@ -81,10 +81,8 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     }
     
     Object returnValueFor(Class<?> type) {
-        if (type.isPrimitive()) {
-            return Primitives.primitiveValueOrNullFor(type);
-        } else if (Primitives.isPrimitiveWrapper(type)) {
-            return Primitives.primitiveWrapperOf(type);
+        if (Primitives.isPrimitiveOrWrapper(type)) {
+            return Primitives.defaultValueForPrimitiveOrWrapper(type);
         //new instances are used instead of Collections.emptyList(), etc.
         //to avoid UnsupportedOperationException if code under test modifies returned collection
         } else if (type == Collection.class) {
@@ -115,7 +113,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new TreeMap<Object, Object>();
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<Object, Object>();
-        }       
+        }
+        // TODO return empty Iterable ; see issue 175
+
         //Let's not care about the rest of collections.
         return null;
     }
