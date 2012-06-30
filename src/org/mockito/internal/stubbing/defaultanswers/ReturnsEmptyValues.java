@@ -82,7 +82,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     
     Object returnValueFor(Class<?> type) {
         if (type.isPrimitive()) {
-            return primitiveOf(type);
+            return Primitives.primitiveValueOrNullFor(type);
         } else if (Primitives.isPrimitiveWrapper(type)) {
             return Primitives.primitiveWrapperOf(type);
         //new instances are used instead of Collections.emptyList(), etc.
@@ -120,13 +120,4 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         return null;
     }
 
-    private Object primitiveOf(Class<?> type) {
-        if (type == Boolean.TYPE) {
-            return false;
-        } else if (type == Character.TYPE) {
-            return (char) 0;
-        } else {
-            return 0;
-        } 
-    }
 }

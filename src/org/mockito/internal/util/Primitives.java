@@ -45,24 +45,24 @@ public class Primitives {
     }
 
     static {
-        wrapperReturnValues.put(Boolean.class, Boolean.FALSE);
-        wrapperReturnValues.put(Character.class, new Character((char) 0));
-        wrapperReturnValues.put(Byte.class, new Byte((byte) 0));
-        wrapperReturnValues.put(Short.class, new Short((short) 0));
-        wrapperReturnValues.put(Integer.class, new Integer(0));
-        wrapperReturnValues.put(Long.class, new Long(0));
-        wrapperReturnValues.put(Float.class, new Float(0));
-        wrapperReturnValues.put(Double.class, new Double(0));
+        wrapperReturnValues.put(Boolean.class, false);
+        wrapperReturnValues.put(Character.class, '\u0000');
+        wrapperReturnValues.put(Byte.class, (byte) 0);
+        wrapperReturnValues.put(Short.class, (short) 0);
+        wrapperReturnValues.put(Integer.class, 0);
+        wrapperReturnValues.put(Long.class, 0L);
+        wrapperReturnValues.put(Float.class, 0F);
+        wrapperReturnValues.put(Double.class, 0D);
     }
 
     static {
         primitiveValues.put(boolean.class, false);
-        primitiveValues.put(char.class, 0);
-        primitiveValues.put(byte.class, 0);
-        primitiveValues.put(short.class, 0);
+        primitiveValues.put(char.class, '\u0000');
+        primitiveValues.put(byte.class, (byte) 0);
+        primitiveValues.put(short.class, (short) 0);
         primitiveValues.put(int.class, 0);
-        primitiveValues.put(long.class, 0);
-        primitiveValues.put(float.class, 0);
-        primitiveValues.put(double.class, 0);
+        primitiveValues.put(long.class, 0L);
+        primitiveValues.put(float.class, 0F);
+        primitiveValues.put(double.class, 0D);
     }
 }

@@ -12,23 +12,26 @@ import org.mockitoutil.TestBase;
 public class ReturnsSmartNullsTest extends TestBase {
 
     @Test
-    public void shouldReturnTheUsualDefaultValuesForPrimitives() throws Throwable {
+    public void should_return_the_usual_default_values_for_primitives() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
         assertEquals(false  ,   answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0,  answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
+        assertEquals((byte) 0,  answer.answer(invocationOf(HasPrimitiveMethods.class, "byteMethod")));
+        assertEquals((short) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "shortMethod")));
         assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
-        assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
-        assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
-        assertEquals(0,         answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
+        assertEquals(0L,        answer.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
+        assertEquals(0f,        answer.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
+        assertEquals(0d,        answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
 
+    @SuppressWarnings("unused")
     interface Foo {
         Foo get();
         Foo withArgs(String oneArg, String otherArg);
     }
 
     @Test
-    public void shouldReturnAnObjectThatFailsOnAnyMethodInvocationForNonPrimitives() throws Throwable {
+    public void should_return_an_object_that_fails_on_any_method_invocation_for_non_primitives() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
@@ -40,7 +43,7 @@ public class ReturnsSmartNullsTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnAnObjectThatAllowsObjectMethods() throws Throwable {
+    public void should_return_an_object_that_allows_object_methods() throws Throwable {
         Answer<Object> answer = new ReturnsSmartNulls();
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
@@ -50,7 +53,7 @@ public class ReturnsSmartNullsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintTheParametersWhenCallingAMethodWithArgs() throws Throwable {
+    public void should_print_the_parameters_when_calling_a_method_with_args() throws Throwable {
     	Answer<Object> answer = new ReturnsSmartNulls();
 
     	Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
@@ -61,7 +64,7 @@ public class ReturnsSmartNullsTest extends TestBase {
     }
 
     @Test
-	public void shouldPrintTheParametersOnSmartNullPointerExceptionMessage() throws Throwable {
+	public void should_print_the_parameters_on_SmartNullPointerException_message() throws Throwable {
     	Answer<Object> answer = new ReturnsSmartNulls();
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
