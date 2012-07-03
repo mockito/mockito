@@ -320,6 +320,9 @@
       <header>
         <![CDATA[
           <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
+          <script type="text/javascript">
+              var shBaseURL = '{@docRoot}/js/sh-2.1.382/';
+          </script>
           <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
           <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
 
@@ -337,6 +340,9 @@
   	<copy todir="${javadoc.dir}/org/mockito" file="javadoc/img/logo.jpg" />
   	<copy todir="${javadoc.dir}/js" file="javadoc/js/jquery-1.7.min.js" />
   	<copy todir="${javadoc.dir}/js" file="javadoc/js/jquery.beautyOfCode-min.js" />
+    <copy todir="${javadoc.dir}/js/sh-2.1.382">
+      <fileset dir="javadoc/js/sh-2.1.382"/>
+    </copy>
   </target>
 
   <target name="repackage-tests" depends="compile.test">
