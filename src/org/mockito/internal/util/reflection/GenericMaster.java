@@ -4,9 +4,7 @@
  */
 package org.mockito.internal.util.reflection;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 @SuppressWarnings("unchecked")
 public class GenericMaster {
@@ -29,5 +27,58 @@ public class GenericMaster {
         }
         
         return Object.class;
+    }
+
+    public Class<?> identifyGenericReturnType(Method method, Class<?> onClass) {
+        Type genericReturnType = method.getGenericReturnType();
+
+        if (genericReturnType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericReturnType;
+
+            if (parameterizedType.getActualTypeArguments().length > 0) {
+                Type type = parameterizedType.getActualTypeArguments()[0];
+
+                if (type instanceof Class) {
+                    return (Class) type;
+                }
+                if (type instanceof TypeVariable) {
+                    return identifyReturnTypeFromClass((TypeVariable) type, onClass);
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+    private Class<?> identifyReturnTypeFromClass(TypeVariable typeVariable, Class<?> onClass) {
+        Type[] genericInterfaces = onClass.getGenericInterfaces();
+
+        for (Type genericInterface : genericInterfaces) {
+
+            if (genericInterface instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+                parameterizedType.getActualTypeArguments();
+
+                if (parameterizedType.getRawType() instanceof Class) {
+                    Class rawType = (Class) parameterizedType.getRawType();
+
+                    TypeVariable[] typeParameters = rawType.getTypeParameters();
+
+                    for (int typeVarPosition = 0; typeVarPosition < typeParameters.length; typeVarPosition++) {
+                        TypeVariable typeParameter = typeParameters[typeVarPosition];
+                        if (typeVariable.equals(typeParameter)) {
+                            Type typeVariableValue = parameterizedType.getActualTypeArguments()[typeVarPosition];
+                            if (typeVariableValue instanceof Class) {
+                                return (Class) typeVariableValue;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return null;
     }
 }
