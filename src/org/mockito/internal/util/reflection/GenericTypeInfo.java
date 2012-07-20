@@ -32,7 +32,7 @@ public class GenericTypeInfo {
     /**
      * The source class from which the generic info information should be retrieved.
      */
-    private final Class<?> onClass;
+    private final Type clazz;
 
     /**
      * Represents resolved type variables on class.
@@ -40,11 +40,11 @@ public class GenericTypeInfo {
     private Map<TypeVariable, Type> typeVariables = new HashMap<TypeVariable, Type>();
 
 
-    private GenericTypeInfo(Type typeToSolve, Class<?> onClass, Map<TypeVariable, Type> typeVariables) {
+    private GenericTypeInfo(Type typeToSolve, Class<?> sourceType, Map<TypeVariable, Type> typeVariables) {
         this.typeToSolve = typeToSolve;
-        this.onClass = onClass;
+        this.clazz = sourceType;
         this.typeVariables = typeVariables;
-        readActualTypeParametersOnDeclaringClass();
+        throw new UnsupportedOperationException("code under (re)factoring");
     }
 
     /**
@@ -102,42 +102,6 @@ public class GenericTypeInfo {
         return type; // irrelevant, we don't manage other types.
     }
 
-    private void readActualTypeParametersOnDeclaringClass() {
-        registerTypeVariablesOn(onClass);
-        registerTypeVariablesOn(onClass.getGenericSuperclass());
-        for (Type genericInterface : onClass.getGenericInterfaces()) {
-            registerTypeVariablesOn(genericInterface);
-        }
-    }
-
-    private void registerTypeVariablesOn(Type classType) {
-        if (!(classType instanceof ParameterizedType)) {
-            return;
-        }
-        ParameterizedType parameterizedType = (ParameterizedType) classType;
-        TypeVariable[] typeParameters = ((Class<?>) parameterizedType.getRawType()).getTypeParameters();
-        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        for (int i = 0; i < actualTypeArguments.length; i++) {
-            Type actualTypeArgument = actualTypeArguments[i];
-            TypeVariable typeParameter = typeParameters[i];
-
-            typeVariables.put(typeParameter, actualTypeArgument);
-            logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(in '" + typeParameter.getGenericDeclaration() + "')" + "' : '" + actualTypeArgument + "' }");
-        }
-    }
-
-    private void registerTypeVariablesOn(Class<?> clazz) {
-        TypeVariable[] typeParameters = clazz.getTypeParameters();
-        for (TypeVariable typeParameter : typeParameters) {
-            typeVariables.put(typeParameter, boundsOf(typeParameter));
-            logger.log("For '" + clazz.getCanonicalName() + "' found type variable : { '" + typeParameter + "(in '" + typeParameter.getGenericDeclaration() + "')" + "' : '" + boundsOf(typeParameter) + "' }");
-        }
-    }
-
-    private Type boundsOf(TypeVariable typeParameter) {
-        return new TypeVariableUpperBounds(typeParameter.getBounds());
-    }
-
 
     @Override
     public String toString() {
@@ -154,13 +118,13 @@ public class GenericTypeInfo {
 
         GenericTypeInfo that = (GenericTypeInfo) o;
 
-        return !(onClass != null ? !onClass.equals(that.onClass) : that.onClass != null) && typeToSolve.equals(that.typeToSolve);
+        return !(clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) && typeToSolve.equals(that.typeToSolve);
     }
 
     @Override
     public int hashCode() {
         int result = typeToSolve.hashCode();
-        result = 31 * result + (onClass != null ? onClass.hashCode() : 0);
+        result = 31 * result + (clazz != null ? clazz.hashCode() : 0);
         return result;
     }
 
@@ -184,35 +148,38 @@ public class GenericTypeInfo {
      * </p>
      */
     public static class TypeVariableUpperBounds implements Type {
-        private final Type firstBound;
-        private final Type[] interfaceBounds;
+        private TypeVariable typeVariable;
 
 
-        public TypeVariableUpperBounds(Type[] bounds) {
-            this.firstBound = bounds[0]; // either a class or an interface, always present
-            this.interfaceBounds = new Type[bounds.length - 1]; // JLS says only interfaces from here
-            System.arraycopy(bounds, 1, interfaceBounds, 0, bounds.length - 1);
+        public TypeVariableUpperBounds(TypeVariable typeVariable) {
+            this.typeVariable = typeVariable;
         }
 
         public Type firstBound() {
-            return firstBound;
+            return typeVariable.getBounds()[0]; // either a class or an interface, always present
         }
 
         public Type[] interfaceBounds() {
+            // JLS says only interfaces from here (typeVar extends AClass_0 & I_1 & I_2 & etc)
+            Type[] interfaceBounds = new Type[typeVariable.getBounds().length - 1];
+            System.arraycopy(typeVariable.getBounds(), 1, interfaceBounds, 0, typeVariable.getBounds().length - 1);
             return interfaceBounds;
         }
 
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
-            sb.append("{firstBound=").append(firstBound);
-            sb.append(", interfaceBounds=").append(Arrays.deepToString(interfaceBounds));
+            sb.append("{firstBound=").append(firstBound());
+            sb.append(", interfaceBounds=").append(Arrays.deepToString(interfaceBounds()));
             sb.append('}');
             return sb.toString();
         }
     }
 
 
+    public static ParameterizedType asParameterizedType(Class<?> clazz) {
+        return new ClassEnhancedToParameterizedType(clazz);
+    }
 
     @Incubating
     public static Builder on(Class<?> clazz) {
@@ -274,6 +241,4 @@ public class GenericTypeInfo {
             return new GenericTypeInfo(genericReturnType, clazz, typeVariables);
         }
     }
-
-
 }
