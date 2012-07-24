@@ -156,7 +156,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return interfaces;
     }
 
-    public MockSettings withParameterizedInfo(MockitoGenericMetadata mockitoGenericMetadata) {
+    public MockSettings parameterizedInfo(MockitoGenericMetadata mockitoGenericMetadata) {
         this.mockitoGenericMetadata = mockitoGenericMetadata;
         return this;
     }

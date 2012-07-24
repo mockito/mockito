@@ -7,14 +7,16 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.reflection.MockitoGenericMetadata.from;
 
+@SuppressWarnings("unused")
 public class MockitoGenericMetadataTest {
 
     interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
@@ -31,6 +33,7 @@ public class MockitoGenericMetadataTest {
         List<? super Integer> returningWildcard();
         K returningK();
         <O extends K> List<O> paramTypeWithTypeParams();
+        <S, T extends S> T twoTypeParams();
         <O extends K> O typeVarWithTypeParams();
     }
 
@@ -47,23 +50,6 @@ public class MockitoGenericMetadataTest {
         assertThat(from(ListOfAnyNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
         assertThat(from(ListOfNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
         assertThat(from(GenericsNest.class.getGenericInterfaces()[0]).rawType()).isEqualTo(Map.class);
-    }
-
-    @Test
-    @Ignore("not the right unit test")
-    public void returning_deep_stubs() throws Exception {
-        GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
-
-        Set<? extends Map.Entry<? extends Cloneable, Set<Number>>> entries = mock.entrySet();
-        Iterator<? extends Map.Entry<? extends Cloneable,Set<Number>>> entriesIterator = mock.entrySet().iterator();
-        Map.Entry<? extends Cloneable, Set<Number>> nextEntry = mock.entrySet().iterator().next();
-
-        Cloneable cloneableKey = mock.entrySet().iterator().next().getKey();
-        Comparable<?> comparableKey = mock.entrySet().iterator().next().getKey();
-
-        Set<Number> value = mock.entrySet().iterator().next().getValue();
-        Iterator<Number> numbersIterator = mock.entrySet().iterator().next().getValue().iterator();
-        Number number = mock.entrySet().iterator().next().getValue().iterator().next();
     }
 
     @Test
@@ -96,8 +82,8 @@ public class MockitoGenericMetadataTest {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Comparable.class);
-        MockitoGenericMetadata extraInterface1 = from(genericMetadata.extraInterfaces().get(0));
-        assertThat(extraInterface1.rawType()).isEqualTo(Cloneable.class);
+        MockitoGenericMetadata extraInterface_0 = from(genericMetadata.extraInterfaces().get(0));
+        assertThat(extraInterface_0.rawType()).isEqualTo(Cloneable.class);
     }
 
     @Test
@@ -119,17 +105,12 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void paramType_with_wildcard_return_type_of___returningWildcard___resolved_to_List_and_type_argument_to_Integer() throws Exception {
-        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningWildcard", GenericsNest.class));
-
-        fail("TODO");
-    }
-
-    @Test
     public void paramType_with_type_parameters_return_type_of___paramTypeWithTypeParams___resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("paramTypeWithTypeParams", GenericsNest.class));
 
-        fail("TODO");
+        assertThat(genericMetadata.rawType()).isEqualTo(List.class);
+        Type firstBoundOfE = ((MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E")).firstBound();
+        assertThat(from(firstBoundOfE).rawType()).isEqualTo(Comparable.class);
     }
 
     @Test
@@ -141,13 +122,20 @@ public class MockitoGenericMetadataTest {
         assertThat(extraInterface_0.rawType()).isEqualTo(Cloneable.class);
     }
 
-
     @Test
     public void class_return_type_of___append___resolved_to_StringBuilder_and_type_arguments() throws Exception {
         MockitoGenericMetadata genericMetadata = from(StringBuilder.class).resolveGenericReturnType(firstNamedMethod("append", StringBuilder.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(StringBuilder.class);
         assertThat(genericMetadata.actualTypeArguments()).isEmpty();
+    }
+
+    @Test
+    @Ignore("TODO WildCard")
+    public void paramType_with_wildcard_return_type_of___returningWildcard___resolved_to_List_and_type_argument_to_Integer() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningWildcard", GenericsNest.class));
+
+        fail("TODO");
     }
 
 

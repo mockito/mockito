@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.settings;
 
+import org.mockito.internal.util.reflection.MockitoGenericMetadata;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -28,6 +29,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected MockName mockName;
     protected boolean serializable;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
+    protected MockitoGenericMetadata mockitoGenericMetadata;
 
     public CreationSettings() {}
 
@@ -40,6 +42,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.mockName = copy.mockName;
         this.serializable = copy.serializable;
         this.invocationListeners = copy.invocationListeners;
+        this.mockitoGenericMetadata = copy.mockitoGenericMetadata;
     }
 
     public Class<T> getTypeToMock() {
@@ -87,5 +90,16 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public List<InvocationListener> getInvocationListeners() {
         return invocationListeners;
+    }
+
+    public MockitoGenericMetadata getMockitoGenericMetadata() {
+        if (mockitoGenericMetadata == null) {
+            this.mockitoGenericMetadata = MockitoGenericMetadata.from(typeToMock);
+        }
+        return mockitoGenericMetadata;
+    }
+
+    public void setMockitoGenericMetadata(MockitoGenericMetadata mockitoGenericMetadata) {
+        this.mockitoGenericMetadata = mockitoGenericMetadata;
     }
 }

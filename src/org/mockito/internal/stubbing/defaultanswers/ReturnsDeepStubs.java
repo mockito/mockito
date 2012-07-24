@@ -6,7 +6,6 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
@@ -22,7 +21,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
 
 /**
  * Returning deep stub implementation.
@@ -85,13 +83,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         }
 
         MockitoGenericMetadata mockitoGenericMetadata =
-                actualParameterizedType(invocation.getMock()).resolveParameterizedType(genericReturnType);
+                actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
-        return mock(
-                mockitoGenericMetadata.rawType(),
-                ((MockSettingsImpl) withSettings().defaultAnswer(this))
-                        .withParameterizedInfo(mockitoGenericMetadata)
-        );
+        return mockitoGenericMetadata.toMock(this);
+
         // throw new MockitoException("[Work In Progress] Can't mock the return type : " + genericReturnType);
     }
 

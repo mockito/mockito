@@ -2,21 +2,31 @@ package org.mockito.internal.util.reflection;
 
 
 import org.mockito.Incubating;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.util.Checks;
+import org.mockito.internal.util.ConsoleMockitoLogger;
+import org.mockito.internal.util.MockitoLogger;
+import org.mockito.stubbing.Answer;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.*;
+
+import static org.mockito.Mockito.withSettings;
 
 @Incubating
 public abstract class MockitoGenericMetadata {
+
+    public static MockitoLogger logger = new ConsoleMockitoLogger();
 
     /**
      * Represents actual type variables resolved for current class.
      */
     protected Map<TypeVariable, Type> contextualActualTypeParameters = new HashMap<TypeVariable, Type>();
-
-    private MockitoGenericMetadata() {
-    }
 
 
     protected void registerTypeVariablesOn(Type classType) {
@@ -31,25 +41,31 @@ public abstract class MockitoGenericMetadata {
             Type actualTypeArgument = actualTypeArguments[i];
 
             contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
-            GenericTypeInfo.logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
+            logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
         }
     }
 
     protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
         for (TypeVariable typeParameter : typeParameters) {
             contextualActualTypeParameters.put(typeParameter, boundsOf(typeParameter));
-            GenericTypeInfo.logger.log("For '" + typeParameter.getGenericDeclaration() + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + boundsOf(typeParameter) + "' }");
+            logger.log("For '" + typeParameter.getGenericDeclaration() + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + boundsOf(typeParameter) + "' }");
         }
     }
 
     private Type boundsOf(TypeVariable typeParameter) {
+        if (typeParameter.getBounds()[0] instanceof TypeVariable) {
+            return boundsOf((TypeVariable) typeParameter.getBounds()[0]);
+        }
         return new BoundedType(typeParameter);
     }
+
+
 
     /**
      * @return Raw type of the current instance.
      */
     public abstract Class<?> rawType();
+
 
 
     /**
@@ -73,7 +89,7 @@ public abstract class MockitoGenericMetadata {
             Type actualType = getActualTypeArgumentFor(typeParameter);
 
             actualTypeArguments.put(typeParameter, actualType);
-            GenericTypeInfo.logger.log("For '" + rawType().getCanonicalName() + "' returning explicit TypeVariable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualType +"' }");
+            logger.log("For '" + rawType().getCanonicalName() + "' returning explicit TypeVariable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualType +"' }");
         }
 
         return actualTypeArguments;
@@ -89,9 +105,22 @@ public abstract class MockitoGenericMetadata {
         return type;
     }
 
-    public MockitoGenericMetadata resolveParameterizedType(Type genericReturnType) {
-        throw new UnsupportedOperationException("not implemented yet");
+
+
+    /**
+     * Creates a mock using the Generics Metadata represented by this instance.
+     *
+     * @param answer The answer to use in mock settings.
+     * @return The mock.
+     */
+    public Object toMock(Answer answer) {
+        return Mockito.mock(
+                rawType(),
+                ((MockSettingsImpl) withSettings().defaultAnswer(answer)).parameterizedInfo(this)
+        );
     }
+
+
 
     /**
      * Resolve current method generic return type to a {@link MockitoGenericMetadata}.
@@ -101,7 +130,7 @@ public abstract class MockitoGenericMetadata {
      */
     public MockitoGenericMetadata resolveGenericReturnType(Method method) {
         Type genericReturnType = method.getGenericReturnType();
-        System.out.println("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
+        logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
 
         if (genericReturnType instanceof Class) {
             return new NotGenericReturnType(genericReturnType);
@@ -112,6 +141,9 @@ public abstract class MockitoGenericMetadata {
         if (genericReturnType instanceof TypeVariable) {
             return new TypeVariableReturnType(this, method.getTypeParameters(), (TypeVariable) genericReturnType);
         }
+        if (genericReturnType instanceof BoundedType) {
+            return new TypeVariableReturnType(this, method.getTypeParameters(), ((BoundedType) genericReturnType).typeVariable());
+        }
 
         throw new IllegalStateException("ouch");
     }
@@ -119,20 +151,30 @@ public abstract class MockitoGenericMetadata {
     /**
      * Create an new MockitoGenericMetadata from a {@link Type}.
      *
+     * <p>
+     *     Supports only {@link Class} and {@link ParameterizedType}, otherwise throw a {@link MockitoException}.
+     * </p>
+     *
      * @param type The class from which the {@link MockitoGenericMetadata} should be built.
      * @return The new {@link MockitoGenericMetadata}.
+     * @throws MockitoException Raised if type is not a {@link Class} or a {@link ParameterizedType}.
      */
     public static MockitoGenericMetadata from(Type type) {
+        Checks.checkNotNull(type, "type");
         if (type instanceof Class) {
             return new FromClassMockitoGenericMetadata((Class<?>) type);
         }
         if (type instanceof ParameterizedType) {
             return new FromParameterizedTypeMockitoGenericMetadata((ParameterizedType) type);
         }
+
         throw new MockitoException("Type meta-data for this Type (" + type.getClass().getCanonicalName() + ") is not supported : " + type);
     }
 
 
+    /**
+     * Metadata for source {@link Class}
+     */
     private static class FromClassMockitoGenericMetadata extends MockitoGenericMetadata {
         private Class<?> clazz;
 
@@ -156,7 +198,10 @@ public abstract class MockitoGenericMetadata {
     }
 
 
-
+    /**
+     * Metadata for source {@link ParameterizedType}.
+     * Don't work with ParameterizedType returned in {@link Method#getGenericReturnType()}.
+     */
     private static class FromParameterizedTypeMockitoGenericMetadata extends MockitoGenericMetadata {
         private ParameterizedType parameterizedType;
 
@@ -178,7 +223,9 @@ public abstract class MockitoGenericMetadata {
     }
 
 
-
+    /**
+     * Metadata specific to {@link ParameterizedType} generic return types.
+     */
     private static class ParameterizedReturnType extends MockitoGenericMetadata {
         private final ParameterizedType parameterizedType;
         private final TypeVariable[] typeParameters;
@@ -188,7 +235,12 @@ public abstract class MockitoGenericMetadata {
             this.typeParameters = typeParameters;
             this.contextualActualTypeParameters = source.contextualActualTypeParameters;
 
+            readTypeParameters();
             readTypeVariables();
+        }
+
+        private void readTypeParameters() {
+            registerTypeParametersOn(typeParameters);
         }
 
         private void readTypeVariables() {
@@ -199,13 +251,18 @@ public abstract class MockitoGenericMetadata {
         public Class<?> rawType() {
             return (Class<?>) parameterizedType.getRawType();
         }
+
     }
 
 
-
+    /**
+     * Metadata specific to {@link TypeVariable} generic return type.
+     */
     private static class TypeVariableReturnType extends MockitoGenericMetadata {
         private final TypeVariable typeVariable;
         private final TypeVariable[] typeParameters;
+        private Class<?> rawType;
+
 
 
         public TypeVariableReturnType(MockitoGenericMetadata source, TypeVariable[] typeParameters, TypeVariable typeVariable) {
@@ -230,7 +287,10 @@ public abstract class MockitoGenericMetadata {
 
         @Override
         public Class<?> rawType() {
-            return extractRawTypeOf(typeVariable);
+            if (rawType == null) {
+                rawType = extractRawTypeOf(typeVariable);
+            }
+            return rawType;
         }
 
         private Class<?> extractRawTypeOf(Type type) {
@@ -250,7 +310,7 @@ public abstract class MockitoGenericMetadata {
                 */
                 return extractRawTypeOf(contextualActualTypeParameters.get(type));
             }
-            throw new MockitoException("Raw extraction not managed for : '" + type + "'");
+            throw new MockitoException("Raw extraction not supported for : '" + type + "'");
         }
 
         @Override
@@ -259,7 +319,26 @@ public abstract class MockitoGenericMetadata {
             if (type instanceof BoundedType) {
                 return Arrays.asList(((BoundedType) type).interfaceBounds());
             }
+            if (type instanceof ParameterizedType) {
+                return Collections.singletonList(type);
+            }
+            if (type instanceof Class) {
+                return Collections.emptyList();
+            }
             throw new MockitoException("Cannot extract extra-interfaces from '" + typeVariable + "' : '" + type + "'");
+        }
+
+        private Class<?>[] rawExtraInterfaces() {
+            List<Type> extraInterfaces = extraInterfaces();
+            List<Class<?>> rawExtraInterfaces = new ArrayList<Class<?>>();
+            for (Type extraInterface : extraInterfaces) {
+                Class<?> rawInterface = extractRawTypeOf(extraInterface);
+                // avoid interface collision with actual raw type (with typevariables, resolution ca be quite aggressive)
+                if(!rawType().equals(rawInterface)) {
+                    rawExtraInterfaces.add(rawInterface);
+                }
+            }
+            return rawExtraInterfaces.toArray(new Class[rawExtraInterfaces.size()]);
         }
 
         private Type extractActualBoundedTypeOf(Type type) {
@@ -279,78 +358,114 @@ public abstract class MockitoGenericMetadata {
             }
             return type; // irrelevant, we don't manage other types.
         }
+
+        public Object toMock(Answer answer) {
+            Class<?>[] rawExtraInterfaces = rawExtraInterfaces();
+            if (rawExtraInterfaces.length <= 0) {
+                return super.toMock(answer);
+            }
+
+            return Mockito.mock(
+                    rawType(),
+                    ((MockSettingsImpl) withSettings()
+                            .defaultAnswer(answer)
+                            .extraInterfaces(rawExtraInterfaces))
+                            .parameterizedInfo(this)
+            );
+        }
     }
 
 
 
-    private static class MethodGenericReturnTypeMockitoGenericMetadata extends MockitoGenericMetadata {
-
-        private final TypeVariable<Method>[] typeParameters;
-
-        private final Type genericReturnType;
-
-        public MethodGenericReturnTypeMockitoGenericMetadata(MockitoGenericMetadata source, Method method) {
-            genericReturnType = method.getGenericReturnType();
-            typeParameters = method.getTypeParameters();
-            this.contextualActualTypeParameters = source.contextualActualTypeParameters;
-
-            resolveActualMethodTypeParameter();
-        }
-
-        private void resolveActualMethodTypeParameter() {
-            if (genericReturnType instanceof TypeVariable) {
-                TypeVariable typeVariable = (TypeVariable) genericReturnType;
-                for (Type type : typeVariable.getBounds()) {
-                    registerTypeVariablesOn(type);
-                }
-                registerTypeVariablesOn(getActualTypeArgumentFor(typeVariable));
-            }
-            if (genericReturnType instanceof ParameterizedType) {
-                registerTypeVariablesOn(genericReturnType);
-            }
-
-            // throw new MockitoException("genericReturnType is a '" + genericReturnType.getClass() + "' : " + genericReturnType);
-        }
-
-        @Override
-        public Class<?> rawType() {
-            if (genericReturnType instanceof TypeVariable) {
-                Type actualTypeArgument = getActualTypeArgumentFor((TypeVariable) genericReturnType);
-                return extractRawTypeOf(actualTypeArgument);
-            }
-            return extractRawTypeOf(genericReturnType);
-        }
-
-        private Class<?> extractRawTypeOf(Type type) {
-            if (type instanceof Class) {
-                return (Class<?>) type;
-            }
-            if (type instanceof ParameterizedType) {
-                return (Class<?>) ((ParameterizedType) type).getRawType();
-            }
-            if (type instanceof BoundedType) {
-                return extractRawTypeOf(((BoundedType) type).firstBound());
-            }
-            throw new MockitoException("Raw extraction not managed for : '" + type + "'");
-        }
-
-
-
-    }
-
-
-
+    /**
+     * Metadata specific to {@link Class} return type.
+     */
     private static class NotGenericReturnType extends MockitoGenericMetadata {
-
         private final Class<?> returnType;
 
         public NotGenericReturnType(Type genericReturnType) {
             returnType = (Class<?>) genericReturnType;
         }
+
         @Override
         public Class<?> rawType() {
             return returnType;
         }
+    }
 
+    /**
+     * Type representing bounds of a type variable, allows to keep all bounds information.
+     *
+     * <p>It uses the first bound in the array, as this array is never null and always contains at least
+     * one element (Object is always here if no bounds are declared).</p>
+     *
+     * <p>If upper bounds are declared with SomeClass and additional interfaces, then firstBound will be SomeClass and
+     * interfacesBound will be an array of the additional interfaces.
+     *
+     * i.e. <code>SomeClass</code>.
+     * <pre class="code"><code class="java">
+     *     interface UpperBoundedTypeWithClass<E extends Comparable<E> & Cloneable> {
+     *         E get();
+     *     }
+     *     // will return Comparable type
+     * </code></pre>
+     * </p>
+     */
+    public static class BoundedType implements Type {
+        private TypeVariable typeVariable;
+
+
+        public BoundedType(TypeVariable typeVariable) {
+            this.typeVariable = typeVariable;
+        }
+
+        /**
+         * @return either a class or an interface (parameterized or not), if no bounds declared Object is returned.
+         */
+        public Type firstBound() {
+            return typeVariable.getBounds()[0]; //
+        }
+
+        /**
+         * On a Type Variable (typeVar extends AClass_0 & I_1 & I_2 & etc), will return an array
+         * containing I_1 and I_2.
+         *
+         * @return other bounds for this type, these bounds can only be only interfaces as the JLS says,
+         * empty array if no other bound declared.
+         */
+        public Type[] interfaceBounds() {
+            Type[] interfaceBounds = new Type[typeVariable.getBounds().length - 1];
+            System.arraycopy(typeVariable.getBounds(), 1, interfaceBounds, 0, typeVariable.getBounds().length - 1);
+            return interfaceBounds;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            return typeVariable.equals(((BoundedType) o).typeVariable);
+
+        }
+
+        @Override
+        public int hashCode() {
+            return typeVariable.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("{firstBound=").append(firstBound());
+            sb.append(", interfaceBounds=").append(Arrays.deepToString(interfaceBounds()));
+            sb.append('}');
+            return sb.toString();
+        }
+
+        public TypeVariable typeVariable() {
+            return typeVariable;
+        }
     }
 }
+
+
