@@ -6,14 +6,23 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.MockitoLogger;
+import org.mockito.internal.util.reflection.MockitoGenericMetadata;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 /**
  * Returning deep stub implementation.
@@ -28,6 +37,8 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     private static final long serialVersionUID = -6926328908792880098L;
     
     private Answer<Object> delegate = new ReturnsEmptyValues();
+
+    private MockitoLogger logger = new ConsoleMockitoLogger();
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> clz = invocation.getMethod().getReturnType();
@@ -55,8 +66,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object recordDeepStubMock(InvocationOnMock invocation, InvocationContainerImpl container) {
-        Class<?> clz = invocation.getMethod().getReturnType();
-        final Object mock = Mockito.mock(clz, this);
+        final Object mock = createGenericsAwareMock(invocation);
 
         container.addAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -65,5 +75,28 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         }, false);
 
         return mock;
+    }
+
+    private Object createGenericsAwareMock(InvocationOnMock invocation) {
+        Type genericReturnType = invocation.getMethod().getGenericReturnType();
+
+        if (genericReturnType instanceof Class) {
+            return mock((Class<?>) genericReturnType, this);
+        }
+
+        MockitoGenericMetadata mockitoGenericMetadata =
+                actualParameterizedType(invocation.getMock()).resolveParameterizedType(genericReturnType);
+
+        return mock(
+                mockitoGenericMetadata.rawType(),
+                ((MockSettingsImpl) withSettings().defaultAnswer(this))
+                        .withParameterizedInfo(mockitoGenericMetadata)
+        );
+        // throw new MockitoException("[Work In Progress] Can't mock the return type : " + genericReturnType);
+    }
+
+    private MockitoGenericMetadata actualParameterizedType(Object mock) {
+        CreationSettings mockSettings = (CreationSettings) new MockUtil().getMockHandler(mock).getMockSettings();
+        return mockSettings.getMockitoGenericMetadata();
     }
 }
