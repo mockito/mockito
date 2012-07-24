@@ -4,11 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -54,60 +52,8 @@ public class GenericMasterTest {
         assertEquals(Set.class, m.getGenericType(field("multiNested")));
     }
 
-    @Test
-    public void can_identify_generic_type_of_returned_collection() throws Exception {
-        assertEquals(Number.class, m.identifyGenericReturnType(method("numberList"), this.getClass()));
-    }
-
-    @Test
-    public void can_identify_generic_type_of_returned_user_type() throws Exception {
-        assertEquals(Number.class, m.identifyGenericReturnType(method("numberComparable"), this.getClass()));
-    }
-
-    @Test
-    public void can_identify_generic_type_of_returned_type_when_owner_type_forces_generic_type() throws Exception {
-        assertEquals(Set.class, m.identifyGenericReturnType(method(ListSet.class, "iterator"), ListSet.class));
-        assertEquals(Number.class, m.identifyGenericReturnType(method(MapNumberString.class, "keySet"), MapNumberString.class));
-        assertEquals(String.class, m.identifyGenericReturnType(method(MapNumberString.class, "values"), MapNumberString.class));
-        assertEquals(String.class, m.identifyGenericReturnType(method(MapNumberString.class, "remove"), MapNumberString.class));
-        assertEquals(Map.Entry.class, m.identifyGenericReturnType(method(MapNumberString.class, "entrySet"), MapNumberString.class));
-    }
-
-    @Test
-    public void can_identify_type_variable_upper_bound() throws Exception {
-        assertEquals(Number.class, m.identifyGenericReturnType(method(HashMapNumberString.class, "keySet"), HashMapNumberString.class));
-        assertEquals(Type.class, m.identifyGenericReturnType(method("typeList"), this.getClass()));
-    }
-
-    @Test
-    @Ignore("Internal API not ready for nested generics, doesn't work")
-    public void can_identify_nested_generic_type_of_returned_type_when_owner_forces_generic_type() throws Exception {
-    }
-
-    @Test
-    public void will_return_null_if_return_type_not_generic() throws Exception {
-        assertEquals(null, m.identifyGenericReturnType(method("rawList"), this.getClass()));
-    }
-
-
-
-
-    private Method method(String noArgMethod) throws NoSuchMethodException {
-        return method(this.getClass(), noArgMethod);
-    }
-
-    private Method method(Class<?> clazz, String noArgMethod) throws NoSuchMethodException {
-        for (Method method : clazz.getMethods()) {
-            if (method.getName().contains(noArgMethod)) {
-                return method;
-            }
-        }
-        throw new NoSuchMethodException("method " + noArgMethod + " do not exist in " + clazz.getSimpleName());
-    }
-
     private Field field(String fieldName) throws SecurityException, NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
-
 
 }
