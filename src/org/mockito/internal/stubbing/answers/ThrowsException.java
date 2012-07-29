@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import java.io.Serializable;
-
-import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.io.Serializable;
 
 public class ThrowsException implements Answer<Object>, Serializable {
 

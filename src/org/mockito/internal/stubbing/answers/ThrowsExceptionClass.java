@@ -5,7 +5,7 @@
 
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.objenesis.ObjenesisHelper;
