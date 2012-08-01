@@ -1,27 +1,36 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.util.reflection;
 
 
 import org.mockito.Incubating;
+import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.Checks;
-import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.stubbing.Answer;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.*;
 
 import static org.mockito.Mockito.withSettings;
 
+
+/**
+ *
+ *
+ *
+ *
+ *
+ */
 @Incubating
 public abstract class MockitoGenericMetadata {
 
-    public static MockitoLogger logger = new ConsoleMockitoLogger();
+    // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
     /**
      * Represents actual type variables resolved for current class.
@@ -30,7 +39,7 @@ public abstract class MockitoGenericMetadata {
 
 
     protected void registerTypeVariablesOn(Type classType) {
-        if (!(classType instanceof ParameterizedType)) { // null protected
+        if (!(classType instanceof ParameterizedType)) {
             return;
         }
         ParameterizedType parameterizedType = (ParameterizedType) classType;
@@ -40,23 +49,52 @@ public abstract class MockitoGenericMetadata {
             TypeVariable typeParameter = typeParameters[i];
             Type actualTypeArgument = actualTypeArguments[i];
 
-            contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
-            logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
+            if (actualTypeArgument instanceof WildcardType) {
+                contextualActualTypeParameters.put(typeParameter, boundsOf((WildcardType) actualTypeArgument));
+            } else {
+                contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
+            }
+            // logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
         }
     }
 
     protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
         for (TypeVariable typeParameter : typeParameters) {
             contextualActualTypeParameters.put(typeParameter, boundsOf(typeParameter));
-            logger.log("For '" + typeParameter.getGenericDeclaration() + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + boundsOf(typeParameter) + "' }");
+            // logger.log("For '" + typeParameter.getGenericDeclaration() + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + boundsOf(typeParameter) + "' }");
         }
     }
 
-    private Type boundsOf(TypeVariable typeParameter) {
+    /**
+     * @param typeParameter The TypeVariable parameter
+     * @return A {@link BoundedType} for easy bound information, if first bound is a TypeVariable
+     *         then retrieve BoundedType of this TypeVariable
+     */
+    private BoundedType boundsOf(TypeVariable typeParameter) {
         if (typeParameter.getBounds()[0] instanceof TypeVariable) {
             return boundsOf((TypeVariable) typeParameter.getBounds()[0]);
         }
-        return new BoundedType(typeParameter);
+        return new TypeVarBoundedType(typeParameter);
+    }
+
+    /**
+     * @param wildCard The WildCard type
+     * @return A {@link BoundedType} for easy bound information, if first bound is a TypeVariable
+     *         then retrieve BoundedType of this TypeVariable
+     */
+    private BoundedType boundsOf(WildcardType wildCard) {
+        /*
+         *  According to JLS(http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1):
+         *  - Lower and upper can't coexist: (for instance, this is not allowed: <? extends List<String> & super MyInterface>)
+         *  - Multiple bounds are not supported (for instance, this is not allowed: <? extends List<String> & MyInterface>)
+         */
+
+        WildCardBoundedType wildCardBoundedType = new WildCardBoundedType(wildCard);
+        if (wildCardBoundedType.firstBound() instanceof TypeVariable) {
+            return boundsOf((TypeVariable) wildCardBoundedType.firstBound());
+        }
+
+        return wildCardBoundedType;
     }
 
 
@@ -89,7 +127,7 @@ public abstract class MockitoGenericMetadata {
             Type actualType = getActualTypeArgumentFor(typeParameter);
 
             actualTypeArguments.put(typeParameter, actualType);
-            logger.log("For '" + rawType().getCanonicalName() + "' returning explicit TypeVariable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualType +"' }");
+            // logger.log("For '" + rawType().getCanonicalName() + "' returning explicit TypeVariable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualType +"' }");
         }
 
         return actualTypeArguments;
@@ -111,15 +149,18 @@ public abstract class MockitoGenericMetadata {
      * Creates a mock using the Generics Metadata represented by this instance.
      *
      * @param answer The answer to use in mock settings.
-     * @return The mock.
+     * @return The mock or null if not mockable.
      */
     public Object toMock(Answer answer) {
-        return Mockito.mock(
-                rawType(),
-                ((MockSettingsImpl) withSettings().defaultAnswer(answer)).parameterizedInfo(this)
-        );
+        return createMock(rawType(), ((MockSettingsImpl) withSettings().defaultAnswer(answer)).parameterizedInfo(this));
     }
 
+    private Object createMock(Class<?> rawType, MockSettings mockSettings) {
+        if (!new MockCreationValidator().isTypeMockable(rawType)) {
+            return null;
+        }
+        return Mockito.mock(rawType, mockSettings);
+    }
 
 
     /**
@@ -130,7 +171,7 @@ public abstract class MockitoGenericMetadata {
      */
     public MockitoGenericMetadata resolveGenericReturnType(Method method) {
         Type genericReturnType = method.getGenericReturnType();
-        logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
+        // logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
 
         if (genericReturnType instanceof Class) {
             return new NotGenericReturnType(genericReturnType);
@@ -141,11 +182,8 @@ public abstract class MockitoGenericMetadata {
         if (genericReturnType instanceof TypeVariable) {
             return new TypeVariableReturnType(this, method.getTypeParameters(), (TypeVariable) genericReturnType);
         }
-        if (genericReturnType instanceof BoundedType) {
-            return new TypeVariableReturnType(this, method.getTypeParameters(), ((BoundedType) genericReturnType).typeVariable());
-        }
 
-        throw new IllegalStateException("ouch");
+        throw new MockitoException("Ouch, it shouldn't happen, type '" + genericReturnType.getClass().getCanonicalName() + "' on method : '" + method.toGenericString() + "' is not supported : " + genericReturnType);
     }
 
     /**
@@ -217,7 +255,6 @@ public abstract class MockitoGenericMetadata {
 
         @Override
         public Class<?> rawType() {
-            // ParameterizedType#getRawType() always return a class !
             return (Class<?>) parameterizedType.getRawType();
         }
     }
@@ -305,9 +342,9 @@ public abstract class MockitoGenericMetadata {
             }
             if (type instanceof TypeVariable) {
                 /*
-                If type is a TypeVariable, then it is needed to gather data elsewhere. Usually TypeVariables are declared
-                on the class definition, such as such as List<E>.
-                */
+                 * If type is a TypeVariable, then it is needed to gather data elsewhere. Usually TypeVariables are declared
+                 * on the class definition, such as such as List<E>.
+                 */
                 return extractRawTypeOf(contextualActualTypeParameters.get(type));
             }
             throw new MockitoException("Raw extraction not supported for : '" + type + "'");
@@ -365,7 +402,7 @@ public abstract class MockitoGenericMetadata {
                 return super.toMock(answer);
             }
 
-            return Mockito.mock(
+            return super.createMock(
                     rawType(),
                     ((MockSettingsImpl) withSettings()
                             .defaultAnswer(answer)
@@ -393,6 +430,22 @@ public abstract class MockitoGenericMetadata {
         }
     }
 
+
+
+    /**
+     * Type representing bounds of a type
+     *
+     * @see TypeVarBoundedType
+     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
+     * @see WildCardBoundedType
+     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1</a>
+     */
+    public static interface BoundedType extends Type {
+        Type firstBound();
+
+        Type[] interfaceBounds();
+    }
+
     /**
      * Type representing bounds of a type variable, allows to keep all bounds information.
      *
@@ -410,12 +463,14 @@ public abstract class MockitoGenericMetadata {
      *     // will return Comparable type
      * </code></pre>
      * </p>
+     *
+     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
      */
-    public static class BoundedType implements Type {
+    public static class TypeVarBoundedType implements BoundedType {
         private TypeVariable typeVariable;
 
 
-        public BoundedType(TypeVariable typeVariable) {
+        public TypeVarBoundedType(TypeVariable typeVariable) {
             this.typeVariable = typeVariable;
         }
 
@@ -427,7 +482,7 @@ public abstract class MockitoGenericMetadata {
         }
 
         /**
-         * On a Type Variable (typeVar extends AClass_0 & I_1 & I_2 & etc), will return an array
+         * On a Type Variable (typeVar extends C_0 & I_1 & I_2 & etc), will return an array
          * containing I_1 and I_2.
          *
          * @return other bounds for this type, these bounds can only be only interfaces as the JLS says,
@@ -444,7 +499,7 @@ public abstract class MockitoGenericMetadata {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            return typeVariable.equals(((BoundedType) o).typeVariable);
+            return typeVariable.equals(((TypeVarBoundedType) o).typeVariable);
 
         }
 
@@ -466,6 +521,67 @@ public abstract class MockitoGenericMetadata {
             return typeVariable;
         }
     }
+
+    /**
+     * Type representing bounds of a wildcard, allows to keep all bounds information.
+     *
+     * <p>The JLS says that lower bound and upper bound are mutually exclusive, and that multiple bounds
+     * are not allowed.
+     *
+     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
+     */
+    public static class WildCardBoundedType implements BoundedType {
+        private WildcardType wildcard;
+
+
+        public WildCardBoundedType(WildcardType wildcard) {
+            this.wildcard = wildcard;
+        }
+
+        /**
+         * @return The first bound, either a type or a reference to a TypeVariable
+         */
+        public Type firstBound() {
+            Type[] lowerBounds = wildcard.getLowerBounds();
+            Type[] upperBounds = wildcard.getUpperBounds();
+
+            return lowerBounds.length != 0 ? lowerBounds[0] : upperBounds[0];
+        }
+
+        /**
+         * @return An empty array as, wildcard don't support multiple bounds.
+         */
+        public Type[] interfaceBounds() {
+            return new Type[0];
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            return wildcard.equals(((TypeVarBoundedType) o).typeVariable);
+
+        }
+
+        @Override
+        public int hashCode() {
+            return wildcard.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("{firstBound=").append(firstBound());
+            sb.append(", interfaceBounds=[]}");
+            return sb.toString();
+        }
+
+        public WildcardType wildCard() {
+            return wildcard;
+        }
+    }
+
 }
 
 

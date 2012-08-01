@@ -1,6 +1,9 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -14,6 +17,7 @@ import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.RETURNS_DEFAULTS;
 import static org.mockito.internal.util.reflection.MockitoGenericMetadata.from;
 
 @SuppressWarnings("unused")
@@ -30,11 +34,13 @@ public class MockitoGenericMetadataTest {
 
     interface GenericsNest<K extends Comparable<K> & Cloneable> extends Map<K, Set<Number>> {
         Set<Number> remove(Object key); // override with fixed ParameterizedType
-        List<? super Integer> returningWildcard();
+        List<? super Integer> returning_wildcard_with_class_lower_bound();
+        List<? super K> returning_wildcard_with_typeVar_lower_bound();
+        List<? extends K> returning_wildcard_with_typeVar_upper_bound();
         K returningK();
-        <O extends K> List<O> paramTypeWithTypeParams();
-        <S, T extends S> T twoTypeParams();
-        <O extends K> O typeVarWithTypeParams();
+        <O extends K> List<O> paramType_with_type_params();
+        <S, T extends S> T two_type_params();
+        <O extends K> O typeVar_with_type_params();
     }
 
     @Test
@@ -70,7 +76,7 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void typeVariable_return_type_of___get___resolved_to_Set_and_type_argument_to_Number() throws Exception {
+    public void typeVariable_return_type_of____get____resolved_to_Set_and_type_argument_to_Number() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("get", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Set.class);
@@ -78,7 +84,7 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void bounded_typeVariable_return_type_of___returningK___resolved_to_Comparable_and_with_BoundedType() throws Exception {
+    public void bounded_typeVariable_return_type_of____returningK____resolved_to_Comparable_and_with_BoundedType() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Comparable.class);
@@ -87,7 +93,7 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void fixed_ParamType_return_type_of___remove___resolved_to_Set_and_type_argument_to_Number() throws Exception {
+    public void fixed_ParamType_return_type_of____remove____resolved_to_Set_and_type_argument_to_Number() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("remove", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Set.class);
@@ -95,7 +101,7 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void paramType_return_type_of___values___resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
+    public void paramType_return_type_of____values____resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("values", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Collection.class);
@@ -105,17 +111,17 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void paramType_with_type_parameters_return_type_of___paramTypeWithTypeParams___resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
-        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("paramTypeWithTypeParams", GenericsNest.class));
+    public void paramType_with_type_parameters_return_type_of____paramType_with_type_params____resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("paramType_with_type_params", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(List.class);
-        Type firstBoundOfE = ((MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E")).firstBound();
+        Type firstBoundOfE = ((MockitoGenericMetadata.TypeVarBoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E")).firstBound();
         assertThat(from(firstBoundOfE).rawType()).isEqualTo(Comparable.class);
     }
 
     @Test
-    public void typeVariable_with_type_parameters_return_type_of___typeVarWithTypeParams___resolved_K_hence_to_Comparable_and_with_BoundedType() throws Exception {
-        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("typeVarWithTypeParams", GenericsNest.class));
+    public void typeVariable_with_type_parameters_return_type_of____typeVar_with_type_params____resolved_K_hence_to_Comparable_and_with_BoundedType() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("typeVar_with_type_params", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Comparable.class);
         MockitoGenericMetadata extraInterface_0 = from(genericMetadata.extraInterfaces().get(0));
@@ -123,19 +129,64 @@ public class MockitoGenericMetadataTest {
     }
 
     @Test
-    public void class_return_type_of___append___resolved_to_StringBuilder_and_type_arguments() throws Exception {
+    public void class_return_type_of____append____resolved_to_StringBuilder_and_type_arguments() throws Exception {
         MockitoGenericMetadata genericMetadata = from(StringBuilder.class).resolveGenericReturnType(firstNamedMethod("append", StringBuilder.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(StringBuilder.class);
         assertThat(genericMetadata.actualTypeArguments()).isEmpty();
     }
 
-    @Test
-    @Ignore("TODO WildCard")
-    public void paramType_with_wildcard_return_type_of___returningWildcard___resolved_to_List_and_type_argument_to_Integer() throws Exception {
-        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningWildcard", GenericsNest.class));
 
-        fail("TODO");
+
+    @Test
+    public void paramType_with_wildcard_return_type_of____returning_wildcard_with_class_lower_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
+
+        assertThat(genericMetadata.rawType()).isEqualTo(List.class);
+        MockitoGenericMetadata.BoundedType boundedType = (MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
+        assertThat(boundedType.firstBound()).isEqualTo(Integer.class);
+        assertThat(boundedType.interfaceBounds()).isEmpty();
+    }
+
+    @Test
+    public void paramType_with_wildcard_return_type_of____returning_wildcard_with_typeVar_lower_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_lower_bound", GenericsNest.class));
+
+        assertThat(genericMetadata.rawType()).isEqualTo(List.class);
+        MockitoGenericMetadata.BoundedType boundedType = (MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
+
+        assertThat(from(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
+        assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);    }
+
+    @Test
+    public void paramType_with_wildcard_return_type_of____returning_wildcard_with_typeVar_upper_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_upper_bound", GenericsNest.class));
+
+        assertThat(genericMetadata.rawType()).isEqualTo(List.class);
+        MockitoGenericMetadata.BoundedType boundedType = (MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
+
+        assertThat(from(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
+        assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
+    }
+
+
+
+
+    @Test
+    public void toMock_returns_null_if_type_unmockable() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
+
+        MockitoGenericMetadata.BoundedType boundedType = (MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
+
+        assertThat(from(boundedType.firstBound()).toMock(RETURNS_DEFAULTS)).isNull();
+    }
+
+    @Test
+    public void toMock_returns_mock_of_correct_type() throws Exception {
+        MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
+
+        assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Comparable.class);
+        assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Cloneable.class);
     }
 
 
