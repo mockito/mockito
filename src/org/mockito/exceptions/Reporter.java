@@ -752,4 +752,8 @@ public class Reporter {
                 ""
         ));
     }
+
+    public void defaultAnswerDoesNotAcceptNullParameter() {
+        throw new MockitoException("defaultAnswer() does not accept null parameter");
+    }
 }
