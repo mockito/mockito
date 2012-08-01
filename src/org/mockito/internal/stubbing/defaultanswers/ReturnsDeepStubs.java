@@ -34,7 +34,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = -6926328908792880098L;
     
-    private Answer<Object> delegate = new ReturnsEmptyValues();
+    private ReturnsEmptyValues delegate = new ReturnsEmptyValues();
 
     private MockitoLogger logger = new ConsoleMockitoLogger();
 
@@ -63,7 +63,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return recordDeepStubMock(invocation, container);
     }
 
-    private Object recordDeepStubMock(InvocationOnMock invocation, InvocationContainerImpl container) {
+    private Object recordDeepStubMock(InvocationOnMock invocation, InvocationContainerImpl container) throws Throwable {
         final Object mock = createGenericsAwareMock(invocation);
 
         container.addAnswer(new Answer<Object>() {
@@ -75,19 +75,21 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return mock;
     }
 
-    private Object createGenericsAwareMock(InvocationOnMock invocation) {
+    private Object createGenericsAwareMock(InvocationOnMock invocation) throws Throwable {
         Type genericReturnType = invocation.getMethod().getGenericReturnType();
 
         if (genericReturnType instanceof Class) {
             return mock((Class<?>) genericReturnType, this);
         }
 
-        MockitoGenericMetadata mockitoGenericMetadata =
+        MockitoGenericMetadata returnTypeGenericMetadata =
                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
-        return mockitoGenericMetadata.toMock(this);
-
-        // throw new MockitoException("[Work In Progress] Can't mock the return type : " + genericReturnType);
+        Object mock = returnTypeGenericMetadata.toMock(this);
+        if (mock == null) {
+            return delegate.returnValueFor(returnTypeGenericMetadata.rawType());
+        }
+        return mock;
     }
 
     private MockitoGenericMetadata actualParameterizedType(Object mock) {

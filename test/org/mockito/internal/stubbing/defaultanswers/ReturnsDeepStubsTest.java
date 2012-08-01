@@ -1,6 +1,9 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -8,23 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unused")
 public class ReturnsDeepStubsTest {
-    interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
-        E get();
-    }
-    interface UpperBoundedTypeWithInterfaces<E extends Comparable<E> & Cloneable> {
-        E get();
-    }
-    interface ListOfNumbers extends List<Number> {}
-    interface ListOfAnyNumbers<N extends Number & Cloneable> extends List<N> {}
+    interface ListOfInteger extends List<Integer> {}
 
     interface GenericsNest<K extends Comparable<K> & Cloneable> extends Map<K, Set<Number>> {
         Set<Number> remove(Object key); // override with fixed ParameterizedType
         List<? super Number> returningWildcard();
+        Map<String, K> returningNonMockableNestedGeneric();
         K returningK();
         <O extends K> List<O> paramTypeWithTypeParams();
         <S extends Appendable, T extends S> T twoTypeParams(S s);
@@ -59,12 +57,21 @@ public class ReturnsDeepStubsTest {
     }
 
     @Test
-    @Ignore("TODO WildCard")
     public void returning_deep_stubs_3() throws Exception {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         List<? super Integer> objects = mock.returningWildcard();
         Number n = (Number) mock.returningWildcard().get(45);
+        n.floatValue();
+    }
+
+    @Test
+    public void return_default_value_on_non_mockable_nested_generic() throws Exception {
+        GenericsNest<?> genericsNest = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
+        ListOfInteger listOfInteger = mock(ListOfInteger.class, RETURNS_DEEP_STUBS);
+
+        assertThat(genericsNest.returningNonMockableNestedGeneric().keySet().iterator().next()).isNull();
+        assertThat(listOfInteger.get(25)).isEqualTo(0);
     }
 
     @Test(expected = ClassCastException.class)
