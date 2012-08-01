@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.creation.settings;
 
-import org.mockito.internal.util.reflection.MockitoGenericMetadata;
+import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -20,6 +20,7 @@ import java.util.Set;
  * by Szczepan Faber, created at: 4/9/12
  */
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
+    private static final long serialVersionUID = -6789800638070123629L;
 
     protected Class<T> typeToMock;
     protected Set<Class> extraInterfaces = new LinkedHashSet<Class>();
@@ -29,10 +30,11 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected MockName mockName;
     protected boolean serializable;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
-    protected MockitoGenericMetadata mockitoGenericMetadata;
+    protected GenericMetadataSupport mockitoGenericMetadata;
 
     public CreationSettings() {}
 
+    @SuppressWarnings("unchecked")
     public CreationSettings(CreationSettings copy) {
         this.typeToMock = copy.typeToMock;
         this.extraInterfaces = copy.extraInterfaces;
@@ -92,14 +94,14 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return invocationListeners;
     }
 
-    public MockitoGenericMetadata getMockitoGenericMetadata() {
+    public GenericMetadataSupport getMockitoGenericMetadata() {
         if (mockitoGenericMetadata == null) {
-            this.mockitoGenericMetadata = MockitoGenericMetadata.from(typeToMock);
+            this.mockitoGenericMetadata = GenericMetadataSupport.from(typeToMock);
         }
         return mockitoGenericMetadata;
     }
 
-    public void setMockitoGenericMetadata(MockitoGenericMetadata mockitoGenericMetadata) {
+    public void setMockitoGenericMetadata(GenericMetadataSupport mockitoGenericMetadata) {
         this.mockitoGenericMetadata = mockitoGenericMetadata;
     }
 }

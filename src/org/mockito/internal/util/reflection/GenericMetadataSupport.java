@@ -66,7 +66,7 @@ import static org.mockito.Mockito.withSettings;
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubs
  */
 @Incubating
-public abstract class MockitoGenericMetadata {
+public abstract class GenericMetadataSupport {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
@@ -154,7 +154,7 @@ public abstract class MockitoGenericMetadata {
 
 
     /**
-     * @return Actual type arguments matching the type variables of the raw type represented by this {@link MockitoGenericMetadata} instance.
+     * @return Actual type arguments matching the type variables of the raw type represented by this {@link GenericMetadataSupport} instance.
      */
     public Map<TypeVariable, Type> actualTypeArguments() {
         TypeVariable[] typeParameters = rawType().getTypeParameters();
@@ -199,17 +199,17 @@ public abstract class MockitoGenericMetadata {
 
 
     /**
-     * Resolve current method generic return type to a {@link MockitoGenericMetadata}.
+     * Resolve current method generic return type to a {@link GenericMetadataSupport}.
      *
      * @param method Method to resolve the return type.
-     * @return {@link MockitoGenericMetadata} representing this generic return type.
+     * @return {@link GenericMetadataSupport} representing this generic return type.
      */
-    public MockitoGenericMetadata resolveGenericReturnType(Method method) {
+    public GenericMetadataSupport resolveGenericReturnType(Method method) {
         Type genericReturnType = method.getGenericReturnType();
         // logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
 
         if (genericReturnType instanceof Class) {
-            return new NotGenericReturnType(genericReturnType);
+            return new NotGenericReturnTypeSupport(genericReturnType);
         }
         if (genericReturnType instanceof ParameterizedType) {
             return new ParameterizedReturnType(this, method.getTypeParameters(), (ParameterizedType) method.getGenericReturnType());
@@ -222,23 +222,23 @@ public abstract class MockitoGenericMetadata {
     }
 
     /**
-     * Create an new MockitoGenericMetadata from a {@link Type}.
+     * Create an new GenericMetadataSupport from a {@link Type}.
      *
      * <p>
      *     Supports only {@link Class} and {@link ParameterizedType}, otherwise throw a {@link MockitoException}.
      * </p>
      *
-     * @param type The class from which the {@link MockitoGenericMetadata} should be built.
-     * @return The new {@link MockitoGenericMetadata}.
+     * @param type The class from which the {@link GenericMetadataSupport} should be built.
+     * @return The new {@link GenericMetadataSupport}.
      * @throws MockitoException Raised if type is not a {@link Class} or a {@link ParameterizedType}.
      */
-    public static MockitoGenericMetadata from(Type type) {
+    public static GenericMetadataSupport from(Type type) {
         Checks.checkNotNull(type, "type");
         if (type instanceof Class) {
-            return new FromClassMockitoGenericMetadata((Class<?>) type);
+            return new FromClassGenericMetadataSupport((Class<?>) type);
         }
         if (type instanceof ParameterizedType) {
-            return new FromParameterizedTypeMockitoGenericMetadata((ParameterizedType) type);
+            return new FromParameterizedTypeGenericMetadataSupport((ParameterizedType) type);
         }
 
         throw new MockitoException("Type meta-data for this Type (" + type.getClass().getCanonicalName() + ") is not supported : " + type);
@@ -248,10 +248,10 @@ public abstract class MockitoGenericMetadata {
     /**
      * Metadata for source {@link Class}
      */
-    private static class FromClassMockitoGenericMetadata extends MockitoGenericMetadata {
+    private static class FromClassGenericMetadataSupport extends GenericMetadataSupport {
         private Class<?> clazz;
 
-        public FromClassMockitoGenericMetadata(Class<?> clazz) {
+        public FromClassGenericMetadataSupport(Class<?> clazz) {
             this.clazz = clazz;
             readActualTypeParametersOnDeclaringClass();
         }
@@ -275,10 +275,10 @@ public abstract class MockitoGenericMetadata {
      * Metadata for source {@link ParameterizedType}.
      * Don't work with ParameterizedType returned in {@link Method#getGenericReturnType()}.
      */
-    private static class FromParameterizedTypeMockitoGenericMetadata extends MockitoGenericMetadata {
+    private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport {
         private ParameterizedType parameterizedType;
 
-        public FromParameterizedTypeMockitoGenericMetadata(ParameterizedType parameterizedType) {
+        public FromParameterizedTypeGenericMetadataSupport(ParameterizedType parameterizedType) {
             this.parameterizedType = parameterizedType;
             readActualTypeParameters();
         }
@@ -298,11 +298,11 @@ public abstract class MockitoGenericMetadata {
     /**
      * Metadata specific to {@link ParameterizedType} generic return types.
      */
-    private static class ParameterizedReturnType extends MockitoGenericMetadata {
+    private static class ParameterizedReturnType extends GenericMetadataSupport {
         private final ParameterizedType parameterizedType;
         private final TypeVariable[] typeParameters;
 
-        public ParameterizedReturnType(MockitoGenericMetadata source, TypeVariable[] typeParameters, ParameterizedType parameterizedType) {
+        public ParameterizedReturnType(GenericMetadataSupport source, TypeVariable[] typeParameters, ParameterizedType parameterizedType) {
             this.parameterizedType = parameterizedType;
             this.typeParameters = typeParameters;
             this.contextualActualTypeParameters = source.contextualActualTypeParameters;
@@ -330,14 +330,14 @@ public abstract class MockitoGenericMetadata {
     /**
      * Metadata specific to {@link TypeVariable} generic return type.
      */
-    private static class TypeVariableReturnType extends MockitoGenericMetadata {
+    private static class TypeVariableReturnType extends GenericMetadataSupport {
         private final TypeVariable typeVariable;
         private final TypeVariable[] typeParameters;
         private Class<?> rawType;
 
 
 
-        public TypeVariableReturnType(MockitoGenericMetadata source, TypeVariable[] typeParameters, TypeVariable typeVariable) {
+        public TypeVariableReturnType(GenericMetadataSupport source, TypeVariable[] typeParameters, TypeVariable typeVariable) {
             this.typeParameters = typeParameters;
             this.typeVariable = typeVariable;
             this.contextualActualTypeParameters = source.contextualActualTypeParameters;
@@ -452,10 +452,10 @@ public abstract class MockitoGenericMetadata {
     /**
      * Metadata specific to {@link Class} return type.
      */
-    private static class NotGenericReturnType extends MockitoGenericMetadata {
+    private static class NotGenericReturnTypeSupport extends GenericMetadataSupport {
         private final Class<?> returnType;
 
-        public NotGenericReturnType(Type genericReturnType) {
+        public NotGenericReturnTypeSupport(Type genericReturnType) {
             returnType = (Class<?>) genericReturnType;
         }
 

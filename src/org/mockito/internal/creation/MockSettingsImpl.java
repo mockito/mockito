@@ -11,7 +11,7 @@ import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
 import org.mockito.internal.util.MockitoSpy;
-import org.mockito.internal.util.reflection.MockitoGenericMetadata;
+import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -159,7 +159,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return interfaces;
     }
 
-    public MockSettings parameterizedInfo(MockitoGenericMetadata mockitoGenericMetadata) {
+    public MockSettings parameterizedInfo(GenericMetadataSupport mockitoGenericMetadata) {
         this.mockitoGenericMetadata = mockitoGenericMetadata;
         return this;
     }

@@ -7,7 +7,7 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.MockitoGenericMetadata;
+import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -29,7 +29,7 @@ import java.io.Serializable;
  * </code></pre>
  * </p>
  *
- * @see Mockito#RETURNS_DEEP_STUBS
+ * @see org.mockito.Mockito#RETURNS_DEEP_STUBS
  * @see org.mockito.Answers#RETURNS_DEEP_STUBS
  */
 @Incubating
@@ -40,7 +40,7 @@ public class ReturnsGenericDeepStubs extends ReturnsDeepStubs implements Answer<
     private ReturnsEmptyValues delegate = new ReturnsEmptyValues();
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        MockitoGenericMetadata returnTypeGenericMetadata =
+        GenericMetadataSupport returnTypeGenericMetadata =
                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
@@ -51,7 +51,7 @@ public class ReturnsGenericDeepStubs extends ReturnsDeepStubs implements Answer<
         return getMock(invocation, returnTypeGenericMetadata);
     }
 
-    private Object getMock(InvocationOnMock invocation, MockitoGenericMetadata returnTypeGenericMetadata) throws Throwable {
+    private Object getMock(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
     	InternalMockHandler<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
     	InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
@@ -77,7 +77,7 @@ public class ReturnsGenericDeepStubs extends ReturnsDeepStubs implements Answer<
         return mock;
     }
 
-    private MockitoGenericMetadata actualParameterizedType(Object mock) {
+    private GenericMetadataSupport actualParameterizedType(Object mock) {
         CreationSettings mockSettings = (CreationSettings) new MockUtil().getMockHandler(mock).getMockSettings();
         return mockSettings.getMockitoGenericMetadata();
     }
