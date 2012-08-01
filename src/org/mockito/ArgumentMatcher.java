@@ -71,8 +71,8 @@ public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
      */
     public abstract boolean matches(Object argument);
 
-    /* 
-     * By default this method decamlizes matchers name to promote meaningful names for matchers.
+    /**
+     * By default this method decamelizes matchers name to promote meaningful names for matchers.
      * <p>
      * For example <b>StringWithStrongLanguage</b> matcher will generate 'String with strong language' description in case of failure.
      * <p>
