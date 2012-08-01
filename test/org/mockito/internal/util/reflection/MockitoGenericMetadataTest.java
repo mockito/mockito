@@ -5,6 +5,7 @@
 package org.mockito.internal.util.reflection;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -172,13 +173,13 @@ public class MockitoGenericMetadataTest {
 
 
 
-    @Test
-    public void toMock_returns_null_if_type_unmockable() throws Exception {
+    @Test(expected = MockitoException.class)
+    public void toMock_propagate_MockitoException_if_type_unmockable() throws Exception {
         MockitoGenericMetadata genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
 
         MockitoGenericMetadata.BoundedType boundedType = (MockitoGenericMetadata.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
 
-        assertThat(from(boundedType.firstBound()).toMock(RETURNS_DEFAULTS)).isNull();
+        from(boundedType.firstBound()).toMock(RETURNS_DEFAULTS);
     }
 
     @Test
