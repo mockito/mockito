@@ -5,10 +5,10 @@
 
 package org.mockito.internal.matchers;
 
-import java.io.Serializable;
-
 import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
+
+import java.io.Serializable;
 
 
 public class EqualsWithDelta extends ArgumentMatcher<Number> implements Serializable {
@@ -25,6 +25,14 @@ public class EqualsWithDelta extends ArgumentMatcher<Number> implements Serializ
 
     public boolean matches(Object actual) {
         Number actualNumber = (Number) actual;
+        if (wanted == null ^ actual == null) {
+            return false;
+        }
+
+        if (wanted == null && actual == null) {
+            return true;
+        }
+
         return wanted.doubleValue() - delta.doubleValue() <= actualNumber.doubleValue()
                 && actualNumber.doubleValue() <= wanted.doubleValue()
                         + delta.doubleValue();

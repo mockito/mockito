@@ -5,11 +5,11 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.util.*;
-
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
+
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 
@@ -18,7 +18,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     ReturnsEmptyValues values = new ReturnsEmptyValues();
 
-    @Test public void shouldReturnEmptyCollectionsOrNullForNonCollections() {
+    @Test public void should_return_empty_collections_or_null_for_non_collections() {
         assertTrue(((Collection) values.returnValueFor(Collection.class)).isEmpty());
 
         assertTrue(((Set) values.returnValueFor(Set.class)).isEmpty());
@@ -40,18 +40,18 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertNull(values.returnValueFor(String.class));
     }
 
-    @Test public void shouldReturnPrimitive() {
+    @Test public void should_return_primitive() {
         assertEquals(false, values.returnValueFor(Boolean.TYPE));
         assertEquals((char) 0, values.returnValueFor(Character.TYPE));
-        assertEquals(0, values.returnValueFor(Byte.TYPE));
-        assertEquals(0, values.returnValueFor(Short.TYPE));
+        assertEquals((byte) 0, values.returnValueFor(Byte.TYPE));
+        assertEquals((short) 0, values.returnValueFor(Short.TYPE));
         assertEquals(0, values.returnValueFor(Integer.TYPE));
-        assertEquals(0, values.returnValueFor(Long.TYPE));
-        assertEquals(0, values.returnValueFor(Float.TYPE));
-        assertEquals(0, values.returnValueFor(Double.TYPE));
+        assertEquals(0L, values.returnValueFor(Long.TYPE));
+        assertEquals(0F, values.returnValueFor(Float.TYPE));
+        assertEquals(0D, values.returnValueFor(Double.TYPE));
     }
 
-    @Test public void shouldReturnNonZeroForCompareToMethod() {
+    @Test public void should_return_non_zero_for_compareTo_method() {
         //given
         Date d = mock(Date.class);
         d.compareTo(new Date());
