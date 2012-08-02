@@ -17,6 +17,7 @@ How to release mockito?
 Items on the top that not yet have the 'milestone' set are the candidates.
 ## Update the release notes wiki. Mention the prominent features with links to documentation; mention prominent contributors.
 ## Update the main page (it might have references to previous release, search the page for links to previous version).
+## Merge the defult branch with the new release branch. Make sure the version.properties is correct.
 
 ---------------------------
 More info.
@@ -112,8 +113,11 @@ $output----- end of output -----
 """
 }
 
-task updateLicenseHeaders << {
-    def files = fileTree('test') + fileTree('src')
+task updateLicenseHeaders {
+  inputs.files fileTree('test') + fileTree('src') 
+  outputs.files inputs.files
+  doLast {
+    def files = inputs.files
     files = files.filter { !it.name.endsWith('.html') && !it.name.endsWith('.txt')}
 
     logger.lifecycle("Updating licence headers in source... Found ${files.files.size()} files to check the license.")
@@ -126,6 +130,9 @@ task updateLicenseHeaders << {
     files.each { File file ->
         def currentHdr = /(?sm).*?\/\*.*?\*\/.*?package org\./
         def ignoreHdr = /NON-STANDARD LICENCE HEADER HERE - THAT'S OK/
+        
+        logger.info("Checking the header of $file")
+        sleep(10)
 
         def content = file.text
 
@@ -140,6 +147,7 @@ task updateLicenseHeaders << {
           file.text = content
         }
     }
+  }
 }
 
 task releaseDocs {
