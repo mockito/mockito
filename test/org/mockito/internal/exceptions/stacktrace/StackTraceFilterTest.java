@@ -3,13 +3,13 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.exceptions.base;
-
-import static org.mockitoutil.ExtraMatchers.*;
+package org.mockito.internal.exceptions.stacktrace;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.TraceBuilder;
 import org.mockitoutil.TestBase;
+
+import static org.mockitoutil.ExtraMatchers.hasOnlyThoseClasses;
 
 public class StackTraceFilterTest extends TestBase {
     

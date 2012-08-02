@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.debugging;
 
-import java.io.Serializable;
-
-import org.mockito.internal.exceptions.base.StackTraceFilter;
+import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockito.invocation.Location;
+
+import java.io.Serializable;
 
 public class LocationImpl implements Location, Serializable {
 
