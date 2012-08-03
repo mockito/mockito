@@ -1,4 +1,4 @@
-include 'testng'
+//include 'testng'
 
 rootProject.name = 'mockito'
 rootProject.children.each {project ->
