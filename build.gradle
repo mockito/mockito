@@ -1,5 +1,7 @@
 apply plugin: 'java'
 
+version = '1.9.8'
+
 sourceCompatibility = 1.5
 
 configurations {
@@ -27,3 +29,34 @@ dependencies {
     testCompile fileTree('lib/test')
     testRuntime fileTree('lib/compile')
 }
+
+task allJar(type: Jar) {
+    baseName = 'mockito-all'
+    manifest.attributes 'Built-By': System.getProperty("user.name"), 'Implementation-Version': project.version
+
+    //classes and source
+    from(sourceSets.main.output)
+    from(sourceSets.main.allSource)
+
+    //license files
+    from(".") { include 'LICENSE', 'NOTICE' }
+    from("lib/run") { exclude '**/*.jar' }
+    from("lib/repackaged") { exclude '**/*.jar' }
+
+    //3rd party library classes
+    from(zipTree("lib/run/com.springsource.org.objenesis-1.0.0.jar")) { exclude "META-INF/maven/**" }
+    from(zipTree("lib/run/com.springsource.org.hamcrest.core-1.1.0.jar")) { exclude "LICENSE.txt" }
+    from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar"))
+}
+
+/*
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'pmd'
+
+pmd {
+    ruleSetFiles = files('conf/pmd-rules.xml')
+}
+*/
