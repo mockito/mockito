@@ -1,0 +1,187 @@
+task printHelp << {
+    println """
+---------------------------
+How to build mockito?
+---------------------------
+# Use ant tasks, 'ant -p' for available tasks, 'ant' to build.
+
+---------------------------
+How to release mockito?
+---------------------------
+# Make sure that the version.properties has the version you want to release.
+# Release documentation via 'gradlew releaseDocs'.
+# Build and push binaries to googlce code via 'gradlew release'. In case of errors follow the instructions.
+# Review the google code project:
+## Mark all fixed issues with given release with the correct Milestone-ReleaseX label.
+### Usually you can use 'advanced search', all open issues, with status 'Fixed, Verified, Done', then sort by 'Milestone' column up.
+Items on the top that not yet have the 'milestone' set are the candidates.
+## Update the release notes wiki. Mention the prominent features with links to documentation; mention prominent contributors.
+## Update the main page (it might have references to previous release, search the page for links to previous version).
+## Merge the defult branch with the new release branch. Make sure the version.properties is correct.
+
+---------------------------
+More info.
+---------------------------
+# At some point we will move fully into gradle. For now the Mockito project tells the 'migration story' and demonstrates how ant and gradle can coexist together.
+"""
+}
+
+task release
+
+if (gradle.startParameter.taskNames == ['release']) {
+    gradle.startParameter.taskNames = ['releaseDocs', 'updateLicenseHeaders', 'assertCleanCopy', 'uploadToGoogle']
+}
+
+
+gradle.taskGraph.whenReady {
+    //validate the existence of project properties
+    if (it.hasTask(':uploadToGoogle')) {
+        project.tasks.uploadToGoogle.assertUploadPossible()
+    }
+}
+
+//TODO SF read from the file
+def version = '1.9.5-rc1'
+
+task uploadToGoogle(type: UploadToGoogle) {
+    mockitoZip = file("target/mockito-${version}.zip")
+    mockitoAllJar = file("target/mockito-all-${version}.jar")
+}
+
+task buildMockito(type: Exec) {
+    commandLine 'ant', 'clean', 'test.release', 'release.maven'
+}
+
+class UploadToGoogle extends DefaultTask {
+
+    @InputFile File mockitoZip
+    @InputFile File mockitoAllJar
+
+    void assertUploadPossible() {
+        def googleUser = project.hasProperty('googleUser')
+        def googlePwd = project.hasProperty('googlePwd')
+
+        assert googleUser && googlePwd : """Google upload not possible - googleUser or googlePwd property not provided.
+Pass -PgoogleUser=someone -PgooglePwd=secret via command line"""
+
+        assert mockitoZip.exists() && mockitoAllJar.exists() : "" +
+                "Google upload not possible - no binaries to upload. Please run 'gradlew build' first."
+    }
+
+    @TaskAction
+    void upload() {
+        project.ant {
+            //declare ant task
+            taskdef(name:"gcupload", classname:"net.bluecow.googlecode.ant.GoogleCodeUploadTask") {
+                classpath {
+                    fileset(dir: 'lib/build', includes: 'ant-googlecode-*.jar')
+                }
+            }
+
+            //acquire the user/password (usually supplied via command line)
+            def googleUser = project.getProperty('googleUser')
+            def googlePwd  = project.getProperty('googlePwd')
+
+            //upload zip
+            logger.lifecycle "Uploading $mockitoZip ..."
+
+            gcupload username:googleUser, password:googlePwd, projectname:"mockito",
+                filename:mockitoZip, targetfilename:mockitoZip.name, summary:"All jars, source and javadocs",
+                labels:"Featured"
+
+            logger.lifecycle "Uploading $mockitoAllJar ..."
+
+            //upload jar
+            gcupload username:googleUser, password:googlePwd, projectname:"mockito",
+                filename:mockitoAllJar, targetfilename:mockitoAllJar.name, summary:"Single jar, includes source",
+                labels:"Featured"
+        }
+    }
+}
+
+task assertCleanCopy << {
+    def output = new ByteArrayOutputStream()
+    exec {
+        commandLine "hg", "status"
+        standardOutput = output
+        errorOutput = output
+    }
+    assert output.toString().empty : """
+Please commit outstanding files.
+----- 'hg st' output -----
+$output----- end of output -----
+"""
+}
+
+task updateLicenseHeaders {
+  inputs.files fileTree('test') + fileTree('src') 
+  outputs.files inputs.files
+  doLast {
+    def files = inputs.files
+    files = files.filter { !it.name.endsWith('.html') && !it.name.endsWith('.txt')}
+
+    logger.lifecycle("Updating licence headers in source... Found ${files.files.size()} files to check the license.")
+
+    def header = """/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+"""
+    files.each { File file ->
+        def currentHdr = /(?sm).*?\/\*.*?\*\/.*?package org\./
+        def ignoreHdr = /NON-STANDARD LICENCE HEADER HERE - THAT'S OK/
+        
+        logger.info("Checking the header of $file")
+        sleep(10)
+
+        def content = file.text
+
+        if (content =~ ignoreHdr) {
+          //this means we're ok with non-standard header
+        } else if (!(content =~ currentHdr)) {
+          logger.lifecycle "missing header in: ${file} - prepending..."
+          file.text = header + content
+        } else if (!content.find(currentHdr)?.contains(header)) {
+          logger.lifecycle "different header in: ${file} - replacing..."
+          content = content.replaceFirst(currentHdr, header + "package org.")
+          file.text = content
+        }
+    }
+  }
+}
+
+task releaseDocs {
+  doLast {
+    def docsRepo = file("../docs")
+    //TODO SF validate if this is a correct repo via hg
+    def docsDir = file("$docsRepo/$version")
+    assert docsDir.directory || docsDir.mkdirs() : "Expected to find cloned 'docs' repo at: '$docsRepo'. Problems creating docs output dir."
+
+    exec {
+      commandLine 'ant', 'javadoc'
+    }
+
+    copy {
+      from 'target/javadoc'
+      into docsDir
+    }
+
+    exec {
+        commandLine 'hg', 'add'
+        workingDir docsDir
+    }
+
+    exec {
+        commandLine 'hg', 'ci', '-m', 'Released the docs.'
+        workingDir docsDir
+    }
+
+    //TODO SF assert clean copy
+    exec {
+        commandLine 'hg', 'push'
+        workingDir docsRepo
+    }
+  }
+}
+
+defaultTasks 'printHelp'
