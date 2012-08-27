@@ -14,7 +14,9 @@
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
   <property name="test.reports.dir.html" value="${target.dir}/reports/junit.html" />
-	
+
+  <property name="pmd.reports.dir" value="${target.dir}/reports/pmd" />
+
   <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
   <property name="lib.dir" value="lib" />
@@ -117,11 +119,12 @@
   <target name="pmd" depends="prepare">
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+    <mkdir dir="${pmd.reports.dir}" />
 
     <pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="conf/pmd-rules.xml">
       <ruleset>Mockito</ruleset>
       <formatter type="text" toConsole="true" />
-      <formatter type="xml" tofile="target/reports/pmd/pmd_report.xml" />
+      <formatter type="xml" tofile="${pmd.reports.dir}/pmd_report.xml" />
 
       <fileset dir="${src.dir}">
         <include name="**/*.java" />
