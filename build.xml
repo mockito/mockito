@@ -323,6 +323,8 @@
       </doctitle>
       <header>
         <![CDATA[
+
+
           <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
           <script type="text/javascript">
               var shBaseURL = '{@docRoot}/js/sh-2.1.382/';
@@ -331,6 +333,7 @@
           <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
 
           <script type="text/javascript">
+              /* Apply beautification of code */
               var usingOldIE = false;
               if($.browser.msie && parseInt($.browser.version) < 9) usingOldIE = true;
 
@@ -339,6 +342,16 @@
                     theme : 'Eclipse',
                     brushes: ['Java']
                   });
+
+
+                  /* Add name & version to header */
+                  $(function() {
+                    $('td.NavBarCell1[colspan=2]').each(function(index, element) {
+                      var jqueryTD = $(element);
+                      jqueryTD.after($("<td><em><strong>Mockito ${version} API</strong></em></td>").attr('class','NavBarCell1').attr('id','mockito-version-header'));
+                      jqueryTD.removeAttr('colspan');
+                    })
+                  })
               }
           </script>
         ]]>
