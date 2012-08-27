@@ -121,6 +121,7 @@
     <pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="conf/pmd-rules.xml">
       <ruleset>Mockito</ruleset>
       <formatter type="text" toConsole="true" />
+      <formatter type="xml" tofile="target/reports/pmd/pmd_report.xml" />
 
       <fileset dir="${src.dir}">
         <include name="**/*.java" />
