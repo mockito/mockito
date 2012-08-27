@@ -331,10 +331,15 @@
           <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
 
           <script type="text/javascript">
-              $.beautyOfCode.init({
-                theme : 'Eclipse',
-                brushes: ['Java']
-              });
+              var usingOldIE = false;
+              if($.browser.msie && parseInt($.browser.version) < 9) usingOldIE = true;
+
+              if(!usingOldIE) {
+                  $.beautyOfCode.init({
+                    theme : 'Eclipse',
+                    brushes: ['Java']
+                  });
+              }
           </script>
         ]]>
       </header>
