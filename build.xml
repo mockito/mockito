@@ -323,7 +323,7 @@
       </doctitle>
       <header>
         <![CDATA[
-
+          <!-- Note there is a weird javadoc task bug if using the double quote char \" that causes an 'illegal package name' error -->
 
           <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
           <script type="text/javascript">
@@ -343,12 +343,15 @@
                     brushes: ['Java']
                   });
 
+                  var version = ${version};
 
                   /* Add name & version to header */
                   $(function() {
                     $('td.NavBarCell1[colspan=2]').each(function(index, element) {
                       var jqueryTD = $(element);
-                      jqueryTD.after($("<td><em><strong>Mockito ${version} API</strong></em></td>").attr('class','NavBarCell1').attr('id','mockito-version-header'));
+                      jqueryTD.after(
+                        $('<td><em><strong>Mockito ${version} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header')
+                      );
                       jqueryTD.removeAttr('colspan');
                     })
                   })
