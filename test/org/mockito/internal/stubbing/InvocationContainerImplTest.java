@@ -13,6 +13,7 @@ import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.invocation.Invocation;
 
 import java.util.LinkedList;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,11 +33,12 @@ public class InvocationContainerImplTest {
     public void shouldBeThreadSafe() throws Throwable {
         //given
         Thread[] t = new Thread[200];
+        final CountDownLatch starter = new CountDownLatch(200);
         for (int i = 0; i < t.length; i++ ) {
             t[i] = new Thread() {
                 public void run() {
                     try {
-                        Thread.sleep(10); //NOPMD
+                        starter.await();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -51,6 +53,8 @@ public class InvocationContainerImplTest {
                 }
             });
             t[i].start();
+
+            starter.countDown();
         }
 
         //when
