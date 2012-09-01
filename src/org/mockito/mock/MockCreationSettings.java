@@ -49,6 +49,13 @@ public interface MockCreationSettings<T> {
     boolean isSerializable();
 
     /**
+     * Whether the mock is only for stubbing, i.e. does not remember
+     * parameters on its invocation and therefore cannot
+     * be used for verification
+     */
+    boolean isStubOnly();
+
+    /**
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();

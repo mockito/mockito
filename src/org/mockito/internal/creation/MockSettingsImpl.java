@@ -17,16 +17,14 @@ import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {
 
-    private static final long serialVersionUID = 4475297236197939568L;
+    private static final long serialVersionUID = 4475297236197939569L;
 
     public MockSettings serializable() {
         this.serializable = true;
@@ -84,6 +82,15 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return serializable;
     }
 
+    public MockSettings stubOnly() {
+        this.stubOnly = true;
+        return this;
+    }
+
+    public boolean isStubOnly() {
+        return this.stubOnly;
+    }
+
     public MockSettings verboseLogging() {
         if (!invocationListenersContainsType(VerboseMockInvocationLogger.class)) {
             invocationListeners(new VerboseMockInvocationLogger());
@@ -138,8 +145,6 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
         //TODO SF - add this validation and also add missing coverage
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
-
-        validator.validateSerializable(typeToMock, source.isSerializable());
 
         CreationSettings<T> settings = new CreationSettings<T>(source);
         settings.setMockName(new MockNameImpl(source.getName(), typeToMock));

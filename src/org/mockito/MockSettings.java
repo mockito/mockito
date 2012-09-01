@@ -197,4 +197,18 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings invocationListeners(InvocationListener... listeners);
-}
+
+    /**
+     * Sets whether this mock should only provide stubbing of methods.
+     * A stub-only mock does not record method
+     * invocations, thus saving memory but
+     * disallowing verification of invocations.
+     * <p>
+     * Example:
+     * <pre class="code"><code class="java">
+     * List stubOnly = mock(List.class, withSettings().stubOnly());
+     * </code></pre>
+     *
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings stubOnly();}

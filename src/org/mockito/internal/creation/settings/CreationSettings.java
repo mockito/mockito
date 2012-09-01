@@ -27,6 +27,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected Answer<Object> defaultAnswer;
     protected MockName mockName;
     protected boolean serializable;
+    protected boolean stubOnly;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
     public CreationSettings() {}
@@ -40,6 +41,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.mockName = copy.mockName;
         this.serializable = copy.serializable;
         this.invocationListeners = copy.invocationListeners;
+        this.stubOnly = copy.stubOnly;
     }
 
     public Class<T> getTypeToMock() {
@@ -83,6 +85,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public boolean isSerializable() {
         return serializable;
+    }
+
+    public boolean isStubOnly() {
+        return stubOnly;
     }
 
     public List<InvocationListener> getInvocationListeners() {
