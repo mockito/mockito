@@ -19,6 +19,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
 import java.util.List;
+import org.mockito.exceptions.Reporter;
 
 /**
  * Invocation handler set on mock objects.
@@ -40,7 +41,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
         this.mockSettings = mockSettings;
         this.mockingProgress = new ThreadSafeMockingProgress();
         this.matchersBinder = new MatchersBinder();
-        this.invocationContainerImpl = new InvocationContainerImpl(mockingProgress);
+        this.invocationContainerImpl = new InvocationContainerImpl(mockingProgress, mockSettings);
     }
 
     public Object handle(Invocation invocation) throws Throwable {
@@ -68,7 +69,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             // TODO: can I avoid this cast here?
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
-                VerificationDataImpl data = new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
+                VerificationDataImpl data = createVerificationData(invocationContainerImpl, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
@@ -117,6 +118,14 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     public InvocationContainer getInvocationContainer() {
         return invocationContainerImpl;
+    }
+
+    private VerificationDataImpl createVerificationData(InvocationContainerImpl invocationContainerImpl, InvocationMatcher invocationMatcher) {
+        if (mockSettings.isStubOnly()) {
+            new Reporter().stubPassedToVerify();     // this throws an exception
+        }
+
+        return new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
     }
 }
 

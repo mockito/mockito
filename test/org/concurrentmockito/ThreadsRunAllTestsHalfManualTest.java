@@ -27,7 +27,7 @@ import org.mockito.internal.progress.TimesTest;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValuesTest;
 import org.mockito.internal.util.MockUtilTest;
 import org.mockito.internal.util.collections.ListUtilTest;
-import org.mockito.internal.verification.RegisteredInvocationsTest;
+import org.mockito.internal.verification.RegisteredInvocationsAllTest;
 import org.mockito.internal.verification.checkers.MissingInvocationCheckerTest;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderCheckerTest;
 import org.mockito.internal.verification.checkers.NumberOfInvocationsCheckerTest;
@@ -71,7 +71,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     AllInvocationsFinderTest.class,
                     ReturnsEmptyValuesTest.class,
                     NumberOfInvocationsCheckerTest.class,
-                    RegisteredInvocationsTest.class,
+                    RegisteredInvocationsAllTest.class,
                     MissingInvocationCheckerTest.class,
                     NumberOfInvocationsInOrderCheckerTest.class,
                     MissingInvocationInOrderCheckerTest.class,

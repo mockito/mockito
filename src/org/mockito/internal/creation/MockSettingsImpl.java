@@ -84,7 +84,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return serializable;
     }
 
-    public MockSettings stubOnly() {
+    public MockSettingsImpl stubOnly() {
         this.stubOnly = true;
         return this;
     }
