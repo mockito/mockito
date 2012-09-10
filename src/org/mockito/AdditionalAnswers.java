@@ -36,7 +36,7 @@ public class AdditionalAnswers {
      * </p>
      *
      * <pre class="code"><code class="java">given(carKeyFob.authenticate(carKey)).will(returnsFirstArg());
-     * daAnswer(returnsFirstArg()).when(carKeyFob).authenticate(carKey)</code></pre>
+     * doAnswer(returnsFirstArg()).when(carKeyFob).authenticate(carKey)</code></pre>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the first argument of the invocation.
@@ -56,7 +56,7 @@ public class AdditionalAnswers {
      * </p>
      *
      * <pre class="code"><code class="java">given(trader.apply(leesFormula, onCreditDefaultSwap)).will(returnsSecondArg());
-     * daAnswer(returnsSecondArg()).when(trader).apply(leesFormula, onCreditDefaultSwap)</code></pre>
+     * doAnswer(returnsSecondArg()).when(trader).apply(leesFormula, onCreditDefaultSwap)</code></pre>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
@@ -76,7 +76,7 @@ public class AdditionalAnswers {
      * </p>
      *
      * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsLastArg());
-     * daAnswer(returnsLastArg()).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
+     * doAnswer(returnsLastArg()).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the last argument of the invocation.
@@ -96,7 +96,7 @@ public class AdditionalAnswers {
      * </p>
      *
      * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(3));
-     * daAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
+     * doAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
