@@ -1,5 +1,7 @@
 relre:target/
 relre:classes/
+build
+.gradle
 mockito.ipr
 mockito.iws
 mockito.iml
