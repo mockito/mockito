@@ -1,7 +1,9 @@
 //include 'testng'
+include 'extTest'
 
 rootProject.name = 'mockito'
-rootProject.children.each {project ->
+
+rootProject.children.each { project ->
     String projectDirName = "subprojects/$project.name"
     project.projectDir = new File(settingsDir, projectDirName)
     project.buildFileName = "${project.name}.gradle"

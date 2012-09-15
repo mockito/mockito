@@ -190,4 +190,13 @@ public class TestBase extends Assert {
             }
         });
     }
+
+    protected String getStackTrace(Throwable e) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        e.printStackTrace(new PrintStream(out));
+        try {
+            out.close();
+        } catch (IOException ex) {}
+        return out.toString();
+    }
 }

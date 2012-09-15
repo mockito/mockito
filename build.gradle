@@ -1,12 +1,22 @@
-apply plugin: 'java'
+version = '1.9.8' //TODO duplicated with file
+group = 'org.mockito'
+description = 'Core API and implementation.'
 
-//TODO duplicated with file
-version = '1.9.8'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+    }
+}
 
 sourceCompatibility = 1.5
 
 configurations {
     provided
+    testUtil //TODO move to separate project
 }
 
 sourceSets {
@@ -20,6 +30,8 @@ sourceSets {
     }
 }
 
+test.include "**/*Test.class"
+
 tasks.withType(Compile) {
     options.warnings = false
 }
@@ -27,8 +39,11 @@ tasks.withType(Compile) {
 dependencies {
     provided fileTree('lib/compile')
     compile fileTree('lib/run') { exclude '*.txt' }, fileTree('lib/repackaged') { exclude '*.txt'}
-    testCompile fileTree('lib/test')
-    testRuntime fileTree('lib/compile')
+
+    testCompile fileTree("lib/test")
+    testRuntime fileTree("lib/compile")
+
+    testUtil sourceSets.test.output
 }
 
 def commonJarContent = copySpec {

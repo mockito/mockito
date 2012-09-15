@@ -95,6 +95,7 @@ public class ClassPathLoader {
     }
 
     public static StackTraceCleanerProvider getStackTraceCleanerProvider() {
+        //TODO we should throw some sensible exception if this is null.
         return stackTraceCleanerProvider;
     }
 
