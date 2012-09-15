@@ -46,6 +46,9 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
+idea.module.scopes.PROVIDED.plus += configurations.provided
+eclipse.classpath.plusConfigurations += configurations.provided
+
 def commonJarContent = copySpec {
     //source
     from(sourceSets.main.allSource)
