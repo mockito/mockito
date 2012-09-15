@@ -1,5 +1,6 @@
 apply plugin: 'java'
 
+//TODO duplicated with file
 version = '1.9.8'
 
 sourceCompatibility = 1.5
@@ -65,16 +66,17 @@ task allJar(type: Jar) {
     from("lib/run") { exclude '**/*.jar' }
 }
 
+tasks.withType(Jar) { task ->
+    doLast {
+        project.exec {
+            commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName"
+        }
+    }
+}
+
 artifacts {
     archives allJar
 }
-
-task osgifyManifests(type: Exec) {
-    commandLine 'ant', '-f', 'build-ant.xml', 'osgifyManifests'
-}
-
-osgifyManifests.dependsOn tasks.withType(Jar)
-assemble.dependsOn osgifyManifests
 
 /*
 repositories {
