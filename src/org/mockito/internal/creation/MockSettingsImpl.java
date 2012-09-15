@@ -17,7 +17,9 @@ import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.internal.util.collections.Sets.newSet;
 
@@ -82,12 +84,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return serializable;
     }
 
-	public MockSettings verboseLogging() {
+    public MockSettings verboseLogging() {
         if (!invocationListenersContainsType(VerboseMockInvocationLogger.class)) {
             invocationListeners(new VerboseMockInvocationLogger());
         }
         return this;
-	}
+    }
 
     public MockSettings invocationListeners(InvocationListener... listeners) {
         if (listeners == null || listeners.length == 0) {
@@ -99,17 +101,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
             }
             this.invocationListeners.add(listener);
         }
-		return this;
-	}
+        return this;
+    }
 
-	private boolean invocationListenersContainsType(Class<?> clazz) {
-		for (InvocationListener listener : invocationListeners) {
-			if (listener.getClass().equals(clazz)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean invocationListenersContainsType(Class<?> clazz) {
+        for (InvocationListener listener : invocationListeners) {
+            if (listener.getClass().equals(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public List<InvocationListener> getInvocationListeners() {
         return this.invocationListeners;
@@ -136,6 +138,8 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
         //TODO SF - add this validation and also add missing coverage
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
+
+        validator.validateSerializable(typeToMock, source.isSerializable());
 
         CreationSettings<T> settings = new CreationSettings<T>(source);
         settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
