@@ -1,6 +1,7 @@
 relre:target/
 relre:classes/
 build/
+out/
 glob:.gradle
 glob:*.iws
 glob:*.ipr
