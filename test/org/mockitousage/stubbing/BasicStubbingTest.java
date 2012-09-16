@@ -7,6 +7,7 @@ package org.mockitousage.stubbing;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
@@ -14,7 +15,6 @@ import org.mockitoutil.TestBase;
 
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
-import org.mockito.exceptions.misusing.NotAMockException;
 
 public class BasicStubbingTest extends TestBase {
 
@@ -110,9 +110,6 @@ public class BasicStubbingTest extends TestBase {
         try {
             verify(localMock, atLeastOnce()).objectReturningMethod(eq(200));
             fail();
-            //TODO this should be more specific exception
-        } catch (NotAMockException e) {}
-
+        } catch (CannotVerifyStubOnlyMock e) {}
     }
-
 }

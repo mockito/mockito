@@ -264,8 +264,8 @@ public class Reporter {
     }
 
     public void stubPassedToVerify() {
-        throw new NotAMockException(join(
-                "Argument passed to verify() is only a stub (not a full-blown mock)!",
+        throw new CannotVerifyStubOnlyMock(join(
+                "Argument passed to verify() is a stubOnly() mock, not a full blown mock!",
                 "If you intend to verify invocations on a mock, don't use stubOnly() in its MockSettings."
         ));
     }
