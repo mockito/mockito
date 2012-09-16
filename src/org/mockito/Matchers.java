@@ -242,7 +242,6 @@ public class Matchers {
     public static <T> T anyObject() {
         return (T) reportMatcher(Any.ANY).returnNull();
     }
-    //TODO: after 1.8 check out Jay Fields' idea on any() matcher
 
     /**
      * Any vararg, meaning any number and values of arguments.

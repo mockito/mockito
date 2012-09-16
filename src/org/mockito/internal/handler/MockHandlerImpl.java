@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.handler;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -19,7 +20,6 @@ import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
 import java.util.List;
-import org.mockito.exceptions.Reporter;
 
 /**
  * Invocation handler set on mock objects.
@@ -67,7 +67,6 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
         if (verificationMode != null) {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
-            // TODO: can I avoid this cast here?
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
                 VerificationDataImpl data = createVerificationData(invocationContainerImpl, invocationMatcher);
                 verificationMode.verify(data);

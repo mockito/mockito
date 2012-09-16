@@ -27,7 +27,7 @@ public class StackTraceFilter implements Serializable {
      * Basically removes all bad from the middle. If any good are in the middle of bad those are also removed. 
      */
     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
-        //TODO: after 1.8 profile
+        //TODO: profile
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastBad = -1;

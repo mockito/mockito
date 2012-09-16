@@ -2039,7 +2039,6 @@ public class Mockito extends Matchers {
      * 
      * @return verification mode
      */
-    //TODO make exception message nicer
     public static VerificationMode only() {
     	return VerificationModeFactory.only();
     }    
