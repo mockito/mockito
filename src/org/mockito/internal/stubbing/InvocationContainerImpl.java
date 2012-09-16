@@ -10,7 +10,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
-import org.mockito.internal.verification.RegisteredInvocationsStubOnly;
+import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
@@ -135,7 +135,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
         return mockSettings.isStubOnly()
-          ? new RegisteredInvocationsStubOnly()
+          ? new SingleRegisteredInvocation()
           : new DefaultRegisteredInvocations();
     }
 }
