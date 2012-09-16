@@ -11,13 +11,13 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-public class RegisteredInvocationsAllTest extends TestBase {
+public class DefaultRegisteredInvocationsTest extends TestBase {
     
-    private RegisteredInvocationsAll invocations;
+    private DefaultRegisteredInvocations invocations;
     
     @Before
     public void setup() {
-        invocations = new RegisteredInvocationsAll();
+        invocations = new DefaultRegisteredInvocations();
     }
     
     @Test

@@ -8,17 +8,17 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
+import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
+import org.mockito.internal.verification.RegisteredInvocationsStubOnly;
 import org.mockito.invocation.Invocation;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.mockito.internal.verification.RegisteredInvocationsAll;
-import org.mockito.internal.verification.RegisteredInvocationsStubOnly;
-import org.mockito.mock.MockCreationSettings;
 
 @SuppressWarnings("unchecked")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
@@ -136,6 +136,6 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
         return mockSettings.isStubOnly()
           ? new RegisteredInvocationsStubOnly()
-          : new RegisteredInvocationsAll();
+          : new DefaultRegisteredInvocations();
     }
 }

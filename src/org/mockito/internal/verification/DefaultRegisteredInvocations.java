@@ -15,8 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-//TODO rename to DefaultRegisteredInvocations
-public class RegisteredInvocationsAll implements RegisteredInvocations, Serializable {
+public class DefaultRegisteredInvocations implements RegisteredInvocations, Serializable {
 
     private static final long serialVersionUID = -2674402327380736290L;
     private final LinkedList<Invocation> invocations = new LinkedList<Invocation>();
