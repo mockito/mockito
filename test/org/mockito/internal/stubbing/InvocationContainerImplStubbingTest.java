@@ -16,11 +16,9 @@ import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.Invocation;
-import org.mockito.mock.MockCreationSettings;
 import org.mockitoutil.TestBase;
 
-//TODO this is InvocationContainerImpl test
-public class MockitoStubberTest extends TestBase{
+public class InvocationContainerImplStubbingTest extends TestBase {
 
     private InvocationContainerImpl invocationContainerImpl;
     private InvocationContainerImpl invocationContainerImplStubOnly;
