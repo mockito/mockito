@@ -15,9 +15,7 @@ import org.mockito.invocation.Invocation;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Author: Szczepan Faber
@@ -38,7 +36,7 @@ public class InvocationContainerImplTest {
             t[i] = new Thread() {
                 public void run() {
                     try {
-                        starter.await();
+                        starter.await(); //NOPMD
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
