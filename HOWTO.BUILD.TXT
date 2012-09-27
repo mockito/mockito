@@ -1,4 +1,4 @@
 1. Use ant (gradle is experimental)
 2. Ant 1.7.1 causes trouble on ubuntu (see issue 195: http://code.google.com/p/mockito/issues/detail?id=195)
 3. If it does not build let me know (but be gentle because it will be very embarassing for me and I will quit coding and open a grocery. Seriously). 
-4. CI server is here: http://jenkins.ramfelt.se/job/Mockito/ If it builds there then it must build on your box.
+4. CI server is here: http://hudsonci-oss.org/view/Mockito/job/Mockito If it builds there then it must build on your box.
