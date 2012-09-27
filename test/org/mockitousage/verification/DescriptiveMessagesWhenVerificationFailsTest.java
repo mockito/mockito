@@ -30,7 +30,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodName() {
+    public void should_print_method_name() {
         try {
             verify(mock).simpleMethod();
             fail();
@@ -54,7 +54,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodNameAndArguments() {
+    public void should_print_method_name_and_arguments() {
         try {
             verify(mock).threeArgumentMethod(12, new Foo(), "xx");
             fail();
@@ -64,7 +64,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintActualAndWantedInLine() {
+    public void should_print_actual_and_wanted_in_line() {
         mock.varargs(1, 2);
 
         try {
@@ -90,7 +90,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
     
     @Test
-    public void shouldPrintActualAndWantedInMultipleLines() {
+    public void should_print_actual_and_wanted_in_multiple_lines() {
         mock.varargs("this is very long string", "this is another very long string");
 
         try {
@@ -130,7 +130,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintActualAndWantedWhenActualMethodNameAndWantedMethodNameAreTheSame() {
+    public void should_print_actual_and_wanted_when_actual_method_name_and_wanted_method_name_are_the_same() {
         mock.simpleMethod();
 
         try {
@@ -143,7 +143,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintActualAndUnverifiedWantedWhenTheDifferenceIsAboutArguments() {
+    public void should_print_actual_and_unverified_wanted_when_the_difference_is_about_arguments() {
         mock.twoArgumentMethod(1, 1);
         mock.twoArgumentMethod(2, 2);
 
@@ -158,7 +158,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintFirstUnexpectedInvocation() {
+    public void should_print_first_unexpected_invocation() {
         mock.oneArg(true);
         mock.oneArg(false);
         mock.threeArgumentMethod(1, "2", "3");
@@ -185,7 +185,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintFirstUnexpectedInvocationWhenVerifyingZeroInteractions() {
+    public void should_print_first_unexpected_invocation_when_verifying_zero_interactions() {
         mock.twoArgumentMethod(1, 2);
         mock.threeArgumentMethod(1, "2", "3");
 
@@ -212,7 +212,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodNameWhenVerifyingAtLeastOnce() throws Exception {
+    public void should_print_method_name_when_verifying_at_least_once() throws Exception {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
@@ -222,7 +222,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodWhenMatcherUsed() throws Exception {
+    public void should_print_method_when_matcher_used() throws Exception {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
             fail();
@@ -238,7 +238,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodWhenMissingInvocationWithArrayMatcher() {
+    public void should_print_method_when_missing_invocation_with_array_matcher() {
         mock.oneArray(new boolean[] { true, false, false });
 
         try {
@@ -251,7 +251,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodWhenMissingInvocationWithVarargMatcher() {
+    public void should_print_method_when_missing_invocation_with_vararg_matcher() {
         mock.varargsString(10, "xxx", "yyy", "zzz");
 
         try {
@@ -264,7 +264,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintMethodWhenMissingInvocationWithMatcher() {
+    public void should_print_method_when_missing_invocation_with_matcher() {
         mock.simpleMethod("foo");
 
         try {
@@ -277,7 +277,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintNullArguments() throws Exception {
+    public void should_print_null_arguments() throws Exception {
         mock.simpleMethod(null, (Integer) null);
         try {
             verify(mock).simpleMethod("test");
@@ -288,7 +288,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
     
     @Test
-    public void shouldSayNeverWantedButInvoked() throws Exception {
+    public void should_say_never_wanted_but_invoked() throws Exception {
         mock.simpleMethod(1);
     
         verify(mock, never()).simpleMethod(2);
@@ -302,7 +302,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
     
     @Test
-    public void shouldShowRightActualMethod() throws Exception {
+    public void should_show_right_actual_method() throws Exception {
         mock.simpleMethod(9191);
         mock.simpleMethod("foo");
     
@@ -318,7 +318,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     @Mock private IMethods iHavefunkyName;
     
     @Test
-    public void shouldPrintFieldNameWhenAnnotationsUsed() throws Exception {
+    public void should_print_field_name_when_annotations_used() throws Exception {
         iHavefunkyName.simpleMethod(10);
     
         try {
@@ -331,7 +331,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
     
     @Test
-    public void shouldPrintInteractionsOnMockWhenOrdinaryVerificationFail() throws Exception {
+    public void should_print_interactions_on_mock_when_ordinary_verification_fail() throws Exception {
         mock.otherMethod();
         mock.booleanReturningMethod();
         
@@ -346,7 +346,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock; 
     
     @Test
-    public void shouldNeverBreakMethodStringWhenNoArgsInMethod() throws Exception {
+    public void should_never_break_method_string_when_no_args_in_method() throws Exception {
         try {
             verify(veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock).simpleMethod();
             fail();
