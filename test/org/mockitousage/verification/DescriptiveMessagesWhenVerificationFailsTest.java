@@ -354,4 +354,20 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains("veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock.simpleMethod()", e.getMessage());
         }
     }
+
+    @Test
+    public void should_print_method_name_and_arguments_of_other_interactions() throws Exception {
+        try {
+            mock.arrayMethod(new String[] {"a", "b", "c"});
+            mock.forByte((byte) 25);
+
+            verify(mock).threeArgumentMethod(12, new Foo(), "xx");
+            fail();
+        } catch (WantedButNotInvoked e) {
+            System.out.println(e);
+            assertContains("iMethods.threeArgumentMethod(12, foo, \"xx\")", e.getMessage());
+            assertContains("iMethods.arrayMethod([\"a\", \"b\", \"c\"])", e.getMessage());
+            assertContains("iMethods.forByte(25)", e.getMessage());
+        }
+    }
 }

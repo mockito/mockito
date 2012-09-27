@@ -314,8 +314,10 @@ public class Reporter {
         } else {
             StringBuilder sb = new StringBuilder("\nHowever, there were other interactions with this mock:\n");
             for (DescribedInvocation i : invocations) {
-                sb.append(i.getLocation());
-                sb.append("\n");
+                sb.append(i.toString())
+                        .append("\n")
+                        .append(i.getLocation())
+                        .append("\n\n");
             }
             allInvocations = sb.toString();
         }
