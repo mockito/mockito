@@ -8,13 +8,11 @@ import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.creation.CglibMockMaker;
+import org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.StackTraceCleanerProvider;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +57,8 @@ import java.util.List;
  */
 public class ClassPathLoader {
     private static final MockMaker mockMaker = findPlatformMockMaker();
+    private static final StackTraceCleanerProvider stackTraceCleanerProvider =
+            findPluginImplementation(StackTraceCleanerProvider.class, new DefaultStackTraceCleanerProvider());
     public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
 
     /**
@@ -94,15 +94,24 @@ public class ClassPathLoader {
         return mockMaker;
     }
 
+    public static StackTraceCleanerProvider getStackTraceCleanerProvider() {
+        //TODO we should throw some sensible exception if this is null.
+        return stackTraceCleanerProvider;
+    }
+
     /**
      * Scans the classpath to find a mock maker plugin if one is available,
      * allowing mockito to run on alternative platforms like Android.
      */
     static MockMaker findPlatformMockMaker() {
-        for (MockMaker mockMaker : loadImplementations(MockMaker.class)) {
-            return mockMaker; // return the first one service loader finds (if any)
+        return findPluginImplementation(MockMaker.class, new CglibMockMaker());
+    }
+
+    static <T> T findPluginImplementation(Class<T> pluginType, T defaultPlugin) {
+        for (T plugin : loadImplementations(pluginType)) {
+            return plugin; // return the first one service loader finds (if any)
         }
-        return new CglibMockMaker(); // default implementation
+        return defaultPlugin; // default implementation
     }
 
     /**

@@ -6,8 +6,7 @@
 package org.mockito.exceptions.verification.junit;
 
 import junit.framework.ComparisonFailure;
-
-import org.mockito.internal.exceptions.base.ConditionalStackTraceFilter;
+import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.util.RemoveFirstLine;
 
 

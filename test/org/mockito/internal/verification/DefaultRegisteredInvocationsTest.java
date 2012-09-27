@@ -11,17 +11,17 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-public class RegisteredInvocationsTest extends TestBase {
+public class DefaultRegisteredInvocationsTest extends TestBase {
     
-    private RegisteredInvocations invocations;
+    private DefaultRegisteredInvocations invocations;
     
     @Before
     public void setup() {
-        invocations = new RegisteredInvocations();
+        invocations = new DefaultRegisteredInvocations();
     }
     
     @Test
-    public void shouldNotReturnToStringMethod() throws Exception {
+    public void should_not_return_to_string_method() throws Exception {
         Invocation toString = new InvocationBuilder().method("toString").toInvocation();
         Invocation simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
         

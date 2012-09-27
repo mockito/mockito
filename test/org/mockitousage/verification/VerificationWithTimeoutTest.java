@@ -5,12 +5,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +14,12 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class VerificationWithTimeoutTest extends TestBase {
@@ -58,7 +58,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     @Test
     public void shouldFailVerificationWithTimeout() throws Exception {
         //given
-        Thread t = waitAndExerciseMock(40);
+        Thread t = waitAndExerciseMock(80);
         
         //when
         t.start();

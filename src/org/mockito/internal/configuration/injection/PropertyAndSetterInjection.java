@@ -7,7 +7,10 @@ package org.mockito.internal.configuration.injection;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.injection.filter.*;
+import org.mockito.internal.configuration.injection.filter.FinalMockCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;

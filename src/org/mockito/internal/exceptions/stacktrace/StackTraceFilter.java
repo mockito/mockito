@@ -3,7 +3,10 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.exceptions.base;
+package org.mockito.internal.exceptions.stacktrace;
+
+import org.mockito.exceptions.stacktrace.StackTraceCleaner;
+import org.mockito.internal.configuration.ClassPathLoader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,29 +15,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StackTraceFilter implements Serializable {
-    static final long serialVersionUID = -5499819791513105700L;
-    
-    public boolean isBad(StackTraceElement e) {
-        boolean fromMockObject = e.getClassName().contains("$$EnhancerByMockitoWithCGLIB$$");
-        boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
-        boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
-        boolean isInternalRunner = e.getClassName().startsWith("org.mockito.internal.runners.");
-        return (fromMockObject || fromOrgMockito) && !isRunner && !isInternalRunner;
-    }
 
+    static final long serialVersionUID = -5499819791513105700L;
+
+    private static StackTraceCleaner cleaner =
+            ClassPathLoader.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
+    
     /**
      * Example how the filter works (+/- means good/bad):
      * [a+, b+, c-, d+, e+, f-, g+] -> [a+, b+, g+]
      * Basically removes all bad from the middle. If any good are in the middle of bad those are also removed. 
      */
     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
-        //TODO: after 1.8 profile
+        //TODO: profile
         List<StackTraceElement> unfilteredStackTrace = Arrays.asList(target);
         
         int lastBad = -1;
         int firstBad = -1;
         for (int i = 0; i < unfilteredStackTrace.size(); i++) {
-            if (!this.isBad(unfilteredStackTrace.get(i))) {
+            if (!cleaner.isOut(unfilteredStackTrace.get(i))) {
                 continue;
             }
             lastBad = i;

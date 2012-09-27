@@ -8,8 +8,11 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
+import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
+import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -20,16 +23,17 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
 
-    private static final long serialVersionUID = -5334301962749537176L;
+    private static final long serialVersionUID = -5334301962749537177L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
     private final List<Answer> answersForStubbing = new ArrayList<Answer>();
-    private final RegisteredInvocations registeredInvocations = new RegisteredInvocations();
+    private final RegisteredInvocations registeredInvocations;
 
     private InvocationMatcher invocationForStubbing;
 
-    public InvocationContainerImpl(MockingProgress mockingProgress) {
+    public InvocationContainerImpl(MockingProgress mockingProgress, MockCreationSettings mockSettings) {
         this.mockingProgress = mockingProgress;
+        this.registeredInvocations = createRegisteredInvocations(mockSettings);
     }
 
     public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
@@ -127,5 +131,11 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     
     public InvocationMatcher getInvocationForStubbing() {
     	return invocationForStubbing;
+    }
+
+    private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
+        return mockSettings.isStubOnly()
+          ? new SingleRegisteredInvocation()
+          : new DefaultRegisteredInvocations();
     }
 }

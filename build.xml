@@ -14,7 +14,9 @@
   <property name="test.classes.dir" value="${target.dir}/test-classes" />
   <property name="test.reports.dir" value="${target.dir}/reports/junit" />
   <property name="test.reports.dir.html" value="${target.dir}/reports/junit.html" />
-	
+
+  <property name="pmd.reports.dir" value="${target.dir}/reports/pmd" />
+
   <property name="javadoc.dir" value="${target.dir}/javadoc" />
 
   <property name="lib.dir" value="lib" />
@@ -117,10 +119,12 @@
   <target name="pmd" depends="prepare">
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="ant.classpath" />
+    <mkdir dir="${pmd.reports.dir}" />
 
     <pmd shortFilenames="true" failonruleviolation="true" rulesetfiles="conf/pmd-rules.xml">
       <ruleset>Mockito</ruleset>
       <formatter type="text" toConsole="true" />
+      <formatter type="xml" tofile="${pmd.reports.dir}/pmd_report.xml" />
 
       <fileset dir="${src.dir}">
         <include name="**/*.java" />
@@ -319,6 +323,8 @@
       </doctitle>
       <header>
         <![CDATA[
+          <!-- Note there is a weird javadoc task bug if using the double quote char \" that causes an 'illegal package name' error -->
+
           <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
           <script type="text/javascript">
               var shBaseURL = '{@docRoot}/js/sh-2.1.382/';
@@ -327,10 +333,29 @@
           <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
 
           <script type="text/javascript">
-              $.beautyOfCode.init({
-                theme : 'Eclipse',
-                brushes: ['Java']
-              });
+              /* Apply beautification of code */
+              var usingOldIE = false;
+              if($.browser.msie && parseInt($.browser.version) < 9) usingOldIE = true;
+
+              if(!usingOldIE) {
+                  $.beautyOfCode.init({
+                    theme : 'Eclipse',
+                    brushes: ['Java']
+                  });
+
+                  var version = ${version};
+
+                  /* Add name & version to header */
+                  $(function() {
+                    $('td.NavBarCell1[colspan=2]').each(function(index, element) {
+                      var jqueryTD = $(element);
+                      jqueryTD.after(
+                        $('<td><em><strong>Mockito ${version} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header')
+                      );
+                      jqueryTD.removeAttr('colspan');
+                    })
+                  })
+              }
           </script>
         ]]>
       </header>

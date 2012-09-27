@@ -4,14 +4,10 @@
  */
 package org.mockito.internal.progress;
 
-import static org.mockito.internal.util.Primitives.*;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import static org.mockito.internal.util.Primitives.defaultValueForPrimitiveOrWrapper;
+import static org.mockito.internal.util.Primitives.isPrimitiveOrWrapper;
 
 @SuppressWarnings("unchecked")
 public class HandyReturnValues {

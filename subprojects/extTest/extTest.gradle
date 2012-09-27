@@ -1,0 +1,9 @@
+description = "Tests for mockito extensions."
+
+dependencies {
+    testCompile project.rootProject
+    testCompile project(path: ':', configuration: 'testUtil')
+
+    testCompile fileTree("$rootDir/lib/test")
+    testCompile fileTree("$rootDir/lib/compile")
+}

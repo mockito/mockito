@@ -7,10 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertSame;
-
-import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Issue353InjectionMightNotHappenInCertainConfigurationTest {

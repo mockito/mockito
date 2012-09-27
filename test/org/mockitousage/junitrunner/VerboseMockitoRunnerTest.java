@@ -4,9 +4,7 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.mockito.Mockito.*;
 import junit.framework.TestCase;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -18,17 +16,19 @@ import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static org.mockito.Mockito.*;
+
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(VerboseMockitoJUnitRunner.class)
-@Ignore
 //TODO
 public class VerboseMockitoRunnerTest extends TestBase {
     
     @Mock private IMethods mock;
     
-    protected static class NoWarnings {       
+    public static class NoWarnings {
         
         @Test
+        @Ignore
         public void test() {
             IMethods mock = mock(IMethods.class);
             mock.simpleMethod(1);
@@ -38,15 +38,16 @@ public class VerboseMockitoRunnerTest extends TestBase {
             throw new RuntimeException("boo");
         }
     }
-    
-    protected static class ContainsWarnings extends TestCase {
+
+    public static class ContainsWarnings extends TestCase {
         
         public ContainsWarnings() {
             super("test");
         }
-        
-        @Test
-        public void test() {
+
+        public void testIgnored() {}
+
+        public void _test() {
             IMethods mock = mock(IMethods.class);
             
             //some stubbing
@@ -67,6 +68,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
     }
     
     @Test
+    @Ignore
     public void shouldContainWarnings() throws Exception {
         //when
         Result result = new JUnitCore().run(new ContainsWarnings());
@@ -77,6 +79,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
     }
 
     @Test
+    @Ignore
     public void shouldNotContainWarnings() throws Exception {
         Result result = new JUnitCore().run(NoWarnings.class);
         assertEquals(1, result.getFailures().size());

@@ -31,6 +31,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected boolean serializable;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
     protected GenericMetadataSupport mockitoGenericMetadata;
+    protected boolean stubOnly;
 
     public CreationSettings() {}
 
@@ -45,6 +46,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.serializable = copy.serializable;
         this.invocationListeners = copy.invocationListeners;
         this.mockitoGenericMetadata = copy.mockitoGenericMetadata;
+        this.stubOnly = copy.stubOnly;
     }
 
     public Class<T> getTypeToMock() {
@@ -104,4 +106,9 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     public void setMockitoGenericMetadata(GenericMetadataSupport mockitoGenericMetadata) {
         this.mockitoGenericMetadata = mockitoGenericMetadata;
     }
+
+    public boolean isStubOnly() {
+        return stubOnly;
+    }
+
 }

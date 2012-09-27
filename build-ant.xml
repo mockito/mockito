@@ -1,0 +1,55 @@
+<!--
+ Copyright (c) 2007 Mockito contributors 
+ This program is made available under the terms of the MIT License.
+-->
+<project name="mockito" basedir=".">
+
+    <loadproperties srcfile="version.properties" />
+
+    <path id="ant.classpath">
+        <fileset dir="lib/build" includes="*bnd*" />
+    </path>
+
+    <property name="jar.core.path" value="build/libs/mockito-core-${version}.jar"/>
+    <property name="jar.all.path"  value="build/libs/mockito-all-${version}.jar"/>
+
+    <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="ant.classpath"/>
+    <target name="bndCore">
+        <bnd
+                classpath="${jar.core.path}"
+                eclipse="false"
+                failok="false"
+                exceptions="true"
+                sourcepath="src"
+                destfile="${jar.core.path}.tmp"
+                files="conf/mockito-core.bnd"/>
+    </target>
+
+    <target name="bndAll">
+        <bnd
+                classpath="${jar.all.path}"
+                eclipse="false"
+                failok="false"
+                exceptions="true"
+                sourcepath="src"
+                destfile="${jar.all.path}.tmp"
+                files="conf/mockito-all.bnd"/>
+    </target>
+
+    <target name="osgify.mockito-core" depends="bndCore">
+        <zip update="true" destfile="${jar.core.path}" >
+            <zipfileset src="${jar.core.path}.tmp" >
+                <include name="META-INF/MANIFEST.MF"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+    <target name="osgify.mockito-all" depends="bndAll">
+        <zip update="true" destfile="${jar.all.path}">
+            <zipfileset src="${jar.all.path}.tmp" >
+                <include name="META-INF/MANIFEST.MF"/>
+            </zipfileset>
+        </zip>
+    </target>
+
+</project>

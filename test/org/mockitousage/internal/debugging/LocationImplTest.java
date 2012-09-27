@@ -6,7 +6,7 @@ package org.mockitousage.internal.debugging;
 
 import org.junit.Test;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.exceptions.base.StackTraceFilter;
+import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("serial")

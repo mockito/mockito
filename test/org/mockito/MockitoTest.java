@@ -5,15 +5,15 @@
 
 package org.mockito;
 
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static org.mockito.Mockito.times;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest extends TestBase {
@@ -66,5 +66,5 @@ public class MockitoTest extends TestBase {
         assertEquals(Mockito.RETURNS_DEFAULTS, settings.getDefaultAnswer());
     }
     
-    //TODO: after 1.8 stack filter does not work very well when it comes to threads?
+    //TODO: stack filter does not work very well when it comes to threads?
 }

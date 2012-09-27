@@ -5,11 +5,11 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.util.*;
-
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
+
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 
