@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 public class ArgumentCaptorTest extends TestBase {
     
     @Test
-    public void tellHandyReturnValuesToReturnValueFor() throws Exception {
+    public void tell_handy_return_values_to_return_value_for() throws Exception {
         //given
         final Object expected = new Object(); 
         ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
@@ -32,7 +32,7 @@ public class ArgumentCaptorTest extends TestBase {
     }
     
     @After
-    public void yesIKnowSomeMatchersAreMisplaced() {
+    public void yes_I_know_some_matchers_are_misplaced() {
         resetState();
     }
 }

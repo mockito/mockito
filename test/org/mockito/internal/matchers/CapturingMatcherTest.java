@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 public class CapturingMatcherTest extends TestBase {
 
     @Test
-    public void shouldCaptureArguments() throws Exception {
+    public void should_capture_arguments() throws Exception {
         //given
         CapturingMatcher m = new CapturingMatcher();
         
@@ -26,7 +26,7 @@ public class CapturingMatcherTest extends TestBase {
     }
     
     @Test
-    public void shouldKnowLastCapturedValue() throws Exception {
+    public void should_know_last_captured_value() throws Exception {
         //given
         CapturingMatcher m = new CapturingMatcher();
         
@@ -39,7 +39,7 @@ public class CapturingMatcherTest extends TestBase {
     }
     
     @Test
-    public void shouldScreamWhenNothingYetCaptured() throws Exception {
+    public void should_scream_when_nothing_yet_captured() throws Exception {
         //given
         CapturingMatcher m = new CapturingMatcher();
 
