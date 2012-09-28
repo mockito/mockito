@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.CapturesArguments;
+import org.mockito.internal.matchers.MatcherDecorator;
+import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
@@ -115,14 +117,32 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
         return invocation.getLocation();
     }
 
-    public void captureArgumentsFrom(Invocation i) {
-        int k = 0;
-        for (Matcher m : matchers) {
-            if (m instanceof CapturesArguments && i.getArguments().length > k) {
-                ((CapturesArguments) m).captureFrom(i.getArguments()[k]);
+    public void captureArgumentsFrom(Invocation invocation) {
+        for (int position = 0; position < matchers.size(); position++) {
+            Matcher m = matchers.get(position);
+            if (m instanceof CapturesArguments && invocation.getArguments().length > position) {
+                if(isVariableArgument(invocation, position) && isVarargMatcher(m)) {
+                    ((CapturesArguments) m).captureFrom(invocation.getRawArguments()[position]);
+                } else {
+                    ((CapturesArguments) m).captureFrom(invocation.getArguments()[position]);
+                }
             }
-            k++;
         }
+    }
+
+    private boolean isVarargMatcher(Matcher matcher) {
+        Matcher actualMatcher = matcher;
+        if (actualMatcher instanceof MatcherDecorator) {
+            actualMatcher = ((MatcherDecorator) actualMatcher).getActualMatcher();
+        }
+        return actualMatcher instanceof VarargMatcher;
+    }
+
+    private boolean isVariableArgument(Invocation invocation, int position) {
+        return invocation.getRawArguments().length - 1 == position
+                && invocation.getRawArguments()[position] != null
+                && invocation.getRawArguments()[position].getClass().isArray()
+                && invocation.getMethod().isVarArgs();
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {

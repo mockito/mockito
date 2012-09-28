@@ -17,20 +17,26 @@ public class ArgumentCaptorTest extends TestBase {
         //given
         final Object expected = new Object(); 
         ArgumentCaptor<Object> argumentCaptor = ArgumentCaptor.forClass(Object.class);
-        argumentCaptor.handyReturnValues = new HandyReturnValues() {
+        argumentCaptor.handyReturnValues = will_return(expected);
+        
+        //when
+        Object returned = argumentCaptor.capture();
+        Object returned_for_vararg = argumentCaptor.captureVararg();
+
+        //then
+        assertEquals(expected, returned);
+        assertEquals(expected, returned_for_vararg);
+    }
+
+    private HandyReturnValues will_return(final Object expected) {
+        return new HandyReturnValues() {
             @Override
             public <T> T returnFor(Class<T> clazz) {
                 return (T) expected;
             }
         };
-        
-        //when
-        Object returned = argumentCaptor.capture();
-        
-        //then
-        assertEquals(expected, returned);
     }
-    
+
     @After
     public void yes_I_know_some_matchers_are_misplaced() {
         resetState();

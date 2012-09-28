@@ -12,15 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.fest.assertions.Assertions;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.AnyVararg;
-import org.mockito.internal.matchers.CapturingMatcher;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.LocalizedMatcher;
-import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.matchers.*;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -143,7 +140,22 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_match_captured_arguments_when_args_count_does_NOT_match() throws Exception {
+    public void should_capture_varargs_as_vararg() throws Exception {
+        //given
+        mock.mixedVarargs(1, "a", "b");
+        Invocation invocation = getLastInvocation();
+        VarargCapturingMatcher varargCapturingMatcher = new VarargCapturingMatcher();
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), new LocalizedMatcher(varargCapturingMatcher)));
+
+        //when
+        invocationMatcher.captureArgumentsFrom(invocation);
+
+        //then
+        Assertions.assertThat(varargCapturingMatcher.getLastVarargs()).containsExactly("a", "b");
+    }
+
+    @Test  // like using several time the captor in the vararg
+    public void should_capture_arguments_when_args_count_does_NOT_match() throws Exception {
         //given
         mock.varargs();
         Invocation invocation = getLastInvocation();

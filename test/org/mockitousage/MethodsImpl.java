@@ -324,6 +324,9 @@ public class MethodsImpl implements IMethods {
     public void mixedVarargs(Object i, String... string) {
     }
 
+    public void varargsbyte(byte... bytes) {
+    }
+
     public List<String> listReturningMethod(Object... objects) {
         return null;
     }

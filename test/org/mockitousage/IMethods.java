@@ -161,7 +161,9 @@ public interface IMethods {
     void varargsString(int i, String... string);
 
     Object varargsObject(int i, Object... object);
-    
+
+    void varargsbyte(byte... bytes);
+
     int varargs(Object ... object);
 
     String varargsReturningString(Object ... object);
@@ -171,21 +173,21 @@ public interface IMethods {
     void mixedVarargs(Object i, String ... string);
 
     List<String> listReturningMethod(Object ... objects);
-    
+
     LinkedList<String> linkedListReturningMethod();
-    
+
     String toString();
-    
+
     String toString(String foo);
 
     void voidMethod();
 
     String forList(List<String> list);
-    
+
     String forSet(Set<String> anySet);
 
     String forMap(Map<String, String> map);
-    
+
     String forCollection(Collection<String> collection);
 
     Object[] arrayReturningMethod();
@@ -197,7 +199,7 @@ public interface IMethods {
     Object objectArgMethod(Object str);
 
     Object listArgMethod(List<String> list);
-    
+
     Object collectionArgMethod(Collection<String> collection);
 
     Object setArgMethod(Set<String> set);

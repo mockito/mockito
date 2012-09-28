@@ -5,6 +5,7 @@
 package org.mockito;
 
 import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.VarargCapturingMatcher;
 import org.mockito.internal.progress.HandyReturnValues;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class ArgumentCaptor<T> {
     HandyReturnValues handyReturnValues = new HandyReturnValues();
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
+    private final VarargCapturingMatcher<T> varargCapturingMatcher = new VarargCapturingMatcher<T>();
     private final Class<T> clazz;
 
     /**
@@ -90,7 +92,7 @@ public class ArgumentCaptor<T> {
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
      * 
-     * @return null
+     * @return null or default values
      */
     public T capture() {
         Mockito.argThat(capturingMatcher);
@@ -98,9 +100,25 @@ public class ArgumentCaptor<T> {
     }
 
     /**
+     * Use it to capture the variable arguments. This method <b>must be used inside of verification</b>.
+     * <p>
+     * Internally, this method registers a special implementation of an {@link ArgumentMatcher}.
+     * This argument matcher stores the variable arguments values so that you can use it later to perform assertions.
+     * <p>
+     * See examples in javadoc for {@link ArgumentCaptor} class.
+     *
+     * @return null or default values
+     */
+    public T captureVararg() {
+        Mockito.argThat(varargCapturingMatcher);
+        return handyReturnValues.returnFor(clazz);
+    }
+
+
+    /**
      * Returns the captured value of the argument.
      * <p>
-     * If the method was called multiple times then it returns the latest captured value
+     * If the method was called multiple times then it returns the latest captured value.
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
      * 
@@ -108,6 +126,19 @@ public class ArgumentCaptor<T> {
      */
     public T getValue() {
         return this.capturingMatcher.getLastValue();
+    }
+
+    /**
+     * Returns the captured value of the variable arguments.
+     * <p>
+     * If the method was called multiple times then it returns the latest captured variable arguments.
+     * <p>
+     * See examples in javadoc for {@link ArgumentCaptor} class.
+     *
+     * @return captured varargs
+     */
+    public List<T> getVarargsValues() {
+        return this.varargCapturingMatcher.getLastVarargs();
     }
 
     /**
@@ -128,6 +159,26 @@ public class ArgumentCaptor<T> {
      */
     public List<T> getAllValues() {
         return this.capturingMatcher.getAllValues();
+    }
+
+    /**
+     * Returns all captured variable arguments. Use it in case the verified method was called multiple times.
+     * <p>
+     * Example:
+     * <pre class="code"><code class="java">
+     *   ArgumentCaptor&lt;Person&gt; peopleFornamesCaptor = ArgumentCaptor.forClass(String.class);
+     *   verify(mock, times(2)).doSomething(peopleFornamesCaptor.captureVarargs());
+     *
+     *   List&lt;String&gt; peopleFornames = peopleFornamesCaptor.getAllVarargs();
+     *   assertThat(peopleFornames.get(0)).contains("John", "Carl");
+     *   assertThat(peopleFornames.get(1)).contains("Janes", "Eloise", "Lois");
+     * </code></pre>
+     * See more examples in javadoc for {@link ArgumentCaptor} class.
+     *
+     * @return all captured varargs
+     */
+    public List<List<T>> getAllVarargsValues() {
+        return this.varargCapturingMatcher.getAllVarargs();
     }
 
     /**
