@@ -24,6 +24,9 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         } else {
             mockSettings.name(annotation.name());
         }
+        if(annotation.serializable()){
+        	mockSettings.serializable();
+        }
 
         // see @Mock answer default value
         mockSettings.defaultAnswer(annotation.answer().get());

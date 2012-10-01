@@ -68,4 +68,6 @@ public @interface Mock {
     String name() default "";
 
     Class<?>[] extraInterfaces() default {};
+    
+    boolean serializable() default false;
 }
