@@ -1,14 +1,15 @@
 package org.mockitousage.testng.failuretests;
 
-import org.mockito.Mock;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.testng.MockitoTestNGListener;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.io.PrintStream;
 
+import static org.mockito.Matchers.anySet;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 
 /**
  * Should fail.
@@ -17,18 +18,13 @@ import static org.mockito.Matchers.anyString;
  */
 @Listeners(MockitoTestNGListener.class)
 @Test(description = "Always failing, shouldn't be listed in 'mockito-testng.xml'")
-public class FailingBecauseWrongStubbingSyntaxInConfigurationMethod {
+public class FailingOnPurposeBecauseIncorrectStubbingSyntax {
 
-    @Mock List list;
-
-    // should fail
-    @BeforeMethod public void some_wrong_stubs() {
+    @Test(expectedExceptions = InvalidUseOfMatchersException.class)
+    public void incorrect_stubbing_syntax_in_test() throws Exception {
+        mock(PrintStream.class);
         anyString();
-    }
-
-
-    @Test
-    public void here_to_execute_the_config_method() throws Exception {
+        anySet();
     }
 
 }

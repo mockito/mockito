@@ -2,7 +2,7 @@ description = "Mockito for TestNG"
 
 group = 'org.mockito'
 archivesBaseName = 'mockito-testng'
-version = '1.0'
+version = '1.0' // TODO change version
 
 repositories {
     mavenCentral()
@@ -16,3 +16,8 @@ dependencies {
     testCompile 'org.easytesting:fest-assert:1.4'
 }
 
+test {
+    useTestNG() {
+        suites 'src/test/resources/mockito-testng.xml'
+    }
+}

@@ -16,6 +16,5 @@ public class InitializeChildTestWhenParentHasListenerTest extends ParentTest {
     public void verify_mocks_are_initialized() throws Exception {
         assertThat(childMockField).isNotNull();
         assertThat(parentMockField).isNotNull();
-      fail();
     }
 }

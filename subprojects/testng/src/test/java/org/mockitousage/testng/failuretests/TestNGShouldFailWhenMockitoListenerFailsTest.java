@@ -19,7 +19,7 @@ public class TestNGShouldFailWhenMockitoListenerFailsTest {
     private final FailureRecordingListener failureRecorder = new FailureRecordingListener();
 
     public void report_failure_on_incorrect_annotation_usage() throws Throwable {
-        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingBecauseIncorrectAnnotationUsage.class);
+        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingOnPurposeBecauseIncorrectAnnotationUsage.class);
 
         testNG.run();
 
@@ -29,7 +29,7 @@ public class TestNGShouldFailWhenMockitoListenerFailsTest {
 
     @Test
     public void report_failure_on_incorrect_stubbing_syntax_with_matchers_in_test_methods() throws Exception {
-        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingBecauseIncorrectStubbingSyntax.class);
+        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingOnPurposeBecauseIncorrectStubbingSyntax.class);
 
         testNG.run();
 
@@ -40,7 +40,7 @@ public class TestNGShouldFailWhenMockitoListenerFailsTest {
 
     @Test
     public void report_failure_on_incorrect_stubbing_syntax_with_matchers_in_configuration_methods() throws Exception {
-        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingBecauseWrongStubbingSyntaxInConfigurationMethod.class);
+        TestNG testNG = new_TestNG_with_failure_recorder_for(FailingOnPurposeBecauseWrongStubbingSyntaxInConfigurationMethod.class);
 
         testNG.run();
 

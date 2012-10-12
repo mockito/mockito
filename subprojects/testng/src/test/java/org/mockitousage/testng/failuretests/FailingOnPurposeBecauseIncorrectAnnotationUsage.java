@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Listeners(MockitoTestNGListener.class)
 @Test(description = "Always failing, shouldn't be listed in 'mockito-testng.xml'")
-public class FailingBecauseIncorrectAnnotationUsage {
+public class FailingOnPurposeBecauseIncorrectAnnotationUsage {
     @Spy Map spy_cant_initialize_interface_fields;
     @Test public void dummy_test_method() throws Exception { }
 }
