@@ -5,9 +5,10 @@
 
 package org.mockitousage.annotation;
 
-import org.fest.assertions.Assertions;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.internal.TextListener;
+import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,9 +21,10 @@ import org.mockitousage.examples.use.ArticleCalculator;
 import org.mockitousage.examples.use.ArticleDatabase;
 import org.mockitousage.examples.use.ArticleManager;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +39,7 @@ public class MockInjectionUsingConstructorTest {
     @Spy @InjectMocks private ArticleManager spiedArticleManager;
 
 
-    @InjectMocks private ArticleVisitor should_be_initialized_several_times;
+//    @InjectMocks private ArticleVisitor should_be_initialized_3_times;
 
     @Test
     public void shouldNotFailWhenNotInitialized() {
@@ -57,10 +59,16 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void constructor_is_called_for_each_test() throws Exception {
-        int minimum_number_of_test_before = 3;
-        Assertions.assertThat(articleVisitorInstantiationCount).isGreaterThan(minimum_number_of_test_before);
-        Assertions.assertThat(articleVisitorMockInjectedInstances.size()).isGreaterThan(minimum_number_of_test_before);
+    public void constructor_is_called_for_each_test_in_test_class() throws Exception {
+        // given
+        JUnitCore jUnitCore = new JUnitCore();
+        jUnitCore.addListener(new TextListener(System.out));
+
+        // when
+        jUnitCore.run(junit_test_with_3_tests_methods.class);
+
+        // then
+        assertThat(junit_test_with_3_tests_methods.constructor_instantiation).isEqualTo(3);
     }
 
     @Test
@@ -76,18 +84,27 @@ public class MockInjectionUsingConstructorTest {
             MockitoAnnotations.initMocks(new ATest());
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
-            Assertions.assertThat(e.getCause()).isInstanceOf(IllegalStateException.class);
+            assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
+            assertThat(e.getCause()).isInstanceOf(IllegalStateException.class);
         }
     }
 
-    private static int articleVisitorInstantiationCount = 0;
-    private static Set<Object> articleVisitorMockInjectedInstances = new HashSet<Object>();
 
-    private static class ArticleVisitor {
-        public ArticleVisitor(ArticleCalculator calculator) {
-            articleVisitorInstantiationCount++;
-            articleVisitorMockInjectedInstances.add(calculator);
+    @RunWith(MockitoJUnitRunner.class)
+    public static class junit_test_with_3_tests_methods {
+        private static int constructor_instantiation = 0;
+
+        @Mock List some_collaborator;
+        @InjectMocks some_class_with_parametered_constructor should_be_initialized_3_times;
+
+        @Test public void test_1() { }
+        @Test public void test_2() { }
+        @Test public void test_3() { }
+
+        private static class some_class_with_parametered_constructor {
+            public some_class_with_parametered_constructor(List collaborator) {
+                constructor_instantiation++;
+            }
         }
     }
 
