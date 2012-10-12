@@ -31,6 +31,7 @@ public class MockitoAfterTestNGMethod {
         Mockito.reset(instanceMocksOf(instance).toArray());
     }
 
+    @SuppressWarnings({"deprecation", "unchecked"})
     private Collection<Object> instanceMocksOf(Object instance) {
         return Fields.allDeclaredFieldsOf(instance)
                                             .filter(annotatedBy(Mock.class,
