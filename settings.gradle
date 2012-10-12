@@ -1,4 +1,4 @@
-//include 'testng'
+include 'testng'
 include 'extTest'
 
 rootProject.name = 'mockito'

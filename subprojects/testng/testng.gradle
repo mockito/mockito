@@ -1,7 +1,4 @@
-apply plugin: 'java'
-
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+description = "Mockito for TestNG"
 
 group = 'org.mockito'
 archivesBaseName = 'mockito-testng'
@@ -12,8 +9,10 @@ repositories {
 }
 
 dependencies {
-    compile 'org.mockito:mockito-core:1.9.1'
+    compile project.rootProject
+//    compile 'org.mockito:mockito-core:1.9.5'
     compile 'org.testng:testng:6.3.1'
 
     testCompile 'org.easytesting:fest-assert:1.4'
 }
+
