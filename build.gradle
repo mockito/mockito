@@ -46,10 +46,10 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
-// Add Mercurial VCS to generated IPR file
+// Configure VCS in generated IPR file
 idea.project.ipr {
     withXml { provider ->
-        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'hg4idea'
+        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
     }
 }
 
