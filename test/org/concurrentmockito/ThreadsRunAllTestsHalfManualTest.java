@@ -25,6 +25,7 @@ import org.mockito.internal.matchers.MatchersToStringTest;
 import org.mockito.internal.progress.MockingProgressImplTest;
 import org.mockito.internal.progress.TimesTest;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValuesTest;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubsTest;
 import org.mockito.internal.util.MockUtilTest;
 import org.mockito.internal.util.collections.ListUtilTest;
 import org.mockito.internal.verification.DefaultRegisteredInvocationsTest;
@@ -118,7 +119,8 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     ExampleTest.class,
                     PointingStackTraceToActualInvocationTest.class,
                     VerificationInOrderFromMultipleThreadsTest.class,
-                    ResetTest.class
+                    ResetTest.class,
+                    ReturnsGenericDeepStubsTest.class
                 );
                 
                 if (!result.wasSuccessful()) {
