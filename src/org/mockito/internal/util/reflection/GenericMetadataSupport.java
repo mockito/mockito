@@ -32,7 +32,7 @@ import static org.mockito.Mockito.withSettings;
  * <p>
  *     Hence :
  *     <ul>
- *         <li>the metadata is created using the {@link #from(Type)} method from a real
+ *         <li>the metadata is created using the {@link #inferFrom(Type)} method from a real
  *         Class or from a ParameterizedType, other types are not yet supported.</li>
  *
  *         <li>Then from this metadata, we can extract meta-data for a generic return type of a method, using
@@ -60,7 +60,7 @@ import static org.mockito.Mockito.withSettings;
  * }
  * </code></pre>
  *
- * @see #from(Type)
+ * @see #inferFrom(Type)
  * @see #resolveGenericReturnType(Method)
  * @see #toMock(Answer)
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubs
@@ -222,17 +222,18 @@ public abstract class GenericMetadataSupport {
     }
 
     /**
-     * Create an new GenericMetadataSupport from a {@link Type}.
+     * Create an new instance of {@link GenericMetadataSupport} inferred from a {@link Type}.
      *
      * <p>
-     *     Supports only {@link Class} and {@link ParameterizedType}, otherwise throw a {@link MockitoException}.
+     *     At the moment <code>type</code> can only be a {@link Class} or a {@link ParameterizedType}, otherwise
+     *     it'll throw a {@link MockitoException}.
      * </p>
      *
      * @param type The class from which the {@link GenericMetadataSupport} should be built.
      * @return The new {@link GenericMetadataSupport}.
      * @throws MockitoException Raised if type is not a {@link Class} or a {@link ParameterizedType}.
      */
-    public static GenericMetadataSupport from(Type type) {
+    public static GenericMetadataSupport inferFrom(Type type) {
         Checks.checkNotNull(type, "type");
         if (type instanceof Class) {
             return new FromClassGenericMetadataSupport((Class<?>) type);
@@ -245,8 +246,15 @@ public abstract class GenericMetadataSupport {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //// Below are specializations of GenericMetadataSupport that could handle retrieval of possible Types
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * Metadata for source {@link Class}
+     * Generic metadata implementation for {@link Class}.
+     *
+     * Offer support to retrieve generic metadata on a {@link Class} by reading type parameters and type variables on
+     * the class and its ancestors and interfaces.
      */
     private static class FromClassGenericMetadataSupport extends GenericMetadataSupport {
         private Class<?> clazz;
@@ -272,8 +280,15 @@ public abstract class GenericMetadataSupport {
 
 
     /**
-     * Metadata for source {@link ParameterizedType}.
-     * Don't work with ParameterizedType returned in {@link Method#getGenericReturnType()}.
+     * Generic metadata implementation for "standalone" {@link ParameterizedType}.
+     *
+     * Offer support to retrieve generic metadata on a {@link ParameterizedType} by reading type variables of
+     * the related raw type and declared type variable of this parameterized type.
+     *
+     * This class is not designed to work on ParameterizedType returned by {@link Method#getGenericReturnType()}, as
+     * the ParameterizedType instance return in these cases could have Type Variables that refer to type declaration(s).
+     * That's what meant the "standalone" word at the beginning of the Javadoc.
+     * Instead use {@link ParameterizedReturnType}.
      */
     private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport {
         private ParameterizedType parameterizedType;
@@ -296,7 +311,7 @@ public abstract class GenericMetadataSupport {
 
 
     /**
-     * Metadata specific to {@link ParameterizedType} generic return types.
+     * Generic metadata specific to {@link ParameterizedType} returned via {@link Method#getGenericReturnType()}.
      */
     private static class ParameterizedReturnType extends GenericMetadataSupport {
         private final ParameterizedType parameterizedType;
@@ -328,7 +343,7 @@ public abstract class GenericMetadataSupport {
 
 
     /**
-     * Metadata specific to {@link TypeVariable} generic return type.
+     * Generic metadata for {@link TypeVariable} returned via {@link Method#getGenericReturnType()}.
      */
     private static class TypeVariableReturnType extends GenericMetadataSupport {
         private final TypeVariable typeVariable;
@@ -450,7 +465,7 @@ public abstract class GenericMetadataSupport {
 
 
     /**
-     * Metadata specific to {@link Class} return type.
+     * Non-Generic metadata for {@link Class} returned via {@link Method#getGenericReturnType()}.
      */
     private static class NotGenericReturnTypeSupport extends GenericMetadataSupport {
         private final Class<?> returnType;

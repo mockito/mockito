@@ -19,7 +19,7 @@ import java.util.Set;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.RETURNS_DEFAULTS;
-import static org.mockito.internal.util.reflection.GenericMetadataSupport.from;
+import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 @SuppressWarnings("unused")
 public class GenericMetadataSupportTest {
@@ -46,39 +46,39 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void can_get_raw_type_from_Class() throws Exception {
-        assertThat(from(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
-        assertThat(from(ListOfNumbers.class).rawType()).isEqualTo(ListOfNumbers.class);
-        assertThat(from(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
+        assertThat(inferFrom(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
+        assertThat(inferFrom(ListOfNumbers.class).rawType()).isEqualTo(ListOfNumbers.class);
+        assertThat(inferFrom(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
     }
 
 
     @Test
     public void can_get_raw_type_from_ParameterizedType() throws Exception {
-        assertThat(from(ListOfAnyNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
-        assertThat(from(ListOfNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
-        assertThat(from(GenericsNest.class.getGenericInterfaces()[0]).rawType()).isEqualTo(Map.class);
+        assertThat(inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
+        assertThat(inferFrom(ListOfNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
+        assertThat(inferFrom(GenericsNest.class.getGenericInterfaces()[0]).rawType()).isEqualTo(Map.class);
     }
 
     @Test
     public void can_get_type_variables_from_Class() throws Exception {
-        assertThat(from(GenericsNest.class).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("K");
-        assertThat(from(ListOfNumbers.class).actualTypeArguments().keySet()).isEmpty();
-        assertThat(from(ListOfAnyNumbers.class).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("N");
-        assertThat(from(Map.class).actualTypeArguments().keySet()).hasSize(2).onProperty("name").contains("K", "V");
-        assertThat(from(Serializable.class).actualTypeArguments().keySet()).isEmpty();
+        assertThat(inferFrom(GenericsNest.class).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("K");
+        assertThat(inferFrom(ListOfNumbers.class).actualTypeArguments().keySet()).isEmpty();
+        assertThat(inferFrom(ListOfAnyNumbers.class).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("N");
+        assertThat(inferFrom(Map.class).actualTypeArguments().keySet()).hasSize(2).onProperty("name").contains("K", "V");
+        assertThat(inferFrom(Serializable.class).actualTypeArguments().keySet()).isEmpty();
     }
 
     @Test
     public void can_get_type_variables_from_ParameterizedType() throws Exception {
-        assertThat(from(GenericsNest.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(2).onProperty("name").contains("K", "V");
-        assertThat(from(ListOfAnyNumbers.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("E");
-        assertThat(from(Integer.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("T");
-        assertThat(from(StringBuilder.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).isEmpty();
+        assertThat(inferFrom(GenericsNest.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(2).onProperty("name").contains("K", "V");
+        assertThat(inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("E");
+        assertThat(inferFrom(Integer.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("T");
+        assertThat(inferFrom(StringBuilder.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).isEmpty();
     }
 
     @Test
     public void typeVariable_return_type_of____get____resolved_to_Set_and_type_argument_to_Number() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("get", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("get", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Set.class);
         assertThat(genericMetadata.actualTypeArguments().values()).contains(Number.class);
@@ -86,16 +86,16 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void bounded_typeVariable_return_type_of____returningK____resolved_to_Comparable_and_with_BoundedType() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Comparable.class);
-        GenericMetadataSupport extraInterface_0 = from(genericMetadata.extraInterfaces().get(0));
+        GenericMetadataSupport extraInterface_0 = inferFrom(genericMetadata.extraInterfaces().get(0));
         assertThat(extraInterface_0.rawType()).isEqualTo(Cloneable.class);
     }
 
     @Test
     public void fixed_ParamType_return_type_of____remove____resolved_to_Set_and_type_argument_to_Number() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("remove", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("remove", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Set.class);
         assertThat(genericMetadata.actualTypeArguments().values()).contains(Number.class);
@@ -103,35 +103,35 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void paramType_return_type_of____values____resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("values", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("values", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Collection.class);
-        GenericMetadataSupport fromTypeVariableE = from(typeVariableValue(genericMetadata.actualTypeArguments(), "E"));
+        GenericMetadataSupport fromTypeVariableE = inferFrom(typeVariableValue(genericMetadata.actualTypeArguments(), "E"));
         assertThat(fromTypeVariableE.rawType()).isEqualTo(Set.class);
         assertThat(fromTypeVariableE.actualTypeArguments().values()).contains(Number.class);
     }
 
     @Test
     public void paramType_with_type_parameters_return_type_of____paramType_with_type_params____resolved_to_Collection_and_type_argument_to_Parameterized_Set() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("paramType_with_type_params", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("paramType_with_type_params", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(List.class);
         Type firstBoundOfE = ((GenericMetadataSupport.TypeVarBoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E")).firstBound();
-        assertThat(from(firstBoundOfE).rawType()).isEqualTo(Comparable.class);
+        assertThat(inferFrom(firstBoundOfE).rawType()).isEqualTo(Comparable.class);
     }
 
     @Test
     public void typeVariable_with_type_parameters_return_type_of____typeVar_with_type_params____resolved_K_hence_to_Comparable_and_with_BoundedType() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("typeVar_with_type_params", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("typeVar_with_type_params", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(Comparable.class);
-        GenericMetadataSupport extraInterface_0 = from(genericMetadata.extraInterfaces().get(0));
+        GenericMetadataSupport extraInterface_0 = inferFrom(genericMetadata.extraInterfaces().get(0));
         assertThat(extraInterface_0.rawType()).isEqualTo(Cloneable.class);
     }
 
     @Test
     public void class_return_type_of____append____resolved_to_StringBuilder_and_type_arguments() throws Exception {
-        GenericMetadataSupport genericMetadata = from(StringBuilder.class).resolveGenericReturnType(firstNamedMethod("append", StringBuilder.class));
+        GenericMetadataSupport genericMetadata = inferFrom(StringBuilder.class).resolveGenericReturnType(firstNamedMethod("append", StringBuilder.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(StringBuilder.class);
         assertThat(genericMetadata.actualTypeArguments()).isEmpty();
@@ -141,7 +141,7 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void paramType_with_wildcard_return_type_of____returning_wildcard_with_class_lower_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(List.class);
         GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
@@ -151,22 +151,22 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void paramType_with_wildcard_return_type_of____returning_wildcard_with_typeVar_lower_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_lower_bound", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_lower_bound", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(List.class);
         GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
 
-        assertThat(from(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
+        assertThat(inferFrom(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
         assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);    }
 
     @Test
     public void paramType_with_wildcard_return_type_of____returning_wildcard_with_typeVar_upper_bound____resolved_to_List_and_type_argument_to_Integer() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_upper_bound", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_typeVar_upper_bound", GenericsNest.class));
 
         assertThat(genericMetadata.rawType()).isEqualTo(List.class);
         GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
 
-        assertThat(from(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
+        assertThat(inferFrom(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
         assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
     }
 
@@ -175,16 +175,16 @@ public class GenericMetadataSupportTest {
 
     @Test(expected = MockitoException.class)
     public void toMock_propagate_MockitoException_if_type_unmockable() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
 
         GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
 
-        from(boundedType.firstBound()).toMock(RETURNS_DEFAULTS);
+        inferFrom(boundedType.firstBound()).toMock(RETURNS_DEFAULTS);
     }
 
     @Test
     public void toMock_returns_mock_of_correct_type() throws Exception {
-        GenericMetadataSupport genericMetadata = from(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
 
         assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Comparable.class);
         assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Cloneable.class);

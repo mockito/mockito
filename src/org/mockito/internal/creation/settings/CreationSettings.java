@@ -98,7 +98,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public GenericMetadataSupport getMockitoGenericMetadata() {
         if (mockitoGenericMetadata == null) {
-            this.mockitoGenericMetadata = GenericMetadataSupport.from(typeToMock);
+            this.mockitoGenericMetadata = GenericMetadataSupport.inferFrom(typeToMock);
         }
         return mockitoGenericMetadata;
     }
