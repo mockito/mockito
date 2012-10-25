@@ -73,6 +73,9 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public MockSettings defaultAnswer(Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
+        if (defaultAnswer == null) {
+            new Reporter().defaultAnswerDoesNotAcceptNullParameter();
+        }
         return this;
     }
 
@@ -167,5 +170,6 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         }
         return interfaces;
     }
+
 }
 

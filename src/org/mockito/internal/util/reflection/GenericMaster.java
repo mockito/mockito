@@ -30,4 +30,5 @@ public class GenericMaster {
         
         return Object.class;
     }
+
 }

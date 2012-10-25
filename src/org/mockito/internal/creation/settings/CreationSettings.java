@@ -19,6 +19,7 @@ import java.util.Set;
  * by Szczepan Faber, created at: 4/9/12
  */
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
+    private static final long serialVersionUID = -6789800638070123629L;
 
     protected Class<T> typeToMock;
     protected Set<Class> extraInterfaces = new LinkedHashSet<Class>();
@@ -27,11 +28,12 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected Answer<Object> defaultAnswer;
     protected MockName mockName;
     protected boolean serializable;
-    protected boolean stubOnly;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
+    protected boolean stubOnly;
 
     public CreationSettings() {}
 
+    @SuppressWarnings("unchecked")
     public CreationSettings(CreationSettings copy) {
         this.typeToMock = copy.typeToMock;
         this.extraInterfaces = copy.extraInterfaces;
@@ -87,11 +89,12 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return serializable;
     }
 
+    public List<InvocationListener> getInvocationListeners() {
+        return invocationListeners;
+    }
+
     public boolean isStubOnly() {
         return stubOnly;
     }
 
-    public List<InvocationListener> getInvocationListeners() {
-        return invocationListeners;
-    }
 }

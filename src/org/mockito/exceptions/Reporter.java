@@ -748,6 +748,10 @@ public class Reporter {
         ));
     }
 
+    public void defaultAnswerDoesNotAcceptNullParameter() {
+        throw new MockitoException("defaultAnswer() does not accept null parameter");
+    }
+
     public void serializableWontWorkForObjectsThatDontImplementSerializable(Class classToMock) {
         throw new MockitoException(join(
                 "You are using the setting 'withSettings().serializable()' however the type you are trying to mock '" + classToMock.getSimpleName() + "'",
