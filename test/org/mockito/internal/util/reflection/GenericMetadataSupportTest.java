@@ -5,7 +5,6 @@
 package org.mockito.internal.util.reflection;
 
 import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -18,7 +17,6 @@ import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
 import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 @SuppressWarnings("unused")
@@ -170,25 +168,6 @@ public class GenericMetadataSupportTest {
         assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
     }
 
-
-
-
-    @Test(expected = MockitoException.class)
-    public void toMock_propagate_MockitoException_if_type_unmockable() throws Exception {
-        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
-
-        GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
-
-        inferFrom(boundedType.firstBound()).toMock(RETURNS_DEFAULTS);
-    }
-
-    @Test
-    public void toMock_returns_mock_of_correct_type() throws Exception {
-        GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returningK", GenericsNest.class));
-
-        assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Comparable.class);
-        assertThat(genericMetadata.toMock(RETURNS_DEFAULTS)).isInstanceOf(Cloneable.class);
-    }
 
 
     private Type typeVariableValue(Map<TypeVariable, Type> typeVariables, String typeVariableName) {

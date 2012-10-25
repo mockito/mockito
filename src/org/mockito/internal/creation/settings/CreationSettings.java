@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.creation.settings;
 
-import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -30,7 +29,6 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected MockName mockName;
     protected boolean serializable;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
-    protected GenericMetadataSupport mockitoGenericMetadata;
     protected boolean stubOnly;
 
     public CreationSettings() {}
@@ -45,7 +43,6 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.mockName = copy.mockName;
         this.serializable = copy.serializable;
         this.invocationListeners = copy.invocationListeners;
-        this.mockitoGenericMetadata = copy.mockitoGenericMetadata;
         this.stubOnly = copy.stubOnly;
     }
 
@@ -94,17 +91,6 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public List<InvocationListener> getInvocationListeners() {
         return invocationListeners;
-    }
-
-    public GenericMetadataSupport getMockitoGenericMetadata() {
-        if (mockitoGenericMetadata == null) {
-            this.mockitoGenericMetadata = GenericMetadataSupport.inferFrom(typeToMock);
-        }
-        return mockitoGenericMetadata;
-    }
-
-    public void setMockitoGenericMetadata(GenericMetadataSupport mockitoGenericMetadata) {
-        this.mockitoGenericMetadata = mockitoGenericMetadata;
     }
 
     public boolean isStubOnly() {

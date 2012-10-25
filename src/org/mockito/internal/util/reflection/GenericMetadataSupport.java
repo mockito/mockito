@@ -6,17 +6,12 @@ package org.mockito.internal.util.reflection;
 
 
 import org.mockito.Incubating;
-import org.mockito.MockSettings;
-import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.util.Checks;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.*;
 import java.util.*;
-
-import static org.mockito.Mockito.withSettings;
 
 
 /**
@@ -145,10 +140,17 @@ public abstract class GenericMetadataSupport {
 
 
     /**
-     * @return Returns extra interfaces if relevant, otherwise empty List.
+     * @return Returns extra interfaces <strong>if relevant</strong>, otherwise empty List.
      */
     public List<Type> extraInterfaces() {
         return Collections.emptyList();
+    }
+
+    /**
+     * @return Returns an array with the raw types of {@link #extraInterfaces()} <strong>if relevant</strong>.
+     */
+    public Class<?>[] rawExtraInterfaces() {
+        return new Class[0];
     }
 
 
@@ -181,21 +183,6 @@ public abstract class GenericMetadataSupport {
         return type;
     }
 
-
-
-    /**
-     * Creates a mock using the Generics Metadata represented by this instance.
-     *
-     * @param answer The answer to use in mock settings.
-     * @return The mock or null if not mockable.
-     */
-    public Object toMock(Answer answer) {
-        return createMock(rawType(), ((MockSettingsImpl) withSettings().defaultAnswer(answer)).parameterizedInfo(this));
-    }
-
-    private Object createMock(Class<?> rawType, MockSettings mockSettings) {
-        return Mockito.mock(rawType, mockSettings);
-    }
 
 
     /**
@@ -415,7 +402,11 @@ public abstract class GenericMetadataSupport {
             throw new MockitoException("Cannot extract extra-interfaces from '" + typeVariable + "' : '" + type + "'");
         }
 
-        private Class<?>[] rawExtraInterfaces() {
+        /**
+         * @return Returns an array with the extracted raw types of {@link #extraInterfaces()}.
+         * @see #extractRawTypeOf(java.lang.reflect.Type)
+         */
+        public Class<?>[] rawExtraInterfaces() {
             List<Type> extraInterfaces = extraInterfaces();
             List<Class<?>> rawExtraInterfaces = new ArrayList<Class<?>>();
             for (Type extraInterface : extraInterfaces) {
@@ -443,22 +434,7 @@ public abstract class GenericMetadataSupport {
                 }
                 return actualFirstBound;
             }
-            return type; // irrelevant, we don't manage other types.
-        }
-
-        public Object toMock(Answer answer) {
-            Class<?>[] rawExtraInterfaces = rawExtraInterfaces();
-            if (rawExtraInterfaces.length <= 0) {
-                return super.toMock(answer);
-            }
-
-            return super.createMock(
-                    rawType(),
-                    ((MockSettingsImpl) withSettings()
-                            .defaultAnswer(answer)
-                            .extraInterfaces(rawExtraInterfaces))
-                            .parameterizedInfo(this)
-            );
+            return type; // irrelevant, we don't manage other types as they are not bounded.
         }
     }
 
