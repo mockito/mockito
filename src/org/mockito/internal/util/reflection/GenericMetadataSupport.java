@@ -8,7 +8,6 @@ package org.mockito.internal.util.reflection;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
-import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -27,15 +26,11 @@ import java.util.*;
  * <p>
  *     Hence :
  *     <ul>
- *         <li>the metadata is created using the {@link #inferFrom(Type)} method from a real
- *         Class or from a ParameterizedType, other types are not yet supported.</li>
+ *         <li>A new instance representing the metadata is created using the {@link #inferFrom(Type)} method from a real
+ *         <code>Class</code> or from a <code>ParameterizedType</code>, other types are not yet supported.</li>
  *
  *         <li>Then from this metadata, we can extract meta-data for a generic return type of a method, using
  *         {@link #resolveGenericReturnType(Method)}.</li>
- *
- *         <li>Finally as we want to mock the actual type, but we want to pass along the contextual generics meta-data
- *         we need to create the mock ourselves as we know how to create it, depending on the kind of Type (Class,
- *         ParameterizedType, TypeVariable), the method {@link #toMock(Answer)} assumes this responsibility.</li>
  *     </ul>
  * </p>
  *
@@ -57,8 +52,7 @@ import java.util.*;
  *
  * @see #inferFrom(Type)
  * @see #resolveGenericReturnType(Method)
- * @see #toMock(Answer)
- * @see org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubs
+ * @see org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs
  */
 @Incubating
 public abstract class GenericMetadataSupport {

@@ -74,6 +74,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     /**
      * Creates a mock using the Generics Metadata.
      *
+     * <li>Finally as we want to mock the actual type, but we want to pass along the contextual generics meta-data
+     * that was resolved for the current return type, for this to happen we associate to the mock an new instance of
+     * {@link ReturnsDeepStubs} answer in which we will store the returned type generic metadata.
+     *
      * @param returnTypeGenericMetadata The metadata to use to create the new mock.
      * @return The mock
      */
