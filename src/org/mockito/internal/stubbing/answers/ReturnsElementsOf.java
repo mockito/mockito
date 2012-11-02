@@ -19,8 +19,16 @@ import java.util.LinkedList;
  *   //this:
  *   when(mock.foo()).thenReturn(1, 2, 3);
  *   //is equivalent to:
- *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
+ *   when(mock.foo()).thenAnswer(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
  * </code></pre>
+ * </p>
+ *
+ * <p>
+ * Also you might better want to use the static factory there
+ * {@link org.mockito.AdditionalAnswers#returnsElementsOf(java.util.Collection)}
+ * </p>
+ *
+ * @see org.mockito.AdditionalAnswers
  */
 public class ReturnsElementsOf implements Answer<Object> {
 

@@ -180,7 +180,7 @@ public class AdditionalAnswers {
      *   when(mock.foo()).thenReturn(1, 2, 3);
      *
      *   //is equivalent to:
-     *   when(mock.foo()).thenReturn(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
+     *   when(mock.foo()).thenAnswer(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
      * </code></pre>
      *
      * @param elements The collection of elements to return.
