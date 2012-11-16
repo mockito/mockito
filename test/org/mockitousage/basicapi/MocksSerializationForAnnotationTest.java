@@ -5,24 +5,6 @@
 
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Observable;
-
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -35,6 +17,24 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Observable;
+
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationForAnnotationTest extends TestBase implements Serializable {
@@ -258,7 +258,8 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
             return string;
         }
     }
-    
+
+    @Test
     public void should_serialize_with_real_object_spy() throws Exception {
         // given
         List<Object> list = new ArrayList<Object>();
@@ -315,7 +316,9 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     @Test
     public void should_be_serialize_and_have_extra_interfaces() throws Exception {
         //then
-        serializeAndBack((List) imethodsWithExtraInterfacesMock);
+        Assertions.assertThat((Object) serializeAndBack((List) imethodsWithExtraInterfacesMock))
+                .isInstanceOf(List.class)
+                .isInstanceOf(IMethods.class);
     }
     
     public static class FailTestClass{

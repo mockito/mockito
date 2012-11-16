@@ -23,7 +23,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {
@@ -333,8 +342,8 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         IMethods mockTwo = mock(IMethods.class, withSettings().extraInterfaces(List.class).serializable());
 
         //then
-        serializeAndBack((List) mock);
-        serializeAndBack((List) mockTwo);
+        Assertions.assertThat((Object) serializeAndBack((List) mock)).isInstanceOf(List.class).isInstanceOf(IMethods.class);
+        Assertions.assertThat((Object) serializeAndBack((List) mockTwo)).isInstanceOf(List.class).isInstanceOf(IMethods.class);
     }
 
     @Test
