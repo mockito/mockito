@@ -25,6 +25,7 @@ import java.util.Observable;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -33,6 +34,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
+import static org.mockitoutil.SimpleSerializationUtil.deserializeMock;
+import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
+import static org.mockitoutil.SimpleSerializationUtil.serializeMock;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {
@@ -354,5 +358,14 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         } catch (MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains(Observable.class.getSimpleName()).contains("serializable()").contains("implement Serializable");
         }
+    }
+
+    @Test
+    public void try_some_mocks_with_current_answers() throws Exception {
+        IMethods iMethods = mock(IMethods.class, RETURNS_DEEP_STUBS);
+
+        serializeAndBack(iMethods);
+
+
     }
 }

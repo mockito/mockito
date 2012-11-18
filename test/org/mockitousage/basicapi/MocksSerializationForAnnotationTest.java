@@ -35,6 +35,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
+import static org.mockitoutil.SimpleSerializationUtil.deserializeMock;
+import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
+import static org.mockitoutil.SimpleSerializationUtil.serializeMock;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationForAnnotationTest extends TestBase implements Serializable {
