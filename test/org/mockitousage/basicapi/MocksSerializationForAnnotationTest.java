@@ -334,7 +334,10 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
         	MockitoAnnotations.initMocks(new FailTestClass());
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains(Observable.class.getSimpleName()).contains("serializable()").contains("implement Serializable");
+            Assertions.assertThat(e.getMessage())
+                    .contains(Observable.class.getSimpleName())
+                    .contains("serializable()")
+                    .contains("implement Serializable");
         }
     }
 }

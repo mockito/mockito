@@ -346,8 +346,12 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         IMethods mockTwo = mock(IMethods.class, withSettings().extraInterfaces(List.class).serializable());
 
         //then
-        Assertions.assertThat((Object) serializeAndBack((List) mock)).isInstanceOf(List.class).isInstanceOf(IMethods.class);
-        Assertions.assertThat((Object) serializeAndBack((List) mockTwo)).isInstanceOf(List.class).isInstanceOf(IMethods.class);
+        Assertions.assertThat((Object) serializeAndBack((List) mock))
+                .isInstanceOf(List.class)
+                .isInstanceOf(IMethods.class);
+        Assertions.assertThat((Object) serializeAndBack((List) mockTwo))
+                .isInstanceOf(List.class)
+                .isInstanceOf(IMethods.class);
     }
 
     @Test
@@ -356,16 +360,19 @@ public class MocksSerializationTest extends TestBase implements Serializable {
             serializeMock(mock(Observable.class, withSettings().serializable()));
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains(Observable.class.getSimpleName()).contains("serializable()").contains("implement Serializable");
+            Assertions.assertThat(e.getMessage())
+                    .contains(Observable.class.getSimpleName())
+                    .contains("serializable()")
+                    .contains("implement Serializable");
         }
     }
 
     @Test
     public void try_some_mocks_with_current_answers() throws Exception {
-        IMethods iMethods = mock(IMethods.class, RETURNS_DEEP_STUBS);
+        IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
+
+        when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);
 
         serializeAndBack(iMethods);
-
-
     }
 }
