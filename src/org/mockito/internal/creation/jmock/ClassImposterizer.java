@@ -71,13 +71,13 @@ public class ClassImposterizer  {
         }
     }
     
-    private void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
+    public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
         for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
             constructor.setAccessible(accessible);
         }
     }
     
-    private Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
+    public Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
@@ -105,6 +105,8 @@ public class ClassImposterizer  {
         } else {
             enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
         }
+
+        enhancer.setSerialVersionUID(42L);
         
         try {
             return enhancer.createClass(); 

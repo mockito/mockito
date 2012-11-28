@@ -5,20 +5,22 @@
 
 package org.mockito.internal.creation;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
@@ -39,6 +41,8 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
             return proxy == args[0];
         } else if (objectMethodsGuru.isHashCodeMethod(method)) {
             return hashCodeForMock(proxy);
+        } else if (new AcrossJVMSerializationFeature().isWriteReplace(method)) {
+            return new AcrossJVMSerializationFeature().writeReplace(proxy);
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);

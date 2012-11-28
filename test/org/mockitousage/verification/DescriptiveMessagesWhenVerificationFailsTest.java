@@ -5,10 +5,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.AdditionalMatchers.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,6 +15,16 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.AdditionalMatchers.aryEq;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
@@ -356,7 +362,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_method_name_and_arguments_of_other_interactions() throws Exception {
+    public void should_print_method_name_and_arguments_of_other_interactions_with_different_methods() throws Exception {
         try {
             mock.arrayMethod(new String[] {"a", "b", "c"});
             mock.forByte((byte) 25);
@@ -370,4 +376,52 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains("iMethods.forByte(25)", e.getMessage());
         }
     }
+
+    @Test
+    public void should_print_method_name_and_arguments_of_other_interactions_of_same_method() throws Exception {
+        try {
+            mock.forByte((byte) 25);
+            mock.forByte((byte) 12);
+
+            verify(mock).forByte((byte) 42);
+            fail();
+        } catch (WantedButNotInvoked e) {
+            System.out.println(e);
+            assertContains("iMethods.forByte(42)", e.getMessage());
+            assertContains("iMethods.forByte(25)", e.getMessage());
+            assertContains("iMethods.forByte(12)", e.getMessage());
+        }
+    }
+
+    @Test
+    public void test1() {
+        AnInterface m = Mockito.mock(AnInterface.class);
+
+        for (int i = 1; i <= 2; i++) {
+            m.foo(i);
+        }
+
+        verify(m).foo(1);
+        verify(m).foo(2);
+        verify(m).foo(3); // XXX: doesn't mention the parameters of foo(1) and foo(2)
+        verify(m).foo(4);
+    }
+
+    @Test
+    public void test2() {
+        AnInterface m = Mockito.mock(AnInterface.class);
+
+        for (int i = 1; i <= 4; i++) {
+            m.foo(i);
+        }
+
+        verify(m).foo(1);
+        verify(m).foo(2);
+        verify(m).foo(5); // XXX: doesn't mention foo(4) at all
+    }
+
+    public interface AnInterface {
+        void foo(int i);
+    }
+    
 }

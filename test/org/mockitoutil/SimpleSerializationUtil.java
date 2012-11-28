@@ -20,6 +20,10 @@ public abstract class SimpleSerializationUtil {
     public static <T> T deserializeMock(ByteArrayOutputStream serialized, Class<T> type) throws IOException,
             ClassNotFoundException {
         InputStream unserialize = new ByteArrayInputStream(serialized.toByteArray());
+        return deserializeMock(unserialize, type);
+    }
+
+    public static <T> T deserializeMock(InputStream unserialize, Class<T> type) throws IOException, ClassNotFoundException {
         Object readObject = new ObjectInputStream(unserialize).readObject();
         Assert.assertNotNull(readObject);
         return type.cast(readObject);
