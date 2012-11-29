@@ -28,7 +28,7 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
     }
 
     Object returnValueFor(Class<?> clazz) {
-        if (!ClassImposterizer.INSTANCE.canImposterise(clazz)) {
+        if (!mockitoCore.isTypeMockable(clazz)) {
             return null;
         }
         

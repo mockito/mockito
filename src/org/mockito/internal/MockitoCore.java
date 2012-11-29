@@ -39,7 +39,11 @@ public class MockitoCore {
     private final Reporter reporter = new Reporter();
     private final MockUtil mockUtil = new MockUtil();
     private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
-    
+
+    public boolean isTypeMockable(Class<?> typeToMock) {
+        return mockUtil.isTypeMockable(typeToMock);
+    }
+
     public <T> T mock(Class<T> typeToMock, MockSettings settings) {
         if (!MockSettingsImpl.class.isInstance(settings)) {
             throw new IllegalArgumentException(

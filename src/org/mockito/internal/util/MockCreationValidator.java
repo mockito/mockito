@@ -5,7 +5,6 @@
 package org.mockito.internal.util;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,12 +12,10 @@ import java.util.Collection;
 @SuppressWarnings("unchecked")
 public class MockCreationValidator {
 
-    public boolean isTypeMockable(Class<?> clz) {
-        return ClassImposterizer.INSTANCE.canImposterise(clz);
-    }
+    private final MockUtil mockUtil = new MockUtil();
 
     public void validateType(Class classToMock) {
-        if (!isTypeMockable(classToMock)) {
+        if (!mockUtil.isTypeMockable(classToMock)) {
             new Reporter().cannotMockFinalClass(classToMock);
         }
     }
