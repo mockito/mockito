@@ -7,8 +7,6 @@ package org.mockito.internal.configuration;
 import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
-import org.mockito.internal.creation.CglibMockMaker;
-import org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
@@ -56,10 +54,15 @@ import java.util.List;
  * </p>
  */
 public class ClassPathLoader {
+    private static final String DEFAULT_MOCK_MAKER_CLASS =
+            "org.mockito.internal.creation.CglibMockMaker";
+    private static final String DEFAULT_STACK_TRACE_CLEANER_PROVIDER_CLASS =
+            "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider";
+    public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
+
     private static final MockMaker mockMaker = findPlatformMockMaker();
     private static final StackTraceCleanerProvider stackTraceCleanerProvider =
-            findPluginImplementation(StackTraceCleanerProvider.class, new DefaultStackTraceCleanerProvider());
-    public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
+            findPlatformStackTraceCleanerProvider();
 
     /**
      * @return configuration loaded from classpath or null
@@ -87,8 +90,8 @@ public class ClassPathLoader {
     /**
      * Returns the implementation of the mock maker available for the current runtime.
      *
-     * <p>Returns {@link CglibMockMaker} if no {@link MockMaker} extension exists
-     * or is visible in the current classpath.</p>
+     * <p>Returns {@link org.mockito.internal.creation.CglibMockMaker} if no
+     * {@link MockMaker} extension exists or is visible in the current classpath.</p>
      */
     public static MockMaker getMockMaker() {
         return mockMaker;
@@ -104,14 +107,27 @@ public class ClassPathLoader {
      * allowing mockito to run on alternative platforms like Android.
      */
     static MockMaker findPlatformMockMaker() {
-        return findPluginImplementation(MockMaker.class, new CglibMockMaker());
+        return findPluginImplementation(MockMaker.class, DEFAULT_MOCK_MAKER_CLASS);
     }
 
-    static <T> T findPluginImplementation(Class<T> pluginType, T defaultPlugin) {
+    static StackTraceCleanerProvider findPlatformStackTraceCleanerProvider() {
+        return findPluginImplementation(
+                StackTraceCleanerProvider.class, DEFAULT_STACK_TRACE_CLEANER_PROVIDER_CLASS);
+    }
+
+    static <T> T findPluginImplementation(Class<T> pluginType, String defaultPluginClassName) {
         for (T plugin : loadImplementations(pluginType)) {
             return plugin; // return the first one service loader finds (if any)
         }
-        return defaultPlugin; // default implementation
+
+        try {
+            // Default implementation. Use our own ClassLoader instead of the context
+            // ClassLoader, as the default implementation is assumed to be part of
+            // Mockito and may not be available via the context ClassLoader.
+            return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
+        } catch (Exception e) {
+            throw new MockitoException("Failed to load default " + pluginType, e);
+        }
     }
 
     /**

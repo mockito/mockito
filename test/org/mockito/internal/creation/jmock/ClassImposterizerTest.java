@@ -62,18 +62,8 @@ public class ClassImposterizerTest extends TestBase {
         assertThat(mock, is(instanceOf(SomeInterface.class)));
     }
 
-    final class FinalClass {}
     class SomeClass {}
     interface SomeInterface {}
-
-    @Test
-    public void shouldKnowIfCanImposterize() throws Exception {
-        assertFalse(ClassImposterizer.INSTANCE.canImposterise(FinalClass.class));
-        assertFalse(ClassImposterizer.INSTANCE.canImposterise(int.class));
-
-        assertTrue(ClassImposterizer.INSTANCE.canImposterise(SomeClass.class));
-        assertTrue(ClassImposterizer.INSTANCE.canImposterise(SomeInterface.class));
-    } 
     
     private class ClassWithoutConstructor {}
 

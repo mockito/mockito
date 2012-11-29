@@ -79,4 +79,17 @@ public class MockUtilTest extends TestBase {
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");
     }
+
+    final class FinalClass {}
+    class SomeClass {}
+    interface SomeInterface {}
+
+    @Test
+    public void shouldKnowIfTypeIsMockable() throws Exception {
+        assertFalse(mockUtil.isTypeMockable(FinalClass.class));
+        assertFalse(mockUtil.isTypeMockable(int.class));
+
+        assertTrue(mockUtil.isTypeMockable(SomeClass.class));
+        assertTrue(mockUtil.isTypeMockable(SomeInterface.class));
+    }
 }

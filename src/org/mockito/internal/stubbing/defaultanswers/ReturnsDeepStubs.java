@@ -6,10 +6,10 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.MockSettings;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
@@ -17,7 +17,6 @@ import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
 /**
@@ -42,6 +41,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = -7105341425736035847L;
 
+    private MockitoCore mockitoCore = new MockitoCore();
     private ReturnsEmptyValues delegate = new ReturnsEmptyValues();
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -49,7 +49,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
-        if (!new MockCreationValidator().isTypeMockable(rawType)) {
+        if (!mockitoCore.isTypeMockable(rawType)) {
             return delegate.returnValueFor(rawType);
         }
 
@@ -82,7 +82,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
      * @return The mock
      */
     private Object createNewDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata) {
-        return mock(
+        return mockitoCore.mock(
                 returnTypeGenericMetadata.rawType(),
                 withSettingsUsing(returnTypeGenericMetadata)
         );
