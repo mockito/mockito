@@ -126,7 +126,9 @@ public class ClassPathLoader {
             // Mockito and may not be available via the context ClassLoader.
             return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
         } catch (Exception e) {
-            throw new MockitoException("Failed to load default " + pluginType, e);
+            throw new MockitoException("Internal problem occurred, please report it. " +
+                    "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
+                    "Failed to load " + pluginType, e);
         }
     }
 
@@ -139,7 +141,6 @@ public class ClassPathLoader {
         if (loader == null) {
             loader = ClassLoader.getSystemClassLoader();
         }
-
         Enumeration<URL> resources;
         try {
             resources = loader.getResources("mockito-extensions/" + service.getName());
