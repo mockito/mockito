@@ -14,6 +14,8 @@ import org.mockito.internal.util.reflection.FieldInitializer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.withSettings;
 
@@ -43,7 +45,8 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     }
 
     @SuppressWarnings("deprecation") // for MockitoAnnotations.Mock
-    public void process(Class<?> context, Object testInstance) {
+    public List<Object> process(Class<?> context, Object testInstance) {
+        List<Object> createdMocks = new ArrayList<Object>();
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
@@ -60,18 +63,20 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                         // instance has been spied earlier
                         // for example happens when MockitoAnnotations.initMocks is called two times.
                         Mockito.reset(instance);
+                        createdMocks.add(instance);
                     } else {
+                        Object mock = Mockito.mock(instance.getClass(), withSettings().spiedInstance(instance)
+                                .defaultAnswer(Mockito.CALLS_REAL_METHODS).name(field.getName()));
                         field.setAccessible(true);
-                        field.set(testInstance, Mockito.mock(instance.getClass(), withSettings()
-                                .spiedInstance(instance)
-                                .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-                                .name(field.getName())));
+                        field.set(testInstance, mock);
+                        createdMocks.add(mock);
                     }
                 } catch (IllegalAccessException e) {
                     throw new MockitoException("Problems initiating spied field " + field.getName(), e);
                 }
             }
         }
+        return createdMocks;
     }
     
     //TODO duplicated elsewhere
