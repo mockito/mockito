@@ -22,6 +22,11 @@ import org.mockito.mock.MockCreationSettings;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
+/**
+ * Should be one instance per mock instance, see CglibMockMaker.
+ *
+ *
+ */
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
@@ -29,6 +34,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockCreationSettings mockSettings;
+    private AcrossJVMSerializationFeature acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
 
     public MethodInterceptorFilter(InternalMockHandler handler, MockCreationSettings mockSettings) {
         this.handler = handler;
@@ -41,8 +47,8 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
             return proxy == args[0];
         } else if (objectMethodsGuru.isHashCodeMethod(method)) {
             return hashCodeForMock(proxy);
-        } else if (new AcrossJVMSerializationFeature().isWriteReplace(method)) {
-            return new AcrossJVMSerializationFeature().writeReplace(proxy);
+        } else if (acrossJVMSerializationFeature.isWriteReplace(method)) {
+            return acrossJVMSerializationFeature.writeReplace(proxy);
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);

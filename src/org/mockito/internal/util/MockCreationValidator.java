@@ -58,7 +58,7 @@ public class MockCreationValidator {
         // Having a **superclass that do not implements Serializable** might fail as well when serialized
         // Though it might prevent issues when mockito is mocking a class without superclass.
         if(serializable && !classToMock.isInterface() && !(Serializable.class.isAssignableFrom(classToMock))) {
-            new Reporter().serializableWontWorkForObjectsThatDontImplementSerializable(classToMock);
+//            new Reporter().serializableWontWorkForObjectsThatDontImplementSerializable(classToMock);
         }
     }
 }

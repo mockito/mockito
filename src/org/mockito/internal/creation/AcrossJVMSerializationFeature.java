@@ -20,16 +20,39 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * XXX not thread-safe prototype !!!!
+ * This is responsible for serializing a mock, it is enabled if the mock is implementing
+ * {@link Serializable}.
+ *
+ * <p>
+ *     The way it works is to enable serialization via the {@link #enableSerializationAcrossJVM(MockCreationSettings)},
+ *     if the mock settings is set to be serializable it will add the {@link AcrossJVMMockitoMockSerilizable} interface.
+ *     This interface defines a the {@link AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerilizable#writeReplace()}
+ *     whose signature match the one that is looked by the standard Java serialization.
+ * </p>
+ *
+ * <p>
+ *     Then in the {@link MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
+ *     it will use the custom implementation of this class {@link #writeReplace(Object)}. This method has a specific
+ *     knowledge on how to serialize a mockito mock that is based on CGLIB.
+ * </p>
+ *
+ * <p><strong>Only one instance per mock.</strong></p>
+ *
+ * not thread-safe prototype !!!!
  *
  * @author Brice Dutheil
  */
 public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
-    private static WeakHashMap<Object, Boolean> currentlySerializing = new WeakHashMap();
+    private boolean currentlySerializing = false;
+    volatile AtomicInteger returningProxyCounter = new AtomicInteger(0);
+    volatile AtomicInteger returningWrapperCounter = new AtomicInteger(0);
+    private Lock mutex = new ReentrantLock();
 
     public boolean isWriteReplace(Method method) {
         return  method.getReturnType() == Object.class
@@ -39,29 +62,46 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
 
     public Object writeReplace(Object proxy) throws ObjectStreamException {
-        // mark started flag // per thread, not per instance
-        // temporary loosy hack to avoid stackoverflow
-        if(Boolean.TRUE.equals(currentlySerializing.get(proxy))) {
-            return proxy;
-        }
-        currentlySerializing.put(proxy, true);
-
         try {
+            mutex.lock();
+            // mark started flag // per thread, not per instance
+            // temporary loosy hack to avoid stackoverflow
+            if(isCurrentlySerializing()) {
+                System.out.println("[" + returningProxyCounter.getAndIncrement() + "] retuning proxy");
+                return proxy;
+            }
+            markMockAsSerializing();
+
+            System.out.println("[" + returningWrapperCounter.getAndIncrement() + "] returning wrapper");
+
             return new AcrossJVMMockSerializationProxy(proxy);         // stackoverflow
         } catch (IOException ioe) {
             throw new NotSerializableException(proxy.getClass().getCanonicalName()); // TODO throw our own serialization exception
         } finally {
             // unmark
-            currentlySerializing.remove(proxy);
+            unmarkMockAsSerializing();
+            mutex.unlock();
         }
-
     }
 
+    private void unmarkMockAsSerializing() {
+        currentlySerializing = false;
+    }
+
+    private void markMockAsSerializing() {
+        currentlySerializing = true;
+    }
+
+    private boolean isCurrentlySerializing() {
+        return currentlySerializing;
+    }
 
 
     public <T> void enableSerializationAcrossJVM(MockCreationSettings<T> settings) {
         // havin faith that this set is modifiable
-        settings.getExtraInterfaces().add(AcrossJVMMockitoMockSerilizable.class);
+        if (settings.isSerializable()) {
+            settings.getExtraInterfaces().add(AcrossJVMMockitoMockSerilizable.class);
+        }
     }
 
 
