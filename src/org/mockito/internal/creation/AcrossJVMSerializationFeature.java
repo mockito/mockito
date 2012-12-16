@@ -46,12 +46,13 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
  *
- * TODO Document external related classes
  * TODO Use a constant for the class annotation marker
  * TODO Use proper MockitoException
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
  *
+ * @see CglibMockMaker
+ * @see MethodInterceptorFilter
  * @author Brice Dutheil
  * @since 1.9.6
  */
