@@ -46,7 +46,6 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
  *
- * TODO Use a constant for the class annotation marker
  * TODO Use proper MockitoException
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
@@ -59,6 +58,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Incubating
 public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
+    private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
     private boolean instanceLocalCurrentlySerializingFlag = false;
     private Lock mutex = new ReentrantLock();
 
@@ -328,7 +328,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * @throws ClassNotFoundException
          */
         private boolean notMarkedAsAMockitoMock(Object marker) throws IOException, ClassNotFoundException {
-            return !"MockitoProxyMarker".equals(marker);
+            return !MOCKITO_PROXY_MARKER.equals(marker);
         }
     }
 
@@ -346,7 +346,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *
      */
     private static class MockitoMockObjectOutputStream extends ObjectOutputStream {
-
+        private static final String NOTHING = "";
         private MockUtil mockUtil = new MockUtil();
 
         public MockitoMockObjectOutputStream(ByteArrayOutputStream out) throws IOException {
@@ -373,9 +373,9 @@ public class AcrossJVMSerializationFeature implements Serializable {
          */
         private String mockitoProxyClassMarker(Class<?> cl) {
             if (mockUtil.isMock(cl)) {
-                return "MockitoProxyMarker";
+                return MOCKITO_PROXY_MARKER;
             } else {
-                return "";
+                return NOTHING;
             }
         }
     }
