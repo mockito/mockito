@@ -6,7 +6,6 @@
 package org.mockitousage.basicapi;
 
 import org.fest.assertions.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -325,29 +324,49 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
                 .isInstanceOf(IMethods.class);
     }
 
-    static class NotSerializableParent {
-        NotSerializableParent(Observable o) { this.o = o; }
-        private final Observable o;
-    }
-    static class NotSerializableToBeMocked extends NotSerializableParent {
-        NotSerializableToBeMocked(Observable o) { super(o); }
+
+
+    static class NotSerializableAndNoDefaultConstructor {
+        NotSerializableAndNoDefaultConstructor(Observable o) { super(); }
     }
     
-    public static class FailTestClass{
-    	@Mock(serializable=true) NotSerializableToBeMocked notSerializableToBeMocked;
+    public static class FailTestClass {
+    	@Mock(serializable=true)
+        NotSerializableAndNoDefaultConstructor notSerializableAndNoDefaultConstructor;
     }
     
     @Test
-    @Ignore("to be replaced by some MockitoException in AcrossJVMSerializationFeature")
-    public void should_fail_when_serializable_used_with_object_that_dont_implements_Serializable() throws Exception {
+    public void should_fail_when_serializable_used_with_type_that_dont_implements_Serializable_and_dont_declare_a_no_arg_constructor() throws Exception {
         try {
-            MockitoAnnotations.initMocks(new FailTestClass());
+            FailTestClass testClass = new FailTestClass();
+            MockitoAnnotations.initMocks(testClass);
+            serializeAndBack(testClass.notSerializableAndNoDefaultConstructor);
             fail("should have thrown an exception to say the object is not serializable");
         } catch (MockitoException e) {
             Assertions.assertThat(e.getMessage())
-                    .contains(Observable.class.getSimpleName())
+                    .contains(NotSerializableAndNoDefaultConstructor.class.getSimpleName())
                     .contains("serializable()")
-                    .contains("implement Serializable");
+                    .contains("implement Serializable")
+                    .contains("no-arg constructor");
         }
+    }
+
+
+
+    static class SerializableAndNoDefaultConstructor implements Serializable {
+        SerializableAndNoDefaultConstructor(Observable o) { super(); }
+    }
+
+    public static class TestClassThatHoldValidField {
+        @Mock(serializable=true)
+        SerializableAndNoDefaultConstructor serializableAndNoDefaultConstructor;
+    }
+
+    @Test
+    public void should_be_able_to_serialize_type_that_implements_Serializable_but_but_dont_declare_a_no_arg_constructor() throws Exception {
+        TestClassThatHoldValidField testClass = new TestClassThatHoldValidField();
+        MockitoAnnotations.initMocks(testClass);
+
+        serializeAndBack(testClass.serializableAndNoDefaultConstructor);
     }
 }

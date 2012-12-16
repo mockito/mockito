@@ -355,23 +355,41 @@ public class MocksSerializationTest extends TestBase implements Serializable {
                 .isInstanceOf(IMethods.class);
     }
 
-    @Test
-    @Ignore("to be replaced by some MockitoException in AcrossJVMSerializationFeature")
-    public void should_fail_when_serializable_used_with_object_that_dont_implements_Serializable() throws Exception {
-        try {
-            serializeMock(mock(Observable.class, withSettings().serializable()));
-            fail();
-        } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage())
-                    .contains(Observable.class.getSimpleName())
-                    .contains("serializable()")
-                    .contains("implement Serializable");
-        }
+
+
+    static class NotSerializableAndNoDefaultConstructor {
+        NotSerializableAndNoDefaultConstructor(Observable o) { super(); }
     }
 
     @Test
+    public void should_fail_when_serializable_used_with_type_that_dont_implements_Serializable_and_dont_declare_a_no_arg_constructor() throws Exception {
+        try {
+            serializeAndBack(mock(NotSerializableAndNoDefaultConstructor.class, withSettings().serializable()));
+            fail("should have thrown an exception to say the object is not serializable");
+        } catch (MockitoException e) {
+            Assertions.assertThat(e.getMessage())
+                    .contains(NotSerializableAndNoDefaultConstructor.class.getSimpleName())
+                    .contains("serializable()")
+                    .contains("implement Serializable")
+                    .contains("no-arg constructor");
+        }
+    }
+
+
+
+    static class SerializableAndNoDefaultConstructor implements Serializable {
+        SerializableAndNoDefaultConstructor(Observable o) { super(); }
+    }
+
+    @Test
+    public void should_be_able_to_serialize_type_that_implements_Serializable_but_but_dont_declare_a_no_arg_constructor() throws Exception {
+        serializeAndBack(mock(SerializableAndNoDefaultConstructor.class));
+    }
+
+
+    @Test
     @Ignore("Bug to fix !!! see issue 399")
-    public void try_some_mocks_with_current_answers() throws Exception {
+    public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
         IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
 
         when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);
