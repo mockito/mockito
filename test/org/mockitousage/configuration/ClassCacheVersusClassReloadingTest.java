@@ -28,7 +28,7 @@ public class ClassCacheVersusClassReloadingTest {
 
         try {
             doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
-            fail("should have raised a ClassCastException when Objenis Cache is enabled");
+            fail("should have raised a ClassCastException when Objenesis Cache is enabled");
         } catch (MockitoException e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("classloading")
