@@ -80,10 +80,16 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
 
 
     public Object doInRealm(String callableCalledInClassLoaderRealm) throws Exception {
-        Object instance = this.loadClass(callableCalledInClassLoaderRealm).getConstructor().newInstance();
-        if (instance instanceof Callable) {
-            Callable<?> callableInRealm = (Callable<?>) instance;
-            return callableInRealm.call();
+        ClassLoader current = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(this);
+            Object instance = this.loadClass(callableCalledInClassLoaderRealm).getConstructor().newInstance();
+            if (instance instanceof Callable) {
+                Callable<?> callableInRealm = (Callable<?>) instance;
+                return callableInRealm.call();
+            }
+        } finally {
+            Thread.currentThread().setContextClassLoader(current);
         }
         throw new IllegalArgumentException("qualified name '" + callableCalledInClassLoaderRealm + "' should represent a class implementing Callable");
     }
