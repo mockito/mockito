@@ -58,7 +58,15 @@ public class MockUtil {
     }
 
     public boolean isSpy(Object mock) {
-        return mock instanceof MockitoSpy; // && isMock(mock);
+        return mock instanceof MockitoSpy;
+    }
+
+    public boolean isMock(Class mockClass) {
+        return mockClass != null && MockitoMock.class.isAssignableFrom(mockClass);
+    }
+
+    public boolean isSpy(Class mockClass) {
+        return mockClass != null && MockitoSpy.class.isAssignableFrom(mockClass);
     }
 
     private <T> boolean isMockitoMock(T mock) {

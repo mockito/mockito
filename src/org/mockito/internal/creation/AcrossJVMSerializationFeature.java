@@ -5,7 +5,6 @@
 package org.mockito.internal.creation;
 
 import org.mockito.Incubating;
-import org.mockito.cglib.proxy.Factory;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.StringJoiner;
@@ -51,7 +50,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * TODO Use a constant for the class annotation marker
  * TODO Use proper MockitoException
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
- * TODO place Mockito mock identification logic in MockUtil
  * TODO check the class is mockable in the deserialization side
  *
  * @author Brice Dutheil
@@ -347,6 +345,9 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *
      */
     private static class MockitoMockObjectOutputStream extends ObjectOutputStream {
+
+        private MockUtil mockUtil = new MockUtil();
+
         public MockitoMockObjectOutputStream(ByteArrayOutputStream out) throws IOException {
             super(out);
         }
@@ -370,8 +371,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * @return The marker if this is a Mockito proxy class, otherwise returns a void marker.
          */
         private String mockitoProxyClassMarker(Class<?> cl) {
-            // TODO place logic in MockUtil
-            if (Factory.class.isAssignableFrom(cl)) {
+            if (mockUtil.isMock(cl)) {
                 return "MockitoProxyMarker";
             } else {
                 return "";
