@@ -12,14 +12,10 @@ import org.mockito.cglib.proxy.Enhancer;
 import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
@@ -27,13 +23,13 @@ public class MockUtilTest extends TestBase {
     private MockUtil mockUtil = new MockUtil();
 
     @Test
-    public void shouldGetHandler() {
+    public void should_get_handler() {
         List mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockHandler(mock));
     }
 
     @Test 
-    public void shouldScreamWhenEnhancedButNotAMockPassed() {
+    public void should_scream_when_enhanced_but_not_a_mock_passed() {
         Object o = Enhancer.create(ArrayList.class, NoOp.INSTANCE);
         try {
             mockUtil.getMockHandler(o);
@@ -42,23 +38,29 @@ public class MockUtilTest extends TestBase {
     }
 
     @Test (expected=NotAMockException.class)
-    public void shouldScreamWhenNotAMockPassed() {
+    public void should_scream_when_not_a_mock_passed() {
         mockUtil.getMockHandler("");
     }
     
     @Test (expected=MockitoException.class)
-    public void shouldScreamWhenNullPassed() {
+    public void should_scream_when_null_passed() {
         mockUtil.getMockHandler(null);
     }
-    
+
     @Test
-    public void shouldValidateMock() {
+    public void should_get_mock_settings() {
+        List mock = Mockito.mock(List.class);
+        assertNotNull(mockUtil.getMockSettings(mock));
+    }
+
+    @Test
+    public void should_validate_mock() {
         assertFalse(mockUtil.isMock("i mock a mock"));
         assertTrue(mockUtil.isMock(Mockito.mock(List.class)));
     }
 
     @Test
-    public void shouldValidateSpy() {
+    public void should_validate_spy() {
         assertFalse(mockUtil.isSpy("i mock a mock"));
         assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
         assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));

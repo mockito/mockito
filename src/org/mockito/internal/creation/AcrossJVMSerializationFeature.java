@@ -47,7 +47,6 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
  *
- * TODO Use (and create) MockitoMock interface to identify a Mockito mock
  * TODO Document external related classes
  * TODO Use a constant for the class annotation marker
  * TODO Use proper MockitoException
@@ -196,7 +195,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
             objectOutputStream.close();
             out.close();
 
-            MockCreationSettings mockSettings = new MockUtil().getMockHandler(mockitoMock).getMockSettings();
+            MockCreationSettings mockSettings = new MockUtil().getMockSettings(mockitoMock);
             this.serializedMock = out.toByteArray();
             this.typeToMock = mockSettings.getTypeToMock();
             this.extraInterfaces = mockSettings.getExtraInterfaces();

@@ -54,11 +54,11 @@ public class MockUtil {
     }
 
     public boolean isMock(Object mock) {
-        return mock != null && isMockitoMock(mock);
+        return mock instanceof MockitoMock;
     }
 
     public boolean isSpy(Object mock) {
-        return mock instanceof MockitoSpy && isMock(mock);
+        return mock instanceof MockitoSpy; // && isMock(mock);
     }
 
     private <T> boolean isMockitoMock(T mock) {
@@ -75,5 +75,9 @@ public class MockUtil {
         if (mockName.isDefault() && getMockHandler(mock).getMockSettings() instanceof CreationSettings) {
             ((CreationSettings) getMockHandler(mock).getMockSettings()).setMockName(new MockNameImpl(newName));
         }
+    }
+
+    public MockCreationSettings getMockSettings(Object mock) {
+        return getMockHandler(mock).getMockSettings();
     }
 }

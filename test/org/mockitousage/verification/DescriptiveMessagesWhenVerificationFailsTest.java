@@ -6,6 +6,7 @@
 package org.mockitousage.verification;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -378,6 +379,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
+    @Ignore("issue 380 related")
     public void should_print_method_name_and_arguments_of_other_interactions_of_same_method() throws Exception {
         try {
             mock.forByte((byte) 25);
@@ -394,6 +396,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
+    @Ignore("issue 380 related")
     public void test1() {
         AnInterface m = Mockito.mock(AnInterface.class);
 
@@ -408,6 +411,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
+    @Ignore("issue 380 related")
     public void test2() {
         AnInterface m = Mockito.mock(AnInterface.class);
 

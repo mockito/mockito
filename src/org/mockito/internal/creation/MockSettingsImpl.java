@@ -10,6 +10,7 @@ import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
+import org.mockito.internal.util.MockitoMock;
 import org.mockito.internal.util.MockitoSpy;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
@@ -162,7 +163,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     private static Set<Class> prepareExtraInterfaces(CreationSettings settings) {
         Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
-//        interfaces.add(MockitoMock.class);
+        interfaces.add(MockitoMock.class);
         if(settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }
