@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation;
 
+import org.mockito.Incubating;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.MockUtil;
@@ -57,6 +58,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Brice Dutheil
  * @since 1.9.6
  */
+@Incubating
 public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private boolean instanceLocalCurrentlySerializingFlag = false;
@@ -221,7 +223,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
                 return deserializedMock;
             } catch (IOException ioe) {
-                throw new InvalidObjectException("For some reason mock cannot ve dematerialized : " + ioe.toString() + "\n" + StringJoiner.join(ioe.getStackTrace()));
+                throw new InvalidObjectException("For some reason mock cannot be deserialized : " + ioe.toString() + "\n" + StringJoiner.join(ioe.getStackTrace()));
             } catch (ClassNotFoundException cce) {
                 throw new InvalidObjectException("For some reason Mockito Mock class cannot be found : " + cce.toString());
             }

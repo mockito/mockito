@@ -162,6 +162,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     private static Set<Class> prepareExtraInterfaces(CreationSettings settings) {
         Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
+//        interfaces.add(MockitoMock.class);
         if(settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }
