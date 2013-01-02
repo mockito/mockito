@@ -9,15 +9,18 @@ import org.fest.assertions.Assertions;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
+import org.mockitoutil.SimpleSerializationUtil;
 import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,19 +28,8 @@ import java.util.List;
 import java.util.Observable;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-import static org.mockitoutil.SimpleSerializationUtil.deserializeMock;
-import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
-import static org.mockitoutil.SimpleSerializationUtil.serializeMock;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.*;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {
@@ -384,6 +376,30 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void should_be_able_to_serialize_type_that_implements_Serializable_but_but_dont_declare_a_no_arg_constructor() throws Exception {
         serializeAndBack(mock(SerializableAndNoDefaultConstructor.class));
+    }
+
+
+
+    public static class AClassWithPrivateNoArgConstructor {
+        private AClassWithPrivateNoArgConstructor() {}
+        List returningSomething() { return Collections.emptyList(); }
+    }
+
+    @Test
+    public void private_constructor_currently_not_supported_at_the_moment_at_deserialization_time() throws Exception {
+        // given
+        AClassWithPrivateNoArgConstructor mockWithPrivateConstructor = Mockito.mock(
+                AClassWithPrivateNoArgConstructor.class,
+                Mockito.withSettings().serializable()
+        );
+
+        try {
+            // when
+            SimpleSerializationUtil.serializeAndBack(mockWithPrivateConstructor);
+        } catch (ObjectStreamException e) {
+            // then
+            Assertions.assertThat(e.getMessage()).contains("no valid constructor");
+        }
     }
 
 
