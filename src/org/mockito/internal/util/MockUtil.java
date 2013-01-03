@@ -54,7 +54,8 @@ public class MockUtil {
     }
 
     public boolean isMock(Object mock) {
-        return mock instanceof MockitoMock;
+        // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
+        return mock instanceof MockitoMock && isMockitoMock(mock);
     }
 
     public boolean isSpy(Object mock) {
