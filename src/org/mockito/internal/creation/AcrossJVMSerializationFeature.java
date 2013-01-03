@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
@@ -121,7 +122,8 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             return new AcrossJVMMockSerializationProxy(mockitoMock);
         } catch (IOException ioe) {
-            throw new NotSerializableException(mockitoMock.getClass().getCanonicalName()); // TODO throw our own serialization exception
+            // TODO use our own mockito mock serialization exception
+            throw new NotSerializableException(mockitoMock.getClass().getCanonicalName());
         } finally {
             // unmark
             mockReplacementCompleted();
@@ -221,9 +223,11 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
                 return deserializedMock;
             } catch (IOException ioe) {
-                throw new InvalidObjectException("For some reason mock cannot be deserialized : " + ioe.toString() + "\n" + StringJoiner.join(ioe.getStackTrace()));
+                // TODO use our own mockito mock serialization exception
+                throw new InvalidObjectException("Mockito mock cannot be deserialized due to : " + ioe.toString() + "\n" + StringJoiner.join(ioe.getStackTrace()));
             } catch (ClassNotFoundException cce) {
-                throw new InvalidObjectException("For some reason Mockito Mock class cannot be found : " + cce.toString());
+                // TODO use our own mockito mock serialization exception
+                throw new InvalidObjectException("Mockito Mock class cannot be found : " + cce.toString());
             }
         }
     }
@@ -307,15 +311,18 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * <code>java.io.InvalidObjectException</code> is thrown, so this part of the code is hacking through
          * the given <code>ObjectStreamClass</code> to change the name with the newly created class.
          *
-         * @param desc The <code>ObjectStreamClass</code> that will be hacked.
+         * @param descInstance The <code>ObjectStreamClass</code> that will be hacked.
          * @param proxyClass The proxy class whose name will be applied.
          * @throws InvalidObjectException
          */
-        private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass desc, Class<?> proxyClass) throws InvalidObjectException {
+        private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass descInstance, Class<?> proxyClass) throws InvalidObjectException {
             try {
-                new FieldSetter(desc, desc.getClass().getDeclaredField("name")).set(proxyClass.getCanonicalName());
+              Field classNameField = descInstance.getClass().getDeclaredField("name");
+              new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
             } catch (NoSuchFieldException e) {
-                throw new InvalidObjectException("Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name', this is definitely a bug, in our code, please report used JDK, eventually code sample.\n" + e.toString());
+                // TODO use our own mockito mock serialization exception
+                throw new InvalidObjectException("Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name', " +
+                    "this is definitely a bug in our code, please report used JDK, eventually with a code sample.\n" + e.toString());
             }
         }
 
