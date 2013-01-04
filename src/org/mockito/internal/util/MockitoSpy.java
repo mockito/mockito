@@ -5,9 +5,9 @@
 package org.mockito.internal.util;
 
 /**
- * Mark internally a MockitoSpy.
+ * Mark internally a Mockito spy.
  *
- * To be used un conjunction with {@link MockUtil#isMock(Object)}
+ * To be used un conjunction with {@link MockUtil#isMock(Object)} or {@link MockUtil#isSpy(Object)}.
  */
-public interface MockitoSpy {
+public interface MockitoSpy extends MockitoMock {
 }

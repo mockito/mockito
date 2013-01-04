@@ -153,26 +153,6 @@ public class TestBase extends Assert {
         return StringDescription.toString(m);
     }
 
-    //TODO use widely
-    protected <T> T serializeAndBack(T obj) throws Exception {
-        ByteArrayOutputStream os = this.serializeMock(obj);
-        return (T) this.deserializeMock(os, Object.class);
-    }
-
-    protected <T> T deserializeMock(ByteArrayOutputStream serialized, Class<T> type) throws IOException,
-            ClassNotFoundException {
-        InputStream unserialize = new ByteArrayInputStream(serialized.toByteArray());
-        Object readObject = new ObjectInputStream(unserialize).readObject();
-        assertNotNull(readObject);
-        return type.cast(readObject);
-    }
-
-    protected ByteArrayOutputStream serializeMock(Object mock) throws IOException {
-        ByteArrayOutputStream serialized = new ByteArrayOutputStream();
-        new ObjectOutputStream(serialized).writeObject(mock);
-        return serialized;
-    }
-
     protected boolean isMock(Object o) {
         return new MockUtil().isMock(o);
     }

@@ -5,10 +5,12 @@
 
 package org.mockitousage.basicapi;
 
-import java.io.Serializable;
-
 import org.junit.Test;
 import org.mockitoutil.TestBase;
+
+import java.io.Serializable;
+
+import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 @SuppressWarnings("serial")
 public class ObjectsSerializationTest extends TestBase implements Serializable {

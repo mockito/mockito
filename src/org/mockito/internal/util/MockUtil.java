@@ -60,11 +60,20 @@ public class MockUtil {
     }
 
     public boolean isMock(Object mock) {
-        return mock != null && isMockitoMock(mock);
+        // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
+        return mock instanceof MockitoMock && isMockitoMock(mock);
     }
 
     public boolean isSpy(Object mock) {
-        return mock instanceof MockitoSpy && isMock(mock);
+        return mock instanceof MockitoSpy;
+    }
+
+    public boolean isMock(Class mockClass) {
+        return mockClass != null && MockitoMock.class.isAssignableFrom(mockClass);
+    }
+
+    public boolean isSpy(Class mockClass) {
+        return mockClass != null && MockitoSpy.class.isAssignableFrom(mockClass);
     }
 
     private <T> boolean isMockitoMock(T mock) {
@@ -81,5 +90,9 @@ public class MockUtil {
         if (mockName.isDefault() && getMockHandler(mock).getMockSettings() instanceof CreationSettings) {
             ((CreationSettings) getMockHandler(mock).getMockSettings()).setMockName(new MockNameImpl(newName));
         }
+    }
+
+    public MockCreationSettings getMockSettings(Object mock) {
+        return getMockHandler(mock).getMockSettings();
     }
 }

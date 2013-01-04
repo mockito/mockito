@@ -53,13 +53,21 @@ public class ClassImposterizer  {
     }
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
+        Class<?> proxyClass = null;
+        Object proxyInstance = null;
         try {
             setConstructorsAccessible(mockedType, true);
-            Class<?> proxyClass = createProxyClass(mockedType, ancillaryTypes);
-            return mockedType.cast(createProxy(proxyClass, interceptor));
+            proxyClass = createProxyClass(mockedType, ancillaryTypes);
+            proxyInstance = createProxy(proxyClass, interceptor);
+            return mockedType.cast(proxyInstance);
         } catch (ClassCastException cce) {
+            // NPE unlikely to happen because CCE will only happen on the cast statement
             throw new MockitoException(join(
-                "ClassCastException occurred when creating the proxy.",
+                "ClassCastException occurred while creating the mockito proxy :",
+                "  class to imposterize : '" + mockedType.getCanonicalName() + "', loaded by classloader : '" + mockedType.getClassLoader() + "'",
+                "  imposterizing class : '" + proxyClass.getCanonicalName() + "', loaded by classloader : '" + proxyClass.getClassLoader() + "'",
+                "  proxy instance class : '" + proxyInstance.getClass().getCanonicalName() + "', loaded by classloader : '" + proxyInstance.getClass().getClassLoader() + "'",
+                "",
                 "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
             ), cce);
         } finally {
@@ -67,13 +75,13 @@ public class ClassImposterizer  {
         }
     }
     
-    private void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
+    public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
         for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
             constructor.setAccessible(accessible);
         }
     }
     
-    private Class<?> createProxyClass(Class<?> mockedType, Class<?>...interfaces) {
+    public Class<?> createProxyClass(Class<?> mockedType, Class<?>... interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
@@ -101,6 +109,8 @@ public class ClassImposterizer  {
         } else {
             enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
         }
+
+        enhancer.setSerialVersionUID(42L);
         
         try {
             return enhancer.createClass(); 
