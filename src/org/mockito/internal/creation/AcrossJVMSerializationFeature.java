@@ -54,7 +54,6 @@ import static org.mockito.internal.util.StringJoiner.join;
 public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
-    private final MockUtil mockUtil = new MockUtil();
     private boolean instanceLocalCurrentlySerializingFlag = false;
     private Lock mutex = new ReentrantLock();
 
@@ -117,11 +116,13 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             return new AcrossJVMMockSerializationProxy(mockitoMock);
         } catch (IOException ioe) {
+            MockUtil mockUtil = new MockUtil();
             MockName mockName = mockUtil.getMockName(mockitoMock);
             String mockedType = mockUtil.getMockSettings(mockitoMock).getTypeToMock().getCanonicalName();
             throw new MockitoSerializationIssue(join(
                     "The mock '" + mockName + "' of type '" + mockedType + "'",
-                    "The Java Standard Serialization reported an '" + ioe.getClass().getSimpleName() + "' saying : " + ioe.getMessage()
+                    "The Java Standard Serialization reported an '" + ioe.getClass().getSimpleName() + "' saying :",
+                    "  " + ioe.getMessage()
             ), ioe);
         } finally {
             // unmark
@@ -227,12 +228,14 @@ public class AcrossJVMSerializationFeature implements Serializable {
                 return deserializedMock;
             } catch (IOException ioe) {
                 throw new MockitoSerializationIssue(join(
-                        "Mockito mock cannot be deserialized to a mock of '" + typeToMock.getCanonicalName() + "'.",
+                        "Mockito mock cannot be deserialized to a mock of '" + typeToMock.getCanonicalName() + "'. The error was :",
+                        "  " + ioe.getMessage(),
                         "If you are unsure what is the reason of this exception, feel free to contact us on the mailing list."
                 ), ioe);
             } catch (ClassNotFoundException cce) {
                 throw new MockitoSerializationIssue(join(
-                        "A class couldn't be found while deserializing a Mockito mock, you should check your classpath.",
+                        "A class couldn't be found while deserializing a Mockito mock, you should check your classpath. The error was :",
+                        "  " + cce.getMessage(),
                         "If you are still unsure what is the reason of this exception, feel free to contact us on the mailing list."
                 ), cce);
             }
@@ -326,14 +329,14 @@ public class AcrossJVMSerializationFeature implements Serializable {
             try {
               Field classNameField = descInstance.getClass().getDeclaredField("name");
               new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
-            } catch (NoSuchFieldException e) {
+            } catch (NoSuchFieldException nsfe) {
                 // TODO use our own mockito mock serialization exception
                 throw new MockitoSerializationIssue(join(
                         "Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name',",
                         "this is definitely a bug in our code as it means the JDK team changed a few internal things.",
                         "",
                         "Please report an issue with the JDK used, a code sample and a link to download the JDK would be welcome."
-                ), e);
+                ), nsfe);
             }
         }
 

@@ -398,7 +398,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
             SimpleSerializationUtil.serializeAndBack(mockWithPrivateConstructor);
         } catch (ObjectStreamException e) {
             // then
-            Assertions.assertThat(e.getMessage()).contains("no valid constructor");
+            Assertions.assertThat(e.toString()).contains("no valid constructor");
         }
     }
 
