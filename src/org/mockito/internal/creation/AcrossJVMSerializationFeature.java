@@ -2,31 +2,25 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
+
 package org.mockito.internal.creation;
 
 import org.mockito.Incubating;
+import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.StringJoiner;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.MockName;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InvalidObjectException;
-import java.io.NotSerializableException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static org.mockito.internal.util.StringJoiner.join;
 
 /**
  * This is responsible for serializing a mock, it is enabled if the mock is implementing
@@ -47,7 +41,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
  *
- * TODO Use proper MockitoException
+ * TODO use a proper way to add the interface
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
  *
@@ -60,6 +54,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
+    private final MockUtil mockUtil = new MockUtil();
     private boolean instanceLocalCurrentlySerializingFlag = false;
     private Lock mutex = new ReentrantLock();
 
@@ -122,8 +117,12 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             return new AcrossJVMMockSerializationProxy(mockitoMock);
         } catch (IOException ioe) {
-            // TODO use our own mockito mock serialization exception
-            throw new NotSerializableException(mockitoMock.getClass().getCanonicalName());
+            MockName mockName = mockUtil.getMockName(mockitoMock);
+            String mockedType = mockUtil.getMockSettings(mockitoMock).getTypeToMock().getCanonicalName();
+            throw new MockitoSerializationIssue(join(
+                    "The mock '" + mockName + "' of type '" + mockedType + "'",
+                    "The Java Standard Serialization reported an '" + ioe.getClass().getSimpleName() + "' saying : " + ioe.getMessage()
+            ), ioe);
         } finally {
             // unmark
             mockReplacementCompleted();
@@ -131,17 +130,21 @@ public class AcrossJVMSerializationFeature implements Serializable {
         }
     }
 
+
     private void mockReplacementCompleted() {
         instanceLocalCurrentlySerializingFlag = false;
     }
+
 
     private void mockReplacementStarted() {
         instanceLocalCurrentlySerializingFlag = true;
     }
 
+
     private boolean mockIsCurrentlyBeingReplaced() {
         return instanceLocalCurrentlySerializingFlag;
     }
+
 
     /**
      * Enable serialization serialization that will work across classloaders / and JVM.
@@ -173,11 +176,12 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * the custom {@link MockitoMockObjectInputStream} that will be in charge of creating the mock class.</p>
      */
     public static class AcrossJVMMockSerializationProxy implements Serializable {
+
+
         private static final long serialVersionUID = -7600267929109286514L;
         private byte[] serializedMock;
         private Class typeToMock;
         private Set<Class> extraInterfaces;
-
         /**
          * Creates the wrapper that be used in the serialization stream.
          *
@@ -202,7 +206,6 @@ public class AcrossJVMSerializationFeature implements Serializable {
             this.extraInterfaces = mockSettings.getExtraInterfaces();
         }
 
-
         /**
          * Resolves the proxy to a new deserialized instance of the Mockito mock.
          *
@@ -223,11 +226,15 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
                 return deserializedMock;
             } catch (IOException ioe) {
-                // TODO use our own mockito mock serialization exception
-                throw new InvalidObjectException("Mockito mock cannot be deserialized due to : " + ioe.toString() + "\n" + StringJoiner.join(ioe.getStackTrace()));
+                throw new MockitoSerializationIssue(join(
+                        "Mockito mock cannot be deserialized to a mock of '" + typeToMock.getCanonicalName() + "'.",
+                        "If you are unsure what is the reason of this exception, feel free to contact us on the mailing list."
+                ), ioe);
             } catch (ClassNotFoundException cce) {
-                // TODO use our own mockito mock serialization exception
-                throw new InvalidObjectException("Mockito Mock class cannot be found : " + cce.toString());
+                throw new MockitoSerializationIssue(join(
+                        "A class couldn't be found while deserializing a Mockito mock, you should check your classpath.",
+                        "If you are still unsure what is the reason of this exception, feel free to contact us on the mailing list."
+                ), cce);
             }
         }
     }
@@ -315,14 +322,18 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * @param proxyClass The proxy class whose name will be applied.
          * @throws InvalidObjectException
          */
-        private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass descInstance, Class<?> proxyClass) throws InvalidObjectException {
+        private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass descInstance, Class<?> proxyClass) throws ObjectStreamException {
             try {
               Field classNameField = descInstance.getClass().getDeclaredField("name");
               new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
             } catch (NoSuchFieldException e) {
                 // TODO use our own mockito mock serialization exception
-                throw new InvalidObjectException("Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name', " +
-                    "this is definitely a bug in our code, please report used JDK, eventually with a code sample.\n" + e.toString());
+                throw new MockitoSerializationIssue(join(
+                        "Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name',",
+                        "this is definitely a bug in our code as it means the JDK team changed a few internal things.",
+                        "",
+                        "Please report an issue with the JDK used, a code sample and a link to download the JDK would be welcome."
+                ), e);
             }
         }
 
@@ -386,6 +397,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
             }
         }
     }
+
 
     /**
      * Simple interface that hold a correct <code>writeReplace</code> signature that can be seen by an
