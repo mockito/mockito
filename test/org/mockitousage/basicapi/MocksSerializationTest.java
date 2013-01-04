@@ -6,24 +6,30 @@
 package org.mockitousage.basicapi;
 
 import org.fest.assertions.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
+import org.mockitoutil.SimpleSerializationUtil;
 import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.*;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {
@@ -333,17 +339,77 @@ public class MocksSerializationTest extends TestBase implements Serializable {
         IMethods mockTwo = mock(IMethods.class, withSettings().extraInterfaces(List.class).serializable());
 
         //then
-        serializeAndBack((List) mock);
-        serializeAndBack((List) mockTwo);
+        Assertions.assertThat((Object) serializeAndBack((List) mock))
+                .isInstanceOf(List.class)
+                .isInstanceOf(IMethods.class);
+        Assertions.assertThat((Object) serializeAndBack((List) mockTwo))
+                .isInstanceOf(List.class)
+                .isInstanceOf(IMethods.class);
+    }
+
+
+
+    static class NotSerializableAndNoDefaultConstructor {
+        NotSerializableAndNoDefaultConstructor(Observable o) { super(); }
     }
 
     @Test
-    public void should_fail_when_serializable_used_with_object_that_dont_implements_Serializable() throws Exception {
+    public void should_fail_when_serializable_used_with_type_that_dont_implements_Serializable_and_dont_declare_a_no_arg_constructor() throws Exception {
         try {
-            serializeMock(mock(Observable.class, withSettings().serializable()));
-            fail();
+            serializeAndBack(mock(NotSerializableAndNoDefaultConstructor.class, withSettings().serializable()));
+            fail("should have thrown an exception to say the object is not serializable");
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains(Observable.class.getSimpleName()).contains("serializable()").contains("implement Serializable");
+            Assertions.assertThat(e.getMessage())
+                    .contains(NotSerializableAndNoDefaultConstructor.class.getSimpleName())
+                    .contains("serializable()")
+                    .contains("implement Serializable")
+                    .contains("no-arg constructor");
         }
+    }
+
+
+
+    static class SerializableAndNoDefaultConstructor implements Serializable {
+        SerializableAndNoDefaultConstructor(Observable o) { super(); }
+    }
+
+    @Test
+    public void should_be_able_to_serialize_type_that_implements_Serializable_but_but_dont_declare_a_no_arg_constructor() throws Exception {
+        serializeAndBack(mock(SerializableAndNoDefaultConstructor.class));
+    }
+
+
+
+    public static class AClassWithPrivateNoArgConstructor {
+        private AClassWithPrivateNoArgConstructor() {}
+        List returningSomething() { return Collections.emptyList(); }
+    }
+
+    @Test
+    public void private_constructor_currently_not_supported_at_the_moment_at_deserialization_time() throws Exception {
+        // given
+        AClassWithPrivateNoArgConstructor mockWithPrivateConstructor = Mockito.mock(
+                AClassWithPrivateNoArgConstructor.class,
+                Mockito.withSettings().serializable()
+        );
+
+        try {
+            // when
+            SimpleSerializationUtil.serializeAndBack(mockWithPrivateConstructor);
+        } catch (ObjectStreamException e) {
+            // then
+            Assertions.assertThat(e.toString()).contains("no valid constructor");
+        }
+    }
+
+
+    @Test
+    @Ignore("Bug to fix !!! see issue 399")
+    public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
+        IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
+
+        when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);
+
+        serializeAndBack(iMethods);
     }
 }

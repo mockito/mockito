@@ -8,7 +8,10 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Observer;
 
 import static java.util.Arrays.asList;
 import static org.fest.assertions.Assertions.assertThat;
@@ -57,8 +60,9 @@ public class MockCreationValidatorTest {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_serializable_with_Object_that_dont_implement_Serializable() {
+        class NonSerializableInnerClassThatHaveAHiddenOneArgConstructor {}
         boolean serializable = true;
-        validator.validateSerializable(Observable.class, serializable);
+        validator.validateSerializable(NonSerializableInnerClassThatHaveAHiddenOneArgConstructor.class, serializable);
     }
 
     @Test

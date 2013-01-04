@@ -4,11 +4,14 @@
  */
 package org.mockito.internal.creation.jmock;
 
-import java.io.Serializable;
-
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.NoOp;
 
+import java.io.Serializable;
+
+/**
+ * Offer a Serializable implementation of the NoOp CGLIB callback.
+ */
 public class SerializableNoOp implements NoOp, Serializable {
 
   private static final long serialVersionUID = 7434976328690189159L;

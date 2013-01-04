@@ -9,10 +9,8 @@ import org.fest.assertions.Condition;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.concurrent.Callable;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -30,7 +28,7 @@ public class ClassCacheVersusClassReloadingTest {
 
         try {
             doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
-            fail("should have raised a ClassCastException when Objenis Cache is enabled");
+            fail("should have raised a ClassCastException when Objenesis Cache is enabled");
         } catch (MockitoException e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("classloading")
@@ -80,7 +78,7 @@ public class ClassCacheVersusClassReloadingTest {
 
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadScope() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
-            public boolean needReload(String qualifiedName) {
+            public boolean acceptReloadOf(String qualifiedName) {
                 return "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking".equals(qualifiedName)
                     || "org.mockitousage.configuration.ClassToBeMocked".equals(qualifiedName);
             }
@@ -101,67 +99,10 @@ public class ClassCacheVersusClassReloadingTest {
 
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
-            public boolean needReload(String qualifiedName) {
+            public boolean acceptReloadOf(String qualifiedName) {
                 return (!qualifiedName.contains("org.mockito.cglib") && qualifiedName.contains("org.mockito"));
             }
         };
     }
 
-    /**
-     * Custom classloader to load classes in hierarchic realm.
-     *
-     * Each class can be reloaded in the realm if the LoadClassPredicate says so.
-     */
-    private static class SimplePerRealmReloadingClassLoader extends URLClassLoader {
-
-        private ReloadClassPredicate reloadClassPredicate;
-
-        public SimplePerRealmReloadingClassLoader(ReloadClassPredicate reloadClassPredicate) {
-            super(new URL[]{obtainClassPath(), obtainClassPath("org.mockito.Mockito")});
-            this.reloadClassPredicate = reloadClassPredicate;
-        }
-
-        public SimplePerRealmReloadingClassLoader(ClassLoader parentClassLoader, ReloadClassPredicate reloadClassPredicate) {
-            super(new URL[]{
-                    obtainClassPath(),
-                    obtainClassPath("org.mockito.Mockito"),
-            }, parentClassLoader);
-            this.reloadClassPredicate = reloadClassPredicate;
-        }
-
-        private static URL obtainClassPath() {
-            String className = SimplePerRealmReloadingClassLoader.class.getName();
-            return obtainClassPath(className);
-        }
-
-        private static URL obtainClassPath(String className) {
-            String path = className.replace('.', '/') + ".class";
-            String url = SimplePerRealmReloadingClassLoader.class.getClassLoader().getResource(path).toExternalForm();
-
-            try {
-                return new URL(url.substring(0, url.length() - path.length()));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Classloader couldn't obtain a proper classpath URL", e);
-            }
-        }
-
-        @Override
-        public Class<?> loadClass(String qualifiedName) throws ClassNotFoundException {
-            if(reloadClassPredicate.needReload(qualifiedName)) {
-                // return customLoadClass(qualifiedName);
-                Class<?> foundClass = findClass(qualifiedName);
-                return foundClass;
-            }
-            return super.loadClass(qualifiedName);
-        }
-
-        public Object doInRealm(String callableCalledInClassLoaderRealm) throws Exception {
-            Callable<?> callableInRealm = (Callable<?>) this.loadClass(callableCalledInClassLoaderRealm).newInstance();
-            return callableInRealm.call();
-        }
-
-        public static interface ReloadClassPredicate {
-            boolean needReload(String qualifiedName);
-        }
-    }
 }

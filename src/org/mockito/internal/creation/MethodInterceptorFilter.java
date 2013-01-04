@@ -5,21 +5,28 @@
 
 package org.mockito.internal.creation;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockHandler;
 import org.mockito.internal.creation.cglib.CGLIBHacker;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
+import java.io.Serializable;
+import java.lang.reflect.Method;
+
+/**
+ * Should be one instance per mock instance, see CglibMockMaker.
+ *
+ *
+ */
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
@@ -27,6 +34,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
     CGLIBHacker cglibHacker = new CGLIBHacker();
     ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockCreationSettings mockSettings;
+    private AcrossJVMSerializationFeature acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
 
     public MethodInterceptorFilter(InternalMockHandler handler, MockCreationSettings mockSettings) {
         this.handler = handler;
@@ -39,6 +47,8 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
             return proxy == args[0];
         } else if (objectMethodsGuru.isHashCodeMethod(method)) {
             return hashCodeForMock(proxy);
+        } else if (acrossJVMSerializationFeature.isWriteReplace(method)) {
+            return acrossJVMSerializationFeature.writeReplace(proxy);
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);
