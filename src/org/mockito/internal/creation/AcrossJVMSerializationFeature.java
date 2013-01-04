@@ -282,7 +282,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
             }
 
             // TODO check the class is mockable in the deserialization side
-            ClassImposterizer.INSTANCE.canImposterise(typeToMock);
+            // ClassImposterizer.INSTANCE.canImposterise(typeToMock);
 
             // create the Mockito mock class before it can even be deserialized
             ClassImposterizer.INSTANCE.setConstructorsAccessible(typeToMock, true);
