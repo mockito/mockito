@@ -5,7 +5,6 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.mockito.internal.creation.ClassNameFinder;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
@@ -14,7 +13,20 @@ import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Default answer of every Mockito mock.
@@ -43,6 +55,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = 1998191268711234347L;
     ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
+    MockUtil mockUtil = new MockUtil();
 
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
@@ -50,9 +63,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     public Object answer(InvocationOnMock invocation) {
         if (methodsGuru.isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
-            MockName name = new MockUtil().getMockName(mock);
+            MockName name = mockUtil.getMockName(mock);
             if (name.isDefault()) {
-                return "Mock for " + ClassNameFinder.classNameForMock(mock) + ", hashCode: " + mock.hashCode();
+                return "Mock for " + mockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
             } else {
                 return name.toString();
             }

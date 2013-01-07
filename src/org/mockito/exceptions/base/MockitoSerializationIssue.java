@@ -7,6 +7,7 @@ package org.mockito.exceptions.base;
 
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 
+import java.io.ObjectStreamException;
 
 /**
  * Raised by mockito to emit an error either due to Mockito, or due to the User.
@@ -17,27 +18,27 @@ import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
  *     However note that other calls related to the stackTrace will refer to the filter stacktrace.
  * </p>
  *
+ * @since 1.9.6
  */
-public class MockitoException extends RuntimeException {
-
-    private static final long serialVersionUID = 1L;
+public class MockitoSerializationIssue extends ObjectStreamException {
 
     private StackTraceElement[] unfilteredStackTrace;
 
-    // TODO lazy filtered stacktrace initialization
-    public MockitoException(String message, Throwable t) {
-        super(message, t);
+    public MockitoSerializationIssue(String message, Exception cause) {
+        super(message);
+        initCause(cause);
         filterStackTrace();
     }
 
-    public MockitoException(String message) {
-        super(message);
+    @Override
+    public StackTraceElement[] getStackTrace() {
         filterStackTrace();
+        return super.getStackTrace();
     }
 
     private void filterStackTrace() {
-        unfilteredStackTrace = getStackTrace();
-        
+        unfilteredStackTrace = super.getStackTrace();
+
         ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
         filter.filter(this);
     }

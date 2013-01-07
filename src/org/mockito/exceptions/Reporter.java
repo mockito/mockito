@@ -755,7 +755,7 @@ public class Reporter {
     public void serializableWontWorkForObjectsThatDontImplementSerializable(Class classToMock) {
         throw new MockitoException(join(
                 "You are using the setting 'withSettings().serializable()' however the type you are trying to mock '" + classToMock.getSimpleName() + "'",
-                " do not implement Serializable.",
+                "do not implement Serializable AND do not have a no-arg constructor.",
                 "This combination is requested, otherwise you will get an 'java.io.InvalidClassException' when the mock will be serialized",
                 "",
                 "Also note that as requested by the Java serialization specification, the whole hierarchy need to implements Serializable,",

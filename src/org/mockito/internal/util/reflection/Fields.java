@@ -23,7 +23,7 @@ import java.util.List;
 public abstract class Fields {
 
     /**
-     * Instance fields declared in thes class and superclasses of the given instance.
+     * Instance fields declared in the class and superclasses of the given instance.
      *
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
@@ -37,7 +37,7 @@ public abstract class Fields {
     }
 
     /**
-     * Instance fields declared in the of the given instance.
+     * Instance fields declared in the class of the given instance.
      *
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
