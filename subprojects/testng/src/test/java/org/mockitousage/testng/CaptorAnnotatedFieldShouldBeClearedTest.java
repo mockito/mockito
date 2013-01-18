@@ -14,13 +14,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @Listeners(MockitoTestNGListener.class)
-@Test(enabled = false, description = "not yet ready")
 public class CaptorAnnotatedFieldShouldBeClearedTest {
 
     @Captor ArgumentCaptor<String> captor;
     @Mock List<String> list;
 
-    @Test(enabled = false)
+    @Test
     public void first_test_method_that_uses_captor() throws Exception {
         list.add("a");
         list.add("b");
@@ -29,7 +28,7 @@ public class CaptorAnnotatedFieldShouldBeClearedTest {
         assertThat(captor.getAllValues()).containsOnly("a", "b");
     }
 
-    @Test(enabled = false)
+    @Test
     public void second_test_method_that_uses_captor() throws Exception {
         list.add("t");
         list.add("u");
