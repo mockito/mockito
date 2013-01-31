@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
