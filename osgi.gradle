@@ -25,6 +25,7 @@ afterEvaluate {
                     'org.apache.tools.ant.*;resolution:=optional',
                     'org.hamcrest;version="[1.0,2.0)"',
                     'org.objenesis;version="[1.0,2.0)"',
+                    'javax.validation.*;version="1.1.0.CR1"',
                     'org.mockito.*'
 
             instruction 'Private-Package', 'org.mockito.*'
@@ -60,6 +61,7 @@ afterEvaluate {
                     'org.hamcrest;version="[1.0,2.0)"',
                     'org.objenesis;version="[1.0,2.0)"',
                     'org.mockito.*',
+                    'javax.validation.*;version="1.1.0.CR1"',
                     'COM.jrockit.reflect;resolution:=optional',
                     'jrockit.vm;resolution:=optional',
                     'sun.reflect;resolution:=optional'

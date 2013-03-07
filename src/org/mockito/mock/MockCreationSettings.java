@@ -11,6 +11,7 @@ import org.mockito.stubbing.Answer;
 
 import java.util.List;
 import java.util.Set;
+import javax.validation.ValidatorFactory;
 
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
@@ -54,6 +55,10 @@ public interface MockCreationSettings<T> {
      * be used for verification
      */
     boolean isStubOnly();
+
+    boolean isValidate();
+
+    ValidatorFactory getValidatorFactory();
 
     /**
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
