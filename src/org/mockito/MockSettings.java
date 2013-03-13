@@ -5,8 +5,8 @@
 package org.mockito;
 
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.AnswerInterceptor;
 
 import java.io.Serializable;
 
@@ -211,14 +211,4 @@ public interface MockSettings extends Serializable {
      *
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings stubOnly();
-
-    /**
-     * Invokes a pluggable interceptor called when invocations are made on this mock.
-     *
-     * @param stubInterceptor
-     * @return
-     */
-    MockSettings onStub(AnswerInterceptor stubInterceptor);
-
-}
+    MockSettings stubOnly();}

@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.creation;
 
-import static org.mockito.internal.util.collections.Sets.newSet;
-
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -18,12 +16,13 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.AnswerInterceptor;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {
@@ -96,15 +95,6 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public boolean isStubOnly() {
         return this.stubOnly;
-    }
-
-    public AnswerInterceptor getAnswerInterceptor() {
-        return this.answerInterceptor;
-    }
-
-    public MockSettings onStub(AnswerInterceptor interceptor) {
-        this.answerInterceptor = interceptor;
-        return this;
     }
 
     public MockSettings verboseLogging() {

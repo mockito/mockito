@@ -8,7 +8,6 @@ package org.mockito.mock;
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.AnswerInterceptor;
 
 import java.util.List;
 import java.util.Set;
@@ -55,11 +54,6 @@ public interface MockCreationSettings<T> {
      * be used for verification
      */
     boolean isStubOnly();
-
-    /**
-     * Allows you to intercept calls to Answer stubbed invocations.
-     */
-    AnswerInterceptor getAnswerInterceptor();
 
     /**
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.

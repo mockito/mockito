@@ -5,6 +5,11 @@
 
 package org.mockito.internal.handler;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.invocation.InvocationPhase.*;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -18,16 +23,14 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.invocation.InvocationPhase;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
+import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class MockHandlerImplTest extends TestBase {
@@ -104,4 +107,67 @@ public class MockHandlerImplTest extends TestBase {
 		given(handler.getMockSettings().getInvocationListeners()).willReturn(Arrays.asList(listener));
 		return handler;
 	}
+
+    @Test
+    public void shouldDetectDefinePhaseOnMocksDuringWhen() throws Throwable {
+        InvocationListener listener = mockInvocationListener(DEFINE);
+
+        Runnable mock = mock(Runnable.class, withSettings().invocationListeners(listener));
+
+        doNothing().when(mock).run();
+        verify(listener, times(1)).reportInvocation((MethodInvocationReport) any());
+    }
+
+    @Test
+    public void shouldDetectExecutePhaseOnMocksDuringExecute() throws Throwable {
+        InvocationListener listener = mockInvocationListener(DEFINE, EXECUTE);
+        Runnable mock = mock(Runnable.class, withSettings().invocationListeners(listener));
+
+        doNothing().when(mock).run();
+        mock.run();
+        verify(listener, times(2)).reportInvocation((MethodInvocationReport) any());
+    }
+
+    @Test
+    public void shouldDetectVerifyPhaseOnMocksDuringVerify() throws Throwable {
+        InvocationListener listener = mockInvocationListener(DEFINE, EXECUTE, VERIFY);
+        Runnable mock = mock(Runnable.class, withSettings().invocationListeners(listener));
+
+        doNothing().when(mock).run();
+        mock.run();
+        verify(mock).run();
+
+        verify(listener, times(3)).reportInvocation((MethodInvocationReport) any());
+    }
+
+
+    private InvocationListener mockInvocationListener(InvocationPhase... phases)
+    {
+        InvocationListener listener = mock(InvocationListener.class);
+        doAnswer(new ReportInvocationAnswer(phases)).when(listener).reportInvocation(
+            (MethodInvocationReport) any());
+        return listener;
+    }
+
+    private static class ReportInvocationAnswer implements Answer {
+        private final InvocationPhase[] expectedInvocationPhase;
+        private int count = 0;
+
+        private ReportInvocationAnswer(final InvocationPhase... expectedInvocationPhase)
+        {
+            this.expectedInvocationPhase = expectedInvocationPhase;
+        }
+
+        @Override
+        public Object answer(final InvocationOnMock invocation) throws Throwable
+        {
+            MethodInvocationReport methodInvocationReport = (MethodInvocationReport) invocation.getArguments()[0];
+            if (count >= expectedInvocationPhase.length) {
+                fail("too many invocations");
+            }
+            assertEquals(expectedInvocationPhase[count++], ((Invocation)methodInvocationReport
+                .getInvocation()).phase());
+            return null;
+        }
+    }
 }
