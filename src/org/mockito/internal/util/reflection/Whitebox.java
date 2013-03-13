@@ -15,7 +15,7 @@ public class Whitebox {
             f.setAccessible(true);
             return f.get(target);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
+            throw new RuntimeException("Unable to get internal state on a private field. Please report to mockito mailing list.", e);
         }
     }
 
@@ -38,7 +38,7 @@ public class Whitebox {
         }
         if (f == null) {
             throw new RuntimeException(
-                    "You want me to set value to this field: '" + field + 
+                    "You want me to get this field: '" + field +
                     "' on this class: '" + clazz.getSimpleName() + 
                     "' but this field is not declared withing hierarchy of this class!");
         }
