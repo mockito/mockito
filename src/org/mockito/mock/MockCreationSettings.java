@@ -8,10 +8,10 @@ package org.mockito.mock;
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.AnswerInterceptor;
 
 import java.util.List;
 import java.util.Set;
-import javax.validation.ValidatorFactory;
 
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
@@ -56,9 +56,10 @@ public interface MockCreationSettings<T> {
      */
     boolean isStubOnly();
 
-    boolean isValidate();
-
-    ValidatorFactory getValidatorFactory();
+    /**
+     * Allows you to intercept calls to Answer stubbed invocations.
+     */
+    AnswerInterceptor getAnswerInterceptor();
 
     /**
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.

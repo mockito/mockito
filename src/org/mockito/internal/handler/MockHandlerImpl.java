@@ -16,14 +16,11 @@ import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.AnswerInterceptor;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
 import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.executable.ExecutableValidator;
 
 /**
  * Invocation handler set on mock objects.
@@ -93,8 +90,11 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
         if (stubbedInvocation != null) {
             stubbedInvocation.captureArgumentsFrom(invocation);
-            validateArguments(invocation);
-            return validateReturnValue(invocation, stubbedInvocation.answer(invocation));
+            AnswerInterceptor answerInterceptor = mockSettings.getAnswerInterceptor();
+            if (answerInterceptor != null) {
+                return answerInterceptor.answer(stubbedInvocation, invocation);
+            }
+            return stubbedInvocation.answer(invocation);
         } else {
              Object ret = mockSettings.getDefaultAnswer().answer(invocation);
 
@@ -107,38 +107,6 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
             return ret;
         }
 	}
-
-    protected Object validateReturnValue(Invocation invocation,  Object returnValue) {
-        if (mockSettings.isValidate()) {
-            Validator validator = mockSettings.getValidatorFactory().getValidator();
-            ExecutableValidator executableValidator = validator.forExecutables();
-            Set<ConstraintViolation<Object>> constraintViolations =
-                executableValidator.validateReturnValue(invocation.getMock(), invocation.getMethod(),
-                    returnValue);
-
-            if (!constraintViolations.isEmpty()) {
-                throw new IllegalArgumentException("Invalid parameters to " + invocation + " : " +
-                    constraintViolations);
-            }
-        }
-
-        return returnValue;
-    }
-
-    protected void validateArguments(final Invocation invocation) {
-        if (mockSettings.isValidate()) {
-            Validator validator = mockSettings.getValidatorFactory().getValidator();
-            ExecutableValidator executableValidator = validator.forExecutables();
-            Set<ConstraintViolation<Object>> constraintViolations =
-            executableValidator.validateParameters(invocation.getMock(), invocation.getMethod(),
-                invocation.getArguments());
-
-            if (!constraintViolations.isEmpty()) {
-                throw new IllegalArgumentException("Invalid return value on " + invocation + " : " +
-                    constraintViolations);
-            }
-        }
-    }
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);
