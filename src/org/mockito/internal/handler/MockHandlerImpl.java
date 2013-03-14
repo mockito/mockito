@@ -94,7 +94,8 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
-             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+            invocation.setPhase(InvocationPhase.DEFINE);
+            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
 
             // redo setting invocation for potential stubbing in case of partial
             // mocks / spies.
