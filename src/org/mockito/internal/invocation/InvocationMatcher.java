@@ -122,6 +122,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
         for (int position = 0; position < matchers.size(); position++) {
             Matcher m = matchers.get(position);
             if (m instanceof CapturesArguments && invocation.getRawArguments().length > position) {
+                //TODO SF - this whole lot can be moved captureFrom implementation
                 if(isVariableArgument(invocation, position) && isVarargMatcher(m)) {
                     Object array = invocation.getRawArguments()[position];
                     for (int i = 0; i < Array.getLength(array); i++) {
