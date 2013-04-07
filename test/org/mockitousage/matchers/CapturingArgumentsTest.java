@@ -5,11 +5,6 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +13,12 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class CapturingArgumentsTest extends TestBase {
 
@@ -213,8 +214,9 @@ public class CapturingArgumentsTest extends TestBase {
         mock.varargsbyte((byte) 1, (byte) 2);
 
         // then
-        verify(mock).varargsbyte(argumentCaptor.captureVararg());
-        Assertions.assertThat(argumentCaptor.getVarargsValues()).containsExactly((byte) 1, (byte) 2);
+        verify(mock).varargsbyte(argumentCaptor.capture());
+        assertEquals((byte) 2, (byte) argumentCaptor.getValue());
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);
     }
 
     @Test
@@ -227,8 +229,9 @@ public class CapturingArgumentsTest extends TestBase {
         mock.varargsbyte((byte) 1, (byte) 2);
 
         // then
-        verify(mock).varargsbyte(argumentCaptor.captureVararg());
-        Assertions.assertThat(argumentCaptor.getVarargsValues()).containsExactly((byte) 1, (byte) 2);
+        verify(mock).varargsbyte(argumentCaptor.capture());
+        assertEquals((byte) 2, (byte) argumentCaptor.getValue());
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);
     }
 
     @Test
@@ -241,8 +244,8 @@ public class CapturingArgumentsTest extends TestBase {
         mock.mixedVarargs(42, "a", "b", "c");
 
         // then
-        verify(mock).mixedVarargs(any(), argumentCaptor.captureVararg());
-        Assertions.assertThat(argumentCaptor.getVarargsValues()).containsExactly("a", "b", "c");
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
     }
 
     @Test
@@ -256,10 +259,10 @@ public class CapturingArgumentsTest extends TestBase {
         mock.mixedVarargs(42, "again ?!");
 
         // then
-        verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.captureVararg());
-        List<List<String>> allVarargsValues = argumentCaptor.getAllVarargsValues();
-        Assertions.assertThat(allVarargsValues.get(0)).containsExactly("a", "b", "c");
-        Assertions.assertThat(allVarargsValues.get(1)).containsExactly("again ?!");
+        verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());
+
+        List<String> allVarargsValues = argumentCaptor.getAllValues();
+        Assertions.assertThat(allVarargsValues).containsExactly("a", "b", "c", "again ?!");
     }
 
     @Test
@@ -272,13 +275,12 @@ public class CapturingArgumentsTest extends TestBase {
         mock.simpleMethod("a", 2);
 
         // then
-        verify(mock).simpleMethod(argumentCaptor.captureVararg(), eq(2));
-        Assertions.assertThat(argumentCaptor.getVarargsValues()).containsExactly("a");
+        verify(mock).simpleMethod(argumentCaptor.capture(), eq(2));
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a");
     }
 
-
     @Test
-    public void can_capture_vararg_using_standard_capturing_API() throws Exception {
+    public void captures_correclty_when_captor_used_multiple_times() throws Exception {
         // given
         IMethods mock = mock(IMethods.class);
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
@@ -287,6 +289,7 @@ public class CapturingArgumentsTest extends TestBase {
         mock.mixedVarargs(42, "a", "b", "c");
 
         // then
+        // this is only for backwards compatibility. It does not make sense in real to do so.
         verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture(), argumentCaptor.capture());
         Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
     }

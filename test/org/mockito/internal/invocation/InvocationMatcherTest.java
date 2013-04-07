@@ -5,13 +5,6 @@
 
 package org.mockito.internal.invocation;
 
-import static java.util.Arrays.*;
-
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.fest.assertions.Assertions;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -21,6 +14,13 @@ import org.mockito.internal.matchers.*;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {
@@ -144,14 +144,14 @@ public class InvocationMatcherTest extends TestBase {
         //given
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
-        VarargCapturingMatcher varargCapturingMatcher = new VarargCapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), new LocalizedMatcher(varargCapturingMatcher)));
+        CapturingMatcher m = new CapturingMatcher();
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), new LocalizedMatcher(m)));
 
         //when
         invocationMatcher.captureArgumentsFrom(invocation);
 
         //then
-        Assertions.assertThat(varargCapturingMatcher.getLastVarargs()).containsExactly("a", "b");
+        Assertions.assertThat(m.getAllValues()).containsExactly("a", "b");
     }
 
     @Test  // like using several time the captor in the vararg

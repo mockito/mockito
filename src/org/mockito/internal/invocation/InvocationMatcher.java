@@ -5,12 +5,6 @@
 
 package org.mockito.internal.invocation;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.matchers.MatcherDecorator;
@@ -19,6 +13,13 @@ import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements DescribedInvocation, CapturesArgumensFromInvocation, Serializable {
@@ -120,11 +121,16 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
     public void captureArgumentsFrom(Invocation invocation) {
         for (int position = 0; position < matchers.size(); position++) {
             Matcher m = matchers.get(position);
-            if (m instanceof CapturesArguments && invocation.getArguments().length > position) {
+            if (m instanceof CapturesArguments && invocation.getRawArguments().length > position) {
                 if(isVariableArgument(invocation, position) && isVarargMatcher(m)) {
-                    ((CapturesArguments) m).captureFrom(invocation.getRawArguments()[position]);
+                    Object array = invocation.getRawArguments()[position];
+                    for (int i = 0; i < Array.getLength(array); i++) {
+                        ((CapturesArguments) m).captureFrom(Array.get(array, i));
+                    }
+                    //since we've captured all varargs already, it does not make sense to process other matchers.
+                    return;
                 } else {
-                    ((CapturesArguments) m).captureFrom(invocation.getArguments()[position]);
+                    ((CapturesArguments) m).captureFrom(invocation.getRawArguments()[position]);
                 }
             }
         }

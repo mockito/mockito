@@ -21,11 +21,9 @@ public class ArgumentCaptorTest extends TestBase {
         
         //when
         Object returned = argumentCaptor.capture();
-        Object returned_for_vararg = argumentCaptor.captureVararg();
 
         //then
         assertEquals(expected, returned);
-        assertEquals(expected, returned_for_vararg);
     }
 
     private HandyReturnValues will_return(final Object expected) {
