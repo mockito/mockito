@@ -394,7 +394,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * @return The marker if this is a Mockito proxy class, otherwise returns a void marker.
          */
         private String mockitoProxyClassMarker(Class<?> cl) {
-            if (mockUtil.isMock(cl)) {
+            if (AcrossJVMMockitoMockSerializable.class.isAssignableFrom(cl)) {
                 return MOCKITO_PROXY_MARKER;
             } else {
                 return NOTHING;
@@ -411,7 +411,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *
      * @see #enableSerializationAcrossJVM(org.mockito.mock.MockCreationSettings)
      */
-    public interface AcrossJVMMockitoMockSerializable {
+    public static interface AcrossJVMMockitoMockSerializable {
         public Object writeReplace() throws java.io.ObjectStreamException;
     }
 }

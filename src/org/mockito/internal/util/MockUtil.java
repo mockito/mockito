@@ -53,7 +53,8 @@ public class MockUtil {
         }
 
         if (isMockitoMock(mock)) {
-            return (InternalMockHandler) mockMaker.getHandler(mock);
+            MockHandler handler = mockMaker.getHandler(mock);
+            return (InternalMockHandler) handler;
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
@@ -61,19 +62,11 @@ public class MockUtil {
 
     public boolean isMock(Object mock) {
         // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
-        return mock instanceof MockitoMock && isMockitoMock(mock);
+        return isMockitoMock(mock);
     }
 
     public boolean isSpy(Object mock) {
-        return mock instanceof MockitoSpy;
-    }
-
-    public boolean isMock(Class mockClass) {
-        return mockClass != null && MockitoMock.class.isAssignableFrom(mockClass);
-    }
-
-    public boolean isSpy(Class mockClass) {
-        return mockClass != null && MockitoSpy.class.isAssignableFrom(mockClass);
+        return isMockitoMock(mock) && getMockSettings(mock).getSpiedInstance() != null;
     }
 
     private <T> boolean isMockitoMock(T mock) {

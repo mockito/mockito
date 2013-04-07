@@ -57,9 +57,6 @@ public class MockUtilTest extends TestBase {
     public void should_validate_mock() {
         assertFalse(mockUtil.isMock("i mock a mock"));
         assertTrue(mockUtil.isMock(Mockito.mock(List.class)));
-        assertFalse(mockUtil.isMock((Class) null));
-        assertFalse(mockUtil.isMock(String.class));
-        assertTrue(mockUtil.isMock(Mockito.mock(List.class).getClass()));
     }
 
     @Test
@@ -68,9 +65,6 @@ public class MockUtilTest extends TestBase {
         assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
         assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
         assertFalse(mockUtil.isSpy((Class) null));
-        assertFalse(mockUtil.isSpy(String.class));
-        assertFalse(mockUtil.isSpy(Mockito.mock(List.class).getClass()));
-        assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList()).getClass()));
     }
 
     @Test
