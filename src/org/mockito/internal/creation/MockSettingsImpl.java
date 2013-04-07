@@ -15,6 +15,7 @@ import org.mockito.internal.util.MockitoSpy;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
+import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -30,7 +31,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     private static final long serialVersionUID = 4475297236197939569L;
 
     public MockSettings serializable() {
-        this.serializable = true;
+        return serializable(SerializableMode.BASIC);
+    }
+
+    public MockSettings serializable(SerializableMode mode) {
+        this.serializableMode = mode;
         return this;
     }
 
@@ -82,10 +87,6 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public Answer<Object> getDefaultAnswer() {
         return defaultAnswer;
-    }
-
-    public boolean isSerializable() {
-        return serializable;
     }
 
     public MockSettingsImpl stubOnly() {

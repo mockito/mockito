@@ -8,6 +8,7 @@ package org.mockitousage.serialization;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 import org.mockitoutil.SimpleSerializationUtil;
@@ -65,7 +66,7 @@ public class AcrossClassLoaderSerializationTest {
         public byte[] call() throws Exception {
             AClassToBeMockedInThisTestOnlyAndInCallablesOnly mock = Mockito.mock(
                     AClassToBeMockedInThisTestOnlyAndInCallablesOnly.class,
-                    Mockito.withSettings().serializable()
+                    Mockito.withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS)
             );
             // use MethodProxy before
             mock.returningSomething();

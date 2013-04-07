@@ -5,7 +5,7 @@
 package org.mockito;
 
 import org.mockito.listeners.InvocationListener;
-import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -162,6 +162,25 @@ public interface MockSettings extends Serializable {
     MockSettings serializable();
 
     /**
+     * Configures the mock to be serializable with a specific serializable mode.
+     * With this feature you can use a mock in a place that requires dependencies to be serializable.
+     * <p>
+     * WARNING: This should be rarely used in unit testing.
+     * <p>
+     * The behaviour was implemented for a specific use case of a BDD spec that had an unreliable external dependency.  This
+     * was in a web environment and the objects from the external dependency were being serialized to pass between layers.
+     *
+     * <pre class="code"><code class="java">
+     *   List serializableMock = mock(List.class, withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS));
+     * </code></pre>
+     *
+     * @param mode serialization mode
+     * @return settings instance so that you can fluently specify other settings
+     * @since 1.9.8
+     */
+    MockSettings serializable(SerializableMode mode);
+
+    /**
      * Enables real-time logging of method invocations on this mock. Can be used
      * during test debugging in order to find wrong interactions with this mock.
      * <p>
@@ -211,4 +230,5 @@ public interface MockSettings extends Serializable {
      *
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings stubOnly();}
+    MockSettings stubOnly();
+}

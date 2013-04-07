@@ -49,6 +49,11 @@ public interface MockCreationSettings<T> {
     boolean isSerializable();
 
     /**
+     * @return the serializable mode of this mock
+     */
+    SerializableMode getSerializableMode();
+
+    /**
      * Whether the mock is only for stubbing, i.e. does not remember
      * parameters on its invocation and therefore cannot
      * be used for verification
