@@ -23,6 +23,15 @@ import java.util.List;
  *   assertEquals("John", argument.getValue().getName());
  * </code></pre>
  *
+ * Example of capturing varargs:
+ * <pre class="code"><code class="java">
+ *   //capturing varargs:
+ *   ArgumentCaptor&lt;Person&gt; varArgs = ArgumentCaptor.forClass(Person.class);
+ *   verify(mock).varArgMethod(varArgs.capture());
+ *   List expected = asList(new Person("John"), new Person("Jane"));
+ *   assertEquals(expected, varArgs.getAllValues());
+ * </code></pre>
+ *
  * <p>
  * <strong>Warning:</strong> it is recommended to use ArgumentCaptor with verification <strong>but not</strong> with stubbing.
  * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
@@ -98,9 +107,9 @@ public class ArgumentCaptor<T> {
     }
 
     /**
-     * Returns the captured value of the argument.
+     * Returns the captured value of the argument. When capturing varargs use {@link #getAllValues()}.
      * <p>
-     * If the method was called multiple times then it returns the latest captured value.
+     * If verified method was called multiple times then this method it returns the latest captured value.
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
      * 
@@ -111,16 +120,32 @@ public class ArgumentCaptor<T> {
     }
 
     /**
-     * Returns all captured values. Use it in case the verified method was called multiple times.
+     * Returns all captured values. Use it when capturing varargs or when the verified method was called multiple times.
+     * When varargs method was called multiple times, this method returns merged list of all values from all invocations.
      * <p>
      * Example: 
      * <pre class="code"><code class="java">
+     *   mock.doSomething(new Person("John");
+     *   mock.doSomething(new Person("Jane");
+     *
      *   ArgumentCaptor&lt;Person&gt; peopleCaptor = ArgumentCaptor.forClass(Person.class);
      *   verify(mock, times(2)).doSomething(peopleCaptor.capture());
      *   
      *   List&lt;Person&gt; capturedPeople = peopleCaptor.getAllValues();
      *   assertEquals("John", capturedPeople.get(0).getName());
      *   assertEquals("Jane", capturedPeople.get(1).getName());
+     * </pre>
+     *
+     * Example of capturing varargs:
+     * <pre class="code"><code class="java">
+     *   mock.countPeople(new Person("John"), new Person("Jane"); //vararg method
+     *
+     *   ArgumentCaptor&lt;Person&gt; peopleCaptor = ArgumentCaptor.forClass(Person.class);
+     *
+     *   verify(mock).countPeople(peopleCaptor.capture());
+     *
+     *   List expected = asList(new Person("John"), new Person("Jane"));
+     *   assertEquals(expected, peopleCaptor.getAllValues());
      * </code></pre>
      * See more examples in javadoc for {@link ArgumentCaptor} class.
      * 
