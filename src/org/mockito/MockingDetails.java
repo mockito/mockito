@@ -4,6 +4,10 @@
  */
 package org.mockito;
 
+import java.util.Collection;
+
+import org.mockito.invocation.Invocation;
+
 /**
  * Provides mocking information.
  * For example, you can identify whether a particular object is either a mock or a spy.
@@ -28,4 +32,13 @@ public interface MockingDetails {
      * @since 1.9.5
      */
     boolean isSpy();
+    
+    /**
+     * Provides a collection of methods indicating the invocations of the object
+     * @return collection of Invocation representing the invocations 
+     * for the object.
+     *
+     * @since 1.9.x
+     */
+    Collection<Invocation> getInvocations();
 }
