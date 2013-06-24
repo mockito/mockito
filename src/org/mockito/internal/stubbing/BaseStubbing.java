@@ -12,17 +12,14 @@ import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
-    public OngoingStubbing<T> thenReturn(T value) {
-        return thenAnswer(new Returns(value));
-    }
-
-    public OngoingStubbing<T> thenReturn(T value, T... values) {
-        OngoingStubbing<T> stubbing = thenReturn(value);            
-        if (values == null) {
-            return stubbing.thenReturn(null);
+    public OngoingStubbing<T> thenReturn(T... values) {
+        if (values == null || values.length == 0) {
+            return thenAnswer(new Returns(null));
         }
+        OngoingStubbing<T> stubbing = null;
         for (T v: values) {
-            stubbing = stubbing.thenReturn(v);
+            if(stubbing == null) stubbing = thenAnswer(new Returns(v));
+            else stubbing.thenReturn(v);
         }
         return stubbing;
     }

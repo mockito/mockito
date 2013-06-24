@@ -35,20 +35,6 @@ import org.mockito.internal.progress.IOngoingStubbing;
 public interface OngoingStubbing<T> extends IOngoingStubbing {
 
     /**
-     * Sets a return value to be returned when the method is called. E.g:
-     * <pre class="code"><code class="java">
-     * when(mock.someMethod()).thenReturn(10);
-     * </code></pre>
-     *
-     * See examples in javadoc for {@link Mockito#when}
-     *
-     * @param value return value
-     *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
-     */
-    OngoingStubbing<T> thenReturn(T value);
-
-    /**
      * Sets consecutive return values to be returned when the method is called. E.g:
      * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenReturn(1, 2, 3);
@@ -58,12 +44,11 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
      * <p>
      * See examples in javadoc for {@link Mockito#when}
      *
-     * @param value first return value
-     * @param values next return values
+     * @param values return values
      *
      * @return iOngoingStubbing object that allows stubbing consecutive calls
      */
-    OngoingStubbing<T> thenReturn(T value, T... values);
+    OngoingStubbing<T> thenReturn(T... values);
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:
