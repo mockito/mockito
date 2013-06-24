@@ -76,16 +76,16 @@ public class BDDMockito extends Mockito {
         BDDMyOngoingStubbing<T> will(Answer<?> answer);
 
         /**
-         * See original {@link OngoingStubbing#thenReturn(Object)}
+         * See original {@link OngoingStubbing#thenReturn(Object[])}
          * @since 1.8.0
          */
         BDDMyOngoingStubbing<T> willReturn(T value);
 
         /**
-         * See original {@link OngoingStubbing#thenReturn(Object, Object[])}
+         * See original {@link OngoingStubbing#thenReturn(Object[])}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willReturn(T value, T... values);
+        BDDMyOngoingStubbing<T> willReturn(T... values);
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Throwable...)}
@@ -144,8 +144,8 @@ public class BDDMockito extends Mockito {
         /* (non-Javadoc)
          * @see BDDMockito.BDDMyOngoingStubbing#willReturn(java.lang.Object, T[])
          */
-        public BDDMyOngoingStubbing<T> willReturn(T value, T... values) {
-            return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value, values));
+        public BDDMyOngoingStubbing<T> willReturn(T... values) {
+            return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(values));
         }
 
         /* (non-Javadoc)
