@@ -1,8 +1,14 @@
+# Intellij
 *.iml
 *.ipr
 *.iws
+.idea/
+
+# Eclipse
 .classpath
 .project
+
+# Gradle & builds
 build
 target
 out
