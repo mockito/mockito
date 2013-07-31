@@ -18,6 +18,10 @@ import org.mockito.Mockito;
  * verify(mock, timeout(200).atLeastOnce()).baz();
  * </code></pre>
  * 
+ * This is similar to {@link VerificationAfterDelay after()} except this assertion will immediately pass if it becomes true at any point,
+ * whereas after() will wait the full period. Assertions which are consistently expected to be initially true and potentially become false are 
+ * deprecated below, and after() should be used instead.
+ * 
  * <p>
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
  */
@@ -39,8 +43,8 @@ public interface VerificationWithTimeout extends VerificationMode {
     
     /**
      * @deprecated
-     * Validation with timeout combined with never simply does not make sense...
-     * The test would have passed immediately in the concurrent environment
+     * Validation with timeout combined with never simply does not make sense, as never() will typically immediately pass,
+     * and therefore not wait the timeout. The behaviour you may be looking for is actually provided by after().never(). 
      * <p>
      * To avoid compilation errors upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
      * <p>
@@ -84,8 +88,8 @@ public interface VerificationWithTimeout extends VerificationMode {
      * @deprecated
      *
      * <b>Deprecated</b>
-     * Validation with timeout combined with atMost simply does not make sense...
-     * The test would have passed immediately in the concurrent environment
+     * Validation with timeout combined with never simply does not make sense, as atMost() will typically immediately pass,
+     * and therefore not wait the timeout. The behaviour you may be looking for is actually provided by after().atMost(). 
      * <p>
      * To avoid compilation errors upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
      * <p>

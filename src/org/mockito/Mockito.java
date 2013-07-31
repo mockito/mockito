@@ -13,7 +13,9 @@ import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
+import org.mockito.verification.After;
 import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationAfterDelay;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWithTimeout;
 
@@ -2045,8 +2047,14 @@ public class Mockito extends Matchers {
     
     /**
      * Allows verifying with timeout. It causes a verify to wait for a specified period of time for a desired
-     * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
+     * interaction rather than fails immediately if has not already happened. May be useful for testing in concurrent
      * conditions.
+     * <p>
+     * This differs from {@link Mockito#after after()} in that after() will wait the full period, unless
+     * the final test result is known early (e.g. if a never() fails), whereas timeout() will stop early as soon
+     * as verification passes, producing different behaviour when used with times(2), for example, which can pass 
+     * and then later fail. In that case, timeout would pass as soon as times(2) passes, whereas after would run until
+     * times(2) failed, and then fail.
      * <p>
      * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
      * <p>
@@ -2057,10 +2065,10 @@ public class Mockito extends Matchers {
      *   //above is an alias to:
      *   verify(mock, timeout(100).times(1)).someMethod();
      *   
-     *   //passes when someMethod() is called <b>*exactly*</b> 2 times within given time span
+     *   //passes as soon as someMethod() has been called 2 times before the given timeout
      *   verify(mock, timeout(100).times(2)).someMethod();
      *
-     *   //passes when someMethod() is called <b>*at least*</b> 2 times within given time span
+     *   //equivalent: this also passes as soon as someMethod() has been called 2 times before the given timeout
      *   verify(mock, timeout(100).atLeast(2)).someMethod();
      *   
      *   //verifies someMethod() within given time span using given verification mode
@@ -2070,13 +2078,53 @@ public class Mockito extends Matchers {
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @param millis - time span in millisecond
+     * @param millis - time span in milliseconds
      * 
      * @return verification mode
      */
     public static VerificationWithTimeout timeout(int millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
-    }       
+    }
+    
+    /**
+     * Allows verifying over a given period. It causes a verify to wait for a specified period of time for a desired
+     * interaction rather than failing immediately if has not already happened. May be useful for testing in concurrent
+     * conditions.
+     * <p>
+     * This differs from {@link Mockito#timeout timeout()} in that after() will wait the full period, whereas timeout() 
+     * will stop early as soon as verification passes, producing different behaviour when used with times(2), for example,
+     * which can pass and then later fail. In that case, timeout would pass as soon as times(2) passes, whereas after would
+     * run the full time, which point it will fail, as times(2) has failed.
+     * <p>
+     * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
+     * <p>
+     * Not yet implemented to work with InOrder verification.
+     * <pre class="code"><code class="java">
+     *   //passes after 100ms, if someMethod() has only been called once at that time. 
+     *   verify(mock, after(100)).someMethod();
+     *   //above is an alias to:
+     *   verify(mock, after(100).times(1)).someMethod();
+     *   
+     *   //passes if someMethod() is called <b>*exactly*</b> 2 times after the given timespan
+     *   verify(mock, after(100).times(2)).someMethod();
+     *
+     *   //passes if someMethod() has not been called after the given timespan
+     *   verify(mock, after(100).never()).someMethod();
+     *   
+     *   //verifies someMethod() after a given time span using given verification mode
+     *   //useful only if you have your own custom verification modes.
+     *   verify(mock, new After(100, yourOwnVerificationMode)).someMethod();
+     * </code></pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @param millis - time span in milliseconds
+     * 
+     * @return verification mode
+     */
+    public static VerificationAfterDelay after(int millis) {
+        return new After(millis, VerificationModeFactory.times(1));
+    }
     
     /**
      * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
@@ -2088,13 +2136,13 @@ public class Mockito extends Matchers {
      * <p>
      * Examples of incorrect use:
      * <pre class="code"><code class="java">
-     * //Oups, someone forgot thenReturn() part:
+     * //Oops, someone forgot thenReturn() part:
      * when(mock.get());
      * 
-     * //Oups, someone put the verified method call inside verify() where it should be outside:
+     * //Oops, someone put the verified method call inside verify() where it should be outside:
      * verify(mock.execute());
      * 
-     * //Oups, someone has used EasyMock for too long and forgot to specify the method to verify:
+     * //Oops, someone has used EasyMock for too long and forgot to specify the method to verify:
      * verify(mock);
      * </code></pre>
      * 
