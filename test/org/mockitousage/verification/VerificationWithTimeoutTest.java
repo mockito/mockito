@@ -82,8 +82,8 @@ public class VerificationWithTimeoutTest extends TestBase {
         t2.start();
         
         //then
-        verify(mock, timeout(1).never()).clear();
-        verify(mock, timeout(100).times(2)).clear();
+        verify(mock, timeout(50).atLeast(1)).clear();
+        verify(mock, timeout(50).times(2)).clear();
         verifyNoMoreInteractions(mock);
     }
     
@@ -98,7 +98,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         t2.start();
         
         //then
-        verify(mock, timeout(1).never()).clear();
+        verify(mock, timeout(50).atLeast(1)).clear();
         try {
             verify(mock, timeout(100).times(3)).clear();
             fail();
@@ -121,7 +121,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     @Test
     public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
         //given
-        Thread t1 = waitAndExerciseMock(20);        
+        Thread t1 = waitAndExerciseMock(20);
         
         //when
         t1.start();
@@ -140,7 +140,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     @Test
     public void shouldAllowTimeoutVerificationInOrder() throws Exception {
         //given
-        Thread t1 = waitAndExerciseMock(20);        
+        Thread t1 = waitAndExerciseMock(20);
         
         //when
         t1.start();
@@ -150,7 +150,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).add(anyString());
         inOrder.verify(mock, never()).clear();
-        inOrder.verify(mock, timeout(40)).clear();                             
+        inOrder.verify(mock, timeout(40)).clear();
     }
 
     private Thread waitAndExerciseMock(final int sleep) {

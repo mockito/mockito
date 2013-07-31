@@ -70,7 +70,8 @@ public class Timeout implements VerificationWithTimeout {
      * See the javadoc for {@link VerificationWithTimeout}
      */
     public VerificationMode never() {
-        return new Timeout(impl.getTreshhold(), impl.getTimeout(), VerificationModeFactory.times(0));
+        new Reporter().atMostShouldNotBeUsedWithTimeout();
+        return null;
     }
 
     /**
