@@ -21,10 +21,9 @@ import java.util.List;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("unchecked")
 public class VerificationWithTimeoutTest extends TestBase {
 
-    List exceptions = new LinkedList();
+    List<Exception> exceptions = new LinkedList<Exception>();
     
     @After
     public void after() {
@@ -34,7 +33,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     }
     
     @Mock
-    private List mock;
+    private List<String> mock;
 
     @Test
     public void shouldVerifyWithTimeout() throws Exception {

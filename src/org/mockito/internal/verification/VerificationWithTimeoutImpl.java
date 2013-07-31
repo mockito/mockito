@@ -12,7 +12,7 @@ import org.mockito.verification.VerificationMode;
  * Verifies that another verification mode (the delegate) becomes true within a certain timeframe
  * (before timeoutMillis has passed, measured from the call to verify()).
  */
-public class VerificationWithTimeoutImpl {
+public class VerificationWithTimeoutImpl implements VerificationMode {
     
     VerificationMode delegate;
     int timeoutMillis;
@@ -59,7 +59,7 @@ public class VerificationWithTimeoutImpl {
         }
     }
 
-    void sleep(int sleep) {
+    private void sleep(int sleep) {
         try {
             Thread.sleep(sleep);
         } catch (InterruptedException ie) {
@@ -75,7 +75,7 @@ public class VerificationWithTimeoutImpl {
         return timeoutMillis;
     }
 
-    public int getTreshhold() {
+    public int getPollingPeriod() {
         return pollingPeriod;
     }    
 }
