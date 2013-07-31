@@ -75,18 +75,36 @@ public class VerificationAfterDelayTest extends TestBase {
     }
 
     @Test
-    public void shouldWaitTheFullTime() throws Exception {
+    public void shouldWaitTheFullTimeIfTheTestCouldPass() throws Exception {
         // given
         Thread t = waitAndExerciseMock(50);
 
         // when
         t.start();
 
-        // then
+        // then        
         long startTime = System.currentTimeMillis();
-        verify(mock, after(100).atMost(1)).clear();
+        
+        try {
+            verify(mock, after(100).atLeast(2)).clear();
+            fail();
+        } catch (MockitoAssertionError e) {}
+        
         assertTrue(System.currentTimeMillis() - startTime >= 100);
-    } 
+    }
+    
+    @Test(timeout=100)
+    public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
+        // given
+        Thread t = waitAndExerciseMock(50);
+        
+        // when
+        t.start();
+        
+        // then
+        expected.expect(MockitoAssertionError.class);
+        verify(mock, after(10000).never()).clear();
+    }
 
     private Thread waitAndExerciseMock(final int sleep) {
         Thread t = new Thread() {

@@ -2,7 +2,12 @@ package org.mockito.verification;
 
 import org.mockito.internal.verification.VerificationAfterDelayImpl;
 
-
+/**
+ * See the javadoc for {@link VerificationAfterDelay}
+ * <p>
+ * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
+ * See javadoc for {@link VerificationWithTimeout}
+ */  
 public class After extends VerificationWrapper<VerificationAfterDelayImpl> implements VerificationAfterDelay {
     
     /**
@@ -10,14 +15,18 @@ public class After extends VerificationWrapper<VerificationAfterDelayImpl> imple
      * <p>
      * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
      * See javadoc for {@link VerificationWithTimeout}
-     */    
+     */
     public After(int delayMillis, VerificationMode verificationMode) {
-        super(new VerificationAfterDelayImpl(delayMillis, verificationMode));
+        this(10, delayMillis, verificationMode);
+    }
+    
+    public After(int pollingPeriod, int delayMillis, VerificationMode verificationMode) {
+        super(new VerificationAfterDelayImpl(pollingPeriod, delayMillis, verificationMode));
     }
     
     @Override
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode) {
-        return new After(wrappedVerification.getDelay(), verificationMode);
+        return new After(wrappedVerification.getPollingPeriod(), wrappedVerification.getDelay(), verificationMode);
     }
 
 }
