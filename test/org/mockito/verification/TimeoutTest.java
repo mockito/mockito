@@ -10,13 +10,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.AtLeast;
-import org.mockito.internal.verification.AtMost;
 import org.mockito.internal.verification.Only;
 import org.mockito.internal.verification.Times;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
 public class TimeoutTest extends TestBase {
     
     @Mock VerificationMode mode;
@@ -38,7 +36,7 @@ public class TimeoutTest extends TestBase {
         
         doThrow(error).
         doThrow(error).
-        doThrow(error).        
+        doThrow(error).
         when(mode).verify(data);
         
         try {
@@ -53,7 +51,7 @@ public class TimeoutTest extends TestBase {
         
         doThrow(error).
         doThrow(error).
-        doNothing().    
+        doNothing().
         when(mode).verify(data);
         
         t.verify(data);
@@ -83,10 +81,10 @@ public class TimeoutTest extends TestBase {
         assertCorrectMode(t.only(), Timeout.class, 50, 25, Only.class);
     }
     
-    private void assertCorrectMode(VerificationMode t, Class expectedType, int expectedTimeout, int expectedTreshold, Class expectedDelegateType) {
+    private void assertCorrectMode(VerificationMode t, Class<?> expectedType, int expectedTimeout, int expectedPollingPeriod, Class<?> expectedDelegateType) {
         assertEquals(expectedType, t.getClass());
-        assertEquals(expectedTimeout, ((Timeout) t).impl.getTimeout());
-        assertEquals(expectedTreshold, ((Timeout) t).impl.getTreshhold());
-        assertEquals(expectedDelegateType, ((Timeout) t).impl.getDelegate().getClass());
+        assertEquals(expectedTimeout, ((Timeout) t).wrappedVerification.getTimeout());
+        assertEquals(expectedPollingPeriod, ((Timeout) t).wrappedVerification.getPollingPeriod());
+        assertEquals(expectedDelegateType, ((Timeout) t).wrappedVerification.getDelegate().getClass());
     }
 }
