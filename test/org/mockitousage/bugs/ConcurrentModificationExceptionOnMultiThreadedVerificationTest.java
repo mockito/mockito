@@ -27,9 +27,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 
 	int nThreads = 1;
-	static final int TEST_MILLIS = 1000;
+	
+	static final int TIMES = 100;
 	static final int INTERVAL_MILLIS = 10;
-	static final int TIMES = TEST_MILLIS / INTERVAL_MILLIS;
+	static final int TEST_TIMEOUT_MILLIS = TIMES * INTERVAL_MILLIS + 500;
 
 	ITarget target = Mockito.mock(ITarget.class);
 	ExecutorService fixedThreadPool;
@@ -44,7 +45,8 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 	public void testInvocationConcurrently() throws Exception {
 		reset(target);
 		startInvocations();
-		verify(target, timeout(TEST_MILLIS).times(TIMES*nThreads)).targetMethod("arg");
+		
+		verify(target, timeout(TEST_TIMEOUT_MILLIS * 2).times(TIMES * nThreads)).targetMethod("arg");
 		verifyNoMoreInteractions(target);
 	}
 
@@ -56,7 +58,6 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 		}
 
 	}
-
 	
 	public class TargetInvoker implements Callable<Object> {
 

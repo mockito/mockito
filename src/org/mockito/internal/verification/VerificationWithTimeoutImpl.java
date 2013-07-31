@@ -11,26 +11,26 @@ import org.mockito.verification.VerificationMode;
 public class VerificationWithTimeoutImpl {
     
     VerificationMode delegate;
-    int timeout;
-    int treshhold;
+    int timeoutMillis;
+    int pollingPeriod;
 
-    public VerificationWithTimeoutImpl(int treshhold, int millis, VerificationMode delegate) {
-        this.treshhold = treshhold;
-        this.timeout = millis;
+    public VerificationWithTimeoutImpl(int pollingPeriod, int timeoutMillis, VerificationMode delegate) {
+        this.pollingPeriod = pollingPeriod;
+        this.timeoutMillis = timeoutMillis;
         this.delegate = delegate;
     }
 
     public void verify(VerificationData data) {
-        int soFar = 0;
         MockitoAssertionError error = null;
-        while (soFar <= timeout) {
+        
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime <= timeoutMillis) {
             try {
                 delegate.verify(data);
                 return;
             } catch (MockitoAssertionError e) {
                 error = e;
-                soFar += treshhold;
-                sleep(treshhold);
+                sleep(pollingPeriod);
             }
         }
         if (error != null) {
@@ -51,10 +51,10 @@ public class VerificationWithTimeoutImpl {
     }
 
     public int getTimeout() {
-        return timeout;
+        return timeoutMillis;
     }
 
     public int getTreshhold() {
-        return treshhold;
+        return pollingPeriod;
     }    
 }
