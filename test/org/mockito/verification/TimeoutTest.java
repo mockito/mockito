@@ -83,7 +83,7 @@ public class TimeoutTest extends TestBase {
     
     private void assertCorrectMode(VerificationMode t, Class<?> expectedType, int expectedTimeout, int expectedPollingPeriod, Class<?> expectedDelegateType) {
         assertEquals(expectedType, t.getClass());
-        assertEquals(expectedTimeout, ((Timeout) t).wrappedVerification.getTimeout());
+        assertEquals(expectedTimeout, ((Timeout) t).wrappedVerification.getDuration());
         assertEquals(expectedPollingPeriod, ((Timeout) t).wrappedVerification.getPollingPeriod());
         assertEquals(expectedDelegateType, ((Timeout) t).wrappedVerification.getDelegate().getClass());
     }

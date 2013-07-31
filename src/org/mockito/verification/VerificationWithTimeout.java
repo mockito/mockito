@@ -19,8 +19,8 @@ import org.mockito.Mockito;
  * </code></pre>
  * 
  * This is similar to {@link VerificationAfterDelay after()} except this assertion will immediately pass if it becomes true at any point,
- * whereas after() will wait the full period (or until the test has definitely failed). Assertions which are consistently expected to be
- * initially true and potentially become false are deprecated below, and after() should be used instead.
+ * whereas after() will wait the full period. Assertions which are consistently expected to be initially true and potentially become false 
+ * are deprecated below, and after() should be used instead.
  * 
  * <p>
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}

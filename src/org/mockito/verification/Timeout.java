@@ -5,16 +5,14 @@
 package org.mockito.verification;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.VerificationWithTimeoutImpl;
-
+import org.mockito.internal.verification.VerificationOverTimeImpl;
 /**
  * See the javadoc for {@link VerificationWithTimeout}
  * <p>
  * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
  * See javadoc for {@link VerificationWithTimeout}
  */
-public class Timeout extends VerificationWrapper<VerificationWithTimeoutImpl> implements VerificationWithTimeout {
+public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> implements VerificationWithTimeout {
     
     /**
      * See the javadoc for {@link VerificationWithTimeout}
@@ -30,12 +28,12 @@ public class Timeout extends VerificationWrapper<VerificationWithTimeoutImpl> im
      * See the javadoc for {@link VerificationWithTimeout}
      */
     Timeout(int pollingPeriod, int millis, VerificationMode delegate) {
-        super(new VerificationWithTimeoutImpl(pollingPeriod, millis, delegate));
+        super(new VerificationOverTimeImpl(pollingPeriod, millis, delegate, true));
     }
     
     @Override
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode newVerificationMode) {
-        return new Timeout(wrappedVerification.getPollingPeriod(), wrappedVerification.getTimeout(), newVerificationMode);
+        return new Timeout(wrappedVerification.getPollingPeriod(), wrappedVerification.getDuration(), newVerificationMode);
     }
     
     public VerificationMode atMost(int maxNumberOfInvocations) {
