@@ -5,7 +5,6 @@
 package org.mockito.verification;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationWithTimeoutImpl;
 import org.mockito.internal.verification.api.VerificationData;
@@ -62,7 +61,7 @@ public class Timeout implements VerificationWithTimeout {
      * See the javadoc for {@link VerificationWithTimeout}
      */
     public VerificationMode atMost(int maxNumberOfInvocations) {
-        new Reporter().atMostShouldNotBeUsedWithTimeout();
+        new Reporter().atMostAndNeverShouldNotBeUsedWithTimeout();
         return null;
     }
 
@@ -70,7 +69,7 @@ public class Timeout implements VerificationWithTimeout {
      * See the javadoc for {@link VerificationWithTimeout}
      */
     public VerificationMode never() {
-        new Reporter().atMostShouldNotBeUsedWithTimeout();
+        new Reporter().atMostAndNeverShouldNotBeUsedWithTimeout();
         return null;
     }
 

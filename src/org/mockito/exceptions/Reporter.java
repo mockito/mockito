@@ -626,7 +626,7 @@ public class Reporter {
                 ""), details);
     }
 
-    public void atMostShouldNotBeUsedWithTimeout() {
+    public void atMostAndNeverShouldNotBeUsedWithTimeout() {
         throw new FriendlyReminderException(join("",
                 "Don't panic! I'm just a friendly reminder!",
                 "timeout() should not be used with atMost() or never() because...",
