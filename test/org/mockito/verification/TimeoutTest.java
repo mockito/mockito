@@ -80,7 +80,6 @@ public class TimeoutTest extends TestBase {
         assertCorrectMode(t.atLeastOnce(), Timeout.class, 50, 25, AtLeast.class);
         assertCorrectMode(t.atLeast(5), Timeout.class, 50, 25, AtLeast.class);
         assertCorrectMode(t.times(5), Timeout.class, 50, 25, Times.class);
-        assertCorrectMode(t.never(), Timeout.class, 50, 25, Times.class);
         assertCorrectMode(t.only(), Timeout.class, 50, 25, Only.class);
     }
     

@@ -626,10 +626,10 @@ public class Reporter {
                 ""), details);
     }
 
-    public void atMostShouldNotBeUsedWithTimeout() {
+    public void atMostAndNeverShouldNotBeUsedWithTimeout() {
         throw new FriendlyReminderException(join("",
                 "Don't panic! I'm just a friendly reminder!",
-                "timeout() should not be used with atMost() because...",
+                "timeout() should not be used with atMost() or never() because...",
                 "...it does not make much sense - the test would have passed immediately in concurency",
                 "We kept this method only to avoid compilation errors when upgrading Mockito.",
                 "In future release we will remove timeout(x).atMost(y) from the API.",
