@@ -30,7 +30,6 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 	
 	static final int TIMES = 100;
 	static final int INTERVAL_MILLIS = 10;
-	static final int TEST_TIMEOUT_MILLIS = TIMES * INTERVAL_MILLIS + 500;
 
 	ITarget target = Mockito.mock(ITarget.class);
 	ExecutorService fixedThreadPool;
@@ -42,11 +41,14 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 	}
 
 	@Test
-	public void testInvocationConcurrently() throws Exception {
+	public void shouldSuccessfullyVerifyConcurrentInvocationsWithTimeout() throws Exception {
+        int potentialOverhead = 1000; // Leave 1000ms extra before timing out as leeway for test overheads
+        int expectedMaxTestLength = TIMES * INTERVAL_MILLIS + potentialOverhead;
+
 		reset(target);
 		startInvocations();
 		
-		verify(target, timeout(TEST_TIMEOUT_MILLIS * 2).times(TIMES * nThreads)).targetMethod("arg");
+		verify(target, timeout(expectedMaxTestLength).times(TIMES * nThreads)).targetMethod("arg");
 		verifyNoMoreInteractions(target);
 	}
 

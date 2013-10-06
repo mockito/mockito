@@ -49,7 +49,7 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void shouldPassEvenIfFirstVerificationFails() {
-        Timeout t = new Timeout(1, 2, mode);
+        Timeout t = new Timeout(1, 5, mode);
         
         doThrow(error).
         doThrow(error).
