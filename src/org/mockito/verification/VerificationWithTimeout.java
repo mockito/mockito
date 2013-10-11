@@ -38,25 +38,23 @@ public interface VerificationWithTimeout extends VerificationMode {
     public VerificationMode times(int wantedNumberOfInvocations);
     
     /**
-     * Alias to times(0), see {@link #times(int)}
+     * @deprecated
+     * Validation with timeout combined with never simply does not make sense...
+     * The test would have passed immediately in the concurrent environment
      * <p>
-     * Verifies that interaction did not happen within given timeout. E.g:
-     * <pre class="code"><code class="java">
-     *   verify(mock, timeout(100).never()).someMethod();
-     * </code></pre>
-     * 
+     * To avoid compilation errors upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
      * <p>
-     * If you want to verify there were NO interactions with the mock 
-     * check out {@link Mockito#verifyNoMoreInteractions(Object...)}
+     * In a future release we will remove timeout(x).atMost(y) and timeout(x).never() from the API.
      * <p>
-     * See examples in javadoc for {@link Mockito} class
+     * Do you want to find out more? See <a href="http://code.google.com/p/mockito/issues/detail?id=235">issue 235</a>
      * 
      * @return verification mode
      */
+    @Deprecated    
     public VerificationMode never();
     
     /**
-     * Allows at-least-once verification withing given timeout. E.g:
+     * Allows at-least-once verification within given timeout. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).atLeastOnce()).someMethod("some arg");
      * </code></pre>
@@ -69,7 +67,7 @@ public interface VerificationWithTimeout extends VerificationMode {
     public VerificationMode atLeastOnce();
 
     /**
-     * Allows at-least-x verification withing given timeout. E.g:
+     * Allows at-least-x verification within given timeout. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, timeout(100).atLeast(3)).someMethod("some arg");
      * </code></pre>
@@ -86,12 +84,12 @@ public interface VerificationWithTimeout extends VerificationMode {
      * @deprecated
      *
      * <b>Deprecated</b>
-     * validation with timeout combined with atMost simply does not make sense...
+     * Validation with timeout combined with atMost simply does not make sense...
      * The test would have passed immediately in the concurrent environment
      * <p>
-     * To avoid compilation erros upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
+     * To avoid compilation errors upon upgrade the method is deprecated and it throws a "friendly reminder" exception.
      * <p>
-     * In future release we will remove timeout(x).atMost(y) from the API.
+     * In a future release we will remove timeout(x).atMost(y) and timeout(x).never() from the API.
      * <p>
      * Do you want to find out more? See <a href="http://code.google.com/p/mockito/issues/detail?id=235">issue 235</a>
      *
