@@ -22,7 +22,7 @@ public class TimeoutTest extends TestBase {
     MockitoAssertionError error = new MockitoAssertionError(""); 
 
     @Test
-    public void shouldPassWhenVerificationPasses() {
+    public void should_pass_when_verification_passes() {
         Timeout t = new Timeout(1, 3, mode);
         
         doNothing().when(mode).verify(data);
@@ -31,7 +31,7 @@ public class TimeoutTest extends TestBase {
     }
     
     @Test
-    public void shouldFailBecauseVerificationFails() {
+    public void should_fail_because_verification_fails() {
         Timeout t = new Timeout(1, 2, mode);
         
         doThrow(error).
@@ -46,7 +46,7 @@ public class TimeoutTest extends TestBase {
     }
     
     @Test
-    public void shouldPassEvenIfFirstVerificationFails() {
+    public void should_pass_even_if_first_verification_fails() {
         Timeout t = new Timeout(1, 5, mode);
         
         doThrow(error).
@@ -58,7 +58,7 @@ public class TimeoutTest extends TestBase {
     }
 
     @Test
-    public void shouldTryToVerifyCorrectNumberOfTimes() {
+    public void should_try_to_verify_correct_number_of_times() {
         Timeout t = new Timeout(1, 4, mode);
         
         doThrow(error).when(mode).verify(data);
@@ -66,22 +66,22 @@ public class TimeoutTest extends TestBase {
         try {
             t.verify(data);
             fail();
-        } catch (MockitoAssertionError e) {};
+        } catch (MockitoAssertionError e) {}
         
         verify(mode, times(5)).verify(data);
     }
     
     @Test
-    public void shouldCreateCorrectType() {
+    public void should_create_correctly_configured_timeout() {
         Timeout t = new Timeout(25, 50, mode);
         
-        assertCorrectMode(t.atLeastOnce(), Timeout.class, 50, 25, AtLeast.class);
-        assertCorrectMode(t.atLeast(5), Timeout.class, 50, 25, AtLeast.class);
-        assertCorrectMode(t.times(5), Timeout.class, 50, 25, Times.class);
-        assertCorrectMode(t.only(), Timeout.class, 50, 25, Only.class);
+        assertTimeoutCorrectlyConfigured(t.atLeastOnce(), Timeout.class, 50, 25, AtLeast.class);
+        assertTimeoutCorrectlyConfigured(t.atLeast(5), Timeout.class, 50, 25, AtLeast.class);
+        assertTimeoutCorrectlyConfigured(t.times(5), Timeout.class, 50, 25, Times.class);
+        assertTimeoutCorrectlyConfigured(t.only(), Timeout.class, 50, 25, Only.class);
     }
     
-    private void assertCorrectMode(VerificationMode t, Class<?> expectedType, int expectedTimeout, int expectedPollingPeriod, Class<?> expectedDelegateType) {
+    private void assertTimeoutCorrectlyConfigured(VerificationMode t, Class<?> expectedType, int expectedTimeout, int expectedPollingPeriod, Class<?> expectedDelegateType) {
         assertEquals(expectedType, t.getClass());
         assertEquals(expectedTimeout, ((Timeout) t).wrappedVerification.getDuration());
         assertEquals(expectedPollingPeriod, ((Timeout) t).wrappedVerification.getPollingPeriod());
