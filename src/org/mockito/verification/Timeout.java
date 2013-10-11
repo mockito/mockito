@@ -27,8 +27,8 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
     /**
      * See the javadoc for {@link VerificationWithTimeout}
      */
-    Timeout(int pollingPeriod, int millis, VerificationMode delegate) {
-        super(new VerificationOverTimeImpl(pollingPeriod, millis, delegate, true));
+    Timeout(int pollingPeriodMillis, int millis, VerificationMode delegate) {
+        super(new VerificationOverTimeImpl(pollingPeriodMillis, millis, delegate, true));
     }
     
     @Override

@@ -15,7 +15,7 @@ import org.mockito.verification.VerificationMode;
  */
 public class VerificationOverTimeImpl implements VerificationMode {
 
-    private final int pollingPeriod;
+    private final int pollingPeriodMillis;
     private final int durationMillis;
     private final VerificationMode delegate;
     private final boolean returnOnSuccess;
@@ -23,7 +23,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
     /**
      * Create this verification mode, to be used to verify invocation ongoing data later.
      *
-     * @param pollingPeriod The frequency to poll delegate.verify(), to check whether the delegate has been satisfied
+     * @param pollingPeriodMillis The frequency to poll delegate.verify(), to check whether the delegate has been satisfied
      * @param durationMillis The max time to wait (in millis) for the delegate verification mode to be satisfied
      * @param delegate The verification mode to delegate overall success or failure to
      * @param returnOnSuccess Whether to immediately return successfully once the delegate is satisfied (as in
@@ -31,8 +31,8 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        the delegate is satisfied and the full duration has passed (as in
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      */
-    public VerificationOverTimeImpl(int pollingPeriod, int durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
-        this.pollingPeriod = pollingPeriod;
+    public VerificationOverTimeImpl(int pollingPeriodMillis, int durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
+        this.pollingPeriodMillis = pollingPeriodMillis;
         this.durationMillis = durationMillis;
         this.delegate = delegate;
         this.returnOnSuccess = returnOnSuccess;
@@ -69,7 +69,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
             } catch (MockitoAssertionError e) {
                 if (canRecoverFromFailure(delegate)) {
                     error = e;
-                    sleep(pollingPeriod);
+                    sleep(pollingPeriodMillis);
                 } else {
                     throw e;
                 }
@@ -94,7 +94,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
     }
     
     public int getPollingPeriod() {
-        return pollingPeriod;
+        return pollingPeriodMillis;
     }
     
     public int getDuration() {
