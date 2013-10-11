@@ -59,7 +59,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_try_to_verify_correct_number_of_times() {
-        Timeout t = new Timeout(1, 4, mode);
+        Timeout t = new Timeout(10, 50, mode);
         
         doThrow(error).when(mode).verify(data);
         
