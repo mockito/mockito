@@ -1,10 +1,7 @@
-branches:
-  only:
-    - master
 language: java
 jdk:
     - oraclejdk7
 script: 
-    - TERM=dumb gradle build --stacktrace
+    - TERM=dumb gradle build
 
 
