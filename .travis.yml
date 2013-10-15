@@ -1,0 +1,8 @@
+language: java
+jdk:
+#    - openjdk6
+    - oraclejdk7
+script: 
+    - TERM=dumb gradle build --stacktrace
+
+
