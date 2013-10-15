@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -14,10 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
+import org.junit.Test;
 
 @SuppressWarnings("unused")
 public class GenericMetadataSupportTest {
@@ -183,12 +181,11 @@ public class GenericMetadataSupportTest {
 
     private Method firstNamedMethod(String methodName, Class<?> clazz) {
         for (Method method : clazz.getMethods()) {
-            if (method.getName().contains(methodName)) {
+            boolean protect_against_different_jdk_ordering_avoiding_bridge_methods = !method.isBridge();
+            if (method.getName().contains(methodName) && protect_against_different_jdk_ordering_avoiding_bridge_methods) {
                 return method;
             }
         }
         throw new IllegalStateException("The method : '" + methodName + "' do not exist in '" + clazz.getSimpleName() + "'");
     }
-
-
 }
