@@ -12,15 +12,20 @@ env:
     - env=dumb
 
 before_install:
-# use Gradle 1.7 
+# use Gradle 1.8 
     - wget http://services.gradle.org/distributions/gradle-1.8-bin.zip
     - unzip gradle-1.8-bin.zip
     - export GRADLE_HOME=$PWD/gradle-1.8
     - export PATH=$GRADLE_HOME/bin:$PATH
 
+install:
+    - true
+
 script: 
     - gradle build
 
 after_success:
+    - cat build/test-results/*
     - gradle cobertura
-    - gradle coveralls
+    - cat build/reports/cobertura/coverage.xml
+    - gradle --info coveralls
