@@ -25,7 +25,7 @@ script:
     - gradle build
 
 after_success:
-    - cat build/test-results/*
+#    - cat build/test-results/*
     - gradle cobertura
-    - cat build/reports/cobertura/coverage.xml
-    - gradle --info coveralls
+#    - cat build/reports/cobertura/coverage.xml
+    - gradle --info --debug coveralls
