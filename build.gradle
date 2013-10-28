@@ -114,7 +114,3 @@ pmd {
     ruleSetFiles = files('conf/pmd-rules.xml')
 }
 */
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.6'
-}
