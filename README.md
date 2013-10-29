@@ -2,7 +2,7 @@
   
 simplier & better mocking
 
-[![Build Status](https://travis-ci.org/bric3/mockito.png?branch=master)](https://travis-ci.org/bric3/mockito) [![Coverage Status](https://coveralls.io/repos/bric3/mockito/badge.png)](https://coveralls.io/r/bric3/mockito)
+[![Build Status](https://travis-ci.org/mockito/mockito.png?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://coveralls.io/repos/mockito/mockito/badge.png)](https://coveralls.io/r/mockito/mockito)
 
 ## Current release
 06/10/2012 Mockito **1.9.5** released! See the release notes. Should appear in maven cdntral shortly.
