@@ -12,6 +12,22 @@ allprojects {
     }
 }
 
+// EXPERIMENTAL : coverage
+// see https://github.com/kt3k/coveralls-gradle-plugin
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'http://kt3k.github.io/repository/maven/release' // coveralls plugin is hosted on github.io.
+        }
+    }
+
+    dependencies {
+        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.1.5'
+    }
+}
+
 sourceCompatibility = 1.5
 
 configurations {
@@ -55,6 +71,16 @@ idea.project.ipr {
 
 idea.module.scopes.PROVIDED.plus += configurations.provided
 eclipse.classpath.plusConfigurations += configurations.provided
+
+
+// EXPERIMENTAL : converage
+// configure code coverage
+apply plugin: 'cobertura'
+apply plugin: 'coveralls'
+cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
+//cobertura.coverageIgnoreTrivial = true
+
+
 
 def commonJarContent = copySpec {
     //source
