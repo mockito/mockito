@@ -1,3 +1,5 @@
+import org.apache.xalan.xsltc.cmdline.Compile
+
 version = '1.9.8' //TODO duplicated with file
 group = 'org.mockito'
 description = 'Core API and implementation.'
@@ -17,14 +19,11 @@ allprojects {
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url 'http://kt3k.github.io/repository/maven/release' // coveralls plugin is hosted on github.io.
-        }
     }
 
     dependencies {
         classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.1.5'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.1.6'
     }
 }
 
