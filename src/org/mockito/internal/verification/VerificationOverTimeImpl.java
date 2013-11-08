@@ -104,5 +104,8 @@ public class VerificationOverTimeImpl implements VerificationMode {
     public VerificationMode getDelegate() {
         return delegate;
     }
-    
+
+    public boolean isReturnOnSuccess() {
+        return returnOnSuccess;
+    }
 }

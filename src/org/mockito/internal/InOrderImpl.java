@@ -18,17 +18,19 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationWrapper;
+import org.mockito.verification.VerificationWrapperInOrderWrapper;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.
  */
 public class InOrderImpl implements InOrder, InOrderContext {
-    
+
     private final MockitoCore mockitoCore = new MockitoCore();
     private final Reporter reporter = new Reporter();
     private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
     private final InOrderContext inOrderContext = new InOrderContextImpl();
-    
+
     public List<Object> getMocksToBeVerifiedInOrder() {
         return mocksToBeVerifiedInOrder;
     }
@@ -40,10 +42,12 @@ public class InOrderImpl implements InOrder, InOrderContext {
     public <T> T verify(T mock) {
         return this.verify(mock, VerificationModeFactory.times(1));
     }
-    
+
     public <T> T verify(T mock, VerificationMode mode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             reporter.inOrderRequiresFamiliarMock();
+        } else if (mode instanceof VerificationWrapper) {
+            return mockitoCore.verify(mock, new VerificationWrapperInOrderWrapper((VerificationWrapper) mode, this));
         } else if (!(mode instanceof VerificationInOrderMode)) {
             throw new MockitoException(mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
         }
