@@ -5,7 +5,7 @@ simplier & better mocking
 [![Build Status](https://travis-ci.org/mockito/mockito.png?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://coveralls.io/repos/mockito/mockito/badge.png)](https://coveralls.io/r/mockito/mockito)
 
 ## Current release
-06/10/2012 Mockito **1.9.5** released! See the release notes. Should appear in maven cdntral shortly.
+06/10/2012 Mockito **1.9.5** released! See the release notes. Should appear in maven central shortly.
 
 ## Moving to github
 We are currently moving a few stuff from [Google Code](https://code.google.com/p/mockito/) to [Github](https://github.com/mockito/mockito).
@@ -47,7 +47,7 @@ verify(mockedList).clear();
 ### Or stub method calls
 
 ```java
-// you can mock conmcrete classes, not only interfaces
+// you can mock concrete classes, not only interfaces
 LinkedList mockedList = mock(LinkedList.class);
 
 // stubbing; before the actual execution
