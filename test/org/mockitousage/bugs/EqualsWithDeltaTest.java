@@ -26,6 +26,14 @@ public class EqualsWithDeltaTest {
         assertThat(matcher.matches(null)).isTrue();
     }
 
+    @Test
+    public void testEqualsWithDelta_WhenActualAndExpectedAreTheSameObject() throws Exception {
+        Double expected = 1.0;
+        Double actual = expected;
+        Matcher<Number> matcher = equalsWithDelta(expected);
+        assertThat(matcher.matches(actual)).isTrue();
+    }
+
 	public Matcher<Number> equalsWithDelta(final Double expected) {
 		return new EqualsWithDelta(expected, .000001);
 	}

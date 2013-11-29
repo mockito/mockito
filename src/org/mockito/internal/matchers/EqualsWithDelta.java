@@ -29,7 +29,7 @@ public class EqualsWithDelta extends ArgumentMatcher<Number> implements Serializ
             return false;
         }
 
-        if (wanted == null && actual == null) {
+        if (wanted == actual) {
             return true;
         }
 
