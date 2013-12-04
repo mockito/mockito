@@ -109,7 +109,7 @@ task allJar(type: Jar) {
     from(sourceSets.main.output)
 
     //3rd party library classes
-    from(zipTree("lib/run/com.springsource.org.objenesis-1.0.0.jar")) { exclude "META-INF/maven/**" }
+    from(zipTree("lib/run/objenesis-2.1.jar")) { exclude "META-INF/maven/**" }
     from(zipTree("lib/run/com.springsource.org.hamcrest.core-1.1.0.jar")) { exclude "LICENSE.txt" }
 
     //3rd party license files

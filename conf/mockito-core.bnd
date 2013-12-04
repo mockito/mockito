@@ -12,8 +12,8 @@ Export-Package= !org.mockito.asm.*, \
 Import-Package= junit.*;resolution:=optional, \
                 org.junit.*;resolution:=optional, \
                 org.apache.tools.ant.*;resolution:=optional, \
-                org.hamcrest;version="[1.0,2.0)", \
-                org.objenesis;version="[1.0,2.0)", \
+                org.hamcrest;version="[1.0,3.0)", \
+                org.objenesis;version="[1.0,3.0)", \
                 org.mockito.*
 
 Private-Package: org.mockito.*

@@ -150,7 +150,7 @@
       <zipfileset dir="${src.dir}" />
 	  <fileset dir="${lib.dir.run}" excludes="*.jar" />
       <fileset dir="${lib.dir.repackaged}" excludes="*.jar" />
-      <zipfileset src="${lib.dir.run}/com.springsource.org.objenesis-1.0.0.jar">
+      <zipfileset src="${lib.dir.run}/objenesis-2.1.jar">
         <exclude name="META-INF/maven/**"/>
       </zipfileset>
       <zipfileset src="${lib.dir.run}/com.springsource.org.hamcrest.core-1.1.0.jar">
@@ -263,7 +263,7 @@
       <zipfileset src="${lib.dir.sources}/com.springsource.org.hamcrest.core-1.1.0-sources.jar" >
       	<exclude name="LICENSE.txt" />
       </zipfileset>
-      <zipfileset src="${lib.dir.sources}/com.springsource.org.objenesis-1.0.0-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/objenesis-2.1-sources.jar" />
     </jar>
   </target>
 
