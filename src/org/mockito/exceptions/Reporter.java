@@ -143,6 +143,7 @@ public class Reporter {
                 "    verify(mock).someMethod();",
                 "    verify(mock, times(10)).someMethod();",
                 "    verify(mock, atLeastOnce()).someMethod();",
+                "    not: verify(mock.someMethod());",
                 "Also, if you use @Mock annotation don't miss initMocks()"
         ));
     }
