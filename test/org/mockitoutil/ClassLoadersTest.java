@@ -21,15 +21,15 @@ public class ClassLoadersTest {
     public void isolated_class_loader_cannot_load_classes_If_no_code_source_path() throws Exception {
         // given
         ClassLoader cl = isolatedClassLoader()
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1")
                 .build();
 
         // when
         try {
-            cl.loadClass("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1");
+            cl.loadClass("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1");
         } catch (ClassNotFoundException e) {
             // then
-            assertThat(e.getMessage()).contains("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1");
+            assertThat(e.getMessage()).contains("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1");
         }
     }
 
@@ -38,29 +38,29 @@ public class ClassLoadersTest {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1")
                 .build();
 
         // when
         try {
-            cl.loadClass("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1");
+            cl.loadClass("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1");
         } catch (NoClassDefFoundError e) {
             // then
-            assertThat(e.getMessage()).contains("org/mockitoutil/IsolatedClassLoaderBuilderTest$Interface1");
+            assertThat(e.getMessage()).contains("org/mockitoutil/ClassLoadersTest$Interface1");
         }
     }
 
     @Test
-    public void isolated_class_loader_can_load_all_classes_if_all_prefixes_correct() throws Exception {
+    public void isolated_class_loader_can_load_all_classes_if_all_prefixes_are_correct() throws Exception {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1")
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$Interface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$Interface1")
                 .build();
 
         // when
-        Class<?> aClass = cl.loadClass("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1");
+        Class<?> aClass = cl.loadClass("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1");
 
         // then
         assertThat(aClass).isNotNull();
@@ -72,8 +72,8 @@ public class ClassLoadersTest {
     public void isolated_class_loader_has_no_parent() throws Exception {
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$ClassUsingInterface1")
-                .withPrivateCopyOf("org.mockitoutil.IsolatedClassLoaderBuilderTest$Interface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1")
+                .withPrivateCopyOf("org.mockitoutil.ClassLoadersTest$Interface1")
                 .build();
 
         assertThat(cl.getParent()).isNull();
