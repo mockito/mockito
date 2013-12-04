@@ -19,12 +19,13 @@ Import-Package= junit.*;resolution:=optional, \
                 org.junit.*;resolution:=optional, \
                 org.apache.tools.ant.*;resolution:=optional, \
                 org.hamcrest;version="[1.0,2.0)", \
-                org.objenesis;version="[1.0,3.0)", \
+                org.objenesis;version="[2.1,3.0)", \
                 org.mockito.*, \
                 COM.jrockit.reflect;resolution:=optional, \
                 jrockit.vm;resolution:=optional, \
-                sun.reflect;resolution:=optional
-                
+                sun.reflect;resolution:=optional, \
+                sun.misc;resolution:=optional
+
 Private-Package: org.mockito.*, \
                  org.hamcrest.*, \
                  org.objenesis.*
