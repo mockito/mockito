@@ -8,7 +8,8 @@ package org.mockitousage.basicapi;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
-import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
+import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
+import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
@@ -95,16 +96,14 @@ public class MockingMultipleInterfacesTest extends TestBase {
     @Test
     public void should_mock_class_with_interfaces_of_different_class_loader_AND_different_classpaths() throws ClassNotFoundException {
         // Note : if classes are in the same classpath, SearchingClassLoader can find the class/classes and load them in the first matching classloader
-        Class<?> interface1 = isolatedClassLoader()
-                .withCodeSourceUrls("test-resources/multiple-classpaths/cp1")
-                .withPrivateCopyOf("test.TestedClass1")
+        Class<?> interface1 = inMemoryClassLoader()
+                .withClassDefinition("test.Interface1", makeMarkerInterface("test.Interface1"))
                 .build()
-                .loadClass("test.TestedClass1");
-        Class<?> interface2 = isolatedClassLoader()
-                .withCodeSourceUrls("test-resources/multiple-classpaths/cp2")
-                .withPrivateCopyOf("test.TestedClass2")
+                .loadClass("test.Interface1");
+        Class<?> interface2 = inMemoryClassLoader()
+                .withClassDefinition("test.Interface2", makeMarkerInterface("test.Interface2"))
                 .build()
-                .loadClass("test.TestedClass2");
+                .loadClass("test.Interface2");
 
         try {
             Object mocked = mock(interface1, withSettings().extraInterfaces(interface2));
