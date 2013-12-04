@@ -1,6 +1,7 @@
 package org.mockitoutil;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import org.junit.Test;
 
@@ -30,6 +31,7 @@ public class ClassLoadersTest {
         // when
         try {
             cl.loadClass(CLASS_NAME_USING_INTERFACE);
+            fail();
         } catch (ClassNotFoundException e) {
             // then
             assertThat(e.getMessage()).contains(CLASS_NAME_USING_INTERFACE);
@@ -47,6 +49,7 @@ public class ClassLoadersTest {
         // when
         try {
             cl.loadClass(CLASS_NAME_USING_INTERFACE);
+            fail();
         } catch (NoClassDefFoundError e) {
             // then
             assertThat(e.getMessage()).contains("org/mockitoutil/ClassLoadersTest$Interface1");
@@ -94,6 +97,7 @@ public class ClassLoadersTest {
         // when
         try {
             cl.loadClass("not.Defined");
+            fail();
         } catch (ClassNotFoundException e) {
             // then
             assertThat(e.getMessage()).contains("not.Defined");

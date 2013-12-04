@@ -5,7 +5,8 @@
 
 package org.mockitousage.basicapi;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
@@ -13,10 +14,9 @@ import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
 
 // See issue 453
-public class MockingMultipleInterfacesTest extends TestBase {
+public class MockingMultipleInterfacesTest {
 
     class Foo {}
     interface IFoo {}
@@ -28,8 +28,8 @@ public class MockingMultipleInterfacesTest extends TestBase {
         Foo mock = mock(Foo.class, withSettings().extraInterfaces(IFoo.class, IBar.class));
         
         //then
-        assertThat(mock, is(IFoo.class));
-        assertThat(mock, is(IBar.class));
+        assertThat(mock).isInstanceOf(IFoo.class);
+        assertThat(mock).isInstanceOf(IBar.class);
     }
     
     @Test
@@ -40,7 +40,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("extraInterfaces() does not accept null parameters", e.getMessage());
+            assertThat(e.getMessage()).contains("extraInterfaces() does not accept null parameters");
         }
     }
     
@@ -52,7 +52,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("extraInterfaces() requires at least one interface", e.getMessage());
+            assertThat(e.getMessage()).contains("extraInterfaces() requires at least one interface");
         }
     }
     
@@ -64,7 +64,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("extraInterfaces() requires at least one interface", e.getMessage());
+            assertThat(e.getMessage()).contains("extraInterfaces() requires at least one interface");
         }
     }
     
@@ -76,7 +76,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("Foo which is not an interface", e.getMessage());
+            assertThat(e.getMessage()).contains("Foo which is not an interface");
         }
     }
     
@@ -88,7 +88,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("You mocked following type: IMethods", e.getMessage());
+            assertThat(e.getMessage()).contains("You mocked following type: IMethods");
         }
     }
 
@@ -105,11 +105,7 @@ public class MockingMultipleInterfacesTest extends TestBase {
                 .build()
                 .loadClass("test.Interface2");
 
-        try {
-            Object mocked = mock(interface1, withSettings().extraInterfaces(interface2));
-            assertTrue("mock should be assignable from interface2 type", interface2.isInstance(mocked));
-        } catch (MockitoException e) {
-            fail("Couldn't mock interfaces with different class loaders and different classpaths");
-        }
+        Object mocked = mock(interface1, withSettings().extraInterfaces(interface2));
+        assertThat(interface2.isInstance(mocked)).describedAs("mock should be assignable from interface2 type").isTrue();
     }
 }
