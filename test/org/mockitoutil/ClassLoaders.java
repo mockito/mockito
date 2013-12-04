@@ -7,48 +7,47 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ClassLoaders {
-    private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
-    private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
+public abstract class ClassLoaders {
+    protected ClassLoaders() {}
 
-    public static ClassLoaders isolatedClassLoader() {
-        return new ClassLoaders();
+    public static IsolatedURLClassLoaderBuilder isolatedClassLoader() {
+        return new IsolatedURLClassLoaderBuilder();
     }
 
-    public ClassLoaders withPrivateCopyOf(String... privatePrefixes) {
-        privateCopyPrefixes.addAll(asList(privatePrefixes));
-        return this;
-    }
-
-    public ClassLoaders withCodeSourceUrls(String... urls) {
-        codeSourceUrls.addAll(pathsToURLs(urls));
-        return this;
-    }
-
-    public ClassLoaders withCurrentCodeSourceUrls() {
-        codeSourceUrls.add(obtainClassPathOF(ClassLoaders.class.getName()));
-        return this;
+    public static InMemoryClassLoaderBuilder inMemoryClassLoader() {
+        return new InMemoryClassLoaderBuilder();
     }
 
 
-    private static URL obtainClassPathOF(String className) {
-        String path = className.replace('.', '/') + ".class";
-        String url = ClassLoaders.class.getClassLoader().getResource(path).toExternalForm();
+    public static class IsolatedURLClassLoaderBuilder extends ClassLoaders {
+        private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
+        private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
 
-        try {
-            return new URL(url.substring(0, url.length() - path.length()));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Classloader couldn't obtain a proper classpath URL", e);
+        public IsolatedURLClassLoaderBuilder withPrivateCopyOf(String... privatePrefixes) {
+            privateCopyPrefixes.addAll(asList(privatePrefixes));
+            return this;
         }
-    }
 
-    public ClassLoader build() {
-        return new LocalIsolatedURLClassLoader(
-                codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                privateCopyPrefixes
-        );
+        public IsolatedURLClassLoaderBuilder withCodeSourceUrls(String... urls) {
+            codeSourceUrls.addAll(pathsToURLs(urls));
+            return this;
+        }
+
+        public IsolatedURLClassLoaderBuilder withCurrentCodeSourceUrls() {
+            codeSourceUrls.add(obtainClassPathOf(ClassLoaders.class.getName()));
+            return this;
+        }
+
+        public ClassLoader build() {
+            return new LocalIsolatedURLClassLoader(
+                    codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
+                    privateCopyPrefixes
+            );
+        }
     }
 
     static class LocalIsolatedURLClassLoader extends URLClassLoader {
@@ -73,7 +72,49 @@ public class ClassLoaders {
         }
     }
 
-    private List<URL> pathsToURLs(String... codeSourceUrls) {
+    public static class InMemoryClassLoaderBuilder extends ClassLoaders {
+        private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
+
+        public InMemoryClassLoaderBuilder withClassDefinition(String name, byte[] classDefinition) {
+            inMemoryClassObjects.put(name, classDefinition);
+            return this;
+        }
+
+        public ClassLoader build() {
+            return new InMemoryClassLoader(inMemoryClassObjects);
+        }
+    }
+
+    static class InMemoryClassLoader extends ClassLoader {
+        private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
+
+        public InMemoryClassLoader(Map<String, byte[]> inMemoryClassObjects) {
+            this.inMemoryClassObjects = inMemoryClassObjects;
+        }
+
+        protected Class findClass(String name) throws ClassNotFoundException {
+            byte[] classDefinition = inMemoryClassObjects.get(name);
+            if (classDefinition != null) {
+                return defineClass(name, classDefinition, 0, classDefinition.length);
+            }
+            throw new ClassNotFoundException(name);
+        }
+
+
+    }
+
+    protected URL obtainClassPathOf(String className) {
+        String path = className.replace('.', '/') + ".class";
+        String url = ClassLoaders.class.getClassLoader().getResource(path).toExternalForm();
+
+        try {
+            return new URL(url.substring(0, url.length() - path.length()));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Classloader couldn't obtain a proper classpath URL", e);
+        }
+    }
+
+    protected List<URL> pathsToURLs(String... codeSourceUrls) {
         return pathsToURLs(Arrays.asList(codeSourceUrls));
     }
     private List<URL> pathsToURLs(List<String> codeSourceUrls) {
