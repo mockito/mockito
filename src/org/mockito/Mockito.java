@@ -1961,6 +1961,24 @@ public class Mockito extends Matchers {
         return times(0);
     }
     
+    
+    /**
+     * Alias to <code>times(1)</code>, see {@link Mockito#times(int)}
+     * <p>
+     * Verifies that interaction happened exactly once. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, once()).someMethod();
+     * </code></pre>
+     * 
+     * See examples in javadoc for {@link Mockito} class
+     * 
+     * @return verification mode
+     */
+    public static VerificationMode once() {
+        return times(1);
+    }
+
+    
     /**
      * Allows at-least-once verification. E.g:
      * <pre class="code"><code class="java">
