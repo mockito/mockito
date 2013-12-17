@@ -52,11 +52,16 @@ tasks.withType(Compile) {
 }
 
 dependencies {
-    provided fileTree('lib/compile')
-    compile fileTree('lib/run') { exclude '*.txt' }, fileTree('lib/repackaged') { exclude '*.txt'}
+    //provided fileTree('lib/compile')
+    //compile fileTree('lib/run') { exclude '*.txt' }, fileTree('lib/repackaged') { exclude '*.txt'}
+    compile 'org.objenesis:objenesis:2.1'
+    compile 'org.hamcrest:hamcrest-core:1.3'
+    compile fileTree('lib/repackaged') { exclude '*.txt'}
+    compile 'junit:junit:4.11'
 
     testCompile fileTree("lib/test")
-    testRuntime fileTree("lib/compile")
+    testRuntime 'junit:junit:4.11'
+    //testRuntime fileTree("lib/compile")
 
     testUtil sourceSets.test.output
 }

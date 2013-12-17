@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 
@@ -62,7 +63,7 @@ public class MocksCreationTest extends TestBase {
         //then
         assertContains("great mockie", name);
         //and
-        assertThat(mock, is(List.class));
+        assertThat(mock, instanceOf(List.class));
     }
     
     @Test

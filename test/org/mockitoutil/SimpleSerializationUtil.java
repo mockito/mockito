@@ -1,6 +1,6 @@
 package org.mockitoutil;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

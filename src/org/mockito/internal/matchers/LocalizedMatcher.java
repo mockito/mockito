@@ -30,6 +30,11 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         return actualMatcher.matches(item);
     }
 
+    @Override
+    public void describeMismatch(Object item, Description mismatchDescription) {
+        actualMatcher.describeMismatch(item, mismatchDescription);
+    }
+
     public void describeTo(Description description) {
         actualMatcher.describeTo(description);
     }
