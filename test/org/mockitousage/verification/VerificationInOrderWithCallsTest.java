@@ -523,6 +523,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         // When
         try{
             verify( mockOne, calls(1)).voidMethod();
+            fail();
         }  catch (MockitoException e){
             assertThat(e.getMessage(), containsString("calls is only intended to work with InOrder"));
         }

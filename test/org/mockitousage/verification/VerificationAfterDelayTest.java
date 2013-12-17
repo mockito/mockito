@@ -105,6 +105,7 @@ public class VerificationAfterDelayTest extends TestBase {
         // then
         try{
             verify(mock, after(10000).never()).clear();
+            fail();
         } catch(MockitoAssertionError e){
 
         }
