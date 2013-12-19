@@ -22,7 +22,7 @@ install:
     - true
 
 script: 
-    - gradle build --info
+    - gradle build
 
 after_success:
     - gradle cobertura
