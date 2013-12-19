@@ -260,7 +260,7 @@
         </fileset>
       <fileset dir="${src.dir}" />
       <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
-      <zipfileset src="${lib.dir.sources}/hamcrest.core-1.3.0-sources.jar" >
+      <zipfileset src="${lib.dir.sources}/hamcrest.core-1.3-sources.jar" >
       	<exclude name="LICENSE.txt" />
       </zipfileset>
       <zipfileset src="${lib.dir.sources}/objenesis-2.1-sources.jar" />
