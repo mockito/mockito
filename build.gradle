@@ -110,7 +110,7 @@ task allJar(type: Jar) {
 
     //3rd party library classes
     from(zipTree("lib/run/objenesis-2.1.jar")) { exclude "META-INF/maven/**" }
-    from(zipTree("lib/run/hamcrest.core-1.3.jar")) { exclude "LICENSE.txt" }
+    from(zipTree("lib/run/hamcrest-core-1.3.jar")) { exclude "LICENSE.txt" }
 
     //3rd party license files
     from("lib/run") { exclude '**/*.jar' }
