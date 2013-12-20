@@ -4,10 +4,10 @@
  */
 package org.mockitousage.verification;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Rule;
+import static org.mockito.Mockito.*;
+
+import org.fest.assertions.Assertions;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
@@ -15,10 +15,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.Mockito.*;
 
 public class VerificationInOrderWithCallsTest extends TestBase {
 
@@ -37,9 +33,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(1)).oneArg( 2 );
             fail();
         } catch (VerificationInOrderFailure e){
-            assertThat(e.getMessage(), allOf(containsString("Verification in order failure"),
-                                             containsString("Wanted but not invoked"),
-                                             containsString("mockOne.oneArg(2)")));
+            Assertions.assertThat(e.getMessage()).contains("Verification in order failure").contains("Wanted but not invoked").contains("mockOne.oneArg(2)");
         }
 
         // Then - expected exception thrown
@@ -59,10 +53,8 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(2)).oneArg( 2 );
             fail();
         } catch(VerificationInOrderFailure e){
-            assertThat(e.getMessage(), allOf(containsString("Verification in order failure"),
-                                             containsString("mockOne.oneArg(2)"),
-                                             containsString("Wanted 2 times"),
-                                             containsString("But was 1 time")));
+	        Assertions.assertThat(e.getMessage()).contains("Verification in order failure").contains("mockOne.oneArg(2)").contains("Wanted 2 times").contains(
+			        "But was 1 time");
         }
 
         // Then - expected exception thrown
@@ -82,9 +74,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(1)).oneArg( 1 );
             fail();
         } catch(VerificationInOrderFailure e){
-            assertThat(e.getMessage(), allOf(containsString("Verification in order failure"),
-                    containsString("Wanted but not invoked"),
-                    containsString("mockOne.oneArg(1)")));
+	        Assertions.assertThat(e.getMessage()).contains("Verification in order failure").contains("Wanted but not invoked").contains("mockOne.oneArg(1)");
         }
 
 
@@ -105,9 +95,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(1)).oneArg( 1 );
             fail();
         } catch(VerificationInOrderFailure e){
-            assertThat(e.getMessage(), allOf(containsString("Verification in order failure"),
-                                                containsString("Wanted but not invoked"),
-                                                containsString("mockOne.oneArg(1)")));
+            Assertions.assertThat(e.getMessage()).contains("Verification in order failure").contains("Wanted but not invoked").contains("mockOne.oneArg(1)");
         }
 
 
@@ -128,9 +116,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(1)).voidMethod();
             fail();
         } catch(VerificationInOrderFailure e){
-            assertThat(e.getMessage(), allOf(containsString("Verification in order failure"),
-                    containsString("Wanted but not invoked"),
-                    containsString("mockOne.voidMethod()")));
+	        Assertions.assertThat(e.getMessage()).contains("Verification in order failure").contains("Wanted but not invoked").contains("mockOne.voidMethod()");
         }
 
 
@@ -260,7 +246,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verifyNoMoreInteractions();
             fail();
         } catch (VerificationInOrderFailure e){
-            assertThat(e.getMessage(), containsString("No interactions wanted here"));
+	        Assertions.assertThat(e.getMessage()).contains("No interactions wanted here");
         }
 
         // Then - expected exception thrown
@@ -326,7 +312,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verifyNoMoreInteractions();
             fail();
         }  catch (VerificationInOrderFailure e){
-            assertThat(e.getMessage(), containsString("No interactions wanted here"));
+	        Assertions.assertThat(e.getMessage()).contains("No interactions wanted here");
         }
 
         // Then - expected exception thrown
@@ -391,7 +377,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verifyNoMoreInteractions();
             fail();
         }  catch (VerificationInOrderFailure e){
-            assertThat(e.getMessage(), containsString("No interactions wanted here"));
+	        Assertions.assertThat(e.getMessage()).contains("No interactions wanted here");
         }
 
         // Then - expected exception thrown
@@ -493,7 +479,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(0)).voidMethod();
             fail();
         } catch (MockitoException e){
-            assertThat(e.getMessage(), containsString("Negative and zero values are not allowed here"));
+	        Assertions.assertThat(e.getMessage()).contains("Negative and zero values are not allowed here");
         }
 
         // Then - expected exception thrown
@@ -509,7 +495,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verifier.verify( mockOne, calls(-1)).voidMethod();
             fail();
         }  catch (MockitoException e){
-            assertThat(e.getMessage(), containsString("Negative and zero values are not allowed here"));
+	        Assertions.assertThat(e.getMessage()).contains("Negative and zero values are not allowed here");
         }
 
         // Then - expected exception thrown
@@ -525,7 +511,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
             verify( mockOne, calls(1)).voidMethod();
             fail();
         }  catch (MockitoException e){
-            assertThat(e.getMessage(), containsString("calls is only intended to work with InOrder"));
+	        Assertions.assertThat(e.getMessage()).contains("calls is only intended to work with InOrder");
         }
 
         // Then - expected exception thrown
