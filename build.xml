@@ -147,7 +147,6 @@
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
-      <zipfileset dir="${src.dir}" />
 	  <fileset dir="${lib.dir.run}" excludes="*.jar" />
       <fileset dir="${lib.dir.repackaged}" excludes="*.jar" />
       <zipfileset src="${lib.dir.run}/objenesis-2.1.jar">
@@ -218,7 +217,6 @@
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
-      <fileset dir="${src.dir}" />
       <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.0.jar"/>
     </jarjar>
   </target>
