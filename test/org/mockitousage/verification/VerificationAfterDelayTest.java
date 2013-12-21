@@ -20,9 +20,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
 
 public class VerificationAfterDelayTest extends TestBase {
-    
-    @Rule
-    public ExpectedException expected = ExpectedException.none();
 
     @Mock
     private List<String> mock;
@@ -69,9 +66,13 @@ public class VerificationAfterDelayTest extends TestBase {
 
         // then
         verify(mock, times(0)).clear();
-        
-        expected.expect(MockitoAssertionError.class);
-        verify(mock, after(50).times(2)).clear();
+
+        try{
+            verify(mock, after(50).times(2)).clear();
+            fail();
+        } catch (MockitoAssertionError e){
+
+        }
     }
 
     @Test
@@ -102,8 +103,12 @@ public class VerificationAfterDelayTest extends TestBase {
         t.start();
         
         // then
-        expected.expect(MockitoAssertionError.class);
-        verify(mock, after(10000).never()).clear();
+        try{
+            verify(mock, after(10000).never()).clear();
+            fail();
+        } catch(MockitoAssertionError e){
+
+        }
     }
 
     private Thread waitAndExerciseMock(final int sleep) {

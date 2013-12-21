@@ -47,7 +47,7 @@ public class MethodInterceptorFilterTest extends TestBase {
 
         //then
         assertTrue((Integer) ret != 0);
-        Mockito.verify(handler, never()).handle(any(InvocationImpl.class));
+        Mockito.verify(handler, never()).handle(Mockito.any(InvocationImpl.class));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class MethodInterceptorFilterTest extends TestBase {
 
         //then
         assertTrue((Boolean) ret);
-        Mockito.verify(handler, never()).handle(any(InvocationImpl.class));
+        Mockito.verify(handler, never()).handle(Mockito.any(InvocationImpl.class));
     }
     
     //TODO: move to separate factory

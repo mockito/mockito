@@ -94,6 +94,6 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldScreamWhenNullPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions(null);
+        verifyNoMoreInteractions((Object[])null);
     }
 }

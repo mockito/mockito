@@ -5,13 +5,13 @@
 
 package org.mockitoutil;
 
-import junit.framework.Assert;
 import org.fest.assertions.Assertions;
 import org.fest.assertions.Condition;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
@@ -62,14 +62,6 @@ public class TestBase extends Assert {
     //I'm really tired of matchers, enter the assertor!
     protected static <T> void assertThat(T o, Assertor<T> a) {
         a.assertValue(o);
-    }
-    
-    protected static <T> void assertThat(T actual, Matcher<T> m) {
-        org.junit.Assert.assertThat(actual, m);
-    }
-    
-    protected static <T> void assertThat(String message, T actual, Matcher<T> m) {
-        org.junit.Assert.assertThat(message, actual, m);
     }
     
     public static <T> Assertor<String> endsWith(final String substring) {

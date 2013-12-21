@@ -105,7 +105,7 @@ public class MockSettingsImplTest extends TestBase {
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
-    	mockSettingsImpl.invocationListeners(null);
+    	mockSettingsImpl.invocationListeners((InvocationListener[])null);
     }
 
     @Test

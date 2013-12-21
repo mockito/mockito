@@ -37,7 +37,7 @@ public class RunnerFactoryTest extends TestBase {
         RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(JUnit44RunnerImpl.class));
+        assertThat(runner, instanceOf(JUnit44RunnerImpl.class));
     }
     
     @Test
@@ -54,7 +54,7 @@ public class RunnerFactoryTest extends TestBase {
         RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(JUnit45AndHigherRunnerImpl.class));
+        assertThat(runner, instanceOf(JUnit45AndHigherRunnerImpl.class));
     }
     
     @Test
