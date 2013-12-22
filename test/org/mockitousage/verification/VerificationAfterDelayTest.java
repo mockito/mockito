@@ -4,32 +4,41 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Fail.*;
+import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockitoutil.TestBase;
+import org.mockito.internal.configuration.ConfigurationAccess;
 
-public class VerificationAfterDelayTest extends TestBase {
+public class VerificationAfterDelayTest {
 
-    @Mock
-    private List<String> mock;
+	@Mock
+	private List<String> mock;
 
-    private List<Exception> exceptions = new LinkedList<Exception>();
+	private List<Exception> exceptions = new LinkedList<Exception>();	
+
+	@Before
+	public void init() {
+		MockitoAnnotations.initMocks(this);
+	}
 
     @After
     public void teardown() {
+	    ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
+	    ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
+	    new StateMaster().validate();
         // making sure there are no threading related exceptions
-        assertTrue(exceptions.isEmpty());
+        assertThat(exceptions).isEmpty();
     }
 
     @Test
@@ -91,7 +100,7 @@ public class VerificationAfterDelayTest extends TestBase {
             fail();
         } catch (MockitoAssertionError e) {}
         
-        assertTrue(System.currentTimeMillis() - startTime >= 100);
+        assertThat(System.currentTimeMillis() - startTime).isGreaterThanOrEqualTo(100);
     }
     
     @Test(timeout=100)
