@@ -133,8 +133,8 @@ public class ExtraMatchers {
         };
     }
     
-    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
-        return CoreMatchers.is(type);
+    public static org.hamcrest.Matcher<?> clazz(java.lang.Class<?> type) {
+        return CoreMatchers.isA(type);
     }
 
     public static Assertor hasMethodsInStackTrace(final String ... methods) {
