@@ -9,6 +9,7 @@ import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
 
+import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -55,7 +56,7 @@ import java.util.*;
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs
  */
 @Incubating
-public abstract class GenericMetadataSupport {
+public abstract class GenericMetadataSupport implements Serializable {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
@@ -237,7 +238,7 @@ public abstract class GenericMetadataSupport {
      * Offer support to retrieve generic metadata on a {@link Class} by reading type parameters and type variables on
      * the class and its ancestors and interfaces.
      */
-    private static class FromClassGenericMetadataSupport extends GenericMetadataSupport {
+    private static class FromClassGenericMetadataSupport extends GenericMetadataSupport implements Serializable {
         private Class<?> clazz;
 
         public FromClassGenericMetadataSupport(Class<?> clazz) {
@@ -271,7 +272,7 @@ public abstract class GenericMetadataSupport {
      * That's what meant the "standalone" word at the beginning of the Javadoc.
      * Instead use {@link ParameterizedReturnType}.
      */
-    private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport {
+    private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport implements Serializable {
         private ParameterizedType parameterizedType;
 
         public FromParameterizedTypeGenericMetadataSupport(ParameterizedType parameterizedType) {
@@ -294,7 +295,7 @@ public abstract class GenericMetadataSupport {
     /**
      * Generic metadata specific to {@link ParameterizedType} returned via {@link Method#getGenericReturnType()}.
      */
-    private static class ParameterizedReturnType extends GenericMetadataSupport {
+    private static class ParameterizedReturnType extends GenericMetadataSupport implements Serializable {
         private final ParameterizedType parameterizedType;
         private final TypeVariable[] typeParameters;
 
@@ -326,7 +327,7 @@ public abstract class GenericMetadataSupport {
     /**
      * Generic metadata for {@link TypeVariable} returned via {@link Method#getGenericReturnType()}.
      */
-    private static class TypeVariableReturnType extends GenericMetadataSupport {
+    private static class TypeVariableReturnType extends GenericMetadataSupport implements Serializable {
         private final TypeVariable typeVariable;
         private final TypeVariable[] typeParameters;
         private Class<?> rawType;
@@ -550,7 +551,7 @@ public abstract class GenericMetadataSupport {
      *
      * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
      */
-    public static class WildCardBoundedType implements BoundedType {
+    public static class WildCardBoundedType implements BoundedType, Serializable {
         private WildcardType wildcard;
 
 

@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.mockito.Mockito.*;
+
+import java.io.Serializable;
+
 import org.mockito.MockSettings;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
@@ -14,10 +18,6 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
-
-import static org.mockito.Mockito.withSettings;
 
 /**
  * Returning deep stub implementation.
@@ -95,6 +95,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
                 : withSettings();
 
         return mockSettings
+		        .serializable()
                 .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata));
     }
 
@@ -109,7 +110,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private Object recordDeepStubMock(final Object mock, InvocationContainerImpl container) throws Throwable {
 
-        container.addAnswer(new Answer<Object>() {
+        container.addAnswer(new SerializableAnswer() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return mock;
             }
@@ -117,6 +118,11 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
         return mock;
     }
+	
+	abstract class SerializableAnswer implements Answer<Object>, Serializable {
+		
+	}
+	
 
     protected GenericMetadataSupport actualParameterizedType(Object mock) {
         CreationSettings mockSettings = (CreationSettings) new MockUtil().getMockHandler(mock).getMockSettings();
