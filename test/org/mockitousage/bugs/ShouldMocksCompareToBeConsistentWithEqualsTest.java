@@ -35,6 +35,20 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     }
 
     @Test
+    public void shouldCompareToTreatAsEqualMocksWithTheSameReferences() {
+        //given
+        Date today    = mock(Date.class);
+
+        //when
+        Set<Date> set = new TreeSet<Date>();
+        set.add(today);
+        set.add(today);
+
+        //then
+        assertEquals(1, set.size());
+    }
+
+    @Test
     public void shouldAllowStubbingAndVerifyingCompareTo() {
         //given
         Date mock    = mock(Date.class);
