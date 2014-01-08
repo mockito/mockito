@@ -64,7 +64,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertTrue(result != (Object) 0);
     }
 
-    @Test public void should_return_zero_for_compareTo_method() {
+    @Test public void should_return_zero_if_mock_is_compared_to_itself() {
         //given
         Date d = mock(Date.class);
         d.compareTo(d);
