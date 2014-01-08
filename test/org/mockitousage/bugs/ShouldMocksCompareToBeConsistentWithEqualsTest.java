@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
 
     @Test
-    public void shouldCompareToBeConsistentWithEquals() {
+    public void should_compare_to_be_consistent_with_equals() {
         //given
         Date today    = mock(Date.class);
         Date tomorrow = mock(Date.class);
@@ -35,7 +35,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldCompareToTreatAsEqualMocksWithTheSameReferences() {
+    public void should_compare_to_be_consistent_with_equals_when_comparing_the_same_reference() {
         //given
         Date today    = mock(Date.class);
 
@@ -49,7 +49,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowStubbingAndVerifyingCompareTo() {
+    public void should_allow_stubbing_and_verifying_compare_to() {
         //given
         Date mock    = mock(Date.class);
         when(mock.compareTo(any(Date.class))).thenReturn(10);
@@ -63,7 +63,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldResetNotRemoveDefaultStubbing() {
+    public void should_reset_not_remove_default_stubbing() {
         //given
         Date mock    = mock(Date.class);
         reset(mock);
