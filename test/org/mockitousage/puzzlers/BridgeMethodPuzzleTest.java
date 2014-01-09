@@ -53,15 +53,4 @@ public class BridgeMethodPuzzleTest extends TestBase {
         assertThat(Sub.class, hasBridgeMethod("say"));
         assertThat(s, hasBridgeMethod("say"));
     }
-    
-    @Test
-    public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
-        //Super has following erasure: say(Object) which differs from Dummy.say(String)
-        //mock has to detect it and do the super.say()
-        Sub s = mock(Sub.class);
-        setMockWithDownCast(s);
-        say("Hello");
-        
-        verify(s).say("Hello");
-    }
 }

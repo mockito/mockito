@@ -41,13 +41,7 @@ public class ClassImposterizer  {
             return "codegen." + super.getClassName(prefix, source, key, names);
         }
     };
-    
-    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-        public int accept(Method method) {
-            return method.isBridge() ? 1 : 0;
-        }
-    };
-    
+
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
         return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
     }
@@ -103,8 +97,7 @@ public class ClassImposterizer  {
             enhancer.setSuperclass(mockedType);
             enhancer.setInterfaces(interfaces);
         }
-        enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
-        enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
+        enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class});
         if (mockedType.getSigners() != null) {
             enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
         } else {
