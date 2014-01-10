@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -19,7 +18,7 @@ import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 
 @SuppressWarnings("unchecked")
-public class MockUtil implements Serializable {
+public class MockUtil {
 
     private static final MockMaker mockMaker = ClassPathLoader.getMockMaker();
 

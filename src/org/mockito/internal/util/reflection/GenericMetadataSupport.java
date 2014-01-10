@@ -238,7 +238,7 @@ public abstract class GenericMetadataSupport implements Serializable {
      * Offer support to retrieve generic metadata on a {@link Class} by reading type parameters and type variables on
      * the class and its ancestors and interfaces.
      */
-    private static class FromClassGenericMetadataSupport extends GenericMetadataSupport implements Serializable {
+    private static class FromClassGenericMetadataSupport extends GenericMetadataSupport {
         private Class<?> clazz;
 
         public FromClassGenericMetadataSupport(Class<?> clazz) {
@@ -272,7 +272,7 @@ public abstract class GenericMetadataSupport implements Serializable {
      * That's what meant the "standalone" word at the beginning of the Javadoc.
      * Instead use {@link ParameterizedReturnType}.
      */
-    private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport implements Serializable {
+    private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport {
         private ParameterizedType parameterizedType;
 
         public FromParameterizedTypeGenericMetadataSupport(ParameterizedType parameterizedType) {
@@ -295,7 +295,7 @@ public abstract class GenericMetadataSupport implements Serializable {
     /**
      * Generic metadata specific to {@link ParameterizedType} returned via {@link Method#getGenericReturnType()}.
      */
-    private static class ParameterizedReturnType extends GenericMetadataSupport implements Serializable {
+    private static class ParameterizedReturnType extends GenericMetadataSupport {
         private final ParameterizedType parameterizedType;
         private final TypeVariable[] typeParameters;
 
@@ -327,7 +327,7 @@ public abstract class GenericMetadataSupport implements Serializable {
     /**
      * Generic metadata for {@link TypeVariable} returned via {@link Method#getGenericReturnType()}.
      */
-    private static class TypeVariableReturnType extends GenericMetadataSupport implements Serializable {
+    private static class TypeVariableReturnType extends GenericMetadataSupport {
         private final TypeVariable typeVariable;
         private final TypeVariable[] typeParameters;
         private Class<?> rawType;

@@ -4,7 +4,6 @@
  */
 package org.mockito.internal;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,11 +38,11 @@ import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
-public class MockitoCore implements Serializable {
+public class MockitoCore {
 
-    private final transient Reporter reporter = new Reporter();
-    private final transient MockUtil mockUtil = new MockUtil();
-    private final transient MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+    private final Reporter reporter = new Reporter();
+    private final MockUtil mockUtil = new MockUtil();
+    private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     public boolean isTypeMockable(Class<?> typeToMock) {
         return mockUtil.isTypeMockable(typeToMock);
