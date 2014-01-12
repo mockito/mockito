@@ -49,7 +49,8 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
-	    instantiateFieldsIfNeeded();
+        instantiateMockitoCoreIfNeeded();
+        instantiateDelegateIfNeeded();
         if (!mockitoCore.isTypeMockable(rawType)) {
             return delegate.returnValueFor(rawType);
         }
@@ -57,16 +58,19 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return getMock(invocation, returnTypeGenericMetadata);
     }
 
-	private void instantiateFieldsIfNeeded() {
-		if (mockitoCore == null) {
-			mockitoCore = new MockitoCore();
-		}
-		if (delegate == null) {
-			delegate = new ReturnsEmptyValues();
-		}
-	}
+    private synchronized void instantiateMockitoCoreIfNeeded() {
+        if (mockitoCore == null) {
+            mockitoCore = new MockitoCore();
+        }
+    }
 
-	private Object getMock(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
+    private synchronized void instantiateDelegateIfNeeded() {
+        if (delegate == null) {
+            delegate = new ReturnsEmptyValues();
+        }
+    }
+
+    private Object getMock(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
     	InternalMockHandler<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
     	InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
