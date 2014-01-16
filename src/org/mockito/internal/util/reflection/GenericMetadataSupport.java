@@ -9,6 +9,7 @@ import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
 
+import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -55,7 +56,7 @@ import java.util.*;
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs
  */
 @Incubating
-public abstract class GenericMetadataSupport {
+public abstract class GenericMetadataSupport implements Serializable {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
@@ -550,7 +551,7 @@ public abstract class GenericMetadataSupport {
      *
      * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
      */
-    public static class WildCardBoundedType implements BoundedType {
+    public static class WildCardBoundedType implements BoundedType, Serializable {
         private WildcardType wildcard;
 
 
