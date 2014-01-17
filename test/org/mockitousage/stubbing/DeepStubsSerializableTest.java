@@ -35,7 +35,6 @@ public class DeepStubsSerializableTest {
     }
 
 	@Test
-	@Ignore
 	public void should_serialize_and_deserialize_map_mocked_by_deep_stubs() throws Exception {
 		// given
 		Map map = Mockito.mock(Map.class, withSettings().defaultAnswer(Mockito.RETURNS_DEEP_STUBS).serializable());
