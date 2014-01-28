@@ -20,6 +20,8 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -92,6 +94,13 @@ public class AnnotationsTest extends TestBase {
         assertEquals(0, noExtraConfig.intReturningMethod());        
     }
 
+    @Mock(customAnswer=MyCustomAnswer.class) IMethods mockWithCustomAnswer;
+
+    @Test
+    public void shouldUseCustomAnswer() {
+        assertSame(MyCustomAnswer.returnedObject,mockWithCustomAnswer.objectReturningMethodNoArgs());
+    }
+
     class SuperBase {
         @Mock private IMethods mock;
 
@@ -113,6 +122,16 @@ public class AnnotationsTest extends TestBase {
 
         public IMethods getMock() {
             return mock;
+        }
+    }
+
+    public static class MyCustomAnswer implements Answer<Object> {
+
+        static Object returnedObject = new Object();
+
+        @Override
+        public Object answer(InvocationOnMock invocation) throws Throwable {
+            return returnedObject;
         }
     }
 }
