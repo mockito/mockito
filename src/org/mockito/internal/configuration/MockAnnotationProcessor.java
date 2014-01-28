@@ -28,16 +28,19 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         } else {
             mockSettings.name(annotation.name());
         }
-        if (annotation.serializable()) {
+        if(annotation.serializable()){
             mockSettings.serializable();
         }
 
-        // see @Mock answer default value
+        mockSettings.defaultAnswer(getDefaultAnswer(annotation));
+        return Mockito.mock(field.getType(), mockSettings);
+    }
 
+    private Answer<?> getDefaultAnswer(Mock annotation) {
         if (!annotation.customAnswer().equals(Answer.class)) {
             Constructor<Answer<?>> constructor = (Constructor<Answer<?>>) annotation.customAnswer().getConstructors()[0];
             try {
-                mockSettings.defaultAnswer(constructor.newInstance(new Object[0]));
+                return constructor.newInstance(new Object[0]);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -45,9 +48,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-        } else {
-            mockSettings.defaultAnswer(annotation.answer().get());
         }
-        return Mockito.mock(field.getType(), mockSettings);
+        return annotation.answer().get();
     }
 }
