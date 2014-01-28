@@ -4,15 +4,14 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.FieldInitializer;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.stubbing.Answer;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Instantiates a mock on a field annotated by {@link Mock}
@@ -32,24 +31,36 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
             mockSettings.serializable();
         }
 
-        mockSettings.defaultAnswer(getDefaultAnswer(annotation));
+        mockSettings.defaultAnswer(getDefaultAnswer(annotation.customAnswer(), annotation.answer()));
         return Mockito.mock(field.getType(), mockSettings);
     }
 
-    private Answer<?> getDefaultAnswer(Mock annotation) {
-        if (hasCustomAnswerDefined(annotation)) {
-            try {
-                return annotation.customAnswer().newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+    private Answer<?> getDefaultAnswer(Class<? extends Answer> customAnswer, Answers defaultAnswer) {
+
+        if (hasCustomAnswerDefined(customAnswer)) {
+            throwExceptionIfAnswerAndCustomAnswerDefined(defaultAnswer);
+
+            return instantiateCustomAnswer(customAnswer);
         }
-        return annotation.answer().get();
+        return defaultAnswer.get();
     }
 
-    private boolean hasCustomAnswerDefined(Mock annotation) {
-        return !annotation.customAnswer().equals(Answer.class);
+    private Answer<?> instantiateCustomAnswer(Class<? extends Answer> customAnswer) {
+        try {
+            return customAnswer.newInstance();
+        } catch (Exception e) {
+            throw new MockitoException("Could not process customAnswer", e);
+        }
     }
+
+    private void throwExceptionIfAnswerAndCustomAnswerDefined(Answers defaultAnswer) {
+        if(defaultAnswer.isReturnDefaultsAnswer()){
+            throw new MockitoException("You cannot define answer and customAnswer at the same time");
+        }
+    }
+
+    private boolean hasCustomAnswerDefined(Class<? extends Answer> customAnswer) {
+        return !customAnswer.equals(Answer.class);
+    }
+
 }

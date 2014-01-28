@@ -80,4 +80,8 @@ public enum Answers {
     public Answer<Object> get() {
         return implementation;
     }
+
+    public boolean isReturnDefaultsAnswer() {
+        return RETURNS_DEFAULTS != this;
+    }
 }
