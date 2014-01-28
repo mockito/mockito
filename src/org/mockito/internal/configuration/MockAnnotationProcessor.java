@@ -37,18 +37,19 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
     }
 
     private Answer<?> getDefaultAnswer(Mock annotation) {
-        if (!annotation.customAnswer().equals(Answer.class)) {
-            Constructor<Answer<?>> constructor = (Constructor<Answer<?>>) annotation.customAnswer().getConstructors()[0];
+        if (hasCustomAnswerDefined(annotation)) {
             try {
-                return constructor.newInstance(new Object[0]);
+                return annotation.customAnswer().newInstance();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
             }
         }
         return annotation.answer().get();
+    }
+
+    private boolean hasCustomAnswerDefined(Mock annotation) {
+        return !annotation.customAnswer().equals(Answer.class);
     }
 }
