@@ -47,13 +47,12 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void should_pass_even_if_first_verification_fails() {
-        Timeout t = new Timeout(1, 5, mode);
+        Timeout t = new Timeout(1, 20, mode);
         
-        doThrow(error).
-        doThrow(error).
+        doThrow(error, error).
         doNothing().
         when(mode).verify(data);
-        
+
         t.verify(data);
     }
 
