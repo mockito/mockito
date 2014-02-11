@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
@@ -34,7 +36,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldStubWithThrowable() throws Exception {
+    public void should_stub_with_throwable() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
         
@@ -47,7 +49,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldSetThrowableToVoidMethod() throws Exception {
+    public void should_set_throwable_to_void_method() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         
         stubVoid(mock).toThrow(expected).on().clear();
@@ -60,7 +62,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     } 
     
     @Test
-    public void shouldLastStubbingVoidBeImportant() throws Exception {
+    public void should_last_stubbing_void_be_important() throws Exception {
         stubVoid(mock).toThrow(new ExceptionOne()).on().clear();
         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
         
@@ -71,7 +73,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
+    public void should_fail_stubbing_throwable_on_the_same_invocation_due_to_acceptable_limitation() throws Exception {
         when(mock.get(1)).thenThrow(new ExceptionOne());
         
         try {
@@ -81,7 +83,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }   
     
     @Test
-    public void shouldAllowSettingCheckedException() throws Exception {
+    public void should_allow_setting_checked_exception() throws Exception {
         Reader reader = mock(Reader.class);
         IOException ioException = new IOException();
         
@@ -96,7 +98,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldAllowSettingError() throws Exception {
+    public void should_allow_setting_error() throws Exception {
         Error error = new Error();
         
         when(mock.add("quake")).thenThrow(error);
@@ -111,36 +113,65 @@ public class StubbingWithThrowablesTest extends TestBase {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldInstantiateExceptionClassOnInteraction() {
+    public void should_instantiate_exception_class_on_interaction() {
         when(mock.add(null)).thenThrow(IllegalArgumentException.class);
 
         mock.add(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldInstantiateExceptionClassWithOngoingStubbingOnInteraction() {
+    public void should_instantiate_exception_class_with_ongoing_stubbing_on_interaction() {
         Mockito.doThrow(IllegalArgumentException.class).when(mock).add(null);
 
         mock.add(null);
     }
+
+    @Test(expected=ExceptionTwo.class)
+    public void should_throw_ExceptionTwo_after_ExceptionOne(){
+        List list = Mockito.mock(List.class);
+        doThrow(ExceptionOne.class,ExceptionTwo.class).when(list).add(null);
+        try{
+            list.add(null);
+            fail();
+        }catch(ExceptionOne e){}
+
+        list.add(null);
+    }
+
+    @Test
+    public void should_throw_ExceptionTwo_multiple_times_after_ExceptionOne(){
+        List list = Mockito.mock(List.class);
+        doThrow(ExceptionOne.class,ExceptionTwo.class).when(list).add(null);
+        try{
+            list.add(null);
+            fail();
+        }catch(ExceptionOne e){}
+
+        for (int i=0 ; i<5 ; ++i){
+            try{
+                list.add(null);
+                fail();
+            } catch(ExceptionTwo e){}
+        }
+    }
     
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
+    public void should_not_allow_setting_invalid_checked_exception() throws Exception {
         when(mock.add("monkey island")).thenThrow(new Exception());
     }
     
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingNullThrowable() throws Exception {
+    public void should_not_allow_setting_null_throwable() throws Exception {
         when(mock.add("monkey island")).thenThrow((Throwable) null);
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingNullThrowableArray() throws Exception {
+    public void should_not_allow_setting_null_throwable_array() throws Exception {
         when(mock.add("monkey island")).thenThrow((Throwable[]) null);
     }
     
     @Test
-    public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
+    public void should_mix_throwables_and_returns_on_different_mocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
         when(mock.getLast()).thenReturn("last");
         stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
@@ -174,7 +205,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldStubbingWithThrowableBeVerifiable() {
+    public void should_stubbing_with_throwable_be_verifiable() {
         when(mock.size()).thenThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
@@ -194,7 +225,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
     
     @Test
-    public void shouldStubbingWithThrowableFailVerification() {
+    public void should_stubbing_with_throwable_fail_verification() {
         when(mock.size()).thenThrow(new RuntimeException());
         stubVoid(mock).toThrow(new RuntimeException()).on().clone();
         
@@ -230,7 +261,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test(expected = NaughtyException.class)
-    public void shouldShowDecentMessageWhenExcepionIsNaughty() throws Exception {
+    public void should_show_decent_message_when_excepion_is_naughty() throws Exception {
         when(mock.add("")).thenThrow(NaughtyException.class);
         mock.add("");
     }

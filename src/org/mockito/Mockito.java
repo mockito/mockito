@@ -248,7 +248,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Read more about doThrow|doAnswer family of methods in paragraph 12.
  * <p>
  * Initially, {@link Mockito#stubVoid(Object)} was used for stubbing voids.
- * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable)}.
+ * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable, Throwable...)}.
  * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods. 
  *
  *
@@ -447,7 +447,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not
  * like void methods inside brackets...
  * <p>
- * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids. 
+ * {@link Mockito#doThrow(Throwable, Throwable...)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
  * The main reason is improved readability and consistency with the family of <code>doAnswer()</code> methods.
  * <p>
  * Use <code>doThrow()</code> when you want to stub a void method with an exception:
@@ -473,9 +473,9 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * {@link Mockito#doReturn(Object)}
  * <p>
- * {@link Mockito#doThrow(Throwable)}
+ * {@link Mockito#doThrow(Throwable, Throwable...)}
  * <p>
- * {@link Mockito#doThrow(Class)}
+ * {@link Mockito#doThrow(Class, Class...)}
  * <p>
  * {@link Mockito#doAnswer(Answer)}
  * <p>
@@ -1362,7 +1362,7 @@ public class Mockito extends Matchers {
      *   //You can do:
      *   when(mock.count()).thenReturn(10);
      * </code></pre>
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable, Throwable...)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -1426,7 +1426,7 @@ public class Mockito extends Matchers {
      *   
      * </code></pre>
      * 
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable, Throwable...)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -1632,7 +1632,7 @@ public class Mockito extends Matchers {
      * 
      * See examples in javadoc for {@link Mockito} class
      * 
-     * @deprecated Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
+     * @deprecated Use {@link Mockito#doThrow(Throwable,Throwable...)} method for stubbing voids
      * 
      * @param mock
      *            to stub
@@ -1653,11 +1653,16 @@ public class Mockito extends Matchers {
      *   doThrow(new RuntimeException()).when(mock).someVoidMethod();
      * </code></pre>
      * 
-     * @param toBeThrown to be thrown when the stubbed method is called
+     * @param firstToBeThrown first to be thrown when the stubbed method is called
+     * @param nextToBeThrown next to be thrown when the stubbed method is called next ti
      * @return stubber - to select a method for stubbing
      */
-    public static Stubber doThrow(Throwable toBeThrown) {
-        return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
+    public static Stubber doThrow(Throwable firstToBeThrown, Throwable ...nextToBeThrown) {
+        Stubber result = MOCKITO_CORE.doAnswer(new ThrowsException(firstToBeThrown));
+        for  (Throwable t : nextToBeThrown){
+            result.doThrow(t);
+        }
+        return result;
     }
 
     /**
@@ -1673,14 +1678,18 @@ public class Mockito extends Matchers {
      *   doThrow(RuntimeException.class).when(mock).someVoidMethod();
      * </code></pre>
      *
-     * @param toBeThrown to be thrown when the stubbed method is called
+     * @param firstToBeThrown first to be thrown when the stubbed method is called
+     * @param nextToBeThrown next to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      * @since 1.9.0
      */
-    public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
-        return MOCKITO_CORE.doAnswer(new ThrowsExceptionClass(toBeThrown));
+    public static Stubber doThrow(Class<? extends Throwable> firstToBeThrown, Class<? extends Throwable> ...nextToBeThrown) {
+        Stubber result = MOCKITO_CORE.doAnswer(new ThrowsExceptionClass(firstToBeThrown));
+        for  (Class<? extends Throwable> claz : nextToBeThrown){
+            result.doThrow(claz);
+        }
+        return result;
     }
-
 
     /**
      * Use <code>doCallRealMethod()</code> when you want to call the real implementation of a method.
