@@ -30,7 +30,7 @@ public class AllInvocationsFinder {
         return new LinkedList<Invocation>(invocationsInOrder);
     }
 
-    private final class SequenceNumberComparator implements Comparator<Invocation> {
+    private static final class SequenceNumberComparator implements Comparator<Invocation> {
         public int compare(Invocation o1, Invocation o2) {
             return Integer.valueOf(o1.getSequenceNumber()).compareTo(o2.getSequenceNumber());
         }

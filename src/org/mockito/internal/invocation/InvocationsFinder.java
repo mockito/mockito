@@ -134,7 +134,7 @@ public class InvocationsFinder {
         return unverified;
     }
     
-    private class RemoveNotMatching implements Filter<Invocation> {
+    private static class RemoveNotMatching implements Filter<Invocation> {
         private final InvocationMatcher wanted;
 
         private RemoveNotMatching(InvocationMatcher wanted) {
@@ -146,7 +146,7 @@ public class InvocationsFinder {
         }
     }
 
-    private class RemoveUnverifiedInOrder implements Filter<Invocation> {
+    private static class RemoveUnverifiedInOrder implements Filter<Invocation> {
         private final InOrderContext orderingContext;
 
         public RemoveUnverifiedInOrder(InOrderContext orderingContext) {
