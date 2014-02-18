@@ -193,7 +193,7 @@ public class FieldInitializerTest {
         public AbstractStaticClass() {}
     }
 
-    static interface Interface {
+    interface Interface {
 
     }
 

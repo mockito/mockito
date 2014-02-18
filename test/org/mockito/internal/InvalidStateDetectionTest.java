@@ -202,7 +202,7 @@ public class InvalidStateDetectionTest extends TestBase {
         verify(mock).simpleMethod();
     }
     
-    private static interface DetectsInvalidState {
+    private interface DetectsInvalidState {
         void detect(IMethods mock);
     }
     
