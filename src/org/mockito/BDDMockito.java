@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
@@ -176,6 +177,46 @@ public class BDDMockito extends Mockito {
      */
     public static <T> BDDMyOngoingStubbing<T> given(T methodCall) {
         return new BDDOngoingStubbingImpl<T>(Mockito.when(methodCall));
+    }
+
+    /**
+     * Bdd style verification of mock behavior.
+     *
+     * @see #verify(Object)
+     * @see #verify(Object, VerificationMode)
+     */
+    public static <T> Then<T> then(T mock) {
+        return new Then<T>(mock);
+    }
+
+    /**
+     * Provides fluent way of mock verification.
+     *
+     * @author Lovro Pandzic
+     * @param <T> type of the mock
+     */
+    public final static class Then<T> {
+
+        private final T mock;
+
+        public Then(T mock) {
+
+            this.mock = mock;
+        }
+
+        /**
+         * @see #verify(Object)
+         */
+        public T should() {
+            return verify(mock);
+        }
+
+        /**
+         * @see #verify(Object, VerificationMode)
+         */
+        public T should(VerificationMode mode) {
+            return verify(mock, mode);
+        }
     }
     
     /**

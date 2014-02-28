@@ -6,6 +6,8 @@ package org.mockitousage.customization;
 
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
@@ -186,5 +188,37 @@ public class BDDMockitoTest extends TestBase {
         Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
 
         assertEquals(expectedMock, returnedMock);
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void shouldValidateMockWhenVerifying() {
+
+        then("notMock").should();
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
+
+        then("notMock").should(times(19));
+    }
+
+    @Test(expected = NotAMockException.class)
+    public void shouldValidateMockWhenVerifyingNoMoreInteractions() {
+
+        then("notMock").should();
+    }
+
+    @Test(expected = WantedButNotInvoked.class)
+    public void shouldFailForExpectedBehaviorThatDidNotHappen() {
+
+        then(mock).should().booleanObjectReturningMethod();
+    }
+
+    @Test
+    public void shouldPassForExpectedBehaviorThatHappened() {
+
+        mock.booleanObjectReturningMethod();
+
+        then(mock).should().booleanObjectReturningMethod();
     }
 }
