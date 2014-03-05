@@ -49,8 +49,8 @@ public class AnswersValidator {
     }
 
     private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {
-        if (methodInfo.isDeclaredOnInterface()) {
-            reporter.cannotCallRealMethodOnInterface();
+        if (methodInfo.isAbstract()) {
+            reporter.cannotCallAbstractRealMethod();
         }
     }
 

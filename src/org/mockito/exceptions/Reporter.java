@@ -580,12 +580,12 @@ public class Reporter {
         ));
     }
 
-    public void cannotCallRealMethodOnInterface() {
+    public void cannotCallAbstractRealMethod() {
         throw new MockitoException(join(
-                "Cannot call real method on java interface. Interface does not have any implementation!",
-                "Calling real methods is only possible when mocking concrete classes.",
+                "Cannot call abstract real method on java object!",
+                "Calling real methods is only possible when mocking non abstract method.",
                 "  //correct example:",
-                "  when(mockOfConcreteClass.doStuff()).thenCallRealMethod();"
+                "  when(mockOfConcreteClass.nonAbstractMethod()).thenCallRealMethod();"
         ));
     }
 

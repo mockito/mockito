@@ -6,7 +6,7 @@ package org.mockito.internal.invocation;
 
 import java.lang.reflect.Method;
 
-public interface MockitoMethod {
+public interface MockitoMethod extends AbstractAwareMethod {
 
     public String getName();
 
