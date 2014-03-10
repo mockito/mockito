@@ -11,7 +11,9 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,11 +42,15 @@ public class GenericMetadataSupportTest {
         <O extends K> O typeVar_with_type_params();
     }
 
+    static class StringList extends ArrayList<String> { }
+
+
     @Test
     public void can_get_raw_type_from_Class() throws Exception {
         assertThat(inferFrom(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
         assertThat(inferFrom(ListOfNumbers.class).rawType()).isEqualTo(ListOfNumbers.class);
         assertThat(inferFrom(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
+        assertThat(inferFrom(StringList.class).rawType()).isEqualTo(StringList.class);
     }
 
 
@@ -53,6 +59,7 @@ public class GenericMetadataSupportTest {
         assertThat(inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
         assertThat(inferFrom(ListOfNumbers.class.getGenericInterfaces()[0]).rawType()).isEqualTo(List.class);
         assertThat(inferFrom(GenericsNest.class.getGenericInterfaces()[0]).rawType()).isEqualTo(Map.class);
+        assertThat(inferFrom(StringList.class.getGenericSuperclass()).rawType()).isEqualTo(ArrayList.class);
     }
 
     @Test
@@ -62,6 +69,7 @@ public class GenericMetadataSupportTest {
         assertThat(inferFrom(ListOfAnyNumbers.class).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("N");
         assertThat(inferFrom(Map.class).actualTypeArguments().keySet()).hasSize(2).onProperty("name").contains("K", "V");
         assertThat(inferFrom(Serializable.class).actualTypeArguments().keySet()).isEmpty();
+        assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
     }
 
     @Test
@@ -70,6 +78,15 @@ public class GenericMetadataSupportTest {
         assertThat(inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("E");
         assertThat(inferFrom(Integer.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).onProperty("name").contains("T");
         assertThat(inferFrom(StringBuilder.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).isEmpty();
+        assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
+    }
+
+    @Test
+    public void typeVariable_return_type_of____iterator____resolved_to_Iterator_and_type_argument_to_String() throws Exception {
+        GenericMetadataSupport genericMetadata = inferFrom(StringList.class).resolveGenericReturnType(firstNamedMethod("iterator", StringList.class));
+
+        assertThat(genericMetadata.rawType()).isEqualTo(Iterator.class);
+        assertThat(genericMetadata.actualTypeArguments().values()).contains(String.class);
     }
 
     @Test

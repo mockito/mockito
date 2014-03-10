@@ -5,13 +5,21 @@
 package org.mockito.internal.util.reflection;
 
 
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
-
-import java.io.Serializable;
-import java.lang.reflect.*;
-import java.util.*;
 
 
 /**
@@ -56,8 +64,7 @@ import java.util.*;
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs
  */
 @Incubating
-public abstract class GenericMetadataSupport implements Serializable {
-
+public abstract class GenericMetadataSupport {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
@@ -77,23 +84,26 @@ public abstract class GenericMetadataSupport implements Serializable {
         for (int i = 0; i < actualTypeArguments.length; i++) {
             TypeVariable typeParameter = typeParameters[i];
             Type actualTypeArgument = actualTypeArguments[i];
-            SerializableTypeVariable serializableTypeVariable = new SerializableTypeVariable(typeParameter);
 
             if (actualTypeArgument instanceof WildcardType) {
-                contextualActualTypeParameters.put(serializableTypeVariable, boundsOf((WildcardType) actualTypeArgument));
-            } else if (actualTypeArgument instanceof ParameterizedType) {
-                contextualActualTypeParameters.put(serializableTypeVariable, new SerializableParameterizedType((ParameterizedType) actualTypeArgument));
+                contextualActualTypeParameters.put(typeParameter, boundsOf((WildcardType) actualTypeArgument));
             } else {
-                contextualActualTypeParameters.put(serializableTypeVariable, actualTypeArgument);
+                contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
             }
             // logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
         }
     }
 
     protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
-        for (TypeVariable typeParameter : typeParameters) {
-            contextualActualTypeParameters.put(new SerializableTypeVariable(typeParameter), boundsOf(typeParameter));
-            // logger.log("For '" + typeParameter.getGenericDeclaration() + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + boundsOf(typeParameter) + "' }");
+        for (TypeVariable typeVariable : typeParameters) {
+            registerTypeVariableIfNotPresent(typeVariable);
+        }
+    }
+
+    private void registerTypeVariableIfNotPresent(TypeVariable typeVariable) {
+        if (!contextualActualTypeParameters.containsKey(typeVariable)) {
+            contextualActualTypeParameters.put(typeVariable, boundsOf(typeVariable));
+            // logger.log("For '" + typeVariable.getGenericDeclaration() + "' found type variable : { '" + typeVariable + "(" + System.identityHashCode(typeVariable) + ")" + "' : '" + boundsOf(typeVariable) + "' }");
         }
     }
 
@@ -106,7 +116,7 @@ public abstract class GenericMetadataSupport implements Serializable {
         if (typeParameter.getBounds()[0] instanceof TypeVariable) {
             return boundsOf((TypeVariable) typeParameter.getBounds()[0]);
         }
-        return new SerializableBoundedType(new TypeVarBoundedType(typeParameter));
+        return new TypeVarBoundedType(typeParameter);
     }
 
     /**
@@ -126,7 +136,7 @@ public abstract class GenericMetadataSupport implements Serializable {
             return boundsOf((TypeVariable) wildCardBoundedType.firstBound());
         }
 
-        return new SerializableBoundedType(wildCardBoundedType);
+        return wildCardBoundedType;
     }
 
 
@@ -152,6 +162,13 @@ public abstract class GenericMetadataSupport implements Serializable {
         return new Class[0];
     }
 
+    /**
+     * @return Returns true if metadata knows about extra-interfaces {@link #extraInterfaces()} <strong>if relevant</strong>.
+     */
+    public boolean hasRawExtraInterfaces() {
+        return rawExtraInterfaces().length > 0;
+    }
+
 
 
     /**
@@ -165,7 +182,7 @@ public abstract class GenericMetadataSupport implements Serializable {
 
             Type actualType = getActualTypeArgumentFor(typeParameter);
 
-            actualTypeArguments.put(new SerializableTypeVariable(typeParameter), actualType);
+            actualTypeArguments.put(typeParameter, actualType);
             // logger.log("For '" + rawType().getCanonicalName() + "' returning explicit TypeVariable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualType +"' }");
         }
 
@@ -243,14 +260,29 @@ public abstract class GenericMetadataSupport implements Serializable {
      * the class and its ancestors and interfaces.
      */
     private static class FromClassGenericMetadataSupport extends GenericMetadataSupport {
-        private Class<?> clazz;
+        private final Class<?> clazz;
 
         public FromClassGenericMetadataSupport(Class<?> clazz) {
             this.clazz = clazz;
-            readActualTypeParametersOnDeclaringClass();
+
+            for (Class currentExploredClass = clazz;
+                 currentExploredClass != null && currentExploredClass != Object.class;
+                 currentExploredClass = superClassOf(currentExploredClass)
+                ) {
+                readActualTypeParametersOnDeclaringClass(currentExploredClass);
+            }
         }
 
-        private void readActualTypeParametersOnDeclaringClass() {
+        private Class superClassOf(Class currentExploredClass) {
+            Type genericSuperclass = currentExploredClass.getGenericSuperclass();
+            if (genericSuperclass instanceof ParameterizedType) {
+                Type rawType = ((ParameterizedType) genericSuperclass).getRawType();
+                return (Class) rawType;
+            }
+            return (Class) genericSuperclass;
+        }
+
+        private void readActualTypeParametersOnDeclaringClass(Class<?> clazz) {
             registerTypeParametersOn(clazz.getTypeParameters());
             registerTypeVariablesOn(clazz.getGenericSuperclass());
             for (Type genericInterface : clazz.getGenericInterfaces()) {
@@ -264,6 +296,7 @@ public abstract class GenericMetadataSupport implements Serializable {
         }
     }
 
+
     /**
      * Generic metadata implementation for "standalone" {@link ParameterizedType}.
      *
@@ -276,7 +309,7 @@ public abstract class GenericMetadataSupport implements Serializable {
      * Instead use {@link ParameterizedReturnType}.
      */
     private static class FromParameterizedTypeGenericMetadataSupport extends GenericMetadataSupport {
-        private ParameterizedType parameterizedType;
+        private final ParameterizedType parameterizedType;
 
         public FromParameterizedTypeGenericMetadataSupport(ParameterizedType parameterizedType) {
             this.parameterizedType = parameterizedType;
@@ -303,8 +336,8 @@ public abstract class GenericMetadataSupport implements Serializable {
         private final TypeVariable[] typeParameters;
 
         public ParameterizedReturnType(GenericMetadataSupport source, TypeVariable[] typeParameters, ParameterizedType parameterizedType) {
-            this.parameterizedType = new SerializableParameterizedType(parameterizedType);
-            this.typeParameters = fromArray(typeParameters);
+            this.parameterizedType = parameterizedType;
+            this.typeParameters = typeParameters;
             this.contextualActualTypeParameters = source.contextualActualTypeParameters;
 
             readTypeParameters();
@@ -490,12 +523,12 @@ public abstract class GenericMetadataSupport implements Serializable {
      *
      * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
      */
-    public static class TypeVarBoundedType implements BoundedType, Serializable {
-        private TypeVariable typeVariable;
+    public static class TypeVarBoundedType implements BoundedType {
+        private final TypeVariable typeVariable;
 
 
         public TypeVarBoundedType(TypeVariable typeVariable) {
-            this.typeVariable = new SerializableTypeVariable(typeVariable);
+            this.typeVariable = typeVariable;
         }
 
         /**
@@ -534,11 +567,7 @@ public abstract class GenericMetadataSupport implements Serializable {
 
         @Override
         public String toString() {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("{firstBound=").append(firstBound());
-            sb.append(", interfaceBounds=").append(Arrays.deepToString(interfaceBounds()));
-            sb.append('}');
-            return sb.toString();
+            return "{firstBound=" + firstBound() + ", interfaceBounds=" + Arrays.deepToString(interfaceBounds()) + '}';
         }
 
         public TypeVariable typeVariable() {
@@ -554,8 +583,8 @@ public abstract class GenericMetadataSupport implements Serializable {
      *
      * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
      */
-    public static class WildCardBoundedType implements BoundedType, Serializable {
-        private WildcardType wildcard;
+    public static class WildCardBoundedType implements BoundedType {
+        private final WildcardType wildcard;
 
 
         public WildCardBoundedType(WildcardType wildcard) {
@@ -595,143 +624,11 @@ public abstract class GenericMetadataSupport implements Serializable {
 
         @Override
         public String toString() {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("{firstBound=").append(firstBound());
-            sb.append(", interfaceBounds=[]}");
-            return sb.toString();
+            return "{firstBound=" + firstBound() + ", interfaceBounds=[]}";
         }
 
         public WildcardType wildCard() {
             return wildcard;
-        }
-    }
-
-    private static class SerializableBound implements Type, Serializable {
-
-        private Class classBound;
-
-        private SerializableParameterizedType serializableParameterizedType;
-
-        public SerializableBound(Type type){
-            if(type instanceof Class){
-                classBound = (Class) type;
-            } else if(type instanceof ParameterizedType) {
-                serializableParameterizedType = new SerializableParameterizedType((ParameterizedType) type);
-            }
-        }
-
-    }
-
-
-    private static class SerializableTypeVariable implements TypeVariable, Serializable {
-
-        private Class genericDeclaration;
-        private String name;
-        private SerializableBound[] bounds;
-
-        public SerializableTypeVariable(TypeVariable typeVariable){
-            this.genericDeclaration = (Class) typeVariable.getGenericDeclaration();
-            this.name = typeVariable.getName();
-            this.bounds = convertToSerializableArray(typeVariable);
-        }
-
-        @Override
-        public Type[] getBounds() {
-            return bounds;
-        }
-
-        @Override
-        public GenericDeclaration getGenericDeclaration() {
-            return genericDeclaration;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-    }
-
-    private static SerializableBound[] convertToSerializableArray(TypeVariable typeVariable) {
-        SerializableBound[] bounds = new SerializableBound[typeVariable.getBounds().length];
-        for (int i = 0; i < typeVariable.getBounds().length; i++) {
-            bounds[i] =  new SerializableBound(typeVariable.getBounds()[i]);
-        }
-        return bounds;
-    }
-    private static SerializableBound[] convertToSerializableArray(BoundedType boundedType) {
-        SerializableBound[] bounds = new SerializableBound[boundedType.interfaceBounds().length];
-        for (int i = 0; i < boundedType.interfaceBounds().length; i++) {
-            bounds[i] =  new SerializableBound(boundedType.interfaceBounds()[i]);
-        }
-        return bounds;
-    }
-
-    private static <T> Class[] fromArrayToArrayOfClass(T[] objects) {
-        Class[] elements = new Class[objects.length];
-        for (int i = 0; i < objects.length; i++) {
-            elements[i] = objects[i].getClass();
-        }
-        return elements;
-    }
-
-    private static SerializableTypeVariable[] fromArray(TypeVariable[] typeVariables){
-        SerializableTypeVariable[] serializableTypeVariables = new SerializableTypeVariable[typeVariables.length];
-        for (int i = 0; i < typeVariables.length; i++) {
-            serializableTypeVariables[i] = new SerializableTypeVariable(typeVariables[i]);
-        }
-        return serializableTypeVariables;
-    }
-
-    private static class SerializableParameterizedType implements ParameterizedType, Serializable {
-
-        private final Class[] actualTypeArguments;
-
-        private final Class rawType;
-
-        private final Class ownerType;
-
-        public SerializableParameterizedType(ParameterizedType parameterizedType){
-            actualTypeArguments = fromArrayToArrayOfClass(parameterizedType.getActualTypeArguments());
-            rawType = (Class) parameterizedType.getRawType();
-            ownerType = (Class) parameterizedType.getOwnerType();
-        }
-
-        @Override
-        public Type[] getActualTypeArguments() {
-            return actualTypeArguments;
-        }
-
-        @Override
-        public Type getRawType() {
-            return rawType;
-        }
-
-        @Override
-        public Type getOwnerType() {
-            return ownerType;
-        }
-    }
-
-    private static class SerializableBoundedType implements BoundedType, Serializable {
-
-        private final SerializableBound firstBound;
-
-        private final SerializableBound[] interfaceBounds;
-
-        private SerializableBoundedType(BoundedType boundedType) {
-            this.firstBound = new SerializableBound(boundedType.firstBound());
-            this.interfaceBounds = convertToSerializableArray(boundedType);
-        }
-
-        @Override
-        public Type firstBound() {
-            return firstBound;
-        }
-
-        @Override
-        public Type[] interfaceBounds() {
-            return interfaceBounds;
         }
     }
 
