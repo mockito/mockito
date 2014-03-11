@@ -13,11 +13,11 @@ import static org.mockito.Mockito.*;
 //see issue 101
 public class CovariantOverrideTest extends TestBase {
    
-    public static interface ReturnsObject {
+    public interface ReturnsObject {
         Object callMe();
     }
 
-    public static interface ReturnsString extends ReturnsObject {
+    public interface ReturnsString extends ReturnsObject {
         // Java 5 covariant override of method from parent interface
         String callMe();
     }

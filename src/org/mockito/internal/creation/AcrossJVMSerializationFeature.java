@@ -411,7 +411,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *
      * @see #enableSerializationAcrossJVM(org.mockito.mock.MockCreationSettings)
      */
-    public static interface AcrossJVMMockitoMockSerializable {
+    public interface AcrossJVMMockitoMockSerializable {
         public Object writeReplace() throws java.io.ObjectStreamException;
     }
 }

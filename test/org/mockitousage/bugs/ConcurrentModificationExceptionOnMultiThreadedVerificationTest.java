@@ -82,7 +82,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 		
 	}
 	
-	public static interface ITarget {
+	public interface ITarget {
 
 		public String targetMethod(String arg);
 	}

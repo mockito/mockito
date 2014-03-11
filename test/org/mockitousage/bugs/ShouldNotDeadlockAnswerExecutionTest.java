@@ -107,7 +107,7 @@ public class ShouldNotDeadlockAnswerExecutionTest {
 
     }
 
-    static interface Service {
+    interface Service {
 
         String verySlowMethod();
 

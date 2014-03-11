@@ -497,7 +497,7 @@ public abstract class GenericMetadataSupport {
      * @see WildCardBoundedType
      * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1</a>
      */
-    public static interface BoundedType extends Type {
+    public interface BoundedType extends Type {
         Type firstBound();
 
         Type[] interfaceBounds();

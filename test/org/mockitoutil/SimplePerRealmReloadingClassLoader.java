@@ -112,7 +112,7 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
     }
 
 
-    public static interface ReloadClassPredicate {
+    public interface ReloadClassPredicate {
         boolean acceptReloadOf(String qualifiedName);
     }
 }

@@ -61,7 +61,7 @@ public class BDDMockito extends Mockito {
      * See original {@link OngoingStubbing}
      * @since 1.8.0
      */
-    public static interface BDDMyOngoingStubbing<T> {
+    public interface BDDMyOngoingStubbing<T> {
         
         /**
          * See original {@link OngoingStubbing#thenAnswer(Answer)}
@@ -182,7 +182,7 @@ public class BDDMockito extends Mockito {
      * See original {@link Stubber}
      * @since 1.8.0
      */
-    public static interface BDDStubber {
+    public interface BDDStubber {
         /**
          * See original {@link Stubber#doAnswer(Answer)}
          * @since 1.8.0
