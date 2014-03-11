@@ -18,7 +18,7 @@ import org.mockitoutil.TestBase;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.mockitousage.annotation.MockBuilder.*;
+import static org.mockitousage.annotation.MockAnnotationBuilder.*;
 
 @SuppressWarnings("unchecked")
 public class MockWithCustomAnswerAnnotationsTest extends TestBase {
@@ -39,25 +39,36 @@ public class MockWithCustomAnswerAnnotationsTest extends TestBase {
     }
 
     @Test
-    public void shouldChooseDefaultConstructor() {
+    public void should_choose_default_constructor() {
         assertSame(MyCustomAnswer.returnedObject, mockWithCustomAnswerHavingMultipleConstructors.objectReturningMethodNoArgs());
     }
 
     @Test
-    public void shouldThrowExceptionWhenCustomAnswerCannotBeInstantiated() throws NoSuchFieldException {
+    public void should_throw_exception_when_custom_answer_cannot_be_instantiated() throws NoSuchFieldException {
         Field aField = MyCustomAnswer.class.getDeclaredFields()[0];
 
         try {
             new MockAnnotationProcessor().process(aMockAnnotation().withCustomAnswer(NotInstantiableClass.class).build(), aField);
             fail("RuntimeException expected ");
         } catch (MockitoException ex) {
-            assertEquals(ex.getMessage(), "Could not process customAnswer");
-            assertTrue(ex.getCause() instanceof InstantiationException);
+            assertEquals("Custom answer cannot be instantiated",ex.getMessage());
         }
     }
 
     @Test
-    public void shouldThrowExceptionWhenBothAnswerAndCustomAnswerAreDefined() throws NoSuchFieldException {
+    public void should_throw_exception_when_custom_answer_throws_exception_in_constructor() throws NoSuchFieldException {
+        Field aField = MyCustomAnswer.class.getDeclaredFields()[0];
+
+        try {
+            new MockAnnotationProcessor().process(aMockAnnotation().withCustomAnswer(AnswerThrowingConstructor.class).build(), aField);
+            fail("RuntimeException expected ");
+        } catch (MockitoException ex) {
+            assertEquals("Custom answer cannot be instantiated",ex.getMessage());
+        }
+    }
+
+    @Test
+    public void should_throw_exception_when_both_answer_and_custom_answer_are_defined() throws NoSuchFieldException {
         Field aField = MyCustomAnswer.class.getDeclaredFields()[0];
 
         try {
@@ -65,12 +76,12 @@ public class MockWithCustomAnswerAnnotationsTest extends TestBase {
             new MockAnnotationProcessor().process(mockWithAnswers, aField);
             fail("Exception expected ");
         } catch (MockitoException ex) {
-            assertEquals(ex.getMessage(), "You cannot define answer and customAnswer at the same time");
+            assertEquals(ex.getMessage(), "You cannot define answer and customAnswer at the same time for field returnedObject");
         }
     }
 
     @Test
-    public void customAnswerIntegrationTest() {
+    public void custom_answer_integration_test() {
 
         assertEquals(mockedList.size(),MOCKED_LIST_SIZE);
 
@@ -101,6 +112,18 @@ public class MockWithCustomAnswerAnnotationsTest extends TestBase {
     }
 
     private class NotInstantiableClass implements Answer<Object> {
+        @Override
+        public Object answer(InvocationOnMock invocation) throws Throwable {
+            return null;
+        }
+    }
+
+    public static class AnswerThrowingConstructor implements Answer<Object> {
+
+        public AnswerThrowingConstructor() {
+            throw new RuntimeException("throwing");
+        }
+
         @Override
         public Object answer(InvocationOnMock invocation) throws Throwable {
             return null;

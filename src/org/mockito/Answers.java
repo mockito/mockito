@@ -81,7 +81,4 @@ public enum Answers {
         return implementation;
     }
 
-    public boolean isReturnDefaultsAnswer() {
-        return RETURNS_DEFAULTS != this;
-    }
 }

@@ -6,21 +6,21 @@ import org.mockito.stubbing.Answer;
 
 import java.lang.annotation.Annotation;
 
-public class MockBuilder {
+public class MockAnnotationBuilder {
 
     private Answers answer=Answers.RETURNS_DEFAULTS;
     private Class<? extends Answer> customAnswerClass;
 
-    public static MockBuilder aMockAnnotation() {
-        return new MockBuilder();
+    public static MockAnnotationBuilder aMockAnnotation() {
+        return new MockAnnotationBuilder();
     }
 
-    public MockBuilder withAnswer(Answers answer) {
+    public MockAnnotationBuilder withAnswer(Answers answer) {
         this.answer = answer;
         return this;
     }
 
-    public MockBuilder withCustomAnswer(Class<? extends Answer> customAnswerClass) {
+    public MockAnnotationBuilder withCustomAnswer(Class<? extends Answer> customAnswerClass) {
         this.customAnswerClass = customAnswerClass;
         return this;
     }

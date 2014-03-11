@@ -8,10 +8,12 @@ import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.Reporter;
 import org.mockito.stubbing.Answer;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Instantiates a mock on a field annotated by {@link Mock}
@@ -27,18 +29,18 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         } else {
             mockSettings.name(annotation.name());
         }
-        if(annotation.serializable()){
+        if (annotation.serializable()) {
             mockSettings.serializable();
         }
 
-        mockSettings.defaultAnswer(getDefaultAnswer(annotation.customAnswer(), annotation.answer()));
+        mockSettings.defaultAnswer(getDefaultAnswer(annotation.customAnswer(), annotation.answer(), field));
         return Mockito.mock(field.getType(), mockSettings);
     }
 
-    private Answer<?> getDefaultAnswer(Class<? extends Answer> customAnswer, Answers defaultAnswer) {
+    private Answer<?> getDefaultAnswer(Class<? extends Answer> customAnswer, Answers defaultAnswer, Field field) {
 
         if (hasCustomAnswerDefined(customAnswer)) {
-            throwExceptionIfAnswerAndCustomAnswerDefined(defaultAnswer);
+            reportCustomAnswerMisuse(defaultAnswer, field);
 
             return instantiateCustomAnswer(customAnswer);
         }
@@ -46,16 +48,26 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
     }
 
     private Answer<?> instantiateCustomAnswer(Class<? extends Answer> customAnswer) {
+        if(customAnswer.getConstructors().length == 0) {
+            throw new Reporter().reportCustomAnswerCannotBeInstantiated(null);
+        }
         try {
-            return customAnswer.newInstance();
-        } catch (Exception e) {
-            throw new MockitoException("Could not process customAnswer", e);
+            Constructor<?> constructor = customAnswer.getConstructor();
+            return (Answer<?>) constructor.newInstance();
+        } catch (InvocationTargetException e) {
+            throw new Reporter().reportCustomAnswerCannotBeInstantiated(e);
+        } catch (InstantiationException e) {
+            throw new Reporter().reportCustomAnswerCannotBeInstantiated(e);
+        } catch (IllegalAccessException e) {
+            throw new Reporter().reportCustomAnswerCannotBeInstantiated(e);
+        } catch (NoSuchMethodException e) {
+            throw new Reporter().reportCustomAnswerCannotBeInstantiated(e);
         }
     }
 
-    private void throwExceptionIfAnswerAndCustomAnswerDefined(Answers defaultAnswer) {
-        if(defaultAnswer.isReturnDefaultsAnswer()){
-            throw new MockitoException("You cannot define answer and customAnswer at the same time");
+    private void reportCustomAnswerMisuse(Answers defaultAnswer, Field field) {
+        if (defaultAnswer != Answers.RETURNS_DEFAULTS) {
+            new Reporter().answerAndCustomAnswerInMockAnnotationNotAllowed(field.getName());
         }
     }
 
