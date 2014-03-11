@@ -4,10 +4,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,9 +11,18 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class VerificationAfterDelayTest extends TestBase {
     
@@ -104,6 +109,27 @@ public class VerificationAfterDelayTest extends TestBase {
         // then
         expected.expect(MockitoAssertionError.class);
         verify(mock, after(10000).never()).clear();
+    }
+
+    @Test
+    public void shouldNotAllowAfterVerificationInOrder() throws Exception {
+        // given
+        Thread t = waitAndExerciseMock(50);
+
+        // when
+        t.start();
+        mock.add("foo");
+
+        // then
+        InOrder inOrder = inOrder(mock);
+        inOrder.verify(mock).add(anyString());
+        inOrder.verify(mock, never()).clear();
+        try {
+            inOrder.verify(mock, after(100)).clear();
+        }catch (MockitoException e) {
+            assertEquals("VerificationOverTimeImpl is not implemented to work with InOrder wrapped inside a After",
+                    e.getMessage());
+        }
     }
 
     private Thread waitAndExerciseMock(final int sleep) {
