@@ -10,6 +10,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationPhase;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +30,7 @@ public class MatchersBinder implements Serializable {
 
     private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
         if (!lastMatchers.isEmpty()) {
+            invocation.setPhase(InvocationPhase.DEFINE);
             int recordedMatchersSize = lastMatchers.size();
             int expectedMatchersSize = invocation.getArguments().length;
             if (expectedMatchersSize != recordedMatchersSize) {

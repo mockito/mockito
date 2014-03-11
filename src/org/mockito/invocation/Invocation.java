@@ -76,4 +76,7 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      * See also {@link #isIgnoredForVerification()}
      */
     void ignoreForVerification();
+
+    InvocationPhase phase();
+    void setPhase(InvocationPhase phase);
 }

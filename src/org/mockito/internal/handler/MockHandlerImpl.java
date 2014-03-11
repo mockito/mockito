@@ -14,6 +14,7 @@ import org.mockito.internal.stubbing.*;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationPhase;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
@@ -46,6 +47,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     public Object handle(Invocation invocation) throws Throwable {
 		if (invocationContainerImpl.hasAnswersForStubbing()) {
+            invocation.setPhase(InvocationPhase.DEFINE);
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
                     mockingProgress.getArgumentMatcherStorage(),
@@ -65,6 +67,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
         // if verificationMode is not null then someone is doing verify()
         if (verificationMode != null) {
+            invocation.setPhase(InvocationPhase.VERIFY);
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
@@ -87,10 +90,12 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
 
         if (stubbedInvocation != null) {
+            invocation.setPhase(InvocationPhase.EXECUTE);
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
-             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+            invocation.setPhase(InvocationPhase.DEFINE);
+            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
 
             // redo setting invocation for potential stubbing in case of partial
             // mocks / spies.

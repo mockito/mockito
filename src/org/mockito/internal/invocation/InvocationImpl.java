@@ -39,6 +39,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
 
     final RealMethod realMethod;
     private StubInfo stubInfo;
+    private InvocationPhase invocationPhase;
 
     public InvocationImpl(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
         this.method = mockitoMethod;
@@ -48,6 +49,17 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = new LocationImpl();
+        this.invocationPhase = InvocationPhase.EXECUTE;
+    }
+
+    public InvocationPhase phase()
+    {
+        return invocationPhase;
+    }
+
+    public void setPhase(final InvocationPhase invocationPhase)
+    {
+        this.invocationPhase = invocationPhase;
     }
 
     public Object getMock() {
