@@ -208,14 +208,28 @@ public class BDDMockito extends Mockito {
          * @see #verify(Object)
          */
         public T should() {
-            return verify(mock);
+            return Mockito.verify(mock);
         }
 
         /**
          * @see #verify(Object, VerificationMode)
          */
         public T should(VerificationMode mode) {
-            return verify(mock, mode);
+            return Mockito.verify(mock, mode);
+        }
+
+        /**
+         * @see #verify(Object)
+         */
+        public T verify() {
+            return Mockito.verify(mock);
+        }
+
+        /**
+         * @see #verify(Object, VerificationMode)
+         */
+        public T verify(VerificationMode mode) {
+            return Mockito.verify(mock, mode);
         }
     }
     
