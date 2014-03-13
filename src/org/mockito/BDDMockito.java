@@ -51,6 +51,31 @@ import org.mockito.verification.VerificationMode;
  *   assertEquals(failure, result);
  * </code></pre>
  * <p>
+ * For BDD style mock verification take a look at {@link Then} in action:
+ * <pre class="code"><code class="java">
+ * Bike bike = new Bike();
+ * Person person = mock(Person.class);
+ *
+ * public void shouldRideBikeTwice() {
+ *
+ *     person.ride(bike);
+ *     person.ride(bike);
+ *
+ *     then(person).should(times(2)).ride(bike);
+ * }
+ * </code></pre>
+ *
+ * Syntax alternative to last example:
+ * <pre class="code"><code class="java">
+ * public void shouldRideBikeTwice() {
+ *
+ *     person.ride(bike);
+ *     person.ride(bike);
+ *
+ *     then(person).verify(times(2)).ride(bike);
+ * }
+ * </code></pre>
+ *
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
  *
  * @since 1.8.0
