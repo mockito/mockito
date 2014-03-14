@@ -38,6 +38,27 @@ public class StubbingUsingDoReturnTest extends TestBase {
         
         assertEquals("bar", mock.simpleMethod());
     }
+
+    @Test
+    public void should_stub_consecutively() throws Exception {
+        doReturn("foo","bar").when(mock).simpleMethod();
+
+        assertEquals("foo", mock.simpleMethod());
+        assertEquals("bar", mock.simpleMethod());
+        for (int i = 0 ; i < 5 ; ++i){
+            assertEquals("bar", mock.simpleMethod());
+        }
+    }
+
+    @Test
+    public void should_returns_last_answer_multiple_times() throws Exception {
+        doReturn("foo","bar").when(mock).simpleMethod();
+
+        assertEquals("foo", mock.simpleMethod());
+        for (int i = 0 ; i < 5 ; ++i){
+            assertEquals("bar", mock.simpleMethod());
+        }
+    }
     
     @Test
     public void should_stub_with_args() throws Exception {
@@ -206,6 +227,26 @@ public class StubbingUsingDoReturnTest extends TestBase {
         .when(mock).simpleMethod();
         
         assertEquals("foo", mock.simpleMethod());
+    }
+
+    @Test
+    public void should_stub_with_generic_answer_consecutively() {
+        doAnswer(new Answer<Object>() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return "foo";
+            }
+        }, new Answer<Object>() {
+                     public Object answer(InvocationOnMock invocation) throws Throwable {
+                         return "bar";
+                     }
+                 })
+                .when(mock).simpleMethod();
+
+        assertEquals("foo", mock.simpleMethod());
+        assertEquals("bar", mock.simpleMethod());
+        for (int i = 0; i<5 ; ++i){
+            assertEquals("bar", mock.simpleMethod());
+        }
     }
     
     @Test

@@ -143,13 +143,27 @@ public class MockitoCore {
         }
         return new InOrderImpl(Arrays.asList(mocks));
     }
-    
-    public Stubber doAnswer(Answer answer) {
-        mockingProgress.stubbingStarted();
-        mockingProgress.resetOngoingStubbing();
-        return new StubberImpl().doAnswer(answer);
+
+    public Stubber doThrow(Class<? extends Throwable> firstToBeThrown, Class<? extends Throwable> ...nextToBeThrown) {
+        initializeMockingProgress();
+        return new StubberImpl().doThrow(firstToBeThrown, nextToBeThrown);
     }
-    
+
+    public Stubber doThrow(Throwable firstToBeThrown, Throwable ...nextToBeThrown) {
+        initializeMockingProgress();
+        return new StubberImpl().doThrow(firstToBeThrown, nextToBeThrown);
+    }
+
+    public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
+        initializeMockingProgress();
+        return new StubberImpl().doReturn(toBeReturned, nextToBeReturned);
+    }
+
+    public Stubber doAnswer(Answer answer, Answer... answers) {
+        initializeMockingProgress();
+        return new StubberImpl().doAnswer(answer, answers);
+    }
+
     public <T> VoidMethodStubbable<T> stubVoid(T mock) {
         InternalMockHandler<T> handler = mockUtil.getMockHandler(mock);
         mockingProgress.stubbingStarted();
@@ -185,5 +199,10 @@ public class MockitoCore {
 
     public MockingDetails mockingDetails(Object toInspect) {
         return new DefaultMockingDetails(toInspect, new MockUtil());
+    }
+
+    private void initializeMockingProgress() {
+        mockingProgress.stubbingStarted();
+        mockingProgress.resetOngoingStubbing();
     }
 }
