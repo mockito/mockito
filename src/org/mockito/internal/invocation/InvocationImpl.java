@@ -61,6 +61,11 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
     public Object[] getArguments() {
         return arguments;
     }
+    
+    @Override
+    public <T> T getArgumentAt(int index, Class<T> clazz) {
+        return (T) arguments[index];
+    }
 
     public boolean isVerified() {
         return verified || isIgnoredForVerification;

@@ -5,6 +5,8 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.junit.Test;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockitousage.IMethods;
@@ -53,29 +55,9 @@ public class ReturnsArgumentAtTest {
         }
     }
 
-	private static InvocationOnMock invocationWith(final String... parameters) {
-        return new InvocationOnMock() {
-
-            public Object getMock() {
-                return null;
-            }
-
-            public Method getMethod() {
-                try {
-                    return IMethods.class.getDeclaredMethod("varargsReturningString", Object[].class);
-                } catch (NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            public Object[] getArguments() {
-                return parameters;
-            }
-
-            public Object callRealMethod() throws Throwable {
-                return null;
-            }
-        };
-    }
+	private static InvocationOnMock invocationWith(Object... parameters) {
+		return new InvocationBuilder().method("varargsReturningString").argTypes(Object[].class)
+ 			.args(parameters).toInvocation();
+	}
 
 }
