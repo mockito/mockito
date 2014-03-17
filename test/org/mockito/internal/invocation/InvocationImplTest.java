@@ -147,4 +147,18 @@ public class InvocationImplTest extends TestBase {
             fail();
         } catch(MockitoException e) {}
     }
+    
+    @Test
+    public void shouldReturnCastedArgumentAt(){
+        //given
+        int argument = 42;
+        Invocation invocationOnInterface = new InvocationBuilder().method("twoArgumentMethod").
+            argTypes(int.class, int.class).args(1, argument).toInvocation();
+
+        //when
+        int secondArgument = invocationOnInterface.getArgumentAt(1, int.class);
+
+        //then
+        assertTrue(secondArgument == argument);
+    }
 }
