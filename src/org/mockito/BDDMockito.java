@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.verification.VerificationMode;
 
 /**
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
@@ -50,6 +51,31 @@ import org.mockito.stubbing.Stubber;
  *   assertEquals(failure, result);
  * </code></pre>
  * <p>
+ * For BDD style mock verification take a look at {@link Then} in action:
+ * <pre class="code"><code class="java">
+ * Bike bike = new Bike();
+ * Person person = mock(Person.class);
+ *
+ * public void shouldRideBikeTwice() {
+ *
+ *     person.ride(bike);
+ *     person.ride(bike);
+ *
+ *     then(person).should(times(2)).ride(bike);
+ * }
+ * </code></pre>
+ *
+ * Syntax alternative to the last example:
+ * <pre class="code"><code class="java">
+ * public void shouldRideBikeTwice() {
+ *
+ *     person.ride(bike);
+ *     person.ride(bike);
+ *
+ *     then(person).verify(times(2)).ride(bike);
+ * }
+ * </code></pre>
+ *
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
  *
  * @since 1.8.0
@@ -176,6 +202,60 @@ public class BDDMockito extends Mockito {
      */
     public static <T> BDDMyOngoingStubbing<T> given(T methodCall) {
         return new BDDOngoingStubbingImpl<T>(Mockito.when(methodCall));
+    }
+
+    /**
+     * Bdd style verification of mock behavior.
+     *
+     * @see #verify(Object)
+     * @see #verify(Object, VerificationMode)
+     */
+    public static <T> Then<T> then(T mock) {
+        return new Then<T>(mock);
+    }
+
+    /**
+     * Provides fluent way of mock verification.
+     *
+     * @author Lovro Pandzic
+     * @param <T> type of the mock
+     */
+    public final static class Then<T> {
+
+        private final T mock;
+
+        public Then(T mock) {
+
+            this.mock = mock;
+        }
+
+        /**
+         * @see #verify(Object)
+         */
+        public T should() {
+            return Mockito.verify(mock);
+        }
+
+        /**
+         * @see #verify(Object, VerificationMode)
+         */
+        public T should(VerificationMode mode) {
+            return Mockito.verify(mock, mode);
+        }
+
+        /**
+         * @see #verify(Object)
+         */
+        public T verify() {
+            return Mockito.verify(mock);
+        }
+
+        /**
+         * @see #verify(Object, VerificationMode)
+         */
+        public T verify(VerificationMode mode) {
+            return Mockito.verify(mock, mode);
+        }
     }
     
     /**

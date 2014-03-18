@@ -58,6 +58,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#26">26. (**New**) Mocking details (Since 1.9.5)</a><br/>
  *      <a href="#27">27. (**New**) Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. (**New**) <code>MockMaker</code> API (Since 1.9.5)</a><br/>
+ *      <a href="#29">29. (**New**) BDD style verification (Since 1.9.8)</a><br/>
  * </b>
  * 
  * <p>
@@ -927,6 +928,14 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>For more details, motivations and examples please refer to
  * the docs for {@link org.mockito.plugins.MockMaker}.
  *
+ *
+ *
+ *
+ * <h3 id="29">29. (**New**) <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.9.8)</h3>
+ *
+ * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
+ *
+ * For more information and an example see {@link BDDMockito}.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
