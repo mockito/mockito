@@ -14,7 +14,9 @@ import org.mockito.internal.util.reflection.FieldSetter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +60,8 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         annotationProcessorMap.put(annotationClass, fieldAnnotationProcessor);
     }
 
-    public void process(Class<?> clazz, Object testInstance) {
+    public List<Object> process(Class<?> clazz, Object testInstance) {
+        List<Object> createdMocks = new ArrayList<Object>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             boolean alreadyAssigned = false;
@@ -73,9 +76,11 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                                 + annotation, e);
                     }
+                    createdMocks.add(mock);
                 }        
             }
         }
+        return createdMocks;
     }
     
     void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {

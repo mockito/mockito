@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * Configures mock creation logic behind &#064;Mock, &#064;Captor and &#064;Spy annotations
@@ -34,8 +35,11 @@ public interface AnnotationEngine {
      * <p>
      * See the implementation of this method to figure out what is it for.
      * 
-     * @param clazz Class where to extract field information, check implementation for details
-     * @param testInstance Test instance
+     * @param clazz
+     *            Class where to extract field information, check implementation for details
+     * @param testInstance
+     *            Test instance
+     * @return List of field values (mocks) from fields processed by this processor
      */
-    void process(Class<?> clazz, Object testInstance);
+    List<Object> process(Class<?> clazz, Object testInstance);
 }

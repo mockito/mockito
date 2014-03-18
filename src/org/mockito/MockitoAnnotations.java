@@ -18,6 +18,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import static java.lang.annotation.ElementType.FIELD;
 
@@ -86,7 +87,7 @@ public class MockitoAnnotations {
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */
-    public static void initMocks(Object testClass) {
+    public static List<Object> initMocks(Object testClass) {
         if (testClass == null) {
             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
@@ -105,7 +106,7 @@ public class MockitoAnnotations {
         }
 
         //anyway act 'the new' way
-        annotationEngine.process(testClass.getClass(), testClass);
+        return annotationEngine.process(testClass.getClass(), testClass);
     }
 
     static void scanDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Class<?> clazz) {

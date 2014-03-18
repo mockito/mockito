@@ -11,7 +11,9 @@ import org.mockito.internal.configuration.injection.scanner.MockScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
@@ -51,9 +53,12 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      *
      * @see org.mockito.configuration.AnnotationEngine#process(Class, Object)
      */
-    public void process(Class<?> clazz, Object testInstance) {
-        processIndependentAnnotations(testInstance.getClass(), testInstance);
+    public List<Object> process(Class<?> clazz, Object testInstance) {
+        List<Object> createdMocks = new ArrayList<Object>();
+        createdMocks.addAll(processIndependentAnnotations(testInstance.getClass(), testInstance));
         processInjectMocks(testInstance.getClass(), testInstance);
+
+        return createdMocks;
     }
 
     private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
@@ -64,16 +69,18 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         }
     }
 
-    private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
+    private List<Object> processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
         Class<?> classContext = clazz;
+        List<Object> createdMocks = new ArrayList<Object>();
         while (classContext != Object.class) {
-            //this will create @Mocks, @Captors, etc:
-            delegate.process(classContext, testInstance);
-            //this will create @Spies:
-            spyAnnotationEngine.process(classContext, testInstance);
+            // this will create @Mocks, @Captors, etc:
+            createdMocks.addAll(delegate.process(classContext, testInstance));
+            // this will create @Spies:
+            createdMocks.addAll(spyAnnotationEngine.process(classContext, testInstance));
 
             classContext = classContext.getSuperclass();
         }
+        return createdMocks;
     }
 
 
