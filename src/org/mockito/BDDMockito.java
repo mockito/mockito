@@ -65,7 +65,7 @@ import org.mockito.verification.VerificationMode;
  * }
  * </code></pre>
  *
- * Syntax alternative to last example:
+ * Syntax alternative to the last example:
  * <pre class="code"><code class="java">
  * public void shouldRideBikeTwice() {
  *
