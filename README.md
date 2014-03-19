@@ -10,7 +10,7 @@ simplier & better mocking
 ## Moving to github
 We are currently moving a few stuff from [Google Code](https://code.google.com/p/mockito/) to [Github](https://github.com/mockito/mockito).
 
-For now only the code repository is moved, issue tracker might follow, but other stuff might stay there like the wiki pages and documentation, discussion group will stay at google.
+For now only the code repository is moved, other stuff will follow like the wiki pages. Documentation may or may not follow. But discussion group, issue tracker will stay at google (unfortunatley GH PR counters incremented before we had the chance to move our issues).
 
 ## Why drink it?
 Mockito is a mocking framework that tastes really good. It lets you write beautiful tests with clean & simple API. Mockito doesn't give you hangover because the tests are very readable and they produce clean verification errors. Read more about [features & motivations](https://code.google.com/p/mockito/wiki/FeaturesAndMotivations).
