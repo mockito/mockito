@@ -85,9 +85,9 @@ Firstly, hats down before **[EasyMock](http://easymock.org/) folks** for their i
 
 Here are just some of my friends who contributed ideas to Mockito (apologize if I missed somebody): **Igor Czechowski**, **Patric Fornasier**, **Jim Barritt**, **Felix Leipold**, **Liz Keogh**, **Bartosz Bańkowski**.
 
-Now some other people joined the gang : **Brice Dutheil** and **David Wallace**.
+Now some other people joined the gang : **Brice Dutheil** then **David Wallace**.
 
-Special thanks to **Erik Ramfelt**, and **Steve Christou** for putting Mockito on his Jenkins server (continuous integration).
+Special thanks to **Erik Ramfelt**, and **Steve Christou** for putting Mockito on there Jenkins server (continuous integration) for a few years. Now Travis and Coveralls took over.
 
 Thanks to **Karol Poźniak** for the logo :)
 
@@ -96,13 +96,14 @@ Finally, thanks to **Erik Brakkee** who helps us getting jars to maven central
 ## links wrap-up
 
 ### Wiki
-* [FAQ](https://code.google.com/p/mockito/wiki/FAQ)
-* [HowToContribute](https://code.google.com/p/mockito/wiki/HowToContribute)
+* [FAQ](https://github.com/mockito/mockito/wiki/FAQ)
+* [HowToContribute](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)
 * [MockitoForPython](https://code.google.com/p/mockito/wiki/MockitoForPython)
 * [MockitoVSEasyMock](https://code.google.com/p/mockito/wiki/MockitoVSEasyMock)
 * [RelatedProjects](https://code.google.com/p/mockito/wiki/RelatedProjects)
-* [ReleaseNotes](https://code.google.com/p/mockito/wiki/ReleaseNotes)
-* [More wiki pages [on google code]](https://code.google.com/p/mockito/w/list)
+* [ReleaseNotes](https://github.com/mockito/mockito/wiki/Release%20Notes)
+* [More wiki pages](https://github.com/mockito/mockito/wiki)
+* [Old wiki pages on google code](https://code.google.com/p/mockito/w/list)
 
 ### Blogs
 * [Szczepan on Mockito](http://monkeyisland.pl/category/mockito)
