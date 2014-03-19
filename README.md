@@ -97,11 +97,11 @@ Finally, thanks to **Erik Brakkee** who helps us getting jars to maven central
 
 ### Wiki
 * [FAQ](https://github.com/mockito/mockito/wiki/FAQ)
-* [HowToContribute](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)
-* [MockitoForPython](https://code.google.com/p/mockito/wiki/MockitoForPython)
-* [MockitoVSEasyMock](https://code.google.com/p/mockito/wiki/MockitoVSEasyMock)
-* [RelatedProjects](https://code.google.com/p/mockito/wiki/RelatedProjects)
-* [ReleaseNotes](https://github.com/mockito/mockito/wiki/Release%20Notes)
+* [How to contribute](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)
+* [Mockito for python](https://code.google.com/p/mockito/wiki/MockitoForPython)
+* [Mockito VS EasyMock](https://code.google.com/p/mockito/wiki/MockitoVSEasyMock)
+* [Related projects](https://code.google.com/p/mockito/wiki/RelatedProjects)
+* [Release notes](https://github.com/mockito/mockito/wiki/Release%20Notes)
 * [More wiki pages](https://github.com/mockito/mockito/wiki)
 * [Old wiki pages on google code](https://code.google.com/p/mockito/w/list)
 
