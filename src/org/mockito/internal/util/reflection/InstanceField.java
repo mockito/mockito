@@ -112,11 +112,7 @@ public class InstanceField {
         if (o == null || getClass() != o.getClass()) return false;
 
         InstanceField that = (InstanceField) o;
-
-        if (!field.equals(that.field)) return false;
-        if (!instance.equals(that.instance)) return false;
-
-        return true;
+        return field.equals(that.field) && instance.equals(that.instance);
     }
 
     @Override
