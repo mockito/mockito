@@ -25,8 +25,8 @@ import java.util.List;
  */
 class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
 
-    private List<InvocationListener> invocationListeners;
-    private InternalMockHandler<T> mockHandler;
+    private final List<InvocationListener> invocationListeners;
+    private final InternalMockHandler<T> mockHandler;
 
     public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings settings) {
         this.mockHandler = mockHandler;

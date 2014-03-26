@@ -12,7 +12,7 @@ import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 public class MockitoAssertionError extends AssertionError {
 
     private static final long serialVersionUID = 1L;
-    private StackTraceElement[] unfilteredStackTrace;
+    private final StackTraceElement[] unfilteredStackTrace;
 
     public MockitoAssertionError(String message) {
         super(message);

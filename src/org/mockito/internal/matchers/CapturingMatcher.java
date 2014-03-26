@@ -16,7 +16,7 @@ import java.util.List;
 public class CapturingMatcher<T> extends ArgumentMatcher<T> implements CapturesArguments, VarargMatcher, Serializable {
     
     private static final long serialVersionUID = 4274067078639307295L;
-    private LinkedList<Object> arguments = new LinkedList<Object>();
+    private final LinkedList<Object> arguments = new LinkedList<Object>();
 
     /* (non-Javadoc)
      * @see org.mockito.ArgumentMatcher#matches(java.lang.Object)

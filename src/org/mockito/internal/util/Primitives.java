@@ -10,8 +10,8 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class Primitives {
 
-    private static Map<Class<?>, Class<?>> primitiveTypes = new HashMap<Class<?>, Class<?>>();
-    private static Map<Class<?>, Object> primitiveOrWrapperDefaultValues = new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Class<?>> primitiveTypes = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Object> primitiveOrWrapperDefaultValues = new HashMap<Class<?>, Object>();
 
 
     /**

@@ -41,7 +41,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
  */
 public class AdditionalMatchers {
     
-    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+    private static final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     /**
      * argument greater than or equal the given value.

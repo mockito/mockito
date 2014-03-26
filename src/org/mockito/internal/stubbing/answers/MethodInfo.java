@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  */
 public class MethodInfo {
 
-    private Method method;
+    private final Method method;
 
     public MethodInfo(Invocation theInvocation) {
         this.method = theInvocation.getMethod();

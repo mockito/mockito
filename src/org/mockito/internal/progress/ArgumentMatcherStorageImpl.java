@@ -23,7 +23,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
     public static final int TWO_SUB_MATCHERS = 2;
     public static final int ONE_SUB_MATCHER = 1;
-    private Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
+    private final Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
     
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportMatcher(org.hamcrest.Matcher)

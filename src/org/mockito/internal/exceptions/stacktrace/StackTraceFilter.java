@@ -18,7 +18,7 @@ public class StackTraceFilter implements Serializable {
 
     static final long serialVersionUID = -5499819791513105700L;
 
-    private static StackTraceCleaner cleaner =
+    private static final StackTraceCleaner cleaner =
             ClassPathLoader.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
     
     /**

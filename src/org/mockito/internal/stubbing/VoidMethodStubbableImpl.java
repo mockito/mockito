@@ -11,7 +11,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
 
 public class VoidMethodStubbableImpl<T> implements VoidMethodStubbable<T> {
     private final T mock;
-    private InvocationContainerImpl invocationContainerImpl;
+    private final InvocationContainerImpl invocationContainerImpl;
 
     public VoidMethodStubbableImpl(T mock, InvocationContainerImpl invocationContainerImpl) {
         this.mock = mock;

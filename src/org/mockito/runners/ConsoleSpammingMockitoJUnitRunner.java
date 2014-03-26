@@ -4,8 +4,6 @@
  */
 package org.mockito.runners;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -20,6 +18,8 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.util.MockitoLogger;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Uses <b>JUnit 4.5</b> runner {@link BlockJUnit4ClassRunner}.
@@ -89,7 +89,7 @@ import org.mockito.internal.util.MockitoLogger;
 public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filterable {
 
     private final MockitoLogger logger;
-    private RunnerImpl runner;
+    private final RunnerImpl runner;
     
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));

@@ -31,11 +31,11 @@ import static java.lang.reflect.Array.*;
  */
 public class HashCodeAndEqualsSafeSet implements Set<Object> {
 
-    private HashSet<HashCodeAndEqualsMockWrapper> backingHashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
+    private final HashSet<HashCodeAndEqualsMockWrapper> backingHashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
 
     public Iterator<Object> iterator() {
         return new Iterator<Object>() {
-            private Iterator<HashCodeAndEqualsMockWrapper> iterator = backingHashSet.iterator();
+            private final Iterator<HashCodeAndEqualsMockWrapper> iterator = backingHashSet.iterator();
 
             public boolean hasNext() {
                 return iterator.hasNext();

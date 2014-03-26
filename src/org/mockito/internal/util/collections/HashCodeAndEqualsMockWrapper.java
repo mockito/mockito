@@ -26,7 +26,7 @@ import org.mockito.internal.util.MockUtil;
  */
 public class HashCodeAndEqualsMockWrapper {
 
-    private Object mockInstance;
+    private final Object mockInstance;
 
     public HashCodeAndEqualsMockWrapper(Object mockInstance) {
         this.mockInstance = mockInstance;

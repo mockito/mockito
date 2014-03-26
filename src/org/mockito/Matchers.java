@@ -104,7 +104,7 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class Matchers {
     
-    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+    private static final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     /**
      * Any <code>boolean</code>, <code>Boolean</code> or <code>null</code>.

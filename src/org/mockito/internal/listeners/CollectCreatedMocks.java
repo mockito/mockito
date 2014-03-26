@@ -4,14 +4,12 @@
  */
 package org.mockito.internal.listeners;
 
-import org.mockito.MockSettings;
-
 import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CollectCreatedMocks implements MockingStartedListener {
     
-    private List toBeFilled;
+    private final List toBeFilled;
 
     public CollectCreatedMocks(List toBeFilled) {
         this.toBeFilled = toBeFilled;

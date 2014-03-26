@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public class StubInfoImpl implements StubInfo, Serializable {
     private static final long serialVersionUID = 2125827349332068867L;
-    private DescribedInvocation stubbedAt;
+    private final DescribedInvocation stubbedAt;
 
     public StubInfoImpl(DescribedInvocation stubbedAt) {
         this.stubbedAt = stubbedAt;

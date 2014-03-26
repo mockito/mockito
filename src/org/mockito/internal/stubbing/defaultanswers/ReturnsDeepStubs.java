@@ -131,7 +131,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private static class DeeplyStubbedAnswer implements Answer<Object>, Serializable {
         @SuppressWarnings("serial") // serialization will fail with a nice message if mock not serializable
-        private Object mock;
+        private final Object mock;
 
         DeeplyStubbedAnswer(Object mock) {
             this.mock = mock;

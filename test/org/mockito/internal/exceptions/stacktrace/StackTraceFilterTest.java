@@ -13,7 +13,7 @@ import static org.mockitoutil.ExtraMatchers.hasOnlyThoseClasses;
 
 public class StackTraceFilterTest extends TestBase {
     
-    private StackTraceFilter filter = new StackTraceFilter();
+    private final StackTraceFilter filter = new StackTraceFilter();
     
     @Test
     public void shouldFilterOutCglibGarbage() {

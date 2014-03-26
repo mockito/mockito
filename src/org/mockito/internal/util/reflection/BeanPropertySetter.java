@@ -17,7 +17,7 @@ public class BeanPropertySetter {
     private static final String SET_PREFIX = "set";
 
     private final Object target;
-    private boolean reportNoSetterFound;
+    private final boolean reportNoSetterFound;
     private final Field field;
 
     /**

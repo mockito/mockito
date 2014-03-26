@@ -17,9 +17,9 @@ import java.io.Serializable;
  */
 @SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
-    static final long serialVersionUID = -2860353062105505938L;
+    private static final long serialVersionUID = -2860353062105505938L;
     
-    private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
+    private static final ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing
     IMockitoConfiguration getIt() {

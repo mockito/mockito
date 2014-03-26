@@ -56,7 +56,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
     private boolean instanceLocalCurrentlySerializingFlag = false;
-    private Lock mutex = new ReentrantLock();
+    private final Lock mutex = new ReentrantLock();
 
     public boolean isWriteReplace(Method method) {
         return  method.getReturnType() == Object.class
@@ -181,9 +181,9 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
 
         private static final long serialVersionUID = -7600267929109286514L;
-        private byte[] serializedMock;
-        private Class typeToMock;
-        private Set<Class> extraInterfaces;
+        private final byte[] serializedMock;
+        private final Class typeToMock;
+        private final Set<Class> extraInterfaces;
         /**
          * Creates the wrapper that be used in the serialization stream.
          *
@@ -264,8 +264,8 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * </p>
      */
     public static class MockitoMockObjectInputStream extends ObjectInputStream {
-        private Class typeToMock;
-        private Set<Class> extraInterfaces;
+        private final Class typeToMock;
+        private final Set<Class> extraInterfaces;
 
         public MockitoMockObjectInputStream(InputStream in, Class typeToMock, Set<Class> extraInterfaces) throws IOException {
             super(in) ;
@@ -369,7 +369,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      */
     private static class MockitoMockObjectOutputStream extends ObjectOutputStream {
         private static final String NOTHING = "";
-        private MockUtil mockUtil = new MockUtil();
+        private final MockUtil mockUtil = new MockUtil();
 
         public MockitoMockObjectOutputStream(ByteArrayOutputStream out) throws IOException {
             super(out);

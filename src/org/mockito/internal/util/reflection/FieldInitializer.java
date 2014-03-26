@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,9 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.MockUtil;
 
 /**
  * Initialize a field with type instance if a default constructor can be found.
@@ -27,9 +27,9 @@ import org.mockito.internal.util.MockUtil;
  */
 public class FieldInitializer {
 
-    private Object fieldOwner;
-    private Field field;
-    private ConstructorInstantiator instantiator;
+    private final Object fieldOwner;
+    private final Field field;
+    private final ConstructorInstantiator instantiator;
 
 
     /**
@@ -159,8 +159,8 @@ public class FieldInitializer {
      * </p>
      */
     static class NoArgConstructorInstantiator implements ConstructorInstantiator {
-        private Object testClass;
-        private Field field;
+        private final Object testClass;
+        private final Field field;
 
         /**
          * Internal, checks are done by FieldInitializer.
@@ -210,11 +210,11 @@ public class FieldInitializer {
      * </p>
      */
     static class ParameterizedConstructorInstantiator implements ConstructorInstantiator {
-        private Object testClass;
-        private Field field;
-        private ConstructorArgumentResolver argResolver;
+        private final Object testClass;
+        private final Field field;
+        private final ConstructorArgumentResolver argResolver;
 	    private final MockUtil mockUtil = new MockUtil();
-        private Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
+        private final Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
             public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
 	            int argLengths = constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
 	            if (argLengths == 0) {

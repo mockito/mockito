@@ -4,8 +4,6 @@
  */
 package org.mockito.runners;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -19,6 +17,8 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.junit.JUnitFailureHacker;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Experimental implementation that suppose to improve tdd/testing experience. 
  * Don't hesitate to send feedback to mockito@googlegroups.com
@@ -28,7 +28,7 @@ import org.mockito.internal.util.junit.JUnitFailureHacker;
  * adds extra Mocktio hints to the exception message. 
  * The point is that Mockito should help the tdd developer to quickly figure out if the test fails for the right reason and track the reason. 
  * <p>
- * The implemntation is pretty hacky - it uses brute force of reflection to modify the exception message and add extra mockito hints.
+ * The implementation is pretty hacky - it uses brute force of reflection to modify the exception message and add extra mockito hints.
  * You've been warned. 
  * <p>
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
@@ -37,7 +37,7 @@ import org.mockito.internal.util.junit.JUnitFailureHacker;
  */
 public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
 
-    private RunnerImpl runner;
+    private final RunnerImpl runner;
 
     public VerboseMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new RunnerFactory().create(klass));
