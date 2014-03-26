@@ -5,10 +5,10 @@
 
 package org.mockito.internal.matchers;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 import org.mockitoutil.TestBase;
+
+import java.math.BigDecimal;
 
 public class ComparableMatchersTest extends TestBase {
 
@@ -18,7 +18,7 @@ public class ComparableMatchersTest extends TestBase {
     }
 
     @Test
-    public void testGreateThan() {
+    public void testGreaterThan() {
         test(new GreaterThan<String>("b"), false, true, false, "gt");
     }
 
@@ -28,7 +28,7 @@ public class ComparableMatchersTest extends TestBase {
     }
 
     @Test
-    public void testGreateOrEqual() {
+    public void testGreaterOrEqual() {
         test(new GreaterOrEqual<String>("b"), false, true, true, "geq");
     }
 
@@ -36,10 +36,8 @@ public class ComparableMatchersTest extends TestBase {
     public void testCompareEqual() {
         test(new CompareEqual<String>("b"), false, false, true, "cmpEq");
 
-        // Make sure it works when equals provide a different result than
-        // compare
-        CompareEqual<BigDecimal> cmpEq = new CompareEqual<BigDecimal>(
-                new BigDecimal("5.00"));
+        // Make sure it works when equals provide a different result than compare
+        CompareEqual<BigDecimal> cmpEq = new CompareEqual<BigDecimal>(new BigDecimal("5.00"));
         assertTrue(cmpEq.matches(new BigDecimal("5")));
     }
 
