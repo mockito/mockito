@@ -6,6 +6,7 @@ package org.mockito.internal.invocation;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import org.mockito.exceptions.base.MockitoException;
@@ -20,6 +21,7 @@ public class SerializableMethod implements Serializable, MockitoMethod {
     private Class<?> returnType;
     private Class<?>[] exceptionTypes;
     private boolean isVarArgs;
+    private boolean isAbstract;
 
     public SerializableMethod(Method method) {
         declaringClass = method.getDeclaringClass();
@@ -28,6 +30,7 @@ public class SerializableMethod implements Serializable, MockitoMethod {
         returnType = method.getReturnType();
         exceptionTypes = method.getExceptionTypes();
         isVarArgs = method.isVarArgs();
+        isAbstract = (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
 
     public String getName() {
@@ -48,7 +51,12 @@ public class SerializableMethod implements Serializable, MockitoMethod {
 
     public boolean isVarArgs() {
         return isVarArgs;
-    }  
+    }
+
+    @Override
+    public boolean isAbstract() {
+        return isAbstract;
+    }
 
     public Method getJavaMethod() {
         try {
@@ -64,7 +72,7 @@ public class SerializableMethod implements Serializable, MockitoMethod {
                             "Please report this as a defect with an example of how to reproduce it.", declaringClass, methodName);
             throw new MockitoException(message, e);
         }
-    }    
+    }
 
     @Override
     public int hashCode() {

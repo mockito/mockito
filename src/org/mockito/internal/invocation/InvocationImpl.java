@@ -107,8 +107,8 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
     }
 
     public Object callRealMethod() throws Throwable {
-        if (this.getMethod().getDeclaringClass().isInterface()) {
-            new Reporter().cannotCallRealMethodOnInterface();
+        if (method.isAbstract()) {
+            new Reporter().cannotCallAbstractRealMethod();
         }
         return realMethod.invoke(mock, rawArguments);
     }

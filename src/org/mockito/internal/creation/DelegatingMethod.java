@@ -5,6 +5,7 @@
 package org.mockito.internal.creation;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.mockito.internal.invocation.MockitoMethod;
 
@@ -39,6 +40,11 @@ public class DelegatingMethod implements MockitoMethod {
 
     public boolean isVarArgs() {
         return method.isVarArgs();
+    }
+
+    @Override
+    public boolean isAbstract() {
+        return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
     
     @Override
