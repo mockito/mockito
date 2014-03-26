@@ -15,7 +15,7 @@ import java.io.Serializable;
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
-@SuppressWarnings("deprecation")//supressed until ReturnValues are removed
+@SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     static final long serialVersionUID = -2860353062105505938L;
     
