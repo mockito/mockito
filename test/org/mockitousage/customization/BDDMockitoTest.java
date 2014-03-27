@@ -222,20 +222,6 @@ public class BDDMockitoTest extends TestBase {
         then(mock).should().booleanObjectReturningMethod();
     }
 
-    @Test(expected = WantedButNotInvoked.class)
-    public void shouldFailForExpectedBehaviorThatDidNotHappenWithVerify() {
-
-        then(mock).verify().booleanObjectReturningMethod();
-    }
-
-    @Test
-    public void shouldPassForExpectedBehaviorThatHappenedWithVerify() {
-
-        mock.booleanObjectReturningMethod();
-
-        then(mock).verify().booleanObjectReturningMethod();
-    }
-
     @Test
     public void shouldPassFluentBddScenario() {
 
@@ -246,18 +232,6 @@ public class BDDMockitoTest extends TestBase {
         person.ride(bike);
 
         then(person).should(times(2)).ride(bike);
-    }
-
-    @Test
-    public void shouldPassFluentBddScenarioWithVerify() {
-
-        Bike bike = new Bike();
-        Person person = mock(Person.class);
-
-        person.ride(bike);
-        person.ride(bike);
-
-        then(person).verify(times(2)).ride(bike);
     }
 
     static class Person {

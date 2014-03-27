@@ -65,17 +65,6 @@ import org.mockito.verification.VerificationMode;
  * }
  * </code></pre>
  *
- * Syntax alternative to the last example:
- * <pre class="code"><code class="java">
- * public void shouldRideBikeTwice() {
- *
- *     person.ride(bike);
- *     person.ride(bike);
- *
- *     then(person).verify(times(2)).ride(bike);
- * }
- * </code></pre>
- *
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
  *
  * @since 1.8.0
@@ -233,28 +222,14 @@ public class BDDMockito extends Mockito {
          * @see #verify(Object)
          */
         public T should() {
-            return Mockito.verify(mock);
+            return verify(mock);
         }
 
         /**
          * @see #verify(Object, VerificationMode)
          */
         public T should(VerificationMode mode) {
-            return Mockito.verify(mock, mode);
-        }
-
-        /**
-         * @see #verify(Object)
-         */
-        public T verify() {
-            return Mockito.verify(mock);
-        }
-
-        /**
-         * @see #verify(Object, VerificationMode)
-         */
-        public T verify(VerificationMode mode) {
-            return Mockito.verify(mock, mode);
+            return verify(mock, mode);
         }
     }
     
