@@ -6,10 +6,13 @@
 package org.mockitousage.stubbing;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.stubbing.Times.times;
 
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.stubbing.Times;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -35,7 +38,8 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     @SuppressWarnings("all")
     @Test
     public void shouldReturnConsecutiveValuesForTwoNulls() throws Exception {
-        when(mock.simpleMethod()).thenReturn(null, null);
+        String nullString = null;
+        when(mock.simpleMethod()).thenReturn(null, nullString);
         
         assertNull(mock.simpleMethod());        
         assertNull(mock.simpleMethod());        
@@ -217,5 +221,50 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
             .toReturn()
             .toThrow(new Exception())
             .on().voidMethod();
+    }
+
+    @Test (expected=IllegalArgumentException.class)
+    public void shouldStubMethodNoTimes() {
+        when(mock.booleanReturningMethod()).thenReturn(true, times(0));
+    }
+
+    @Test
+    public void shouldStubMethodOnce() {
+        when(mock.booleanReturningMethod()).thenReturn(true, times(1));
+        assertTrue(mock.booleanReturningMethod());
+    }
+
+    @Test
+    public void shouldStubMethodSpecifiedNumberOfTimes() {
+        when(mock.booleanReturningMethod()).thenReturn(true, times(3));
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+    }
+
+    @Test
+    public void shouldStubMethodSpecifiedNumberOfTimesFollowedByADifferentValue() {
+        when(mock.booleanReturningMethod()).thenReturn(true, times(3))
+                .thenReturn(false);
+
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+        assertFalse(mock.booleanReturningMethod());
+
+    }
+
+    @Test
+    public void shouldHandleChainedConsecutiveStubbing() {
+        when(mock.booleanReturningMethod()).thenReturn(true, times(3))
+                .thenReturn(false, times(3)).thenReturn(true);
+
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
+        assertFalse(mock.booleanReturningMethod());
+        assertFalse(mock.booleanReturningMethod());
+        assertFalse(mock.booleanReturningMethod());
+        assertTrue(mock.booleanReturningMethod());
     }
 }
