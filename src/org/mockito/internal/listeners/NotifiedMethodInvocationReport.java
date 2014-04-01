@@ -8,6 +8,8 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 /**
  * Report on a method call
  */
@@ -70,9 +72,9 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
 
         NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
 
-        return (invocation != null ? invocation.equals(that.invocation) : that.invocation == null) &&
-               (returnedValue != null ? returnedValue.equals(that.returnedValue) : that.returnedValue == null) &&
-               (throwable != null ? throwable.equals(that.throwable) : that.throwable == null);
+        return areEqual(invocation, that.invocation) &&
+               areEqual(returnedValue, that.returnedValue) &&
+               areEqual(throwable, that.throwable);
     }
 
     public int hashCode() {
