@@ -20,9 +20,18 @@ public class EqualityTest extends TestBase {
         assertTrue(areEqual(new Object[10], new Object[10]));
         assertTrue(areEqual(new int[] {1}, new Integer[] {1}));
         assertTrue(areEqual(new Object[] {"1"}, new String[] {"1"}));
+	Object badequals=new BadEquals();
+	assertTrue(areEqual(badequals,badequals));
 
         assertFalse(areEqual(new Object[9], new Object[10]));
         assertFalse(areEqual(new int[] {1, 2}, new int[] {1}));
         assertFalse(areEqual(new int[] {1}, new double[] {1.0}));
     }
-}
+
+   private final class BadEquals {
+    @Override
+        public boolean equals (Object oth) {
+	      throw new RuntimeException();
+        }
+   }
+}
