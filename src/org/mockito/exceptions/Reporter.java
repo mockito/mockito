@@ -770,4 +770,13 @@ public class Reporter {
                 ""
         ));
     }
+
+    public void answerAndCustomAnswerInMockAnnotationNotAllowed(String fieldName) {
+        throw new MockitoException("You cannot define answer and customAnswer at the same time for field " + fieldName);
+
+    }
+
+    public MockitoException reportCustomAnswerCannotBeInstantiated(Exception e) {
+        return new MockitoException("Custom answer cannot be instantiated",e);
+    }
 }

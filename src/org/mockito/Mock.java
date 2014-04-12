@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import org.mockito.stubbing.Answer;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -70,4 +72,6 @@ public @interface Mock {
     Class<?>[] extraInterfaces() default {};
     
     boolean serializable() default false;
+
+    Class<? extends Answer> customAnswer() default Answer.class;
 }
