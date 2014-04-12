@@ -72,7 +72,7 @@ idea.module.scopes.PROVIDED.plus += configurations.provided
 eclipse.classpath.plusConfigurations += configurations.provided
 
 
-// EXPERIMENTAL : converage
+// EXPERIMENTAL : coverage
 // configure code coverage
 apply plugin: 'cobertura'
 apply plugin: 'coveralls'
