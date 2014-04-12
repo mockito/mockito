@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
@@ -67,18 +68,30 @@ public class VerificationOverTimeImpl implements VerificationMode {
                     error = null;
                 }
             } catch (MockitoAssertionError e) {
-                if (canRecoverFromFailure(delegate)) {
-                    error = e;
-                    sleep(pollingPeriodMillis);
-                } else {
-                    throw e;
-                }
+                error = handleVerifyException(e);
+            }
+            catch (ArgumentsAreDifferent e) {
+                error = handleVerifyException(e);
             }
         }
         
         if (error != null) {
             throw error;
         }
+    }
+
+    private MockitoAssertionError handleVerifyException(AssertionError e) {
+        MockitoAssertionError error;
+        if (canRecoverFromFailure(delegate)) {
+            if (e instanceof MockitoAssertionError)
+                error = (MockitoAssertionError)e;
+            else
+                error = new MockitoAssertionError(e.getMessage());
+            sleep(pollingPeriodMillis);
+        } else {
+            throw e;
+        }
+        return error;
     }
 
     protected boolean canRecoverFromFailure(VerificationMode verificationMode) {

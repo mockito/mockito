@@ -133,7 +133,35 @@ public class VerificationWithTimeoutTest extends TestBase {
             fail();
         } catch (NoInteractionsWanted e) {}
     }
-    
+
+    /**
+     * This test is JUnit-specific because the code behaves different if JUnit is used.
+     */
+    @Test
+    public void canIgnoreInvocationsWithJunit() {
+        //given
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                mock.add("0");
+                mock.add("1");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                    // We do not need to handle this.
+                }
+                mock.add("2");
+            }
+        };
+
+        //when
+        t1.start();
+
+        //then
+        verify(mock, timeout(200)).add("1");
+        verify(mock, timeout(200)).add("2");
+    }
+
     //TODO not yet implemented
     @Ignore
     @Test
