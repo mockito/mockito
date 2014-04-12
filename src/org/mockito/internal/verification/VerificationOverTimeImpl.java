@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
@@ -54,7 +55,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      * @throws MockitoAssertionError if the delegate verification mode does not succeed before the timeout
      */
     public void verify(VerificationData data) {
-        MockitoAssertionError error = null;
+        AssertionError error = null;
         
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime <= durationMillis) {
@@ -67,17 +68,24 @@ public class VerificationOverTimeImpl implements VerificationMode {
                     error = null;
                 }
             } catch (MockitoAssertionError e) {
-                if (canRecoverFromFailure(delegate)) {
-                    error = e;
-                    sleep(pollingPeriodMillis);
-                } else {
-                    throw e;
-                }
+                error = handleVerifyException(e);
+            }
+            catch (ArgumentsAreDifferent e) {
+                error = handleVerifyException(e);
             }
         }
         
         if (error != null) {
             throw error;
+        }
+    }
+
+    private AssertionError handleVerifyException(AssertionError e) {
+        if (canRecoverFromFailure(delegate)) {
+            sleep(pollingPeriodMillis);
+            return e;
+        } else {
+            throw e;
         }
     }
 
