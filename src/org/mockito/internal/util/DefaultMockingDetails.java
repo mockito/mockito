@@ -4,14 +4,10 @@
  */
 package org.mockito.internal.util;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.mockito.MockingDetails;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.invocation.Invocation;
+
+import java.util.Collection;
 
 /**
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
@@ -19,8 +15,8 @@ import org.mockito.invocation.Invocation;
  */
 public class DefaultMockingDetails implements MockingDetails {
 
-    private Object toInspect;
-    private MockUtil delegate;
+    private final Object toInspect;
+    private final MockUtil delegate;
 
     public DefaultMockingDetails(Object toInspect, MockUtil delegate){
         this.toInspect = toInspect;

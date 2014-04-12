@@ -11,7 +11,7 @@ import org.mockito.invocation.Invocation;
 import static org.mockito.internal.util.StringJoiner.join;
 
 public class LoggingListener implements FindingsListener {
-    private boolean warnAboutUnstubbed;
+    private final boolean warnAboutUnstubbed;
     private final MockitoLogger logger;
 
     public LoggingListener(boolean warnAboutUnstubbed, MockitoLogger logger) {

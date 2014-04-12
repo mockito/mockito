@@ -26,7 +26,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * If you have comments on Mockito configuration feature don't hesitate to write to mockito@googlegroups.com
  */
-@SuppressWarnings("deprecation")//supressed until ReturnValues are removed
+@SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public interface IMockitoConfiguration {
 
     /**

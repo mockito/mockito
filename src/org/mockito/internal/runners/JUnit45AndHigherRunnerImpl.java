@@ -17,7 +17,7 @@ import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
 
-    private BlockJUnit4ClassRunner runner;
+    private final BlockJUnit4ClassRunner runner;
 
     public JUnit45AndHigherRunnerImpl(Class<?> klass) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(klass) {

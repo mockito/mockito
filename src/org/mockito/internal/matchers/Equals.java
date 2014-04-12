@@ -29,10 +29,7 @@ public class Equals extends ArgumentMatcher<Object> implements ContainsExtraType
     }
 
     public String describe(Object object) {
-        String text = quoting();
-        text+="" + object;
-        text+= quoting();
-        return text;
+        return quoting() + object + quoting();
     }
 
     private String quoting() {

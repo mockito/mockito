@@ -10,8 +10,8 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class Primitives {
 
-    private static Map<Class<?>, Class<?>> primitiveTypes = new HashMap<Class<?>, Class<?>>();
-    private static Map<Class<?>, Object> primitiveOrWrapperDefaultValues = new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES = new HashMap<Class<?>, Object>();
 
 
     /**
@@ -29,7 +29,7 @@ public class Primitives {
         if (clazz.isPrimitive()) {
             return clazz;
         }
-        return (Class<T>) primitiveTypes.get(clazz);
+        return (Class<T>) PRIMITIVE_TYPES.get(clazz);
     }
 
     /**
@@ -39,7 +39,7 @@ public class Primitives {
      * @return <code>true</code> if primitive or wrapper, <code>false</code> otherwise.
      */
     public static boolean isPrimitiveOrWrapper(Class<?> type) {
-        return primitiveOrWrapperDefaultValues.containsKey(type);
+        return PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.containsKey(type);
     }
 
     /**
@@ -50,38 +50,38 @@ public class Primitives {
      *         <code>null</code> if the type is neither a primitive nor a wrapper
      */
     public static <T> T defaultValueForPrimitiveOrWrapper(Class<T> primitiveOrWrapperType) {
-        return (T) primitiveOrWrapperDefaultValues.get(primitiveOrWrapperType);
+        return (T) PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.get(primitiveOrWrapperType);
     }
 
 
     static {
-        primitiveTypes.put(Boolean.class, Boolean.TYPE);
-        primitiveTypes.put(Character.class, Character.TYPE);
-        primitiveTypes.put(Byte.class, Byte.TYPE);
-        primitiveTypes.put(Short.class, Short.TYPE);
-        primitiveTypes.put(Integer.class, Integer.TYPE);
-        primitiveTypes.put(Long.class, Long.TYPE);
-        primitiveTypes.put(Float.class, Float.TYPE);
-        primitiveTypes.put(Double.class, Double.TYPE);
+        PRIMITIVE_TYPES.put(Boolean.class, Boolean.TYPE);
+        PRIMITIVE_TYPES.put(Character.class, Character.TYPE);
+        PRIMITIVE_TYPES.put(Byte.class, Byte.TYPE);
+        PRIMITIVE_TYPES.put(Short.class, Short.TYPE);
+        PRIMITIVE_TYPES.put(Integer.class, Integer.TYPE);
+        PRIMITIVE_TYPES.put(Long.class, Long.TYPE);
+        PRIMITIVE_TYPES.put(Float.class, Float.TYPE);
+        PRIMITIVE_TYPES.put(Double.class, Double.TYPE);
     }
 
     static {
-        primitiveOrWrapperDefaultValues.put(Boolean.class, false);
-        primitiveOrWrapperDefaultValues.put(Character.class, '\u0000');
-        primitiveOrWrapperDefaultValues.put(Byte.class, (byte) 0);
-        primitiveOrWrapperDefaultValues.put(Short.class, (short) 0);
-        primitiveOrWrapperDefaultValues.put(Integer.class, 0);
-        primitiveOrWrapperDefaultValues.put(Long.class, 0L);
-        primitiveOrWrapperDefaultValues.put(Float.class, 0F);
-        primitiveOrWrapperDefaultValues.put(Double.class, 0D);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Boolean.class, false);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Character.class, '\u0000');
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Byte.class, (byte) 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Short.class, (short) 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Integer.class, 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Long.class, 0L);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Float.class, 0F);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Double.class, 0D);
 
-        primitiveOrWrapperDefaultValues.put(boolean.class, false);
-        primitiveOrWrapperDefaultValues.put(char.class, '\u0000');
-        primitiveOrWrapperDefaultValues.put(byte.class, (byte) 0);
-        primitiveOrWrapperDefaultValues.put(short.class, (short) 0);
-        primitiveOrWrapperDefaultValues.put(int.class, 0);
-        primitiveOrWrapperDefaultValues.put(long.class, 0L);
-        primitiveOrWrapperDefaultValues.put(float.class, 0F);
-        primitiveOrWrapperDefaultValues.put(double.class, 0D);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(boolean.class, false);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(char.class, '\u0000');
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(byte.class, (byte) 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(short.class, (short) 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(int.class, 0);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(long.class, 0L);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(float.class, 0F);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(double.class, 0D);
     }
 }

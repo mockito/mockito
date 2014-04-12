@@ -8,13 +8,15 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 /**
  * Report on a method call
  */
 public class NotifiedMethodInvocationReport implements MethodInvocationReport {
     private final Invocation invocation;
-    private Object returnedValue;
-    private Throwable throwable;
+    private final Object returnedValue;
+    private final Throwable throwable;
 
 
     /**
@@ -27,6 +29,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
     public NotifiedMethodInvocationReport(Invocation invocation, Object returnedValue) {
         this.invocation = invocation;
         this.returnedValue = returnedValue;
+        this.throwable = null;
     }
 
     /**
@@ -38,6 +41,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
      */
     public NotifiedMethodInvocationReport(Invocation invocation, Throwable throwable) {
         this.invocation = invocation;
+        this.returnedValue = null;
         this.throwable = throwable;
     }
 
@@ -68,12 +72,9 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
 
         NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
 
-        if (invocation != null ? !invocation.equals(that.invocation) : that.invocation != null) return false;
-        if (returnedValue != null ? !returnedValue.equals(that.returnedValue) : that.returnedValue != null)
-            return false;
-        if (throwable != null ? !throwable.equals(that.throwable) : that.throwable != null) return false;
-
-        return true;
+        return areEqual(invocation, that.invocation) &&
+               areEqual(returnedValue, that.returnedValue) &&
+               areEqual(throwable, that.throwable);
     }
 
     public int hashCode() {

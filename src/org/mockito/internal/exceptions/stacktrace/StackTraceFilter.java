@@ -18,7 +18,7 @@ public class StackTraceFilter implements Serializable {
 
     static final long serialVersionUID = -5499819791513105700L;
 
-    private static StackTraceCleaner cleaner =
+    private static final StackTraceCleaner CLEANER =
             ClassPathLoader.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
     
     /**
@@ -33,7 +33,7 @@ public class StackTraceFilter implements Serializable {
         int lastBad = -1;
         int firstBad = -1;
         for (int i = 0; i < unfilteredStackTrace.size(); i++) {
-            if (!cleaner.isOut(unfilteredStackTrace.get(i))) {
+            if (!CLEANER.isOut(unfilteredStackTrace.get(i))) {
                 continue;
             }
             lastBad = i;

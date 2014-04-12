@@ -59,9 +59,9 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
-    private Comparator<Field> superTypesLast = new FieldTypeAndNameComparator();
+    private final Comparator<Field> superTypesLast = new FieldTypeAndNameComparator();
 
-    private ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
+    private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
         public boolean isOut(Field object) {
             return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
         }

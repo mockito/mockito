@@ -4,24 +4,24 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.exceptions.base.MockitoException;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-import org.mockito.exceptions.base.MockitoException;
-
 public class SerializableMethod implements Serializable, MockitoMethod {
 
     private static final long serialVersionUID = 6005610965006048445L;
-    
-    private Class<?> declaringClass;
-    private String methodName;
-    private Class<?>[] parameterTypes;
-    private Class<?> returnType;
-    private Class<?>[] exceptionTypes;
-    private boolean isVarArgs;
-    private boolean isAbstract;
+
+    private final Class<?> declaringClass;
+    private final String methodName;
+    private final Class<?>[] parameterTypes;
+    private final Class<?> returnType;
+    private final Class<?>[] exceptionTypes;
+    private final boolean isVarArgs;
+    private final boolean isAbstract;
 
     public SerializableMethod(Method method) {
         declaringClass = method.getDeclaringClass();
@@ -53,7 +53,6 @@ public class SerializableMethod implements Serializable, MockitoMethod {
         return isVarArgs;
     }
 
-    @Override
     public boolean isAbstract() {
         return isAbstract;
     }

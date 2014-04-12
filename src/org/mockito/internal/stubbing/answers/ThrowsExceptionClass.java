@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class ThrowsExceptionClass implements Answer<Object>, Serializable {
 
-    private Class<? extends Throwable> throwableClass;
+    private final Class<? extends Throwable> throwableClass;
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
     public ThrowsExceptionClass(Class<? extends Throwable> throwableClass) {

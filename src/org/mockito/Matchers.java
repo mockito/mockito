@@ -104,7 +104,7 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class Matchers {
     
-    private static MockingProgress mockingProgress = new ThreadSafeMockingProgress();
+    private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
 
     /**
      * Any <code>boolean</code>, <code>Boolean</code> or <code>null</code>.
@@ -875,6 +875,6 @@ public class Matchers {
     }
 
     private static HandyReturnValues reportMatcher(Matcher<?> matcher) {
-        return mockingProgress.getArgumentMatcherStorage().reportMatcher(matcher);
+        return MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

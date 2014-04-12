@@ -21,8 +21,8 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  */
 @SuppressWarnings({"deprecation", "unchecked"})
 public class InjectingAnnotationEngine implements AnnotationEngine {
-    private AnnotationEngine delegate = new DefaultAnnotationEngine();
-    private AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
+    private final AnnotationEngine delegate = new DefaultAnnotationEngine();
+    private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 
     /***
      * Create a mock using {@link DefaultAnnotationEngine}

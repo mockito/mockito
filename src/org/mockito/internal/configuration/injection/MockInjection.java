@@ -52,11 +52,11 @@ public class MockInjection {
      * Ongoing configuration of the mock injector.
      */
     public static class OngoingMockInjection {
-        private Set<Field> fields = new HashSet<Field>();
-        private Set<Object> mocks = newMockSafeHashSet();
-        private Object fieldOwner;
-        private MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
-        private MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();
+        private final Set<Field> fields = new HashSet<Field>();
+        private final Set<Object> mocks = newMockSafeHashSet();
+        private final Object fieldOwner;
+        private final MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
+        private final MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();
 
         private OngoingMockInjection(Field field, Object fieldOwner) {
             this(Collections.singleton(field), fieldOwner);

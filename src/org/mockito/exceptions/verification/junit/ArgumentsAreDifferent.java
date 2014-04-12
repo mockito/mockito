@@ -14,7 +14,7 @@ public class ArgumentsAreDifferent extends ComparisonFailure {
     
     private static final long serialVersionUID = 1L;
     private final String message;
-    private StackTraceElement[] unfilteredStackTrace;
+    private final StackTraceElement[] unfilteredStackTrace;
 
     public ArgumentsAreDifferent(String message, String wanted, String actual) {
         super(message, wanted, actual);

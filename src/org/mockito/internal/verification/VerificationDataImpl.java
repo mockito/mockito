@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.List;
-
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
+
+import java.util.List;
 
 public class VerificationDataImpl implements VerificationData {
 
@@ -32,11 +32,11 @@ public class VerificationDataImpl implements VerificationData {
         return wanted;
     }
 
-    void assertWantedIsVerifiable() {
+    private void assertWantedIsVerifiable() {
         if (wanted == null) {
             return;
         }
-        ObjectMethodsGuru o = new ObjectMethodsGuru();
+        ObjectMethodsGuru o =  new ObjectMethodsGuru();
         if (o.isToString(wanted.getMethod())) {
             new Reporter().cannotVerifyToString();
         }

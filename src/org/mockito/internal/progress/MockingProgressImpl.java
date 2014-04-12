@@ -5,7 +5,6 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
@@ -111,7 +110,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void mockingStarted(Object mock, Class classToMock) {
-        if (listener != null && listener instanceof MockingStartedListener) {
+        if (listener instanceof MockingStartedListener) {
             ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
         }
         validateMostStuff();

@@ -9,9 +9,9 @@ package org.mockito.internal.util.reflection;
  * Report on field initialization
  */
 public class FieldInitializationReport {
-    private Object fieldInstance;
-    private boolean wasInitialized;
-    private boolean wasInitializedUsingConstructorArgs;
+    private final Object fieldInstance;
+    private final boolean wasInitialized;
+    private final boolean wasInitializedUsingConstructorArgs;
 
     public FieldInitializationReport(Object fieldInstance, boolean wasInitialized, boolean wasInitializedUsingConstructorArgs) {
         this.fieldInstance = fieldInstance;

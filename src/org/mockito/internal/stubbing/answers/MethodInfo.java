@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier;
  */
 public class MethodInfo implements AbstractAwareMethod {
 
-    private Method method;
+    private final Method method;
 
     public MethodInfo(Invocation theInvocation) {
         this.method = theInvocation.getMethod();
@@ -66,7 +66,6 @@ public class MethodInfo implements AbstractAwareMethod {
         return method.getDeclaringClass().isInterface();
     }
 
-    @Override
     public boolean isAbstract() {
         return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }

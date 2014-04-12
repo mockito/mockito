@@ -15,21 +15,21 @@ import java.io.Serializable;
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
-@SuppressWarnings("deprecation")//supressed until ReturnValues are removed
+@SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
-    static final long serialVersionUID = -2860353062105505938L;
+    private static final long serialVersionUID = -2860353062105505938L;
     
-    private static ThreadLocal<IMockitoConfiguration> globalConfiguration = new ThreadLocal<IMockitoConfiguration>();
+    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing
     IMockitoConfiguration getIt() {
-        return globalConfiguration.get();
+        return GLOBAL_CONFIGURATION.get();
     }
 
     public GlobalConfiguration() {
         //Configuration should be loaded only once but I cannot really test it
-        if (globalConfiguration.get() == null) {
-            globalConfiguration.set(createConfig());
+        if (GLOBAL_CONFIGURATION.get() == null) {
+            GLOBAL_CONFIGURATION.set(createConfig());
         }
     }
 
@@ -48,22 +48,22 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     }
 
     public ReturnValues getReturnValues() {
-        return globalConfiguration.get().getReturnValues();
+        return GLOBAL_CONFIGURATION.get().getReturnValues();
     }
 
     public AnnotationEngine getAnnotationEngine() {
-        return globalConfiguration.get().getAnnotationEngine();
+        return GLOBAL_CONFIGURATION.get().getAnnotationEngine();
     }
 
     public boolean cleansStackTrace() {
-        return globalConfiguration.get().cleansStackTrace();
+        return GLOBAL_CONFIGURATION.get().cleansStackTrace();
     }
     
     public boolean enableClassCache() {
-        return globalConfiguration.get().enableClassCache();
+        return GLOBAL_CONFIGURATION.get().enableClassCache();
     }
 
     public Answer<Object> getDefaultAnswer() {
-        return globalConfiguration.get().getDefaultAnswer();
+        return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }
 }

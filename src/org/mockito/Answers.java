@@ -71,7 +71,7 @@ public enum Answers {
     CALLS_REAL_METHODS(new CallsRealMethods())
     ;
 
-    private Answer<Object> implementation;
+    private final Answer<Object> implementation;
 
     private Answers(Answer<Object> implementation) {
         this.implementation = implementation;

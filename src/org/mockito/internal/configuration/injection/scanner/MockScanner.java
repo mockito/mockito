@@ -19,7 +19,7 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  * Scan mocks, and prepare them if needed.
  */
 public class MockScanner {
-    private MockUtil mockUtil = new MockUtil();
+    private final MockUtil mockUtil = new MockUtil();
     private final Object instance;
     private final Class<?> clazz;
 
