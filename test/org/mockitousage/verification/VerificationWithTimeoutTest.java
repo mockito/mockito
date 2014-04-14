@@ -145,11 +145,7 @@ public class VerificationWithTimeoutTest extends TestBase {
             public void run() {
                 mock.add("0");
                 mock.add("1");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ignored) {
-                    // We do not need to handle this.
-                }
+		VerificationWithTimeoutTest.this.sleep(100);
                 mock.add("2");
             }
         };
@@ -160,6 +156,14 @@ public class VerificationWithTimeoutTest extends TestBase {
         //then
         verify(mock, timeout(200)).add("1");
         verify(mock, timeout(200)).add("2");
+    }
+
+    private void sleep (long milliseconds){
+	try{
+	    Thread.sleep(milliseconds);
+	} catch (InterruptedException ignored) {
+	    // we do not need to handle this.
+	}
     }
 
     //TODO not yet implemented
