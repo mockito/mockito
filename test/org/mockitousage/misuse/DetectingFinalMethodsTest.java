@@ -35,7 +35,7 @@ public class DetectingFinalMethodsTest extends TestBase {
     public void shouldFailWithUnfinishedStubbing() {
         withFinal = mock(WithFinal.class);
         try {
-            when(withFinal.foo()).thenReturn(null);
+            when(withFinal.foo()).thenReturn(-1);
             fail();
         } catch (MissingMethodInvocationException e) {}
     }
