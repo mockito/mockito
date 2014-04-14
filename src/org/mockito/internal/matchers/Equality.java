@@ -24,7 +24,7 @@ public class Equality {
     static boolean areArraysEqual(Object o1, Object o2) {
         return areArrayLengthsEqual(o1, o2)
                 && areArrayElementsEqual(o1, o2)
-                && areArraysHomogenous(o1, o2);
+ 	        && o1.getClass().equals(o2.getClass());
     }
 
     static boolean areArrayLengthsEqual(Object o1, Object o2) {
@@ -36,12 +36,6 @@ public class Equality {
             if (!areEqual(Array.get(o1, i), Array.get(o2, i))) return false;
         }
         return true;
-    }
-
-    static boolean areArraysHomogenous(Object o1, Object o2) {
-	assert null!=o1.getClass().getComponentType():"o1 is an array and arrays have component types";
-	assert null!=o2.getClass().getComponentType():"o2 is an array and arrays have component types";
-        return o1.getClass().getComponentType().equals(o2.getClass().getComponentType());
     }
 
     static boolean isArray(Object o) {
