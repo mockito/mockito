@@ -18,6 +18,8 @@ public class EqualityTest extends TestBase {
         assertTrue(areEqual(new Double[] {1.0}, new Double[] {1.0}));
         assertTrue(areEqual(new String[0], new String[0]));
         assertTrue(areEqual(new Object[10], new Object[10]));
+        assertFalse(areEqual(new int[] {1}, new Integer[] {1}));
+        assertFalse(areEqual(new Object[] {"1"}, new String[] {"1"}));
 	Object badequals=new BadEquals();
 	assertTrue(areEqual(badequals,badequals));
 
