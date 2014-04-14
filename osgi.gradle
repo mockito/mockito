@@ -9,7 +9,7 @@ afterEvaluate {
             instruction '-versionpolicy', '[${version;==;${@}},${version;+;${@}})'
 
             name = 'Mockito Mock Library for Java. Core bundle requires Hamcrest-core and Objenesis.'
-            symbolicName = 'org.mockito.mockito-core'
+            symbolicName = 'org.mockito'
             version = project.version
 
             instruction 'Export-Package',
@@ -41,7 +41,7 @@ afterEvaluate {
             instruction '-versionpolicy', '[${version;==;${@}},${version;+;${@}})'
 
             name = 'Mockito Mock Library for Java. Hamcrest-core and Objenesis included in the bundle.'
-            symbolicName = 'org.mockito.mockito-all'
+            symbolicName = 'org.mockito.all'
             version = project.version
 
             instruction 'Export-Package',
