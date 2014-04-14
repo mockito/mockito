@@ -25,8 +25,8 @@ public class EqualityTest extends TestBase {
         assertFalse(areEqual(new int[] {1, 2}, new int[] {1}));
         assertFalse(areEqual(new int[] {1}, new double[] {1.0}));
         Integer[] ints = new Integer[0];
-	Long[] longs = new Long[0];
-	assertFalse(areEqual(ints,longs));
+        Long[] longs = new Long[0];
+        assertFalse(areEqual(ints,longs));
     }
 
    private final class BadEquals {
