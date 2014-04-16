@@ -2091,7 +2091,7 @@ public class Mockito extends Matchers {
      * 
      * @return verification mode
      */
-    public static VerificationWithTimeout timeout(int millis) {
+    public static VerificationWithTimeout timeout(long millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
     }
     

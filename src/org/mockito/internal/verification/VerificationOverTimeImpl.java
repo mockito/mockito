@@ -17,7 +17,7 @@ import org.mockito.verification.VerificationMode;
 public class VerificationOverTimeImpl implements VerificationMode {
 
     private final int pollingPeriodMillis;
-    private final int durationMillis;
+    private final long durationMillis;
     private final VerificationMode delegate;
     private final boolean returnOnSuccess;
     
@@ -32,7 +32,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        the delegate is satisfied and the full duration has passed (as in
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      */
-    public VerificationOverTimeImpl(int pollingPeriodMillis, int durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
+    public VerificationOverTimeImpl(int pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
         this.pollingPeriodMillis = pollingPeriodMillis;
         this.durationMillis = durationMillis;
         this.delegate = delegate;
@@ -105,7 +105,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
         return pollingPeriodMillis;
     }
     
-    public int getDuration() {
+    public long getDuration() {
         return durationMillis;
     }
     
