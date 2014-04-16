@@ -18,6 +18,6 @@ dependencies {
 
 test {
     useTestNG() {
-        suites file('/src/test/resources/mockito-testng.xml')
+        suites file('src/test/resources/mockito-testng.xml')
     }
 }
