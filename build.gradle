@@ -1,6 +1,9 @@
 import org.apache.xalan.xsltc.cmdline.Compile
 
-version = '1.9.8' //TODO duplicated with file
+Properties props = new Properties()
+props.load(new FileInputStream("${rootProject.projectDir}/version.properties"))
+
+version = props.version
 group = 'org.mockito'
 description = 'Core API and implementation.'
 
@@ -8,6 +11,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
+    apply plugin: 'maven'
 
     repositories {
         mavenCentral()
