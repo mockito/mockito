@@ -1,7 +1,7 @@
 -versionpolicy=[${version;==;${@}},${version;+;${@}})
 
 Bundle-Name= Mockito Mock Library for Java. Core bundle requires Hamcrest-core and Objenesis. 
-Bundle-SymbolicName= org.mockito.mockito-core
+Bundle-SymbolicName= org.mockito
 Bundle-Version= ${version}
 
 Export-Package= !org.mockito.asm.*, \
