@@ -72,46 +72,46 @@ public interface Stubber {
     <T> T when(T mock);
 
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Throwable)} style:
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Throwable, Throwable...)} style:
      * <pre class="code"><code class="java">
      *   doThrow(new RuntimeException("one")).
      *   doThrow(new RuntimeException("two"))
      *   .when(mock).someVoidMethod();
      * </code></pre>
-     * See javadoc for {@link Mockito#doThrow(Throwable)}
+     * See javadoc for {@link Mockito#doThrow(Throwable, Throwable...)}
      * 
-     * @param toBeThrown to be thrown when the stubbed method is called
+     * @param toBeThrown first to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
     Stubber doThrow(Throwable toBeThrown);
 
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class)} style:
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class, Class...)} style:
      * <pre class="code"><code class="java">
      *   doThrow(RuntimeException.class).
      *   doThrow(IllegalArgumentException.class)
      *   .when(mock).someVoidMethod();
      * </code></pre>
-     * See javadoc for {@link Mockito#doThrow(Class)}
+     * See javadoc for {@link Mockito#doThrow(Class, Class...)}
      *
-     * @param toBeThrown exception class to be thrown when the stubbed method is called
+     * @param toBeThrown exception class to first be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
     Stubber doThrow(Class<? extends Throwable> toBeThrown);
 
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer)} style:
+     * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer, Answer...)} style:
      * <pre class="code"><code class="java">
      *   doAnswer(answerOne).
      *   doAnswer(answerTwo)
      *   .when(mock).someVoidMethod();
      * </code></pre>
-     * See javadoc for {@link Mockito#doAnswer(Answer)}
+     * See javadoc for {@link Mockito#doAnswer(Answer, Answer...)}
      * 
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doAnswer(Answer answer);    
+    Stubber doAnswer(Answer answer);
     
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doNothing()} style:
@@ -127,9 +127,9 @@ public interface Stubber {
     Stubber doNothing();
     
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doReturn(Object)} style.
+     * Use it for stubbing consecutive calls in {@link Mockito#doReturn(Object, Object...)} style.
      * <p>
-     * See javadoc for {@link Mockito#doReturn(Object)}
+     * See javadoc for {@link Mockito#doReturn(Object, Object...)}
      * 
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
@@ -145,3 +145,4 @@ public interface Stubber {
      */
     Stubber doCallRealMethod();
 }
+

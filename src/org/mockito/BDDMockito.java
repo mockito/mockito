@@ -338,13 +338,21 @@ public class BDDMockito extends Mockito {
             return new BDDStubberImpl(mockitoStubber.doCallRealMethod());
         }
     }
-    
+
     /**
-     * see original {@link Mockito#doThrow(Throwable)}
+     * see original {@link Mockito#doThrow(Throwable, Throwable...)}
      * @since 1.8.0
      */
     public static BDDStubber willThrow(Throwable toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
+    }
+    
+    /**
+     * see original {@link Mockito#doThrow(Throwable, Throwable...)}
+     * @since 1.9.8
+     */
+    public static BDDStubber willThrow(Throwable toBeThrown, Throwable nextToBeThrown) {
+        return new BDDStubberImpl(Mockito.doThrow(toBeThrown, nextToBeThrown));
     }
 
     /**
@@ -354,29 +362,46 @@ public class BDDMockito extends Mockito {
     public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
     }
-    
+
+    /**
+     * see original {@link Mockito#doThrow(Throwable, Throwable...)}
+     * @since 1.9.8
+     */
+    public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable> nextToBeThrown) {
+        return new BDDStubberImpl(Mockito.doThrow(toBeThrown, nextToBeThrown));
+    }
+
     /**
      * see original {@link Mockito#doAnswer(Answer)}
      * @since 1.8.0
      */
     public static BDDStubber willAnswer(Answer answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
-    }  
-    
+    }
+
+
     /**
      * see original {@link Mockito#doNothing()}
      * @since 1.8.0
      */
     public static BDDStubber willDoNothing() {
         return new BDDStubberImpl(Mockito.doNothing());
-    }    
-    
+    }
+
     /**
      * see original {@link Mockito#doReturn(Object)}
      * @since 1.8.0
      */
     public static BDDStubber willReturn(Object toBeReturned) {
         return new BDDStubberImpl(Mockito.doReturn(toBeReturned));
+    }
+
+    /**
+     * see original {@link Mockito#doReturn(Object, Object...)}
+     * @since 1.9.8
+     */
+    public static BDDStubber willReturn(Object toBeReturned, Object nextToBeReturned) {
+        return new BDDStubberImpl(Mockito.doReturn(toBeReturned, nextToBeReturned));
     }
 
     /**

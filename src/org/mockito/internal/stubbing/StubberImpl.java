@@ -10,11 +10,33 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class StubberImpl implements Stubber {
+
+    private static final TransformToAnswerCommand<Object> transformObjectToAnswerCommand = new TransformToAnswerCommand<Object>() {
+        @Override
+        public Answer toAnswer(Object o) {
+            return new Returns(o);
+        }
+    };
+
+    private static final TransformToAnswerCommand<Throwable> transformThrowableToAnswerCommand = new TransformToAnswerCommand<Throwable>() {
+        @Override
+        public Answer toAnswer(Throwable t) {
+            return new ThrowsException(t);
+        }
+    };
+
+    private static final TransformToAnswerCommand<Class<? extends Throwable>> transformThrowableClassToAnswerCommand = new TransformToAnswerCommand<Class<? extends Throwable>>() {
+        @Override
+        public Answer toAnswer(Class<? extends Throwable> c) {
+            return new ThrowsExceptionClass(c);
+        }
+    };
 
     final List<Answer> answers = new LinkedList<Answer>();
     private final Reporter reporter = new Reporter();
@@ -35,18 +57,27 @@ public class StubberImpl implements Stubber {
     }
 
     public Stubber doReturn(Object toBeReturned) {
-        answers.add(new Returns(toBeReturned));
-        return this;
+        return handleDoMethods(transformObjectToAnswerCommand, toBeReturned);
     }
 
-    public Stubber doThrow(Throwable toBeThrown) {
-        answers.add(new ThrowsException(toBeThrown));
-        return this;
+    public Stubber doThrow(Throwable toBeThrown){
+        return handleDoMethods(transformThrowableToAnswerCommand, toBeThrown);
     }
 
     public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
-        answers.add(new ThrowsExceptionClass(toBeThrown));
-        return this;
+        return handleDoMethods(transformThrowableClassToAnswerCommand, toBeThrown);
+    }
+
+    public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
+        return handleDoMethods(transformObjectToAnswerCommand, toBeReturned, nextToBeReturned);
+    }
+
+    public Stubber doThrow(Throwable toBeThrown, Throwable... nextToBeThrown){
+        return handleDoMethods(transformThrowableToAnswerCommand, toBeThrown, nextToBeThrown);
+    }
+
+    public Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+        return handleDoMethods(transformThrowableClassToAnswerCommand, toBeThrown, nextToBeThrown);
     }
 
     public Stubber doNothing() {
@@ -59,8 +90,27 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
+    public Stubber doAnswer(Answer answer, Answer... nextAnswers) {
+        doAnswer(answer);
+        Collections.addAll(answers,nextAnswers);
+        return this;
+    }
+
     public Stubber doCallRealMethod() {
         answers.add(new CallsRealMethods());
         return this;
+    }
+
+    private <T> Stubber handleDoMethods(TransformToAnswerCommand<T> transformCommand, T firstElement, T... elements){
+        Answer firstAnswer =  transformCommand.toAnswer(firstElement);
+        Answer[] answers = new Answer[elements.length];
+        for (int index = 0; index < elements.length; ++index ){
+            answers[index] = transformCommand.toAnswer(elements[index]);
+        }
+        return doAnswer(firstAnswer, answers);
+    }
+
+    private interface TransformToAnswerCommand<T>{
+        Answer toAnswer(T t);
     }
 }
