@@ -39,6 +39,6 @@ public class ObjectMethodsGuru implements Serializable {
         return Comparable.class.isAssignableFrom(method.getDeclaringClass())
                 && method.getName().equals("compareTo")
                 && method.getParameterTypes().length == 1
-                && method.getParameterTypes()[0] == method.getDeclaringClass();
+                && (method.getParameterTypes()[0] == method.getDeclaringClass() || method.getParameterTypes()[0] ==  Object.class);
     }
 }
