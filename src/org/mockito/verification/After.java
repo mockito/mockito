@@ -16,11 +16,11 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl> impleme
      * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
      * See javadoc for {@link VerificationWithTimeout}
      */
-    public After(int delayMillis, VerificationMode verificationMode) {
+    public After(long delayMillis, VerificationMode verificationMode) {
         this(10, delayMillis, verificationMode);
     }
     
-    public After(int pollingPeriod, int delayMillis, VerificationMode verificationMode) {
+    public After(long pollingPeriod, long delayMillis, VerificationMode verificationMode) {
         super(new VerificationOverTimeImpl(pollingPeriod, delayMillis, verificationMode, false));
     }
     

@@ -20,14 +20,14 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
      * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
      * See javadoc for {@link VerificationWithTimeout}
      */
-    public Timeout(int millis, VerificationMode delegate) {
+    public Timeout(long millis, VerificationMode delegate) {
         this(10, millis, delegate);
     }
 
     /**
      * See the javadoc for {@link VerificationWithTimeout}
      */
-    Timeout(int pollingPeriodMillis, int millis, VerificationMode delegate) {
+    Timeout(long pollingPeriodMillis, long millis, VerificationMode delegate) {
         super(new VerificationOverTimeImpl(pollingPeriodMillis, millis, delegate, true));
     }
     
