@@ -23,6 +23,7 @@ public class Equality {
 
     static boolean areArraysEqual(Object o1, Object o2) {
         return areArrayLengthsEqual(o1, o2)
+                && o1.getClass().equals(o2.getClass())
                 && areArrayElementsEqual(o1, o2);
     }
 
