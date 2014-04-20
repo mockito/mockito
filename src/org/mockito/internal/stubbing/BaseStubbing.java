@@ -10,6 +10,7 @@ import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Times;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
     public OngoingStubbing<T> thenReturn(T value) {
@@ -17,7 +18,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
     }
 
     public OngoingStubbing<T> thenReturn(T value, T... values) {
-        OngoingStubbing<T> stubbing = thenReturn(value);            
+        OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
             return stubbing.thenReturn(null);
         }
@@ -38,13 +39,13 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
         OngoingStubbing<T> stubbing = null;
         for (Throwable t: throwables) {
             if (stubbing == null) {
-                stubbing = thenThrow(t);                    
+                stubbing = thenThrow(t);
             } else {
                 stubbing = stubbing.thenThrow(t);
             }
         }
         return stubbing;
-    }        
+    }
 
     private OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableClass) {
         return thenAnswer(new ThrowsExceptionClass(throwableClass));
@@ -75,5 +76,22 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
 
     public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
         return toAnswer(new ThrowsException(throwable));
+    }
+
+    public OngoingStubbing<T> thenReturn(T value, Times times) {
+        OngoingStubbing<T> stubbing = thenReturn(value);
+
+        if (times.getNumberOfInvocations() == 0) {
+            throw new IllegalArgumentException("Number of times must be greater than 0");
+        }
+
+        if (times.getNumberOfInvocations() <= 1) {
+            return stubbing;
+        }
+
+        for (int i = 1; i < times.getNumberOfInvocations(); i++) {
+            stubbing = stubbing.thenReturn(value);
+        }
+        return stubbing;
     }
 }

@@ -66,6 +66,22 @@ public interface OngoingStubbing<T> extends IOngoingStubbing {
     OngoingStubbing<T> thenReturn(T value, T... values);
 
     /**
+     * Sets values to be returned a specified number of times when the method is called. E.g:
+     * <pre class="code"><code class="java">
+     * when(mock.someMethod()).thenReturn(1, times(2));
+     * </code></pre>
+     *
+     * The last parameter in the method call (in example: times(2)) determines the number of times the first parameter is returned.
+     * <p>
+     *
+     * @param value value to return
+     * @param times number of times the first parameter should be returned
+     *
+     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     */
+    OngoingStubbing<T> thenReturn(T value, Times times);
+
+    /**
      * Sets Throwable objects to be thrown when the method is called. E.g:
      * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenThrow(new RuntimeException());
