@@ -4,22 +4,23 @@
  */
 package org.mockito;
 
-import java.lang.annotation.*;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Allows shorthand wrapping of field instances in an spy object.
- * 
+ *
  * <p>
  * Example:
- * 
+ *
  * <pre class="code"><code class="java">
  * public class Test{
  *    //Instance for spying is created by calling constructor explicitly:
  *    &#64;Spy Foo spyOnFoo = new Foo("argument");
- *    //Instance for spying is created by mockito via reflection (only default constructors supported): 
+ *    //Instance for spying is created by mockito via reflection (only default constructors supported):
  *    &#64;Spy Bar spyOnBar;
  *    &#64;Before
  *    public void init(){
@@ -30,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </code></pre>
  * <p>
  * Same as doing:
- * 
+ *
  * <pre class="code"><code class="java">
  * Foo spyOnFoo = Mockito.spy(new Foo("argument"));
  * Bar spyOnFoo = Mockito.spy(new Bar());
@@ -91,6 +92,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
  * {@link org.mockito.runners.MockitoJUnitRunner}.
  * </p>
+ *
+ * <p>Note that the spy won't have any annotations of the spied type, because CGLIB won't rewrite them.
+ * It may troublesome for code that rely on the spy to have these annotations.</p>
  *
  * @see Mockito#spy(Object)
  * @see Mock
