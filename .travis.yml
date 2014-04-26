@@ -11,19 +11,11 @@ jdk:
 env:
     - TERM=dumb
 
-before_install:
-# use Gradle 1.11
-    - wget http://services.gradle.org/distributions/gradle-1.11-bin.zip
-    - unzip gradle-1.11-bin.zip
-    - export GRADLE_HOME=$PWD/gradle-1.11
-    - export PATH=$GRADLE_HOME/bin:$PATH
-
 install:
     - true
 
 script: 
-    - gradle build
+    - ./gradlew build
 
 after_success:
-    - gradle cobertura
-    - gradle coveralls
+    - ./gradlew cobertura coveralls
