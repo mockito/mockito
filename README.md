@@ -2,7 +2,7 @@
   
 simplier & better mocking
 
-[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://coveralls.io/repos/mockito/mockito/badge.png)](https://coveralls.io/r/mockito/mockito)
+[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](http://img.shields.io/coveralls/mockito/mockito/master.svg)](https://coveralls.io/r/mockito/mockito)
 
 ## Status update
 18/03/2014 Mockito should work fine with JDK8 if you stay away from defender methods. Lambda usage may work just as good for `Answer`s. We're unsure about every JDK8 features at the moment, like serializing a mock that uses a lambda. Error report and pull request are welcome though ([contributing guide](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)).
