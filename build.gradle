@@ -64,8 +64,8 @@ dependencies {
 
     testUtil sourceSets.test.output
 
-//    compile 'org.objenesis:objenesis:2.1'
-//    compile 'org.hamcrest:hamcrest-core:1.1'
+    compile 'org.objenesis:objenesis:2.1'
+    compile 'org.hamcrest:hamcrest-core:1.1'
 
 }
 
@@ -113,10 +113,6 @@ task allJar(type: Jar) {
     baseName = 'mockito-all'
 
     with commonJarContent
-
-
-    from(zipTree("lib/run/objenesis-2.1.jar")) { exclude "META-INF/maven/**" }
-    from(zipTree("lib/run/com.springsource.org.hamcrest.core-1.1.0.jar")) { exclude "LICENSE.txt" }
 
     //classes
     from(sourceSets.main.output)
