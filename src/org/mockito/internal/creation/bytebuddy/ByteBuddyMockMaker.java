@@ -13,6 +13,7 @@ import net.bytebuddy.modifier.MemberVisibility;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.internal.creation.jmock.SearchingClassLoader;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -158,8 +159,14 @@ public class ByteBuddyMockMaker implements MockMaker {
                     .throwing(ObjectStreamException.class)
                     .intercept(MethodDelegation.to(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class)));
         }
+        Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
+        allMockedTypes[0] = mockType;
+        int index = 1;
+        for (Class<?> type : interfaces) {
+            allMockedTypes[index++] = type;
+        }
         return builder.make()
-                .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .load(SearchingClassLoader.combineLoadersOf(allMockedTypes), ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
     }
 
