@@ -65,7 +65,7 @@ dependencies {
     testUtil sourceSets.test.output
 
     compile 'org.objenesis:objenesis:2.1'
-    compile 'org.hamcrest:hamcrest-core:1.+'
+    compile 'org.hamcrest:hamcrest-core:1.1'
 
 }
 
