@@ -1,0 +1,168 @@
+package org.mockito.internal.creation.bytebuddy;
+
+import org.mockito.exceptions.Reporter;
+import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.exceptions.VerificationAwareInvocation;
+import org.mockito.internal.invocation.ArgumentsProcessor;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.reporting.PrintSettings;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.StubInfo;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
+public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
+
+    public static interface SuperMethod {
+
+        static enum IsIllegal implements SuperMethod {
+
+            INSTANCE;
+
+            @Override
+            public boolean isInvokable() {
+                return false;
+            }
+
+            @Override
+            public Object invoke() {
+                throw new IllegalStateException();
+            }
+        }
+
+        static class FromCallable implements SuperMethod {
+
+            private final Callable<?> callable;
+
+            public FromCallable(Callable<?> callable) {
+                this.callable = callable;
+            }
+
+            @Override
+            public boolean isInvokable() {
+                return true;
+            }
+
+            @Override
+            public Object invoke() throws Exception {
+                return callable.call();
+            }
+        }
+
+        boolean isInvokable();
+
+        Object invoke() throws Exception;
+    }
+
+    private final Object mock;
+    private final MockitoMethod mockitoMethod;
+    private final Object[] arguments, rawArguments;
+    private final SuperMethod superMethod;
+
+    private final int sequenceNumber;
+
+    private final Location location;
+
+    private boolean verified;
+    private boolean isIgnoredForVerification;
+    private StubInfo stubInfo;
+
+    public InterceptedInvocation(Object mock,
+                                 MockitoMethod mockitoMethod,
+                                 Object[] arguments,
+                                 SuperMethod superMethod,
+                                 int sequenceNumber) {
+        this.mock = mock;
+        this.mockitoMethod = mockitoMethod;
+        this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), arguments);
+        this.rawArguments = arguments;
+        this.superMethod = superMethod;
+        this.sequenceNumber = sequenceNumber;
+        location = new LocationImpl();
+    }
+
+    @Override
+    public boolean isVerified() {
+        return verified;
+    }
+
+    @Override
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
+    public Object[] getRawArguments() {
+        return rawArguments;
+    }
+
+    @Override
+    public void markVerified() {
+        verified = true;
+    }
+
+    @Override
+    public StubInfo stubInfo() {
+        return stubInfo;
+    }
+
+    @Override
+    public void markStubbed(StubInfo stubInfo) {
+        this.stubInfo = stubInfo;
+    }
+
+    @Override
+    public boolean isIgnoredForVerification() {
+        return isIgnoredForVerification;
+    }
+
+    @Override
+    public void ignoreForVerification() {
+        isIgnoredForVerification = true;
+    }
+
+    @Override
+    public Object getMock() {
+        return mock;
+    }
+
+    @Override
+    public Method getMethod() {
+        return mockitoMethod.getJavaMethod();
+    }
+
+    @Override
+    public Object[] getArguments() {
+        return arguments;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getArgumentAt(int index, Class<T> clazz) {
+        return (T) arguments[index];
+    }
+
+    @Override
+    public Object callRealMethod() throws Throwable {
+        if (!superMethod.isInvokable()) {
+            new Reporter().cannotCallAbstractRealMethod();
+        }
+        return superMethod.invoke();
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    public String toString() {
+        return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
+    }
+}
