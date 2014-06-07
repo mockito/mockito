@@ -4,6 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.dynamic.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.instrumentation.FieldAccessor;
 import net.bytebuddy.instrumentation.MethodDelegation;
 import net.bytebuddy.instrumentation.attribute.MethodAttributeAppender;
@@ -143,10 +144,12 @@ public class ByteBuddyMockMaker implements MockMaker {
     private <T> Class<? extends T> makeMock(Class<T> mockType,
                                             Set<Class> interfaces,
                                             boolean acrossClassLoaderSerialization) {
-        DynamicType.Builder<T> builder = byteBuddy.subclass(mockType)
+        DynamicType.Builder<T> builder = byteBuddy.subclass(mockType, ConstructorStrategy.Default.NO_CONSTRUCTORS)
                 .name(nameFor(mockType))
                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
-                .method(any()).intercept(MethodDelegation.toInstanceField(MethodInterceptor.class, "mockitoInterceptor"))
+                .method(any()).intercept(MethodDelegation
+                        .toInstanceField(MethodInterceptor.class, "mockitoInterceptor")
+                        .filter(isDeclaredBy(MethodInterceptor.class)))
                 .implement(MethodInterceptor.Access.class).intercept(FieldAccessor.ofBeanProperty())
                 .method(isHashCode()).intercept(MethodDelegation.to(MethodInterceptor.ForHashCode.class))
                 .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class));
