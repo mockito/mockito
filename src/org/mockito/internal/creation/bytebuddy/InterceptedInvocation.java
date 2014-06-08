@@ -97,7 +97,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public boolean isVerified() {
-        return verified;
+        return verified || isIgnoredForVerification;
     }
 
     @Override
