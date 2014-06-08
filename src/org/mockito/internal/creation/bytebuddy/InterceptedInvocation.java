@@ -3,6 +3,7 @@ package org.mockito.internal.creation.bytebuddy;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
+import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.reporting.PrintSettings;
@@ -52,14 +53,19 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             }
 
             @Override
-            public Object invoke() throws Exception {
-                return callable.call();
+            public Object invoke() throws Throwable {
+                try {
+                    return callable.call();
+                } catch (Throwable t) {
+                    new ConditionalStackTraceFilter().filter(t);
+                    throw t;
+                }
             }
         }
 
         boolean isInvokable();
 
-        Object invoke() throws Exception;
+        Object invoke() throws Throwable;
     }
 
     private final Object mock;
