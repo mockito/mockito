@@ -10,12 +10,13 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
-    public static interface SuperMethod {
+    public static interface SuperMethod extends Serializable {
 
         static enum IsIllegal implements SuperMethod {
 

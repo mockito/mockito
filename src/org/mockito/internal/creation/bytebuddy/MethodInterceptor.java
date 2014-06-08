@@ -34,7 +34,7 @@ public class MethodInterceptor implements Serializable {
     public Object interceptSuperCallable(@This Object mock,
                                          @Origin Method method,
                                          @AllArguments Object[] arguments,
-                                         @SuperCall Callable<?> superCall) throws Throwable {
+                                         @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
     }
 
@@ -43,7 +43,7 @@ public class MethodInterceptor implements Serializable {
     public Object interceptDefaultCallable(@This Object mock,
                                            @Origin Method method,
                                            @AllArguments Object[] arguments,
-                                           @DefaultCall Callable<?> superCall) throws Throwable {
+                                           @DefaultCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
     }
 

@@ -157,7 +157,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         if (acrossClassLoaderSerialization) {
             builder = builder.defineMethod("writeReplace", Object.class, Collections.<Class<?>>emptyList(), MemberVisibility.PRIVATE)
                     .throwing(ObjectStreamException.class)
-                    .intercept(MethodDelegation.to(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class)));
+                    .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
         }
         Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
         allMockedTypes[0] = mockType;
@@ -172,7 +172,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     private String nameFor(Class<?> type) {
         String typeName = type.getName();
-        if (typeName.startsWith("java.") || type.getPackage().isSealed()) {
+        if (typeName.startsWith("java.") || (type.getPackage() != null && type.getPackage().isSealed())) {
             typeName = "codegen." + typeName;
         }
         return String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
