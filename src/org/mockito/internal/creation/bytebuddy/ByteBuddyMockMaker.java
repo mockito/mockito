@@ -9,7 +9,7 @@ import net.bytebuddy.instrumentation.FieldAccessor;
 import net.bytebuddy.instrumentation.MethodDelegation;
 import net.bytebuddy.instrumentation.attribute.MethodAttributeAppender;
 import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
-import net.bytebuddy.modifier.MemberVisibility;
+import net.bytebuddy.modifier.Visibility;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.GlobalConfiguration;
@@ -24,6 +24,7 @@ import org.objenesis.ObjenesisStd;
 import java.io.ObjectStreamException;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.*;
 
@@ -58,13 +59,13 @@ public class ByteBuddyMockMaker implements MockMaker {
         }
     }
 
-    private static class MockKey {
+    private static class MockKey<T> {
 
-        private final Class<?> mockedType;
+        private final Class<T> mockedType;
         private final Set<Class> types;
         private final boolean acrossClassLoaderSerialization;
 
-        private MockKey(Class<?> mockedType, Set<Class> interfaces, boolean acrossClassLoaderSerialization) {
+        private MockKey(Class<T> mockedType, Set<Class> interfaces, boolean acrossClassLoaderSerialization) {
             this.mockedType = mockedType;
             this.types = new HashSet<Class>(interfaces);
             types.add(mockedType);
@@ -76,7 +77,7 @@ public class ByteBuddyMockMaker implements MockMaker {
             if (this == other) return true;
             if (other == null || getClass() != other.getClass()) return false;
 
-            MockKey mockKey = (MockKey) other;
+            MockKey mockKey = (MockKey<?>) other;
 
             if (acrossClassLoaderSerialization != mockKey.acrossClassLoaderSerialization) return false;
             if (!mockedType.equals(mockKey.mockedType)) return false;
@@ -98,7 +99,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     private final ByteBuddy byteBuddy;
 
-    private final Map<MockKey, Class<?>> previousClasses;
+    private final Map<MockKey<?>, Class<?>> previousClasses;
 
     private final Random random;
 
@@ -107,7 +108,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V6)
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
-        previousClasses = new HashMap<MockKey, Class<?>>();
+        previousClasses = new ConcurrentHashMap<MockKey<?>, Class<?>>();
         random = new Random();
     }
 
@@ -133,18 +134,28 @@ public class ByteBuddyMockMaker implements MockMaker {
     private <T> Class<? extends T> getOrMakeMock(Class<T> mockedType,
                                                  Set<Class> interfaces,
                                                  boolean acrossClassLoaderSerialization) {
-        MockKey mockKey = new MockKey(mockedType, interfaces, acrossClassLoaderSerialization);
-        @SuppressWarnings("unchecked")
-        Class<? extends T> mockType = (Class<? extends T>) previousClasses.get(mockKey);
+        MockKey<T> mockKey = new MockKey<T>(mockedType, interfaces, acrossClassLoaderSerialization);
+        Class<? extends T> mockType = lookup(mockKey);
         if (mockType == null) {
-            try {
-                mockType = makeMock(mockedType, interfaces, acrossClassLoaderSerialization);
-            } catch (Exception e) {
-                prettify(mockedType, e);
+            synchronized (mockedType) {
+                mockType = lookup(mockKey);
+                if (mockType != null) {
+                    return mockType;
+                }
+                try {
+                    mockType = makeMock(mockedType, interfaces, acrossClassLoaderSerialization);
+                } catch (Exception e) {
+                    prettify(mockedType, e);
+                }
+                previousClasses.put(mockKey, mockType);
             }
-            previousClasses.put(mockKey, mockType);
         }
         return mockType;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Class<? extends T> lookup(MockKey<T> mockKey) {
+        return (Class<? extends T>) previousClasses.get(mockKey);
     }
 
     private static void prettify(Class<?> mockedType, Exception e) {
@@ -175,7 +186,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                 .method(isHashCode()).intercept(MethodDelegation.to(MethodInterceptor.ForHashCode.class))
                 .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class));
         if (acrossClassLoaderSerialization) {
-            builder = builder.defineMethod("writeReplace", Object.class, Collections.<Class<?>>emptyList(), MemberVisibility.PRIVATE)
+            builder = builder.defineMethod("writeReplace", Object.class, Collections.<Class<?>>emptyList(), Visibility.PRIVATE)
                     .throwing(ObjectStreamException.class)
                     .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
         }
