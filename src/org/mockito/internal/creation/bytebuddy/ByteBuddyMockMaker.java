@@ -22,6 +22,7 @@ import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 import java.io.ObjectStreamException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.*;
@@ -59,14 +60,14 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     private static class MockKey {
 
-        private final Class<?> mockType;
+        private final Class<?> mockedType;
         private final Set<Class> types;
         private final boolean acrossClassLoaderSerialization;
 
-        private MockKey(Class<?> mockType, Set<Class> interfaces, boolean acrossClassLoaderSerialization) {
-            this.mockType = mockType;
+        private MockKey(Class<?> mockedType, Set<Class> interfaces, boolean acrossClassLoaderSerialization) {
+            this.mockedType = mockedType;
             this.types = new HashSet<Class>(interfaces);
-            types.add(mockType);
+            types.add(mockedType);
             this.acrossClassLoaderSerialization = acrossClassLoaderSerialization;
         }
 
@@ -78,7 +79,7 @@ public class ByteBuddyMockMaker implements MockMaker {
             MockKey mockKey = (MockKey) other;
 
             if (acrossClassLoaderSerialization != mockKey.acrossClassLoaderSerialization) return false;
-            if (!mockType.equals(mockKey.mockType)) return false;
+            if (!mockedType.equals(mockKey.mockedType)) return false;
             if (!types.equals(mockKey.types)) return false;
 
             return true;
@@ -86,7 +87,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
         @Override
         public int hashCode() {
-            int result = mockType.hashCode();
+            int result = mockedType.hashCode();
             result = 31 * result + types.hashCode();
             result = 31 * result + (acrossClassLoaderSerialization ? 1 : 0);
             return result;
@@ -129,24 +130,43 @@ public class ByteBuddyMockMaker implements MockMaker {
         return mock;
     }
 
-    private <T> Class<? extends T> getOrMakeMock(Class<T> mockType,
+    private <T> Class<? extends T> getOrMakeMock(Class<T> mockedType,
                                                  Set<Class> interfaces,
                                                  boolean acrossClassLoaderSerialization) {
-        MockKey mockKey = new MockKey(mockType, interfaces, acrossClassLoaderSerialization);
+        MockKey mockKey = new MockKey(mockedType, interfaces, acrossClassLoaderSerialization);
         @SuppressWarnings("unchecked")
-        Class<? extends T> mockedType = (Class<? extends T>) previousClasses.get(mockKey);
-        if (mockedType == null) {
-            mockedType = makeMock(mockType, interfaces, acrossClassLoaderSerialization);
-            previousClasses.put(mockKey, mockedType);
+        Class<? extends T> mockType = (Class<? extends T>) previousClasses.get(mockKey);
+        if (mockType == null) {
+            try {
+                mockType = makeMock(mockedType, interfaces, acrossClassLoaderSerialization);
+            } catch (Exception e) {
+                prettify(mockedType, e);
+            }
+            previousClasses.put(mockKey, mockType);
         }
-        return mockedType;
+        return mockType;
     }
 
-    private <T> Class<? extends T> makeMock(Class<T> mockType,
+    private static void prettify(Class<?> mockedType, Exception e) {
+        if (Modifier.isPrivate(mockedType.getModifiers())) {
+            throw new MockitoException("\n"
+                    + "Mockito cannot mock this class: " + mockedType
+                    + ".\n"
+                    + "Most likely it is a private class that is not visible by Mockito");
+        }
+        throw new MockitoException("\n"
+                + "Mockito cannot mock this class: " + mockedType
+                + "\n"
+                + "Mockito can only mock visible & non-final classes."
+                + "\n"
+                + "If you're not sure why you're getting this error, please report to the mailing list.", e);
+    }
+
+    private <T> Class<? extends T> makeMock(Class<T> mockedType,
                                             Set<Class> interfaces,
                                             boolean acrossClassLoaderSerialization) {
-        DynamicType.Builder<T> builder = byteBuddy.subclass(mockType, ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                .name(nameFor(mockType))
+        DynamicType.Builder<T> builder = byteBuddy.subclass(mockedType, ConstructorStrategy.Default.NO_CONSTRUCTORS)
+                .name(nameFor(mockedType))
                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
                 .method(any()).intercept(MethodDelegation
                         .toInstanceField(MethodInterceptor.class, "mockitoInterceptor")
@@ -160,7 +180,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                     .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
         }
         Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
-        allMockedTypes[0] = mockType;
+        allMockedTypes[0] = mockedType;
         int index = 1;
         for (Class<?> type : interfaces) {
             allMockedTypes[index++] = type;
