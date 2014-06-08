@@ -12,6 +12,7 @@ import org.mockito.invocation.StubInfo;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
@@ -161,6 +162,21 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     @Override
     public int hashCode() {
         return 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !o.getClass().equals(this.getClass())) {
+            return false;
+        }
+        InterceptedInvocation other = (InterceptedInvocation) o;
+        return this.mock.equals(other.mock)
+                && this.mockitoMethod.equals(other.mockitoMethod)
+                && this.equalArguments(other.arguments);
+    }
+
+    private boolean equalArguments(Object[] arguments) {
+        return Arrays.equals(arguments, this.arguments);
     }
 
     public String toString() {
