@@ -17,6 +17,8 @@ import java.util.concurrent.Callable;
 
 public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
+    private static final long serialVersionUID = 475027563923510472L;
+
     public static interface SuperMethod extends Serializable {
 
         static enum IsIllegal implements SuperMethod {
@@ -35,6 +37,8 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         }
 
         static class FromCallable implements SuperMethod {
+
+            private static final long serialVersionUID = 47957363950483625L;
 
             private final Callable<?> callable;
 

@@ -17,6 +17,8 @@ import java.util.concurrent.Callable;
 
 public class MethodInterceptor implements Serializable {
 
+    private static final long serialVersionUID = 7152947254057253027L;
+
     private final InternalMockHandler handler;
     private final MockCreationSettings mockCreationSettings;
 
@@ -97,9 +99,8 @@ public class MethodInterceptor implements Serializable {
 
     public static class ForWriteReplace {
 
-        public static Object doWriteReplace(@This @RuntimeType Access thiz) throws ObjectStreamException {
-            AcrossJVMSerializationFeature feature = thiz.getMockitoInterceptor().getAcrossJVMSerializationFeature();
-            return feature.writeReplace(thiz);
+        public static Object doWriteReplace(@This Access thiz) throws ObjectStreamException {
+            return thiz.getMockitoInterceptor().getAcrossJVMSerializationFeature().writeReplace(thiz);
         }
     }
 
