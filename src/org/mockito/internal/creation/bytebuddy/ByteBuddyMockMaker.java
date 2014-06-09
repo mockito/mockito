@@ -190,7 +190,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                 .implement(MethodInterceptor.Access.class).intercept(FieldAccessor.ofBeanProperty())
                 .method(isHashCode()).intercept(MethodDelegation.to(MethodInterceptor.ForHashCode.class))
                 .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class))
-                .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL);
+                .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
         if (acrossClassLoaderSerialization) {
             builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)
                     .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
