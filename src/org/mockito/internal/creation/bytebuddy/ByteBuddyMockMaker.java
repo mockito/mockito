@@ -9,10 +9,13 @@ import net.bytebuddy.instrumentation.FieldAccessor;
 import net.bytebuddy.instrumentation.MethodDelegation;
 import net.bytebuddy.instrumentation.attribute.MethodAttributeAppender;
 import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
+import net.bytebuddy.modifier.FieldManifestation;
+import net.bytebuddy.modifier.Ownership;
 import net.bytebuddy.modifier.Visibility;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.internal.creation.AcrossJVMSerializationFeature;
 import org.mockito.internal.creation.jmock.SearchingClassLoader;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -21,9 +24,11 @@ import org.mockito.plugins.MockMaker;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-import java.io.ObjectStreamException;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.*;
@@ -99,7 +104,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     private final ByteBuddy byteBuddy;
 
-    private final Map<MockKey<?>, Class<?>> previousClasses;
+    private static final Map<MockKey<?>, Class<?>> PREVIOUS_CLASSES = new ConcurrentHashMap<MockKey<?>, Class<?>>();
 
     private final Random random;
 
@@ -109,7 +114,6 @@ public class ByteBuddyMockMaker implements MockMaker {
                 .withIgnoredMethods(isBridge())
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
-        previousClasses = new ConcurrentHashMap<MockKey<?>, Class<?>>();
         random = new Random();
     }
 
@@ -132,9 +136,9 @@ public class ByteBuddyMockMaker implements MockMaker {
         return mock;
     }
 
-    private <T> Class<? extends T> getOrMakeMock(Class<T> mockedType,
-                                                 Set<Class> interfaces,
-                                                 boolean acrossClassLoaderSerialization) {
+    public <T> Class<? extends T> getOrMakeMock(Class<T> mockedType,
+                                                Set<Class> interfaces,
+                                                boolean acrossClassLoaderSerialization) {
         MockKey<T> mockKey = new MockKey<T>(mockedType, interfaces, acrossClassLoaderSerialization);
         Class<? extends T> mockType = lookup(mockKey);
         if (mockType == null) {
@@ -148,7 +152,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                 } catch (Exception e) {
                     prettify(mockedType, e);
                 }
-                previousClasses.put(mockKey, mockType);
+                PREVIOUS_CLASSES.put(mockKey, mockType);
             }
         }
         return mockType;
@@ -156,7 +160,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     @SuppressWarnings("unchecked")
     private <T> Class<? extends T> lookup(MockKey<T> mockKey) {
-        return (Class<? extends T>) previousClasses.get(mockKey);
+        return (Class<? extends T>) PREVIOUS_CLASSES.get(mockKey);
     }
 
     private static void prettify(Class<?> mockedType, Exception e) {
@@ -185,10 +189,10 @@ public class ByteBuddyMockMaker implements MockMaker {
                         .filter(isDeclaredBy(MethodInterceptor.class)))
                 .implement(MethodInterceptor.Access.class).intercept(FieldAccessor.ofBeanProperty())
                 .method(isHashCode()).intercept(MethodDelegation.to(MethodInterceptor.ForHashCode.class))
-                .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class));
+                .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class))
+                .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL);
         if (acrossClassLoaderSerialization) {
-            builder = builder.defineMethod("writeReplace", Object.class, Collections.<Class<?>>emptyList(), Visibility.PRIVATE)
-                    .throwing(ObjectStreamException.class)
+            builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)
                     .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
         }
         Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
