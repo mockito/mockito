@@ -111,7 +111,7 @@ public class ByteBuddyMockMaker implements MockMaker {
     public ByteBuddyMockMaker() {
         silentConstructor = makeSilentConstructor();
         byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V6)
-                .withIgnoredMethods(isBridge())
+//                .withIgnoredMethods(isBridge())
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
         random = new Random();

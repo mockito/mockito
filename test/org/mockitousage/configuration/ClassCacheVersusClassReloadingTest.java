@@ -101,7 +101,7 @@ public class ClassCacheVersusClassReloadingTest {
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
             public boolean acceptReloadOf(String qualifiedName) {
-                return (!qualifiedName.contains("org.mockito.cglib") && qualifiedName.contains("org.mockito"));
+                return (!qualifiedName.contains("net.bytebuddy") && qualifiedName.contains("org.mockito"));
             }
         };
     }

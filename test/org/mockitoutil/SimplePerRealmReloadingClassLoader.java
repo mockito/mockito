@@ -31,7 +31,7 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
         return new URL[]{
                 obtainClassPath(),
                 obtainClassPath("org.mockito.Mockito"),
-                obtainClassPath("org.mockito.cglib.proxy.Enhancer")
+                obtainClassPath("net.bytebuddy.ByteBuddy")
         };
     }
 
