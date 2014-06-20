@@ -34,7 +34,7 @@ public class MethodInterceptor implements Serializable {
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 3)
     public Object interceptSuperCallable(@This Object mock,
-                                         @Origin Method method,
+                                         @Origin(cacheMethod = true) Method method,
                                          @AllArguments Object[] arguments,
                                          @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
@@ -43,7 +43,7 @@ public class MethodInterceptor implements Serializable {
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 2)
     public Object interceptDefaultCallable(@This Object mock,
-                                           @Origin Method method,
+                                           @Origin(cacheMethod = true) Method method,
                                            @AllArguments Object[] arguments,
                                            @DefaultCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
@@ -51,7 +51,7 @@ public class MethodInterceptor implements Serializable {
 
     @RuntimeType
     public Object interceptAbstract(@This Object mock,
-                                    @Origin Method method,
+                                    @Origin(cacheMethod = true) Method method,
                                     @AllArguments Object[] arguments) throws Throwable {
         return doIntercept(mock, method, arguments, InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE);
     }

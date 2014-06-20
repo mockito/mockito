@@ -60,7 +60,7 @@ tasks.withType(JavaCompile) {
 
 //TODO we should remove all dependencies to checked-in jars
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:0.2.0'
+    compile 'net.bytebuddy:byte-buddy:0.2.1'
 
     provided "junit:junit:4.10"
     compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
