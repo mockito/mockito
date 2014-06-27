@@ -77,7 +77,7 @@ System.out.println(mockedList.get(999));
 * Don't mock everything
 * Show some love with your tests
 
-Click here for more documentation and examples. Remember all documentation lives in javadocs so you don’t need to visit that page too often. You can grab the RefCard? here.
+Click [here](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html) for more documentation and examples. Remember all documentation lives in javadocs so you don’t need to visit that page too often. You can grab the RefCard [here](http://refcardz.dzone.com/refcardz/mockito).
 
 If you have any suggestions, find documentation unclear or you found a bug, write to our [mailing list](http://groups.google.com/group/mockito). You can report bugs [here](http://code.google.com/p/mockito/issues/list).
 
