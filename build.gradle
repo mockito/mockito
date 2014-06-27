@@ -63,6 +63,10 @@ dependencies {
     testRuntime fileTree("lib/compile")
 
     testUtil sourceSets.test.output
+
+    compile 'org.objenesis:objenesis:2.1'
+    compile 'org.hamcrest:hamcrest-core:1.1'
+
 }
 
 // Configure VCS in generated IPR file
@@ -91,6 +95,7 @@ def commonJarContent = copySpec {
 
     //mockito license
     from(".") { include 'LICENSE', 'NOTICE' }
+
     //repackaged license
     from("lib/repackaged") { exclude '**/*.jar' }
     //repackaged classes
@@ -111,10 +116,6 @@ task allJar(type: Jar) {
 
     //classes
     from(sourceSets.main.output)
-
-    //3rd party library classes
-    from(zipTree("lib/run/objenesis-2.1.jar")) { exclude "META-INF/maven/**" }
-    from(zipTree("lib/run/com.springsource.org.hamcrest.core-1.1.0.jar")) { exclude "LICENSE.txt" }
 
     //3rd party license files
     from("lib/run") { exclude '**/*.jar' }
