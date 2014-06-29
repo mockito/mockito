@@ -127,6 +127,6 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
-        verifyNoMoreInteractions(null);
+        verifyNoMoreInteractions((Object[])null);
     }
 }
