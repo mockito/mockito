@@ -49,7 +49,6 @@ public class DefaultMockingDetails implements MockingDetails {
      * 
      * @return Real or "original" class of the object
      */
-    @Override
     public Class<?> getRealClass() {
         return new MockUtil().getMockHandler(toInspect).getMockSettings().getTypeToMock();
     }
