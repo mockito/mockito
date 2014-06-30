@@ -41,4 +41,13 @@ public interface MockingDetails {
      * @since 1.9.x
      */
     Collection<Invocation> getInvocations();
+    
+    /**
+     * Returns the "real" or "original" class of the object, or the type originally passed to
+     * the "mock()" or "spy()" function, or referenced by an annotation.  This works even if
+     * the object is not a mock or a spy.
+     * 
+     * @return Real or "original" class of the object
+     */
+    Class<?>    getRealClass();
 }
