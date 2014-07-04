@@ -984,6 +984,37 @@ public class Mockito extends Matchers {
      * </code></pre>
      */
     public static final Answer<Object> RETURNS_SMART_NULLS = Answers.RETURNS_SMART_NULLS.get();
+
+    /**
+     * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}.
+     * <p>
+     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * <p>
+     * This implementation can be helpful when working with legacy code.
+     * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
+     * This implementation of Answer <b>returns SmartNull instead of null</b>.
+     * <code>SmartNull</code> gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
+     * <p>
+     * Unlike <code>ReturnsSmartNulls</code>, <code>ThrowsSmartNulls</code> does not try to return ordinary return values.
+     * <p>
+     * If the return type is a primitive or a final then a smart null exception is thrown.
+     * <p>
+     * Example:
+     * <pre class="code"><code class="java">
+     *   Foo mock = (Foo.class, RETURNS_SMART_NULLS);
+     *   
+     *   //calling unstubbed method here:
+     *   Stuff stuff = mock.getStuff();
+     *   
+     *   //using object returned by unstubbed call:
+     *   stuff.doSomething();
+     *   
+     *   //Above doesn't yield NullPointerException this time!
+     *   //Instead, SmartNullPointerException is thrown. 
+     *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.  
+     * </code></pre>
+     */
+    public static final Answer<Object> THROWS_SMART_NULLS = Answers.THROWS_SMART_NULLS.get();
     
     /**
      * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}

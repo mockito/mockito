@@ -9,6 +9,7 @@ import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
+import org.mockito.internal.stubbing.defaultanswers.ThrowsSmartNulls;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -41,6 +42,15 @@ public enum Answers {
      * @see org.mockito.Mockito#RETURNS_SMART_NULLS
      */
     RETURNS_SMART_NULLS(new ReturnsSmartNulls()),
+
+    /**
+     * An answer that throws smart-nulls.
+     *
+     * <p>Please see the {@link org.mockito.Mockito#THROWS_SMART_NULLS} documentation for more details.</p>
+     *
+     * @see org.mockito.Mockito#THROWS_SMART_NULLS
+     */
+    THROWS_SMART_NULLS(new ThrowsSmartNulls()),
 
     /**
      * An answer that returns <strong>mocks</strong> (not stubs).
