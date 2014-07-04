@@ -99,7 +99,8 @@ public class AdditionalAnswers {
      * doAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
      *
      * @param <T> Return type of the invocation.
-     * @return Answer that will return the second argument of the invocation.
+     * @param position index of the argument from the list of arguments.
+     * @return Answer that will return the argument from the given position in the argument's list
      *
      * @since 1.9.5
      */
