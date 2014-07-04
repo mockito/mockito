@@ -102,10 +102,11 @@ public class MockSettingsImplTest extends TestBase {
     	//then
     	Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
-    
+
+    @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
-    	mockSettingsImpl.invocationListeners(null);
+    	mockSettingsImpl.invocationListeners((InvocationListener[])null);
     }
 
     @Test

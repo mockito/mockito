@@ -35,7 +35,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     @SuppressWarnings("all")
     @Test
     public void shouldReturnConsecutiveValuesForTwoNulls() throws Exception {
-        when(mock.simpleMethod()).thenReturn(null, null);
+        when(mock.simpleMethod()).thenReturn(null, (String[])null);
         
         assertNull(mock.simpleMethod());        
         assertNull(mock.simpleMethod());        
