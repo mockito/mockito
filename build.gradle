@@ -32,6 +32,7 @@ buildscript {
 }
 
 sourceCompatibility = 1.5
+targetCompatibility = 1.5
 
 configurations {
     provided
