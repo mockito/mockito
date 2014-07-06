@@ -9,7 +9,10 @@ jdk:
     - oraclejdk7
 
 env:
-    - TERM=dumb
+  matrix:
+  - TERM=dumb
+  global:
+    secure: ZjU6SpkLzTAJr9qmxKDSI0uA8eJ/r5n58/equD6ifDlCBUasxPxOwaIARuNjhH45UCFOQDO9HMmvD7IWufyYl0OpACMM6MZ/0JX5Qsd+vhmBGirl6H3rRbVpvyoSI1J2xqJXy9/yTU54IYMDv3R7suinvmKXYHCqJ3h7ke+m4Ik=
 
 install:
     - true
