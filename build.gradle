@@ -1,5 +1,3 @@
-import org.apache.xalan.xsltc.cmdline.Compile
-
 Properties props = new Properties()
 props.load(new FileInputStream("${rootProject.projectDir}/version.properties"))
 
