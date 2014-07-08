@@ -15,6 +15,8 @@ after_success:
 - ./gradlew bintrayPublish
 - git checkout master
 - ./gradlew incrementVersion
+- git config user.email "szczepiq@gmail.com"
+- git config user.name "Szczepan Faber"
 - git commit -m "Increment version by Travis CI build $TRAVIS_BUILD_NUMBER" version.properties
 - git push https://szczepiq:$GH_TOKEN@github.com/mockito/mockito.git master
 - ./gradlew cobertura coveralls
