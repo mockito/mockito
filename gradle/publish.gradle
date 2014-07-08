@@ -1,6 +1,10 @@
 apply plugin: 'com.jfrog.bintray'
 
-tasks.incrementVersion.mustRunAfter "bintrayUpload"
+//if the build fails, we don't want to publish
+tasks.bintrayUpload.mustRunAfter "build"
+
+//if upload fails, don't increment version
+tasks.incrementVersion.mustRunAfter tasks.bintrayUpload
 
 bintray {
     user = 'szczepiq'
