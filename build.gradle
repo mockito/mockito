@@ -51,7 +51,7 @@ sourceSets {
 
 test.include "**/*Test.class"
 
-tasks.withType(Compile) {
+tasks.withType(JavaCompile) {
     options.warnings = false
 }
 
