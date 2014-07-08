@@ -1,5 +1,7 @@
 apply plugin: 'com.jfrog.bintray'
 
+tasks.incrementVersion.mustRunAfter "bintrayUpload"
+
 bintray {
     user = 'szczepiq'
     key = getBintrayKey()
