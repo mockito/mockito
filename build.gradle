@@ -1,33 +1,35 @@
-Properties props = new Properties()
-props.load(new FileInputStream("${rootProject.projectDir}/version.properties"))
-
-version = props.version
-group = 'org.mockito'
-description = 'Core API and implementation.'
-
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
-    apply plugin: 'maven'
-
-    repositories {
-        mavenCentral()
-    }
-}
-
-// EXPERIMENTAL : coverage
-// see https://github.com/kt3k/coveralls-gradle-plugin
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
         classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.1.6'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5' //publishing to bintray
+        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 }
+
+apply from: 'gradle/version.gradle'
+
+group = 'org.mockito'
+description = 'Core API and implementation.'
+
+//TODO don't use 'allprojects'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'maven-publish'
+apply from: 'gradle/publish.gradle'
 
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
@@ -64,6 +66,7 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
+//TODO push out
 // Configure VCS in generated IPR file
 idea.project.ipr {
     withXml { provider ->
@@ -74,7 +77,7 @@ idea.project.ipr {
 idea.module.scopes.PROVIDED.plus += configurations.provided
 eclipse.classpath.plusConfigurations += configurations.provided
 
-
+//TODO push out
 // EXPERIMENTAL : coverage
 // configure code coverage
 apply plugin: 'cobertura'
@@ -122,7 +125,7 @@ task allJar(type: Jar) {
 tasks.withType(Jar) { task ->
     doLast {
         project.exec {
-            commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName"
+            commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
         }
     }
 }
@@ -131,17 +134,18 @@ artifacts {
     archives allJar
 }
 
-/*
-repositories {
-    mavenCentral()
+publishing {
+    publications {
+        mockitoCore(MavenPublication) {
+            from components.java
+            artifactId 'mockito-core'
+        }
+        mockitoAll(MavenPublication) {
+            artifact allJar
+            artifactId 'mockito-all'
+        }
+    }
 }
-
-apply plugin: 'pmd'
-
-pmd {
-    ruleSetFiles = files('conf/pmd-rules.xml')
-}
-*/
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'

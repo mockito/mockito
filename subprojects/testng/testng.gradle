@@ -1,7 +1,8 @@
 description = "Mockito for TestNG"
+apply plugin: 'maven'
 
 Properties props = new Properties()
-props.load(new FileInputStream("${rootProject.projectDir}/version.properties"))
+props.load(new FileInputStream(rootProject.file("version.properties")))
 
 group = 'org.mockito'
 archivesBaseName = 'mockito-testng'

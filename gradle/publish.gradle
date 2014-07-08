@@ -1,0 +1,50 @@
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+    user = 'szczepiq'
+    key = getBintrayKey()
+
+    publications = ['mockitoCore', 'mockitoAll']
+
+    dryRun = false
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        //userOrg = 'org.mockito' // an optional organization name when the repo belongs to one of the user's orgs
+        name = 'mockito'
+        desc = 'Mockito library'
+        websiteUrl = 'http://mockito.org'
+        issueTrackerUrl = 'https://code.google.com/p/mockito/issues/list'
+        vcsUrl = 'https://github.com/mockito/mockito.git'
+        licenses = ['MIT']
+        labels = ['mocks', 'tdd', 'unit tests']
+        publicDownloadNumbers = true
+
+        // optional version attributes
+//        version {
+        //          name = '1.9.8-SNAPSHOT' // bintray logical version name
+//            desc = 'optional, version-specific description'
+        //        vcsTag = '1.9.8-SNAPSHOT'
+        //  }
+    }
+}
+
+//getting bintray key securely
+String getBintrayKey() {
+    if (project.hasProperty("bintrayApiKey")) {
+        return project.getProperty("bintrayApiKey")
+    }
+    //for travis
+    def env = System.env.MOCKITO_BINTRAY_API_KEY
+    if (env) {
+        return env
+    }
+    null
+}
+
+gradle.taskGraph.whenReady {
+    if (it.hasTask(':bintrayUpload') && !getBintrayKey()) {
+        throw new GradleException("'bintrayUpload' task requires bintray key configured. Please pass -PbintrayApiKey=secret property.")
+    }
+}
