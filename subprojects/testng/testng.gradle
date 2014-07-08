@@ -9,7 +9,7 @@ archivesBaseName = 'mockito-testng'
 version = props['mockito.testng.version']
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 jar {
