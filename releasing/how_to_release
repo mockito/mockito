@@ -1,4 +1,0 @@
-How to release version x.x
-
- * check out clean trunk into 'mockito-java' folder 
- * run 'python release.py' from releasing folder
