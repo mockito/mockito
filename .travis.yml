@@ -12,7 +12,7 @@ install:
 script:
 - ./gradlew build
 after_success:
-- ./gradlew bintrayPublish
+- ./gradlew bintrayUpload
 - git checkout master
 - ./gradlew incrementVersion
 - git config user.email "szczepiq@gmail.com"
