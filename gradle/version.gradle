@@ -13,9 +13,10 @@ task incrementVersion {
     doLast {
         try {
             List numbers = project.version.split('\\.')
-            int micro = numbers.pop() as Integer
+            //TODO remove -dev hack once we're happy with releases
+            int micro = (numbers.pop() - "-dev") as Integer
             numbers << micro + 1
-            def newVersion = numbers.join('.')
+            def newVersion = numbers.join('.') + "-dev"
             def updatedContent = versionFile.text.replaceAll("(?s)version=(.*?)\n", "version=$newVersion\n")
             versionFile.text = updatedContent
             logger.lifecycle("Current content of '{}':\n----------\n{}\n----------", versionFile.name, updatedContent)
