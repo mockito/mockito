@@ -1,6 +1,13 @@
 apply from: rootProject.file("gradle/publish.gradle")
 
 task (release) {
+    onlyIf {
+        def branch = System.env.TRAVIS_BRANCH
+        def pr = System.env.TRAVIS_PULL_REQUEST
+        def releasable = pr == 'false' && branch == 'master'
+        logger.lifecycle("Branch: {}, Pull request: {}, will release: {}", branch, pr, releasable)
+        releasable
+    }
     doLast {
         run "./gradlew", "bintrayUpload"
         run "git", "checkout", "master"
