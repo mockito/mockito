@@ -6,7 +6,7 @@ props.load(new FileInputStream(versionFile))
 
 project.version = props.version
 
-logger.lifecycle "Using version: '$project.version'"
+logger.lifecycle "Version: $project.version"
 
 task incrementVersion {
     description "Increments version in 'version.properties' file."
