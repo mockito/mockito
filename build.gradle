@@ -28,7 +28,7 @@ allprojects {
 }
 
 apply plugin: 'maven-publish'
-apply from: 'gradle/publish.gradle'
+apply from: 'gradle/release.gradle'
 
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
