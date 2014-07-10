@@ -120,9 +120,10 @@ task allJar(type: Jar) {
 }
 
 configure([jar, allJar]) { task ->
+    task.rootSpec.exclude "MANIFEST.MF" //hack to avoid problems with bnd
     doLast {
         project.exec {
-            commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
+            commandLine 'ant', '-v', '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
         }
     }
 }
