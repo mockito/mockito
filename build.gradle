@@ -55,7 +55,8 @@ tasks.withType(JavaCompile) {
 //we should consider getting rid of mockito-all completely (or moving out into a completely separate project.
 dependencies {
     provided "junit:junit:4.10"
-    compile fileTree('lib/run') { exclude '*.txt' }, fileTree('lib/repackaged') { exclude '*.txt'}
+    compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
+    compile fileTree('lib/repackaged') { exclude '*.txt'}
 
     testCompile fileTree("lib/test")
     testRuntime configurations.provided
