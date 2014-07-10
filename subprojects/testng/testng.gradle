@@ -9,10 +9,6 @@ group = 'org.mockito'
 archivesBaseName = 'mockito-testng'
 version = props['mockito.testng.version']
 
-repositories {
-    jcenter()
-}
-
 jar {
     manifest.attributes["Created-By"] =
             "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
