@@ -84,8 +84,6 @@ apply plugin: 'coveralls'
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 //cobertura.coverageIgnoreTrivial = true
 
-
-
 def commonJarContent = copySpec {
     //source
     from(sourceSets.main.allSource)
@@ -93,7 +91,7 @@ def commonJarContent = copySpec {
     //mockito license
     from(".") { include 'LICENSE', 'NOTICE' }
     //repackaged license
-    from("lib/repackaged") { exclude '**/*.jar' }
+    from("lib/repackaged") { include '*.txt' }
     //repackaged classes
     from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
         exclude 'META-INF/MANIFEST.MF'
