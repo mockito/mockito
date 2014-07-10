@@ -145,6 +145,7 @@ publishing {
         }
     }
 }
+apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'

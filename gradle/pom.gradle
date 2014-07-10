@@ -1,0 +1,29 @@
+publishing.publications.all {
+    //TODO github profile?
+    def devs = ["szczepiq:Szczepan Faber"]
+
+    pom.withXml {
+        def root = asNode()
+        root.appendNode('name', 'Mockito')
+        root.appendNode('packaging', 'jar')
+        root.appendNode('url', 'http://www.mockito.org')
+        root.appendNode('description', 'Mock objects library for java')
+
+        def license = root.appendNode('licenses').appendNode('license')
+        license.appendNode('name', 'The MIT License')
+        //TODO link to github
+        license.appendNode('url', 'http://code.google.com/p/mockito/wiki/License')
+        license.appendNode('distribution', 'repo')
+
+        root.appendNode('scm').appendNode('url', 'http://github.com/mockito/mockito')
+
+        def developers = root.appendNode('developers')
+        devs.each {
+            def split = it.split(":")
+            assert split.length == 2
+            def d = developers.appendNode('developer')
+            d.appendNode('id', split[0])
+            d.appendNode('name', split[1])
+        }
+    }
+}
