@@ -12,6 +12,7 @@ buildscript {
 }
 
 apply from: 'gradle/version.gradle'
+apply from: "gradle/ide.gradle"
 
 group = 'org.mockito'
 description = 'Core API and implementation.'
@@ -19,8 +20,6 @@ description = 'Core API and implementation.'
 //TODO don't use 'allprojects'
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
 
     repositories {
         jcenter()
@@ -64,17 +63,6 @@ dependencies {
 
     testUtil sourceSets.test.output
 }
-
-//TODO push out
-// Configure VCS in generated IPR file
-idea.project.ipr {
-    withXml { provider ->
-        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
-    }
-}
-
-idea.module.scopes.PROVIDED.plus += configurations.provided
-eclipse.classpath.plusConfigurations += configurations.provided
 
 //TODO push out
 // EXPERIMENTAL : coverage
