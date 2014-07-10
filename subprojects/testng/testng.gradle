@@ -1,5 +1,6 @@
-description = "Mockito for TestNG"
+apply plugin: 'java'
 apply plugin: 'maven'
+description = "Mockito for TestNG"
 
 Properties props = new Properties()
 props.load(new FileInputStream(rootProject.file("version.properties")))

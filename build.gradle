@@ -11,24 +11,21 @@ buildscript {
     }
 }
 
+apply plugin: 'maven-publish'
+
 apply from: 'gradle/version.gradle'
 apply from: "gradle/ide.gradle"
+apply from: 'gradle/release.gradle'
+apply from: 'gradle/coverage.gradle'
 
-group = 'org.mockito'
-description = 'Core API and implementation.'
-
-//TODO don't use 'allprojects'
 allprojects {
-    apply plugin: 'java'
-
     repositories {
         jcenter()
     }
 }
 
-apply plugin: 'maven-publish'
-apply from: 'gradle/release.gradle'
-
+group = 'org.mockito'
+description = 'Core API and implementation.'
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
@@ -63,14 +60,6 @@ dependencies {
 
     testUtil sourceSets.test.output
 }
-
-//TODO push out
-// EXPERIMENTAL : coverage
-// configure code coverage
-apply plugin: 'cobertura'
-apply plugin: 'coveralls'
-cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
-//cobertura.coverageIgnoreTrivial = true
 
 def commonJarContent = copySpec {
     //source
