@@ -128,7 +128,7 @@ configure([jar, allJar]) { task ->
 }
 
 artifacts {
-    archives allJar
+    archives allJar, sourcesJar, javadocJar
 }
 
 publishing {
