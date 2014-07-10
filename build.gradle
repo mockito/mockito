@@ -64,15 +64,14 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
-def commonJarContent = copySpec {
-    //source
-    from(sourceSets.main.allSource)
-
+def licenseFiles = copySpec {
     //mockito license
     from(".") { include 'LICENSE', 'NOTICE' }
     //repackaged license
     from("lib/repackaged") { include '*.txt' }
-    //repackaged classes
+}
+
+def repackagedClasses = copySpec {
     from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
         exclude 'META-INF/MANIFEST.MF'
     }
@@ -80,13 +79,34 @@ def commonJarContent = copySpec {
 
 jar {
     baseName = 'mockito-core'
-    with commonJarContent
+    from(sourceSets.main.allSource)
+    with repackagedClasses
+    with licenseFiles
+}
+
+task sourcesJar(type: Jar) {
+    baseName = 'mockito-core'
+    from(sourceSets.main.allSource)
+    classifier "sources"
+    from(zipTree("lib/sources/cglib-and-asm-1.0-sources.jar"))
+    with licenseFiles
+}
+
+task javadocJar(type: Jar) {
+    baseName = 'mockito-core'
+    classifier "javadoc"
+    with licenseFiles
+    from javadoc
 }
 
 task allJar(type: Jar) {
     baseName = 'mockito-all'
 
-    with commonJarContent
+    with repackagedClasses
+    with licenseFiles
+
+    //source files
+    from(sourceSets.main.allSource)
 
     //classes
     from(sourceSets.main.output)
@@ -99,7 +119,7 @@ task allJar(type: Jar) {
     from("lib/run") { exclude '**/*.jar' }
 }
 
-tasks.withType(Jar) { task ->
+configure([jar, allJar]) { task ->
     doLast {
         project.exec {
             commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
@@ -116,6 +136,8 @@ publishing {
         mockitoCore(MavenPublication) {
             from components.java
             artifactId 'mockito-core'
+            artifact sourcesJar
+            artifact javadocJar
         }
         mockitoAll(MavenPublication) {
             artifact allJar
