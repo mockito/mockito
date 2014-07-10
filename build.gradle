@@ -54,11 +54,11 @@ tasks.withType(JavaCompile) {
 //TODO we should remove all dependencies to checked-in jars and move the 'mockito-all' project out
 //we should consider getting rid of mockito-all completely (or moving out into a completely separate project.
 dependencies {
-    provided fileTree('lib/compile')
+    provided "junit:junit:4.10"
     compile fileTree('lib/run') { exclude '*.txt' }, fileTree('lib/repackaged') { exclude '*.txt'}
 
     testCompile fileTree("lib/test")
-    testRuntime fileTree("lib/compile")
+    testRuntime configurations.provided
 
     testUtil sourceSets.test.output
 }

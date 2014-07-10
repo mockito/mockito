@@ -6,5 +6,5 @@ dependencies {
     testCompile project(path: ':', configuration: 'testUtil')
 
     testCompile fileTree("$rootDir/lib/test")
-    testCompile fileTree("$rootDir/lib/compile")
+    testCompile "junit:junit:4.10"
 }
