@@ -13,4 +13,4 @@ script:
 - ./gradlew build publishToMavenLocal idea eclipse
 after_success:
 - ./gradlew release
-- ./gradlew cobertura coveralls --info --continue --stacktrace
+- ./gradlew cobertura coveralls
