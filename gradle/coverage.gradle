@@ -2,3 +2,4 @@ apply plugin: 'cobertura'
 apply plugin: 'coveralls'
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 //cobertura.coverageIgnoreTrivial = true
+coveralls.sourceDirs = ['src']
