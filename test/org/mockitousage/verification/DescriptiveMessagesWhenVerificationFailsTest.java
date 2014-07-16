@@ -184,7 +184,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String expectedCause =
                     "\n" +
-                    "But found this interaction:" +
+                    "But found this interaction on mock '" + mock + "':" +
                     "\n" +
                     "-> at";
             assertContains(expectedCause, e.getMessage());
@@ -210,7 +210,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String expectedCause =
                 "\n" +
-                "But found this interaction:" +
+                "But found this interaction on mock '" + mock + "':" +
                 "\n" +
                 "-> at";
 
