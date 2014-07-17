@@ -72,12 +72,11 @@ public class DeepStubsSerializableTest {
         public Container(E e) { this.e = e; }
         public E get() { return e; }
 
-        @Override
         public Iterator<E> iterator() {
             return new Iterator<E>() {
-                @Override public boolean hasNext() { return true; }
-                @Override public E next() { return e; }
-                @Override public void remove() { }
+                public boolean hasNext() { return true; }
+                public E next() { return e; }
+                public void remove() { }
             };
         }
     }
