@@ -151,3 +151,8 @@ apply from: "gradle/pom.gradle"
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'
 }
+
+task ciBuild {
+    //validate the state of the project
+    dependsOn build, publishToMavenLocal, idea, eclipse
+}

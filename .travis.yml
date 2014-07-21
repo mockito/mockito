@@ -10,7 +10,7 @@ env:
 install:
 - true
 script:
-- ./gradlew build publishToMavenLocal idea eclipse
+- ./gradlew ciBuild
 after_success:
 - ./gradlew release
 - ./gradlew cobertura coveralls
