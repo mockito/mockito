@@ -13,7 +13,8 @@ task incrementVersion {
     doLast {
         try {
             List numbers = project.version.split('\\.')
-            //TODO remove -dev hack once we're happy with releases
+            //TODO remove -dev hack once we're happy with releases.
+            //TODO version file will have -SNAPSHOT name but Travis with remove -SNAPSHOT during the build
             int micro = (numbers.pop() - "-dev") as Integer
             numbers << micro + 1
             def newVersion = numbers.join('.') + "-dev"
