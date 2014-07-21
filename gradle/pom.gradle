@@ -11,8 +11,7 @@ publishing.publications.all {
 
         def license = root.appendNode('licenses').appendNode('license')
         license.appendNode('name', 'The MIT License')
-        //TODO link to github
-        license.appendNode('url', 'http://code.google.com/p/mockito/wiki/License')
+        license.appendNode('url', 'http://github.com/mockito/mockito/blob/master/LICENSE')
         license.appendNode('distribution', 'repo')
 
         root.appendNode('scm').appendNode('url', 'http://github.com/mockito/mockito')
