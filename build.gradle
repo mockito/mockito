@@ -154,5 +154,5 @@ task wrapper(type: Wrapper) {
 
 task ciBuild {
     //validate the state of the project
-    dependsOn build, publishToMavenLocal, idea, eclipse
+    dependsOn build, publishToMavenLocal, tasks.idea, tasks.eclipse
 }
