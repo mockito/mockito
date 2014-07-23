@@ -20,6 +20,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
     private final long durationMillis;
     private final VerificationMode delegate;
     private final boolean returnOnSuccess;
+    private final DurationChecker durationChecker;
     
     /**
      * Create this verification mode, to be used to verify invocation ongoing data later.
@@ -37,6 +38,27 @@ public class VerificationOverTimeImpl implements VerificationMode {
         this.durationMillis = durationMillis;
         this.delegate = delegate;
         this.returnOnSuccess = returnOnSuccess;
+        this.durationChecker = new DurationCheckerImpl(durationMillis);
+    }
+
+    /**
+     * Create this verification mode, to be used to verify invocation ongoing data later.
+     *
+     * @param pollingPeriodMillis The frequency to poll delegate.verify(), to check whether the delegate has been satisfied
+     * @param durationMillis The max time to wait (in millis) for the delegate verification mode to be satisfied
+     * @param delegate The verification mode to delegate overall success or failure to
+     * @param returnOnSuccess Whether to immediately return successfully once the delegate is satisfied (as in
+     *                        {@link org.mockito.verification.VerificationWithTimeout}, or to only return once
+     *                        the delegate is satisfied and the full duration has passed (as in
+     *                        {@link org.mockito.verification.VerificationAfterDelay}).
+     * @param durationChecker Checker of whether the duration of the verification is still acceptable
+     */
+    public VerificationOverTimeImpl(long pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess, DurationChecker durationChecker) {
+        this.pollingPeriodMillis = pollingPeriodMillis;
+        this.durationMillis = durationMillis;
+        this.delegate = delegate;
+        this.returnOnSuccess = returnOnSuccess;
+        this.durationChecker = durationChecker;
     }
 
     /**
@@ -58,7 +80,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
         AssertionError error = null;
         
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime <= durationMillis) {
+        while (durationChecker.isVerificationStillInProgress(startTime)) {
             try {
                 delegate.verify(data);
                 
