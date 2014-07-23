@@ -15,8 +15,6 @@ task mockitoJavadoc {
         ant.javadoc(
                 sourcepath: "src",
                 destdir: "$buildDir/javadoc",
-                stylesheetfile: "javadoc/stylesheet.css",
-                header: "",
                 author: "true",
                 version: "true",
                 use: "true",
