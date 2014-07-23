@@ -1,0 +1,70 @@
+//Until I fix the bug in Gradle related to line breaks in the javadoc options file,
+// we need to stick with ant task for javadoc generation
+
+task mockitoJavadoc {
+    description "Creates javadoc html for Mockito API."
+
+    inputs.files sourceSets.main.compileClasspath
+    inputs.dir "javadoc"
+    outputs.dir "$buildDir/javadoc"
+
+    doLast {
+        def mockitoVersion = project.version
+        ant.javadoc(
+                sourcepath: "src",
+                destdir: "$buildDir/javadoc",
+                stylesheetfile: "javadoc/stylesheet.css",
+                header: "",
+                author: "true",
+                version: "true",
+                use: "true",
+                windowtitle: "Mockito ${mockitoVersion} API",
+                doctitle: """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${mockitoVersion} API.</h1>""") {
+            group(title: "Main package", packages: "org.mockito")
+            classpath {
+                sourceSets.main.compileClasspath.addToAntBuilder(ant, "resources")
+            }
+            header """
+          <!-- Note there is a weird javadoc task bug if using the double quote char \\" that causes an 'illegal package name' error -->
+
+          <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
+          <script type="text/javascript">
+              var shBaseURL = '{@docRoot}/js/sh-2.1.382/';
+          </script>
+          <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
+          <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
+
+          <script type="text/javascript">
+              /* Apply beautification of code */
+              var usingOldIE = false;
+              if(\$.browser.msie && parseInt(\$.browser.version) < 9) usingOldIE = true;
+
+              if(!usingOldIE) {
+                  \$.beautyOfCode.init({
+                    theme : 'Eclipse',
+                    brushes: ['Java']
+                  });
+
+                  var version = ${mockitoVersion};
+
+                  /* Add name & version to header */
+                  \$(function() {
+                    \$('td.NavBarCell1[colspan=2]').each(function(index, element) {
+                      var jqueryTD = \$(element);
+                      jqueryTD.after(
+                        \$('<td><em><strong>Mockito ${mockitoVersion} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header')
+                      );
+                      jqueryTD.removeAttr('colspan');
+                    })
+                  })
+              }
+          </script>
+"""
+        }
+
+        copy {
+            from "javadoc"
+            into "$buildDir/javadoc"
+        }
+    }
+}

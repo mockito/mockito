@@ -92,11 +92,13 @@ task sourcesJar(type: Jar) {
     with licenseFiles
 }
 
+apply from: 'gradle/javadoc.gradle'
+
 task javadocJar(type: Jar) {
     baseName = 'mockito-core'
     classifier "javadoc"
     with licenseFiles
-    from javadoc
+    from mockitoJavadoc
 }
 
 task allJar(type: Jar) {
