@@ -9,16 +9,14 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.verification.AtLeast;
-import org.mockito.internal.verification.Only;
-import org.mockito.internal.verification.Times;
-import org.mockito.internal.verification.VerificationDataImpl;
+import org.mockito.internal.verification.*;
 import org.mockitoutil.TestBase;
 
 public class TimeoutTest extends TestBase {
     
     @Mock VerificationMode mode;
     @Mock VerificationDataImpl data;
+    @Mock DurationChecker durationChecker;
     MockitoAssertionError error = new MockitoAssertionError(""); 
 
     @Test
@@ -59,15 +57,16 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_try_to_verify_correct_number_of_times() {
-        Timeout t = new Timeout(10, 50, mode);
+        Timeout t = new Timeout(10, 50, mode, durationChecker);
         
         doThrow(error).when(mode).verify(data);
-        
+        when(durationChecker.isVerificationStillInProgress(anyLong())).thenReturn(true, true, true, true, true, false);
+
         try {
             t.verify(data);
             fail();
         } catch (MockitoAssertionError e) {}
-        
+
         verify(mode, times(5)).verify(data);
     }
     
