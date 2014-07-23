@@ -1,5 +1,7 @@
-//Until I fix the bug in Gradle related to line breaks in the javadoc options file,
+//Until I fix the bug in Gradle (GRADLE-3099) related to line breaks in the javadoc options file,
 // we need to stick with ant task for javadoc generation
+
+//TODO generate to different dir, disable vanilla javadoc task
 
 task mockitoJavadoc {
     description "Creates javadoc html for Mockito API."
