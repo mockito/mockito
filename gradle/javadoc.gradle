@@ -26,6 +26,7 @@ task mockitoJavadoc {
             }
             header """
           <!-- Note there is a weird javadoc task bug if using the double quote char \\" that causes an 'illegal package name' error -->
+          <em id="mockito-version-header-javadoc7"><strong>Mockito ${mockitoVersion} API</strong></em>
 
           <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
           <script type="text/javascript">
@@ -45,18 +46,34 @@ task mockitoJavadoc {
                     brushes: ['Java']
                   });
 
-                  var version = ${mockitoVersion};
+                  var version = '${mockitoVersion}';
 
-                  /* Add name & version to header */
+                  jQuery.fn.removeAttributes = function() {
+                    return this.each(function() {
+                      var attributes = \$.map(this.attributes, function(item) {
+                        return item.name;
+                      });
+                      var img = \$(this);
+                      \$.each(attributes, function(i, item) {
+                        img.removeAttr(item);
+                      });
+                    });
+                  };
+
                   \$(function() {
+                    /* Add name & version to header for Javadoc 1.6 */
                     \$('td.NavBarCell1[colspan=2]').each(function(index, element) {
                       var jqueryTD = \$(element);
                       jqueryTD.after(
-                        \$('<td><em><strong>Mockito ${mockitoVersion} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header')
+                        \$('<td><em><strong>Mockito ${mockitoVersion} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header-javadoc6')
                       );
                       jqueryTD.removeAttr('colspan');
-                    })
-                  })
+                    });
+                    /* Cleans up mess with Javadoc 1.7 */
+                    \$('body > h1').removeAttributes().attr('class', 'bar').attr('title', 'Mockito ${mockitoVersion} API');
+                    /* Cleans up mess with Javadoc 1.7 with Javadoc 1.6 */
+                    \$('td em#mockito-version-header-javadoc7').remove();
+                  });
               }
           </script>
 """
