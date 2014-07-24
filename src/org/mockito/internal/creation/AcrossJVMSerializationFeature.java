@@ -29,8 +29,9 @@ import static org.mockito.internal.util.StringJoiner.join;
  *
  * <p>
  *     The way it works is to enable serialization via the {@link #enableSerializationAcrossJVM(MockCreationSettings)},
- *     if the mock settings is set to be serializable it will add the {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable} interface.
- *     This interface defines a the {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable#writeReplace()}
+ *     if the mock settings is set to be serializable it will add the {@link AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable}
+ *     interface.
+ *     This interface defines a the {@link AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable#writeReplace()}
  *     whose signature match the one that is looked by the standard Java serialization.
  * </p>
  *
@@ -77,11 +78,14 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * </code></pre>
      *         So, {@link ObjectOutputStream} will track the <code>writeReplace</code> method in the instance and
      *         execute it, which is wanted to replace the mock by another type that will encapsulate the actual mock.
-     *         At this point, the code will return an {@link AcrossJVMMockSerializationProxy}.</p>
+     *         At this point, the code will return an
+     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy}.</p>
      *     </li>
      *     <li>
-     *         <p>Now, in the constructor {@link AcrossJVMMockSerializationProxy#AcrossJVMMockSerializationProxy(Object)}
-     *         the mock is being serialized in a custom way (using {@link MockitoMockObjectOutputStream}) to a
+     *         <p>Now, in the constructor
+     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy#AcrossJVMMockSerializationProxy(Object)}
+     *         the mock is being serialized in a custom way (using
+     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream}) to a
      *         byte array. So basically it means the code is performing double nested serialization of the passed
      *         <code>mockitoMock</code>.</p>
      *
@@ -170,8 +174,9 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * This is the serialization proxy that will encapsulate the real mock data as a byte array.
      *
      * <p>When called in the constructor it will serialize the mock in a byte array using a
-     * custom {@link MockitoMockObjectOutputStream} that will annotate the mock class in the stream.
-     * other information are used in this class in order to facilitate deserialization.
+     * custom {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream} that
+     * will annotate the mock class in the stream.
+     * Other information are used in this class in order to facilitate deserialization.
      * </p>
      *
      * <p>Deserialization of the mock will be performed by the {@link #readResolve()} method via
@@ -187,7 +192,8 @@ public class AcrossJVMSerializationFeature implements Serializable {
         /**
          * Creates the wrapper that be used in the serialization stream.
          *
-         * <p>Immediately serializes the Mockito mock using specifically crafted {@link MockitoMockObjectOutputStream},
+         * <p>Immediately serializes the Mockito mock using specifically crafted
+         * {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream},
          * in a byte array.</p>
          *
          * @param mockitoMock The Mockito mock to serialize.
@@ -252,7 +258,8 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *     class. It is doing so via the {@link #resolveClass(java.io.ObjectStreamClass)} which looks in the stream
      *     for a Mockito marker. If this marker is found it will try to resolve the mockito class otherwise it
      *     delegates class resolution to the default super behavior.
-     *     The mirror method used for serializing the mock is {@link MockitoMockObjectOutputStream#annotateClass(Class)}.
+     *     The mirror method used for serializing the mock is
+     *     {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream#annotateClass(Class)}.
      * </p>
      *
      * <p>
