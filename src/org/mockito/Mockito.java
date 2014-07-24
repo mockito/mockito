@@ -761,8 +761,9 @@ import org.mockito.verification.VerificationWithTimeout;
  * </ul>
  *
  * <p>
- * Note that &#064;{@link InjectMocks} can only be used in combination with the &#064;{@link Spy} annotation, it means
- * that Mockito will inject mocks in a partial mock under testing. As a remainder, please read point 16 about partial mocks.
+ * Note that &#064;{@link InjectMocks} can also be used in combination with the &#064;{@link Spy} annotation, it means
+ * that Mockito will inject mocks into the partial mock under test. This complexity is another good reason why you
+ * should only use partial mocks as a last resort. See point 16 about partial mocks.
  *
  * <p>
  * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
