@@ -5,7 +5,7 @@ task (release) {
         def branch = System.env.TRAVIS_BRANCH
         def pr = System.env.TRAVIS_PULL_REQUEST
         def releasable = pr == 'false' && branch == 'master'
-        logger.lifecycle("Branch: {}, Pull request: {}, will release: {}", branch, pr, releasable)
+        logger.lifecycle("Skipping release: {}, branch: {}, pull request: {}.", !releasable, branch, pr)
         releasable
     }
     doLast {
