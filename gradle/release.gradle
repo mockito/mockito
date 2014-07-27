@@ -27,7 +27,11 @@ void publishJavadocNow() {
     run "git", "rm", "*"
     project.copy {
         from "build/javadoc"
-        into "docs"
+        into "docs/$project.version"
+    }
+    project.copy {
+        from "build/javadoc"
+        into "docs/current"
     }
     run "git", "add", "docs"
     run "git", "commit", "-m", '"Publish javadoc by Travis CI build #' + System.env.TRAVIS_BUILD_NUMBER + ' [ci skip]"'
