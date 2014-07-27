@@ -5,5 +5,7 @@
 package org.mockitousage.packageprotected;
 
 class PackageProtected {
+	
+	void doStuff() {}
 
 }
