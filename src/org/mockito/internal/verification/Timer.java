@@ -1,14 +1,14 @@
 package org.mockito.internal.verification;
 
-public class DurationCheckerImpl implements DurationChecker {
+public class Timer {
 
     private final long durationMillis;
 
-    public DurationCheckerImpl(long durationMillis) {
+    public Timer(long durationMillis) {
         this.durationMillis = durationMillis;
     }
 
-    public boolean isVerificationStillInProgress(long startTime) {
+    public boolean isUp(long startTime) {
         return System.currentTimeMillis() - startTime <= durationMillis;
     }
 }

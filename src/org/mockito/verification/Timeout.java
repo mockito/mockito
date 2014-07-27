@@ -5,8 +5,7 @@
 package org.mockito.verification;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.verification.DurationChecker;
-import org.mockito.internal.verification.DurationCheckerImpl;
+import org.mockito.internal.verification.Timer;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 /**
  * See the javadoc for {@link VerificationWithTimeout}
@@ -36,8 +35,8 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
     /**
      * See the javadoc for {@link VerificationWithTimeout}
      */
-    Timeout(long pollingPeriodMillis, long millis, VerificationMode delegate, DurationChecker durationChecker) {
-        super(new VerificationOverTimeImpl(pollingPeriodMillis, millis, delegate, true, durationChecker));
+    Timeout(long pollingPeriodMillis, long millis, VerificationMode delegate, Timer timer) {
+        super(new VerificationOverTimeImpl(pollingPeriodMillis, millis, delegate, true, timer));
     }
     
     @Override
