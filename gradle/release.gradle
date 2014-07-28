@@ -24,7 +24,7 @@ task (release) {
 void updateJavadocNow() {
     run "git", "fetch", "origin", "+gh-pages:gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
-    run "git", "rm", "docs/current"
+    run "git", "rm", "-r", "docs/current"
     project.copy {
         from "build/javadoc"
         into "docs/$project.version"
