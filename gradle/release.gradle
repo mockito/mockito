@@ -25,7 +25,7 @@ task (release) {
 void publishJavadocNow() {
     run "git", "fetch", "origin", "gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
-    run "git", "rm", "*"
+    run "git", "rm", "docs/current"
     project.copy {
         from "build/javadoc"
         into "docs/$project.version"
@@ -37,6 +37,7 @@ void publishJavadocNow() {
     run "git", "add", "docs"
     run "git", "commit", "-m", '"Publish javadoc by Travis CI build #' + System.env.TRAVIS_BUILD_NUMBER + ' [ci skip]"'
     run "git", "push", new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git"), "gh-pages"
+    run "git", "checkout", "master"
 }
 
 task publishJavadoc {
