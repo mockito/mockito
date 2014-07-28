@@ -10,6 +10,7 @@ task (release) {
     }
     doLast {
         run "./gradlew", "bintrayUpload"
+        publishJavadocNow()
         run "git", "checkout", "master"
         run "./gradlew", "incrementVersion"
         run "git", "config", "user.email", "szczepiq@gmail.com"
@@ -22,7 +23,6 @@ task (release) {
 }
 
 void publishJavadocNow() {
-    run "./gradlew", ":javadoc"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "*"
     project.copy {
