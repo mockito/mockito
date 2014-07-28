@@ -35,7 +35,7 @@ void publishJavadocNow() {
     }
     run "git", "add", "docs"
     run "git", "commit", "-m", '"Publish javadoc by Travis CI build #' + System.env.TRAVIS_BUILD_NUMBER + ' [ci skip]"'
-    run "git", "push", new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git"), "gh-pages", "-q"
+    run "git", "push", new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git"), "gh-pages"
 }
 
 task publishJavadoc {
