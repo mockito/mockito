@@ -10,7 +10,7 @@ task (release) {
     }
     doLast {
         run "./gradlew", "bintrayUpload"
-        publishJavadocNow()
+        updateJavadocNow()
         run "git", "checkout", "master"
         run "./gradlew", "incrementVersion"
         run "git", "config", "user.email", "szczepiq@gmail.com"
@@ -18,11 +18,10 @@ task (release) {
         String message = '"Increment version by Travis CI build #' + System.env.TRAVIS_BUILD_NUMBER + ' [ci skip]"'
         run "git", "commit", "-m", message, "version.properties"
         run "git", "push", new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git"), "master", "gh-pages"
-        publishJavadocNow()
     }
 }
 
-void publishJavadocNow() {
+void updateJavadocNow() {
     run "git", "fetch", "origin", "+gh-pages:gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "docs/current"
@@ -38,10 +37,9 @@ void publishJavadocNow() {
     run "git", "commit", "-m", '"Publish javadoc by Travis CI build #' + System.env.TRAVIS_BUILD_NUMBER + ' [ci skip]"'
 }
 
-task publishJavadoc {
+task updateJavadoc {
     doLast {
-        publishJavadocNow()
-        run "git", "checkout", "master"
+        updateJavadocNow()
     }
 }
 
