@@ -23,7 +23,7 @@ task (release) {
 }
 
 void publishJavadocNow() {
-    run "git", "fetch", "origin", "gh-pages", "--depth=1"
+    run "git", "fetch", "+gh-pages:gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "docs/current"
     project.copy {
