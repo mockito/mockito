@@ -426,7 +426,7 @@ public class Reporter {
         throw new NoInteractionsWanted(join(
                 "No interactions wanted here:",
                 new LocationImpl(),
-                "But found this interaction:",
+                "But found this interaction on mock '" + undesired.getMock() + "':",
                 undesired.getLocation(),
                 scenario
         ));
@@ -436,9 +436,8 @@ public class Reporter {
         throw new VerificationInOrderFailure(join(
                 "No interactions wanted here:",
                 new LocationImpl(),
-                "But found this interaction:",
-                undesired.getLocation(),
-                ""
+                "But found this interaction on mock '" + undesired.getMock() + "':",
+                undesired.getLocation()
         ));
     }
 
