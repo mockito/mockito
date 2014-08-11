@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
 public class ClassCacheVersusClassReloadingTest {
+    // TODO refactor to use ClassLoaders
 
     private SimplePerRealmReloadingClassLoader testMethodClassLoaderRealm = new SimplePerRealmReloadingClassLoader(reloadMockito());
 

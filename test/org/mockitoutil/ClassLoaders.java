@@ -1,15 +1,12 @@
 package org.mockitoutil;
 
-import static java.util.Arrays.asList;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Arrays.asList;
 
 public abstract class ClassLoaders {
     protected ClassLoaders() {}
@@ -18,9 +15,16 @@ public abstract class ClassLoaders {
         return new IsolatedURLClassLoaderBuilder();
     }
 
+    public static ExcludingURLClassLoaderBuilder excludingClassLoader() {
+        return new ExcludingURLClassLoaderBuilder();
+    }
+
     public static InMemoryClassLoaderBuilder inMemoryClassLoader() {
         return new InMemoryClassLoaderBuilder();
     }
+
+
+
 
 
     public static class IsolatedURLClassLoaderBuilder extends ClassLoaders {
@@ -34,6 +38,13 @@ public abstract class ClassLoaders {
 
         public IsolatedURLClassLoaderBuilder withCodeSourceUrls(String... urls) {
             codeSourceUrls.addAll(pathsToURLs(urls));
+            return this;
+        }
+
+        public IsolatedURLClassLoaderBuilder withCodeSourceUrlOf(Class<?>... classes) {
+            for (Class<?> clazz : classes) {
+                codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
+            }
             return this;
         }
 
@@ -62,6 +73,62 @@ public abstract class ClassLoaders {
         public Class<?> findClass(String name) throws ClassNotFoundException {
             if(classShouldBePrivate(name)) return super.findClass(name);
             throw new ClassNotFoundException("Can only load classes with prefix : " + privateCopyPrefixes);
+        }
+
+        private boolean classShouldBePrivate(String name) {
+            for (String prefix : privateCopyPrefixes) {
+                if (name.startsWith(prefix)) return true;
+            }
+            return false;
+        }
+    }
+
+    public static class ExcludingURLClassLoaderBuilder extends ClassLoaders {
+        private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
+        private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
+
+        public ExcludingURLClassLoaderBuilder without(String... privatePrefixes) {
+            privateCopyPrefixes.addAll(asList(privatePrefixes));
+            return this;
+        }
+
+        public ExcludingURLClassLoaderBuilder withCodeSourceUrls(String... urls) {
+            codeSourceUrls.addAll(pathsToURLs(urls));
+            return this;
+        }
+
+        public ExcludingURLClassLoaderBuilder withCodeSourceUrlOf(Class<?>... classes) {
+            for (Class<?> clazz : classes) {
+                codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
+            }
+            return this;
+        }
+
+        public ExcludingURLClassLoaderBuilder withCurrentCodeSourceUrls() {
+            codeSourceUrls.add(obtainClassPathOf(ClassLoaders.class.getName()));
+            return this;
+        }
+
+        public ClassLoader build() {
+            return new LocalExcludingURLClassLoader(
+                    codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
+                    privateCopyPrefixes
+            );
+        }
+    }
+
+    static class LocalExcludingURLClassLoader extends URLClassLoader {
+        private final ArrayList<String> privateCopyPrefixes;
+
+        public LocalExcludingURLClassLoader(URL[] urls, ArrayList<String> privateCopyPrefixes) {
+            super(urls, null);
+            this.privateCopyPrefixes = privateCopyPrefixes;
+        }
+
+        @Override
+        public Class<?> findClass(String name) throws ClassNotFoundException {
+            if(classShouldBePrivate(name)) throw new ClassNotFoundException("classes with prefix : " + privateCopyPrefixes + " are excluded");
+            return super.findClass(name);
         }
 
         private boolean classShouldBePrivate(String name) {

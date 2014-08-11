@@ -1,9 +1,12 @@
 package org.mockitoutil;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockitoutil.ClassLoaders.excludingClassLoader;
+import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 
 public class ClassLoadersTest {
 
@@ -85,6 +88,52 @@ public class ClassLoadersTest {
         assertThat(cl.getParent()).isNull();
     }
 
+    @Test(expected = ClassNotFoundException.class)
+    public void excluding_class_loader_cannot_load_classes_when_no_correct_source_url_set() throws Exception {
+        // given
+        ClassLoader cl = excludingClassLoader()
+                .withCodeSourceUrlOf(this.getClass())
+                .build();
+
+        // when
+        cl.loadClass("org.mockito.Mockito");
+
+        // then class CNFE
+    }
+
+    @Test
+    public void excluding_class_loader_can_load_classes_when_correct_source_url_set() throws Exception {
+        // given
+        ClassLoader cl = excludingClassLoader()
+                .withCodeSourceUrlOf(Mockito.class)
+                .build();
+
+        // when
+        cl.loadClass("org.mockito.Mockito");
+
+        // then class successfully loaded
+    }
+
+    @Test
+    public void excluding_class_loader_cannot_load_class_when_excluded_prefix_match_class_to_load() throws Exception {
+        // given
+        ClassLoader cl = excludingClassLoader()
+                .withCodeSourceUrlOf(Mockito.class)
+                .without("org.mockito.BDDMockito")
+                .build();
+
+        cl.loadClass("org.mockito.Mockito");
+
+        // when
+        try {
+            cl.loadClass("org.mockito.BDDMockito");
+            fail("should have raise a ClassNotFoundException");
+        } catch (ClassNotFoundException e) {
+            assertThat(e.getMessage()).contains("org.mockito.BDDMockito");
+        }
+
+        // then class successfully loaded
+    }
 
     @Test
     public void can_not_load_a_class_not_previously_registered_in_builder() throws Exception {
