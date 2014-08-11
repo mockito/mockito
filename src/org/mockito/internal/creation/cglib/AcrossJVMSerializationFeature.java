@@ -313,7 +313,7 @@ class AcrossJVMSerializationFeature implements Serializable {
 //                    extraInterfaces.toArray(new Class[extraInterfaces.size()])
 //            );
 
-            Class<?> proxyClass = new ByteBuddyMockMaker().getOrMakeMock(typeToMock, extraInterfaces, true);
+            Class<?> proxyClass = new ByteBuddyMockMaker().getOrMakeMock(typeToMock, extraInterfaces);
             hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
             return proxyClass;
         }
