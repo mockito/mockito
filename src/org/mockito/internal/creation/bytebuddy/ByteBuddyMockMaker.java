@@ -10,37 +10,31 @@ import org.mockito.plugins.MockMaker;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.mockito.internal.util.StringJoiner.join;
+
 public class ByteBuddyMockMaker implements MockMaker {
 
-    private static interface SilentConstructor {
+    private static interface ClassInstantiator {
 
         <T> T instantiate(Class<T> type);
 
-        static class UsingObjenesis implements SilentConstructor {
+        static class UsingObjenesis implements ClassInstantiator {
 
             private final Objenesis objenesis;
 
-            public UsingObjenesis(Objenesis objenesis) {
-                this.objenesis = objenesis;
+            public UsingObjenesis(boolean useClassCache) {
+                this.objenesis = new ObjenesisStd(useClassCache);
             }
 
             public <T> T instantiate(Class<T> type) {
                 return objenesis.newInstance(type);
-            }
-        }
-
-        static enum Unavailable implements SilentConstructor {
-
-            INSTANCE;
-
-            public <T> T instantiate(Class<T> type) {
-                throw new MockitoException("Could not create mock: Objenesis is missing on the class path");
             }
         }
     }
@@ -77,20 +71,27 @@ public class ByteBuddyMockMaker implements MockMaker {
         }
     }
 
-    private final SilentConstructor silentConstructor;
+    private final ClassInstantiator classInstantiator;
 
-    private static final Map<MockKey<?>, Class<?>> PREVIOUS_CLASSES = new ConcurrentHashMap<MockKey<?>, Class<?>>();
+    private static final Map<MockKey<?>, Class<?>> PREVIOUSLY_GENERATED_MOCK_CLASSES = new ConcurrentHashMap<MockKey<?>, Class<?>>();
 
 
     public ByteBuddyMockMaker() {
-        silentConstructor = makeSilentConstructor();
+        classInstantiator = initializeSilentConstructor();
     }
 
-    private static SilentConstructor makeSilentConstructor() {
+    private static ClassInstantiator initializeSilentConstructor() {
         try {
-            return new SilentConstructor.UsingObjenesis(new ObjenesisStd(new GlobalConfiguration().enableClassCache()));
+            Class<?> objenesisClassLoader = Class.forName("org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker$ClassInstantiator$UsingObjenesis");
+            Constructor<?> usingClassCacheConstructor = objenesisClassLoader.getDeclaredConstructor(boolean.class);
+            return ClassInstantiator.class.cast(usingClassCacheConstructor.newInstance(new GlobalConfiguration().enableClassCache()));
         } catch (Throwable throwable) {
-            return SilentConstructor.Unavailable.INSTANCE;
+            // MockitoException cannot be used at this point as we are early in the classloading chain and necessary dependencies may not yet be loadable by the classloader
+            throw new IllegalStateException(join(
+                    "Mockito could not create mock: Objenesis is missing on the classpath.",
+                    "Please add Objenesis on the classpath.",
+                    ""
+            ));
         }
     }
 
@@ -102,7 +103,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                 settings.getTypeToMock(),
                 settings.getExtraInterfaces()
                 );
-        T mock = silentConstructor.instantiate(mockedType);
+        T mock = classInstantiator.instantiate(mockedType);
         MethodInterceptor.Access access = (MethodInterceptor.Access) mock;
         access.setMockitoInterceptor(new MethodInterceptor(asInternalMockHandler(handler), settings));
         return mock;
@@ -122,7 +123,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                 } catch (Exception e) {
                     prettify(mockedType, e);
                 }
-                PREVIOUS_CLASSES.put(mockKey, mockType);
+                PREVIOUSLY_GENERATED_MOCK_CLASSES.put(mockKey, mockType);
             }
         }
         return mockType;
@@ -130,7 +131,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
     @SuppressWarnings("unchecked")
     private <T> Class<? extends T> lookup(MockKey<T> mockKey) {
-        return (Class<? extends T>) PREVIOUS_CLASSES.get(mockKey);
+        return (Class<? extends T>) PREVIOUSLY_GENERATED_MOCK_CLASSES.get(mockKey);
     }
 
     private static void prettify(Class<?> mockedType, Exception e) {
