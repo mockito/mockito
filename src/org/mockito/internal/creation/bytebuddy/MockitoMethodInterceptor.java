@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public class MethodInterceptor implements Serializable {
+public class MockitoMethodInterceptor implements Serializable {
 
     private static final long serialVersionUID = 7152947254057253027L;
 
@@ -30,8 +30,8 @@ public class MethodInterceptor implements Serializable {
 
     private final AcrossJVMSerializationFeature acrossJVMSerializationFeature;
 
-    public MethodInterceptor(InternalMockHandler handler,
-                             MockCreationSettings mockCreationSettings) {
+    public MockitoMethodInterceptor(InternalMockHandler handler,
+                                    MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
@@ -105,15 +105,15 @@ public class MethodInterceptor implements Serializable {
 
     public static class ForWriteReplace {
 
-        public static Object doWriteReplace(@This Access thiz) throws ObjectStreamException {
+        public static Object doWriteReplace(@This MockAccess thiz) throws ObjectStreamException {
             return thiz.getMockitoInterceptor().getAcrossJVMSerializationFeature().writeReplace(thiz);
         }
     }
 
-    public static interface Access {
+    public static interface MockAccess {
 
-        MethodInterceptor getMockitoInterceptor();
+        MockitoMethodInterceptor getMockitoInterceptor();
 
-        void setMockitoInterceptor(MethodInterceptor methodInterceptor);
+        void setMockitoInterceptor(MockitoMethodInterceptor mockitoMethodInterceptor);
     }
 }

@@ -44,11 +44,11 @@ class ByteBuddyMockBytecodeGenerator {
                 .name(nameFor(mockedType))
                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
                 .method(any()).intercept(MethodDelegation
-                        .toInstanceField(MethodInterceptor.class, "mockitoInterceptor")
-                        .filter(isDeclaredBy(MethodInterceptor.class)))
-                .implement(MethodInterceptor.Access.class).intercept(FieldAccessor.ofBeanProperty())
-                .method(isHashCode()).intercept(MethodDelegation.to(MethodInterceptor.ForHashCode.class))
-                .method(isEquals()).intercept(MethodDelegation.to(MethodInterceptor.ForEquals.class))
+                        .toInstanceField(MockitoMethodInterceptor.class, "mockitoInterceptor")
+                        .filter(isDeclaredBy(MockitoMethodInterceptor.class)))
+                .implement(MockitoMethodInterceptor.MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
+                .method(isHashCode()).intercept(MethodDelegation.to(MockitoMethodInterceptor.ForHashCode.class))
+                .method(isEquals()).intercept(MethodDelegation.to(MockitoMethodInterceptor.ForEquals.class))
                 .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
 //            if (acrossClassLoaderSerialization) {
 //                builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)

@@ -21,6 +21,109 @@ import static org.mockito.internal.util.StringJoiner.join;
 
 public class ByteBuddyMockMaker implements MockMaker {
 
+    private final ClassInstantiator classInstantiator;
+
+    private static final Map<MockKey<?>, Class<?>> PREVIOUSLY_GENERATED_MOCK_CLASSES = new ConcurrentHashMap<MockKey<?>, Class<?>>();
+
+
+    public ByteBuddyMockMaker() {
+        classInstantiator = initializeClassInstantiator();
+    }
+
+    private static ClassInstantiator initializeClassInstantiator() {
+        try {
+            Class<?> objenesisClassLoader = Class.forName("org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker$ClassInstantiator$UsingObjenesis");
+            Constructor<?> usingClassCacheConstructor = objenesisClassLoader.getDeclaredConstructor(boolean.class);
+            return ClassInstantiator.class.cast(usingClassCacheConstructor.newInstance(new GlobalConfiguration().enableClassCache()));
+        } catch (Throwable throwable) {
+            // MockitoException cannot be used at this point as we are early in the classloading chain and necessary dependencies may not yet be loadable by the classloader
+            throw new IllegalStateException(join(
+                    "Mockito could not create mock: Objenesis is missing on the classpath.",
+                    "Please add Objenesis on the classpath.",
+                    ""
+            ));
+        }
+    }
+
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+        if (settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
+            throw new MockitoException("Serialization across classloaders not yet supported with ByteBuddy");
+        }
+        Class<? extends T> mockedType = getOrMakeMock(
+                settings.getTypeToMock(),
+                settings.getExtraInterfaces()
+        );
+        T mock = classInstantiator.instantiate(mockedType);
+        MockitoMethodInterceptor.MockAccess mockAccess = (MockitoMethodInterceptor.MockAccess) mock;
+        mockAccess.setMockitoInterceptor(new MockitoMethodInterceptor(asInternalMockHandler(handler), settings));
+        return mock;
+    }
+
+    public <T> Class<? extends T> getOrMakeMock(Class<T> mockedType, Set<Class> interfaces) {
+        MockKey<T> mockKey = new MockKey<T>(mockedType, interfaces);
+        Class<? extends T> mockType = lookup(mockKey);
+        if (mockType == null) {
+            synchronized (mockedType) {
+                mockType = lookup(mockKey);
+                if (mockType != null) {
+                    return mockType;
+                }
+                try {
+                    mockType = new ByteBuddyMockBytecodeGenerator().generateMockClass(mockedType, interfaces);
+                } catch (Exception generationFailed) {
+                    prettifyFailure(mockedType, generationFailed);
+                }
+                PREVIOUSLY_GENERATED_MOCK_CLASSES.put(mockKey, mockType);
+            }
+        }
+        return mockType;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Class<? extends T> lookup(MockKey<T> mockKey) {
+        return (Class<? extends T>) PREVIOUSLY_GENERATED_MOCK_CLASSES.get(mockKey);
+    }
+
+    private static void prettifyFailure(Class<?> mockedType, Exception generationFailed) {
+        if (Modifier.isPrivate(mockedType.getModifiers())) {
+            throw new MockitoException(join(
+                    "Mockito cannot mock this class: " + mockedType,
+                    ".",
+                    "Most likely it is a private class that is not visible by Mockito"
+            ));
+        }
+        throw new MockitoException(join(
+                "Mockito cannot mock this class: " + mockedType,
+                "",
+                "Mockito can only mock visible & non-final classes.",
+                "If you're not sure why you're getting this error, please report to the mailing list."),
+                generationFailed
+        );
+    }
+
+    public MockHandler getHandler(Object mock) {
+        if (!(mock instanceof MockitoMethodInterceptor.MockAccess)) {
+            return null;
+        }
+        return ((MockitoMethodInterceptor.MockAccess) mock).getMockitoInterceptor().getMockHandler();
+    }
+
+    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+        ((MockitoMethodInterceptor.MockAccess) mock).setMockitoInterceptor(new MockitoMethodInterceptor(asInternalMockHandler(newHandler), settings));
+    }
+
+    private static InternalMockHandler asInternalMockHandler(MockHandler handler) {
+        if (!(handler instanceof InternalMockHandler)) {
+            throw new MockitoException(join(
+                    "At the moment you cannot provide own implementations of MockHandler.",
+                    "Please see the javadocs for the MockMaker interface.",
+                    ""
+            ));
+        }
+        return (InternalMockHandler) handler;
+    }
+
+
     private static interface ClassInstantiator {
 
         <T> T instantiate(Class<T> type);
@@ -70,102 +173,4 @@ public class ByteBuddyMockMaker implements MockMaker {
             return result;
         }
     }
-
-    private final ClassInstantiator classInstantiator;
-
-    private static final Map<MockKey<?>, Class<?>> PREVIOUSLY_GENERATED_MOCK_CLASSES = new ConcurrentHashMap<MockKey<?>, Class<?>>();
-
-
-    public ByteBuddyMockMaker() {
-        classInstantiator = initializeSilentConstructor();
-    }
-
-    private static ClassInstantiator initializeSilentConstructor() {
-        try {
-            Class<?> objenesisClassLoader = Class.forName("org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker$ClassInstantiator$UsingObjenesis");
-            Constructor<?> usingClassCacheConstructor = objenesisClassLoader.getDeclaredConstructor(boolean.class);
-            return ClassInstantiator.class.cast(usingClassCacheConstructor.newInstance(new GlobalConfiguration().enableClassCache()));
-        } catch (Throwable throwable) {
-            // MockitoException cannot be used at this point as we are early in the classloading chain and necessary dependencies may not yet be loadable by the classloader
-            throw new IllegalStateException(join(
-                    "Mockito could not create mock: Objenesis is missing on the classpath.",
-                    "Please add Objenesis on the classpath.",
-                    ""
-            ));
-        }
-    }
-
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
-        if(settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
-            throw new MockitoException("Serialization across classloaders not yet supported with ByteBuddy");
-        }
-        Class<? extends T> mockedType = getOrMakeMock(
-                settings.getTypeToMock(),
-                settings.getExtraInterfaces()
-                );
-        T mock = classInstantiator.instantiate(mockedType);
-        MethodInterceptor.Access access = (MethodInterceptor.Access) mock;
-        access.setMockitoInterceptor(new MethodInterceptor(asInternalMockHandler(handler), settings));
-        return mock;
-    }
-
-    public <T> Class<? extends T> getOrMakeMock(Class<T> mockedType, Set<Class> interfaces) {
-        MockKey<T> mockKey = new MockKey<T>(mockedType, interfaces);
-        Class<? extends T> mockType = lookup(mockKey);
-        if (mockType == null) {
-            synchronized (mockedType) {
-                mockType = lookup(mockKey);
-                if (mockType != null) {
-                    return mockType;
-                }
-                try {
-                    mockType = new ByteBuddyMockBytecodeGenerator().generateMockClass(mockedType, interfaces);
-                } catch (Exception e) {
-                    prettify(mockedType, e);
-                }
-                PREVIOUSLY_GENERATED_MOCK_CLASSES.put(mockKey, mockType);
-            }
-        }
-        return mockType;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Class<? extends T> lookup(MockKey<T> mockKey) {
-        return (Class<? extends T>) PREVIOUSLY_GENERATED_MOCK_CLASSES.get(mockKey);
-    }
-
-    private static void prettify(Class<?> mockedType, Exception e) {
-        if (Modifier.isPrivate(mockedType.getModifiers())) {
-            throw new MockitoException("\n"
-                    + "Mockito cannot mock this class: " + mockedType
-                    + ".\n"
-                    + "Most likely it is a private class that is not visible by Mockito");
-        }
-        throw new MockitoException("\n"
-                + "Mockito cannot mock this class: " + mockedType
-                + "\n"
-                + "Mockito can only mock visible & non-final classes."
-                + "\n"
-                + "If you're not sure why you're getting this error, please report to the mailing list.", e);
-    }
-
-    public MockHandler getHandler(Object mock) {
-        if (!(mock instanceof MethodInterceptor.Access)) {
-            return null;
-        }
-        return ((MethodInterceptor.Access) mock).getMockitoInterceptor().getMockHandler();
-    }
-
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
-        ((MethodInterceptor.Access) mock).setMockitoInterceptor(new MethodInterceptor(asInternalMockHandler(newHandler), settings));
-    }
-
-    private static InternalMockHandler asInternalMockHandler(MockHandler handler) {
-        if (!(handler instanceof InternalMockHandler)) {
-            throw new MockitoException("At the moment you cannot provide own implementations of MockHandler." +
-                    "\nPlease see the javadocs for the MockMaker interface.");
-        }
-        return (InternalMockHandler) handler;
-    }
-
 }
