@@ -7,6 +7,8 @@
 # Eclipse
 .classpath
 .project
+.settings/
+bin/
 
 # Gradle & builds
 build
