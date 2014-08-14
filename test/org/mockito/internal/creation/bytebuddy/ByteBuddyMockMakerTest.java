@@ -62,31 +62,4 @@ public class ByteBuddyMockMakerTest {
 
         // then everything went fine
     }
-
-    @Test
-    public void validate_weak_hashmap_with_classloader_as_key() throws Exception {
-        WeakHashMap<ClassLoader, Object> cache = new WeakHashMap<ClassLoader, Object>();
-        ClassLoader inMemory = inMemoryClassLoader()
-                .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
-                .build();
-
-        cache.put(inMemory, new A(new WeakReference<Class>(inMemory.loadClass("foo.Bar"))));
-
-        System.out.println(cache);
-
-        inMemory = null;
-
-        System.gc();
-        Thread.sleep(500);
-
-        System.out.println(cache);
-    }
-
-    static class A {
-        final WeakReference<Class> a;
-
-        A(WeakReference<Class> a) {
-            this.a = a;
-        }
-    }
 }

@@ -309,7 +309,8 @@ class AcrossJVMSerializationFeature implements Serializable {
             // TODO check the class is mockable in the deserialization side
 
             // create the Mockito mock class before it can even be deserialized
-            Class<?> proxyClass = new CachingBytecodeGenerator().get(typeToMock, extraInterfaces);
+            // TODO make cache accessible in a singleton
+            Class<?> proxyClass = new CachingMockBytecodeGenerator().get(typeToMock, extraInterfaces);
             hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
             return proxyClass;
         }

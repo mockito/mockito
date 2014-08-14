@@ -16,57 +16,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
+class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 475027563923510472L;
-
-    public static interface SuperMethod extends Serializable {
-
-        static enum IsIllegal implements SuperMethod {
-
-            INSTANCE;
-
-            @Override
-            public boolean isInvokable() {
-                return false;
-            }
-
-            @Override
-            public Object invoke() {
-                throw new IllegalStateException();
-            }
-        }
-
-        static class FromCallable implements SuperMethod {
-
-            private static final long serialVersionUID = 47957363950483625L;
-
-            private final Callable<?> callable;
-
-            public FromCallable(Callable<?> callable) {
-                this.callable = callable;
-            }
-
-            @Override
-            public boolean isInvokable() {
-                return true;
-            }
-
-            @Override
-            public Object invoke() throws Throwable {
-                try {
-                    return callable.call();
-                } catch (Throwable t) {
-                    new ConditionalStackTraceFilter().filter(t);
-                    throw t;
-                }
-            }
-        }
-
-        boolean isInvokable();
-
-        Object invoke() throws Throwable;
-    }
 
     private final Object mock;
     private final MockitoMethod mockitoMethod;
@@ -192,4 +144,54 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     public String toString() {
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
+
+
+    public static interface SuperMethod extends Serializable {
+
+        static enum IsIllegal implements SuperMethod {
+
+            INSTANCE;
+
+            @Override
+            public boolean isInvokable() {
+                return false;
+            }
+
+            @Override
+            public Object invoke() {
+                throw new IllegalStateException();
+            }
+        }
+
+        static class FromCallable implements SuperMethod {
+
+            private static final long serialVersionUID = 47957363950483625L;
+
+            private final Callable<?> callable;
+
+            public FromCallable(Callable<?> callable) {
+                this.callable = callable;
+            }
+
+            @Override
+            public boolean isInvokable() {
+                return true;
+            }
+
+            @Override
+            public Object invoke() throws Throwable {
+                try {
+                    return callable.call();
+                } catch (Throwable t) {
+                    new ConditionalStackTraceFilter().filter(t);
+                    throw t;
+                }
+            }
+        }
+
+        boolean isInvokable();
+
+        Object invoke() throws Throwable;
+    }
+
 }

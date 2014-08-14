@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public class MockitoMethodInterceptor implements Serializable {
+public class MockMethodInterceptor implements Serializable {
 
     private static final long serialVersionUID = 7152947254057253027L;
 
@@ -30,8 +30,7 @@ public class MockitoMethodInterceptor implements Serializable {
 
     private final AcrossJVMSerializationFeature acrossJVMSerializationFeature;
 
-    public MockitoMethodInterceptor(InternalMockHandler handler,
-                                    MockCreationSettings mockCreationSettings) {
+    public MockMethodInterceptor(InternalMockHandler handler, MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
@@ -40,37 +39,54 @@ public class MockitoMethodInterceptor implements Serializable {
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 3)
     public Object interceptSuperCallable(@This Object mock,
-                                         @Origin(cacheMethod = true) Method method,
+                                         @Origin(cacheMethod = true) Method invokedMethod,
                                          @AllArguments Object[] arguments,
                                          @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
-        return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
+        return doIntercept(
+                mock,
+                invokedMethod,
+                arguments,
+                new InterceptedInvocation.SuperMethod.FromCallable(superCall)
+        );
     }
 
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 2)
     public Object interceptDefaultCallable(@This Object mock,
-                                           @Origin(cacheMethod = true) Method method,
+                                           @Origin(cacheMethod = true) Method invokedMethod,
                                            @AllArguments Object[] arguments,
                                            @DefaultCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
-        return doIntercept(mock, method, arguments, new InterceptedInvocation.SuperMethod.FromCallable(superCall));
+        return doIntercept(
+                mock,
+                invokedMethod,
+                arguments,
+                new InterceptedInvocation.SuperMethod.FromCallable(superCall)
+        );
     }
 
     @RuntimeType
     public Object interceptAbstract(@This Object mock,
-                                    @Origin(cacheMethod = true) Method method,
+                                    @Origin(cacheMethod = true) Method invokedMethod,
                                     @AllArguments Object[] arguments) throws Throwable {
-        return doIntercept(mock, method, arguments, InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE);
+        return doIntercept(
+                mock,
+                invokedMethod,
+                arguments,
+                InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE
+        );
     }
 
     private Object doIntercept(Object mock,
-                               Method method,
+                               Method invokedMethod,
                                Object[] arguments,
                                InterceptedInvocation.SuperMethod superMethod) throws Throwable {
-        return handler.handle(new InterceptedInvocation(mock,
-                createMockitoMethod(method),
+        return handler.handle(new InterceptedInvocation(
+                mock,
+                createMockitoMethod(invokedMethod),
                 arguments,
                 superMethod,
-                SequenceNumber.next()));
+                SequenceNumber.next()
+        ));
     }
 
     private MockitoMethod createMockitoMethod(Method method) {
@@ -90,30 +106,25 @@ public class MockitoMethodInterceptor implements Serializable {
     }
 
     public static class ForHashCode {
-
         public static int doIdentityHashCode(@This Object thiz) {
             return System.identityHashCode(thiz);
         }
     }
 
     public static class ForEquals {
-
         public static boolean doIdentityEquals(@This Object thiz, @Argument(0) Object other) {
             return thiz == other;
         }
     }
 
     public static class ForWriteReplace {
-
         public static Object doWriteReplace(@This MockAccess thiz) throws ObjectStreamException {
             return thiz.getMockitoInterceptor().getAcrossJVMSerializationFeature().writeReplace(thiz);
         }
     }
 
     public static interface MockAccess {
-
-        MockitoMethodInterceptor getMockitoInterceptor();
-
-        void setMockitoInterceptor(MockitoMethodInterceptor mockitoMethodInterceptor);
+        MockMethodInterceptor getMockitoInterceptor();
+        void setMockitoInterceptor(MockMethodInterceptor mockMethodInterceptor);
     }
 }

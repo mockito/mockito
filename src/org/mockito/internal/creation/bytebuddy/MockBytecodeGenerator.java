@@ -22,16 +22,13 @@ import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDecl
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
 
-/**
-*
-*/
-class ByteBuddyMockBytecodeGenerator {
+class MockBytecodeGenerator {
     private final ByteBuddy byteBuddy;
     private final Random random;
 
 
-    public ByteBuddyMockBytecodeGenerator() {
-        byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V6)
+    public MockBytecodeGenerator() {
+        byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V5)
 //                .withIgnoredMethods(isBridge())
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
@@ -44,11 +41,11 @@ class ByteBuddyMockBytecodeGenerator {
                 .name(nameFor(mockedType))
                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
                 .method(any()).intercept(MethodDelegation
-                        .toInstanceField(MockitoMethodInterceptor.class, "mockitoInterceptor")
-                        .filter(isDeclaredBy(MockitoMethodInterceptor.class)))
-                .implement(MockitoMethodInterceptor.MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
-                .method(isHashCode()).intercept(MethodDelegation.to(MockitoMethodInterceptor.ForHashCode.class))
-                .method(isEquals()).intercept(MethodDelegation.to(MockitoMethodInterceptor.ForEquals.class))
+                        .toInstanceField(MockMethodInterceptor.class, "mockitoInterceptor")
+                        .filter(isDeclaredBy(MockMethodInterceptor.class)))
+                .implement(MockMethodInterceptor.MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
+                .method(isHashCode()).intercept(MethodDelegation.to(MockMethodInterceptor.ForHashCode.class))
+                .method(isEquals()).intercept(MethodDelegation.to(MockMethodInterceptor.ForEquals.class))
                 .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
 //            if (acrossClassLoaderSerialization) {
 //                builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)
