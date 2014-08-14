@@ -1,18 +1,14 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.ObjenesisStd;
 
-import java.lang.ref.WeakReference;
-import java.util.WeakHashMap;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
-import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 
 public class ByteBuddyMockMakerTest {
 

@@ -33,7 +33,7 @@ public class CachingMockBytecodeGeneratorTest {
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"), Collections.<Class>emptySet()
         );
 
-        assumeTrue(cachingMockBytecodeGenerator.avoidingClassLeakageCache.size() == 1);
+        assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
 
         // when
         classloader_with_life_shorter_than_cache = is_no_more_referenced();
@@ -56,7 +56,7 @@ public class CachingMockBytecodeGeneratorTest {
 
         cache.put(short_lived_classloader, new HoldingAReference(new WeakReference<Class>(short_lived_classloader.loadClass("foo.Bar"))));
 
-        assumeTrue(cache.size() == 1);
+        assertThat(cache).hasSize(1);
 
         // when
         short_lived_classloader = is_no_more_referenced();
