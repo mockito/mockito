@@ -307,11 +307,9 @@ class AcrossJVMSerializationFeature implements Serializable {
             }
 
             // TODO check the class is mockable in the deserialization side
-            // ClassImposterizer.INSTANCE.canImposterise(typeToMock);
 
             // create the Mockito mock class before it can even be deserialized
-            //TODO SF unify creation of imposterizer, constructor code duplicated
-            Class<?> proxyClass = new ByteBuddyMockMaker().getOrMakeMock(typeToMock, extraInterfaces);
+            Class<?> proxyClass = new CachingBytecodeGenerator().get(typeToMock, extraInterfaces);
             hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
             return proxyClass;
         }
