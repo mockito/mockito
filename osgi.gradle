@@ -21,6 +21,7 @@ afterEvaluate {
 
             instruction 'Import-Package',
                     '!org.mockito.asm.signature',
+                    'net.bytebuddy.*;version=0.2.1',
                     'junit.*;resolution:=optional',
                     'org.junit.*;resolution:=optional',
                     'org.apache.tools.ant.*;resolution:=optional',
@@ -29,7 +30,8 @@ afterEvaluate {
                     'org.mockito.asm.signature;resolution:=optional',
                     'org.mockito.*'
 
-            instruction 'Private-Package', 'org.mockito.*'
+            instruction 'Private-Package',
+                    'org.mockito.*'
 
             instruction '-removeheaders', 'Private-Package'
         }
