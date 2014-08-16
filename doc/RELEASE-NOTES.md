@@ -1,4 +1,7 @@
-# 1.9.5 (06-10-2012)
+
+----------------------
+
+### 1.9.5 (06-10-2012)
 
 Few minor bugfixes and a relatively small extension point added to improve the android experience.
 
@@ -7,7 +10,7 @@ Few minor bugfixes and a relatively small extension point added to improve the a
 * @InjectMocks inconsistency between java 6 and 7 (issue 353) - neat **Brice's** work.
 * fixed a problem with autoboxed default return values, needed for the MockMaker extension point (issue 352). Thanks so much **Jesse Wilson** for reporting and the patch, and **Brice** for merging!
 
-# 1.9.5 rc-1 (03-06-2012)
+### 1.9.5 rc-1 (03-06-2012)
 
 Thanks a lot to all community members for reporting issues, submitting patches and ideas! The complete list of bug fixes and features is listed [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9.5-rc1&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
 
@@ -21,7 +24,7 @@ Thanks a lot to all community members for reporting issues, submitting patches a
   * **José Paumard**, who contributed several issues including the delegating answer.
   * **Julien Meddah** for an even better error reporting.
 
-# 1.9.0 (16-12-2011)
+### 1.9.0 (16-12-2011)
 
 If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.9.0-rc1! This release contains 2 bug fixes and 1 awesome improvement. Full details of this release are listed [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
 
@@ -29,7 +32,7 @@ If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.
 * Credits to **Daniel Spilker** for helping out with the issue related to mocks in superclasses
 * **Dpredovic** helped making the Mockito.reset() even better :)
 
-# 1.9.0-rc1 (23-07-2011)
+### 1.9.0-rc1 (23-07-2011)
 
  * Annotations are smarter. They can use constructor injection and instantiate objects. More information [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#23 here].
  * To keep the test code slim you can now create a stub [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#24 in one line].
@@ -50,4 +53,4 @@ If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.
   * *Peter Knista, Ivan Koblik, Slawek Garwol, Ruediger Herrmann, Robert Thibaut, Clive Evans* for reporting important issues
   * *rdamazio, kenpragma, mszczytowski, albelsky, everflux, twillhorn, nurkiewicz, hanriseldon, exortech, edwinstang, dodozhang21* for some more issue reports :)
 
-# Older versions are documented [here](https://code.google.com/p/mockito/wiki/ReleaseNotes).
+### Older versions are documented [here](https://code.google.com/p/mockito/wiki/ReleaseNotes).
