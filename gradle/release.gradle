@@ -2,6 +2,14 @@ assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
 
+/*
+TROUBLESHOOTING
+
+In case the release process from Travis CI fails, please try:
+  - push dummy commit
+  - update version.properties manually and push (can be done in the browser via GitHub gui)
+*/
+
 task (release) {
     onlyIf {
         def branch = System.env.TRAVIS_BRANCH
@@ -11,22 +19,52 @@ task (release) {
         releasable
     }
     doLast {
+        String previousVersion = project.version //the version loaded when Gradle build has started
+        String currentVersion = project.ext.loadVersion() //currently configured version in the file
+        String buildInfo = "by Travis CI build #$System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+        MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
+
+        //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
-        run "git", "config", "user.email", "szczepiq@gmail.com"
-        run "git", "config", "user.name", "Szczepan Faber"
-        updateJavadocNow()
+        configureGit()
+        commitUpdatedJavadoc()
+        pushTag(currentVersion, buildInfo, pushTarget)
+
+        /*
+            Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
+            What can happen:
+             - bintrayUpload will fail saying that the version is already released
+             - git push fails saying that the pull is needed
+            Resolutions:
+             - push dummy commit
+             - manually edit version.properties and push (can be done in the browser via GitHub gui)
+        */
         run "git", "checkout", "master"
-        run "./gradlew", "incrementVersion"
-        def previousVersion = project.version //the version loaded when Gradle build has started
-        def currentVersion = project.ext.loadVersion() //currently configured version in the file
-        String message = "Increment version '$previousVersion' -> '$currentVersion' by Travis CI build #$System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-        println message
-        run "git", "commit", "-m", "$message" as String, "version.properties"
-        run "git", "push", new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git"), "master", "gh-pages"
+        commitIncrementedVersion(previousVersion, currentVersion, buildInfo)
+        run "git", "push", pushTarget, "master", "gh-pages"
     }
 }
 
-void updateJavadocNow() {
+private void pushTag(String currentVersion, String buildInfo, MaskedArg pushTarget) {
+    String tag = "v${currentVersion}"
+    String tagMessage = "Create tag $tag ${buildInfo}"
+    run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
+    run "git", "push", pushTarget, tag
+}
+
+private void configureGit() {
+    run "git", "config", "user.email", "szczepiq@gmail.com"
+    run "git", "config", "user.name", "Szczepan Faber"
+}
+
+private void commitIncrementedVersion(String previousVersion, String currentVersion, String buildInfo) {
+    run "./gradlew", "incrementVersion"
+    String message = "Increment version '$previousVersion' -> '$currentVersion' $buildInfo"
+    run "git", "commit", "-m", "$message" as String, "version.properties"
+}
+
+
+private void commitUpdatedJavadoc() {
     run "git", "fetch", "origin", "+gh-pages:gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "-r", "docs/current", "-q"
@@ -44,7 +82,7 @@ void updateJavadocNow() {
 
 task updateJavadoc {
     doLast {
-        updateJavadocNow()
+        commitUpdatedJavadoc()
     }
 }
 
