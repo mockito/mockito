@@ -1,6 +1,3 @@
-
-----------------------
-
 ### 1.9.5 (06-10-2012)
 
 Few minor bugfixes and a relatively small extension point added to improve the android experience.
