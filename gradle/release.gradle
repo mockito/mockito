@@ -27,8 +27,8 @@ task (release) {
         //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
         configureGit()
-        commitUpdatedJavadoc()
         pushTag(currentVersion, buildInfo, pushTarget)
+        commitUpdatedJavadoc()
 
         /*
             Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
