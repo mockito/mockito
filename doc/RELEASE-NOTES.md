@@ -1,1 +1,53 @@
-Test
+# 1.9.5 (06-10-2012)
+
+Few minor bugfixes and a relatively small extension point added to improve the android experience.
+
+* **StackTraceCleaner API** - to improve the experience of mocking on android platform we've added an extension point for cleaning the stack traces. This allows the friends behind the [dexmaker](http://code.google.com/p/dexmaker) to implement custom stack trace filter and hence make the Mockito verification errors contain clean and tidy stack traces. Clean stack trace is something Mockito always cares about! Thanks a lot **Jesse Wilson** for reporting, submitting the initial patch and validating the final solution.
+* javadoc fix (issue 356) - thanks **konigsberg** for reporting and patching and **Brice** for merging.
+* @InjectMocks inconsistency between java 6 and 7 (issue 353) - neat **Brice's** work.
+* fixed a problem with autoboxed default return values, needed for the MockMaker extension point (issue 352). Thanks so much **Jesse Wilson** for reporting and the patch, and **Brice** for merging!
+
+# 1.9.5 rc-1 (03-06-2012)
+
+Thanks a lot to all community members for reporting issues, submitting patches and ideas! The complete list of bug fixes and features is listed [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9.5-rc1&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
+
+* **MockMaker API**. The [MockMaker](http://docs.mockito.googlecode.com/hg/1.9.5-rc1/org/mockito/plugins/MockMaker.html) extension point enables replacing the default proxy-creation implementation (cglib) with... something else :) For example, with a help from [dexmaker](http://code.google.com/p/dexmaker) you will be able to use Mockito with Android tests. Special thanks to friends from Google: **Jesse Wilson** and **Crazy Bob** for initiating the whole idea, for the patches, and for friendly pings to get the new feature released.
+* [**MockingDetails**](http://docs.mockito.googlecode.com/hg/1.9.5-rc1/org/mockito/Mockito.html#mocking_details) can be used to inspect objects and find out if they are Mockito mocks or spies. Special thanks to **David Wallace**, one of the new members of the Mockito team, who was championing the feature.
+* [**The delegating answer**](http://docs.mockito.googlecode.com/hg/1.9.5-rc1/org/mockito/Mockito.html#delegating_call_to_real_instance) is useful for spying some objects difficult to spy in the typical way. Thanks to **Brice Dutheil** (who is one of the most active contributors :) for making it happen!
+* Driven by changes needed by the MockMaker API we started externalizing some internal interfaces. Hence some new public types. Down the road it will make Mockito more flexible and extensible.
+* We moved some classes from the public interface 'org.mockito.exceptions' to an internal interface (Pluralizer, Discrepancy, JUnitTool). Don't worry though, those classes were not exposed by our API at all so chance that someone is uses them is minimal. Just in case, though, I left the deprecated variants.
+* Special thanks for the participants of **Hackergarten Paris**:
+  * **Eric Lefevre** for his contribution on the simple answers, yet useful.
+  * **José Paumard**, who contributed several issues including the delegating answer.
+  * **Julien Meddah** for an even better error reporting.
+
+# 1.9.0 (16-12-2011)
+
+If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.9.0-rc1! This release contains 2 bug fixes and 1 awesome improvement. Full details of this release are listed [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
+
+* Thanks to our mysterious friend **Dharapvj**, we now have most beautiful documentation. Take a look [here](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
+* Credits to **Daniel Spilker** for helping out with the issue related to mocks in superclasses
+* **Dpredovic** helped making the Mockito.reset() even better :)
+
+# 1.9.0-rc1 (23-07-2011)
+
+ * Annotations are smarter. They can use constructor injection and instantiate objects. More information [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#23 here].
+ * To keep the test code slim you can now create a stub [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#24 in one line].
+ * Made it possible to verify interactions [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#25 ignoring stubs].
+ * Fixed various bugs & enhancements. Full list is [http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here].
+ * **THANKS** to all the community members who helped improving Mockito! **Brice Dutheil** is a new Mockito champion, having contributed a lot of excellent code in the recent months! Without him, there wouldn't be any release and your mailing list queries wouldn't be answered so promptly! Brice - thank you and welcome to the team! Some fresh mojitoes ought to be served to:
+  * *Steven Baker* for sharing the one-liner stubs idea
+  * *Konrad Garus* for reporting the inconsistencies in the docs & exception messages
+  * *Murat Knecht* for the verbose logging
+  * *Krisztian Milesz* for the maven javadoc enhancement
+  * *Edwinstang* for patience and patches to injection logic
+  * *Kristofer Karlsson* for important bug reports and help with the mailing list
+  * *Gordon Tyler* for his vigilance and help on getting the main docs sorted
+  * *lucasmrtuner* for patches
+  * *jakubholy.net* for excellent doc updates
+  * *Andre Rigon* for patches on constructor injection
+  * *Ulrich Hobelmann* for important doc updates
+  * *Peter Knista, Ivan Koblik, Slawek Garwol, Ruediger Herrmann, Robert Thibaut, Clive Evans* for reporting important issues
+  * *rdamazio, kenpragma, mszczytowski, albelsky, everflux, twillhorn, nurkiewicz, hanriseldon, exortech, edwinstang, dodozhang21* for some more issue reports :)
+
+# Older versions are documented [here](https://code.google.com/p/mockito/wiki/ReleaseNotes).
