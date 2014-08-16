@@ -7,6 +7,9 @@ env:
   global:
   - secure: ZjU6SpkLzTAJr9qmxKDSI0uA8eJ/r5n58/equD6ifDlCBUasxPxOwaIARuNjhH45UCFOQDO9HMmvD7IWufyYl0OpACMM6MZ/0JX5Qsd+vhmBGirl6H3rRbVpvyoSI1J2xqJXy9/yTU54IYMDv3R7suinvmKXYHCqJ3h7ke+m4Ik=
   - secure: SDwSEK8W+GU78fVLi+P0k+v5eYK1fevz1Z0Htsjta2PRr0DicL6CMTNLxi48c3vXT+GHL6W8uojmfRwnHd8yyRZu2nW4Hda5rWB3de6Nz64lOZFYUbvoZfj9TdCgDYn+u2jUkm6+C76ZlPtfQhS97uZCb9iCDSdm1JErpng5e6g=
+branches:
+  except:
+    - /^v\d/
 install:
 - true
 script:
