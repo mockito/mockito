@@ -19,8 +19,7 @@ task (release) {
         releasable
     }
     doLast {
-        String previousVersion = project.version //the version loaded when Gradle build has started
-        String currentVersion = project.ext.loadVersion() //currently configured version in the file
+        String currentVersion = project.version //the version loaded when Gradle build has started
         String buildInfo = "by Travis CI build #$System.env.TRAVIS_BUILD_NUMBER [ci skip]"
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
@@ -40,9 +39,50 @@ task (release) {
              - manually edit version.properties and push (can be done in the browser via GitHub gui)
         */
         run "git", "checkout", "master"
-        commitIncrementedVersion(previousVersion, currentVersion, buildInfo)
+        commitIncrementedVersion(currentVersion, buildInfo)
+
         run "git", "push", pushTarget, "master", "gh-pages"
     }
+}
+
+//TODO work in progress
+//printIssuesBetween(getPreviousVersion(), "1.10.29-dev")
+
+private void printIssuesBetween(String fromVersion, String toVersion) {
+    getCommitsBetween("1.9.5", "1.10.29-dev").each {
+        if (it.contains("[ci skip]")) {
+            return
+        }
+        def tickets = it.findAll("#\\d+")
+        if (tickets) {
+            println "$tickets found in $it"
+        }
+        def issues = it.findAll("[Ii]ssue \\d+")
+        if (issues) {
+            println "$issues found in $it"
+        }
+    }
+}
+
+private String getPreviousVersion() {
+    return project.file("doc/RELEASE-NOTES.md").withReader {
+        def firstLine = it.readLine()
+        assert firstLine.startsWith('###')
+        //Example: "### 1.9.5 (06-10-2012)", we want to extract "1.9.5"
+        def m = firstLine =~ /### (.+?) .*/
+        assert m.matches()
+        return m.group(1)
+    }
+}
+
+private Collection<String> getCommitsBetween(String fromVersion, String toVersion) {
+    def out = new ByteArrayOutputStream()
+    def token = "@@commit@@"
+    project.exec {
+        standardOutput = out
+        commandLine "git", "log", "--pretty=format:%B$token", "v${fromVersion}..v${toVersion}"
+    }
+    out.toString().split(token)*.trim()
 }
 
 private void pushTag(String currentVersion, String buildInfo, MaskedArg pushTarget) {
@@ -57,9 +97,10 @@ private void configureGit() {
     run "git", "config", "user.name", "Szczepan Faber"
 }
 
-private void commitIncrementedVersion(String previousVersion, String currentVersion, String buildInfo) {
+private void commitIncrementedVersion(String currentVersion, String buildInfo) {
     run "./gradlew", "incrementVersion"
-    String message = "Increment version '$previousVersion' -> '$currentVersion' $buildInfo"
+    String nextVersion = project.ext.loadVersion() //currently configured version in the file - TODO we don't need this, we infer changes from tags
+    String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
     run "git", "commit", "-m", "$message" as String, "version.properties"
 }
 
