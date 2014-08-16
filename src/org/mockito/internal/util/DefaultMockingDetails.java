@@ -41,5 +41,16 @@ public class DefaultMockingDetails implements MockingDetails {
     public Collection<Invocation> getInvocations() {
     	return delegate.getMockHandler(toInspect).getInvocationContainer().getInvocations();
     }
+    
+    /**
+     * Returns the "real" or "original" class of the object, or the type originally passed to
+     * the "mock()" or "spy()" function, or referenced by an annotation. If the object is a plain
+     * object, then it will just return the class of the object.
+     * 
+     * @return Real or "original" class of the object
+     */
+    public Class<?> getRealClass() {
+        return new MockUtil().getMockHandler(toInspect).getMockSettings().getTypeToMock();
+    }
 }
 
