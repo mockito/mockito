@@ -63,7 +63,6 @@ private void commitIncrementedVersion(String previousVersion, String currentVers
     run "git", "commit", "-m", "$message" as String, "version.properties"
 }
 
-
 private void commitUpdatedJavadoc() {
     run "git", "fetch", "origin", "+gh-pages:gh-pages", "--depth=1"
     run "git", "checkout", "gh-pages"
