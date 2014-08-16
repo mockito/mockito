@@ -1,10 +1,13 @@
 assert project == rootProject
 
-Properties props = new Properties()
-File versionFile = rootProject.file("version.properties")
-props.load(new FileInputStream(versionFile))
+File versionFile = project.rootProject.file("version.properties")
+project.ext.loadVersion = {
+    Properties props = new Properties()
+    props.load(new FileInputStream(versionFile))
+    props.version
+}
 
-project.version = props.version
+project.version = project.ext.loadVersion()
 
 logger.lifecycle "Version: $project.version"
 
