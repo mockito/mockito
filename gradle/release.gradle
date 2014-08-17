@@ -27,7 +27,7 @@ task (release) {
         //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
         configureGit()
-        //TODO tag should contain updated release notes. Update notes on tag and cherry-pick to master.
+        //TODO tag should contain updated release notes. Update notes on tag (use HEAD as 'toVersion') and cherry-pick to master.
         pushTag(currentVersion, buildInfo, pushTarget)
         commitUpdatedJavadoc(buildInfo)
 
