@@ -124,7 +124,8 @@ private ImprovementSet getImprovements(Set<String> tickets) {
     if (tickets.empty) {
         return new ImprovementSet(improvements: [])
     }
-    println "Querying GitHub API about ${tickets.size()} tickets. This may take a while."
+    //TODO we should query for all tickets via one REST call and stop using jcapi
+    println "Querying GitHub API for ${tickets.size()} tickets. This may take a while."
     def github = new RtGithub(System.env.GH_TOKEN)
     def repo = github.repos().get(new Coordinates.Simple("mockito/mockito"))
     def issues = repo.issues()
