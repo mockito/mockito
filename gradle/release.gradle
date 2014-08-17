@@ -27,7 +27,8 @@ task (release) {
         //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
         configureGit()
-        //TODO tag should contain updated release notes. Update notes on tag (use HEAD as 'toVersion') and cherry-pick to master.
+        updateReleaseNotes()
+        commitReleaseNotes(buildInfo)
         pushTag(currentVersion, buildInfo, pushTarget)
         commitUpdatedJavadoc(buildInfo)
 
@@ -40,19 +41,22 @@ task (release) {
              - see 'TROUBLESHOOTING' section at the top of this file
         */
         run "git", "checkout", "master"
-        commitUpdatedReleaseNotes(buildInfo)
+        run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
+        commitReleaseNotes(buildInfo)
         commitIncrementedVersion(currentVersion, buildInfo)
 
         run "git", "push", pushTarget, "master", "gh-pages"
     }
 }
 
-private void commitUpdatedReleaseNotes(String buildInfo) {
+private void updateReleaseNotes() {
     //release-notes.gradle script plugin immediately updates the notes when it is applied
     //I needed to implement it this way to avoid some weird classloader issues
     //This problem should go away once we stop using jcabi
     project.apply from: rootProject.file("gradle/release-notes.gradle")
+}
 
+private void commitReleaseNotes(String buildInfo) {
     def notesFile = project.file("doc/RELEASE-NOTES.md")
     run "git", "add", "$notesFile" as String
     run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
