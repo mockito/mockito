@@ -25,10 +25,10 @@ task (release) {
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
         //Release process. Should *not* run concurrently.
-        //run "./gradlew", "bintrayUpload" //TODO uncomment
+        run "./gradlew", "bintrayUpload"
         configureGit()
-        updateReleaseNotes()
-        commitReleaseNotes(buildInfo)
+//        updateReleaseNotes() //TODO SF release notes automation is in progress
+//        commitReleaseNotes(buildInfo)
         pushTag(currentVersion, buildInfo, pushTarget)
         commitUpdatedJavadoc(buildInfo)
 
@@ -42,7 +42,7 @@ task (release) {
         */
         run "git", "checkout", "master"
         run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
-        commitReleaseNotes(buildInfo)
+//        commitReleaseNotes(buildInfo)
         commitIncrementedVersion(currentVersion, buildInfo)
 
         run "git", "push", pushTarget, "master", "gh-pages"
