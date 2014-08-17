@@ -16,7 +16,7 @@ ext.updateReleaseNotes = { File notesFile, String toVersion ->
 }
 
 def notesFile = project.file("doc/RELEASE-NOTES.md")
-updateReleaseNotes(notesFile, "1.10.29-dev")
+updateReleaseNotes(notesFile, project.version)
 
 import com.jcabi.github.*
 

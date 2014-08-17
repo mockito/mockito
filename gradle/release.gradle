@@ -27,7 +27,7 @@ task (release) {
         //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
         configureGit()
-        commitUpdatedReleaseNotes(buildInfo)
+        //TODO tag should contain updated release notes. Update notes on tag and cherry-pick to master.
         pushTag(currentVersion, buildInfo, pushTarget)
         commitUpdatedJavadoc(buildInfo)
 
@@ -40,6 +40,7 @@ task (release) {
              - see 'TROUBLESHOOTING' section at the top of this file
         */
         run "git", "checkout", "master"
+        commitUpdatedReleaseNotes(buildInfo)
         commitIncrementedVersion(currentVersion, buildInfo)
 
         run "git", "push", pushTarget, "master", "gh-pages"
