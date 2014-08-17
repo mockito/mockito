@@ -4,21 +4,20 @@ buildscript {
         classpath "com.jcabi:jcabi-github:0.13.2"
     }
 }
+import com.jcabi.github.*
 
-ext.updateReleaseNotes = { File notesFile, String toVersion ->
+def notesFile = project.file("doc/RELEASE-NOTES.md")
+updateReleaseNotes(notesFile, "HEAD")
+
+private void updateReleaseNotes(File notesFile, String toVersion) {
     println "Updating release notes file: $notesFile"
     def currentContent = notesFile.text
-    def previousVersion = getPreviousVersion(notesFile)
+    def previousVersion = "v" + getPreviousVersion(notesFile)
     println "Building notes since $previousVersion until $toVersion"
     def newContent = buildNotesBetween(previousVersion, toVersion)
     notesFile.text = newContent + currentContent
     println "Successfully updated the release notes!"
 }
-
-def notesFile = project.file("doc/RELEASE-NOTES.md")
-updateReleaseNotes(notesFile, "HEAD")
-
-import com.jcabi.github.*
 
 private String buildNotesBetween(String fromVersion, String toVersion) {
     def tickets = new HashSet()
@@ -108,7 +107,7 @@ private Collection<String> getCommitsBetween(String fromVersion, String toVersio
     def token = "@@commit@@"
     project.exec {
         standardOutput = out
-        commandLine "git", "log", "--pretty=format:%B$token", "v${fromVersion}..v${toVersion}"
+        commandLine "git", "log", "--pretty=format:%B$token", "${fromVersion}..${toVersion}"
     }
     return out.toString().split(token)*.trim()
 }
