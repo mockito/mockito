@@ -14,8 +14,6 @@ private void updateReleaseNotes(File notesFile, String toVersion) {
     println "Updating release notes file: $notesFile"
     def currentContent = notesFile.text
     def previousVersion = "v" + getPreviousVersion(notesFile)
-    println "Fetching tag $previousVersion"
-//    project.exec { commandLine "git", "fetch", "origin", "+refs/tags/$previousVersion:refs/tags/$previousVersion" }
     println "Building notes since $previousVersion until $toVersion"
     def newContent = buildNotesBetween(previousVersion, toVersion)
     notesFile.text = newContent + currentContent

@@ -10,6 +10,7 @@ In case the release process from Travis CI fails, please try:
 assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
+//apply from: rootProject.file("gradle/release-notes.gradle")
 
 task (release) {
     onlyIf {
@@ -27,8 +28,9 @@ task (release) {
         //Release process. Should *not* run concurrently.
         run "./gradlew", "bintrayUpload"
         configureGit()
-//        updateReleaseNotes() //TODO SF release notes automation is in progress
-//        commitReleaseNotes(buildInfo)
+        run "git", "pull", "--depth", "500" //We need good chunk of recent commits to build release notes correctly
+        updateReleaseNotes()
+        commitReleaseNotes(buildInfo)
         pushTag(currentVersion, buildInfo, pushTarget)
         commitUpdatedJavadoc(buildInfo)
 
@@ -42,7 +44,7 @@ task (release) {
         */
         run "git", "checkout", "master"
         run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
-//        commitReleaseNotes(buildInfo)
+        commitReleaseNotes(buildInfo)
         commitIncrementedVersion(currentVersion, buildInfo)
 
         run "git", "push", pushTarget, "master", "gh-pages"
