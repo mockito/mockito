@@ -115,7 +115,7 @@ class ContributionSet {
     String toString() {
         def sorted = contributions.sort { a, b -> b.value.commits.size() <=> a.value.commits.size() }
         """* Authors: ${contributions.keySet().size()}
-  * Commits: $commitCount
+* Commits: $commitCount
   * ${sorted.values().join('\n  * ')}"""
     }
 }
