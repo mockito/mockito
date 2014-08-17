@@ -25,7 +25,7 @@ task (release) {
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
         //Release process. Should *not* run concurrently.
-        run "./gradlew", "bintrayUpload"
+        //run "./gradlew", "bintrayUpload" //TODO uncomment
         configureGit()
         updateReleaseNotes()
         commitReleaseNotes(buildInfo)
