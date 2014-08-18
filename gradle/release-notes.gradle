@@ -73,18 +73,20 @@ class Commit {
 
 class Contribution {
     String email //identifies the contributor
-    Set<String> authorAliases = new HashSet<String>() //there may be multiple aliases associated with given email
+    String author
     Collection<Commit> commits = new LinkedList<Commit>() //the commits
     void add(Commit commit) {
         if (email == null) {
             email = commit.email
+            author = commit.author
+            //TODO we could guess the best author from the ones associated with given email
+            //we could base on existence of space (this hints that it's a proper first name + surname)
         }
-        assert email == commit.email
-        authorAliases << commit.author
+        assert email == commit.email //email identifies the contributor, author alias not necessarily
         commits << commit
     }
     String toString() {
-        "${authorAliases.iterator().next()}: ${commits.size()}"
+        "$author: ${commits.size()}"
     }
 }
 
@@ -113,11 +115,15 @@ class ContributionSet {
         out
     }
     String toString() {
-        def sorted = contributions.sort { a, b -> b.value.commits.size() <=> a.value.commits.size() }
-        """* Authors: ${contributions.keySet().size()}
-* Commits: $commitCount
-  * ${sorted.values().join('\n  * ')}"""
-    }
+        def sorted = contributions.sort { a, b -> b.value.commits.size() <=> a.value.commits.size() } //top contributors first
+        def grouped = sorted.groupBy { it.value.commits.size() } //groupBy number of commits
+        def out = """* Authors: ${contributions.keySet().size()}
+* Commits: $commitCount"""
+        grouped.each { k,v ->
+            out += "\n  * $k: ${v.values()*.author.join(', ')}"
+        }
+        out
+     }
 }
 
 private ImprovementSet getImprovements(Set<String> tickets) {
