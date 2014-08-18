@@ -1,3 +1,10 @@
+### 1.10.40-dev (2014-08-18 07:26 UTC)
+
+* Authors: 1
+* Commits: 7
+  * 7: Szczepan Faber
+* Improvements: 0
+
 ### 1.10.38-dev (2014-08-17 21:54 UTC)
 
 * Authors: 25
