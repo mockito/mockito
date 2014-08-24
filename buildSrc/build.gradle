@@ -1,0 +1,9 @@
+apply plugin: 'idea'
+apply plugin: 'groovy'
+
+repositories { jcenter() }
+
+dependencies {
+    compile gradleApi()
+    compile "com.jcabi:jcabi-github:0.13.2"
+}
