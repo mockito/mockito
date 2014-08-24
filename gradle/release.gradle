@@ -54,7 +54,7 @@ task (release) {
 private void updateReleaseNotes() {
     //release-notes.gradle script plugin immediately updates the notes when it is applied
     //I needed to implement it this way to avoid some weird classloader issues
-    //This problem should go away once we stop using jcabi
+    //TODO SF now that the code live under buildSrc try fixing this configuration-time hack
     project.apply from: rootProject.file("gradle/release-notes.gradle")
 }
 
