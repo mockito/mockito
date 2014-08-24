@@ -6,7 +6,7 @@ buildscript {
 }
 import com.jcabi.github.*
 
-def notesFile = project.file("doc/RELEASE-NOTES.md")
+def notesFile = project.file("doc/release-notes/official.md")
 updateReleaseNotes(notesFile, "HEAD")
 //println getContributionsBetween("v1.9.5", "HEAD")
 
