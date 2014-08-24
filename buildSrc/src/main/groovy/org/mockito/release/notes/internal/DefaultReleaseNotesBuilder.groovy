@@ -12,8 +12,10 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
 
     private final Project project
     private final String gitHubToken
+    private final String ignorePattern
 
-    DefaultReleaseNotesBuilder(Project project, String gitHubToken) {
+    DefaultReleaseNotesBuilder(Project project, String gitHubToken, String ignorePattern) {
+        this.ignorePattern = ignorePattern
         this.gitHubToken = gitHubToken
         this.project = project
     }
@@ -75,7 +77,7 @@ $improvements
                 out << new Improvement(id: issue.number(), title: issue.title(), url: issue.htmlUrl())
             }
         }
-        new ImprovementSet(improvements: out)
+        new ImprovementSet(improvements: out, ignorePattern: ignorePattern)
     }
 
     String getPreviousVersion(File notesFile) {

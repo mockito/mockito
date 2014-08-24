@@ -2,4 +2,5 @@ Plan for this module:
  - extract a library out of it (open source it)
  - create a separate gradle plugin that makes use of this library (open source it)
  - use java instead of groovy
- - design the public api and hide everything behind interfaces (besides a single entry-point class)
+ - design the public api and hide everything behind interfaces (besides a single entry-point class).
+    There should be no public classes besides one.
