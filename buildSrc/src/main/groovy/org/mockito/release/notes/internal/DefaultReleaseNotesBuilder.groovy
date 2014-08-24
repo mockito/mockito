@@ -99,7 +99,7 @@ $improvements
         def infoToken = "@@info@@"
         project.exec {
             standardOutput = out
-            commandLine "git", "log", "--pretty=format:%ae$infoToken%an$infoToken%B$entryToken", "${fromRevision}..${toRevision}"
+            commandLine "git", "log", "--pretty=format:%ae$infoToken%an$infoToken%B%N$entryToken", "${fromRevision}..${toRevision}"
         }
         def contributions = new ContributionSet()
         out.toString().split(entryToken).each { String logEntry ->
