@@ -198,6 +198,7 @@ public class BDDMockito extends Mockito {
      *
      * @see #verify(Object)
      * @see #verify(Object, VerificationMode)
+     * @since 1.10.0
      */
     public static <T> Then<T> then(T mock) {
         return new Then<T>(mock);

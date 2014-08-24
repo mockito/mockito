@@ -38,7 +38,7 @@ public interface MockingDetails {
      * @return collection of Invocation representing the invocations 
      * for the object.
      *
-     * @since 1.9.x
+     * @since 1.10.0
      */
     Collection<Invocation> getInvocations();
 }
