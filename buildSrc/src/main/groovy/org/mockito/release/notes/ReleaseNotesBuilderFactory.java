@@ -17,6 +17,7 @@ class ReleaseNotesBuilderFactory {
     private String ignorePattern;
     private Map<String, String> labelToHeaderMapping = Collections.emptyMap();
     private List<String> labelsToIgnore = Collections.emptyList();
+    private String headerForOtherChanges;
 
     ReleaseNotesBuilderFactory(Project project) {
         this.project = project;
@@ -25,7 +26,7 @@ class ReleaseNotesBuilderFactory {
     ReleaseNotesBuilder createBuilder() {
         Collection<String> labelsToShowSeparately = labelToHeaderMapping.keySet();
         ChangeSetSegregator segregator = new ChangeSetSegregator(labelsToShowSeparately, labelsToIgnore);
-        ImprovementsPrinter improvementsPrinter = new ImprovementsPrinter(segregator, labelToHeaderMapping);
+        ImprovementsPrinter improvementsPrinter = new ImprovementsPrinter(segregator, labelToHeaderMapping, headerForOtherChanges);
         return new DefaultReleaseNotesBuilder(project, gitHubToken, ignorePattern, improvementsPrinter);
     }
 
@@ -48,6 +49,11 @@ class ReleaseNotesBuilderFactory {
 
     ReleaseNotesBuilderFactory showSeparatelyImprovementsWithLabelMappings(Map<String, String> labelToHeaderMapping) {
         this.labelToHeaderMapping = labelToHeaderMapping;
+        return this;
+    }
+
+    ReleaseNotesBuilderFactory headerForOtherChanges(String headerForOtherChanges) {
+        this.headerForOtherChanges = headerForOtherChanges;
         return this;
     }
 }
