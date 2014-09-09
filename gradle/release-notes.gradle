@@ -2,9 +2,11 @@ import org.mockito.release.notes.*
 
 ext.updateReleaseNotes = {
     def notesBuilder = new ReleaseNotesBuilderFactory(project)
-            .gitHubToken(System.env.GH_TOKEN)
-            .ignoreImprovementsMatching("^[Rr]efactoring.*")
-            .createBuilder()
+        .gitHubToken(System.env.GH_TOKEN)
+        .ignoreImprovementsMatching("^[Rr]efactoring.*")
+        .showSeparatelyImprovementsWithLabelMappings(["bug": "Fixed bugs", "enhancement": "Improvements", "doc": "Documentation"])
+        .ignoreImprovementsWithLabels(["refactoring", "invalid", "question", "wontfix", "duplicate"])
+        .createBuilder()
     def notesFile = project.file("doc/release-notes/official.md")
     notesBuilder.updateNotes(notesFile, "HEAD")
 }

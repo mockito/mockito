@@ -6,6 +6,8 @@ import org.mockito.release.notes.ContributionSet
 import org.mockito.release.notes.GitCommit
 import org.mockito.release.notes.Improvement
 import org.mockito.release.notes.ImprovementSet
+import org.mockito.release.notes.LabelledImprovementSet
+import org.mockito.release.notes.OneCategoryImprovementSet
 import org.mockito.release.notes.ReleaseNotesBuilder
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
@@ -13,11 +15,14 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
     private final Project project
     private final String gitHubToken
     private final String ignorePattern
+    private final ImprovementsPrinter improvementsPrinter
 
-    DefaultReleaseNotesBuilder(Project project, String gitHubToken, String ignorePattern) {
+    DefaultReleaseNotesBuilder(Project project, String gitHubToken, String ignorePattern,
+                               ImprovementsPrinter improvementsPrinter) {
         this.ignorePattern = ignorePattern
         this.gitHubToken = gitHubToken
         this.project = project
+        this.improvementsPrinter = improvementsPrinter
     }
 
     void updateNotes(File notesFile, String toVersion) {
@@ -60,7 +65,7 @@ $improvements
 
     ImprovementSet getImprovements(Set<String> tickets) {
         if (tickets.empty) {
-            return new ImprovementSet(improvements: [])
+            return new OneCategoryImprovementSet(improvements: [])
         }
         //TODO we should query for all tickets via one REST call and stop using jcapi
         println "Querying GitHub API for ${tickets.size()} tickets. This may take a while."
@@ -74,10 +79,22 @@ $improvements
             def i = issues.get(it as int)
             def issue = new Issue.Smart(i)
             if (issue.exists() && !issue.isOpen()) {
-                out << new Improvement(id: issue.number(), title: issue.title(), url: issue.htmlUrl())
+                out << new Improvement(id: issue.number(), title: issue.title(), url: issue.htmlUrl(),
+                        labels: iterableToList(issue.labels().iterate()).collect{ Label label -> label.name() })
             }
         }
-        new ImprovementSet(improvements: out, ignorePattern: ignorePattern)
+//        new OneCategoryImprovementSet(improvements: out, ignorePattern: ignorePattern)
+        new LabelledImprovementSet(out, ignorePattern, improvementsPrinter)
+    }
+
+    //TODO: MZA: Can it be done easier with Groovy 1.7.6?
+    private static <T> List<T> iterableToList(Iterable<T> iterable) {
+        def list = []
+        def iterator = iterable.iterator()
+        while (iterator.hasNext()) {
+            list.add(iterator.next())
+        }
+        list
     }
 
     String getPreviousVersion(File notesFile) {
