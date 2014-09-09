@@ -6,27 +6,39 @@ import static org.mockito.release.notes.internal.ImprovementTestFixture.anImprov
 
 class ImprovementsPrinterIntegrationTest extends Specification {
 
+    public static final DEFAULT_MAPPINGS = ["bug": "Fixed bugs", "doc": "Documentation", "enhancement": "Enhancements"]
+
     def "should print formatted change list"() {
         given:
-            def improvements = [anImprovementWithIdAndLabels("1", ["bug"]),
-                                anImprovementWithIdAndLabels("2", []),
-                                anImprovementWithIdAndLabels("3", ["bug", "enhancement"]),
-                                anImprovementWithIdAndLabels("4", ["ignored"])]
-            def mappings = ["bug": "Fixed bugs", "doc": "Documentation", "enhancement": "Improvements"]
+            def changes = [anImprovementWithIdAndLabels("1", ["bug"]),
+                           anImprovementWithIdAndLabels("2", []),
+                           anImprovementWithIdAndLabels("3", ["bug", "enhancement"]),
+                           anImprovementWithIdAndLabels("4", ["ignored"])]
         and:
-            def segregator = new ChangeSetSegregator(mappings.keySet(), ["ignored"])
-            def sut = new ImprovementsPrinter(segregator, mappings, "Other")
+            def segregator = new ImprovementSetSegregator(DEFAULT_MAPPINGS.keySet(), ["ignored"])
+            def sut = new ImprovementsPrinter(segregator, DEFAULT_MAPPINGS, "Other")
         when:
-            def printed = sut.print(improvements)
+            def printed = sut.print(changes)
         then:
-            printed == """* Changes: 4
- * Fixed bugs: 2
-  * bug 1 [(#1)](u1)
-  * bug 3 [(#3)](u3)
- * Documentation: 0
- * Improvements: 1
-  * bug 3 [(#3)](u3)
- * Other: 1
-  * bug 2 [(#2)](u2)"""
+            printed == """* Improvements: 4
+  * Fixed bugs: 2
+    * bug 1 [(#1)](u1)
+    * bug 3 [(#3)](u3)
+  * Enhancements: 1
+    * bug 3 [(#3)](u3)
+  * Other: 1
+    * bug 2 [(#2)](u2)"""
+    }
+
+    def "should print formatted change list for no changes"() {
+        given:
+            def changes = []
+        and:
+            def segregator = new ImprovementSetSegregator(DEFAULT_MAPPINGS.keySet(), ["ignored"])
+            def sut = new ImprovementsPrinter(segregator, DEFAULT_MAPPINGS, "Other")
+        when:
+            def printed = sut.print(changes)
+        then:
+            printed == """* Improvements: 0"""
     }
 }

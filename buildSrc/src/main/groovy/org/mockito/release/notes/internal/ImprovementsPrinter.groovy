@@ -2,39 +2,42 @@ package org.mockito.release.notes.internal
 
 import org.mockito.release.notes.Improvement
 
-import static org.mockito.release.notes.internal.ChangeSetSegregator.NON_EXISTING_LABEL
+import static ImprovementSetSegregator.NON_EXISTING_LABEL
 
 class ImprovementsPrinter {
 
+    private static final String ROOT_IMPROVEMENTS_HEADER = "Improvements"
     private static final String DEFAULT_HEADER_FOR_OTHER_IMPROVEMENTS = "Other"
 
-    private final ChangeSetSegregator segregator
+    private final ImprovementSetSegregator segregator
     private final Map<String, String> labelToListHeaderMappings
 
-    ImprovementsPrinter(ChangeSetSegregator segregator, Map<String, String> labelToListHeaderMappings, String headerForOther) {
+    ImprovementsPrinter(ImprovementSetSegregator segregator, Map<String, String> labelToListHeaderMappings, String headerForOther) {
         this.segregator = segregator
         this.labelToListHeaderMappings = labelToListHeaderMappings +
                 [(NON_EXISTING_LABEL): headerForOther ?: DEFAULT_HEADER_FOR_OTHER_IMPROVEMENTS]
     }
 
     String print(Collection<Improvement> improvements) {
-        def tokenizedChanges = segregator.tokenize(improvements)
-        def printedTokenizedChanges = printTokenizedImprovements(tokenizedChanges)
+        def tokenizedImprovements = segregator.tokenize(improvements)
+        def printedTokenizedImprovements = printTokenizedImprovements(tokenizedImprovements)
 
-        "* Changes: ${improvements.size()}\n * $printedTokenizedChanges"
+        "* " + ROOT_IMPROVEMENTS_HEADER + ": ${improvements.size()}$printedTokenizedImprovements"
      }
 
     private String printTokenizedImprovements(Map<String, List<Improvement>> tokenizedImprovementsMap) {
-        tokenizedImprovementsMap.collect { entry ->
-            "${labelToListHeaderMappings.getOrDefault(entry.key, entry.key)}: ${printOneSubImprovements(entry.value)}"
-        }.join('\n * ')
+        tokenizedImprovementsMap.findAll { entry ->
+            entry.value.size() > 0
+        }.collect { entry ->
+                "\n  * ${labelToListHeaderMappings.get(entry.key, entry.key)}: ${printOneSubImprovements(entry.value)}"
+        }.join('')
     }
 
     private String printOneSubImprovements(Collection<Improvement> improvements) {
         if (improvements.isEmpty()) {
             "0"
         } else {
-            "${improvements.size()}\n  * ${improvements.join('\n  * ')}"
+            "${improvements.size()}\n    * ${improvements.join('\n    * ')}"
         }
     }
 }

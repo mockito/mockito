@@ -1,7 +1,7 @@
 package org.mockito.release.notes;
 
 import org.gradle.api.Project;
-import org.mockito.release.notes.internal.ChangeSetSegregator;
+import org.mockito.release.notes.internal.ImprovementSetSegregator;
 import org.mockito.release.notes.internal.DefaultReleaseNotesBuilder;
 import org.mockito.release.notes.internal.ImprovementsPrinter;
 
@@ -17,7 +17,7 @@ class ReleaseNotesBuilderFactory {
     private String ignorePattern;
     private Map<String, String> labelToHeaderMapping = Collections.emptyMap();
     private List<String> labelsToIgnore = Collections.emptyList();
-    private String headerForOtherChanges;
+    private String headerForOtherImprovements;
 
     ReleaseNotesBuilderFactory(Project project) {
         this.project = project;
@@ -25,8 +25,8 @@ class ReleaseNotesBuilderFactory {
 
     ReleaseNotesBuilder createBuilder() {
         Collection<String> labelsToShowSeparately = labelToHeaderMapping.keySet();
-        ChangeSetSegregator segregator = new ChangeSetSegregator(labelsToShowSeparately, labelsToIgnore);
-        ImprovementsPrinter improvementsPrinter = new ImprovementsPrinter(segregator, labelToHeaderMapping, headerForOtherChanges);
+        ImprovementSetSegregator segregator = new ImprovementSetSegregator(labelsToShowSeparately, labelsToIgnore);
+        ImprovementsPrinter improvementsPrinter = new ImprovementsPrinter(segregator, labelToHeaderMapping, headerForOtherImprovements);
         return new DefaultReleaseNotesBuilder(project, gitHubToken, ignorePattern, improvementsPrinter);
     }
 
@@ -52,8 +52,8 @@ class ReleaseNotesBuilderFactory {
         return this;
     }
 
-    ReleaseNotesBuilderFactory headerForOtherChanges(String headerForOtherChanges) {
-        this.headerForOtherChanges = headerForOtherChanges;
+    ReleaseNotesBuilderFactory headerForOtherImprovements(String headerForOtherImprovements) {
+        this.headerForOtherImprovements = headerForOtherImprovements;
         return this;
     }
 }
