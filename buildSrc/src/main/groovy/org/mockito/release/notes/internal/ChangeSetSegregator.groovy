@@ -5,7 +5,6 @@ import org.mockito.release.notes.Improvement
 
 class ChangeSetSegregator {
 
-    // visible for testing
     @PackageScope
     static final NON_EXISTING_LABEL = "====NOT_EXISTING===="
 
