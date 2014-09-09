@@ -2,12 +2,12 @@ package org.mockito.release.notes.internal
 
 import spock.lang.Specification
 
-import static org.mockito.release.notes.internal.ChangeSetSegregator.NON_EXISTING_LABEL
+import static ImprovementSetSegregator.NON_EXISTING_LABEL
 import static org.mockito.release.notes.internal.ImprovementTestFixture.anImprovementWithIdAndLabels
 
-class ChangeSetSegregatorTest extends Specification {
+class ImprovementSetSegregatorTest extends Specification {
 
-    private ChangeSetSegregator sut = new ChangeSetSegregator(["bug", "improvement"], ["ignored"])
+    private ImprovementSetSegregator sut = new ImprovementSetSegregator(["bug", "improvement"], ["ignored"])
 
     def "should treat non labelled changes as Other"() {
         given:
@@ -48,7 +48,7 @@ class ChangeSetSegregatorTest extends Specification {
 
     def "should not fail on empty list"() {
         given:
-            ChangeSetSegregator sut = new ChangeSetSegregator(["bug", "improvement"], ["ignored"])
+            ImprovementSetSegregator sut = new ImprovementSetSegregator(["bug", "improvement"], ["ignored"])
         when:
             def tokenizedChangesMap = sut.tokenize([])
         then:

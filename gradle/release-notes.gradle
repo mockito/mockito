@@ -4,7 +4,7 @@ ext.updateReleaseNotes = {
     def notesBuilder = new ReleaseNotesBuilderFactory(project)
         .gitHubToken(System.env.GH_TOKEN)
         .ignoreImprovementsMatching("^[Rr]efactoring.*")
-        .showSeparatelyImprovementsWithLabelMappings(["enhancement": "Improvements", "bug": "Fixed bugs", "doc": "Documentation"])
+        .showSeparatelyImprovementsWithLabelMappings(["new feature": "New features", "enhancement": "Enhancements", "bug": "Fixed bugs", "doc": "Documentation"])
         .ignoreImprovementsWithLabels(["refactoring", "invalid", "question", "wontfix", "duplicate"])
         .createBuilder()
     def notesFile = project.file("doc/release-notes/official.md")
