@@ -17,5 +17,5 @@ package org.mockito.cglib.transform;
 
 import org.mockito.cglib.core.ClassEmitter;
 
-abstract public class ClassEmitterTransformer extends ClassEmitter implements ClassTransformer {
+abstract public class ClassEmitterTransformer extends ClassEmitter {
 }

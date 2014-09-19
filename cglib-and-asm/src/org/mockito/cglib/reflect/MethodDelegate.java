@@ -16,11 +16,10 @@
 package org.mockito.cglib.reflect;
 
 import java.lang.reflect.*;
-
-import org.mockito.asm.ClassVisitor;
-import org.mockito.asm.Type;
 import org.mockito.cglib.*;
 import org.mockito.cglib.core.*;
+import org.mockito.asm.ClassVisitor;
+import org.mockito.asm.Type;
 
 // TODO: don't require exact match for return type
 

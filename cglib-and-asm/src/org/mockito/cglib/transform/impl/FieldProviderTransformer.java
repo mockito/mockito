@@ -15,13 +15,12 @@
  */
 package org.mockito.cglib.transform.impl;
 
+import org.mockito.cglib.transform.*;
 import java.util.*;
-
+import org.mockito.cglib.core.*;
 import org.mockito.asm.Attribute;
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
-import org.mockito.cglib.transform.*;
 
 public class FieldProviderTransformer extends ClassEmitterTransformer {
     

@@ -18,7 +18,6 @@ package org.mockito.cglib.core;
 import java.io.*;
 import java.util.*;
 import java.lang.ref.*;
-
 import org.mockito.asm.ClassReader;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.ClassWriter;

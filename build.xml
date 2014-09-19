@@ -155,7 +155,7 @@
       <zipfileset src="${lib.dir.run}/com.springsource.org.hamcrest.core-1.1.0.jar">
         <exclude name="LICENSE.txt" />
       </zipfileset>
-      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.0.jar" />
+      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.1.jar" />
     </jarjar>
   </target>
 	
@@ -217,7 +217,7 @@
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.classes.dir}" />
-      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.0.jar"/>
+      <zipfileset src="${lib.dir.repackaged}/cglib-and-asm-1.1.jar"/>
     </jarjar>
   </target>
 	
@@ -230,7 +230,7 @@
       <fileset dir="." file="LICENSE" />
       <fileset dir="." file="NOTICE" />
       <fileset dir="${src.dir}" />
-      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.1-sources.jar" />
     </jar>
   </target>
 	
@@ -257,7 +257,7 @@
           <include name="objenesis-license*"/>
         </fileset>
       <fileset dir="${src.dir}" />
-      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.0-sources.jar" />
+      <zipfileset src="${lib.dir.sources}/cglib-and-asm-1.1-sources.jar" />
       <zipfileset src="${lib.dir.sources}/com.springsource.org.hamcrest.core-1.1.0-sources.jar" >
       	<exclude name="LICENSE.txt" />
       </zipfileset>

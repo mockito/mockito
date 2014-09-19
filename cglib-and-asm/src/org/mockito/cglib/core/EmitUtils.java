@@ -18,7 +18,6 @@ package org.mockito.cglib.core;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;
 

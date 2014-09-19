@@ -15,10 +15,9 @@
  */
 package org.mockito.cglib.proxy;
 
-import java.util.*;
-
-import org.mockito.asm.Type;
 import org.mockito.cglib.core.*;
+import java.util.*;
+import org.mockito.asm.Type;
 
 class InvocationHandlerGenerator
 implements CallbackGenerator

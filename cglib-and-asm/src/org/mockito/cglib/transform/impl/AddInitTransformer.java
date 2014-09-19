@@ -17,15 +17,15 @@ package org.mockito.cglib.transform.impl;
 
 import java.lang.reflect.Method;
 
-
-import org.mockito.asm.Attribute;
-import org.mockito.asm.Type;
 import org.mockito.cglib.core.CodeEmitter;
 import org.mockito.cglib.core.Constants;
 import org.mockito.cglib.core.MethodInfo;
 import org.mockito.cglib.core.ReflectUtils;
 import org.mockito.cglib.core.Signature;
 import org.mockito.cglib.transform.ClassEmitterTransformer;
+
+import org.mockito.asm.Attribute;
+import org.mockito.asm.Type;
 
 /**
  * @author	Mark Hobson

@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,46 +32,69 @@ package org.mockito.asm.util;
 import org.mockito.asm.AnnotationVisitor;
 import org.mockito.asm.Attribute;
 import org.mockito.asm.FieldVisitor;
+import org.mockito.asm.Opcodes;
 
 /**
  * A {@link FieldVisitor} that checks that its methods are properly used.
  */
-public class CheckFieldAdapter implements FieldVisitor {
-
-    private final FieldVisitor fv;
+public class CheckFieldAdapter extends FieldVisitor {
 
     private boolean end;
 
+    /**
+     * Constructs a new {@link CheckFieldAdapter}. <i>Subclasses must not use
+     * this constructor</i>. Instead, they must use the
+     * {@link #CheckFieldAdapter(int, FieldVisitor)} version.
+     * 
+     * @param fv
+     *            the field visitor to which this adapter must delegate calls.
+     */
     public CheckFieldAdapter(final FieldVisitor fv) {
-        this.fv = fv;
+        this(Opcodes.ASM4, fv);
     }
 
-    public AnnotationVisitor visitAnnotation(
-        final String desc,
-        final boolean visible)
-    {
+    /**
+     * Constructs a new {@link CheckFieldAdapter}.
+     * 
+     * @param api
+     *            the ASM API version implemented by this visitor. Must be one
+     *            of {@link Opcodes#ASM4}.
+     * @param fv
+     *            the field visitor to which this adapter must delegate calls.
+     */
+    protected CheckFieldAdapter(final int api, final FieldVisitor fv) {
+        super(api, fv);
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(final String desc,
+            final boolean visible) {
         checkEnd();
         CheckMethodAdapter.checkDesc(desc, false);
-        return new CheckAnnotationAdapter(fv.visitAnnotation(desc, visible));
+        return new CheckAnnotationAdapter(super.visitAnnotation(desc, visible));
     }
 
+    @Override
     public void visitAttribute(final Attribute attr) {
         checkEnd();
         if (attr == null) {
-            throw new IllegalArgumentException("Invalid attribute (must not be null)");
+            throw new IllegalArgumentException(
+                    "Invalid attribute (must not be null)");
         }
-        fv.visitAttribute(attr);
+        super.visitAttribute(attr);
     }
 
+    @Override
     public void visitEnd() {
         checkEnd();
         end = true;
-        fv.visitEnd();
+        super.visitEnd();
     }
 
     private void checkEnd() {
         if (end) {
-            throw new IllegalStateException("Cannot call a visit method after visitEnd has been called");
+            throw new IllegalStateException(
+                    "Cannot call a visit method after visitEnd has been called");
         }
     }
 }

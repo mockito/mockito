@@ -16,7 +16,6 @@
 package org.mockito.cglib.proxy;
 
 import java.util.List;
-
 import org.mockito.cglib.core.*;
 
 interface CallbackGenerator
@@ -32,5 +31,6 @@ interface CallbackGenerator
         int getIndex(MethodInfo method);
         void emitCallback(CodeEmitter ce, int index);
         Signature getImplSignature(MethodInfo method);
+        void emitInvoke(CodeEmitter e, MethodInfo method);
     }
 }

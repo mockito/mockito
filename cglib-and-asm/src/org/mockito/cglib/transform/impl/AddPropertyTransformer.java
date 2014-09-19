@@ -15,11 +15,10 @@
  */
 package org.mockito.cglib.transform.impl;
 
-import java.util.*;
-
-import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 import org.mockito.cglib.transform.*;
+import java.util.*;
+import org.mockito.cglib.core.*;
+import org.mockito.asm.Type;
 
 public class AddPropertyTransformer extends ClassEmitterTransformer {
     private final String[] names;

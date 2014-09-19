@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,10 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
     /**
      * Constructs a new {@link MultiANewArrayInsnNode}.
      * 
-     * @param desc an array type descriptor (see {@link org.mockito.asm.Type}).
-     * @param dims number of dimensions of the array to allocate.
+     * @param desc
+     *            an array type descriptor (see {@link org.mockito.asm.Type}).
+     * @param dims
+     *            number of dimensions of the array to allocate.
      */
     public MultiANewArrayInsnNode(final String desc, final int dims) {
         super(Opcodes.MULTIANEWARRAY);
@@ -63,15 +65,18 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
         this.dims = dims;
     }
 
+    @Override
     public int getType() {
         return MULTIANEWARRAY_INSN;
     }
 
+    @Override
     public void accept(final MethodVisitor mv) {
         mv.visitMultiANewArrayInsn(desc, dims);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+    public AbstractInsnNode clone(final Map<LabelNode, LabelNode> labels) {
         return new MultiANewArrayInsnNode(desc, dims);
     }
 

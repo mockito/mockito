@@ -55,4 +55,12 @@ public class DefaultNamingPolicy implements NamingPolicy {
     protected String getTag() {
         return "ByCGLIB";
     }
+
+  public int hashCode() {
+    return getTag().hashCode();
+  }
+
+  public boolean equals(Object o) {
+    return (o instanceof DefaultNamingPolicy) && ((DefaultNamingPolicy) o).getTag().equals(getTag());
+  }
 }

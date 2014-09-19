@@ -21,12 +21,11 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.ProtectionDomain;
 import java.util.*;
-
 import org.mockito.asm.Attribute;
 import org.mockito.asm.Type;
 
 /**
- * @version $Id: ReflectUtils.java,v 1.29 2006/02/28 00:30:51 herbyderby Exp $
+ * @version $Id: ReflectUtils.java,v 1.30 2009/01/11 19:47:49 herbyderby Exp $
  */
 public class ReflectUtils {
     private ReflectUtils() { }
@@ -382,7 +381,10 @@ public class ReflectUtils {
         
     public static Class defineClass(String className, byte[] b, ClassLoader loader) throws Exception {
         Object[] args = new Object[]{className, b, new Integer(0), new Integer(b.length), PROTECTION_DOMAIN };
-        return (Class)DEFINE_CLASS.invoke(loader, args);
+        Class c = (Class)DEFINE_CLASS.invoke(loader, args);
+        // Force static initializers to run.
+        Class.forName(className, true, loader);
+        return c;
     }
         
     public static int findPackageProtected(Class[] classes) {
