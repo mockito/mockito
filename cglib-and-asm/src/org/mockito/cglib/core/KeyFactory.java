@@ -17,7 +17,6 @@
 package org.mockito.cglib.core;
 
 import java.lang.reflect.Method;
-
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;

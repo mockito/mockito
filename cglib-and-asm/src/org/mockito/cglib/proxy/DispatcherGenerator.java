@@ -16,9 +16,8 @@
 package org.mockito.cglib.proxy;
 
 import java.util.*;
-
-import org.mockito.asm.Type;
 import org.mockito.cglib.core.*;
+import org.mockito.asm.Type;
 
 class DispatcherGenerator implements CallbackGenerator {
     public static final DispatcherGenerator INSTANCE =

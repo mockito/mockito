@@ -17,10 +17,9 @@ package org.mockito.cglib.proxy;
 
 import java.lang.reflect.Method;
 import java.util.*;
-
+import org.mockito.cglib.core.*;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 
 /**
  * @author Chris Nokleberg

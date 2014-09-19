@@ -15,9 +15,9 @@
  */
 package org.mockito.cglib.transform;
 
-import org.mockito.asm.ClassVisitor;
 import org.mockito.cglib.core.ClassGenerator;
 import org.mockito.cglib.core.Transformer;
+import org.mockito.asm.ClassVisitor;
 
 public class TransformingClassGenerator implements ClassGenerator {
     private ClassGenerator gen;

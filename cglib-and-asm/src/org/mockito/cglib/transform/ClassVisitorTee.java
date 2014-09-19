@@ -17,11 +17,12 @@ package org.mockito.cglib.transform;
 
 import org.mockito.asm.*;
 
-public class ClassVisitorTee implements ClassVisitor {
+public class ClassVisitorTee extends ClassVisitor {
     private ClassVisitor cv1, cv2;
     
     public ClassVisitorTee(ClassVisitor cv1, ClassVisitor cv2) {
-        this.cv1 = cv1;
+	super(Opcodes.ASM4);
+	this.cv1 = cv1;
         this.cv2 = cv2;
     }
 

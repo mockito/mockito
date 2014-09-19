@@ -15,12 +15,12 @@
  */
 package org.mockito.cglib.transform.impl;
 
-import org.mockito.asm.Attribute;
+import org.mockito.cglib.transform.*;
+import org.mockito.cglib.core.*;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.MethodVisitor;
+import org.mockito.asm.Attribute;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
-import org.mockito.cglib.transform.*;
 
 public class AccessFieldTransformer extends ClassEmitterTransformer {
     private Callback callback;

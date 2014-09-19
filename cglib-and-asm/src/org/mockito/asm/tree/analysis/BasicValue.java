@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,19 +40,22 @@ import org.mockito.asm.Type;
  */
 public class BasicValue implements Value {
 
-    public static final Value UNINITIALIZED_VALUE = new BasicValue(null);
+    public static final BasicValue UNINITIALIZED_VALUE = new BasicValue(null);
 
-    public static final Value INT_VALUE = new BasicValue(Type.INT_TYPE);
+    public static final BasicValue INT_VALUE = new BasicValue(Type.INT_TYPE);
 
-    public static final Value FLOAT_VALUE = new BasicValue(Type.FLOAT_TYPE);
+    public static final BasicValue FLOAT_VALUE = new BasicValue(Type.FLOAT_TYPE);
 
-    public static final Value LONG_VALUE = new BasicValue(Type.LONG_TYPE);
+    public static final BasicValue LONG_VALUE = new BasicValue(Type.LONG_TYPE);
 
-    public static final Value DOUBLE_VALUE = new BasicValue(Type.DOUBLE_TYPE);
+    public static final BasicValue DOUBLE_VALUE = new BasicValue(
+            Type.DOUBLE_TYPE);
 
-    public static final Value REFERENCE_VALUE = new BasicValue(Type.getObjectType("java/lang/Object"));
+    public static final BasicValue REFERENCE_VALUE = new BasicValue(
+            Type.getObjectType("java/lang/Object"));
 
-    public static final Value RETURNADDRESS_VALUE = new BasicValue(null);
+    public static final BasicValue RETURNADDRESS_VALUE = new BasicValue(
+            Type.VOID_TYPE);
 
     private final Type type;
 
@@ -73,6 +76,7 @@ public class BasicValue implements Value {
                 && (type.getSort() == Type.OBJECT || type.getSort() == Type.ARRAY);
     }
 
+    @Override
     public boolean equals(final Object value) {
         if (value == this) {
             return true;
@@ -87,10 +91,12 @@ public class BasicValue implements Value {
         }
     }
 
+    @Override
     public int hashCode() {
         return type == null ? 0 : type.hashCode();
     }
 
+    @Override
     public String toString() {
         if (this == UNINITIALIZED_VALUE) {
             return ".";

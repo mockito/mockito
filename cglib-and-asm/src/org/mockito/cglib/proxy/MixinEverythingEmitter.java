@@ -18,11 +18,10 @@ package org.mockito.cglib.proxy;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-
-import org.mockito.asm.ClassVisitor;
 import org.mockito.cglib.core.CollectionUtils;
 import org.mockito.cglib.core.ReflectUtils;
 import org.mockito.cglib.core.RejectModifierPredicate;
+import org.mockito.asm.ClassVisitor;
 
 /**
  * @author Chris Nokleberg

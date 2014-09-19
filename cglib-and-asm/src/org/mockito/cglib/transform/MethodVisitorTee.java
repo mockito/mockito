@@ -17,12 +17,13 @@ package org.mockito.cglib.transform;
 
 import org.mockito.asm.*;
 
-public class MethodVisitorTee implements MethodVisitor {
+public class MethodVisitorTee extends MethodVisitor {
     private final MethodVisitor mv1;
     private final MethodVisitor mv2;
     
     public MethodVisitorTee(MethodVisitor mv1, MethodVisitor mv2) {
-        this.mv1 = mv1;
+	super(Opcodes.ASM4);
+	this.mv1 = mv1;
         this.mv2 = mv2;
     }
 

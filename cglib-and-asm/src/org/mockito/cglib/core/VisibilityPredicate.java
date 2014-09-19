@@ -16,7 +16,6 @@
 package org.mockito.cglib.core;
 
 import java.lang.reflect.*;
-
 import org.mockito.asm.Type;
 
 public class VisibilityPredicate implements Predicate {

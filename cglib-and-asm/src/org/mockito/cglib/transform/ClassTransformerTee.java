@@ -15,14 +15,14 @@
  */
 package org.mockito.cglib.transform;
 
-import org.mockito.asm.ClassAdapter;
 import org.mockito.asm.ClassVisitor;
+import org.mockito.asm.Opcodes;
 
-public class ClassTransformerTee extends ClassAdapter implements ClassTransformer {
+public class ClassTransformerTee extends ClassTransformer {
     private ClassVisitor branch;
     
     public ClassTransformerTee(ClassVisitor branch) {
-        super(null);
+        super(Opcodes.ASM4);
         this.branch = branch;
     }
     

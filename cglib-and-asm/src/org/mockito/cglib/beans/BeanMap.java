@@ -19,9 +19,8 @@ import java.beans.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
-
-import org.mockito.asm.ClassVisitor;
 import org.mockito.cglib.core.*;
+import org.mockito.asm.ClassVisitor;
 
 /**
  * A <code>Map</code>-based view of a JavaBean.  The default set of keys is the

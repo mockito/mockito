@@ -43,9 +43,9 @@ public class ClassImposterizer  {
     };
     
     private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-        public int accept(Method method) {
-            return method.isBridge() ? 1 : 0;
-        }
+		public int accept(Method method, List<Method> allMethods) {
+			return method.isBridge() ? 1 : 0;
+		}
     };
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {

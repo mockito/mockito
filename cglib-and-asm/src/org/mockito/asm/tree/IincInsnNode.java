@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,10 @@ public class IincInsnNode extends AbstractInsnNode {
     /**
      * Constructs a new {@link IincInsnNode}.
      * 
-     * @param var index of the local variable to be incremented.
-     * @param incr increment amount to increment the local variable by.
+     * @param var
+     *            index of the local variable to be incremented.
+     * @param incr
+     *            increment amount to increment the local variable by.
      */
     public IincInsnNode(final int var, final int incr) {
         super(Opcodes.IINC);
@@ -63,15 +65,18 @@ public class IincInsnNode extends AbstractInsnNode {
         this.incr = incr;
     }
 
+    @Override
     public int getType() {
         return IINC_INSN;
     }
 
+    @Override
     public void accept(final MethodVisitor mv) {
         mv.visitIincInsn(var, incr);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+    public AbstractInsnNode clone(final Map<LabelNode, LabelNode> labels) {
         return new IincInsnNode(var, incr);
     }
 }

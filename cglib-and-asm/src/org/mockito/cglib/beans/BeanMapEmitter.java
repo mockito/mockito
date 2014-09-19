@@ -17,11 +17,10 @@ package org.mockito.cglib.beans;
 
 import java.beans.*;
 import java.util.*;
-
+import org.mockito.cglib.core.*;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 
 class BeanMapEmitter extends ClassEmitter {
     private static final Type BEAN_MAP =

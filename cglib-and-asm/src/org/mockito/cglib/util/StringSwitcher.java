@@ -16,11 +16,10 @@
 package org.mockito.cglib.util;
 
 import java.util.*;
-
+import org.mockito.cglib.core.*;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Label;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 
 /**
  * This class implements a simple String->int mapping for a fixed set of keys.

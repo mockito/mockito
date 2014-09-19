@@ -15,18 +15,20 @@
  */
 package org.mockito.cglib.core;
 
-import org.mockito.asm.ClassReader;
 import org.mockito.asm.ClassWriter;
-import org.mockito.asm.util.TraceClassVisitor;
+import org.mockito.asm.ClassReader;
+import org.mockito.asm.ClassVisitor;
+import org.mockito.asm.Opcodes;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
 
-public class DebuggingClassWriter extends ClassWriter {
+public class DebuggingClassWriter extends ClassVisitor {
     
     public static final String DEBUG_LOCATION_PROPERTY = "cglib.debugLocation";
     
     private static String debugLocation;
-    private static boolean traceEnabled;
+    private static Constructor traceCtor;
     
     private String className;
     private String superName;
@@ -36,15 +38,15 @@ public class DebuggingClassWriter extends ClassWriter {
         if (debugLocation != null) {
             System.err.println("CGLIB debugging enabled, writing to '" + debugLocation + "'");
             try {
-                Class.forName("org.mockito.asm.util.TraceClassVisitor");
-                traceEnabled = true;
+              Class clazz = Class.forName("org.mockito.asm.util.TraceClassVisitor");
+              traceCtor = clazz.getConstructor(new Class[]{ClassVisitor.class, PrintWriter.class});
             } catch (Throwable ignore) {
             }
         }
     }
     
     public DebuggingClassWriter(int flags) {
-        super(flags);
+	super(Opcodes.ASM4, new ClassWriter(flags));
     }
 
     public void visit(int version,
@@ -73,7 +75,7 @@ public class DebuggingClassWriter extends ClassWriter {
             public Object run() {
                 
                 
-                byte[] b = DebuggingClassWriter.super.toByteArray();
+                byte[] b = ((ClassWriter) DebuggingClassWriter.super.cv).toByteArray();
                 if (debugLocation != null) {
                     String dirs = className.replace('.', File.separatorChar);
                     try {
@@ -87,20 +89,20 @@ public class DebuggingClassWriter extends ClassWriter {
                             out.close();
                         }
                         
-                        if (traceEnabled) {
+                        if (traceCtor != null) {
                             file = new File(new File(debugLocation), dirs + ".asm");
                             out = new BufferedOutputStream(new FileOutputStream(file));
                             try {
                                 ClassReader cr = new ClassReader(b);
                                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
-                                TraceClassVisitor tcv = new TraceClassVisitor(null, pw);
+                                ClassVisitor tcv = (ClassVisitor)traceCtor.newInstance(new Object[]{null, pw});
                                 cr.accept(tcv, 0);
                                 pw.flush();
                             } finally {
                                 out.close();
                             }
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new CodeGenerationException(e);
                     }
                 }

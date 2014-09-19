@@ -15,14 +15,10 @@
  */
 package org.mockito.cglib.transform.impl;
 
-import org.mockito.asm.Attribute;
-import org.mockito.asm.ClassVisitor;
-import org.mockito.asm.Label;
-import org.mockito.asm.MethodAdapter;
-import org.mockito.asm.MethodVisitor;
-import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 import org.mockito.cglib.transform.*;
+import org.mockito.cglib.core.*;
+import org.mockito.asm.Label;
+import org.mockito.asm.Type;
 
 /**
  * @author Juozas Baliuka, Chris Nokleberg

@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,6 +43,10 @@ package org.mockito.asm;
  */
 public interface Opcodes {
 
+    // ASM API versions
+
+    int ASM4 = 4 << 16 | 0 << 8 | 0;
+
     // versions
 
     int V1_1 = 3 << 16 | 45;
@@ -51,6 +55,7 @@ public interface Opcodes {
     int V1_4 = 0 << 16 | 48;
     int V1_5 = 0 << 16 | 49;
     int V1_6 = 0 << 16 | 50;
+    int V1_7 = 0 << 16 | 51;
 
     // access flags
 
@@ -75,7 +80,7 @@ public interface Opcodes {
 
     // ASM specific pseudo access flags
 
-    int ACC_DEPRECATED = 131072; // class, field, method
+    int ACC_DEPRECATED = 0x20000; // class, field, method
 
     // types for NEWARRAY
 
@@ -87,6 +92,18 @@ public interface Opcodes {
     int T_SHORT = 9;
     int T_INT = 10;
     int T_LONG = 11;
+
+    // tags for Handle
+
+    int H_GETFIELD = 1;
+    int H_GETSTATIC = 2;
+    int H_PUTFIELD = 3;
+    int H_PUTSTATIC = 4;
+    int H_INVOKEVIRTUAL = 5;
+    int H_INVOKESTATIC = 6;
+    int H_INVOKESPECIAL = 7;
+    int H_NEWINVOKESPECIAL = 8;
+    int H_INVOKEINTERFACE = 9;
 
     // stack map frame types
 
@@ -322,7 +339,7 @@ public interface Opcodes {
     int INVOKESPECIAL = 183; // -
     int INVOKESTATIC = 184; // -
     int INVOKEINTERFACE = 185; // -
-    // int UNUSED = 186; // NOT VISITED
+    int INVOKEDYNAMIC = 186; // visitInvokeDynamicInsn
     int NEW = 187; // visitTypeInsn
     int NEWARRAY = 188; // visitIntInsn
     int ANEWARRAY = 189; // visitTypeInsn

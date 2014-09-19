@@ -17,10 +17,9 @@ package org.mockito.cglib.beans;
 
 import java.beans.PropertyDescriptor;
 import java.util.*;
-
+import org.mockito.cglib.core.*;
 import org.mockito.asm.ClassVisitor;
 import org.mockito.asm.Type;
-import org.mockito.cglib.core.*;
 
 /**
  * @author Juozas Baliuka, Chris Nokleberg

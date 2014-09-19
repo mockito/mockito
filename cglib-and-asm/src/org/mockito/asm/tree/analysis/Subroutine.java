@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,19 +46,16 @@ class Subroutine {
 
     boolean[] access;
 
-    List callers;
+    List<JumpInsnNode> callers;
 
     private Subroutine() {
     }
 
-    Subroutine(
-        final LabelNode start,
-        final int maxLocals,
-        final JumpInsnNode caller)
-    {
+    Subroutine(final LabelNode start, final int maxLocals,
+            final JumpInsnNode caller) {
         this.start = start;
         this.access = new boolean[maxLocals];
-        this.callers = new ArrayList();
+        this.callers = new ArrayList<JumpInsnNode>();
         callers.add(caller);
     }
 
@@ -67,7 +64,7 @@ class Subroutine {
         result.start = start;
         result.access = new boolean[access.length];
         System.arraycopy(access, 0, result.access, 0, access.length);
-        result.callers = new ArrayList(callers);
+        result.callers = new ArrayList<JumpInsnNode>(callers);
         return result;
     }
 
@@ -81,7 +78,7 @@ class Subroutine {
         }
         if (subroutine.start == start) {
             for (int i = 0; i < subroutine.callers.size(); ++i) {
-                Object caller = subroutine.callers.get(i);
+                JumpInsnNode caller = subroutine.callers.get(i);
                 if (!callers.contains(caller)) {
                     callers.add(caller);
                     changes = true;

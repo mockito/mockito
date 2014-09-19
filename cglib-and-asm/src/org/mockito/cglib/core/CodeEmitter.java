@@ -17,7 +17,6 @@ package org.mockito.cglib.core;
 
 import java.io.*;
 import java.util.*;
-
 import org.mockito.asm.*;
 
 /**

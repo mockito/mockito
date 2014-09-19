@@ -17,8 +17,7 @@ package org.mockito.cglib.proxy;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.List;
-
+import java.lang.reflect.Member;
 import org.mockito.cglib.core.CodeGenerationException;
 
 /**
@@ -40,7 +39,7 @@ public class Proxy implements Serializable {
     protected InvocationHandler h;
 
     private static final CallbackFilter BAD_OBJECT_METHOD_FILTER = new CallbackFilter() {
-        public int accept(Method method, List<Method> allMethods) {
+        public int accept(Method method) {
             if (method.getDeclaringClass().getName().equals("java.lang.Object")) {
                 String name = method.getName();
                 if (!(name.equals("hashCode") ||

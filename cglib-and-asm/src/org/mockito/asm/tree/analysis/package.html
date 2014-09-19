@@ -1,7 +1,7 @@
 <html>
 <!--
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2005 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,13 +50,13 @@ for (int i = 0; i < methods.size(); ++i) {
         Analyzer a = new Analyzer(new BasicInterpreter());
         a.analyze(cn.name, method);
         Frame[] frames = a.getFrames();
-        // Elements of the frames arrray now contains info for each instruction 
+        // Elements of the frames arrray now contains info for each instruction
         // from the analyzed method. BasicInterpreter creates BasicValue, that
-        // is using simplified type system that distinguishes the UNINITIALZED, 
+        // is using simplified type system that distinguishes the UNINITIALZED,
         // INT, FLOAT, LONG, DOUBLE, REFERENCE and RETURNADDRESS types.
         ...
     }
-}   
+}
 </pre>
 
 <p>

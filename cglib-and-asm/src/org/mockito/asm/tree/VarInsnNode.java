@@ -1,6 +1,6 @@
 /***
  * ASM: a very small and fast Java bytecode manipulation framework
- * Copyright (c) 2000-2007 INRIA, France Telecom
+ * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -51,11 +51,13 @@ public class VarInsnNode extends AbstractInsnNode {
     /**
      * Constructs a new {@link VarInsnNode}.
      * 
-     * @param opcode the opcode of the local variable instruction to be
-     *        constructed. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
-     *        ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET.
-     * @param var the operand of the instruction to be constructed. This operand
-     *        is the index of a local variable.
+     * @param opcode
+     *            the opcode of the local variable instruction to be
+     *            constructed. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
+     *            ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET.
+     * @param var
+     *            the operand of the instruction to be constructed. This operand
+     *            is the index of a local variable.
      */
     public VarInsnNode(final int opcode, final int var) {
         super(opcode);
@@ -65,23 +67,27 @@ public class VarInsnNode extends AbstractInsnNode {
     /**
      * Sets the opcode of this instruction.
      * 
-     * @param opcode the new instruction opcode. This opcode must be ILOAD,
-     *        LLOAD, FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE
-     *        or RET.
+     * @param opcode
+     *            the new instruction opcode. This opcode must be ILOAD, LLOAD,
+     *            FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or
+     *            RET.
      */
     public void setOpcode(final int opcode) {
         this.opcode = opcode;
     }
 
+    @Override
     public int getType() {
         return VAR_INSN;
     }
 
+    @Override
     public void accept(final MethodVisitor mv) {
         mv.visitVarInsn(opcode, var);
     }
 
-    public AbstractInsnNode clone(final Map labels) {
+    @Override
+    public AbstractInsnNode clone(final Map<LabelNode, LabelNode> labels) {
         return new VarInsnNode(opcode, var);
     }
 }

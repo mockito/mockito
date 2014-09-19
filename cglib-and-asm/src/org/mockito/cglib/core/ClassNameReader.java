@@ -15,8 +15,9 @@
  */
 package org.mockito.cglib.core;
 
-import org.mockito.asm.ClassAdapter;
 import org.mockito.asm.ClassReader;
+import org.mockito.asm.ClassVisitor;
+import org.mockito.asm.Opcodes;
 
 import java.util.*;
 
@@ -37,7 +38,7 @@ public class ClassNameReader {
     public static String[] getClassInfo(ClassReader r) {
         final List array = new ArrayList();
         try {
-            r.accept(new ClassAdapter(null) {
+            r.accept(new ClassVisitor(Opcodes.ASM4, null) {
                 public void visit(int version,
                                   int access,
                                   String name,

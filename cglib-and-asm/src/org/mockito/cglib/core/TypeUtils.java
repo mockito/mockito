@@ -16,7 +16,6 @@
 package org.mockito.cglib.core;
 
 import java.util.*;
-
 import org.mockito.asm.Type;
 
 public class TypeUtils {
@@ -74,6 +73,10 @@ public class TypeUtils {
     
     public static boolean isSynthetic(int access) {
         return (Constants.ACC_SYNTHETIC & access) != 0;
+    }
+    
+    public static boolean isBridge(int access) {
+    	return (Constants.ACC_BRIDGE & access) != 0;
     }
     
     // getPackage returns null on JDK 1.2

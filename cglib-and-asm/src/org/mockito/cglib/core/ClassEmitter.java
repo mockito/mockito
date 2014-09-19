@@ -15,15 +15,21 @@
  */
 package org.mockito.cglib.core;
 
-import java.io.*;
-import java.util.*;
+import org.mockito.cglib.transform.ClassTransformer;
 
-import org.mockito.asm.*;
+import org.mockito.asm.ClassVisitor;
+import org.mockito.asm.FieldVisitor;
+import org.mockito.asm.MethodVisitor;
+import org.mockito.asm.Opcodes;
+import org.mockito.asm.Type;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Juozas Baliuka, Chris Nokleberg
  */
-public class ClassEmitter extends ClassAdapter {
+public class ClassEmitter extends ClassTransformer {
     private ClassInfo classInfo;
     private Map fieldInfo;
 
@@ -34,12 +40,11 @@ public class ClassEmitter extends ClassAdapter {
     private Signature staticHookSig;
 
     public ClassEmitter(ClassVisitor cv) {
-        super(null);
         setTarget(cv);
     }
 
     public ClassEmitter() {
-        super(null);
+        super(Opcodes.ASM4);
     }
 
     public void setTarget(ClassVisitor cv) {
@@ -143,7 +148,7 @@ public class ClassEmitter extends ClassAdapter {
                                          TypeUtils.toInternalNames(exceptions));
         if (sig.equals(Constants.SIG_STATIC) && !TypeUtils.isInterface(getAccess())) {
             rawStaticInit = v;
-            MethodVisitor wrapped = new MethodAdapter(v) {
+            MethodVisitor wrapped = new MethodVisitor(Opcodes.ASM4, v) {
                 public void visitMaxs(int maxStack, int maxLocals) {
                     // ignore
                 }

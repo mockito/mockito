@@ -15,9 +15,14 @@
  */
 package org.mockito.cglib.transform.impl;
 
-import org.mockito.asm.Attribute;
-import org.mockito.cglib.core.*;
-import org.mockito.cglib.transform.*;
+import org.mockito.cglib.core.ClassGenerator;
+import org.mockito.cglib.core.DefaultGeneratorStrategy;
+import org.mockito.cglib.core.GeneratorStrategy;
+import org.mockito.cglib.core.TypeUtils;
+import org.mockito.cglib.transform.ClassTransformer;
+import org.mockito.cglib.transform.MethodFilter;
+import org.mockito.cglib.transform.MethodFilterTransformer;
+import org.mockito.cglib.transform.TransformingClassGenerator;
 
 /**
  * A {@link GeneratorStrategy} suitable for use with {@link org.mockito.cglib.Enhancer} which
@@ -25,9 +30,11 @@ import org.mockito.cglib.transform.*;
  * in an alternative exception of your choice.
  */
 public class UndeclaredThrowableStrategy extends DefaultGeneratorStrategy {
-    private ClassTransformer t;
+    
 
-    /**
+    private Class wrapper;
+
+	/**
      * Create a new instance of this strategy.
      * @param wrapper a class which extends either directly or
      * indirectly from <code>Throwable</code> and which has at least one
@@ -36,8 +43,7 @@ public class UndeclaredThrowableStrategy extends DefaultGeneratorStrategy {
      * <code>java.lang.reflect.UndeclaredThrowableException.class</code>
      */
     public UndeclaredThrowableStrategy(Class wrapper) {
-        t = new UndeclaredThrowableTransformer(wrapper);
-        t = new MethodFilterTransformer(TRANSFORM_FILTER, t);
+       this.wrapper = wrapper;
     }
     
     private static final MethodFilter TRANSFORM_FILTER = new MethodFilter() {
@@ -47,7 +53,9 @@ public class UndeclaredThrowableStrategy extends DefaultGeneratorStrategy {
     };
 
     protected ClassGenerator transform(ClassGenerator cg) throws Exception {
-        return new TransformingClassGenerator(cg, t);
+    	 ClassTransformer   tr = new UndeclaredThrowableTransformer(wrapper);
+         tr = new MethodFilterTransformer(TRANSFORM_FILTER, tr);
+        return new TransformingClassGenerator(cg, tr);
     }
 }
 
