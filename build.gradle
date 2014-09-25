@@ -144,6 +144,7 @@ publishing {
         }
         mockitoAll(MavenPublication) {
             artifactId 'mockito-all'
+            artifact allJar
             artifact sourcesJar
             artifact javadocJar
         }
