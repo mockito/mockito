@@ -52,13 +52,13 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
  *      <a href="#21">21. New annotations: <code>&#064;Captor</code>, <code>&#064;Spy</code>, <code>&#064;InjectMocks</code> (Since 1.8.3) </a><br/>
  *      <a href="#22">22. Verification with timeout (Since 1.8.5) </a><br/>
- *      <a href="#23">23. (New) Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9.0)</a><br/>
- *      <a href="#24">24. (New) One-liner stubs (Since 1.9.0)</a><br/>
- *      <a href="#25">25. (New) Verification ignoring stubs (Since 1.9.0)</a><br/>
- *      <a href="#26">26. (**New**) Mocking details (Since 1.9.5)</a><br/>
- *      <a href="#27">27. (**New**) Delegate calls to real instance (Since 1.9.5)</a><br/>
- *      <a href="#28">28. (**New**) <code>MockMaker</code> API (Since 1.9.5)</a><br/>
- *      <a href="#29">29. (**New**) BDD style verification (Since 1.9.8)</a><br/>
+ *      <a href="#23">23. Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9.0)</a><br/>
+ *      <a href="#24">24. One-liner stubs (Since 1.9.0)</a><br/>
+ *      <a href="#25">25. Verification ignoring stubs (Since 1.9.0)</a><br/>
+ *      <a href="#26">26. Mocking details (Since 1.9.5)</a><br/>
+ *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
+ *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
+ *      <a href="#29">29. BDD style verification (Since 1.9.8)</a><br/>
  * </b>
  *
  * <p>
@@ -805,7 +805,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="23">23. (New) <a class="meaningful_link" href="#automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
+ * <h3 id="23">23. <a class="meaningful_link" href="#automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
  * <code>&#064;InjectMocks</code></a> and <a class="meaningful_link" href="#constructor_injection">constructor injection goodness</a> (Since 1.9.0)</h3>
  *
  * <p>
@@ -828,7 +828,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="24">24. (New) <a class="meaningful_link" href="#one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="24">24. <a class="meaningful_link" href="#one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
@@ -844,7 +844,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="25">25. (New) <a class="meaningful_link" href="#ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="25">25. <a class="meaningful_link" href="#ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow to ignore stubbing for the sake of verification.
  * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
@@ -873,7 +873,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="26">26. (**New**) <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Since 1.9.5)</h3>
+ * <h3 id="26">26. <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Since 1.9.5)</h3>
  * <p>
  * To identify whether a particular object is a mock or a spy:
  * <pre class="code"><code class="java">
@@ -888,7 +888,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="27">27. (**New**) <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
+ * <h3 id="27">27. <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
  *
  * <p>Useful for spies or partial mocks of objects <strong>that are difficult to mock or spy</strong> using the usual spy API.
  * Possible use cases:
@@ -921,7 +921,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="28">28. (**New**) <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
+ * <h3 id="28">28. <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
  * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
  *   that allows replacing the proxy generation engine. By default, Mockito uses cglib to create dynamic proxies.
  * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
@@ -932,7 +932,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="29">29. (**New**) <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.9.8)</h3>
+ * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.9.8)</h3>
  *
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
