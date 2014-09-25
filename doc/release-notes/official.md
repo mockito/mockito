@@ -1,38 +1,3 @@
-### 1.10.44-dev (2014-08-25 18:34 UTC)
-
-* Authors: 25
-* Commits: 327
-  * 137: Szczepan Faber
-  * 134: Brice Dutheil
-  * 10: Marcin Grzejszczak
-  * 6: Tim Perry
-  * 5: Lovro Pandzic
-  * 4: alberski
-  * 3: Dmytro Chyzhykov, Gunnar Wagenknecht, Kamil Szymanski, pimterry, Ian Parkinson
-  * 2: Emory Merryman, U-Michal-Komputer\Michal
-  * 1: Vivian Pennel, Kuangshi Yan, Marius Volkhart, Marcin Zajaczkowski, Andrei Solntsev, Markus Wüstenberg, Marius Volkhart, Ken Dombeck, jrrickard, Philip Aston, Ivan Vershinin, ludovic.meurillon@gmail.com
-* Improvements: 20
-  * Added useful links to README.md [(#58)](https://github.com/mockito/mockito/pull/58)
-  * Fixed wrong javadoc for AdditionalAnswers [(#56)](https://github.com/mockito/mockito/pull/56)
-  * Enabled continuous integration with Travis CI and coverage tracking with coveralls [(#18)](https://github.com/mockito/mockito/pull/18)
-  * Verification with timout measures time more more accurately [(#15)](https://github.com/mockito/mockito/pull/15)
-  * Allow calling real implementation of jdk8 extension methods [(#39)](https://github.com/mockito/mockito/pull/39)
-  * Deprecated timeout().never(), in line with timeout().atMost() [(#14)](https://github.com/mockito/mockito/pull/14)
-  * New "then" method for BDD-style interaction testing [(#38)](https://github.com/mockito/mockito/pull/38)
-  * Improved behavior of EqualsWithDelta with regards to null handling [(#21)](https://github.com/mockito/mockito/pull/21)
-  * New "getArgumentAt" method for convenient implementation of custom Answers [(#41)](https://github.com/mockito/mockito/pull/41)
-  * Coveralls coverage tracking tool allows Mockito source code preview [(#62)](https://github.com/mockito/mockito/pull/62)
-  * Improve NoInteractionsWanted report to include the name of the mock [(#63)](https://github.com/mockito/mockito/pull/63)
-  * Improved the javadoc example of custom Answer implementation [(#22)](https://github.com/mockito/mockito/pull/22)
-  * Avoided classloader issue when testing in Eclipse plugins environment [(#24)](https://github.com/mockito/mockito/pull/24)
-  * Removed .java files from main mockito jar artifacts [(#28)](https://github.com/mockito/mockito/pull/28)
-  * Smarter constructor injection by choosing "biggest" constructor instead of the default one [(#29)](https://github.com/mockito/mockito/pull/29)
-  * New "MockingDetails.getInvocations" method for inspecting what happened with the mock [(#10)](https://github.com/mockito/mockito/pull/10)
-  * Deep stub style mocks can be serialized [(#30)](https://github.com/mockito/mockito/pull/30)
-  * Improved MockitoTestNGListener by making it reset argument captors before each test [(#6)](https://github.com/mockito/mockito/pull/6)
-  * Mock serialization/deserialization across classloader/JVM [(#5)](https://github.com/mockito/mockito/pull/5)
-  * Fixed the behavior of compareTo method of the mock objects [(#32)](https://github.com/mockito/mockito/pull/32)
-
 ### 1.9.5 (06-10-2012)
 
 Few minor bugfixes and a relatively small extension point added to improve the android experience.
