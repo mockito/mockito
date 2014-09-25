@@ -87,7 +87,7 @@ jar {
 task sourcesJar(type: Jar) {
     baseName = 'mockito-core'
     from(sourceSets.main.allSource)
-    classifier "sources"
+    classifier = "sources"
     from(zipTree("lib/sources/cglib-and-asm-1.0-sources.jar"))
     with licenseFiles
 }
@@ -96,7 +96,7 @@ apply from: 'gradle/javadoc.gradle'
 
 task javadocJar(type: Jar) {
     baseName = 'mockito-core'
-    classifier "javadoc"
+    classifier = "javadoc"
     with licenseFiles
     from mockitoJavadoc
 }
@@ -143,7 +143,7 @@ publishing {
             artifact javadocJar
         }
         mockitoAll(MavenPublication) {
-            artifact allJar
+            artifact file: "foo.jar"
             artifactId 'mockito-all'
             artifact sourcesJar
             artifact javadocJar
