@@ -1,5 +1,7 @@
 ### 1.10.0 (2014-09-25 22:25 UTC)
 
+Thanks everybody for great contributions! Next release should come quicker thanks to continuous deployment goodness.
+
 * Authors: 25
 * Commits: 337
   * 147: Szczepan Faber
