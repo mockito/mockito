@@ -55,6 +55,8 @@ private void updateReleaseNotes() {
     //release-notes.gradle script plugin immediately updates the notes when it is applied
     //I needed to implement it this way to avoid some weird classloader issues
     //TODO SF now that the code live under buildSrc try fixing this configuration-time hack
+    //TODO SF allow dry-run generation of the release notes without GH_TOKEN
+    //TODO SF document how to work with release notes, e.g. that we only show closed tickets, etc.
     project.apply from: rootProject.file("gradle/release-notes.gradle")
 }
 
