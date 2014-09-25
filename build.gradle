@@ -143,7 +143,6 @@ publishing {
             artifact javadocJar
         }
         mockitoAll(MavenPublication) {
-            artifact file: "foo.jar"
             artifactId 'mockito-all'
             artifact sourcesJar
             artifact javadocJar
