@@ -33,6 +33,8 @@
   * Improved MockitoTestNGListener by making it reset argument captors before each test [(#6)](https://github.com/mockito/mockito/pull/6)
   * Mock serialization/deserialization across classloader/JVM [(#5)](https://github.com/mockito/mockito/pull/5)
   * Fixed the behavior of compareTo method of the mock objects [(#32)](https://github.com/mockito/mockito/pull/32)
+ 
+Older implemented improvements were managed in the original issue tracker and can be viewed at [Google Code site](https://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.10.0).
 
 ### 1.9.5 (06-10-2012)
 
