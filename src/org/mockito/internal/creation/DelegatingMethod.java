@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.creation;
 
+import org.mockito.internal.invocation.MockitoMethod;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import org.mockito.internal.invocation.MockitoMethod;
 
 public class DelegatingMethod implements MockitoMethod {
 
@@ -45,14 +45,26 @@ public class DelegatingMethod implements MockitoMethod {
     public boolean isAbstract() {
         return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
-    
+
+    /**
+     * @return True if the input object is a DelegatingMethod which has an internal Method which is equal to the internal Method of this DelegatingMethod,
+     * or if the input object is a Method which is equal to the internal Method of this DelegatingMethod.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof DelegatingMethod) {
+            DelegatingMethod that = (DelegatingMethod) o;
+            return method.equals(that.method);
+        } else {
+            return method.equals(o);
+        }
+    }
+
     @Override
     public int hashCode() {
-        return 1;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        return method.equals(obj);
+        return method.hashCode();
     }
 }
