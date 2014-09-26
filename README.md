@@ -2,14 +2,14 @@
   
 simplier & better mocking
 
-[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](http://img.shields.io/coveralls/mockito/mockito/master.svg)](https://coveralls.io/r/mockito/mockito)
-[![Maven central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-all)
-
-## Status update
-18/03/2014 Mockito should work fine with JDK8 if you stay away from defender methods. Lambda usage may work just as good for `Answer`s. We're unsure about every JDK8 features at the moment, like serializing a mock that uses a lambda. Error report and pull request are welcome though ([contributing guide](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)).
+[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](http://img.shields.io/coveralls/mockito/mockito/master.svg)](https://coveralls.io/r/mockito/mockito) [ ![Current release](https://api.bintray.com/packages/szczepiq/maven/mockito/images/download.svg) ](https://bintray.com/szczepiq/maven/mockito/_latestVersion)
 
 ## Current release
-06/10/2012 Mockito **1.9.5** released! See the release notes. Should appear in maven central shortly.
+See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md).
+
+## JDK8 status
+
+Mockito should work fine with JDK8 if you stay away from defender methods. Lambda usage may work just as good for `Answer`s. We're unsure about every JDK8 features at the moment, like serializing a mock that uses a lambda. Error report and pull request are welcome though ([contributing guide](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)).
 
 ## Moving to github
 We are currently moving a few stuff from [Google Code](https://code.google.com/p/mockito/) to [Github](https://github.com/mockito/mockito).
@@ -29,7 +29,21 @@ Mockito is a mocking framework that tastes really good. It lets you write beauti
 
 ## How do I drink it?
 
-Download [mockito-all-x.x.x.jar](http://code.google.com/p/mockito/downloads/list) and put it on the classpath. If you use a fancy build system with declarative dependencies like Gradle or Maven please -> [Click HERE](https://code.google.com/p/mockito/wiki/DeclaringMockitoDependency) <-
+Recommended way of getting Mockito is declaring a dependency on "mockito-core" library (not "mockito-all"!) using your favorite build system. My favorite build system happens to be [http://gradle.org Gradle] and so I do:
+
+```groovy
+repositories {
+  jcenter()
+}
+
+dependencies {
+  testCompile "org.mockito:mockito-core:1.+"
+}
+```
+
+For legacy builds with manual dependency management it might be useful to use mockito-all package that can be downloaded from [https://bintray.com/szczepiq/maven/mockito/_latestVersion Mockito's Bintray repository] or [http://jcenter.bintray.com/org/mockito/mockito-all Bintray's jcenter].
+
+For more information please refer to the [wiki page](https://code.google.com/p/mockito/wiki/DeclaringMockitoDependency).
 
 ### Then you can verify interactions
 
@@ -66,9 +80,9 @@ System.out.println(mockedList.get(999));
 
 ### You can go further
 
-* Try the annotations [@Mock](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mock.html), [@Spy](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Spy.html), [@Captor](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Captor.html), [@InjectMocks](http://docs.mockito.googlecode.com/hg/latest/org/mockito/InjectMocks.html)
-* Try BDD syntax with [BDDMockito](http://docs.mockito.googlecode.com/hg/latest/org/mockito/BDDMockito.html)
-* If the provided answers doesn't fit your needs, write one yourself extending the [Answer](http://docs.mockito.googlecode.com/hg/latest/org/mockito/stubbing/Answer.html) interface
+* Try the annotations [@Mock](http://mockito.github.io/mockito/docs/current/org/mockito/Mock.html), [@Spy](http://mockito.github.io/mockito/docs/current/org/mockito/Spy.html), [@Captor](http://mockito.github.io/mockito/docs/current/org/mockito/Captor.html), [@InjectMocks](http://mockito.github.io/mockito/docs/current/org/mockito/InjectMocks.html)
+* Try BDD syntax with [BDDMockito](http://mockito.github.io/mockito/docs/current/org/mockito/BDDMockito.html)
+* If the provided answers doesn't fit your needs, write one yourself extending the [Answer](http://mockito.github.io/mockito/docs/current/org/mockito/stubbing/Answer.html) interface
 * Try the Mockito on Android, thanks to the Google guys working on dexmaker (more on that later)
 
 ### Remember
@@ -78,7 +92,7 @@ System.out.println(mockedList.get(999));
 * Don't mock everything
 * Show some love with your tests
 
-Click [here](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html) for more documentation and examples. Remember all documentation lives in javadocs so you don’t need to visit that page too often. You can grab the RefCard [here](http://refcardz.dzone.com/refcardz/mockito).
+Click [here](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html) for more documentation and examples. Remember all documentation lives in javadocs so you don’t need to visit that page too often. You can grab the RefCard [here](http://refcardz.dzone.com/refcardz/mockito).
 
 If you have any suggestions, find documentation unclear or you found a bug, write to our [mailing list](http://groups.google.com/group/mockito). You can report bugs [here](http://code.google.com/p/mockito/issues/list).
 
@@ -110,13 +124,13 @@ Finally, thanks to **Erik Brakkee** who helps us getting jars to maven central
 * [Old wiki pages on google code](https://code.google.com/p/mockito/w/list)
 
 ### Blogs
-* [Szczepan on Mockito](http://monkeyisland.pl/category/mockito)
+* [Szczepan's new blog](http://szczepiq.blogspot.com/)
 * [Brice's French coffee workshop](http://blog.arkey.fr/)
 
 ### Other project links
-* [Latest documentation](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
+* [Latest documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html)
 * [Dzone Reference Card](http://refcardz.dzone.com/refcardz/mockito)
-* [Hudson continuous integration server](http://hudsonci-oss.org/view/Mockito/job/Mockito)
+* [Continuous integration server](http://travis-ci.org/mockito/mockito)
 
 ### Groups
 * [Mockito mailing list](http://groups.google.com/group/mockito)
