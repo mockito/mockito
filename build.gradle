@@ -101,6 +101,7 @@ task javadocJar(type: Jar) {
     from mockitoJavadoc
 }
 
+//TODO SF mockito-all jar should automatically appear as downloadable in bintray and in Mockito 2.0, replaced with zip distro
 task allJar(type: Jar) {
     baseName = 'mockito-all'
 
