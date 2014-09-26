@@ -57,12 +57,7 @@ public class DelegatingMethod implements MockitoMethod {
         }
         if (o instanceof DelegatingMethod) {
             DelegatingMethod that = (DelegatingMethod) o;
-
-            if (method != null ? !method.equals(that.method) : that.method != null) {
-                return false;
-            }
-
-            return true;
+            return method.equals(that.method);
         } else {
             return method.equals(o);
         }
