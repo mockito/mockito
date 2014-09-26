@@ -1,12 +1,3 @@
-### 1.10.1-dev (2014-09-26 14:08 UTC)
-
-* Authors: 2
-* Commits: 4
-  * 3: Hugh Hamill
-  * 1: Szczepan Faber
-* Improvements: 1
-  * Fixed DelegatingMethod.equals() so that it's easier to extend Mockito by custom verification modes [(#87)](https://github.com/mockito/mockito/pull/87)
-
 ### 1.10.0 (2014-09-25 22:25 UTC)
 
 Thanks everybody for great contributions! Next release should come quicker thanks to continuous deployment goodness.
