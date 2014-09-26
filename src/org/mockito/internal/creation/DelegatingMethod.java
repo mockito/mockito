@@ -55,26 +55,21 @@ public class DelegatingMethod implements MockitoMethod {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DelegatingMethod)) {
-            if (o instanceof Method) {
-                if (method != null ? !method.equals(o) : o != null) {
-                    return false;
-                }
-                return true;
+        if (o instanceof DelegatingMethod) {
+            DelegatingMethod that = (DelegatingMethod) o;
+
+            if (method != null ? !method.equals(that.method) : that.method != null) {
+                return false;
             }
+
+            return true;
+        } else {
+            return method.equals(o);
         }
-
-        DelegatingMethod that = (DelegatingMethod) o;
-
-        if (method != null ? !method.equals(that.method) : that.method != null) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override
     public int hashCode() {
-        return method != null ? method.hashCode() : 0;
+        return method.hashCode();
     }
 }
