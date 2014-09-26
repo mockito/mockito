@@ -41,7 +41,7 @@ dependencies {
 }
 ```
 
-For legacy builds with manual dependency management it might be useful to use mockito-all package that can be downloaded from [https://bintray.com/szczepiq/maven/mockito/_latestVersion Mockito's Bintray repository] or [http://jcenter.bintray.com/org/mockito/mockito-all Bintray's jcenter].
+For legacy builds with manual dependency management it might be useful to use mockito-all package that can be downloaded from [Mockito's Bintray repository](https://bintray.com/szczepiq/maven/mockito/_latestVersion) or [Bintray's jcenter](http://jcenter.bintray.com/org/mockito/mockito-all).
 
 For more information please refer to the [wiki page](https://code.google.com/p/mockito/wiki/DeclaringMockitoDependency).
 
