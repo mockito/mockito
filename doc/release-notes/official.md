@@ -3,7 +3,8 @@
 * Authors: 2
 * Commits: 4
   * 2: Marcin Grzejszczak, Szczepan Faber
-* Improvements: 0
+* Improvements: 1
+  * Fix flaky test: TimeoutTest [(#66)](https://github.com/mockito/mockito/pull/66)
 
 ### 1.10.2 (2014-09-26 16:37 UTC)
 
