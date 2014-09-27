@@ -79,8 +79,8 @@ public class VerificationOverTimeImpl implements VerificationMode {
     public void verify(VerificationData data) {
         AssertionError error = null;
         
-        long startTime = System.currentTimeMillis();
-        while (timer.isUp(startTime)) {
+        timer.start();
+        while (timer.isCounting()) {
             try {
                 delegate.verify(data);
                 

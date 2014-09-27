@@ -4,13 +4,14 @@
  */
 package org.mockito.verification;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.*;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.*;
 
 public class TimeoutTest extends TestBase {
     
@@ -23,17 +24,21 @@ public class TimeoutTest extends TestBase {
     public void should_pass_when_verification_passes() {
         Timeout t = new Timeout(1, 3, mode, timer);
 
-        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
+        when(timer.isCounting()).thenReturn(true);
         doNothing().when(mode).verify(data);
 
         t.verify(data);
+
+        InOrder inOrder = inOrder(timer);
+        inOrder.verify(timer).start();
+        inOrder.verify(timer).isCounting();
     }
-    
+
     @Test
     public void should_fail_because_verification_fails() {
         Timeout t = new Timeout(1, 2, mode, timer);
 
-        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
+        when(timer.isCounting()).thenReturn(true, true, true, false);
         doThrow(error).
         doThrow(error).
         doThrow(error).
@@ -43,19 +48,22 @@ public class TimeoutTest extends TestBase {
             t.verify(data);
             fail();
         } catch (MockitoAssertionError e) {}
+
+        verify(timer, times(4)).isCounting();
     }
     
     @Test
     public void should_pass_even_if_first_verification_fails() {
         Timeout t = new Timeout(1, 5, mode, timer);
 
-        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
+        when(timer.isCounting()).thenReturn(true, true, true, false);
         doThrow(error).
         doThrow(error).
         doNothing().
         when(mode).verify(data);
         
         t.verify(data);
+        verify(timer, times(3)).isCounting();
     }
 
     @Test
@@ -63,7 +71,7 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(10, 50, mode, timer);
         
         doThrow(error).when(mode).verify(data);
-        when(timer.isUp(anyLong())).thenReturn(true, true, true, true, true, false);
+        when(timer.isCounting()).thenReturn(true, true, true, true, true, false);
 
         try {
             t.verify(data);
