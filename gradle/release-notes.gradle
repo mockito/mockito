@@ -1,11 +1,20 @@
 import org.mockito.release.notes.*
 
-def notesBuilder = new ReleaseNotesBuilderFactory(project)
-    .gitHubToken(System.env.GH_TOKEN)
-    .ignoreImprovementsMatching("^[Rr]efactoring.*")
-    .createBuilder()
+ext.updateReleaseNotes = {
+    def notesBuilder = new ReleaseNotesBuilderFactory(project)
+            .gitHubToken(System.env.GH_TOKEN)
+            .ignoreImprovementsMatching("^[Rr]efactoring.*")
+            .createBuilder()
+    def notesFile = project.file("doc/release-notes/official.md")
+    notesBuilder.updateNotes(notesFile, "HEAD")
+}
 
-def notesFile = project.file("doc/release-notes/official.md")
-notesBuilder.updateNotes(notesFile, "HEAD")
+//TODO SF allow dry-run generation of the release notes without GH_TOKEN
+//TODO SF document how to work with release notes, e.g. that we only show closed tickets, etc.
+task updateReleaseNotes {
+    description "Updates release notes file. Useful for previewing the relese notes."
+    doLast { updateReleaseNotes() }
+}
+
 //println notesBuilder.getContributionsBetween("v1.9.5", "HEAD")
 //println notesBuilder.buildNotesBetween("v1.9.5", "HEAD")

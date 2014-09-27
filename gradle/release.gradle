@@ -10,8 +10,9 @@ In case the release process from Travis CI fails, please try:
 assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
-//apply from: rootProject.file("gradle/release-notes.gradle")
+apply from: rootProject.file("gradle/release-notes.gradle")
 
+//TODO SF allow dry-running the release
 task (release) {
     onlyIf {
         def branch = System.env.TRAVIS_BRANCH
@@ -26,7 +27,6 @@ task (release) {
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
         //Release process. Should *not* run concurrently.
-        //TODO SF change the package name in bintray from 'mockito' to 'org.mockito'
         run "./gradlew", "bintrayUpload"
         configureGit()
         run "git", "pull", "--depth", "500" //We need good chunk of recent commits to build release notes correctly
@@ -50,15 +50,6 @@ task (release) {
 
         run "git", "push", pushTarget, "master", "gh-pages"
     }
-}
-
-private void updateReleaseNotes() {
-    //release-notes.gradle script plugin immediately updates the notes when it is applied
-    //I needed to implement it this way to avoid some weird classloader issues
-    //TODO SF now that the code live under buildSrc try fixing this configuration-time hack
-    //TODO SF allow dry-run generation of the release notes without GH_TOKEN
-    //TODO SF document how to work with release notes, e.g. that we only show closed tickets, etc.
-    project.apply from: rootProject.file("gradle/release-notes.gradle")
 }
 
 private void commitReleaseNotes(String buildInfo) {
