@@ -1,3 +1,10 @@
+### 1.10.3 (2014-09-27 20:45 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 2: Marcin Grzejszczak, Szczepan Faber
+* Improvements: 0
+
 ### 1.10.2 (2014-09-26 16:37 UTC)
 
 * Authors: 2
