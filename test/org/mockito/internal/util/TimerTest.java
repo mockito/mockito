@@ -1,4 +1,4 @@
-package org.mockito.internal.verification;
+package org.mockito.internal.util;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;

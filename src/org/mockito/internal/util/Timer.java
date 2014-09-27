@@ -1,4 +1,4 @@
-package org.mockito.internal.verification;
+package org.mockito.internal.util;
 
 public class Timer {
 

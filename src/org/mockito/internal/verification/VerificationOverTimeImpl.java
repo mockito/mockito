@@ -6,6 +6,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 

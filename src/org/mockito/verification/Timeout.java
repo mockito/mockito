@@ -5,7 +5,7 @@
 package org.mockito.verification;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.verification.Timer;
+import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 /**
  * See the javadoc for {@link VerificationWithTimeout}

@@ -8,7 +8,11 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.verification.*;
+import org.mockito.internal.util.Timer;
+import org.mockito.internal.verification.AtLeast;
+import org.mockito.internal.verification.Only;
+import org.mockito.internal.verification.Times;
+import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
 
 import static org.mockito.Mockito.*;
@@ -17,7 +21,8 @@ public class TimeoutTest extends TestBase {
     
     @Mock VerificationMode mode;
     @Mock VerificationDataImpl data;
-    @Mock Timer timer;
+    @Mock
+    Timer timer;
     MockitoAssertionError error = new MockitoAssertionError(""); 
 
     @Test
