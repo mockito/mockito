@@ -9,31 +9,31 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.verification.AtLeast;
-import org.mockito.internal.verification.Only;
-import org.mockito.internal.verification.Times;
-import org.mockito.internal.verification.VerificationDataImpl;
+import org.mockito.internal.verification.*;
 import org.mockitoutil.TestBase;
 
 public class TimeoutTest extends TestBase {
     
     @Mock VerificationMode mode;
     @Mock VerificationDataImpl data;
+    @Mock Timer timer;
     MockitoAssertionError error = new MockitoAssertionError(""); 
 
     @Test
     public void should_pass_when_verification_passes() {
-        Timeout t = new Timeout(1, 3, mode);
-        
+        Timeout t = new Timeout(1, 3, mode, timer);
+
+        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
         doNothing().when(mode).verify(data);
-        
+
         t.verify(data);
     }
     
     @Test
     public void should_fail_because_verification_fails() {
-        Timeout t = new Timeout(1, 2, mode);
-        
+        Timeout t = new Timeout(1, 2, mode, timer);
+
+        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
         doThrow(error).
         doThrow(error).
         doThrow(error).
@@ -47,8 +47,9 @@ public class TimeoutTest extends TestBase {
     
     @Test
     public void should_pass_even_if_first_verification_fails() {
-        Timeout t = new Timeout(1, 5, mode);
-        
+        Timeout t = new Timeout(1, 5, mode, timer);
+
+        when(timer.isUp(anyLong())).thenReturn(true, true, true, false);
         doThrow(error).
         doThrow(error).
         doNothing().
@@ -59,21 +60,22 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_try_to_verify_correct_number_of_times() {
-        Timeout t = new Timeout(10, 50, mode);
+        Timeout t = new Timeout(10, 50, mode, timer);
         
         doThrow(error).when(mode).verify(data);
-        
+        when(timer.isUp(anyLong())).thenReturn(true, true, true, true, true, false);
+
         try {
             t.verify(data);
             fail();
         } catch (MockitoAssertionError e) {}
-        
+
         verify(mode, times(5)).verify(data);
     }
     
     @Test
     public void should_create_correctly_configured_timeout() {
-        Timeout t = new Timeout(25, 50, mode);
+        Timeout t = new Timeout(25, 50, mode, timer);
         
         assertTimeoutCorrectlyConfigured(t.atLeastOnce(), Timeout.class, 50, 25, AtLeast.class);
         assertTimeoutCorrectlyConfigured(t.atLeast(5), Timeout.class, 50, 25, AtLeast.class);
