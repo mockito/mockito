@@ -1,3 +1,11 @@
+### 1.10.4 (2014-09-28 18:20 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Szczepan Faber
+* Improvements: 1
+  * Improve exception messages when user mocks a method declared on non-public parent [(#90)](https://github.com/mockito/mockito/issues/90)
+
 ### 1.10.3 (2014-09-27 20:45 UTC)
 
 * Authors: 2
