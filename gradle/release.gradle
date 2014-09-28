@@ -13,6 +13,10 @@ apply from: rootProject.file("gradle/publish.gradle")
 apply from: rootProject.file("gradle/release-notes.gradle")
 
 //TODO SF allow dry-running the release
+//TODO SF only release a new version if:
+// any of the jars are different than the previous version:
+//  core jar, core javadoc jar, core sources jar, core pom file
+//  all jar, all javadoc jar, all sources jar, all pom fil
 task (release) {
     onlyIf {
         def branch = System.env.TRAVIS_BRANCH
