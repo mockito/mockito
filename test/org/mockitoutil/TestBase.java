@@ -23,7 +23,9 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collection;
 
 import static org.mockito.Mockito.mock;
@@ -39,7 +41,12 @@ public class TestBase extends Assert {
     public void cleanUpConfigInAnyCase() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
-        new StateMaster().validate();
+        StateMaster state = new StateMaster();
+        //catch any invalid state left over after test case run
+        //this way we can catch early if some Mockito operations leave weird state afterwards
+        state.validate();
+        //reset the state, especially, reset any ongoing stubbing for correct error messages of tests that assert unhappy paths
+        state.reset();
     }
 
     @Before

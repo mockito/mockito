@@ -13,6 +13,7 @@ public class StateMaster {
 
     public void reset() {
         mockingProgress.reset();
+        mockingProgress.resetOngoingStubbing();
     }
     
     public void validate() {
