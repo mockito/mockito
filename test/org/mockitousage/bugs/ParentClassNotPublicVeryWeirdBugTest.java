@@ -7,20 +7,26 @@ package org.mockitousage.bugs;
 import org.fest.assertions.Assertions;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.internal.exceptions.MockitoLimitations;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.mock;
+import java.util.List;
+
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 //see bug 212
-// @Ignore("needs fixing")
 public class ParentClassNotPublicVeryWeirdBugTest extends TestBase {
     
     class SuperClass {
         public boolean isValid() {
           return false;
         }
+        public int arg(Object o) { return 0; }
       }
     
     public class ClassForMocking extends SuperClass {
@@ -30,19 +36,59 @@ public class ParentClassNotPublicVeryWeirdBugTest extends TestBase {
     @Ignore("needs fixing")
     public void is_valid_mocked() {
         ClassForMocking clazzMock = mock(ClassForMocking.class);
-        Mockito.when(clazzMock.isValid()).thenReturn(true);
+        when(clazzMock.isValid()).thenReturn(true);
     }
 
     @Test
-    public void report_why_this_exception_happen() throws Exception {
+    public void hints_that_parent_not_public_during_stubbing() throws Exception {
         ClassForMocking clazzMock = mock(ClassForMocking.class);
         try {
-            Mockito.when(clazzMock.isValid()).thenReturn(true);
+            when(clazzMock.isValid()).thenReturn(true);
             fail();
         } catch (MissingMethodInvocationException e) {
             Assertions.assertThat(e.getMessage())
-                    .contains("the parent of the mocked class is not public.")
-                    .contains("It is a limitation of the mock engine");
+                    .contains(MockitoLimitations.NON_PUBLIC_PARENT);
+        }
+    }
+
+    @Test
+    public void hints_that_parent_not_public_during_stubbing_start() throws Exception {
+        ClassForMocking clazzMock = mock(ClassForMocking.class);
+        mock(List.class).clear();
+        try {
+            //Mockito thinks that we're stubbing void 'clear' method here and reports that boolean value cannot stub void method
+            when(clazzMock.isValid()).thenReturn(true);
+            fail();
+        } catch (MockitoException e) {   //TODO SF custom exception
+            Assertions.assertThat(e.getMessage())
+                    .contains(MockitoLimitations.NON_PUBLIC_PARENT);
+        }
+    }
+
+    @Test
+    public void hints_that_parent_not_public_during_verify() throws Exception {
+        ClassForMocking clazzMock = mock(ClassForMocking.class);
+        verify(clazzMock).isValid();
+        try {
+            //Since Mockito did not see 'isValid()' method, we will report unfinished verification
+            verify(clazzMock);
+            fail();
+        } catch (UnfinishedVerificationException e) {
+            Assertions.assertThat(e.getMessage())
+                    .contains(MockitoLimitations.NON_PUBLIC_PARENT);
+        }
+    }
+
+    @Test
+    public void hints_that_parent_not_public_when_misplaced_matchers_detected() throws Exception {
+        ClassForMocking clazzMock = mock(ClassForMocking.class);
+        try {
+            //Mockito does not see 'arg()' method so the anyObject() matcher is reported as misplaced
+            when(clazzMock.arg(anyObject())).thenReturn(0);
+            fail();
+        } catch (InvalidUseOfMatchersException e) {
+            Assertions.assertThat(e.getMessage())
+                    .contains(MockitoLimitations.NON_PUBLIC_PARENT);
         }
     }
 }

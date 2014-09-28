@@ -5,24 +5,12 @@
 
 package org.mockito.exceptions;
 
-import static org.mockito.internal.reporting.Pluralizer.pluralize;
-import static org.mockito.internal.util.StringJoiner.join;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.*;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.exceptions.MockitoLimitations;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.JUnitTool;
@@ -34,6 +22,14 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static org.mockito.internal.reporting.Pluralizer.pluralize;
+import static org.mockito.internal.util.StringJoiner.join;
 
 /**
  * Reports verification and misusing errors.
@@ -102,9 +98,8 @@ public class Reporter {
                 "Also, this error might show up because:",
                 "1. you stub either of: final/private/equals()/hashCode() methods.",
                 "   Those methods *cannot* be stubbed/verified.",
+                "   " + MockitoLimitations.NON_PUBLIC_PARENT,
                 "2. inside when() you don't call method on mock but on some other object.",
-                "3. the parent of the mocked class is not public.",
-                "   It is a limitation of the mock engine.",
                 ""
         ));
     }
@@ -119,6 +114,7 @@ public class Reporter {
                 "",
                 "Also, this error might show up because you verify either of: final/private/equals()/hashCode() methods.",
                 "Those methods *cannot* be stubbed/verified.",
+                MockitoLimitations.NON_PUBLIC_PARENT,
                 ""
         ));
 
@@ -463,6 +459,7 @@ public class Reporter {
                 "2. Somewhere in your test you are stubbing *final methods*. Sorry, Mockito does not verify/stub final methods.",
                 "3. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - ",
                 "   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.",
+                "4. " + MockitoLimitations.NON_PUBLIC_PARENT,
                 ""
         ));
     }
@@ -511,6 +508,7 @@ public class Reporter {
                 "",
                 "Also, this error might show up because you use argument matchers with methods that cannot be mocked.",
                 "Following methods *cannot* be stubbed/verified: final/private/equals()/hashCode().",
+                MockitoLimitations.NON_PUBLIC_PARENT,
                 ""
         ));
     }
