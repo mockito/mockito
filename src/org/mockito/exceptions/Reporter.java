@@ -448,7 +448,7 @@ public class Reporter {
     }
 
     public void cannotStubVoidMethodWithAReturnValue(String methodName) {
-        throw new MockitoException(join(
+        throw new CannotStubVoidMethodWithReturnValue(join(
                 "'" + methodName + "' is a *void method* and it *cannot* be stubbed with a *return value*!",
                 "Voids are usually stubbed with Throwables:",
                 "    doThrow(exception).when(mock).someVoidMethod();",

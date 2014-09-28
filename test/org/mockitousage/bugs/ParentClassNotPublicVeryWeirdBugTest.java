@@ -7,7 +7,7 @@ package org.mockitousage.bugs;
 import org.fest.assertions.Assertions;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
@@ -59,7 +59,7 @@ public class ParentClassNotPublicVeryWeirdBugTest extends TestBase {
             //Mockito thinks that we're stubbing void 'clear' method here and reports that boolean value cannot stub void method
             when(clazzMock.isValid()).thenReturn(true);
             fail();
-        } catch (MockitoException e) {   //TODO SF custom exception
+        } catch (CannotStubVoidMethodWithReturnValue e) {
             Assertions.assertThat(e.getMessage())
                     .contains(MockitoLimitations.NON_PUBLIC_PARENT);
         }
