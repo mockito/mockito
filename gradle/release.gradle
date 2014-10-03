@@ -12,31 +12,48 @@ assert project == rootProject
 apply from: rootProject.file("gradle/publish.gradle")
 apply from: rootProject.file("gradle/release-notes.gradle")
 
-//TODO SF allow dry-running the release
+def dryRun = project.hasProperty('dryRun')
+
+/*
+Release process should *not* run concurrently.
+ */
+task("releaseNeeded") {
+    def branch = System.env.TRAVIS_BRANCH
+    def pr = System.env.TRAVIS_PULL_REQUEST
+    ext.needed = dryRun || (pr == 'false' && branch == 'master')
+    logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}.", needed, branch, pr, dryRun)
+}
+
+bintrayUpload {
+    dependsOn releaseNeeded
+    onlyIf { releaseNeeded.needed }
+    doFirst {
+        if (dryRun) {
+            logger.lifecycle "Dry-running the release"
+        }
+    }
+}
+
 //TODO SF only release a new version if:
 // any of the jars are different than the previous version:
 //  core jar, core javadoc jar, core sources jar, core pom file
 //  all jar, all javadoc jar, all sources jar, all pom fil
-task (release) {
-    onlyIf {
-        def branch = System.env.TRAVIS_BRANCH
-        def pr = System.env.TRAVIS_PULL_REQUEST
-        def releasable = pr == 'false' && branch == 'master'
-        logger.lifecycle("Skipping release: {}, branch: {}, pull request: {}.", !releasable, branch, pr)
-        releasable
-    }
+task("release") {
+    dependsOn bintrayUpload, releaseNeeded
+    onlyIf { releaseNeeded.needed }
     doLast {
+        if (dryRun) {
+            logger.lifecycle "Dry-running the release"
+        }
         String currentVersion = project.version //the version loaded when Gradle build has started
         String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
-        //Release process. Should *not* run concurrently.
-        run "./gradlew", "bintrayUpload"
         configureGit()
         run "git", "pull", "--depth", "500" //We need good chunk of recent commits to build release notes correctly
-        updateReleaseNotes()
+        project.updateReleaseNotes()
         commitReleaseNotes(buildInfo)
-        pushTag(currentVersion, buildInfo, pushTarget)
+        createTag(currentVersion, buildInfo)
         commitUpdatedJavadoc(buildInfo)
 
         /*
@@ -49,10 +66,13 @@ task (release) {
         */
         run "git", "checkout", "master"
         run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
-        commitReleaseNotes(buildInfo)
         commitIncrementedVersion(currentVersion, buildInfo)
 
-        run "git", "push", pushTarget, "master", "gh-pages"
+        def pushCommandLine = ["git", "push", pushTarget]
+        if (dryRun) {
+            pushCommandLine << '--dry-run'
+        }
+        run pushCommandLine
     }
 }
 
@@ -62,21 +82,19 @@ private void commitReleaseNotes(String buildInfo) {
     run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
 }
 
-private void pushTag(String currentVersion, String buildInfo, MaskedArg pushTarget) {
+private void createTag(String currentVersion, String buildInfo) {
     String tag = "v${currentVersion}"
     String tagMessage = "Create tag $tag ${buildInfo}"
     run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
-    run "git", "push", pushTarget, tag
 }
 
 private void configureGit() {
-    run "git", "config", "user.email", "szczepiq@gmail.com"
-    run "git", "config", "user.name", "Szczepan Faber"
+    run "git", "config", "user.email", "continuous.delivery.drone@gmail.com"
+    run "git", "config", "user.name", "Continuous Delivery Drone"
 }
 
 private void commitIncrementedVersion(String currentVersion, String buildInfo) {
-    run "./gradlew", "incrementVersion"
-    String nextVersion = project.ext.loadVersion() //currently configured version in the file - TODO we don't need this, we infer changes from tags
+    String nextVersion = project.incrementVersion()
     String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
     run "git", "commit", "-m", "$message" as String, "version.properties"
 }
@@ -104,6 +122,10 @@ task updateJavadoc {
 }
 
 void run(Object ... args) {
+    run(args as List)
+}
+
+void run(Collection args) {
     logger.lifecycle("--- Executing: {}", args.join(" "))
     exec { commandLine args.collect { it instanceof MaskedArg? it.value : it.toString()} }
     logger.lifecycle("--- Completed!", args)
