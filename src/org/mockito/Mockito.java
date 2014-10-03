@@ -11,6 +11,7 @@ import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.rules.MockitoJUnitRule;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
 import org.mockito.verification.After;
@@ -373,7 +374,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * MockitoAnnotations.initMocks(testClass);
  * </code></pre>
  *
- * You can use built-in runner: {@link MockitoJUnitRunner}.
+ * You can use built-in runner: {@link MockitoJUnitRunner} or a rule: {@link MockitoJUnitRule}.
  * <p>
  * Read more here: {@link MockitoAnnotations}
  *
@@ -767,7 +768,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <p>
  * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
- * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner}.
+ * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner} or rule:
+ * {@link MockitoJUnitRule}.
  * <p>
  *
  *
@@ -812,7 +814,8 @@ import org.mockito.verification.VerificationWithTimeout;
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
  * using <b>constructor</b> injection, <b>setter</b> injection, or <b>field</b> injection.
  * <p>
- * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)} or {@link MockitoJUnitRunner}.
+ * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)}, {@link MockitoJUnitRunner}
+ * or {@link MockitoJUnitRule}.
  * <p>
  * Read more about available tricks and the rules of injection in the javadoc for {@link InjectMocks}
  * <pre class="code"><code class="java">
@@ -2170,12 +2173,12 @@ public class Mockito extends Matchers {
      * For example, one of the users wanted to put <code>validateMockitoUsage()</code> in his <code>&#064;After</code> method
      * so that he knows immediately when he misused Mockito.
      * Without it, he would have known about it not sooner than <b>next time</b> he used the framework.
-     * One more benefit of having <code>validateMockitoUsage()</code> in <code>&#064;After</code> is that jUnit runner will always fail in the test method with defect
+     * One more benefit of having <code>validateMockitoUsage()</code> in <code>&#064;After</code> is that jUnit runner and rule will always fail in the test method with defect
      * whereas ordinary 'next-time' validation might fail the <b>next</b> test method.
      * But even though JUnit might report next test as red, don't worry about it
      * and just click at navigable stack trace element in the exception message to instantly locate the place where you misused mockito.
      * <p>
-     * <b>Built-in runner: {@link MockitoJUnitRunner}</b> does validateMockitoUsage() after each test method.
+     * <b>Both built-in runner: {@link MockitoJUnitRunner} and rule: {@link MockitoJUnitRule}</b> do validateMockitoUsage() after each test method.
      * <p>
      * Bear in mind that <b>usually you don't have to <code>validateMockitoUsage()</code></b>
      * and framework validation triggered on next-time basis should be just enough,
