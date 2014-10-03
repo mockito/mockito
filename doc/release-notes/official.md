@@ -97,10 +97,10 @@ If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.
 
 ### 1.9.0-rc1 (23-07-2011)
 
- * Annotations are smarter. They can use constructor injection and instantiate objects. More information [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#23 here].
- * To keep the test code slim you can now create a stub [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#24 in one line].
- * Made it possible to verify interactions [http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#25 ignoring stubs].
- * Fixed various bugs & enhancements. Full list is [http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles here].
+ * Annotations are smarter. They can use constructor injection and instantiate objects. More information [here](http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#23).
+ * To keep the test code slim you can now create a stub [in one line](http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#24).
+ * Made it possible to verify interactions [ignoring stubs](http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#25).
+ * Fixed various bugs & enhancements. Full list is [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
  * **THANKS** to all the community members who helped improving Mockito! **Brice Dutheil** is a new Mockito champion, having contributed a lot of excellent code in the recent months! Without him, there wouldn't be any release and your mailing list queries wouldn't be answered so promptly! Brice - thank you and welcome to the team! Some fresh mojitoes ought to be served to:
   * *Steven Baker* for sharing the one-liner stubs idea
   * *Konrad Garus* for reporting the inconsistencies in the docs & exception messages
