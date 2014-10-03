@@ -8,11 +8,11 @@ tasks.incrementVersion.mustRunAfter tasks.bintrayUpload
 
 bintray {
     user = 'szczepiq'
-    key = getBintrayKey()
+    key = System.env.MOCKITO_BINTRAY_API_KEY
 
     publications = ['mockitoCore', 'mockitoAll']
 
-    dryRun = false
+    dryRun = project.hasProperty('dryRun')
     publish = true
 
     pkg {
@@ -33,24 +33,5 @@ bintray {
 //            desc = 'optional, version-specific description'
         //        vcsTag = '1.9.8-SNAPSHOT'
         //  }
-    }
-}
-
-//getting bintray key securely
-String getBintrayKey() {
-    if (project.hasProperty("bintrayApiKey")) {
-        return project.getProperty("bintrayApiKey")
-    }
-    //for travis
-    def env = System.env.MOCKITO_BINTRAY_API_KEY
-    if (env) {
-        return env
-    }
-    null
-}
-
-gradle.taskGraph.whenReady {
-    if (it.hasTask(':bintrayUpload') && !getBintrayKey()) {
-        throw new GradleException("'bintrayUpload' task requires bintray key configured. Please pass -PbintrayApiKey=secret property.")
     }
 }
