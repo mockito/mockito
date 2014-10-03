@@ -29,9 +29,9 @@
 Thanks everybody for great contributions! Next release should come quicker thanks to continuous deployment goodness.
 
 * Authors: 25
-* Commits: 337
-  * 147: Szczepan Faber
+* Commits: 307
   * 134: Brice Dutheil
+  * 117: Szczepan Faber
   * 10: Marcin Grzejszczak
   * 6: Tim Perry
   * 5: Lovro Pandzic
