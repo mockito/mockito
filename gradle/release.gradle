@@ -100,7 +100,7 @@ private void commitIncrementedVersion(String currentVersion, String buildInfo) {
 }
 
 private void commitUpdatedJavadoc(String buildInfo) {
-    run "git", "fetch", "origin", "+gh-pages:gh-pages", "--depth=1"
+    run "git", "fetch", "origin", "+gh-pages:gh-pages"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "-r", "docs/current", "-q"
     project.copy {
