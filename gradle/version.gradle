@@ -14,17 +14,21 @@ logger.lifecycle "Version: $project.version"
 task incrementVersion {
     description "Increments version in 'version.properties' file."
     doLast {
-        try {
-            List numbers = project.version.split('\\.')
-            //TODO version file will have -SNAPSHOT name but Travis with remove -SNAPSHOT during the build
-            int micro = numbers.pop() as Integer
-            numbers << micro + 1
-            def newVersion = numbers.join('.')
-            def updatedContent = versionFile.text.replaceAll("(?s)version=(.*?)\n", "version=$newVersion\n")
-            versionFile.text = updatedContent
-            logger.lifecycle("Current content of '{}':\n----------\n{}\n----------", versionFile.name, updatedContent)
-        } catch (Exception e) {
-            throw new GradleException("Unable to increment minor version.", e)
-        }
+        incrementVersion()
+    }
+}
+
+ext.incrementVersion = {
+    try {
+        List numbers = project.version.split('\\.')
+        int micro = numbers.pop() as Integer
+        numbers << micro + 1
+        def newVersion = numbers.join('.')
+        def updatedContent = versionFile.text.replaceAll("(?s)version=(.*?)\n", "version=$newVersion\n")
+        versionFile.text = updatedContent
+        logger.lifecycle("Current content of '{}':\n----------\n{}\n----------", versionFile.name, updatedContent)
+        return newVersion
+    } catch (Exception e) {
+        throw new GradleException("Unable to increment minor version.", e)
     }
 }
