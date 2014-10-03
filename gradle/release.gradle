@@ -34,10 +34,6 @@ bintrayUpload {
     }
 }
 
-//TODO SF only release a new version if:
-// any of the jars are different than the previous version:
-//  core jar, core javadoc jar, core sources jar, core pom file
-//  all jar, all javadoc jar, all sources jar, all pom fil
 task("release") {
     dependsOn bintrayUpload, releaseNeeded
     onlyIf { releaseNeeded.needed }
@@ -135,3 +131,16 @@ class MaskedArg {
     String value
     String toString() { "<masked>" }
 }
+
+/*
+TODO:
+-no new version publication if all binaries the same
+-release process performs dry run first, if it is successful it makes the actual release
+-steps are better described and log stuff verbosely only in case of failure
+-steps can be rolled back:
+  -configure git user back to the original
+  -tag removal
+  -new commits removal (git reset --hard) on all affected branches
+-clean up after release:
+  -configure git user back to the original
+ */
