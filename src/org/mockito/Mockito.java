@@ -2150,13 +2150,13 @@ public class Mockito extends Matchers {
      * <p>
      * Examples of incorrect use:
      * <pre class="code"><code class="java">
-     * //Oops, someone forgot thenReturn() part:
+     * //Oops, thenReturn() part is missing:
      * when(mock.get());
      *
-     * //Oops, someone put the verified method call inside verify() where it should be outside:
+     * //Oops, verified method call is inside verify() where it should be on the outside:
      * verify(mock.execute());
      *
-     * //Oops, someone has used EasyMock for too long and forgot to specify the method to verify:
+     * //Oops, missing method to verify:
      * verify(mock);
      * </code></pre>
      *
