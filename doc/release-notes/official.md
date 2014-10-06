@@ -1,3 +1,13 @@
+### 1.10.5 (2014-10-06 19:20 UTC)
+
+* Authors: 2
+* Commits: 8
+  * 6: Szczepan Faber
+  * 2: Continuous Delivery Drone
+  * 1: jerzykrlk@gmail.com
+* Improvements: 1
+  * Added a Mockito @Rule for JUnit [(#85)](https://github.com/mockito/mockito/pull/85)
+
 ### 1.10.4 (2014-09-28 18:20 UTC)
 
 * Authors: 1
