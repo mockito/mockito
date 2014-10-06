@@ -1,11 +1,9 @@
 package org.mockito.junit;
 
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.internal.rules.JUnitRule;
-
-import static org.mockito.internal.util.Checks.checkNotNull;
 
 /**
  * The MockitoJUnitRule Rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}.
@@ -25,7 +23,7 @@ import static org.mockito.internal.util.Checks.checkNotNull;
  * public class ExampleTest {
  *
  *     &#064;Rule
- *     public MockitoJUnitRule mockitoJUnitRule = new MockitoJUnitRule(this);</b>
+ *     public MockitoJUnitRule mockitoJUnitRule = MockitoJUnitRule.rule();</b>
  *
  *     &#064;Mock
  *     private List list;
@@ -37,20 +35,33 @@ import static org.mockito.internal.util.Checks.checkNotNull;
  * }
  * </code></pre>
  */
-public class MockitoJUnitRule implements TestRule {
+public class MockitoJUnitRule implements MethodRule {
 
     private final JUnitRule jUnitRule;
 
     /**
+     */
+    public MockitoJUnitRule() {
+        this.jUnitRule = new JUnitRule();
+    }
+
+    /**
+     * Please use {@link MockitoJUnitRule#MockitoJUnitRule()}.
      * @param targetTest the test class instance where the rule is declared. Cannot be null.
      */
+    @Deprecated
     public MockitoJUnitRule(Object targetTest) {
-        checkNotNull(targetTest, "Mockito JUnit rule target");
-        this.jUnitRule = new JUnitRule(targetTest);
+        this();
     }
 
-    public Statement apply(final Statement base, Description description) {
-        return jUnitRule.apply(base, description);
+    /**
+     * @return new default MockitoJUnitRule.
+     */
+    public static MockitoJUnitRule rule() {
+        return new MockitoJUnitRule();
     }
 
+    public Statement apply(Statement base, FrameworkMethod method, Object target) {
+        return jUnitRule.apply(base, target);
+    }
 }
