@@ -46,10 +46,15 @@ task("release") {
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
         configureGit()
-        run "git", "pull", "--depth", "500" //We need good chunk of recent commits to build release notes correctly
+        //We need good chunk of recent commits to build release notes correctly
+        run "git", "pull", "--depth", "500"
         project.updateReleaseNotes()
+
+        //Operations on new tag
         commitReleaseNotes(buildInfo)
         createTag(currentVersion, buildInfo)
+
+        //Operations on gh-pages branch
         commitUpdatedJavadoc(buildInfo)
 
         /*
@@ -63,6 +68,7 @@ task("release") {
         run "git", "checkout", "master"
         run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
         commitIncrementedVersion(currentVersion, buildInfo)
+        commitReleaseNotes(buildInfo) //we have it committed on a tag, now committing on master
 
         def pushCommandLine = ["git", "push", pushTarget]
         if (dryRun) {
