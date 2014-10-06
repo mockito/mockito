@@ -31,14 +31,18 @@ public class InjectTestCase {
         return injectInto;
     }
 
-    private static class Injected {
+    public static class Injected {
         public String stringMethod() {
             return "string";
         }
     }
 
-    private static class InjectInto {
+    public static class InjectInto {
         private Injected injected;
+
+        public Injected getInjected() {
+            return injected;
+        }
     }
 
 }
