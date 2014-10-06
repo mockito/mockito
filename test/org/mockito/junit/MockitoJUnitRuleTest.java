@@ -1,4 +1,4 @@
-package org.mockito.rules;
+package org.mockito.junit;
 
 import org.junit.Rule;
 import org.junit.Test;
