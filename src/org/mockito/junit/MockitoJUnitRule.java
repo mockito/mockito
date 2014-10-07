@@ -39,11 +39,14 @@ import static org.mockito.internal.util.Checks.checkNotNull;
  */
 public class MockitoJUnitRule implements TestRule {
 
-    private JUnitRule jUnitRule;
+    private final JUnitRule jUnitRule;
 
-    public MockitoJUnitRule(Object object) {
-        checkNotNull(object, "Rule target");
-        this.jUnitRule = new JUnitRule(object);
+    /**
+     * @param testInstance the test class instance where the rule is declared. Cannot be null.
+     */
+    public MockitoJUnitRule(Object testInstance) {
+        checkNotNull(testInstance, "mockito JUnit rule test instance");
+        this.jUnitRule = new JUnitRule(testInstance);
     }
 
     public Statement apply(final Statement base, Description description) {
