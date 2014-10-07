@@ -1,3 +1,11 @@
+### 1.10.6 (2014-10-07 19:38 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Szczepan Faber
+* Improvements: 1
+  * Document minimum JUnit requirement for MockitoJUnitRule [(#96)](https://github.com/mockito/mockito/issues/96)
+
 ### 1.10.5 (2014-10-06 19:20 UTC)
 
 * Authors: 2
