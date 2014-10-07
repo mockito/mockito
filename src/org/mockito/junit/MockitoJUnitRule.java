@@ -9,6 +9,7 @@ import static org.mockito.internal.util.Checks.checkNotNull;
 
 /**
  * The MockitoJUnitRule Rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}.
+ * Requires JUnit 4.9 (at least).
  *
  * This rule adds following behavior:
  * <ul>
