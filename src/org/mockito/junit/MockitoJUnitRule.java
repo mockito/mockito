@@ -42,11 +42,11 @@ public class MockitoJUnitRule implements TestRule {
     private final JUnitRule jUnitRule;
 
     /**
-     * @param testInstance the test class instance where the rule is declared. Cannot be null.
+     * @param targetTest the test class instance where the rule is declared. Cannot be null.
      */
-    public MockitoJUnitRule(Object testInstance) {
-        checkNotNull(testInstance, "mockito JUnit rule test instance");
-        this.jUnitRule = new JUnitRule(testInstance);
+    public MockitoJUnitRule(Object targetTest) {
+        checkNotNull(targetTest, "Mockito JUnit rule target");
+        this.jUnitRule = new JUnitRule(targetTest);
     }
 
     public Statement apply(final Statement base, Description description) {

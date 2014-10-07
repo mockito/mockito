@@ -32,7 +32,7 @@ public class MockitoJUnitRuleTest {
             new MockitoJUnitRule(null);
             fail();
         } catch (NullPointerException e) {
-            assertEquals("valid message", "Rule target should not be null", e.getMessage());
+            assertEquals("valid message", "Mockito JUnit rule target should not be null", e.getMessage());
         }
     }
 
