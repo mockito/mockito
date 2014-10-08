@@ -6,6 +6,8 @@ tasks.bintrayUpload.mustRunAfter "build"
 //if upload fails, don't increment version
 tasks.incrementVersion.mustRunAfter tasks.bintrayUpload
 
+def theVcsTag = "v" + project.version
+
 bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
@@ -29,7 +31,7 @@ bintray {
 
         // optional version attributes
         version {
-            vcsTag = "v$version"
+            vcsTag = theVcsTag
         }
     }
 }
