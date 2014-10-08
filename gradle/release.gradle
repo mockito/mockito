@@ -45,6 +45,7 @@ task("release") {
         }
         String currentVersion = project.version //the version loaded when Gradle build has started
         String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+        String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
         configureGit()
@@ -53,11 +54,11 @@ task("release") {
         project.updateReleaseNotes()
 
         //Operations on new tag
-        commitReleaseNotes(buildInfo)
+        commitReleaseNotes(buildInfo, author)
         createTag(currentVersion, buildInfo)
 
         //Operations on gh-pages branch
-        commitUpdatedJavadoc(buildInfo)
+        commitUpdatedJavadoc(buildInfo, author)
 
         /*
             Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
@@ -69,8 +70,8 @@ task("release") {
         */
         run "git", "checkout", "master"
         run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
-        commitIncrementedVersion(currentVersion, buildInfo)
-        commitReleaseNotes(buildInfo) //we have it committed on a tag, now committing on master
+        commitIncrementedVersion(currentVersion, buildInfo, author)
+        commitReleaseNotes(buildInfo, author) //we have it committed on a tag, now committing on master
 
         def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion"]
         if (dryRun) {
@@ -80,10 +81,10 @@ task("release") {
     }
 }
 
-private void commitReleaseNotes(String buildInfo) {
+private void commitReleaseNotes(String buildInfo, String author) {
     def notesFile = project.file("doc/release-notes/official.md")
     run "git", "add", "$notesFile" as String
-    run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
+    run "git", "commit", "--author", author, "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
 }
 
 private void createTag(String currentVersion, String buildInfo) {
@@ -97,13 +98,13 @@ private void configureGit() {
     run "git", "config", "user.name", "Continuous Delivery Drone"
 }
 
-private void commitIncrementedVersion(String currentVersion, String buildInfo) {
+private void commitIncrementedVersion(String currentVersion, String buildInfo, String author) {
     String nextVersion = project.incrementVersion()
     String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
-    run "git", "commit", "-m", "$message" as String, "version.properties"
+    run "git", "commit", "--author", author, "-m", "$message" as String, "version.properties"
 }
 
-private void commitUpdatedJavadoc(String buildInfo) {
+private void commitUpdatedJavadoc(String buildInfo, String author) {
     run "git", "fetch", "origin", "+gh-pages:gh-pages"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "-r", "docs/current", "-q"
@@ -116,13 +117,7 @@ private void commitUpdatedJavadoc(String buildInfo) {
         into "docs/current"
     }
     run "git", "add", "docs"
-    run "git", "commit", "-m", '"Refresh javadoc ' + buildInfo + '"', "-q"
-}
-
-task updateJavadoc {
-    doLast {
-        commitUpdatedJavadoc("")
-    }
+    run "git", "commit", "--author", author, "-m", '"Refresh javadoc ' + buildInfo + '"', "-q"
 }
 
 void run(Object ... args) {
@@ -143,6 +138,7 @@ class MaskedArg {
 /*
 TODO:
 -no new version publication if all binaries the same
+-update issues and tell which version contains a fix for given issue
 -release process performs dry run first, if it is successful it makes the actual release
 -steps are better described and log stuff verbosely only in case of failure
 -steps can be rolled back:
@@ -150,5 +146,5 @@ TODO:
   -tag removal
   -new commits removal (git reset --hard) on all affected branches
 -clean up after release:
-  -configure git user back to the original
+ -?
  */
