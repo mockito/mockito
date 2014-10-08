@@ -1,3 +1,13 @@
+### 1.10.7 (2014-10-08 18:52 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Continuous Delivery Drone
+  * 1: Szczepan Faber
+* Improvements: 2
+  * possible NPE exception when class cannot be mocked via PowerMockito [(#98)](https://github.com/mockito/mockito/issues/98)
+  * Documentation mentions non-existing version 1.9.8 in few places [(#101)](https://github.com/mockito/mockito/issues/101)
+
 ### 1.10.6 (2014-10-07 19:38 UTC)
 
 * Authors: 1
