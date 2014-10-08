@@ -61,12 +61,11 @@ public class ClassImposterizer  {
             proxyInstance = createProxy(proxyClass, interceptor);
             return mockedType.cast(proxyInstance);
         } catch (ClassCastException cce) {
-            // NPE unlikely to happen because CCE will only happen on the cast statement
             throw new MockitoException(join(
                 "ClassCastException occurred while creating the mockito proxy :",
-                "  class to imposterize : '" + mockedType.getCanonicalName() + "', loaded by classloader : '" + mockedType.getClassLoader() + "'",
-                "  imposterizing class : '" + proxyClass.getCanonicalName() + "', loaded by classloader : '" + proxyClass.getClassLoader() + "'",
-                "  proxy instance class : '" + proxyInstance.getClass().getCanonicalName() + "', loaded by classloader : '" + proxyInstance.getClass().getClassLoader() + "'",
+                "  class to imposterize : '" + describeClass(mockedType),
+                "  imposterizing class : '" + describeClass(proxyClass),
+                "  proxy instance class : '" + describeClass(proxyInstance),
                 "",
                 "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
             ), cce);
@@ -74,7 +73,15 @@ public class ClassImposterizer  {
             setConstructorsAccessible(mockedType, false);
         }
     }
-    
+
+    private static String describeClass(Class type) {
+        return type == null? "null" : type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
+    }
+
+    private static String describeClass(Object instance) {
+        return instance == null? "null" : describeClass(instance.getClass());
+    }
+
     public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
         for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
             constructor.setAccessible(accessible);
