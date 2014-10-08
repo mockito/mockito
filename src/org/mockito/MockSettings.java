@@ -176,7 +176,7 @@ public interface MockSettings extends Serializable {
      *
      * @param mode serialization mode
      * @return settings instance so that you can fluently specify other settings
-     * @since 1.9.8
+     * @since 1.10.0
      */
     MockSettings serializable(SerializableMode mode);
 
