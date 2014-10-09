@@ -68,7 +68,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         }
 
         // record deep stub answer
-        return recordDeepStubAnswer(newDeepStubMock(returnTypeGenericMetadata), container);
+        return recordDeepStubAnswer(
+                newDeepStubMock(returnTypeGenericMetadata, invocation.getMock()),
+                container
+        );
     }
 
     /**
@@ -79,23 +82,28 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
      * {@link ReturnsDeepStubs} answer in which we will store the returned type generic metadata.
      *
      * @param returnTypeGenericMetadata The metadata to use to create the new mock.
+     * @param parentMock The parent of the current deep stub mock.
      * @return The mock
      */
-    private Object newDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata) {
+    private Object newDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata, Object parentMock) {
+        MockCreationSettings parentMockSettings = new MockUtil().getMockSettings(parentMock);
         return mockitoCore().mock(
                 returnTypeGenericMetadata.rawType(),
-                withSettingsUsing(returnTypeGenericMetadata)
+                withSettingsUsing(returnTypeGenericMetadata, parentMockSettings)
         );
     }
 
-    private MockSettings withSettingsUsing(GenericMetadataSupport returnTypeGenericMetadata) {
+    private MockSettings withSettingsUsing(GenericMetadataSupport returnTypeGenericMetadata, MockCreationSettings parentMockSettings) {
         MockSettings mockSettings = returnTypeGenericMetadata.hasRawExtraInterfaces() ?
                 withSettings().extraInterfaces(returnTypeGenericMetadata.rawExtraInterfaces())
                 : withSettings();
 
-        return mockSettings
-		        .serializable()
+        return propagateSerializationSettings(mockSettings, parentMockSettings)
                 .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata));
+    }
+
+    private MockSettings propagateSerializationSettings(MockSettings mockSettings, MockCreationSettings parentMockSettings) {
+        return mockSettings.serializable(parentMockSettings.getSerializableMode());
     }
 
     private ReturnsDeepStubs returnsDeepStubsAnswerUsing(final GenericMetadataSupport returnTypeGenericMetadata) {
