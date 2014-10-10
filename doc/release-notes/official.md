@@ -1,3 +1,11 @@
+### 1.10.8 (2014-10-10 00:58 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Brice Dutheil
+* Improvements: 1
+  * Fixes issue #99 [(#103)](https://github.com/mockito/mockito/pull/103)
+
 ### 1.10.7 (2014-10-08 18:52 UTC)
 
 * Authors: 2
