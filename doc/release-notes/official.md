@@ -4,7 +4,7 @@
 * Commits: 3
   * 3: Brice Dutheil
 * Improvements: 1
-  * Fixes issue #99 [(#103)](https://github.com/mockito/mockito/pull/103)
+  * Fixes issue #99 : RETURNS_DEEP_STUBS automatically tries to create serializable mocks [(#103)](https://github.com/mockito/mockito/pull/103)
 
 ### 1.10.7 (2014-10-08 18:52 UTC)
 
@@ -74,7 +74,7 @@ Thanks everybody for great contributions! Next release should come quicker thank
   * 4: alberski
   * 3: Dmytro Chyzhykov, Gunnar Wagenknecht, Kamil Szymanski, pimterry, Ian Parkinson
   * 2: Emory Merryman, U-Michal-Komputer\Michal
-  * 1: Vivian Pennel, Kuangshi Yan, Marius Volkhart, Marcin Zajaczkowski, Andrei Solntsev, Markus Wüstenberg, Marius Volkhart, Ken Dombeck, jrrickard, Philip Aston, Ivan Vershinin, ludovic.meurillon@gmail.com
+  * 1: Vivian Pennel, Kuangshi Yan, Marius Volkhart, Marcin Zajaczkowski, Andrei Solntsev, Markus Wüstenberg, Marius Volkhart, Ken Dombeck, jrrickard, Philip Aston, Ivan Vershinin, ludovic.meurillon@gmail.com
 * Improvements: 21
   * Added useful links to README.md [(#58)](https://github.com/mockito/mockito/pull/58)
   * Fixed wrong javadoc for AdditionalAnswers [(#56)](https://github.com/mockito/mockito/pull/56)
