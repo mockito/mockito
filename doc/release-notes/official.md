@@ -4,7 +4,7 @@
 * Commits: 3
   * 3: Brice Dutheil
 * Improvements: 1
-  * Fixes issue #99 : RETURNS_DEEP_STUBS automatically tries to create serializable mocks [(#103)](https://github.com/mockito/mockito/pull/103)
+  * Fixes issue [#99](https://github.com/mockito/mockito/issues/99) : RETURNS_DEEP_STUBS automatically tries to create serializable mocks [(#103)](https://github.com/mockito/mockito/pull/103)
 
 ### 1.10.7 (2014-10-08 18:52 UTC)
 
