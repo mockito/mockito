@@ -127,6 +127,9 @@ public class BDDMockito extends Mockito {
         <M> M getMock();
     }
 
+    /**
+     * @deprecated not part of the public API, use {@link BDDMyOngoingStubbing} instead.
+     */
     public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
 
         private final OngoingStubbing<T> mockitoOngoingStubbing;
@@ -227,6 +230,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verify(Object)
+         * @since 1.10.5
          */
         public T should() {
             return verify(mock);
@@ -234,6 +238,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verify(Object, VerificationMode)
+         * @since 1.10.5
          */
         public T should(VerificationMode mode) {
             return verify(mock, mode);
@@ -288,6 +293,9 @@ public class BDDMockito extends Mockito {
         <T> T given(T mock);
     }
 
+    /**
+     * @deprecated not part of the public API, use {@link BDDStubber} instead.
+     */
     public static class BDDStubberImpl implements BDDStubber {
 
         private final Stubber mockitoStubber;
