@@ -141,6 +141,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return validatedSettings(typeToMock, this);
     }
 
+    public MockCreationSettings<T> mockAbstractMethodsOnly() {
+    	this.mocksAbstractMethodsOnly = true;
+    	return this;
+    }
+
     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
         MockCreationValidator validator = new MockCreationValidator();
 

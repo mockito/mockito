@@ -4,14 +4,7 @@
  */
 package org.mockito.internal.creation.jmock;
 
-import org.mockito.cglib.core.CodeGenerationException;
-import org.mockito.cglib.core.NamingPolicy;
-import org.mockito.cglib.core.Predicate;
-import org.mockito.cglib.proxy.*;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.GlobalConfiguration;
-import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
-import org.objenesis.ObjenesisStd;
+import static org.mockito.internal.util.StringJoiner.join;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -19,7 +12,19 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 
-import static org.mockito.internal.util.StringJoiner.join;
+import org.mockito.cglib.core.CodeGenerationException;
+import org.mockito.cglib.core.NamingPolicy;
+import org.mockito.cglib.core.Predicate;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.CallbackFilter;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.NoOp;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
+import org.objenesis.ObjenesisStd;
 
 /**
  * Thanks to jMock guys for this handy class that wraps all the cglib magic. 
@@ -34,6 +39,18 @@ public class ClassImposterizer  {
     //have a constructor in this class that tries to instantiate ObjenesisStd and if it fails then show decent exception that dependency is missing
     //TODO: for the same reason catch and give better feedback when hamcrest core is not found.
     private final ObjenesisStd objenesis = new ObjenesisStd(new GlobalConfiguration().enableClassCache());
+    private final PartialMocker skipConstructor = new PartialMocker() {
+	    @Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+	    	enhancer.setUseFactory(true);
+	    	@SuppressWarnings("unchecked") // createClass() returns raw Class
+			Factory factory = (Factory) objenesis.newInstance(enhancer.createClass());
+	    	factory.setCallbacks(callbacks);
+	    	return factory;
+	    }
+	    @Override boolean usesConstructor(Constructor<?> next) {
+	    	return false;
+	    }
+	};
     
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
         @Override
@@ -43,7 +60,7 @@ public class ClassImposterizer  {
     };
     
     private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-        public int accept(Method method) {
+        public int accept(Method method, List<Method> allMethods) {
             return method.isBridge() ? 1 : 0;
         }
     };
@@ -73,8 +90,57 @@ public class ClassImposterizer  {
             setConstructorsAccessible(mockedType, false);
         }
     }
+    
+    public <T> T instantiate(
+    		MethodInterceptor interceptor,
+    		Class<T> mockedType,
+    		Class<?>[] interfaces,
+    		Object injectionTarget) {
+    	if (mockedType.isInterface()) {
+    		return imposterise(interceptor, mockedType);
+    	}
+        if(Modifier.isPrivate(mockedType.getModifiers())) {
+            throw new IllegalArgumentException(
+            		String.format("Cannot partial mock private %s %s. Please make the class non-private.", mockedType));
+        }
+        final UseConstructor useConstructor =
+        		chooseMockConstructor(mockedType, injectionTarget);
+        final Constructor<?> superConstructor;
+        try {
+        	superConstructor = useConstructor.getConstructor(mockedType);
+        } catch (NoSuchMethodException e) {
+			return skipConstructor.partialMock(mockedType, interfaces, interceptor);
+        }
+        if (Modifier.isPrivate(superConstructor.getModifiers())) {
+          // No good constructor, just skip
+          return skipConstructor.partialMock(mockedType, interfaces, interceptor);
+        }
+        return new PartialMocker() {
+			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+		    	  enhancer.setUseFactory(false);
+		    	  enhancer.setCallbacks(callbacks);
+		    	  return useConstructor.construct(enhancer);
+			}
+			@Override boolean usesConstructor(Constructor<?> constructor) {
+				return useConstructor.usesConstructor(constructor);
+			}
+        }.partialMock(mockedType, interfaces, interceptor);
+    }
 
-    private static String describeClass(Class type) {
+    private UseConstructor chooseMockConstructor(Class<?> toMock, Object injectionTarget) {
+      if (!Modifier.isStatic(toMock.getModifiers()) && toMock.getEnclosingClass() != null) {
+    	if (!toMock.getEnclosingClass().isInstance(injectionTarget)) {
+    		throw new IllegalArgumentException(
+    				"Cannot mock non-static inner class " + toMock + ". Consider declaring it a field in "
+    				+ toMock.getEnclosingClass() + " and annotate it with @Spy");
+    	}
+        return new UseInnerClassDefaultConstructor(toMock.getEnclosingClass(), injectionTarget);
+      } else {
+        return new UseZeroArgConstructor();
+      }
+    }
+
+    private static String describeClass(Class<?> type) {
         return type == null? "null" : type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
     }
 
@@ -95,28 +161,23 @@ public class ClassImposterizer  {
         
         Enhancer enhancer = new Enhancer() {
             @Override
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("rawtypes")
             protected void filterConstructors(Class sc, List constructors) {
                 // Don't filter
             }
         };
-        Class<?>[] allMockedTypes = prepend(mockedType, interfaces);
-		enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(allMockedTypes));
+		enhancer.setClassLoader(getCombinedClassLoader(mockedType, interfaces));
         enhancer.setUseFactory(true);
         if (mockedType.isInterface()) {
             enhancer.setSuperclass(Object.class);
-            enhancer.setInterfaces(allMockedTypes);
+            enhancer.setInterfaces(prepend(mockedType, interfaces));
         } else {
             enhancer.setSuperclass(mockedType);
             enhancer.setInterfaces(interfaces);
         }
         enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
         enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
-        if (mockedType.getSigners() != null) {
-            enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
-        } else {
-            enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
-        }
+        setNamingPolicy(enhancer, mockedType);
 
         enhancer.setSerialVersionUID(42L);
         
@@ -137,6 +198,18 @@ public class ClassImposterizer  {
                     + "If you're not sure why you're getting this error, please report to the mailing list.", e);
         }
     }
+
+	static ClassLoader getCombinedClassLoader(Class<?> mockedType, Class<?>... interfaces) {
+		return SearchingClassLoader.combineLoadersOf(prepend(mockedType, interfaces));
+	}
+
+	static void setNamingPolicy(Enhancer enhancer, Class<?> mockedType) {
+		if (mockedType.getSigners() != null) {
+            enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
+        } else {
+            enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
+        }
+	}
     
     private Object createProxy(Class<?> proxyClass, final MethodInterceptor interceptor) {
         Factory proxy = (Factory) objenesis.newInstance(proxyClass);
@@ -144,11 +217,56 @@ public class ClassImposterizer  {
         return proxy;
     }
     
-    private Class<?>[] prepend(Class<?> first, Class<?>... rest) {
+    private static Class<?>[] prepend(Class<?> first, Class<?>... rest) {
         Class<?>[] all = new Class<?>[rest.length+1];
         all[0] = first;
         System.arraycopy(rest, 0, all, 1, rest.length);
         return all;
+    }
+
+    private interface UseConstructor {
+    	boolean usesConstructor(Constructor<?> constructor);
+    	Object construct(Enhancer enhancers);
+    	Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException;
+    }
+
+    private static class UseZeroArgConstructor implements UseConstructor {
+
+      @Override public boolean usesConstructor(Constructor<?> constructor) {
+    	  return constructor.getParameterTypes().length == 0;
+      }
+
+      @Override public Object construct(Enhancer enhancer) {
+    	  return enhancer.create();
+      }
+
+      @Override public Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException {
+        return type.getDeclaredConstructor();
+      }
+    }
+
+    private class UseInnerClassDefaultConstructor implements UseConstructor {
+
+      private final Class<?> enclosingClass;
+      private final Object injectionTarget;
+
+      UseInnerClassDefaultConstructor(Class<?> enclosingClass, Object injectionTarget) {
+        this.enclosingClass = enclosingClass;
+        this.injectionTarget = injectionTarget;
+      }
+
+      @Override public boolean usesConstructor(Constructor<?> constructor) {
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        return parameterTypes.length == 1 && parameterTypes[0] == enclosingClass;
+      }
+
+      @Override public Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException {
+          return type.getDeclaredConstructor(enclosingClass);
+      }
+
+      @Override public Object construct(Enhancer enhancer) {
+        return enhancer.create(new Class<?>[] {enclosingClass}, new Object[] {injectionTarget});
+      }
     }
     
     public static class ClassWithSuperclassToWorkAroundCglibBug {}

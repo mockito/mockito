@@ -5,12 +5,12 @@
 
 package org.mockito.mock;
 
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
@@ -64,4 +64,10 @@ public interface MockCreationSettings<T> {
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();
+
+    /** Returns the object to which the mocks are being injected, or null if not applicable. */
+    Object getInjectionTarget();
+
+    /** Returns true if only the abstract methods are to be mocked. */
+    boolean mocksAbstractMethodsOnly();
 }

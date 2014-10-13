@@ -1343,6 +1343,13 @@ public class Mockito extends Matchers {
                 .defaultAnswer(CALLS_REAL_METHODS));
     }
 
+    public static <T> T partialMock(Class<T> type) {
+    	MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
+    	settings.defaultAnswer(RETURNS_DEFAULTS);
+    	settings.mockAbstractMethodsOnly();
+        return MOCKITO_CORE.mock(type, settings);
+    }
+
     /**
      * Stubs a method call with return value or an exception. E.g:
      *
