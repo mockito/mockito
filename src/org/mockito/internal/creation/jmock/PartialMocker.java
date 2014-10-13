@@ -34,7 +34,7 @@ abstract class PartialMocker {
       enhancer.setClassLoader(ClassImposterizer.getCombinedClassLoader(toMock, interfaces));
       enhancer.setCallbackTypes(new Class[] {NoOp.class, MethodInterceptor.class});
       enhancer.setCallbackFilter(new CallbackFilter() {
-          @Override public int accept(Method method, List<Method> allMethods) {
+          @Override public int accept(Method method) {
             if (shouldBeOnMock(method)) {
               return 1;
             } else {
