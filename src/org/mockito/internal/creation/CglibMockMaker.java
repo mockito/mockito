@@ -26,7 +26,7 @@ public final class CglibMockMaker implements MockMaker {
                     new MethodInterceptorFilter(mockitoHandler, settings),
                     settings.getTypeToMock(),
                     settings.getExtraInterfaces().toArray(new Class<?>[0]),
-                    settings.getInjectionTarget());
+                    settings.getEnclosingInstance());
         } else {
             return ClassImposterizer.INSTANCE.imposterise(
                     new MethodInterceptorFilter(mockitoHandler, settings),

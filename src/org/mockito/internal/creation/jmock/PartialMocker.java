@@ -20,7 +20,6 @@ abstract class PartialMocker {
       Enhancer enhancer = new Enhancer() {
         @SuppressWarnings({"rawtypes", "unchecked"}) // Cglib API is pre-generics
         @Override protected void filterConstructors(Class sc, List constructors) {
-          super.filterConstructors(sc, constructors);
           Iterator<Constructor> it = constructors.iterator();
           while (it.hasNext()) {
         	  if (!usesConstructor(it.next())) {
@@ -32,22 +31,21 @@ abstract class PartialMocker {
       enhancer.setSuperclass(toMock);
       enhancer.setInterfaces(interfaces);
       enhancer.setClassLoader(ClassImposterizer.getCombinedClassLoader(toMock, interfaces));
-      enhancer.setCallbackTypes(new Class[] {NoOp.class, MethodInterceptor.class});
+      enhancer.setCallbackTypes(new Class[] {MethodInterceptor.class, NoOp.class});
       enhancer.setCallbackFilter(new CallbackFilter() {
           @Override public int accept(Method method) {
             if (shouldBeOnMock(method)) {
-              return 1;
-            } else {
               return 0;
+            } else {
+              return 1;
             }
           }
         });
-      enhancer.setUseFactory(false);
-      enhancer.setCallbacks(new Callback[] {NoOp.INSTANCE, mockInterceptor});
+      enhancer.setUseFactory(true);
       ClassImposterizer.setNamingPolicy(enhancer, toMock);
       enhancer.setSerialVersionUID(43L);
       @SuppressWarnings("unchecked")  // toMock is Class<T>
-	  T proxy = (T) createProxy(enhancer, new Callback[] {NoOp.INSTANCE, mockInterceptor});
+	  T proxy = (T) createProxy(enhancer, new Callback[] {mockInterceptor, NoOp.INSTANCE});
       return proxy;
     }
 

@@ -32,7 +32,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
     protected boolean stubOnly;
     protected boolean mocksAbstractMethodsOnly = false;
-    protected Object injectionTarget;
+    protected Object enclosingInstance;
 
     public CreationSettings() {}
 
@@ -48,7 +48,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.invocationListeners = copy.invocationListeners;
         this.stubOnly = copy.stubOnly;
         this.mocksAbstractMethodsOnly = copy.mocksAbstractMethodsOnly;
-        this.injectionTarget = copy.injectionTarget;
+        this.enclosingInstance = copy.enclosingInstance;
     }
 
     public Class<T> getTypeToMock() {
@@ -110,7 +110,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     	return mocksAbstractMethodsOnly;
     }
   
-    public Object getInjectionTarget() {
-    	return injectionTarget;
+    public Object getEnclosingInstance() {
+    	return enclosingInstance;
     }
 }

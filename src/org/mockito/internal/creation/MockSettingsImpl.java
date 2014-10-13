@@ -146,6 +146,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     	return this;
     }
 
+    public MockCreationSettings<T> setEnclosingInstance(Object enclosingInstance) {
+    	this.enclosingInstance = enclosingInstance;
+    	return this;
+    }
+
     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
         MockCreationValidator validator = new MockCreationValidator();
 

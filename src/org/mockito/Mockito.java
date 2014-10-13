@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.lang.reflect.Modifier;
+
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -1343,11 +1345,131 @@ public class Mockito extends Matchers {
                 .defaultAnswer(CALLS_REAL_METHODS));
     }
 
+    /**
+     * Mocks only the abstract methods in {@code type}.
+     * Non-abstract methods (including final methods) are invoked as is. If {@code type} declares
+     * a non-private 0-arg constructor, the constructor will be invoked to initialize the mock.
+     *
+     * <p>Because non-abstract methods aren't mocked, they cannot be {@link #when stubbed} or
+     * {@link #verify verified}. To stub or verify these methods, use a spy around the partial
+     * mock (only if the method isn't final).
+     * 
+     * <p>As usual you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+     * How does partial mock fit into this paradigm? Well, it just doesn't...
+     * Partial mock usually means that the complexity has been moved to a different method on the same object.
+     * In most cases, this is not the way you want to design your application.
+     *
+     * <p>While it's not encouraged to mock a poorly designed object with {@code partialMock}, it's
+     * useful for creating fakes or mock helpers in tests. For example, one can create a
+     * simple fake of the following interface without implementing it fully: <pre>
+     * interface UserAccount {
+     *   List<String> getEmails();
+     *   void addEmail(String email);
+     *   // 20 more methods
+     * }
+     * 
+     * public class UserServiceTest {
+     *
+     *   public void testWithUserAccount() {
+     *     FakeUserAccount userAccount = Mockito.partialMock(FakeUserAccount.class);
+     *     ...
+     *   }
+     * 
+     *   abstract static class FakeUserAccount {
+     *     List<String> emails = new ArrayList<>();
+     *     
+     *     public List<String> getEmails() {
+     *       return Collections.unmodifiableList(emails);
+     *     }
+     * 
+     *     public void addEmail(String email) {
+     *       return emails.add(email);
+     *     }
+     *   }
+     * }
+     * </pre>
+     *
+     * Another use case is to mock callback-style APIs in a statically type safe way:
+     * <pre>   {@code
+     *
+     *   interface UserService {
+     *     void getUser(String id, AsyncCallback<UserAccount> callback);
+     *   }
+     *
+     *   public class UserServiceTest {
+     *
+     *     public void testSuccess() {
+     *       FakeUserService service = Mockito.partialMock(FakeService.class);
+     *       when(service.getUser("id")).thenReturn(AsyncFutures.failure(new Exception()));
+     *       ...
+     *     }
+     *
+     *     abstract static class FakeUserService {
+     *       public void getUser(String id, AsyncCallback<UserAccount> callback) {
+     *         getUser(id).get(callback);
+     *       }
+     *
+     *       abstract AsyncFuture<UserAccount> getUser(String id);
+     *     }
+     *   }}</pre>
+     */
     public static <T> T partialMock(Class<T> type) {
+        if (needsEnclosingInstance(type)) {
+    		throw new IllegalArgumentException(
+    				"Cannot mock non-static inner class " + type
+    				+ ". Please pass in the enclosing instance.");
+    	}
     	MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
     	settings.defaultAnswer(RETURNS_DEFAULTS);
     	settings.mockAbstractMethodsOnly();
         return MOCKITO_CORE.mock(type, settings);
+    }
+
+    /**
+     * Mocks only the abstract methods in {@code innerClass}.
+     * Non-abstract methods (including final methods) are invoked as is. If {@code type} declares
+     * a non-private 0-arg constructor, the constructor will be invoked to initialize the mock,
+     * with {@code enclosingInstance} properly set.
+     *
+     * <p>This method is typically used to create fakes/stubs in a test class, with collaborators
+     * also provided by the test. For example: <pre>
+     * class UserServiceTest {
+     *   private mockAuthenticationService;
+     *
+     *   public void testAuthenticated() {
+     *     FakeUserService userService = Mockito.partialMock(this, FakeUserService.class);
+     *     ...
+     *   }
+     * 
+     *   abstract class FakeUserService extends AbstractUserService {
+     *     FakeUserService() {
+     *       super(mockAuthenticationService);
+     *     }
+     *   }
+     * }
+     * </pre>
+     *
+     * <p>Because non-abstract methods aren't mocked, they cannot be {@link #when stubbed} or
+     * {@link #verify verified}. To stub or verify these methods, use a spy around the partial
+     * mock (only if the method isn't final).
+     */
+    public static <T> T partialMock(Object enclosingInstance, Class<T> innerClass) {
+    	if (enclosingInstance == null) {
+    		throw new NullPointerException("enclosingInstance");
+    	}
+        if (!needsEnclosingInstance(innerClass)) {
+    		throw new IllegalArgumentException(innerClass + " is not non-static inner class.");
+    	}
+        if (!innerClass.getEnclosingClass().isInstance(enclosingInstance)) {
+        	throw new IllegalArgumentException(
+        			innerClass + " isn't inner class of " + enclosingInstance.getClass());
+        }
+    	MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
+    	settings.defaultAnswer(RETURNS_DEFAULTS);
+    	settings.mockAbstractMethodsOnly();
+    	settings.setEnclosingInstance(enclosingInstance);
+        return MOCKITO_CORE.mock(innerClass, settings);
     }
 
     /**
@@ -2240,4 +2362,8 @@ public class Mockito extends Matchers {
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
+
+	private static <T> boolean needsEnclosingInstance(Class<T> type) {
+		return type.getEnclosingClass() != null && !Modifier.isStatic(type.getModifiers());
+	}
 }

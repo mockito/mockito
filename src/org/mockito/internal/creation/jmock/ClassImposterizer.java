@@ -95,7 +95,7 @@ public class ClassImposterizer  {
     		MethodInterceptor interceptor,
     		Class<T> mockedType,
     		Class<?>[] interfaces,
-    		Object injectionTarget) {
+    		Object enclosingInstance) {
     	if (mockedType.isInterface()) {
     		return imposterise(interceptor, mockedType);
     	}
@@ -104,7 +104,7 @@ public class ClassImposterizer  {
             		String.format("Cannot partial mock private %s %s. Please make the class non-private.", mockedType));
         }
         final UseConstructor useConstructor =
-        		chooseMockConstructor(mockedType, injectionTarget);
+        		chooseMockConstructor(mockedType, enclosingInstance);
         final Constructor<?> superConstructor;
         try {
         	superConstructor = useConstructor.getConstructor(mockedType);
@@ -117,7 +117,6 @@ public class ClassImposterizer  {
         }
         return new PartialMocker() {
 			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
-		    	  enhancer.setUseFactory(false);
 		    	  enhancer.setCallbacks(callbacks);
 		    	  return useConstructor.construct(enhancer);
 			}
@@ -127,14 +126,9 @@ public class ClassImposterizer  {
         }.partialMock(mockedType, interfaces, interceptor);
     }
 
-    private UseConstructor chooseMockConstructor(Class<?> toMock, Object injectionTarget) {
-      if (!Modifier.isStatic(toMock.getModifiers()) && toMock.getEnclosingClass() != null) {
-    	if (!toMock.getEnclosingClass().isInstance(injectionTarget)) {
-    		throw new IllegalArgumentException(
-    				"Cannot mock non-static inner class " + toMock + ". Consider declaring it a field in "
-    				+ toMock.getEnclosingClass() + " and annotate it with @Spy");
-    	}
-        return new UseInnerClassDefaultConstructor(toMock.getEnclosingClass(), injectionTarget);
+    private UseConstructor chooseMockConstructor(Class<?> toMock, Object enclosingInstance) {
+      if (enclosingInstance != null) {
+        return new UseInnerClassDefaultConstructor(toMock.getEnclosingClass(), enclosingInstance);
       } else {
         return new UseZeroArgConstructor();
       }
@@ -248,11 +242,11 @@ public class ClassImposterizer  {
     private class UseInnerClassDefaultConstructor implements UseConstructor {
 
       private final Class<?> enclosingClass;
-      private final Object injectionTarget;
+      private final Object enclosingInstance;
 
-      UseInnerClassDefaultConstructor(Class<?> enclosingClass, Object injectionTarget) {
+      UseInnerClassDefaultConstructor(Class<?> enclosingClass, Object enclosingInstance) {
         this.enclosingClass = enclosingClass;
-        this.injectionTarget = injectionTarget;
+        this.enclosingInstance = enclosingInstance;
       }
 
       @Override public boolean usesConstructor(Constructor<?> constructor) {
@@ -265,7 +259,7 @@ public class ClassImposterizer  {
       }
 
       @Override public Object construct(Enhancer enhancer) {
-        return enhancer.create(new Class<?>[] {enclosingClass}, new Object[] {injectionTarget});
+        return enhancer.create(new Class<?>[] {enclosingClass}, new Object[] {enclosingInstance});
       }
     }
     

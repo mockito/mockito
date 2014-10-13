@@ -65,8 +65,11 @@ public interface MockCreationSettings<T> {
      */
     List<InvocationListener> getInvocationListeners();
 
-    /** Returns the object to which the mocks are being injected, or null if not applicable. */
-    Object getInjectionTarget();
+    /**
+     * Returns the object instance enclosing the class to be mocked. {@link #getTypeToMock} must be
+     * a non-static inner class enclosed by it.
+     */
+    Object getEnclosingInstance();
 
     /** Returns true if only the abstract methods are to be mocked. */
     boolean mocksAbstractMethodsOnly();
