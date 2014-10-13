@@ -91,48 +91,55 @@ public class ClassImposterizer  {
         }
     }
     
-    public <T> T instantiate(
-    		MethodInterceptor interceptor,
-    		Class<T> mockedType,
-    		Class<?>[] interfaces,
-    		Object enclosingInstance) {
-    	if (mockedType.isInterface()) {
-    		return imposterise(interceptor, mockedType);
-    	}
-        if(Modifier.isPrivate(mockedType.getModifiers())) {
-            throw new IllegalArgumentException(
-            		String.format("Cannot partial mock private %s %s. Please make the class non-private.", mockedType));
-        }
-        final UseConstructor useConstructor =
-        		chooseMockConstructor(mockedType, enclosingInstance);
-        final Constructor<?> superConstructor;
-        try {
-        	superConstructor = useConstructor.getConstructor(mockedType);
-        } catch (NoSuchMethodException e) {
-			return skipConstructor.partialMock(mockedType, interfaces, interceptor);
-        }
-        if (Modifier.isPrivate(superConstructor.getModifiers())) {
-          // No good constructor, just skip
-          return skipConstructor.partialMock(mockedType, interfaces, interceptor);
-        }
-        return new PartialMocker() {
+	public <T> T instantiate(
+			MethodInterceptor interceptor,
+			Class<T> mockedType,
+			Class<?>[] interfaces,
+			Object enclosingInstance) {
+		if (mockedType.isInterface()) {
+			return imposterise(interceptor, mockedType);
+		}
+		if (Modifier.isPrivate(mockedType.getModifiers())) {
+			throw new IllegalArgumentException(
+					String.format(
+							"Cannot partial mock private %s %s. Please make the class non-private.",
+							mockedType));
+		}
+		final UseConstructor useConstructor = chooseMockConstructor(mockedType,
+				enclosingInstance);
+		final Constructor<?> superConstructor;
+		try {
+			superConstructor = useConstructor.getConstructor(mockedType);
+		} catch (NoSuchMethodException e) {
+			return skipConstructor.partialMock(mockedType, interfaces,
+					interceptor);
+		}
+		if (Modifier.isPrivate(superConstructor.getModifiers())) {
+			// No good constructor, just skip
+			return skipConstructor.partialMock(mockedType, interfaces,
+					interceptor);
+		}
+		return new PartialMocker() {
 			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
-		    	  enhancer.setCallbacks(callbacks);
-		    	  return useConstructor.construct(enhancer);
+				enhancer.setCallbacks(callbacks);
+				return useConstructor.construct(enhancer);
 			}
+
 			@Override boolean usesConstructor(Constructor<?> constructor) {
 				return useConstructor.usesConstructor(constructor);
 			}
-        }.partialMock(mockedType, interfaces, interceptor);
-    }
+		}.partialMock(mockedType, interfaces, interceptor);
+	}
 
-    private UseConstructor chooseMockConstructor(Class<?> toMock, Object enclosingInstance) {
-      if (enclosingInstance != null) {
-        return new UseInnerClassDefaultConstructor(toMock.getEnclosingClass(), enclosingInstance);
-      } else {
-        return new UseZeroArgConstructor();
-      }
-    }
+	private UseConstructor chooseMockConstructor(Class<?> toMock,
+			Object enclosingInstance) {
+		if (enclosingInstance != null) {
+			return new UseInnerClassDefaultConstructor(
+					toMock.getEnclosingClass(), enclosingInstance);
+		} else {
+			return new UseZeroArgConstructor();
+		}
+	}
 
     private static String describeClass(Class<?> type) {
         return type == null? "null" : type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
@@ -218,50 +225,60 @@ public class ClassImposterizer  {
         return all;
     }
 
-    private interface UseConstructor {
-    	boolean usesConstructor(Constructor<?> constructor);
-    	Object construct(Enhancer enhancers);
-    	Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException;
-    }
+	private interface UseConstructor {
+		/** Returns true if {@code constructor} will be invoked to construct the mock. */
+		boolean usesConstructor(Constructor<?> constructor);
 
-    private static class UseZeroArgConstructor implements UseConstructor {
+		/** Constructs the mock instance using the class enhanced by {@code enhancer}. */
+		Object construct(Enhancer enhancers);
 
-      @Override public boolean usesConstructor(Constructor<?> constructor) {
-    	  return constructor.getParameterTypes().length == 0;
-      }
+		/** Returns the constructor to be invoked. */
+		Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException;
+	}
 
-      @Override public Object construct(Enhancer enhancer) {
-    	  return enhancer.create();
-      }
+	private static class UseZeroArgConstructor implements UseConstructor {
 
-      @Override public Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException {
-        return type.getDeclaredConstructor();
-      }
-    }
+		@Override public boolean usesConstructor(Constructor<?> constructor) {
+			return constructor.getParameterTypes().length == 0;
+		}
 
-    private class UseInnerClassDefaultConstructor implements UseConstructor {
+		@Override public Object construct(Enhancer enhancer) {
+			return enhancer.create();
+		}
 
-      private final Class<?> enclosingClass;
-      private final Object enclosingInstance;
+		@Override public Constructor<?> getConstructor(Class<?> type)
+				throws NoSuchMethodException {
+			return type.getDeclaredConstructor();
+		}
+	}
 
-      UseInnerClassDefaultConstructor(Class<?> enclosingClass, Object enclosingInstance) {
-        this.enclosingClass = enclosingClass;
-        this.enclosingInstance = enclosingInstance;
-      }
+	private class UseInnerClassDefaultConstructor implements UseConstructor {
 
-      @Override public boolean usesConstructor(Constructor<?> constructor) {
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
-        return parameterTypes.length == 1 && parameterTypes[0] == enclosingClass;
-      }
+		private final Class<?> enclosingClass;
+		private final Object enclosingInstance;
 
-      @Override public Constructor<?> getConstructor(Class<?> type) throws NoSuchMethodException {
-          return type.getDeclaredConstructor(enclosingClass);
-      }
+		UseInnerClassDefaultConstructor(Class<?> enclosingClass,
+				Object enclosingInstance) {
+			this.enclosingClass = enclosingClass;
+			this.enclosingInstance = enclosingInstance;
+		}
 
-      @Override public Object construct(Enhancer enhancer) {
-        return enhancer.create(new Class<?>[] {enclosingClass}, new Object[] {enclosingInstance});
-      }
-    }
+		@Override public boolean usesConstructor(Constructor<?> constructor) {
+			Class<?>[] parameterTypes = constructor.getParameterTypes();
+			return parameterTypes.length == 1
+					&& parameterTypes[0] == enclosingClass;
+		}
+
+		@Override public Constructor<?> getConstructor(Class<?> type)
+				throws NoSuchMethodException {
+			return type.getDeclaredConstructor(enclosingClass);
+		}
+
+		@Override public Object construct(Enhancer enhancer) {
+			return enhancer.create(new Class<?>[] { enclosingClass },
+					new Object[] { enclosingInstance });
+		}
+	}
     
     public static class ClassWithSuperclassToWorkAroundCglibBug {}
     
