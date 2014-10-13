@@ -13,6 +13,14 @@ public interface ReleaseNotesBuilder {
     void updateNotes(File notesFile, String toRevision);
 
     /**
+     * Retrieves previously released version based on the release notes file.
+     *
+     * @param notesFile
+     * @return version, for example '1.10.0'
+     */
+    String getPreviousVersion(File notesFile);
+
+    /**
      * Returns contributions between two revisions. Revisions can also be tag names or HEAD, etc.
      *
      * @param fromRevision start revision
