@@ -25,10 +25,11 @@ import static org.mockito.internal.util.StringJoiner.join;
  */
 public class ClassImposterizer  {
 
-    //TODO SF no singleton!!!
-    public static final ClassImposterizer INSTANCE = new ClassImposterizer();
-    
-    private ClassImposterizer() {}
+    private final InstanceFactory instanceFactory;
+
+    public ClassImposterizer(InstanceFactory instanceFactory) {
+        this.instanceFactory = instanceFactory;
+    }
     
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
         @Override
@@ -43,25 +44,25 @@ public class ClassImposterizer  {
         }
     };
     
-    public <T> T imposterise(InstanceFactory factory, final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
-        return imposterise(factory, interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
+    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
+        return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
     }
     
-    public <T> T imposterise(InstanceFactory factory, final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
+    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
         Class<Factory> proxyClass = null;
         Object proxyInstance = null;
         try {
             setConstructorsAccessible(mockedType, true);
             proxyClass = createProxyClass(mockedType, ancillaryTypes);
-            proxyInstance = createProxy(factory, proxyClass, interceptor);
+            proxyInstance = createProxy(proxyClass, interceptor);
             return mockedType.cast(proxyInstance);
         } catch (ClassCastException cce) {
             throw new MockitoException(join(
                 "ClassCastException occurred while creating the mockito proxy :",
-                "  class to mock : '" + describeClass(mockedType),
-                "  created class : '" + describeClass(proxyClass),
-                "  proxy instance class : '" + describeClass(proxyInstance),
-                "  instance creation by : '" + factory.getClass().getSimpleName(),
+                "  class to mock : " + describeClass(mockedType),
+                "  created class : " + describeClass(proxyClass),
+                "  proxy instance class : " + describeClass(proxyInstance),
+                "  instance creation by : " + instanceFactory.getClass().getSimpleName(),
                 "",
                 "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
             ), cce);
@@ -71,7 +72,7 @@ public class ClassImposterizer  {
     }
 
     private static String describeClass(Class type) {
-        return type == null? "null" : type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
+        return type == null? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
     }
 
     private static String describeClass(Object instance) {
@@ -135,8 +136,8 @@ public class ClassImposterizer  {
         }
     }
     
-    private Object createProxy(InstanceFactory factory, Class<Factory> proxyClass, final MethodInterceptor interceptor) {
-        Factory proxy = factory.newInstance(proxyClass);
+    private Object createProxy(Class<Factory> proxyClass, final MethodInterceptor interceptor) {
+        Factory proxy = instanceFactory.newInstance(proxyClass);
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
         return proxy;
     }
