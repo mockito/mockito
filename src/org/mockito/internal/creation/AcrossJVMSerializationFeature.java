@@ -8,7 +8,7 @@ package org.mockito.internal.creation;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.creation.instance.InstantiatorProvider;
-import org.mockito.internal.creation.jmock.DefaultClassImposterizer;
+import org.mockito.internal.creation.jmock.CglibClassImposterizer;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
@@ -264,7 +264,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * </p>
      *
      * <p>
-     *     When this marker is found, {@link org.mockito.internal.creation.jmock.DefaultClassImposterizer} methods are being used to create the mock class.
+     *     When this marker is found, {@link org.mockito.internal.creation.jmock.CglibClassImposterizer} methods are being used to create the mock class.
      *     <em>Note that behind the <code>ClassImposterizer</code> there is CGLIB and the
      *     {@link org.mockito.internal.creation.jmock.SearchingClassLoader} that will look if this enhanced class has
      *     already been created in an accessible classloader ; so basically this code trusts the ClassImposterizer
@@ -305,7 +305,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             // create the Mockito mock class before it can even be deserialized
             //TODO SF unify creation of imposterizer, constructor code duplicated
-            DefaultClassImposterizer imposterizer = new DefaultClassImposterizer(new InstantiatorProvider().getInstantiator());
+            CglibClassImposterizer imposterizer = new CglibClassImposterizer(new InstantiatorProvider().getInstantiator());
             imposterizer.setConstructorsAccessible(typeToMock, true);
             Class<?> proxyClass = imposterizer.createProxyClass(
                     typeToMock,

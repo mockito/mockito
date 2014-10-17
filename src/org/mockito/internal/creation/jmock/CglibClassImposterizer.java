@@ -23,11 +23,11 @@ import static org.mockito.internal.util.StringJoiner.join;
 /**
  * Thanks to jMock guys for this handy class that wraps all the cglib magic. 
  */
-public class DefaultClassImposterizer {
+public class CglibClassImposterizer implements ClassImposterizer {
 
     private final Instantiator instantiator;
 
-    public DefaultClassImposterizer(Instantiator instantiator) {
+    public CglibClassImposterizer(Instantiator instantiator) {
         this.instantiator = instantiator;
     }
     

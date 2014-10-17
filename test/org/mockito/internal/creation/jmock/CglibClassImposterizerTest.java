@@ -18,9 +18,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
 @SuppressWarnings("unchecked")
-public class DefaultClassImposterizerTest extends TestBase {
+public class CglibClassImposterizerTest extends TestBase {
 
-    DefaultClassImposterizer imposterizer = new DefaultClassImposterizer(new InstantiatorProvider().getInstantiator());
+    CglibClassImposterizer imposterizer = new CglibClassImposterizer(new InstantiatorProvider().getInstantiator());
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
@@ -69,7 +69,7 @@ public class DefaultClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateClassByConstructor() {
-        imposterizer = new DefaultClassImposterizer(new ConstructorInstantiator());
+        imposterizer = new CglibClassImposterizer(new ConstructorInstantiator());
         OtherClass mock = imposterizer.imposterise(new MethodInterceptorStub(), OtherClass.class);
         assertNotNull(mock);
     }
