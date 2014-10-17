@@ -4,13 +4,12 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import static org.mockito.Mockito.spy;
-
 import org.junit.Test;
 import org.mockito.cglib.core.NamingPolicy;
-import org.mockito.internal.creation.MockitoMethodProxy;
 import org.mockitoutil.TestBase;
 import org.powermock.reflect.Whitebox;
+
+import static org.mockito.Mockito.spy;
 
 public class CGLIBHackerTest extends TestBase {
 

@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.internal.creation.MockitoMethodProxy;
+import org.mockito.internal.creation.cglib.MockitoMethodProxy;
 import org.mockito.internal.invocation.realmethod.HasCGLIBMethodProxy;
 
 public class ExposedInvocation {

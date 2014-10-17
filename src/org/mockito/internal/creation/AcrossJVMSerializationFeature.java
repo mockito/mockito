@@ -37,21 +37,21 @@ import static org.mockito.internal.util.StringJoiner.join;
  * </p>
  *
  * <p>
- *     Then in the {@link MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
+ *     Then in the {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
  *     it will use the custom implementation of this class {@link #writeReplace(Object)}. This method has a specific
  *     knowledge on how to serialize a mockito mock that is based on CGLIB.
  * </p>
  *
- * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
+ * <p><strong>Only one instance per mock! See {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter}</strong></p>
  *
  * TODO use a proper way to add the interface
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
  *
- * @see CglibMockMaker
- * @see MethodInterceptorFilter
+ * @see org.mockito.internal.creation.cglib.CglibMockMaker
+ * @see org.mockito.internal.creation.cglib.MethodInterceptorFilter
  * @author Brice Dutheil
- * @since 1.9.6
+ * @since 1.10.0
  */
 @Incubating
 public class AcrossJVMSerializationFeature implements Serializable {

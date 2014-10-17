@@ -3,12 +3,13 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.creation;
+package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.cglib.CGLIBHacker;
+import org.mockito.internal.creation.AcrossJVMSerializationFeature;
+import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
@@ -24,8 +25,6 @@ import java.lang.reflect.Method;
 
 /**
  * Should be one instance per mock instance, see CglibMockMaker.
- *
- *
  */
 public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
@@ -79,7 +78,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         if (mockSettings.isSerializable()) {
             return new SerializableMethod(method);
         } else {
-            return new DelegatingMethod(method); 
+            return new DelegatingMethod(method);
         }
     }
 }
