@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.cglib;
+package org.mockito.internal.creation.util;
 
 import static java.lang.Thread.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Inspired on jMock (thanks jMock guys!!!)
  */
-class SearchingClassLoader extends ClassLoader {
+public class SearchingClassLoader extends ClassLoader {
     private final ClassLoader nextToSearch;
     
     public SearchingClassLoader(ClassLoader parent, ClassLoader nextToSearch) {

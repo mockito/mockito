@@ -263,9 +263,9 @@ class AcrossJVMSerializationFeature implements Serializable {
      * </p>
      *
      * <p>
-     *     When this marker is found, {@link ClassImposterizer} methods are being used to create the mock class.
+     *     When this marker is found, {@link org.mockito.internal.creation.cglib.ClassImposterizer} methods are being used to create the mock class.
      *     <em>Note that behind the <code>ClassImposterizer</code> there is CGLIB and the
-     *     {@link SearchingClassLoader} that will look if this enhanced class has
+     *     {@link org.mockito.internal.creation.util.SearchingClassLoader} that will look if this enhanced class has
      *     already been created in an accessible classloader ; so basically this code trusts the ClassImposterizer
      *     code.</em>
      * </p>

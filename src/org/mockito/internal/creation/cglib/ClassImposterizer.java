@@ -10,6 +10,7 @@ import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.internal.creation.util.SearchingClassLoader;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

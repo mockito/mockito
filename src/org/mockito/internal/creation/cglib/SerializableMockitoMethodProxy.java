@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.util.MockitoMethodProxy;
 import org.mockito.internal.util.reflection.Whitebox;
 
 import java.io.Serializable;

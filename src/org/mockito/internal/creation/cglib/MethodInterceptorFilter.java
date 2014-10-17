@@ -9,10 +9,11 @@ import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.creation.util.MockitoMethodProxy;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
-import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
+import org.mockito.internal.invocation.realmethod.CleanTraceRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.Invocation;
@@ -53,7 +54,7 @@ class MethodInterceptorFilter implements MethodInterceptor, Serializable {
         
         MockitoMethod mockitoMethod = createMockitoMethod(method);
         
-        FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
+        CleanTraceRealMethod realMethod = new CleanTraceRealMethod(mockitoMethodProxy);
         Invocation invocation = new InvocationImpl(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return handler.handle(invocation);
     }
