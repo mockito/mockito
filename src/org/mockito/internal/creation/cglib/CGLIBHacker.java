@@ -9,7 +9,7 @@ import org.mockito.cglib.proxy.MethodProxy;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-public class CGLIBHacker implements Serializable {
+class CGLIBHacker implements Serializable {
 
     private static final long serialVersionUID = -4389233991416356668L;
 

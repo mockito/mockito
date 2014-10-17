@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.jmock;
+package org.mockito.internal.creation.cglib;
 
 import org.junit.Test;
 import org.mockito.cglib.proxy.Factory;
@@ -18,9 +18,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
 @SuppressWarnings("unchecked")
-public class CglibClassImposterizerTest extends TestBase {
+public class ClassImposterizerTest extends TestBase {
 
-    CglibClassImposterizer imposterizer = new CglibClassImposterizer(new InstantiatorProvider().getInstantiator());
+    ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
@@ -69,7 +69,7 @@ public class CglibClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateClassByConstructor() {
-        imposterizer = new CglibClassImposterizer(new ConstructorInstantiator());
+        imposterizer = new ClassImposterizer(new ConstructorInstantiator());
         OtherClass mock = imposterizer.imposterise(new MethodInterceptorStub(), OtherClass.class);
         assertNotNull(mock);
     }

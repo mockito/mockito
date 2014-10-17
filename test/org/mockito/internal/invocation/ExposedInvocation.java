@@ -7,6 +7,7 @@ package org.mockito.internal.invocation;
 import org.mockito.internal.creation.cglib.MockitoMethodProxy;
 import org.mockito.internal.invocation.realmethod.HasCGLIBMethodProxy;
 
+//TODO SF try to get rid of so that we can further insulate cglib into separate package
 public class ExposedInvocation {
 
     private final MockitoMethodProxy methodProxy;

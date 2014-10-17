@@ -9,7 +9,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 
 import java.io.Serializable;
 
-public class SerializableMockitoMethodProxy extends AbstractMockitoMethodProxy implements Serializable {
+class SerializableMockitoMethodProxy extends AbstractMockitoMethodProxy implements Serializable {
 
     private static final long serialVersionUID = -5337859962876770632L;
     private final Class<?> c1;

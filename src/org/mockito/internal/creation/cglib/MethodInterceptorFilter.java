@@ -8,7 +8,6 @@ package org.mockito.internal.creation.cglib;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.AcrossJVMSerializationFeature;
 import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
@@ -26,7 +25,7 @@ import java.lang.reflect.Method;
 /**
  * Should be one instance per mock instance, see CglibMockMaker.
  */
-public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
+class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
     private final InternalMockHandler handler;

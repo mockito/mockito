@@ -2,14 +2,13 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.jmock;
+package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.core.CodeGenerationException;
 import org.mockito.cglib.core.NamingPolicy;
 import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 import org.mockito.internal.creation.instance.Instantiator;
 
 import java.lang.reflect.Constructor;
@@ -21,13 +20,13 @@ import java.util.List;
 import static org.mockito.internal.util.StringJoiner.join;
 
 /**
- * Thanks to jMock guys for this handy class that wraps all the cglib magic. 
+ * Inspired on jMock (thanks jMock guys!!!)
  */
-public class CglibClassImposterizer implements ClassImposterizer {
+public class ClassImposterizer {
 
     private final Instantiator instantiator;
 
-    public CglibClassImposterizer(Instantiator instantiator) {
+    public ClassImposterizer(Instantiator instantiator) {
         this.instantiator = instantiator;
     }
     

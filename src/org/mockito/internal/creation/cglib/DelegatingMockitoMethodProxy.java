@@ -6,7 +6,7 @@ package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.proxy.MethodProxy;
 
-public class DelegatingMockitoMethodProxy extends AbstractMockitoMethodProxy {
+class DelegatingMockitoMethodProxy extends AbstractMockitoMethodProxy {
 
     private final MethodProxy methodProxy;
 

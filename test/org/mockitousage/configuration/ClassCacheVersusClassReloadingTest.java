@@ -36,7 +36,7 @@ public class ClassCacheVersusClassReloadingTest {
                     .containsIgnoringCase("MockitoConfiguration");
             assertThat(e.getCause())
                     .satisfies(thatCceIsThrownFrom("java.lang.Class.cast"))
-                    .satisfies(thatCceIsThrownFrom("org.mockito.internal.creation.jmock.ClassImposterizer.imposterise"));
+                    .satisfies(thatCceIsThrownFrom("org.mockito.internal.creation.cglib.ClassImposterizer.imposterise"));
         }
     }
 
