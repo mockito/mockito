@@ -7,7 +7,7 @@ package org.mockito.internal.creation;
 
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
-import org.mockito.internal.creation.instance.CachingObjenesisInstantiator;
+import org.mockito.internal.creation.instance.InstantiatorProvider;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
@@ -305,7 +305,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             // create the Mockito mock class before it can even be deserialized
             //TODO SF unify creation of imposterizer, constructor code duplicated
-            ClassImposterizer imposterizer = new ClassImposterizer(new CachingObjenesisInstantiator());
+            ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
             imposterizer.setConstructorsAccessible(typeToMock, true);
             Class<?> proxyClass = imposterizer.createProxyClass(
                     typeToMock,
