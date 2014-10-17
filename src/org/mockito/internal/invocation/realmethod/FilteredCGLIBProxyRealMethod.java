@@ -9,7 +9,10 @@ import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 
 import java.io.Serializable;
 
-public class FilteredCGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Serializable {
+/**
+ * Provides stack trace filtering on exception.
+ */
+public class FilteredCGLIBProxyRealMethod implements RealMethod, Serializable {
 
     private static final long serialVersionUID = 3596550785818938496L;
     private final RealMethod realMethod;
@@ -29,9 +32,5 @@ public class FilteredCGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodP
             new ConditionalStackTraceFilter().filter(t);
             throw t;
         }
-    }
-
-    public MockitoMethodProxy getMethodProxy() {
-        return ((HasCGLIBMethodProxy) realMethod).getMethodProxy();
     }
 }

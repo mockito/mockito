@@ -9,7 +9,7 @@ import org.mockito.internal.creation.cglib.MockitoMethodProxy;
 import java.io.Serializable;
 
 
-public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Serializable {
+public class CGLIBProxyRealMethod implements RealMethod, Serializable {
 
     private static final long serialVersionUID = -4596470901191501582L;
     private final MockitoMethodProxy methodProxy;
@@ -20,9 +20,5 @@ public class CGLIBProxyRealMethod implements RealMethod, HasCGLIBMethodProxy, Se
 
     public Object invoke(Object target, Object[] arguments) throws Throwable {
         return methodProxy.invokeSuper(target, arguments);
-    }
-
-    public MockitoMethodProxy getMethodProxy() {
-        return methodProxy;
     }
 }
