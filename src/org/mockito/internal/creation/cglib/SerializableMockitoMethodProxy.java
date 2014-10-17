@@ -17,9 +17,10 @@ class SerializableMockitoMethodProxy implements MockitoMethodProxy, Serializable
     private final String desc;
     private final String name;
     private final String superName;
-    private transient MethodProxy methodProxy;
+    transient MethodProxy methodProxy;
 
     public SerializableMockitoMethodProxy(MethodProxy methodProxy) {
+        assert methodProxy != null;
         Object info = Whitebox.getInternalState(methodProxy, "createInfo");
         c1 = (Class<?>) Whitebox.getInternalState(info, "c1");
         c2 = (Class<?>) Whitebox.getInternalState(info, "c2");
@@ -29,7 +30,7 @@ class SerializableMockitoMethodProxy implements MockitoMethodProxy, Serializable
         this.methodProxy = methodProxy;
     }
 
-    public MethodProxy getMethodProxy() {
+    private MethodProxy getMethodProxy() {
         if (methodProxy == null) {
             methodProxy = MethodProxy.create(c1, c2, desc, name, superName);
         }
@@ -37,6 +38,6 @@ class SerializableMockitoMethodProxy implements MockitoMethodProxy, Serializable
     }
 
     public Object invokeSuper(Object target, Object[] arguments) throws Throwable {
-        return methodProxy.invokeSuper(target, arguments);
+        return getMethodProxy().invokeSuper(target, arguments);
     }
 }

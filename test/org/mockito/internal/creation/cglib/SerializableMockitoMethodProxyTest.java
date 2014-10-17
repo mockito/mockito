@@ -16,6 +16,7 @@ public class SerializableMockitoMethodProxyTest extends TestBase {
         // given
         MethodProxy proxy = MethodProxy.create(String.class, Integer.class, "", "", "");
         SerializableMockitoMethodProxy serializableMockitoMethodProxy = new SerializableMockitoMethodProxy(proxy);
+        serializableMockitoMethodProxy.methodProxy = null;
 
         // when
         Object methodProxy = Whitebox.invokeMethod(serializableMockitoMethodProxy, "getMethodProxy",  new Object[0]);
@@ -31,6 +32,7 @@ public class SerializableMockitoMethodProxyTest extends TestBase {
         // given
         MethodProxy proxy = MethodProxy.create(String.class, Integer.class, "a", "b", "c");
         SerializableMockitoMethodProxy serializableMockitoMethodProxy = new SerializableMockitoMethodProxy(proxy);
+        serializableMockitoMethodProxy.methodProxy = null;
 
         // when
         MethodProxy methodProxy = (MethodProxy) Whitebox.invokeMethod(serializableMockitoMethodProxy, "getMethodProxy",  new Object[0]);
