@@ -8,20 +8,24 @@ import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.instance.InstanceFactory;
+import org.mockito.internal.creation.instance.ObjenesisInstanceFactory;
+import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
 
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.
  */
 public final class CglibMockMaker implements MockMaker {
 
+    private final static InstanceFactory INSTANCE_FACTORY = new ObjenesisInstanceFactory();
+
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         InternalMockHandler mockitoHandler = cast(handler);
         new AcrossJVMSerializationFeature().enableSerializationAcrossJVM(settings);
-        return ClassImposterizer.INSTANCE.imposterise(
+        return ClassImposterizer.INSTANCE.imposterise(INSTANCE_FACTORY,
                 new MethodInterceptorFilter(mockitoHandler, settings), settings.getTypeToMock(), settings.getExtraInterfaces());
     }
 

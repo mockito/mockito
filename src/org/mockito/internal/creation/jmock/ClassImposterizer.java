@@ -9,9 +9,8 @@ import org.mockito.cglib.core.NamingPolicy;
 import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
-import org.objenesis.ObjenesisStd;
+import org.mockito.internal.creation.instance.InstanceFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -26,14 +25,10 @@ import static org.mockito.internal.util.StringJoiner.join;
  */
 public class ClassImposterizer  {
 
+    //TODO SF no singleton!!!
     public static final ClassImposterizer INSTANCE = new ClassImposterizer();
     
     private ClassImposterizer() {}
-    
-    //TODO: in order to provide decent exception message when objenesis is not found,
-    //have a constructor in this class that tries to instantiate ObjenesisStd and if it fails then show decent exception that dependency is missing
-    //TODO: for the same reason catch and give better feedback when hamcrest core is not found.
-    private final ObjenesisStd objenesis = new ObjenesisStd(new GlobalConfiguration().enableClassCache());
     
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
         @Override
@@ -48,24 +43,25 @@ public class ClassImposterizer  {
         }
     };
     
-    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
-        return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
+    public <T> T imposterise(InstanceFactory factory, final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
+        return imposterise(factory, interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
     }
     
-    public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
-        Class<?> proxyClass = null;
+    public <T> T imposterise(InstanceFactory factory, final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
+        Class<Factory> proxyClass = null;
         Object proxyInstance = null;
         try {
             setConstructorsAccessible(mockedType, true);
             proxyClass = createProxyClass(mockedType, ancillaryTypes);
-            proxyInstance = createProxy(proxyClass, interceptor);
+            proxyInstance = createProxy(factory, proxyClass, interceptor);
             return mockedType.cast(proxyInstance);
         } catch (ClassCastException cce) {
             throw new MockitoException(join(
                 "ClassCastException occurred while creating the mockito proxy :",
-                "  class to imposterize : '" + describeClass(mockedType),
-                "  imposterizing class : '" + describeClass(proxyClass),
+                "  class to mock : '" + describeClass(mockedType),
+                "  created class : '" + describeClass(proxyClass),
                 "  proxy instance class : '" + describeClass(proxyInstance),
+                "  instance creation by : '" + factory.getClass().getSimpleName(),
                 "",
                 "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
             ), cce);
@@ -82,13 +78,14 @@ public class ClassImposterizer  {
         return instance == null? "null" : describeClass(instance.getClass());
     }
 
+    //TODO this method does not belong here
     public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
         for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
             constructor.setAccessible(accessible);
         }
     }
     
-    public Class<?> createProxyClass(Class<?> mockedType, Class<?>... interfaces) {
+    public Class<Factory> createProxyClass(Class<?> mockedType, Class<?>... interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
@@ -138,8 +135,8 @@ public class ClassImposterizer  {
         }
     }
     
-    private Object createProxy(Class<?> proxyClass, final MethodInterceptor interceptor) {
-        Factory proxy = (Factory) objenesis.newInstance(proxyClass);
+    private Object createProxy(InstanceFactory factory, Class<Factory> proxyClass, final MethodInterceptor interceptor) {
+        Factory proxy = factory.newInstance(proxyClass);
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
         return proxy;
     }

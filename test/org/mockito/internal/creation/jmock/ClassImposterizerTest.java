@@ -4,22 +4,25 @@
  */
 package org.mockito.internal.creation.jmock;
 
-import static org.hamcrest.CoreMatchers.*;
-
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
+import org.mockito.internal.creation.instance.ConstructorInstanceFactory;
+import org.mockito.internal.creation.instance.ObjenesisInstanceFactory;
 import org.mockitoutil.TestBase;
+
+import java.lang.reflect.Method;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 
 @SuppressWarnings("unchecked")
 public class ClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
-        SomeInterface proxy = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeInterface.class);
+        SomeInterface proxy = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), SomeInterface.class);
         
         Class superClass = proxy.getClass().getSuperclass();
         assertEquals(Object.class, superClass);
@@ -27,7 +30,7 @@ public class ClassImposterizerTest extends TestBase {
     
     @Test
     public void shouldCreateMockFromClass() throws Exception {
-        ClassWithoutConstructor proxy = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), ClassWithoutConstructor.class);
+        ClassWithoutConstructor proxy = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), ClassWithoutConstructor.class);
         
         Class superClass = proxy.getClass().getSuperclass();
         assertEquals(ClassWithoutConstructor.class, superClass);
@@ -40,14 +43,14 @@ public class ClassImposterizerTest extends TestBase {
             fail();
         } catch (Exception e) {}
         
-        ClassWithDodgyConstructor mock = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), ClassWithDodgyConstructor.class);
+        ClassWithDodgyConstructor mock = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), ClassWithDodgyConstructor.class);
         assertNotNull(mock);
     }
     
     @Test 
     public void shouldMocksHaveDifferentInterceptors() throws Exception {
-        SomeClass mockOne = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class);
-        SomeClass mockTwo = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class);
+        SomeClass mockOne = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), SomeClass.class);
+        SomeClass mockTwo = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), SomeClass.class);
         
         Factory cglibFactoryOne = (Factory) mockOne;
         Factory cglibFactoryTwo = (Factory) mockTwo;
@@ -57,13 +60,20 @@ public class ClassImposterizerTest extends TestBase {
     
     @Test
     public void shouldUseAnicilliaryTypes() {
-        SomeClass mock = ClassImposterizer.INSTANCE.imposterise(new MethodInterceptorStub(), SomeClass.class, SomeInterface.class);
+        SomeClass mock = ClassImposterizer.INSTANCE.imposterise(new ObjenesisInstanceFactory(), new MethodInterceptorStub(), SomeClass.class, SomeInterface.class);
         
         assertThat(mock, is(instanceOf(SomeInterface.class)));
     }
 
+    @Test
+    public void shouldCreateClassByConstructor() {
+        OtherClass mock = ClassImposterizer.INSTANCE.imposterise(new ConstructorInstanceFactory(), new MethodInterceptorStub(), OtherClass.class);
+        assertNotNull(mock);
+    }
+
     class SomeClass {}
     interface SomeInterface {}
+    static class OtherClass {}
     
     private class ClassWithoutConstructor {}
 

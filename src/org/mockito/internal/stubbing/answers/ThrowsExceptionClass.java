@@ -18,12 +18,11 @@ public class ThrowsExceptionClass implements Answer<Object>, Serializable {
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
     public ThrowsExceptionClass(Class<? extends Throwable> throwableClass) {
-
         this.throwableClass = throwableClass;
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-
+        //TODO centralize the use of Objenesis. Why do we use ObjenesisHelper?
         Throwable throwable = (Throwable) ObjenesisHelper.newInstance(throwableClass);
         throwable.fillInStackTrace();
         filter.filter(throwable);
