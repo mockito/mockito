@@ -22,7 +22,7 @@ import static org.mockito.internal.util.StringJoiner.join;
 /**
  * Inspired on jMock (thanks jMock guys!!!)
  */
-public class ClassImposterizer {
+class ClassImposterizer {
 
     private final Instantiator instantiator;
 
