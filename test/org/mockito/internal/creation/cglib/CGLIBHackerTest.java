@@ -17,14 +17,13 @@ public class CGLIBHackerTest extends TestBase {
     @Test
     public void shouldSetMockitoNamingPolicy() throws Exception {
         //given
-        MethodProxy methodProxy = MethodProxy.create(null, null, null, null, null);
+        MethodProxy methodProxy = MethodProxy.create(String.class, Integer.class, "", "", "");
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
         
         //then
-        Object realMethodProxy = Whitebox.invokeMethod(methodProxy, "getMethodProxy", new Object[0]);
-        Object createInfo = Whitebox.getInternalState(realMethodProxy, "createInfo");
+        Object createInfo = Whitebox.getInternalState(methodProxy, "createInfo");
         NamingPolicy namingPolicy = (NamingPolicy) Whitebox.getInternalState(createInfo, "namingPolicy");
         assertEquals(MockitoNamingPolicy.INSTANCE, namingPolicy);
     }
@@ -32,14 +31,13 @@ public class CGLIBHackerTest extends TestBase {
     @Test
     public void shouldSetMockitoNamingPolicyEvenIfMethodProxyIsProxied() throws Exception {
         //given
-        MethodProxy proxiedMethodProxy = spy(MethodProxy.create(null, null, null, null, null));
+        MethodProxy proxiedMethodProxy = spy(MethodProxy.create(String.class, Integer.class, "", "", ""));
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(proxiedMethodProxy);
         
         //then
-        Object realMethodProxy = Whitebox.invokeMethod(proxiedMethodProxy, "getMethodProxy", new Object[0]);
-        Object createInfo = Whitebox.getInternalState(realMethodProxy, "createInfo");
+        Object createInfo = Whitebox.getInternalState(proxiedMethodProxy, "createInfo");
         NamingPolicy namingPolicy = (NamingPolicy) Whitebox.getInternalState(createInfo, "namingPolicy");
         assertEquals(MockitoNamingPolicy.INSTANCE, namingPolicy);
     }

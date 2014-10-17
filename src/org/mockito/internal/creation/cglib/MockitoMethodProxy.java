@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.cglib;
 
+//TODO SF Replace with RealMethod and get rid of (possibly).
 public interface MockitoMethodProxy {
     Object invokeSuper(Object target, Object[] arguments) throws Throwable;
 }
