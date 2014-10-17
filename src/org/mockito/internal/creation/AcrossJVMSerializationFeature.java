@@ -8,11 +8,13 @@ package org.mockito.internal.creation;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
+import org.mockito.internal.creation.jmock.Instantiator;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+import org.objenesis.strategy.InstantiatorStrategy;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -304,7 +306,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
 
             // create the Mockito mock class before it can even be deserialized
             ClassImposterizer.INSTANCE.setConstructorsAccessible(typeToMock, true);
-            Class<?> proxyClass = ClassImposterizer.INSTANCE.createProxyClass(
+            Class<?> proxyClass = Instantiator.createProxyClass(
                     typeToMock,
                     extraInterfaces.toArray(new Class[extraInterfaces.size()])
             );

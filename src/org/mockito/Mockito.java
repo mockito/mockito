@@ -1346,7 +1346,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Mocks only the abstract methods in {@code type}.
+     * Spies {@code type} by constructing it as a partial mock.
      * Non-abstract methods (including final methods) are invoked as is. If {@code type} declares
      * a non-private 0-arg constructor, the constructor will be invoked to initialize the mock.
      *
@@ -1360,7 +1360,7 @@ public class Mockito extends Matchers {
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
      * In most cases, this is not the way you want to design your application.
      *
-     * <p>While it's not encouraged to mock a poorly designed object with {@code partialMock}, it's
+     * <p>While it's not encouraged to mock a poorly designed object with {@code spy}, it's
      * useful for creating fakes or mock helpers in tests. For example, one can create a
      * simple fake of the following interface without implementing it fully: <pre>
      * interface UserAccount {
@@ -1372,7 +1372,7 @@ public class Mockito extends Matchers {
      * public class UserServiceTest {
      *
      *   public void testWithUserAccount() {
-     *     FakeUserAccount userAccount = Mockito.partialMock(FakeUserAccount.class);
+     *     FakeUserAccount userAccount = Mockito.spy(FakeUserAccount.class);
      *     ...
      *   }
      * 
@@ -1400,7 +1400,7 @@ public class Mockito extends Matchers {
      *   public class UserServiceTest {
      *
      *     public void testSuccess() {
-     *       FakeUserService service = Mockito.partialMock(FakeService.class);
+     *       FakeUserService service = Mockito.spy(FakeService.class);
      *       when(service.getUser("id")).thenReturn(AsyncFutures.failure(new Exception()));
      *       ...
      *     }
@@ -1414,20 +1414,20 @@ public class Mockito extends Matchers {
      *     }
      *   }}</pre>
      */
-    public static <T> T partialMock(Class<T> type) {
+    public static <T> T spy(Class<T> type) {
         if (needsEnclosingInstance(type)) {
     		throw new IllegalArgumentException(
     				"Cannot mock non-static inner class " + type
     				+ ". Please pass in the enclosing instance.");
     	}
     	MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
-    	settings.defaultAnswer(RETURNS_DEFAULTS);
+    	settings.defaultAnswer(new PartialMockAnswer(RETURNS_DEFAULTS));
     	settings.mockAbstractMethodsOnly();
         return MOCKITO_CORE.mock(type, settings);
     }
 
     /**
-     * Mocks only the abstract methods in {@code innerClass}.
+     * Spies {@code tyep} by mocking only the abstract methods in {@code innerClass}.
      * Non-abstract methods (including final methods) are invoked as is. If {@code type} declares
      * a non-private 0-arg constructor, the constructor will be invoked to initialize the mock,
      * with {@code enclosingInstance} properly set.
@@ -1438,7 +1438,7 @@ public class Mockito extends Matchers {
      *   private mockAuthenticationService;
      *
      *   public void testAuthenticated() {
-     *     FakeUserService userService = Mockito.partialMock(this, FakeUserService.class);
+     *     FakeUserService userService = Mockito.spy(this, FakeUserService.class);
      *     ...
      *   }
      * 
@@ -1454,7 +1454,7 @@ public class Mockito extends Matchers {
      * {@link #verify verified}. To stub or verify these methods, use a spy around the partial
      * mock (only if the method isn't final).
      */
-    public static <T> T partialMock(Object enclosingInstance, Class<T> innerClass) {
+    public static <T> T spy(Object enclosingInstance, Class<T> innerClass) {
     	if (enclosingInstance == null) {
     		throw new NullPointerException("enclosingInstance");
     	}
@@ -1466,7 +1466,7 @@ public class Mockito extends Matchers {
         			innerClass + " isn't inner class of " + enclosingInstance.getClass());
         }
     	MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
-    	settings.defaultAnswer(RETURNS_DEFAULTS);
+    	settings.defaultAnswer(new PartialMockAnswer(RETURNS_DEFAULTS));
     	settings.mockAbstractMethodsOnly();
     	settings.setEnclosingInstance(enclosingInstance);
         return MOCKITO_CORE.mock(innerClass, settings);
