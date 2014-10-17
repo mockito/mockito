@@ -6,7 +6,7 @@ package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.proxy.MethodProxy;
 
-class DelegatingMockitoMethodProxy extends AbstractMockitoMethodProxy {
+class DelegatingMockitoMethodProxy implements MockitoMethodProxy {
 
     private final MethodProxy methodProxy;
 
@@ -14,7 +14,7 @@ class DelegatingMockitoMethodProxy extends AbstractMockitoMethodProxy {
         this.methodProxy = methodProxy;
     }
 
-    public MethodProxy getMethodProxy() {
-        return methodProxy;
+    public Object invokeSuper(Object target, Object[] arguments) throws Throwable {
+        return methodProxy.invokeSuper(target, arguments);
     }
 }

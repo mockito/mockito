@@ -6,6 +6,7 @@ package org.mockito.internal.creation.cglib;
 
 import org.junit.Test;
 import org.mockito.cglib.core.NamingPolicy;
+import org.mockito.cglib.proxy.MethodProxy;
 import org.mockitoutil.TestBase;
 import org.powermock.reflect.Whitebox;
 
@@ -16,7 +17,7 @@ public class CGLIBHackerTest extends TestBase {
     @Test
     public void shouldSetMockitoNamingPolicy() throws Exception {
         //given
-        MockitoMethodProxy methodProxy = new MethodProxyBuilder().build();
+        MethodProxy methodProxy = MethodProxy.create(null, null, null, null, null);
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
@@ -31,7 +32,7 @@ public class CGLIBHackerTest extends TestBase {
     @Test
     public void shouldSetMockitoNamingPolicyEvenIfMethodProxyIsProxied() throws Exception {
         //given
-        MockitoMethodProxy proxiedMethodProxy = spy(new MethodProxyBuilder().build());
+        MethodProxy proxiedMethodProxy = spy(MethodProxy.create(null, null, null, null, null));
         
         //when
         new CGLIBHacker().setMockitoNamingPolicy(proxiedMethodProxy);

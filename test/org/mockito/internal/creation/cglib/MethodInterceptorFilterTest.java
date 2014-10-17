@@ -32,11 +32,6 @@ public class MethodInterceptorFilterTest extends TestBase {
     InternalMockHandler handler = Mockito.mock(InternalMockHandler.class);
     MethodInterceptorFilter filter = new MethodInterceptorFilter(handler, (MockSettingsImpl) withSettings());
 
-    @Before
-    public void setUp() {
-        filter.cglibHacker = Mockito.mock(CGLIBHacker.class);        
-    }
-
     @Test
     public void shouldBeSerializable() throws Exception {
         new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(new MethodInterceptorFilter(null, null));

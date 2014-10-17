@@ -9,7 +9,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 
 import java.io.Serializable;
 
-class SerializableMockitoMethodProxy extends AbstractMockitoMethodProxy implements Serializable {
+class SerializableMockitoMethodProxy implements MockitoMethodProxy, Serializable {
 
     private static final long serialVersionUID = -5337859962876770632L;
     private final Class<?> c1;
@@ -30,8 +30,13 @@ class SerializableMockitoMethodProxy extends AbstractMockitoMethodProxy implemen
     }
 
     public MethodProxy getMethodProxy() {
-        if (methodProxy == null)
+        if (methodProxy == null) {
             methodProxy = MethodProxy.create(c1, c2, desc, name, superName);
+        }
         return methodProxy;
+    }
+
+    public Object invokeSuper(Object target, Object[] arguments) throws Throwable {
+        return methodProxy.invokeSuper(target, arguments);
     }
 }

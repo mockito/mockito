@@ -29,7 +29,6 @@ class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
     private final InternalMockHandler handler;
-    CGLIBHacker cglibHacker = new CGLIBHacker();
     final ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockCreationSettings mockSettings;
     private final AcrossJVMSerializationFeature acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
@@ -50,7 +49,7 @@ class MethodInterceptorFilter implements MethodInterceptor, Serializable {
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);
-        cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
+        new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
         
         MockitoMethod mockitoMethod = createMockitoMethod(method);
         
