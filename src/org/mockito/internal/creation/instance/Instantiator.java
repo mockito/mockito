@@ -3,7 +3,7 @@ package org.mockito.internal.creation.instance;
 /**
  * Provides instances of classes.
  */
-public interface InstanceFactory {
+public interface Instantiator {
 
     /**
      * Creates instance of given class

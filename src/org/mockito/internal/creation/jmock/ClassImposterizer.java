@@ -10,7 +10,7 @@ import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
-import org.mockito.internal.creation.instance.InstanceFactory;
+import org.mockito.internal.creation.instance.Instantiator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -25,10 +25,10 @@ import static org.mockito.internal.util.StringJoiner.join;
  */
 public class ClassImposterizer  {
 
-    private final InstanceFactory instanceFactory;
+    private final Instantiator instantiator;
 
-    public ClassImposterizer(InstanceFactory instanceFactory) {
-        this.instanceFactory = instanceFactory;
+    public ClassImposterizer(Instantiator instantiator) {
+        this.instantiator = instantiator;
     }
     
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
@@ -62,7 +62,7 @@ public class ClassImposterizer  {
                 "  class to mock : " + describeClass(mockedType),
                 "  created class : " + describeClass(proxyClass),
                 "  proxy instance class : " + describeClass(proxyInstance),
-                "  instance creation by : " + instanceFactory.getClass().getSimpleName(),
+                "  instance creation by : " + instantiator.getClass().getSimpleName(),
                 "",
                 "You might experience classloading issues, disabling the Objenesis cache *might* help (see MockitoConfiguration)"
             ), cce);
@@ -137,7 +137,7 @@ public class ClassImposterizer  {
     }
     
     private Object createProxy(Class<Factory> proxyClass, final MethodInterceptor interceptor) {
-        Factory proxy = instanceFactory.newInstance(proxyClass);
+        Factory proxy = instantiator.newInstance(proxyClass);
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
         return proxy;
     }

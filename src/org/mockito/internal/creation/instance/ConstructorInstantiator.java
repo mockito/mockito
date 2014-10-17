@@ -1,6 +1,6 @@
 package org.mockito.internal.creation.instance;
 
-public class ConstructorInstanceFactory implements InstanceFactory {
+public class ConstructorInstantiator implements Instantiator {
 
     public <T> T newInstance(Class<T> cls) {
         try {

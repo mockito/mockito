@@ -8,7 +8,7 @@ import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.instance.CachingObjenesisInstanceFactory;
+import org.mockito.internal.creation.instance.CachingObjenesisInstantiator;
 import org.mockito.internal.creation.jmock.ClassImposterizer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -23,7 +23,7 @@ public final class CglibMockMaker implements MockMaker {
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         InternalMockHandler mockitoHandler = cast(handler);
         new AcrossJVMSerializationFeature().enableSerializationAcrossJVM(settings);
-        return new ClassImposterizer(new CachingObjenesisInstanceFactory()).imposterise(
+        return new ClassImposterizer(new CachingObjenesisInstantiator()).imposterise(
                 new MethodInterceptorFilter(mockitoHandler, settings), settings.getTypeToMock(), settings.getExtraInterfaces());
     }
 

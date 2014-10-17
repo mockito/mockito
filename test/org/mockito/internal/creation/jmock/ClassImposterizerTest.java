@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.mockito.cglib.proxy.Factory;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
-import org.mockito.internal.creation.instance.ConstructorInstanceFactory;
-import org.mockito.internal.creation.instance.ObjenesisInstanceFactory;
+import org.mockito.internal.creation.instance.ConstructorInstantiator;
+import org.mockito.internal.creation.instance.ObjenesisInstantiator;
 import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Method;
@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 @SuppressWarnings("unchecked")
 public class ClassImposterizerTest extends TestBase {
 
-    ClassImposterizer imposterizer = new ClassImposterizer(new ObjenesisInstanceFactory());
+    ClassImposterizer imposterizer = new ClassImposterizer(new ObjenesisInstantiator());
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {
@@ -69,7 +69,7 @@ public class ClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateClassByConstructor() {
-        imposterizer = new ClassImposterizer(new ConstructorInstanceFactory());
+        imposterizer = new ClassImposterizer(new ConstructorInstantiator());
         OtherClass mock = imposterizer.imposterise(new MethodInterceptorStub(), OtherClass.class);
         assertNotNull(mock);
     }
