@@ -83,7 +83,7 @@ System.out.println(mockedList.get(999));
 [Main reference documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html) features:
 
 * [`mock()`](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html#mock(java.lang.Class))/[`@Mock`](http://mockito.github.io/mockito/docs/current/org/mockito/Mock.html): Create a mock (specify how it should behave via [`Answer`](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html#field_summary)/[`ReturnValue`](http://mockito.github.io/mockito/docs/current/org/mockito/ReturnValues.html)/[`MockSettings`](http://mockito.github.io/mockito/docs/current/org/mockito/MockSettings.html))
-     * [`when()`](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html#when(T)) to specify how a mock should behave.
+     * [`when()`](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html#when(T))/[`given()`](https://mockito.github.io/mockito/docs/current/org/mockito/BDDMockito.html#given(T)) to specify how a mock should behave.
      * If the provided answers doesn't fit your needs, write one yourself extending the [`Answer`](http://mockito.github.io/mockito/docs/current/org/mockito/stubbing/Answer.html) interface
 * [`spy()`](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html#spy(T))/[`@Spy`](http://mockito.github.io/mockito/docs/current/org/mockito/Spy.html): Calls a real object but records what has been called,
 * [`@InjectMocks`](http://mockito.github.io/mockito/docs/current/org/mockito/InjectMocks.html): Used as a kind of simple automatic dependency injection of fields created using the `@Spy` or `@Mock` annotation.
