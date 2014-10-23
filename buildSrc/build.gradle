@@ -10,3 +10,7 @@ dependencies {
         exclude module: "groovy-all"
     }
 }
+
+if (gradle.parent && gradle.parent.startParameter.taskNames.any { it in ["ideaModule", "idea"] }) {
+    build.dependsOn ideaModule
+}
