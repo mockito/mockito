@@ -1,5 +1,6 @@
 package org.mockito.release.notes;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.mockito.release.notes.internal.ImprovementSetSegregator;
 import org.mockito.release.notes.internal.DefaultReleaseNotesBuilder;
@@ -27,6 +28,9 @@ class ReleaseNotesBuilderFactory {
         Collection<String> labelsToShowSeparately = labelToHeaderMapping.keySet();
         ImprovementSetSegregator segregator = new ImprovementSetSegregator(labelsToShowSeparately, labelsToIgnore);
         ImprovementsPrinter improvementsPrinter = new ImprovementsPrinter(segregator, labelToHeaderMapping, headerForOtherImprovements);
+        if (gitHubToken == null) {
+            throw new GradleException("GitHub token not provided");
+        }
         return new DefaultReleaseNotesBuilder(project, gitHubToken, ignorePattern, improvementsPrinter);
     }
 
