@@ -80,21 +80,11 @@ $improvements
             def issue = new Issue.Smart(i)
             if (issue.exists() && !issue.isOpen()) {
                 out << new Improvement(id: issue.number(), title: issue.title(), url: issue.htmlUrl(),
-                        labels: iterableToList(issue.labels().iterate()).collect{ Label label -> label.name() })
+                        labels: issue.labels().iterate().collect{ Label label -> label.name() })
             }
         }
 //        new OneCategoryImprovementSet(improvements: out, ignorePattern: ignorePattern)
         new LabelledImprovementSet(out, ignorePattern, improvementsPrinter)
-    }
-
-    //TODO: MZA: Can it be done easier with Groovy 1.7.6?
-    private static <T> List<T> iterableToList(Iterable<T> iterable) {
-        def list = []
-        def iterator = iterable.iterator()
-        while (iterator.hasNext()) {
-            list.add(iterator.next())
-        }
-        list
     }
 
     String getPreviousVersion(File notesFile) {
