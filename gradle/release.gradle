@@ -27,6 +27,7 @@ class BinariesComparatorTask extends DefaultTask {
     }
 
     @TaskAction compareBinaries() {
+        assert !markerFile.exists() || markerFile.delete()
         String prev = project.getPreviousVersion()
         logger.info "{} - comparing current binaries with version {}", path, prev
 
