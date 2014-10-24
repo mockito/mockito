@@ -2,16 +2,15 @@ package org.mockito.release.notes;
 
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
-import org.mockito.release.notes.internal.ImprovementSetSegregator;
-import org.mockito.release.notes.internal.DefaultReleaseNotesBuilder;
-import org.mockito.release.notes.internal.ImprovementsPrinter;
+import org.mockito.release.notes.internal.*;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class ReleaseNotesBuilderFactory {
+class ReleaseNotesServices {
 
     private final Project project;
     private String gitHubToken;
@@ -20,7 +19,7 @@ class ReleaseNotesBuilderFactory {
     private List<String> labelsToIgnore = Collections.emptyList();
     private String headerForOtherImprovements;
 
-    ReleaseNotesBuilderFactory(Project project) {
+    ReleaseNotesServices(Project project) {
         this.project = project;
     }
 
@@ -35,29 +34,33 @@ class ReleaseNotesBuilderFactory {
     }
 
     //TODO SF interface
-    ReleaseNotesBuilderFactory gitHubToken(String gitHubToken) {
+    ReleaseNotesServices gitHubToken(String gitHubToken) {
         this.gitHubToken = gitHubToken;
         return this;
     }
 
     //TODO: MZ: Not needed when labelsToIgnore are used
-    ReleaseNotesBuilderFactory ignoreImprovementsMatching(String pattern) {
+    ReleaseNotesServices ignoreImprovementsMatching(String pattern) {
         this.ignorePattern = pattern;
         return this;
     }
 
-    ReleaseNotesBuilderFactory ignoreImprovementsWithLabels(List<String> labelsToIgnore) {
+    ReleaseNotesServices ignoreImprovementsWithLabels(List<String> labelsToIgnore) {
         this.labelsToIgnore = labelsToIgnore;
         return this;
     }
 
-    ReleaseNotesBuilderFactory showSeparatelyImprovementsWithLabelMappings(Map<String, String> labelToHeaderMapping) {
+    ReleaseNotesServices showSeparatelyImprovementsWithLabelMappings(Map<String, String> labelToHeaderMapping) {
         this.labelToHeaderMapping = labelToHeaderMapping;
         return this;
     }
 
-    ReleaseNotesBuilderFactory headerForOtherImprovements(String headerForOtherImprovements) {
+    ReleaseNotesServices headerForOtherImprovements(String headerForOtherImprovements) {
         this.headerForOtherImprovements = headerForOtherImprovements;
         return this;
+    }
+
+    PreviousVersionProvider getPreviousVersionProvider(File releaseNotesFile) {
+        return new PreviousVersionFromFile(releaseNotesFile);
     }
 }

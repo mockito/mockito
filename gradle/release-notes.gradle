@@ -1,7 +1,7 @@
 import org.mockito.release.notes.*
 
 def getNotesBuilder() {
-    new ReleaseNotesBuilderFactory(project)
+    new ReleaseNotesServices(project)
         .gitHubToken(System.env.GH_TOKEN)
         .ignoreImprovementsMatching("^[Rr]efactoring.*")
         .createBuilder()
@@ -14,7 +14,7 @@ ext.updateReleaseNotes = {
 
 //TODO add task that calculates previous version
 ext.getPreviousVersion = {
-    return notesBuilder.getPreviousVersion(notesFile)
+    return new ReleaseNotesServices(project).getPreviousVersionProvider(notesFile).getPreviousVersion()
 }
 
 //TODO SF allow dry-run generation of the release notes without GH_TOKEN

@@ -28,7 +28,7 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
     void updateNotes(File notesFile, String toVersion) {
         println "Updating release notes file: $notesFile"
         def currentContent = notesFile.text
-        def previousVersion = "v" + getPreviousVersion(notesFile)
+        def previousVersion = "v" + new PreviousVersionFromFile(notesFile).getPreviousVersion()
         println "Fetching $previousVersion"
         project.exec { commandLine "git", "fetch", "origin", "+refs/tags/$previousVersion:refs/tags/$previousVersion" }
         println "Building notes since $previousVersion until $toVersion"
@@ -85,18 +85,6 @@ $improvements
         }
 //        new OneCategoryImprovementSet(improvements: out, ignorePattern: ignorePattern)
         new LabelledImprovementSet(out, ignorePattern, improvementsPrinter)
-    }
-
-    String getPreviousVersion(File notesFile) {
-        println "Attempting to figure out the previous version from the release notes file"
-        return notesFile.withReader {
-            def firstLine = it.readLine()
-            assert firstLine.startsWith('###')
-            //Example: "### 1.9.5 (06-10-2012)", we want to extract "1.9.5"
-            def m = firstLine =~ /### (.+?) .*/
-            assert m.matches()
-            return m.group(1)
-        }
     }
 
     ContributionSet getContributionsBetween(String fromRevision, String toRevision) {
