@@ -28,7 +28,7 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
     void updateNotes(File notesFile, String toVersion) {
         println "Updating release notes file: $notesFile"
         def currentContent = notesFile.text
-        def previousVersion = "v" + new PreviousVersionFromFile(notesFile).getPreviousVersion()
+        def previousVersion = "v" + new PreviousVersionFromFile(notesFile).getPreviousVersion() //TODO SF duplicated, reuse service
         println "Fetching $previousVersion"
         project.exec { commandLine "git", "fetch", "origin", "+refs/tags/$previousVersion:refs/tags/$previousVersion" }
         println "Building notes since $previousVersion until $toVersion"

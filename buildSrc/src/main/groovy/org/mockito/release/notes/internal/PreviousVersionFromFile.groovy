@@ -11,7 +11,7 @@ class PreviousVersionFromFile implements PreviousVersionProvider {
         this.releaseNotes = releaseNotes
     }
 
-    String getPreviousVersion() {
+    String getPreviousVersion() { //TODO SF coverage
         println "Attempting to figure out the previous version from the release notes file"
         return releaseNotes.withReader {
             def firstLine = it.readLine()
