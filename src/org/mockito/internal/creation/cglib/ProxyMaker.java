@@ -26,17 +26,18 @@ public abstract class ProxyMaker {
 	    }
 	};
     
-    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
-        @Override
-        public String getClassName(String prefix, String source, Object key, Predicate names) {
-            return "codegen." + super.getClassName(prefix, source, key, names);
-        }
-    };
-    
-    public static Class<? extends Factory> makeProxyClass(
-    		Class<?> mockedType, Class<?>... interfaces) {
-        if (mockedType == Object.class) {
-            mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
+    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES =
+    		new MockitoNamingPolicy() {
+		        @Override
+		        public String getClassName(String prefix, String source, Object key, Predicate names) {
+		            return "codegen." + super.getClassName(prefix, source, key, names);
+		        }
+		    };
+
+    /** Makes proxy class for {@code clazz} that in addition implements {@code interfaces}. */
+    public static Class<? extends Factory> makeProxyClass(Class<?> clazz, Class<?>... interfaces) {
+        if (clazz == Object.class) {
+            clazz = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
         
         Enhancer enhancer = new Enhancer() {
@@ -46,18 +47,18 @@ public abstract class ProxyMaker {
                 // Don't filter
             }
         };
-		enhancer.setClassLoader(getCombinedClassLoader(mockedType, interfaces));
+		enhancer.setClassLoader(getCombinedClassLoader(clazz, interfaces));
         enhancer.setUseFactory(true);
-        if (mockedType.isInterface()) {
+        if (clazz.isInterface()) {
             enhancer.setSuperclass(Object.class);
-            enhancer.setInterfaces(prepend(mockedType, interfaces));
+            enhancer.setInterfaces(prepend(clazz, interfaces));
         } else {
-            enhancer.setSuperclass(mockedType);
+            enhancer.setSuperclass(clazz);
             enhancer.setInterfaces(interfaces);
         }
         enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
         enhancer.setCallbackFilter(ProxyMaker.IGNORE_BRIDGE_METHODS);
-        setNamingPolicy(enhancer, mockedType);
+        setNamingPolicy(enhancer, clazz);
 
         enhancer.setSerialVersionUID(42L);
         
@@ -66,14 +67,14 @@ public abstract class ProxyMaker {
 			Class<? extends Factory> proxyClass = enhancer.createClass();
             return proxyClass;
         } catch (CodeGenerationException e) {
-            if (Modifier.isPrivate(mockedType.getModifiers())) {
+            if (Modifier.isPrivate(clazz.getModifiers())) {
                 throw new MockitoException("\n"
-                        + "Mockito cannot mock this class: " + mockedType 
+                        + "Mockito cannot mock this class: " + clazz 
                         + ".\n"
                         + "Most likely it is a private class that is not visible by Mockito");
             }
             throw new MockitoException("\n"
-                    + "Mockito cannot mock this class: " + mockedType 
+                    + "Mockito cannot mock this class: " + clazz 
                     + "\n" 
                     + "Mockito can only mock visible & non-final classes."
                     + "\n" 
@@ -81,8 +82,8 @@ public abstract class ProxyMaker {
         }
     }
 
-	final <T> T instantiate(
-			Class<T> toMock, Class<?>[] interfaces, MethodInterceptor mockInterceptor) {
+    /** Makes a new instance for {@code clazz} that implements {@code interfaces} using {@code interceptor}. */
+	final <T> T make(Class<T> clazz, Class<?>[] interfaces, MethodInterceptor interceptor) {
 		Enhancer enhancer = new Enhancer() {
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			// Cglib API is pre-generics
@@ -95,23 +96,25 @@ public abstract class ProxyMaker {
 				}
 			}
 		};
-		enhancer.setSuperclass(toMock);
+		enhancer.setSuperclass(clazz);
 		enhancer.setInterfaces(interfaces);
-		enhancer.setClassLoader(getCombinedClassLoader(toMock, interfaces));
+		enhancer.setClassLoader(getCombinedClassLoader(clazz, interfaces));
 		enhancer.setCallbackTypes(new Class[] { MethodInterceptor.class, NoOp.class });
 		enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
 		enhancer.setUseFactory(true);
-		setNamingPolicy(enhancer, toMock);
+		setNamingPolicy(enhancer, clazz);
 		enhancer.setSerialVersionUID(43L);
 		@SuppressWarnings("unchecked")
 		// toMock is Class<T>
-		T proxy = (T) makeProxy(enhancer,
-				new Callback[] { mockInterceptor, SerializableNoOp.INSTANCE });
+		T proxy = (T) createProxy(enhancer,
+				new Callback[] { interceptor, SerializableNoOp.INSTANCE });
 		return proxy;
 	}
 
-	abstract Object makeProxy(Enhancer enhancer, Callback[] callbacks);
+	/** Override this method to configure how the proxy instance should be constructed. */
+	abstract Object createProxy(Enhancer enhancer, Callback[] callbacks);
 
+	/** Returns true if {@code constructor} should be used to construct the proxy. */
 	abstract boolean usesConstructor(Constructor<?> constructor);
 
 	private static ClassLoader getCombinedClassLoader(Class<?> mockedType, Class<?>... interfaces) {

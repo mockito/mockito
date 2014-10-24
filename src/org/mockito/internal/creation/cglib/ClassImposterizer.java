@@ -96,16 +96,16 @@ class ClassImposterizer {
 		try {
 			superConstructor = useConstructor.getConstructor(mockedType);
 		} catch (NoSuchMethodException e) {
-			return skipConstructor().instantiate(mockedType, interfaces,
+			return skipConstructor().make(mockedType, interfaces,
 					interceptor);
 		}
 		if (Modifier.isPrivate(superConstructor.getModifiers())) {
 			// No good constructor, just skip
-			return skipConstructor().instantiate(mockedType, interfaces,
+			return skipConstructor().make(mockedType, interfaces,
 					interceptor);
 		}
 		return new ProxyMaker() {
-			@Override Object makeProxy(Enhancer enhancer, Callback[] callbacks) {
+			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
 				enhancer.setCallbacks(callbacks);
 				return useConstructor.construct(enhancer);
 			}
@@ -113,12 +113,12 @@ class ClassImposterizer {
 			@Override boolean usesConstructor(Constructor<?> constructor) {
 				return useConstructor.usesConstructor(constructor);
 			}
-		}.instantiate(mockedType, interfaces, interceptor);
+		}.make(mockedType, interfaces, interceptor);
 	}
 
 	private ProxyMaker skipConstructor() {
 	   return new ProxyMaker() {
-		    @Override Object makeProxy(Enhancer enhancer, Callback[] callbacks) {
+		    @Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
 		    	enhancer.setUseFactory(true);
 		    	@SuppressWarnings("unchecked") // createClass() returns raw Class
 				Factory factory = (Factory) instantiator.newInstance(enhancer.createClass());
