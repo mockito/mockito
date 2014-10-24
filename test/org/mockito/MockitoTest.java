@@ -6,6 +6,7 @@
 package org.mockito;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -179,7 +180,7 @@ public class MockitoTest extends TestBase {
     	}
     }
   
-    @Test(expected=NullPointerException.class)
+    @Test(expected=MockitoException.class)
     public void spyWithNullEnclosingInstance() {
     	Mockito.spy(NonStaticInnerClass.class, withSettings().enclosingInstance(null));
     }
