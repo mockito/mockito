@@ -132,7 +132,8 @@ public abstract class ProxyMaker {
 
 	private static void setNamingPolicy(Enhancer enhancer, Class<?> mockedType) {
 		if (mockedType.getSigners() != null) {
-			enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
+			enhancer.setNamingPolicy(
+					NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
 		} else {
 			enhancer.setNamingPolicy(MockitoNamingPolicy.INSTANCE);
 		}
