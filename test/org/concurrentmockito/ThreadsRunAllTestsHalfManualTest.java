@@ -14,7 +14,7 @@ import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
-import org.mockito.internal.creation.jmock.ClassImposterizerTest;
+import org.mockito.internal.creation.cglib.ClassImposterizerTest;
 import org.mockito.internal.handler.MockHandlerImplTest;
 import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;

@@ -18,7 +18,7 @@ import java.io.ObjectStreamException;
  *     However note that other calls related to the stackTrace will refer to the filter stacktrace.
  * </p>
  *
- * @since 1.9.6
+ * @since 1.10.0
  */
 public class MockitoSerializationIssue extends ObjectStreamException {
 

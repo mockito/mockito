@@ -3,16 +3,17 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.creation;
+package org.mockito.internal.creation.cglib;
 
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.cglib.CGLIBHacker;
+import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.creation.util.MockitoMethodProxy;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
-import org.mockito.internal.invocation.realmethod.FilteredCGLIBProxyRealMethod;
+import org.mockito.internal.invocation.realmethod.CleanTraceRealMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.Invocation;
@@ -24,14 +25,11 @@ import java.lang.reflect.Method;
 
 /**
  * Should be one instance per mock instance, see CglibMockMaker.
- *
- *
  */
-public class MethodInterceptorFilter implements MethodInterceptor, Serializable {
+class MethodInterceptorFilter implements MethodInterceptor, Serializable {
 
     private static final long serialVersionUID = 6182795666612683784L;
     private final InternalMockHandler handler;
-    CGLIBHacker cglibHacker = new CGLIBHacker();
     final ObjectMethodsGuru objectMethodsGuru = new ObjectMethodsGuru();
     private final MockCreationSettings mockSettings;
     private final AcrossJVMSerializationFeature acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
@@ -52,11 +50,11 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         }
         
         MockitoMethodProxy mockitoMethodProxy = createMockitoMethodProxy(methodProxy);
-        cglibHacker.setMockitoNamingPolicy(mockitoMethodProxy);
+        new CGLIBHacker().setMockitoNamingPolicy(methodProxy);
         
         MockitoMethod mockitoMethod = createMockitoMethod(method);
         
-        FilteredCGLIBProxyRealMethod realMethod = new FilteredCGLIBProxyRealMethod(mockitoMethodProxy);
+        CleanTraceRealMethod realMethod = new CleanTraceRealMethod(mockitoMethodProxy);
         Invocation invocation = new InvocationImpl(proxy, mockitoMethod, args, SequenceNumber.next(), realMethod);
         return handler.handle(invocation);
     }
@@ -79,7 +77,7 @@ public class MethodInterceptorFilter implements MethodInterceptor, Serializable 
         if (mockSettings.isSerializable()) {
             return new SerializableMethod(method);
         } else {
-            return new DelegatingMethod(method); 
+            return new DelegatingMethod(method);
         }
     }
 }

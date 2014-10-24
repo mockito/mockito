@@ -1,4 +1,4 @@
-package org.mockito.internal.creation.jmock;
+package org.mockito.internal.creation.cglib;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -12,13 +12,13 @@ import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.Callback;
 import org.mockito.cglib.proxy.CallbackFilter;
 import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
 import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
-import org.mockito.internal.creation.jmock.ClassImposterizer.ClassWithSuperclassToWorkAroundCglibBug;
+import org.mockito.internal.creation.util.SearchingClassLoader;
 
-public abstract class Instantiator {
+public abstract class ProxyCreator {
 	static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
 	    public int accept(Method method) {
 	        return method.isBridge() ? 1 : 0;
@@ -32,7 +32,8 @@ public abstract class Instantiator {
         }
     };
     
-    public static Class<?> createProxyClass(Class<?> mockedType, Class<?>... interfaces) {
+    public static Class<? extends Factory> createProxyClass(
+    		Class<?> mockedType, Class<?>... interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
@@ -54,13 +55,14 @@ public abstract class Instantiator {
             enhancer.setInterfaces(interfaces);
         }
         enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
-        enhancer.setCallbackFilter(Instantiator.IGNORE_BRIDGE_METHODS);
+        enhancer.setCallbackFilter(ProxyCreator.IGNORE_BRIDGE_METHODS);
         setNamingPolicy(enhancer, mockedType);
 
         enhancer.setSerialVersionUID(42L);
         
         try {
-            return enhancer.createClass(); 
+			Class<? extends Factory> proxyClass = enhancer.createClass();
+            return proxyClass;
         } catch (CodeGenerationException e) {
             if (Modifier.isPrivate(mockedType.getModifiers())) {
                 throw new MockitoException("\n"
@@ -128,4 +130,6 @@ public abstract class Instantiator {
         System.arraycopy(rest, 0, all, 1, rest.length);
         return all;
     }
+    
+    public static class ClassWithSuperclassToWorkAroundCglibBug {}
 }

@@ -1,3 +1,12 @@
+### 1.10.9 (2014-10-22 08:51 UTC)
+
+* Authors: 1
+* Commits: 15
+  * 15: Szczepan Faber
+* Improvements: 2
+  * Improve internal implementation so that it is possible to implement mocking abstract classes [(#107)](https://github.com/mockito/mockito/issues/107)
+  * Continuous deployment should not release new version if binaries are equal [(#105)](https://github.com/mockito/mockito/issues/105)
+
 ### 1.10.8 (2014-10-10 00:58 UTC)
 
 * Authors: 1

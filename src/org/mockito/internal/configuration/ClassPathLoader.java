@@ -55,7 +55,7 @@ import java.util.List;
  */
 public class ClassPathLoader {
     private static final String DEFAULT_MOCK_MAKER_CLASS =
-            "org.mockito.internal.creation.CglibMockMaker";
+            "org.mockito.internal.creation.cglib.CglibMockMaker";
     private static final String DEFAULT_STACK_TRACE_CLEANER_PROVIDER_CLASS =
             "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider";
     public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
@@ -90,7 +90,7 @@ public class ClassPathLoader {
     /**
      * Returns the implementation of the mock maker available for the current runtime.
      *
-     * <p>Returns {@link org.mockito.internal.creation.CglibMockMaker} if no
+     * <p>Returns {@link org.mockito.internal.creation.cglib.CglibMockMaker} if no
      * {@link MockMaker} extension exists or is visible in the current classpath.</p>
      */
     public static MockMaker getMockMaker() {

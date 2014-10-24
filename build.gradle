@@ -15,7 +15,6 @@ apply plugin: 'maven-publish'
 
 apply from: 'gradle/version.gradle'
 apply from: "gradle/ide.gradle"
-apply from: 'gradle/release.gradle'
 apply from: 'gradle/coverage.gradle'
 
 allprojects {
@@ -151,6 +150,8 @@ publishing {
         }
     }
 }
+
+apply from: 'gradle/release.gradle'
 apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {

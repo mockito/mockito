@@ -3,12 +3,11 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.creation;
+package org.mockito.internal.creation.cglib;
 
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
-import org.mockito.internal.creation.jmock.ClassImposterizer;
-import org.mockito.internal.creation.jmock.Instantiator;
+import org.mockito.internal.creation.instance.InstantiatorProvider;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
@@ -38,24 +37,24 @@ import static org.mockito.internal.util.StringJoiner.join;
  * </p>
  *
  * <p>
- *     Then in the {@link MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
+ *     Then in the {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
  *     it will use the custom implementation of this class {@link #writeReplace(Object)}. This method has a specific
  *     knowledge on how to serialize a mockito mock that is based on CGLIB.
  * </p>
  *
- * <p><strong>Only one instance per mock! See {@link MethodInterceptorFilter}</strong></p>
+ * <p><strong>Only one instance per mock! See {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter}</strong></p>
  *
  * TODO use a proper way to add the interface
  * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
  *
- * @see CglibMockMaker
- * @see MethodInterceptorFilter
+ * @see org.mockito.internal.creation.cglib.CglibMockMaker
+ * @see org.mockito.internal.creation.cglib.MethodInterceptorFilter
  * @author Brice Dutheil
- * @since 1.9.6
+ * @since 1.10.0
  */
 @Incubating
-public class AcrossJVMSerializationFeature implements Serializable {
+class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
     private boolean instanceLocalCurrentlySerializingFlag = false;
@@ -81,13 +80,13 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *         So, {@link ObjectOutputStream} will track the <code>writeReplace</code> method in the instance and
      *         execute it, which is wanted to replace the mock by another type that will encapsulate the actual mock.
      *         At this point, the code will return an
-     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy}.</p>
+     *         {@link AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy}.</p>
      *     </li>
      *     <li>
      *         <p>Now, in the constructor
-     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy#AcrossJVMMockSerializationProxy(Object)}
+     *         {@link AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy#AcrossJVMMockSerializationProxy(Object)}
      *         the mock is being serialized in a custom way (using
-     *         {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream}) to a
+     *         {@link AcrossJVMSerializationFeature.MockitoMockObjectOutputStream}) to a
      *         byte array. So basically it means the code is performing double nested serialization of the passed
      *         <code>mockitoMock</code>.</p>
      *
@@ -176,7 +175,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
      * This is the serialization proxy that will encapsulate the real mock data as a byte array.
      *
      * <p>When called in the constructor it will serialize the mock in a byte array using a
-     * custom {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream} that
+     * custom {@link AcrossJVMSerializationFeature.MockitoMockObjectOutputStream} that
      * will annotate the mock class in the stream.
      * Other information are used in this class in order to facilitate deserialization.
      * </p>
@@ -195,7 +194,7 @@ public class AcrossJVMSerializationFeature implements Serializable {
          * Creates the wrapper that be used in the serialization stream.
          *
          * <p>Immediately serializes the Mockito mock using specifically crafted
-         * {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream},
+         * {@link AcrossJVMSerializationFeature.MockitoMockObjectOutputStream},
          * in a byte array.</p>
          *
          * @param mockitoMock The Mockito mock to serialize.
@@ -261,13 +260,13 @@ public class AcrossJVMSerializationFeature implements Serializable {
      *     for a Mockito marker. If this marker is found it will try to resolve the mockito class otherwise it
      *     delegates class resolution to the default super behavior.
      *     The mirror method used for serializing the mock is
-     *     {@link org.mockito.internal.creation.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream#annotateClass(Class)}.
+     *     {@link AcrossJVMSerializationFeature.MockitoMockObjectOutputStream#annotateClass(Class)}.
      * </p>
      *
      * <p>
-     *     When this marker is found, {@link ClassImposterizer} methods are being used to create the mock class.
+     *     When this marker is found, {@link org.mockito.internal.creation.cglib.ClassImposterizer} methods are being used to create the mock class.
      *     <em>Note that behind the <code>ClassImposterizer</code> there is CGLIB and the
-     *     {@link org.mockito.internal.creation.jmock.SearchingClassLoader} that will look if this enhanced class has
+     *     {@link org.mockito.internal.creation.util.SearchingClassLoader} that will look if this enhanced class has
      *     already been created in an accessible classloader ; so basically this code trusts the ClassImposterizer
      *     code.</em>
      * </p>
@@ -305,8 +304,10 @@ public class AcrossJVMSerializationFeature implements Serializable {
             // ClassImposterizer.INSTANCE.canImposterise(typeToMock);
 
             // create the Mockito mock class before it can even be deserialized
-            ClassImposterizer.INSTANCE.setConstructorsAccessible(typeToMock, true);
-            Class<?> proxyClass = Instantiator.createProxyClass(
+            //TODO SF unify creation of imposterizer, constructor code duplicated
+            ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
+            imposterizer.setConstructorsAccessible(typeToMock, true);
+            Class<?> proxyClass = imposterizer.createProxyClass(
                     typeToMock,
                     extraInterfaces.toArray(new Class[extraInterfaces.size()])
             );
