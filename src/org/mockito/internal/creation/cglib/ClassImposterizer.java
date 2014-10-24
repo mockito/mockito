@@ -100,7 +100,7 @@ class ClassImposterizer {
     }
 
     //TODO this method does not belong here
-    public static void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
+    public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
         for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
             constructor.setAccessible(accessible);
         }
