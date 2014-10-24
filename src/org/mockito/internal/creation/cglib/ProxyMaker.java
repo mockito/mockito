@@ -18,7 +18,8 @@ import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.util.SearchingClassLoader;
 
-public abstract class ProxyCreator {
+/** Responsible for creating proxy class and proxy instance using cglib. */
+public abstract class ProxyMaker {
 	static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
 	    public int accept(Method method) {
 	        return method.isBridge() ? 1 : 0;
@@ -32,7 +33,7 @@ public abstract class ProxyCreator {
         }
     };
     
-    public static Class<? extends Factory> createProxyClass(
+    public static Class<? extends Factory> makeProxyClass(
     		Class<?> mockedType, Class<?>... interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
@@ -55,12 +56,13 @@ public abstract class ProxyCreator {
             enhancer.setInterfaces(interfaces);
         }
         enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
-        enhancer.setCallbackFilter(ProxyCreator.IGNORE_BRIDGE_METHODS);
+        enhancer.setCallbackFilter(ProxyMaker.IGNORE_BRIDGE_METHODS);
         setNamingPolicy(enhancer, mockedType);
 
         enhancer.setSerialVersionUID(42L);
         
         try {
+			@SuppressWarnings("unchecked")  // because of setUseFactory(true)
 			Class<? extends Factory> proxyClass = enhancer.createClass();
             return proxyClass;
         } catch (CodeGenerationException e) {
@@ -103,12 +105,12 @@ public abstract class ProxyCreator {
 		enhancer.setSerialVersionUID(43L);
 		@SuppressWarnings("unchecked")
 		// toMock is Class<T>
-		T proxy = (T) createProxy(enhancer,
+		T proxy = (T) makeProxy(enhancer,
 				new Callback[] { mockInterceptor, SerializableNoOp.INSTANCE });
 		return proxy;
 	}
 
-	abstract Object createProxy(Enhancer enhancer, Callback[] callbacks);
+	abstract Object makeProxy(Enhancer enhancer, Callback[] callbacks);
 
 	abstract boolean usesConstructor(Constructor<?> constructor);
 

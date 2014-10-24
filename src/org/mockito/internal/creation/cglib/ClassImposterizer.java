@@ -36,7 +36,7 @@ class ClassImposterizer {
         Object proxyInstance = null;
         try {
             setConstructorsAccessible(mockedType, true);
-            proxyClass = ProxyCreator.createProxyClass(mockedType, ancillaryTypes);
+            proxyClass = ProxyMaker.makeProxyClass(mockedType, ancillaryTypes);
             proxyInstance = createProxy(proxyClass, interceptor);
             return mockedType.cast(proxyInstance);
         } catch (ClassCastException cce) {
@@ -104,8 +104,8 @@ class ClassImposterizer {
 			return skipConstructor().instantiate(mockedType, interfaces,
 					interceptor);
 		}
-		return new ProxyCreator() {
-			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+		return new ProxyMaker() {
+			@Override Object makeProxy(Enhancer enhancer, Callback[] callbacks) {
 				enhancer.setCallbacks(callbacks);
 				return useConstructor.construct(enhancer);
 			}
@@ -116,9 +116,9 @@ class ClassImposterizer {
 		}.instantiate(mockedType, interfaces, interceptor);
 	}
 
-	private ProxyCreator skipConstructor() {
-	   return new ProxyCreator() {
-		    @Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+	private ProxyMaker skipConstructor() {
+	   return new ProxyMaker() {
+		    @Override Object makeProxy(Enhancer enhancer, Callback[] callbacks) {
 		    	enhancer.setUseFactory(true);
 		    	@SuppressWarnings("unchecked") // createClass() returns raw Class
 				Factory factory = (Factory) instantiator.newInstance(enhancer.createClass());

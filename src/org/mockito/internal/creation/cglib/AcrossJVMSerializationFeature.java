@@ -315,7 +315,7 @@ class AcrossJVMSerializationFeature implements Serializable {
             //TODO SF unify creation of imposterizer, constructor code duplicated
             ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
             imposterizer.setConstructorsAccessible(typeToMock, true);
-            Class<?> proxyClass = ProxyCreator.createProxyClass(
+            Class<?> proxyClass = ProxyMaker.makeProxyClass(
                     typeToMock,
                     extraInterfaces.toArray(new Class[extraInterfaces.size()])
             );
