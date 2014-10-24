@@ -106,7 +106,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return stubOnly;
     }
 
-    public boolean usesConstructor() {
+    public boolean usesConstructorIfPossible() {
     	return usesConstructor;
     }
   

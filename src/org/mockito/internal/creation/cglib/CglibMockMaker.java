@@ -23,7 +23,7 @@ public final class CglibMockMaker implements MockMaker {
         new AcrossJVMSerializationFeature().enableSerializationAcrossJVM(settings);
         ClassImposterizer imposterizer =
         		new ClassImposterizer(new InstantiatorProvider().getInstantiator());
-        if (settings.usesConstructor()) {
+        if (settings.usesConstructorIfPossible()) {
             return imposterizer.instantiate(
                     new MethodInterceptorFilter(mockitoHandler, settings),
                     settings.getTypeToMock(),

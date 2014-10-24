@@ -141,7 +141,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return validatedSettings(typeToMock, this);
     }
 
-    public MockSettings useConstructor() {
+    public MockSettings useConstructorIfPossible() {
     	this.usesConstructor = true;
     	return this;
     }

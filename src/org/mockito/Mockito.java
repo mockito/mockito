@@ -1416,7 +1416,7 @@ public class Mockito extends Matchers {
      */
     public static <T> T spy(Class<T> type) {
     	return mock(type, withSettings()
-    			.useConstructor()
+    			.useConstructorIfPossible()
     			.defaultAnswer(new PartialMockAnswer(RETURNS_DEFAULTS)));
     }
 
@@ -1492,7 +1492,7 @@ public class Mockito extends Matchers {
     public static <T> T spy(Class<T> type, MockSettings settings) {
     	MockSettingsImpl<?> impl = (MockSettingsImpl<?>) settings;
     	return mock(type, settings
-    			.useConstructor()
+    			.useConstructorIfPossible()
     			.defaultAnswer(new PartialMockAnswer(impl.getDefaultAnswer())));
     }
 

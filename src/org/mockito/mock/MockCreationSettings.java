@@ -71,6 +71,6 @@ public interface MockCreationSettings<T> {
      */
     Object getEnclosingInstance();
 
-    /** Returns true if only the abstract methods are to be mocked. */
-    boolean usesConstructor();
+    /** Returns true if the constructor should be called, if any. */
+    boolean usesConstructorIfPossible();
 }

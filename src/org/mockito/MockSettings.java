@@ -232,12 +232,12 @@ public interface MockSettings extends Serializable {
     MockSettings stubOnly();
 
     /**
-     * The mock should be created by invoking the default constructor.
+     * The mock should be created by invoking the default constructor, if any.
      * The constructor is skipped if it's private.
      *
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings useConstructor();
+    MockSettings useConstructorIfPossible();
 
 
     /**
