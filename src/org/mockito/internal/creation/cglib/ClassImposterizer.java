@@ -4,45 +4,28 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import org.mockito.cglib.core.CodeGenerationException;
-import org.mockito.cglib.core.NamingPolicy;
-import org.mockito.cglib.core.Predicate;
-import org.mockito.cglib.proxy.*;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.instance.Instantiator;
-import org.mockito.internal.creation.util.SearchingClassLoader;
+import static org.mockito.internal.util.StringJoiner.join;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.List;
 
-import static org.mockito.internal.util.StringJoiner.join;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.instance.Instantiator;
 
 /**
  * Inspired on jMock (thanks jMock guys!!!)
  */
 class ClassImposterizer {
-
     private final Instantiator instantiator;
 
     public ClassImposterizer(Instantiator instantiator) {
         this.instantiator = instantiator;
     }
-    
-    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
-        @Override
-        public String getClassName(String prefix, String source, Object key, Predicate names) {
-            return "codegen." + super.getClassName(prefix, source, key, names);
-        }
-    };
-    
-    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-        public int accept(Method method) {
-            return method.isBridge() ? 1 : 0;
-        }
-    };
     
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
         return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
@@ -71,7 +54,7 @@ class ClassImposterizer {
         }
     }
 
-    private static String describeClass(Class type) {
+    private static String describeClass(Class<?> type) {
         return type == null? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
     }
 
@@ -113,12 +96,12 @@ class ClassImposterizer {
 		try {
 			superConstructor = useConstructor.getConstructor(mockedType);
 		} catch (NoSuchMethodException e) {
-			return skipConstructor.instantiate(mockedType, interfaces,
+			return skipConstructor().instantiate(mockedType, interfaces,
 					interceptor);
 		}
 		if (Modifier.isPrivate(superConstructor.getModifiers())) {
 			// No good constructor, just skip
-			return skipConstructor.instantiate(mockedType, interfaces,
+			return skipConstructor().instantiate(mockedType, interfaces,
 					interceptor);
 		}
 		return new ProxyCreator() {
@@ -131,6 +114,21 @@ class ClassImposterizer {
 				return useConstructor.usesConstructor(constructor);
 			}
 		}.instantiate(mockedType, interfaces, interceptor);
+	}
+
+	private ProxyCreator skipConstructor() {
+	   return new ProxyCreator() {
+		    @Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+		    	enhancer.setUseFactory(true);
+		    	@SuppressWarnings("unchecked") // createClass() returns raw Class
+				Factory factory = (Factory) instantiator.newInstance(enhancer.createClass());
+		    	factory.setCallbacks(callbacks);
+		    	return factory;
+		    }
+		    @Override boolean usesConstructor(Constructor<?> next) {
+		    	return false;
+		    }
+		};
 	}
 
 	private UseConstructor chooseMockConstructor(Class<?> toMock,

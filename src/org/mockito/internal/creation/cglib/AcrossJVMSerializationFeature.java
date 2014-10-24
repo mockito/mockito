@@ -5,6 +5,24 @@
 
 package org.mockito.internal.creation.cglib;
 
+import static org.mockito.internal.util.StringJoiner.join;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.creation.instance.InstantiatorProvider;
@@ -13,16 +31,6 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
-import org.objenesis.strategy.InstantiatorStrategy;
-
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static org.mockito.internal.util.StringJoiner.join;
 
 /**
  * This is responsible for serializing a mock, it is enabled if the mock is implementing
@@ -307,7 +315,7 @@ class AcrossJVMSerializationFeature implements Serializable {
             //TODO SF unify creation of imposterizer, constructor code duplicated
             ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
             imposterizer.setConstructorsAccessible(typeToMock, true);
-            Class<?> proxyClass = imposterizer.createProxyClass(
+            Class<?> proxyClass = ProxyCreator.createProxyClass(
                     typeToMock,
                     extraInterfaces.toArray(new Class[extraInterfaces.size()])
             );
