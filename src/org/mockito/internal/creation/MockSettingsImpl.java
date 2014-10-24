@@ -148,7 +148,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public MockSettings enclosingInstance(Object enclosingInstance) {
     	if (enclosingInstance == null) {
-    		throw new NullPointerException("enclosingInstance");
+    		new Reporter().enclosingInstanceDoesNotAcceptNullParameter();
     	}
     	this.enclosingInstance = enclosingInstance;
     	return this;
