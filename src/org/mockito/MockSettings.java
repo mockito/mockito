@@ -230,4 +230,21 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings stubOnly();
+
+    /**
+     * The mock should be created by invoking the default constructor.
+     * The constructor is skipped if it's private.
+     *
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings useConstructor();
+
+
+    /**
+     * If the mocked type is non-static inner class, the enclosing instance is needed to
+     * construct the mock, when {@link #useConstructor} is specified.
+     *
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings enclosingInstance(Object enclosingInstance);
 }

@@ -141,12 +141,15 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return validatedSettings(typeToMock, this);
     }
 
-    public MockCreationSettings<T> mockAbstractMethodsOnly() {
-    	this.mocksAbstractMethodsOnly = true;
+    public MockSettings useConstructor() {
+    	this.usesConstructor = true;
     	return this;
     }
 
-    public MockCreationSettings<T> setEnclosingInstance(Object enclosingInstance) {
+    public MockSettings enclosingInstance(Object enclosingInstance) {
+    	if (enclosingInstance == null) {
+    		throw new NullPointerException("enclosingInstance");
+    	}
     	this.enclosingInstance = enclosingInstance;
     	return this;
     }

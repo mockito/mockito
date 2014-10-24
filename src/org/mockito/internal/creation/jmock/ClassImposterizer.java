@@ -113,11 +113,25 @@ public class ClassImposterizer  {
 	private UseConstructor chooseMockConstructor(Class<?> toMock,
 			Object enclosingInstance) {
 		if (enclosingInstance != null) {
+	        if (!needsEnclosingInstance(toMock)) {
+	    		throw new IllegalArgumentException(toMock + " is not non-static inner class.");
+	    	}
+	        if (!toMock.getEnclosingClass().isInstance(enclosingInstance)) {
+	        	throw new IllegalArgumentException(
+	        			toMock + " isn't inner class of " + enclosingInstance.getClass());
+	        }
 			return new UseInnerClassDefaultConstructor(
 					toMock.getEnclosingClass(), enclosingInstance);
 		} else {
+	        if (needsEnclosingInstance(toMock)) {
+	    		throw new IllegalArgumentException(toMock + " is non-static inner class.");
+	    	}
 			return new UseZeroArgConstructor();
 		}
+	}
+
+	private static <T> boolean needsEnclosingInstance(Class<T> type) {
+		return type.getEnclosingClass() != null && !Modifier.isStatic(type.getModifiers());
 	}
 
     private static String describeClass(Class<?> type) {

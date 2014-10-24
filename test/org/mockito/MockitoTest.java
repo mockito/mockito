@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest extends TestBase {
@@ -180,27 +181,29 @@ public class MockitoTest extends TestBase {
   
     @Test(expected=NullPointerException.class)
     public void spyWithNullEnclosingInstance() {
-    	Mockito.spy(null, NonStaticInnerClass.class);
+    	Mockito.spy(NonStaticInnerClass.class, withSettings().enclosingInstance(null));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void spyWithEnclosingInstanceAndStaticNestedClass() {
-    	Mockito.spy(this, StaticAbstractClass.class);
+    	Mockito.spy(StaticAbstractClass.class, withSettings().enclosingInstance(this));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void spyWithEnclosingInstanceAndTopLevelClass() {
-    	Mockito.spy(this, AbstractList.class);
+    	Mockito.spy(AbstractList.class, withSettings().enclosingInstance(this));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void spyWithWrongEnclosingInstance() {
-    	Mockito.spy("not enclosing instance", NonStaticInnerClass.class);
+    	Mockito.spy(NonStaticInnerClass.class,
+    			withSettings().enclosingInstance("not enclosing instance"));
     }
 
     @Test
     public void spyWithEnclosingInstance() {
-    	NonStaticInnerClass mock = Mockito.spy(this, NonStaticInnerClass.class);
+    	NonStaticInnerClass mock =
+    			Mockito.spy(NonStaticInnerClass.class, withSettings().enclosingInstance(this));
     	Mockito.when(mock.play(1)).thenReturn("one");
     	Mockito.when(mock.play(2)).thenReturn("two");
     	assertEquals(Arrays.asList("one", "two", null), mock.playNumbers(1, 3));
