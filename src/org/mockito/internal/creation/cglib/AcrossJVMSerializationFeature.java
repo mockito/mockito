@@ -313,8 +313,7 @@ class AcrossJVMSerializationFeature implements Serializable {
 
             // create the Mockito mock class before it can even be deserialized
             //TODO SF unify creation of imposterizer, constructor code duplicated
-            ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
-            imposterizer.setConstructorsAccessible(typeToMock, true);
+            ClassImposterizer.setConstructorsAccessible(typeToMock, true);
             Class<?> proxyClass = ProxyMaker.makeProxyClass(
                     typeToMock,
                     extraInterfaces.toArray(new Class[extraInterfaces.size()])

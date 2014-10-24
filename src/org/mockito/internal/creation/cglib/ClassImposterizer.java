@@ -54,28 +54,6 @@ class ClassImposterizer {
         }
     }
 
-    private static String describeClass(Class<?> type) {
-        return type == null? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
-    }
-
-    private static String describeClass(Object instance) {
-        return instance == null? "null" : describeClass(instance.getClass());
-    }
-
-    //TODO this method does not belong here
-    public void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
-        for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
-            constructor.setAccessible(accessible);
-        }
-    }
-    
-    private Object createProxy(
-    		Class<? extends Factory> proxyClass, final MethodInterceptor interceptor) {
-        Factory proxy = instantiator.newInstance(proxyClass);
-        proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
-        return proxy;
-    }
-
 	public <T> T instantiate(
 			MethodInterceptor interceptor,
 			Class<T> mockedType,
@@ -87,38 +65,56 @@ class ClassImposterizer {
 		if (Modifier.isPrivate(mockedType.getModifiers())) {
 			throw new IllegalArgumentException(
 					String.format(
-							"Cannot partial mock private %s %s. Please make the class non-private.",
+							"Cannot partial mock private %s. Please make the class non-private.",
 							mockedType));
 		}
-		final UseConstructor useConstructor = chooseMockConstructor(mockedType,
-				enclosingInstance);
+		final UseConstructor useConstructor = chooseMockConstructor(mockedType, enclosingInstance);
 		final Constructor<?> superConstructor;
 		try {
 			superConstructor = useConstructor.getConstructor(mockedType);
 		} catch (NoSuchMethodException e) {
-			return skipConstructor().make(mockedType, interfaces,
-					interceptor);
+			// No usable constructor. Just skip.
+			return skipConstructor().make(mockedType, interfaces, interceptor);
 		}
 		if (Modifier.isPrivate(superConstructor.getModifiers())) {
-			// No good constructor, just skip
-			return skipConstructor().make(mockedType, interfaces,
-					interceptor);
+			// Private constructor. Just skip
+			return skipConstructor().make(mockedType, interfaces, interceptor);
 		}
 		return new ProxyMaker() {
-			@Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+			@Override Object createProxy(Enhancer enhancer, Callback... callbacks) {
 				enhancer.setCallbacks(callbacks);
 				return useConstructor.construct(enhancer);
 			}
-
 			@Override boolean usesConstructor(Constructor<?> constructor) {
 				return useConstructor.usesConstructor(constructor);
 			}
 		}.make(mockedType, interfaces, interceptor);
 	}
 
+    private static String describeClass(Class<?> type) {
+        return type == null? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
+    }
+
+    private static String describeClass(Object instance) {
+        return instance == null? "null" : describeClass(instance.getClass());
+    }
+
+    //TODO this method does not belong here
+    public static void setConstructorsAccessible(Class<?> mockedType, boolean accessible) {
+        for (Constructor<?> constructor : mockedType.getDeclaredConstructors()) {
+            constructor.setAccessible(accessible);
+        }
+    }
+    
+    private Object createProxy(Class<? extends Factory> proxyClass, MethodInterceptor interceptor) {
+        Factory proxy = instantiator.newInstance(proxyClass);
+        proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
+        return proxy;
+    }
+
 	private ProxyMaker skipConstructor() {
 	   return new ProxyMaker() {
-		    @Override Object createProxy(Enhancer enhancer, Callback[] callbacks) {
+		    @Override Object createProxy(Enhancer enhancer, Callback... callbacks) {
 		    	enhancer.setUseFactory(true);
 		    	@SuppressWarnings("unchecked") // createClass() returns raw Class
 				Factory factory = (Factory) instantiator.newInstance(enhancer.createClass());
@@ -131,8 +127,7 @@ class ClassImposterizer {
 		};
 	}
 
-	private UseConstructor chooseMockConstructor(Class<?> toMock,
-			Object enclosingInstance) {
+	private static UseConstructor chooseMockConstructor(Class<?> toMock, Object enclosingInstance) {
 		if (enclosingInstance != null) {
 	        if (!needsEnclosingInstance(toMock)) {
 	    		throw new IllegalArgumentException(toMock + " is not non-static inner class.");
@@ -182,8 +177,7 @@ class ClassImposterizer {
 		}
 	}
 
-	private class UseInnerClassDefaultConstructor implements UseConstructor {
-
+	private static class UseInnerClassDefaultConstructor implements UseConstructor {
 		private final Class<?> enclosingClass;
 		private final Object enclosingInstance;
 

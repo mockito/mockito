@@ -20,7 +20,7 @@ import org.mockito.internal.creation.util.SearchingClassLoader;
 
 /** Responsible for creating proxy class and proxy instance using cglib. */
 public abstract class ProxyMaker {
-	static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
+	private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
 	    public int accept(Method method) {
 	        return method.isBridge() ? 1 : 0;
 	    }
@@ -47,20 +47,7 @@ public abstract class ProxyMaker {
                 // Don't filter
             }
         };
-		enhancer.setClassLoader(getCombinedClassLoader(clazz, interfaces));
-        enhancer.setUseFactory(true);
-        if (clazz.isInterface()) {
-            enhancer.setSuperclass(Object.class);
-            enhancer.setInterfaces(prepend(clazz, interfaces));
-        } else {
-            enhancer.setSuperclass(clazz);
-            enhancer.setInterfaces(interfaces);
-        }
-        enhancer.setCallbackTypes(new Class[]{MethodInterceptor.class, NoOp.class});
-        enhancer.setCallbackFilter(ProxyMaker.IGNORE_BRIDGE_METHODS);
-        setNamingPolicy(enhancer, clazz);
-
-        enhancer.setSerialVersionUID(42L);
+        configureMock(enhancer, clazz, interfaces);
         
         try {
 			@SuppressWarnings("unchecked")  // because of setUseFactory(true)
@@ -96,26 +83,34 @@ public abstract class ProxyMaker {
 				}
 			}
 		};
-		enhancer.setSuperclass(clazz);
-		enhancer.setInterfaces(interfaces);
-		enhancer.setClassLoader(getCombinedClassLoader(clazz, interfaces));
-		enhancer.setCallbackTypes(new Class[] { MethodInterceptor.class, NoOp.class });
-		enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
-		enhancer.setUseFactory(true);
-		setNamingPolicy(enhancer, clazz);
-		enhancer.setSerialVersionUID(43L);
+		configureMock(enhancer, clazz, interfaces);
 		@SuppressWarnings("unchecked")
 		// toMock is Class<T>
-		T proxy = (T) createProxy(enhancer,
-				new Callback[] { interceptor, SerializableNoOp.INSTANCE });
+		T proxy = (T) createProxy(enhancer, interceptor, SerializableNoOp.INSTANCE);
 		return proxy;
 	}
 
 	/** Override this method to configure how the proxy instance should be constructed. */
-	abstract Object createProxy(Enhancer enhancer, Callback[] callbacks);
+	abstract Object createProxy(Enhancer enhancer, Callback... callbacks);
 
 	/** Returns true if {@code constructor} should be used to construct the proxy. */
 	abstract boolean usesConstructor(Constructor<?> constructor);
+
+	private static void configureMock(Enhancer enhancer, Class<?> clazz, Class<?>... interfaces) {
+		if (clazz.isInterface()) {
+            enhancer.setSuperclass(Object.class);
+            enhancer.setInterfaces(prepend(clazz, interfaces));
+        } else {
+            enhancer.setSuperclass(clazz);
+            enhancer.setInterfaces(interfaces);
+        }
+		enhancer.setUseFactory(true);  // We need Factory to check if an instance is a mock.
+		enhancer.setCallbackTypes(new Class[] { MethodInterceptor.class, NoOp.class });
+        enhancer.setCallbackFilter(ProxyMaker.IGNORE_BRIDGE_METHODS);
+		enhancer.setClassLoader(getCombinedClassLoader(clazz, interfaces));
+        setNamingPolicy(enhancer, clazz);
+        enhancer.setSerialVersionUID(42L);
+	}
 
 	private static ClassLoader getCombinedClassLoader(Class<?> mockedType, Class<?>... interfaces) {
 		return SearchingClassLoader.combineLoadersOf(prepend(mockedType, interfaces));
