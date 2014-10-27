@@ -5,7 +5,7 @@ simplier & better mocking
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](http://img.shields.io/coveralls/mockito/mockito/master.svg)](https://coveralls.io/r/mockito/mockito) [ ![Current release](https://api.bintray.com/packages/szczepiq/maven/mockito/images/download.svg) ](https://bintray.com/szczepiq/maven/mockito/_latestVersion) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core)
 
 ## Current release
-See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md).
+See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md) and [latest documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html)
 
 ## JDK8 status
 
