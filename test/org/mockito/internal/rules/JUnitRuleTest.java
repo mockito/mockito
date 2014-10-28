@@ -1,8 +1,12 @@
 package org.mockito.internal.rules;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.Statement;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
@@ -66,5 +70,45 @@ public class JUnitRuleTest {
             MockitoAnnotations.initMocks(injectTestCase);
             injectTestCase.unfinishedStubbingThrowsException();
         }
+    }
+
+    public static class InjectTestCase {
+
+        @Mock
+        private Injected injected;
+
+        @InjectMocks
+        private InjectInto injectInto;
+
+        @Test
+        public void dummy() throws Exception {
+        }
+
+        public void unfinishedStubbingThrowsException() throws Exception {
+            Mockito.when(injected.stringMethod());
+        }
+
+        public Injected getInjected() {
+            return injected;
+        }
+
+        public InjectInto getInjectInto() {
+            return injectInto;
+        }
+
+        public static class Injected {
+            public String stringMethod() {
+                return "string";
+            }
+        }
+
+        public static class InjectInto {
+            private Injected injected;
+
+            public Injected getInjected() {
+                return injected;
+            }
+        }
+
     }
 }
