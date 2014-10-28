@@ -74,4 +74,22 @@ public class StubbingWithDelegate {
             assertThat(e.toString()).doesNotContain("org.mockito");
         }
     }
+
+    @Test
+    public void exception_should_be_propagated_from_delegate() throws Exception {
+        final RuntimeException failure = new RuntimeException("angry-method");
+        IMethods methods = mock(IMethods.class, delegatesTo(new MethodsImpl() {
+            @Override
+            public String simpleMethod() {
+                throw failure;
+            }
+        }));
+
+        try {
+            methods.simpleMethod(); // delegate throws an exception
+            fail();
+        } catch (RuntimeException e) {
+            assertThat(e).isEqualTo(failure);
+        }
+    }
 }

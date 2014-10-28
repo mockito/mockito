@@ -8,6 +8,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -28,6 +29,11 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
 	public Object answer(InvocationOnMock invocation) throws Throwable {
 		Method method = invocation.getMethod() ;
 
-        return method.invoke(delegatedObject, invocation.getArguments());
-	}
+        try {
+            return method.invoke(delegatedObject, invocation.getArguments());
+        } catch (InvocationTargetException e) {
+            // propagate the original exception from the delegate
+            throw e.getCause();
+        }
+    }
 }
