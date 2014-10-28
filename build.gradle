@@ -121,11 +121,17 @@ task allJar(type: Jar) {
     from("lib/run") { exclude '**/*.jar' }
 }
 
+def antCommand = "ant"
+
+if (System.getProperty("os.name").startsWith("Windows")) {
+    antCommand += ".bat"
+}
+
 configure([jar, allJar]) { task ->
     task.rootSpec.exclude "MANIFEST.MF" //hack to avoid problems with bnd
     doLast {
         project.exec {
-            commandLine 'ant', '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
+            commandLine antCommand, '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
         }
     }
 }
