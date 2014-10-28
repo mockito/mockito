@@ -1,3 +1,11 @@
+### 1.10.10 (2014-10-28 07:26 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Szczepan Faber, Ross Black
+* Improvements: 1
+  * Improved exception handling of AdditionalAnswers#delegatesTo [(#113)](https://github.com/mockito/mockito/pull/113)
+
 ### 1.10.9 (2014-10-22 08:51 UTC)
 
 * Authors: 1
