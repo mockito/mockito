@@ -42,7 +42,7 @@ public class StubbingWithDelegate {
         }
         
         public ArrayList<T> subList(int fromIndex, int toIndex) {
-            return new ArrayList<>();
+            return new ArrayList<T>();
         }
     }
     
@@ -52,7 +52,7 @@ public class StubbingWithDelegate {
         }
         
         public Collection<T> subList(int fromIndex, int toIndex) {
-            return new ArrayList<>();
+            return new ArrayList<T>();
         }
     }
 	
@@ -110,7 +110,7 @@ public class StubbingWithDelegate {
     
     @Test
     public void instance_of_different_class_can_be_called() {
-        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<String>()));
         
         mock.set(1, "1");
         assertThat(mock.get(1).equals("1"));
@@ -118,7 +118,7 @@ public class StubbingWithDelegate {
     
     @Test
     public void method_with_subtype_return_can_be_called() {
-        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<String>()));
         
         List<String> subList = mock.subList(0, 0);
         assertThat(subList.isEmpty());
@@ -126,7 +126,7 @@ public class StubbingWithDelegate {
     
     @Test
     public void calling_missing_method_should_throw_exception() {
-        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<String>()));
         
         try {
             mock.isEmpty();
@@ -138,7 +138,7 @@ public class StubbingWithDelegate {
     
     @Test
     public void calling_method_with_wrong_primitive_return_should_throw_exception() {
-        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<>()));
+        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<String>()));
         
         try {
             mock.size();
@@ -150,7 +150,7 @@ public class StubbingWithDelegate {
     
     @Test
     public void calling_method_with_wrong_reference_return_should_throw_exception() {
-        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<>()));
+        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<String>()));
         
         try {
             mock.subList(0, 0);
