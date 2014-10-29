@@ -8,7 +8,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.stubbing.answers.MethodInfo;
+import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -28,21 +31,25 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Method mockMethod = invocation.getMethod();
-
+        
+        Object result = null;
+        
         try {
             Method delegateMethod = getDelegateMethod(mockMethod);
             
             if (!compatibleReturnTypes(mockMethod.getReturnType(), delegateMethod.getReturnType())) {
-                throw new MockitoException("Incompatible return type on delegate method: " + delegateMethod);
+                new Reporter().delegatedMethodHasWrongReturnType(mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }
             
-            return delegateMethod.invoke(delegatedObject, invocation.getArguments());
+            result = delegateMethod.invoke(delegatedObject, invocation.getArguments());
         } catch (NoSuchMethodException e) {
-            throw new MockitoException("Method not found on delegate: " + mockMethod, e);
+            new Reporter().delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);
         } catch (InvocationTargetException e) {
             // propagate the original exception from the delegate
             throw e.getCause();
         }
+        
+        return result;
     }
 
     private Method getDelegateMethod(Method mockMethod) throws NoSuchMethodException {

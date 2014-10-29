@@ -132,7 +132,7 @@ public class StubbingWithDelegate {
             mock.isEmpty();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.toString()).contains("Method not found on delegate");
+            assertThat(e.toString()).contains("Methods called on mock must exist");
         }
     }
     
@@ -144,7 +144,7 @@ public class StubbingWithDelegate {
             mock.size();
             fail();
         } catch (MockitoException e) {
-            assertThat(e.toString()).contains("Incompatible return type on delegate method");
+            assertThat(e.toString()).contains("Methods called on delegated instance must have compatible return type");
         }
     }
     
@@ -156,9 +156,9 @@ public class StubbingWithDelegate {
             mock.subList(0, 0);
             fail();
         } catch (MockitoException e) {
-            assertThat(e.toString()).contains("Incompatible return type on delegate method");
+            assertThat(e.toString()).contains("Methods called on delegated instance must have compatible return type");
         }
-	}
+    }
 
     @Test
     public void exception_should_be_propagated_from_delegate() throws Exception {
