@@ -6,10 +6,12 @@ package org.mockitousage.stubbing;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -22,7 +24,38 @@ import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithDelegate {
-
+   public class FakeList<T> {
+        private T value;
+        
+        public T get(int i) {
+            return value;
+        }
+        
+        public T set(int i, T value) {
+            T oldValue = value;
+            this.value = value;
+            return oldValue;
+        }
+        
+        public int size() {
+            return 10;
+        }
+        
+        public ArrayList<T> subList(int fromIndex, int toIndex) {
+            return new ArrayList<>();
+        }
+    }
+    
+    public class FakeListWithWrongMethods<T> {
+        public double size() {
+            return 10;
+        }
+        
+        public Collection<T> subList(int fromIndex, int toIndex) {
+            return new ArrayList<>();
+        }
+    }
+	
 	@Test
 	public void when_not_stubbed_delegate_should_be_called() {
 		List<String> delegatedList = new ArrayList<String>();
@@ -74,6 +107,58 @@ public class StubbingWithDelegate {
             assertThat(e.toString()).doesNotContain("org.mockito");
         }
     }
+    
+    @Test
+    public void instance_of_different_class_can_be_called() {
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        
+        mock.set(1, "1");
+        assertThat(mock.get(1).equals("1"));
+    }
+    
+    @Test
+    public void method_with_subtype_return_can_be_called() {
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        
+        List<String> subList = mock.subList(0, 0);
+        assertThat(subList.isEmpty());
+    }
+    
+    @Test
+    public void calling_missing_method_should_throw_exception() {
+        List<String> mock = mock(List.class, delegatesTo(new FakeList<>()));
+        
+        try {
+            mock.isEmpty();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.toString()).contains("Method not found on delegate");
+        }
+    }
+    
+    @Test
+    public void calling_method_with_wrong_primitive_return_should_throw_exception() {
+        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<>()));
+        
+        try {
+            mock.size();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.toString()).contains("Incompatible return type on delegate method");
+        }
+    }
+    
+    @Test
+    public void calling_method_with_wrong_reference_return_should_throw_exception() {
+        List<String> mock = mock(List.class, delegatesTo(new FakeListWithWrongMethods<>()));
+        
+        try {
+            mock.subList(0, 0);
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.toString()).contains("Incompatible return type on delegate method");
+        }
+	}
 
     @Test
     public void exception_should_be_propagated_from_delegate() throws Exception {
