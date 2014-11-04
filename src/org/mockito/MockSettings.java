@@ -242,7 +242,7 @@ public interface MockSettings extends Serializable {
 
     /**
      * If the mocked type is non-static inner class, the enclosing instance is needed to
-     * construct the mock, when {@link #useConstructor} is specified.
+     * construct the mock, when {@link #useConstructorIfPossible} is specified.
      *
      * @return settings instance so that you can fluently specify other settings
      */
