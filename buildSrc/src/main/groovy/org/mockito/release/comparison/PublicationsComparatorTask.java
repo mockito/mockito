@@ -27,14 +27,13 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
 
     @TaskAction public void comparePublications() {
         getLogger().lifecycle("{} - about to compare publications", getPath());
+
         boolean poms = pomComparator.areEqual();
-        if (!poms) {
-            getLogger().lifecycle("{} - pom files are not equal", getPath());
-        }
+        getLogger().lifecycle("{} - pom files equal: {}", getPath(), poms);
+
         boolean jars = sourceJarComparator.areEqual();
-        if (!jars) {
-            getLogger().lifecycle("{} - source jars are not equal", getPath());
-        }
+        getLogger().lifecycle("{} - source jars equal: {}", getPath(), jars);
+
         this.publicationsEqual = jars && poms;
     }
 }

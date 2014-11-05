@@ -16,16 +16,16 @@ def dryRun = project.hasProperty('dryRun')
 
 configurations {
     previousSrc
-    prevoiusPom
+    previousPom
 }
 
 dependencies {
     previousSrc "org.mockito:mockito-core:${project.getPreviousVersion()}:sources@jar"
-    prevoiusPom "org.mockito:mockito-core:${project.getPreviousVersion()}@pom"
+    previousPom "org.mockito:mockito-core:${project.getPreviousVersion()}@pom"
 }
 
-task("comparePublications", type: PublicationsComparatorTask) {
-    dependsOn publishToMavenLocal, sourcesJar, previousPublications
+task("comparePublications", type: org.mockito.release.comparison.PublicationsComparatorTask) {
+    dependsOn publishToMavenLocal, sourcesJar
 
     compareSourcesJar({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
     comparePom({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
