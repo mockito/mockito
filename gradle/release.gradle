@@ -39,9 +39,8 @@ task("releaseNeeded") {
     doLast {
         def branch = System.env.TRAVIS_BRANCH
         def pr = System.env.TRAVIS_PULL_REQUEST
-        def publicationsEqual = compareBinaries.markerFile.isFile()
-        ext.needed = dryRun || (pr == 'false' && branch == 'master' && !publicationsEqual)
-        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}.", needed, branch, pr, dryRun, publicationsEqual)
+        ext.needed = dryRun || (pr == 'false' && branch == 'master' && !comparePublications.publicationsEqual)
+        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}.", needed, branch, pr, dryRun, comparePublications.publicationsEqual)
     }
 }
 
