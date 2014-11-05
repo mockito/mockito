@@ -14,77 +14,34 @@ apply from: rootProject.file("gradle/release-notes.gradle")
 
 def dryRun = project.hasProperty('dryRun')
 
-//TODO push out to the buildSrc
-class BinariesComparatorTask extends DefaultTask {
-
-    private final Map<String, Closure> toCheck = [:]
-    File outputDir = new File(project.buildDir, name)
-    File markerFile = new File(outputDir, "binaries-equal.txt")
-
-    void check(String dependency, Closure localFile) {
-        assert dependency.contains("<previous>")
-        toCheck.put(dependency, localFile)
-    }
-
-    @TaskAction compareBinaries() {
-        assert !markerFile.exists() || markerFile.delete()
-        String prev = project.getPreviousVersion()
-        logger.info "{} - comparing current binaries with version {}", path, prev
-
-        def areEqual = true
-        toCheck.each { k,v ->
-            def localFile = v()
-            areEqual = checkBinary(k.replaceAll("<previous>", prev), localFile) && areEqual
-        }
-
-        if (areEqual) {
-            logger.lifecycle "{} - all binaries are equal. Creating {}.", path, markerFile
-            markerFile << "marker file indicating that previous binaries are the same as the current"
-        }
-    }
-
-    boolean checkBinary(String dependency, File current) {
-        if (!current.isFile()) {
-            throw new GradleException("Unable to compare binaries. No file at $current.")
-        }
-        logger.info "{} - comparing {} and {}", path, dependency, current
-        def conf = project.configurations.detachedConfiguration(project.dependencies.create(dependency))
-        def downloaded = conf.singleFile
-        def equal = downloaded.length() == current.length()
-        logger.info "{} - file sizes: {}: {} VS {}: {}", path, dependency, downloaded.length(), current.name, current.length()
-
-
-        logger.info "{} - copying previous binary into {}", path, outputDir
-        project.copy {
-            from downloaded
-            into outputDir
-        }
-
-        logger.lifecycle("{} - '{}' {} {}.", path, dependency, equal? '==':'!=', current.name)
-        equal
-    }
+configurations {
+    previousSrc
+    prevoiusPom
 }
 
-task("compareBinaries", type: BinariesComparatorTask) {
-    dependsOn publishToMavenLocal, sourcesJar
+dependencies {
+    previousSrc "org.mockito:mockito-core:${project.getPreviousVersion()}:sources@jar"
+    prevoiusPom "org.mockito:mockito-core:${project.getPreviousVersion()}@pom"
+}
 
-    check "org.mockito:mockito-core:<previous>:sources@jar", { sourcesJar.archivePath }
-    check "org.mockito:mockito-core:<previous>@pom", { generatePomFileForMockitoCorePublication.destination }
-    check "org.mockito:mockito-all:<previous>:sources@jar", { sourcesJar.archivePath }
-    check "org.mockito:mockito-all:<previous>@pom", { generatePomFileForMockitoAllPublication.destination }
+task("comparePublications", type: PublicationsComparatorTask) {
+    dependsOn publishToMavenLocal, sourcesJar, previousPublications
+
+    compareSourcesJar({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
+    comparePom({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
 }
 
 /*
 Release process should *not* run concurrently.
  */
 task("releaseNeeded") {
-    dependsOn compareBinaries
+    dependsOn comparePublications
     doLast {
         def branch = System.env.TRAVIS_BRANCH
         def pr = System.env.TRAVIS_PULL_REQUEST
-        def binariesEqual = compareBinaries.markerFile.isFile()
-        ext.needed = dryRun || (pr == 'false' && branch == 'master' && !binariesEqual)
-        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, binaries equal: {}.", needed, branch, pr, dryRun, binariesEqual)
+        def publicationsEqual = compareBinaries.markerFile.isFile()
+        ext.needed = dryRun || (pr == 'false' && branch == 'master' && !publicationsEqual)
+        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}.", needed, branch, pr, dryRun, publicationsEqual)
     }
 }
 
