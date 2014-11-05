@@ -9,14 +9,14 @@ class PomComparator {
     private Closure<String> left;
     private Closure<String> right;
 
-    public PomComparator setPair(Closure<String> left, Closure<String> right) {
+    PomComparator setPair(Closure<String> left, Closure<String> right) {
         notNull(left, "pom content to compare", right, "pom content to compare");
         this.left = left;
         this.right = right;
         return this;
     }
 
-    public boolean areEqual() {
+    boolean areEqual() {
         String left = this.left.call();
         String right = this.right.call();
 

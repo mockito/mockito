@@ -13,7 +13,7 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
     private Boolean publicationsEqual;
 
     void compareSourcesJar(Closure<File> left, Closure<File> right) {
-        sourceJarComparator.addPair(left, right);
+        sourceJarComparator.setPair(left, right);
     }
 
     public boolean isPublicationsEqual() {
