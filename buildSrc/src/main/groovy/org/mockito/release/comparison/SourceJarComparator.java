@@ -3,6 +3,7 @@ package org.mockito.release.comparison;
 import groovy.lang.Closure;
 
 import java.io.File;
+import java.util.Arrays;
 
 import static org.mockito.release.util.ArgumentValidation.notNull;
 
@@ -22,6 +23,10 @@ class SourceJarComparator {
         File left = this.left.call();
         File right = this.right.call();
         notNull(left, "source jar file to compare", right, "source jar file to compare");
-        return left.length() == right.length();
+
+        FileHasher hasher = new FileHasher();
+        byte[] leftHash = hasher.hash(left);
+        byte[] rightHash = hasher.hash(right);
+        return Arrays.equals(leftHash, rightHash);
     }
 }
