@@ -4,7 +4,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-class SourceJarComparatorTest extends Specification {
+class BinaryComparatorTest extends Specification {
 
     @Rule TemporaryFolder tmp = new TemporaryFolder()
 
@@ -14,10 +14,10 @@ class SourceJarComparatorTest extends Specification {
         def diff = tmp.newFile() << "asdf\n"
 
         expect:
-        new SourceJarComparator().setPair({file}, {same}).areEqual()
-        new SourceJarComparator().setPair({same}, {file}).areEqual()
+        new BinaryComparator().setPair({file}, {same}).areEqual()
+        new BinaryComparator().setPair({same}, {file}).areEqual()
 
-        !new SourceJarComparator().setPair({file}, {diff}).areEqual()
-        !new SourceJarComparator().setPair({diff}, {file}).areEqual()
+        !new BinaryComparator().setPair({file}, {diff}).areEqual()
+        !new BinaryComparator().setPair({diff}, {file}).areEqual()
     }
 }

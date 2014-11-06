@@ -8,21 +8,21 @@ import java.io.File;
 
 public class PublicationsComparatorTask extends DefaultTask implements PublicationsComparator {
 
-    private SourceJarComparator sourceJarComparator = new SourceJarComparator();
+    private BinaryComparator binaryComparator = new BinaryComparator();
     private PomComparator pomComparator = new PomComparator();
     private Boolean publicationsEqual;
 
-    void compareSourcesJar(Closure<File> left, Closure<File> right) {
-        sourceJarComparator.setPair(left, right);
+    public void compareBinaries(Closure<File> left, Closure<File> right) {
+        binaryComparator.setPair(left, right);
+    }
+
+    public void comparePoms(Closure<String> left, Closure<String> right) {
+        pomComparator.setPair(left, right);
     }
 
     public boolean isPublicationsEqual() {
-        assert publicationsEqual != null : "task not executed yet";
+        assert publicationsEqual != null : "Comparison task was not executed yet, the 'publicationsEqual' information not available.";
         return publicationsEqual;
-    }
-
-    void comparePom(Closure<String> left, Closure<String> right) {
-        pomComparator.setPair(left, right);
     }
 
     @TaskAction public void comparePublications() {
@@ -31,7 +31,7 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
         boolean poms = pomComparator.areEqual();
         getLogger().lifecycle("{} - pom files equal: {}", getPath(), poms);
 
-        boolean jars = sourceJarComparator.areEqual();
+        boolean jars = binaryComparator.areEqual();
         getLogger().lifecycle("{} - source jars equal: {}", getPath(), jars);
 
         this.publicationsEqual = jars && poms;

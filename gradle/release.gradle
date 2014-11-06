@@ -27,8 +27,8 @@ dependencies {
 task("comparePublications", type: org.mockito.release.comparison.PublicationsComparatorTask) {
     dependsOn publishToMavenLocal, sourcesJar
 
-    compareSourcesJar({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
-    comparePom({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
+    compareBinaries({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
+    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
 }
 
 /*
