@@ -767,4 +767,8 @@ public class Reporter {
                 ""
         ));
     }
+
+    public void enclosingInstanceDoesNotAcceptNullParameter() {
+    	throw new MockitoException("enclosingInstance() does not accept null parameter");
+    }
 }
