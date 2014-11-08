@@ -119,7 +119,7 @@ Finally, thanks to **Erik Brakkee** who helps us getting jars to maven central
 * [Mockito for python](https://code.google.com/p/mockito/wiki/MockitoForPython)
 * [Mockito VS EasyMock](https://code.google.com/p/mockito/wiki/MockitoVSEasyMock)
 * [Related projects](https://code.google.com/p/mockito/wiki/RelatedProjects)
-* [Release notes](https://github.com/mockito/mockito/wiki/Release%20Notes)
+* [Release notes](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md)
 * [More wiki pages](https://github.com/mockito/mockito/wiki)
 * [Old wiki pages on google code](https://code.google.com/p/mockito/w/list)
 
