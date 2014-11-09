@@ -62,7 +62,7 @@ import static org.mockito.internal.util.StringJoiner.join;
 @Incubating
 class AcrossJVMSerializationFeature implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
-    private static final String MOCKITO_PROXY_MARKER = "MockitoProxyMarker";
+    private static final String MOCKITO_PROXY_MARKER = "ByteBuddyMockitoProxyMarker";
     private boolean instanceLocalCurrentlySerializingFlag = false;
     private final Lock mutex = new ReentrantLock();
 
