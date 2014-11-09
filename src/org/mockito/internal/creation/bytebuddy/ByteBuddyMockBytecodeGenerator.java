@@ -12,12 +12,15 @@ import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
 import net.bytebuddy.modifier.FieldManifestation;
 import net.bytebuddy.modifier.Ownership;
 import net.bytebuddy.modifier.Visibility;
-import org.mockito.internal.creation.jmock.SearchingClassLoader;
+import org.mockito.internal.creation.util.SearchingClassLoader;
 
 import java.util.Random;
 import java.util.Set;
 
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.*;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.any;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDeclaredBy;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
 
 /**
 *

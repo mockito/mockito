@@ -1,8 +1,14 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.*;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.AllArguments;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Argument;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.BindingPriority;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.DefaultCall;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Origin;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.RuntimeType;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.SuperCall;
+import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.This;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.AcrossJVMSerializationFeature;
 import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
