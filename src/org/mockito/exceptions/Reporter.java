@@ -22,12 +22,11 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
-
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.util.StringJoiner.join;
 
@@ -767,4 +766,24 @@ public class Reporter {
                 ""
         ));
     }
+    
+    public void delegatedMethodHasWrongReturnType(Method mockMethod, Method delegateMethod, Object mock, Object delegate) {
+    	throw new MockitoException(join(
+    	        "Methods called on delegated instance must have compatible return types with the mock.",
+    	        "When calling: " + mockMethod + " on mock: " + new MockUtil().getMockName(mock),
+    	        "return type should be: " + mockMethod.getReturnType().getSimpleName() + ", but was: " + delegateMethod.getReturnType().getSimpleName(),
+    	        "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
+    	        "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
+    	));
+    }
+
+	public void delegatedMethodDoesNotExistOnDelegate(Method mockMethod, Object mock, Object delegate) {
+		throw new MockitoException(join(
+    	        "Methods called on mock must exist in delegated instance.",
+    	        "When calling: " + mockMethod + " on mock: " + new MockUtil().getMockName(mock),
+    	        "no such method was found.",
+    	        "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
+    	        "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
+    	));
+	}
 }
