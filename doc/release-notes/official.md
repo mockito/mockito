@@ -1,3 +1,13 @@
+### 1.10.11 (2014-11-15 17:46 UTC)
+
+* Authors: 3
+* Commits: 23
+  * 17: Szczepan Faber
+  * 3: Marcin Zajaczkowski, David Maciver
+* Improvements: 1
+  * Other: 1
+    * Allow instances of other classes in AdditionalAnswers.delegatesTo [(#112)](https://github.com/mockito/mockito/issues/112)
+
 ### 1.10.10 (2014-10-28 07:26 UTC)
 
 * Authors: 2
