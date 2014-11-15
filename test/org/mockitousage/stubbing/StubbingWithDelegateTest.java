@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
-public class StubbingWithDelegate {
+public class StubbingWithDelegateTest {
    public class FakeList<T> {
         private T value;
         
