@@ -11,6 +11,12 @@ class ZipComparator {
     private Closure<File> file1;
     private Closure<File> file2;
 
+    private final ZipCompare zipCompare;
+
+    ZipComparator(ZipCompare zipCompare) {
+        this.zipCompare = zipCompare;
+    }
+
     ZipComparator setPair(Closure<File> file1, Closure<File> file2) {
         notNull(file1, "zip/jar file to compare", file2, "zip/jar file to compare");
         this.file1 = file1;
@@ -23,7 +29,7 @@ class ZipComparator {
         final File file2 = this.file2.call();
         notNull(file1, "zip/jar file to compare", file2, "zip/jar file to compare");
 
-        final boolean equals = new ZipCompare().compareZips(file1.getAbsolutePath(), file2.getAbsolutePath());
+        final boolean equals = zipCompare.compareZips(file1.getAbsolutePath(), file2.getAbsolutePath());
 
         return new Result() {
             public boolean areEqual() { return equals; }

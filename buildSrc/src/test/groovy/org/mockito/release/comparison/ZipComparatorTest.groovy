@@ -5,31 +5,38 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
 class ZipComparatorTest extends Specification {
 
     @Rule TemporaryFolder tmp = new TemporaryFolder()
+    def compare = Mock(ZipCompare)
 
     def "compares files"() {
-        def file = tmp.newFile() << "asdf"
-        def same = tmp.newFile() << "asdf"
-        def diff = tmp.newFile() << "asdf\n"
+        def f1 = tmp.newFile()
+        def f2 = tmp.newFile()
 
-        expect:
-        new ZipComparator().setPair({file}, {same}).compareFiles().areEqual()
-        new ZipComparator().setPair({same}, {file}).compareFiles().areEqual()
+        when: def result = new ZipComparator(compare).setPair({ f1 }, { f2 }).compareFiles()
 
-        !new ZipComparator().setPair({file}, {diff}).compareFiles().areEqual()
-        !new ZipComparator().setPair({diff}, {file}).compareFiles().areEqual()
+        then:
+        1 * compare.compareZips(f1.absolutePath, f2.absolutePath) >> true
+        0 * _
+
+        and:
+        result.areEqual()
     }
 
-    def "provides file information"() {
+    def "detects not equal zips"() {
         def f1 = tmp.newFile() << "asdf"
         def f2 = tmp.newFile() << "asdf\n"
-        def result = new ZipComparator().setPair({ f1 }, { f2 }).compareFiles()
 
-        expect:
+        when:
+        def result = new ZipComparator(compare).setPair({ f1 }, { f2 }).compareFiles()
+
+        then:
         result.file1.absolutePath == f1.absolutePath
         result.file2.absolutePath == f2.absolutePath
+
+        and:
+        1 * compare.compareZips(f1.absolutePath, f2.absolutePath) >> false
+        !result.areEqual()
     }
 }
