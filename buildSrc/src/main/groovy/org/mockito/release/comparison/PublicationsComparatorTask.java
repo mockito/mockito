@@ -31,8 +31,11 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
         boolean poms = pomComparator.areEqual();
         getLogger().lifecycle("{} - pom files equal: {}", getPath(), poms);
 
-        boolean jars = binaryComparator.areEqual();
+        BinaryComparator.Result result = binaryComparator.compareFiles();
+        getLogger().info("{} - compared binaries: '{}' and '{}'", getPath(), result.getFile1(), result.getFile2());
+        boolean jars = result.areEqual();
         getLogger().lifecycle("{} - source jars equal: {}", getPath(), jars);
+
 
         this.publicationsEqual = jars && poms;
     }
