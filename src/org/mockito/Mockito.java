@@ -894,7 +894,10 @@ import org.mockito.verification.VerificationWithTimeout;
  * <h3 id="27">27. <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
  *
  * <p>Useful for spies or partial mocks of objects <strong>that are difficult to mock or spy</strong> using the usual spy API.
- * Possible use cases:
+ * Since Mockito 1.10.11, the delegate may or may not be of the same type as the mock.
+ * If the type is different, a matching method needs to be found on delegate type otherwise an exception is thrown.
+ *
+ * Possible use cases for this feature:
  * <ul>
  *     <li>Final classes but with an interface</li>
  *     <li>Already custom proxied object</li>
