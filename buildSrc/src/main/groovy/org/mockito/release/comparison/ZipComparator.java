@@ -23,10 +23,6 @@ class ZipComparator {
         final File file2 = this.file2.call();
         notNull(file1, "zip/jar file to compare", file2, "zip/jar file to compare");
 
-        FileHasher hasher = new FileHasher();
-        final byte[] hash1 = hasher.hash(file1);
-        final byte[] hash2 = hasher.hash(file2);
-
         final boolean equals = new ZipCompare().compareZips(file1.getAbsolutePath(), file2.getAbsolutePath());
 
         return new Result() {
