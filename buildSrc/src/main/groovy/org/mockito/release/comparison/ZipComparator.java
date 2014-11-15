@@ -12,7 +12,7 @@ class ZipComparator {
     private Closure<File> file2;
 
     ZipComparator setPair(Closure<File> file1, Closure<File> file2) {
-        notNull(file1, "source jar file to compare", file2, "source jar file to compare");
+        notNull(file1, "zip/jar file to compare", file2, "zip/jar file to compare");
         this.file1 = file1;
         this.file2 = file2;
         return this;
@@ -21,7 +21,7 @@ class ZipComparator {
     Result compareFiles() {
         final File file1 = this.file1.call();
         final File file2 = this.file2.call();
-        notNull(file1, "source jar file to compare", file2, "source jar file to compare");
+        notNull(file1, "zip/jar file to compare", file2, "zip/jar file to compare");
 
         FileHasher hasher = new FileHasher();
         final byte[] hash1 = hasher.hash(file1);
