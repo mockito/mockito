@@ -8,12 +8,12 @@ import java.io.File;
 
 public class PublicationsComparatorTask extends DefaultTask implements PublicationsComparator {
 
-    private BinaryComparator binaryComparator = new BinaryComparator();
+    private ZipComparator zipComparator = new ZipComparator();
     private PomComparator pomComparator = new PomComparator();
     private Boolean publicationsEqual;
 
     public void compareBinaries(Closure<File> left, Closure<File> right) {
-        binaryComparator.setPair(left, right);
+        zipComparator.setPair(left, right);
     }
 
     public void comparePoms(Closure<String> left, Closure<String> right) {
@@ -31,7 +31,7 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
         boolean poms = pomComparator.areEqual();
         getLogger().lifecycle("{} - pom files equal: {}", getPath(), poms);
 
-        BinaryComparator.Result result = binaryComparator.compareFiles();
+        ZipComparator.Result result = zipComparator.compareFiles();
         getLogger().info("{} - compared binaries: '{}' and '{}'", getPath(), result.getFile1(), result.getFile2());
         boolean jars = result.areEqual();
         getLogger().lifecycle("{} - source jars equal: {}", getPath(), jars);

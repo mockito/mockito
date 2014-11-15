@@ -3,16 +3,15 @@ package org.mockito.release.comparison;
 import groovy.lang.Closure;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static org.mockito.release.util.ArgumentValidation.notNull;
 
-class BinaryComparator {
+class ZipComparator {
 
     private Closure<File> file1;
     private Closure<File> file2;
 
-    BinaryComparator setPair(Closure<File> file1, Closure<File> file2) {
+    ZipComparator setPair(Closure<File> file1, Closure<File> file2) {
         notNull(file1, "source jar file to compare", file2, "source jar file to compare");
         this.file1 = file1;
         this.file2 = file2;

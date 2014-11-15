@@ -6,7 +6,7 @@ import spock.lang.Ignore
 import spock.lang.Specification
 
 @Ignore
-class BinaryComparatorTest extends Specification {
+class ZipComparatorTest extends Specification {
 
     @Rule TemporaryFolder tmp = new TemporaryFolder()
 
@@ -16,17 +16,17 @@ class BinaryComparatorTest extends Specification {
         def diff = tmp.newFile() << "asdf\n"
 
         expect:
-        new BinaryComparator().setPair({file}, {same}).compareFiles().areEqual()
-        new BinaryComparator().setPair({same}, {file}).compareFiles().areEqual()
+        new ZipComparator().setPair({file}, {same}).compareFiles().areEqual()
+        new ZipComparator().setPair({same}, {file}).compareFiles().areEqual()
 
-        !new BinaryComparator().setPair({file}, {diff}).compareFiles().areEqual()
-        !new BinaryComparator().setPair({diff}, {file}).compareFiles().areEqual()
+        !new ZipComparator().setPair({file}, {diff}).compareFiles().areEqual()
+        !new ZipComparator().setPair({diff}, {file}).compareFiles().areEqual()
     }
 
     def "provides file information"() {
         def f1 = tmp.newFile() << "asdf"
         def f2 = tmp.newFile() << "asdf\n"
-        def result = new BinaryComparator().setPair({ f1 }, { f2 }).compareFiles()
+        def result = new ZipComparator().setPair({ f1 }, { f2 }).compareFiles()
 
         expect:
         result.file1.absolutePath == f1.absolutePath
