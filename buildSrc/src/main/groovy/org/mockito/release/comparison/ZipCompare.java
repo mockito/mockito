@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+//TODO SF - borrowed code, not very nice, should not write to system out and should throw decent exceptions
 class ZipCompare {
 
     boolean compareZips(String filePath1, String filePath2) {
