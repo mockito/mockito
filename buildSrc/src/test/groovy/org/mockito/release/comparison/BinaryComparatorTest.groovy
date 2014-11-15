@@ -2,8 +2,10 @@ package org.mockito.release.comparison
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import spock.lang.Ignore
 import spock.lang.Specification
 
+@Ignore
 class BinaryComparatorTest extends Specification {
 
     @Rule TemporaryFolder tmp = new TemporaryFolder()

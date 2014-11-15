@@ -28,7 +28,7 @@ class BinaryComparator {
         final byte[] hash1 = hasher.hash(file1);
         final byte[] hash2 = hasher.hash(file2);
 
-        final boolean equals = Arrays.equals(hash1, hash2);
+        final boolean equals = new ZipCompare().compareZips(file1.getAbsolutePath(), file2.getAbsolutePath());
 
         return new Result() {
             public boolean areEqual() { return equals; }
