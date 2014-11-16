@@ -21,6 +21,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);            
         if (values == null) {
+            //TODO below does not seem right
             return stubbing.thenReturn(null);
         }
         for (T v: values) {
