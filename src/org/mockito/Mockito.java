@@ -947,9 +947,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</a></h3>
  *
- * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}.
+ * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
  * Previously, spying was only possible on instances of objects.
  * New API makes it possible to use constructor when creating an instance of the mock.
@@ -961,10 +961,12 @@ import org.mockito.verification.VerificationWithTimeout;
  *   SomeAbstract spy = spy(SomeAbstract.class);
  *
  *   //Robust API, via settings builder:
- *   OtherAbstract spy = mock(OtherAbstract.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+ *   OtherAbstract spy = mock(OtherAbstract.class, withSettings()
+ *      .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
  *
  *   //Mocking a non-static inner abstract class:
- *   InnerAbstract spy = mock(InnerAbstract.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+ *   InnerAbstract spy = mock(InnerAbstract.class, withSettings()
+ *      .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
  * </code></pre>
  *
  * For more information please see {@link MockSettings#useConstructor()}.
@@ -1385,10 +1387,12 @@ public class Mockito extends Matchers {
      *   SomeAbstract spy = spy(SomeAbstract.class);
      *
      *   //Robust API, via settings builder:
-     *   OtherAbstract spy = mock(OtherAbstract.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+     *   OtherAbstract spy = mock(OtherAbstract.class, withSettings()
+     *      .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
      *
      *   //Mocking a non-static inner abstract class:
-     *   InnerAbstract spy = mock(InnerAbstract.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     *   InnerAbstract spy = mock(InnerAbstract.class, withSettings()
+     *      .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
      * </code></pre>
      *
      * @param classToSpy the class to spy

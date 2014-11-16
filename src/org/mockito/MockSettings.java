@@ -238,10 +238,12 @@ public interface MockSettings extends Serializable {
      * Example:
      * <pre class="code"><code class="java">
      * //Robust API, via settings builder:
-     * OtherAbstract spy = mock(OtherAbstract.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+     * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
+     *   .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
      *
      * //Mocking a non-static inner abstract class:
-     * InnerAbstract spy = mock(InnerAbstract.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
+     *   .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
      * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
@@ -253,7 +255,8 @@ public interface MockSettings extends Serializable {
      * <p>
      * Example:
      * <pre class="code"><code class="java">
-     * InnerClass mock = mock(InnerClass.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     * InnerClass mock = mock(InnerClass.class, withSettings()
+     *   .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
      * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
