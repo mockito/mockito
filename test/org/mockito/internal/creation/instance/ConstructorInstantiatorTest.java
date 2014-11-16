@@ -1,6 +1,5 @@
 package org.mockito.internal.creation.instance;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -8,6 +7,9 @@ public class ConstructorInstantiatorTest extends TestBase {
 
     static class SomeClass {}
     class SomeInnerClass {}
+    static class SomeClass2 {
+        SomeClass2(String x) {}
+    }
 
     @Test public void creates_instances() {
         assertEquals(new ConstructorInstantiator(null).newInstance(SomeClass.class).getClass(), SomeClass.class);
@@ -17,13 +19,12 @@ public class ConstructorInstantiatorTest extends TestBase {
         assertEquals(new ConstructorInstantiator(this).newInstance(SomeInnerClass.class).getClass(), SomeInnerClass.class);
     }
 
-    @Ignore //TODO SF
     @Test public void explains_when_constructor_cannot_be_found() {
-        fail();
-    }
-
-    @Ignore //TODO SF
-    @Test public void fails_with_graceful_message() {
-        fail();
+        try {
+            new ConstructorInstantiator(null).newInstance(SomeClass2.class);
+            fail();
+        } catch (InstantationException e) {
+            assertEquals("Please ensure it has parameter-less constructor.", e.getMessage());
+        }
     }
 }

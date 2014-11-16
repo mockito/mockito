@@ -9,6 +9,7 @@ import org.mockito.cglib.core.NamingPolicy;
 import org.mockito.cglib.core.Predicate;
 import org.mockito.cglib.proxy.*;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.instance.InstantationException;
 import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.creation.util.SearchingClassLoader;
 
@@ -137,7 +138,12 @@ class ClassImposterizer {
     }
     
     private Object createProxy(Class<Factory> proxyClass, final MethodInterceptor interceptor) {
-        Factory proxy = instantiator.newInstance(proxyClass);
+        Factory proxy;
+        try {
+            proxy = instantiator.newInstance(proxyClass);
+        } catch (InstantationException e) {
+            throw new MockitoException("Unable to create mock instance of type '" + proxyClass.getSuperclass().getSimpleName() + "'", e);
+        }
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
         return proxy;
     }

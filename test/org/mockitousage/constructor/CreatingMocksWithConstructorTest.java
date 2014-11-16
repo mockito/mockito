@@ -48,6 +48,23 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         assertEquals("hey!", mock.getMessage());
     }
 
+    static class HasConstructor {
+        HasConstructor(String x) {}
+    }
+
+    @Test
+    public void exception_message_when_constructor_not_found() {
+        try {
+            //when
+            spy(HasConstructor.class);
+            //then
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("Unable to create mock instance of type 'HasConstructor'", e.getMessage());
+            assertContains("Please ensure it has parameter-less constructor", e.getCause().getMessage());
+        }
+    }
+
     @Test
     @Ignore //TODO SF
     public void mocking_inner_classes_with_wrong_outer_instance() {
