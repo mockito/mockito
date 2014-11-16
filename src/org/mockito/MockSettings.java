@@ -247,7 +247,9 @@ public interface MockSettings extends Serializable {
      * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
+     * @since 1.10.12
      */
+    @Incubating
     MockSettings useConstructor();
 
     /**
@@ -260,6 +262,8 @@ public interface MockSettings extends Serializable {
      * </code></pre>
      *
      * @return settings instance so that you can fluently specify other settings
+     * @since 1.10.12
      */
+    @Incubating
     MockSettings outerInstance(Object outerClassInstance);
 }

@@ -1398,7 +1398,9 @@ public class Mockito extends Matchers {
      * @param classToSpy the class to spy
      * @param <T> type of the spy
      * @return a spy of the provided class
+     * @since 1.10.12
      */
+    @Incubating
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(classToSpy, withSettings()
                 .useConstructor()

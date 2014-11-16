@@ -67,13 +67,17 @@ public interface MockCreationSettings<T> {
 
     /**
      * Informs whether the mock instance should be created via constructor
+     *
+     * @since 1.10.12
      */
+    @Incubating
     boolean isUsingConstructor();
 
     /**
      * Used when mocking non-static inner classes in conjunction with {@link #isUsingConstructor()}
      *
      * @return the outer class instance used for creation of the mock object via the constructor.
+     * @since 1.10.12
      */
     @Incubating
     Object getOuterClassInstance();
