@@ -60,6 +60,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. (new) BDD style verification (Since 1.10.0)</a><br/>
+ *      <a href="#30">30. (new) Spying or mocking abstract classes (Since 1.10.12)</a><br/>
  * </b>
  *
  * <p>
@@ -943,6 +944,30 @@ import org.mockito.verification.VerificationWithTimeout;
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
  * For more information and an example see {@link BDDMockito}.
+ *
+ *
+ *
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</h3>
+ *
+ * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}.
+ * <p>
+ * Previously, spying was only possible on instances of objects.
+ * New API makes it possible to use constructor when creating an instance of the mock.
+ * This is particularly useful for mocking abstract classes because the user is no longer required to provide an instance of the abstract class.
+ * At the moment, only parameter-less constructor is supported, let us know if it is not enough.
+ *
+ * <pre class="code"><code class="java">
+ *   //convenience API, new overloaded spy() method:
+ *   SomeAbstract spy = spy(SomeAbstract.class);
+ *
+ *   //Robust API, via settings builder:
+ *   OtherAbstract spy = mock(OtherAbstract.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+ *
+ *   //Mocking a non-static inner abstract class:
+ *   InnerAbstract spy = mock(InnerAbstract.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+ * </code></pre>
+ *
+ * For more information please see {@link MockSettings#useConstructor()}.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends Matchers {
@@ -1343,6 +1368,36 @@ public class Mockito extends Matchers {
     public static <T> T spy(T object) {
         return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
+                .defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Please refer to the documentation of {@link #spy(Object)}.
+     * Overusing spies hints at code design smells.
+     * <p>
+     * This method, in contrast to the original {@link #spy(Object)}, creates a spy based on class instead of an object.
+     * Sometimes it is more convenient to create spy based on the class and avoid providing an instance of a spied object.
+     * This is particularly useful for spying on abstract classes because they cannot be instantiated.
+     * See also {@link MockSettings#useConstructor()}.
+     * <p>
+     * Examples:
+     * <pre class="code"><code class="java">
+     *   SomeAbstract spy = spy(SomeAbstract.class);
+     *
+     *   //Robust API, via settings builder:
+     *   OtherAbstract spy = mock(OtherAbstract.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+     *
+     *   //Mocking a non-static inner abstract class:
+     *   InnerAbstract spy = mock(InnerAbstract.class, withSettings().useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     * </code></pre>
+     *
+     * @param classToSpy the class to spy
+     * @param <T> type of the spy
+     * @return a spy of the provided class
+     */
+    public static <T> T spy(Class<T> classToSpy) {
+        return MOCKITO_CORE.mock(classToSpy, withSettings()
+                .useConstructor()
                 .defaultAnswer(CALLS_REAL_METHODS));
     }
 

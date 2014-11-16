@@ -6,9 +6,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
+import static org.mockito.Mockito.*;
 
 public class CreatingMocksWithConstructorTest extends TestBase {
 
@@ -35,15 +33,18 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     @Test
     public void can_mock_abstract_classes() {
         AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
-        //the message is a part of state of the mocked type that gets initialized in constructor
+        assertEquals("hey!", mock.getMessage());
+    }
+
+    @Test
+    public void can_spy_abstract_classes() {
+        AbstractMessage mock = spy(AbstractMessage.class);
         assertEquals("hey!", mock.getMessage());
     }
 
     @Test
     public void can_mock_inner_classes() {
         InnerClass mock = mock(InnerClass.class, withSettings().useConstructor().outerInstance(this).defaultAnswer(CALLS_REAL_METHODS));
-
-        //the message is a part of state of the mocked type that gets initialized in constructor
         assertEquals("hey!", mock.getMessage());
     }
 
