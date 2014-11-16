@@ -10,7 +10,7 @@ import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
-public class CreatingMocksWithConstructor extends TestBase {
+public class CreatingMocksWithConstructorTest extends TestBase {
 
     static abstract class AbstractMessage {
         private final String message;
