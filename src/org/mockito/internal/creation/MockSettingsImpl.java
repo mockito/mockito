@@ -28,6 +28,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     private static final long serialVersionUID = 4475297236197939569L;
     private boolean useConstructor;
+    private Object outerClassInstance;
 
     public MockSettings serializable() {
         return serializable(SerializableMode.BASIC);
@@ -98,8 +99,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
+    public MockSettings outerInstance(Object outerClassInstance) {
+        this.outerClassInstance = outerClassInstance;
+        return this;
+    }
+
     public boolean isUsingConstructor() {
         return useConstructor;
+    }
+
+    public Object getOuterClassInstance() {
+        return outerClassInstance;
     }
 
     public boolean isStubOnly() {

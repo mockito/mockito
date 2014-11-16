@@ -8,7 +8,7 @@ public class InstantiatorProvider {
 
     public Instantiator getInstantiator(MockCreationSettings settings) {
         if (settings.isUsingConstructor()) {
-            return new ConstructorInstantiator();
+            return new ConstructorInstantiator(settings.getOuterClassInstance());
         } else {
             return INSTANCE;
         }

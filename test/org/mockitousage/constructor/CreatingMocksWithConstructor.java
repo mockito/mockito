@@ -13,13 +13,17 @@ import static org.mockito.Mockito.withSettings;
 public class CreatingMocksWithConstructor extends TestBase {
 
     static abstract class AbstractMessage {
-        String message = "hey!";
+        private final String message;
+        AbstractMessage() {
+            this.message = "hey!";
+        }
         String getMessage() {
             return message;
         }
     }
 
     static class Message extends AbstractMessage {}
+    class InnerClass extends AbstractMessage {}
 
     @Test
     public void can_create_mock_with_constructor() {
@@ -33,6 +37,20 @@ public class CreatingMocksWithConstructor extends TestBase {
         AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
         //the message is a part of state of the mocked type that gets initialized in constructor
         assertEquals("hey!", mock.getMessage());
+    }
+
+    @Test
+    public void can_mock_inner_classes() {
+        InnerClass mock = mock(InnerClass.class, withSettings().useConstructor().outerInstance(this).defaultAnswer(CALLS_REAL_METHODS));
+
+        //the message is a part of state of the mocked type that gets initialized in constructor
+        assertEquals("hey!", mock.getMessage());
+    }
+
+    @Test
+    @Ignore //TODO SF
+    public void mocking_inner_classes_with_wrong_outer_instance() {
+        fail();
     }
 
     @Test

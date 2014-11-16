@@ -61,12 +61,20 @@ public interface MockCreationSettings<T> {
     boolean isStubOnly();
 
     /**
-     * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
+     * The invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();
 
     /**
-     * informs whether the mock instance should be created via constructor
+     * Informs whether the mock instance should be created via constructor
      */
     boolean isUsingConstructor();
+
+    /**
+     * Used when mocking non-static inner classes in conjunction with {@link #isUsingConstructor()}
+     *
+     * @return the outer class instance used for creation of the mock object via the constructor.
+     */
+    @Incubating
+    Object getOuterClassInstance();
 }

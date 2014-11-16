@@ -70,7 +70,7 @@ public class ClassImposterizerTest extends TestBase {
 
     @Test
     public void shouldCreateClassByConstructor() {
-        imposterizer = new ClassImposterizer(new ConstructorInstantiator());
+        imposterizer = new ClassImposterizer(new ConstructorInstantiator(null));
         OtherClass mock = imposterizer.imposterise(new MethodInterceptorStub(), OtherClass.class);
         assertNotNull(mock);
     }

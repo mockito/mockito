@@ -233,6 +233,15 @@ public interface MockSettings extends Serializable {
 
     /**
      * Mockito attempts to use constructor when creating instance of the mock.
+     *
+     * @return settings instance so that you can fluently specify other settings
      */
     MockSettings useConstructor();
+
+    /**
+     * Useful for mocking non-static inner classes in conjunction with {@link #useConstructor()}
+     *
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings outerInstance(Object outerClassInstance);
 }
