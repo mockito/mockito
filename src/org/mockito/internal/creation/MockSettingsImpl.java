@@ -172,7 +172,9 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
 
         validator.validateSerializable(typeToMock, source.isSerializable());
+        validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
 
+        //TODO SF - I don't think we really need CreationSettings type
         CreationSettings<T> settings = new CreationSettings<T>(source);
         settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
         settings.setTypeToMock(typeToMock);

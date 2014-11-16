@@ -3,6 +3,7 @@ package org.mockitousage.constructor;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -87,8 +88,14 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
-    @Ignore //TODO SF
     public void prevents_across_jvm_serialization_with_constructor() {
-        fail();
+        try {
+            //when
+            mock(AbstractMessage.class, withSettings().useConstructor().serializable(SerializableMode.ACROSS_CLASSLOADERS));
+            //then
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("Mocks instantiated with constructor cannot be combined with " + SerializableMode.ACROSS_CLASSLOADERS + " serialization mode.", e.getMessage());
+        }
     }
 }

@@ -22,6 +22,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.SerializableMode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -788,4 +789,8 @@ public class Reporter {
     	        "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
     	));
 	}
+
+    public void usingConstructorWithFancySerializable(SerializableMode mode) {
+        throw new MockitoException("Mocks instantiated with constructor cannot be combined with " + mode + " serialization mode.");
+    }
 }

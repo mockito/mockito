@@ -6,6 +6,7 @@ package org.mockito.internal.util;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.reflection.Constructors;
+import org.mockito.mock.SerializableMode;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -61,6 +62,12 @@ public class MockCreationValidator {
                 && Constructors.noArgConstructorOf(classToMock) == null
                 ) {
             new Reporter().serializableWontWorkForObjectsThatDontImplementSerializable(classToMock);
+        }
+    }
+
+    public void validateConstructorUse(boolean usingConstructor, SerializableMode mode) {
+        if (usingConstructor && mode == SerializableMode.ACROSS_CLASSLOADERS) {
+            new Reporter().usingConstructorWithFancySerializable(mode);
         }
     }
 }
