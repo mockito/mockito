@@ -10,6 +10,7 @@ import org.mockito.cglib.proxy.MethodInterceptor;
 import org.mockito.cglib.proxy.MethodProxy;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.creation.instance.InstantiatorProvider;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ import static org.hamcrest.CoreMatchers.is;
 @SuppressWarnings("unchecked")
 public class ClassImposterizerTest extends TestBase {
 
-    ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
+    ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator(new CreationSettings()));
 
     @Test
     public void shouldCreateMockFromInterface() throws Exception {

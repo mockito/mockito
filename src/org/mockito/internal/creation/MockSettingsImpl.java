@@ -27,6 +27,7 @@ import static org.mockito.internal.util.collections.Sets.newSet;
 public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {
 
     private static final long serialVersionUID = 4475297236197939569L;
+    private boolean useConstructor;
 
     public MockSettings serializable() {
         return serializable(SerializableMode.BASIC);
@@ -90,6 +91,15 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     public MockSettingsImpl stubOnly() {
         this.stubOnly = true;
         return this;
+    }
+
+    public MockSettings useConstructor() {
+        this.useConstructor = true;
+        return this;
+    }
+
+    public boolean isUsingConstructor() {
+        return useConstructor;
     }
 
     public boolean isStubOnly() {

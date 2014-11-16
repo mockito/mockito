@@ -64,4 +64,9 @@ public interface MockCreationSettings<T> {
      * the invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();
+
+    /**
+     * informs whether the mock instance should be created via constructor
+     */
+    boolean isUsingConstructor();
 }

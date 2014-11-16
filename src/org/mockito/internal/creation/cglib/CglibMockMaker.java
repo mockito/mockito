@@ -21,7 +21,7 @@ public final class CglibMockMaker implements MockMaker {
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         InternalMockHandler mockitoHandler = cast(handler);
         new AcrossJVMSerializationFeature().enableSerializationAcrossJVM(settings);
-        return new ClassImposterizer(new InstantiatorProvider().getInstantiator()).imposterise(
+        return new ClassImposterizer(new InstantiatorProvider().getInstantiator(settings)).imposterise(
                 new MethodInterceptorFilter(mockitoHandler, settings), settings.getTypeToMock(), settings.getExtraInterfaces());
     }
 

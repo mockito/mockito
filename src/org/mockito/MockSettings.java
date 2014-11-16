@@ -230,4 +230,9 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings stubOnly();
+
+    /**
+     * Mockito attempts to use constructor when creating instance of the mock.
+     */
+    MockSettings useConstructor();
 }

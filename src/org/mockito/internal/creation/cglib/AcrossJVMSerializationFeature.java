@@ -8,6 +8,7 @@ package org.mockito.internal.creation.cglib;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.creation.instance.InstantiatorProvider;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.mock.MockCreationSettings;
@@ -303,8 +304,8 @@ class AcrossJVMSerializationFeature implements Serializable {
             // ClassImposterizer.INSTANCE.canImposterise(typeToMock);
 
             // create the Mockito mock class before it can even be deserialized
-            //TODO SF unify creation of imposterizer, constructor code duplicated
-            ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator());
+            //TODO SF unify creation of imposterizer, constructor code duplicated, pulling in CreationSettings internal class
+            ClassImposterizer imposterizer = new ClassImposterizer(new InstantiatorProvider().getInstantiator(new CreationSettings()));
             imposterizer.setConstructorsAccessible(typeToMock, true);
             Class<?> proxyClass = imposterizer.createProxyClass(
                     typeToMock,
