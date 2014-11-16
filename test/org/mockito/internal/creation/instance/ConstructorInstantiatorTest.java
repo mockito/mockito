@@ -24,7 +24,8 @@ public class ConstructorInstantiatorTest extends TestBase {
             new ConstructorInstantiator(null).newInstance(SomeClass2.class);
             fail();
         } catch (InstantationException e) {
-            assertEquals("Please ensure it has parameter-less constructor.", e.getMessage());
+            assertEquals("Unable to create mock instance of 'SomeClass2'.\n" +
+                    "Please ensure it has parameter-less constructor.", e.getMessage());
         }
     }
 }

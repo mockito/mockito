@@ -66,9 +66,16 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
-    @Ignore //TODO SF
     public void mocking_inner_classes_with_wrong_outer_instance() {
-        fail();
+        try {
+            //when
+            mock(InnerClass.class, withSettings().useConstructor().outerInstance("foo").defaultAnswer(CALLS_REAL_METHODS));
+            //then
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("Unable to create mock instance of type 'InnerClass'", e.getMessage());
+            assertContains("Please ensure that the outer instance has correct type and that the target class has parameter-less constructor", e.getCause().getMessage());
+        }
     }
 
     @Test

@@ -11,12 +11,25 @@ public class ConstructorInstantiator implements Instantiator {
     }
 
     public <T> T newInstance(Class<T> cls) {
+        if (outerClassInstance == null) {
+            return noArgConstructor(cls);
+        }
+        return withOuterClass(cls);
+    }
+
+    private <T> T withOuterClass(Class<T> cls) {
         try {
-            if (outerClassInstance == null) {
-                return cls.newInstance();
-            }
             Constructor<T> c = cls.getDeclaredConstructor(outerClassInstance.getClass());
             return c.newInstance(outerClassInstance);
+        } catch (Exception e) {
+            throw new InstantationException("Unable to create mock instance of '"
+                    + cls.getSimpleName() + "'.\nPlease ensure that the outer instance has correct type and that the target class has parameter-less constructor.", e);
+        }
+    }
+
+    private <T> T noArgConstructor(Class<T> cls) {
+        try {
+            return cls.newInstance();
         } catch (Exception e) {
             throw new InstantationException("Unable to create mock instance of '"
                     + cls.getSimpleName() + "'.\nPlease ensure it has parameter-less constructor.", e);
