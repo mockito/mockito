@@ -13,10 +13,10 @@ import java.lang.annotation.RetentionPolicy;
  * The annotation conveys following information:
  * <ul>
  * <li>The API is fairly new and we would appreciate your feedback. For example, what are you missing from the API
- * to solve your use case (yes, please, real use cases).</li>
- * <li>For types or methods that are already released this annotation means that that the API might change.
- * The chance for that is small and we will always try to make any changes in a backwards compatible way.
- * The only reason we would want to change it is to provide better support for using and extending Mockito.
+ * to solve your use case.</li>
+ * <li>The API might change.
+ * The chance for that is small because we care great deal for the initial design.
+ * The incubating API might change based on the feedback from the community in order to make the API most useful for the users.
  * </li>
  * <li>
  * For types or methods that are not yet released it means the API is <strong>work in progress</strong>
