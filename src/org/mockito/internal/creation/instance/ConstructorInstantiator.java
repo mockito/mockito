@@ -14,20 +14,43 @@ public class ConstructorInstantiator implements Instantiator {
         if (outerClassInstance == null) {
             return noArgConstructor(cls);
         }
-        return withOuterClass(cls);
+        return withParams(cls, outerClassInstance);
     }
 
-    private <T> T withOuterClass(Class<T> cls) {
+    private static <T> T withParams(Class<T> cls, Object... params) {
         try {
-            Constructor<T> c = cls.getDeclaredConstructor(outerClassInstance.getClass());
-            return c.newInstance(outerClassInstance);
+            //this is kind of overengineered because we don't need to support more params
+            //however, I know we will be needing it :)
+            for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
+                Class<?>[] types = constructor.getParameterTypes();
+                if (paramsMatch(types, params)) {
+                    return (T) constructor.newInstance(params);
+                }
+            }
         } catch (Exception e) {
-            throw new InstantationException("Unable to create mock instance of '"
-                    + cls.getSimpleName() + "'.\nPlease ensure that the outer instance has correct type and that the target class has parameter-less constructor.", e);
+            throw paramsException(cls, e);
         }
+        throw paramsException(cls, null);
     }
 
-    private <T> T noArgConstructor(Class<T> cls) {
+    private static <T> InstantationException paramsException(Class<T> cls, Exception e) {
+        return new InstantationException("Unable to create mock instance of '"
+                + cls.getSimpleName() + "'.\nPlease ensure that the outer instance has correct type and that the target class has parameter-less constructor.", e);
+    }
+
+    private static boolean paramsMatch(Class<?>[] types, Object[] params) {
+        if (params.length != types.length) {
+            return false;
+        }
+        for (int i = 0; i < params.length; i++) {
+            if (!types[i].isInstance(params[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static <T> T noArgConstructor(Class<T> cls) {
         try {
             return cls.newInstance();
         } catch (Exception e) {

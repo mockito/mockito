@@ -7,6 +7,7 @@ public class ConstructorInstantiatorTest extends TestBase {
 
     static class SomeClass {}
     class SomeInnerClass {}
+    class ChildOfThis extends ConstructorInstantiatorTest {}
     static class SomeClass2 {
         SomeClass2(String x) {}
     }
@@ -17,6 +18,7 @@ public class ConstructorInstantiatorTest extends TestBase {
 
     @Test public void creates_instances_of_inner_classes() {
         assertEquals(new ConstructorInstantiator(this).newInstance(SomeInnerClass.class).getClass(), SomeInnerClass.class);
+        assertEquals(new ConstructorInstantiator(new ChildOfThis()).newInstance(SomeInnerClass.class).getClass(), SomeInnerClass.class);
     }
 
     @Test public void explains_when_constructor_cannot_be_found() {
