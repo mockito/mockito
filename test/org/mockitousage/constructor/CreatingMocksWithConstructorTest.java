@@ -79,14 +79,11 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
-    @Ignore //TODO SF
-    public void prevents_mocking_interfaces_with_constructor() {
-        try {
-            //when
-            mock(IMethods.class, withSettings().useConstructor());
-            //then
-            fail();
-        } catch (MockitoException e) {}
+    public void mocking_interfaces_with_constructor() {
+        //at the moment this is allowed however we can be more strict if needed
+        //there is not much sense in creating a spy of an interface
+        mock(IMethods.class, withSettings().useConstructor());
+        spy(IMethods.class);
     }
 
     @Test
