@@ -1,3 +1,14 @@
+### 1.10.12 (2014-11-17 00:09 UTC)
+
+* Authors: 2
+* Commits: 23
+  * 22: Szczepan Faber
+  * 1: jerzykrlk
+* Improvements: 2
+  * Other: 2
+    * Make the build working on windows [(#115)](https://github.com/mockito/mockito/pull/115)
+    * Allow convenient spying on abstract classes [(#92)](https://github.com/mockito/mockito/issues/92)
+
 ### 1.10.11 (2014-11-15 17:46 UTC)
 
 * Authors: 3
