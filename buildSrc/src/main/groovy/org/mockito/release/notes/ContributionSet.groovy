@@ -13,7 +13,7 @@ class ContributionSet {
         commitCount++
         def c = contributions.get(commit.email)
         if (c == null) {
-            contributions.put(commit.email, c = new Contribution())
+            contributions.put(commit.email, c = new Contribution(commit))
         }
         c.add(commit)
     }
