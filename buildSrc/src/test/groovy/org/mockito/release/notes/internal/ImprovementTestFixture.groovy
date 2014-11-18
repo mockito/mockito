@@ -1,7 +1,5 @@
 package org.mockito.release.notes.internal
 
-import org.mockito.release.notes.Improvement
-
 class ImprovementTestFixture {
 
     static Improvement anImprovementWithIdAndLabels(String id, List<String> labels) {

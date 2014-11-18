@@ -1,6 +1,4 @@
-package org.mockito.release.notes
-
-import org.mockito.release.notes.internal.ImprovementsPrinter;
+package org.mockito.release.notes.internal
 
 class LabelledImprovementSet implements ImprovementSet {
     private final Collection<Improvement> improvements

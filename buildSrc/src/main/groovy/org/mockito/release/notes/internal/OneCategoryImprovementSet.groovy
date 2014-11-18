@@ -1,4 +1,4 @@
-package org.mockito.release.notes
+package org.mockito.release.notes.internal
 
 class OneCategoryImprovementSet implements ImprovementSet {
     Collection<Improvement> improvements

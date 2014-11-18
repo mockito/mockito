@@ -1,5 +1,7 @@
-package org.mockito.release.notes
+package org.mockito.release.notes.internal
 
+import org.mockito.release.notes.internal.Improvement
+import org.mockito.release.notes.internal.OneCategoryImprovementSet
 import spock.lang.Specification
 
 class OneCategoryImprovementSetTest extends Specification {

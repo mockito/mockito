@@ -1,4 +1,4 @@
-package org.mockito.release.notes;
+package org.mockito.release.notes.internal;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,5 +1,7 @@
-package org.mockito.release.notes
+package org.mockito.release.notes.internal
 
+import org.mockito.release.notes.internal.Contribution
+import org.mockito.release.notes.internal.GitCommit
 import spock.lang.Specification
 
 class ContributionTest extends Specification {

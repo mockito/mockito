@@ -2,12 +2,6 @@ package org.mockito.release.notes.internal;
 
 import com.jcabi.github.*
 import org.gradle.api.Project
-import org.mockito.release.notes.ContributionSet
-import org.mockito.release.notes.GitCommit
-import org.mockito.release.notes.Improvement
-import org.mockito.release.notes.ImprovementSet
-import org.mockito.release.notes.LabelledImprovementSet
-import org.mockito.release.notes.OneCategoryImprovementSet
 import org.mockito.release.notes.ReleaseNotesBuilder
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {

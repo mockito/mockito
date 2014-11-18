@@ -1,7 +1,5 @@
 package org.mockito.release.notes.internal
 
-import org.mockito.release.notes.Improvement
-
 import static ImprovementSetSegregator.NON_EXISTING_LABEL
 
 class ImprovementsPrinter {

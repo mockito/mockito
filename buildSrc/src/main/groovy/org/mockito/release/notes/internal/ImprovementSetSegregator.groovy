@@ -1,7 +1,6 @@
 package org.mockito.release.notes.internal
 
 import groovy.transform.PackageScope
-import org.mockito.release.notes.Improvement
 
 class ImprovementSetSegregator {
 

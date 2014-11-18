@@ -1,4 +1,4 @@
-package org.mockito.release.notes;
+package org.mockito.release.notes.internal;
 
 class ContributionSet {
     Map<String, Contribution> contributions = new HashMap<String, Contribution>()
