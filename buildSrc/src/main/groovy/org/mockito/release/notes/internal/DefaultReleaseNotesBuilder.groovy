@@ -2,6 +2,7 @@ package org.mockito.release.notes.internal;
 
 import com.jcabi.github.*
 import org.gradle.api.Project
+import org.mockito.release.notes.PreviousVersionFromFile
 import org.mockito.release.notes.ReleaseNotesBuilder
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {

@@ -1,4 +1,4 @@
-package org.mockito.release.notes.internal
+package org.mockito.release.notes
 
 /**
  * Retrieves previously released version based on the top entry in the current release notes file.

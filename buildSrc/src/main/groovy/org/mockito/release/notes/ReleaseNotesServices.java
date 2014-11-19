@@ -3,6 +3,7 @@ package org.mockito.release.notes;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.mockito.release.notes.internal.*;
+import org.mockito.release.notes.PreviousVersionFromFile;
 
 import java.io.File;
 import java.util.Collection;

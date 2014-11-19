@@ -1,4 +1,4 @@
-package org.mockito.release.notes.internal;
+package org.mockito.release.notes;
 
 /**
  * Provides previous version of the library.
