@@ -1,7 +1,5 @@
 package org.mockito.internal.rules;
 
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.Statement;
 import org.mockito.InjectMocks;
@@ -14,17 +12,11 @@ import static org.junit.Assert.*;
 
 public class JUnitRuleTest {
 
-    private JUnitRule jUnitRule;
-    private InjectTestCase injectTestCase;
-
-    @Before
-    public void setUp() throws Exception {
-        injectTestCase = new InjectTestCase();
-        jUnitRule = new JUnitRule();
-    }
+    private JUnitRule jUnitRule = new JUnitRule();
+    private InjectTestCase injectTestCase = new InjectTestCase();
 
     @Test
-    public void testInject() throws Throwable {
+    public void shouldInjectIntoTestCase() throws Throwable {
         jUnitRule.apply(new DummyStatement(), injectTestCase).evaluate();
         assertNotNull("@Mock mock object created", injectTestCase.getInjected());
         assertNotNull("@InjectMocks object created", injectTestCase.getInjectInto());
@@ -32,7 +24,7 @@ public class JUnitRuleTest {
     }
 
     @Test
-    public void testThrowAnException() throws Throwable {
+    public void shouldRethrowException() throws Throwable {
         try {
             jUnitRule.apply(new ExceptionStatement(), injectTestCase).evaluate();
             fail("Should throw exception");
@@ -42,7 +34,7 @@ public class JUnitRuleTest {
     }
 
     @Test
-    public void testMockitoValidation() throws Throwable {
+    public void shouldDetectUnfinishedStubbing() throws Throwable {
         try {
             jUnitRule.apply(new UnfinishedStubbingStatement(), injectTestCase).evaluate();
             fail("Should detect invalid Mockito usage");
