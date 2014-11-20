@@ -10,7 +10,7 @@ public class Vcs {
     /**
      * Provides means to get contributions.
      */
-    public static ContributionsProvider getContributionsProvider(ProcessRunner runner) {
+    public static ContributionsProvider getGitProvider(ProcessRunner runner) {
         return new GitContributionsProvider(new GitLogProvider(runner), new IgnoreCiSkip());
     }
 }

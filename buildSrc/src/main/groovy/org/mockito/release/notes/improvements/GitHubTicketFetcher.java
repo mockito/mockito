@@ -4,6 +4,7 @@ import com.jcabi.github.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,29 +12,26 @@ class GitHubTicketFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(GitHubTicketFetcher.class);
 
-    ImprovementSet fetchTickets(String gitHubToken, Set<String> ticketIds) {
+    void fetchTickets(String gitHubAuthToken, Collection<String> ticketIds, DefaultImprovements improvements) {
         if (ticketIds.isEmpty()) {
-            return new DefaultImprovements();
+            return;
         }
         try {
             //TODO if possible we should query for all tickets via one REST call and perhaps stop using jcapi
             LOG.info("Querying GitHub API for {} tickets", ticketIds.size());
-            RtGithub github = new RtGithub(gitHubToken);
+            RtGithub github = new RtGithub(gitHubAuthToken);
             Repo repo = github.repos().get(new Coordinates.Simple("mockito/mockito"));
             Issues issues = repo.issues();
-            DefaultImprovements out = new DefaultImprovements();
-
             for (String ticketId : ticketIds) {
                 LOG.info(" #{}", ticketId);
                 //TODO make ticked id an int
                 Issue i = issues.get(Integer.parseInt(ticketId));
                 Issue.Smart issue = new Issue.Smart(i);
                 if (issue.exists() && !issue.isOpen()) {
-                    out.add(new Improvement(issue.number(), issue.title(), issue.htmlUrl(),
+                    improvements.add(new Improvement(issue.number(), issue.title(), issue.htmlUrl().toString(),
                             labels(issue.labels())));
                 }
             }
-            return out;
         } catch (Exception e) {
             throw new RuntimeException("Problems fetching " + ticketIds.size() + " from GitHub", e);
         }

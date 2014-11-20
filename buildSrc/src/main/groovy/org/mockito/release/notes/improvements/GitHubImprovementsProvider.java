@@ -11,11 +11,18 @@ import java.util.regex.Pattern;
 class GitHubImprovementsProvider implements ImprovementSetProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitHubImprovementsProvider.class);
+    private final GitHubAuthToken authToken;
+
+    public GitHubImprovementsProvider(GitHubAuthToken authToken) {
+        this.authToken = authToken;
+    }
 
     public ImprovementSet getImprovements(ContributionSet contributions) {
         LOGGER.info("Parsing {} commits", contributions.getAllCommits());
         Set<String> ticketIds = findTickets(contributions);
-        return new GitHubTicketFetcher().fetchTickets(ticketIds);
+        DefaultImprovements out = new DefaultImprovements();
+        new GitHubTicketFetcher().fetchTickets(authToken.getToken(), ticketIds, out);
+        return out;
     }
 
     private Set<String> findTickets(ContributionSet contributions) {
