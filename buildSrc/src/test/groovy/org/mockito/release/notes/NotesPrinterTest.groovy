@@ -9,7 +9,7 @@ class NotesPrinterTest extends Specification {
     @Subject printer = new NotesPrinter()
 
     def "prints notes"() {
-        def date = new GregorianCalendar(2016, 12, 5).getTime();
+        def date = new Date(1483570800000)
         when: def notes = printer.printNotes("2.0.1", date, {"the contributions"} as HumanReadable, {"the improvements"} as HumanReadable)
         then: notes == """### 2.0.1 (2017-01-04 23:00 UTC)
 
