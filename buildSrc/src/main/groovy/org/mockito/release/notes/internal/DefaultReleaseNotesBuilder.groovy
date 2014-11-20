@@ -4,8 +4,10 @@ import com.jcabi.github.*
 import org.gradle.api.Project
 import org.mockito.release.notes.PreviousVersionFromFile
 import org.mockito.release.notes.ReleaseNotesBuilder
+import org.mockito.release.notes.exec.Exec
 import org.mockito.release.notes.vcs.ContributionSet
 import org.mockito.release.notes.vcs.GitCommit
+import org.mockito.release.notes.vcs.Vcs
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
 
@@ -30,6 +32,10 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
         def newContent = buildNotesBetween(previousVersion, toVersion)
         notesFile.text = newContent + currentContent
         println "Successfully updated the release notes!"
+    }
+
+    ContributionSet getContributionsBetween(String fromRevision, String toRevision) {
+        return Vcs.getContributionsProvider(Exec.getGradleProcessRunner(project)).getContributionsBetween(fromRevision, toRevision);
     }
 
     String buildNotesBetween(String fromVersion, String toVersion) {
