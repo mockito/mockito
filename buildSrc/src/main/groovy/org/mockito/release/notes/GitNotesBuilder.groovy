@@ -1,26 +1,20 @@
-package org.mockito.release.notes.internal
+package org.mockito.release.notes
 
 import org.gradle.api.Project
-import org.mockito.release.notes.PreviousVersionFromFile
-import org.mockito.release.notes.ReleaseNotesBuilder
 import org.mockito.release.notes.exec.Exec
 import org.mockito.release.notes.improvements.Improvements
 import org.mockito.release.notes.vcs.ContributionSet
 import org.mockito.release.notes.vcs.Vcs
+import org.mockito.release.notes.versions.PreviousVersionFromFile
 
-class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
+class GitNotesBuilder implements NotesBuilder {
 
     private final Project project
-    private final String gitHubToken
-    private final String ignorePattern
-    private final ImprovementsPrinter improvementsPrinter
+    private final String authTokenEnvVar
 
-    DefaultReleaseNotesBuilder(Project project, String gitHubToken, String ignorePattern,
-                               ImprovementsPrinter improvementsPrinter) {
-        this.ignorePattern = ignorePattern
-        this.gitHubToken = gitHubToken
+    GitNotesBuilder(Project project, String authTokenEnvVar) {
+        this.authTokenEnvVar = authTokenEnvVar
         this.project = project
-        this.improvementsPrinter = improvementsPrinter
     }
 
     void updateNotes(File notesFile, String toVersion) {
@@ -39,7 +33,7 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
 
     String buildNotesBetween(String fromVersion, String toVersion) {
         ContributionSet contributions = getContributionsBetween(fromVersion, toVersion)
-        def improvements = Improvements.getGitHubProvider().getImprovements(contributions);
+        def improvements = Improvements.getGitHubProvider("GH_TOKEN").getImprovements(contributions);
         def date = new Date().format("yyyy-MM-dd HH:mm z", TimeZone.getTimeZone("UTC"))
         return """### $project.version ($date)
 

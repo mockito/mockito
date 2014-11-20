@@ -22,6 +22,7 @@ class GradleProcessRunner implements ProcessRunner {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         //TODO SF we can turn this class into java once we're using newer version of Gradle
         //which has exec method that receives an Action
+        //TODO SF, ideally we don't need the Gradle project at all
         project.exec { ExecSpec spec ->
             spec.commandLine(commandLine)
             spec.standardOutput = out

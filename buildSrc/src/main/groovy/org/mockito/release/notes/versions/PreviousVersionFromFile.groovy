@@ -1,9 +1,8 @@
-package org.mockito.release.notes
-
+package org.mockito.release.notes.versions
 /**
  * Retrieves previously released version based on the top entry in the current release notes file.
  */
-class PreviousVersionFromFile implements PreviousVersionProvider {
+class PreviousVersionFromFile implements PreviousVersion {
 
     private final File releaseNotes
 
