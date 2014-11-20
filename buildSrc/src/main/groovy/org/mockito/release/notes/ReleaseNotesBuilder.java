@@ -1,7 +1,5 @@
 package org.mockito.release.notes;
 
-import org.mockito.release.notes.internal.ContributionSet;
-
 import java.io.File;
 
 public interface ReleaseNotesBuilder {

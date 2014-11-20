@@ -4,6 +4,8 @@ import com.jcabi.github.*
 import org.gradle.api.Project
 import org.mockito.release.notes.PreviousVersionFromFile
 import org.mockito.release.notes.ReleaseNotesBuilder
+import org.mockito.release.notes.vcs.ContributionSet
+import org.mockito.release.notes.vcs.GitCommit
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
 
@@ -24,8 +26,6 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
         println "Updating release notes file: $notesFile"
         def currentContent = notesFile.text
         def previousVersion = "v" + new PreviousVersionFromFile(notesFile).getPreviousVersion() //TODO SF duplicated, reuse service
-        println "Fetching $previousVersion"
-        project.exec { commandLine "git", "fetch", "origin", "+refs/tags/$previousVersion:refs/tags/$previousVersion" }
         println "Building notes since $previousVersion until $toVersion"
         def newContent = buildNotesBetween(previousVersion, toVersion)
         notesFile.text = newContent + currentContent
@@ -80,22 +80,5 @@ $improvements
         }
 //        new OneCategoryImprovementSet(improvements: out, ignorePattern: ignorePattern)
         new LabelledImprovementSet(out, ignorePattern, improvementsPrinter)
-    }
-
-    ContributionSet getContributionsBetween(String fromRevision, String toRevision) {
-        println "Loading all commits between $fromRevision and $toRevision"
-        def out = new ByteArrayOutputStream()
-        def entryToken = "@@commit@@"
-        def infoToken = "@@info@@"
-        project.exec {
-            standardOutput = out
-            commandLine "git", "log", "--pretty=format:%ae$infoToken%an$infoToken%B%N$entryToken", "${fromRevision}..${toRevision}"
-        }
-        def contributions = new ContributionSet()
-        out.toString().split(entryToken).each { String logEntry ->
-            def s = logEntry.split(infoToken)
-            contributions.add(new GitCommit(email: s[0].trim(), author: s[1].trim(), message: s[2].trim()))
-        }
-        contributions
     }
 }
