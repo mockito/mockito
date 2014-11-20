@@ -4,7 +4,8 @@ def notesFile = project.file("doc/release-notes/official.md")
 
 //TODO add task that calculates previous version
 ext.getPreviousVersion = {
-    return Notes.previousVersion(notesFile).previousVersion
+    def firstLine = notesFile.withReader { it.readLine() }
+    return Notes.previousVersion(firstLine).previousVersion
 }
 
 ext.updateReleaseNotes = {

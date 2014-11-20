@@ -2,9 +2,7 @@ package org.mockito.release.notes;
 
 import org.gradle.api.Project;
 import org.mockito.release.notes.versions.PreviousVersion;
-import org.mockito.release.notes.versions.PreviousVersionFromFile;
-
-import java.io.File;
+import org.mockito.release.notes.versions.Versions;
 
 /**
  * Release notes services
@@ -22,9 +20,9 @@ public class Notes {
     }
 
     /**
-     * Provides previous version information based on the release notes file
+     * Provides previous version information based on the release notes content file
      */
-    public static PreviousVersion previousVersion(File releaseNotesFile) {
-        return new PreviousVersionFromFile(releaseNotesFile);
+    public static PreviousVersion previousVersion(String releaseNotesContent) {
+        return Versions.previousFromNotesContent(releaseNotesContent);
     }
 }
