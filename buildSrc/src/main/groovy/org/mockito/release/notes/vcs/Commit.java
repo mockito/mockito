@@ -1,5 +1,7 @@
 package org.mockito.release.notes.vcs;
 
+import java.util.Collection;
+
 public interface Commit {
 
     /**
@@ -16,4 +18,9 @@ public interface Commit {
      * Commit message
      */
     String getMessage();
+
+    /**
+     * Tickets referenced by the commit. For example, jira issue ids or GitHub issue ids.
+     */
+    Collection<String> getTickets();
 }

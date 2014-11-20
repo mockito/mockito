@@ -15,6 +15,11 @@ public interface ContributionSet extends HumanReadable {
     Collection<Commit> getAllCommits();
 
     /**
+     * all tickets referenced in commit messages
+     */
+    Collection<String> getAllTickets();
+
+    /**
      * human readable text representation
      */
     String toText();

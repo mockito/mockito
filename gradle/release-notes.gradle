@@ -8,13 +8,18 @@ ext.getPreviousVersion = {
     return Notes.previousVersion(firstLine).previousVersion
 }
 
-ext.updateReleaseNotes = {
+ext.getReleaseNotes = {
     project.logger.lifecycle("Building and updating release notes in {}", notesFile)
     def builder = Notes.gitHubNotesBuilder(project, "GH_TOKEN")
     def prev = "v" + getPreviousVersion()
     def current = "HEAD"
     project.logger.lifecycle("Building notes for revisions: {} -> {}", prev, current)
     def newContent = builder.buildNotes(prev, current)
+    newContent
+}
+
+ext.updateReleaseNotes = {
+    def newContent = getReleaseNotes()
     def existing = notesFile.text
     notesFile.text = newContent + existing
     project.logger.lifecycle("Successfully updated release notes!")
@@ -25,4 +30,12 @@ ext.updateReleaseNotes = {
 task updateReleaseNotes {
     description "Updates release notes file. Useful for previewing the release notes."
     doLast { updateReleaseNotes() }
+}
+
+task previewReleaseNotes {
+    description "Shows new content of release notes."
+    doLast {
+        def notes = getReleaseNotes()
+        println "----------------\n$notes----------------"
+    }
 }

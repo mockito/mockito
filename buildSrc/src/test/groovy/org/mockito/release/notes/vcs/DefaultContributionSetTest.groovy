@@ -11,7 +11,19 @@ class DefaultContributionSetTest extends Specification {
     def "empty contributions"() {
         expect:
         contributions.allCommits.isEmpty()
+        contributions.allTickets.isEmpty()
         contributions.toText() == "* Authors: 0\n* Commits: 0"
+    }
+
+    def "contains referenced tickets"() {
+        contributions.add(new GitCommit("a@x", "A", "fixes issue #123"))
+        contributions.add(new GitCommit("a@x", "A", "fixes issue 250"))
+        contributions.add(new GitCommit("b@x", "B", """adds new feature
+#100
+"""))
+
+        expect:
+        contributions.allTickets == ["123", "100"]
     }
 
     def "many contributions"() {

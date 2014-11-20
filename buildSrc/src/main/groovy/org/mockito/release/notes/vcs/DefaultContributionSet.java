@@ -8,6 +8,7 @@ class DefaultContributionSet implements ContributionSet {
     private final Map<String, Contribution> contributions = new HashMap<String, Contribution>();
     private final Collection<Commit> commits = new LinkedList<Commit>();
     private final Predicate<Commit> ignoreCommit;
+    private final Collection<String> tickets = new LinkedList<String>();
 
     public DefaultContributionSet(Predicate<Commit> ignoredCommit) {
         this.ignoreCommit = ignoredCommit;
@@ -18,6 +19,7 @@ class DefaultContributionSet implements ContributionSet {
             return;
         }
         commits.add(commit);
+        tickets.addAll(commit.getTickets());
         Contribution c = contributions.get(commit.getAuthorId());
         if (c == null) {
             contributions.put(commit.getAuthorId(), new Contribution(commit));
@@ -28,6 +30,10 @@ class DefaultContributionSet implements ContributionSet {
 
     public Collection<Commit> getAllCommits() {
         return commits;
+    }
+
+    public Collection<String> getAllTickets() {
+        return tickets;
     }
 
     public String toText() {
