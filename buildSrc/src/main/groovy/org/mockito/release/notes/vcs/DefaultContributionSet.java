@@ -6,7 +6,7 @@ class DefaultContributionSet implements ContributionSet {
     private final Map<String, DefaultContribution> contributions = new HashMap<String, DefaultContribution>();
     private final Collection<Commit> commits = new LinkedList<Commit>();
 
-    void add(GitCommit commit) {
+    void add(Commit commit) {
         if (commit.getMessage().contains("[ci skip]")) {
             //we used #id for Travis CI build number in commits performed by Travis. Let's avoid pulling those ids here.
             //also, if ci was skipped we probably are not interested in such change, no?

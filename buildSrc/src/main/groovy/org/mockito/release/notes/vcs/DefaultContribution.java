@@ -17,7 +17,7 @@ class DefaultContribution implements Contribution, Comparable<DefaultContributio
         commits.add(commit);
     }
 
-    DefaultContribution add(GitCommit commit) {
+    DefaultContribution add(Commit commit) {
         assert authorId.equals(commit.getAuthorId());
         commits.add(commit);
         return this;
