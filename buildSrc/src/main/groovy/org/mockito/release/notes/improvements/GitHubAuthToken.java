@@ -1,5 +1,7 @@
 package org.mockito.release.notes.improvements;
 
+import org.mockito.release.notes.util.ReleaseNotesException;
+
 class GitHubAuthToken {
 
     private final String envVariableName;
@@ -9,6 +11,10 @@ class GitHubAuthToken {
     }
 
     public String getToken() {
-        return null;
+        String out = System.getenv(envVariableName);
+        if (out == null) {
+            throw new ReleaseNotesException("Environmental variable '" + envVariableName + "' is missing.");
+        }
+        return out;
     }
 }

@@ -8,7 +8,7 @@ class DefaultContributionSet implements ContributionSet {
     private final Map<String, Contribution> contributions = new HashMap<String, Contribution>();
     private final Collection<Commit> commits = new LinkedList<Commit>();
     private final Predicate<Commit> ignoreCommit;
-    private final Collection<String> tickets = new LinkedList<String>();
+    private final Set<String> tickets = new LinkedHashSet<String>();
 
     public DefaultContributionSet(Predicate<Commit> ignoredCommit) {
         this.ignoreCommit = ignoredCommit;
