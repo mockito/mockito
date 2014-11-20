@@ -23,7 +23,7 @@ class DefaultContribution implements Contribution, Comparable<DefaultContributio
         return this;
     }
 
-    public String toString() {
+    public String toText() {
         return commits.size() + ": " + author;
     }
 

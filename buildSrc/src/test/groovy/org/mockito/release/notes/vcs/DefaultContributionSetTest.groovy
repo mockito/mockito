@@ -10,7 +10,7 @@ class DefaultContributionSetTest extends Specification {
     def "empty contributions"() {
         expect:
         contributions.allCommits.isEmpty()
-        contributions.toString() == "* Authors: 0\n* Commits: 0"
+        contributions.toText() == "* Authors: 0\n* Commits: 0"
     }
 
     def "many contributions"() {
@@ -19,7 +19,7 @@ class DefaultContributionSetTest extends Specification {
         contributions.add(new GitCommit("b@x", "B", "3"))
 
         expect:
-        contributions.toString() == """* Authors: 2
+        contributions.toText() == """* Authors: 2
 * Commits: 3
   * 2: B
   * 1: A"""

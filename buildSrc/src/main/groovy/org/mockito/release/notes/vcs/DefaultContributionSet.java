@@ -26,13 +26,13 @@ class DefaultContributionSet implements ContributionSet {
         return commits;
     }
 
-    public String toString() {
+    public String toText() {
         StringBuilder sb = new StringBuilder("* Authors: ").append(contributions.size())
                 .append("\n* Commits: ").append(commits.size());
 
         for (Map.Entry<String, DefaultContribution> entry : sortByValue(contributions)) {
             Contribution c = entry.getValue();
-            sb.append("\n  * ").append(c);
+            sb.append("\n  * ").append(c.toText());
         }
 
         return sb.toString();

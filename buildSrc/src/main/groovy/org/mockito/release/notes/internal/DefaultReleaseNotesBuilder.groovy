@@ -1,12 +1,15 @@
-package org.mockito.release.notes.internal;
+package org.mockito.release.notes.internal
 
-import com.jcabi.github.*
+import com.jcabi.github.Coordinates
+import com.jcabi.github.Issue
+import com.jcabi.github.Label
+import com.jcabi.github.RtGithub;
 import org.gradle.api.Project
 import org.mockito.release.notes.PreviousVersionFromFile
 import org.mockito.release.notes.ReleaseNotesBuilder
 import org.mockito.release.notes.exec.Exec
+import org.mockito.release.notes.vcs.Commit
 import org.mockito.release.notes.vcs.ContributionSet
-import org.mockito.release.notes.vcs.GitCommit
 import org.mockito.release.notes.vcs.Vcs
 
 class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
@@ -41,8 +44,8 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
     String buildNotesBetween(String fromVersion, String toVersion) {
         def tickets = new HashSet()
         ContributionSet contributions = getContributionsBetween(fromVersion, toVersion)
-        println "Parsing ${contributions.commitCount} commits"
-        contributions.allCommits.each { GitCommit it ->
+        println "Parsing ${contributions.allCommits.size()} commits"
+        contributions.allCommits.each { Commit it ->
             def t = it.message.findAll("#\\d+")
             if (t) {
                 tickets.addAll(t*.substring(1)) //get rid of leading '#'
@@ -58,7 +61,7 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
         def date = new Date().format("yyyy-MM-dd HH:mm z", TimeZone.getTimeZone("UTC"))
         return """### $project.version ($date)
 
-$contributions
+${contributions.toText()}
 $improvements
 
 """

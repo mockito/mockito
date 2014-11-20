@@ -10,10 +10,10 @@ class DefaultContributionTest extends Specification {
         expect:
         c.author == "lad"
         c.authorId == "a@b"
-        c.toString() == "1: lad"
+        c.toText() == "1: lad"
 
         when: c.add(new GitCommit("a@b", "lad", "m2"))
-        then: c.toString() == "2: lad"
+        then: c.toText() == "2: lad"
     }
 
     def "can be sorted by number of commits"() {
@@ -35,6 +35,6 @@ class DefaultContributionTest extends Specification {
     def "has String representation"() {
         def c = new GitCommit("john.doe@gmail.com", "John Doe", "some message")
         expect:
-        new DefaultContribution(c).add(c).toString() == "2: John Doe"
+        new DefaultContribution(c).add(c).toText() == "2: John Doe"
     }
 }
