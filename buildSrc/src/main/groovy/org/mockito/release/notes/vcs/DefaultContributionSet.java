@@ -5,7 +5,7 @@ import org.mockito.release.notes.util.Predicate;
 import java.util.*;
 
 class DefaultContributionSet implements ContributionSet {
-    private final Map<String, DefaultContribution> contributions = new HashMap<String, DefaultContribution>();
+    private final Map<String, Contribution> contributions = new HashMap<String, Contribution>();
     private final Collection<Commit> commits = new LinkedList<Commit>();
     private final Predicate<Commit> ignoreCommit;
 
@@ -18,9 +18,9 @@ class DefaultContributionSet implements ContributionSet {
             return;
         }
         commits.add(commit);
-        DefaultContribution c = contributions.get(commit.getAuthorId());
+        Contribution c = contributions.get(commit.getAuthorId());
         if (c == null) {
-            contributions.put(commit.getAuthorId(), new DefaultContribution(commit));
+            contributions.put(commit.getAuthorId(), new Contribution(commit));
         } else {
             c.add(commit);
         }
@@ -34,7 +34,7 @@ class DefaultContributionSet implements ContributionSet {
         StringBuilder sb = new StringBuilder("* Authors: ").append(contributions.size())
                 .append("\n* Commits: ").append(commits.size());
 
-        for (Map.Entry<String, DefaultContribution> entry : sortByValue(contributions)) {
+        for (Map.Entry<String, Contribution> entry : sortByValue(contributions)) {
             Contribution c = entry.getValue();
             sb.append("\n  * ").append(c.toText());
         }

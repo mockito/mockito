@@ -2,10 +2,10 @@ package org.mockito.release.notes.vcs
 
 import spock.lang.Specification
 
-class DefaultContributionTest extends Specification {
+class ContributionTest extends Specification {
 
     def "accumulates commits"() {
-        def c = new DefaultContribution(new GitCommit("a@b", "lad", "m1"))
+        def c = new Contribution(new GitCommit("a@b", "lad", "m1"))
 
         expect:
         c.author == "lad"
@@ -18,9 +18,9 @@ class DefaultContributionTest extends Specification {
 
     def "can be sorted by number of commits"() {
         def c = new GitCommit("a", "a", "1")
-        def c1 = new DefaultContribution(c)
-        def c2 = new DefaultContribution(c).add(c)
-        def c3 = new DefaultContribution(c).add(c).add(c)
+        def c1 = new Contribution(c)
+        def c2 = new Contribution(c).add(c)
+        def c3 = new Contribution(c).add(c).add(c)
 
         def set = new TreeSet([c1, c3, c2])
 
@@ -35,6 +35,6 @@ class DefaultContributionTest extends Specification {
     def "has String representation"() {
         def c = new GitCommit("john.doe@gmail.com", "John Doe", "some message")
         expect:
-        new DefaultContribution(c).add(c).toText() == "2: John Doe"
+        new Contribution(c).add(c).toText() == "2: John Doe"
     }
 }
