@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * Release notes services
  */
-class Notes {
+public class Notes {
 
     /**
      * Release notes build based on git and GitHub.
@@ -17,14 +17,14 @@ class Notes {
      * @param project the Gradle project
      * @param authTokenEnvVar env variable name that holds the GitHub auth token
      */
-    NotesBuilder gitHubNotesBuilder(Project project, String authTokenEnvVar) {
+    public static NotesBuilder gitHubNotesBuilder(Project project, String authTokenEnvVar) {
         return new GitNotesBuilder(project, authTokenEnvVar);
     }
 
     /**
      * Provides previous version information based on the release notes file
      */
-    PreviousVersion previousVersion(File releaseNotesFile) {
+    public static PreviousVersion previousVersion(File releaseNotesFile) {
         return new PreviousVersionFromFile(releaseNotesFile);
     }
 }

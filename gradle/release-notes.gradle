@@ -1,28 +1,27 @@
-import org.mockito.release.notes.*
+import org.mockito.release.notes.Notes
 
-def getNotesBuilder() {
-    new ReleaseNotesServices(project)
-        .gitHubToken(System.env.GH_TOKEN)
-        .ignoreImprovementsMatching("^[Rr]efactoring.*")
-        .createBuilder()
-}
 def notesFile = project.file("doc/release-notes/official.md")
-
-ext.updateReleaseNotes = {
-    notesBuilder.updateNotes(notesFile, "HEAD")
-}
 
 //TODO add task that calculates previous version
 ext.getPreviousVersion = {
-    return new ReleaseNotesServices(project).getPreviousVersionProvider(notesFile).getPreviousVersion()
+    return Notes.previousVersion(notesFile).previousVersion
+}
+
+ext.updateReleaseNotes = {
+    project.logger.lifecycle("Building and updating release notes in {}", notesFile)
+    def builder = Notes.gitHubNotesBuilder(project, "GH_TOKEN")
+    def prev = "v" + getPreviousVersion()
+    def current = "HEAD"
+    project.logger.lifecycle("Building notes for revisions: {} -> {}", prev, current)
+    def newContent = builder.buildNotes(prev, current)
+    def existing = notesFile.text
+    notesFile.text = newContent + existing
+    project.logger.lifecycle("Successfully updated release notes!")
 }
 
 //TODO SF allow dry-run generation of the release notes without GH_TOKEN
 //TODO SF document how to work with release notes, e.g. that we only show closed tickets, etc.
 task updateReleaseNotes {
-    description "Updates release notes file. Useful for previewing the relese notes."
+    description "Updates release notes file. Useful for previewing the release notes."
     doLast { updateReleaseNotes() }
 }
-
-//println notesBuilder.getContributionsBetween("v1.9.5", "HEAD")
-//println notesBuilder.buildNotesBetween("v1.9.5", "HEAD")

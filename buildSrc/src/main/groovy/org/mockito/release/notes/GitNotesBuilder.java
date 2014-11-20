@@ -25,7 +25,7 @@ class GitNotesBuilder implements NotesBuilder {
         this.project = project;
     }
 
-    public String getNotes(String fromRevision, String toRevision) {
+    public String buildNotes(String fromRevision, String toRevision) {
         LOG.info("Getting release notes between {} and {}", fromRevision, toRevision);
 
         ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.getGradleProcessRunner(project));
