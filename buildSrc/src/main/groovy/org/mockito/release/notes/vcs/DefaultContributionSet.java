@@ -1,16 +1,20 @@
 package org.mockito.release.notes.vcs;
 
+import org.mockito.release.notes.util.Predicate;
+
 import java.util.*;
 
 class DefaultContributionSet implements ContributionSet {
     private final Map<String, DefaultContribution> contributions = new HashMap<String, DefaultContribution>();
     private final Collection<Commit> commits = new LinkedList<Commit>();
+    private final Predicate<Commit> ignoreCommit;
+
+    public DefaultContributionSet(Predicate<Commit> ignoredCommit) {
+        this.ignoreCommit = ignoredCommit;
+    }
 
     void add(Commit commit) {
-        if (commit.getMessage().contains("[ci skip]")) {
-            //we used #id for Travis CI build number in commits performed by Travis. Let's avoid pulling those ids here.
-            //also, if ci was skipped we probably are not interested in such change, no?
-            //Currently, all our [ci skip] are infrastructure commits
+        if (ignoreCommit.isTrue(commit)) {
             return;
         }
         commits.add(commit);
