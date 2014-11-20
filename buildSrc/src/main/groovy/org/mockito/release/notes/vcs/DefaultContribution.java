@@ -7,27 +7,28 @@ import java.util.List;
 class DefaultContribution implements Contribution, Comparable<DefaultContribution> {
 
     //email identifies the contributor, author alias not necessarily
-    final String email;
+    final String authorId;
     final String author;
     final List<Commit> commits = new LinkedList<Commit>();
 
     DefaultContribution(Commit commit) {
-        email = commit.getEmail();
+        authorId = commit.getAuthorId();
         author = commit.getAuthor();
         commits.add(commit);
     }
 
-    void add(GitCommit commit) {
-        assert email.equals(commit.getEmail());
+    DefaultContribution add(GitCommit commit) {
+        assert authorId.equals(commit.getAuthorId());
         commits.add(commit);
+        return this;
     }
 
     public String toString() {
-        return author + ":" + commits.size();
+        return commits.size() + ": " + author;
     }
 
     public int compareTo(DefaultContribution other) {
-        return Integer.valueOf(commits.size()).compareTo(other.getCommits().size());
+        return Integer.valueOf(other.getCommits().size()).compareTo(commits.size());
     }
 
     public Collection<Commit> getCommits() {

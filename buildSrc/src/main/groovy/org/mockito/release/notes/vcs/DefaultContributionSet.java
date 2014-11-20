@@ -14,9 +14,9 @@ class DefaultContributionSet implements ContributionSet {
             return;
         }
         commits.add(commit);
-        DefaultContribution c = contributions.get(commit.getEmail());
+        DefaultContribution c = contributions.get(commit.getAuthorId());
         if (c == null) {
-            contributions.put(commit.getEmail(), c = new DefaultContribution(commit));
+            contributions.put(commit.getAuthorId(), new DefaultContribution(commit));
         } else {
             c.add(commit);
         }

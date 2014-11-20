@@ -12,7 +12,7 @@ class GitCommit implements Commit {
         this.message = message;
     }
 
-    public String getEmail() {
+    public String getAuthorId() {
         return email;
     }
 
