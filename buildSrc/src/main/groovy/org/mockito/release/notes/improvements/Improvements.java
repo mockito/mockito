@@ -10,7 +10,7 @@ public class Improvements {
      *
      * @param authTokenEnvVarName name of the env var that holds the token
      */
-    public static ImprovementSetProvider getGitHubProvider(final String authTokenEnvVarName) {
+    public static ImprovementsProvider getGitHubProvider(final String authTokenEnvVarName) {
         return new GitHubImprovementsProvider(new GitHubAuthToken(authTokenEnvVarName));
     }
 }

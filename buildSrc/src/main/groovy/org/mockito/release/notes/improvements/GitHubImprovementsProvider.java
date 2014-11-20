@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.regex.Pattern;
 
-class GitHubImprovementsProvider implements ImprovementSetProvider {
+class GitHubImprovementsProvider implements ImprovementsProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitHubImprovementsProvider.class);
     private final GitHubAuthToken authToken;

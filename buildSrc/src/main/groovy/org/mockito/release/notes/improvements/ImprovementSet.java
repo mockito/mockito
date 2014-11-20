@@ -1,6 +1,11 @@
 package org.mockito.release.notes.improvements;
 
-public interface ImprovementSet {
+import org.mockito.release.notes.util.HumanReadable;
+
+/**
+ * the improvements
+ */
+public interface ImprovementSet extends HumanReadable {
 
     /**
      * human readable representation of the improvements
