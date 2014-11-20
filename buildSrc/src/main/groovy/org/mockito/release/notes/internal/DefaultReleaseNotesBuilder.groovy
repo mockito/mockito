@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.mockito.release.notes.PreviousVersionFromFile
 import org.mockito.release.notes.ReleaseNotesBuilder
 import org.mockito.release.notes.exec.Exec
+import org.mockito.release.notes.improvements.Improvements
 import org.mockito.release.notes.vcs.Commit
 import org.mockito.release.notes.vcs.ContributionSet
 import org.mockito.release.notes.vcs.Vcs
@@ -42,22 +43,8 @@ class DefaultReleaseNotesBuilder implements ReleaseNotesBuilder {
     }
 
     String buildNotesBetween(String fromVersion, String toVersion) {
-        def tickets = new HashSet()
         ContributionSet contributions = getContributionsBetween(fromVersion, toVersion)
-        println "Parsing ${contributions.allCommits.size()} commits"
-        contributions.allCommits.each { Commit it ->
-            def t = it.message.findAll("#\\d+")
-            if (t) {
-                tickets.addAll(t*.substring(1)) //get rid of leading '#'
-            }
-
-//this is helpful to find out what Google code issues we worked on:
-//        def issues = it.findAll("[Ii]ssue \\d+")
-//        if (issues) {
-//            println "$issues found in $it"
-//        }
-        }
-        ImprovementSet improvements = getImprovements(tickets)
+        def improvements = Improvements.getImprovementSetProvider().getImprovements(contributions);
         def date = new Date().format("yyyy-MM-dd HH:mm z", TimeZone.getTimeZone("UTC"))
         return """### $project.version ($date)
 
@@ -65,29 +52,5 @@ ${contributions.toText()}
 $improvements
 
 """
-    }
-
-    ImprovementSet getImprovements(Set<String> tickets) {
-        if (tickets.empty) {
-            return new OneCategoryImprovementSet(improvements: [])
-        }
-        //TODO we should query for all tickets via one REST call and stop using jcapi
-        println "Querying GitHub API for ${tickets.size()} tickets. This may take a while."
-        def github = new RtGithub(gitHubToken)
-        def repo = github.repos().get(new Coordinates.Simple("mockito/mockito"))
-        def issues = repo.issues()
-        def out = []
-
-        tickets.each {
-            println " #$it"
-            def i = issues.get(it as int)
-            def issue = new Issue.Smart(i)
-            if (issue.exists() && !issue.isOpen()) {
-                out << new Improvement(id: issue.number(), title: issue.title(), url: issue.htmlUrl(),
-                        labels: issue.labels().iterate().collect{ Label label -> label.name() })
-            }
-        }
-//        new OneCategoryImprovementSet(improvements: out, ignorePattern: ignorePattern)
-        new LabelledImprovementSet(out, ignorePattern, improvementsPrinter)
     }
 }

@@ -1,5 +1,7 @@
 package org.mockito.release.notes.internal
 
+import org.mockito.release.notes.improvements.Improvement
+
 class OneCategoryImprovementSet implements ImprovementSet {
     Collection<Improvement> improvements
     String ignorePattern
