@@ -1,10 +1,10 @@
 package org.mockito.release.notes.exec;
 
-import org.gradle.api.Project;
+import java.io.File;
 
 public class Exec {
 
-    public static ProcessRunner getGradleProcessRunner(Project project) {
-        return new GradleProcessRunner(project);
+    public static ProcessRunner getProcessRunner(File workDir) {
+        return new DefaultProcessRunner(workDir);
     }
 }

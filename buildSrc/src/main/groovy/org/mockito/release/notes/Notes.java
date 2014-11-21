@@ -4,6 +4,8 @@ import org.gradle.api.Project;
 import org.mockito.release.notes.versions.PreviousVersion;
 import org.mockito.release.notes.versions.Versions;
 
+import java.io.File;
+
 /**
  * Release notes services
  */
@@ -12,11 +14,11 @@ public class Notes {
     /**
      * Release notes build based on git and GitHub.
      *
-     * @param project the Gradle project
+     * @param workDir working directory for executing external processes like 'git log'
      * @param authTokenEnvVar env variable name that holds the GitHub auth token
      */
-    public static NotesBuilder gitHubNotesBuilder(Project project, String authTokenEnvVar) {
-        return new GitNotesBuilder(project, authTokenEnvVar);
+    public static NotesBuilder gitHubNotesBuilder(File workDir, String authTokenEnvVar) {
+        return new GitNotesBuilder(workDir, authTokenEnvVar);
     }
 
     /**

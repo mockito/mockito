@@ -11,29 +11,34 @@ import org.mockito.release.notes.vcs.Vcs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Date;
 
 class GitNotesBuilder implements NotesBuilder {
 
     private static Logger LOG = LoggerFactory.getLogger(GitNotesBuilder.class);
 
-    private final Project project;
+    private final File workDir;
     private final String authTokenEnvVar;
 
-    GitNotesBuilder(Project project, String authTokenEnvVar) {
+    /**
+     * @param workDir the working directory for external processes execution (for example: git log)
+     * @param authTokenEnvVar the env var that holds the GitHub auth token
+     */
+    GitNotesBuilder(File workDir, String authTokenEnvVar) {
+        this.workDir = workDir;
         this.authTokenEnvVar = authTokenEnvVar;
-        this.project = project;
     }
 
-    public String buildNotes(String fromRevision, String toRevision) {
+    public String buildNotes(String version, String fromRevision, String toRevision) {
         LOG.info("Getting release notes between {} and {}", fromRevision, toRevision);
 
-        ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.getGradleProcessRunner(project));
+        ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.getProcessRunner(workDir));
         ContributionSet contributions = contributionsProvider.getContributionsBetween(fromRevision, toRevision);
 
         ImprovementsProvider improvementsProvider = Improvements.getGitHubProvider(authTokenEnvVar);
         ImprovementSet improvements = improvementsProvider.getImprovements(contributions);
 
-        return new NotesPrinter().printNotes(project.getVersion().toString(), new Date(), contributions, improvements);
+        return new NotesPrinter().printNotes(version, new Date(), contributions, improvements);
     }
 }

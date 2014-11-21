@@ -21,7 +21,7 @@ class FromNotesContent implements PreviousVersion {
         Pattern p = Pattern.compile("(?s)^### (.+?) .*");
         Matcher m = p.matcher(releaseNotesContent);
         if(!m.matches()) {
-            throw new ReleaseNotesException("Unable to parse previous version from release notes content: " + releaseNotesContent);
+            throw new ReleaseNotesException("Unable to parse previous version from release notes content: " + releaseNotesContent, null);
         }
         return m.group(1);
     }

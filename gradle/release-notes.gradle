@@ -10,11 +10,11 @@ ext.getPreviousVersion = {
 
 ext.getReleaseNotes = {
     project.logger.lifecycle("Building and updating release notes in {}", notesFile)
-    def builder = Notes.gitHubNotesBuilder(project, "GH_TOKEN")
+    def builder = Notes.gitHubNotesBuilder(project.projectDir, "GH_TOKEN")
     def prev = "v" + getPreviousVersion()
     def current = "HEAD"
     project.logger.lifecycle("Building notes for revisions: {} -> {}", prev, current)
-    def newContent = builder.buildNotes(prev, current)
+    def newContent = builder.buildNotes(project.version, prev, current)
     newContent
 }
 

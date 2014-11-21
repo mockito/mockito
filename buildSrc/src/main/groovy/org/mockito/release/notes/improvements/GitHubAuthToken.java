@@ -13,7 +13,7 @@ class GitHubAuthToken {
     public String getToken() {
         String out = System.getenv(envVariableName);
         if (out == null) {
-            throw new ReleaseNotesException("Environmental variable '" + envVariableName + "' is missing.");
+            throw new ReleaseNotesException("Environmental variable '" + envVariableName + "' is missing.", null);
         }
         return out;
     }
