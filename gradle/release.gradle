@@ -10,7 +10,12 @@ In case the release process from Travis CI fails, please try:
 assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
-apply from: rootProject.file("gradle/release-notes.gradle")
+
+apply plugin: 'release-notes'
+
+notes {
+    notesFile = project.file("doc/release-notes/official.md")
+}
 
 def dryRun = project.hasProperty('dryRun')
 
@@ -20,8 +25,8 @@ configurations {
 }
 
 dependencies {
-    previousSrc "org.mockito:mockito-core:${project.getPreviousVersion()}:sources@jar"
-    previousPom "org.mockito:mockito-core:${project.getPreviousVersion()}@pom"
+    previousSrc "org.mockito:mockito-core:${project.notes.getPreviousVersion()}:sources@jar"
+    previousPom "org.mockito:mockito-core:${project.notes.getPreviousVersion()}@pom"
 }
 
 task("comparePublications", type: org.mockito.release.comparison.PublicationsComparatorTask) {
@@ -69,7 +74,7 @@ task("release") {
         configureGit()
         //We need good chunk of recent commits to build release notes correctly
         run "git", "pull", "--depth", "500"
-        project.updateReleaseNotes()
+        project.notes.updateReleaseNotes()
 
         //Operations on new tag
         commitReleaseNotes(buildInfo, author)
