@@ -1,6 +1,5 @@
 package org.mockito.release.notes.improvements;
 
-import com.jcabi.github.*;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.mockito.release.notes.util.IOUtil;
