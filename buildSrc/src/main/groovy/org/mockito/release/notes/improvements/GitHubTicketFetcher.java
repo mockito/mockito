@@ -19,13 +19,13 @@ class GitHubTicketFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(GitHubTicketFetcher.class);
 
-    void fetchTickets(String gitHubAuthToken, Collection<String> ticketIds, DefaultImprovements improvements) {
+    void fetchTickets(String authToken, Collection<String> ticketIds, DefaultImprovements improvements) {
         if (ticketIds.isEmpty()) {
             return;
         }
         LOG.info("Querying GitHub API for {} tickets", ticketIds.size());
-        String url = "https://api.github.com/repos/mockito/mockito/issues?access_token=" + gitHubAuthToken;
-        url += "&state=closed";
+        String url = "https://api.github.com/repos/mockito/mockito/issues?access_token=" + authToken;
+        url += "&state=closed&filter=all";
 
         Set<Long> tickets = new HashSet<Long>();
         for (String id : ticketIds) {
@@ -42,7 +42,9 @@ class GitHubTicketFetcher {
     private void fetch(Set<Long> tickets, DefaultImprovements improvements, String url) throws IOException {
         InputStream response = new URL(url).openStream();
         String content = IOUtil.readStream(response);
+        LOG.info("GitHub API responded successfully.");
         List<JSONObject> issues = (List) JSONValue.parse(content);
+        LOG.info("GitHub API returned {} issues.", issues.size());
 
         for (JSONObject issue : issues) {
             long id = (Long) issue.get("number");

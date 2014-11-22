@@ -12,7 +12,7 @@ class ReleaseNotesExtension {
     final static String EXT_NAME = "notes"
 
     File notesFile;
-    String authTokenEnvVar = "GH_TOKEN";
+    String authToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"; //read-only token
 
     private final File workDir;
     private final String version;
@@ -28,9 +28,9 @@ class ReleaseNotesExtension {
             throw new GradleException("'notesFile' must be configured and the file must be present.\n" +
                     + "Example: ${EXT_NAME}.notesFile = project.file('docs/release-notes.md')")
         }
-        if (!authTokenEnvVar) {
-            throw new GradleException("'authTokenEnvVar' must be configured.\n" +
-                    + "Example: ${EXT_NAME}.authTokenEnvVar = 'GH_TOKEN'")
+        if (!authToken) {
+            throw new GradleException("'authToken' must be configured.\n" +
+                    + "Example: ${EXT_NAME}.authToken = 'secret'")
         }
     }
 
@@ -45,7 +45,7 @@ class ReleaseNotesExtension {
     String getReleaseNotes() {
         assertConfigured()
         LOG.lifecycle("Building new release notes based on {}", notesFile)
-        def builder = Notes.gitHubNotesBuilder(workDir, authTokenEnvVar)
+        def builder = Notes.gitHubNotesBuilder(workDir, authToken)
         def prev = "v" + getPreviousVersion()
         def current = "HEAD"
         LOG.lifecycle("Building notes for revisions: {} -> {}", prev, current)
