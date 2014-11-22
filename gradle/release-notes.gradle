@@ -1,5 +1,0 @@
-apply plugin: 'release-notes'
-
-release {
-    notesFile = project.file("doc/release-notes/official.md")
-}
