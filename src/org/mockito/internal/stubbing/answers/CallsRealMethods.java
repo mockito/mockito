@@ -36,7 +36,7 @@ public class CallsRealMethods implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
     	if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
-    		return Answers.CALLS_REAL_METHODS.get().answer(invocation);
+    		return Answers.RETURNS_DEFAULTS.get().answer(invocation);
     	}
         return invocation.callRealMethod();
     }
