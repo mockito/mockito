@@ -1,3 +1,13 @@
+### 1.10.13 (2014-11-22 21:28 UTC)
+
+* Authors: 2
+* Commits: 32
+  * 31: Szczepan Faber
+  * 1: fluentfuture
+* Improvements: 2
+  * Problem spying on abstract classes [(#122)](https://github.com/mockito/mockito/issues/122)
+  * tidy-up and rework release notes automation [(#119)](https://github.com/mockito/mockito/issues/119)
+
 ### 1.10.12 (2014-11-17 00:09 UTC)
 
 Special thanks to _Ben Yu_ for the original idea and implementation of the abstract classes spying!
