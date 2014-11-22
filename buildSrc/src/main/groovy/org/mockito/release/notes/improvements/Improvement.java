@@ -6,12 +6,12 @@ import java.util.Set;
 
 class Improvement {
 
-    private final int id;
+    private final long id;
     private final String title;
     private final String url;
     private final Collection<String> labels;
 
-    public Improvement(int id, String title, String url, Collection<String> labels) {
+    public Improvement(long id, String title, String url, Collection<String> labels) {
         this.id = id;
         this.title = title;
         this.url = url;

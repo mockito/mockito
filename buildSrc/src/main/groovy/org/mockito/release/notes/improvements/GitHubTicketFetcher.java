@@ -1,11 +1,18 @@
 package org.mockito.release.notes.improvements;
 
 import com.jcabi.github.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.mockito.release.notes.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class GitHubTicketFetcher {
@@ -16,32 +23,38 @@ class GitHubTicketFetcher {
         if (ticketIds.isEmpty()) {
             return;
         }
+        LOG.info("Querying GitHub API for {} tickets", ticketIds.size());
+        String url = "https://api.github.com/repos/mockito/mockito/issues?access_token=" + gitHubAuthToken;
+        url += "&state=closed";
+
+        Set<Long> tickets = new HashSet<Long>();
+        for (String id : ticketIds) {
+            tickets.add(Long.parseLong(id));
+        }
+
         try {
-            //TODO if possible we should query for all tickets via one REST call and perhaps stop using jcapi
-            LOG.info("Querying GitHub API for {} tickets", ticketIds.size());
-            RtGithub github = new RtGithub(gitHubAuthToken);
-            Repo repo = github.repos().get(new Coordinates.Simple("mockito/mockito"));
-            Issues issues = repo.issues();
-            for (String ticketId : ticketIds) {
-                LOG.info(" #{}", ticketId);
-                //TODO make ticked id an int
-                Issue i = issues.get(Integer.parseInt(ticketId));
-                Issue.Smart issue = new Issue.Smart(i);
-                if (issue.exists() && !issue.isOpen()) {
-                    improvements.add(new Improvement(issue.number(), issue.title(), issue.htmlUrl().toString(),
-                            labels(issue.labels())));
-                }
-            }
+            fetch(tickets, improvements, url);
         } catch (Exception e) {
             throw new RuntimeException("Problems fetching " + ticketIds.size() + " from GitHub", e);
         }
     }
 
-    private static Set<String> labels(IssueLabels labels) {
-        Set<String> out = new HashSet<String>();
-        for (Label label : labels.iterate()) {
-            out.add(label.name());
+    private void fetch(Set<Long> tickets, DefaultImprovements improvements, String url) throws IOException {
+        InputStream response = new URL(url).openStream();
+        String content = IOUtil.readStream(response);
+        List<JSONObject> issues = (List) JSONValue.parse(content);
+
+        for (JSONObject issue : issues) {
+            long id = (Long) issue.get("number");
+            if (tickets.remove(id)) {
+                String issueUrl = (String) issue.get("html_url");
+                String title = (String) issue.get("title");
+                improvements.add(new Improvement(id, title, issueUrl, new HashSet()));
+
+                if (tickets.isEmpty()) {
+                    return;
+                }
+            }
         }
-        return out;
     }
 }
