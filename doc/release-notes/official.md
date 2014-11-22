@@ -1,8 +1,10 @@
 ### 1.10.12 (2014-11-17 00:09 UTC)
 
+Special thanks to _Ben Yu_ for the original idea and implementation of the abstract classes spying!
+
 * Authors: 2
 * Commits: 23
-  * 22: Szczepan Faber
+  * 22: Szczepan Faber based on Ben Yu's PR
   * 1: jerzykrlk
 * Improvements: 2
   * Other: 2
