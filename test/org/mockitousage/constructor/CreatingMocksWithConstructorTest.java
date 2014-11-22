@@ -1,6 +1,7 @@
 package org.mockitousage.constructor;
 
-import org.junit.Ignore;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
@@ -97,5 +98,31 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         } catch (MockitoException e) {
             assertEquals("Mocks instantiated with constructor cannot be combined with " + SerializableMode.ACROSS_CLASSLOADERS + " serialization mode.", e.getMessage());
         }
+    }
+
+    static abstract class AbstractThing {
+    	abstract String name();
+    	String fullName() {
+    		return "abstract " + name();
+    	}
+    }
+    
+    @Test
+    public void abstractMethodReturnsDefault() {
+    	AbstractThing thing = spy(AbstractThing.class);
+    	assertEquals("abstract null", thing.fullName());
+    }
+    
+    @Test
+    public void abstractMethodStubbed() {
+    	AbstractThing thing = spy(AbstractThing.class);
+    	when(thing.name()).thenReturn("me");
+    	assertEquals("abstract me", thing.fullName());
+    }
+ 
+    @Test
+    public void testCallsRealInterfaceMethod() {
+    	List<String> list = mock(List.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
+    	assertNull(list.get(1));
     }
 }

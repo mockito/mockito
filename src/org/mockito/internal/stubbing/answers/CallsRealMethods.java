@@ -5,7 +5,9 @@
 package org.mockito.internal.stubbing.answers;
 
 import java.io.Serializable;
+import java.lang.reflect.Modifier;
 
+import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -33,6 +35,9 @@ public class CallsRealMethods implements Answer<Object>, Serializable {
     private static final long serialVersionUID = 9057165148930624087L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
+    	if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
+    		return new GloballyConfiguredAnswer().answer(invocation);
+    	}
         return invocation.callRealMethod();
     }
 }
