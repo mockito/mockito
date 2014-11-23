@@ -132,6 +132,7 @@ public class InvocationNotifierHandlerTest {
     }
 
     private static class CustomListener implements InvocationListener {
+    	CustomListener() {}
         public void reportInvocation(MethodInvocationReport methodInvocationReport) {
             // nop
         }

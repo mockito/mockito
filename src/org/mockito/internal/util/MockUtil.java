@@ -66,7 +66,9 @@ public class MockUtil {
     }
 
     public boolean isSpy(Object mock) {
-        return isMockitoMock(mock) && getMockSettings(mock).getSpiedInstance() != null;
+        return isMockitoMock(mock) &&
+        		(getMockSettings(mock).getSpiedInstance() != null
+        		    || getMockSettings(mock).isUsingConstructor());
     }
 
     private <T> boolean isMockitoMock(T mock) {
