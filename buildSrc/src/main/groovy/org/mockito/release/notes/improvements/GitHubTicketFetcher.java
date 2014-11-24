@@ -40,7 +40,7 @@ class GitHubTicketFetcher {
 
     private void fetch(Set<Long> tickets, DefaultImprovements improvements, String url) throws IOException {
         InputStream response = new URL(url).openStream();
-        String content = IOUtil.readStream(response);
+        String content = IOUtil.readFully(response);
         LOG.info("GitHub API responded successfully.");
         List<JSONObject> issues = (List) JSONValue.parse(content);
         LOG.info("GitHub API returned {} issues.", issues.size());

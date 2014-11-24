@@ -2,14 +2,19 @@ package org.mockito.release.notes.util;
 
 import java.io.*;
 
-//TODO SF document and cover
+/**
+ * IO utils. A bit of reinventing the wheel but we don't want extra dependencies at this stage and we want to be java.
+ */
 public class IOUtil {
 
-    public static String readStream(InputStream is) {
+    /**
+     * Reads string from the stream and closes it
+     */
+    public static String readFully(InputStream stream) {
         BufferedReader r = null;
         try {
-            r = new BufferedReader(new InputStreamReader(is));
-            return readNow(is);
+            r = new BufferedReader(new InputStreamReader(stream));
+            return readNow(stream);
         } catch (Exception e) {
             throw new RuntimeException("Problems reading stream", e);
         } finally {
@@ -17,6 +22,11 @@ public class IOUtil {
         }
     }
 
+    /**
+     * Closes the target. Does nothing when target is null. Is not silent, throws exception on IOException.
+     *
+     * @param closeable the target, may be null
+     */
     public static void close(Closeable closeable) {
         if (closeable != null) {
             try {
@@ -28,14 +38,7 @@ public class IOUtil {
     }
 
     private static String readNow(InputStream is) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        while(null != (line = r.readLine())) {
-            sb.append(line).append("\n");
-        }
-
-        return sb.toString();
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 }
