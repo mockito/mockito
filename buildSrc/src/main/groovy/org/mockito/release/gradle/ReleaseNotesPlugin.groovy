@@ -7,7 +7,6 @@ import org.gradle.api.Task
 class ReleaseNotesPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        //TODO SF have read-only auth token that is checked-in to the repo
         //TODO SF document how to work with release notes, e.g. that we only show closed tickets, etc.
         def notes = project.extensions.create(ReleaseNotesExtension.EXT_NAME, ReleaseNotesExtension, project.projectDir, project.version.toString())
         project.tasks.create("updateReleaseNotes") { Task task ->
