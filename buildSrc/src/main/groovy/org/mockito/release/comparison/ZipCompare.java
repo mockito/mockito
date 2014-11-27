@@ -1,5 +1,8 @@
 package org.mockito.release.comparison;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -9,8 +12,11 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-//TODO SF - borrowed code, not very nice, should not write to system out and should throw decent exceptions
+import static java.lang.String.format;
+
 class ZipCompare {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ZipCompare.class);
 
     boolean compareZips(String filePath1, String filePath2) {
         ZipFile file1;
@@ -27,7 +33,7 @@ class ZipCompare {
             throw new ZipCompareException("Could not open zip file " + filePath1, e);
         }
 
-        System.out.println("Comparing " + filePath1 + " with " + filePath2 + ":");
+        LOG.info("Comparing " + filePath1 + " with " + filePath2);
 
         Set set1 = new LinkedHashSet();
         for (Enumeration e = file1.entries(); e.hasMoreElements(); )
@@ -42,7 +48,7 @@ class ZipCompare {
         for (Iterator i = set1.iterator(); i.hasNext(); ) {
             String name = (String) i.next();
             if (!set2.contains(name)) {
-                System.out.println(name + " not found in " + filePath2);
+                LOG.info(name + " not found in " + filePath2);
                 errcount += 1;
                 continue;
             }
@@ -50,26 +56,23 @@ class ZipCompare {
                 set2.remove(name);
                 if (!streamsEqual(file1.getInputStream(file1.getEntry(name)), file2.getInputStream(file2
                         .getEntry(name)))) {
-                    System.out.println(name + " does not match");
+                    LOG.info(name + " does not match");
                     errcount += 1;
                     continue;
                 }
             } catch (Exception e) {
-                System.out.println(name + ": IO Error " + e);
-                e.printStackTrace();
-                errcount += 1;
-                continue;
+                throw new ZipCompareException(format("Unable to compare zip entry '%s' found in '%s' with '%s'", name, filePath1, filePath2), e);
             }
             filecount += 1;
         }
         for (Iterator i = set2.iterator(); i.hasNext(); ) {
             String name = (String) i.next();
-            System.out.println(name + " not found in " + filePath1);
+            LOG.info(name + " not found in " + filePath1);
             errcount += 1;
         }
-        System.out.println(filecount + " entries matched");
+        LOG.info(filecount + " entries matched");
         if (errcount > 0) {
-            System.out.println(errcount + " entries did not match");
+            LOG.info(errcount + " entries did not match");
             return false;
         }
         return true;
