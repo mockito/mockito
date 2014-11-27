@@ -17,16 +17,14 @@ class ZipCompare {
         try {
             file1 = new ZipFile(filePath1);
         } catch (IOException e) {
-            System.out.println("Could not open zip file " + filePath1 + ": " + e);
-            return false;
+            throw new ZipCompareException("Could not open zip file " + filePath1, e);
         }
 
         ZipFile file2;
         try {
             file2 = new ZipFile(filePath2);
         } catch (IOException e) {
-            System.out.println("Could not open zip file " + filePath1 + ": " + e);
-            return false;
+            throw new ZipCompareException("Could not open zip file " + filePath1, e);
         }
 
         System.out.println("Comparing " + filePath1 + " with " + filePath2 + ":");
@@ -115,6 +113,12 @@ class ZipCompare {
         } finally {
             stream1.close();
             stream2.close();
+        }
+    }
+
+    static class ZipCompareException extends RuntimeException {
+        public ZipCompareException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }
