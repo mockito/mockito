@@ -14,6 +14,11 @@ import java.util.zip.ZipFile;
 
 import static java.lang.String.format;
 
+/**
+ * Borrowed from the web so it does not look great.
+ * I've removed System.out.println, fixed exception handling and added coverage.
+ * For now it might be good enough.
+ */
 class ZipCompare {
 
     private final static Logger LOG = LoggerFactory.getLogger(ZipCompare.class);
