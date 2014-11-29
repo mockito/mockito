@@ -7,7 +7,9 @@ package org.mockito.internal.configuration;
 import static org.mockito.Mockito.withSettings;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 import org.mockito.Captor;
@@ -66,22 +68,54 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
                                 .name(field.getName())));
                     } else {
-                    	MockSettings settings = withSettings()
-                    			.useConstructor()
-                    			.defaultAnswer(Mockito.CALLS_REAL_METHODS)
-                    			.name(field.getName());
-                    	if (field.getType().getEnclosingClass() != null
-                    			&& !Modifier.isStatic(field.getType().getModifiers())
-                    			&& field.getType().getEnclosingClass().isInstance(testInstance)) {
-                    		settings.outerInstance(testInstance);
-                    	}
-						field.set(testInstance, Mockito.mock(field.getType(), settings));
+                    	field.set(testInstance, newSpyInstance(testInstance, field));
                     }
                 } catch (IllegalAccessException e) {
+                    throw new MockitoException("Problems initiating spied field " + field.getName(), e);
+                } catch (InstantiationException e) {
+                    throw new MockitoException("Problems initiating spied field " + field.getName(), e);
+                } catch (InvocationTargetException e) {
                     throw new MockitoException("Problems initiating spied field " + field.getName(), e);
                 }
             }
         }
+    }
+  
+    private static Object newSpyInstance(Object testInstance, Field field)
+    		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    	MockSettings settings = withSettings()
+    			.defaultAnswer(Mockito.CALLS_REAL_METHODS)
+    			.name(field.getName());
+    	Class<?> type = field.getType();
+    	if (type.isInterface()) {
+    		return Mockito.mock(type,settings.useConstructor());
+    	}
+    	try {
+	    	if (!Modifier.isStatic(type.getModifiers())) {
+	        	Class<?> enclosing = type.getEnclosingClass();
+	        	if (enclosing != null) {
+	        		if (!enclosing.isInstance(testInstance)) {
+	        			throw new MockitoException("Cannot spy inner " + type);
+	        		}
+	        		if (Modifier.isPrivate(type.getDeclaredConstructor(enclosing).getModifiers())) {
+	        			throw new MockitoException("Cannot spy inner " + type + " with private constructor");
+	        		}
+	        		return Mockito.mock(type, settings
+	        				.useConstructor()
+	        				.outerInstance(testInstance));
+	        	}
+	    	}
+	    	Constructor<?> constructor = type.getDeclaredConstructor();
+	    	if (Modifier.isPrivate(constructor.getModifiers())) {
+	    		constructor.setAccessible(true);
+	    		return Mockito.mock(type, settings
+	    				.spiedInstance(constructor.newInstance()));
+	    	} else {
+	    		return Mockito.mock(type, settings.useConstructor());
+	    	}
+    	} catch (NoSuchMethodException noDefaultConstructor) {
+    		throw new MockitoException("0-arg constructor is required to spy " + type);
+    	}
     }
     
     //TODO duplicated elsewhere

@@ -17,7 +17,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class MockingDetailsTest {
     
     private static class TestClass{
-    	TestClass() {}
     }
 
     @Mock
