@@ -5,7 +5,9 @@
 package org.mockitousage.annotation;
 
 import org.fest.assertions.Assertions;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -28,6 +30,8 @@ public class SpyAnnotationTest extends TestBase {
 
     @Spy
     NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
+  
+    @Rule public final ExpectedException shouldThrow = ExpectedException.none();
 
 	@Test
     public void shouldInitSpies() throws Exception {
@@ -65,7 +69,7 @@ public class SpyAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new FailingSpy());
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains("Unable to create mock instance");
+            Assertions.assertThat(e.getMessage()).contains("0-arg constructor is required");
         }
     }
     
@@ -134,6 +138,19 @@ public class SpyAnnotationTest extends TestBase {
     public void shouldResetSpies() throws Exception {
         spiedList.get(10); // see shouldInitSpy
     }
+
+	@Test
+	public void shouldReportWhenInnerClassNotEnclosedByTestInstance() throws Exception {
+		class Outer {
+			class Inner {}
+		}
+		class WithSpy {
+			@Spy private Outer.Inner inner;
+		}
+		shouldThrow.expect(MockitoException.class);
+		shouldThrow.expectMessage("Cannot spy inner class ");
+		MockitoAnnotations.initMocks(new WithSpy());
+	}
 
     static class NestedClassWithoutDefinedConstructor { }
 
