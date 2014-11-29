@@ -4,18 +4,24 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.*;
+import static org.mockito.Mockito.withSettings;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.FieldInitializationReport;
-import org.mockito.internal.util.reflection.FieldInitializer;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-import static org.mockito.Mockito.withSettings;
 
 /**
  * Process fields annotated with &#64;Spy.
@@ -48,30 +54,68 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
                 assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+                field.setAccessible(true);
                 Object instance = null;
                 try {
-                    FieldInitializationReport report = new FieldInitializer(testInstance, field).initialize();
-                    instance = report.fieldInstance();
-                } catch (MockitoException e) {
-                    new Reporter().cannotInitializeForSpyAnnotation(field.getName(), e);
-                }
-                try {
+                    instance = field.get(testInstance);
                     if (new MockUtil().isMock(instance)) {
                         // instance has been spied earlier
                         // for example happens when MockitoAnnotations.initMocks is called two times.
                         Mockito.reset(instance);
-                    } else {
-                        field.setAccessible(true);
+                    } else if (instance != null) {
                         field.set(testInstance, Mockito.mock(instance.getClass(), withSettings()
                                 .spiedInstance(instance)
                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
                                 .name(field.getName())));
+                    } else {
+                    	field.set(testInstance, newSpyInstance(testInstance, field));
                     }
                 } catch (IllegalAccessException e) {
+                    throw new MockitoException("Problems initiating spied field " + field.getName(), e);
+                } catch (InstantiationException e) {
+                    throw new MockitoException("Problems initiating spied field " + field.getName(), e);
+                } catch (InvocationTargetException e) {
                     throw new MockitoException("Problems initiating spied field " + field.getName(), e);
                 }
             }
         }
+    }
+  
+    private static Object newSpyInstance(Object testInstance, Field field)
+    		throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    	MockSettings settings = withSettings()
+    			.defaultAnswer(Mockito.CALLS_REAL_METHODS)
+    			.name(field.getName());
+    	Class<?> type = field.getType();
+    	if (type.isInterface()) {
+    		return Mockito.mock(type,settings.useConstructor());
+    	}
+    	try {
+	    	if (!Modifier.isStatic(type.getModifiers())) {
+	        	Class<?> enclosing = type.getEnclosingClass();
+	        	if (enclosing != null) {
+	        		if (!enclosing.isInstance(testInstance)) {
+	        			throw new MockitoException("Cannot spy inner " + type);
+	        		}
+	        		if (Modifier.isPrivate(type.getDeclaredConstructor(enclosing).getModifiers())) {
+	        			throw new MockitoException("Cannot spy inner " + type + " with private constructor");
+	        		}
+	        		return Mockito.mock(type, settings
+	        				.useConstructor()
+	        				.outerInstance(testInstance));
+	        	}
+	    	}
+	    	Constructor<?> constructor = type.getDeclaredConstructor();
+	    	if (Modifier.isPrivate(constructor.getModifiers())) {
+	    		constructor.setAccessible(true);
+	    		return Mockito.mock(type, settings
+	    				.spiedInstance(constructor.newInstance()));
+	    	} else {
+	    		return Mockito.mock(type, settings.useConstructor());
+	    	}
+    	} catch (NoSuchMethodException noDefaultConstructor) {
+    		throw new MockitoException("0-arg constructor is required to spy " + type);
+    	}
     }
     
     //TODO duplicated elsewhere
