@@ -149,7 +149,7 @@ public class SpyAnnotationTest extends TestBase {
 			@Spy private Outer.Inner inner;
 		}
 		shouldThrow.expect(MockitoException.class);
-		shouldThrow.expectMessage("Cannot spy inner class ");
+		shouldThrow.expectMessage("outer class is supplied via withSettings().outerInstance()");
 		MockitoAnnotations.initMocks(new WithSpy());
 	}
 
