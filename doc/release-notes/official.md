@@ -1,3 +1,13 @@
+### 1.10.14 (2014-12-02 10:01 UTC)
+
+* Authors: 3
+* Commits: 23
+  * 16: Szczepan Faber
+  * 5: Werner Beroux
+  * 2: fluentfuture
+* Improvements: 1
+  * @Spy annotation supports abstract classes [(#126)](https://github.com/mockito/mockito/pull/126)
+
 ### 1.10.13 (2014-11-22 21:28 UTC)
 
 * Authors: 2
