@@ -1904,6 +1904,36 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Sets consecutive return values to be returned when a method is called. See {@link Mockito#doReturn(Object)} for
+     * examples where you may want to use doReturn rather than {@link Mockito#when(Object)}.
+     *
+     * <pre class="code"><code class="java">
+     *   List list = new ArrayList();
+     *   Iterator iterator = list.iterator();
+     *   Iterator spy = spy(iterator);
+     *
+     *   doReturn(1, 2, 3).when(spy).next();
+     * </code></pre>
+     *
+     * @param firstReturnValue The value to be returned the first time the stubbed method is called
+     * @param furtherReturnValues The values to be returned in order on subsequent invocations of the stubbed method
+     * @return Stubber - to select a method for stubbing
+     */
+    public static Stubber doReturn(Object firstReturnValue, Object... furtherReturnValues) {
+        Stubber stubber = doReturn(firstReturnValue);
+
+        if (furtherReturnValues == null) {
+            return stubber.doReturn(null);
+        }
+
+        for (Object value: furtherReturnValues) {
+            stubber = stubber.doReturn(value);
+        }
+
+        return stubber;
+    }
+
+    /**
      * Creates {@link org.mockito.InOrder} object that allows verifying mocks in order.
      *
      * <pre class="code"><code class="java">

@@ -131,6 +131,16 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
+    public void shouldAllowChainedStubbingWithVarargsSignature() {
+        doReturn("foo", "bar", "baz").when(mock).simpleMethod();
+
+        assertEquals("foo", mock.simpleMethod());
+        assertEquals("bar", mock.simpleMethod());
+        assertEquals("baz", mock.simpleMethod());
+        assertEquals("baz", mock.simpleMethod());
+    }
+
+    @Test
     public void shouldAllowDoCallRealMethodInChainedStubbing() throws Exception {
         MethodsImpl methods = mock(MethodsImpl.class);
         doReturn("A").doCallRealMethod()
