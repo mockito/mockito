@@ -4,86 +4,49 @@
  */
 package org.mockitousage.basicapi;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-public class MockingDetailsTest {
+public class MockingDetailsTest extends TestBase {
     
-    private static class TestClass{
-    }
+    static class TestClass {}
 
-    @Mock
-    TestClass mock1;
-    @Spy
-    TestClass spy1;
-    TestClass mock2;
-    TestClass spy2;
-    TestClass nonMock;
-    
-    @Before
-    public void setUp(){
-        initMocks( this );
-        mock2 = mock( TestClass.class );
-        spy2 = spy( new TestClass());
-        nonMock = new TestClass();
-    }
-    
+    @Mock TestClass annotatedMock;
+    @Spy TestClass annotatedSpy;
+
     @Test
-    public void shouldReturnTrue_FromIsMock_ForAnnotatedMock(){
-        assertTrue(mockingDetails(mock1).isMock());
+    public void should_know_spy(){
+        assertTrue(mockingDetails(annotatedSpy).isMock());
+        assertTrue(mockingDetails(spy( new TestClass())).isMock());
+        assertTrue(mockingDetails(spy(TestClass.class)).isMock());
+        assertTrue(mockingDetails(mock(TestClass.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))).isMock());
+
+        assertTrue(mockingDetails(annotatedSpy).isSpy());
+        assertTrue(mockingDetails(spy( new TestClass())).isSpy());
+        assertTrue(mockingDetails(spy(TestClass.class)).isSpy());
+        assertTrue(mockingDetails(mock(TestClass.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))).isSpy());
     }
 
     @Test
-    public void shouldReturnTrue_FromIsMock_ForDirectMock(){
-        assertTrue(mockingDetails(mock2).isMock());
+    public void should_know_mock(){
+        assertTrue(mockingDetails(annotatedMock).isMock());
+        assertTrue(mockingDetails(mock(TestClass.class)).isMock());
+
+        assertFalse(mockingDetails(annotatedMock).isSpy());
+        assertFalse(mockingDetails(mock(TestClass.class)).isSpy());
     }
 
     @Test
-    public void shouldReturnTrue_FromIsMock_ForAnnotatedSpy(){
-        assertTrue(mockingDetails(spy1).isMock());
-    }
+    public void should_handle_non_mocks() {
+        assertFalse(mockingDetails("non mock").isSpy());
+        assertFalse(mockingDetails("non mock").isMock());
 
-    @Test
-    public void shouldReturnTrue_FromIsMock_ForDirectSpy(){
-
-        assertTrue(mockingDetails(spy2).isMock());
-    }
-
-    @Test
-    public void shouldReturnFalse_FromIsMock_ForNonMock(){
-        assertFalse(mockingDetails(nonMock).isMock());
-    }
-
-    @Test
-    public void shouldReturnFalse_FromIsSpy_ForAnnotatedMock(){
-        assertFalse(mockingDetails(mock1).isSpy());
-    }
-
-    @Test
-    public void shouldReturnFalse_FromIsSpy_ForDirectMock(){
-        assertFalse(mockingDetails(mock2).isSpy());
-    }
-
-
-    @Test
-    public void shouldReturnTrue_FromIsSpy_ForAnnotatedSpy(){
-        assertTrue(mockingDetails(spy1).isSpy());
-    }
-
-    @Test
-    public void shouldReturnTrue_FromIsSpy_ForDirectSpy(){
-        assertTrue(mockingDetails(spy2).isSpy());
-    }
-
-    @Test
-    public void shouldReturnFalse_FromIsSpy_ForNonMock(){
-        assertFalse(mockingDetails(nonMock).isSpy());
+        assertFalse(mockingDetails(null).isSpy());
+        assertFalse(mockingDetails(null).isMock());
     }
 }

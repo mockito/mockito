@@ -14,11 +14,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnitRule;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
-import org.mockito.verification.After;
-import org.mockito.verification.Timeout;
-import org.mockito.verification.VerificationAfterDelay;
-import org.mockito.verification.VerificationMode;
-import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.verification.*;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>
@@ -1194,7 +1190,7 @@ public class Mockito extends Matchers {
      * In future Mockito versions MockingDetails may grow and provide other useful information about the mock,
      * e.g. invocations, stubbing info, etc.
      *
-     * @param toInspect - object to inspect
+     * @param toInspect - object to inspect. null input is allowed.
      * @return A {@link org.mockito.MockingDetails} instance.
      * @since 1.9.5
      */
