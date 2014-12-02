@@ -1,24 +1,20 @@
 package org.mockito;
 
-import java.lang.reflect.Method;
+import org.junit.Test;
+import org.mockito.internal.MockitoCore;
+import org.mockito.invocation.Invocation;
+import org.mockitoutil.TestBase;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Test;
-import org.mockito.internal.MockitoCore;
-import org.mockito.invocation.Invocation;
+import static org.mockito.Mockito.mock;
 
-import static org.mockito.Mockito.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-public class MockingDetailsTest {
+public class MockingDetailsTest extends TestBase {
 	
 	@Test
-	public void testGetInvocations() {
+	public void should_provide_invocations() {
 		List<String> methodsInvoked = new ArrayList<String>() {{
 			add("add");
 			add("remove");
@@ -44,4 +40,10 @@ public class MockingDetailsTest {
 			}
 		}	
 	}
+
+    @Test
+    public void should_handle_null_input() {
+        //TODO SF, decide how to handle it and ensure the there is a top level integ test for the mockingDetails().getInvocations()
+        //assertTrue(new MockitoCore().mockingDetails(null).getInvocations().isEmpty());
+    }
 }
