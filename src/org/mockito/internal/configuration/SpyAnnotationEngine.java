@@ -63,8 +63,10 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                                 .defaultAnswer(Mockito.CALLS_REAL_METHODS)
                                 .name(field.getName())));
                     } else {
-                    	field.set(testInstance, newSpyInstance(testInstance, field));
+                        field.set(testInstance, newSpyInstance(testInstance, field));
                     }
+                } catch (MockitoException e) {
+                    throw e;
                 } catch (Exception e) {
                     throw new MockitoException("Problems initiating @Spy annotated field '" + field.getName() + "'", e);
                 }
@@ -105,7 +107,8 @@ public class SpyAnnotationEngine implements AnnotationEngine {
 	    		return Mockito.mock(type, settings.useConstructor());
 	    	}
     	} catch (NoSuchMethodException noDefaultConstructor) {
-    		throw new MockitoException("0-arg constructor is required to spy " + type);
+    		throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName()
+                    + "'. Please ensure that the type '" + type.getSimpleName()  + "' has 0-arg constructor.");
     	}
     }
     
