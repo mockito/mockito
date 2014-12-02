@@ -17,6 +17,8 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.withSettings;
+
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
     
@@ -63,8 +65,11 @@ public class MockUtilTest extends TestBase {
     public void should_validate_spy() {
         assertFalse(mockUtil.isSpy("i mock a mock"));
         assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
-        assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
         assertFalse(mockUtil.isSpy((Class) null));
+
+        assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
+        assertTrue(mockUtil.isSpy(Mockito.spy(ArrayList.class)));
+        assertTrue(mockUtil.isSpy(Mockito.mock(ArrayList.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))));
     }
 
     @Test
@@ -88,7 +93,7 @@ public class MockUtilTest extends TestBase {
     interface SomeInterface {}
 
     @Test
-    public void shouldKnowIfTypeIsMockable() throws Exception {
+    public void should_konw_if_type_is_mockable() throws Exception {
         assertFalse(mockUtil.isTypeMockable(FinalClass.class));
         assertFalse(mockUtil.isTypeMockable(int.class));
 

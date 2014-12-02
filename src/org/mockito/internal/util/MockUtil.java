@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.ClassPathLoader;
@@ -66,10 +67,7 @@ public class MockUtil {
     }
 
     public boolean isSpy(Object mock) {
-        //TODO SF, spy is determined by default answer
-        return isMockitoMock(mock) &&
-        		(getMockSettings(mock).getSpiedInstance() != null
-        		    || getMockSettings(mock).isUsingConstructor());
+        return isMockitoMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
     }
 
     private <T> boolean isMockitoMock(T mock) {
