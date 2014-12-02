@@ -163,9 +163,12 @@ public class SpyAnnotationTest extends TestBase {
 		class WithSpy {
 			@Spy private Outer.Inner inner;
 		}
-		shouldThrow.expect(MockitoException.class);
-		shouldThrow.expectMessage("outer class is supplied via withSettings().outerInstance()");
-		MockitoAnnotations.initMocks(new WithSpy());
+		try {
+            MockitoAnnotations.initMocks(new WithSpy());
+            fail();
+        } catch (MockitoException e) {
+            assertContains("@Spy annotation can only initialize inner classes", e.getMessage());
+        }
 	}
 
     static class NestedClassWithoutDefinedConstructor { }

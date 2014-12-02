@@ -26,7 +26,7 @@ public class ConstructorInstantiatorTest extends TestBase {
             new ConstructorInstantiator(null).newInstance(SomeClass2.class);
             fail();
         } catch (InstantationException e) {
-            assertEquals("Unable to create mock instance of 'SomeClass2'.\n" +
+            assertEquals("Unable to create instance of 'SomeClass2'.\n" +
                     "Please ensure it has 0-arg constructor which invokes cleanly.", e.getMessage());
         }
     }
