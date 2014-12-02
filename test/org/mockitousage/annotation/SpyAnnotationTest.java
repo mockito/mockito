@@ -57,6 +57,7 @@ public class SpyAnnotationTest extends TestBase {
 		WithSpy withSpy = new WithSpy();
         MockitoAnnotations.initMocks(withSpy);
         assertEquals(0, withSpy.list.size());
+        //TODO SF prevent
     }
 
     @Test

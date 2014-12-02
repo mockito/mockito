@@ -92,9 +92,12 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                                 + "\nIf you are mocking an inner class please ensure the instance of the outer class is supplied via withSettings().outerInstance()"
                                 + "\nThe outer class is: '" + enclosing.getSimpleName() + "'");
 	        		}
-	        		if (Modifier.isPrivate(type.getDeclaredConstructor(enclosing).getModifiers())) {
-	        			throw new MockitoException("Cannot spy inner " + type + " with private constructor");
-	        		}
+                    //TODO SF find out if it is useful
+//	        		if (Modifier.isPrivate(type.getDeclaredConstructor(enclosing).getModifiers())) {
+//                        throw new AssertionError();
+//	        			throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName() + "'. "
+//                                + "Cannot spy inner type '" + type.getSimpleName() + "' because it has private constructor.");
+//	        		}
 	        		return Mockito.mock(type, settings
 	        				.useConstructor()
 	        				.outerInstance(testInstance));

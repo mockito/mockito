@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import java.lang.reflect.Modifier;
-
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.ClassPathLoader;
@@ -16,6 +14,8 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
+
+import java.lang.reflect.Modifier;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -66,6 +66,7 @@ public class MockUtil {
     }
 
     public boolean isSpy(Object mock) {
+        //TODO SF, spy is determined by default answer
         return isMockitoMock(mock) &&
         		(getMockSettings(mock).getSpiedInstance() != null
         		    || getMockSettings(mock).isUsingConstructor());
