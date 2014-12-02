@@ -1,12 +1,12 @@
 package org.mockitousage.constructor;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -63,7 +63,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertEquals("Unable to create mock instance of type 'HasConstructor'", e.getMessage());
-            assertContains("Please ensure it has parameter-less constructor", e.getCause().getMessage());
+            assertContains("0-arg constructor", e.getCause().getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertEquals("Unable to create mock instance of type 'InnerClass'", e.getMessage());
-            assertContains("Please ensure that the outer instance has correct type and that the target class has parameter-less constructor", e.getCause().getMessage());
+            assertContains("Please ensure that the outer instance has correct type and that the target class has 0-arg constructor.", e.getCause().getMessage());
         }
     }
 

@@ -14,13 +14,9 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
@@ -35,33 +31,51 @@ public class SpyAnnotationTest extends TestBase {
     @Rule public final ExpectedException shouldThrow = ExpectedException.none();
 
 	@Test
-    public void shouldInitSpies() throws Exception {
+    public void should_init_spy_by_instance() throws Exception {
         doReturn("foo").when(spiedList).get(10);
-
         assertEquals("foo", spiedList.get(10));
         assertTrue(spiedList.isEmpty());
     }
 
     @Test
-    public void shouldInitSpyIfNestedStaticClass() throws Exception {
-		assertNotNull(staticTypeWithNoArgConstructor);
-		assertNotNull(staticTypeWithoutDefinedConstructor);
+    public void should_init_spy_and_automatically_create_instance() throws Exception {
+        when(staticTypeWithNoArgConstructor.toString()).thenReturn("x");
+        when(staticTypeWithoutDefinedConstructor.toString()).thenReturn("y");
+        assertEquals("x", staticTypeWithNoArgConstructor.toString());
+        assertEquals("y", staticTypeWithoutDefinedConstructor.toString());
     }
 
     @Test
-    public void spyInterface() throws Exception {
+    public void should_prevent_spying_on_interfaces() throws Exception {
 		class WithSpy {
 			@Spy List<String> list;
 		}
 
 		WithSpy withSpy = new WithSpy();
-        MockitoAnnotations.initMocks(withSpy);
-        assertEquals(0, withSpy.list.size());
-        //TODO SF prevent
+        try {
+            MockitoAnnotations.initMocks(withSpy);
+            fail();
+        } catch (MockitoException e) {
+            Assertions.assertThat(e.getMessage()).contains("is an interface and it cannot be spied on");
+        }
     }
 
     @Test
-    public void shouldReportWhenNoArgConstructor() throws Exception {
+    public void should_allow_spying_on_interfaces_when_instance_is_concrete() throws Exception {
+        class WithSpy {
+            @Spy List<String> list = new LinkedList<String>();
+        }
+
+        WithSpy withSpy = new WithSpy();
+        //when
+        MockitoAnnotations.initMocks(withSpy);
+
+        //then
+        verify(withSpy.list, never()).clear();
+    }
+
+    @Test
+    public void should_report_when_no_arg_less_constructor() throws Exception {
 		class FailingSpy {
 	        @Spy
             NoValidConstructor noValidConstructor;
@@ -76,7 +90,7 @@ public class SpyAnnotationTest extends TestBase {
     }
     
     @Test
-    public void shouldReportWhenConstructorThrows() throws Exception {
+    public void should_report_when_constructor_is_explosive() throws Exception {
 		class FailingSpy {
 	        @Spy
             ThrowingConstructor throwingConstructor;
@@ -91,7 +105,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void spyAbstractClass() throws Exception {
+    public void should_spy_abstract_class() throws Exception {
 		class SpyAbstractClass {
 			@Spy AbstractList<String> list;
 			
@@ -107,7 +121,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void spyInnerClass() throws Exception {
+    public void should_spy_inner_class() throws Exception {
     	 
      class WithMockAndSpy {
     		@Spy private InnerStrength strength;
@@ -137,12 +151,12 @@ public class SpyAnnotationTest extends TestBase {
     }
 
 	@Test(expected = IndexOutOfBoundsException.class)
-    public void shouldResetSpies() throws Exception {
+    public void should_reset_spy() throws Exception {
         spiedList.get(10); // see shouldInitSpy
     }
 
 	@Test
-	public void shouldReportWhenInnerClassNotEnclosedByTestInstance() throws Exception {
+	public void should_report_when_encosing_instance_is_needed() throws Exception {
 		class Outer {
 			class Inner {}
 		}
