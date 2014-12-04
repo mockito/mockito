@@ -105,7 +105,7 @@ If you have any suggestions, find documentation unclear or you found a bug, writ
 ## Who is your bartender?
 Mockito is served to you by **Szczepan Faber and friends**. First people who tried Mockito were developers of the [Guardian](http://guardian.co.uk/) project in London in early 2008. Here is how Szczepan explained [why we need another mocking framework](http://monkeyisland.pl/2008/01/14/mockito)?
 
-Firstly, hats down before **[EasyMock](http://easymock.org/) folks** for their ideas on beautiful and refactorable mocking syntax. First hacks on Mockito were done on top of the EasyMock? code.
+Firstly, hats down before **[EasyMock](http://easymock.org/) folks** for their ideas on beautiful and refactorable mocking syntax. First hacks on Mockito were done on top of the EasyMock code.
 
 Here are just some of my friends who contributed ideas to Mockito (apologize if I missed somebody): **Igor Czechowski**, **Patric Fornasier**, **Jim Barritt**, **Felix Leipold**, **Liz Keogh**, **Bartosz Bańkowski**.
 
