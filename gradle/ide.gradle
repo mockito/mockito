@@ -13,6 +13,6 @@ idea.project.ipr {
 }
 
 afterEvaluate { //so the provided conf exists
-    idea.module.scopes.PROVIDED.plus += configurations.provided
-    eclipse.classpath.plusConfigurations += configurations.provided
+    idea.module.scopes.PROVIDED.plus += [configurations.provided]
+    eclipse.classpath.plusConfigurations += [configurations.provided]
 }
