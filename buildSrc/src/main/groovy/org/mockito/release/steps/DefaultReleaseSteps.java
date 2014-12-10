@@ -33,7 +33,7 @@ class DefaultReleaseSteps implements ReleaseSteps {
 
     private static void rollback(List<ReleaseStep> attempted) {
         System.out.println("Release failed. Rolling back " + attempted.size() + " release steps.");
-        LinkedList<ReleaseStep> targets = new LinkedList<ReleaseStep>();
+        LinkedList<ReleaseStep> targets = new LinkedList<ReleaseStep>(attempted);
         while(!targets.isEmpty()) {
             ReleaseStep s = targets.removeLast();
             Operation r = s.getRollback();
