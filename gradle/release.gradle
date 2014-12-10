@@ -59,42 +59,46 @@ bintrayUpload {
     }
 }
 
-task("release") {
+task("release", type: org.mockito.release.gradle.ReleaseTask) {
     dependsOn bintrayUpload, releaseNeeded
     onlyIf { releaseNeeded.needed }
-    doLast {
+
+    doFirst {
         if (dryRun) {
             logger.lifecycle "Dry-running the release"
         }
-        String currentVersion = project.version //the version loaded when Gradle build has started
-        String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-        String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
-        MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
+    }
 
+    String currentVersion = project.version //the version loaded when Gradle build has started
+    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+    String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
+    MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
+
+    step("ensure recent commits available") {
         //We need good chunk of recent commits to build release notes correctly
         run "git", "pull", "--depth", "500"
-        project.notes.updateReleaseNotes()
+    }
+    step("update release notes") { project.notes.updateReleaseNotes() }
 
-        //Operations on new tag
-        commitReleaseNotes(buildInfo, author)
-        createTag(currentVersion, buildInfo)
+    step("commit release notes to master") { commitReleaseNotes(buildInfo, author) }
+    step("create new version tag") { createTag(currentVersion, buildInfo) }
 
-        //Operations on gh-pages branch
-        commitUpdatedJavadoc(buildInfo, author)
+    step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo, author) }
 
-        /*
+    /*
             Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
             What can happen:
              - bintrayUpload will fail saying that the version is already released
              - git push fails saying that the pull is needed
             Resolutions:
              - see 'TROUBLESHOOTING' section at the top of this file
-        */
-        run "git", "checkout", "master"
-        run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit"
-        commitIncrementedVersion(currentVersion, buildInfo, author)
-        commitReleaseNotes(buildInfo, author) //we have it committed on a tag, now committing on master
+    */
 
+    step("start operating on master") { run "git", "checkout", "master" }
+    step("merge changes from tag to master") { run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit" }
+    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo, author) }
+    step("commit release notes on master") { commitReleaseNotes(buildInfo, author) }
+    step("push changes to all involved branches") {
         def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
             pushCommandLine << '--dry-run'
