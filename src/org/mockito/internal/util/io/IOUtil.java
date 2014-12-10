@@ -27,16 +27,16 @@ public class IOUtil {
         }
     }
 
-    public static Collection<String> readLines(Reader reader) {
+    public static Collection<String> readLines(InputStream is) {
         List<String> out = new LinkedList<String>();
-        BufferedReader r = new BufferedReader(reader);
+        BufferedReader r = new BufferedReader(new InputStreamReader(is));
         String line;
         try {
             while((line = r.readLine()) != null) {
                 out.add(line);
             }
         } catch (IOException e) {
-            throw new MockitoException("Problems reading from: " + reader, e);
+            throw new MockitoException("Problems reading from: " + is, e);
         }
         return out;
     }

@@ -2,12 +2,12 @@ package org.mockito.internal.configuration.plugins;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.internal.util.collections.Iterables;
 import org.mockito.plugins.PluginSwitcher;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -55,28 +55,19 @@ class PluginLoader {
             throw new MockitoException("Failed to load " + service, e);
         }
 
+        //TODO SF refactor
         List<T> result = new ArrayList<T>();
-        for (URL resource : Collections.list(resources)) {
-            try {
-                InputStream in = resource.openStream();
-                InputStreamReader reader = new InputStreamReader(in, "UTF-8");
-                String className = new PluginFileReader().readPluginClass(reader);
-                if (className == null) {
-                    //For backwards compatibility
-                    //If the resource does not have plugin class name we're ignoring it
-                    continue;
-                }
-                if (!pluginSwitcher.isEnabled(className)) {
-                    continue;
-                }
-                Class<?> pluginClass = loader.loadClass(className);
+        try {
+            String foundPluginClass = new PluginFinder(pluginSwitcher).findPluginClass(Iterables.toIterable(resources));
+            if (foundPluginClass != null) {
+                Class<?> pluginClass = loader.loadClass(foundPluginClass);
                 Object plugin = pluginClass.newInstance();
                 result.add(service.cast(plugin));
-            } catch (Exception e) {
-                throw new MockitoConfigurationException(
-                        "Failed to load " + service + " using " + resource, e);
             }
+            return result;
+        } catch (Exception e) {
+            throw new MockitoConfigurationException(
+                    "Failed to load " + service + " implementation declared in " + resources, e);
         }
-        return result;
     }
 }

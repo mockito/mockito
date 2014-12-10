@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,23 +27,27 @@ public class PluginFileReaderTest extends TestBase {
     @Test
     public void no_class_in_resource() throws IOException {
         //no class
-        assertNull(reader.readPluginClass(new StringReader("")));
-        assertNull(reader.readPluginClass(new StringReader("  ")));
-        assertNull(reader.readPluginClass(new StringReader(" \n ")));
+        assertNull(reader.readPluginClass(impl("")));
+        assertNull(reader.readPluginClass(impl("  ")));
+        assertNull(reader.readPluginClass(impl(" \n ")));
 
         //commented out
-        assertNull(reader.readPluginClass(new StringReader("#foo")));
-        assertNull(reader.readPluginClass(new StringReader("  # foo  ")));
-        assertNull(reader.readPluginClass(new StringReader("  # # # java.langString # ")));
-        assertNull(reader.readPluginClass(new StringReader("  \n # foo \n # foo \n ")));
+        assertNull(reader.readPluginClass(impl("#foo")));
+        assertNull(reader.readPluginClass(impl("  # foo  ")));
+        assertNull(reader.readPluginClass(impl("  # # # java.langString # ")));
+        assertNull(reader.readPluginClass(impl("  \n # foo \n # foo \n ")));
+    }
+
+    private InputStream impl(String s) {
+        return new ByteArrayInputStream(s.getBytes());
     }
 
     @Test
     public void reads_class_name() throws IOException {
-        assertEquals("java.lang.String", reader.readPluginClass(new StringReader("java.lang.String")));
-        assertEquals("x", reader.readPluginClass(new StringReader("x")));
-        assertEquals("x y z", reader.readPluginClass(new StringReader(" x y z ")));
-        assertEquals("foo.Foo", reader.readPluginClass(new StringReader(" #my class\n  foo.Foo \n #other class ")));
-        assertEquals("foo.Foo", reader.readPluginClass(new StringReader("foo.Foo  # cool class")));
+        assertEquals("java.lang.String", reader.readPluginClass(impl("java.lang.String")));
+        assertEquals("x", reader.readPluginClass(impl("x")));
+        assertEquals("x y z", reader.readPluginClass(impl(" x y z ")));
+        assertEquals("foo.Foo", reader.readPluginClass(impl(" #my class\n  foo.Foo \n #other class ")));
+        assertEquals("foo.Foo", reader.readPluginClass(impl("foo.Foo  # cool class")));
     }
 }
