@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.6.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5' //publishing to bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 }
