@@ -71,7 +71,7 @@ task("release", type: org.mockito.release.gradle.ReleaseTask) {
 
     String currentVersion = project.version //the version loaded when Gradle build has started
     String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-    String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
+    String author = '"Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"'
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
     step("ensure good chunk of recent commits is pulled for release notes automation") {
@@ -114,6 +114,7 @@ TODO:
  - declare release steps and then Gradle plugin adds tasks:
   release, rollbackRelease, releaseStep1, rollbackStep2, releaseSteps1..7
  - improve exception reporting
+ - start rolling back from last successful step (e.g. don't rollback the step that failed)
  */
 
 private void commitReleaseNotes(String buildInfo, String author) {
