@@ -1,4 +1,4 @@
-package org.mockito.internal.rules;
+package org.mockito.internal.junit;
 
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;

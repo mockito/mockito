@@ -1,4 +1,4 @@
-package org.mockito.internal.rules;
+package org.mockito.internal.junit;
 
 import org.junit.Test;
 import org.junit.runners.model.Statement;
@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.internal.junit.JUnitRule;
 
 import static org.junit.Assert.*;
 

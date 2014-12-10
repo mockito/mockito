@@ -3,7 +3,7 @@ package org.mockito.junit;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.mockito.internal.rules.JUnitRule;
+import org.mockito.internal.junit.JUnitRule;
 import org.mockito.rules.MockitoJUnit;
 
 
