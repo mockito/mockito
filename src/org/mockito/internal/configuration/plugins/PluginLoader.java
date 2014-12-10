@@ -12,8 +12,6 @@ import java.util.List;
 
 class PluginLoader {
 
-    private final PluginFileReader reader = new PluginFileReader();
-
     /**
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
@@ -52,20 +50,21 @@ class PluginLoader {
 
         List<T> result = new ArrayList<T>();
         for (URL resource : Collections.list(resources)) {
-            InputStream in = null;
             try {
-                in = resource.openStream();
-                for (String line : reader.readerToLines(new InputStreamReader(in, "UTF-8"))) {
-                    String name = reader.stripCommentAndWhitespace(line);
-                    if (name.length() != 0) {
-                        result.add(service.cast(loader.loadClass(name).newInstance()));
-                    }
+                InputStream in = resource.openStream();
+                InputStreamReader reader = new InputStreamReader(in, "UTF-8");
+                String className = new PluginFileReader().readPluginClass(reader);
+                if (className == null) {
+                    //For backwards compatibility
+                    //If the resource does not have plugin class name we're ignoring it
+                    continue;
                 }
+                Class<?> pluginClass = loader.loadClass(className);
+                Object plugin = pluginClass.newInstance();
+                result.add(service.cast(plugin));
             } catch (Exception e) {
                 throw new MockitoConfigurationException(
                         "Failed to load " + service + " using " + resource, e);
-            } finally {
-                reader.closeQuietly(in);
             }
         }
         return result;

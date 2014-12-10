@@ -1,25 +1,37 @@
 package org.mockito.internal.configuration.plugins;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 class PluginFileReader {
 
-    List<String> readerToLines(Reader reader) throws IOException {
-        List<String> result = new ArrayList<String>();
-        BufferedReader lineReader = new BufferedReader(reader);
-        String line;
-        while ((line = lineReader.readLine()) != null) {
-            result.add(line);
+    String readPluginClass(Reader reader) throws IOException {
+        List<String> lines = readerToLines(reader);
+        for (String line : lines) {
+            String stripped = stripCommentAndWhitespace(line);
+            if (stripped.length() > 0) {
+                return stripped;
+            }
         }
-        return result;
+        return null;
     }
 
-    String stripCommentAndWhitespace(String line) {
+    private static List<String> readerToLines(Reader reader) throws IOException {
+        List<String> result = new ArrayList<String>();
+        BufferedReader lineReader = new BufferedReader(reader);
+        try {
+            String line;
+            while ((line = lineReader.readLine()) != null) {
+                result.add(line);
+            }
+            return result;
+        } finally {
+            closeQuietly(lineReader);
+        }
+    }
+
+    private static String stripCommentAndWhitespace(String line) {
         int hash = line.indexOf('#');
         if (hash != -1) {
             line = line.substring(0, hash);
@@ -27,10 +39,10 @@ class PluginFileReader {
         return line.trim();
     }
 
-    void closeQuietly(InputStream in) {
-        if (in != null) {
+    private static void closeQuietly(Closeable c) {
+        if (c != null) {
             try {
-                in.close();
+                c.close();
             } catch (IOException ignored) {
             }
         }

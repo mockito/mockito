@@ -23,49 +23,25 @@ public class PluginFileReaderTest extends TestBase {
     PluginFileReader reader = new PluginFileReader();
 
     @Test
-    public void readerToLinesEmptyString() throws IOException {
-        assertEquals(Collections.emptyList(), reader.readerToLines(new StringReader("")));
+    public void no_class_in_resource() throws IOException {
+        //no class
+        assertNull(reader.readPluginClass(new StringReader("")));
+        assertNull(reader.readPluginClass(new StringReader("  ")));
+        assertNull(reader.readPluginClass(new StringReader(" \n ")));
+
+        //commented out
+        assertNull(reader.readPluginClass(new StringReader("#foo")));
+        assertNull(reader.readPluginClass(new StringReader("  # foo  ")));
+        assertNull(reader.readPluginClass(new StringReader("  # # # java.langString # ")));
+        assertNull(reader.readPluginClass(new StringReader("  \n # foo \n # foo \n ")));
     }
 
     @Test
-    public void readerToLinesNoLineBreaks() throws IOException {
-        assertEquals(Arrays.asList("a"), reader.readerToLines(new StringReader("a")));
-    }
-
-    @Test
-    public void readerToLinesWithLineBreaks() throws IOException {
-        assertEquals(Arrays.asList("a", "b", "c"),
-                reader.readerToLines(new StringReader("a\nb\nc")));
-    }
-
-    @Test
-    public void readerToLinesWithEmptyLines() throws IOException {
-        assertEquals(Arrays.asList("a", "", "c"),
-                reader.readerToLines(new StringReader("a\n\nc")));
-    }
-
-    @Test
-    public void stripCommentsAndWhitespaceEmptyInput() throws IOException {
-        assertEquals("", reader.stripCommentAndWhitespace(""));
-    }
-
-    @Test
-    public void stripCommentsAndWhitespaceWhitespaceInput() throws IOException {
-        assertEquals("", reader.stripCommentAndWhitespace(" "));
-    }
-
-    @Test
-    public void stripCommentsAndWhitespaceCommentInInput() throws IOException {
-        assertEquals("a", reader.stripCommentAndWhitespace("a#b"));
-    }
-
-    @Test
-    public void stripCommentsAndWhitespaceMultipleHashes() throws IOException {
-        assertEquals("a", reader.stripCommentAndWhitespace("a#b#c"));
-    }
-
-    @Test
-    public void stripCommentsAndWhitespaceWithWhitespaceAndComments() throws IOException {
-        assertEquals("a", reader.stripCommentAndWhitespace(" a #b"));
+    public void reads_class_name() throws IOException {
+        assertEquals("java.lang.String", reader.readPluginClass(new StringReader("java.lang.String")));
+        assertEquals("x", reader.readPluginClass(new StringReader("x")));
+        assertEquals("x y z", reader.readPluginClass(new StringReader(" x y z ")));
+        assertEquals("foo.Foo", reader.readPluginClass(new StringReader(" #my class\n  foo.Foo \n #other class ")));
+        assertEquals("foo.Foo", reader.readPluginClass(new StringReader("foo.Foo  # cool class")));
     }
 }
