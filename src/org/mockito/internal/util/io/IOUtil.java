@@ -21,7 +21,7 @@ public class IOUtil {
             pw = new PrintWriter(new FileWriter(output));
             pw.write(text);
         } catch (Exception e) {
-            throw new MockitoException("Problems writing text to file: " + output);
+            throw new MockitoException("Problems writing text to file: " + output, e);
         } finally {
             close(pw);
         }
@@ -36,7 +36,7 @@ public class IOUtil {
                 out.add(line);
             }
         } catch (IOException e) {
-            throw new MockitoException("Problems reading from: " + reader);
+            throw new MockitoException("Problems reading from: " + reader, e);
         }
         return out;
     }
@@ -64,7 +64,7 @@ public class IOUtil {
             try {
                 closeable.close();
             } catch (IOException e) {
-                throw new MockitoException("Problems closing stream: " + closeable);
+                throw new MockitoException("Problems closing stream: " + closeable, e);
             }
         }
     }
