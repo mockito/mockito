@@ -1,31 +1,23 @@
 package org.mockito.internal.configuration.plugins;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.Reader;
 
 class PluginFileReader {
 
     String readPluginClass(Reader reader) throws IOException {
-        List<String> lines = readerToLines(reader);
-        for (String line : lines) {
-            String stripped = stripCommentAndWhitespace(line);
-            if (stripped.length() > 0) {
-                return stripped;
-            }
-        }
-        return null;
-    }
-
-    private static List<String> readerToLines(Reader reader) throws IOException {
-        List<String> result = new ArrayList<String>();
         BufferedReader lineReader = new BufferedReader(reader);
         try {
             String line;
             while ((line = lineReader.readLine()) != null) {
-                result.add(line);
+                String stripped = stripCommentAndWhitespace(line);
+                if (stripped.length() > 0) {
+                    return stripped;
+                }
             }
-            return result;
+            return null;
         } finally {
             closeQuietly(lineReader);
         }
