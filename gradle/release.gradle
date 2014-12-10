@@ -109,6 +109,13 @@ task("release", type: org.mockito.release.gradle.ReleaseTask) {
     }
 }
 
+/*
+TODO:
+ - declare release steps and then Gradle plugin adds tasks:
+  release, rollbackRelease, releaseStep1, rollbackStep2, releaseSteps1..7
+ - improve exception reporting
+ */
+
 private void commitReleaseNotes(String buildInfo, String author) {
     def notesFile = project.file("doc/release-notes/official.md")
     run "git", "add", "$notesFile" as String
