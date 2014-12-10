@@ -74,13 +74,13 @@ task("release", type: org.mockito.release.gradle.ReleaseTask) {
     String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
-    step("ensure recent commits available") {
-        //We need good chunk of recent commits to build release notes correctly
+    step("ensure good chunk of recent commits is pulled for release notes automation") {
+        //Travis default clone is pretty shallow
         run "git", "pull", "--depth", "500"
     }
     step("update release notes") { project.notes.updateReleaseNotes() }
-
     step("commit release notes to master") { commitReleaseNotes(buildInfo, author) }
+    .rollback { run "git", "reset", "--hard", "HEAD^" }
     step("create new version tag") { createTag(currentVersion, buildInfo) }
 
     step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo, author) }

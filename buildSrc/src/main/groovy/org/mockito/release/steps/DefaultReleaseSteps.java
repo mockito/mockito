@@ -3,6 +3,7 @@ package org.mockito.release.steps;
 import org.mockito.release.util.operations.Operation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 class DefaultReleaseSteps implements ReleaseSteps {
@@ -17,10 +18,31 @@ class DefaultReleaseSteps implements ReleaseSteps {
 
     public void perform() {
         System.out.println("Performing " + steps.size() + " release steps");
-        int i = 1;
+        List<ReleaseStep> attempted = new LinkedList<ReleaseStep>();
         for (ReleaseStep step : steps) {
-            System.out.println("Step " + (i++) + ": " + step.getDescription());
-            step.perform();
+            attempted.add(step);
+            System.out.println("Step " + attempted.size() + ": " + step.getDescription());
+            try {
+                step.perform();
+            } catch (Throwable t) {
+                rollback(attempted); //TODO SF what if rollback fails?
+                throw new RuntimeException("Release failed. Rollback was performed.", t);
+            }
+        }
+    }
+
+    private static void rollback(List<ReleaseStep> attempted) {
+        System.out.println("Release failed. Rolling back " + attempted.size() + " release steps.");
+        LinkedList<ReleaseStep> targets = new LinkedList<ReleaseStep>();
+        while(!targets.isEmpty()) {
+            ReleaseStep s = targets.removeLast();
+            Operation r = s.getRollback();
+            if (r != null) {
+                System.out.println("Rolling back step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+                r.perform();
+            } else {
+                System.out.println("No rollback for step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+            }
         }
     }
 }
