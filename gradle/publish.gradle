@@ -32,17 +32,15 @@ bintray {
         // optional version attributes
         version {
             vcsTag = theVcsTag
-        }
 
-        /*
-        gpg {
-            sign = true
-        }
-        */
+            gpg {
+               sign = true
+            }
 
-        mavenCentralSync {
-            user = 'mockito'
-            password = System.env.NEXUS_PWD
+            mavenCentralSync {
+                user = 'mockito'
+                password = System.env.NEXUS_PWD
+            }
         }
     }
 }

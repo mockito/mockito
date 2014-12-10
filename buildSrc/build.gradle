@@ -8,7 +8,7 @@ dependencies {
     //TODO SF use jcabi to edit issues after the release so that they have the milestone attached
     //compile "com.jcabi:jcabi-github:0.17"
     compile "com.googlecode.json-simple:json-simple:1.1.1@jar"
-    testCompile("org.spockframework:spock-core:0.7-groovy-1.8") {
+    testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
         exclude module: "groovy-all"
     }
     testCompile "cglib:cglib-nodep:2.2.2"

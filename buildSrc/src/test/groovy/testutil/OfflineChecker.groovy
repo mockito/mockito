@@ -6,7 +6,7 @@ class OfflineChecker {
         isOffline("http://google.com")
     }
 
-    @groovy.transform.PackageScope static isOffline(String testUrl) {
+    static isOffline(String testUrl) {
         try {
             new URL(testUrl).withInputStream {}
             return false
