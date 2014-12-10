@@ -7,6 +7,7 @@ package org.mockito.internal.exceptions.stacktrace;
 
 import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 import org.mockito.internal.configuration.ClassPathLoader;
+import org.mockito.internal.configuration.plugins.PluginRegistry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class StackTraceFilter implements Serializable {
     static final long serialVersionUID = -5499819791513105700L;
 
     private static final StackTraceCleaner CLEANER =
-            ClassPathLoader.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
+            PluginRegistry.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
     
     /**
      * Example how the filter works (+/- means good/bad):
