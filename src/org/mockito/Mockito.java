@@ -939,9 +939,11 @@ import org.mockito.verification.*;
  *
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
- * For more information and an example see {@link BDDMockito}.
+ * <pre class="code"><code class="java">
+ *   then(person).should(times(2)).ride(bike);
+ * </code></pre>
  *
- *
+ * For more information and an example see {@link BDDMockito#then(Object)}}
  *
  * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</a></h3>
  *

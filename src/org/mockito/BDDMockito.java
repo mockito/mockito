@@ -53,16 +53,10 @@ import org.mockito.verification.VerificationMode;
  * <p>
  * For BDD style mock verification take a look at {@link Then} in action:
  * <pre class="code"><code class="java">
- * Bike bike = new Bike();
- * Person person = mock(Person.class);
+ *   person.ride(bike);
+ *   person.ride(bike);
  *
- * public void shouldRideBikeTwice() {
- *
- *     person.ride(bike);
- *     person.ride(bike);
- *
- *     then(person).should(times(2)).ride(bike);
- * }
+ *   then(person).should(times(2)).ride(bike);
  * </code></pre>
  *
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
@@ -199,6 +193,13 @@ public class BDDMockito extends Mockito {
 
     /**
      * Bdd style verification of mock behavior.
+     *
+     * <pre class="code"><code class="java">
+     *   person.ride(bike);
+     *   person.ride(bike);
+     *
+     *   then(person).should(times(2)).ride(bike);
+     * </code></pre>
      *
      * @see #verify(Object)
      * @see #verify(Object, VerificationMode)
