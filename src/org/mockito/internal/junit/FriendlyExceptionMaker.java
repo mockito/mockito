@@ -14,6 +14,7 @@ class FriendlyExceptionMaker {
         this.detecter = detecter;
     }
 
+    //TODO SF this can be now unit tested
     public AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
         if (!detecter.hasJUnit()) {
             return new ArgumentsAreDifferent(message);
