@@ -7,9 +7,7 @@ import org.mockito.plugins.PluginSwitch;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 class PluginLoader {
 
@@ -23,8 +21,9 @@ class PluginLoader {
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
     <T> T loadPlugin(Class<T> pluginType, String defaultPluginClassName) {
-        for (T plugin : loadImplementations(pluginType)) {
-            return plugin; // return the first one service loader finds (if any)
+        T plugin = loadImpl(pluginType);
+        if (plugin != null) {
+            return plugin;
         }
 
         try {
@@ -43,7 +42,7 @@ class PluginLoader {
      * Equivalent to {@link java.util.ServiceLoader#load} but without requiring
      * Java 6 / Android 2.3 (Gingerbread).
      */
-    <T> List<T> loadImplementations(Class<T> service) {
+    <T> T loadImpl(Class<T> service) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = ClassLoader.getSystemClassLoader();
@@ -55,16 +54,14 @@ class PluginLoader {
             throw new MockitoException("Failed to load " + service, e);
         }
 
-        //TODO SF refactor
-        List<T> result = new ArrayList<T>();
         try {
             String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
             if (foundPluginClass != null) {
                 Class<?> pluginClass = loader.loadClass(foundPluginClass);
                 Object plugin = pluginClass.newInstance();
-                result.add(service.cast(plugin));
+                return service.cast(plugin);
             }
-            return result;
+            return null;
         } catch (Exception e) {
             throw new MockitoConfigurationException(
                     "Failed to load " + service + " implementation declared in " + resources, e);
