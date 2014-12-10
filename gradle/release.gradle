@@ -71,7 +71,6 @@ task("release") {
         String author = "Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"
         MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
-        configureGit()
         //We need good chunk of recent commits to build release notes correctly
         run "git", "pull", "--depth", "500"
         project.notes.updateReleaseNotes()
@@ -114,11 +113,6 @@ private void createTag(String currentVersion, String buildInfo) {
     String tag = "v${currentVersion}"
     String tagMessage = "Create tag $tag ${buildInfo}"
     run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
-}
-
-private void configureGit() {
-    run "git", "config", "user.email", "continuous.delivery.drone@gmail.com"
-    run "git", "config", "user.name", "Continuous Delivery Drone"
 }
 
 private void commitIncrementedVersion(String currentVersion, String buildInfo, String author) {
