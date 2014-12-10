@@ -16,12 +16,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
-public class PluginSwitcherTest {
+public class PluginSwitchTest {
     
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
-        assertEquals(MyPluginSwitcher.invokedFor, asList(MyMockMaker.class.getName(), MyStackTraceCleanerProvider.class.getName()));
+        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(), MyStackTraceCleanerProvider.class.getName()));
     }
 
     @Test

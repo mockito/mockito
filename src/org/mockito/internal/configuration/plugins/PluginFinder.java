@@ -2,17 +2,17 @@ package org.mockito.internal.configuration.plugins;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.io.IOUtil;
-import org.mockito.plugins.PluginSwitcher;
+import org.mockito.plugins.PluginSwitch;
 
 import java.io.InputStream;
 import java.net.URL;
 
 class PluginFinder {
 
-    private final PluginSwitcher pluginSwitcher;
+    private final PluginSwitch pluginSwitch;
 
-    public PluginFinder(PluginSwitcher pluginSwitcher) {
-        this.pluginSwitcher = pluginSwitcher;
+    public PluginFinder(PluginSwitch pluginSwitch) {
+        this.pluginSwitch = pluginSwitch;
     }
 
     String findPluginClass(Iterable<URL> resources) {
@@ -26,7 +26,7 @@ class PluginFinder {
                     //If the resource does not have plugin class name we're ignoring it
                     continue;
                 }
-                if (!pluginSwitcher.isEnabled(pluginClassName)) {
+                if (!pluginSwitch.isEnabled(pluginClassName)) {
                     continue;
                 }
                 return pluginClassName;

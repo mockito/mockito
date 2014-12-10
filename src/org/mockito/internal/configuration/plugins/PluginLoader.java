@@ -3,7 +3,7 @@ package org.mockito.internal.configuration.plugins;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.util.collections.Iterables;
-import org.mockito.plugins.PluginSwitcher;
+import org.mockito.plugins.PluginSwitch;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,10 +13,10 @@ import java.util.List;
 
 class PluginLoader {
 
-    private final PluginSwitcher pluginSwitcher;
+    private final PluginSwitch pluginSwitch;
 
-    public PluginLoader(PluginSwitcher pluginSwitcher) {
-        this.pluginSwitcher = pluginSwitcher;
+    public PluginLoader(PluginSwitch pluginSwitch) {
+        this.pluginSwitch = pluginSwitch;
     }
 
     /**
@@ -58,7 +58,7 @@ class PluginLoader {
         //TODO SF refactor
         List<T> result = new ArrayList<T>();
         try {
-            String foundPluginClass = new PluginFinder(pluginSwitcher).findPluginClass(Iterables.toIterable(resources));
+            String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
             if (foundPluginClass != null) {
                 Class<?> pluginClass = loader.loadClass(foundPluginClass);
                 Object plugin = pluginClass.newInstance();

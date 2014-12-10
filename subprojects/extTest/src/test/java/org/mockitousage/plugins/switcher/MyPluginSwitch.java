@@ -1,11 +1,11 @@
 package org.mockitousage.plugins.switcher;
 
-import org.mockito.plugins.PluginSwitcher;
+import org.mockito.plugins.PluginSwitch;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MyPluginSwitcher implements PluginSwitcher {
+public class MyPluginSwitch implements PluginSwitch {
 
     static List<String> invokedFor = new LinkedList<String>();
 

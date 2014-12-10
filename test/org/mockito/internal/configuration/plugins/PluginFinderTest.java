@@ -6,7 +6,7 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.util.io.IOUtil;
-import org.mockito.plugins.PluginSwitcher;
+import org.mockito.plugins.PluginSwitch;
 import org.mockitoutil.TestBase;
 
 import java.io.File;
@@ -17,7 +17,8 @@ import static org.mockito.Mockito.when;
 
 public class PluginFinderTest extends TestBase {
 
-    @Mock PluginSwitcher switcher;
+    @Mock
+    PluginSwitch switcher;
     @InjectMocks PluginFinder finder;
     public @Rule TemporaryFolder tmp = new TemporaryFolder();
 

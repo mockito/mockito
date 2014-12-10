@@ -1,8 +1,8 @@
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.plugins.PluginSwitcher;
+import org.mockito.plugins.PluginSwitch;
 
-class DefaultPluginSwitcher implements PluginSwitcher {
+class DefaultPluginSwitch implements PluginSwitch {
     public boolean isEnabled(String pluginClassName) {
         return true;
     }
