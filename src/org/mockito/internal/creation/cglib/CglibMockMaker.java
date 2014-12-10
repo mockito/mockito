@@ -16,7 +16,7 @@ import org.mockito.plugins.MockMaker;
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.
  */
-public final class CglibMockMaker implements MockMaker {
+public class CglibMockMaker implements MockMaker {
 
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         InternalMockHandler mockitoHandler = cast(handler);
