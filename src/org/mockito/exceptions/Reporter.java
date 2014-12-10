@@ -301,11 +301,7 @@ public class Reporter {
                 ""
         );
 
-        if (JUnitTool.hasJUnit()) {
-            throw JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
-        } else {
-            throw new ArgumentsAreDifferent(message);
-        }
+        throw JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
     }
 
     public void wantedButNotInvoked(DescribedInvocation wanted) {

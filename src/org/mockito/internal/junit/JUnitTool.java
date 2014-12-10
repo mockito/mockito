@@ -24,6 +24,10 @@ public class JUnitTool {
     }
 
     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
+        if (!hasJUnit) {
+            return new ArgumentsAreDifferent(message);
+        }
+
         try {
             Class<?> clazz = Class.forName("org.mockito.exceptions.verification.junit.ArgumentsAreDifferent");
             AssertionError throwable = (AssertionError) clazz.getConstructors()[0].newInstance(message, wanted, actual);
