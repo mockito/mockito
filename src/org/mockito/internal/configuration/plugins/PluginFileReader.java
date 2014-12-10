@@ -1,26 +1,20 @@
 package org.mockito.internal.configuration.plugins;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
+import org.mockito.internal.util.io.IOUtil;
+
 import java.io.IOException;
 import java.io.Reader;
 
 class PluginFileReader {
 
     String readPluginClass(Reader reader) throws IOException {
-        BufferedReader lineReader = new BufferedReader(reader);
-        try {
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                String stripped = stripCommentAndWhitespace(line);
-                if (stripped.length() > 0) {
-                    return stripped;
-                }
+        for(String line: IOUtil.readLines(reader)) {
+            String stripped = stripCommentAndWhitespace(line);
+            if (stripped.length() > 0) {
+                return stripped;
             }
-            return null;
-        } finally {
-            closeQuietly(lineReader);
         }
+        return null;
     }
 
     private static String stripCommentAndWhitespace(String line) {
@@ -29,14 +23,5 @@ class PluginFileReader {
             line = line.substring(0, hash);
         }
         return line.trim();
-    }
-
-    private static void closeQuietly(Closeable c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (IOException ignored) {
-            }
-        }
     }
 }
