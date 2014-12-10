@@ -160,12 +160,10 @@ class MaskedArg {
 
 /*
 TODO:
--no new version publication if all binaries the same
 -update issues and tell which version contains a fix for given issue
 -release process performs dry run first, if it is successful it makes the actual release
 -steps are better described and log stuff verbosely only in case of failure
 -steps can be rolled back:
-  -configure git user back to the original
   -tag removal
   -new commits removal (git reset --hard) on all affected branches
 -clean up after release:
