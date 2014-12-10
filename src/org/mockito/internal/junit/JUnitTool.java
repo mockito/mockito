@@ -4,37 +4,15 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.exceptions.verification.ArgumentsAreDifferent;
-
 public class JUnitTool {
 
-    private static boolean hasJUnit;
+    private static JUnitDetecter detecter = new JUnitDetecter();
 
-    static {
-        try {
-            Class.forName("junit.framework.ComparisonFailure");
-            hasJUnit = true;
-        } catch (Throwable t) {
-            hasJUnit = false;
-        }
-    }
-    
     public static boolean hasJUnit() {
-        return hasJUnit;
+        return detecter.hasJUnit();
     }
 
     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
-        if (!hasJUnit) {
-            return new ArgumentsAreDifferent(message);
-        }
-
-        try {
-            Class<?> clazz = Class.forName("org.mockito.exceptions.verification.junit.ArgumentsAreDifferent");
-            AssertionError throwable = (AssertionError) clazz.getConstructors()[0].newInstance(message, wanted, actual);
-            return throwable;
-        } catch (Throwable t) {
-//            throw the default exception in case of problems
-            return new ArgumentsAreDifferent(message);
-        }
+        return new FriendlyExceptionMaker(detecter).createArgumentsAreDifferentException(message, wanted, actual);
     }
 }
