@@ -96,7 +96,7 @@ task("release") {
         commitIncrementedVersion(currentVersion, buildInfo, author)
         commitReleaseNotes(buildInfo, author) //we have it committed on a tag, now committing on master
 
-        def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion"]
+        def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
             pushCommandLine << '--dry-run'
         }
