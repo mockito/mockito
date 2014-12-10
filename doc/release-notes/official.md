@@ -1,3 +1,12 @@
+### 1.10.16 (2014-12-14 23:56 UTC)
+
+* Authors: 1
+* Commits: 15
+  * 15: Szczepan Faber
+* Improvements: 2
+  * Promote incubating features [(#137)](https://github.com/mockito/mockito/issues/137)
+  * Automate maven central sync [(#136)](https://github.com/mockito/mockito/issues/136)
+
 ### 1.10.15 (2014-12-12 23:42 UTC)
 
 * Authors: 3
