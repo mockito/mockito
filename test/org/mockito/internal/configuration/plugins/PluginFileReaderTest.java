@@ -18,52 +18,54 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class PluginLoaderTest extends TestBase {
+public class PluginFileReaderTest extends TestBase {
+
+    PluginFileReader reader = new PluginFileReader();
 
     @Test
     public void readerToLinesEmptyString() throws IOException {
-        assertEquals(Collections.emptyList(), PluginLoader.readerToLines(new StringReader("")));
+        assertEquals(Collections.emptyList(), reader.readerToLines(new StringReader("")));
     }
 
     @Test
     public void readerToLinesNoLineBreaks() throws IOException {
-        assertEquals(Arrays.asList("a"), PluginLoader.readerToLines(new StringReader("a")));
+        assertEquals(Arrays.asList("a"), reader.readerToLines(new StringReader("a")));
     }
 
     @Test
     public void readerToLinesWithLineBreaks() throws IOException {
         assertEquals(Arrays.asList("a", "b", "c"),
-                PluginLoader.readerToLines(new StringReader("a\nb\nc")));
+                reader.readerToLines(new StringReader("a\nb\nc")));
     }
 
     @Test
     public void readerToLinesWithEmptyLines() throws IOException {
         assertEquals(Arrays.asList("a", "", "c"),
-                PluginLoader.readerToLines(new StringReader("a\n\nc")));
+                reader.readerToLines(new StringReader("a\n\nc")));
     }
 
     @Test
     public void stripCommentsAndWhitespaceEmptyInput() throws IOException {
-        assertEquals("", PluginLoader.stripCommentAndWhitespace(""));
+        assertEquals("", reader.stripCommentAndWhitespace(""));
     }
 
     @Test
     public void stripCommentsAndWhitespaceWhitespaceInput() throws IOException {
-        assertEquals("", PluginLoader.stripCommentAndWhitespace(" "));
+        assertEquals("", reader.stripCommentAndWhitespace(" "));
     }
 
     @Test
     public void stripCommentsAndWhitespaceCommentInInput() throws IOException {
-        assertEquals("a", PluginLoader.stripCommentAndWhitespace("a#b"));
+        assertEquals("a", reader.stripCommentAndWhitespace("a#b"));
     }
 
     @Test
     public void stripCommentsAndWhitespaceMultipleHashes() throws IOException {
-        assertEquals("a", PluginLoader.stripCommentAndWhitespace("a#b#c"));
+        assertEquals("a", reader.stripCommentAndWhitespace("a#b#c"));
     }
 
     @Test
     public void stripCommentsAndWhitespaceWithWhitespaceAndComments() throws IOException {
-        assertEquals("a", PluginLoader.stripCommentAndWhitespace(" a #b"));
+        assertEquals("a", reader.stripCommentAndWhitespace(" a #b"));
     }
 }

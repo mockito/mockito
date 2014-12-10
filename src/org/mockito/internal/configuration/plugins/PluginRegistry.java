@@ -9,10 +9,10 @@ import org.mockito.plugins.StackTraceCleanerProvider;
 public class PluginRegistry {
 
     private static final MockMaker mockMaker
-            = PluginLoader.plugin(MockMaker.class, "org.mockito.internal.creation.cglib.CglibMockMaker");
+            = new PluginLoader().loadPlugin(MockMaker.class, "org.mockito.internal.creation.cglib.CglibMockMaker");
 
     private static final StackTraceCleanerProvider stackTraceCleanerProvider
-            = PluginLoader.plugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+            = new PluginLoader().loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
 
     /**
      * The implementation of the stack trace cleaner
