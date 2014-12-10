@@ -130,6 +130,7 @@ public class BDDMockito extends Mockito {
     /**
      * @deprecated not part of the public API, use {@link BDDMyOngoingStubbing} instead.
      */
+    @Deprecated
     public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
 
         private final OngoingStubbing<T> mockitoOngoingStubbing;
@@ -204,7 +205,7 @@ public class BDDMockito extends Mockito {
      * @since 1.10.0
      */
     public static <T> Then<T> then(T mock) {
-        return new Then<T>(mock);
+        return new ThenImpl<T>(mock);
     }
 
     /**
@@ -212,19 +213,28 @@ public class BDDMockito extends Mockito {
      *
      * @param <T> type of the mock
      *
-     * @author Lovro Pandzic
      * @since 1.10.5
      */
-    public final static class Then<T> {
+    public static interface Then<T> {
+
+        /**
+         * @see #verify(Object)
+         * @since 1.10.5
+         */
+        T should();
+
+        /**
+         * @see #verify(Object, VerificationMode)
+         * @since 1.10.5
+         */
+        T should(VerificationMode mode);
+    }
+
+    static class ThenImpl<T> implements Then<T> {
 
         private final T mock;
 
-        /**
-         * @deprecated not part of the public API, use {@link BDDMockito#then(Object)} instead.
-         */
-        @Deprecated
-        public Then(T mock) {
-
+        ThenImpl(T mock) {
             this.mock = mock;
         }
 
@@ -296,6 +306,7 @@ public class BDDMockito extends Mockito {
     /**
      * @deprecated not part of the public API, use {@link BDDStubber} instead.
      */
+    @Deprecated
     public static class BDDStubberImpl implements BDDStubber {
 
         private final Stubber mockitoStubber;
