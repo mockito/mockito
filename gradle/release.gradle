@@ -100,7 +100,6 @@ task("release", type: org.mockito.release.gradle.ReleaseTask) {
     step("start operating on master") { run "git", "checkout", "master" }
     step("merge changes from tag to master") { run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit" }
     step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo, author) }
-    step("commit release notes on master") { commitReleaseNotes(buildInfo, author) }
     step("push changes to all involved branches") {
         def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
