@@ -4,7 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
@@ -35,7 +34,6 @@ import org.mockito.mock.MockCreationSettings;
  * @see org.mockito.invocation.MockHandler
  * @since 1.9.5
  */
-@Incubating
 public interface MockMaker {
 
     /**

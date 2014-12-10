@@ -15,7 +15,6 @@ import java.util.Set;
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
  */
-@Incubating
 public interface MockCreationSettings<T> {
 
     /**

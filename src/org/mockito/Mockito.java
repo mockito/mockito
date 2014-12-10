@@ -1196,7 +1196,6 @@ public class Mockito extends Matchers {
      * @return A {@link org.mockito.MockingDetails} instance.
      * @since 1.9.5
      */
-    @Incubating
     public static MockingDetails mockingDetails(Object toInspect) {
         return MOCKITO_CORE.mockingDetails(toInspect);
     }

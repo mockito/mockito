@@ -5,21 +5,11 @@
 package org.mockito.internal.util.reflection;
 
 
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 
 /**
@@ -63,7 +53,6 @@ import org.mockito.internal.util.Checks;
  * @see #resolveGenericReturnType(Method)
  * @see org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs
  */
-@Incubating
 public abstract class GenericMetadataSupport {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();

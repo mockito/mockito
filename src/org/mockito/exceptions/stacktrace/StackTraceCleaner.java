@@ -1,7 +1,5 @@
 package org.mockito.exceptions.stacktrace;
 
-import org.mockito.Incubating;
-
 /**
  * Decides if particular StackTraceElement is excluded from the human-readable stack trace output.
  * Mockito stack trace filtering mechanism uses this information.
@@ -16,7 +14,6 @@ import org.mockito.Incubating;
  * See the default implementation: {@link org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner}.
  *
  */
-@Incubating
 public interface StackTraceCleaner {
 
     /**

@@ -1,6 +1,5 @@
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
 import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 
 /**
@@ -13,7 +12,6 @@ import org.mockito.exceptions.stacktrace.StackTraceCleaner;
  * <p>
  * See the default implementation: {@link org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider}
  */
-@Incubating
 public interface StackTraceCleanerProvider {
 
     /**

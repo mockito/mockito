@@ -4,10 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.Incubating;
 import org.mockito.internal.util.Checks;
-import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.util.collections.ListUtil.Filter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -19,7 +18,6 @@ import java.util.List;
  *
  * Code is very new and might need rework.
  */
-@Incubating
 public abstract class Fields {
 
     /**
