@@ -1,6 +1,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.PluginSwitcher;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
 /**
@@ -8,11 +9,14 @@ import org.mockito.plugins.StackTraceCleanerProvider;
  */
 public class PluginRegistry {
 
+    private static final PluginSwitcher pluginSwitcher
+            = new PluginLoader(new DefaultPluginSwitcher()).loadPlugin(PluginSwitcher.class, DefaultPluginSwitcher.class.getName());
+
     private static final MockMaker mockMaker
-            = new PluginLoader().loadPlugin(MockMaker.class, "org.mockito.internal.creation.cglib.CglibMockMaker");
+            = new PluginLoader(pluginSwitcher).loadPlugin(MockMaker.class, "org.mockito.internal.creation.cglib.CglibMockMaker");
 
     private static final StackTraceCleanerProvider stackTraceCleanerProvider
-            = new PluginLoader().loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+            = new PluginLoader(pluginSwitcher).loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
 
     /**
      * The implementation of the stack trace cleaner

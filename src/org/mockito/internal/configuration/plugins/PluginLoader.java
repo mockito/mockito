@@ -2,6 +2,7 @@ package org.mockito.internal.configuration.plugins;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.plugins.PluginSwitcher;
 
 import java.io.*;
 import java.net.URL;
@@ -11,6 +12,12 @@ import java.util.Enumeration;
 import java.util.List;
 
 class PluginLoader {
+
+    private final PluginSwitcher pluginSwitcher;
+
+    public PluginLoader(PluginSwitcher pluginSwitcher) {
+        this.pluginSwitcher = pluginSwitcher;
+    }
 
     /**
      * Scans the classpath for given pluginType. If not found, default class is used.
@@ -57,6 +64,9 @@ class PluginLoader {
                 if (className == null) {
                     //For backwards compatibility
                     //If the resource does not have plugin class name we're ignoring it
+                    continue;
+                }
+                if (!pluginSwitcher.isEnabled(className)) {
                     continue;
                 }
                 Class<?> pluginClass = loader.loadClass(className);

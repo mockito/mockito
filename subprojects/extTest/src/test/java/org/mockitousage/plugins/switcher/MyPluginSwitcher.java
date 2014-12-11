@@ -7,10 +7,10 @@ import java.util.List;
 
 public class MyPluginSwitcher implements PluginSwitcher {
 
-    static List<Class> invokedFor = new LinkedList<Class>();
+    static List<String> invokedFor = new LinkedList<String>();
 
-    public boolean isEnabled(Class pluginClass) {
-        invokedFor.add(pluginClass);
+    public boolean isEnabled(String pluginClassName) {
+        invokedFor.add(pluginClassName);
         return true;
     }
 }
