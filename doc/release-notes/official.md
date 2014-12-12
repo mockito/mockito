@@ -1,3 +1,14 @@
+### 1.10.15 (2014-12-12 23:42 UTC)
+
+* Authors: 3
+* Commits: 27
+  * 24: Szczepan Faber
+  * 2: Lovro Pandzic
+  * 1: Dhruv Arora
+* Improvements: 2
+  * Introduce PluginSwitch extension point [(#135)](https://github.com/mockito/mockito/issues/135)
+  * bdd mockito cleanup [(#100)](https://github.com/mockito/mockito/pull/100)
+
 ### 1.10.14 (2014-12-02 10:01 UTC)
 
 * Authors: 3
