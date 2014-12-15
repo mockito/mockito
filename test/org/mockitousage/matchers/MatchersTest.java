@@ -225,15 +225,25 @@ public class MatchersTest extends TestBase {
     
     @Test
     public void anyStringMatcher() {
-        when(mock.oneArg(anyString())).thenReturn("1");
+        when(mock.oneArg(anyString())).thenReturn("matched");
         
-        assertEquals("1", mock.oneArg(""));
-        assertEquals("1", mock.oneArg("any string"));
-        assertEquals(null, mock.oneArg((Object) null));
+        assertEquals("matched", mock.oneArg(""));
+        assertEquals("matched", mock.oneArg("any string"));
+        assertEquals(null, mock.oneArg((String) null));
     }
 
     @Test
     public void anyMatcher() {
+        when(mock.forObject(any())).thenReturn("matched");
+
+        assertEquals("matched", mock.forObject(123));
+        assertEquals("matched", mock.forObject("any string"));
+        assertEquals("matched", mock.forObject("any string"));
+        assertEquals("matched", mock.forObject((Object) null));
+    }
+
+    @Test
+    public void anyXMatcher() {
         when(mock.oneArg(anyBoolean())).thenReturn("0");
         when(mock.oneArg(anyByte())).thenReturn("1");
         when(mock.oneArg(anyChar())).thenReturn("2");

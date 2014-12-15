@@ -29,41 +29,41 @@ public class NewMatchersTest extends TestBase {
 
     @Test
     public void shouldAllowAnyList() {
-        when(mock.forList(anyList())).thenReturn("x");
+        when(mock.forList(anyList())).thenReturn("matched");
         
-        assertEquals("x", mock.forList(null));
-        assertEquals("x", mock.forList(Arrays.asList("x", "y")));
-        
-        verify(mock, times(2)).forList(anyList());
+        assertEquals("matched", mock.forList(Arrays.asList("x", "y")));
+        assertEquals(null, mock.forList(null));
+
+        verify(mock, times(1)).forList(anyList());
     }
     
     @Test
     public void shouldAllowAnyCollection() {
-        when(mock.forCollection(anyCollection())).thenReturn("x");
+        when(mock.forCollection(anyCollection())).thenReturn("matched");
         
-        assertEquals("x", mock.forCollection(null));
-        assertEquals("x", mock.forCollection(Arrays.asList("x", "y")));
-        
-        verify(mock, times(2)).forCollection(anyCollection());
+        assertEquals("matched", mock.forCollection(Arrays.asList("x", "y")));
+        assertEquals(null, mock.forCollection(null));
+
+        verify(mock, times(1)).forCollection(anyCollection());
     }
     
     @Test
     public void shouldAllowAnyMap() {
-        when(mock.forMap(anyMap())).thenReturn("x");
+        when(mock.forMap(anyMap())).thenReturn("matched");
         
-        assertEquals("x", mock.forMap(null));
-        assertEquals("x", mock.forMap(new HashMap<String, String>()));
-        
-        verify(mock, times(2)).forMap(anyMap());
+        assertEquals("matched", mock.forMap(new HashMap<String, String>()));
+        assertEquals(null, mock.forMap(null));
+
+        verify(mock, times(1)).forMap(anyMap());
     }
     
     @Test
     public void shouldAllowAnySet() {
-        when(mock.forSet(anySet())).thenReturn("x");
+        when(mock.forSet(anySet())).thenReturn("matched");
         
-        assertEquals("x", mock.forSet(null));
-        assertEquals("x", mock.forSet(new HashSet<String>()));
-        
-        verify(mock, times(2)).forSet(anySet());
+        assertEquals("matched", mock.forSet(new HashSet<String>()));
+        assertEquals(null, mock.forSet(null));
+
+        verify(mock, times(1)).forSet(anySet());
     }
 }
