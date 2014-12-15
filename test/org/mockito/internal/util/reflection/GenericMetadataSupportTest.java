@@ -21,7 +21,10 @@ import org.junit.Test;
 
 @SuppressWarnings("unused")
 public class GenericMetadataSupportTest {
-
+  
+    interface GenericsSelfReference<T extends GenericsSelfReference<T>> {
+        T self();
+    }
     interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
         E get();
     }
@@ -44,6 +47,12 @@ public class GenericMetadataSupportTest {
 
     static class StringList extends ArrayList<String> { }
 
+    @Test
+    public void typeVariable_of_self_type() {
+        GenericMetadataSupport genericMetadata = inferFrom(GenericsSelfReference.class).resolveGenericReturnType(firstNamedMethod("self", GenericsSelfReference.class));
+
+        assertThat(genericMetadata.rawType()).isEqualTo(GenericsSelfReference.class);
+    }
 
     @Test
     public void can_get_raw_type_from_Class() throws Exception {
