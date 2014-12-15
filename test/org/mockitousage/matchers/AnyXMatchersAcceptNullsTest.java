@@ -41,7 +41,7 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
     }
     
     @Test
-    public void shouldAnyPrimiteWraperMatchersAcceptNull() {
+    public void shouldAcceptNullsInAllPrimitiveWrapperAnyMatchers() {
         when(mock.forInteger(anyInt())).thenReturn("0");
         when(mock.forCharacter(anyChar())).thenReturn("1");
         when(mock.forShort(anyShort())).thenReturn("2");
