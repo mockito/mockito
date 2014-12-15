@@ -1,10 +1,9 @@
-package org.mockito.rules;
+package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
-import org.mockito.junit.MockitoJUnitRule;
 
 /**
- * The MockitoJUnit rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}.
+ * The JUnit rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}.
  *
  * This rule adds following behavior:
  * <ul>
@@ -20,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRule;
  * public class ExampleTest {
  *
  *     &#064;Rule
- *     public MethodRule mockitoJUnitRule = MockitoJUnit.rule();</b>
+ *     public MockitoRule rule = MockitoJUnit.rule();
  *
  *     &#064;Mock
  *     private List list;
@@ -31,13 +30,7 @@ import org.mockito.junit.MockitoJUnitRule;
  *     }
  * }
  * </code></pre>
+ *
+ * @since 1.10.17
  */
-public class MockitoJUnit {
-
-    /**
-     * @return new MockitoJUnitRule.
-     */
-    public static MethodRule rule() {
-        return new MockitoJUnitRule();
-    }
-}
+public interface MockitoRule extends MethodRule {}

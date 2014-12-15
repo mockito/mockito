@@ -5,7 +5,8 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.rules.MockitoJUnit;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class RuleTestWithFactoryMethodTest {
 
     @Rule
-    public MethodRule mockitoJUnitRule = MockitoJUnit.rule();
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
     private Injected injected;

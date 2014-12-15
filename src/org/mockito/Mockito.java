@@ -11,10 +11,10 @@ import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.junit.MockitoJUnitRule;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
 import org.mockito.verification.*;
+import org.mockito.junit.*;
 
 /**
  * <p align="left"><img src="logo.jpg"/></p>
@@ -371,7 +371,7 @@ import org.mockito.verification.*;
  * MockitoAnnotations.initMocks(testClass);
  * </code></pre>
  *
- * You can use built-in runner: {@link MockitoJUnitRunner} or a rule: {@link MockitoJUnitRule}.
+ * You can use built-in runner: {@link MockitoJUnitRunner} or a rule: {@link MockitoRule}.
  * <p>
  * Read more here: {@link MockitoAnnotations}
  *
@@ -766,7 +766,7 @@ import org.mockito.verification.*;
  * <p>
  * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
  * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner} or rule:
- * {@link MockitoJUnitRule}.
+ * {@link MockitoRule}.
  * <p>
  *
  *
@@ -812,7 +812,7 @@ import org.mockito.verification.*;
  * using <b>constructor</b> injection, <b>setter</b> injection, or <b>field</b> injection.
  * <p>
  * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)}, {@link MockitoJUnitRunner}
- * or {@link MockitoJUnitRule}.
+ * or {@link MockitoRule}.
  * <p>
  * Read more about available tricks and the rules of injection in the javadoc for {@link InjectMocks}
  * <pre class="code"><code class="java">
@@ -2239,7 +2239,7 @@ public class Mockito extends Matchers {
      * But even though JUnit might report next test as red, don't worry about it
      * and just click at navigable stack trace element in the exception message to instantly locate the place where you misused mockito.
      * <p>
-     * <b>Both built-in runner: {@link MockitoJUnitRunner} and rule: {@link MockitoJUnitRule}</b> do validateMockitoUsage() after each test method.
+     * <b>Both built-in runner: {@link MockitoJUnitRunner} and rule: {@link MockitoRule}</b> do validateMockitoUsage() after each test method.
      * <p>
      * Bear in mind that <b>usually you don't have to <code>validateMockitoUsage()</code></b>
      * and framework validation triggered on next-time basis should be just enough,

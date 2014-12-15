@@ -4,7 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRule;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 public class MockitoJUnitRuleTest {
 
     @Rule
-    public MockitoJUnitRule mockitoJUnitRule = new MockitoJUnitRule();
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
     private Injected injected;
@@ -25,7 +26,6 @@ public class MockitoJUnitRuleTest {
         assertNotNull("Mock created", injected);
         assertNotNull("Object created", injectInto);
         assertEquals("A injected into B", injected, injectInto.getInjected());
-
     }
 
     public static class Injected {
