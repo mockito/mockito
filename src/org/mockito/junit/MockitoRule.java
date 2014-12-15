@@ -4,6 +4,7 @@ import org.junit.rules.MethodRule;
 
 /**
  * The JUnit rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}.
+ * It requires JUnit at least 4.7.
  *
  * This rule adds following behavior:
  * <ul>
