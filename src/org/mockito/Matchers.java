@@ -5,7 +5,6 @@
 package org.mockito;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.core.IsNull;
 import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.HandyReturnValues;
@@ -241,7 +240,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T anyObject() {
-        return (T) reportMatcher(new InstanceOf(Object.class)).returnNull();
+        return (T) reportMatcher(Any.ANY).returnNull();
     }
 
     /**
@@ -289,7 +288,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
-        return (T) reportMatcher(new InstanceOf(clazz)).returnFor(clazz);
+        return (T) reportMatcher(Any.ANY).returnFor(clazz);
     }
     
     /**
@@ -306,7 +305,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any() {
-        return (T) reportMatcher(Any.ANY).returnNull();
+        return anyObject();
     }
 
     /**
