@@ -13,6 +13,7 @@ import org.mockito.internal.junit.JUnitRule;
  * @see MockitoJUnit
  * @since 1.10.6
  */
+@Deprecated
 public class MockitoJUnitRule implements MethodRule, MockitoRule {
     //MethodRule is undeprecated in latest JUnit
     private final JUnitRule jUnitRule;
