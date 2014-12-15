@@ -5,6 +5,7 @@
 package org.mockito;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.core.IsNull;
 import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.progress.HandyReturnValues;
@@ -118,7 +119,7 @@ public class Matchers {
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
-        return reportMatcher(Any.ANY).returnFalse();
+        return reportMatcher(new InstanceOf(Boolean.class)).returnFalse();
     }
 
     /**
@@ -133,7 +134,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static byte anyByte() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Byte.class)).returnZero();
     }
 
     /**
@@ -148,7 +149,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static char anyChar() {
-        return reportMatcher(Any.ANY).returnChar();
+        return reportMatcher(new InstanceOf(Character.class)).returnChar();
     }
 
     /**
@@ -163,7 +164,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static int anyInt() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Integer.class)).returnZero();
     }
 
     /**
@@ -178,7 +179,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static long anyLong() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Long.class)).returnZero();
     }
 
     /**
@@ -193,7 +194,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float anyFloat() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Float.class)).returnZero();
     }
 
     /**
@@ -208,7 +209,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double anyDouble() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Double.class)).returnZero();
     }
 
     /**
@@ -223,7 +224,7 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static short anyShort() {
-        return reportMatcher(Any.ANY).returnZero();
+        return reportMatcher(new InstanceOf(Short.class)).returnZero();
     }
 
     /**
@@ -240,7 +241,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T anyObject() {
-        return (T) reportMatcher(Any.ANY).returnNull();
+        return (T) reportMatcher(new InstanceOf(Object.class)).returnNull();
     }
 
     /**
@@ -288,7 +289,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
-        return (T) reportMatcher(Any.ANY).returnFor(clazz);
+        return (T) reportMatcher(new InstanceOf(clazz)).returnFor(clazz);
     }
     
     /**
@@ -305,7 +306,7 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any() {
-        return (T) anyObject();
+        return (T) reportMatcher(Any.ANY).returnNull();
     }
 
     /**
@@ -320,7 +321,7 @@ public class Matchers {
      * @return empty String ("")
      */
     public static String anyString() {
-        return reportMatcher(Any.ANY).returnString();
+        return reportMatcher(new InstanceOf(String.class)).returnString();
     }
     
     /**
@@ -335,7 +336,7 @@ public class Matchers {
      * @return empty List.
      */
     public static List anyList() {
-        return reportMatcher(Any.ANY).returnList();
+        return reportMatcher(new InstanceOf(List.class)).returnList();
     }    
     
     /**
@@ -354,7 +355,7 @@ public class Matchers {
      * @return empty List.
      */
     public static <T> List<T> anyListOf(Class<T> clazz) {
-        return (List) reportMatcher(Any.ANY).returnList();
+        return anyList();
     }    
     
     /**
@@ -369,7 +370,7 @@ public class Matchers {
      * @return empty Set
      */
     public static Set anySet() {
-        return reportMatcher(Any.ANY).returnSet();
+        return reportMatcher(new InstanceOf(Set.class)).returnSet();
     }
     
     /**
@@ -388,7 +389,7 @@ public class Matchers {
      * @return empty Set
      */
     public static <T> Set<T> anySetOf(Class<T> clazz) {
-        return (Set) reportMatcher(Any.ANY).returnSet();
+        return anySet();
     }
 
     /**
@@ -403,7 +404,7 @@ public class Matchers {
      * @return empty Map.
      */
     public static Map anyMap() {
-        return reportMatcher(Any.ANY).returnMap();
+        return reportMatcher(new InstanceOf(Map.class)).returnMap();
     }
 
     /**
@@ -423,7 +424,7 @@ public class Matchers {
      * @return empty Map.
      */
     public static <K, V>  Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
-        return reportMatcher(Any.ANY).returnMap();
+        return anyMap();
     }
     
     /**
@@ -438,7 +439,7 @@ public class Matchers {
      * @return empty Collection.
      */
     public static Collection anyCollection() {
-        return reportMatcher(Any.ANY).returnList();
+        return reportMatcher(new InstanceOf(Collection.class)).returnList();
     }    
     
     /**
@@ -457,7 +458,7 @@ public class Matchers {
      * @return empty Collection.
      */
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
-        return (Collection) reportMatcher(Any.ANY).returnList();
+        return anyCollection();
     }    
 
     /**

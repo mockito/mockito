@@ -219,4 +219,6 @@ public interface IMethods {
     int toIntPrimitive(Integer i);
 
     Integer toIntWrapper(int i);
+
+    String forObject(Object object);
 }

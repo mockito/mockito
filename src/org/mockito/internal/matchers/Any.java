@@ -14,7 +14,7 @@ import org.mockito.ArgumentMatcher;
 public class Any extends ArgumentMatcher implements Serializable {
 
     private static final long serialVersionUID = -4062420125651019029L;
-    public static final Any ANY = new Any();    
+    public static final Any ANY = new Any();
     
     private Any() {}
     

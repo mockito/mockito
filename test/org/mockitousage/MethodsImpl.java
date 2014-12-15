@@ -418,4 +418,8 @@ public class MethodsImpl implements IMethods {
     public Integer toIntWrapper(int i) {
         return null;
     }
+
+    public String forObject(Object object) {
+        return null;
+    }
 }
