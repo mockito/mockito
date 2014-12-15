@@ -65,12 +65,12 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         
         try {
             //when
-            verify(boo).withLongAndInt(eq(100), anyInt());
+            verify(boo).withLongAndInt(eq(100), any(Integer.class));
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
             assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
-            assertContains("withLongAndInt((Integer) 100, <any>)", e.getMessage());
+            assertContains("withLongAndInt((Integer) 100, <any>", e.getMessage());
         }
     }
     

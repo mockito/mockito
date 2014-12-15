@@ -239,7 +239,10 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                 "\n" +
                 "Wanted but not invoked:" +
                 "\n" +
-                "iMethods.twoArgumentMethod(<any>, 100);";
+                "iMethods.twoArgumentMethod(\n" +
+                "    isA(java.lang.Integer),\n" +
+                "    100\n" +
+                ");";
             assertContains(expectedMessage, actualMessage);
         }
     }
