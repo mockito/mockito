@@ -76,7 +76,7 @@ public abstract class GenericMetadataSupport {
 
             if (actualTypeArgument instanceof WildcardType) {
                 contextualActualTypeParameters.put(typeParameter, boundsOf((WildcardType) actualTypeArgument));
-            } else {
+            } else if (typeParameter != actualTypeArgument) {
                 contextualActualTypeParameters.put(typeParameter, actualTypeArgument);
             }
             // logger.log("For '" + parameterizedType + "' found type variable : { '" + typeParameter + "(" + System.identityHashCode(typeParameter) + ")" + "' : '" + actualTypeArgument + "(" + System.identityHashCode(typeParameter) + ")" + "' }");
