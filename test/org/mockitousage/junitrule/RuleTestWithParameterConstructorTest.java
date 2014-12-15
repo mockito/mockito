@@ -1,13 +1,15 @@
-package org.mockito.junit;
+package org.mockitousage.junitrule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRule;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class MockitoJUnitRuleTest {
+public class RuleTestWithParameterConstructorTest {
 
     @Rule
     public MockitoJUnitRule mockitoJUnitRule = new MockitoJUnitRule(this);
@@ -26,20 +28,10 @@ public class MockitoJUnitRuleTest {
 
     }
 
-    @Test
-    public void testThrowExceptionWhenNullTarget() throws Exception {
-        try {
-            new MockitoJUnitRule(null);
-            fail();
-        } catch (NullPointerException e) {
-            assertEquals("valid message", "Mockito JUnit rule target should not be null", e.getMessage());
-        }
+    public static class Injected {
     }
 
-    private static class Injected {
-    }
-
-    private static class InjectInto {
+    public static class InjectInto {
 
         private Injected injected;
 

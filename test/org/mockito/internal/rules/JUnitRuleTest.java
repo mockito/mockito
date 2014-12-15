@@ -1,39 +1,32 @@
 package org.mockito.internal.rules;
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class JUnitRuleTest {
 
-    private JUnitRule jUnitRule;
-    private InjectTestCase injectTestCase;
+    private JUnitRule jUnitRule = new JUnitRule();
+    private InjectTestCase injectTestCase = new InjectTestCase();
 
-    @Before
-    public void setUp() throws Exception {
-        injectTestCase = new InjectTestCase();
-        jUnitRule = new JUnitRule(injectTestCase);
+    @Test
+    public void shouldInjectIntoTestCase() throws Throwable {
+        jUnitRule.apply(new DummyStatement(), injectTestCase).evaluate();
+        assertNotNull("@Mock mock object created", injectTestCase.getInjected());
+        assertNotNull("@InjectMocks object created", injectTestCase.getInjectInto());
+        assertNotNull("Mock injected into the object", injectTestCase.getInjectInto().getInjected());
     }
 
     @Test
-    public void testInject() throws Throwable {
-        jUnitRule.apply(new DummyStatement(), Description.EMPTY).evaluate();
-        assertNotNull("", injectTestCase.getInjected());
-        assertNotNull("", injectTestCase.getInjectInto());
-    }
-
-    @Test
-    public void testThrowAnException() throws Throwable {
+    public void shouldRethrowException() throws Throwable {
         try {
-            jUnitRule.apply(new ExceptionStatement(), Description.EMPTY).evaluate();
+            jUnitRule.apply(new ExceptionStatement(), injectTestCase).evaluate();
             fail("Should throw exception");
         } catch (RuntimeException e) {
             assertEquals("Correct message", "Statement exception", e.getMessage());
@@ -41,10 +34,10 @@ public class JUnitRuleTest {
     }
 
     @Test
-    public void testMockitoValidation() throws Throwable {
+    public void shouldDetectUnfinishedStubbing() throws Throwable {
         try {
-            jUnitRule.apply(new UnfinishedStubbingStatement(), Description.EMPTY).evaluate();
-            fail("Should detect unvalid Mockito usage");
+            jUnitRule.apply(new UnfinishedStubbingStatement(), injectTestCase).evaluate();
+            fail("Should detect invalid Mockito usage");
         } catch (UnfinishedStubbingException e) {
         }
     }
@@ -69,5 +62,45 @@ public class JUnitRuleTest {
             MockitoAnnotations.initMocks(injectTestCase);
             injectTestCase.unfinishedStubbingThrowsException();
         }
+    }
+
+    public static class InjectTestCase {
+
+        @Mock
+        private Injected injected;
+
+        @InjectMocks
+        private InjectInto injectInto;
+
+        @Test
+        public void dummy() throws Exception {
+        }
+
+        public void unfinishedStubbingThrowsException() throws Exception {
+            Mockito.when(injected.stringMethod());
+        }
+
+        public Injected getInjected() {
+            return injected;
+        }
+
+        public InjectInto getInjectInto() {
+            return injectInto;
+        }
+
+        public static class Injected {
+            public String stringMethod() {
+                return "string";
+            }
+        }
+
+        public static class InjectInto {
+            private Injected injected;
+
+            public Injected getInjected() {
+                return injected;
+            }
+        }
+
     }
 }
