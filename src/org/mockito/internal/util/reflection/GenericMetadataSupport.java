@@ -84,8 +84,8 @@ public abstract class GenericMetadataSupport {
     }
 
     protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
-        for (TypeVariable typeVariable : typeParameters) {
-            registerTypeVariableIfNotPresent(typeVariable);
+        for (TypeVariable type : typeParameters) {
+            registerTypeVariableIfNotPresent(type);
         }
     }
 
@@ -376,6 +376,7 @@ public abstract class GenericMetadataSupport {
             for (Type type : typeVariable.getBounds()) {
                 registerTypeVariablesOn(type);
             }
+            registerTypeParametersOn(new TypeVariable[] { typeVariable });
             registerTypeVariablesOn(getActualTypeArgumentFor(typeVariable));
         }
 
