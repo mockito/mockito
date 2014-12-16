@@ -83,9 +83,13 @@ public abstract class GenericMetadataSupport {
         }
     }
 
-    protected void registerTypeParametersOn(TypeVariable[] typeParameters) {
-        for (TypeVariable typeVariable : typeParameters) {
-            registerTypeVariableIfNotPresent(typeVariable);
+    protected void registerTypeParametersOn(TypeVariable[] typeParameters, TypeVariable... typeVariable) {
+        for (TypeVariable type : typeParameters) {
+            registerTypeVariableIfNotPresent(type);
+        }
+        
+        if (typeVariable != null && typeVariable.length == 1) {
+          registerTypeVariableIfNotPresent(typeVariable[0]);
         }
     }
 
@@ -369,7 +373,7 @@ public abstract class GenericMetadataSupport {
         }
 
         private void readTypeParameters() {
-            registerTypeParametersOn(typeParameters);
+            registerTypeParametersOn(typeParameters, typeVariable);
         }
 
         private void readTypeVariables() {

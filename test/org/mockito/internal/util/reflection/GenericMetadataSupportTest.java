@@ -6,7 +6,11 @@ package org.mockito.internal.util.reflection;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -17,11 +21,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.junit.Test;
 
-@SuppressWarnings("unused")
 public class GenericMetadataSupportTest {
 
+    interface MyClass1 <MC2 extends MyClass2> {
+        MC2 getNested();
+    }
+    interface MyClass2<MC3 extends MyClass3> {
+        MC3 getNested();
+    }
+    interface MyClass3 {
+        String returnSomething();
+    }  
     interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
         E get();
     }
@@ -44,7 +57,14 @@ public class GenericMetadataSupportTest {
 
     static class StringList extends ArrayList<String> { }
 
-
+    @Test
+    public void can_mock_deep_stubbing_with_generic_response() throws NoSuchMethodException, SecurityException {
+        assertThat(inferFrom(MyClass2.class)
+            .resolveGenericReturnType(MyClass2.class.getMethod("getNested"))
+            .rawType())
+            .isEqualTo(MyClass3.class);
+    }
+    
     @Test
     public void can_get_raw_type_from_Class() throws Exception {
         assertThat(inferFrom(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
