@@ -50,13 +50,6 @@ import java.util.Set;
  * This implementation is due static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  *
- * <p>
- * <b>Warning 2:</b>
- * <p>
- * The any family methods <b>*don't do any type checks*</b>, those are only here to avoid casting
- * in your code. If you want to perform type checks use the {@link #isA(Class)} method.
- * This <b>might</b> however change (type checks could be added) in a future major release.
- *
  * <h1>Custom Argument Matchers</h1>
  * 
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}.
@@ -107,11 +100,7 @@ public class Matchers {
     private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
 
     /**
-     * Any <code>boolean</code>, <code>Boolean</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>boolean</code> or non-null <code>Boolean</code>
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -122,11 +111,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>byte</code>, <code>Byte</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>byte</code> or non-null <code>Byte</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -137,11 +122,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>char</code>, <code>Character</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>char</code> or non-null <code>Character</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -152,11 +133,7 @@ public class Matchers {
     }
 
     /**
-     * Any int, Integer or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any int or non-null Integer.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -167,11 +144,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>long</code>, <code>Long</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>long</code> or non-null <code>Long</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -182,11 +155,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>float</code>, <code>Float</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>float</code> or non-null <code>Float</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -197,11 +166,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>double</code>, <code>Double</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>double</code> or non-null <code>Double</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -212,11 +177,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>short</code>, <code>Short</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any <code>short</code> or non-null <code>Short</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -227,13 +188,9 @@ public class Matchers {
     }
 
     /**
-     * Any <code>Object</code> or <code>null</code>.
+     * Matches anything, including null.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
-     * <p>
-     * Has aliases: {@link #any()} and {@link #any(Class clazz)}
+     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -271,20 +228,16 @@ public class Matchers {
     }
     
     /**
-     * Any kind object, not necessary of the given class.
-     * The class argument is provided only to avoid casting.
+     * Matches any object, including nulls
      * <p>
-     * Sometimes looks better than <code>anyObject()</code> - especially when explicit casting is required
-     * <p>
-     * Alias to {@link Matchers#anyObject()}
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * This method doesn't do type checks with the given parameter, it is only there
+     * to avoid casting in your code. This might however change (type checks could
+     * be added) in a future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
-     * 
-     * @param clazz The type to avoid casting
+     * <p>
+     * This is an alias of: {@link #any()} and {@link #anyObject()}
+     * <p>
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
@@ -292,16 +245,14 @@ public class Matchers {
     }
     
     /**
-     * Any object or <code>null</code>.
+     * Matches anything, including nulls
      * <p>
      * Shorter alias to {@link Matchers#anyObject()}
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
-     * <p>
      * See examples in javadoc for {@link Matchers} class
-     * 
+     * <p>
+     * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
+     * <p>
      * @return <code>null</code>.
      */
     public static <T> T any() {
@@ -309,11 +260,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>String</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any non-null <code>String</code>
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -324,11 +271,7 @@ public class Matchers {
     }
     
     /**
-     * Any <code>List</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any non-null <code>List</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -336,17 +279,17 @@ public class Matchers {
      */
     public static List anyList() {
         return reportMatcher(new InstanceOf(List.class)).returnList();
-    }    
+    }
     
     /**
      * Generic friendly alias to {@link Matchers#anyList()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * Any <code>List</code> or <code>null</code>.
+     * Any non-null <code>List</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * This method doesn't do type checks with the given parameter, it is only there
+     * to avoid casting in your code. This might however change (type checks could
+     * be added) in a future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -355,14 +298,10 @@ public class Matchers {
      */
     public static <T> List<T> anyListOf(Class<T> clazz) {
         return anyList();
-    }    
+    }
     
     /**
-     * Any <code>Set</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any non-null <code>Set</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -376,11 +315,11 @@ public class Matchers {
      * Generic friendly alias to {@link Matchers#anySet()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * Any <code>Set</code> or <code>null</code>
+     * Any non-null <code>Set</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * This method doesn't do type checks with the given parameter, it is only there
+     * to avoid casting in your code. This might however change (type checks could
+     * be added) in a future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -392,11 +331,7 @@ public class Matchers {
     }
 
     /**
-     * Any <code>Map</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any non-null <code>Map</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -410,11 +345,11 @@ public class Matchers {
      * Generic friendly alias to {@link Matchers#anyMap()}.
      * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * Any <code>Map</code> or <code>null</code>
+     * Any non-null <code>Map</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * This method doesn't do type checks with the given parameter, it is only there
+     * to avoid casting in your code. This might however change (type checks could
+     * be added) in a future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      *
@@ -427,11 +362,7 @@ public class Matchers {
     }
     
     /**
-     * Any <code>Collection</code> or <code>null</code>.
-     * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * Any non-null <code>Collection</code>.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
@@ -443,13 +374,13 @@ public class Matchers {
     
     /**
      * Generic friendly alias to {@link Matchers#anyCollection()}.
-     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.     
+     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
      * <p>
-     * Any <code>Collection</code> or <code>null</code>.
+     * Any non-null <code>Collection</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * This method doesn't do type checks with the given parameter, it is only there
+     * to avoid casting in your code. This might however change (type checks could
+     * be added) in a future major release.
      * <p>
      * See examples in javadoc for {@link Matchers} class
      * 
