@@ -1,3 +1,13 @@
+### 1.10.17 (2014-12-16 09:38 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 8: Szczepan Faber
+  * 3: jerzykrlk
+* Improvements: 2
+  * Make Mockito JUnit rule easier to use [(#140)](https://github.com/mockito/mockito/issues/140)
+  * Tidy-up public API of Mockito JUnit rule [(#139)](https://github.com/mockito/mockito/issues/139)
+
 ### 1.10.16 (2014-12-14 23:56 UTC)
 
 * Authors: 1
