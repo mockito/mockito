@@ -24,24 +24,37 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
     }
 
     @Test
-    public void shouldAnyXMatchersAcceptNull() {
-        when(mock.oneArg(anyObject())).thenReturn("0");
-        when(mock.oneArg(anyString())).thenReturn("1");
-        when(mock.forList(anyList())).thenReturn("2");
-        when(mock.forMap(anyMap())).thenReturn("3");
-        when(mock.forCollection(anyCollection())).thenReturn("4");
-        when(mock.forSet(anySet())).thenReturn("5");
+    public void shouldAcceptNullsInAnyMatcher() {
+        when(mock.oneArg(any())).thenReturn("matched");
+
+        assertEquals(null, mock.forObject(null));
+    }
+
+    @Test
+    public void shouldAcceptNullsInAnyObjectMatcher() {
+        when(mock.oneArg(anyObject())).thenReturn("matched");
+
+        assertEquals(null, mock.forObject(null));
+    }
+
+    @Test
+    public void shouldNotAcceptNullInAnyXMatchers() {
+        when(mock.oneArg(anyString())).thenReturn("0");
+        when(mock.forList(anyList())).thenReturn("1");
+        when(mock.forMap(anyMap())).thenReturn("2");
+        when(mock.forCollection(anyCollection())).thenReturn("3");
+        when(mock.forSet(anySet())).thenReturn("4");
         
-        assertEquals("0", mock.oneArg((Object) null));
-        assertEquals("1", mock.oneArg((String) null));
-        assertEquals("2", mock.forList(null));
-        assertEquals("3", mock.forMap(null));
-        assertEquals("4", mock.forCollection(null));
-        assertEquals("5", mock.forSet(null));
+        assertEquals(null, mock.oneArg((Object) null));
+        assertEquals(null, mock.oneArg((String) null));
+        assertEquals(null, mock.forList(null));
+        assertEquals(null, mock.forMap(null));
+        assertEquals(null, mock.forCollection(null));
+        assertEquals(null, mock.forSet(null));
     }
     
     @Test
-    public void shouldAnyPrimiteWraperMatchersAcceptNull() {
+    public void shouldNotAcceptNullInAllAnyPrimitiveWrapperMatchers() {
         when(mock.forInteger(anyInt())).thenReturn("0");
         when(mock.forCharacter(anyChar())).thenReturn("1");
         when(mock.forShort(anyShort())).thenReturn("2");
@@ -51,13 +64,13 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
         when(mock.forFloat(anyFloat())).thenReturn("6");
         when(mock.forDouble(anyDouble())).thenReturn("7");
         
-        assertEquals("0", mock.forInteger(null));
-        assertEquals("1", mock.forCharacter(null));
-        assertEquals("2", mock.forShort(null));
-        assertEquals("3", mock.forByte(null));
-        assertEquals("4", mock.forBoolean(null));
-        assertEquals("5", mock.forLong(null));
-        assertEquals("6", mock.forFloat(null));
-        assertEquals("7", mock.forDouble(null));
+        assertEquals(null, mock.forInteger(null));
+        assertEquals(null, mock.forCharacter(null));
+        assertEquals(null, mock.forShort(null));
+        assertEquals(null, mock.forByte(null));
+        assertEquals(null, mock.forBoolean(null));
+        assertEquals(null, mock.forLong(null));
+        assertEquals(null, mock.forFloat(null));
+        assertEquals(null, mock.forDouble(null));
     }
 }
