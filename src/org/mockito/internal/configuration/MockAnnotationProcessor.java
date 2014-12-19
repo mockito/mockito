@@ -29,7 +29,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         }
 
         // see @Mock answer default value
-        mockSettings.defaultAnswer(annotation.answer().get());
+        mockSettings.defaultAnswer(annotation.answer());
         return Mockito.mock(field.getType(), mockSettings);
     }
 }

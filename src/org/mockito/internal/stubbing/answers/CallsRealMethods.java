@@ -4,7 +4,8 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.Answers;
+import static org.mockito.Answers.RETURNS_DEFAULTS;
+
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -36,7 +37,7 @@ public class CallsRealMethods implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
     	if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
-    		return Answers.RETURNS_DEFAULTS.get().answer(invocation);
+    		return RETURNS_DEFAULTS.answer(invocation);
     	}
         return invocation.callRealMethod();
     }
