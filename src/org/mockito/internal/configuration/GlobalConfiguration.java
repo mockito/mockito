@@ -18,19 +18,23 @@ import java.io.Serializable;
 @SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
-    
-    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
-    //back door for testing
-    IMockitoConfiguration getIt() {
-        return GLOBAL_CONFIGURATION.get();
-    }
+    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
     public GlobalConfiguration() {
         //Configuration should be loaded only once but I cannot really test it
         if (GLOBAL_CONFIGURATION.get() == null) {
             GLOBAL_CONFIGURATION.set(createConfig());
         }
+    }
+
+    //back door for testing
+    IMockitoConfiguration getIt() {
+        return GLOBAL_CONFIGURATION.get();
+    }
+
+    public static void setConfiguration(IMockitoConfiguration config) {
+      GLOBAL_CONFIGURATION.set(config);
     }
 
     private IMockitoConfiguration createConfig() {
@@ -58,7 +62,7 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public boolean cleansStackTrace() {
         return GLOBAL_CONFIGURATION.get().cleansStackTrace();
     }
-    
+
     public boolean enableClassCache() {
         return GLOBAL_CONFIGURATION.get().enableClassCache();
     }

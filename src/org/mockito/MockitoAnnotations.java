@@ -7,6 +7,7 @@ package org.mockito;
 
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
@@ -23,30 +24,30 @@ import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
- * <p>  
+ * <p>
  * <ul>
- * <li>Allows shorthand creation of objects required for testing.</li> 
- * <li>Minimizes repetitive mock creation code.</li> 
+ * <li>Allows shorthand creation of objects required for testing.</li>
+ * <li>Minimizes repetitive mock creation code.</li>
  * <li>Makes the test class more readable.</li>
  * <li>Makes the verification error easier to read because <b>field name</b> is used to identify the mock.</li>
  * </ul>
- * 
+ *
  * <pre class="code"><code class="java">
- *   public class ArticleManagerTest extends SampleBaseTestCase { 
- *     
+ *   public class ArticleManagerTest extends SampleBaseTestCase {
+ *
  *       &#064;Mock private ArticleCalculator calculator;
  *       &#064;Mock private ArticleDatabase database;
  *       &#064;Mock private UserProvider userProvider;
- *     
+ *
  *       private ArticleManager manager;
- *     
+ *
  *       &#064;Before public void setup() {
  *           manager = new ArticleManager(userProvider, database, calculator);
  *       }
  *   }
- *   
+ *
  *   public class SampleBaseTestCase {
- *   
+ *
  *       &#064;Before public void initMocks() {
  *           MockitoAnnotations.initMocks(this);
  *       }
@@ -57,7 +58,7 @@ import static java.lang.annotation.ElementType.FIELD;
  * <p>
  * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated fields.
  * <p>
- * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class. 
+ * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
  * You can also put initMocks() in your JUnit runner (&#064;RunWith) or use built-in runner: {@link MockitoJUnitRunner}
  */
@@ -66,23 +67,35 @@ public class MockitoAnnotations {
     /**
      * Use top-level {@link org.mockito.Mock} annotation instead
      * <p>
-     * When &#064;Mock annotation was implemented as an inner class then users experienced problems with autocomplete features in IDEs. 
-     * Hence &#064;Mock was made a top-level class.  
+     * When &#064;Mock annotation was implemented as an inner class then users experienced problems with autocomplete features in IDEs.
+     * Hence &#064;Mock was made a top-level class.
      * <p>
-     * How to fix deprecation warnings? 
+     * How to fix deprecation warnings?
      * Typically, you can just <b>search:</b> import org.mockito.MockitoAnnotations.Mock; <b>and replace with:</b> import org.mockito.Mock;
      * <p>
-     * If you're an existing user then sorry for making your code littered with deprecation warnings. 
+     * If you're an existing user then sorry for making your code littered with deprecation warnings.
      * This change was required to make Mockito better.
      */
     @Target( { FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     @Deprecated
-    public @interface Mock {}    
-    
+    public @interface Mock {}
+
+    /**
+     * Sets the configuration to be {@code config} and initializes objects annotated with Mockito
+     * annotations for given {@code testClass}:
+     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks}
+     * <p>
+     * See examples in javadoc for {@link MockitoAnnotations} class.
+     */
+    public static void initMocks(IMockitoConfiguration config, Object testClass) {
+        Mockito.setConfiguration(config);
+        initMocks(testClass);
+    }
+
     /**
      * Initializes objects annotated with Mockito annotations for given testClass:
-     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks} 
+     *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks}
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */
@@ -123,7 +136,7 @@ public class MockitoAnnotations {
             Object mock = annotationEngine.createMockFor(annotation, field);
             if (mock != null) {
                 throwIfAlreadyAssigned(field, alreadyAssigned);
-                alreadyAssigned = true;                
+                alreadyAssigned = true;
                 try {
                     new FieldSetter(testClass, field).set(mock);
                 } catch (Exception e) {

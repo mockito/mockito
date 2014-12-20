@@ -4,7 +4,9 @@
  */
 package org.mockito;
 
+import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.MockitoCore;
+import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.stubbing.answers.*;
@@ -2293,5 +2295,9 @@ public class Mockito extends Matchers {
     @Deprecated
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
+    }
+
+    public static void setConfiguration(IMockitoConfiguration config) {
+        GlobalConfiguration.setConfiguration(config);
     }
 }
