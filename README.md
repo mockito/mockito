@@ -9,7 +9,7 @@ See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/
 
 ## JDK8 status
 
-Mockito should work fine with JDK8 if you stay away from defender methods. Lambda usage may work just as good for `Answer`s. We're unsure about every JDK8 features at the moment, like serializing a mock that uses a lambda. Error report and pull request are welcome though ([contributing guide](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)).
+Mockito should work fine with JDK8 if you stay away from _default methods_ (aka _defender methods_). Lambda usage may work just as good for `Answer`s. We're unsure about every JDK8 features at the moment, like serializing a mock that uses a lambda. Error report and pull request are welcome though ([contributing guide](https://github.com/mockito/mockito/wiki/How%20To%20Contribute)).
 
 ## Moving to github
 We are currently moving a few stuff from [Google Code](https://code.google.com/p/mockito/) to [Github](https://github.com/mockito/mockito).
