@@ -1,4 +1,4 @@
-package org.mockito.release.gradle
+package org.mockito.release.gradle.steps
 
 import org.mockito.release.git.GitTool
 import org.mockito.release.steps.ReleaseStep

@@ -1,4 +1,4 @@
-package org.mockito.release.gradle
+package org.mockito.release.gradle.notes
 
 import org.gradle.api.GradleException
 import org.gradle.api.logging.Logger
