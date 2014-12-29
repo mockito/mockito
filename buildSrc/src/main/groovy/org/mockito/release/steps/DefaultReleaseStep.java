@@ -30,6 +30,15 @@ class DefaultReleaseStep implements ConfigurableReleaseStep {
     }
   }
 
+  public void performCleanup() {
+    if (cleanup != null) {
+      System.out.println("Cleaning up after step '" + getDescription() + "'");
+      cleanup.perform();
+    } else {
+      System.out.println("No cleanup found for step '" + getDescription() + "'");
+    }
+  }
+
   public void rollback(Closure closure) {
     rollback = Operations.toOperation(closure);
   }
@@ -40,9 +49,5 @@ class DefaultReleaseStep implements ConfigurableReleaseStep {
 
   public void perform() {
     operation.perform();
-  }
-
-  public Operation getCleanup() {
-    return cleanup;
   }
 }

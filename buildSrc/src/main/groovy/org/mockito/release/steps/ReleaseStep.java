@@ -8,8 +8,5 @@ public interface ReleaseStep extends Operation {
 
   void performRollback();
 
-  /**
-   * may return null. TODO: I don't like this
-   */
-  Operation getCleanup();
+  void performCleanup();
 }

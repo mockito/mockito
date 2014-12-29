@@ -36,11 +36,7 @@ class DefaultReleaseSteps implements ReleaseSteps {
         //TODO SF needs tidy up. I should model better the cleanup VS rollback operation
         while(!attempted.isEmpty()) {
           ReleaseStep step = attempted.removeLast();
-          Operation cleanup = step.getCleanup();
-          if (cleanup != null) {
-            System.out.println("Found cleanup operation for step " + (attempted.size() + 1) + " (" + step.getDescription() + ")");
-            cleanup.perform();
-          }
+          step.performCleanup();
         }
     }
 
