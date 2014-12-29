@@ -74,7 +74,6 @@ release {
 releaseSteps {
     String currentVersion = project.version //the version loaded when Gradle build has started
     String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-    String author = '"Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"'
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
     step("ensure good chunk of recent commits is pulled for release notes automation") {
@@ -88,13 +87,13 @@ releaseSteps {
 
     step("update release notes") { project.notes.updateReleaseNotes() }
 
-    step("commit release notes to master") { commitReleaseNotes(buildInfo, author) }
+    step("commit release notes to master") { commitReleaseNotes(buildInfo) }
     .rollback { run "git", "reset", "--hard", "HEAD^" }
 
     step("create new version tag") { createTag(buildInfo, "v${currentVersion}".toString()) }
     .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
 
-    step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo, author) }
+    step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo) }
 
     /*
             Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
@@ -107,7 +106,7 @@ releaseSteps {
 
     step("start operating on master") { run "git", "checkout", "master" }
     step("merge changes from tag to master") { run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit" }
-    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo, author) }
+    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo) }
     step("push changes to all involved branches") {
         def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
@@ -125,10 +124,10 @@ TODO:
  - start rolling back from last successful step (e.g. don't rollback the step that failed)
  */
 
-private void commitReleaseNotes(String buildInfo, String author) {
+private void commitReleaseNotes(String buildInfo) {
     def notesFile = project.file("doc/release-notes/official.md")
     run "git", "add", "$notesFile" as String
-    run "git", "commit", "--author", author, "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
+    run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
 }
 
 private void createTag(String buildInfo, String tag) {
@@ -136,13 +135,13 @@ private void createTag(String buildInfo, String tag) {
     run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
 }
 
-private void commitIncrementedVersion(String currentVersion, String buildInfo, String author) {
+private void commitIncrementedVersion(String currentVersion, String buildInfo) {
     String nextVersion = project.incrementVersion()
     String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
-    run "git", "commit", "--author", author, "-m", "$message" as String, "version.properties"
+    run "git", "commit", "-m", "$message" as String, "version.properties"
 }
 
-private void commitUpdatedJavadoc(String buildInfo, String author) {
+private void commitUpdatedJavadoc(String buildInfo) {
     run "git", "fetch", "origin", "+gh-pages:gh-pages"
     run "git", "checkout", "gh-pages"
     run "git", "rm", "-r", "docs/current", "-q"
@@ -155,7 +154,7 @@ private void commitUpdatedJavadoc(String buildInfo, String author) {
         into "docs/current"
     }
     run "git", "add", "docs"
-    run "git", "commit", "--author", author, "-m", '"Refresh javadoc ' + buildInfo + '"', "-q"
+    run "git", "commit", "-m", '"Refresh javadoc ' + buildInfo + '"', "-q"
 }
 
 void run(Object ... args) {
