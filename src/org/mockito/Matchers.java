@@ -53,7 +53,7 @@ import java.util.Set;
  * <p>
  * <b>Warning 2:</b>
  * <p>
- * The any family methods <b>*don't do any type checks*</b>, those are only here to avoid casting
+ * The any family methods <b>*doesn't do any type checks*</b>, those are only here to avoid casting
  * in your code. If you want to perform type checks use the {@link #isA(Class)} method.
  * This <b>might</b> however change (type checks could be added) in a future major release.
  *
@@ -109,7 +109,7 @@ public class Matchers {
     /**
      * Any <code>boolean</code>, <code>Boolean</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -124,7 +124,7 @@ public class Matchers {
     /**
      * Any <code>byte</code>, <code>Byte</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -139,7 +139,7 @@ public class Matchers {
     /**
      * Any <code>char</code>, <code>Character</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -154,7 +154,7 @@ public class Matchers {
     /**
      * Any int, Integer or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -169,7 +169,7 @@ public class Matchers {
     /**
      * Any <code>long</code>, <code>Long</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -184,7 +184,7 @@ public class Matchers {
     /**
      * Any <code>float</code>, <code>Float</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -199,7 +199,7 @@ public class Matchers {
     /**
      * Any <code>double</code>, <code>Double</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -214,7 +214,7 @@ public class Matchers {
     /**
      * Any <code>short</code>, <code>Short</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -229,7 +229,7 @@ public class Matchers {
     /**
      * Any <code>Object</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -278,7 +278,7 @@ public class Matchers {
      * <p>
      * Alias to {@link Matchers#anyObject()}
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -296,7 +296,7 @@ public class Matchers {
      * <p>
      * Shorter alias to {@link Matchers#anyObject()}
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -311,7 +311,7 @@ public class Matchers {
     /**
      * Any <code>String</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -326,7 +326,7 @@ public class Matchers {
     /**
      * Any <code>List</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -344,7 +344,7 @@ public class Matchers {
      * <p>
      * Any <code>List</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -360,7 +360,7 @@ public class Matchers {
     /**
      * Any <code>Set</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -378,7 +378,7 @@ public class Matchers {
      * <p>
      * Any <code>Set</code> or <code>null</code>
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*dones't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -394,7 +394,7 @@ public class Matchers {
     /**
      * Any <code>Map</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -412,7 +412,7 @@ public class Matchers {
      * <p>
      * Any <code>Map</code> or <code>null</code>
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -429,7 +429,7 @@ public class Matchers {
     /**
      * Any <code>Collection</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*dones't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
@@ -447,7 +447,7 @@ public class Matchers {
      * <p>
      * Any <code>Collection</code> or <code>null</code>.
      * <p>
-     * This method <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * This method <b>*doesn't do any type checks*</b>, it is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      * <p>
