@@ -11,8 +11,9 @@ class ReleasePlugin implements Plugin<Project> {
     def steps = Steps.newSteps()
     def gitTool = Git.gitTool(Exec.getProcessRunner(project.getProjectDir()))
     project.extensions.create("releaseSteps", ReleaseExtension, steps, gitTool)
-    def task = project.tasks.create("release", ReleaseTask)
-    task.steps = steps
+    def task = project.tasks.create("release")
+    task.doLast { steps.perform() }
+    task.description = "Perform all release steps"
 
     project.tasks.addRule("releaseStep<Number> - performs given release step") { String taskName ->
       if (taskName.startsWith("releaseStep")) {
@@ -31,5 +32,9 @@ class ReleasePlugin implements Plugin<Project> {
         stepTask.doLast { step.performRollback() }
       }
     }
+
+    def rollback = project.tasks.create("rollbackRelease")
+    rollback.doLast { steps.performRollback() }
+    rollback.description = "Attempt rolling back all release steps"
   }
 }
