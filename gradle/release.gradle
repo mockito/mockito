@@ -81,6 +81,11 @@ releaseSteps {
         //Travis default clone is pretty shallow
         run "git", "pull", "--depth", "500"
     }
+
+    def gitAuthor
+    step("configure generic git user") { gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com") }
+    .rollback { gitAuthor.restoreOriginal() }
+
     step("update release notes") { project.notes.updateReleaseNotes() }
 
     step("commit release notes to master") { commitReleaseNotes(buildInfo, author) }

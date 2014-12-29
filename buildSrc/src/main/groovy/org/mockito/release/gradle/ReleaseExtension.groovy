@@ -1,5 +1,7 @@
 package org.mockito.release.gradle
 
+import org.mockito.release.git.Git
+import org.mockito.release.git.GitTool
 import org.mockito.release.steps.ReleaseStep
 import org.mockito.release.steps.ReleaseSteps
 import org.mockito.release.util.operations.Operations
@@ -14,5 +16,9 @@ class ReleaseExtension {
 
   ReleaseStep step(String description, Closure operation) {
     steps.newStep(description, Operations.toOperation(operation))
+  }
+
+  GitTool getGitTool() {
+    return Git.gitTool()
   }
 }

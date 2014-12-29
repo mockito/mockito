@@ -4,8 +4,7 @@ import org.mockito.release.util.operations.Operation;
 
 public interface ReleaseSteps extends Operation {
 
-    ConfigurableReleaseStep newStep(String description, Operation operation);
+  ConfigurableReleaseStep newStep(String description, Operation operation);
 
-    ReleaseStep getStep(int stepNumber);
-
+  ReleaseStep getStep(int stepNumber);
 }
