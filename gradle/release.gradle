@@ -84,7 +84,7 @@ releaseSteps {
 
     def gitAuthor
     step("configure generic git user") { gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com") }
-    .rollback { gitAuthor.restoreOriginal() }
+    .cleanup { gitAuthor.restoreOriginal() }
 
     step("update release notes") { project.notes.updateReleaseNotes() }
 

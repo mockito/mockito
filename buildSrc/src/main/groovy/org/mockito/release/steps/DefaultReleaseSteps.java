@@ -22,7 +22,7 @@ class DefaultReleaseSteps implements ReleaseSteps {
 
   public void perform() {
         System.out.println("Performing " + steps.size() + " release steps");
-        List<ReleaseStep> attempted = new LinkedList<ReleaseStep>();
+        LinkedList<ReleaseStep> attempted = new LinkedList<ReleaseStep>();
         for (ReleaseStep step : steps) {
             attempted.add(step);
             System.out.println("Step " + attempted.size() + ": " + step.getDescription());
@@ -33,6 +33,15 @@ class DefaultReleaseSteps implements ReleaseSteps {
                 throw new RuntimeException("Release failed at step " + attempted.size() + " (" + step.getDescription() + "). Rollback was performed.", t);
             }
         }
+        //TODO SF needs tidy up. I should model better the cleanup VS rollback operation
+        while(!attempted.isEmpty()) {
+          ReleaseStep step = attempted.removeLast();
+          Operation cleanup = step.getCleanup();
+          if (cleanup != null) {
+            System.out.println("Found cleanup operation for step " + (attempted.size() + 1) + " (" + step.getDescription() + ")");
+            cleanup.perform();
+          }
+        }
     }
 
     private static void rollback(List<ReleaseStep> attempted) {
@@ -41,11 +50,15 @@ class DefaultReleaseSteps implements ReleaseSteps {
         while(!targets.isEmpty()) {
             ReleaseStep s = targets.removeLast();
             Operation r = s.getRollback();
+            Operation c = s.getCleanup();
             if (r != null) {
-                System.out.println("Rolling back step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
-                r.perform();
+              System.out.println("Rolling back step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+              r.perform();
+            } else if (c != null) {
+              System.out.println("Cleaning up after step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+              c.perform();
             } else {
-                System.out.println("No rollback for step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+              System.out.println("No rollback for step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
             }
         }
     }

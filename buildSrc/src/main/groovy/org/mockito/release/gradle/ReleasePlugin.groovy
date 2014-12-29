@@ -31,7 +31,7 @@ class ReleasePlugin implements Plugin<Project> {
         stepTask.doLast {
           def r = step.getRollback()
           if (r == null) {
-            logger.lifecycle("No rollback for step {}", step)
+            logger.lifecycle("No rollback for step {} ({})", number, step.getDescription())
           } else {
             r.perform()
           }

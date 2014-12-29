@@ -6,28 +6,37 @@ import org.mockito.release.util.operations.Operations;
 
 class DefaultReleaseStep implements ConfigurableReleaseStep {
 
-    private final String description;
-    private final Operation operation;
-    private Operation rollback;
+  private final String description;
+  private final Operation operation;
+  private Operation rollback;
+  private Operation cleanup;
 
-    public DefaultReleaseStep(String description, Operation operation) {
-        this.description = description;
-        this.operation = operation;
-    }
+  public DefaultReleaseStep(String description, Operation operation) {
+    this.description = description;
+    this.operation = operation;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void rollback(Closure closure) {
-        rollback = Operations.toOperation(closure);
-    }
+  public void rollback(Closure closure) {
+    rollback = Operations.toOperation(closure);
+  }
 
-    public Operation getRollback() {
-        return rollback;
-    }
+  public void cleanup(Closure closure) {
+    this.cleanup = Operations.toOperation(closure);
+  }
 
-    public void perform() {
-        operation.perform();
-    }
+  public Operation getRollback() {
+    return rollback;
+  }
+
+  public void perform() {
+    operation.perform();
+  }
+
+  public Operation getCleanup() {
+    return cleanup;
+  }
 }
