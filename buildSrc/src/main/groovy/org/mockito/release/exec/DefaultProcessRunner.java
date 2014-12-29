@@ -1,4 +1,4 @@
-package org.mockito.release.notes.exec;
+package org.mockito.release.exec;
 
 import org.mockito.release.notes.util.ReleaseNotesException;
 import org.slf4j.Logger;

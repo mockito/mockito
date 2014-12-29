@@ -1,7 +1,6 @@
 package org.mockito.release.notes;
 
-import org.gradle.api.Project;
-import org.mockito.release.notes.exec.Exec;
+import org.mockito.release.exec.Exec;
 import org.mockito.release.notes.improvements.ImprovementSet;
 import org.mockito.release.notes.improvements.ImprovementsProvider;
 import org.mockito.release.notes.improvements.Improvements;

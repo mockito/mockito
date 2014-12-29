@@ -1,6 +1,6 @@
 package org.mockito.release.notes.vcs;
 
-import org.mockito.release.notes.exec.ProcessRunner;
+import org.mockito.release.exec.ProcessRunner;
 
 class GitLogProvider {
 

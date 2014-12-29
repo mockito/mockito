@@ -1,4 +1,4 @@
-package org.mockito.release.notes.exec;
+package org.mockito.release.exec;
 
 import java.io.File;
 

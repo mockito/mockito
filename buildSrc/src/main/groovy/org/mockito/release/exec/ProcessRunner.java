@@ -1,4 +1,4 @@
-package org.mockito.release.notes.exec;
+package org.mockito.release.exec;
 
 /**
  * Provides ways to execute external processes
