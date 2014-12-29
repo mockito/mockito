@@ -6,10 +6,7 @@ public interface ReleaseStep extends Operation {
 
   String getDescription();
 
-  /**
-   * may return null. TODO: I don't like this
-   */
-  Operation getRollback();
+  void performRollback();
 
   /**
    * may return null. TODO: I don't like this

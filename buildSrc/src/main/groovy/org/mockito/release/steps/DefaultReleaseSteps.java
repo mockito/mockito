@@ -49,17 +49,9 @@ class DefaultReleaseSteps implements ReleaseSteps {
         LinkedList<ReleaseStep> targets = new LinkedList<ReleaseStep>(attempted);
         while(!targets.isEmpty()) {
             ReleaseStep s = targets.removeLast();
-            Operation r = s.getRollback();
-            Operation c = s.getCleanup();
-            if (r != null) {
-              System.out.println("Rolling back step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
-              r.perform();
-            } else if (c != null) {
-              System.out.println("Cleaning up after step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
-              c.perform();
-            } else {
-              System.out.println("No rollback for step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
-            }
+            //TODO SF push this message down
+            System.out.println("Attempting to roll back step " + (targets.size() + 1) + " (" + s.getDescription() + ")");
+            s.performRollback();
         }
     }
 }

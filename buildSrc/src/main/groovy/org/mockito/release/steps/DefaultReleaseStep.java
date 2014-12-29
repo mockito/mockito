@@ -20,16 +20,22 @@ class DefaultReleaseStep implements ConfigurableReleaseStep {
     return description;
   }
 
+  public void performRollback() {
+    if (rollback != null) {
+      rollback.perform();
+    } else if (cleanup != null) {
+      cleanup.perform();
+    } else {
+      System.out.println("No rollback or cleanup operation found for step '" + description + "'");
+    }
+  }
+
   public void rollback(Closure closure) {
     rollback = Operations.toOperation(closure);
   }
 
   public void cleanup(Closure closure) {
     this.cleanup = Operations.toOperation(closure);
-  }
-
-  public Operation getRollback() {
-    return rollback;
   }
 
   public void perform() {
