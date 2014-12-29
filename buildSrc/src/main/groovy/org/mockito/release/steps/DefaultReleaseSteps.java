@@ -16,7 +16,11 @@ class DefaultReleaseSteps implements ReleaseSteps {
         return step;
     }
 
-    public void perform() {
+  public Operation getStep(int stepNumber) {
+    return steps.get(stepNumber - 1); //TODO SF array index
+  }
+
+  public void perform() {
         System.out.println("Performing " + steps.size() + " release steps");
         List<ReleaseStep> attempted = new LinkedList<ReleaseStep>();
         for (ReleaseStep step : steps) {

@@ -12,6 +12,7 @@ assert project == rootProject
 apply from: rootProject.file("gradle/publish.gradle")
 
 apply plugin: 'release-notes'
+apply plugin: 'release'
 
 notes {
     notesFile = project.file("doc/release-notes/official.md")
@@ -59,16 +60,18 @@ bintrayUpload {
     }
 }
 
-task("release", type: org.mockito.release.gradle.ReleaseTask) {
-    dependsOn bintrayUpload, releaseNeeded
-    onlyIf { releaseNeeded.needed }
+release {
+  dependsOn bintrayUpload, releaseNeeded
+  onlyIf { releaseNeeded.needed }
 
-    doFirst {
-        if (dryRun) {
-            logger.lifecycle "Dry-running the release"
-        }
+  doFirst {
+    if (dryRun) {
+      logger.lifecycle "Dry-running the release"
     }
+  }
+}
 
+releaseSteps {
     String currentVersion = project.version //the version loaded when Gradle build has started
     String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
     String author = '"Continuous Delivery Drone <continuous.delivery.drone@gmail.com>"'
