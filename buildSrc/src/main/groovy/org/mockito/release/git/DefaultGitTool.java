@@ -16,6 +16,6 @@ class DefaultGitTool implements GitTool {
     runner.run("git", "config", "user.name", name);
     runner.run("git", "config", "user.email", email);
 
-    return new DefaultGitAuthor(currentLocalUser, currentLocalEmail);
+    return new DefaultGitAuthor(currentLocalUser, currentLocalEmail, runner);
   }
 }

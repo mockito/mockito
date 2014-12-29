@@ -2,12 +2,15 @@ package org.mockito.release.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.mockito.release.exec.Exec
+import org.mockito.release.git.Git
 import org.mockito.release.steps.Steps
 
 class ReleasePlugin implements Plugin<Project> {
   void apply(Project project) {
     def steps = Steps.newSteps()
-    project.extensions.create("releaseSteps", ReleaseExtension, steps)
+    def gitTool = Git.gitTool(Exec.getProcessRunner(project.getProjectDir()))
+    project.extensions.create("releaseSteps", ReleaseExtension, steps, gitTool)
     def task = project.tasks.create("release", ReleaseTask)
     task.steps = steps
 

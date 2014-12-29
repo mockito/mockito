@@ -1,6 +1,5 @@
 package org.mockito.release.gradle
 
-import org.mockito.release.git.Git
 import org.mockito.release.git.GitTool
 import org.mockito.release.steps.ReleaseStep
 import org.mockito.release.steps.ReleaseSteps
@@ -9,8 +8,10 @@ import org.mockito.release.util.operations.Operations
 class ReleaseExtension {
 
   private final ReleaseSteps steps
+  private final GitTool gitTool
 
-  ReleaseExtension(ReleaseSteps steps) {
+  ReleaseExtension(ReleaseSteps steps, GitTool gitTool) {
+    this.gitTool = gitTool
     this.steps = steps
   }
 
@@ -19,6 +20,6 @@ class ReleaseExtension {
   }
 
   GitTool getGitTool() {
-    return Git.gitTool()
+    gitTool
   }
 }
