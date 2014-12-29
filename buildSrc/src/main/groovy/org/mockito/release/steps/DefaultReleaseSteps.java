@@ -10,13 +10,13 @@ class DefaultReleaseSteps implements ReleaseSteps {
 
     private List<ReleaseStep> steps = new ArrayList<ReleaseStep>();
 
-    public ReleaseStep newStep(String description, Operation operation) {
+    public ConfigurableReleaseStep newStep(String description, Operation operation) {
         DefaultReleaseStep step = new DefaultReleaseStep(description, operation);
         steps.add(step);
         return step;
     }
 
-  public Operation getStep(int stepNumber) {
+  public ReleaseStep getStep(int stepNumber) {
     return steps.get(stepNumber - 1); //TODO SF array index
   }
 

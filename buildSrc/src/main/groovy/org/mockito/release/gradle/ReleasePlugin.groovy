@@ -19,5 +19,21 @@ class ReleasePlugin implements Plugin<Project> {
         stepTask.doLast { step.perform() }
       }
     }
+
+    project.tasks.addRule("rollbackStep<Number> - rolls back given release step") { String taskName ->
+      if (taskName.startsWith("rollbackStep")) {
+        String number = taskName - "rollbackStep"
+        def step = steps.getStep(number as int)
+        def stepTask = project.tasks.create(taskName)
+        stepTask.doLast {
+          def r = step.getRollback()
+          if (r == null) {
+            logger.lifecycle("No rollback for step {}", step)
+          } else {
+            r.perform()
+          }
+        }
+      }
+    }
   }
 }

@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import org.mockito.release.util.operations.Operation;
 import org.mockito.release.util.operations.Operations;
 
-class DefaultReleaseStep implements ReleaseStep {
+class DefaultReleaseStep implements ConfigurableReleaseStep {
 
     private final String description;
     private final Operation operation;
