@@ -6,9 +6,6 @@ package org.mockito.internal.util.reflection;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 import java.io.Serializable;
