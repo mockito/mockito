@@ -1,3 +1,15 @@
+### 1.10.18 (2014-12-30 07:32 UTC)
+
+* Authors: 4
+* Commits: 14
+  * 11: Szczepan Faber
+  * 1: pbielicki
+  * 1: Brice Dutheil
+  * 1: Matthew Dean
+* Improvements: 2
+  * Fix grammar issues in the javadoc documentation [(#149)](https://github.com/mockito/mockito/pull/149)
+  * 1.10 regression (StackOverflowError) with interface where generic type has itself as upper bound [(#114)](https://github.com/mockito/mockito/issues/114)
+
 ### 1.10.17 (2014-12-16 09:38 UTC)
 
 * Authors: 2
