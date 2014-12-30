@@ -26,15 +26,6 @@ import org.junit.Test;
 
 public class GenericMetadataSupportTest {
 
-    interface MyClass1 <MC2 extends MyClass2> {
-        MC2 getNested();
-    }
-    interface MyClass2<MC3 extends MyClass3> {
-        MC3 getNested();
-    }
-    interface MyClass3 {
-        String returnSomething();
-    }  
     interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
         E get();
     }
@@ -58,20 +49,12 @@ public class GenericMetadataSupportTest {
     static class StringList extends ArrayList<String> { }
 
     @Test
-    public void discoverDeepMockingOfGenerics() {
-        MyClass1 myMock1 = mock(MyClass1.class, RETURNS_DEEP_STUBS);
-
-        when(myMock1.getNested().getNested().returnSomething()).thenReturn("Hello World.");
-    }
-    
-    @Test
     public void can_get_raw_type_from_Class() throws Exception {
         assertThat(inferFrom(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
         assertThat(inferFrom(ListOfNumbers.class).rawType()).isEqualTo(ListOfNumbers.class);
         assertThat(inferFrom(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
         assertThat(inferFrom(StringList.class).rawType()).isEqualTo(StringList.class);
     }
-
 
     @Test
     public void can_get_raw_type_from_ParameterizedType() throws Exception {
