@@ -7,6 +7,7 @@ package org.mockito.internal.util.reflection;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -17,9 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.junit.Test;
 
-@SuppressWarnings("unused")
 public class GenericMetadataSupportTest {
   
     interface GenericsSelfReference<T extends GenericsSelfReference<T>> {
@@ -61,7 +62,6 @@ public class GenericMetadataSupportTest {
         assertThat(inferFrom(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
         assertThat(inferFrom(StringList.class).rawType()).isEqualTo(StringList.class);
     }
-
 
     @Test
     public void can_get_raw_type_from_ParameterizedType() throws Exception {
