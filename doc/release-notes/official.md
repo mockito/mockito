@@ -1,3 +1,15 @@
+### 1.10.20 (2014-12-31 17:04 UTC)
+
+* Authors: 4
+* Commits: 10
+  * 6: pbielicki
+  * 2: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Radim Kubacki
+* Improvements: 2
+  * Deep stubbing with generic responses in the call chain is not working [(#128)](https://github.com/mockito/mockito/issues/128)
+  * Make org.mockito.asm.signature package optional in Import-Packages. [(#125)](https://github.com/mockito/mockito/pull/125)
+
 ### 1.10.18 (2014-12-30 09:45 UTC)
 
 * Authors: 4
