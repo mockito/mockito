@@ -1,30 +1,42 @@
 package org.mockito.release.version
 
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 import spock.lang.Subject
 
 class DefaultVersionToolTest extends Specification {
 
-    @Subject tool = new DefaultVersionTool()
+    @Rule TemporaryFolder dir = new TemporaryFolder()
+    @Subject tool = new DefaultVersionTool(new VersionBumper())
 
-    def "increments version"() {
-        expect:
-        tool.incrementVersion("1.0.0") == "1.0.1"
-        tool.incrementVersion("0.0.0") == "0.0.1"
-        tool.incrementVersion("1.10.15") == "1.10.16"
-
-        tool.incrementVersion("1.0.0-beta") == "1.0.1-beta"
-        tool.incrementVersion("1.10.15-beta") == "1.10.16-beta"
+    def "does not increment empty file"() {
+        def f = dir.newFile()
+        when: tool.incrementVersion("1.0.0", f)
+        then: f.text == ""
     }
 
-    def "increments only 3 numbered versions"() {
-        when:
-        tool.incrementVersion(unsupported)
+    def "does not increment file without 'version'"() {
+        def f = dir.newFile() << "ala\nma"
+        when: tool.incrementVersion("1.0.0", f)
+        then: f.text == "ala\nma"
+    }
 
-        then:
-        thrown(IllegalArgumentException)
+    def "increments version in file"() {
+        def f = dir.newFile() << """
+ala
+#version=x
+version=y
 
-        where:
-        unsupported << ["1.0", "2", "1.0.0.0", "1.0.1-beta.2"]
+foo=bar
+"""
+        when: tool.incrementVersion("1.0.0", f)
+        then: f.text == """
+ala
+#version=1.0.1
+version=1.0.1
+
+foo=bar
+"""
     }
 }

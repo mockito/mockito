@@ -1,22 +1,22 @@
 package org.mockito.release.version;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.mockito.release.notes.util.IOUtil;
+
+import java.io.File;
 
 class DefaultVersionTool implements VersionTool {
 
-    public String incrementVersion(String version) {
-        Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(-(\\w+)){0,1}");
-        Matcher matcher = pattern.matcher(version);
-        boolean m = matcher.matches();
-        if (!m) {
-            throw new IllegalArgumentException("Unsupported version: '" + version + "'. Examples of supported versions: 1.0.0, 1.20.123, 1.0.10-beta");
-        }
+    private final VersionBumper bumper;
 
-        int major = Integer.parseInt(matcher.group(1));
-        int minor = Integer.parseInt(matcher.group(2));
-        int patch = Integer.parseInt(matcher.group(3));
-        String postfix = matcher.group(4) != null ? matcher.group(4) : "";
-        return "" + major + "." + minor + "." + (patch + 1) + postfix;
+    DefaultVersionTool(VersionBumper bumper) {
+        this.bumper = bumper;
+    }
+
+    public String incrementVersion(String currentVersion, File target) {
+        String inc = bumper.incrementVersion(currentVersion);
+        String content = IOUtil.readFully(target);
+        String updated = content.replaceAll("(?s)version=(.*?)\n", "version=" + inc + "\n");
+        IOUtil.writeFile(target, updated);
+        return inc;
     }
 }
