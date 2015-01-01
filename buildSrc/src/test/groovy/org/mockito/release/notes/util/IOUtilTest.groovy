@@ -5,6 +5,7 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.mockito.release.notes.util.IOUtil.readFully
+import static org.mockito.release.notes.util.IOUtil.writeFile
 
 class IOUtilTest extends Specification {
 
@@ -24,9 +25,11 @@ class IOUtilTest extends Specification {
         IOUtil.close(new ByteArrayInputStream())
     }
 
-    def "reads file"() {
-        def f = tmp.newFile() << "ala"
+    def "writes file"() {
+        def f = tmp.newFile()
+        writeFile(f, "ala\nma")
+
         expect:
-        readFully(f) == "ala"
+        readFully(f) == "ala\nma"
     }
 }

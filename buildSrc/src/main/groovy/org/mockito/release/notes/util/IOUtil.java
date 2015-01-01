@@ -52,4 +52,16 @@ public class IOUtil {
             s.close();
         }
     }
+
+    public static void writeFile(File target, String content) {
+        PrintWriter p = null;
+        try {
+            p = new PrintWriter(new FileWriter(target));
+            p.write(content);
+        } catch (Exception e) {
+            throw new RuntimeException("Problems writing text to file: " + target);
+        } finally {
+            close(p);
+        }
+    }
 }
