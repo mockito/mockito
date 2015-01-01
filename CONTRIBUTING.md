@@ -15,12 +15,11 @@ For that reason each pull request has to go through a thorough review / discussi
 
 Things we pay attention in a PR :
 
-* Expressive title and description in the PR
+* On pull requests, please document the change, what it brings, what is the benefit, the issue on Google Code, etc.
 * Clean commit history in the topic branch in your fork of the repository, even during review. For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). Tests are an asset, so is history.
 * In the code, always test your feature / change, in unit tests and in our `acceptance test suite` located in `org.mockitousage`. Older tests will be migrated when a test is modified.
 * We have decided that tests should from now on will fallow a snake case (`ensure_that_stuff_is_doing_that`) convention, so that we can express the real intent of the test and still be able to read it.
 * When reporting errors to the users, if it's a user report report it gently and explain how a user should deal with it, see the `Reporter` class. However not all errors should go there, some unlikely technical errors don't need to be in the `Reporter` class.
-* On pull requests, please document the change, what it brings, what is the benefit, the issue on Google Code, etc.
 * Documentation !!! Always document with love the public API. Internals could use some love too. In all cases the code should _auto-document_ itself.
 
 
