@@ -8,17 +8,24 @@ import java.io.*;
 public class IOUtil {
 
     /**
+     * Reads string from the file
+     */
+    public static String readFully(File input) {
+        try {
+            return readNow(new FileInputStream(input));
+        } catch (Exception e) {
+            throw new RuntimeException("Problems reading file: " + input, e);
+        }
+    }
+
+    /**
      * Reads string from the stream and closes it
      */
     public static String readFully(InputStream stream) {
-        BufferedReader r = null;
         try {
-            r = new BufferedReader(new InputStreamReader(stream));
             return readNow(stream);
         } catch (Exception e) {
             throw new RuntimeException("Problems reading stream", e);
-        } finally {
-            close(r);
         }
     }
 
@@ -39,6 +46,10 @@ public class IOUtil {
 
     private static String readNow(InputStream is) throws IOException {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
+        try {
+            return s.hasNext() ? s.next() : "";
+        } finally {
+            s.close();
+        }
     }
 }

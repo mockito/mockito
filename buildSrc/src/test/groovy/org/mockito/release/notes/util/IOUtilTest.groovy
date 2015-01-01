@@ -1,10 +1,14 @@
 package org.mockito.release.notes.util
 
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.mockito.release.notes.util.IOUtil.readFully
 
 class IOUtilTest extends Specification {
+
+    @Rule TemporaryFolder tmp = new TemporaryFolder()
 
     def "reads stream"() {
         expect:
@@ -18,5 +22,11 @@ class IOUtilTest extends Specification {
         expect:
         IOUtil.close(null)
         IOUtil.close(new ByteArrayInputStream())
+    }
+
+    def "reads file"() {
+        def f = tmp.newFile() << "ala"
+        expect:
+        readFully(f) == "ala"
     }
 }
