@@ -7,6 +7,8 @@ In case the release process from Travis CI fails, please try:
   - delete top release notes paragraph(s) so that they are recreated
 */
 
+import org.mockito.release.version.*
+
 assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
@@ -106,7 +108,7 @@ releaseSteps {
 
     step("start operating on master") { run "git", "checkout", "master" }
     step("merge changes from tag to master") { run "git", "merge", "v$currentVersion" as String, "--squash", "--no-commit" }
-    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo) }
+    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
     step("push changes to all involved branches") {
         def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
@@ -135,8 +137,8 @@ private void createTag(String buildInfo, String tag) {
     run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
 }
 
-private void commitIncrementedVersion(String currentVersion, String buildInfo) {
-    String nextVersion = project.incrementVersion()
+private void commitIncrementedVersion(String currentVersion, String buildInfo, VersionFile versionFile) {
+    String nextVersion = versionFile.incrementVersion()
     String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
     run "git", "commit", "-m", "$message" as String, "version.properties"
 }
