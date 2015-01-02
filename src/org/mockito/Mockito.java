@@ -2200,7 +2200,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationAfterDelay after(int millis) {
+    public static VerificationAfterDelay after(long millis) {
         return new After(millis, VerificationModeFactory.times(1));
     }
 
