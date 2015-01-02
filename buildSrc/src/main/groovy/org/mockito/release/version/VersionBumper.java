@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 
 class VersionBumper {
 
+    /**
+     * Increments 'patch' element of the version of provided version, e.g. 1.0.0 -> 1.0.1
+     */
     String incrementVersion(String version) {
         Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(-(\\w+)){0,1}");
         Matcher matcher = pattern.matcher(version);
