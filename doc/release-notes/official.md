@@ -1,3 +1,13 @@
+### 2.0.0-beta (2015-01-02 15:02 UTC)
+
+* Authors: 3
+* Commits: 19
+  * 8: Szczepan Faber
+  * 6: Brice Dutheil
+  * 5: pimterry
+* Improvements: 1
+  * Argument matcher anyXxx() (i.e. anyString(), anyList()) should not match nulls [(#134)](https://github.com/mockito/mockito/issues/134)
+
 ### 1.10.19 (2014-12-31 17:04 UTC)
 
 * Authors: 4
