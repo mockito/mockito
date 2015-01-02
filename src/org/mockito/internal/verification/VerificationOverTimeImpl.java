@@ -22,7 +22,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
     private final VerificationMode delegate;
     private final boolean returnOnSuccess;
     private final Timer timer;
-    
+
     /**
      * Create this verification mode, to be used to verify invocation ongoing data later.
      *
@@ -35,11 +35,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      */
     public VerificationOverTimeImpl(long pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
-        this.pollingPeriodMillis = pollingPeriodMillis;
-        this.durationMillis = durationMillis;
-        this.delegate = delegate;
-        this.returnOnSuccess = returnOnSuccess;
-        this.timer = new Timer(durationMillis);
+        this(pollingPeriodMillis, durationMillis, delegate, returnOnSuccess, new Timer(durationMillis));
     }
 
     /**
@@ -79,12 +75,12 @@ public class VerificationOverTimeImpl implements VerificationMode {
      */
     public void verify(VerificationData data) {
         AssertionError error = null;
-        
+
         timer.start();
         while (timer.isCounting()) {
             try {
                 delegate.verify(data);
-                
+
                 if (returnOnSuccess) {
                     return;
                 } else {
@@ -97,7 +93,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
                 error = handleVerifyException(e);
             }
         }
-        
+
         if (error != null) {
             throw error;
         }
@@ -123,17 +119,17 @@ public class VerificationOverTimeImpl implements VerificationMode {
             // oups. not much luck.
         }
     }
-    
+
     public long getPollingPeriod() {
         return pollingPeriodMillis;
     }
-    
+
     public long getDuration() {
         return durationMillis;
     }
-    
+
     public VerificationMode getDelegate() {
         return delegate;
     }
-    
+
 }
