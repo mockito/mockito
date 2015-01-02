@@ -9,6 +9,7 @@ import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -22,8 +23,7 @@ import org.mockito.stubbing.Answer;
  * </code></pre>
  * <b>This is not the full list</b> of Answers available in Mockito. Some interesting answers can be found in org.mockito.stubbing.answers package.
  */
-public enum Answers {
-
+public enum Answers implements Answer<Object>{
     /**
      * The default configured answer of every mock.
      *
@@ -77,7 +77,18 @@ public enum Answers {
         this.implementation = implementation;
     }
 
+    /**
+     * @deprecated Use the enum-constant directly, instead of this getter. This method will be removed in a future release<br> 
+     * E.g. instead of <code>Answers.CALLS_REAL_METHODS.get()</code> use <code>Answers.CALLS_REAL_METHODS</code> .
+     */
+    @Deprecated
     public Answer<Object> get() {
-        return implementation;
+        return this;
     }
+
+	public Object answer(InvocationOnMock invocation) throws Throwable {
+		return implementation.answer(invocation);
+	}
+
+   
 }
