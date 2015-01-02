@@ -1,14 +1,16 @@
 package org.mockito.release.version;
 
+import java.io.File;
+
 /**
  * Version utilities
  */
 public class Version {
 
     /**
-     * Provides version tool
+     * Provides instance of version file
      */
-    public static VersionTool getVersionTool() {
-        return new DefaultVersionTool(new VersionBumper());
+    VersionFile versionFile(File versionFile) {
+        return new DefaultVersionFile(versionFile);
     }
 }
