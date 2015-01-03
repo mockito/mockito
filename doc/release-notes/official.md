@@ -6,7 +6,9 @@
   * 1: christian.schwarz
   * 1: Brice Dutheil
   * 1: Szczepan Faber
-* No notable improvements. See the commits for detailed changes.
+* Improvements: 2
+  * enum Answers now implements Answer<Object> [(#144)](https://github.com/mockito/mockito/pull/144)
+  * `Mockito.after` now takes a `long`
 
 ### 2.0.1-beta (2015-01-02 15:02 UTC)
 
