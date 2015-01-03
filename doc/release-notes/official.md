@@ -1,9 +1,8 @@
 ### 2.0.2-beta (2015-01-02 16:25 UTC)
 
-* Authors: 4
+* Authors: 3
 * Commits: 5
   * 2: Christian Schwarz
-  * 1: christian.schwarz
   * 1: Brice Dutheil
   * 1: Szczepan Faber
 * Improvements: 2
