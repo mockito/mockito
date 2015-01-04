@@ -9,7 +9,7 @@ See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/
 
 ## Mockito site
 
-All you want to know about Mockito is hosted at [Mockito site](http://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
+All you want to know about Mockito is hosted at [The Mockito Site](http://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
 
 Want to contribute? Take a look at the [Contributing Guide](https://github.com/mockito/mockito/blob/master/CONTRIBUTING.md).
 
