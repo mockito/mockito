@@ -21,6 +21,12 @@ notes {
 }
 
 def dryRun = project.hasProperty('dryRun')
+if (dryRun) {
+    //TODO SF lets not use excludedTaskNames to model this
+    logger.lifecycle "Automatically scheduling 'rollbackRelease' task"
+    rollbackRelease.dependsOn release
+    gradle.startParameter.taskNames += "rollbackRelease"
+}
 
 configurations {
     previousSrc
