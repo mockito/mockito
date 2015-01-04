@@ -29,7 +29,7 @@ Mockito is a mocking framework that tastes really good. It lets you write beauti
 
 ## How do I drink it?
 
-Recommended way of getting Mockito is declaring a dependency on "mockito-core" library ("mockito-all" is discontinued in Mockito 2.*) using your favorite build system. My favorite build system happens to be [Gradle](http://gradle.org) and so I do:
+Recommended way of getting Mockito is declaring a dependency on "mockito-core" library ("mockito-all" is discontinued in Mockito 2.*) using your favorite build system. Our favorite build system happens to be [Gradle](http://gradle.org) and so I do:
 
 ```groovy
 repositories {
@@ -41,7 +41,7 @@ dependencies {
 }
 ```
 
-For more information please refer to the [wiki page](https://code.google.com/p/mockito/wiki/DeclaringMockitoDependency).
+For more information please refer to the [wiki page](https://github.com/mockito/mockito/wiki/Declaring-mockito-dependency).
 
 ### Then you can verify interactions
 
