@@ -50,8 +50,7 @@ tasks.withType(JavaCompile) {
     options.warnings = false
 }
 
-//TODO we should remove all dependencies to checked-in jars and move the 'mockito-all' project out
-//we should consider getting rid of mockito-all completely (or moving out into a completely separate project.
+//TODO we should remove all dependencies to checked-in jars
 dependencies {
     provided "junit:junit:4.10"
     compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
@@ -70,16 +69,12 @@ def licenseFiles = copySpec {
     from("lib/repackaged") { include '*.txt' }
 }
 
-def repackagedClasses = copySpec {
-    from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
-        exclude 'META-INF/MANIFEST.MF'
-    }
-}
-
 jar {
     baseName = 'mockito-core'
     from(sourceSets.main.allSource)
-    with repackagedClasses
+    from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
+        exclude 'META-INF/MANIFEST.MF'
+    }
     with licenseFiles
 }
 
@@ -100,34 +95,13 @@ task javadocJar(type: Jar) {
     from mockitoJavadoc
 }
 
-//TODO SF mockito-all jar should automatically appear as downloadable in bintray and in Mockito 2.0, replaced with zip distro
-task allJar(type: Jar) {
-    baseName = 'mockito-all'
-
-    with repackagedClasses
-    with licenseFiles
-
-    //source files
-    from(sourceSets.main.allSource)
-
-    //classes
-    from(sourceSets.main.output)
-
-    //3rd party library classes
-    from(zipTree("lib/run/objenesis-2.1.jar")) { exclude "META-INF/maven/**" }
-    from(zipTree("lib/run/com.springsource.org.hamcrest.core-1.1.0.jar")) { exclude "LICENSE.txt" }
-
-    //3rd party license files
-    from("lib/run") { exclude '**/*.jar' }
-}
-
 def antCommand = "ant"
 
 if (System.getProperty("os.name").startsWith("Windows")) {
     antCommand += ".bat"
 }
 
-configure([jar, allJar]) { task ->
+jar { task ->
     task.rootSpec.exclude "MANIFEST.MF" //hack to avoid problems with bnd
     doLast {
         project.exec {
@@ -137,7 +111,7 @@ configure([jar, allJar]) { task ->
 }
 
 artifacts {
-    archives allJar, sourcesJar, javadocJar
+    archives sourcesJar, javadocJar
 }
 
 publishing {
@@ -145,12 +119,6 @@ publishing {
         mockitoCore(MavenPublication) {
             from components.java
             artifactId 'mockito-core'
-            artifact sourcesJar
-            artifact javadocJar
-        }
-        mockitoAll(MavenPublication) {
-            artifactId 'mockito-all'
-            artifact allJar
             artifact sourcesJar
             artifact javadocJar
         }

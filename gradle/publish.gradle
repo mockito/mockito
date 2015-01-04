@@ -12,7 +12,7 @@ bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
 
-    publications = ['mockitoCore', 'mockitoAll']
+    publications = ['mockitoCore']
 
     dryRun = project.hasProperty('dryRun')
     publish = true
