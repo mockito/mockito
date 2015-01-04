@@ -1,3 +1,8 @@
+- [Contributing to Mockito](#)
+	- [Pull request criteria](#)
+	- [General info](#)
+	- [More on pull requests](#)
+
 # Contributing to Mockito
 
 ## Pull request criteria
@@ -18,7 +23,7 @@
 * Mockito currently uses Github for versioning so you can *create a fork of Mockito in no time*. Go to the [github project](https://github.com/mockito/mockito) and "Create your own fork". Start a branch, when you're ready let us know about your pull request so we can discuss it and merge the PR!
 * Note the project now uses *gradle*, when your Gradle install is ready, make your IDE project's files (for example **`gradle idea`**). Other gradle commands are listed via **`gradle tasks`**.
 
-## More on Pull requests
+## More on pull requests
 
 As you may have noticed, Mockito has now a continuous release bot, that means that each **merged** pull request will be automacilly released in a newer version of Mockito.
 For that reason each pull request has to go through a thorough review / discussion.
