@@ -1,3 +1,13 @@
+### 2.0.3-beta (2015-01-20 20:35 UTC)
+
+* Authors: 2
+* Commits: 8
+  * 6: Brice Dutheil
+  * 2: Szczepan Faber
+* Improvements: 2
+  * stop producing mockito-all [(#153)](https://github.com/mockito/mockito/issues/153)
+  * Mockito 1.10.x timeout verification needs JUnit classes (VerifyError, NoClassDefFoundError) [(#152)](https://github.com/mockito/mockito/issues/152)
+
 ### 2.0.2-beta (2015-01-02 16:25 UTC)
 
 * Authors: 3
