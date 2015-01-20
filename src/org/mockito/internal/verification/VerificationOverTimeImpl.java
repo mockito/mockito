@@ -5,7 +5,6 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
@@ -89,7 +88,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
             } catch (MockitoAssertionError e) {
                 error = handleVerifyException(e);
             }
-            catch (ArgumentsAreDifferent e) {
+            catch (AssertionError e) {
                 error = handleVerifyException(e);
             }
         }
