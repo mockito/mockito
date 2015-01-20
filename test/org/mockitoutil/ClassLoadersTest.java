@@ -5,8 +5,10 @@ import org.mockito.Mockito;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockitoutil.ClassLoaders.currentClassLoader;
 import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
+import static org.mockitoutil.ClassLoaders.jdkClassLoader;
 
 public class ClassLoadersTest {
 
@@ -168,6 +170,53 @@ public class ClassLoadersTest {
         assertThat(aClass).isNotNull();
         assertThat(aClass.getClassLoader()).isEqualTo(cl);
         assertThat(aClass.getName()).isEqualTo("yop.Dude");
+    }
+
+    @Test
+    public void cannot_load_a_class_file_not_in_parent() throws Exception {
+        // given
+        ClassLoader cl = ClassLoaders
+                .inMemoryClassLoader()
+                .withParent(jdkClassLoader())
+                .build();
+
+        cl.loadClass("java.lang.String");
+
+        try {
+            // when
+            cl.loadClass("org.mockito.Mockito");
+            fail("should have not found Mockito class");
+        } catch (ClassNotFoundException e) {
+            // then
+            assertThat(e.getMessage()).contains("org.mockito.Mockito");
+        }
+    }
+
+    @Test
+    public void can_list_all_classes_reachable_in_a_classloader() throws Exception {
+        ClassLoader classLoader = ClassLoaders.inMemoryClassLoader()
+                .withParent(jdkClassLoader())
+                .withClassDefinition("a.A", SimpleClassGenerator.makeMarkerInterface("a.A"))
+                .withClassDefinition("a.b.B", SimpleClassGenerator.makeMarkerInterface("a.b.B"))
+                .withClassDefinition("c.C", SimpleClassGenerator.makeMarkerInterface("c.C"))
+//                .withCodeSourceUrlOf(ClassLoaders.class)
+                .build();
+
+        assertThat(ClassLoaders.in(classLoader).listOwnedClasses()).containsOnly("a.A", "a.b.B", "c.C");
+        assertThat(ClassLoaders.in(classLoader).omit("b", "c").listOwnedClasses()).containsOnly("a.A");
+    }
+
+    @Test
+    public void return_bootstrap_classloader() throws Exception {
+        assertThat(jdkClassLoader()).isNotEqualTo(Mockito.class.getClassLoader());
+        assertThat(jdkClassLoader()).isNotEqualTo(ClassLoaders.class.getClassLoader());
+        assertThat(jdkClassLoader()).isEqualTo(Number.class.getClassLoader());
+        assertThat(jdkClassLoader()).isEqualTo(null);
+    }
+
+    @Test
+    public void return_current_classloader() throws Exception {
+        assertThat(currentClassLoader()).isEqualTo(this.getClass().getClassLoader());
     }
 
     static class ClassUsingInterface1 implements Interface1 { }

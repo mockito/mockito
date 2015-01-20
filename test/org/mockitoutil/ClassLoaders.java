@@ -1,14 +1,23 @@
 package org.mockitoutil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.util.*;
 
 import static java.util.Arrays.asList;
 
 public abstract class ClassLoaders {
+    protected ClassLoader parent = currentClassLoader();
+
     protected ClassLoaders() {}
 
     public static IsolatedURLClassLoaderBuilder isolatedClassLoader() {
@@ -23,9 +32,23 @@ public abstract class ClassLoaders {
         return new InMemoryClassLoaderBuilder();
     }
 
+    public static ReachableClassesFinder in(ClassLoader classLoader_without_jUnit) {
+        return new ReachableClassesFinder(classLoader_without_jUnit);
+    }
 
+    public static ClassLoader jdkClassLoader() {
+        return String.class.getClassLoader();
+    }
 
+    public static ClassLoader systemClassLoader() {
+        return ClassLoader.getSystemClassLoader();
+    }
 
+    public static ClassLoader currentClassLoader() {
+        return ClassLoaders.class.getClassLoader();
+    }
+
+    public abstract ClassLoader build();
 
     public static class IsolatedURLClassLoaderBuilder extends ClassLoaders {
         private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
@@ -55,6 +78,7 @@ public abstract class ClassLoaders {
 
         public ClassLoader build() {
             return new LocalIsolatedURLClassLoader(
+                    jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
                     privateCopyPrefixes
             );
@@ -64,8 +88,8 @@ public abstract class ClassLoaders {
     static class LocalIsolatedURLClassLoader extends URLClassLoader {
         private final ArrayList<String> privateCopyPrefixes;
 
-        public LocalIsolatedURLClassLoader(URL[] urls, ArrayList<String> privateCopyPrefixes) {
-            super(urls, null);
+        public LocalIsolatedURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+            super(urls, classLoader);
             this.privateCopyPrefixes = privateCopyPrefixes;
         }
 
@@ -111,6 +135,7 @@ public abstract class ClassLoaders {
 
         public ClassLoader build() {
             return new LocalExcludingURLClassLoader(
+                    jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
                     privateCopyPrefixes
             );
@@ -120,8 +145,8 @@ public abstract class ClassLoaders {
     static class LocalExcludingURLClassLoader extends URLClassLoader {
         private final ArrayList<String> privateCopyPrefixes;
 
-        public LocalExcludingURLClassLoader(URL[] urls, ArrayList<String> privateCopyPrefixes) {
-            super(urls, null);
+        public LocalExcludingURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+            super(urls, classLoader);
             this.privateCopyPrefixes = privateCopyPrefixes;
         }
 
@@ -142,20 +167,27 @@ public abstract class ClassLoaders {
     public static class InMemoryClassLoaderBuilder extends ClassLoaders {
         private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
 
+        public InMemoryClassLoaderBuilder withParent(ClassLoader parent) {
+            this.parent = parent;
+            return this;
+        }
+
         public InMemoryClassLoaderBuilder withClassDefinition(String name, byte[] classDefinition) {
             inMemoryClassObjects.put(name, classDefinition);
             return this;
         }
 
         public ClassLoader build() {
-            return new InMemoryClassLoader(inMemoryClassObjects);
+            return new InMemoryClassLoader(parent, inMemoryClassObjects);
         }
     }
 
     static class InMemoryClassLoader extends ClassLoader {
+        public static final String SCHEME = "mem";
         private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
 
-        public InMemoryClassLoader(Map<String, byte[]> inMemoryClassObjects) {
+        public InMemoryClassLoader(ClassLoader parent, Map<String, byte[]> inMemoryClassObjects) {
+            super(parent);
             this.inMemoryClassObjects = inMemoryClassObjects;
         }
 
@@ -167,7 +199,60 @@ public abstract class ClassLoaders {
             throw new ClassNotFoundException(name);
         }
 
+        @Override
+        public Enumeration<URL> getResources(String ignored) throws IOException {
+            return inMemoryOnly();
+        }
 
+        private Enumeration<URL> inMemoryOnly() {
+            final Set<String> names = inMemoryClassObjects.keySet();
+            return new Enumeration<URL>() {
+                private final MemHandler memHandler = new MemHandler(InMemoryClassLoader.this);
+                private final Iterator<String> it = names.iterator();
+
+                public boolean hasMoreElements() {
+                    return it.hasNext();
+                }
+
+                public URL nextElement() {
+                    try {
+                        return new URL(null, SCHEME + ":" + it.next(), memHandler);
+                    } catch (MalformedURLException rethrown) {
+                        throw new IllegalStateException(rethrown);
+                    }
+                }
+            };
+        }
+    }
+
+    public static class MemHandler extends URLStreamHandler {
+        private InMemoryClassLoader inMemoryClassLoader;
+
+        public MemHandler(InMemoryClassLoader inMemoryClassLoader) {
+            this.inMemoryClassLoader = inMemoryClassLoader;
+        }
+
+        @Override
+        protected URLConnection openConnection(URL url) throws IOException {
+            return new MemURLConnection(url, inMemoryClassLoader);
+        }
+
+        private static class MemURLConnection extends URLConnection {
+            private final InMemoryClassLoader inMemoryClassLoader;
+            private String qualifiedName;
+            public MemURLConnection(URL url, InMemoryClassLoader inMemoryClassLoader) {
+                super(url);
+                this.inMemoryClassLoader = inMemoryClassLoader;
+                qualifiedName = url.getPath();
+            }
+            @Override
+            public void connect() throws IOException { }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return new ByteArrayInputStream(inMemoryClassLoader.inMemoryClassObjects.get(qualifiedName));
+            }
+        }
     }
 
     protected URL obtainClassPathOf(String className) {
@@ -184,6 +269,7 @@ public abstract class ClassLoaders {
     protected List<URL> pathsToURLs(String... codeSourceUrls) {
         return pathsToURLs(Arrays.asList(codeSourceUrls));
     }
+
     private List<URL> pathsToURLs(List<String> codeSourceUrls) {
         ArrayList<URL> urls = new ArrayList<URL>(codeSourceUrls.size());
         for (String codeSourceUrl : codeSourceUrls) {
@@ -199,5 +285,82 @@ public abstract class ClassLoaders {
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Path is malformed", e);
         }
+    }
+
+    public static class ReachableClassesFinder {
+        private ClassLoader classLoader;
+        private Set<String> qualifiedNameSubstring = new HashSet<String>();
+
+        public ReachableClassesFinder(ClassLoader classLoader) {
+            this.classLoader = classLoader;
+        }
+
+        public ReachableClassesFinder omit(String... qualifiedNameSubstring) {
+            this.qualifiedNameSubstring.addAll(Arrays.asList(qualifiedNameSubstring));
+            return this;
+        }
+
+        public Set<String> listOwnedClasses() throws IOException, URISyntaxException {
+            Enumeration<URL> roots = classLoader.getResources("");
+
+            Set<String> classes = new HashSet<String>();
+            while(roots.hasMoreElements()) {
+                URI uri = roots.nextElement().toURI();
+
+                if (uri.getScheme().equalsIgnoreCase("file")) {
+                    addFromFileBasedClassLoader(classes, uri);
+                } else if(uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
+                    addFromInMemoryBasedClassLoader(classes, uri);
+                } else {
+                    throw new IllegalArgumentException(String.format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
+                }
+            }
+            return classes;
+        }
+
+        private void addFromFileBasedClassLoader(Set<String> classes, URI uri) {
+            File root = new File(uri);
+            classes.addAll(findClassQualifiedNames(root, root, qualifiedNameSubstring));
+        }
+
+        private void addFromInMemoryBasedClassLoader(Set<String> classes, URI uri) {
+            String qualifiedName = uri.getSchemeSpecificPart();
+            if(excludes(qualifiedName, qualifiedNameSubstring)) {
+                classes.add(qualifiedName);
+            }
+        }
+
+
+        private Set<String> findClassQualifiedNames(File root, File file, Set<String> packageFilters) {
+            if(file.isDirectory()) {
+                File[] files = file.listFiles();
+                Set<String> classes = new HashSet<String>();
+                for (File children : files) {
+                    classes.addAll(findClassQualifiedNames(root, children, packageFilters));
+                }
+                return classes;
+            } else {
+                if (file.getName().endsWith(".class")) {
+                    String qualifiedName = classNameFor(root, file);
+                    if (excludes(qualifiedName, packageFilters)) {
+                        return Collections.singleton(qualifiedName);
+                    }
+                }
+            }
+            return Collections.emptySet();
+        }
+
+        private boolean excludes(String qualifiedName, Set<String> packageFilters) {
+            for (String filter : packageFilters) {
+                if(qualifiedName.contains(filter)) return false;
+            }
+            return true;
+        }
+
+        private String classNameFor(File root, File file) {
+            String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).replace('/', '.');
+            return temp.subSequence(0, temp.indexOf(".class")).toString();
+        }
+
     }
 }
