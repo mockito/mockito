@@ -7,12 +7,12 @@
 
 ## Pull request criteria
 
-* at least one commit message in the PR contains "Fixes #id" where id is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation
-* use `@since` tags for new public APIs
-* include tests
-* document public APIs with examples
-* for new feautres consider adding new documentation item in main `Mockito` class
-* also, look at the [GitHub's Pull Request guide](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)
+* At least one commit message in the PR contains "Fixes #id" where id is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation
+* Use `@since` tags for new public APIs
+* Include tests
+* Document public APIs with examples
+* For new feautres consider adding new documentation item in main `Mockito` class
+* Also, look at the [GitHub's Pull Request guide](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)
 
 ## General info
 
@@ -35,7 +35,7 @@ Things we pay attention in a PR :
 * On pull requests, please document the change, what it brings, what is the benefit, the issue on Google Code, etc.
 * Clean commit history in the topic branch in your fork of the repository, even during review. For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). Tests are an asset, so is history.
 * In the code, always test your feature / change, in unit tests and in our `acceptance test suite` located in `org.mockitousage`. Older tests will be migrated when a test is modified.
-* We have decided that tests should from now on will fallow a snake case (`ensure_that_stuff_is_doing_that`) convention, so that we can express the real intent of the test and still be able to read it.
+* New tests methods should follow a snake case convention (`ensure_that_stuff_is_doing_that`), this allow test name to be fully expressice on intent while still readable.
 * When reporting errors to the users, if it's a user report report it gently and explain how a user should deal with it, see the `Reporter` class. However not all errors should go there, some unlikely technical errors don't need to be in the `Reporter` class.
 * Documentation !!! Always document with love the public API. Internals could use some love too. In all cases the code should _auto-document_ itself.
 
