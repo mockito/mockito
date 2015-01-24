@@ -33,7 +33,7 @@ public class MockitoAfterTestNGMethod {
 
     @SuppressWarnings({"deprecation", "unchecked"})
     private Collection<Object> instanceMocksOf(Object instance) {
-        return Fields.allDeclaredFieldsOf(instance)
+        return Fields.allDeclaredInstanceFieldsOf(instance)
                                             .filter(annotatedBy(Mock.class,
                                                                 Spy.class,
                                                                 MockitoAnnotations.Mock.class))
