@@ -44,7 +44,7 @@ public class MockitoBeforeTestNGMethod {
     }
 
     private void initializeCaptors(Object instance) {
-        List<InstanceField> instanceFields = Fields.allDeclaredFieldsOf(instance).filter(annotatedBy(Captor.class)).instanceFields();
+        List<InstanceField> instanceFields = Fields.allDeclaredInstanceFieldsOf(instance).filter(annotatedBy(Captor.class)).instanceFields();
         for (InstanceField instanceField : instanceFields) {
             instanceField.set(new CaptorAnnotationProcessor().process(instanceField.annotation(Captor.class), instanceField.jdkField()));
         }
