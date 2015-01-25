@@ -123,7 +123,7 @@ public abstract class ClassLoaders {
 
         public ExcludingURLClassLoaderBuilder withCodeSourceUrlOf(Class<?>... classes) {
             for (Class<?> clazz : classes) {
-                codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
+                if(clazz != null) codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
             }
             return this;
         }

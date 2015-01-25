@@ -10,6 +10,7 @@ import org.mockito.internal.util.collections.ListUtil.Filter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +21,15 @@ import java.util.List;
  */
 public abstract class Fields {
 
+    private Fields() { }
+
     /**
      * Instance fields declared in the class and superclasses of the given instance.
      *
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
      */
-    public static InstanceFields allDeclaredFieldsOf(Object instance) {
+    public static InstanceFields allDeclaredInstanceFieldsOf(Object instance) {
         List<InstanceField> instanceFields = new ArrayList<InstanceField>();
         for (Class<?> clazz = instance.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
             instanceFields.addAll(instanceFieldsIn(instance, clazz.getDeclaredFields()));
@@ -40,17 +43,20 @@ public abstract class Fields {
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
      */
-    public static InstanceFields declaredFieldsOf(Object instance) {
-        List<InstanceField> instanceFields = new ArrayList<InstanceField>();
-        instanceFields.addAll(instanceFieldsIn(instance, instance.getClass().getDeclaredFields()));
-        return new InstanceFields(instance, instanceFields);
+    public static InstanceFields declaredInstanceFieldsOf(Object instance) {
+        return new InstanceFields(
+                instance,
+                instanceFieldsIn(instance, instance.getClass().getDeclaredFields()));
     }
 
     private static List<InstanceField> instanceFieldsIn(Object instance, Field[] fields) {
         List<InstanceField> instanceDeclaredFields = new ArrayList<InstanceField>();
         for (Field field : fields) {
-            InstanceField instanceField = new InstanceField(field, instance);
-            instanceDeclaredFields.add(instanceField);
+            // ignores generated fields (synthetic) injected either by the the compiler itself or by bytecode manipulation
+            // ignore static fields, not instance related
+            if(!field.isSynthetic() && !Modifier.isStatic(field.getModifiers())) {
+                instanceDeclaredFields.add(new InstanceField(field, instance));
+            }
         }
         return instanceDeclaredFields;
     }
