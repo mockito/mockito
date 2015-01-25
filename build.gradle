@@ -9,6 +9,8 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
+
+    configurations.classpath.exclude group: 'com.android.tools.build', module: 'gradle'
 }
 
 apply plugin: 'maven-publish'
