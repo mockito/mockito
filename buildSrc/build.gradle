@@ -14,6 +14,12 @@ dependencies {
     testCompile "cglib:cglib-nodep:2.2.2"
 }
 
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 if (gradle.parent && gradle.parent.startParameter.taskNames.any { it in ["ideaModule", "idea"] }) {
     build.dependsOn ideaModule
 }

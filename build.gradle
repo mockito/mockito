@@ -46,7 +46,12 @@ sourceSets {
     }
 }
 
-test.include "**/*Test.class"
+test {
+    include "**/*Test.class"
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
 
 tasks.withType(JavaCompile) {
     options.warnings = false
