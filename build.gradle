@@ -48,6 +48,7 @@ test {
     include "**/*Test.class"
     testLogging {
         exceptionFormat = 'full'
+        showCauses true
     }
 }
 
