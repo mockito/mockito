@@ -24,4 +24,4 @@ script:
 - ./gradlew ciBuild
 after_success:
 - ./gradlew release
-- ./gradlew cobertura coveralls
+- ./gradlew --stacktrace cobertura coveralls
