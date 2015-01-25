@@ -3,4 +3,4 @@ apply plugin: 'com.github.kt3k.coveralls'
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 //cobertura.coverageIgnoreTrivial = true
 
-//coveralls.sourceDirs = ['src']  //workaround for https://github.com/stevesaliman/gradle-cobertura-plugin/issues/53
+coveralls.sourceDirs = ['src/']  //workaround for https://github.com/stevesaliman/gradle-cobertura-plugin/issues/53
