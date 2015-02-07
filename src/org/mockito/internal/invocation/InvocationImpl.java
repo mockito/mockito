@@ -94,7 +94,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
     }
 
     public String toString() {
-        return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
+        return new PrintSettings().printArguments(this);
     }
 
     public Location getLocation() {

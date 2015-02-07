@@ -52,9 +52,9 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
     public List<Matcher> getMatchers() {
         return this.matchers;
     }
-    
+
     public String toString() {
-        return new PrintSettings().print(matchers, invocation);
+        return new PrintSettings().printMatchers(this);
     }
 
     public boolean matches(Invocation actual) {
