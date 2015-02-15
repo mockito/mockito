@@ -12,7 +12,7 @@ import net.bytebuddy.ByteBuddy;
 public class ByteBuddyMockMakerTest {
 
     @Test
-    @Ignore("missing objenesis report removed")
+    @Ignore("missing objenesis reporting removed")
     public void report_issue_when_trying_to_load_objenesis() throws Exception {
         // given
         ClassLoader classpath_without_objenesis = ClassLoaders.excludingClassLoader()
@@ -42,7 +42,7 @@ public class ByteBuddyMockMakerTest {
     @Test
     public void instantiate_fine_when_objenesis_on_the_classpath() throws Exception {
         // given
-        ClassLoader classpath_without_objenesis = ClassLoaders.excludingClassLoader()
+        ClassLoader classpath_with_objenesis = ClassLoaders.excludingClassLoader()
                 .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
                 .build();
         boolean initialize_class = true;
@@ -50,7 +50,7 @@ public class ByteBuddyMockMakerTest {
         Class<?> mock_maker_class_loaded_fine_until = Class.forName(
                 "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker",
                 initialize_class,
-                classpath_without_objenesis
+                classpath_with_objenesis
         );
 
         // when
