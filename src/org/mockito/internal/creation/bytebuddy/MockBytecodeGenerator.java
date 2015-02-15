@@ -5,7 +5,7 @@ import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDecl
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
 import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
 import java.util.Random;
-import java.util.Set;
+import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.util.SearchingClassLoader;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
@@ -34,10 +34,10 @@ class MockBytecodeGenerator {
         random = new Random();
     }
 
-    public <T> Class<? extends T> generateMockClass(Class<T> mockedType, Set<Class> interfaces) {
-        DynamicType.Builder<T> builder = byteBuddy.subclass(mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
-                .name(nameFor(mockedType))
-                .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
+    public <T> Class<? extends T> generateMockClass(MockFeatures<T> features) {
+        DynamicType.Builder<T> builder = byteBuddy.subclass(features.mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
+                .name(nameFor(features.mockedType))
+                .implement(features.interfaces.toArray(new Class<?>[features.interfaces.size()]))
                 .method(any()).intercept(MethodDelegation
                         .toInstanceField(MockMethodInterceptor.class, "mockitoInterceptor")
                         .filter(isDeclaredBy(MockMethodInterceptor.class)))
@@ -45,15 +45,15 @@ class MockBytecodeGenerator {
                 .method(isHashCode()).intercept(MethodDelegation.to(MockMethodInterceptor.ForHashCode.class))
                 .method(isEquals()).intercept(MethodDelegation.to(MockMethodInterceptor.ForEquals.class))
                 .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
-//            if (acrossClassLoaderSerialization) {
-//                builder = builder.implement(AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable.class)
-//                        .intercept(MethodDelegation.to(MethodInterceptor.ForWriteReplace.class));
-//            }
-        Class<?>[] allMockedTypes = new Class<?>[interfaces.size() + 1];
-        allMockedTypes[0] = mockedType;
+            if (features.crossClassLoaderSerializable) {
+                builder = builder.implement(CrossClassLoaderSerializableMock.class)
+                        .intercept(MethodDelegation.to(MockMethodInterceptor.ForWriteReplace.class));
+            }
+        Class<?>[] allMockedTypes = new Class<?>[features.interfaces.size() + 1];
+        allMockedTypes[0] = features.mockedType;
 //            System.arraycopy(interfaces.toArray(), 0, allMockedTypes, 1, interfaces.size());
         int index = 1;
-        for (Class<?> type : interfaces) {
+        for (Class<?> type : features.interfaces) {
             allMockedTypes[index++] = type;
         }
         return builder.make()

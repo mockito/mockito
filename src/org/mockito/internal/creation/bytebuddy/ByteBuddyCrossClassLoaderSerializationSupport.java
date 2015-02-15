@@ -5,14 +5,9 @@
 
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.Incubating;
-import org.mockito.exceptions.base.MockitoSerializationIssue;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.FieldSetter;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.MockName;
-import org.mockito.mock.SerializableMode;
-
+import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
+import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.*;
+import static org.mockito.internal.util.StringJoiner.join;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,82 +18,80 @@ import java.io.ObjectStreamClass;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static org.mockito.internal.util.StringJoiner.join;
+import org.mockito.Incubating;
+import org.mockito.exceptions.base.MockitoSerializationIssue;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldSetter;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.MockName;
 
 /**
- * This is responsible for serializing a mock, it is enabled if the mock is implementing
- * {@link java.io.Serializable}.
- * <p/>
+ * This is responsible for serializing a mock, it is enabled if the mock is implementing {@link Serializable}.
+ *
  * <p>
- *     The way it works is to enable serialization via the {@link #enableSerializationAcrossJVM(org.mockito.mock.MockCreationSettings)},
- *     if the mock settings is set to be serializable it will add the {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable}
- *     interface.
- *     This interface defines a the {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.AcrossJVMMockitoMockSerializable#writeReplace()}
+ *     The way it works is to enable serialization via the flag {@link MockFeatures#crossClassLoaderSerializable},
+ *     if the mock settings is set to be serializable the mock engine will implement the
+ *     {@link CrossClassLoaderSerializableMock} marker interface.
+ *     This interface defines a the {@link CrossClassLoaderSerializableMock#writeReplace()}
  *     whose signature match the one that is looked by the standard Java serialization.
  * </p>
- * <p/>
+ *
  * <p>
- *     Then in the {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter} of mockito, if the <code>writeReplace</code> method is called,
- *     it will use the custom implementation of this class {@link #writeReplace(Object)}. This method has a specific
- *     knowledge on how to serialize a mockito mock that is based on CGLIB.
+ *     Then in the proxy class there will be a generated <code>writeReplace</code> that will delegate to
+ *     {@link ForWriteReplace#doWriteReplace(MockAccess)} of mockito, and in turn will delegate to the custom
+ *     implementation of this class {@link #writeReplace(Object)}. This method has a specific
+ *     knowledge on how to serialize a mockito mock that is based on ByteBuddy and will ignore other Mockito MockMakers.
  * </p>
  *
- * <p><strong>Only one instance per mock! See {@link org.mockito.internal.creation.cglib.MethodInterceptorFilter}</strong></p>
+ * <p><strong>Only one instance per mock! See {@link MockMethodInterceptor}</strong></p>
  *
- * TODO use a proper way to add the interface
- * TODO offer a way to disable completely this behavior, or maybe enable this behavior only with a specific setting
  * TODO check the class is mockable in the deserialization side
  *
- * @see org.mockito.internal.creation.cglib.CglibMockMaker
- * @see org.mockito.internal.creation.cglib.MethodInterceptorFilter
+ * @see org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker
+ * @see org.mockito.internal.creation.bytebuddy.MockMethodInterceptor
  * @author Brice Dutheil
  * @since 1.10.0
  */
 @Incubating
-class AcrossJVMSerializationFeature implements Serializable {
+class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "ByteBuddyMockitoProxyMarker";
     private boolean instanceLocalCurrentlySerializingFlag = false;
     private final Lock mutex = new ReentrantLock();
-
-    public boolean isWriteReplace(Method method) {
-        return method.getReturnType() == Object.class
-                && method.getParameterTypes().length == 0
-                && method.getName().equals("writeReplace");
-    }
-
 
     /**
      * Custom implementation of the <code>writeReplace</code> method for serialization.
      * <p/>
      * Here's how it's working and why :
      * <ol>
-     * <li>
-     * <p>When first entering in this method, it's because some is serializing the mock, with some code like :
+     *
+     *     <li>
+     *         <p>When first entering in this method, it's because some is serializing the mock, with some code like :</p>
+     *
      * <pre class="code"><code class="java">
      * objectOutputStream.writeObject(mock);
      * </code></pre>
-     *         So, {@link java.io.ObjectOutputStream} will track the <code>writeReplace</code> method in the instance and
+     *
+     *         <p>So, {@link ObjectOutputStream} will track the <code>writeReplace</code> method in the instance and
      *         execute it, which is wanted to replace the mock by another type that will encapsulate the actual mock.
      *         At this point, the code will return an
-     *         {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy}.</p>
+     *         {@link CrossClassLoaderSerializableMock}.</p>
      *     </li>
      *     <li>
      *         <p>Now, in the constructor
-     *         {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.AcrossJVMMockSerializationProxy#AcrossJVMMockSerializationProxy(Object)}
-     *         the mock is being serialized in a custom way (using
-     *         {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream}) to a
+     *         {@link CrossClassLoaderSerializationProxy#CrossClassLoaderSerializationProxy(java.lang.Object)}
+     *         the mock is being serialized in a custom way (using {@link MockitoMockObjectOutputStream}) to a
      *         byte array. So basically it means the code is performing double nested serialization of the passed
      *         <code>mockitoMock</code>.</p>
      *
      *         <p>However the <code>ObjectOutputStream</code> will still detect the custom
      *         <code>writeReplace</code> and execute it.
-     *         <em>(For that matter disabling replacement via {@link java.io.ObjectOutputStream#enableReplaceObject(boolean)}
+     *         <em>(For that matter disabling replacement via {@link ObjectOutputStream#enableReplaceObject(boolean)}
      *         doesn't disable the <code>writeReplace</code> call, but just just toggle replacement in the
      *         written stream, <strong><code>writeReplace</code> is always called by
      *         <code>ObjectOutputStream</code></strong>.)</em></p>
@@ -111,13 +104,13 @@ class AcrossJVMSerializationFeature implements Serializable {
      * </ol>
      *
      * @param mockitoMock The Mockito mock to be serialized.
-     * @return A wrapper ({@link AcrossJVMMockSerializationProxy}) to be serialized by the calling ObjectOutputStream.
+     * @return A wrapper ({@link CrossClassLoaderSerializationProxy}) to be serialized by the calling ObjectOutputStream.
      * @throws java.io.ObjectStreamException
      */
     public Object writeReplace(Object mockitoMock) throws ObjectStreamException {
+        // reentrant lock for critical section. could it be improved ?
+        mutex.lock();
         try {
-            // reentrant lock for critical section. could it be improved ?
-            mutex.lock();
             // mark started flag // per thread, not per instance
             // temporary loosy hack to avoid stackoverflow
             if (mockIsCurrentlyBeingReplaced()) {
@@ -125,7 +118,7 @@ class AcrossJVMSerializationFeature implements Serializable {
             }
             mockReplacementStarted();
 
-            return new AcrossJVMMockSerializationProxy(mockitoMock);
+            return new CrossClassLoaderSerializationProxy(mockitoMock);
         } catch (IOException ioe) {
             MockUtil mockUtil = new MockUtil();
             MockName mockName = mockUtil.getMockName(mockitoMock);
@@ -157,39 +150,18 @@ class AcrossJVMSerializationFeature implements Serializable {
         return instanceLocalCurrentlySerializingFlag;
     }
 
-
-    /**
-     * Enable serialization serialization that will work across classloaders / and JVM.
-     * <p/>
-     * <p>Only enable if settings says the mock should be serializable. In this case add the
-     * {@link AcrossJVMMockitoMockSerializable} to the extra interface list.</p>
-     *
-     * @param settings Mock creation settings.
-     * @param <T>      Type param to not be bothered by the generics
-     */
-    public <T> void enableSerializationAcrossJVM(MockCreationSettings<T> settings) {
-        if (settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
-            // havin faith that this set is modifiable
-            // TODO use a proper way to add the interface
-            settings.getExtraInterfaces().add(AcrossJVMMockitoMockSerializable.class);
-        }
-    }
-
-
     /**
      * This is the serialization proxy that will encapsulate the real mock data as a byte array.
      * <p/>
      * <p>When called in the constructor it will serialize the mock in a byte array using a
-     * custom {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream} that
-     * will annotate the mock class in the stream.
+     * custom {@link MockitoMockObjectOutputStream} that will annotate the mock class in the stream.
      * Other information are used in this class in order to facilitate deserialization.
      * </p>
      * <p/>
      * <p>Deserialization of the mock will be performed by the {@link #readResolve()} method via
      * the custom {@link MockitoMockObjectInputStream} that will be in charge of creating the mock class.</p>
      */
-    public static class AcrossJVMMockSerializationProxy implements Serializable {
-
+    public static class CrossClassLoaderSerializationProxy implements Serializable {
 
         private static final long serialVersionUID = -7600267929109286514L;
         private final byte[] serializedMock;
@@ -199,14 +171,13 @@ class AcrossJVMSerializationFeature implements Serializable {
         /**
          * Creates the wrapper that be used in the serialization stream.
          *
-         * <p>Immediately serializes the Mockito mock using specifically crafted
-         * {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream},
+         * <p>Immediately serializes the Mockito mock using specifically crafted {@link MockitoMockObjectOutputStream},
          * in a byte array.</p>
          *
          * @param mockitoMock The Mockito mock to serialize.
          * @throws java.io.IOException
          */
-        public AcrossJVMMockSerializationProxy(Object mockitoMock) throws IOException {
+        public CrossClassLoaderSerializationProxy(Object mockitoMock) throws IOException {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new MockitoMockObjectOutputStream(out);
 
@@ -261,20 +232,16 @@ class AcrossJVMSerializationFeature implements Serializable {
      * Special Mockito aware <code>ObjectInputStream</code> that will resolve the Mockito proxy class.
      * <p/>
      * <p>
-     *     This specificaly crafted ObjectInoutStream has the most important role to resolve the Mockito generated
-     *     class. It is doing so via the {@link #resolveClass(java.io.ObjectStreamClass)} which looks in the stream
+     *     This specifically crafted ObjectInoutStream has the most important role to resolve the Mockito generated
+     *     class. It is doing so via the {@link #resolveClass(ObjectStreamClass)} which looks in the stream
      *     for a Mockito marker. If this marker is found it will try to resolve the mockito class otherwise it
      *     delegates class resolution to the default super behavior.
-     *     The mirror method used for serializing the mock is
-     *     {@link org.mockito.internal.creation.cglib.AcrossJVMSerializationFeature.MockitoMockObjectOutputStream#annotateClass(Class)}.
+     *     The mirror method used for serializing the mock is {@link MockitoMockObjectOutputStream#annotateClass(Class)}.
      * </p>
      * <p/>
      * <p>
-     *     When this marker is found, {@link org.mockito.internal.creation.cglib.ClassImposterizer} methods are being used to create the mock class.
-     *     <em>Note that behind the <code>ClassImposterizer</code> there is CGLIB and the
-     *     {@link org.mockito.internal.creation.util.SearchingClassLoader} that will look if this enhanced class has
-     *     already been created in an accessible classloader ; so basically this code trusts the ClassImposterizer
-     *     code.</em>
+     *     When this marker is found, {@link ByteBuddyMockMaker#createProxyClass(MockFeatures)} methods are being used
+     *     to create the mock class.
      * </p>
      */
     public static class MockitoMockObjectInputStream extends ObjectInputStream {
@@ -309,8 +276,10 @@ class AcrossJVMSerializationFeature implements Serializable {
             // TODO check the class is mockable in the deserialization side
 
             // create the Mockito mock class before it can even be deserialized
-            // TODO make cache accessible in a singleton
-            Class<?> proxyClass = new CachingMockBytecodeGenerator().get(typeToMock, extraInterfaces);
+
+            Class<?> proxyClass = ((ByteBuddyMockMaker) Plugins.getMockMaker())
+                    .createProxyClass(withMockFeatures(typeToMock, extraInterfaces, true));
+
             hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
             return proxyClass;
         }
@@ -338,7 +307,6 @@ class AcrossJVMSerializationFeature implements Serializable {
                 Field classNameField = descInstance.getClass().getDeclaredField("name");
                 new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
             } catch (NoSuchFieldException nsfe) {
-                // TODO use our own mockito mock serialization exception
                 throw new MockitoSerializationIssue(join(
                         "Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name',",
                         "this is definitely a bug in our code as it means the JDK team changed a few internal things.",
@@ -370,7 +338,7 @@ class AcrossJVMSerializationFeature implements Serializable {
      * marking process is necessary to identify the proxy class that will need to be recreated.
      * <p/>
      * The mirror method used for deserializing the mock is
-     * {@link MockitoMockObjectInputStream#resolveClass(java.io.ObjectStreamClass)}.
+     * {@link MockitoMockObjectInputStream#resolveClass(ObjectStreamClass)}.
      * </p>
      */
     private static class MockitoMockObjectOutputStream extends ObjectOutputStream {
@@ -399,7 +367,7 @@ class AcrossJVMSerializationFeature implements Serializable {
          * @return The marker if this is a Mockito proxy class, otherwise returns a void marker.
          */
         private String mockitoProxyClassMarker(Class<?> cl) {
-            if (AcrossJVMMockitoMockSerializable.class.isAssignableFrom(cl)) {
+            if (CrossClassLoaderSerializableMock.class.isAssignableFrom(cl)) {
                 return MOCKITO_PROXY_MARKER;
             } else {
                 return NOTHING;
@@ -413,10 +381,8 @@ class AcrossJVMSerializationFeature implements Serializable {
      * <code>ObjectOutputStream</code>.
      * <p/>
      * It will be applied before the creation of the mock when the mock setting says it should serializable.
-     *
-     * @see #enableSerializationAcrossJVM(org.mockito.mock.MockCreationSettings)
      */
-    public interface AcrossJVMMockitoMockSerializable {
-        public Object writeReplace() throws ObjectStreamException;
+    public interface CrossClassLoaderSerializableMock {
+        Object writeReplace() throws ObjectStreamException;
     }
 }

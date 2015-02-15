@@ -1,18 +1,17 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
+import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
+import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
+import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 import java.lang.management.ManagementFactory;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assume.assumeTrue;
-import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
-import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CachingMockBytecodeGeneratorTest {
 
@@ -29,9 +28,11 @@ public class CachingMockBytecodeGeneratorTest {
                 .build();
 
         CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
-        Class<?> the_mock_type = cachingMockBytecodeGenerator.get(
-                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"), Collections.<Class>emptySet()
-        );
+        Class<?> the_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
+                        classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                        Collections.<Class>emptySet(),
+                        false
+                ));
 
         assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
 

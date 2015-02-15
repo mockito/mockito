@@ -1,7 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.exceptions.base.MockitoException;
-
+import static org.mockito.internal.util.StringJoiner.join;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -10,10 +9,9 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.mockito.exceptions.base.MockitoException;
 
-import static org.mockito.internal.util.StringJoiner.join;
-
-public class CachingMockBytecodeGenerator {
+class CachingMockBytecodeGenerator {
 
     private final Lock avoidingClassLeakCacheLock = new ReentrantLock();
     public final WeakHashMap<ClassLoader, CachedBytecodeGenerator> avoidingClassLeakageCache =
@@ -21,13 +19,13 @@ public class CachingMockBytecodeGenerator {
 
     private final MockBytecodeGenerator mockBytecodeGenerator = new MockBytecodeGenerator();
 
-    public <T> Class<? extends T> get(final Class<T> mockedType, final Set<Class> interfaces) {
+    public <T> Class<T> get(MockFeatures<T> params) {
+        // TODO improves locking behavior with ReentrantReadWriteLock ?
         avoidingClassLeakCacheLock.lock();
         try {
 
-            Class generatedMockClass = mockCachePerClassLoaderOf(mockedType).getOrGenerateMockClass(
-                    mockedType,
-                    interfaces
+            Class generatedMockClass = mockCachePerClassLoaderOf(params.mockedType).getOrGenerateMockClass(
+                    params
             );
 
             return generatedMockClass;
@@ -55,38 +53,37 @@ public class CachingMockBytecodeGenerator {
             this.generator = generator;
         }
 
-        public <T> Class getOrGenerateMockClass(Class<T> mockedType, Set<Class> interfaces) {
-            MockKey mockKey = MockKey.of(mockedType, interfaces);
+        public <T> Class getOrGenerateMockClass(MockFeatures<T> features) {
+            MockKey mockKey = MockKey.of(features.mockedType, features.interfaces);
             Class generatedMockClass = null;
             WeakReference<Class> classWeakReference = generatedClassCache.get(mockKey);
             if(classWeakReference != null) {
                 generatedMockClass = classWeakReference.get();
             }
             if(generatedMockClass == null) {
-                generatedMockClass = generate(mockedType, interfaces);
+                generatedMockClass = generate(features);
             }
             generatedClassCache.put(mockKey, new WeakReference<Class>(generatedMockClass));
             return generatedMockClass;
         }
 
-        private <T> Class<? extends T> generate(Class<T> mockedType, Set<Class> interfaces) {
+        private <T> Class<? extends T> generate(MockFeatures<T> mockFeatures) {
             try {
-                return generator.generateMockClass(mockedType, interfaces);
+                return generator.generateMockClass(mockFeatures);
             } catch (Exception bytecodeGenerationFailed) {
-                throw prettifyFailure(mockedType, bytecodeGenerationFailed);
+                throw prettifyFailure(mockFeatures, bytecodeGenerationFailed);
             }
         }
 
-        private RuntimeException prettifyFailure(Class<?> mockedType, Exception generationFailed) {
-            if (Modifier.isPrivate(mockedType.getModifiers())) {
+        private RuntimeException prettifyFailure(MockFeatures<?> mockFeatures, Exception generationFailed) {
+            if (Modifier.isPrivate(mockFeatures.mockedType.getModifiers())) {
                 throw new MockitoException(join(
-                        "Mockito cannot mock this class: " + mockedType,
-                        ".",
+                        "Mockito cannot mock this class: " + mockFeatures.mockedType + ".",
                         "Most likely it is a private class that is not visible by Mockito"
                 ));
             }
             throw new MockitoException(join(
-                    "Mockito cannot mock this class: " + mockedType,
+                    "Mockito cannot mock this class: " + mockFeatures.mockedType,
                     "",
                     "Mockito can only mock visible & non-final classes.",
                     "If you're not sure why you're getting this error, please report to the mailing list."),
@@ -94,8 +91,8 @@ public class CachingMockBytecodeGenerator {
             );
         }
 
+        // should be stored as a weak reference
         private static class MockKey<T> {
-            // weakreference
             private final String mockedType;
             private final Set<String> types = new HashSet<String>();
 

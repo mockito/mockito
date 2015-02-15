@@ -19,13 +19,8 @@ public class ByteBuddyMockMaker implements MockMaker {
     }
 
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
-        if (settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
-            throw new MockitoException("Serialization across classloaders not yet supported with ByteBuddyMockMaker");
-        }
-        Class<? extends T> mockedProxyType = cachingMockBytecodeGenerator.get(
-                settings.getTypeToMock(),
-                settings.getExtraInterfaces()
-        );
+        Class<T> mockedProxyType = createProxyClass(mockWithFeaturesFrom(settings));
+
         Instantiator instantiator = new InstantiatorProvider().getInstantiator(settings);
         T mockInstance = null;
         try {
@@ -48,6 +43,19 @@ public class ByteBuddyMockMaker implements MockMaker {
         } catch (org.mockito.internal.creation.instance.InstantiationException e) {
             throw new MockitoException("Unable to create mock instance of type '" + mockedProxyType.getSuperclass().getSimpleName() + "'", e);
         }
+    }
+
+    <T> Class<T> createProxyClass(MockFeatures<T> mockFeatures) {
+        return cachingMockBytecodeGenerator.get(mockFeatures);
+    }
+
+
+    private <T> MockFeatures<T> mockWithFeaturesFrom(MockCreationSettings<T> settings) {
+        return MockFeatures.withMockFeatures(
+                settings.getTypeToMock(),
+                settings.getExtraInterfaces(),
+                settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS
+        );
     }
 
     private <T> T ensureMockIsAssignableToMockedType(MockCreationSettings<T> settings, T mock) {

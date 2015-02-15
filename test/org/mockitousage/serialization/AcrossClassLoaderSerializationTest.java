@@ -9,11 +9,9 @@ import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
@@ -27,11 +25,6 @@ public class AcrossClassLoaderSerializationTest {
     @Before
     public void reproduce_CCE_by_creating_a_mock_with_IMethods_before() throws Exception {
         mock = Mockito.mock(IMethods.class);
-    }
-
-    @Before
-    public void only_if_CglibMockMaker() {
-        Assume.assumeTrue("CglibMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
     }
 
     @Test

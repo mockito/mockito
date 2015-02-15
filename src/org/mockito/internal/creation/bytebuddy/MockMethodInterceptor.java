@@ -1,5 +1,16 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.SerializableMethod;
+import org.mockito.internal.progress.SequenceNumber;
+import org.mockito.invocation.MockHandler;
+import org.mockito.mock.MockCreationSettings;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.AllArguments;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Argument;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.BindingPriority;
@@ -8,18 +19,6 @@ import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Origin;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.RuntimeType;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.SuperCall;
 import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.This;
-import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.creation.DelegatingMethod;
-import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.invocation.SerializableMethod;
-import org.mockito.internal.progress.SequenceNumber;
-import org.mockito.invocation.MockHandler;
-import org.mockito.mock.MockCreationSettings;
-
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 public class MockMethodInterceptor implements Serializable {
 
@@ -28,12 +27,12 @@ public class MockMethodInterceptor implements Serializable {
     private final InternalMockHandler handler;
     private final MockCreationSettings mockCreationSettings;
 
-    private final AcrossJVMSerializationFeature acrossJVMSerializationFeature;
+    private final ByteBuddyCrossClassLoaderSerializationSupport serializationSupport;
 
     public MockMethodInterceptor(InternalMockHandler handler, MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
-        acrossJVMSerializationFeature = new AcrossJVMSerializationFeature();
+        serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
     }
 
     @RuntimeType
@@ -101,8 +100,8 @@ public class MockMethodInterceptor implements Serializable {
         return handler;
     }
 
-    public AcrossJVMSerializationFeature getAcrossJVMSerializationFeature() {
-        return acrossJVMSerializationFeature;
+    public ByteBuddyCrossClassLoaderSerializationSupport getSerializationSupport() {
+        return serializationSupport;
     }
 
     public static class ForHashCode {
@@ -119,7 +118,7 @@ public class MockMethodInterceptor implements Serializable {
 
     public static class ForWriteReplace {
         public static Object doWriteReplace(@This MockAccess thiz) throws ObjectStreamException {
-            return thiz.getMockitoInterceptor().getAcrossJVMSerializationFeature().writeReplace(thiz);
+            return thiz.getMockitoInterceptor().getSerializationSupport().writeReplace(thiz);
         }
     }
 
