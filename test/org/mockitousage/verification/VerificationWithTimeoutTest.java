@@ -5,6 +5,15 @@
 
 package org.mockitousage.verification;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import java.util.LinkedList;
+import java.util.List;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,12 +23,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
 
 public class VerificationWithTimeoutTest extends TestBase {
 
@@ -168,7 +171,7 @@ public class VerificationWithTimeoutTest extends TestBase {
     }
 
     //TODO not yet implemented
-    @Ignore
+    @Ignore("TODO not yet implemented")
     @Test
     public void shouldAllowTimeoutVerificationInOrder() throws Exception {
         //given

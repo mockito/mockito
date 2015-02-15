@@ -1,14 +1,16 @@
 package org.mockitousage.constructor;
 
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
+import java.util.List;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 public class CreatingMocksWithConstructorTest extends TestBase {
 
@@ -101,28 +103,28 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     static abstract class AbstractThing {
-    	abstract String name();
-    	String fullName() {
-    		return "abstract " + name();
-    	}
+        abstract String name();
+        String fullName() {
+            return "abstract " + name();
+        }
     }
-    
+
     @Test
-    public void abstractMethodReturnsDefault() {
-    	AbstractThing thing = spy(AbstractThing.class);
-    	assertEquals("abstract null", thing.fullName());
+    public void abstract_method_returns_default() {
+        AbstractThing thing = spy(AbstractThing.class);
+        assertEquals("abstract null", thing.fullName());
     }
-    
+
     @Test
-    public void abstractMethodStubbed() {
-    	AbstractThing thing = spy(AbstractThing.class);
-    	when(thing.name()).thenReturn("me");
-    	assertEquals("abstract me", thing.fullName());
+    public void abstract_method_stubbed() {
+        AbstractThing thing = spy(AbstractThing.class);
+        when(thing.name()).thenReturn("me");
+        assertEquals("abstract me", thing.fullName());
     }
- 
+
     @Test
-    public void testCallsRealInterfaceMethod() {
-    	List<String> list = mock(List.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
-    	assertNull(list.get(1));
+    public void calls_real_interface_method() {
+        List list = mock(List.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
+        assertNull(list.get(1));
     }
 }
