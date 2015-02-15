@@ -2,10 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.concurrentmockito;
+package org.mockito.cglibintegration;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.concurrentmockito.VerificationInOrderFromMultipleThreadsTest;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -16,7 +17,7 @@ import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
-import org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGeneratorTest;
+import org.mockito.internal.creation.cglib.ClassImposterizerTest;
 import org.mockito.internal.handler.MockHandlerImplTest;
 import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
@@ -88,7 +89,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MissingInvocationCheckerTest.class,
                     NumberOfInvocationsInOrderCheckerTest.class,
                     MissingInvocationInOrderCheckerTest.class,
-                    CachingMockBytecodeGeneratorTest.class,
+                    ClassImposterizerTest.class,
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,
                     InvocationImplTest.class,

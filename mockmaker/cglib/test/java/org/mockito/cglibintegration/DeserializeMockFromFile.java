@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockitousage.serialization;
+package org.mockito.cglibintegration;
 
 import org.mockito.Mockito;
 
@@ -57,6 +57,6 @@ public class DeserializeMockFromFile {
         }
         return returnObject;
     }
-   
+
 }
 
