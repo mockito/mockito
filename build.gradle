@@ -37,11 +37,12 @@ configurations {
 
 sourceSets {
     main {
-        java.srcDir 'src'
+        java.srcDirs 'src', 'mockmaker/bytebuddy/main/java', 'mockmaker/cglib/main/java'
+//        resources.srcDirs 'mockmaker/cglib/main/resources'
         compileClasspath = compileClasspath + configurations.provided
     }
     test {
-        java.srcDir 'test'
+        java.srcDirs 'test', 'mockmaker/bytebuddy/test/java', 'mockmaker/cglib/test/java'
         compileClasspath = compileClasspath + configurations.provided
     }
 }
