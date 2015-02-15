@@ -1,11 +1,10 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import static org.mockito.internal.util.StringJoiner.join;
-import java.lang.reflect.Constructor;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.configuration.GlobalConfiguration;
-import org.mockito.internal.creation.instance.*;
+import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.internal.creation.instance.InstantiatorProvider;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -13,11 +12,9 @@ import org.mockito.plugins.MockMaker;
 
 public class ByteBuddyMockMaker implements MockMaker {
 
-    private final ClassInstantiator classInstantiator;
     private final CachingMockBytecodeGenerator cachingMockBytecodeGenerator;
 
     public ByteBuddyMockMaker() {
-        classInstantiator = initializeClassInstantiator();
         cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
     }
 
@@ -80,21 +77,6 @@ public class ByteBuddyMockMaker implements MockMaker {
         ((MockMethodInterceptor.MockAccess) mock).setMockitoInterceptor(
                 new MockMethodInterceptor(asInternalMockHandler(newHandler), settings)
         );
-    }
-
-    private static ClassInstantiator initializeClassInstantiator() {
-        try {
-            Class<?> objenesisClassLoader = Class.forName("org.mockito.internal.creation.bytebuddy.ClassInstantiator$UsingObjenesis");
-            Constructor<?> usingClassCacheConstructor = objenesisClassLoader.getDeclaredConstructor(boolean.class);
-            return ClassInstantiator.class.cast(usingClassCacheConstructor.newInstance(new GlobalConfiguration().enableClassCache()));
-        } catch (Throwable throwable) {
-            // MockitoException cannot be used at this point as we are early in the classloading chain and necessary dependencies may not yet be loadable by the classloader
-            throw new IllegalStateException(join(
-                    "Mockito could not create mock: Objenesis is missing on the classpath.",
-                    "Please add Objenesis on the classpath.",
-                    ""
-            ), throwable);
-        }
     }
 
     private static InternalMockHandler asInternalMockHandler(MockHandler handler) {

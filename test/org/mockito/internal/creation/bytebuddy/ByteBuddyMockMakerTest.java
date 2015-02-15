@@ -1,18 +1,18 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.ByteBuddy;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.ObjenesisStd;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import net.bytebuddy.ByteBuddy;
 
 public class ByteBuddyMockMakerTest {
 
     @Test
+    @Ignore("missing objenesis report removed")
     public void report_issue_when_trying_to_load_objenesis() throws Exception {
         // given
         ClassLoader classpath_without_objenesis = ClassLoaders.excludingClassLoader()
