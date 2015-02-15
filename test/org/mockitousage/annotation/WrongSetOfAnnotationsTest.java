@@ -29,14 +29,14 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSpyAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-            @InjectMocks @Spy List mock;
+            @InjectMocks @Spy WrongSetOfAnnotationsTest mock;
         });
     }
     
     @Test(expected=MockitoException.class)
     public void shouldNotAllowMockAndInjectMock() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
-            @InjectMocks @Mock List mock;
+            @InjectMocks @Mock WrongSetOfAnnotationsTest mock;
         });
     }
     

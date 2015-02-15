@@ -4,10 +4,7 @@
  */
 package org.mockito.internal.configuration.injection.scanner;
 
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.exceptions.Reporter;
 
 import java.lang.reflect.Field;
@@ -50,7 +47,7 @@ public class InjectMocksScanner {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {
-                assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
+                assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class, Spy.class);
                 mockDependentFields.add(field);
             }
         }
