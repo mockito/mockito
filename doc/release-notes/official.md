@@ -1,3 +1,13 @@
+### 2.0.4-beta (2015-02-15 19:37 UTC)
+
+* Authors: 2
+* Commits: 13
+  * 11: Brice Dutheil
+  * 2: Clark Brewer
+* Improvements: 2
+  * GitHubIssues fetcher is now aware of GitHub pagination [(#163)](https://github.com/mockito/mockito/pull/163)
+  * Excluded missing transitive dependency of the coveralls gradle plugin to fix failing build. [(#161)](https://github.com/mockito/mockito/pull/161)
+
 ### 2.0.3-beta (2015-01-20 20:35 UTC)
 
 * Authors: 2
