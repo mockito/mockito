@@ -141,7 +141,7 @@ class ClassImposterizer {
         Factory proxy;
         try {
             proxy = instantiator.newInstance(proxyClass);
-        } catch (InstantationException e) {
+        } catch (InstantiationException e) {
             throw new MockitoException("Unable to create mock instance of type '" + proxyClass.getSuperclass().getSimpleName() + "'", e);
         }
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });

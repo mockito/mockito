@@ -1,6 +1,8 @@
 package org.mockito.internal.creation.instance;
 
+import static org.mockito.internal.util.StringJoiner.join;
 import java.lang.reflect.Constructor;
+import org.mockito.internal.util.reflection.AccessibilityChanger;
 
 public class ConstructorInstantiator implements Instantiator {
 
@@ -19,12 +21,12 @@ public class ConstructorInstantiator implements Instantiator {
 
     private static <T> T withParams(Class<T> cls, Object... params) {
         try {
-            //this is kind of overengineered because we don't need to support more params
+            //this is kind of over-engineered because we don't need to support more params
             //however, I know we will be needing it :)
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
                 if (paramsMatch(types, params)) {
-                    return (T) constructor.newInstance(params);
+                    return invokeConstructor(constructor, params);
                 }
             }
         } catch (Exception e) {
@@ -33,9 +35,18 @@ public class ConstructorInstantiator implements Instantiator {
         throw paramsException(cls, null);
     }
 
-    private static <T> InstantationException paramsException(Class<T> cls, Exception e) {
-        return new InstantationException("Unable to create instance of '"
-                + cls.getSimpleName() + "'.\nPlease ensure that the outer instance has correct type and that the target class has 0-arg constructor.", e);
+    @SuppressWarnings("unchecked")
+    private static <T> T invokeConstructor(Constructor<?> constructor, Object... params) throws java.lang.InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
+        AccessibilityChanger accessibility = new AccessibilityChanger();
+        accessibility.enableAccess(constructor);
+        return (T) constructor.newInstance(params);
+    }
+
+    private static <T> InstantiationException paramsException(Class<T> cls, Exception e) {
+        return new InstantiationException(join(
+                "Unable to create instance of '" + cls.getSimpleName() + "'.",
+                "Please ensure that the outer instance has correct type and that the target class has 0-arg constructor.")
+                , e);
     }
 
     private static boolean paramsMatch(Class<?>[] types, Object[] params) {
@@ -52,10 +63,12 @@ public class ConstructorInstantiator implements Instantiator {
 
     private static <T> T noArgConstructor(Class<T> cls) {
         try {
-            return cls.newInstance();
+            return invokeConstructor(cls.getDeclaredConstructor());
         } catch (Throwable t) {
-            throw new InstantationException("Unable to create instance of '"
-                    + cls.getSimpleName() + "'.\nPlease ensure it has 0-arg constructor which invokes cleanly.", t);
+            throw new InstantiationException(join(
+                    "Unable to create instance of '" + cls.getSimpleName() + "'.",
+                    "Please ensure it has 0-arg constructor which invokes cleanly."),
+                    t);
         }
     }
 }
