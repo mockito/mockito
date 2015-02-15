@@ -1,9 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.any;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDeclaredBy;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
 import java.util.Random;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.util.SearchingClassLoader;
@@ -16,6 +12,7 @@ import net.bytebuddy.instrumentation.FieldAccessor;
 import net.bytebuddy.instrumentation.MethodDelegation;
 import net.bytebuddy.instrumentation.attribute.MethodAttributeAppender;
 import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
+import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.modifier.FieldManifestation;
 import net.bytebuddy.modifier.Ownership;
 import net.bytebuddy.modifier.Visibility;
@@ -23,7 +20,6 @@ import net.bytebuddy.modifier.Visibility;
 class MockBytecodeGenerator {
     private final ByteBuddy byteBuddy;
     private final Random random;
-
 
     public MockBytecodeGenerator() {
         byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V5)
@@ -38,12 +34,12 @@ class MockBytecodeGenerator {
         DynamicType.Builder<T> builder = byteBuddy.subclass(features.mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
                 .name(nameFor(features.mockedType))
                 .implement(features.interfaces.toArray(new Class<?>[features.interfaces.size()]))
-                .method(any()).intercept(MethodDelegation
+                .method(ElementMatchers.any()).intercept(MethodDelegation
                         .toInstanceField(MockMethodInterceptor.class, "mockitoInterceptor")
-                        .filter(isDeclaredBy(MockMethodInterceptor.class)))
+                        .filter(ElementMatchers.isDeclaredBy(MockMethodInterceptor.class)))
                 .implement(MockMethodInterceptor.MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
-                .method(isHashCode()).intercept(MethodDelegation.to(MockMethodInterceptor.ForHashCode.class))
-                .method(isEquals()).intercept(MethodDelegation.to(MockMethodInterceptor.ForEquals.class))
+                .method(ElementMatchers.isHashCode()).intercept(MethodDelegation.to(MockMethodInterceptor.ForHashCode.class))
+                .method(ElementMatchers.isEquals()).intercept(MethodDelegation.to(MockMethodInterceptor.ForEquals.class))
                 .defineField("serialVersionUID", long.class, Ownership.STATIC, Visibility.PRIVATE, FieldManifestation.FINAL).value(42L);
             if (features.crossClassLoaderSerializable) {
                 builder = builder.implement(CrossClassLoaderSerializableMock.class)
