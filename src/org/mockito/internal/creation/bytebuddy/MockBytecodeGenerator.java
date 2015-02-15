@@ -1,5 +1,12 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.any;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDeclaredBy;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
+import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
+import java.util.Random;
+import java.util.Set;
+import org.mockito.internal.creation.util.SearchingClassLoader;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.dynamic.ClassLoadingStrategy;
@@ -12,15 +19,6 @@ import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
 import net.bytebuddy.modifier.FieldManifestation;
 import net.bytebuddy.modifier.Ownership;
 import net.bytebuddy.modifier.Visibility;
-import org.mockito.internal.creation.util.SearchingClassLoader;
-
-import java.util.Random;
-import java.util.Set;
-
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.any;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isDeclaredBy;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isEquals;
-import static net.bytebuddy.instrumentation.method.matcher.MethodMatchers.isHashCode;
 
 class MockBytecodeGenerator {
     private final ByteBuddy byteBuddy;
@@ -37,7 +35,7 @@ class MockBytecodeGenerator {
     }
 
     public <T> Class<? extends T> generateMockClass(Class<T> mockedType, Set<Class> interfaces) {
-        DynamicType.Builder<T> builder = byteBuddy.subclass(mockedType, ConstructorStrategy.Default.NO_CONSTRUCTORS)
+        DynamicType.Builder<T> builder = byteBuddy.subclass(mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
                 .name(nameFor(mockedType))
                 .implement(interfaces.toArray(new Class<?>[interfaces.size()]))
                 .method(any()).intercept(MethodDelegation

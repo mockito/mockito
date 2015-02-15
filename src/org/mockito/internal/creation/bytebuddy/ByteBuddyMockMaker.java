@@ -1,16 +1,15 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.util.StringJoiner.join;
+import java.lang.reflect.Constructor;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.internal.creation.instance.*;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
-
-import java.lang.reflect.Constructor;
-
-import static org.mockito.internal.util.StringJoiner.join;
 
 public class ByteBuddyMockMaker implements MockMaker {
 
@@ -26,33 +25,48 @@ public class ByteBuddyMockMaker implements MockMaker {
         if (settings.getSerializableMode() == SerializableMode.ACROSS_CLASSLOADERS) {
             throw new MockitoException("Serialization across classloaders not yet supported with ByteBuddyMockMaker");
         }
-        Class<? extends T> mockedType = cachingMockBytecodeGenerator.get(
+        Class<? extends T> mockedProxyType = cachingMockBytecodeGenerator.get(
                 settings.getTypeToMock(),
                 settings.getExtraInterfaces()
         );
-        T mock = classInstantiator.instantiate(mockedType);
-        MockMethodInterceptor.MockAccess mockAccess = (MockMethodInterceptor.MockAccess) mock;
-        mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
-
-        return ensureMockIsAssignableToMockedType(settings, mock);
-    }
-
-    private <T> T ensureMockIsAssignableToMockedType(MockCreationSettings<T> settings, T mock) {
-        // force explicit cast to mocked type here, instead of
-        // relying on the JVM to implicitly cast on the client call site
-        Class<T> typeToMock = settings.getTypeToMock();
+        Instantiator instantiator = new InstantiatorProvider().getInstantiator(settings);
+        T mockInstance = null;
         try {
-            return typeToMock.cast(mock);
+            mockInstance = instantiator.newInstance(mockedProxyType);
+            MockMethodInterceptor.MockAccess mockAccess = (MockMethodInterceptor.MockAccess) mockInstance;
+            mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
+
+            return ensureMockIsAssignableToMockedType(settings, mockInstance);
         } catch (ClassCastException cce) {
             throw new MockitoException(join(
                     "ClassCastException occurred while creating the mockito mock :",
-                    "  class to mock : '" + typeToMock.getCanonicalName() + "', loaded by classloader : '" + typeToMock.getClassLoader() + "'",
-                    "  imposterizing class : '" + mock.getClass().getCanonicalName() + "', loaded by classloader : '" + mock.getClass().getClassLoader() + "'",
+                    "  class to mock : " + describeClass(mockedProxyType),
+                    "  created class : " + describeClass(settings.getTypeToMock()),
+                    "  proxy instance class : " + describeClass(mockInstance),
+                    "  instance creation by : " + instantiator.getClass().getSimpleName(),
                     "",
                     "You might experience classloading issues, please ask the mockito mailing-list.",
                     ""
             ),cce);
+        } catch (org.mockito.internal.creation.instance.InstantiationException e) {
+            throw new MockitoException("Unable to create mock instance of type '" + mockedProxyType.getSuperclass().getSimpleName() + "'", e);
         }
+    }
+
+    private <T> T ensureMockIsAssignableToMockedType(MockCreationSettings<T> settings, T mock) {
+        // Force explicit cast to mocked type here, instead of
+        // relying on the JVM to implicitly cast on the client call site.
+        // This allows us to catch the ClassCastException earlier
+        Class<T> typeToMock = settings.getTypeToMock();
+        return typeToMock.cast(mock);
+    }
+
+    private static String describeClass(Class type) {
+        return type == null ? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
+    }
+
+    private static String describeClass(Object instance) {
+        return instance == null ? "null" : describeClass(instance.getClass());
     }
 
     public MockHandler getHandler(Object mock) {
