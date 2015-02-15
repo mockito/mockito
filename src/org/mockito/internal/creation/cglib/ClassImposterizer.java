@@ -4,22 +4,25 @@
  */
 package org.mockito.internal.creation.cglib;
 
-import org.mockito.cglib.core.CodeGenerationException;
-import org.mockito.cglib.core.NamingPolicy;
-import org.mockito.cglib.core.Predicate;
-import org.mockito.cglib.proxy.*;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.instance.InstantationException;
-import org.mockito.internal.creation.instance.Instantiator;
-import org.mockito.internal.creation.util.SearchingClassLoader;
-
+import static org.mockito.internal.util.StringJoiner.join;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
-
-import static org.mockito.internal.util.StringJoiner.join;
+import org.mockito.cglib.core.CodeGenerationException;
+import org.mockito.cglib.core.NamingPolicy;
+import org.mockito.cglib.core.Predicate;
+import org.mockito.cglib.proxy.Callback;
+import org.mockito.cglib.proxy.CallbackFilter;
+import org.mockito.cglib.proxy.Enhancer;
+import org.mockito.cglib.proxy.Factory;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.NoOp;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.instance.InstantiationException;
+import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.internal.creation.util.SearchingClassLoader;
 
 /**
  * Inspired on jMock (thanks jMock guys!!!)
@@ -31,24 +34,25 @@ class ClassImposterizer {
     public ClassImposterizer(Instantiator instantiator) {
         this.instantiator = instantiator;
     }
-    
+
     private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new MockitoNamingPolicy() {
         @Override
         public String getClassName(String prefix, String source, Object key, Predicate names) {
             return "codegen." + super.getClassName(prefix, source, key, names);
         }
     };
-    
+
     private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
         public int accept(Method method) {
             return method.isBridge() ? 1 : 0;
         }
     };
-    
+
+    @SuppressWarnings("unchecked")
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Collection<Class> ancillaryTypes) {
-        return imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
+        return (T) imposterise(interceptor, mockedType, ancillaryTypes.toArray(new Class[ancillaryTypes.size()]));
     }
-    
+
     public <T> T imposterise(final MethodInterceptor interceptor, Class<T> mockedType, Class<?>... ancillaryTypes) {
         Class<Factory> proxyClass = null;
         Object proxyInstance = null;
@@ -86,12 +90,12 @@ class ClassImposterizer {
             constructor.setAccessible(accessible);
         }
     }
-    
+
     public Class<Factory> createProxyClass(Class<?> mockedType, Class<?>... interfaces) {
         if (mockedType == Object.class) {
             mockedType = ClassWithSuperclassToWorkAroundCglibBug.class;
         }
-        
+
         Enhancer enhancer = new Enhancer() {
             @Override
             @SuppressWarnings("unchecked")
@@ -118,25 +122,25 @@ class ClassImposterizer {
         }
 
         enhancer.setSerialVersionUID(42L);
-        
+
         try {
-            return enhancer.createClass(); 
+            return enhancer.createClass();
         } catch (CodeGenerationException e) {
             if (Modifier.isPrivate(mockedType.getModifiers())) {
                 throw new MockitoException("\n"
-                        + "Mockito cannot mock this class: " + mockedType 
+                        + "Mockito cannot mock this class: " + mockedType
                         + ".\n"
                         + "Most likely it is a private class that is not visible by Mockito");
             }
             throw new MockitoException("\n"
-                    + "Mockito cannot mock this class: " + mockedType 
-                    + "\n" 
+                    + "Mockito cannot mock this class: " + mockedType
+                    + "\n"
                     + "Mockito can only mock visible & non-final classes."
-                    + "\n" 
+                    + "\n"
                     + "If you're not sure why you're getting this error, please report to the mailing list.", e);
         }
     }
-    
+
     private Object createProxy(Class<Factory> proxyClass, final MethodInterceptor interceptor) {
         Factory proxy;
         try {
@@ -147,14 +151,14 @@ class ClassImposterizer {
         proxy.setCallbacks(new Callback[] {interceptor, SerializableNoOp.SERIALIZABLE_INSTANCE });
         return proxy;
     }
-    
+
     private Class<?>[] prepend(Class<?> first, Class<?>... rest) {
         Class<?>[] all = new Class<?>[rest.length+1];
         all[0] = first;
         System.arraycopy(rest, 0, all, 1, rest.length);
         return all;
     }
-    
+
     public static class ClassWithSuperclassToWorkAroundCglibBug {}
-    
+
 }
