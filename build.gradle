@@ -79,7 +79,7 @@ def licenseFiles = copySpec {
 
 jar {
     baseName = 'mockito-core'
-    from(sourceSets.main.allSource)
+    from(sourceSets.main.output)
     from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
         exclude 'META-INF/MANIFEST.MF'
     }
