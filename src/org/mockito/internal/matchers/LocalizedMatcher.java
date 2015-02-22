@@ -64,6 +64,10 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         }
     }
 
+    public void describeMismatch(Object argument, Description description) {
+        actualMatcher.describeMismatch(argument, description);
+    }
+
     //TODO: refactor other 'delegated interfaces' to use the MatcherDecorator feature
     public Matcher getActualMatcher() {
         return actualMatcher;
