@@ -14,7 +14,7 @@ import java.util.Set;
 import static org.fest.assertions.Assertions.assertThat;
 
 @SuppressWarnings("unused")
-public class FieldTypeAndNameComparatorTest {
+public class PropertyAndSetterInjectionTest {
     /**
      * A Comparator that behaves like the old one, so the existing tests
      * continue to work.
