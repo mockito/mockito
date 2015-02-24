@@ -33,7 +33,7 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  *   <li>for each fields of a class in @InjectMocks type hierarchy
  *     <ul>
  *     <li>make a copy of mock candidates
- *     <li>order fields rom sub-type to super-type, then by field name
+ *     <li>order fields from sub-type to super-type, then by field name
  *     <li>for the list of fields in a class try two passes of :
  *         <ul>
  *             <li>find mock candidate by type
@@ -59,7 +59,6 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
-    private final Comparator<Field> superTypesLast = new FieldTypeAndNameComparator();
 
     private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
         public boolean isOut(Field object) {
@@ -125,27 +124,45 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
         declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
 
-        Collections.sort(declaredFields, superTypesLast);
+        sortSuperTypesLast(declaredFields);
 
         return declaredFields;
     }
 
-    static class FieldTypeAndNameComparator implements Comparator<Field> {
-        public int compare(Field field1, Field field2) {
-            Class<?> field1Type = field1.getType();
-            Class<?> field2Type = field2.getType();
+    /**
+     * Sort first by name, then move any fields after their supertypes.
+     */
+    static void sortSuperTypesLast(List<Field> fields) {
+        Collections.sort(fields, compareFieldsByName);
 
-            // if same type, compares on field name
-            if (field1Type == field2Type) {
-                return field1.getName().compareTo(field2.getName());
+        int i = 0;
+
+        while (i < fields.size() - 1) {
+            Field f = fields.get(i);
+            Class<?> ft = f.getType();
+            int newPos = i;
+            for (int j = i + 1; j < fields.size(); j++) {
+                Class<?> t = fields.get(j).getType();
+
+                if (ft != t && ft.isAssignableFrom(t)) {
+                    newPos = j;
+                }
             }
-            if(field1Type.isAssignableFrom(field2Type)) {
-                return 1;
+
+            if (newPos == i) {
+                i++;
+            } else {
+                fields.remove(i);
+                fields.add(newPos, f);
             }
-            if(field2Type.isAssignableFrom(field1Type)) {
-                return -1;
-            }
-            return 0;
         }
     }
+
+    private static Comparator<Field> compareFieldsByName = new Comparator<Field>()
+    {
+        public int compare(Field o1, Field o2)
+        {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
 }
