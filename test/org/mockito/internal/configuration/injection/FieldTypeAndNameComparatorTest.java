@@ -5,12 +5,15 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 @SuppressWarnings("unused")
 public class FieldTypeAndNameComparatorTest {
+
+    private static Comparator<Field> cmp = new PropertyAndSetterInjection.FieldTypeAndNameComparator();
 
     private Object objectA;
     private Object objectB;
@@ -23,15 +26,15 @@ public class FieldTypeAndNameComparatorTest {
 
     @Test
     public void when_same_type_the_order_is_based_on_field_name() throws Exception {
-        assertThat(new PropertyAndSetterInjection.FieldTypeAndNameComparator().compare(field("objectA"), field("objectB"))).isEqualTo(-1);
-        assertThat(new PropertyAndSetterInjection.FieldTypeAndNameComparator().compare(field("objectB"), field("objectA"))).isEqualTo(1);
-        assertThat(new PropertyAndSetterInjection.FieldTypeAndNameComparator().compare(field("objectB"), field("objectB"))).isEqualTo(0);
+        assertThat(cmp.compare(field("objectA"), field("objectB"))).isEqualTo(-1);
+        assertThat(cmp.compare(field("objectB"), field("objectA"))).isEqualTo(1);
+        assertThat(cmp.compare(field("objectB"), field("objectB"))).isEqualTo(0);
     }
 
     @Test
     public void when_type_is_different_the_supertype_comes_last() throws Exception {
-        assertThat(new PropertyAndSetterInjection.FieldTypeAndNameComparator().compare(field("numberA"), field("objectB"))).isEqualTo(-1);
-        assertThat(new PropertyAndSetterInjection.FieldTypeAndNameComparator().compare(field("objectB"), field("numberA"))).isEqualTo(1);
+        assertThat(cmp.compare(field("numberA"), field("objectB"))).isEqualTo(-1);
+        assertThat(cmp.compare(field("objectB"), field("numberA"))).isEqualTo(1);
     }
 
     @Test
@@ -45,7 +48,7 @@ public class FieldTypeAndNameComparatorTest {
                 field("integerA")
         );
 
-        Collections.sort(unsortedFields, new PropertyAndSetterInjection.FieldTypeAndNameComparator());
+        Collections.sort(unsortedFields, cmp);
 
         assertThat(unsortedFields).containsSequence(
                 field("integerA"),
@@ -65,7 +68,7 @@ public class FieldTypeAndNameComparatorTest {
                 field("objectA")
         );
 
-        Collections.sort(unsortedFields, new PropertyAndSetterInjection.FieldTypeAndNameComparator());
+        Collections.sort(unsortedFields, cmp);
 
         assertThat(unsortedFields).containsSequence(
                 field("objectA"),
