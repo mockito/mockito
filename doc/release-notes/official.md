@@ -1,3 +1,14 @@
+### 2.0.5-beta (2015-02-26 22:31 UTC)
+
+* Authors: 2
+* Commits: 7
+  * 4: Joseph Walton
+  * 3: Brice Dutheil
+* Improvements: 3
+  * Make PropertyAndSetterInjection field sorting consistent [(#176)](https://github.com/mockito/mockito/pull/176)
+  * @InjectMocks and @Spy on same field should cause MockitoException [(#169)](https://github.com/mockito/mockito/issues/169)
+  * Internal Comparator violates its general contract [(#155)](https://github.com/mockito/mockito/issues/155)
+
 ### 2.0.4-beta (2015-02-15 19:37 UTC)
 
 * Authors: 2
