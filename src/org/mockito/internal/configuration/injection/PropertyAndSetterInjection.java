@@ -14,6 +14,7 @@ import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFil
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
+import org.mockito.internal.util.reflection.SuperTypesLastSorter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +34,7 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  *   <li>for each fields of a class in @InjectMocks type hierarchy
  *     <ul>
  *     <li>make a copy of mock candidates
- *     <li>order fields rom sub-type to super-type, then by field name
+ *     <li>order fields from sub-type to super-type, then by field name
  *     <li>for the list of fields in a class try two passes of :
  *         <ul>
  *             <li>find mock candidate by type
@@ -59,7 +60,6 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter = new TypeBasedCandidateFilter(new NameBasedCandidateFilter(new FinalMockCandidateFilter()));
-    private final Comparator<Field> superTypesLast = new FieldTypeAndNameComparator();
 
     private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
         public boolean isOut(Field object) {
@@ -125,27 +125,6 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
         declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
 
-        Collections.sort(declaredFields, superTypesLast);
-
-        return declaredFields;
-    }
-
-    static class FieldTypeAndNameComparator implements Comparator<Field> {
-        public int compare(Field field1, Field field2) {
-            Class<?> field1Type = field1.getType();
-            Class<?> field2Type = field2.getType();
-
-            // if same type, compares on field name
-            if (field1Type == field2Type) {
-                return field1.getName().compareTo(field2.getName());
-            }
-            if(field1Type.isAssignableFrom(field2Type)) {
-                return 1;
-            }
-            if(field2Type.isAssignableFrom(field1Type)) {
-                return -1;
-            }
-            return 0;
-        }
+        return new SuperTypesLastSorter().sort(declaredFields);
     }
 }
