@@ -1,6 +1,8 @@
-package org.mockito.internal.configuration.injection;
+package org.mockito.internal.util.reflection;
 
+import org.fest.assertions.Condition;
 import org.junit.Test;
+import org.mockito.internal.util.reflection.SuperTypesLastSorter;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.Set;
 import static org.fest.assertions.Assertions.assertThat;
 
 @SuppressWarnings("unused")
-public class PropertyAndSetterInjectionTest {
+public class SuperTypesLastSorterTest {
     /**
      * A Comparator that behaves like the old one, so the existing tests
      * continue to work.
@@ -27,8 +29,7 @@ public class PropertyAndSetterInjectionTest {
                 return 0;
             }
 
-            List<Field> l = new ArrayList<Field>(Arrays.asList(o1, o2));
-            PropertyAndSetterInjection.sortSuperTypesLast(l);
+            List<Field> l = new SuperTypesLastSorter().sort(Arrays.asList(o1, o2));
 
             if (l.get(0) == o1) {
                 return -1;
@@ -78,9 +79,9 @@ public class PropertyAndSetterInjectionTest {
                 field("integerA")
         );
 
-        PropertyAndSetterInjection.sortSuperTypesLast(unsortedFields);
+        List<Field> sortedFields = new SuperTypesLastSorter().sort(unsortedFields);
 
-        assertThat(unsortedFields).containsSequence(
+        assertThat(sortedFields).containsSequence(
                 field("integerA"),
                 field("integerB"),
                 field("numberA"),
@@ -136,10 +137,7 @@ public class PropertyAndSetterInjectionTest {
         Set<List<Field>> results = new HashSet<List<Field>>();
 
         for (Field[] o : initialOrderings) {
-            List<Field> l = new ArrayList<Field>(Arrays.asList(o));
-
-            PropertyAndSetterInjection.sortSuperTypesLast(l);
-            results.add(l);
+            results.add(new SuperTypesLastSorter().sort(Arrays.asList(o)));
         }
 
         assertThat(results).hasSize(1);

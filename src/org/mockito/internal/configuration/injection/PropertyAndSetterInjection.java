@@ -14,6 +14,7 @@ import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFil
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
+import org.mockito.internal.util.reflection.SuperTypesLastSorter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -124,45 +125,6 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
         declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
 
-        sortSuperTypesLast(declaredFields);
-
-        return declaredFields;
+        return new SuperTypesLastSorter().sort(declaredFields);
     }
-
-    /**
-     * Sort first by name, then move any fields after their supertypes.
-     */
-    static void sortSuperTypesLast(List<Field> fields) {
-        Collections.sort(fields, compareFieldsByName);
-
-        int i = 0;
-
-        while (i < fields.size() - 1) {
-            Field f = fields.get(i);
-            Class<?> ft = f.getType();
-            int newPos = i;
-            for (int j = i + 1; j < fields.size(); j++) {
-                Class<?> t = fields.get(j).getType();
-
-                if (ft != t && ft.isAssignableFrom(t)) {
-                    newPos = j;
-                }
-            }
-
-            if (newPos == i) {
-                i++;
-            } else {
-                fields.remove(i);
-                fields.add(newPos, f);
-            }
-        }
-    }
-
-    private static Comparator<Field> compareFieldsByName = new Comparator<Field>()
-    {
-        public int compare(Field o1, Field o2)
-        {
-            return o1.getName().compareTo(o2.getName());
-        }
-    };
 }
