@@ -11,7 +11,7 @@
 * Use `@since` tags for new public APIs
 * Include tests
 * Document public APIs with examples
-* For new feautres consider adding new documentation item in main `Mockito` class
+* For new features consider adding new documentation item in main `Mockito` class
 * Also, look at the [GitHub's Pull Request guide](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)
 
 ## General info
