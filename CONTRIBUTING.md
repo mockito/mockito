@@ -3,6 +3,12 @@
 	- [General info](#)
 	- [More on pull requests](#)
 
+**If looking for support**
+
+* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
+* Search / Ask question on [stackoverflow](http://stackoverflow.com)
+
+
 # Contributing to Mockito
 
 ## Pull request criteria
