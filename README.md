@@ -26,7 +26,10 @@ major.minor.build-tag
 | build  | a released build number incremented automatically a pull request is merged |
 | tag    | will probably be `-beta` or just nothing                                   |
 
+## Looking for support
 
+* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
+* Search / Ask question on [stackoverflow](http://stackoverflow.com)
 
 ## More information
 
