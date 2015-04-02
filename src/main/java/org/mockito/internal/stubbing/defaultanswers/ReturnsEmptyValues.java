@@ -1,25 +1,6 @@
-/*
- * Copyright (c) 2007 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
-
 package org.mockito.internal.stubbing.defaultanswers;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
@@ -27,33 +8,41 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
+import java.io.Serializable;
+import java.util.*;
+
 /**
  * Default answer of every Mockito mock.
  * <ul>
  * <li>
- *  Returns appropriate primitive for primitive-returning methods
+ * Returns appropriate primitive for primitive-returning methods
  * </li>
  * <li>
- *  Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
+ * Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
  * </li>
  * <li>
- *  Returns empty collection for collection-returning methods (works for most commonly used collection types)
+ * Returns empty collection for collection-returning methods (works for most commonly used collection types)
  * </li>
  * <li>
- *  Returns description of mock for toString() method
+ * Returns description of mock for toString() method
  * </li>
  * <li>
- *  Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
+ * Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
  * </li>
  * <li>
- *  Returns null for everything else
+ * Returns an {@code java.util.Optional#empty() empty Optional} for Optional (see issue 191).
+ * </li>
+ * <li>
+ * Returns null for everything else
  * </li>
  * </ul>
  */
 public class ReturnsEmptyValues implements Answer<Object>, Serializable {
-    
+
     private static final long serialVersionUID = 1998191268711234347L;
+
     ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
+
     MockUtil mockUtil = new MockUtil();
 
     /* (non-Javadoc)
@@ -74,11 +63,11 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             //Only for compareTo() method by the Comparable interface
             return invocation.getMock() == invocation.getArgument(0) ? 0 : 1;
         }
-        
+
         Class<?> returnType = invocation.getMethod().getReturnType();
         return returnValueFor(returnType);
     }
-    
+
     Object returnValueFor(Class<?> type) {
         if (Primitives.isPrimitiveOrWrapper(type)) {
             return Primitives.defaultValueForPrimitiveOrWrapper(type);
@@ -114,9 +103,11 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new TreeMap<Object, Object>();
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<Object, Object>();
+        } else if ("java.util.Optional".equals(type.getName())) {
+            return JavaEightUtil.emptyOptional();
         }
+
         //Let's not care about the rest of collections.
         return null;
     }
-
 }
