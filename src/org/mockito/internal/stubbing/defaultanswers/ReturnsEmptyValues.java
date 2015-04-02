@@ -5,14 +5,9 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
-import org.mockito.internal.util.Primitives;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.mock.MockName;
-import org.mockito.stubbing.Answer;
-
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,6 +22,15 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import org.mockito.internal.creation.instance.InstantiationException;
+import org.mockito.internal.util.JavaEightUtil;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.internal.util.Primitives;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.mock.MockName;
+import org.mockito.stubbing.Answer;
 
 /**
  * Default answer of every Mockito mock.
@@ -45,6 +49,9 @@ import java.util.TreeSet;
  * </li>
  * <li>
  *  Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
+ * </li>
+ * <li>
+ *  Returns an {@link java.util.Optional#empty() empty Optional} for Optional (see issue 191).
  * </li>
  * <li>
  *  Returns null for everything else
@@ -116,8 +123,11 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         }
         // TODO return empty Iterable ; see issue 175
 
+        if ("java.util.Optional".equals(type.getName())) {
+        	return JavaEightUtil.emptyOptional();
+        }
+        
         //Let's not care about the rest of collections.
         return null;
     }
-
 }
