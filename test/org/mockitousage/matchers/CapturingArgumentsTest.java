@@ -14,6 +14,7 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -123,6 +124,18 @@ public class CapturingArgumentsTest extends TestBase {
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(null, argument.getValue());
+    }
+
+    @Test
+    public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way()  {
+        //the test passes if this expression compiles
+        ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
+    }
+
+    @Test
+    public void should_allow_construction_of_captor_for_a_more_specific_type()  {
+        //the test passes if this expression compiles
+        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(ArrayList.class);
     }
     
     @Test
