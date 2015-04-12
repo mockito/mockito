@@ -19,6 +19,7 @@ class ZipMaker {
      */
     File newZip(String ... contents) {
         assert contents.length % 2 == 0
+        assert contents.length != 0
 
         File zip = new File(tmpDir, "zip-${counter++}.zip")
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip))

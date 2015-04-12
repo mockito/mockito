@@ -6,7 +6,7 @@ import spock.lang.Specification
 import testutil.ZipMaker
 
 class ZipCompareTest extends Specification {
-    
+
     @Rule TemporaryFolder tmp = new TemporaryFolder()
 
     def "compares zips"() {
@@ -17,17 +17,13 @@ class ZipCompareTest extends Specification {
         File differentContent = zip.newZip("1.txt", "1", "x/2.txt", "2", "x/y/3.txt", "3", "x/y/4.txt", "XX")
         File missingFile      = zip.newZip("1.txt", "1", "x/2.txt", "2", "x/y/3.txt", "3")
         File extraFile        = zip.newZip("1.txt", "1", "x/2.txt", "2", "x/y/3.txt", "3", "x/y/4.txt", "4", "x.txt", "")
-        File emptyZip         = zip.newZip()
-        File emptyZip2        = zip.newZip()
 
         expect:
         eq zip1, zip2
-        eq emptyZip, emptyZip2
 
         !eq(zip1, differentContent)
         !eq(zip1, missingFile)
         !eq(zip1, extraFile)
-        !eq(zip1, emptyZip)
     }
 
     private static boolean eq(File z1, File z2) {
