@@ -41,7 +41,15 @@ Things we pay attention in a PR :
 * On pull requests, please document the change, what it brings, what is the benefit. If the issue exists on the old issue tracker on [Google Code](https://code.google.com/p/mockito/issues/list), please add cross links. But don't create a new one there.
 * **Clean commit history** in the topic branch in your fork of the repository, even during review. That means that commits are _rebased_ and _squashed_ if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups.
 
-  For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits) (like starting with `Fixes #issue_id`). _Tests are an asset, so is history_.
+  For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
+  
+  _Exemple gratia_:
+  
+  ```
+  Fixes #73 : The new feature
+  Fixes #73 : Refactors this part of Mockito to make feature possible
+  ```
+  
 * In the code, always test your feature / change, in unit tests and in our `acceptance test suite` located in `org.mockitousage`. Older tests will be migrated when a test is modified.
 * New test methods should follow a snake case convention (`ensure_that_stuff_is_doing_that`), this allows the test name to be fully expressive on intent while still readable.
 * When reporting errors to the users, if it's a user report report it gently and explain how a user should deal with it, see the `Reporter` class. However not all errors should go there, some unlikely technical errors don't need to be in the `Reporter` class.
