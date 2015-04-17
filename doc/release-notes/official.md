@@ -1,3 +1,15 @@
+### 2.0.6-beta (2015-04-17 09:55 UTC)
+
+* Authors: 3
+* Commits: 9
+  * 7: Brice Dutheil
+  * 1: bruce
+  * 1: Hans Joachim Desserud
+* Improvements: 3
+  * Fixes #200 : ArgumentCaptor.forClass is more friendly with generic types [(#201)](https://github.com/mockito/mockito/pull/201)
+  * ArgumentCaptor.fromClass's return type should match a parameterized type [(#200)](https://github.com/mockito/mockito/issues/200)
+  * Fixes typo [(#184)](https://github.com/mockito/mockito/pull/184)
+
 ### 2.0.5-beta (2015-02-26 22:31 UTC)
 
 * Authors: 2
