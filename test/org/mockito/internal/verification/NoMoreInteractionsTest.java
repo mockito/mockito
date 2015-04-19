@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.verification;
 
-import static java.util.Arrays.*;
-
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -17,19 +15,23 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
 
 public class NoMoreInteractionsTest extends TestBase {
 
     InOrderContextImpl context = new InOrderContextImpl();
-    
+
     @Test
     public void shouldVerifyInOrder() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
         Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(context.isVerified(i));
-        
+
         try {
             //when
             n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i), null));
@@ -37,7 +39,7 @@ public class NoMoreInteractionsTest extends TestBase {
             fail();
         } catch(VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldVerifyInOrderAndPass() {
         //given
@@ -45,12 +47,12 @@ public class NoMoreInteractionsTest extends TestBase {
         Invocation i = new InvocationBuilder().toInvocation();
         context.markVerified(i);
         assertTrue(context.isVerified(i));
-        
+
         //when
         n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i), null));
         //then no exception is thrown
     }
-    
+
     @Test
     public void shouldVerifyInOrderMultipleInvoctions() {
         //given
@@ -83,7 +85,7 @@ public class NoMoreInteractionsTest extends TestBase {
     public void noMoreInteractionsExceptionMessageShouldDescribeMock() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        String mock = "a mock";
+        IMethods mock = mock(IMethods.class, "a mock");
         InvocationMatcher i = new InvocationBuilder().mock(mock).toInvocationMatcher();
 
         InvocationContainerImpl invocations =
@@ -104,7 +106,7 @@ public class NoMoreInteractionsTest extends TestBase {
     public void noMoreInteractionsInOrderExceptionMessageShouldDescribeMock() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        String mock = "a mock";
+        IMethods mock = mock(IMethods.class, "a mock");
         Invocation i = new InvocationBuilder().mock(mock).toInvocation();
 
         try {

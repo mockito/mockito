@@ -33,7 +33,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
     @Before
     public void setup() {
-        mock = Mockito.mock(IMethods.class);
+        mock = Mockito.mock(IMethods.class, "iMethods");
     }
 
     @Test
@@ -85,8 +85,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     "iMethods.varargs(1, 1000);";
 
             assertContains(wanted, e.getMessage());
-            
-            String actual = 
+
+            String actual =
                     "\n" +
                     "Actual invocation has different arguments:" +
                     "\n" +
@@ -95,7 +95,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains(actual, e.getMessage());
         }
     }
-    
+
     @Test
     public void should_print_actual_and_wanted_in_multiple_lines() {
         mock.varargs("this is very long string", "this is another very long string");
@@ -296,11 +296,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains("simpleMethod(null, null);", e.getMessage());
         }
     }
-    
+
     @Test
     public void should_say_never_wanted_but_invoked() throws Exception {
         mock.simpleMethod(1);
-    
+
         verify(mock, never()).simpleMethod(2);
         try {
             verify(mock, never()).simpleMethod(1);
@@ -310,12 +310,12 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains("But invoked here:", e.getMessage());
         }
     }
-    
+
     @Test
     public void should_show_right_actual_method() throws Exception {
         mock.simpleMethod(9191);
         mock.simpleMethod("foo");
-    
+
         try {
             verify(mock).simpleMethod("bar");
             fail();
@@ -326,11 +326,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Mock private IMethods iHavefunkyName;
-    
+
     @Test
     public void should_print_field_name_when_annotations_used() throws Exception {
         iHavefunkyName.simpleMethod(10);
-    
+
         try {
             verify(iHavefunkyName).simpleMethod(20);
             fail();
@@ -339,12 +339,12 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertContains("iHavefunkyName.simpleMethod(10)", e.getMessage());
         }
     }
-    
+
     @Test
     public void should_print_interactions_on_mock_when_ordinary_verification_fail() throws Exception {
         mock.otherMethod();
         mock.booleanReturningMethod();
-        
+
         try {
             verify(mock).simpleMethod();
             fail();
@@ -353,8 +353,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         }
     }
 
-    @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock; 
-    
+    @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock;
+
     @Test
     public void should_never_break_method_string_when_no_args_in_method() throws Exception {
         try {
@@ -430,5 +430,4 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     public interface AnInterface {
         void foo(int i);
     }
-    
 }
