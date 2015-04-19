@@ -8,7 +8,13 @@ package org.mockito.exceptions;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.*;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.SmartNullPointerException;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.MockitoLimitations;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
@@ -232,7 +238,7 @@ public class Reporter {
     public void invalidUseOfMatchers(int expectedMatchersCount, List<LocalizedMatcher> recordedMatchers) {
         throw new InvalidUseOfMatchersException(join(
                 "Invalid use of argument matchers!",
-                expectedMatchersCount + " matchers expected, " + recordedMatchers.size()+ " recorded:" +
+                expectedMatchersCount + " matchers expected, " + recordedMatchers.size() + " recorded:" +
                         locationsOf(recordedMatchers),
                 "",
                 "This exception may occur if matchers are combined with raw values:",
@@ -388,7 +394,7 @@ public class Reporter {
     private String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted,
                                                      Location lastActualInvocation) {
         String ending =
-                (lastActualInvocation != null)? lastActualInvocation + "\n" : "\n";
+                (lastActualInvocation != null) ? lastActualInvocation + "\n" : "\n";
 
         String message = join(
                 wanted.toString(),
@@ -642,7 +648,7 @@ public class Reporter {
 
     public void fieldInitialisationThrewException(Field field, Throwable details) {
         throw new MockitoException(join(
-                "Cannot instantiate @InjectMocks field named '" + field.getName() + "' of type '" + field.getType() +  "'.",
+                "Cannot instantiate @InjectMocks field named '" + field.getName() + "' of type '" + field.getType() + "'.",
                 "You haven't provided the instance at field declaration so I tried to construct the instance.",
                 "However the constructor or the initialization block threw an exception : " + details.getMessage(),
                 ""), details);
@@ -694,7 +700,7 @@ public class Reporter {
     public void spyAndDelegateAreMutuallyExclusive() {
         throw new MockitoException(join(
                 "Settings should not define a spy instance and a delegated instance at the same time."
-        )) ;
+        ));
     }
 
     public void invalidArgumentRangeAtIdentityAnswerCreationTime() {
@@ -775,24 +781,24 @@ public class Reporter {
     }
 
     public void delegatedMethodHasWrongReturnType(Method mockMethod, Method delegateMethod, Object mock, Object delegate) {
-    	throw new MockitoException(join(
-    	        "Methods called on delegated instance must have compatible return types with the mock.",
-    	        "When calling: " + mockMethod + " on mock: " + safelyGetMockName(mock),
-    	        "return type should be: " + mockMethod.getReturnType().getSimpleName() + ", but was: " + delegateMethod.getReturnType().getSimpleName(),
-    	        "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
-    	        "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
-    	));
+        throw new MockitoException(join(
+                "Methods called on delegated instance must have compatible return types with the mock.",
+                "When calling: " + mockMethod + " on mock: " + safelyGetMockName(mock),
+                "return type should be: " + mockMethod.getReturnType().getSimpleName() + ", but was: " + delegateMethod.getReturnType().getSimpleName(),
+                "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
+                "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
+        ));
     }
 
-	public void delegatedMethodDoesNotExistOnDelegate(Method mockMethod, Object mock, Object delegate) {
-		throw new MockitoException(join(
-    	        "Methods called on mock must exist in delegated instance.",
-    	        "When calling: " + mockMethod + " on mock: " + safelyGetMockName(mock),
-    	        "no such method was found.",
-    	        "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
-    	        "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
-    	));
-	}
+    public void delegatedMethodDoesNotExistOnDelegate(Method mockMethod, Object mock, Object delegate) {
+        throw new MockitoException(join(
+                "Methods called on mock must exist in delegated instance.",
+                "When calling: " + mockMethod + " on mock: " + safelyGetMockName(mock),
+                "no such method was found.",
+                "Check that the instance passed to delegatesTo() is of the correct type or contains compatible methods",
+                "(delegate instance had type: " + delegate.getClass().getSimpleName() + ")"
+        ));
+    }
 
     public void usingConstructorWithFancySerializable(SerializableMode mode) {
         throw new MockitoException("Mocks instantiated with constructor cannot be combined with " + mode + " serialization mode.");
