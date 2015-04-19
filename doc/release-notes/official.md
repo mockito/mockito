@@ -1,3 +1,12 @@
+### 2.0.7-beta (2015-04-19 18:47 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 2
+  * Better protection against incompatible returned value of default answer, and get safely mock name [(#202)](https://github.com/mockito/mockito/pull/202)
+  * java.lang.ClassCastException: java.lang.Class cannot be cast to java.lang.String [(#187)](https://github.com/mockito/mockito/issues/187)
+
 ### 2.0.6-beta (2015-04-17 09:55 UTC)
 
 * Authors: 3
