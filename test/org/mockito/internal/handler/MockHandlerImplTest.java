@@ -8,6 +8,7 @@ package org.mockito.internal.handler;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationImpl;
@@ -16,6 +17,7 @@ import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
@@ -73,6 +75,17 @@ public class MockHandlerImplTest extends TestBase {
         handler.handle(invocation);
     }
 
+    @Test(expected = WrongTypeOfReturnValue.class)
+    public void should_report_bogus_default_answer() throws Throwable {
+        MockSettingsImpl mockSettings = mock(MockSettingsImpl.class);
+        MockHandlerImpl<?> handler = new MockHandlerImpl(mockSettings);
+        given(mockSettings.getDefaultAnswer()).willReturn(new Returns(AWrongType.WRONG_TYPE));
+
+        @SuppressWarnings("unused") // otherwise cast is not done
+        String there_should_not_be_a_CCE_here = (String) handler.handle(
+                new InvocationBuilder().method(Object.class.getDeclaredMethod("toString")).toInvocation()
+        );
+    }
 
     private MockHandlerImpl<?> create_correctly_stubbed_handler(InvocationListener throwingListener) {
         MockHandlerImpl<?> handler = create_handler_with_listeners(throwingListener);
@@ -97,5 +110,9 @@ public class MockHandlerImplTest extends TestBase {
         handler.matchersBinder = mock(MatchersBinder.class);
         given(handler.getMockSettings().getInvocationListeners()).willReturn(Arrays.asList(listener));
         return handler;
+    }
+
+    private static class AWrongType {
+        public static final AWrongType WRONG_TYPE = new AWrongType();
     }
 }

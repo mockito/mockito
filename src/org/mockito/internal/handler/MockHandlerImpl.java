@@ -10,7 +10,12 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.internal.stubbing.*;
+import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.stubbing.VoidMethodStubbableImpl;
+import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
@@ -23,9 +28,8 @@ import java.util.List;
 
 /**
  * Invocation handler set on mock objects.
- * 
- * @param <T>
- *            type of mock object to handle
+ *
+ * @param <T> type of mock object to handle
  */
 class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
@@ -45,7 +49,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-		if (invocationContainerImpl.hasAnswersForStubbing()) {
+        if (invocationContainerImpl.hasAnswersForStubbing()) {
             // stubbing voids with stubVoid() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
                     mockingProgress.getArgumentMatcherStorage(),
@@ -90,7 +94,8 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
-             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+            Object ret = mockSettings.getDefaultAnswer().answer(invocation);
+            new AnswersValidator().validateDefaultAnswerReturnedValue(invocation, ret);
 
             // redo setting invocation for potential stubbing in case of partial
             // mocks / spies.
@@ -100,7 +105,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
             invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
-	}
+    }
 
     public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
         return new VoidMethodStubbableImpl<T>(mock, invocationContainerImpl);

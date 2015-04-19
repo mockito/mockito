@@ -496,6 +496,18 @@ public class Reporter {
         ));
     }
 
+    public void wrongTypeReturnedByDefaultAnswer(Object mock, String expectedType, String actualType, String methodName) {
+        throw new WrongTypeOfReturnValue(join(
+                "Default answer returned a result with the wrong type:",
+                actualType + " cannot be returned by " + methodName + "()",
+                methodName + "() should return " + expectedType,
+                "",
+                "The default answer of " + safelyGetMockName(mock) + " that was configured on the mock is probably incorrectly implemented.",
+                ""
+        ));
+    }
+
+
     public void wantedAtMostX(int maxNumberOfInvocations, int foundSize) {
         throw new MockitoAssertionError(join("Wanted at most " + pluralize(maxNumberOfInvocations) + " but was " + foundSize));
     }
