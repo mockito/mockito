@@ -32,4 +32,8 @@ public class Timer {
             new Reporter().cannotCreateTimerWithNegativeDurationTime(durationMillis);
         }
     }
+
+    public long duration() {
+        return durationMillis;
+    }
 }

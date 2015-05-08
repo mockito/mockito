@@ -20,13 +20,17 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl> impleme
         this(10, delayMillis, verificationMode);
     }
     
-    public After(long pollingPeriod, long delayMillis, VerificationMode verificationMode) {
-        super(new VerificationOverTimeImpl(pollingPeriod, delayMillis, verificationMode, false));
+    After(long pollingPeriod, long delayMillis, VerificationMode verificationMode) {
+        this(new VerificationOverTimeImpl(pollingPeriod, delayMillis, verificationMode, false));
     }
-    
+
+    After(VerificationOverTimeImpl verificationOverTime) {
+        super(verificationOverTime);
+    }
+
     @Override
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode) {
-        return new After(wrappedVerification.getPollingPeriod(), wrappedVerification.getDuration(), verificationMode);
+        return new After(wrappedVerification.copyWithVerificationMode(verificationMode));
     }
 
 }
