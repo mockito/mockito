@@ -133,7 +133,7 @@ public class ExtraMatchers {
         };
     }
     
-    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
+    public static <T> org.hamcrest.Matcher<T> clazz(java.lang.Class<T> type) {
         return CoreMatchers.is(type);
     }
 
