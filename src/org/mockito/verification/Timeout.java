@@ -39,13 +39,13 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
         this(new VerificationOverTimeImpl(pollingPeriodMillis, delegate, true, timer));
     }
 
+    Timeout(VerificationOverTimeImpl verificationOverTime) {
+        super(verificationOverTime);
+    }
+
     @Override
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode newVerificationMode) {
         return new Timeout(wrappedVerification.copyWithVerificationMode(newVerificationMode));
-    }
-
-    Timeout(VerificationOverTimeImpl verificationOverTime) {
-        super(verificationOverTime);
     }
 
     public VerificationMode atMost(int maxNumberOfInvocations) {
