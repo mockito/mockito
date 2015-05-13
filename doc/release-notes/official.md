@@ -1,3 +1,13 @@
+### 2.0.8-beta (2015-05-13 15:05 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Lukasz Szewc
+  * 1: Brice Dutheil
+* Improvements: 2
+  * Fixes #197 : Blocks ability to use negative value for timeout() and after() method. [(#207)](https://github.com/mockito/mockito/pull/207)
+  * Mockito.after() method accepts negative timeperiods and subsequent verifications always pass [(#197)](https://github.com/mockito/mockito/issues/197)
+
 ### 2.0.7-beta (2015-04-19 18:47 UTC)
 
 * Authors: 1
