@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="mockito-osgi-tests">
+
+  <target name="init">
+    <property name="compile.target" value="1.5" />
+    <property name="compile.source" value="1.5" />
+
+    <property name="build.target" value="build" />
+
+    <property name="key.store" value="${build.target}/.keystore" />
+    <property name="key.storepass" value="mockito" />
+    <property name="key.alias" value="mockito" />
+    <property name="key.pass" value="mockito" />
+
+    <path id="compile.classpath">
+      <fileset dir="../../lib">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="${build.target}/lib">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <property name="test.entry" value="net.sf.cglib.TestAll" />
+    <property name="test.failonerror" value="true" />
+    <property name="test.runner" value="junit.textui.TestRunner" />
+  </target>
+
+  <target name="prepare" depends="init">
+    <mkdir dir="${build.target}" />
+    <mkdir dir="${build.target}/mockito" />
+    <mkdir dir="${build.target}/test1src" />
+    <mkdir dir="${build.target}/test1test" />
+    <mkdir dir="${build.target}/lib" />
+
+    <delete file="${key.store}1" quiet="true" />
+    <genkey keystore="${key.store}1" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" validity="365">
+      <dname>
+        <param name="CN" value="Mockito Project" />
+        <param name="OU" value="Key 1" />
+        <param name="O" value="Mockito" />
+        <param name="C" value="US" />
+      </dname>
+    </genkey>
+    <delete file="${key.store}2" quiet="true" />
+    <genkey keystore="${key.store}2" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" validity="365">
+      <dname>
+        <param name="CN" value="Mockito Project" />
+        <param name="OU" value="Key 2" />
+        <param name="O" value="Mockito" />
+        <param name="C" value="US" />
+      </dname>
+    </genkey>
+    <delete file="${key.store}3" quiet="true" />
+    <genkey keystore="${key.store}3" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" validity="365">
+      <dname>
+        <param name="CN" value="Mockito Project" />
+        <param name="OU" value="Key 3" />
+        <param name="O" value="Mockito" />
+        <param name="C" value="US" />
+      </dname>
+    </genkey>
+
+    <get src="http://central.maven.org/maven2/junit/junit/4.11/junit-4.11.jar" dest="${build.target}/lib/junit.jar" />
+  </target>
+
+  <target name="compile" depends="prepare">
+    <echo level="info" message="Compiling Mockito" />
+    <javac destdir="${build.target}/mockito" srcdir="../../src" target="${compile.target}" source="${compile.source}">
+      <classpath refid="compile.classpath" />
+    </javac>
+
+    <echo level="info" message="Compiling class-under-test" />
+    <javac destdir="${build.target}/test1src" srcdir="../../test" includes="**/PackageProtected.java" target="${compile.target}" source="${compile.source}">
+      <classpath refid="compile.classpath" />
+      <classpath path="${build.target}/mockito" />
+    </javac>
+
+    <echo level="info" message="Compiling tests" />
+    <javac destdir="${build.target}/test1test" srcdir="../../test" includes="**/MockingPackageProtectedTest.java" target="${compile.target}" source="${compile.source}">
+      <classpath refid="compile.classpath" />
+      <classpath path="${build.target}/mockito" />
+      <classpath path="${build.target}/test1src" />
+    </javac>
+    <!-- note: this produces some addition stuff in test1test which should better be in the same jar as mockito -->
+    <move todir="${build.target}/mockito/org/mockito">
+      <fileset dir="${build.target}/test1test/org/mockito"/>
+    </move>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build.target}" />
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar basedir="${build.target}/mockito" jarfile="${build.target}/mockito.jar"/>
+    <jar basedir="${build.target}/test1src" jarfile="${build.target}/test1src.jar" />
+    <jar basedir="${build.target}/test1test" jarfile="${build.target}/test1test.jar" />
+
+    <signjar jar="${build.target}/mockito.jar" signedjar="${build.target}/mockito.jar" keystore="${key.store}1" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" />
+    <signjar jar="${build.target}/test1src.jar" signedjar="${build.target}/test1src.jar" keystore="${key.store}2" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" />
+    <signjar jar="${build.target}/test1test.jar" signedjar="${build.target}/test1test.jar" keystore="${key.store}2" alias="${key.alias}" storepass="${key.storepass}" keypass="${key.pass}" />
+  </target>
+
+  <target name="test" depends="jar">
+    <junit showoutput="yes" printsummary="yes" fork="yes" haltonfailure="yes">
+      <classpath refid="compile.classpath" />
+      <classpath path="${build.target}/mockito.jar" />
+      <classpath path="${build.target}/test1src.jar" />
+      <classpath path="${build.target}/test1test.jar" />
+
+      <test name="org.mockitousage.packageprotected.MockingPackageProtectedTest" todir="${build.target}">
+        <formatter type="plain" usefile="false" />
+      </test>
+      
+    </junit>
+  </target>
+
+  <target name="all" depends="clean,compile,jar,test" description="Cleans up old stuff and builds everything." />
+
+</project>

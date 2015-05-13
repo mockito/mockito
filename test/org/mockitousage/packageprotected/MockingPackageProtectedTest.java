@@ -22,4 +22,21 @@ public class MockingPackageProtectedTest extends TestBase {
         mock(Foo.class);
         mock(Bar.class);
     }
+    
+    @Test
+    public void should_verify_package_protected_methods() {
+        PackageProtected packageProtected = mock(PackageProtected.class);
+        verifyDoStuff(packageProtected);
+    }
+
+    @Test
+    public void can_spy_and_verify_package_protected_methods() {
+        PackageProtected packageProtected = spy(new PackageProtected());
+        verifyDoStuff(packageProtected);
+    }
+
+	private void verifyDoStuff(PackageProtected packageProtected) {
+		packageProtected.doStuff();
+        verify(packageProtected).doStuff();
+	}
 }
