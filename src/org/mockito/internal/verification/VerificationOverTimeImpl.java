@@ -17,7 +17,6 @@ import org.mockito.verification.VerificationMode;
 public class VerificationOverTimeImpl implements VerificationMode {
 
     private final long pollingPeriodMillis;
-    private final long durationMillis;
     private final VerificationMode delegate;
     private final boolean returnOnSuccess;
     private final Timer timer;
@@ -34,14 +33,13 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      */
     public VerificationOverTimeImpl(long pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
-        this(pollingPeriodMillis, durationMillis, delegate, returnOnSuccess, new Timer(durationMillis));
+        this(pollingPeriodMillis, delegate, returnOnSuccess, new Timer(durationMillis));
     }
 
     /**
      * Create this verification mode, to be used to verify invocation ongoing data later.
      *
      * @param pollingPeriodMillis The frequency to poll delegate.verify(), to check whether the delegate has been satisfied
-     * @param durationMillis The max time to wait (in millis) for the delegate verification mode to be satisfied
      * @param delegate The verification mode to delegate overall success or failure to
      * @param returnOnSuccess Whether to immediately return successfully once the delegate is satisfied (as in
      *                        {@link org.mockito.verification.VerificationWithTimeout}, or to only return once
@@ -49,9 +47,8 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      * @param timer Checker of whether the duration of the verification is still acceptable
      */
-    public VerificationOverTimeImpl(long pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess, Timer timer) {
+    public VerificationOverTimeImpl(long pollingPeriodMillis, VerificationMode delegate, boolean returnOnSuccess, Timer timer) {
         this.pollingPeriodMillis = pollingPeriodMillis;
-        this.durationMillis = durationMillis;
         this.delegate = delegate;
         this.returnOnSuccess = returnOnSuccess;
         this.timer = timer;
@@ -111,24 +108,15 @@ public class VerificationOverTimeImpl implements VerificationMode {
         return !(verificationMode instanceof AtMost || verificationMode instanceof NoMoreInteractions);
     }
 
+    public VerificationOverTimeImpl copyWithVerificationMode(VerificationMode verificationMode) {
+        return new VerificationOverTimeImpl(pollingPeriodMillis, timer.duration(), verificationMode, returnOnSuccess);
+    }
+
     private void sleep(long sleep) {
         try {
             Thread.sleep(sleep);
         } catch (InterruptedException ie) {
-            // oups. not much luck.
+            throw new RuntimeException("Thread sleep has been interrupted", ie);
         }
     }
-
-    public long getPollingPeriod() {
-        return pollingPeriodMillis;
-    }
-
-    public long getDuration() {
-        return durationMillis;
-    }
-
-    public VerificationMode getDelegate() {
-        return delegate;
-    }
-
 }

@@ -816,6 +816,15 @@ public class Reporter {
         throw new MockitoException("Mocks instantiated with constructor cannot be combined with " + mode + " serialization mode.");
     }
 
+    public void cannotCreateTimerWithNegativeDurationTime(long durationMillis) {
+        throw new FriendlyReminderException(join("",
+                "Don't panic! I'm just a friendly reminder!",
+                "It is impossible for time to go backward, therefore...",
+                "You cannot put negative value of duration: (" +  durationMillis +  ")",
+                "as argument of timer methods (after(), timeout())",
+                ""));
+    }
+
     private MockName safelyGetMockName(Object mock) {
         return new MockUtil().getMockName(mock);
     }

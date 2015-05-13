@@ -1,6 +1,8 @@
 package org.mockito.internal.util;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockitoutil.TestBase;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -15,22 +17,35 @@ public class TimerTest extends TestBase {
 
         //when
         timer.start();
-        boolean stillCounting = timer.isCounting();
 
         //then
-        assertThat(stillCounting, is(true));
+        assertThat(timer.isCounting(), is(true));
     }
 
     @Test
-    public void should_return_false_if_task_is_outside_the_acceptable_time_bounds() {
+    public void should_return_false_when_time_run_out() throws Exception {
         //given
-        Timer timer = new Timer(-1);
+        Timer timer = new Timer(0);
         timer.start();
 
         //when
-        boolean stillCounting = timer.isCounting();
+        oneMillisecondPasses();
 
         //then
         assertThat(timer.isCounting(), is(false));
+    }
+
+    @Test
+    public void should_throw_friendly_reminder_exception_when_duration_is_negative() {
+        try {
+            new Timer(-1);
+            Assert.fail("It is forbidden to create timer with negative value of timer's duration.");
+        } catch (FriendlyReminderException e) {
+            Assert.assertTrue(true);
+        }
+    }
+
+    private void oneMillisecondPasses() throws InterruptedException {
+        Thread.sleep(1);
     }
 }
