@@ -7,6 +7,8 @@ package org.mockito.internal.matchers;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.SelfDescribing;
+import org.hamcrest.StringDescription;
 import org.junit.Test;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockitoutil.TestBase;
@@ -16,39 +18,37 @@ public class MatchersPrinterTest extends TestBase {
 
     MatchersPrinter printer = new MatchersPrinter();
 
-    @Test
-    public void shouldGetArgumentsLine() {
-        String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1), new Equals(2)), new PrintSettings());
-        assertEquals("(1, 2);", line);
+    private String toString(List<SelfDescribing> items) {
+        return new StringDescription().appendList("(", ", ", ");", items).toString();
     }
 
     @Test
-    public void shouldGetArgumentsBlock() {
-        String line = printer.getArgumentsBlock((List) Arrays.asList(new Equals(1), new Equals(2)), new PrintSettings());
-        assertEquals("(\n    1,\n    2\n);", line);
+    public void should_get_matchers() {
+        List<SelfDescribing> matchers = printer.describe((List) Arrays.asList(new Equals(1), new Equals(2)), new PrintSettings());
+        assertEquals("(1, 2);", toString(matchers));
     }
 
     @Test
-    public void shouldDescribeTypeInfoOnlyMarkedMatchers() {
+    public void should_describe_type_info_only_for_marked_matchers() {
         //when
-        String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(1));
+        List<SelfDescribing> matchers = printer.describe((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(1));
         //then
-        assertEquals("(1, (Integer) 2);", line);
+        assertEquals("(1, (Integer) 2);", toString(matchers));
     }
 
     @Test
-    public void shouldGetVerboseArgumentsInBlock() {
+    public void should_get_verbose_matchers() {
         //when
-        String line = printer.getArgumentsBlock((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(0, 1));
+        List<SelfDescribing> matchers = printer.describe((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(0, 1));
         //then
-        assertEquals("(\n    (Long) 1,\n    (Integer) 2\n);", line);
+        assertEquals("((Long) 1, (Integer) 2);", toString(matchers));
     }
 
     @Test
-    public void shouldGetVerboseArgumentsEvenIfSomeMatchersAreNotVerbose() {
+    public void should_get_verbose_matchers_even_if_some_matchers_are_not_verbose() {
         //when
-        String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), NotNull.NOT_NULL), PrintSettings.verboseMatchers(0));
+        List<SelfDescribing> matchers = printer.describe((List) Arrays.asList(new Equals(1L), NotNull.NOT_NULL), PrintSettings.verboseMatchers(0));
         //then
-        assertEquals("((Long) 1, notNull());", line);
+        assertEquals("((Long) 1, notNull());", toString(matchers));
     }
 }

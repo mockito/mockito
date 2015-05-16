@@ -38,14 +38,18 @@ public class ArgumentsProcessor {
         return newArgs;
     }
 
+    public static Matcher argumentToMatcher(Object arg) {
+        if (arg != null && arg.getClass().isArray()) {
+            return new ArrayEquals(arg);
+        } else {
+            return new Equals(arg);
+        }
+    }
+
     public static List<Matcher> argumentsToMatchers(Object[] arguments) {
         List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
         for (Object arg : arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
+            matchers.add(argumentToMatcher(arg));
         }
         return matchers;
     }
