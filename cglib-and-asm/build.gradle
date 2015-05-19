@@ -6,34 +6,78 @@ targetCompatibility = 1.5
 
 sourceSets.main.java.srcDir("src")
 
-repositories {
-  flatDir dirs: 'lib'
-}
+repositories { flatDir dirs: 'lib' }
 
-dependencies {
-  compile(':ant:1.7.0')
-}
+dependencies { compile(':ant:1.7.0') }
 
 jar {
-  baseName = 'cglib-and-asm'
-  from "src"
+	baseName = 'cglib-and-asm'
+	from "src"
 }
 
 task jarSources(type: Zip) {
-    classifier = 'sources'
-    from 'src', 'licenses'
-    extension = 'jar'
+	classifier = 'sources'
+	from 'src', 'licenses'
+	extension = 'jar'
 }
 
 task copyToMockito {
-  copy {
-    from jar.archivePath
-    into "../lib/repackaged"
-  }
-  copy {
-    from jarSources.archivePath
-    into "../lib/sources"
-  }
+	copy {
+		from jar.archivePath
+		into "../lib/repackaged"
+	}
+	copy {
+		from jarSources.archivePath
+		into "../lib/sources"
+	}
+}
+
+configurations {
+	pkgrenametask
+	asmsource
+	cglibsource
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+	pkgrenametask group: 'com.sun.wts.tools.ant', name: 'package-rename-task', version: '1.4'
+	asmsource group: 'org.ow2.asm', name: 'asm-all', version: '4.2', classifier: 'sources'
+	cglibsource group: 'cglib', name: 'cglib', version: '3.1', classifier: 'sources'
+}
+
+task repackageAsmAndCglib << {
+	ant.taskdef(name: 'pkgrename', classname: 'com.sun.wts.tools.ant.PackageRenameTask', classpath: configurations.pkgrenametask.asPath)
+
+	copy {
+		from zipTree(configurations.asmsource.singleFile)
+		into "${buildDir}/repackage/asm"
+	}
+	ant.pkgrename(srcdir: "${buildDir}/repackage/asm", destdir: "${buildDir}/repackage/asm-repackaged") {
+		pattern(from: 'org.objectweb.asm', to: 'org.mockito.asm')
+	}
+
+	copy {
+		from zipTree( configurations.cglibsource.find { it.name.endsWith('sources.jar') } )
+		into "${buildDir}/repackage/cglib"
+	}
+	ant.pkgrename(srcdir: "${buildDir}/repackage/cglib/src/proxy", destdir: "${buildDir}/repackage/cglib-repackaged") {
+		pattern(from: 'org.objectweb.asm', to: 'org.mockito.asm')
+		pattern(from: 'net.sf.cglib',      to: 'org.mockito.cglib')
+		pattern(from: 'samples',           to: 'org.mockito.cglibsamples')
+	}
+}
+
+task syncRepackagedSource << {
+	copy {
+		from "${buildDir}/repackage/asm-repackaged"
+		from "${buildDir}/repackage/cglib-repackaged"
+		into "${buildDir}/repackage/src-new"
+		include 'org/mockito/**/*'
+	}
+	ant.sync(todir: 'src') {
+		fileset(dir: "${buildDir}/repackage/src-new")
+	}
 }
 
 defaultTasks "clean", "build", "jarSources", "copyToMockito"
