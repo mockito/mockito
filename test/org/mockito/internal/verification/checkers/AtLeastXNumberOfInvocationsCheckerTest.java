@@ -28,6 +28,6 @@ public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
         c.check(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
 
         //then
-        Mockito.verify(c.invocationMarker).markVerified(eq(asList(invocation)), any(CapturesArgumensFromInvocation.class));
+        Mockito.verify(c.invocationMarker).markVerified(eq(asList(invocation)), any(CapturesArgumentsFromInvocation.class));
     }
 }

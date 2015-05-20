@@ -19,7 +19,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements DescribedInvocation, CapturesArgumensFromInvocation, Serializable {
+public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;
@@ -116,30 +116,35 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
     }
 
     public void captureArgumentsFrom(Invocation invocation) {
+        captureArguments(invocation);
         if (invocation.getMethod().isVarArgs()) {
-            int indexOfVararg = invocation.getRawArguments().length - 1;
-            for (int position = 0; position < indexOfVararg; position++) {
-                Matcher m = matchers.get(position);
-                if (m instanceof CapturesArguments) {
-                    ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
-                }
+            captureVarargsPart(invocation);
+        }
+    }
+
+    private void captureArguments(Invocation invocation) {
+        for (int position = 0; position < regularArgumentsSize(invocation); position++) {
+            Matcher m = matchers.get(position);
+            if (m instanceof CapturesArguments) {
+                ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
             }
-            for (Matcher m : uniqueMatcherSet(indexOfVararg)) {
-                if (m instanceof CapturesArguments) {
-                    Object rawArgument = invocation.getRawArguments()[indexOfVararg];
-                    for (int i = 0; i < Array.getLength(rawArgument); i++) {
-                        ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
-                    }
-                }
-            }
-        } else {
-            for (int position = 0; position < matchers.size(); position++) {
-                Matcher m = matchers.get(position);
-                if (m instanceof CapturesArguments) {
-                    ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
+        }
+    }
+
+    private void captureVarargsPart(Invocation invocation) {
+        int indexOfVararg = invocation.getRawArguments().length - 1;
+        for (Matcher m : uniqueMatcherSet(indexOfVararg)) {
+            if (m instanceof CapturesArguments) {
+                Object rawArgument = invocation.getRawArguments()[indexOfVararg];
+                for (int i = 0; i < Array.getLength(rawArgument); i++) {
+                    ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
                 }
             }
         }
+    }
+
+    private int regularArgumentsSize(Invocation invocation) {
+        return invocation.getMethod().isVarArgs() ? invocation.getRawArguments().length - 1 : matchers.size();
     }
 
     private Set<Matcher> uniqueMatcherSet(int indexOfVararg) {

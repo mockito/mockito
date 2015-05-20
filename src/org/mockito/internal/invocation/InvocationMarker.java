@@ -11,18 +11,18 @@ import org.mockito.invocation.Invocation;
 
 public class InvocationMarker {
 
-    public void markVerified(List<Invocation> invocations, CapturesArgumensFromInvocation wanted) {
+    public void markVerified(List<Invocation> invocations, CapturesArgumentsFromInvocation wanted) {
         for (Invocation invocation : invocations) {
             markVerified(invocation, wanted);
         }
     }
 
-    public void markVerified(Invocation invocation, CapturesArgumensFromInvocation wanted) {
-        invocation.markVerified();
-        wanted.captureArgumentsFrom(invocation);
-    }
+	public void markVerified(Invocation invocation, CapturesArgumentsFromInvocation wanted) {
+		invocation.markVerified();
+		wanted.captureArgumentsFrom(invocation);
+	}
 
-    public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted, InOrderContext context) {
+    public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumentsFromInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);
         
         for (Invocation i : chunk) {
