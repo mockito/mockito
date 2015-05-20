@@ -5,7 +5,7 @@
 
 package org.mockitousage.matchers;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -303,5 +303,18 @@ public class CapturingArgumentsTest extends TestBase {
         // this is only for backwards compatibility. It does not make sense in real to do so.
         verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture(), argumentCaptor.capture());
         Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
+    }
+
+    @Test
+    public void captures_correctly_when_captor_used_on_pure_vararg_method() throws Exception {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.varargs(42, "capturedValue");
+
+        // then
+        verify(mock).varargs(eq(42), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).contains("capturedValue");
     }
 }
