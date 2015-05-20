@@ -5,10 +5,10 @@
 
 package org.mockitousage.matchers;
 
+import junit.framework.Assert;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -23,8 +23,6 @@ import static org.mockito.Mockito.*;
 
 public class CapturingArgumentsTest extends TestBase {
 
-    @Mock IMethods mock;
-    
     class Person {
 
         private final Integer age;
@@ -37,12 +35,12 @@ public class CapturingArgumentsTest extends TestBase {
             return age;
         }
     }
-    
-    class Emailer {
-     
+
+    class BulkEmailService {
+
         private EmailService service;
-        
-        public Emailer(EmailService service) {
+
+        public BulkEmailService(EmailService service) {
             this.service = service;
         }
 
@@ -53,50 +51,53 @@ public class CapturingArgumentsTest extends TestBase {
             }
         }
     }
-    
+
     interface EmailService {
         boolean sendEmailTo(Person person);
     }
 
     EmailService emailService = mock(EmailService.class);
-    Emailer emailer = new Emailer(emailService);
+    BulkEmailService bulkEmailService = new BulkEmailService(emailService);
+    IMethods mock = mock(IMethods.class);
 
     @SuppressWarnings("deprecation")
     @Test
     public void should_allow_assertions_on_captured_argument() {
-        //when
-        emailer.email(12);
-        
-        //then
+        //given
         ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+
+        //when
+        bulkEmailService.email(12);
+
+        //then
         verify(emailService).sendEmailTo(argument.capture());
-        
         assertEquals(12, argument.getValue().getAge());
     }
     
     @Test
     public void should_allow_assertions_on_all_captured_arguments() {
-        //when
-        emailer.email(11, 12);
-        
-        //then
+        //given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
-        verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
-        List<Person> allValues = argument.getAllValues();
-        
-        assertEquals(11, allValues.get(0).getAge());
-        assertEquals(12, allValues.get(1).getAge());
+
+        //when
+        bulkEmailService.email(11, 12);
+
+        //then
+        verify(emailService, times(2)).sendEmailTo(argument.capture());
+        assertEquals(11, argument.getAllValues().get(0).getAge());
+        assertEquals(12, argument.getAllValues().get(1).getAge());
     }
     
     @Test
     public void should_allow_assertions_on_last_argument() {
-        //when
-        emailer.email(11, 12, 13);
-        
-        //then
+        //given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
-        verify(emailService, atLeastOnce()).sendEmailTo(argument.capture());
-        
+
+        //when
+        bulkEmailService.email(11, 12, 13);
+
+        //then
+        verify(emailService, times(3)).sendEmailTo(argument.capture());
         assertEquals(13, argument.getValue().getAge());
     }
     
@@ -117,11 +118,13 @@ public class CapturingArgumentsTest extends TestBase {
     
     @Test
     public void should_allow_assertions_on_captured_null() {
+        //given
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
+
         //when
         emailService.sendEmailTo(null);
-        
+
         //then
-        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(null, argument.getValue());
     }
@@ -130,12 +133,14 @@ public class CapturingArgumentsTest extends TestBase {
     public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way()  {
         //the test passes if this expression compiles
         ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
+        assertNotNull(argument);
     }
 
     @Test
     public void should_allow_construction_of_captor_for_a_more_specific_type()  {
         //the test passes if this expression compiles
         ArgumentCaptor<List> argument = ArgumentCaptor.forClass(ArrayList.class);
+        assertNotNull(argument);
     }
     
     @Test
@@ -171,20 +176,22 @@ public class CapturingArgumentsTest extends TestBase {
         try {
             argument.getValue();
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+            Assert.assertTrue(true);
+        }
     }
     
     @Test
     public void should_capture_when_full_arg_list_matches() throws Exception {
         //given
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        //when
         mock.simpleMethod("foo", 1);
         mock.simpleMethod("bar", 2);
-        
-        //when
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(mock).simpleMethod(captor.capture(), eq(1));
-        
+
         //then
+        verify(mock).simpleMethod(captor.capture(), eq(1));
         assertEquals(1, captor.getAllValues().size());
         assertEquals("foo", captor.getValue());
     }
@@ -192,7 +199,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_int_by_creating_captor_with_primitive_wrapper() {
         //given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 
         //when
@@ -206,7 +212,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_int_by_creating_captor_with_primitive() throws Exception {
         //given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
         
         //when
@@ -220,7 +225,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_byte_vararg_by_creating_captor_with_primitive() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(byte.class);
 
         // when
@@ -235,7 +239,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(Byte.class);
 
         // when
@@ -250,7 +253,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_vararg() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
@@ -264,7 +266,6 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_capture_all_vararg() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
@@ -274,14 +275,12 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());
 
-        List<String> allVarargsValues = argumentCaptor.getAllValues();
-        Assertions.assertThat(allVarargsValues).containsExactly("a", "b", "c", "again ?!");
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c", "again ?!");
     }
 
     @Test
     public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
@@ -293,9 +292,8 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void captures_correclty_when_captor_used_multiple_times() throws Exception {
+    public void captures_correctly_when_captor_used_multiple_times() throws Exception {
         // given
-        IMethods mock = mock(IMethods.class);
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
