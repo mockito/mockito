@@ -1,3 +1,12 @@
+### 2.0.9-beta (2015-06-02 19:54 UTC)
+
+* Authors: 2
+* Commits: 40
+  * 25: Brice Dutheil
+  * 15: rafwin
+* Improvements: 1
+  * Allow convenient spying on abstract classes [(#92)](https://github.com/mockito/mockito/issues/92)
+
 ### 2.0.8-beta (2015-05-13 15:05 UTC)
 
 * Authors: 2
