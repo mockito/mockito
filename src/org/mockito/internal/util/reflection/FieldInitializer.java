@@ -213,27 +213,27 @@ public class FieldInitializer {
         private final Object testClass;
         private final Field field;
         private final ConstructorArgumentResolver argResolver;
-	      private final MockUtil mockUtil = new MockUtil();
+          private final MockUtil mockUtil = new MockUtil();
         private final Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
             public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
-	            int argLengths = constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
-	            if (argLengths == 0) {
-		            int constructorAMockableParamsSize = countMockableParams(constructorA);
-		            int constructorBMockableParamsSize = countMockableParams(constructorB);
-		            return constructorBMockableParamsSize - constructorAMockableParamsSize;
-	            }
-	            return argLengths;
+                int argLengths = constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
+                if (argLengths == 0) {
+                    int constructorAMockableParamsSize = countMockableParams(constructorA);
+                    int constructorBMockableParamsSize = countMockableParams(constructorB);
+                    return constructorBMockableParamsSize - constructorAMockableParamsSize;
+                }
+                return argLengths;
             }
-	        
-	        private int countMockableParams(Constructor<?> constructor) {
-		        int constructorMockableParamsSize = 0;
-		        for (Class<?> aClass : constructor.getParameterTypes()) {
-			        if(mockUtil.isTypeMockable(aClass)){
-				        constructorMockableParamsSize++;
-			        }
-		        }
-		        return constructorMockableParamsSize;
-	        }
+            
+            private int countMockableParams(Constructor<?> constructor) {
+                int constructorMockableParamsSize = 0;
+                for (Class<?> aClass : constructor.getParameterTypes()) {
+                    if(mockUtil.isTypeMockable(aClass)){
+                        constructorMockableParamsSize++;
+                    }
+                }
+                return constructorMockableParamsSize;
+            }
         };
 
         /**
@@ -282,7 +282,7 @@ public class FieldInitializer {
         private Constructor<?> biggestConstructor(Class<?> clazz) {
             final List<Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
             Collections.sort(constructors, byParameterNumber);
-			
+            
             Constructor<?> constructor = constructors.get(0);
             checkParameterized(constructor, field);
             return constructor;

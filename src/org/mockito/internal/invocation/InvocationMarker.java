@@ -17,10 +17,10 @@ public class InvocationMarker {
         }
     }
 
-	public void markVerified(Invocation invocation, CapturesArgumensFromInvocation wanted) {
-		invocation.markVerified();
-		wanted.captureArgumentsFrom(invocation);
-	}
+    public void markVerified(Invocation invocation, CapturesArgumensFromInvocation wanted) {
+        invocation.markVerified();
+        wanted.captureArgumentsFrom(invocation);
+    }
 
     public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumensFromInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);

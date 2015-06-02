@@ -12,17 +12,17 @@ import org.mockito.MockSettings;
  * For this to happen, it must be registered using {@link MockSettings#invocationListeners(InvocationListener...)}.
  */
 public interface InvocationListener {
-	
-	/**
-	 * Called after the invocation of the listener's mock if it returned normally.
-	 *
+    
+    /**
+     * Called after the invocation of the listener's mock if it returned normally.
+     *
      * <p>
      * Exceptions caused by this invocationListener will raise a {@link org.mockito.exceptions.base.MockitoException}.
      * </p>
-	 *
-	 * @param methodInvocationReport Information about the method call that just happened.
+     *
+     * @param methodInvocationReport Information about the method call that just happened.
      *
      * @see MethodInvocationReport
-	 */
-	void reportInvocation(MethodInvocationReport methodInvocationReport);
+     */
+    void reportInvocation(MethodInvocationReport methodInvocationReport);
 }

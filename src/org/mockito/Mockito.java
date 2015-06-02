@@ -2119,7 +2119,7 @@ public class Mockito extends Matchers {
      * @return verification mode
      */
     public static VerificationMode only() {
-    	return VerificationModeFactory.only();
+        return VerificationModeFactory.only();
     }
 
     /**

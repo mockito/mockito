@@ -93,44 +93,44 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void shouldAddVerboseLoggingListenerOnlyOnce() {
-    	//given
-    	assertFalse(mockSettingsImpl.hasInvocationListeners());
-    	
-    	//when
-    	mockSettingsImpl.verboseLogging().verboseLogging();
-    	
-    	//then
-    	Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
+        //given
+        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        
+        //when
+        mockSettingsImpl.verboseLogging().verboseLogging();
+        
+        //then
+        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
 
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
-    	mockSettingsImpl.invocationListeners((InvocationListener[])null);
+        mockSettingsImpl.invocationListeners((InvocationListener[])null);
     }
 
     @Test
     public void shouldAddInvocationListener() {
-    	//given
-    	assertFalse(mockSettingsImpl.hasInvocationListeners());
-    	
-    	//when
-    	mockSettingsImpl.invocationListeners(invocationListener);
-    	
-    	//then
+        //given
+        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        
+        //when
+        mockSettingsImpl.invocationListeners(invocationListener);
+        
+        //then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
     }
     
     @Test
     public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
-    	//given
-    	assertFalse(mockSettingsImpl.hasInvocationListeners());
-    	
-    	//when
-    	mockSettingsImpl.invocationListeners(invocationListener, invocationListener).invocationListeners(invocationListener);
-    	
-    	//then
-    	Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
+        //given
+        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        
+        //when
+        mockSettingsImpl.invocationListeners(invocationListener, invocationListener).invocationListeners(invocationListener);
+        
+        //then
+        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
     }
 
     @Test

@@ -5,6 +5,12 @@
 
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.matchers.MatcherDecorator;
@@ -13,13 +19,6 @@ import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
-
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements DescribedInvocation, CapturesArgumensFromInvocation, Serializable {
@@ -100,16 +99,16 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
         Method m2 = candidate.getMethod();
         
         if (m1.getName() != null && m1.getName().equals(m2.getName())) {
-        	/* Avoid unnecessary cloning */
-        	Class[] params1 = m1.getParameterTypes();
-        	Class[] params2 = m2.getParameterTypes();
-        	if (params1.length == params2.length) {
-        	    for (int i = 0; i < params1.length; i++) {
-        		if (params1[i] != params2[i])
-        		    return false;
-        	    }
-        	    return true;
-        	}
+            /* Avoid unnecessary cloning */
+            Class[] params1 = m1.getParameterTypes();
+            Class[] params2 = m2.getParameterTypes();
+            if (params1.length == params2.length) {
+                for (int i = 0; i < params1.length; i++) {
+                if (params1[i] != params2[i])
+                    return false;
+                }
+                return true;
+            }
         }
         return false;
     }

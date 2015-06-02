@@ -4,23 +4,29 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Locale;
+import javax.net.SocketFactory;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
-
-import javax.net.SocketFactory;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.Locale;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
 
 
 public class DeepStubbingTest extends TestBase {
@@ -33,7 +39,7 @@ public class DeepStubbingTest extends TestBase {
         }
         
         public Address getAddress(String addressName) {
-        	return address;
+            return address;
         }
         
         public FinalClass getFinalClass() {
@@ -221,16 +227,16 @@ public class DeepStubbingTest extends TestBase {
     }
     
     @Test
-	public void verification_work_with_argument_Matchers_in_nested_calls() throws Exception {
-		//given
-    	person.getAddress("111 Mock Lane").getStreet();
-    	person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
+    public void verification_work_with_argument_Matchers_in_nested_calls() throws Exception {
+        //given
+        person.getAddress("111 Mock Lane").getStreet();
+        person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
 
-		//then
-    	verify(person.getAddress(anyString())).getStreet();
-    	verify(person.getAddress(anyString()).getStreet(Locale.CHINESE), never()).getName();
-    	verify(person.getAddress(anyString()).getStreet(eq(Locale.ITALIAN))).getName();
-	}
+        //then
+        verify(person.getAddress(anyString())).getStreet();
+        verify(person.getAddress(anyString()).getStreet(Locale.CHINESE), never()).getName();
+        verify(person.getAddress(anyString()).getStreet(eq(Locale.ITALIAN))).getName();
+    }
 
     @Test
     public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() throws Exception {

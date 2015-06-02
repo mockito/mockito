@@ -41,7 +41,7 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
         return runner.getDescription();
     }
 
-	public void filter(Filter filter) throws NoTestsRemainException {
-		runner.filter(filter);
-	}
+    public void filter(Filter filter) throws NoTestsRemainException {
+        runner.filter(filter);
+    }
 }

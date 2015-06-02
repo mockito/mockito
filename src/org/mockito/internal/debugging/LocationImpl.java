@@ -4,10 +4,9 @@
  */
 package org.mockito.internal.debugging;
 
+import java.io.Serializable;
 import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockito.invocation.Location;
-
-import java.io.Serializable;
 
 public class LocationImpl implements Location, Serializable {
 
@@ -23,7 +22,7 @@ public class LocationImpl implements Location, Serializable {
         this.stackTraceFilter = stackTraceFilter;
         stackTraceHolder = new Throwable();
     }
-	
+
     @Override
     public String toString() {
         StackTraceElement[] filtered = stackTraceFilter.filter(stackTraceHolder.getStackTrace(), false);

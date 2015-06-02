@@ -4,6 +4,15 @@
  */
 package org.mockitousage.annotation;
 
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import org.fest.assertions.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,10 +22,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
-
-import java.util.*;
-
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
@@ -30,7 +35,7 @@ public class SpyAnnotationTest extends TestBase {
   
     @Rule public final ExpectedException shouldThrow = ExpectedException.none();
 
-	@Test
+    @Test
     public void should_init_spy_by_instance() throws Exception {
         doReturn("foo").when(spiedList).get(10);
         assertEquals("foo", spiedList.get(10));
@@ -47,11 +52,11 @@ public class SpyAnnotationTest extends TestBase {
 
     @Test
     public void should_prevent_spying_on_interfaces() throws Exception {
-		class WithSpy {
-			@Spy List<String> list;
-		}
+        class WithSpy {
+            @Spy List<String> list;
+        }
 
-		WithSpy withSpy = new WithSpy();
+        WithSpy withSpy = new WithSpy();
         try {
             MockitoAnnotations.initMocks(withSpy);
             fail();
@@ -76,10 +81,10 @@ public class SpyAnnotationTest extends TestBase {
 
     @Test
     public void should_report_when_no_arg_less_constructor() throws Exception {
-		class FailingSpy {
-	        @Spy
+        class FailingSpy {
+            @Spy
             NoValidConstructor noValidConstructor;
-		}
+        }
 
         try {
             MockitoAnnotations.initMocks(new FailingSpy());
@@ -91,10 +96,10 @@ public class SpyAnnotationTest extends TestBase {
     
     @Test
     public void should_report_when_constructor_is_explosive() throws Exception {
-		class FailingSpy {
-	        @Spy
+        class FailingSpy {
+            @Spy
             ThrowingConstructor throwingConstructor;
-		}
+        }
 
         try {
             MockitoAnnotations.initMocks(new FailingSpy());
@@ -106,70 +111,70 @@ public class SpyAnnotationTest extends TestBase {
 
     @Test
     public void should_spy_abstract_class() throws Exception {
-		class SpyAbstractClass {
-			@Spy AbstractList<String> list;
-			
-			List<String> asSingletonList(String s) {
-				when(list.size()).thenReturn(1);
-				when(list.get(0)).thenReturn(s);
-				return list;
-			}
-		}
-		SpyAbstractClass withSpy = new SpyAbstractClass();
+        class SpyAbstractClass {
+            @Spy AbstractList<String> list;
+            
+            List<String> asSingletonList(String s) {
+                when(list.size()).thenReturn(1);
+                when(list.get(0)).thenReturn(s);
+                return list;
+            }
+        }
+        SpyAbstractClass withSpy = new SpyAbstractClass();
         MockitoAnnotations.initMocks(withSpy);
         assertEquals(Arrays.asList("a"), withSpy.asSingletonList("a"));
     }
 
     @Test
     public void should_spy_inner_class() throws Exception {
-    	 
+         
      class WithMockAndSpy {
-    		@Spy private InnerStrength strength;
-    		@Mock private List<String> list;
+            @Spy private InnerStrength strength;
+            @Mock private List<String> list;
 
             abstract class InnerStrength {
-            	private final String name;
+                private final String name;
 
-            	InnerStrength() {
-            		// Make sure that @Mock fields are always injected before @Spy fields.
-            		assertNotNull(list);
-            		// Make sure constructor is indeed called.
-            		this.name = "inner";
-            	}
-            	
-            	abstract String strength();
-            	
-            	String fullStrength() {
-            		return name + " " + strength();
-            	}
+                InnerStrength() {
+                    // Make sure that @Mock fields are always injected before @Spy fields.
+                    assertNotNull(list);
+                    // Make sure constructor is indeed called.
+                    this.name = "inner";
+                }
+                
+                abstract String strength();
+                
+                String fullStrength() {
+                    return name + " " + strength();
+                }
             }
-    	}
-		WithMockAndSpy outer = new WithMockAndSpy();
+        }
+        WithMockAndSpy outer = new WithMockAndSpy();
         MockitoAnnotations.initMocks(outer);
         when(outer.strength.strength()).thenReturn("strength");
         assertEquals("inner strength", outer.strength.fullStrength());
     }
 
-	@Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void should_reset_spy() throws Exception {
         spiedList.get(10); // see shouldInitSpy
     }
 
-	@Test
-	public void should_report_when_encosing_instance_is_needed() throws Exception {
-		class Outer {
-			class Inner {}
-		}
-		class WithSpy {
-			@Spy private Outer.Inner inner;
-		}
-		try {
+    @Test
+    public void should_report_when_encosing_instance_is_needed() throws Exception {
+        class Outer {
+            class Inner {}
+        }
+        class WithSpy {
+            @Spy private Outer.Inner inner;
+        }
+        try {
             MockitoAnnotations.initMocks(new WithSpy());
             fail();
         } catch (MockitoException e) {
             assertContains("@Spy annotation can only initialize inner classes", e.getMessage());
         }
-	}
+    }
 
     static class NestedClassWithoutDefinedConstructor { }
 

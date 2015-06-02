@@ -15,7 +15,7 @@ import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
-	
+    
     class BaseClass {
         @Spy List list = new LinkedList();
     }

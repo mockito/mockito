@@ -4,6 +4,13 @@
  */
 package org.mockitousage.misuse;
 
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.validateMockitoUsage;
+import static org.mockito.Mockito.verify;
+import java.util.Observer;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,15 +18,6 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.Observer;
-
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.validateMockitoUsage;
-import static org.mockito.Mockito.verify;
 
 public class DetectingMisusedMatchersTest extends TestBase {
 
@@ -62,16 +60,16 @@ public class DetectingMisusedMatchersTest extends TestBase {
     @Test
     public void should_report_argument_locations_when_argument_matchers_misused() {
         try {
-        	Observer observer = mock(Observer.class);
-        	
-        	misplaced_anyInt_argument_matcher();
-        	misplaced_anyObject_argument_matcher();
-        	misplaced_anyBoolean_argument_matcher();
-        	
-        	observer.update(null, null);
-        	
-        	validateMockitoUsage();
-        	fail();
+            Observer observer = mock(Observer.class);
+            
+            misplaced_anyInt_argument_matcher();
+            misplaced_anyObject_argument_matcher();
+            misplaced_anyBoolean_argument_matcher();
+            
+            observer.update(null, null);
+            
+            validateMockitoUsage();
+            fail();
         } catch (InvalidUseOfMatchersException e) {
             assertContains("DetectingMisusedMatchersTest.misplaced_anyInt_argument_matcher", e.getMessage());
             assertContains("DetectingMisusedMatchersTest.misplaced_anyObject_argument_matcher", e.getMessage());

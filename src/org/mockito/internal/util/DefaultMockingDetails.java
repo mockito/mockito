@@ -4,10 +4,9 @@
  */
 package org.mockito.internal.util;
 
+import java.util.Collection;
 import org.mockito.MockingDetails;
 import org.mockito.invocation.Invocation;
-
-import java.util.Collection;
 
 /**
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
@@ -39,7 +38,7 @@ public class DefaultMockingDetails implements MockingDetails {
     }
     
     public Collection<Invocation> getInvocations() {
-    	return delegate.getMockHandler(toInspect).getInvocationContainer().getInvocations();
+        return delegate.getMockHandler(toInspect).getInvocationContainer().getInvocations();
     }
 }
 

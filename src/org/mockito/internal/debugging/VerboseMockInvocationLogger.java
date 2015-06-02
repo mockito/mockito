@@ -5,11 +5,10 @@
 
 package org.mockito.internal.debugging;
 
+import java.io.PrintStream;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
-
-import java.io.PrintStream;
 
 /**
  * Logs all invocations to standard output.
@@ -19,9 +18,9 @@ import java.io.PrintStream;
 public class VerboseMockInvocationLogger implements InvocationListener {
 
     // visible for testing
-	final PrintStream printStream;
+    final PrintStream printStream;
 
-	private int mockInvocationsCounter = 0;
+    private int mockInvocationsCounter = 0;
 
     public VerboseMockInvocationLogger() {
         this(System.out);
@@ -56,22 +55,22 @@ public class VerboseMockInvocationLogger implements InvocationListener {
     }
 
     private void printHeader() {
-		mockInvocationsCounter++;
-		printStream.println("############ Logging method invocation #" + mockInvocationsCounter + " on mock/spy ########");
-	}
+        mockInvocationsCounter++;
+        printStream.println("############ Logging method invocation #" + mockInvocationsCounter + " on mock/spy ########");
+    }
 
     private void printInvocation(DescribedInvocation invocation) {
-		printStream.println(invocation.toString());
-//		printStream.println("Handling method call on a mock/spy.");
-		printlnIndented("invoked: " + invocation.getLocation().toString());
-	}
+        printStream.println(invocation.toString());
+//        printStream.println("Handling method call on a mock/spy.");
+        printlnIndented("invoked: " + invocation.getLocation().toString());
+    }
 
-	private void printFooter() {
-		printStream.println("");
-	}
-	
-	private void printlnIndented(String message) {
-		printStream.println("   " + message);
-	}
-	
+    private void printFooter() {
+        printStream.println("");
+    }
+    
+    private void printlnIndented(String message) {
+        printStream.println("   " + message);
+    }
+    
 }

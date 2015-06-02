@@ -54,9 +54,9 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     @Test
     public void should_print_the_parameters_when_calling_a_method_with_args() throws Throwable {
-    	Answer<Object> answer = new ReturnsSmartNulls();
+        Answer<Object> answer = new ReturnsSmartNulls();
 
-    	Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
+        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
         assertContains("foo.withArgs", smartNull + "");
         assertContains("oompa", smartNull + "");
@@ -64,8 +64,8 @@ public class ReturnsSmartNullsTest extends TestBase {
     }
 
     @Test
-	public void should_print_the_parameters_on_SmartNullPointerException_message() throws Throwable {
-    	Answer<Object> answer = new ReturnsSmartNulls();
+    public void should_print_the_parameters_on_SmartNullPointerException_message() throws Throwable {
+        Answer<Object> answer = new ReturnsSmartNulls();
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
@@ -73,8 +73,8 @@ public class ReturnsSmartNullsTest extends TestBase {
             smartNull.get();
             fail();
         } catch (SmartNullPointerException e) {
-        	assertContains("oompa", e.getMessage());
-        	assertContains("lumpa", e.getMessage());
+            assertContains("oompa", e.getMessage());
+            assertContains("lumpa", e.getMessage());
         }
-	}
+    }
 }

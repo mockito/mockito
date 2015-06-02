@@ -25,7 +25,7 @@ public enum Answers {
     RETURNS_MOCKS(new ReturnsMocks()),
     RETURNS_DEEP_STUBS(new ReturnsDeepStubs()),
     CALLS_REAL_METHODS(new CallsRealMethods())
-	;
+    ;
 
     private final Answer<Object> implementation;
 

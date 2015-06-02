@@ -24,23 +24,23 @@ public class MockInjectionUsingConstructorIssue421Test {
 
     @Test
     public void mockJustWorks() {
-	    issue421.checkIfMockIsInjected();
+        issue421.checkIfMockIsInjected();
     }
 
-	static class Issue421 {
+    static class Issue421 {
 
-		private ArticleCalculator calculator;
+        private ArticleCalculator calculator;
 
-		public Issue421(int a) {
-		}
+        public Issue421(int a) {
+        }
 
-		public Issue421(ArticleCalculator calculator) {
-			this.calculator = calculator;
-		}
+        public Issue421(ArticleCalculator calculator) {
+            this.calculator = calculator;
+        }
 
-		public void checkIfMockIsInjected(){
-			assertThat(new MockUtil().isMock(calculator)).isTrue();
-		}
-	}
+        public void checkIfMockIsInjected(){
+            assertThat(new MockUtil().isMock(calculator)).isTrue();
+        }
+    }
 
 }

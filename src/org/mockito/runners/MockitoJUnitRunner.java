@@ -67,8 +67,8 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
         return runner.getDescription();
     }
 
-	public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(Filter filter) throws NoTestsRemainException {
         //filter is required because without it UnrootedTests show up in Eclipse
-		runner.filter(filter);
-	}
+        runner.filter(filter);
+    }
 }

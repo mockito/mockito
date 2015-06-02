@@ -23,63 +23,63 @@ public class OnlyVerificationTest extends TestBase {
 
     @Mock private List<Object> mock2;
 
-	@Test
-	public void shouldVerifyMethodWasInvokedExclusively() {
-		mock.clear();
-		verify(mock, only()).clear();
-	}
+    @Test
+    public void shouldVerifyMethodWasInvokedExclusively() {
+        mock.clear();
+        verify(mock, only()).clear();
+    }
 
-	@Test
-	public void shouldVerifyMethodWasInvokedExclusivelyWithMatchersUsage() {
-		mock.get(0);
-		verify(mock, only()).get(anyInt());
-	}
+    @Test
+    public void shouldVerifyMethodWasInvokedExclusivelyWithMatchersUsage() {
+        mock.get(0);
+        verify(mock, only()).get(anyInt());
+    }
 
-	@Test
-	public void shouldFailIfMethodWasNotInvoked() {
-		mock.clear();
-		try {
-			verify(mock, only()).get(0);
-			fail();
-		} catch (WantedButNotInvoked e) {}
-	}
+    @Test
+    public void shouldFailIfMethodWasNotInvoked() {
+        mock.clear();
+        try {
+            verify(mock, only()).get(0);
+            fail();
+        } catch (WantedButNotInvoked e) {}
+    }
 
-	@Test
-	public void shouldFailIfMethodWasInvokedMoreThanOnce() {
-		mock.clear();
-		mock.clear();
-		try {
-			verify(mock, only()).clear();
-			fail();
-		} catch (NoInteractionsWanted e) {}
-	}
+    @Test
+    public void shouldFailIfMethodWasInvokedMoreThanOnce() {
+        mock.clear();
+        mock.clear();
+        try {
+            verify(mock, only()).clear();
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
 
-	@Test
-	public void shouldFailIfMethodWasInvokedButWithDifferentArguments() {
-		mock.get(0);
-		mock.get(2);
-		try {
-			verify(mock, only()).get(999);
-			fail();
-		} catch (WantedButNotInvoked e) {}
-	}
-	
-	@Test
-	public void shouldFailIfExtraMethodWithDifferentArgsFound() {
-	    mock.get(0);
-	    mock.get(2);
-	    try {
-	        verify(mock, only()).get(2);
-	        fail();
-	    } catch (NoInteractionsWanted e) {}
-	}
+    @Test
+    public void shouldFailIfMethodWasInvokedButWithDifferentArguments() {
+        mock.get(0);
+        mock.get(2);
+        try {
+            verify(mock, only()).get(999);
+            fail();
+        } catch (WantedButNotInvoked e) {}
+    }
+    
+    @Test
+    public void shouldFailIfExtraMethodWithDifferentArgsFound() {
+        mock.get(0);
+        mock.get(2);
+        try {
+            verify(mock, only()).get(2);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
 
-	@Test
-	public void shouldVerifyMethodWasInvokedExclusivelyWhenTwoMocksInUse() {
-		mock.clear();
-		mock2.get(0);
-		verify(mock, only()).clear();
-		verify(mock2, only()).get(0);
-	}
+    @Test
+    public void shouldVerifyMethodWasInvokedExclusivelyWhenTwoMocksInUse() {
+        mock.clear();
+        mock2.get(0);
+        verify(mock, only()).clear();
+        verify(mock2, only()).get(0);
+    }
 
 }

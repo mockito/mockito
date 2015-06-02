@@ -104,7 +104,7 @@ class ClassImposterizer {
             }
         };
         Class<?>[] allMockedTypes = prepend(mockedType, interfaces);
-		enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(allMockedTypes));
+        enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(allMockedTypes));
         enhancer.setUseFactory(true);
         if (mockedType.isInterface()) {
             enhancer.setSuperclass(Object.class);

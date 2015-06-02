@@ -130,7 +130,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
     
     public InvocationMatcher getInvocationForStubbing() {
-    	return invocationForStubbing;
+        return invocationForStubbing;
     }
 
     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {

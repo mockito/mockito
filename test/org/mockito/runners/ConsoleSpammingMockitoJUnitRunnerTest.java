@@ -68,7 +68,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
 
         public void run(RunNotifier notifier) {}
 
-		public void filter(Filter filter) throws NoTestsRemainException {}
+        public void filter(Filter filter) throws NoTestsRemainException {}
 
     }
 }

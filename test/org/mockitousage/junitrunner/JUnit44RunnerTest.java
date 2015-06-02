@@ -20,36 +20,36 @@ import org.mockito.runners.MockitoJUnit44Runner;
 @SuppressWarnings( { "unchecked", "deprecation" })
 public class JUnit44RunnerTest {
 
-	@InjectMocks
-	private ListDependent listDependent = new ListDependent();
+    @InjectMocks
+    private ListDependent listDependent = new ListDependent();
 
-	@Mock
-	private List list;
+    @Mock
+    private List list;
 
-	@Test
-	public void shouldInitMocksUsingRunner() {
-		list.add("test");
-		verify(list).add("test");
-	}
-	@Test
-	public void shouldInjectMocksUsingRunner() {
-		assertSame(list, listDependent.getList());
-	}
-
-	@Test
-    public void shouldFilterTestMethodsCorrectly() throws Exception{
-		MockitoJUnit44Runner runner = new MockitoJUnit44Runner(this.getClass());
-
-    	runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
-
-    	assertEquals(1, runner.testCount());
+    @Test
+    public void shouldInitMocksUsingRunner() {
+        list.add("test");
+        verify(list).add("test");
+    }
+    @Test
+    public void shouldInjectMocksUsingRunner() {
+        assertSame(list, listDependent.getList());
     }
 
-	class ListDependent {
-		private List list;
+    @Test
+    public void shouldFilterTestMethodsCorrectly() throws Exception{
+        MockitoJUnit44Runner runner = new MockitoJUnit44Runner(this.getClass());
 
-		public List getList() {
-			return list;
-		}
-	}
+        runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
+
+        assertEquals(1, runner.testCount());
+    }
+
+    class ListDependent {
+        private List list;
+
+        public List getList() {
+            return list;
+        }
+    }
 }

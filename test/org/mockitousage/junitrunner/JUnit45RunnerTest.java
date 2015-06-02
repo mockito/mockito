@@ -20,7 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @SuppressWarnings("unchecked")
 public class JUnit45RunnerTest {
 
-	@InjectMocks private ListDependent listDependent = new ListDependent();
+    @InjectMocks private ListDependent listDependent = new ListDependent();
     @Mock private List list;
 
     @Test
@@ -37,18 +37,18 @@ public class JUnit45RunnerTest {
 
     @Test
     public void shouldFilterTestMethodsCorrectly() throws Exception{
-    	MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
+        MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
 
-    	runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
+        runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
 
-    	assertEquals(1, runner.testCount());
+        assertEquals(1, runner.testCount());
     }
 
-	class ListDependent {
-		private List list;
+    class ListDependent {
+        private List list;
 
-		public List getList() {
-			return list;
-		}
-	}
+        public List getList() {
+            return list;
+        }
+    }
 }
