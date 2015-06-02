@@ -54,7 +54,7 @@ Things we pay attention in a PR :
 * New test methods should follow a snake case convention (`ensure_that_stuff_is_doing_that`), this allows the test name to be fully expressive on intent while still readable.
 * When reporting errors to the users, if it's a user report report it gently and explain how a user should deal with it, see the `Reporter` class. However not all errors should go there, some unlikely technical errors don't need to be in the `Reporter` class.
 * Documentation !!! Always document with love the public API. Internals could use some love too. In all cases the code should _auto-document_ itself like any [well designed API](rebased and squashed if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups).
-
+* We use (4) spaces instead of tabs. Make sure line ending is Unix style (LF). More on line ending on the [Github help](https://help.github.com/articles/dealing-with-line-endings/).
 
 
 _If you are unsure about git you can have a look on our [git tips to have a clean history](https://github.com/mockito/mockito/wiki/Using git to prepare your PR to have a clean history)._
