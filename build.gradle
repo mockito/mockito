@@ -92,7 +92,6 @@ task sourcesJar(type: Jar) {
 }
 
 apply from: 'gradle/javadoc.gradle'
-
 task javadocJar(type: Jar) {
     baseName = 'mockito-core'
     classifier = "javadoc"
@@ -116,7 +115,8 @@ jar { task ->
 }
 
 artifacts {
-    archives sourcesJar, javadocJar
+    archives sourcesJar
+    archives javadocJar
 }
 
 publishing {
