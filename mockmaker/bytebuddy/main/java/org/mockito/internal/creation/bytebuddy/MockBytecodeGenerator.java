@@ -5,17 +5,17 @@ import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializ
 import org.mockito.internal.creation.util.SearchingClassLoader;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.dynamic.ClassLoadingStrategy;
+import net.bytebuddy.description.modifier.FieldManifestation;
+import net.bytebuddy.description.modifier.Ownership;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
-import net.bytebuddy.instrumentation.FieldAccessor;
-import net.bytebuddy.instrumentation.MethodDelegation;
-import net.bytebuddy.instrumentation.attribute.MethodAttributeAppender;
-import net.bytebuddy.instrumentation.attribute.TypeAttributeAppender;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
+import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 import net.bytebuddy.matcher.ElementMatchers;
-import net.bytebuddy.modifier.FieldManifestation;
-import net.bytebuddy.modifier.Ownership;
-import net.bytebuddy.modifier.Visibility;
 
 class MockBytecodeGenerator {
     private final ByteBuddy byteBuddy;

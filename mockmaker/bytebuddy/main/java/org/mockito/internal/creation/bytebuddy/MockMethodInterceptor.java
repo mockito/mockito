@@ -11,14 +11,14 @@ import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.AllArguments;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Argument;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.BindingPriority;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.DefaultCall;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.Origin;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.RuntimeType;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.SuperCall;
-import net.bytebuddy.instrumentation.method.bytecode.bind.annotation.This;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.Argument;
+import net.bytebuddy.implementation.bind.annotation.BindingPriority;
+import net.bytebuddy.implementation.bind.annotation.DefaultCall;
+import net.bytebuddy.implementation.bind.annotation.Origin;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.This;
 
 public class MockMethodInterceptor implements Serializable {
 
@@ -38,7 +38,7 @@ public class MockMethodInterceptor implements Serializable {
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 3)
     public Object interceptSuperCallable(@This Object mock,
-                                         @Origin(cacheMethod = true) Method invokedMethod,
+                                         @Origin(cache = true) Method invokedMethod,
                                          @AllArguments Object[] arguments,
                                          @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(
@@ -52,7 +52,7 @@ public class MockMethodInterceptor implements Serializable {
     @RuntimeType
     @BindingPriority(BindingPriority.DEFAULT * 2)
     public Object interceptDefaultCallable(@This Object mock,
-                                           @Origin(cacheMethod = true) Method invokedMethod,
+                                           @Origin(cache = true) Method invokedMethod,
                                            @AllArguments Object[] arguments,
                                            @DefaultCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
         return doIntercept(
@@ -65,7 +65,7 @@ public class MockMethodInterceptor implements Serializable {
 
     @RuntimeType
     public Object interceptAbstract(@This Object mock,
-                                    @Origin(cacheMethod = true) Method invokedMethod,
+                                    @Origin(cache = true) Method invokedMethod,
                                     @AllArguments Object[] arguments) throws Throwable {
         return doIntercept(
                 mock,

@@ -60,12 +60,12 @@ tasks.withType(JavaCompile) {
 
 //TODO we should remove all dependencies to checked-in jars
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:0.5.2'
+    compile 'net.bytebuddy:byte-buddy:0.6.8'
 
     provided "junit:junit:4.10"
     compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
 
-    testCompile 'org.ow2.asm:asm:5.0.3'
+    testCompile 'org.ow2.asm:asm:5.0.4'
     testCompile fileTree("lib/test")
     testRuntime configurations.provided
 
