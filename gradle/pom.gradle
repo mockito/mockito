@@ -1,6 +1,6 @@
 publishing.publications.all {
     //TODO github profile?
-    def devs = ["szczepiq:Szczepan Faber"]
+    def devs = ["szczepiq:Szczepan Faber", "bric3:Brice Dutheil"]
 
     pom.withXml {
         def root = asNode()
