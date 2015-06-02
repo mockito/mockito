@@ -34,4 +34,4 @@ public class EqualityTest extends TestBase {
 	      throw new RuntimeException();
         }
    }
-}
+}
