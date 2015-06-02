@@ -1,11 +1,5 @@
 package org.mockito.release.notes.improvements;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.mockito.release.notes.util.IOUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -17,6 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.mockito.release.notes.util.IOUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class GitHubTicketFetcher {
 
@@ -61,12 +60,12 @@ class GitHubTicketFetcher {
     }
 
     private Queue<Long> queuedTicketNumbers(Collection<String> ticketIds) {
-        List<Long> tickets = new ArrayList<>();
+        List<Long> tickets = new ArrayList<Long>();
         for (String id : ticketIds) {
             tickets.add(Long.parseLong(id));
         }
         Collections.sort(tickets);
-        PriorityQueue<Long> longs = new PriorityQueue<>(tickets.size(), Collections.reverseOrder());
+        PriorityQueue<Long> longs = new PriorityQueue<Long>(tickets.size(), Collections.reverseOrder());
         longs.addAll(tickets);
         return longs;
     }
@@ -76,7 +75,7 @@ class GitHubTicketFetcher {
             return Collections.emptyList();
         }
 
-        ArrayList<Improvement> pagedImprovements = new ArrayList<>();
+        ArrayList<Improvement> pagedImprovements = new ArrayList<Improvement>();
         for (JSONObject issue : issues) {
             long id = (Long) issue.get("number");
             if (tickets.remove(id)) {

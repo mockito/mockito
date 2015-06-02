@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.6.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0' //publishing to bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 
@@ -78,13 +78,13 @@ def licenseFiles = copySpec {
     //repackaged license
 }
 
-jar {
-    baseName = 'mockito-core'
-    from(sourceSets.main.allSource)
-    with licenseFiles
-}
-
 task sourcesJar(type: Jar) {
+    jar {
+        baseName = 'mockito-core'
+        from(sourceSets.main.allSource)
+        with licenseFiles
+
+    }
     baseName = 'mockito-core'
     from(sourceSets.main.allSource)
     classifier = "sources"
@@ -134,7 +134,7 @@ apply from: 'gradle/release.gradle'
 apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.4'
 }
 
 task ciBuild {
