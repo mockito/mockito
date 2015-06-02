@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.6.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0' //publishing to bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 
@@ -37,11 +37,11 @@ configurations {
 
 sourceSets {
     main {
-        java.srcDir 'src'
+        java.srcDirs 'src', 'mockmaker/bytebuddy/main/java'
         compileClasspath = compileClasspath + configurations.provided
     }
     test {
-        java.srcDir 'test'
+        java.srcDirs 'test', 'mockmaker/bytebuddy/test/java'
         compileClasspath = compileClasspath + configurations.provided
     }
 }
@@ -60,10 +60,12 @@ tasks.withType(JavaCompile) {
 
 //TODO we should remove all dependencies to checked-in jars
 dependencies {
+    compile 'net.bytebuddy:byte-buddy:0.6.8'
+
     provided "junit:junit:4.10"
     compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
-    compile fileTree('lib/repackaged') { exclude '*.txt'}
 
+    testCompile 'org.ow2.asm:asm:5.0.4'
     testCompile fileTree("lib/test")
     testRuntime configurations.provided
 
@@ -74,23 +76,18 @@ def licenseFiles = copySpec {
     //mockito license
     from(".") { include 'LICENSE', 'NOTICE' }
     //repackaged license
-    from("lib/repackaged") { include '*.txt' }
-}
-
-jar {
-    baseName = 'mockito-core'
-    from(sourceSets.main.allSource)
-    from(zipTree("lib/repackaged/cglib-and-asm-1.0.jar")) {
-        exclude 'META-INF/MANIFEST.MF'
-    }
-    with licenseFiles
 }
 
 task sourcesJar(type: Jar) {
+    jar {
+        baseName = 'mockito-core'
+        from(sourceSets.main.allSource)
+        with licenseFiles
+
+    }
     baseName = 'mockito-core'
     from(sourceSets.main.allSource)
     classifier = "sources"
-    from(zipTree("lib/sources/cglib-and-asm-1.0-sources.jar"))
     with licenseFiles
 }
 
@@ -137,7 +134,7 @@ apply from: 'gradle/release.gradle'
 apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.4'
 }
 
 task ciBuild {

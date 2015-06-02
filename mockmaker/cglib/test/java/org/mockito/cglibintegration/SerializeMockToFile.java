@@ -3,11 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockitousage.serialization;
-
-import org.mockito.Mockito;
-import org.mockito.cglib.proxy.MethodInterceptor;
-import org.mockito.cglib.proxy.MethodProxy;
+package org.mockito.cglibintegration;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -16,6 +12,9 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Observable;
+import org.mockito.Mockito;
+import org.mockito.cglib.proxy.MethodInterceptor;
+import org.mockito.cglib.proxy.MethodProxy;
 
 /**
  * These classes are here purely to show that mocks can be serialized in a different VM
@@ -25,7 +24,7 @@ import java.util.Observable;
 public class SerializeMockToFile {
 
     public static void main(String[] args) {
-       
+
         Observable observable = Mockito.mock(
                 Observable.class,
                 Mockito.withSettings().serializable()

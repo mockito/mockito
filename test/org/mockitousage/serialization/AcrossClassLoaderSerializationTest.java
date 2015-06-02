@@ -5,6 +5,10 @@
 
 package org.mockitousage.serialization;
 
+import java.io.ByteArrayInputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Callable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,11 +16,6 @@ import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 import org.mockitoutil.SimpleSerializationUtil;
-
-import java.io.ByteArrayInputStream;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 
 public class AcrossClassLoaderSerializationTest {

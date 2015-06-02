@@ -10,7 +10,7 @@ class PluginRegistry {
             = new PluginLoader(new DefaultPluginSwitch()).loadPlugin(PluginSwitch.class, DefaultPluginSwitch.class.getName());
 
     private final MockMaker mockMaker
-            = new PluginLoader(pluginSwitch).loadPlugin(MockMaker.class, "org.mockito.internal.creation.cglib.CglibMockMaker");
+            = new PluginLoader(pluginSwitch).loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider
             = new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");

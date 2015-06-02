@@ -5,17 +5,17 @@
 package org.mockitousage.configuration;
 
 
-import org.fest.assertions.Condition;
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockitoutil.SimplePerRealmReloadingClassLoader;
-
-import java.util.concurrent.Callable;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import java.util.concurrent.Callable;
+import org.fest.assertions.Condition;
+import org.junit.Assume;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
 @SuppressWarnings("unchecked")
 public class ClassCacheVersusClassReloadingTest {
@@ -25,6 +25,8 @@ public class ClassCacheVersusClassReloadingTest {
 
     @Test
     public void should_throw_ClassCastException_on_second_call() throws Exception {
+        Assume.assumeTrue("CglibMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
+
         doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
 
         try {
@@ -101,7 +103,7 @@ public class ClassCacheVersusClassReloadingTest {
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
             public boolean acceptReloadOf(String qualifiedName) {
-                return (!qualifiedName.contains("org.mockito.cglib") && qualifiedName.contains("org.mockito"));
+                return (!qualifiedName.contains("net.bytebuddy") && qualifiedName.contains("org.mockito"));
             }
         };
     }

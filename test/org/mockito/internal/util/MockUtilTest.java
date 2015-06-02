@@ -5,23 +5,19 @@
 
 package org.mockito.internal.util;
 
+import static org.mockito.Mockito.withSettings;
+import java.util.ArrayList;
+import java.util.List;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.cglib.proxy.Enhancer;
-import org.mockito.cglib.proxy.NoOp;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockitoutil.TestBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.withSettings;
-
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
-    
+
     private MockUtil mockUtil = new MockUtil();
 
     @Test
@@ -30,20 +26,11 @@ public class MockUtilTest extends TestBase {
         assertNotNull(mockUtil.getMockHandler(mock));
     }
 
-    @Test 
-    public void should_scream_when_enhanced_but_not_a_mock_passed() {
-        Object o = Enhancer.create(ArrayList.class, NoOp.INSTANCE);
-        try {
-            mockUtil.getMockHandler(o);
-            fail();
-        } catch (NotAMockException e) {}
-    }
-
     @Test (expected=NotAMockException.class)
     public void should_scream_when_not_a_mock_passed() {
         mockUtil.getMockHandler("");
     }
-    
+
     @Test (expected=MockitoException.class)
     public void should_scream_when_null_passed() {
         mockUtil.getMockHandler(null);
