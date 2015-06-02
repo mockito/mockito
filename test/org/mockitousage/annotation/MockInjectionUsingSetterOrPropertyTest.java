@@ -4,6 +4,9 @@
  */
 package org.mockitousage.annotation;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +31,7 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @InjectMocks private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
     @InjectMocks private SubUnderTesting subUnderTest = new SubUnderTesting();
     @InjectMocks private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
+    @InjectMocks private OtherSuperUnderTesting otherSuperUnderTesting = new OtherSuperUnderTesting();
 
     private BaseUnderTesting baseUnderTestingInstance = new BaseUnderTesting();
     @InjectMocks private BaseUnderTesting initializedBase = baseUnderTestingInstance;
@@ -40,6 +44,8 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Mock private List list;
     @Mock private Set histogram1;
     @Mock private Set histogram2;
+    @Mock private A candidate2;
+    
     @Spy private TreeSet searchTree = new TreeSet();
     private MockUtil mockUtil = new MockUtil();
 
@@ -102,6 +108,13 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
         MockitoAnnotations.initMocks(this);
         assertSame(searchTree, otherBaseUnderTest.getSearchTree());
     }
+    
+    @Test
+	public void shouldInsertFieldWithCorrectNameWhenMultipleTypesAvailable() {
+		MockitoAnnotations.initMocks(this);
+		assertNull(otherSuperUnderTesting.candidate1);
+		assertNotNull(otherSuperUnderTesting.candidate2);
+	}
     
     @Test
     public void shouldInstantiateInjectMockFieldIfPossible() throws Exception {
@@ -168,4 +181,15 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
             return histogram2;
         }
     }
+    
+    static class OtherSuperUnderTesting {
+		private A candidate1;
+
+		private A candidate2;
+	}
+
+	interface A {
+	}
+
+    
 }

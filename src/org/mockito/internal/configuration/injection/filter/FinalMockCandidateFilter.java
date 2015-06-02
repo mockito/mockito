@@ -10,6 +10,7 @@ import org.mockito.internal.util.reflection.FieldSetter;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This node returns an actual injecter which will be either :
@@ -20,7 +21,7 @@ import java.util.Collection;
  * </ul>
  */
 public class FinalMockCandidateFilter implements MockCandidateFilter {
-    public OngoingInjecter filterCandidate(final Collection<Object> mocks, final Field field, final Object fieldInstance) {
+    public OngoingInjecter filterCandidate(final Collection<Object> mocks, final Field field, List<Field> fields, final Object fieldInstance) {
         if(mocks.size() == 1) {
             final Object matchingMock = mocks.iterator().next();
 
