@@ -83,4 +83,11 @@ task mockitoJavadoc(type: Javadoc) {
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
+
+    doLast {
+        copy {
+            from "javadoc"
+            into "$buildDir/javadoc"
+        }
+    }
 }
