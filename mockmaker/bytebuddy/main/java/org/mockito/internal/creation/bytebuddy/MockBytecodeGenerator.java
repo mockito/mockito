@@ -69,7 +69,7 @@ class MockBytecodeGenerator {
     }
 
     private boolean isComingFromJDK(Class<?> type) {
-        return "Java Runtime Environment".equalsIgnoreCase(type.getPackage().getImplementationTitle())
+        return type.getPackage() != null && "Java Runtime Environment".equalsIgnoreCase(type.getPackage().getImplementationTitle())
                 || type.getName().startsWith("java.")
                 || type.getName().startsWith("javax.");
     }
