@@ -1,3 +1,10 @@
+### 2.0.11-beta (2015-06-03 23:57 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Brice Dutheil
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.0.10-beta (2015-06-03 12:37 UTC)
 
 * Authors: 1
