@@ -84,7 +84,7 @@
   * 1: Szczepan Faber
 * Improvements: 2
   * enum Answers now implements Answer<Object> [(#144)](https://github.com/mockito/mockito/pull/144)
-  * `Mockito.after` now takes a `long`
+  * `Mockito.after` now takes a `long`.
 
 ### 2.0.1-beta (2015-01-02 15:02 UTC)
 
@@ -95,6 +95,10 @@
   * 5: pimterry
 * Improvements: 1
   * Argument matcher anyXxx() (i.e. anyString(), anyList()) should not match nulls [(#134)](https://github.com/mockito/mockito/issues/134)
+
+---------------------------------
+
+## Latest 1.x stable version
 
 ### 1.10.19 (2014-12-31 17:04 UTC)
 
