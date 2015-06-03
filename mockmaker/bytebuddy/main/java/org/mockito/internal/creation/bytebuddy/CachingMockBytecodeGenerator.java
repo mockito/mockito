@@ -79,14 +79,17 @@ class CachingMockBytecodeGenerator {
             if (Modifier.isPrivate(mockFeatures.mockedType.getModifiers())) {
                 throw new MockitoException(join(
                         "Mockito cannot mock this class: " + mockFeatures.mockedType + ".",
-                        "Most likely it is a private class that is not visible by Mockito"
-                ));
+                        "Most likely it is a private class that is not visible by Mockito",
+                        ""
+                ), generationFailed);
             }
             throw new MockitoException(join(
                     "Mockito cannot mock this class: " + mockFeatures.mockedType,
                     "",
                     "Mockito can only mock visible & non-final classes.",
-                    "If you're not sure why you're getting this error, please report to the mailing list."),
+                    "If you're not sure why you're getting this error, please report to the mailing list.",
+                    "",
+                    "Underlying exception : " + generationFailed),
                     generationFailed
             );
         }

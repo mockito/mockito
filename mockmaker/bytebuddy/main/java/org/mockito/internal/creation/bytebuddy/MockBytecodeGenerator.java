@@ -60,9 +60,25 @@ class MockBytecodeGenerator {
     // TODO inspect naming strategy (for OSGI, signed package, java.* (and bootstrap classes), etc...)
     private String nameFor(Class<?> type) {
         String typeName = type.getName();
-        if (typeName.startsWith("java.") || (type.getPackage() != null && type.getPackage().isSealed())) {
+        if (isComingFromJDK(type)
+                || isComingFromSignedJar(type)
+                || isComingFromSealedPackage(type)) {
             typeName = "codegen." + typeName;
         }
         return String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
+    }
+
+    private boolean isComingFromJDK(Class<?> type) {
+        return "Java Runtime Environment".equalsIgnoreCase(type.getPackage().getImplementationTitle())
+                || type.getName().startsWith("java.")
+                || type.getName().startsWith("javax.");
+    }
+
+    private boolean isComingFromSealedPackage(Class<?> type) {
+        return type.getPackage() != null && type.getPackage().isSealed();
+    }
+
+    private boolean isComingFromSignedJar(Class<?> type) {
+        return type.getSigners() != null;
     }
 }
