@@ -4,8 +4,6 @@
 * Commits: 40
   * 25: Brice Dutheil
   * 15: rafwin
-* Improvements: 1
-  * Allow convenient spying on abstract classes [(#92)](https://github.com/mockito/mockito/issues/92)
 * Refactorings: 1
   * Replace Internal CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
 
@@ -17,7 +15,7 @@
   * 1: Brice Dutheil
 * Improvements: 2
   * Fixes #197 : Blocks ability to use negative value for timeout() and after() method. [(#207)](https://github.com/mockito/mockito/pull/207)
-  * Mockito.after() method accepts negative timeperiods and subsequent verifications always pass [(#197)](https://github.com/mockito/mockito/issues/197)
+  * Mockito.after() method accepts negative time periods and subsequent verifications always pass [(#197)](https://github.com/mockito/mockito/issues/197)
 
 ### 2.0.7-beta (2015-04-19 18:47 UTC)
 
@@ -46,9 +44,8 @@
 * Commits: 7
   * 4: Joseph Walton
   * 3: Brice Dutheil
-* Improvements: 3
+* Improvements: 2
   * Make PropertyAndSetterInjection field sorting consistent [(#176)](https://github.com/mockito/mockito/pull/176)
-  * @InjectMocks and @Spy on same field should cause MockitoException [(#169)](https://github.com/mockito/mockito/issues/169)
   * Internal Comparator violates its general contract [(#155)](https://github.com/mockito/mockito/issues/155)
 
 ### 2.0.4-beta (2015-02-15 19:37 UTC)
