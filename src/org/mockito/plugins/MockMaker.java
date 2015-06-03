@@ -10,10 +10,10 @@ import org.mockito.mock.MockCreationSettings;
 /**
  * The facility to create mocks.
  *
- * <p>By default, an internal cglib/asm/objenesis based implementation is used.</p>
+ * <p>By default, an internal byte-buddy/asm/objenesis based implementation is used.</p>
  *
  * <p>{@code MockMaker} is an extension point that makes it possible to use custom dynamic proxies
- * and avoid using the default cglib/asm/objenesis implementation.
+ * and avoid using the default byte-buddy/asm/objenesis implementation.
  * For example, the android users can use a MockMaker that can work with Dalvik virtual machine
  * and hence bring Mockito to android apps developers.</p>
  *
@@ -22,10 +22,17 @@ import org.mockito.mock.MockCreationSettings;
  * <p>Suppose you wrote an extension to create mocks with some <em>Awesome</em> library, in order to tell
  * Mockito to use it you need to put in your <strong>classpath</strong>:
  * <ol style="list-style-type: lower-alpha">
- *     <li>The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code> that extends the <code>MockMaker</code>.</li>
- *     <li>A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
- *     exactly a <strong>one</strong> line with the qualified name: <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- * </ol></p>
+ *     <li>
+ *         The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code> that
+ *         extends the <code>MockMaker</code>.
+ *     </li>
+ *     <li>
+ *         A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
+ *         exactly a <strong>one</strong> line with the qualified name:
+ *         <code>org.awesome.mockito.AwesomeMockMaker</code>.
+*      </li>
+ * </ol>
+ * </p>
  *
  * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
  * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
