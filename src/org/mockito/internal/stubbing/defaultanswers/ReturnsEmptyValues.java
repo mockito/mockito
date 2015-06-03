@@ -5,13 +5,6 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
-import org.mockito.internal.util.Primitives;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.mock.MockName;
-import org.mockito.stubbing.Answer;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +20,12 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.ObjectMethodsGuru;
+import org.mockito.internal.util.Primitives;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.mock.MockName;
+import org.mockito.stubbing.Answer;
 
 /**
  * Default answer of every Mockito mock.
@@ -35,7 +34,7 @@ import java.util.TreeSet;
  *  Returns appropriate primitive for primitive-returning methods
  * </li>
  * <li>
- *  Returns consistent values for primitive wrapper classes (e.g. int-returning method retuns 0 <b>and</b> Integer-returning method returns 0, too)
+ *  Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
  * </li>
  * <li>
  *  Returns empty collection for collection-returning methods (works for most commonly used collection types)
@@ -83,8 +82,10 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (Primitives.isPrimitiveOrWrapper(type)) {
             return Primitives.defaultValueForPrimitiveOrWrapper(type);
-        //new instances are used instead of Collections.emptyList(), etc.
-        //to avoid UnsupportedOperationException if code under test modifies returned collection
+            //new instances are used instead of Collections.emptyList(), etc.
+            //to avoid UnsupportedOperationException if code under test modifies returned collection
+        } else if (type == Iterable.class) {
+            return new ArrayList<Object>(0);
         } else if (type == Collection.class) {
             return new LinkedList<Object>();
         } else if (type == Set.class) {
@@ -114,8 +115,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<Object, Object>();
         }
-        // TODO return empty Iterable ; see issue 175
-
         //Let's not care about the rest of collections.
         return null;
     }
