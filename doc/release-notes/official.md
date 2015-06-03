@@ -6,6 +6,8 @@
   * 15: rafwin
 * Improvements: 1
   * Allow convenient spying on abstract classes [(#92)](https://github.com/mockito/mockito/issues/92)
+* Refactorings: 1
+  * Replace Internal CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
 
 ### 2.0.8-beta (2015-05-13 15:05 UTC)
 
