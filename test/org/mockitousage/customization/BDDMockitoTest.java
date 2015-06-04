@@ -7,6 +7,7 @@ package org.mockitousage.customization;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -223,15 +224,31 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
+    public void shouldValidateThatMockDidNotHaveAnyInteractions() {
+
+        then(mock).shouldHaveZeroInteractions();
+    }
+
+    @Test(expected = NoInteractionsWanted.class)
+    public void shouldFailWhenMockHadUnwantedInteractions() {
+
+        mock.booleanObjectReturningMethod();
+
+        then(mock).shouldHaveZeroInteractions();
+    }
+
+    @Test
     public void shouldPassFluentBddScenario() {
 
         Bike bike = new Bike();
         Person person = mock(Person.class);
+        Police police = mock(Police.class);
 
         person.ride(bike);
         person.ride(bike);
 
         then(person).should(times(2)).ride(bike);
+        then(police).shouldHaveZeroInteractions();
     }
 
     static class Person {
@@ -240,6 +257,10 @@ public class BDDMockitoTest extends TestBase {
     }
 
     static class Bike {
+
+    }
+
+    static class Police {
 
     }
 }
