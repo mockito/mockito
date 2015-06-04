@@ -57,6 +57,7 @@ import org.mockito.verification.VerificationMode;
  *   person.ride(bike);
  *
  *   then(person).should(times(2)).ride(bike);
+ *   then(police).shouldHaveZeroInteractions();
  * </code></pre>
  *
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
@@ -229,6 +230,12 @@ public class BDDMockito extends Mockito {
          * @since 1.10.5
          */
         T should(VerificationMode mode);
+
+        /**
+         * @see #verifyZeroInteractions(Object...)
+         * @since 2.0.0
+         */
+        void shouldHaveZeroInteractions();
     }
 
     static class ThenImpl<T> implements Then<T> {
@@ -253,6 +260,14 @@ public class BDDMockito extends Mockito {
          */
         public T should(VerificationMode mode) {
             return verify(mock, mode);
+        }
+
+        /**
+         * @see #verifyZeroInteractions(Object...)
+         * @since 2.0.0
+         */
+        public void shouldHaveZeroInteractions() {
+            verifyZeroInteractions(mock);
         }
     }
 
