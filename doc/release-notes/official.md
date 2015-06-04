@@ -3,7 +3,10 @@
 * Authors: 1
 * Commits: 3
   * 3: Brice Dutheil
-* No notable improvements. See the commits for detailed changes.
+* Improvements: 1
+  * Empty values can return an empty iterable [(#210)](https://github.com/mockito/mockito/pull/210)
+* Fixes: 1
+  * Mockito could not mock types in signed jars [(#218)](https://github.com/mockito/mockito/pull/218)
 
 ### 2.0.10-beta (2015-06-03 12:37 UTC)
 
