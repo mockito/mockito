@@ -1,3 +1,15 @@
+### 2.0.12-beta (2015-06-04 17:01 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Brice Dutheil
+  * 1: Michal Kordas
+  * 1: Simen Bekkhus
+* Improvements: 3
+  * Fixes #212 : Add shouldHaveZeroInteractions as BDD version of verifyZeroInteractions [(#221)](https://github.com/mockito/mockito/pull/221)
+  * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+  * Add BDD version of verifyZeroInteractions() [(#212)](https://github.com/mockito/mockito/issues/212)
+
 ### 2.0.11-beta (2015-06-03 23:57 UTC)
 
 * Authors: 1
