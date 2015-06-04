@@ -69,6 +69,9 @@ class MockBytecodeGenerator {
     }
 
     private boolean isComingFromJDK(Class<?> type) {
+        // Comes from the manifest entry :
+        // Implementation-Title: Java Runtime Environment
+        // This entry is not necessarily present in every jar of the JDK
         return type.getPackage() != null && "Java Runtime Environment".equalsIgnoreCase(type.getPackage().getImplementationTitle())
                 || type.getName().startsWith("java.")
                 || type.getName().startsWith("javax.");
