@@ -59,7 +59,19 @@ import org.mockito.verification.VerificationMode;
  *   then(person).should(times(2)).ride(bike);
  *   then(police).shouldHaveZeroInteractions();
  * </code></pre>
+ * <p>
+ * It is also possible to do BDD style {@link InOrder} verification:
+ * <pre class="code"><code class="java">
+ *   InOrder inOrder = inOrder(person);
  *
+ *   person.drive(car);
+ *   person.ride(bike);
+ *   person.ride(bike);
+ *
+ *   then(person).should(inOrder).drive(car);
+ *   then(person).should(inOrder, times(2)).ride(bike);
+ * </code></pre>
+ * <p>
  * One of the purposes of BDDMockito is also to show how to tailor the mocking syntax to a different programming style.
  *
  * @since 1.8.0
@@ -232,8 +244,20 @@ public class BDDMockito extends Mockito {
         T should(VerificationMode mode);
 
         /**
+         * @see InOrder#verify(Object)
+         * @since 2.0
+         */
+        T should(InOrder inOrder);
+
+        /**
+         * @see InOrder#verify(Object, VerificationMode)
+         * @since 2.0
+         */
+        T should(InOrder inOrder, VerificationMode mode);
+
+        /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.0
          */
         void shouldHaveZeroInteractions();
     }
@@ -263,8 +287,24 @@ public class BDDMockito extends Mockito {
         }
 
         /**
+         * @see InOrder#verify(Object)
+         * @since 2.0
+         */
+        public T should(InOrder inOrder) {
+            return inOrder.verify(mock);
+        }
+
+        /**
+         * @see InOrder#verify(Object, VerificationMode)
+         * @since 2.0
+         */
+        public T should(InOrder inOrder, VerificationMode mode) {
+            return inOrder.verify(mock, mode);
+        }
+
+        /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.0
          */
         public void shouldHaveZeroInteractions() {
             verifyZeroInteractions(mock);

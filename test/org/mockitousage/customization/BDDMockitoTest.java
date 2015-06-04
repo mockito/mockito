@@ -5,9 +5,11 @@
 package org.mockitousage.customization;
 
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -238,6 +240,38 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
+    public void shouldPassForInteractionsThatHappenedInCorrectOrder() {
+
+        InOrder inOrder = inOrder(mock);
+
+        mock.booleanObjectReturningMethod();
+        mock.arrayReturningMethod();
+
+        then(mock).should(inOrder).booleanObjectReturningMethod();
+        then(mock).should(inOrder).arrayReturningMethod();
+    }
+
+    @Test(expected = VerificationInOrderFailure.class)
+    public void shouldFailForInteractionsThatWereInWrongOrder() {
+
+        InOrder inOrder = inOrder(mock);
+
+        mock.arrayReturningMethod();
+        mock.booleanObjectReturningMethod();
+
+        then(mock).should(inOrder).booleanObjectReturningMethod();
+        then(mock).should(inOrder).arrayReturningMethod();
+    }
+
+    @Test(expected = WantedButNotInvoked.class)
+    public void shouldFailWhenCheckingOrderOfInteractionsThatDidNotHappen() {
+
+        InOrder inOrder = inOrder(mock);
+
+        then(mock).should(inOrder).booleanObjectReturningMethod();
+    }
+
+    @Test
     public void shouldPassFluentBddScenario() {
 
         Bike bike = new Bike();
@@ -251,16 +285,55 @@ public class BDDMockitoTest extends TestBase {
         then(police).shouldHaveZeroInteractions();
     }
 
+    @Test
+    public void shouldPassFluentBddScenarioWithOrderedVerification() {
+
+        Bike bike = new Bike();
+        Car car = new Car();
+        Person person = mock(Person.class);
+        InOrder inOrder = inOrder(person);
+
+        person.drive(car);
+        person.ride(bike);
+        person.ride(bike);
+
+        then(person).should(inOrder).drive(car);
+        then(person).should(inOrder, times(2)).ride(bike);
+    }
+
+    @Test
+    public void shouldPassFluentBddScenarioWithOrderedVerificationForTwoMocks() {
+
+        Car car = new Car();
+        Person person = mock(Person.class);
+        Police police = mock(Police.class);
+        InOrder inOrder = inOrder(person, police);
+
+        person.drive(car);
+        person.drive(car);
+        police.chase(car);
+
+        then(person).should(inOrder, times(2)).drive(car);
+        then(police).should(inOrder).chase(car);
+    }
+
     static class Person {
 
         void ride(Bike bike) {}
+
+        void drive(Car car) {}
     }
 
     static class Bike {
 
     }
 
+    static class Car {
+
+    }
+
     static class Police {
 
+        void chase(Car car) {}
     }
 }
