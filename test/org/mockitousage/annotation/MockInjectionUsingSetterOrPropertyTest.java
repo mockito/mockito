@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @InjectMocks private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
     @InjectMocks private SubUnderTesting subUnderTest = new SubUnderTesting();
     @InjectMocks private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
-    @InjectMocks private OtherSuperUnderTesting otherSuperUnderTesting = new OtherSuperUnderTesting();
+    @InjectMocks private HasTwoFieldsWithSameType hasTwoFieldsWithSameType = new HasTwoFieldsWithSameType();
 
     private BaseUnderTesting baseUnderTestingInstance = new BaseUnderTesting();
     @InjectMocks private BaseUnderTesting initializedBase = baseUnderTestingInstance;
@@ -41,8 +42,8 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Mock private List list;
     @Mock private Set histogram1;
     @Mock private Set histogram2;
-    @Mock private A candidate2;
-    
+    @Mock private IMethods candidate2;
+
     @Spy private TreeSet searchTree = new TreeSet();
     private MockUtil mockUtil = new MockUtil();
 
@@ -108,12 +109,12 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     }
 
     @Test
-	public void shouldInsertFieldWithCorrectNameWhenMultipleTypesAvailable() {
-		MockitoAnnotations.initMocks(this);
-		assertNull(otherSuperUnderTesting.candidate1);
-		assertNotNull(otherSuperUnderTesting.candidate2);
-	}
-    
+    public void should_insert_into_field_with_matching_name_when_multiple_fields_of_same_type_exists_in_injectee() {
+        MockitoAnnotations.initMocks(this);
+        assertNull("not injected, no mock named 'candidate1'", hasTwoFieldsWithSameType.candidate1);
+        assertNotNull("injected, there's a mock named 'candidate2'", hasTwoFieldsWithSameType.candidate2);
+    }
+
     @Test
     public void should_instantiate_inject_mock_field_if_possible() throws Exception {
         assertNotNull(notInitializedBase);
@@ -167,15 +168,9 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
         public Set getHistogram1() { return histogram1; }
         public Set getHistogram2() { return histogram2; }
     }
-    
-    static class OtherSuperUnderTesting {
-		private A candidate1;
 
-		private A candidate2;
-	}
-
-	interface A {
-	}
-
-    
+    static class HasTwoFieldsWithSameType {
+        private IMethods candidate1;
+        private IMethods candidate2;
+    }
 }
