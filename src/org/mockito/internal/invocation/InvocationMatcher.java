@@ -5,23 +5,21 @@
 
 package org.mockito.internal.invocation;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.matchers.MatcherDecorator;
-import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.*;
+
 @SuppressWarnings("unchecked")
-public class InvocationMatcher implements DescribedInvocation, CapturesArgumensFromInvocation, Serializable {
+public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;
@@ -35,7 +33,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
             this.matchers = matchers;
         }
     }
-    
+
     public InvocationMatcher(Invocation invocation) {
         this(invocation, Collections.<Matcher>emptyList());
     }
@@ -43,15 +41,15 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
     public Method getMethod() {
         return invocation.getMethod();
     }
-    
+
     public Invocation getInvocation() {
         return this.invocation;
     }
-    
+
     public List<Matcher> getMatchers() {
         return this.matchers;
     }
-    
+
     public String toString() {
         return new PrintSettings().print(matchers, invocation);
     }
@@ -71,13 +69,13 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
     }
 
     /**
-     * similar means the same method name, same mock, unverified 
+     * similar means the same method name, same mock, unverified
      * and: if arguments are the same cannot be overloaded
      */
     public boolean hasSimilarMethod(Invocation candidate) {
         String wantedMethodName = getMethod().getName();
         String currentMethodName = candidate.getMethod().getName();
-        
+
         final boolean methodNameEquals = wantedMethodName.equals(currentMethodName);
         final boolean isUnverified = !candidate.isVerified();
         final boolean mockIsTheSame = getInvocation().getMock() == candidate.getMock();
@@ -97,67 +95,79 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArgumensF
         //sometimes java generates forwarding methods when generics are in play see JavaGenericsForwardingMethodsTest
         Method m1 = invocation.getMethod();
         Method m2 = candidate.getMethod();
-        
+
         if (m1.getName() != null && m1.getName().equals(m2.getName())) {
             /* Avoid unnecessary cloning */
             Class[] params1 = m1.getParameterTypes();
             Class[] params2 = m2.getParameterTypes();
             if (params1.length == params2.length) {
                 for (int i = 0; i < params1.length; i++) {
-                if (params1[i] != params2[i])
-                    return false;
+                    if (params1[i] != params2[i])
+                        return false;
                 }
                 return true;
             }
         }
         return false;
     }
-    
+
     public Location getLocation() {
         return invocation.getLocation();
     }
 
     public void captureArgumentsFrom(Invocation invocation) {
-        for (int position = 0; position < matchers.size(); position++) {
+        captureRegularArguments(invocation);
+        captureVarargsPart(invocation);
+    }
+
+    private void captureRegularArguments(Invocation invocation) {
+        for (int position = 0; position < regularArgumentsSize(invocation); position++) {
             Matcher m = matchers.get(position);
-            if (m instanceof CapturesArguments && invocation.getRawArguments().length > position) {
-                //TODO SF - this whole lot can be moved captureFrom implementation
-                if(isVariableArgument(invocation, position) && isVarargMatcher(m)) {
-                    Object array = invocation.getRawArguments()[position];
-                    for (int i = 0; i < Array.getLength(array); i++) {
-                        ((CapturesArguments) m).captureFrom(Array.get(array, i));
-                    }
-                    //since we've captured all varargs already, it does not make sense to process other matchers.
-                    return;
-                } else {
-                    ((CapturesArguments) m).captureFrom(invocation.getRawArguments()[position]);
+            if (m instanceof CapturesArguments) {
+                ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
+            }
+        }
+    }
+
+    private void captureVarargsPart(Invocation invocation) {
+        if (!invocation.getMethod().isVarArgs()) {
+            return;
+        }
+        int indexOfVararg = invocation.getRawArguments().length - 1;
+        for (Matcher m : uniqueMatcherSet(indexOfVararg)) {
+            if (m instanceof CapturesArguments) {
+                Object rawArgument = invocation.getRawArguments()[indexOfVararg];
+                for (int i = 0; i < Array.getLength(rawArgument); i++) {
+                    ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
                 }
             }
         }
     }
 
-    private boolean isVarargMatcher(Matcher matcher) {
-        Matcher actualMatcher = matcher;
-        if (actualMatcher instanceof MatcherDecorator) {
-            actualMatcher = ((MatcherDecorator) actualMatcher).getActualMatcher();
-        }
-        return actualMatcher instanceof VarargMatcher;
+    private int regularArgumentsSize(Invocation invocation) {
+        return invocation.getMethod().isVarArgs() ?
+                invocation.getRawArguments().length - 1 // ignores vararg holder array
+                : matchers.size();
     }
 
-    private boolean isVariableArgument(Invocation invocation, int position) {
-        return invocation.getRawArguments().length - 1 == position
-                && invocation.getRawArguments()[position] != null
-                && invocation.getRawArguments()[position].getClass().isArray()
-                && invocation.getMethod().isVarArgs();
+    private Set<Matcher> uniqueMatcherSet(int indexOfVararg) {
+        HashSet<Matcher> set = new HashSet<Matcher>();
+        for (int position = indexOfVararg; position < matchers.size(); position++) {
+            Matcher matcher = matchers.get(position);
+            if (matcher instanceof MatcherDecorator) {
+                set.add(((MatcherDecorator) matcher).getActualMatcher());
+            } else {
+                set.add(matcher);
+            }
+        }
+        return set;
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
         LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
-
         for (Invocation i : invocations) {
             out.add(new InvocationMatcher(i));
         }
-
         return out;
     }
 }

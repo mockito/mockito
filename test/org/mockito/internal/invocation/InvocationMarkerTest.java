@@ -35,7 +35,7 @@ public class InvocationMarkerTest extends TestBase {
         InvocationMarker marker = new InvocationMarker();
         Invocation i = new InvocationBuilder().toInvocation();
         final ObjectBox box = new ObjectBox();
-        CapturesArgumensFromInvocation c = new CapturesArgumensFromInvocation() {
+        CapturesArgumentsFromInvocation c = new CapturesArgumentsFromInvocation() {
             public void captureArgumentsFrom(Invocation i) {
                 box.put(i);
             }};
