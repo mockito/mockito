@@ -5,7 +5,6 @@
 
 package org.mockitousage.matchers;
 
-import org.junit.Assert;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -176,9 +175,7 @@ public class CapturingArgumentsTest extends TestBase {
         try {
             argument.getValue();
             fail();
-        } catch (MockitoException e) {
-            Assert.assertTrue(true);
-        }
+        } catch (MockitoException expected) { }
     }
     
     @Test

@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.List;
-
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+
+import java.util.List;
 
 public class InvocationMarker {
 
@@ -17,14 +17,14 @@ public class InvocationMarker {
         }
     }
 
-	public void markVerified(Invocation invocation, CapturesArgumentsFromInvocation wanted) {
-		invocation.markVerified();
-		wanted.captureArgumentsFrom(invocation);
-	}
+    public void markVerified(Invocation invocation, CapturesArgumentsFromInvocation wanted) {
+        invocation.markVerified();
+        wanted.captureArgumentsFrom(invocation);
+    }
 
     public void markVerifiedInOrder(List<Invocation> chunk, CapturesArgumentsFromInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);
-        
+
         for (Invocation i : chunk) {
             context.markVerified(i);
         }
