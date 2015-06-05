@@ -53,8 +53,8 @@ public class DefaultMockingDetailsTest {
 
     @Test
     public void should_get_extra_interfaces() throws Exception {
-        mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
-        assertEquals(setOf(Observer.class, List.class), mockingDetails(bar).getExtraInterfaces());
+        Bar loup = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
+        assertEquals(setOf(Observer.class, List.class), mockingDetails(loup).getExtraInterfaces());
     }
 
     @Test(expected = NotAMockException.class)
