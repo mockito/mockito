@@ -1,3 +1,25 @@
+### 2.0.12-beta (2015-06-04 17:01 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Brice Dutheil
+  * 1: Michal Kordas
+  * 1: Simen Bekkhus
+* Improvements: 3
+  * Fixes #212 : Add shouldHaveZeroInteractions as BDD version of verifyZeroInteractions [(#221)](https://github.com/mockito/mockito/pull/221)
+  * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+  * Add BDD version of verifyZeroInteractions() [(#212)](https://github.com/mockito/mockito/issues/212)
+
+### 2.0.11-beta (2015-06-03 23:57 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Brice Dutheil
+* Improvements: 1
+  * Empty values can return an empty iterable [(#210)](https://github.com/mockito/mockito/pull/210)
+* Fixes: 1
+  * Mockito could not mock types in signed jars [(#218)](https://github.com/mockito/mockito/pull/218)
+
 ### 2.0.10-beta (2015-06-03 12:37 UTC)
 
 * Authors: 1
