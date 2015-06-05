@@ -146,43 +146,26 @@ public class BDDMockito extends Mockito {
             this.mockitoOngoingStubbing = ongoingStubbing;
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#willAnswer(Answer)
-         */
         public BDDMyOngoingStubbing<T> willAnswer(Answer<?> answer) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenAnswer(answer));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#will(Answer)
-         */
         public BDDMyOngoingStubbing<T> will(Answer<?> answer) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.then(answer));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#willReturn(java.lang.Object)
-         */
         public BDDMyOngoingStubbing<T> willReturn(T value) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#willReturn(java.lang.Object, T[])
-         */
         public BDDMyOngoingStubbing<T> willReturn(T value, T... values) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value, values));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#willThrow(java.lang.Throwable[])
-         */
         public BDDMyOngoingStubbing<T> willThrow(Throwable... throwables) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwables));
         }
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDMyOngoingStubbing#willThrow(java.lang.Class[])
-         */
+
         public BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable>... throwableClasses) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwableClasses));
         }
@@ -229,7 +212,7 @@ public class BDDMockito extends Mockito {
      *
      * @since 1.10.5
      */
-    public static interface Then<T> {
+    public interface Then<T> {
 
         /**
          * @see #verify(Object)
@@ -262,6 +245,10 @@ public class BDDMockito extends Mockito {
         void shouldHaveZeroInteractions();
     }
 
+    /**
+     * @deprecated not part of the public API, use {@link Then} instead.
+     */
+    @Deprecated
     static class ThenImpl<T> implements Then<T> {
 
         private final T mock;
@@ -371,51 +358,30 @@ public class BDDMockito extends Mockito {
             this.mockitoStubber = mockitoStubber;
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#given(java.lang.Object)
-         */
         public <T> T given(T mock) {
             return mockitoStubber.when(mock);
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willAnswer(Answer)
-         */
         public BDDStubber willAnswer(Answer answer) {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willNothing()
-         */
         public BDDStubber willNothing() {
             return new BDDStubberImpl(mockitoStubber.doNothing());
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willReturn(java.lang.Object)
-         */
         public BDDStubber willReturn(Object toBeReturned) {
             return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willThrow(java.lang.Throwable)
-         */
         public BDDStubber willThrow(Throwable toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willThrow(Class)
-         */
         public BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        /* (non-Javadoc)
-         * @see BDDMockito.BDDStubber#willCallRealMethod()
-         */
         public BDDStubber willCallRealMethod() {
             return new BDDStubberImpl(mockitoStubber.doCallRealMethod());
         }
