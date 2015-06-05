@@ -99,10 +99,10 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
 
     private boolean injectMockCandidates(Class<?> awaitingInjectionClazz, Set<Object> mocks, Object instance) {
-        boolean injectionOccurred = false;
+        boolean injectionOccurred;
         List<Field> orderedInstanceFields = orderedInstanceFieldsFrom(awaitingInjectionClazz);
         // pass 1
-        injectionOccurred |= injectMockCandidatesOnFields(mocks, instance, injectionOccurred, orderedInstanceFields);
+        injectionOccurred = injectMockCandidatesOnFields(mocks, instance, false, orderedInstanceFields);
         // pass 2
         injectionOccurred |= injectMockCandidatesOnFields(mocks, instance, injectionOccurred, orderedInstanceFields);
         return injectionOccurred;
