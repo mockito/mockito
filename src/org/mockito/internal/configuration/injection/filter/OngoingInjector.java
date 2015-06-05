@@ -7,7 +7,7 @@ package org.mockito.internal.configuration.injection.filter;
 /**
  * Allow the ongoing injection of a mock candidate.
  */
-public interface OngoingInjecter {
+public interface OngoingInjector {
 
     /**
      * Inject the mock.
@@ -20,4 +20,12 @@ public interface OngoingInjecter {
      */
     Object thenInject();
 
+    /**
+     * Injector that will do nothing, and will return <code>null</code> as no mocks will be injected
+     */
+    OngoingInjector nop = new OngoingInjector() {
+        public Object thenInject() {
+            return null;
+        }
+    };
 }

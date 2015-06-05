@@ -1,17 +1,9 @@
 package org.mockito.internal.util.reflection;
 
-import org.fest.assertions.Condition;
 import org.junit.Test;
-import org.mockito.internal.util.reflection.SuperTypesLastSorter;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -21,10 +13,8 @@ public class SuperTypesLastSorterTest {
      * A Comparator that behaves like the old one, so the existing tests
      * continue to work.
      */
-    private static Comparator<Field> cmp = new Comparator<Field>()
-    {
-        public int compare(Field o1, Field o2)
-        {
+    private static Comparator<Field> cmp = new Comparator<Field>() {
+        public int compare(Field o1, Field o2) {
             if (o1.equals(o2)) {
                 return 0;
             }
@@ -108,14 +98,12 @@ public class SuperTypesLastSorterTest {
     }
 
     @Test
-    public void fields_sort_consistently_when_interfaces_are_included() throws NoSuchFieldException
-    {
+    public void fields_sort_consistently_when_interfaces_are_included() throws NoSuchFieldException {
         assertSortConsistently(field("iterableA"), field("numberA"), field("integerA"));
     }
 
     @Test
-    public void fields_sort_consistently_when_names_and_type_indicate_different_order() throws NoSuchFieldException
-    {
+    public void fields_sort_consistently_when_names_and_type_indicate_different_order() throws NoSuchFieldException {
         assertSortConsistently(field("xNumber"), field("yIterable"), field("zInteger"));
     }
 
@@ -123,8 +111,7 @@ public class SuperTypesLastSorterTest {
      * Assert that these fields sort in the same order no matter which order
      * they start in.
      */
-    private static void assertSortConsistently(Field a, Field b, Field c)
-    {
+    private static void assertSortConsistently(Field a, Field b, Field c) {
         Field[][] initialOrderings = {
                 {a, b, c},
                 {a, c, b},

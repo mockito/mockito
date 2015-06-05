@@ -9,11 +9,10 @@ import java.util.Collection;
 import java.util.List;
 
 public interface MockCandidateFilter {
-
-    OngoingInjecter filterCandidate(
+    OngoingInjector filterCandidate(
             Collection<Object> mocks,
-            Field fieldToBeInjected,
-            List<Field> fields, Object instance
+            Field candidateFieldToBeInjected,
+            List<Field> allRemainingCandidateFields,
+            Object injectee
     );
-
 }
