@@ -23,63 +23,29 @@ task mockitoJavadoc(type: Javadoc) {
     options.noIndex = false
     options.noNavBar = false
     options.noTree = false
-//    options.stylesheetFile file("src/javadoc/stylesheet.css")
     options.links('http://docs.oracle.com/javase/8/docs/api/')
-//    options.top = '<some mockito html>'
+    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
+    options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
+    options.bottom("""
+        <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.js"></script>
+        <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
+        <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
 
-    options.header("""
-<em id="mockito-version-header-javadoc7"><strong>Mockito ${project.version} API</strong></em>
-
-<!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
-<script type="text/javascript">
-  var shBaseURL = "{@docRoot}/js/sh-2.1.382/";
-</script>
-<script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
-<script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
-
-<script type="text/javascript">
-  /* Apply beautification of code */
-  var usingOldIE = false;
-  if(\$.browser.msie && parseInt(\$.browser.version) < 9) usingOldIE = true;
-
-  if(!usingOldIE) {
-      \$.beautyOfCode.init({
-        theme : "Eclipse",
-        brushes: ["Java"]
-      });
-
-      var version = "${project.version}";
-
-      jQuery.fn.removeAttributes = function() {
-        return this.each(function() {
-          var attributes = \$.map(this.attributes, function(item) {
-            return item.name;
-          });
-          var img = \$(this);
-          \$.each(attributes, function(i, item) {
-            img.removeAttr(item);
-          });
-        });
-      };
-
-      \$(function() {
-        /* Add name & version to header for Javadoc 1.6 */
-        \$("td.NavBarCell1[colspan=2]").each(function(index, element) {
-          var jqueryTD = \$(element);
-          jqueryTD.after(
-            \$("<td><em><strong>Mockito ${project.version} API</strong></em></td>").attr("class","NavBarCell1").attr("id","mockito-version-header-javadoc6")
-          );
-          jqueryTD.removeAttr("colspan");
-        });
-        /* Cleans up mess with Javadoc 1.7 */
-        \$("body > h1").removeAttributes().attr("class", "bar").attr("title", "Mockito ${project.version} API");
-        /* Cleans up mess with Javadoc 1.7 with Javadoc 1.6 */
-        \$("td em#mockito-version-header-javadoc7").remove();
-      });
-  }
-</script>
-""")
-    options.bottom = 'Mockito, MIT License'
+        <script type="text/javascript">
+          var usingOldIE = \$.browser.msie && parseInt(\$.browser.version) < 9;
+          if(!usingOldIE) {
+              \$("head").append("<link rel=\\"shortcut icon\\" href=\\"/favicon.ico?v=cafebabe\\">")
+              \$("head", window.parent.document).append("<link rel=\\"shortcut icon\\" href=\\"/favicon.ico?v=cafebabe\\">")
+              hljs.initHighlightingOnLoad();
+              injectProjectVersionForJavadocJDK6("Mockito ${project.version} API",
+                                                 "em#mockito-version-header-javadoc7-header",
+                                                 "em#mockito-version-header-javadoc7-footer");
+          }
+        </script>
+    """)
+//    options.stylesheetFile file("src/javadoc/stylesheet.css")
+//    options.addStringOption('top', 'some html')
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
