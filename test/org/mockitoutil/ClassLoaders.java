@@ -358,7 +358,8 @@ public abstract class ClassLoaders {
         }
 
         private String classNameFor(File root, File file) {
-            String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).replace('/', '.');
+            String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).
+                    replace(File.separatorChar, '.');
             return temp.subSequence(0, temp.indexOf(".class")).toString();
         }
 
