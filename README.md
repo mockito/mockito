@@ -1,4 +1,4 @@
-![Mockito](http://docs.mockito.googlecode.com/hg/latest/org/mockito/logo.jpg)
+![Mockito](https://raw.githubusercontent.com/mockito/mockito/master/javadoc/org/mockito/logo.png)
   
 Tasty mocking framework for unit tests in Java
 
@@ -19,12 +19,12 @@ Mockito has an automated release system, which imposed some change how the versi
 major.minor.build-tag
 ```
 
-| number | meaning                                                                    |
-| ------ | -------------------------------------------------------------------------- |
-| major  | major version, with most probably incompatible change in API and behavior  |
-| minor  | minor version, important enough change to bump this number                 |
-| build  | a released build number incremented automatically a pull request is merged |
-| tag    | will probably be `-beta` or just nothing                                   |
+| number | meaning                                                                               |
+| ------ | ------------------------------------------------------------------------------------- |
+| major  | major version, with most probably incompatible change in API and behavior             |
+| minor  | minor version, important enough change to bump this number                            |
+| build  | a released build number incremented automatically a pull request is merged            |
+| tag    | will probably be `-beta` or just nothing (during beta, breaking changes are expected) |
 
 ## Looking for support
 

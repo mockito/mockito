@@ -18,7 +18,7 @@ import org.mockito.verification.*;
 import org.mockito.junit.*;
 
 /**
- * <p align="left"><img src="logo.jpg"/></p>
+ * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
  * Mockito library enables mocks creation, verification and stubbing.
  * <p>
  * This javadoc content is also available on the <a href="http://mockito.org">http://mockito.org</a> web page.
