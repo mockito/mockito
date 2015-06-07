@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.util.collections;
 
-import org.mockito.internal.util.Checks;
+import static java.lang.reflect.Array.newInstance;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static java.lang.reflect.Array.*;
+import org.mockito.internal.util.Checks;
 
 /**
  * hashCode and equals safe hash based set.
@@ -29,6 +29,7 @@ import static java.lang.reflect.Array.*;
  *
  * @see HashCodeAndEqualsMockWrapper
  */
+@SuppressWarnings("unchecked")
 public class HashCodeAndEqualsSafeSet implements Set<Object> {
 
     private final HashSet<HashCodeAndEqualsMockWrapper> backingHashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
@@ -59,15 +60,15 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return backingHashSet.isEmpty();
     }
 
-    public boolean contains(Object mock) {
+    public boolean contains(final Object mock) {
         return backingHashSet.contains(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
-    public boolean add(Object mock) {
+    public boolean add(final Object mock) {
         return backingHashSet.add(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
-    public boolean remove(Object mock) {
+    public boolean remove(final Object mock) {
         return backingHashSet.remove(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
@@ -79,11 +80,11 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         throw new CloneNotSupportedException();
     }
 
-    @Override public boolean equals(Object o) {
+    @Override public boolean equals(final Object o) {
         if (!(o instanceof HashCodeAndEqualsSafeSet)) {
             return false;
         }
-        HashCodeAndEqualsSafeSet that = (HashCodeAndEqualsSafeSet) o;
+        final HashCodeAndEqualsSafeSet that = (HashCodeAndEqualsSafeSet) o;
         return backingHashSet.equals(that.backingHashSet);
     }
 
@@ -95,8 +96,8 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return unwrapTo(new Object[size()]);
     }
 
-    private <T> T[] unwrapTo(T[] array) {
-        Iterator<Object> iterator = iterator();
+    private <T> T[] unwrapTo(final T[] array) {
+        final Iterator<Object> iterator = iterator();
         for (int i = 0, objectsLength = array.length; i < objectsLength; i++) {
             if (iterator.hasNext()) {
                 array[i] = (T) iterator.next();
@@ -106,33 +107,33 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
     }
 
 
-    public <T> T[] toArray(T[] typedArray) {
-        T[] array = typedArray.length >= size() ? typedArray :
-                (T[]) newInstance(typedArray.getClass().getComponentType(), size());
+    public <T> T[] toArray(final T[] typedArray) {
+        final T[] array = typedArray.length >= size() ? typedArray
+                : (T[]) newInstance(typedArray.getClass().getComponentType(), size());
         return unwrapTo(array);
     }
 
-    public boolean removeAll(Collection<?> mocks) {
+    public boolean removeAll(final Collection<?> mocks) {
         return backingHashSet.removeAll(asWrappedMocks(mocks));
     }
 
-    public boolean containsAll(Collection<?> mocks) {
+    public boolean containsAll(final Collection<?> mocks) {
         return backingHashSet.containsAll(asWrappedMocks(mocks));
     }
 
-    public boolean addAll(Collection<?> mocks) {
+    public boolean addAll(final Collection<?> mocks) {
         return backingHashSet.addAll(asWrappedMocks(mocks));
     }
 
-    public boolean retainAll(Collection<?> mocks) {
+    public boolean retainAll(final Collection<?> mocks) {
         return backingHashSet.retainAll(asWrappedMocks(mocks));
     }
 
-    private HashSet<HashCodeAndEqualsMockWrapper> asWrappedMocks(Collection<?> mocks) {
+    private HashSet<HashCodeAndEqualsMockWrapper> asWrappedMocks(final Collection<?> mocks) {
         Checks.checkNotNull(mocks, "Passed collection should notify() be null");
-        HashSet<HashCodeAndEqualsMockWrapper> hashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
-        for (Object mock : mocks) {
-            assert ! (mock instanceof HashCodeAndEqualsMockWrapper) : "WRONG";
+        final HashSet<HashCodeAndEqualsMockWrapper> hashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
+        for (final Object mock : mocks) {
+            assert !(mock instanceof HashCodeAndEqualsMockWrapper) : "WRONG";
             hashSet.add(HashCodeAndEqualsMockWrapper.of(mock));
         }
         return hashSet;
@@ -142,14 +143,14 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return backingHashSet.toString();
     }
 
-    public static HashCodeAndEqualsSafeSet of(Object... mocks) {
+    public static HashCodeAndEqualsSafeSet of(final Object... mocks) {
         return of(Arrays.asList(mocks));
     }
 
-    public static HashCodeAndEqualsSafeSet of(Iterable<Object> objects) {
-        HashCodeAndEqualsSafeSet hashCodeAndEqualsSafeSet = new HashCodeAndEqualsSafeSet();
+    public static HashCodeAndEqualsSafeSet of(final Iterable<Object> objects) {
+        final HashCodeAndEqualsSafeSet hashCodeAndEqualsSafeSet = new HashCodeAndEqualsSafeSet();
         if (objects != null) {
-            for (Object mock : objects) {
+            for (final Object mock : objects) {
                 hashCodeAndEqualsSafeSet.add(mock);
             }
         }

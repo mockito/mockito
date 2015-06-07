@@ -5,14 +5,10 @@
 
 package org.mockitousage.bugs;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 //see issue 101
 public class BridgeMethodsHitAgainTest extends TestBase {
@@ -34,14 +30,14 @@ public class BridgeMethodsHitAgainTest extends TestBase {
   @Test
   public void basicCheck() {
     Mockito.when((someSubInterface).factory()).thenReturn(extendedFactory);
-    SomeInterface si = someSubInterface;
+    final SomeInterface si = someSubInterface;
     assertTrue(si.factory() != null);
   }
 
   @Test
   public void checkWithExtraCast() {
     Mockito.when(((SomeInterface) someSubInterface).factory()).thenReturn(extendedFactory);
-    SomeInterface si = someSubInterface;
+    final SomeInterface si = someSubInterface;
     assertTrue(si.factory() != null);
   }
 }

@@ -4,7 +4,7 @@
  */
 package org.mockitousage.debugging;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,7 +22,7 @@ public class PrintingInvocationsDetectsUnusedStubTest extends TestBase {
         mock.giveMeSomeString("arg");
 
         //when
-        String log = NewMockito.debug().printInvocations(mock, mockTwo);
+        final String log = NewMockito.debug().printInvocations(mock, mockTwo);
 
         //then
         assertContainsIgnoringCase("unused", log);

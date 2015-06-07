@@ -9,7 +9,7 @@ import java.lang.reflect.Array;
 //stolen from hamcrest because I didn't want to have more dependency than Matcher class 
 public class Equality {
 
-    public static boolean areEqual(Object o1, Object o2) {
+    public static boolean areEqual(final Object o1, final Object o2) {
         if (o1 == o2 ) {
             return true;
     } else if (o1 == null || o2 == null) {
@@ -21,23 +21,25 @@ public class Equality {
         }
     }
 
-    static boolean areArraysEqual(Object o1, Object o2) {
+    static boolean areArraysEqual(final Object o1, final Object o2) {
         return areArrayLengthsEqual(o1, o2)
                 && areArrayElementsEqual(o1, o2);
     }
 
-    static boolean areArrayLengthsEqual(Object o1, Object o2) {
+    static boolean areArrayLengthsEqual(final Object o1, final Object o2) {
         return Array.getLength(o1) == Array.getLength(o2);
     }
 
-    static boolean areArrayElementsEqual(Object o1, Object o2) {
+    static boolean areArrayElementsEqual(final Object o1, final Object o2) {
         for (int i = 0; i < Array.getLength(o1); i++) {
-            if (!areEqual(Array.get(o1, i), Array.get(o2, i))) return false;
+            if (!areEqual(Array.get(o1, i), Array.get(o2, i))) {
+                return false;
+            }
         }
         return true;
     }
 
-    static boolean isArray(Object o) {
+    static boolean isArray(final Object o) {
         return o.getClass().isArray();
     }
 }

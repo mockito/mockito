@@ -8,11 +8,13 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.fest.assertions.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,17 +25,20 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings({ "rawtypes", "unused" })
 public class SpyAnnotationTest extends TestBase {
 
-    @Spy final List spiedList = new ArrayList();
+    @Spy
+    final List spiedList = new ArrayList();
 
-    @Spy NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
+    @Spy
+    NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
 
     @Spy
     NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
-  
-    @Rule public final ExpectedException shouldThrow = ExpectedException.none();
+
+    @Rule
+    public final ExpectedException shouldThrow = ExpectedException.none();
 
     @Test
     public void should_init_spy_by_instance() throws Exception {
@@ -53,14 +58,15 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_prevent_spying_on_interfaces() throws Exception {
         class WithSpy {
-            @Spy List<String> list;
+            @Spy
+            List<String> list;
         }
 
-        WithSpy withSpy = new WithSpy();
+        final WithSpy withSpy = new WithSpy();
         try {
             MockitoAnnotations.initMocks(withSpy);
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains("is an interface and it cannot be spied on");
         }
     }
@@ -68,14 +74,15 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_allow_spying_on_interfaces_when_instance_is_concrete() throws Exception {
         class WithSpy {
-            @Spy List<String> list = new LinkedList<String>();
+            @Spy
+            List<String> list = new LinkedList<String>();
         }
 
-        WithSpy withSpy = new WithSpy();
-        //when
+        final WithSpy withSpy = new WithSpy();
+        // when
         MockitoAnnotations.initMocks(withSpy);
 
-        //then
+        // then
         verify(withSpy.list, never()).clear();
     }
 
@@ -89,11 +96,11 @@ public class SpyAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new FailingSpy());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains("0-arg constructor");
         }
     }
-    
+
     @Test
     public void should_report_when_constructor_is_explosive() throws Exception {
         class FailingSpy {
@@ -104,7 +111,7 @@ public class SpyAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new FailingSpy());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains("Unable to create mock instance");
         }
     }
@@ -112,44 +119,48 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_spy_abstract_class() throws Exception {
         class SpyAbstractClass {
-            @Spy AbstractList<String> list;
-            
-            List<String> asSingletonList(String s) {
+            @Spy
+            AbstractList<String> list;
+
+            List<String> asSingletonList(final String s) {
                 when(list.size()).thenReturn(1);
                 when(list.get(0)).thenReturn(s);
                 return list;
             }
         }
-        SpyAbstractClass withSpy = new SpyAbstractClass();
+        final SpyAbstractClass withSpy = new SpyAbstractClass();
         MockitoAnnotations.initMocks(withSpy);
         assertEquals(Arrays.asList("a"), withSpy.asSingletonList("a"));
     }
 
     @Test
     public void should_spy_inner_class() throws Exception {
-         
-     class WithMockAndSpy {
-            @Spy private InnerStrength strength;
-            @Mock private List<String> list;
+
+        class WithMockAndSpy {
+            @Spy
+            private InnerStrength strength;
+            @Mock
+            private List<String> list;
 
             abstract class InnerStrength {
                 private final String name;
 
                 InnerStrength() {
-                    // Make sure that @Mock fields are always injected before @Spy fields.
+                    // Make sure that @Mock fields are always injected before
+                    // @Spy fields.
                     assertNotNull(list);
                     // Make sure constructor is indeed called.
                     this.name = "inner";
                 }
-                
+
                 abstract String strength();
-                
+
                 String fullStrength() {
                     return name + " " + strength();
                 }
             }
         }
-        WithMockAndSpy outer = new WithMockAndSpy();
+        final WithMockAndSpy outer = new WithMockAndSpy();
         MockitoAnnotations.initMocks(outer);
         when(outer.strength.strength()).thenReturn("strength");
         assertEquals("inner strength", outer.strength.fullStrength());
@@ -163,31 +174,40 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_report_when_encosing_instance_is_needed() throws Exception {
         class Outer {
-            class Inner {}
+            class Inner {
+            }
         }
         class WithSpy {
-            @Spy private Outer.Inner inner;
+            @Spy
+            private Outer.Inner inner;
         }
         try {
             MockitoAnnotations.initMocks(new WithSpy());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertContains("@Spy annotation can only initialize inner classes", e.getMessage());
         }
     }
 
-    static class NestedClassWithoutDefinedConstructor { }
+    static class NestedClassWithoutDefinedConstructor {
+    }
 
     static class NestedClassWithNoArgConstructor {
-        NestedClassWithNoArgConstructor() { }
-        NestedClassWithNoArgConstructor(String f) { }
+        NestedClassWithNoArgConstructor() {
+        }
+
+        NestedClassWithNoArgConstructor(final String f) {
+        }
     }
 
     static class NoValidConstructor {
-        NoValidConstructor(String f) { }
+        NoValidConstructor(final String f) {
+        }
     }
 
     static class ThrowingConstructor {
-        ThrowingConstructor() { throw new RuntimeException("boo!"); }
+        ThrowingConstructor() {
+            throw new RuntimeException("boo!");
+        }
     }
 }

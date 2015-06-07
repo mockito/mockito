@@ -5,15 +5,17 @@
 
 package org.mockito.internal.invocation;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.invocation.*;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.StubInfo;
 
 /**
  * Method call on a mock object.
@@ -40,7 +42,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
     final RealMethod realMethod;
     private StubInfo stubInfo;
 
-    public InvocationImpl(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
+    public InvocationImpl(final Object mock, final MockitoMethod mockitoMethod, final Object[] args, final int sequenceNumber, final RealMethod realMethod) {
         this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
@@ -62,7 +64,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         return arguments;
     }
 
-    public <T> T getArgumentAt(int index, Class<T> clazz) {
+    public <T> T getArgumentAt(final int index, final Class<T> clazz) {
         return (T) arguments[index];
     }
 
@@ -74,17 +76,17 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         return sequenceNumber;
     }
 
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == null || !o.getClass().equals(this.getClass())) {
             return false;
         }
 
-        InvocationImpl other = (InvocationImpl) o;
+        final InvocationImpl other = (InvocationImpl) o;
 
         return this.mock.equals(other.mock) && this.method.equals(other.method) && this.equalArguments(other.arguments);
     }
 
-    private boolean equalArguments(Object[] arguments) {
+    private boolean equalArguments(final Object[] arguments) {
         return Arrays.equals(arguments, this.arguments);
     }
 
@@ -124,7 +126,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         return stubInfo;
     }
 
-    public void markStubbed(StubInfo stubInfo) {
+    public void markStubbed(final StubInfo stubInfo) {
         this.stubInfo = stubInfo;
     }
 

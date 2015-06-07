@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -30,7 +30,7 @@ public class SerializableMethodTest extends TestBase {
     
     @Test
     public void shouldBeSerializable() throws Exception {
-        ByteArrayOutputStream serialized = new ByteArrayOutputStream();
+        final ByteArrayOutputStream serialized = new ByteArrayOutputStream();
         new ObjectOutputStream(serialized).writeObject(method);
     }
     
@@ -66,7 +66,7 @@ public class SerializableMethodTest extends TestBase {
     
     @Test
     public void shouldNotBeEqualForSameMethodFromTwoDifferentClasses() throws Exception {
-        Method testBaseToStringMethod = String.class.getMethod("toString", args);
+        final Method testBaseToStringMethod = String.class.getMethod("toString", args);
         assertFalse(new SerializableMethod(testBaseToStringMethod).equals(method));
     }
     

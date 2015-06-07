@@ -4,8 +4,12 @@
  */
 package org.mockito.internal.util.reflection;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -13,10 +17,10 @@ import java.util.LinkedList;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class LenientCopyToolTest extends TestBase {
 
-    private LenientCopyTool tool = new LenientCopyTool();
+    private final LenientCopyTool tool = new LenientCopyTool();
 
     static class InheritMe {
         protected String protectedInherited = "protected";
@@ -34,7 +38,7 @@ public class LenientCopyToolTest extends TestBase {
         public SomeOtherObject instancePublicField = new SomeOtherObject();
         final int finalField;
 
-        public SomeObject(int finalField) {
+        public SomeObject(final int finalField) {
             this.finalField = finalField;
         }
     }
@@ -42,7 +46,7 @@ public class LenientCopyToolTest extends TestBase {
     public static class SomeOtherObject {
     }
 
-    private SomeObject from = new SomeObject(100);
+    private final SomeObject from = new SomeObject(100);
     private SomeObject to = mock(SomeObject.class);
 
     @Test
@@ -74,8 +78,8 @@ public class LenientCopyToolTest extends TestBase {
     @Test
     public void shouldShallowCopyLinkedListIntoMock() throws Exception {
         // given
-        LinkedList fromList = new LinkedList();
-        LinkedList toList = mock(LinkedList.class);
+        final LinkedList fromList = new LinkedList();
+        final LinkedList toList = mock(LinkedList.class);
 
         // when
         tool.copyToMock(fromList, toList);

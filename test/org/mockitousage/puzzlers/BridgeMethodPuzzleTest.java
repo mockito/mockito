@@ -5,8 +5,9 @@
 
 package org.mockitousage.puzzlers;
 
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockitoutil.ExtraMatchers.hasBridgeMethod;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
@@ -18,35 +19,35 @@ import org.mockitoutil.TestBase;
  * method in Subclass so that erasures are the same, signatures of methods match
  * and overridding is ON.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class BridgeMethodPuzzleTest extends TestBase {
     
     private class Super<T> {
-        public String say(T t) {
+        public String say(final T t) {
             return "Super says: " + t;
         }
     }
     
     private class Sub extends Super<String> {
         @Override
-        public String say(String t)  {
+        public String say(final String t)  {
             return "Dummy says: " + t;
         }
     }
 
     Super mock;
     
-    private void setMockWithDownCast(Super mock) {
+    private void setMockWithDownCast(final Super mock) {
         this.mock = mock;
     }
     
-    private void say(String string) {
+    private void say(final String string) {
         mock.say(string);
     }
     
     @Test
     public void shouldHaveBridgeMethod() throws Exception {
-        Super s = new Sub();
+        final Super s = new Sub();
         
         assertEquals("Dummy says: Hello", s.say("Hello"));
         
@@ -58,7 +59,7 @@ public class BridgeMethodPuzzleTest extends TestBase {
     public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
         //Super has following erasure: say(Object) which differs from Dummy.say(String)
         //mock has to detect it and do the super.say()
-        Sub s = mock(Sub.class);
+        final Sub s = mock(Sub.class);
         setMockWithDownCast(s);
         say("Hello");
         

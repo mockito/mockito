@@ -5,7 +5,9 @@
 
 package org.mockitoutil;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -16,7 +18,7 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ExtraMatchers {
 
     public static <T> Assertor<Throwable> hasFirstMethodInStackTrace(final String method) {
@@ -25,8 +27,8 @@ public class ExtraMatchers {
     
     public static <T> Assertor<Throwable> hasOnlyThoseClassesInStackTrace(final String ... classes) {
         return new Assertor<Throwable>() {
-            public void assertValue(Throwable traceElements) {
-                StackTraceElement[] trace = traceElements.getStackTrace();
+            public void assertValue(final Throwable traceElements) {
+                final StackTraceElement[] trace = traceElements.getStackTrace();
                 
                 assertEquals("Number of classes does not match." +
                         "\nExpected: " + Arrays.toString(classes) + 
@@ -42,7 +44,7 @@ public class ExtraMatchers {
     
     public static <T> Assertor<StackTraceElement[]> hasOnlyThoseClasses(final String ... classes) {
         return new Assertor<StackTraceElement[]>() {
-            public void assertValue(StackTraceElement[] traceElements) {
+            public void assertValue(final StackTraceElement[] traceElements) {
                 assertEquals("Number of classes does not match." +
                         "\nExpected: " + Arrays.toString(classes) + 
                         "\nGot: " + Arrays.toString(traceElements),
@@ -60,7 +62,7 @@ public class ExtraMatchers {
 
             private String actualMethodAtIndex;
 
-            public void assertValue(Throwable throwable) {
+            public void assertValue(final Throwable throwable) {
                 actualMethodAtIndex = throwable.getStackTrace()[stackTraceIndex].getMethodName();
                 assertTrue(
                     "Method at index: " + stackTraceIndex + 
@@ -76,7 +78,7 @@ public class ExtraMatchers {
     public static <T> Assertor<Object> hasBridgeMethod(final String methodName) {
         return new Assertor<Object>() {
 
-            public void assertValue(Object o) {
+            public void assertValue(final Object o) {
                 Class clazz = null;
                 if (o instanceof Class) {
                     clazz = (Class) o;
@@ -84,7 +86,7 @@ public class ExtraMatchers {
                     clazz = o.getClass();
                 }
                 
-                for (Method m : clazz.getMethods()) {
+                for (final Method m : clazz.getMethods()) {
                     if (m.isBridge() && m.getName().equals(methodName)) {
                         return;
                     }
@@ -98,10 +100,10 @@ public class ExtraMatchers {
     public static <T> Assertor<Collection> hasExactlyInOrder(final T ... elements) {
         return new Assertor<Collection>() {
 
-            public void assertValue(Collection value) {
+            public void assertValue(final Collection value) {
                 assertEquals(elements.length, value.size());
                 
-                boolean containsSublist = Collections.indexOfSubList((List<?>) value, Arrays.asList(elements)) != -1;
+                final boolean containsSublist = Collections.indexOfSubList((List<?>) value, Arrays.asList(elements)) != -1;
                 assertTrue(
                         "Elements:" +
                         "\n" + 
@@ -117,10 +119,10 @@ public class ExtraMatchers {
     public static <T> Assertor<Collection> contains(final Matcher<T> ... elements) {
         return new Assertor<Collection>() {
             
-            public void assertValue(Collection value) {
+            public void assertValue(final Collection value) {
                 int matched = 0;
-                for (Matcher<T> m : elements) {
-                    for (Object el : value) {
+                for (final Matcher<T> m : elements) {
+                    for (final Object el : value) {
                         if (m.matches(el)) {
                             matched++;
                             continue;
@@ -133,14 +135,14 @@ public class ExtraMatchers {
         };
     }
     
-    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
+    public static org.hamcrest.Matcher<java.lang.Object> clazz(final java.lang.Class<?> type) {
         return CoreMatchers.is(type);
     }
 
     public static Assertor hasMethodsInStackTrace(final String ... methods) {
         return new Assertor<Throwable>() {
-            public void assertValue(Throwable value) {
-                StackTraceElement[] trace = value.getStackTrace();
+            public void assertValue(final Throwable value) {
+                final StackTraceElement[] trace = value.getStackTrace();
                 for (int i = 0; i < methods.length; i++) {
                     assertEquals("Expected methods[" + i + "] to be in the stack trace.", methods[i], trace[i].getMethodName());
                 }

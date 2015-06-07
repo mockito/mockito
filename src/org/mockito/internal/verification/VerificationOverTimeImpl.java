@@ -32,7 +32,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        the delegate is satisfied and the full duration has passed (as in
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      */
-    public VerificationOverTimeImpl(long pollingPeriodMillis, long durationMillis, VerificationMode delegate, boolean returnOnSuccess) {
+    public VerificationOverTimeImpl(final long pollingPeriodMillis, final long durationMillis, final VerificationMode delegate, final boolean returnOnSuccess) {
         this(pollingPeriodMillis, delegate, returnOnSuccess, new Timer(durationMillis));
     }
 
@@ -47,7 +47,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *                        {@link org.mockito.verification.VerificationAfterDelay}).
      * @param timer Checker of whether the duration of the verification is still acceptable
      */
-    public VerificationOverTimeImpl(long pollingPeriodMillis, VerificationMode delegate, boolean returnOnSuccess, Timer timer) {
+    public VerificationOverTimeImpl(final long pollingPeriodMillis, final VerificationMode delegate, final boolean returnOnSuccess, final Timer timer) {
         this.pollingPeriodMillis = pollingPeriodMillis;
         this.delegate = delegate;
         this.returnOnSuccess = returnOnSuccess;
@@ -69,7 +69,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *
      * @throws MockitoAssertionError if the delegate verification mode does not succeed before the timeout
      */
-    public void verify(VerificationData data) {
+    public void verify(final VerificationData data) {
         AssertionError error = null;
 
         timer.start();
@@ -82,10 +82,9 @@ public class VerificationOverTimeImpl implements VerificationMode {
                 } else {
                     error = null;
                 }
-            } catch (MockitoAssertionError e) {
+            } catch (final MockitoAssertionError e) {
                 error = handleVerifyException(e);
-            }
-            catch (AssertionError e) {
+            } catch (final AssertionError e) {
                 error = handleVerifyException(e);
             }
         }
@@ -95,7 +94,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
         }
     }
 
-    private AssertionError handleVerifyException(AssertionError e) {
+    private AssertionError handleVerifyException(final AssertionError e) {
         if (canRecoverFromFailure(delegate)) {
             sleep(pollingPeriodMillis);
             return e;
@@ -104,18 +103,18 @@ public class VerificationOverTimeImpl implements VerificationMode {
         }
     }
 
-    protected boolean canRecoverFromFailure(VerificationMode verificationMode) {
+    protected boolean canRecoverFromFailure(final VerificationMode verificationMode) {
         return !(verificationMode instanceof AtMost || verificationMode instanceof NoMoreInteractions);
     }
 
-    public VerificationOverTimeImpl copyWithVerificationMode(VerificationMode verificationMode) {
+    public VerificationOverTimeImpl copyWithVerificationMode(final VerificationMode verificationMode) {
         return new VerificationOverTimeImpl(pollingPeriodMillis, timer.duration(), verificationMode, returnOnSuccess);
     }
 
-    private void sleep(long sleep) {
+    private void sleep(final long sleep) {
         try {
             Thread.sleep(sleep);
-        } catch (InterruptedException ie) {
+        } catch (final InterruptedException ie) {
             throw new RuntimeException("Thread sleep has been interrupted", ie);
         }
     }

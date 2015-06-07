@@ -1,16 +1,22 @@
 package org.mockito.internal.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.withSettings;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Observer;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
@@ -53,7 +59,7 @@ public class DefaultMockingDetailsTest {
 
     @Test
     public void should_get_extra_interfaces() throws Exception {
-        Bar loup = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
+        final Bar loup = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
         assertEquals(setOf(Observer.class, List.class), mockingDetails(loup).getExtraInterfaces());
     }
 
@@ -62,7 +68,7 @@ public class DefaultMockingDetailsTest {
         mockingDetails("not a mock").getExtraInterfaces();
     }
 
-    private <T> Set<T> setOf(T... items) {
+    private <T> Set<T> setOf(final T... items) {
         return new HashSet<T>(Arrays.asList(items));
     }
 

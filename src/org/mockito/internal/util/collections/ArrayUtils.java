@@ -4,10 +4,9 @@
  */
 package org.mockito.internal.util.collections;
 
-@SuppressWarnings("unchecked")
 public class ArrayUtils {
 
-    public <T> boolean isEmpty(T[] array) {
+    public <T> boolean isEmpty(final T[] array) {
         return array == null || array.length == 0;
     }
 

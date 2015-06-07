@@ -5,21 +5,26 @@
 package org.mockitousage.bugs;
 
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.withSettings;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 
-import java.util.List;
-
-import static org.mockito.Mockito.*;
-
+@SuppressWarnings("rawtypes")
 public class ListenersLostOnResetMockTest {
 
     @Test
     public void listener() throws Exception {
-        InvocationListener invocationListener = mock(InvocationListener.class);
+        final InvocationListener invocationListener = mock(InvocationListener.class);
 
-        List mockedList = mock(List.class, withSettings().invocationListeners(invocationListener));
+        final List mockedList = mock(List.class, withSettings().invocationListeners(invocationListener));
         reset(mockedList);
 
         mockedList.clear();

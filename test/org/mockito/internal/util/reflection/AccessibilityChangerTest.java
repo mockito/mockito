@@ -5,19 +5,20 @@
 
 package org.mockito.internal.util.reflection;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import java.lang.reflect.Field;
 import java.util.Observable;
 
+import org.junit.Ignore;
+import org.junit.Test;
+
 public class AccessibilityChangerTest {
 
+    @SuppressWarnings("unused")
     private Observable whatever;
 
     @Test
     public void should_enable_and_safely_disable() throws Exception {
-        AccessibilityChanger changer = new AccessibilityChanger();
+        final AccessibilityChanger changer = new AccessibilityChanger();
         changer.enableAccess(field("whatever"));
         changer.safelyDisableAccess(field("whatever"));
     }
@@ -28,7 +29,7 @@ public class AccessibilityChangerTest {
         new AccessibilityChanger().safelyDisableAccess(field("whatever"));
     }
 
-    private Field field(String fieldName) throws NoSuchFieldException {
+    private Field field(final String fieldName) throws NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
 }

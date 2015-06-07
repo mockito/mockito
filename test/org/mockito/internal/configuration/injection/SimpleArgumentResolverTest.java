@@ -5,24 +5,30 @@
 
 package org.mockito.internal.configuration.injection;
 
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.junit.Test;
+
+@SuppressWarnings("rawtypes")
 public class SimpleArgumentResolverTest {
 
     @Test
     public void should_return_object_matching_given_types() throws Exception {
-        ConstructorInjection.SimpleArgumentResolver resolver =
+        final ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet(), new ByteArrayOutputStream(), new HashMap()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
+        final Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -32,10 +38,10 @@ public class SimpleArgumentResolverTest {
 
     @Test
     public void should_return_null_when_match_is_not_possible_on_given_types() throws Exception {
-        ConstructorInjection.SimpleArgumentResolver resolver =
+        final ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet(), new ByteArrayOutputStream()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
+        final Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -45,10 +51,10 @@ public class SimpleArgumentResolverTest {
 
     @Test
     public void should_return_null_when_types_are_primitives() throws Exception {
-        ConstructorInjection.SimpleArgumentResolver resolver =
+        final ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashMap(), new TreeSet()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, Boolean.class);
+        final Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, Boolean.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -56,7 +62,7 @@ public class SimpleArgumentResolverTest {
         assertNull(resolvedInstance[2]);
     }
 
-    private Set<Object> newSetOf(Object... objects) {
+    private Set<Object> newSetOf(final Object... objects) {
         return new HashSet<Object>(Arrays.asList(objects));
     }
 

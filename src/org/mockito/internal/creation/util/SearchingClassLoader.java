@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.creation.util;
 
-import static java.lang.Thread.*;
+import static java.lang.Thread.currentThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +15,20 @@ import java.util.List;
 public class SearchingClassLoader extends ClassLoader {
     private final ClassLoader nextToSearch;
     
-    public SearchingClassLoader(ClassLoader parent, ClassLoader nextToSearch) {
+    public SearchingClassLoader(final ClassLoader parent, final ClassLoader nextToSearch) {
         super(parent);
         this.nextToSearch = nextToSearch;
     }
     
-    public static ClassLoader combineLoadersOf(Class<?>... classes) {
+    public static ClassLoader combineLoadersOf(final Class<?>... classes) {
         return combineLoadersOf(classes[0], classes);
     }
     
-    private static ClassLoader combineLoadersOf(Class<?> first, Class<?>... others) {
-        List<ClassLoader> loaders = new ArrayList<ClassLoader>();
+    private static ClassLoader combineLoadersOf(final Class<?> first, final Class<?>... others) {
+        final List<ClassLoader> loaders = new ArrayList<ClassLoader>();
         
         addIfNewElement(loaders, first.getClassLoader());
-        for (Class<?> c : others) {
+        for (final Class<?> c : others) {
             addIfNewElement(loaders, c.getClassLoader());
         }
         
@@ -49,7 +49,7 @@ public class SearchingClassLoader extends ClassLoader {
         return combine(loaders);
     }
     
-    private static ClassLoader combine(List<ClassLoader> parentLoaders) {
+    private static ClassLoader combine(final List<ClassLoader> parentLoaders) {
         ClassLoader loader = parentLoaders.get(parentLoaders.size()-1);
         
         for (int i = parentLoaders.size()-2; i >= 0; i--) {
@@ -59,14 +59,14 @@ public class SearchingClassLoader extends ClassLoader {
         return loader;
     }
     
-    private static void addIfNewElement(List<ClassLoader> loaders, ClassLoader c) {
+    private static void addIfNewElement(final List<ClassLoader> loaders, final ClassLoader c) {
         if (c != null && !loaders.contains(c)) {
             loaders.add(c);
         }
     }
     
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
         if (nextToSearch != null) {
             return nextToSearch.loadClass(name);
         } else {

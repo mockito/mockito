@@ -1,11 +1,16 @@
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.Test;
 
 @SuppressWarnings("unused")
 public class SuperTypesLastSorterTest {
@@ -14,12 +19,12 @@ public class SuperTypesLastSorterTest {
      * continue to work.
      */
     private static Comparator<Field> cmp = new Comparator<Field>() {
-        public int compare(Field o1, Field o2) {
+        public int compare(final Field o1, final Field o2) {
             if (o1.equals(o2)) {
                 return 0;
             }
 
-            List<Field> l = new SuperTypesLastSorter().sort(Arrays.asList(o1, o2));
+            final List<Field> l = new SuperTypesLastSorter().sort(Arrays.asList(o1, o2));
 
             if (l.get(0) == o1) {
                 return -1;
@@ -60,7 +65,7 @@ public class SuperTypesLastSorterTest {
 
     @Test
     public void using_Collections_dot_sort() throws Exception {
-        List<Field> unsortedFields = Arrays.asList(
+        final List<Field> unsortedFields = Arrays.asList(
                 field("objectB"),
                 field("integerB"),
                 field("numberA"),
@@ -69,7 +74,7 @@ public class SuperTypesLastSorterTest {
                 field("integerA")
         );
 
-        List<Field> sortedFields = new SuperTypesLastSorter().sort(unsortedFields);
+        final List<Field> sortedFields = new SuperTypesLastSorter().sort(unsortedFields);
 
         assertThat(sortedFields).containsSequence(
                 field("integerA"),
@@ -84,7 +89,7 @@ public class SuperTypesLastSorterTest {
 
     @Test
     public void issue_352_order_was_different_between_JDK6_and_JDK7() throws Exception {
-        List<Field> unsortedFields = Arrays.asList(
+        final List<Field> unsortedFields = Arrays.asList(
                 field("objectB"),
                 field("objectA")
         );
@@ -111,8 +116,8 @@ public class SuperTypesLastSorterTest {
      * Assert that these fields sort in the same order no matter which order
      * they start in.
      */
-    private static void assertSortConsistently(Field a, Field b, Field c) {
-        Field[][] initialOrderings = {
+    private static void assertSortConsistently(final Field a, final Field b, final Field c) {
+        final Field[][] initialOrderings = {
                 {a, b, c},
                 {a, c, b},
                 {b, a, c},
@@ -121,16 +126,16 @@ public class SuperTypesLastSorterTest {
                 {c, b, a}
         };
 
-        Set<List<Field>> results = new HashSet<List<Field>>();
+        final Set<List<Field>> results = new HashSet<List<Field>>();
 
-        for (Field[] o : initialOrderings) {
+        for (final Field[] o : initialOrderings) {
             results.add(new SuperTypesLastSorter().sort(Arrays.asList(o)));
         }
 
         assertThat(results).hasSize(1);
     }
 
-    private Field field(String field) throws NoSuchFieldException {
+    private Field field(final String field) throws NoSuchFieldException {
         return getClass().getDeclaredField(field);
     }
 }

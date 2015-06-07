@@ -1,14 +1,15 @@
 package org.mockitousage.bugs;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
+@SuppressWarnings("rawtypes")
 public class ClassCastExOnVerifyZeroInteractionsTest {
     public interface TestMock {
         boolean m1();
@@ -16,8 +17,8 @@ public class ClassCastExOnVerifyZeroInteractionsTest {
 
     @Test(expected = NoInteractionsWanted.class)
     public void should_not_throw_ClassCastException_when_mock_verification_fails() {
-        TestMock test = mock(TestMock.class, new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+        final TestMock test = mock(TestMock.class, new Answer() {
+            public Object answer(final InvocationOnMock invocation) throws Throwable {
                 return false;
             }
         });
@@ -27,8 +28,8 @@ public class ClassCastExOnVerifyZeroInteractionsTest {
 
     @Test(expected = WrongTypeOfReturnValue.class)
     public void should_report_bogus_default_answer() throws Exception {
-        TestMock test = mock(TestMock.class, new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+        final TestMock test = mock(TestMock.class, new Answer() {
+            public Object answer(final InvocationOnMock invocation) throws Throwable {
                 return false;
             }
         });

@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.handler;
 
+import java.util.List;
+
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.stubbing.InvocationContainer;
@@ -11,23 +13,24 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.VoidMethodStubbable;
 
-import java.util.List;
-
 /**
  * Protects the results from delegate MockHandler. Makes sure the results are valid.
  *
  * by Szczepan Faber, created at: 5/22/12
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 class NullResultGuardian implements InternalMockHandler {
+
+    private static final long serialVersionUID = 3415582812871378410L;
     private final InternalMockHandler delegate;
 
-    public NullResultGuardian(InternalMockHandler delegate) {
+    public NullResultGuardian(final InternalMockHandler delegate) {
         this.delegate = delegate;
     }
 
-    public Object handle(Invocation invocation) throws Throwable {
-        Object result = delegate.handle(invocation);
-        Class<?> returnType = invocation.getMethod().getReturnType();
+    public Object handle(final Invocation invocation) throws Throwable {
+        final Object result = delegate.handle(invocation);
+        final Class<?> returnType = invocation.getMethod().getReturnType();
         if(result == null && returnType.isPrimitive()) {
             //primitive values cannot be null
             return new HandyReturnValues().returnFor(returnType);
@@ -42,11 +45,11 @@ class NullResultGuardian implements InternalMockHandler {
         return delegate.getMockSettings();
     }
 
-    public VoidMethodStubbable voidMethodStubbable(Object mock) {
+    public VoidMethodStubbable voidMethodStubbable(final Object mock) {
         return delegate.voidMethodStubbable(mock);
     }
 
-    public void setAnswersForStubbing(List answers) {
+    public void setAnswersForStubbing(final List answers) {
         delegate.setAnswersForStubbing(answers);
     }
 

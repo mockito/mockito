@@ -5,16 +5,19 @@
 
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockitoutil.TestBase;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 //see issue 184
 public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
@@ -22,11 +25,11 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     @Test
     public void should_compare_to_be_consistent_with_equals() {
         //given
-        Date today    = mock(Date.class);
-        Date tomorrow = mock(Date.class);
+        final Date today    = mock(Date.class);
+        final Date tomorrow = mock(Date.class);
 
         //when
-        Set<Date> set = new TreeSet<Date>();
+        final Set<Date> set = new TreeSet<Date>();
         set.add(today);
         set.add(tomorrow);
 
@@ -37,10 +40,10 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     @Test
     public void should_compare_to_be_consistent_with_equals_when_comparing_the_same_reference() {
         //given
-        Date today    = mock(Date.class);
+        final Date today    = mock(Date.class);
 
         //when
-        Set<Date> set = new TreeSet<Date>();
+        final Set<Date> set = new TreeSet<Date>();
         set.add(today);
         set.add(today);
 
@@ -51,7 +54,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     @Test
     public void should_allow_stubbing_and_verifying_compare_to() {
         //given
-        Date mock    = mock(Date.class);
+        final Date mock    = mock(Date.class);
         when(mock.compareTo(any(Date.class))).thenReturn(10);
 
         //when
@@ -65,7 +68,7 @@ public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {
     @Test
     public void should_reset_not_remove_default_stubbing() {
         //given
-        Date mock    = mock(Date.class);
+        final Date mock    = mock(Date.class);
         reset(mock);
 
         //then

@@ -28,7 +28,7 @@ public class HashCodeAndEqualsMockWrapper {
 
     private final Object mockInstance;
 
-    public HashCodeAndEqualsMockWrapper(Object mockInstance) {
+    public HashCodeAndEqualsMockWrapper(final Object mockInstance) {
         this.mockInstance = mockInstance;
     }
 
@@ -37,11 +37,15 @@ public class HashCodeAndEqualsMockWrapper {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HashCodeAndEqualsMockWrapper)) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof HashCodeAndEqualsMockWrapper)) {
+            return false;
+        }
 
-        HashCodeAndEqualsMockWrapper that = (HashCodeAndEqualsMockWrapper) o;
+        final HashCodeAndEqualsMockWrapper that = (HashCodeAndEqualsMockWrapper) o;
 
         return mockInstance == that.mockInstance;
     }
@@ -51,12 +55,12 @@ public class HashCodeAndEqualsMockWrapper {
         return System.identityHashCode(mockInstance);
     }
 
-    public static HashCodeAndEqualsMockWrapper of(Object mock) {
+    public static HashCodeAndEqualsMockWrapper of(final Object mock) {
         return new HashCodeAndEqualsMockWrapper(mock);
     }
 
     @Override public String toString() {
-        MockUtil mockUtil = new MockUtil();
+        final MockUtil mockUtil = new MockUtil();
         return "HashCodeAndEqualsMockWrapper{" +
                 "mockInstance=" + (mockUtil.isMock(mockInstance) ? mockUtil.getMockName(mockInstance) : typeInstanceString()) +
                 '}';

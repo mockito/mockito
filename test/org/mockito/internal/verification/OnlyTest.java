@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.verification;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +26,7 @@ public class OnlyTest {
         private final Invocation invocation;
         private final InvocationMatcher wanted;
 
-        public VerificationDataStub(InvocationMatcher wanted, Invocation invocation) {
+        public VerificationDataStub(final InvocationMatcher wanted, final Invocation invocation) {
             this.invocation = invocation;
             this.wanted = wanted;
         }
@@ -41,7 +43,7 @@ public class OnlyTest {
     @Test
     public void shouldMarkAsVerified() {
         //given
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        final Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
         
         //when
@@ -54,14 +56,14 @@ public class OnlyTest {
     @Test
     public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
         //given
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        final Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
         
         //when
         try {
             only.verify(new VerificationDataStub(new InvocationBuilder().toInvocationMatcher(), invocation));
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (final MockitoAssertionError e) {}
         
         //then
         assertFalse(invocation.isVerified());

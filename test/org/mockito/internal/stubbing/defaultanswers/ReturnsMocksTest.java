@@ -9,7 +9,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 public class ReturnsMocksTest extends TestBase {
-    private ReturnsMocks values = new ReturnsMocks();
+    private final ReturnsMocks values = new ReturnsMocks();
 
     interface FooInterface {
     }
@@ -22,13 +22,13 @@ public class ReturnsMocksTest extends TestBase {
 
     @Test
     public void should_return_mock_value_for_interface() throws Exception {
-        Object interfaceMock = values.returnValueFor(FooInterface.class);
+        final Object interfaceMock = values.returnValueFor(FooInterface.class);
         assertTrue(new MockUtil().isMock(interfaceMock));
     }
 
     @Test
     public void should_return_mock_value_for_class() throws Exception {
-        Object classMock = values.returnValueFor(BarClass.class);
+        final Object classMock = values.returnValueFor(BarClass.class);
         assertTrue(new MockUtil().isMock(classMock));
     }
 
@@ -39,7 +39,7 @@ public class ReturnsMocksTest extends TestBase {
 
     @Test
     public void should_return_the_usual_default_values_for_primitives() throws Throwable {
-        ReturnsMocks answer = new ReturnsMocks();
+        final ReturnsMocks answer = new ReturnsMocks();
         assertEquals(false, answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
         assertEquals((byte) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "byteMethod")));
@@ -50,7 +50,6 @@ public class ReturnsMocksTest extends TestBase {
         assertEquals(0d, answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
 
-    @SuppressWarnings("unused")
     interface StringMethods {
         String stringMethod();
         String[] stringArrayMethod();
@@ -58,7 +57,7 @@ public class ReturnsMocksTest extends TestBase {
     
     @Test
     public void should_return_empty_array() throws Throwable {
-        String[] ret = (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
+        final String[] ret = (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
         
         assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);

@@ -4,23 +4,28 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.exceptions.Reporter;
-import org.mockito.internal.stubbing.answers.*;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
-import java.util.LinkedList;
-import java.util.List;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class StubberImpl implements Stubber {
 
     final List<Answer> answers = new LinkedList<Answer>();
+    
     private final Reporter reporter = new Reporter();
 
-    public <T> T when(T mock) {
-        MockUtil mockUtil = new MockUtil();
+    public <T> T when(final T mock) {
+        final MockUtil mockUtil = new MockUtil();
         
         if (mock == null) {
             reporter.nullPassedToWhenMethod();
@@ -34,17 +39,17 @@ public class StubberImpl implements Stubber {
         return mock;
     }
 
-    public Stubber doReturn(Object toBeReturned) {
+    public Stubber doReturn(final Object toBeReturned) {
         answers.add(new Returns(toBeReturned));
         return this;
     }
 
-    public Stubber doThrow(Throwable toBeThrown) {
+    public Stubber doThrow(final Throwable toBeThrown) {
         answers.add(new ThrowsException(toBeThrown));
         return this;
     }
 
-    public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
+    public Stubber doThrow(final Class<? extends Throwable> toBeThrown) {
         answers.add(new ThrowsExceptionClass(toBeThrown));
         return this;
     }
@@ -54,7 +59,7 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
-    public Stubber doAnswer(Answer answer) {
+    public Stubber doAnswer(final Answer answer) {
         answers.add(answer);
         return this;
     }

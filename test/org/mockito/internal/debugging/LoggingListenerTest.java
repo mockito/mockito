@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.debugging;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -20,7 +21,7 @@ public class LoggingListenerTest extends TestBase {
     @Test
     public void shouldLogUnusedStub() {
         //given
-        LoggingListener listener = new LoggingListener(false, logger);
+        final LoggingListener listener = new LoggingListener(false, logger);
 
         //when
         listener.foundUnusedStub(new InvocationBuilder().toInvocation());
@@ -32,7 +33,7 @@ public class LoggingListenerTest extends TestBase {
     @Test
     public void shouldLogUnstubbed() {
         //given
-        LoggingListener listener = new LoggingListener(true, logger);
+        final LoggingListener listener = new LoggingListener(true, logger);
 
         //when
         listener.foundUnstubbed(new InvocationBuilder().toInvocationMatcher());
@@ -44,7 +45,7 @@ public class LoggingListenerTest extends TestBase {
     @Test
     public void shouldNotLogUnstubbed() {
         //given
-        LoggingListener listener = new LoggingListener(false, logger);
+        final LoggingListener listener = new LoggingListener(false, logger);
 
         //when
         listener.foundUnstubbed(new InvocationBuilder().toInvocationMatcher());
@@ -56,7 +57,7 @@ public class LoggingListenerTest extends TestBase {
     @Test
     public void shouldLogDifferentArgs() {
         //given
-        LoggingListener listener = new LoggingListener(true, logger);
+        final LoggingListener listener = new LoggingListener(true, logger);
 
         //when
         listener.foundStubCalledWithDifferentArgs(new InvocationBuilder().toInvocation(), new InvocationBuilder().toInvocationMatcher());

@@ -4,8 +4,15 @@
  */
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.RETURNS_MOCKS;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -28,7 +35,7 @@ public class ResetTest extends TestBase {
         try {
             when(null).thenReturn("anything");
             fail();
-        } catch (MissingMethodInvocationException e) {
+        } catch (final MissingMethodInvocationException e) {
         }
     }
 
@@ -60,7 +67,7 @@ public class ResetTest extends TestBase {
 
     @Test
     public void shouldRemoveStubbingToString() throws Exception {
-        IMethods mockTwo = mock(IMethods.class);
+        final IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);
         assertContains("Mock for IMethods", mockTwo.toString());
@@ -76,8 +83,8 @@ public class ResetTest extends TestBase {
 
     @Test
     public void shouldNotAffectMockName() {
-        IMethods mock = mock(IMethods.class, "mockie");
-        IMethods mockTwo = mock(IMethods.class);
+        final IMethods mock = mock(IMethods.class, "mockie");
+        final IMethods mockTwo = mock(IMethods.class);
         reset(mock);
         assertContains("Mock for IMethods", "" + mockTwo);
         assertEquals("mockie", "" + mock);
@@ -99,7 +106,7 @@ public class ResetTest extends TestBase {
         try {
             reset(mockTwo);
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (final UnfinishedVerificationException e) {}
     }
     
     @Test

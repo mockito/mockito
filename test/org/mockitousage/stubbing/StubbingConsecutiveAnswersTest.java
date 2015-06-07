@@ -5,7 +5,8 @@
 
 package org.mockitousage.stubbing;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,7 +36,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     @SuppressWarnings("all")
     @Test
     public void shouldReturnConsecutiveValuesForTwoNulls() throws Exception {
-        when(mock.simpleMethod()).thenReturn(null, (String[])null);
+        when(mock.simpleMethod()).thenReturn(null, (String[]) null);
         
         assertNull(mock.simpleMethod());        
         assertNull(mock.simpleMethod());        
@@ -69,16 +70,16 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         try {
             mock.simpleMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         assertEquals("three", mock.simpleMethod());
         try {
             mock.simpleMethod();
             fail();
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
     }
     
     @Test
@@ -91,22 +92,22 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
     }
 
     @Test
@@ -117,22 +118,22 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
     }
     
     @Test
@@ -146,14 +147,14 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
         
         assertEquals("one", mock.simpleMethod());
         
         try {
             mock.simpleMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         
         assertEquals(null, mock.simpleMethod());
         assertEquals(null, mock.simpleMethod());
@@ -177,19 +178,19 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
         
         mock.voidMethod();
         
         try {
             mock.voidMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         
         try {
             mock.voidMethod();
             fail();
-        } catch (NullPointerException e) {}        
+        } catch (final NullPointerException e) {}        
     }
     
     @Test
@@ -205,7 +206,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch (NullPointerException e) {}
+        } catch (final NullPointerException e) {}
         
         mock.voidMethod();
         mock.voidMethod();

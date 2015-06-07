@@ -4,7 +4,8 @@
  */
 
 package org.concurrentmockito;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -16,7 +17,7 @@ public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
     public void shouldVerifyInOrderWhenMultipleThreadsInteractWithMock() throws Exception {
         final Foo testInf = mock(Foo.class);
         
-        Thread threadOne = new Thread(new Runnable(){
+        final Thread threadOne = new Thread(new Runnable(){
             public void run() {
                 testInf.methodOne();
             }
@@ -24,7 +25,7 @@ public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
         threadOne.start();
         threadOne.join();
         
-        Thread threadTwo = new Thread(new Runnable(){
+        final Thread threadTwo = new Thread(new Runnable(){
             public void run() {
                 testInf.methodTwo();
             }
@@ -32,7 +33,7 @@ public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
         threadTwo.start();
         threadTwo.join();
         
-        InOrder inOrder = inOrder(testInf);
+        final InOrder inOrder = inOrder(testInf);
         inOrder.verify(testInf).methodOne();
         inOrder.verify(testInf).methodTwo();
     }

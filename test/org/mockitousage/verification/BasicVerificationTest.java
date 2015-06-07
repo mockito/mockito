@@ -5,7 +5,11 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -17,7 +21,7 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class BasicVerificationTest extends TestBase {
 
     @Mock private List mock;
@@ -48,7 +52,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).add("bar");
             fail();
-        } catch (AssertionError expected) {}
+        } catch (final AssertionError expected) {}
     }
 
     @Test
@@ -63,7 +67,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (final WantedButNotInvoked e) {}
     }
 
     @Test
@@ -78,7 +82,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -92,7 +96,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).clear();
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (final TooManyActualInvocations e) {}
     }
 
     @Test
@@ -107,12 +111,12 @@ public class BasicVerificationTest extends TestBase {
 
     @Test
     public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
-        IMethods mockThree = mock(IMethods.class);
+        final IMethods mockThree = mock(IMethods.class);
         
-        mockThree.varargs((Object[]) new Object[] {});
+        mockThree.varargs(new Object[] {});
         try {
-            verify(mockThree).varargs((String[]) new String[] {});
+            verify(mockThree).varargs(new String[] {});
             fail();
-        } catch(WantedButNotInvoked e) {}
+        } catch(final WantedButNotInvoked e) {}
     }
 }

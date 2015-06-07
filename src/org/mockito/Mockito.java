@@ -7,15 +7,29 @@ package org.mockito;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
-import org.mockito.internal.stubbing.answers.*;
+import org.mockito.internal.stubbing.answers.AnswerReturnValuesAdapter;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.*;
-import org.mockito.verification.*;
-import org.mockito.junit.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.DeprecatedOngoingStubbing;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidMethodStubbable;
+import org.mockito.verification.After;
+import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationAfterDelay;
+import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationWithTimeout;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -58,8 +72,8 @@ import org.mockito.junit.*;
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. (new) BDD style verification (Since 1.10.0)</a><br/>
  *      <a href="#30">30. (new) Spying or mocking abstract classes (Since 1.10.12)</a><br/>
- *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
- *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3>
+ *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a>
+ *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a>
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  * </b>
@@ -1063,7 +1077,7 @@ import org.mockito.junit.*;
  *
  *
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Mockito extends Matchers {
 
     static final MockitoCore MOCKITO_CORE = new MockitoCore();
@@ -1252,7 +1266,7 @@ public class Mockito extends Matchers {
      * @param classToMock class or interface to mock
      * @return mock object
      */
-    public static <T> T mock(Class<T> classToMock) {
+    public static <T> T mock(final Class<T> classToMock) {
         return mock(classToMock, withSettings().defaultAnswer(RETURNS_DEFAULTS));
     }
 
@@ -1271,7 +1285,7 @@ public class Mockito extends Matchers {
      * @param name of the mock
      * @return mock object
      */
-    public static <T> T mock(Class<T> classToMock, String name) {
+    public static <T> T mock(final Class<T> classToMock, final String name) {
         return mock(classToMock, withSettings()
                 .name(name)
                 .defaultAnswer(RETURNS_DEFAULTS));
@@ -1289,7 +1303,7 @@ public class Mockito extends Matchers {
      * @return A {@link org.mockito.MockingDetails} instance.
      * @since 1.9.5
      */
-    public static MockingDetails mockingDetails(Object toInspect) {
+    public static MockingDetails mockingDetails(final Object toInspect) {
         return MOCKITO_CORE.mockingDetails(toInspect);
     }
 
@@ -1324,7 +1338,7 @@ public class Mockito extends Matchers {
      * @deprecated <b>Please use mock(Foo.class, defaultAnswer);</b>
      */
     @Deprecated
-    public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
+    public static <T> T mock(final Class<T> classToMock, final ReturnValues returnValues) {
         return mock(classToMock, withSettings().defaultAnswer(new AnswerReturnValuesAdapter(returnValues)));
     }
 
@@ -1347,7 +1361,7 @@ public class Mockito extends Matchers {
      *
      * @return mock object
      */
-    public static <T> T mock(Class<T> classToMock, Answer defaultAnswer) {
+    public static <T> T mock(final Class<T> classToMock, final Answer defaultAnswer) {
         return mock(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
 
@@ -1374,7 +1388,7 @@ public class Mockito extends Matchers {
      * @param mockSettings additional mock settings
      * @return mock object
      */
-    public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
+    public static <T> T mock(final Class<T> classToMock, final MockSettings mockSettings) {
         return MOCKITO_CORE.mock(classToMock, mockSettings);
     }
 
@@ -1457,7 +1471,7 @@ public class Mockito extends Matchers {
      *            to spy on
      * @return a spy of the real object
      */
-    public static <T> T spy(T object) {
+    public static <T> T spy(final T object) {
         return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
                 .defaultAnswer(CALLS_REAL_METHODS));
@@ -1491,7 +1505,7 @@ public class Mockito extends Matchers {
      * @since 1.10.12
      */
     @Incubating
-    public static <T> T spy(Class<T> classToSpy) {
+    public static <T> T spy(final Class<T> classToSpy) {
         return MOCKITO_CORE.mock(classToSpy, withSettings()
                 .useConstructor()
                 .defaultAnswer(CALLS_REAL_METHODS));
@@ -1546,7 +1560,7 @@ public class Mockito extends Matchers {
      *            method call
      * @return DeprecatedOngoingStubbing object to set stubbed value/exception
      */
-    public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
+    public static <T> DeprecatedOngoingStubbing<T> stub(final T methodCall) {
         return MOCKITO_CORE.stub(methodCall);
     }
 
@@ -1612,7 +1626,7 @@ public class Mockito extends Matchers {
      * @return OngoingStubbing object used to stub fluently.
      *         <strong>Do not</strong> create a reference to this returned object.
      */
-    public static <T> OngoingStubbing<T> when(T methodCall) {
+    public static <T> OngoingStubbing<T> when(final T methodCall) {
         return MOCKITO_CORE.when(methodCall);
     }
 
@@ -1643,7 +1657,7 @@ public class Mockito extends Matchers {
      * @param mock to be verified
      * @return mock object itself
      */
-    public static <T> T verify(T mock) {
+    public static <T> T verify(final T mock) {
         return MOCKITO_CORE.verify(mock, times(1));
     }
 
@@ -1669,7 +1683,7 @@ public class Mockito extends Matchers {
      *
      * @return mock object itself
      */
-    public static <T> T verify(T mock, VerificationMode mode) {
+    public static <T> T verify(final T mock, final VerificationMode mode) {
         return MOCKITO_CORE.verify(mock, mode);
     }
 
@@ -1700,7 +1714,7 @@ public class Mockito extends Matchers {
      * @param <T> The Type of the mocks
      * @param mocks to be reset
      */
-    public static <T> void reset(T ... mocks) {
+    public static <T> void reset(final T ... mocks) {
         MOCKITO_CORE.reset(mocks);
     }
 
@@ -1745,7 +1759,7 @@ public class Mockito extends Matchers {
      *
      * @param mocks to be verified
      */
-    public static void verifyNoMoreInteractions(Object... mocks) {
+    public static void verifyNoMoreInteractions(final Object... mocks) {
         MOCKITO_CORE.verifyNoMoreInteractions(mocks);
     }
 
@@ -1764,7 +1778,7 @@ public class Mockito extends Matchers {
      *
      * @param mocks to be verified
      */
-    public static void verifyZeroInteractions(Object... mocks) {
+    public static void verifyZeroInteractions(final Object... mocks) {
         MOCKITO_CORE.verifyNoMoreInteractions(mocks);
     }
 
@@ -1800,7 +1814,8 @@ public class Mockito extends Matchers {
      *            to stub
      * @return stubbable object that allows stubbing with throwable
      */
-    public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
+    @Deprecated
+    public static <T> VoidMethodStubbable<T> stubVoid(final T mock) {
         return MOCKITO_CORE.stubVoid(mock);
     }
 
@@ -1818,7 +1833,7 @@ public class Mockito extends Matchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    public static Stubber doThrow(Throwable toBeThrown) {
+    public static Stubber doThrow(final Throwable toBeThrown) {
         return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
     }
 
@@ -1839,7 +1854,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      * @since 1.9.0
      */
-    public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
+    public static Stubber doThrow(final Class<? extends Throwable> toBeThrown) {
         return MOCKITO_CORE.doAnswer(new ThrowsExceptionClass(toBeThrown));
     }
 
@@ -1901,7 +1916,7 @@ public class Mockito extends Matchers {
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    public static Stubber doAnswer(Answer answer) {
+    public static Stubber doAnswer(final Answer answer) {
         return MOCKITO_CORE.doAnswer(answer);
     }
 
@@ -1993,7 +2008,7 @@ public class Mockito extends Matchers {
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    public static Stubber doReturn(Object toBeReturned) {
+    public static Stubber doReturn(final Object toBeReturned) {
         return MOCKITO_CORE.doAnswer(new Returns(toBeReturned));
     }
 
@@ -2024,7 +2039,7 @@ public class Mockito extends Matchers {
      *
      * @return InOrder object to be used to verify in order
      */
-    public static InOrder inOrder(Object... mocks) {
+    public static InOrder inOrder(final Object... mocks) {
         return MOCKITO_CORE.inOrder(mocks);
     }
 
@@ -2091,7 +2106,7 @@ public class Mockito extends Matchers {
      * @param mocks input mocks that will be changed
      * @return the same mocks that were passed in as parameters
      */
-    public static Object[] ignoreStubs(Object... mocks) {
+    public static Object[] ignoreStubs(final Object... mocks) {
         return MOCKITO_CORE.ignoreStubs(mocks);
     }
 
@@ -2107,7 +2122,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationMode times(int wantedNumberOfInvocations) {
+    public static VerificationMode times(final int wantedNumberOfInvocations) {
         return VerificationModeFactory.times(wantedNumberOfInvocations);
     }
 
@@ -2159,7 +2174,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationMode atLeast(int minNumberOfInvocations) {
+    public static VerificationMode atLeast(final int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
     }
 
@@ -2175,7 +2190,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationMode atMost(int maxNumberOfInvocations) {
+    public static VerificationMode atMost(final int maxNumberOfInvocations) {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
     }
 
@@ -2192,7 +2207,7 @@ public class Mockito extends Matchers {
      * @param wantedNumberOfInvocations number of invocations to verify
      * @return  verification mode
      */
-    public static VerificationMode calls( int wantedNumberOfInvocations ){
+    public static VerificationMode calls( final int wantedNumberOfInvocations ){
         return VerificationModeFactory.calls( wantedNumberOfInvocations );
     }
 
@@ -2253,7 +2268,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationWithTimeout timeout(long millis) {
+    public static VerificationWithTimeout timeout(final long millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
     }
 
@@ -2293,7 +2308,7 @@ public class Mockito extends Matchers {
      *
      * @return verification mode
      */
-    public static VerificationAfterDelay after(long millis) {
+    public static VerificationAfterDelay after(final long millis) {
         return new After(millis, VerificationModeFactory.times(1));
     }
 

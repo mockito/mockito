@@ -73,7 +73,7 @@ import java.util.List;
  * @since 1.0
  * @version $Id: EqualsBuilder.java 611543 2008-01-13 07:00:22Z bayard $
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 class EqualsBuilder {
     
     /**
@@ -112,7 +112,7 @@ class EqualsBuilder {
      * @param rhs  the other object
      * @return <code>true</code> if the two Objects have tested equals.
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs) {
+    public static boolean reflectionEquals(final Object lhs, final Object rhs) {
         return reflectionEquals(lhs, rhs, false, null, null);
     }
 
@@ -135,7 +135,7 @@ class EqualsBuilder {
      * @param excludeFields  array of field names to exclude from testing
      * @return <code>true</code> if the two Objects have tested equals.
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, String[] excludeFields) {
+    public static boolean reflectionEquals(final Object lhs, final Object rhs, final String[] excludeFields) {
         return reflectionEquals(lhs, rhs, false, null, excludeFields);
     }
 
@@ -159,7 +159,7 @@ class EqualsBuilder {
      * @param testTransients  whether to include transient fields
      * @return <code>true</code> if the two Objects have tested equals.
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients) {
+    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients) {
         return reflectionEquals(lhs, rhs, testTransients, null, null);
     }
 
@@ -188,7 +188,7 @@ class EqualsBuilder {
      * @return <code>true</code> if the two Objects have tested equals.
      * @since 2.0
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class reflectUpToClass) {
+    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class reflectUpToClass) {
         return reflectionEquals(lhs, rhs, testTransients, reflectUpToClass, null);
     }
 
@@ -218,8 +218,8 @@ class EqualsBuilder {
      * @return <code>true</code> if the two Objects have tested equals.
      * @since 2.0
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class reflectUpToClass,
-            String[] excludeFields) {
+    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class reflectUpToClass,
+            final String[] excludeFields) {
         if (lhs == rhs) {
             return true;
         }
@@ -230,8 +230,8 @@ class EqualsBuilder {
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars, 
         // then a subclass can test equals to a superclass.
-        Class lhsClass = lhs.getClass();
-        Class rhsClass = rhs.getClass();
+        final Class lhsClass = lhs.getClass();
+        final Class rhsClass = rhs.getClass();
         Class testClass;
         if (lhsClass.isInstance(rhs)) {
             testClass = lhsClass;
@@ -249,14 +249,14 @@ class EqualsBuilder {
             // The two classes are not related.
             return false;
         }
-        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        final EqualsBuilder equalsBuilder = new EqualsBuilder();
         try {
             reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
             while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
                 testClass = testClass.getSuperclass();
                 reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // In this case, we tried to test a subclass vs. a superclass and
             // the subclass has ivars or the ivars are transient and 
             // we are testing transients.
@@ -279,24 +279,24 @@ class EqualsBuilder {
      * @param excludeFields  array of field names to exclude from testing
      */
     private static void reflectionAppend(
-        Object lhs,
-        Object rhs,
-        Class clazz,
-        EqualsBuilder builder,
-        boolean useTransients,
-        String[] excludeFields) {
-        Field[] fields = clazz.getDeclaredFields();
-        List excludedFieldList = excludeFields != null ? Arrays.asList(excludeFields) : Collections.EMPTY_LIST;
+        final Object lhs,
+        final Object rhs,
+        final Class clazz,
+        final EqualsBuilder builder,
+        final boolean useTransients,
+        final String[] excludeFields) {
+        final Field[] fields = clazz.getDeclaredFields();
+        final List excludedFieldList = excludeFields != null ? Arrays.asList(excludeFields) : Collections.EMPTY_LIST;
         AccessibleObject.setAccessible(fields, true);
         for (int i = 0; i < fields.length && builder.isEquals; i++) {
-            Field f = fields[i];
+            final Field f = fields[i];
             if (!excludedFieldList.contains(f.getName())
                 && (f.getName().indexOf('$') == -1)
                 && (useTransients || !Modifier.isTransient(f.getModifiers()))
                 && (!Modifier.isStatic(f.getModifiers()))) {
                 try {
                     builder.append(f.get(lhs), f.get(rhs));
-                } catch (IllegalAccessException e) {
+                } catch (final IllegalAccessException e) {
                     //this can't happen. Would get a Security exception instead
                     //throw a runtime exception in case the impossible happens.
                     throw new InternalError("Unexpected IllegalAccessException");
@@ -314,7 +314,7 @@ class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      * @since 2.0
      */
-    public EqualsBuilder appendSuper(boolean superEquals) {
+    public EqualsBuilder appendSuper(final boolean superEquals) {
         isEquals &= superEquals;
         return this;
     }
@@ -329,7 +329,7 @@ class EqualsBuilder {
      * @param rhs  the right hand object
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(Object lhs, Object rhs) {
+    public EqualsBuilder append(final Object lhs, final Object rhs) {
         if (!isEquals) {
             return this;
         }
@@ -340,7 +340,7 @@ class EqualsBuilder {
             this.setEquals(false);
             return this;
         }
-        Class lhsClass = lhs.getClass();
+        final Class lhsClass = lhs.getClass();
         if (!lhsClass.isArray()) {
             if (lhs instanceof java.math.BigDecimal && rhs instanceof java.math.BigDecimal) {
                 isEquals = (((java.math.BigDecimal) lhs).compareTo((java.math.BigDecimal) rhs) == 0);
@@ -388,7 +388,7 @@ class EqualsBuilder {
      *                  the right hand <code>long</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(long lhs, long rhs) {
+    public EqualsBuilder append(final long lhs, final long rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -400,7 +400,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>int</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(int lhs, int rhs) {
+    public EqualsBuilder append(final int lhs, final int rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -412,7 +412,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>short</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(short lhs, short rhs) {
+    public EqualsBuilder append(final short lhs, final short rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -424,7 +424,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>char</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(char lhs, char rhs) {
+    public EqualsBuilder append(final char lhs, final char rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -436,7 +436,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>byte</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(byte lhs, byte rhs) {
+    public EqualsBuilder append(final byte lhs, final byte rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -454,7 +454,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>double</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(double lhs, double rhs) {
+    public EqualsBuilder append(final double lhs, final double rhs) {
         if (!isEquals) {
             return this;
         }
@@ -474,7 +474,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>float</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(float lhs, float rhs) {
+    public EqualsBuilder append(final float lhs, final float rhs) {
         if (!isEquals) {
             return this;
         }
@@ -488,7 +488,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>boolean</code>
      * @return EqualsBuilder - used to chain calls.
       */
-    public EqualsBuilder append(boolean lhs, boolean rhs) {
+    public EqualsBuilder append(final boolean lhs, final boolean rhs) {
         isEquals &= (lhs == rhs);
         return this;
     }
@@ -503,7 +503,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>Object[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(Object[] lhs, Object[] rhs) {
+    public EqualsBuilder append(final Object[] lhs, final Object[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -534,7 +534,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>long[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(long[] lhs, long[] rhs) {
+    public EqualsBuilder append(final long[] lhs, final long[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -565,7 +565,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>int[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(int[] lhs, int[] rhs) {
+    public EqualsBuilder append(final int[] lhs, final int[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -596,7 +596,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>short[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(short[] lhs, short[] rhs) {
+    public EqualsBuilder append(final short[] lhs, final short[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -627,7 +627,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>char[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(char[] lhs, char[] rhs) {
+    public EqualsBuilder append(final char[] lhs, final char[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -658,7 +658,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>byte[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(byte[] lhs, byte[] rhs) {
+    public EqualsBuilder append(final byte[] lhs, final byte[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -689,7 +689,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>double[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(double[] lhs, double[] rhs) {
+    public EqualsBuilder append(final double[] lhs, final double[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -720,7 +720,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>float[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(float[] lhs, float[] rhs) {
+    public EqualsBuilder append(final float[] lhs, final float[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -751,7 +751,7 @@ class EqualsBuilder {
      * @param rhs  the right hand <code>boolean[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
-    public EqualsBuilder append(boolean[] lhs, boolean[] rhs) {
+    public EqualsBuilder append(final boolean[] lhs, final boolean[] rhs) {
         if (!isEquals) {
             return this;
         }
@@ -788,7 +788,7 @@ class EqualsBuilder {
      * @param isEquals The value to set.
      * @since 2.1
      */
-    protected void setEquals(boolean isEquals) {
+    protected void setEquals(final boolean isEquals) {
         this.isEquals = isEquals;
     }
 }

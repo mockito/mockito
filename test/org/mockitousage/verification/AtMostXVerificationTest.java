@@ -5,8 +5,11 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AtMostXVerificationTest extends TestBase {
 
     @Mock private List mock;
@@ -34,7 +37,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(1)).clear();
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (final MockitoAssertionError e) {}
     }
     
     @Test
@@ -45,7 +48,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(0)).add(anyString());
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (final MockitoAssertionError e) {}
     }
     
     @Test
@@ -53,7 +56,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(-1)).clear();
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertEquals("Negative value is not allowed here", e.getMessage());
         }
     }
@@ -66,7 +69,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(1)).clear();
             fail();
-        } catch (MockitoAssertionError e) {
+        } catch (final MockitoAssertionError e) {
             assertEquals("\nWanted at most 1 time but was 2", e.getMessage());
         }
     }
@@ -74,12 +77,12 @@ public class AtMostXVerificationTest extends TestBase {
     @Test
     public void shouldNotAllowInOrderMode() throws Exception {
         mock.clear();
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         
         try {
             inOrder.verify(mock, atMost(1)).clear();
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertEquals("AtMost is not implemented to work with InOrder", e.getMessage());
         }
     }
@@ -103,7 +106,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch(NoInteractionsWanted e) {
+        } catch(final NoInteractionsWanted e) {
             assertContains("undesiredInteraction(", e.getMessage());
         }
     }

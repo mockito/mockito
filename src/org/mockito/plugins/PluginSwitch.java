@@ -27,7 +27,7 @@ import org.mockito.Incubating;
  *     <li>The implementation itself, for example <code>org.awesome.mockito.AwesomeMockMaker</code> that extends the <code>MockMaker</code>.</li>
  *     <li>A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
  *     exactly a <strong>one</strong> line with the qualified name: <code>org.awesome.mockito.AwesomeMockMaker</code>.</li>
- * </ol></p>
+ * </ol>
  *
  * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
  * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
@@ -48,5 +48,5 @@ public interface PluginSwitch {
      *
      * @since 1.10.15
      */
-    boolean isEnabled(String pluginClassName);
+    boolean isEnabled(final String pluginClassName);
 }

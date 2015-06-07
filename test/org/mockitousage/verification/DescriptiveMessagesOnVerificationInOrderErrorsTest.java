@@ -5,8 +5,10 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,8 +49,8 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one, atLeastOnce()).simpleMethod(11);
             fail();
-        } catch (VerificationInOrderFailure e) {
-            String expected = 
+        } catch (final VerificationInOrderFailure e) {
+            final String expected = 
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
@@ -60,7 +62,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             
             assertContains(expected, e.getMessage());
             
-            String expectedCause = 
+            final String expectedCause = 
                 "\n" +
                 "Wanted anywhere AFTER following interaction:" +
                 "\n" +
@@ -77,8 +79,8 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one).differentMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
-            String expected = 
+        } catch (final WantedButNotInvoked e) {
+            final String expected = 
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
@@ -95,7 +97,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {           
+        } catch (final org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {           
             assertContains("has different arguments", e.getMessage());
         }
     }
@@ -107,7 +109,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertContains("Wanted but not invoked", e.getMessage());
         }
     } 
@@ -121,9 +123,9 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(three).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {
-            String actualMessage = e.getMessage();
-            String expectedMessage = 
+        } catch (final VerificationInOrderFailure e) {
+            final String actualMessage = e.getMessage();
+            final String expectedMessage = 
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
@@ -141,9 +143,9 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(two, times(1)).simpleMethod(2);
             fail();
-        } catch (VerificationInOrderFailure e) {
-            String actualMessage = e.getMessage();
-            String expectedMessage = 
+        } catch (final VerificationInOrderFailure e) {
+            final String actualMessage = e.getMessage();
+            final String expectedMessage = 
                     "\n" +
                     "Verification in order failure:" +
                     "\n" +
@@ -154,7 +156,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "-> at"; 
             assertContains(expectedMessage, actualMessage);      
 
-            String expectedCause =
+            final String expectedCause =
                 "\n" +
                 "But was 2 times. Undesired invocation:" +
                 "\n" +
@@ -174,9 +176,9 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(two, times(2)).simpleMethod(2);
             fail();
-        } catch (VerificationInOrderFailure e) {
-            String actualMessage = e.getMessage();
-            String expectedMessage = 
+        } catch (final VerificationInOrderFailure e) {
+            final String actualMessage = e.getMessage();
+            final String expectedMessage = 
                     "\n" +
                     "Verification in order failure:" +
                     "\n" +
@@ -187,7 +189,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "-> at";
             assertContains(expectedMessage, actualMessage);
             
-            String expectedCause = 
+            final String expectedCause = 
                 "\n" +
                 "But was 1 time:" +
                 "\n" +

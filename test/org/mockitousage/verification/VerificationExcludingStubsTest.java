@@ -5,6 +5,12 @@
 
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -13,45 +19,48 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.*;
-
-@SuppressWarnings("unchecked")
 public class VerificationExcludingStubsTest extends TestBase {
 
-    @Mock IMethods mock;
+    @Mock
+    IMethods mock;
 
     @Test
     public void shouldAllowToExcludeStubsForVerification() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
-        String stubbed = mock.simpleMethod(); //irrelevant call because it is stubbing
+        // when
+        final String stubbed = mock.simpleMethod(); // irrelevant call because
+                                                    // it is stubbing
         mock.objectArgMethod(stubbed);
 
-        //then
+        // then
         verify(mock).objectArgMethod("foo");
 
-        //verifyNoMoreInteractions fails:
-        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {};
-        
-        //but it works when stubs are ignored:
+        // verifyNoMoreInteractions fails:
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (final NoInteractionsWanted e) {
+        }
+
+        // but it works when stubs are ignored:
         ignoreStubs(mock);
         verifyNoMoreInteractions(mock);
     }
 
     @Test
     public void shouldExcludeFromVerificationInOrder() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
+        // when
         mock.objectArgMethod("1");
         mock.objectArgMethod("2");
-        mock.simpleMethod(); //calling the stub
+        mock.simpleMethod(); // calling the stub
 
-        //then
-        InOrder inOrder = inOrder(ignoreStubs(mock));
+        // then
+        final InOrder inOrder = inOrder(ignoreStubs(mock));
         inOrder.verify(mock).objectArgMethod("1");
         inOrder.verify(mock).objectArgMethod("2");
         inOrder.verifyNoMoreInteractions();

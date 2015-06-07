@@ -5,6 +5,7 @@
 package org.mockitousage.annotation;
 
 import java.util.List;
+
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +17,7 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings("rawtypes")
 public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected=MockitoException.class)
@@ -31,26 +32,16 @@ public class WrongSetOfAnnotationsTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new Object() { @InjectMocks @Spy List mock; });
             fail();
-        } catch (MockitoException me) {
+        } catch (final MockitoException me) {
             Assertions.assertThat(me.getMessage()).contains("'List' is an interface");
         }
         try {
             MockitoAnnotations.initMocks(new Object() { @Spy List mock; });
             fail();
-        } catch (MockitoException me) {
+        } catch (final MockitoException me) {
             Assertions.assertThat(me.getMessage()).contains("'List' is an interface");
         }
     }
-
-//    @Test
-//    public void should_allow_Spy_and_InjectMocks() throws Exception {
-//        MockitoAnnotations.initMocks(new Object() {
-//            @InjectMocks
-//            @Spy
-//            WithDependency mock;
-//        });
-//    }
-//    static class WithDependency { List list; }
 
     @Test(expected=MockitoException.class)
     public void should_not_allow_Mock_and_InjectMocks() throws Exception {

@@ -4,6 +4,14 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -11,15 +19,7 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.lang.reflect.Method;
-import java.util.Set;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stubVoid;
-import static org.mockito.Mockito.when;
-
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings({"rawtypes", "deprecation"})
 public class StubbingWithCustomAnswerTest extends TestBase {
     @Mock
     private IMethods mock;
@@ -27,8 +27,8 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     @Test
     public void shouldAnswer() throws Exception {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                String arg = (String) invocation.getArguments()[0];
+            public String answer(final InvocationOnMock invocation) throws Throwable {
+                final String arg = (String) invocation.getArguments()[0];
 
                 return invocation.getMethod().getName() + "-" + arg;
             }
@@ -39,8 +39,8 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     @Test
     public void shouldAnswerWithThenAnswerAlias() throws Exception {
-        RecordCall recordCall = new RecordCall();
-        Set mockedSet = when(mock(Set.class).isEmpty()).then(recordCall).getMock();
+        final RecordCall recordCall = new RecordCall();
+        final Set mockedSet = when(mock(Set.class).isEmpty()).then(recordCall).getMock();
 
         mockedSet.isEmpty();
 
@@ -51,13 +51,13 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     public void shouldAnswerConsecutively() throws Exception {
         when(mock.simpleMethod())
                 .thenAnswer(new Answer<String>() {
-                    public String answer(InvocationOnMock invocation) throws Throwable {
+                    public String answer(final InvocationOnMock invocation) throws Throwable {
                         return invocation.getMethod().getName();
                     }
                 })
                 .thenReturn("Hello")
                 .thenAnswer(new Answer<String>() {
-                    public String answer(InvocationOnMock invocation) throws Throwable {
+                    public String answer(final InvocationOnMock invocation) throws Throwable {
                         return invocation.getMethod().getName() + "-1";
                     }
                 });
@@ -70,7 +70,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     @Test
     public void shoudAnswerVoidMethod() throws Exception {
-        RecordCall recordCall = new RecordCall();
+        final RecordCall recordCall = new RecordCall();
 
         stubVoid(mock).toAnswer(recordCall).on().voidMethod();
 
@@ -80,8 +80,8 @@ public class StubbingWithCustomAnswerTest extends TestBase {
 
     @Test
     public void shouldAnswerVoidMethodConsecutively() throws Exception {
-        RecordCall call1 = new RecordCall();
-        RecordCall call2 = new RecordCall();
+        final RecordCall call1 = new RecordCall();
+        final RecordCall call2 = new RecordCall();
 
         stubVoid(mock).toAnswer(call1)
                 .toThrow(new UnsupportedOperationException())
@@ -95,7 +95,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
         }
 
         mock.voidMethod();
@@ -105,7 +105,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     @Test
     public void shouldMakeSureTheInterfaceDoesNotChange() throws Exception {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(final InvocationOnMock invocation) throws Throwable {
                 assertTrue(invocation.getArguments().getClass().isArray());
                 assertEquals(Method.class, invocation.getMethod().getClass());
 
@@ -123,7 +123,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
             return called;
         }
 
-        public Object answer(InvocationOnMock invocation) throws Throwable {
+        public Object answer(final InvocationOnMock invocation) throws Throwable {
             called = true;
             return null;
         }

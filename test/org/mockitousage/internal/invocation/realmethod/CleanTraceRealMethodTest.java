@@ -4,7 +4,7 @@
  */
 package org.mockitousage.internal.invocation.realmethod;
 
-import static org.mockitoutil.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.hasMethodInStackTraceAt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +28,8 @@ public class CleanTraceRealMethodTest extends TestBase {
     @Test
     public void shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows() throws Throwable {
         //given
-        CleanTraceRealMethod realMethod = new CleanTraceRealMethod(new RealMethod() {
-            public Object invoke(Object target, Object[] arguments) throws Throwable {
+        final CleanTraceRealMethod realMethod = new CleanTraceRealMethod(new RealMethod() {
+            public Object invoke(final Object target, final Object[] arguments) throws Throwable {
                 return new Foo().throwSomething();
             }});
         
@@ -38,7 +38,7 @@ public class CleanTraceRealMethodTest extends TestBase {
             realMethod.invoke(null, null);
             fail();
         //then
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertThat(e, hasMethodInStackTraceAt(0, "throwSomething"));
             assertThat(e, hasMethodInStackTraceAt(1, "invoke"));
             assertThat(e, hasMethodInStackTraceAt(2, "shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows"));

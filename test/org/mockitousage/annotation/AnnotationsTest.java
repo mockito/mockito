@@ -5,7 +5,7 @@
 
 package org.mockitousage.annotation;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,19 +23,24 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class AnnotationsTest extends TestBase {
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface NotAMock {}
+    public @interface NotAMock {
+    }
 
-    @Mock List list;
-    @Mock final Map map = new HashMap();
-        
-    @NotAMock Set notAMock;
+    @Mock
+    List list;
+    @Mock
+    final Map map = new HashMap();
+
+    @NotAMock
+    Set notAMock;
 
     @SuppressWarnings("deprecation")
-    @MockitoAnnotations.Mock List listTwo;
+    @MockitoAnnotations.Mock
+    List listTwo;
 
     @Before
     public void setup() {
@@ -58,7 +63,7 @@ public class AnnotationsTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(null);
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertEquals("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class",
                     e.getMessage());
         }
@@ -66,34 +71,39 @@ public class AnnotationsTest extends TestBase {
 
     @Test
     public void shouldLookForAnnotatedMocksInSuperClasses() throws Exception {
-        Sub sub = new Sub();
+        final Sub sub = new Sub();
         MockitoAnnotations.initMocks(sub);
 
         assertNotNull(sub.getMock());
         assertNotNull(sub.getBaseMock());
         assertNotNull(sub.getSuperBaseMock());
     }
-    
-    @Mock(answer = Answers.RETURNS_MOCKS, name = "i have a name") IMethods namedAndReturningMocks;
-    @Mock(answer = Answers.RETURNS_DEFAULTS) IMethods returningDefaults;
-    @Mock(extraInterfaces = {List.class}) IMethods hasExtraInterfaces;
-    @Mock() IMethods noExtraConfig;
+
+    @Mock(answer = Answers.RETURNS_MOCKS, name = "i have a name")
+    IMethods namedAndReturningMocks;
+    @Mock(answer = Answers.RETURNS_DEFAULTS)
+    IMethods returningDefaults;
+    @Mock(extraInterfaces = { List.class })
+    IMethods hasExtraInterfaces;
+    @Mock()
+    IMethods noExtraConfig;
 
     @Test
     public void shouldInitMocksWithGivenSettings() throws Exception {
         assertEquals("i have a name", namedAndReturningMocks.toString());
         assertNotNull(namedAndReturningMocks.iMethodsReturningMethod());
-       
+
         assertEquals("returningDefaults", returningDefaults.toString());
-        assertEquals(0, returningDefaults.intReturningMethod()); 
-        
+        assertEquals(0, returningDefaults.intReturningMethod());
+
         assertTrue(hasExtraInterfaces instanceof List);
-        
-        assertEquals(0, noExtraConfig.intReturningMethod());        
+
+        assertEquals(0, noExtraConfig.intReturningMethod());
     }
 
     class SuperBase {
-        @Mock private IMethods mock;
+        @Mock
+        private IMethods mock;
 
         public IMethods getSuperBaseMock() {
             return mock;
@@ -101,7 +111,8 @@ public class AnnotationsTest extends TestBase {
     }
 
     class Base extends SuperBase {
-        @Mock private IMethods mock;
+        @Mock
+        private IMethods mock;
 
         public IMethods getBaseMock() {
             return mock;
@@ -109,7 +120,8 @@ public class AnnotationsTest extends TestBase {
     }
 
     class Sub extends Base {
-        @Mock private IMethods mock;
+        @Mock
+        private IMethods mock;
 
         public IMethods getMock() {
             return mock;

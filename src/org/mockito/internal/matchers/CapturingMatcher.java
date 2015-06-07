@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.matchers;
 
-import org.hamcrest.Description;
-import org.mockito.ArgumentMatcher;
-import org.mockito.exceptions.Reporter;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+import org.hamcrest.Description;
+import org.mockito.ArgumentMatcher;
+import org.mockito.exceptions.Reporter;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class CapturingMatcher<T> extends ArgumentMatcher<T> implements CapturesArguments, VarargMatcher, Serializable {
     
     private static final long serialVersionUID = 4274067078639307295L;
@@ -21,14 +21,14 @@ public class CapturingMatcher<T> extends ArgumentMatcher<T> implements CapturesA
     /* (non-Javadoc)
      * @see org.mockito.ArgumentMatcher#matches(java.lang.Object)
      */
-    public boolean matches(Object argument) {
+    public boolean matches(final Object argument) {
         return true;
     }    
 
     /* (non-Javadoc)
      * @see org.mockito.ArgumentMatcher#describeTo(org.hamcrest.Description)
      */
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description.appendText("<Capturing argument>");
     }
 
@@ -45,7 +45,7 @@ public class CapturingMatcher<T> extends ArgumentMatcher<T> implements CapturesA
         return (List) arguments;
     }
 
-    public void captureFrom(Object argument) {
+    public void captureFrom(final Object argument) {
         this.arguments.add(argument);
     }
 }

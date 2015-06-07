@@ -5,7 +5,6 @@
 
 package org.mockito.exceptions;
 
-import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Location;
 
 @Deprecated

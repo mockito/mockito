@@ -13,19 +13,19 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class StubbedInvocationMatcher extends InvocationMatcher implements Answer, Serializable {
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
     private DescribedInvocation usedAt;
 
-    public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
+    public StubbedInvocationMatcher(final InvocationMatcher invocation, final Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
         this.answers.add(answer);
     }
 
-    public Object answer(InvocationOnMock invocation) throws Throwable {
+    public Object answer(final InvocationOnMock invocation) throws Throwable {
         //see ThreadsShareGenerouslyStubbedMockTest
         Answer a;
         synchronized(answers) {
@@ -34,11 +34,11 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Answe
         return a.answer(invocation);
     }
 
-    public void addAnswer(Answer answer) {
+    public void addAnswer(final Answer answer) {
         answers.add(answer);
     }
 
-    public void markStubUsed(DescribedInvocation usedAt) {
+    public void markStubUsed(final DescribedInvocation usedAt) {
         this.usedAt = usedAt;
     }
 

@@ -5,8 +5,16 @@
 
 package org.mockito.internal;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Test;
@@ -37,7 +45,7 @@ import org.mockitoutil.TestBase;
  *    -on stub
  *    -on stubVoid
  */
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings({"rawtypes", "deprecation"})
 public class InvalidStateDetectionTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -180,13 +188,13 @@ public class InvalidStateDetectionTest extends TestBase {
         try {
             stubVoid(mock).toThrow(new RuntimeException()).on().oneArg(true);
             fail();
-        } catch (UnfinishedStubbingException e) {}
+        } catch (final UnfinishedStubbingException e) {}
         
         stubVoid(mock).toThrow(new RuntimeException()).on().oneArg(true);
         try {
             mock.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
     }
     
     @Test
@@ -197,80 +205,80 @@ public class InvalidStateDetectionTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (final UnfinishedVerificationException e) {}
         
         verify(mock).simpleMethod();
     }
     
     private interface DetectsInvalidState {
-        void detect(IMethods mock);
+        void detect(final IMethods mock);
     }
     
     private static class OnVerify implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             verify(mock);
         }
     }
     
     private static class OnVerifyInOrder implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             inOrder(mock).verify(mock);
         }
     }
     
     private static class OnVerifyZeroInteractions implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             verifyZeroInteractions(mock);
         }
     }
     
     private static class OnVerifyNoMoreInteractions implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             verifyNoMoreInteractions(mock);
         }
     }   
     
     private static class OnDoAnswer implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             doAnswer(null);
         }
     }  
     
     private static class OnStub implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             when(mock);
         }
     }
     
     private static class OnStubVoid implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             stubVoid(mock);
         }
     }
     
     private static class OnMethodCallOnMock implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             mock.simpleMethod();
         }
     }
     
     private static class OnMockCreation implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             mock(IMethods.class);
         }
     }
     
     private static class OnSpyCreation implements DetectsInvalidState {
-        public void detect(IMethods mock) {
+        public void detect(final IMethods mock) {
             spy(new Object());
         }
     }
     
-    private void detectsAndCleansUp(DetectsInvalidState detector, Class expected) {
+    private void detectsAndCleansUp(final DetectsInvalidState detector, final Class expected) {
         try {
             detector.detect(mock);
             fail("Should throw an exception");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertEquals(expected, e.getClass());
         }
         //Make sure state is cleaned up

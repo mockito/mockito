@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.mock.MockName;
-
 import java.io.Serializable;
 
+import org.mockito.mock.MockName;
+
+@SuppressWarnings("rawtypes")
 public class MockNameImpl implements MockName, Serializable {
     
     private static final long serialVersionUID = 8014974700844306925L;
     private final String mockName;
     private boolean defaultName;
 
-    @SuppressWarnings("unchecked")
-    public MockNameImpl(String mockName, Class classToMock) {
+    public MockNameImpl(final String mockName, final Class classToMock) {
         if (mockName == null) {
             this.mockName = toInstanceName(classToMock);
             this.defaultName = true;
@@ -24,11 +24,11 @@ public class MockNameImpl implements MockName, Serializable {
         }
     }
 
-    public MockNameImpl(String mockName) {
+    public MockNameImpl(final String mockName) {
         this.mockName = mockName;
     }
 
-    private static String toInstanceName(Class<?> clazz) {
+    private static String toInstanceName(final Class<?> clazz) {
         String className = clazz.getSimpleName();
         if (className.length() == 0) {
             //it's an anonymous class, let's get name from the parent

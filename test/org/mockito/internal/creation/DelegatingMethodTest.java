@@ -1,10 +1,10 @@
 package org.mockito.internal.creation;
 
+import java.lang.reflect.Method;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import java.lang.reflect.Method;
 
 public class DelegatingMethodTest extends TestBase {
 
@@ -20,13 +20,13 @@ public class DelegatingMethodTest extends TestBase {
 
     @Test
     public void equals_should_return_false_when_not_equal() throws Exception {
-        DelegatingMethod notEqual = new DelegatingMethod(otherMethod);
+        final DelegatingMethod notEqual = new DelegatingMethod(otherMethod);
         assertFalse(delegatingMethod.equals(notEqual));
     }
 
     @Test
     public void equals_should_return_true_when_equal() throws Exception {
-        DelegatingMethod equal = new DelegatingMethod(someMethod);
+        final DelegatingMethod equal = new DelegatingMethod(someMethod);
         assertTrue(delegatingMethod.equals(equal));
     }
 
@@ -47,8 +47,8 @@ public class DelegatingMethodTest extends TestBase {
 
     private interface Something {
 
-        public Object someMethod(Object param);
+        Object someMethod(final Object param);
 
-        public Object otherMethod(Object param);
+        Object otherMethod(final Object param);
     }
 }

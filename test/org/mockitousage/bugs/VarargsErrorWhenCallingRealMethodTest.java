@@ -5,21 +5,24 @@
 
 package org.mockitousage.bugs;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 import org.mockitoutil.TestBase;
 
 public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
 
     class Foo {
-        int blah(String a, String b, Object ... c) {
+        int blah(final String a, final String b, final Object ... c) {
             return 1;
         }
     }
 
     @Test
     public void shouldNotThrowAnyException() throws Exception {
-        Foo foo = mock(Foo.class);
+        final Foo foo = mock(Foo.class);
 
         when(foo.blah(anyString(), anyString())).thenCallRealMethod();
 

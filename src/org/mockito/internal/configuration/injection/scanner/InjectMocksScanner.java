@@ -4,20 +4,20 @@
  */
 package org.mockito.internal.configuration.injection.scanner;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.Reporter;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Scan field for injection.
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unchecked", "rawtypes"})
 public class InjectMocksScanner {
     private final Class<?> clazz;
 
@@ -26,7 +26,7 @@ public class InjectMocksScanner {
      *
      * @param clazz    Current class in the hierarchy of the test
      */
-    public InjectMocksScanner(Class<?> clazz) {
+    public InjectMocksScanner(final Class<?> clazz) {
         this.clazz = clazz;
     }
 
@@ -36,7 +36,7 @@ public class InjectMocksScanner {
      *
      * @param mockDependentFields Set of fields annotated by  @{@link InjectMocks}
      */
-    public void addTo(Set<Field> mockDependentFields) {
+    public void addTo(final Set<Field> mockDependentFields) {
         mockDependentFields.addAll(scan());
     }
 
@@ -46,9 +46,9 @@ public class InjectMocksScanner {
      * @return Fields that depends on Mock
      */
     private Set<Field> scan() {
-        Set<Field> mockDependentFields = new HashSet<Field>();
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
+        final Set<Field> mockDependentFields = new HashSet<Field>();
+        final Field[] fields = clazz.getDeclaredFields();
+        for (final Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {
                 assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
                 mockDependentFields.add(field);
@@ -59,7 +59,7 @@ public class InjectMocksScanner {
     }
 
     void assertNoAnnotations(final Field field, final Class... annotations) {
-        for (Class annotation : annotations) {
+        for (final Class annotation : annotations) {
             if (field.isAnnotationPresent(annotation)) {
                 new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
             }

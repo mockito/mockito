@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class InOrderImplTest extends TestBase {
     
     @Mock IMethods mock;
@@ -23,8 +23,8 @@ public class InOrderImplTest extends TestBase {
     @Test
     public void shouldMarkVerifiedInOrder() throws Exception {
         //given
-        InOrderImpl impl = new InOrderImpl((List) asList(mock));
-        Invocation i = new InvocationBuilder().toInvocation();
+        final InOrderImpl impl = new InOrderImpl((List) asList(mock));
+        final Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(impl.isVerified(i));
         
         //when

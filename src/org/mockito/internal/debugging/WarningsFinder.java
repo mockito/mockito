@@ -4,33 +4,33 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.Invocation;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class WarningsFinder {
     private final List<Invocation> baseUnusedStubs;
     private final List<InvocationMatcher> baseAllInvocations;
 
-    public WarningsFinder(List<Invocation> unusedStubs, List<InvocationMatcher> allInvocations) {
+    public WarningsFinder(final List<Invocation> unusedStubs, final List<InvocationMatcher> allInvocations) {
         this.baseUnusedStubs = unusedStubs;
         this.baseAllInvocations = allInvocations;
     }
     
-    public void find(FindingsListener findingsListener) {
-        List<Invocation> unusedStubs = new LinkedList(this.baseUnusedStubs);
-        List<InvocationMatcher> allInvocations = new LinkedList(this.baseAllInvocations);
+    public void find(final FindingsListener findingsListener) {
+        final List<Invocation> unusedStubs = new LinkedList(this.baseUnusedStubs);
+        final List<InvocationMatcher> allInvocations = new LinkedList(this.baseAllInvocations);
 
-        Iterator<Invocation> unusedIterator = unusedStubs.iterator();
+        final Iterator<Invocation> unusedIterator = unusedStubs.iterator();
         while(unusedIterator.hasNext()) {
-            Invocation unused = unusedIterator.next();
-            Iterator<InvocationMatcher> unstubbedIterator = allInvocations.iterator();
+            final Invocation unused = unusedIterator.next();
+            final Iterator<InvocationMatcher> unstubbedIterator = allInvocations.iterator();
             while(unstubbedIterator.hasNext()) {
-                InvocationMatcher unstubbed = unstubbedIterator.next();
+                final InvocationMatcher unstubbed = unstubbedIterator.next();
                 if(unstubbed.hasSimilarMethod(unused)) {
                     findingsListener.foundStubCalledWithDifferentArgs(unused, unstubbed);
                     unusedIterator.remove();
@@ -39,11 +39,11 @@ public class WarningsFinder {
             }
         }
 
-        for (Invocation i : unusedStubs) {
+        for (final Invocation i : unusedStubs) {
             findingsListener.foundUnusedStub(i);
         }
 
-        for (InvocationMatcher i : allInvocations) {
+        for (final InvocationMatcher i : allInvocations) {
             findingsListener.foundUnstubbed(i);
         }
     }

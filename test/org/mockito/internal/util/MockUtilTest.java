@@ -6,8 +6,10 @@
 package org.mockito.internal.util;
 
 import static org.mockito.Mockito.withSettings;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,14 +17,14 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class MockUtilTest extends TestBase {
 
-    private MockUtil mockUtil = new MockUtil();
+    private final MockUtil mockUtil = new MockUtil();
 
     @Test
     public void should_get_handler() {
-        List mock = Mockito.mock(List.class);
+        final List mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockHandler(mock));
     }
 
@@ -38,7 +40,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_get_mock_settings() {
-        List mock = Mockito.mock(List.class);
+        final List mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockSettings(mock));
     }
 
@@ -61,7 +63,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_redefine_MockName_if_default() {
-        List mock = Mockito.mock(List.class);
+        final List mock = Mockito.mock(List.class);
         mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("newName");
@@ -69,7 +71,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_not_redefine_MockName_if_default() {
-        List mock = Mockito.mock(List.class, "original");
+        final List mock = Mockito.mock(List.class, "original");
         mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");

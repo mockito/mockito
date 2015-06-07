@@ -5,8 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +51,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     } 
     
     @Test
@@ -58,7 +62,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("differentMethod()", e.getMessage());
         }
     }
@@ -77,7 +81,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -96,6 +100,6 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
 }

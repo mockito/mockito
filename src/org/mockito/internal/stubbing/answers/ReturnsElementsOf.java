@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,7 +34,7 @@ public class ReturnsElementsOf implements Answer<Object> {
 
     private final LinkedList<Object> elements;
 
-    public ReturnsElementsOf(Collection<?> elements) {
+    public ReturnsElementsOf(final Collection<?> elements) {
         if (elements == null) {
             throw new MockitoException("ReturnsElementsOf does not accept null as constructor argument.\n" +
                     "Please pass a collection instance");
@@ -41,10 +42,11 @@ public class ReturnsElementsOf implements Answer<Object> {
         this.elements = new LinkedList<Object>(elements);
     }
 
-    public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (elements.size() == 1)
+    public Object answer(final InvocationOnMock invocation) throws Throwable {
+        if (elements.size() == 1) {
             return elements.get(0);
-        else 
+        } else {
             return elements.poll();
+        }
     }
 }

@@ -5,7 +5,7 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 import java.util.LinkedList;
 
@@ -16,7 +16,7 @@ import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase {
 
     @Mock private LinkedList mock;
@@ -31,7 +31,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         try {
             Mockito.verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (final TooLittleActualInvocations e) {
             assertContains("mock.clear();", e.getMessage());
             assertContains("Wanted 100 times", e.getMessage());
             assertContains("was 3", e.getMessage());
@@ -49,7 +49,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         try {
             Mockito.verify(mock, times(1)).clear();
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (final TooManyActualInvocations e) {
             assertContains("mock.clear();", e.getMessage());
             assertContains("Wanted 1 time", e.getMessage());
             assertContains("was 4", e.getMessage());

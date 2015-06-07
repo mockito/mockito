@@ -7,7 +7,9 @@ package org.mockitousage.bugs;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
@@ -16,14 +18,14 @@ import org.mockitoutil.TestBase;
 public class AIOOBExceptionWithAtLeastTest extends TestBase {
 
     interface IProgressMonitor {
-        void beginTask(String s, int i);
-        void worked(int i);
+        void beginTask(final String s, final int i);
+        void worked(final int i);
         void done();
     }
 
     @Test
     public void testCompleteProgress() throws Exception {
-        IProgressMonitor progressMonitor = mock(IProgressMonitor.class);
+        final IProgressMonitor progressMonitor = mock(IProgressMonitor.class);
 
         progressMonitor.beginTask("foo", 12);
         progressMonitor.worked(10);

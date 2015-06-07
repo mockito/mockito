@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.internal.util.Checks;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import org.mockito.internal.util.Checks;
 
 /**
  * Represents an accessible instance field.
@@ -22,11 +22,13 @@ public class InstanceField {
     /**
      * Create a new InstanceField.
      *
-     * @param field The field that should be accessed, note that no checks are performed to ensure
-     *              the field belong to this instance class.
-     * @param instance The instance from which the field shall be accessed.
+     * @param field
+     *            The field that should be accessed, note that no checks are
+     *            performed to ensure the field belong to this instance class.
+     * @param instance
+     *            The instance from which the field shall be accessed.
      */
-    public InstanceField(Field field, Object instance) {
+    public InstanceField(final Field field, final Object instance) {
         this.field = Checks.checkNotNull(field, "field");
         this.instance = Checks.checkNotNull(instance, "instance");
     }
@@ -44,10 +46,11 @@ public class InstanceField {
     /**
      * Set the given value to the field of this instance.
      *
-     * @param value The value that should be written to the field.
+     * @param value
+     *            The value that should be written to the field.
      * @see FieldSetter
      */
-    public void set(Object value) {
+    public void set(final Object value) {
         new FieldSetter(instance, field).set(value);
     }
 
@@ -63,21 +66,25 @@ public class InstanceField {
     /**
      * Check if the field is annotated by the given annotation.
      *
-     * @param annotationClass The annotation type to check.
-     * @return <code>true</code> if the field is annotated by this annotation, else <code>false</code>.
+     * @param annotationClass
+     *            The annotation type to check.
+     * @return <code>true</code> if the field is annotated by this annotation,
+     *         else <code>false</code>.
      */
-    public boolean isAnnotatedBy(Class<? extends Annotation> annotationClass) {
+    public boolean isAnnotatedBy(final Class<? extends Annotation> annotationClass) {
         return field.isAnnotationPresent(annotationClass);
     }
 
     /**
      * Returns the annotation instance for the given annotation type.
      *
-     * @param annotationClass Tha annotation type to retrieve.
-     * @param <A> Type of the annotation.
+     * @param annotationClass
+     *            Tha annotation type to retrieve.
+     * @param <A>
+     *            Type of the annotation.
      * @return The annotation instance.
      */
-    public <A extends Annotation> A annotation(Class<A> annotationClass) {
+    public <A extends Annotation> A annotation(final Class<A> annotationClass) {
         return field.getAnnotation(annotationClass);
     }
 
@@ -107,11 +114,15 @@ public class InstanceField {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-        InstanceField that = (InstanceField) o;
+        final InstanceField that = (InstanceField) o;
         return field.equals(that.field) && instance.equals(that.instance);
     }
 

@@ -4,13 +4,16 @@
  */
 package org.mockitousage.basicapi;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.withSettings;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 public class MockingDetailsTest extends TestBase {
     

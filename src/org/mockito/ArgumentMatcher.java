@@ -59,8 +59,6 @@ import org.mockito.internal.util.Decamelizer;
  */
 public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
 
-    private static final long serialVersionUID = -2145234737829370369L;
-
     /**
      * Returns whether this matcher accepts the given argument.
      * <p>
@@ -85,8 +83,8 @@ public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
      * @param description the description to which the matcher description is
      * appended.
      */
-    public void describeTo(Description description) {
-        String className = getClass().getSimpleName();
+    public void describeTo(final Description description) {
+        final String className = getClass().getSimpleName();
         description.appendText(Decamelizer.decamelizeMatcher(className));
     }
 }

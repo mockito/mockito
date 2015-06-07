@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class CaptorAnnotationUnhappyPathTest extends TestBase {
     
     @Captor List notACaptorField;
@@ -31,7 +31,7 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
             //when
             MockitoAnnotations.initMocks(this);
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             //then
             assertContains("notACaptorField", e.getMessage());
             assertContains("wrong type", e.getMessage());

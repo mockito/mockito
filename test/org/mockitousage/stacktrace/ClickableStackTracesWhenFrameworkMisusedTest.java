@@ -5,8 +5,10 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Test;
@@ -36,7 +38,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (InvalidUseOfMatchersException e) {
+        } catch (final InvalidUseOfMatchersException e) {
             assertContains("-> at ", e.getMessage());
             assertContains("misplacedArgumentMatcherHere(", e.getMessage());
         }
@@ -53,7 +55,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (UnfinishedStubbingException e) {
+        } catch (final UnfinishedStubbingException e) {
             assertContains("-> at ", e.getMessage());
             assertContains("unfinishedStubbingHere(", e.getMessage());
         }
@@ -65,7 +67,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         try {
             mock(IMethods.class);
             fail();
-        } catch (UnfinishedVerificationException e) {
+        } catch (final UnfinishedVerificationException e) {
             assertContains("unfinishedVerificationHere(", e.getMessage());
         }
     }

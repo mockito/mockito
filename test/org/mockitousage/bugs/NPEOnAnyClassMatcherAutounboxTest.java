@@ -5,21 +5,23 @@
 
 package org.mockitousage.bugs;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 //see issue 221
 public class NPEOnAnyClassMatcherAutounboxTest extends TestBase {
 
     interface Foo {
-        void bar(long id);
+        void bar(final long id);
     }
 
     @Test
     public void shouldNotThrowNPE() {
-        Foo f = mock(Foo.class);
+        final Foo f = mock(Foo.class);
         f.bar(1);
         verify(f).bar(any(Long.class));
     }

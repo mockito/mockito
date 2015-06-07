@@ -4,6 +4,11 @@
  */
 package org.mockitousage.annotation;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,40 +21,53 @@ import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings("rawtypes")
 public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
-    private SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
-    @InjectMocks private SuperUnderTesting superUnderTest = new SuperUnderTesting();
-    @InjectMocks private BaseUnderTesting baseUnderTest = new BaseUnderTesting();
-    @InjectMocks private SubUnderTesting subUnderTest = new SubUnderTesting();
-    @InjectMocks private OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
-    @InjectMocks private HasTwoFieldsWithSameType hasTwoFieldsWithSameType = new HasTwoFieldsWithSameType();
+    private final SuperUnderTesting superUnderTestWithoutInjection = new SuperUnderTesting();
+    @InjectMocks
+    private final SuperUnderTesting superUnderTest = new SuperUnderTesting();
+    @InjectMocks
+    private final BaseUnderTesting baseUnderTest = new BaseUnderTesting();
+    @InjectMocks
+    private final SubUnderTesting subUnderTest = new SubUnderTesting();
+    @InjectMocks
+    private final OtherBaseUnderTesting otherBaseUnderTest = new OtherBaseUnderTesting();
+    @InjectMocks
+    private final HasTwoFieldsWithSameType hasTwoFieldsWithSameType = new HasTwoFieldsWithSameType();
 
-    private BaseUnderTesting baseUnderTestingInstance = new BaseUnderTesting();
-    @InjectMocks private BaseUnderTesting initializedBase = baseUnderTestingInstance;
-    @InjectMocks private BaseUnderTesting notInitializedBase;
+    private final BaseUnderTesting baseUnderTestingInstance = new BaseUnderTesting();
+    @InjectMocks
+    private final BaseUnderTesting initializedBase = baseUnderTestingInstance;
+    @InjectMocks
+    private BaseUnderTesting notInitializedBase;
 
-    @Spy @InjectMocks private SuperUnderTesting initializedSpy = new SuperUnderTesting();
-    @Spy @InjectMocks private SuperUnderTesting notInitializedSpy;
+    @Spy
+    @InjectMocks
+    private final SuperUnderTesting initializedSpy = new SuperUnderTesting();
+    @Spy
+    @InjectMocks
+    private SuperUnderTesting notInitializedSpy;
 
-    @Mock private Map map;
-    @Mock private List list;
-    @Mock private Set histogram1;
-    @Mock private Set histogram2;
-    @Mock private IMethods candidate2;
+    @Mock
+    private Map map;
+    @Mock
+    private List list;
+    @Mock
+    private Set histogram1;
+    @Mock
+    private Set histogram2;
+    @Mock
+    private IMethods candidate2;
 
-    @Spy private TreeSet searchTree = new TreeSet();
-    private MockUtil mockUtil = new MockUtil();
+    @Spy
+    private final TreeSet searchTree = new TreeSet();
+    private final MockUtil mockUtil = new MockUtil();
 
     @Before
     public void enforces_new_instances() {
-        // initMocks called in TestBase Before method, so instances are not the same
+        // initMocks called in TestBase Before method, so instances are not the
+        // same
         MockitoAnnotations.initMocks(this);
     }
 
@@ -127,46 +145,60 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
     @Test
     public void should_report_nicely() throws Exception {
-        Object failing = new Object() {
-            @InjectMocks ThrowingConstructor failingConstructor;
+        final Object failing = new Object() {
+            @InjectMocks
+            ThrowingConstructor failingConstructor;
         };
         try {
             MockitoAnnotations.initMocks(failing);
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             Assertions.assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
             Assertions.assertThat(e.getCause()).isInstanceOf(RuntimeException.class);
         }
     }
 
     static class ThrowingConstructor {
-        ThrowingConstructor() { throw new RuntimeException("aha"); }
+        ThrowingConstructor() {
+            throw new RuntimeException("aha");
+        }
     }
 
     static class SuperUnderTesting {
         private List aList;
 
-        public List getAList() { return aList; }
+        public List getAList() {
+            return aList;
+        }
     }
 
     static class BaseUnderTesting extends SuperUnderTesting {
         private Map aMap;
 
-        public Map getAMap() { return aMap; }
+        public Map getAMap() {
+            return aMap;
+        }
     }
 
     static class OtherBaseUnderTesting extends SuperUnderTesting {
         private TreeSet searchTree;
 
-        public TreeSet getSearchTree() { return searchTree; }
+        public TreeSet getSearchTree() {
+            return searchTree;
+        }
     }
 
     static class SubUnderTesting extends BaseUnderTesting {
         private Set histogram1;
         private Set histogram2;
 
-        public Set getHistogram1() { return histogram1; }
-        public Set getHistogram2() { return histogram2; }
+        public Set getHistogram1() {
+            return histogram1;
+        }
+
+        public Set getHistogram2() {
+            return histogram2;
+        }
     }
 
     static class HasTwoFieldsWithSameType {

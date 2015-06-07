@@ -5,7 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +74,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -87,7 +92,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();
-        } catch(NoInteractionsWanted e) {}
+        } catch(final NoInteractionsWanted e) {}
     }  
     
     @Test
@@ -104,7 +109,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockThree).simpleMethod(3);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -113,7 +118,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             verifyNoMoreInteractions(mockTwo);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test(expected=VerificationInOrderFailure.class)
@@ -194,7 +199,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             verify(mockOne, times(0)).simpleMethod(1);
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (final NeverWantedButInvoked e) {}
     }
     
     @Test
@@ -203,7 +208,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockThree, times(0)).simpleMethod(3);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test(expected=VerificationInOrderFailure.class)
@@ -234,7 +239,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -243,7 +248,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test
@@ -252,6 +257,6 @@ public class RelaxedVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
 }

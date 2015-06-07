@@ -5,16 +5,17 @@
 
 package org.mockito.mock;
 
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
-import java.util.List;
-import java.util.Set;
-
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
  */
+@SuppressWarnings("rawtypes")
 public interface MockCreationSettings<T> {
 
     /**

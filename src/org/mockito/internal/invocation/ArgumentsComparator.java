@@ -4,21 +4,21 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.List;
+
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 
-import java.util.List;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ArgumentsComparator {
-    public boolean argumentsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
-        Object[] actualArgs = actual.getArguments();
+    public boolean argumentsMatch(final InvocationMatcher invocationMatcher, final Invocation actual) {
+        final Object[] actualArgs = actual.getArguments();
         return argumentsMatch(invocationMatcher, actualArgs) || varArgsMatch(invocationMatcher, actual);
     }
 
-    public boolean argumentsMatch(InvocationMatcher invocationMatcher, Object[] actualArgs) {
+    public boolean argumentsMatch(final InvocationMatcher invocationMatcher, final Object[] actualArgs) {
         if (actualArgs.length != invocationMatcher.getMatchers().size()) {
             return false;
         }
@@ -31,28 +31,28 @@ public class ArgumentsComparator {
     }
 
     //ok, this method is a little bit messy but the vararg business unfortunately is messy...      
-    private boolean varArgsMatch(InvocationMatcher invocationMatcher, Invocation actual) {
+    private boolean varArgsMatch(final InvocationMatcher invocationMatcher, final Invocation actual) {
         if (!actual.getMethod().isVarArgs()) {
             //if the method is not vararg forget about it
             return false;
         }
 
         //we must use raw arguments, not arguments...
-        Object[] rawArgs = actual.getRawArguments();
-        List<Matcher> matchers = invocationMatcher.getMatchers();
+        final Object[] rawArgs = actual.getRawArguments();
+        final List<Matcher> matchers = invocationMatcher.getMatchers();
 
         if (rawArgs.length != matchers.size()) {
             return false;
         }
 
         for (int i = 0; i < rawArgs.length; i++) {
-            Matcher m = matchers.get(i);
+            final Matcher m = matchers.get(i);
             //it's a vararg because it's the last array in the arg list
             if (rawArgs[i] != null && rawArgs[i].getClass().isArray() && i == rawArgs.length-1) {
                 Matcher actualMatcher;
                 //this is necessary as the framework often decorates matchers
                 if (m instanceof MatcherDecorator) {
-                    actualMatcher = ((MatcherDecorator)m).getActualMatcher();
+                    actualMatcher = ((MatcherDecorator) m).getActualMatcher();
                 } else {
                     actualMatcher = m;
                 }

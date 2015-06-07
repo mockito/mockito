@@ -5,17 +5,8 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.StackTraceCleanerProvider;
-
-import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
 /**
  * Loads configuration or extension points available in the classpath.
@@ -53,6 +44,7 @@ import java.util.List;
  * </ul>
  * </p>
  */
+@SuppressWarnings("rawtypes")
 public class ClassPathLoader {
 
     public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
@@ -60,22 +52,21 @@ public class ClassPathLoader {
     /**
      * @return configuration loaded from classpath or null
      */
-    @SuppressWarnings({"unchecked"})
     public IMockitoConfiguration loadConfiguration() {
         //Trying to get config from classpath
         Class configClass;
         try {
-            configClass = (Class) Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
-        } catch (ClassNotFoundException e) {
+            configClass = Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
+        } catch (final ClassNotFoundException e) {
             //that's ok, it means there is no global config, using default one.
             return null;
         }
 
         try {
             return (IMockitoConfiguration) configClass.newInstance();
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new MockitoConfigurationException("MockitoConfiguration class must implement " + IMockitoConfiguration.class.getName() + " interface.", e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new MockitoConfigurationException("Unable to instantiate " + MOCKITO_CONFIGURATION_CLASS_NAME +" class. Does it have a safe, no-arg constructor?", e);
         }
     }

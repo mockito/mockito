@@ -4,6 +4,13 @@
  */
 package org.mockito.internal.creation;
 
+import static org.mockito.internal.util.collections.Sets.newSet;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -16,14 +23,7 @@ import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.internal.util.collections.Sets.newSet;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {
 
     private static final long serialVersionUID = 4475297236197939569L;
@@ -34,17 +34,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return serializable(SerializableMode.BASIC);
     }
 
-    public MockSettings serializable(SerializableMode mode) {
+    public MockSettings serializable(final SerializableMode mode) {
         this.serializableMode = mode;
         return this;
     }
 
-    public MockSettings extraInterfaces(Class... extraInterfaces) {
+    public MockSettings extraInterfaces(final Class... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
             new Reporter().extraInterfacesRequiresAtLeastOneInterface();
         }
 
-        for (Class i : extraInterfaces) {
+        for (final Class i : extraInterfaces) {
             if (i == null) {
                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();
             } else if (!i.isInterface()) {
@@ -67,17 +67,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return spiedInstance;
     }
 
-    public MockSettings name(String name) {
+    public MockSettings name(final String name) {
         this.name = name;
         return this;
     }
 
-    public MockSettings spiedInstance(Object spiedInstance) {
+    public MockSettings spiedInstance(final Object spiedInstance) {
         this.spiedInstance = spiedInstance;
         return this;
     }
 
-    public MockSettings defaultAnswer(Answer defaultAnswer) {
+    public MockSettings defaultAnswer(final Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
         if (defaultAnswer == null) {
             new Reporter().defaultAnswerDoesNotAcceptNullParameter();
@@ -99,7 +99,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    public MockSettings outerInstance(Object outerClassInstance) {
+    public MockSettings outerInstance(final Object outerClassInstance) {
         this.outerClassInstance = outerClassInstance;
         return this;
     }
@@ -123,11 +123,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    public MockSettings invocationListeners(InvocationListener... listeners) {
+    public MockSettings invocationListeners(final InvocationListener... listeners) {
         if (listeners == null || listeners.length == 0) {
             new Reporter().invocationListenersRequiresAtLeastOneListener();
         }
-        for (InvocationListener listener : listeners) {
+        for (final InvocationListener listener : listeners) {
             if (listener == null) {
                 new Reporter().invocationListenerDoesNotAcceptNullParameters();
             }
@@ -136,8 +136,8 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    private boolean invocationListenersContainsType(Class<?> clazz) {
-        for (InvocationListener listener : invocationListeners) {
+    private boolean invocationListenersContainsType(final Class<?> clazz) {
+        for (final InvocationListener listener : invocationListeners) {
             if (listener.getClass().equals(clazz)) {
                 return true;
             }
@@ -157,12 +157,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return typeToMock;
     }
 
-    public MockCreationSettings<T> confirm(Class<T> typeToMock) {
+    public MockCreationSettings<T> confirm(final Class<T> typeToMock) {
         return validatedSettings(typeToMock, this);
     }
 
-    private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
-        MockCreationValidator validator = new MockCreationValidator();
+    private static <T> CreationSettings<T> validatedSettings(final Class<T> typeToMock, final CreationSettings<T> source) {
+        final MockCreationValidator validator = new MockCreationValidator();
 
         validator.validateType(typeToMock);
         validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
@@ -175,15 +175,15 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
 
         //TODO SF - I don't think we really need CreationSettings type
-        CreationSettings<T> settings = new CreationSettings<T>(source);
+        final CreationSettings<T> settings = new CreationSettings<T>(source);
         settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
         settings.setTypeToMock(typeToMock);
         settings.setExtraInterfaces(prepareExtraInterfaces(source));
         return settings;
     }
 
-    private static Set<Class> prepareExtraInterfaces(CreationSettings settings) {
-        Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
+    private static Set<Class> prepareExtraInterfaces(final CreationSettings settings) {
+        final Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
         if(settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }

@@ -5,7 +5,7 @@
 
 package org.mockito.internal.util;
 
-import static org.mockito.internal.util.Decamelizer.*;
+import static org.mockito.internal.util.Decamelizer.decamelizeMatcher;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;

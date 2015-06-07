@@ -5,24 +5,24 @@
 
 package org.mockito.internal.util.collections;
 
-import org.junit.Test;
-import org.mockito.internal.util.collections.ListUtil.Filter;
-import org.mockitoutil.TestBase;
+import static java.util.Arrays.asList;
+import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
+import org.junit.Test;
+import org.mockito.internal.util.collections.ListUtil.Filter;
+import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ListUtilTest extends TestBase {
 
     @Test
     public void shouldFilterList() throws Exception {
-        List list = asList("one", "x", "two", "x", "three");
-        List filtered = ListUtil.filter(list, new Filter() {
-            public boolean isOut(Object object) {
+        final List list = asList("one", "x", "two", "x", "three");
+        final List filtered = ListUtil.filter(list, new Filter() {
+            public boolean isOut(final Object object) {
                 return object == "x";
             }
         });
@@ -32,8 +32,8 @@ public class ListUtilTest extends TestBase {
     
     @Test
     public void shouldReturnEmptyIfEmptyListGiven() throws Exception {
-        List list = new LinkedList();
-        List filtered = ListUtil.filter(list, null);
+        final List list = new LinkedList();
+        final List filtered = ListUtil.filter(list, null);
         assertTrue(filtered.isEmpty());
     }
 }

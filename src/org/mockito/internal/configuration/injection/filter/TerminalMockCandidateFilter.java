@@ -42,7 +42,7 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
             };
         }
 
-        return OngoingInjector.nop;
+        return OngoingInjector.NOOP;
 
     }
 }

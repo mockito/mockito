@@ -5,18 +5,17 @@
 package org.mockito.internal.util.collections;
 
 
-import java.util.HashSet;
+import static java.util.Arrays.asList;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static java.util.Arrays.asList;
-
 public abstract class Sets {
-    public static Set<Object> newMockSafeHashSet(Iterable<Object> mocks) {
+    public static Set<Object> newMockSafeHashSet(final Iterable<Object> mocks) {
         return HashCodeAndEqualsSafeSet.of(mocks);
     }
 
-    public static Set<Object> newMockSafeHashSet(Object... mocks) {
+    public static Set<Object> newMockSafeHashSet(final Object... mocks) {
         return HashCodeAndEqualsSafeSet.of(mocks);
     }
 
@@ -24,7 +23,7 @@ public abstract class Sets {
         return new IdentitySet();
     }
 
-    public static <T> Set<T> newSet(T ... elements) {
+    public static <T> Set<T> newSet(final T ... elements) {
         if (elements == null) {
             throw new IllegalArgumentException("Expected an array of elements (or empty array) but received a null.");
         }

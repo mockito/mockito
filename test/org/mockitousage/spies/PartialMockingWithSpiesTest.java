@@ -5,7 +5,10 @@
 
 package org.mockitousage.spies;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +24,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
     }
     
     class InheritMe {
-        private String inherited = "100$";
+        private final String inherited = "100$";
         protected String getInherited() {
             return inherited;
         }
@@ -55,7 +58,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
     class Name {
         private final String name;
 
-        public Name(String name) {
+        public Name(final String name) {
             this.name = name;
         }
     }
@@ -65,7 +68,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
     @Test
     public void shouldCallRealMethdsEvenDelegatedToOtherSelfMethod() {
         // when
-        String name = spy.getName();
+        final String name = spy.getName();
 
         // then
         assertEquals("Default name", name);
@@ -90,7 +93,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
         try {
             spy.getNameButDelegateToMethodThatThrows();
             fail();
-        } catch(Exception e) {
+        } catch(final Exception e) {
             assertEquals("appetite for destruction", e.getMessage());
         }
     }
@@ -101,7 +104,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             // when
             spy.getNameButDelegateToMethodThatThrows();
             fail();
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             // then
             assertThat(t, ExtraMatchers.hasMethodsInStackTrace(
                     "throwSomeException",
@@ -130,7 +133,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
         // given
         when(spy.guessName()).thenReturn(new Name("John"));
         // when
-        String name = spy.getName();
+        final String name = spy.getName();
         // then
         assertEquals("John", name);
     }

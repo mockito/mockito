@@ -5,7 +5,8 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -17,8 +18,8 @@ import org.mockitoutil.TestBase;
 public class CaptorAnnotationAutoboxingTest extends TestBase {
     
     interface Fun {
-        void doFun(double prmitive);
-        void moreFun(int howMuch);
+        void doFun(final double prmitive);
+        void moreFun(final int howMuch);
     }
     
     @Mock Fun fun;
@@ -31,7 +32,7 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
         
         //then
         verify(fun).doFun(captor.capture());
-        assertEquals((Double) 1.0, captor.getValue());
+        assertEquals(1.0, captor.getValue());
     }
 
     @Captor ArgumentCaptor<Integer> intCaptor;

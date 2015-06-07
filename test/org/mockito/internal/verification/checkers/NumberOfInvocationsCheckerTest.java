@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.LinkedList;
 
@@ -50,8 +50,8 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
 
     @Test
     public void shouldReportWithLastInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
+        final Invocation first = new InvocationBuilder().toInvocation();
+        final Invocation second = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second));
         
@@ -71,9 +71,9 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
-        Invocation third = new InvocationBuilder().toInvocation();
+        final Invocation first = new InvocationBuilder().toInvocation();
+        final Invocation second = new InvocationBuilder().toInvocation();
+        final Invocation third = new InvocationBuilder().toInvocation();
         
         finderStub.actualToReturn.addAll(asList(first, second, third));
         
@@ -96,7 +96,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldReportNeverWantedButInvoked() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        final Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         
         checker.check(invocations, wanted, 0);
@@ -107,7 +107,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
     
     @Test
     public void shouldMarkInvocationsAsVerified() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
+        final Invocation invocation = new InvocationBuilder().toInvocation();
         finderStub.actualToReturn.add(invocation);
         assertFalse(invocation.isVerified());
         
@@ -121,14 +121,14 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         private int actualCount;
         private DescribedInvocation wanted;
         private Location location;
-        @Override public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {
+        @Override public void tooLittleActualInvocations(final org.mockito.internal.reporting.Discrepancy discrepancy, final DescribedInvocation wanted, final Location lastActualLocation) {
                     this.wantedCount = discrepancy.getWantedCount();
                     this.actualCount = discrepancy.getActualCount();
                     this.wanted = wanted;
                     this.location = lastActualLocation;
         }
         
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, Location firstUndesired) {
+        @Override public void tooManyActualInvocations(final int wantedCount, final int actualCount, final DescribedInvocation wanted, final Location firstUndesired) {
                     this.wantedCount = wantedCount;
                     this.actualCount = actualCount;
                     this.wanted = wanted;
@@ -136,7 +136,7 @@ public class NumberOfInvocationsCheckerTest extends TestBase {
         }
         
         @Override
-        public void neverWantedButInvoked(DescribedInvocation wanted, Location firstUndesired) {
+        public void neverWantedButInvoked(final DescribedInvocation wanted, final Location firstUndesired) {
             this.wanted = wanted;
             this.location = firstUndesired;
         }

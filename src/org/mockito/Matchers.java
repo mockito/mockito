@@ -4,17 +4,27 @@
  */
 package org.mockito;
 
-import org.hamcrest.Matcher;
-import org.mockito.internal.matchers.*;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.progress.HandyReturnValues;
-import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.hamcrest.Matcher;
+import org.mockito.internal.matchers.Any;
+import org.mockito.internal.matchers.AnyVararg;
+import org.mockito.internal.matchers.Contains;
+import org.mockito.internal.matchers.EndsWith;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.internal.matchers.Matches;
+import org.mockito.internal.matchers.NotNull;
+import org.mockito.internal.matchers.Null;
+import org.mockito.internal.matchers.Same;
+import org.mockito.internal.matchers.StartsWith;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
+import org.mockito.internal.progress.HandyReturnValues;
+import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -94,7 +104,7 @@ import java.util.Set;
  * For example, if custom argument matcher is not likely to be reused
  * or you just need it to assert on argument values to complete verification of behavior.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Matchers {
     
     private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
@@ -240,8 +250,8 @@ public class Matchers {
      * <p>
      * @return <code>null</code>.
      */
-    public static <T> T any(Class<T> clazz) {
-        return (T) reportMatcher(Any.ANY).returnFor(clazz);
+    public static <T> T any(final Class<T> clazz) {
+        return reportMatcher(Any.ANY).returnFor(clazz);
     }
     
     /**
@@ -296,7 +306,7 @@ public class Matchers {
      * @param clazz Type owned by the list to avoid casting
      * @return empty List.
      */
-    public static <T> List<T> anyListOf(Class<T> clazz) {
+    public static <T> List<T> anyListOf(final Class<T> clazz) {
         return anyList();
     }
     
@@ -326,7 +336,7 @@ public class Matchers {
      * @param clazz Type owned by the Set to avoid casting
      * @return empty Set
      */
-    public static <T> Set<T> anySetOf(Class<T> clazz) {
+    public static <T> Set<T> anySetOf(final Class<T> clazz) {
         return anySet();
     }
 
@@ -357,7 +367,7 @@ public class Matchers {
      * @param valueClazz Type of the value to avoid casting
      * @return empty Map.
      */
-    public static <K, V>  Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
+    public static <K, V>  Map<K, V> anyMapOf(final Class<K> keyClazz, final Class<V> valueClazz) {
         return anyMap();
     }
     
@@ -387,7 +397,7 @@ public class Matchers {
      * @param clazz Type owned by the collection to avoid casting
      * @return empty Collection.
      */
-    public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
+    public static <T> Collection<T> anyCollectionOf(final Class<T> clazz) {
         return anyCollection();
     }    
 
@@ -402,7 +412,7 @@ public class Matchers {
      *            the class of the accepted type.
      * @return <code>null</code>.
      */
-    public static <T> T isA(Class<T> clazz) {
+    public static <T> T isA(final Class<T> clazz) {
         return reportMatcher(new InstanceOf(clazz)).<T>returnFor(clazz);
     }
 
@@ -415,7 +425,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static boolean eq(boolean value) {
+    public static boolean eq(final boolean value) {
         return reportMatcher(new Equals(value)).returnFalse();
     }
 
@@ -428,7 +438,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static byte eq(byte value) {
+    public static byte eq(final byte value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
 
@@ -441,7 +451,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static char eq(char value) {
+    public static char eq(final char value) {
         return reportMatcher(new Equals(value)).returnChar();
     }
 
@@ -454,7 +464,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static double eq(double value) {
+    public static double eq(final double value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
 
@@ -467,7 +477,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static float eq(float value) {
+    public static float eq(final float value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
     
@@ -480,7 +490,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static int eq(int value) {
+    public static int eq(final int value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
 
@@ -493,7 +503,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static long eq(long value) {
+    public static long eq(final long value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
 
@@ -506,7 +516,7 @@ public class Matchers {
      *            the given value.
      * @return <code>0</code>.
      */
-    public static short eq(short value) {
+    public static short eq(final short value) {
         return reportMatcher(new Equals(value)).returnZero();
     }
 
@@ -519,8 +529,8 @@ public class Matchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T> T eq(T value) {
-        return (T) reportMatcher(new Equals(value)).<T>returnFor(value);
+    public static <T> T eq(final T value) {
+        return reportMatcher(new Equals(value)).<T>returnFor(value);
     }
 
     /**
@@ -543,7 +553,7 @@ public class Matchers {
      *            fields to exclude, if field does not exist it is ignored.
      * @return <code>null</code>.
      */
-    public static <T> T refEq(T value, String... excludeFields) {
+    public static <T> T refEq(final T value, final String... excludeFields) {
         return reportMatcher(new ReflectionEquals(value, excludeFields)).<T>returnNull();
     }
     
@@ -558,8 +568,8 @@ public class Matchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T> T same(T value) {
-        return (T) reportMatcher(new Same(value)).<T>returnFor(value);
+    public static <T> T same(final T value) {
+        return reportMatcher(new Same(value)).<T>returnFor(value);
     }
 
     /**
@@ -582,7 +592,7 @@ public class Matchers {
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
-    public static <T> T isNull(Class<T> clazz) {
+    public static <T> T isNull(final Class<T> clazz) {
         return (T) reportMatcher(Null.NULL).returnNull();
     }
 
@@ -610,7 +620,7 @@ public class Matchers {
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
-    public static <T> T notNull(Class<T> clazz) {
+    public static <T> T notNull(final Class<T> clazz) {
         return (T) reportMatcher(NotNull.NOT_NULL).returnNull();
     }
     
@@ -638,7 +648,7 @@ public class Matchers {
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
      */
-    public static <T> T isNotNull(Class<T> clazz) {
+    public static <T> T isNotNull(final Class<T> clazz) {
         return notNull(clazz);
     }
 
@@ -651,7 +661,7 @@ public class Matchers {
      *            the substring.
      * @return empty String ("").
      */
-    public static String contains(String substring) {
+    public static String contains(final String substring) {
         return reportMatcher(new Contains(substring)).returnString();
     }
 
@@ -664,7 +674,7 @@ public class Matchers {
      *            the regular expression.
      * @return empty String ("").
      */
-    public static String matches(String regex) {
+    public static String matches(final String regex) {
         return reportMatcher(new Matches(regex)).returnString();
     }
 
@@ -677,7 +687,7 @@ public class Matchers {
      *            the suffix.
      * @return empty String ("").
      */
-    public static String endsWith(String suffix) {
+    public static String endsWith(final String suffix) {
         return reportMatcher(new EndsWith(suffix)).returnString();
     }
 
@@ -690,7 +700,7 @@ public class Matchers {
      *            the prefix.
      * @return empty String ("").
      */
-    public static String startsWith(String prefix) {
+    public static String startsWith(final String prefix) {
         return reportMatcher(new StartsWith(prefix)).returnString();
     }
 
@@ -705,7 +715,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>null</code>.
      */
-    public static <T> T argThat(Matcher<T> matcher) {
+    public static <T> T argThat(final Matcher<T> matcher) {
         return reportMatcher(matcher).<T>returnNull();
     }
     
@@ -717,7 +727,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static char charThat(Matcher<Character> matcher) {
+    public static char charThat(final Matcher<Character> matcher) {
         return reportMatcher(matcher).returnChar();
     }
     
@@ -729,7 +739,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>false</code>.
      */
-    public static boolean booleanThat(Matcher<Boolean> matcher) {
+    public static boolean booleanThat(final Matcher<Boolean> matcher) {
         return reportMatcher(matcher).returnFalse();
     }
     
@@ -741,7 +751,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static byte byteThat(Matcher<Byte> matcher) {
+    public static byte byteThat(final Matcher<Byte> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -753,7 +763,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static short shortThat(Matcher<Short> matcher) {
+    public static short shortThat(final Matcher<Short> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -765,7 +775,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static int intThat(Matcher<Integer> matcher) {
+    public static int intThat(final Matcher<Integer> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
@@ -777,7 +787,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static long longThat(Matcher<Long> matcher) {
+    public static long longThat(final Matcher<Long> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -789,7 +799,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static float floatThat(Matcher<Float> matcher) {
+    public static float floatThat(final Matcher<Float> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -801,11 +811,11 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static double doubleThat(Matcher<Double> matcher) {
+    public static double doubleThat(final Matcher<Double> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
-    private static HandyReturnValues reportMatcher(Matcher<?> matcher) {
+    private static HandyReturnValues reportMatcher(final Matcher<?> matcher) {
         return MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

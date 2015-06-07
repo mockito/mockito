@@ -5,8 +5,9 @@
 
 package org.mockitousage.misuse;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,7 +28,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (final UnfinishedVerificationException e) {}
     }
     
     @Test
@@ -36,7 +37,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (UnfinishedStubbingException e) {}
+        } catch (final UnfinishedStubbingException e) {}
     }
     
     @Test
@@ -45,6 +46,6 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (InvalidUseOfMatchersException e) {}
+        } catch (final InvalidUseOfMatchersException e) {}
     }
 }

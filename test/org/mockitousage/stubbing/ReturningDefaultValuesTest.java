@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ReturningDefaultValuesTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -47,7 +47,7 @@ public class ReturningDefaultValuesTest extends TestBase {
     
     @Test 
     public void shouldReturnEmptyCollections() {
-        CollectionsServer mock = Mockito.mock(CollectionsServer.class);
+        final CollectionsServer mock = Mockito.mock(CollectionsServer.class);
         
         assertTrue(mock.list().isEmpty());
         assertTrue(mock.linkedList().isEmpty());
@@ -57,9 +57,9 @@ public class ReturningDefaultValuesTest extends TestBase {
     
     @Test 
     public void shouldReturnMutableEmptyCollection() {
-        CollectionsServer mock = Mockito.mock(CollectionsServer.class);
+        final CollectionsServer mock = Mockito.mock(CollectionsServer.class);
         
-        List list = mock.list();
+        final List list = mock.list();
         list.add("test");
        
         assertTrue(mock.list().isEmpty());

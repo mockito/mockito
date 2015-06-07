@@ -4,8 +4,11 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +22,7 @@ public class CallingRealMethodTest extends TestBase {
     static class TestedObject {
         String value;
 
-        void setValue(String value) {
+        void setValue(final String value) {
             this.value = value;
         }
 
@@ -58,14 +61,14 @@ public class CallingRealMethodTest extends TestBase {
 
     @Test
     public void shouldCallRealMethodByDefault() {
-        TestedObject mock = mock(TestedObject.class, CALLS_REAL_METHODS);
+        final TestedObject mock = mock(TestedObject.class, CALLS_REAL_METHODS);
 
         Assert.assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
     }
 
     @Test
     public void shouldNotCallRealMethodWhenStubbedLater() {
-        TestedObject mock = mock(TestedObject.class);
+        final TestedObject mock = mock(TestedObject.class);
 
         when(mock.getValue()).thenCallRealMethod();
         when(mock.getValue()).thenReturn("FAKE_VALUE");

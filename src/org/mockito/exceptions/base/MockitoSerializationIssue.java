@@ -5,9 +5,9 @@
 
 package org.mockito.exceptions.base;
 
-import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
-
 import java.io.ObjectStreamException;
+
+import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 
 /**
  * Raised by mockito to emit an error either due to Mockito, or due to the User.
@@ -22,9 +22,10 @@ import java.io.ObjectStreamException;
  */
 public class MockitoSerializationIssue extends ObjectStreamException {
 
+    private static final long serialVersionUID = 5195617906606661289L;
     private StackTraceElement[] unfilteredStackTrace;
 
-    public MockitoSerializationIssue(String message, Exception cause) {
+    public MockitoSerializationIssue(final String message, final Exception cause) {
         super(message);
         initCause(cause);
         filterStackTrace();
@@ -39,7 +40,7 @@ public class MockitoSerializationIssue extends ObjectStreamException {
     private void filterStackTrace() {
         unfilteredStackTrace = super.getStackTrace();
 
-        ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
+        final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
         filter.filter(this);
     }
 

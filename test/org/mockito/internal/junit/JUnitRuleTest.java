@@ -1,5 +1,9 @@
 package org.mockito.internal.junit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.junit.runners.model.Statement;
 import org.mockito.InjectMocks;
@@ -7,14 +11,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
-import org.mockito.internal.junit.JUnitRule;
-
-import static org.junit.Assert.*;
 
 public class JUnitRuleTest {
 
-    private JUnitRule jUnitRule = new JUnitRule();
-    private InjectTestCase injectTestCase = new InjectTestCase();
+    private final JUnitRule jUnitRule = new JUnitRule();
+    private final InjectTestCase injectTestCase = new InjectTestCase();
 
     @Test
     public void shouldInjectIntoTestCase() throws Throwable {
@@ -29,7 +30,7 @@ public class JUnitRuleTest {
         try {
             jUnitRule.apply(new ExceptionStatement(), injectTestCase).evaluate();
             fail("Should throw exception");
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             assertEquals("Correct message", "Statement exception", e.getMessage());
         }
     }
@@ -39,7 +40,7 @@ public class JUnitRuleTest {
         try {
             jUnitRule.apply(new UnfinishedStubbingStatement(), injectTestCase).evaluate();
             fail("Should detect invalid Mockito usage");
-        } catch (UnfinishedStubbingException e) {
+        } catch (final UnfinishedStubbingException e) {
         }
     }
 
@@ -59,7 +60,7 @@ public class JUnitRuleTest {
     private static class UnfinishedStubbingStatement extends Statement {
         @Override
         public void evaluate() throws Throwable {
-            InjectTestCase injectTestCase = new InjectTestCase();
+            final InjectTestCase injectTestCase = new InjectTestCase();
             MockitoAnnotations.initMocks(injectTestCase);
             injectTestCase.unfinishedStubbingThrowsException();
         }

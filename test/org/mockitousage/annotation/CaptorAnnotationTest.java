@@ -21,7 +21,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class CaptorAnnotationTest extends TestBase {
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -44,7 +44,7 @@ public class CaptorAnnotationTest extends TestBase {
     Set notAMock;
 
     public interface MockInterface {
-        void testMe(String simple, List<List<String>> genericList);
+        void testMe(final String simple, final List<List<String>> genericList);
     }
 
     @Test
@@ -59,8 +59,8 @@ public class CaptorAnnotationTest extends TestBase {
         assertNull(notAMock);
 
         // use captors in the field to be sure they are cool
-        String argForFinalCaptor = "Hello";
-        ArrayList<List<String>> argForGenericsCaptor = new ArrayList<List<String>>();
+        final String argForFinalCaptor = "Hello";
+        final ArrayList<List<String>> argForGenericsCaptor = new ArrayList<List<String>>();
 
         mockInterface.testMe(argForFinalCaptor, argForGenericsCaptor);
 
@@ -81,7 +81,7 @@ public class CaptorAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new WrongType());
             fail();
-        } catch (MockitoException e) {}
+        } catch (final MockitoException e) {}
     }
 
     public static class ToManyAnnotations {
@@ -95,7 +95,7 @@ public class CaptorAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new ToManyAnnotations());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertContains("missingGenericsField", e.getMessage());
             assertContains("multiple Mockito annotations", e.getMessage());            
         }
@@ -106,13 +106,13 @@ public class CaptorAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(null);
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
         }
     }
 
     @Test
     public void shouldLookForAnnotatedCaptorsInSuperClasses() throws Exception {
-        Sub sub = new Sub();
+        final Sub sub = new Sub();
         MockitoAnnotations.initMocks(sub);
 
         assertNotNull(sub.getCaptor());

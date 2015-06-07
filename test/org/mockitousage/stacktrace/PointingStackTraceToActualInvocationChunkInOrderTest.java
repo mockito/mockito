@@ -5,8 +5,10 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +62,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         try {
             inOrder.verify(mock).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertContains("secondChunk(", e.getMessage());
         }
     }
@@ -72,7 +74,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         try {
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertContains("thirdChunk(", e.getMessage());
         }
     }
@@ -86,7 +88,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         try {
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertContains("thirdChunk(", e.getMessage());
         }
     }
@@ -98,7 +100,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertContains("fourthChunk(", e.getMessage());
         }
     }

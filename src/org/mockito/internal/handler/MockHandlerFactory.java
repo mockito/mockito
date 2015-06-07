@@ -10,12 +10,13 @@ import org.mockito.mock.MockCreationSettings;
 /**
  * by Szczepan Faber, created at: 5/21/12
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MockHandlerFactory {
 
-    public InternalMockHandler create(MockCreationSettings settings) {
-        InternalMockHandler handler = new MockHandlerImpl(settings);
-        InternalMockHandler nullResultGuardian = new NullResultGuardian(handler);
-        InternalMockHandler notifier = new InvocationNotifierHandler(nullResultGuardian, settings);
+    public InternalMockHandler create(final MockCreationSettings settings) {
+        final InternalMockHandler handler = new MockHandlerImpl(settings);
+        final InternalMockHandler nullResultGuardian = new NullResultGuardian(handler);
+        final InternalMockHandler notifier = new InvocationNotifierHandler(nullResultGuardian, settings);
 
         return notifier;
     }

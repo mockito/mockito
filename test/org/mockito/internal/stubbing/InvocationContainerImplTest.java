@@ -4,7 +4,15 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.LinkedList;
+import java.util.concurrent.CountDownLatch;
+
 import org.junit.Test;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
@@ -12,24 +20,15 @@ import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.invocation.Invocation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.mock.MockCreationSettings;
-
-import java.util.LinkedList;
-import java.util.concurrent.CountDownLatch;
-
-import static org.junit.Assert.*;
-
 /**
  * Author: Szczepan Faber
  */
+@SuppressWarnings("rawtypes")
 public class InvocationContainerImplTest {
 
     InvocationContainerImpl container = new InvocationContainerImpl(new ThreadSafeMockingProgress(), new MockSettingsImpl());
     InvocationContainerImpl containerStubOnly =
-      new InvocationContainerImpl(new ThreadSafeMockingProgress(), (MockCreationSettings) new MockSettingsImpl().stubOnly());
+      new InvocationContainerImpl(new ThreadSafeMockingProgress(), new MockSettingsImpl().stubOnly());
     Invocation invocation = new InvocationBuilder().toInvocation();
     LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
 
@@ -46,14 +45,14 @@ public class InvocationContainerImplTest {
     //works 50% of the time
     private void doShouldBeThreadSafe(final InvocationContainerImpl c) throws Throwable {
         //given
-        Thread[] t = new Thread[200];
+        final Thread[] t = new Thread[200];
         final CountDownLatch starter = new CountDownLatch(200);
         for (int i = 0; i < t.length; i++ ) {
             t[i] = new Thread() {
                 public void run() {
                     try {
                         starter.await(); //NOPMD
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     c.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
@@ -62,7 +61,7 @@ public class InvocationContainerImplTest {
                 }
             };
             t[i].setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                public void uncaughtException(Thread t, Throwable e) {
+                public void uncaughtException(final Thread t, final Throwable e) {
                     exceptions.add(e);
                 }
             });
@@ -72,7 +71,7 @@ public class InvocationContainerImplTest {
         }
 
         //when
-        for (Thread aT : t) {
+        for (final Thread aT : t) {
             aT.join();
         }
 

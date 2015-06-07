@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.debugging;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,13 +22,13 @@ public class WarningsPrinterImplTest extends TestBase {
     @Test
     public void shouldUseFinderCorrectly() {
         // given
-        WarningsPrinterImpl printer = new WarningsPrinterImpl(false, finder);
+        final WarningsPrinterImpl printer = new WarningsPrinterImpl(false, finder);
 
         // when
         printer.print(logger);
 
         // then
-        ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
+        final ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
         verify(finder).find(arg.capture());
         assertEquals(logger, arg.getValue().getLogger());
         assertEquals(false, arg.getValue().isWarnAboutUnstubbed());
@@ -36,13 +37,13 @@ public class WarningsPrinterImplTest extends TestBase {
     @Test
     public void shouldPassCorrectWarningFlag() {
         // given
-        WarningsPrinterImpl printer = new WarningsPrinterImpl(true, finder);
+        final WarningsPrinterImpl printer = new WarningsPrinterImpl(true, finder);
 
         // when
         printer.print(logger);
 
         // then
-        ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
+        final ArgumentCaptor<LoggingListener> arg = ArgumentCaptor.forClass(LoggingListener.class);
         verify(finder).find(arg.capture());
         assertEquals(true, arg.getValue().isWarnAboutUnstubbed());
     }
@@ -50,10 +51,10 @@ public class WarningsPrinterImplTest extends TestBase {
     @Test
     public void shouldPrintToString() {
         // given
-        WarningsPrinterImpl printer = spy(new WarningsPrinterImpl(true, finder));
+        final WarningsPrinterImpl printer = spy(new WarningsPrinterImpl(true, finder));
 
         // when
-        String out = printer.print();
+        final String out = printer.print();
 
         // then
         verify(printer).print((MockitoLogger) notNull());

@@ -5,7 +5,7 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,7 +26,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("However, there were other interactions with this mock", e.getMessage());
             assertContains("firstInteraction(", e.getMessage());
             assertContains("secondInteraction(", e.getMessage());
@@ -41,7 +41,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("firstInteraction(", e.getMessage());
             assertNotContains("differentMockInteraction(", e.getMessage());
         }
@@ -52,7 +52,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("there were zero interactions with this mock.", e.getMessage());
         }
     }

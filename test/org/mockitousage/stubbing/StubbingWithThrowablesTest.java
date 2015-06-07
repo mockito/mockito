@@ -5,13 +5,12 @@
 
 package org.mockitousage.stubbing;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockitoutil.TestBase;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -19,7 +18,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings({"serial", "unchecked", "all", "deprecation"})
 public class StubbingWithThrowablesTest extends TestBase {
@@ -35,26 +40,26 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test
     public void shouldStubWithThrowable() throws Exception {
-        IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
+        final IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
         
         try {
             mock.add("throw");
             fail();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             assertEquals(expected, e);
         }
     }
     
     @Test
     public void shouldSetThrowableToVoidMethod() throws Exception {
-        IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
+        final IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         
         stubVoid(mock).toThrow(expected).on().clear();
         try {
             mock.clear();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertEquals(expected, e);
         }
     } 
@@ -67,7 +72,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         try {
             mock.clear();
             fail();
-        } catch (ExceptionTwo e) {}
+        } catch (final ExceptionTwo e) {}
     }
     
     @Test
@@ -77,34 +82,34 @@ public class StubbingWithThrowablesTest extends TestBase {
         try {
             when(mock.get(1)).thenThrow(new ExceptionTwo());
             fail();
-        } catch (ExceptionOne e) {}
+        } catch (final ExceptionOne e) {}
     }   
     
     @Test
     public void shouldAllowSettingCheckedException() throws Exception {
-        Reader reader = mock(Reader.class);
-        IOException ioException = new IOException();
+        final Reader reader = mock(Reader.class);
+        final IOException ioException = new IOException();
         
         when(reader.read()).thenThrow(ioException);
         
         try {
             reader.read();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertEquals(ioException, e);
         }
     }
     
     @Test
     public void shouldAllowSettingError() throws Exception {
-        Error error = new Error();
+        final Error error = new Error();
         
         when(mock.add("quake")).thenThrow(error);
         
         try {
             mock.add("quake");
             fail();
-        } catch (Error e) {
+        } catch (final Error e) {
             assertEquals(error, e);
         }
     }
@@ -155,22 +160,22 @@ public class StubbingWithThrowablesTest extends TestBase {
         try {
             mockTwo.clear();
             fail();
-        } catch (ExceptionThree e) {}
+        } catch (final ExceptionThree e) {}
         try {
             mockTwo.containsValue("ExceptionFour");
             fail();
-        } catch (ExceptionFour e) {}
+        } catch (final ExceptionFour e) {}
         
         assertNull(mock.getFirst());
         assertEquals("last", mock.getLast());
         try {
             mock.add("ExceptionOne");
             fail();
-        } catch (ExceptionOne e) {}
+        } catch (final ExceptionOne e) {}
         try {
             mock.clear();
             fail();
-        } catch (ExceptionTwo e) {}
+        } catch (final ExceptionTwo e) {}
     }
     
     @Test
@@ -181,12 +186,12 @@ public class StubbingWithThrowablesTest extends TestBase {
         try {
             mock.size();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         
         try {
             mock.clone();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         
         verify(mock).size();
         verify(mock).clone();
@@ -205,17 +210,17 @@ public class StubbingWithThrowablesTest extends TestBase {
         try {
             verify(mock).size();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (final WantedButNotInvoked e) {}
         
         try {
             verify(mock).clone();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (final WantedButNotInvoked e) {}
         
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     private class ExceptionOne extends RuntimeException {}

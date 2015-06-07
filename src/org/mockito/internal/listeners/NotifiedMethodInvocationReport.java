@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.listeners;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
-
-import static org.mockito.internal.matchers.Equality.areEqual;
 
 /**
  * Report on a method call
@@ -18,28 +18,33 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
     private final Object returnedValue;
     private final Throwable throwable;
 
-
     /**
-     * Build a new {@link org.mockito.listeners.MethodInvocationReport} with a return value.
+     * Build a new {@link org.mockito.listeners.MethodInvocationReport} with a
+     * return value.
      *
      *
-     * @param invocation Information on the method call
-     * @param returnedValue The value returned by the method invocation
+     * @param invocation
+     *            Information on the method call
+     * @param returnedValue
+     *            The value returned by the method invocation
      */
-    public NotifiedMethodInvocationReport(Invocation invocation, Object returnedValue) {
+    public NotifiedMethodInvocationReport(final Invocation invocation, final Object returnedValue) {
         this.invocation = invocation;
         this.returnedValue = returnedValue;
         this.throwable = null;
     }
 
     /**
-     * Build a new {@link org.mockito.listeners.MethodInvocationReport} with a return value.
+     * Build a new {@link org.mockito.listeners.MethodInvocationReport} with a
+     * return value.
      *
      *
-     * @param invocation Information on the method call
-     * @param throwable Tha throwable raised by the method invocation
+     * @param invocation
+     *            Information on the method call
+     * @param throwable
+     *            Tha throwable raised by the method invocation
      */
-    public NotifiedMethodInvocationReport(Invocation invocation, Throwable throwable) {
+    public NotifiedMethodInvocationReport(final Invocation invocation, final Throwable throwable) {
         this.invocation = invocation;
         this.returnedValue = null;
         this.throwable = throwable;
@@ -65,16 +70,19 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
         return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt().toString();
     }
 
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        final NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
 
-        NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
-
-        return areEqual(invocation, that.invocation) &&
-               areEqual(returnedValue, that.returnedValue) &&
-               areEqual(throwable, that.throwable);
+        return areEqual(invocation, that.invocation)
+                && areEqual(returnedValue, that.returnedValue)
+                && areEqual(throwable, that.throwable);
     }
 
     public int hashCode() {

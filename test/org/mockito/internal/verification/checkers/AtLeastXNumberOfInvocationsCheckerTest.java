@@ -10,7 +10,10 @@ import static org.mockito.Matchers.eq;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.CapturesArgumentsFromInvocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationMarker;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
@@ -19,10 +22,10 @@ public class AtLeastXNumberOfInvocationsCheckerTest extends TestBase {
     @Test
     public void shouldMarkActualInvocationsAsVerified() {
         //given
-        AtLeastXNumberOfInvocationsChecker c = new AtLeastXNumberOfInvocationsChecker();
+        final AtLeastXNumberOfInvocationsChecker c = new AtLeastXNumberOfInvocationsChecker();
         c.invocationMarker = Mockito.mock(InvocationMarker.class);
-        Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
-        Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
+        final Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
+        final Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         //when
         c.check(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);

@@ -9,7 +9,9 @@ import org.mockito.exceptions.base.MockitoException;
 
 public class CannotVerifyStubOnlyMock extends MockitoException {
 
-    public CannotVerifyStubOnlyMock(String message) {
+    private static final long serialVersionUID = 1432030325988142053L;
+
+    public CannotVerifyStubOnlyMock(final String message) {
         super(message);
     }
 }

@@ -5,16 +5,19 @@
 
 package org.mockitousage.verification;
 
-import org.junit.Test;
 import static org.mockito.Matchers.anyString;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockitoutil.TestBase;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockitoutil.TestBase;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AtLeastXVerificationTest extends TestBase {
 
     @Mock private List mock;
@@ -38,7 +41,7 @@ public class AtLeastXVerificationTest extends TestBase {
         try {
             verify(mock, atLeast(2)).add(anyString());
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (final MockitoAssertionError e) {}
     }
     
     @Test

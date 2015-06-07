@@ -5,8 +5,12 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockitoutil.ExtraMatchers.hasFirstMethodInStackTrace;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +43,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerify"));
         }
     }
@@ -50,7 +54,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {
+        } catch (final NoInteractionsWanted e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
@@ -61,7 +65,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {
+        } catch (final NoInteractionsWanted e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
@@ -72,14 +76,14 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             verify(mock).oneArg(true); 
             fail();
-        } catch (MockitoException expected) {
+        } catch (final MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceOnMockitoException"));
         }
     }
     
     @Test
     public void shouldFilterStacktraceWhenVerifyingInOrder() {
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         mock.oneArg(true);
         mock.oneArg(false);
         
@@ -87,7 +91,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             inOrder.verify(mock).oneArg(true);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));
         }
     }
@@ -97,7 +101,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             inOrder();
             fail();
-        } catch (MockitoException expected) {
+        } catch (final MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenInOrderThrowsMockitoException"));
         }
     }
@@ -105,10 +109,10 @@ public class StackTraceFilteringTest extends TestBase {
     @Test
     public void shouldFilterStacktraceWhenInOrderVerifies() {
         try {
-            InOrder inOrder = inOrder(mock);
+            final InOrder inOrder = inOrder(mock);
             inOrder.verify(null);
             fail();
-        } catch (MockitoException expected) {
+        } catch (final MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStacktraceWhenInOrderVerifies"));
         }
     }
@@ -118,7 +122,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             when(mock.oneArg(true)).thenThrow(new Exception());
             fail();
-        } catch (MockitoException expected) {
+        } catch (final MockitoException expected) {
             assertThat(expected, hasFirstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromMockHandler"));
         }
     }
@@ -130,7 +134,7 @@ public class StackTraceFilteringTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             assertThat(e, hasFirstMethodInStackTrace("shouldShowProperExceptionStackTrace"));
         }
     }

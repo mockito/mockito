@@ -4,8 +4,12 @@
  */
 
 package org.mockitousage.examples.use;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
@@ -61,9 +65,9 @@ public class ExampleTest extends TestBase {
     
     @Test
     public void managerUpdatesNumberOfRelatedArticles() {
-        Article articleOne = new Article();
-        Article articleTwo = new Article();
-        Article articleThree = new Article();
+        final Article articleOne = new Article();
+        final Article articleTwo = new Article();
+        final Article articleThree = new Article();
         
         when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
@@ -80,8 +84,8 @@ public class ExampleTest extends TestBase {
     
     @Test
     public void shouldPersistRecalculatedArticle() {
-        Article articleOne = new Article();
-        Article articleTwo = new Article();
+        final Article articleOne = new Article();
+        final Article articleTwo = new Article();
         
         when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
@@ -90,7 +94,7 @@ public class ExampleTest extends TestBase {
         
         articleManager.updateRelatedArticlesCounters("Guardian");
 
-        InOrder inOrder = inOrder(mockDatabase, mockCalculator);
+        final InOrder inOrder = inOrder(mockDatabase, mockCalculator);
         
         inOrder.verify(mockCalculator).countNumberOfRelatedArticles((Article) anyObject());
         inOrder.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());

@@ -4,12 +4,17 @@
  */
 package org.mockito.internal.progress;
 
-import java.util.*;
-
 import static org.mockito.internal.util.Primitives.defaultValueForPrimitiveOrWrapper;
 import static org.mockito.internal.util.Primitives.isPrimitiveOrWrapper;
 
-@SuppressWarnings("unchecked")
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class HandyReturnValues {
 
     public byte returnZero() {
@@ -32,7 +37,7 @@ public class HandyReturnValues {
         return "";
     }
 
-    public <T> T returnFor(Class<T> clazz) {
+    public <T> T returnFor(final Class<T> clazz) {
         // explicitly return null if type is not a primitive or a wrapper
         if (isPrimitiveOrWrapper(clazz)) {
             return defaultValueForPrimitiveOrWrapper(clazz);
@@ -52,7 +57,7 @@ public class HandyReturnValues {
         return new HashSet();
     }
 
-    public <T> T returnFor(T instance) {
+    public <T> T returnFor(final T instance) {
         return instance == null ? null : (T) returnFor(instance.getClass());
     }
 }

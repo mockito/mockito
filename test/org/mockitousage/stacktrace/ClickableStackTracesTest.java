@@ -5,7 +5,8 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,11 +18,11 @@ public class ClickableStackTracesTest extends TestBase {
     
     @Mock private IMethods mock;
 
-    private void callMethodOnMock(String param) {
+    private void callMethodOnMock(final String param) {
         mock.simpleMethod(param);
     }
 
-    private void verifyTheMock(int times, String param) {
+    private void verifyTheMock(final int times, final String param) {
         verify(mock, times(times)).simpleMethod(param);
     }
     
@@ -31,7 +32,7 @@ public class ClickableStackTracesTest extends TestBase {
         try {
             verifyTheMock(1, "not foo");
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             assertContains("callMethodOnMock(", e.getMessage());
             assertContains("verifyTheMock(", e.getMessage());
         }

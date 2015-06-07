@@ -5,7 +5,15 @@
 
 package org.mockitoutil;
 
+import static org.mockito.Mockito.mock;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Collection;
+
 import junit.framework.Assert;
+
 import org.fest.assertions.Assertions;
 import org.fest.assertions.Condition;
 import org.hamcrest.Matcher;
@@ -23,25 +31,18 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Collection;
-
-import static org.mockito.Mockito.mock;
-
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class TestBase extends Assert {
 
     @After
     public void cleanUpConfigInAnyCase() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
-        StateMaster state = new StateMaster();
+        final StateMaster state = new StateMaster();
         //catch any invalid state left over after test case run
         //this way we can catch early if some Mockito operations leave weird state afterwards
         state.validate();
@@ -67,21 +68,21 @@ public class TestBase extends Assert {
     }
 
     //I'm really tired of matchers, enter the assertor!
-    protected static <T> void assertThat(T o, Assertor<T> a) {
+    protected static <T> void assertThat(final T o, final Assertor<T> a) {
         a.assertValue(o);
     }
     
-    protected static <T> void assertThat(T actual, Matcher<T> m) {
+    protected static <T> void assertThat(final T actual, final Matcher<T> m) {
         org.junit.Assert.assertThat(actual, m);
     }
     
-    protected static <T> void assertThat(String message, T actual, Matcher<T> m) {
+    protected static <T> void assertThat(final String message, final T actual, final Matcher<T> m) {
         org.junit.Assert.assertThat(message, actual, m);
     }
     
     public static <T> Assertor<String> endsWith(final String substring) {
         return new Assertor<String>() {
-            public void assertValue(String value) {
+            public void assertValue(final String value) {
                 assertTrue("This substring: \n" + substring + 
                         "\nshould be at the end of:\n" + value
                         , value.endsWith(substring));
@@ -89,11 +90,11 @@ public class TestBase extends Assert {
         };
     }
     
-    public static void assertNotEquals(Object expected, Object got) {
+    public static void assertNotEquals(final Object expected, final Object got) {
         assertFalse(expected.equals(got));
     }
 
-    public static void assertContains(String sub, String string) {
+    public static void assertContains(final String sub, final String string) {
         assertTrue("\n" +
                 "This substring:[" +
                 sub +
@@ -104,7 +105,7 @@ public class TestBase extends Assert {
                 , string.contains(sub));
     }
 
-    public static void assertContainsIgnoringCase(String sub, String string) {
+    public static void assertContainsIgnoringCase(final String sub, final String string) {
         assertTrue("\n" +
                 "This substring:" +
                 sub +
@@ -115,14 +116,14 @@ public class TestBase extends Assert {
                 , containsIgnoringCase(string, sub));
     }
 
-    private static boolean containsIgnoringCase(String string, String sub) {
-        int subLength = sub.length();
+    private static boolean containsIgnoringCase(final String string, final String sub) {
+        final int subLength = sub.length();
         if (string.length() < subLength) {
             return false;
         }
         int i = 0;
         while(i+subLength <= string.length()) {
-            boolean temp = string.substring(i, i+subLength).equalsIgnoreCase(sub);
+            final boolean temp = string.substring(i, i+subLength).equalsIgnoreCase(sub);
             if (temp) {
                 return true;
             }
@@ -131,7 +132,7 @@ public class TestBase extends Assert {
         return false;
     }
 
-    public static void assertNotContains(String sub, String string) {
+    public static void assertNotContains(final String sub, final String string) {
         assertFalse("\n" +
                 "This substring:" +
                 sub +
@@ -142,8 +143,8 @@ public class TestBase extends Assert {
                 , string.contains(sub));
     }
     
-    protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
-        Class[] types = new Class[args.length];
+    protected static Invocation invocationOf(final Class<?> type, final String methodName, final Object ... args) throws NoSuchMethodException {
+        final Class[] types = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
@@ -151,24 +152,24 @@ public class TestBase extends Assert {
                 types)), args, 1, null);
     }
 
-    protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
+    protected static Invocation invocationOf(final Class<?> type, final String methodName, final RealMethod realMethod) throws NoSuchMethodException {
         return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
                 new Class[0])), new Object[0], 1, realMethod);
     }
 
-    protected static String describe(SelfDescribing m) {
+    protected static String describe(final SelfDescribing m) {
         return StringDescription.toString(m);
     }
 
-    protected boolean isMock(Object o) {
+    protected boolean isMock(final Object o) {
         return new MockUtil().isMock(o);
     }
 
     protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
         Assertions.assertThat(list).satisfies(new Condition<Collection<?>>() {
             @Override
-            public boolean matches(Collection<?> objects) {
-                for (Object object : objects) {
+            public boolean matches(final Collection<?> objects) {
+                for (final Object object : objects) {
                     if (clazz.isAssignableFrom(object.getClass())) {
                         return true;
                     }
@@ -178,12 +179,12 @@ public class TestBase extends Assert {
         });
     }
 
-    protected String getStackTrace(Throwable e) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    protected String getStackTrace(final Throwable e) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         e.printStackTrace(new PrintStream(out));
         try {
             out.close();
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
         return out.toString();
     }
 }

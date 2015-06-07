@@ -2,11 +2,12 @@ package org.mockito.internal.creation.instance;
 
 import org.mockito.mock.MockCreationSettings;
 
+@SuppressWarnings("rawtypes")
 public class InstantiatorProvider {
 
-    private final static Instantiator INSTANCE = new ObjenesisInstantiator();
+    private static final Instantiator INSTANCE = new ObjenesisInstantiator();
 
-    public Instantiator getInstantiator(MockCreationSettings settings) {
+    public Instantiator getInstantiator(final MockCreationSettings settings) {
         if (settings.isUsingConstructor()) {
             return new ConstructorInstantiator(settings.getOuterClassInstance());
         } else {

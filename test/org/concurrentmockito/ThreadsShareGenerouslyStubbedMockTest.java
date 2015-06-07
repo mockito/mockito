@@ -5,7 +5,8 @@
 
 package org.concurrentmockito;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockitousage.IMethods;
@@ -47,7 +48,7 @@ public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
                         mock.simpleMethod("foo");
                         mock.simpleMethod("foo");
                         mock.simpleMethod("foo");
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         throw new RuntimeException(e);
                     }
                 }

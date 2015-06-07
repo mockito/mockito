@@ -5,17 +5,18 @@
 
 package org.mockito.internal.verification;
 
-import org.mockito.invocation.Invocation;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.mockito.invocation.Invocation;
+
 public class SingleRegisteredInvocation implements RegisteredInvocations, Serializable {
 
+    private static final long serialVersionUID = 1252072993982392338L;
     private Invocation invocation;
 
-    public void add(Invocation invocation) {
+    public void add(final Invocation invocation) {
         this.invocation = invocation;
     }
 

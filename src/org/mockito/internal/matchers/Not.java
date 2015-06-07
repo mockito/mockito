@@ -11,21 +11,21 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Not extends ArgumentMatcher implements Serializable {
 
     private static final long serialVersionUID = 4627373642333593264L;
     private final Matcher first;
 
-    public Not(Matcher first) {
+    public Not(final Matcher first) {
         this.first = first;
     }
 
-    public boolean matches(Object actual) {
+    public boolean matches(final Object actual) {
         return !first.matches(actual);
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description.appendText("not(");
         first.describeTo(description);
         description.appendText(")");
