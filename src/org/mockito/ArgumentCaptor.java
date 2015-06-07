@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
+import java.util.List;
+
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.progress.HandyReturnValues;
-
-import java.util.List;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -87,7 +87,7 @@ public class ArgumentCaptor<T> {
         this.clazz = null;
     }
 
-    private ArgumentCaptor(Class<? extends T> clazz) {
+    private ArgumentCaptor(final Class<? extends T> clazz) {
         this.clazz = clazz;
     }
 
@@ -124,7 +124,7 @@ public class ArgumentCaptor<T> {
      * When varargs method was called multiple times, this method returns merged list of all values from all invocations.
      * <p>
      * Example: 
-     * <pre class="code"><code class="java">
+     * <pre class="code">
      *   mock.doSomething(new Person("John");
      *   mock.doSomething(new Person("Jane");
      *
@@ -167,7 +167,7 @@ public class ArgumentCaptor<T> {
      * @param <U> Type of object captured by the newly built ArgumentCaptor
      * @return A new ArgumentCaptor
      */
-    public static <U,S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
+    public static <U, S extends U> ArgumentCaptor<U> forClass(final Class<S> clazz) {
         return new ArgumentCaptor<U>(clazz);
     }
 }

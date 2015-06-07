@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,12 +30,12 @@ public class AcrossClassLoaderSerializationTest {
 
     @Test
     public void check_that_mock_can_be_serialized_in_a_classloader_and_deserialized_in_another() throws Exception {
-        byte[] bytes = create_mock_and_serialize_it_in_class_loader_A();
+        final byte[] bytes = create_mock_and_serialize_it_in_class_loader_A();
 
-        Object the_deserialized_mock = read_stream_and_deserialize_it_in_class_loader_B(bytes);
+        final Object the_deserialized_mock = read_stream_and_deserialize_it_in_class_loader_B(bytes);
     }
 
-    private Object read_stream_and_deserialize_it_in_class_loader_B(byte[] bytes) throws Exception {
+    private Object read_stream_and_deserialize_it_in_class_loader_B(final byte[] bytes) throws Exception {
         return new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes())
                 .doInRealm(
                         "org.mockitousage.serialization.AcrossClassLoaderSerializationTest$ReadStreamAndDeserializeIt",
@@ -51,10 +52,9 @@ public class AcrossClassLoaderSerializationTest {
 
     private SimplePerRealmReloadingClassLoader.ReloadClassPredicate isolating_test_classes() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
-            public boolean acceptReloadOf(String qualifiedName) {
+            public boolean acceptReloadOf(final String qualifiedName) {
                 return qualifiedName.contains("org.mockitousage")
-                        || qualifiedName.contains("org.mockitoutil")
-                        ;
+                        || qualifiedName.contains("org.mockitoutil");
             }
         };
     }
@@ -63,7 +63,7 @@ public class AcrossClassLoaderSerializationTest {
     // see create_mock_and_serialize_it_in_class_loader_A
     public static class CreateMockAndSerializeIt implements Callable<byte[]> {
         public byte[] call() throws Exception {
-            AClassToBeMockedInThisTestOnlyAndInCallablesOnly mock = Mockito.mock(
+            final AClassToBeMockedInThisTestOnlyAndInCallablesOnly mock = Mockito.mock(
                     AClassToBeMockedInThisTestOnlyAndInCallablesOnly.class,
                     Mockito.withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS)
             );
@@ -76,14 +76,14 @@ public class AcrossClassLoaderSerializationTest {
 
     // see read_stream_and_deserialize_it_in_class_loader_B
     public static class ReadStreamAndDeserializeIt implements Callable<Object> {
-        private byte[] bytes;
+        private final byte[] bytes;
 
-        public ReadStreamAndDeserializeIt(byte[] bytes) {
+        public ReadStreamAndDeserializeIt(final byte[] bytes) {
             this.bytes = bytes;
         }
 
         public Object call() throws Exception {
-            ByteArrayInputStream to_unserialize = new ByteArrayInputStream(bytes);
+            final ByteArrayInputStream to_unserialize = new ByteArrayInputStream(bytes);
             return SimpleSerializationUtil.deserializeMock(
                     to_unserialize,
                     AClassToBeMockedInThisTestOnlyAndInCallablesOnly.class

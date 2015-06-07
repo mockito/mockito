@@ -4,22 +4,21 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.*;
-import org.mockito.configuration.AnnotationEngine;
-import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
-import org.mockito.internal.configuration.injection.scanner.MockScanner;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+import org.mockito.MockitoAnnotations;
+import org.mockito.configuration.AnnotationEngine;
+import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
+import org.mockito.internal.configuration.injection.scanner.MockScanner;
 
 /**
  * See {@link MockitoAnnotations}
  */
-@SuppressWarnings({"deprecation", "unchecked"})
 public class InjectingAnnotationEngine implements AnnotationEngine {
     private final AnnotationEngine delegate = new DefaultAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
@@ -31,7 +30,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      * @see org.mockito.configuration.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
      */
     @Deprecated
-    public Object createMockFor(Annotation annotation, Field field) {
+    public Object createMockFor(final Annotation annotation, final Field field) {
         return delegate.createMockFor(annotation, field);
     }
 
@@ -51,7 +50,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      *
      * @see org.mockito.configuration.AnnotationEngine#process(Class, Object)
      */
-    public void process(Class<?> clazz, Object testInstance) {
+    public void process(final Class<?> clazz, final Object testInstance) {
         processIndependentAnnotations(testInstance.getClass(), testInstance);
         processInjectMocks(testInstance.getClass(), testInstance);
     }
@@ -88,8 +87,8 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      */
     public void injectMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
-        Set<Field> mockDependentFields = new HashSet<Field>();
-        Set<Object> mocks = newMockSafeHashSet();
+        final Set<Field> mockDependentFields = new HashSet<Field>();
+        final Set<Object> mocks = newMockSafeHashSet();
         
         while (clazz != Object.class) {
             new InjectMocksScanner(clazz).addTo(mockDependentFields);

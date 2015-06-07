@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.listeners;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
-
-import static org.mockito.internal.matchers.Equality.areEqual;
 
 /**
  * Report on a method call
@@ -26,7 +26,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
      * @param invocation Information on the method call
      * @param returnedValue The value returned by the method invocation
      */
-    public NotifiedMethodInvocationReport(Invocation invocation, Object returnedValue) {
+    public NotifiedMethodInvocationReport(final Invocation invocation, final Object returnedValue) {
         this.invocation = invocation;
         this.returnedValue = returnedValue;
         this.throwable = null;

@@ -5,6 +5,12 @@
 
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -13,9 +19,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.*;
-
-@SuppressWarnings("unchecked")
 public class VerificationExcludingStubsTest extends TestBase {
 
     @Mock IMethods mock;
@@ -26,14 +29,14 @@ public class VerificationExcludingStubsTest extends TestBase {
         when(mock.simpleMethod()).thenReturn("foo");
 
         //when
-        String stubbed = mock.simpleMethod(); //irrelevant call because it is stubbing
+        final String stubbed = mock.simpleMethod(); //irrelevant call because it is stubbing
         mock.objectArgMethod(stubbed);
 
         //then
         verify(mock).objectArgMethod("foo");
 
         //verifyNoMoreInteractions fails:
-        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {};
+        try { verifyNoMoreInteractions(mock); fail(); } catch (final NoInteractionsWanted e) {};
         
         //but it works when stubs are ignored:
         ignoreStubs(mock);
@@ -51,7 +54,7 @@ public class VerificationExcludingStubsTest extends TestBase {
         mock.simpleMethod(); //calling the stub
 
         //then
-        InOrder inOrder = inOrder(ignoreStubs(mock));
+        final InOrder inOrder = inOrder(ignoreStubs(mock));
         inOrder.verify(mock).objectArgMethod("1");
         inOrder.verify(mock).objectArgMethod("2");
         inOrder.verifyNoMoreInteractions();

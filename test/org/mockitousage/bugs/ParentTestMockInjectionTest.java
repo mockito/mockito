@@ -4,6 +4,8 @@
  */
 package org.mockitousage.bugs;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,14 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertNotNull;
-
 // issue 229 : @Mock fields in super test class are not injected on @InjectMocks fields
 public class ParentTestMockInjectionTest {
 
     @Test
     public void injectMocksShouldInjectMocksFromTestSuperClasses() {
-        ImplicitTest it = new ImplicitTest();
+        final ImplicitTest it = new ImplicitTest();
         MockitoAnnotations.initMocks(it);
 
         assertNotNull(it.daoFromParent);
@@ -28,13 +28,13 @@ public class ParentTestMockInjectionTest {
     }
 
     @Ignore
-    public static abstract class BaseTest {
+    public abstract static class BaseTest {
         @Mock protected DaoA daoFromParent;
     }
 
     @Ignore("JUnit test under test : don't test this!")
     public static class ImplicitTest extends BaseTest {
-        @InjectMocks private TestedSystem sut = new TestedSystem();
+        @InjectMocks private final TestedSystem sut = new TestedSystem();
 
         @Mock private DaoB daoFromSub;
 

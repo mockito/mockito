@@ -5,9 +5,6 @@
 
 package org.mockitousage;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
@@ -25,7 +22,7 @@ public class PlaygroundTest extends TestBase {
     }
     
     class Boo {
-        final public Object withLong(long y) {
+        public final Object withLong(final long y) {
                          return "";
         }
 

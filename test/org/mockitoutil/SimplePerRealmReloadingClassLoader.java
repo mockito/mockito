@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
  */
 public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
 
-    private final Map<String,Class> classHashMap = new HashMap<String, Class>();
+    private final Map<String, Class> classHashMap = new HashMap<String, Class>();
     private ReloadClassPredicate reloadClassPredicate;
 
     public SimplePerRealmReloadingClassLoader(ReloadClassPredicate reloadClassPredicate) {

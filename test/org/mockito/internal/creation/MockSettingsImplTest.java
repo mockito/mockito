@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.creation;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,13 +16,9 @@ import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.listeners.InvocationListener;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 public class MockSettingsImplTest extends TestBase {
 
-    private MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();
+    private final MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();
     
     @Mock private InvocationListener invocationListener;
 
@@ -106,7 +106,7 @@ public class MockSettingsImplTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
-        mockSettingsImpl.invocationListeners((InvocationListener[])null);
+        mockSettingsImpl.invocationListeners((InvocationListener[]) null);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class MockSettingsImplTest extends TestBase {
         try {
             mockSettingsImpl.invocationListeners();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Assertions.assertThat(e.getMessage()).contains("at least one listener");
         }
     }
@@ -148,7 +148,7 @@ public class MockSettingsImplTest extends TestBase {
         try {
             mockSettingsImpl.invocationListeners(invocationListener, null);
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Assertions.assertThat(e.getMessage()).contains("does not accept null");
         }
     }

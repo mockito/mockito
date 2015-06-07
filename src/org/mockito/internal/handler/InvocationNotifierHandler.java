@@ -5,6 +5,7 @@
 package org.mockito.internal.handler;
 
 import java.util.List;
+
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
@@ -24,41 +25,42 @@ import org.mockito.stubbing.VoidMethodStubbable;
  */
 class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
 
+    private static final long serialVersionUID = -4146835657113951837L;
     private final List<InvocationListener> invocationListeners;
     private final InternalMockHandler<T> mockHandler;
 
-    public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings settings) {
+    public InvocationNotifierHandler(final InternalMockHandler<T> mockHandler, final MockCreationSettings settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }
 
-    public Object handle(Invocation invocation) throws Throwable {
+    public Object handle(final Invocation invocation) throws Throwable {
         try {
-            Object returnedValue = mockHandler.handle(invocation);
+            final Object returnedValue = mockHandler.handle(invocation);
             notifyMethodCall(invocation, returnedValue);
             return returnedValue;
-        } catch (Throwable t){
+        } catch (final Throwable t){
             notifyMethodCallException(invocation, t);
             throw t;
         }
     }
 
 
-    private void notifyMethodCall(Invocation invocation, Object returnValue) {
-        for (InvocationListener listener : invocationListeners) {
+    private void notifyMethodCall(final Invocation invocation, final Object returnValue) {
+        for (final InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
-            } catch(Throwable listenerThrowable) {
+            } catch(final Throwable listenerThrowable) {
                 new Reporter().invocationListenerThrewException(listener, listenerThrowable);
             }
         }
     }
 
-    private void notifyMethodCallException(Invocation invocation, Throwable exception) {
-        for (InvocationListener listener : invocationListeners) {
+    private void notifyMethodCallException(final Invocation invocation, final Throwable exception) {
+        for (final InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, exception));
-            } catch(Throwable listenerThrowable) {
+            } catch(final Throwable listenerThrowable) {
                 new Reporter().invocationListenerThrewException(listener, listenerThrowable);
             }
         }

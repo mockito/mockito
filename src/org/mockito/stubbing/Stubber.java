@@ -38,7 +38,6 @@ import org.mockito.Mockito;
  * 
  * See examples in javadoc for {@link Mockito}
  */
-@SuppressWarnings("unchecked")
 public interface Stubber {
 
     /**
@@ -69,7 +68,7 @@ public interface Stubber {
      * @param mock The mock
      * @return select method for stubbing
      */
-    <T> T when(T mock);
+    <T> T when(final T mock);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Throwable)} style:
@@ -83,7 +82,7 @@ public interface Stubber {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doThrow(Throwable toBeThrown);
+    Stubber doThrow(final Throwable toBeThrown);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class)} style:
@@ -97,7 +96,7 @@ public interface Stubber {
      * @param toBeThrown exception class to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doThrow(Class<? extends Throwable> toBeThrown);
+    Stubber doThrow(final Class<? extends Throwable> toBeThrown);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer)} style:
@@ -111,7 +110,7 @@ public interface Stubber {
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doAnswer(Answer answer);    
+    Stubber doAnswer(final Answer answer);    
     
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doNothing()} style:
@@ -134,7 +133,7 @@ public interface Stubber {
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doReturn(Object toBeReturned);
+    Stubber doReturn(final Object toBeReturned);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doCallRealMethod()} style.

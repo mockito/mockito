@@ -4,15 +4,14 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.List;
+
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.LocalizedMatcher;
 
-import java.util.List;
-
-@SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
-    HandyReturnValues reportMatcher(Matcher matcher);
+    HandyReturnValues reportMatcher(final Matcher matcher);
 
     List<LocalizedMatcher> pullLocalizedMatchers();
 

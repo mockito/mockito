@@ -4,11 +4,11 @@
  */
 package org.mockito;
 
+import java.io.Serializable;
+
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 /**
  * Allows mock creation with additional mock settings.
@@ -58,7 +58,7 @@ public interface MockSettings extends Serializable {
      * @param interfaces extra interfaces the should implement.
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings extraInterfaces(Class<?>... interfaces);
+    MockSettings extraInterfaces(final Class<?>... interfaces);
 
     /**
      * Specifies mock name. Naming mocks can be helpful for debugging - the name is used in all verification errors.
@@ -78,7 +78,7 @@ public interface MockSettings extends Serializable {
      * @param name the name of the mock, later used in all verification errors
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings name(String name);
+    MockSettings name(final String name);
 
     /**
      * Specifies the instance to spy on. Makes sense only for spies/partial mocks.
@@ -120,7 +120,7 @@ public interface MockSettings extends Serializable {
      * @param instance to spy on
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings spiedInstance(Object instance);
+    MockSettings spiedInstance(final Object instance);
 
     /**
      * Specifies default answers to interactions.
@@ -140,8 +140,7 @@ public interface MockSettings extends Serializable {
      * @param defaultAnswer default answer to be used by mock when not stubbed
      * @return settings instance so that you can fluently specify other settings
      */
-    @SuppressWarnings("unchecked")
-    MockSettings defaultAnswer(Answer defaultAnswer);
+    MockSettings defaultAnswer(final Answer defaultAnswer);
 
     /**
      * Configures the mock to be serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
@@ -178,7 +177,7 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      * @since 1.10.0
      */
-    MockSettings serializable(SerializableMode mode);
+    MockSettings serializable(final SerializableMode mode);
 
     /**
      * Enables real-time logging of method invocations on this mock. Can be used
@@ -215,7 +214,7 @@ public interface MockSettings extends Serializable {
      * @param listeners The invocation listeners to add. May not be null.
      * @return settings instance so that you can fluently specify other settings
      */
-    MockSettings invocationListeners(InvocationListener... listeners);
+    MockSettings invocationListeners(final InvocationListener... listeners);
 
     /**
      * A stub-only mock does not record method
@@ -265,5 +264,5 @@ public interface MockSettings extends Serializable {
      * @since 1.10.12
      */
     @Incubating
-    MockSettings outerInstance(Object outerClassInstance);
+    MockSettings outerInstance(final Object outerClassInstance);
 }

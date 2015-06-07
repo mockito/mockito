@@ -35,7 +35,7 @@ public class ReturnsGenericDeepStubsTest {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Set<? extends Map.Entry<? extends Cloneable, Set<Number>>> entries = mock.entrySet();
-        Iterator<? extends Map.Entry<? extends Cloneable,Set<Number>>> entriesIterator = mock.entrySet().iterator();
+        Iterator<? extends Map.Entry<? extends Cloneable, Set<Number>>> entriesIterator = mock.entrySet().iterator();
         Map.Entry<? extends Cloneable, Set<Number>> nextEntry = mock.entrySet().iterator().next();
 
         Cloneable cloneableKey = mock.entrySet().iterator().next().getKey();

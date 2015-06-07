@@ -42,7 +42,6 @@
         <module name="UnusedImports">
             <property name="severity" value="ignore"/>
         </module>
-        <module name="FileLength"/>
         <module name="LineLength">
             <property name="severity" value="ignore"/>
         </module>
@@ -62,7 +61,6 @@
             <property name="tokens" value="CTOR_CALL,METHOD_CALL,SUPER_CTOR_CALL"/>
         </module>
         <module name="TypecastParenPad"/>
-        <module name="TabCharacter"/>
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround">
             <property name="severity" value="ignore"/>
@@ -80,7 +78,6 @@
         <module name="AvoidInlineConditionals">
             <property name="severity" value="ignore"/>
         </module>
-        <module name="DoubleCheckedLocking"/>
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField">
@@ -92,10 +89,6 @@
             <property name="severity" value="ignore"/>
         </module>
         <module name="MissingSwitchDefault"/>
-        <module name="RedundantThrows">
-            <property name="logLoadErrors" value="true"/>
-            <property name="suppressLoadErrors" value="true"/>
-        </module>
         <module name="SimplifyBooleanExpression">
             <property name="severity" value="ignore"/>
         </module>
@@ -127,6 +120,8 @@
         <module name="TodoComment"/>
         <module name="UpperEll"/>
     </module>
+    <module name="FileLength"/>
+    <module name="FileTabCharacter"/>
     <module name="NewlineAtEndOfFile">
         <property name="severity" value="ignore"/>
     </module>

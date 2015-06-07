@@ -24,7 +24,7 @@ public class Only implements VerificationMode {
     public void verify(VerificationData data) {
         InvocationMatcher wantedMatcher = data.getWanted();
         List<Invocation> invocations = data.getAllInvocations();
-        List<Invocation> chunk = finder.findInvocations(invocations,wantedMatcher);
+        List<Invocation> chunk = finder.findInvocations(invocations, wantedMatcher);
         if (invocations.size() != 1 && chunk.size() > 0) {            
             Invocation unverified = finder.findFirstUnverified(invocations);
             reporter.noMoreInteractionsWanted(unverified, (List) invocations);

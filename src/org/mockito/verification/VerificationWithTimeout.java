@@ -39,7 +39,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * 
      * @return verification mode
      */
-    public VerificationMode times(int wantedNumberOfInvocations);
+    VerificationMode times(final int wantedNumberOfInvocations);
     
     /**
      * @deprecated
@@ -55,7 +55,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * @return verification mode
      */
     @Deprecated    
-    public VerificationMode never();
+    VerificationMode never();
     
     /**
      * Allows at-least-once verification within given timeout. E.g:
@@ -68,7 +68,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * 
      * @return verification mode
      */
-    public VerificationMode atLeastOnce();
+    VerificationMode atLeastOnce();
 
     /**
      * Allows at-least-x verification within given timeout. E.g:
@@ -82,7 +82,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * 
      * @return verification mode
      */
-    public VerificationMode atLeast(int minNumberOfInvocations);
+    VerificationMode atLeast(final int minNumberOfInvocations);
 
     /**
      * @deprecated
@@ -100,7 +100,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      * @return verification mode
      */
     @Deprecated
-    public VerificationMode atMost(int maxNumberOfInvocations);
+    VerificationMode atMost(final int maxNumberOfInvocations);
 
     /**
      * Allows checking if given method was the only one invoked. E.g:
@@ -118,5 +118,5 @@ public interface VerificationWithTimeout extends VerificationMode {
      * 
      * @return verification mode
      */
-    public VerificationMode only();       
+    VerificationMode only();       
 }

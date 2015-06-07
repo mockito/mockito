@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked","serial"})
+@SuppressWarnings({"unchecked", "serial"})
 public class ArgumentMatchingToolTest extends TestBase {
 
     private ArgumentMatchingTool tool = new ArgumentMatchingTool();

@@ -48,7 +48,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     @Mock(serializable=true) IMethods imethodsMock2;
     @Mock(serializable=true) Any anyMock;
     @Mock(serializable=true) AlreadySerializable alreadySerializableMock;
-    @Mock(extraInterfaces={List.class},serializable=true) IMethods imethodsWithExtraInterfacesMock;
+    @Mock(extraInterfaces={List.class}, serializable=true) IMethods imethodsWithExtraInterfacesMock;
     
     @Test
     public void should_allow_throws_exception_to_be_serializable() throws Exception {

@@ -5,7 +5,10 @@
 
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -28,7 +31,7 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @SuppressWarnings("all")
     @Test
     public void tryDescriptiveMessagesOnMisuse() {
-        Foo foo = mock(Foo.class);
+        final Foo foo = mock(Foo.class);
         
 //        when(foo.finalMethod()).thenReturn("foo");
 //        doReturn("foo").when(foo).finalMethod();
@@ -94,6 +97,6 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldScreamWhenNullPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions((Object[])null);
+        verifyNoMoreInteractions((Object[]) null);
     }
 }

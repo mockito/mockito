@@ -107,11 +107,13 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
                 }
             } catch (Exception e) {
                 // 9 = failed - exception
-                if (importLogBean != null)
-                    importLogBean.setStatus(9);
+                if (importLogBean != null) {
+					importLogBean.setStatus(9);
+				}
             } finally {
-                if (importLogBean != null)
-                    finalizeResume(importLogBean);
+                if (importLogBean != null) {
+					finalizeResume(importLogBean);
+				}
             }
         }
 

@@ -1,6 +1,7 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import static org.mockito.internal.util.StringJoiner.join;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -9,8 +10,10 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import org.mockito.exceptions.base.MockitoException;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 class CachingMockBytecodeGenerator {
 
     private final Lock avoidingClassLeakCacheLock = new ReentrantLock();
@@ -19,7 +22,7 @@ class CachingMockBytecodeGenerator {
 
     private final MockBytecodeGenerator mockBytecodeGenerator = new MockBytecodeGenerator();
 
-    public <T> Class<T> get(MockFeatures<T> params) {
+	public <T> Class<T> get(MockFeatures<T> params) {
         // TODO improves locking behavior with ReentrantReadWriteLock ?
         avoidingClassLeakCacheLock.lock();
         try {

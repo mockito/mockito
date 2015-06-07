@@ -5,14 +5,14 @@
 
 package org.mockito.internal.verification;
 
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
-
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 
 public class DefaultRegisteredInvocations implements RegisteredInvocations, Serializable {
@@ -20,7 +20,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     private static final long serialVersionUID = -2674402327380736290L;
     private final LinkedList<Invocation> invocations = new LinkedList<Invocation>();
 
-    public void add(Invocation invocation) {
+    public void add(final Invocation invocation) {
         synchronized (invocations) {
             invocations.add(invocation);
         }
@@ -29,7 +29,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public void removeLast() {
         //TODO: add specific test for synchronization of this block (it is tested by InvocationContainerImplTest at the moment)
         synchronized (invocations) {
-            if (! invocations.isEmpty()) {
+            if (!invocations.isEmpty()) {
                 invocations.removeLast();
             }
         }
@@ -38,7 +38,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public List<Invocation> getAll() {
         List<Invocation> copiedList;
         synchronized (invocations) {
-            copiedList = new LinkedList<Invocation>(invocations) ;
+            copiedList = new LinkedList<Invocation>(invocations);
         }
 
         return ListUtil.filter(copiedList, new RemoveToString());
@@ -51,7 +51,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     }
 
     private static class RemoveToString implements Filter<Invocation> {
-        public boolean isOut(Invocation invocation) {
+        public boolean isOut(final Invocation invocation) {
             return new ObjectMethodsGuru().isToString(invocation.getMethod());
         }
     }

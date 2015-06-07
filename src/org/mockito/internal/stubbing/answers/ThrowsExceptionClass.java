@@ -5,25 +5,26 @@
 
 package org.mockito.internal.stubbing.answers;
 
+import java.io.Serializable;
+
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.objenesis.ObjenesisHelper;
 
-import java.io.Serializable;
-
 public class ThrowsExceptionClass implements Answer<Object>, Serializable {
 
+    private static final long serialVersionUID = 4118083979304825900L;
     private final Class<? extends Throwable> throwableClass;
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
-    public ThrowsExceptionClass(Class<? extends Throwable> throwableClass) {
+    public ThrowsExceptionClass(final Class<? extends Throwable> throwableClass) {
         this.throwableClass = throwableClass;
     }
 
-    public Object answer(InvocationOnMock invocation) throws Throwable {
+    public Object answer(final InvocationOnMock invocation) throws Throwable {
         //TODO centralize the use of Objenesis. Why do we use ObjenesisHelper?
-        Throwable throwable = (Throwable) ObjenesisHelper.newInstance(throwableClass);
+        final Throwable throwable = ObjenesisHelper.newInstance(throwableClass);
         throwable.fillInStackTrace();
         filter.filter(throwable);
         throw throwable;

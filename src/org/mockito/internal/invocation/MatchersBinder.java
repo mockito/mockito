@@ -5,32 +5,31 @@
 
 package org.mockito.internal.invocation;
 
-import org.hamcrest.Matcher;
+import java.io.Serializable;
+import java.util.List;
+
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.invocation.Invocation;
-
-import java.io.Serializable;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MatchersBinder implements Serializable {
 
     private static final long serialVersionUID = -311433939339443463L;
 
-    public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
-        List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
+    public InvocationMatcher bindMatchers(final ArgumentMatcherStorage argumentMatcherStorage, final Invocation invocation) {
+        final List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<Matcher>)(List) lastMatchers);
+        final InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List) lastMatchers);
         return invocationWithMatchers;
     }
 
-    private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {
+    private void validateMatchers(final Invocation invocation, final List<LocalizedMatcher> lastMatchers) {
         if (!lastMatchers.isEmpty()) {
-            int recordedMatchersSize = lastMatchers.size();
-            int expectedMatchersSize = invocation.getArguments().length;
+            final int recordedMatchersSize = lastMatchers.size();
+            final int expectedMatchersSize = invocation.getArguments().length;
             if (expectedMatchersSize != recordedMatchersSize) {
                 new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
             }

@@ -68,8 +68,7 @@ public enum Answers implements Answer<Object>{
      *
      * @see org.mockito.Mockito#CALLS_REAL_METHODS
      */
-    CALLS_REAL_METHODS(new CallsRealMethods())
-    ;
+    CALLS_REAL_METHODS(new CallsRealMethods());
 
     private final Answer<Object> implementation;
 

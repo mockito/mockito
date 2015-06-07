@@ -11,20 +11,19 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.internal.matchers.ContainsExtraTypeInformation;
 
-@SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
 
     /**
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
-    public Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<Matcher> matchers, Object[] arguments) {
+    public Integer[] getSuspiciouslyNotMatchingArgsIndexes(final List<Matcher> matchers, final Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
         
-        List<Integer> suspicious = new LinkedList<Integer>();
+        final List<Integer> suspicious = new LinkedList<Integer>();
         int i = 0;
-        for (Matcher m : matchers) {
+        for (final Matcher m : matchers) {
             if (m instanceof ContainsExtraTypeInformation 
                     && !safelyMatches(m, arguments[i]) 
                     && toStringEquals(m, arguments[i])
@@ -36,15 +35,15 @@ public class ArgumentMatchingTool {
         return suspicious.toArray(new Integer[0]);
     }
 
-    private boolean safelyMatches(Matcher m, Object arg) {
+    private boolean safelyMatches(final Matcher m, final Object arg) {
         try {
             return m.matches(arg);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             return false;
         }
     }
 
-    private boolean toStringEquals(Matcher m, Object arg) {
+    private boolean toStringEquals(final Matcher m, final Object arg) {
         return StringDescription.toString(m).equals(arg == null? "null" : arg.toString());
     }
 }

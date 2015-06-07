@@ -5,7 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +85,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -94,7 +99,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(4);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -114,7 +119,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -124,7 +129,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(2);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -137,7 +142,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(0)).simpleMethod(4);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -150,7 +155,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(2)).simpleMethod(4);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -172,7 +177,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(2)).simpleMethod(-999);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -182,7 +187,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockTwo, times(2)).oneArg(true);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -195,7 +200,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(-666);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -208,7 +213,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).oneArg(false);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -220,7 +225,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -230,7 +235,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -240,7 +245,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {
+        } catch (final VerificationInOrderFailure e) {
         }
     }
 
@@ -254,7 +259,7 @@ public class BasicVerificationInOrderTest extends TestBase {
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWanted e) {
+        } catch (final NoInteractionsWanted e) {
         }
     }
 
@@ -266,6 +271,6 @@ public class BasicVerificationInOrderTest extends TestBase {
     @SuppressWarnings("all")
     @Test(expected = MockitoException.class)
     public void shouldScreamWhenNullPassed() {
-        inOrder((Object[])null);
+        inOrder((Object[]) null);
     }
 }

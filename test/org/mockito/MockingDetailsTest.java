@@ -31,12 +31,12 @@ public class MockingDetailsTest extends TestBase {
         Collection<Invocation> invocations = mockingDetails.getInvocations();
         
         assertNotNull(invocations);
-        assertEquals(invocations.size(),3);
+        assertEquals(invocations.size(), 3);
         for (Invocation method : invocations) {
             assertTrue(methodsInvoked.contains(method.getMethod().getName()));
             if (method.getMethod().getName().equals("add")) {
-                assertEquals(method.getArguments().length,1);
-                assertEquals(method.getArguments()[0],"one");
+                assertEquals(method.getArguments().length, 1);
+                assertEquals(method.getArguments()[0], "one");
             }
         }    
     }

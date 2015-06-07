@@ -5,7 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +70,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -75,7 +80,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -88,7 +93,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {
+        } catch (final NoInteractionsWanted e) {
             assertContains("list of all invocations", e.getMessage());
         }
     }
@@ -100,15 +105,15 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {
+        } catch (final NoInteractionsWanted e) {
             assertNotContains("list of all invocations", e.getMessage());
         }
     }    
     
     @Test
     public void shouldVerifyOneMockButFailOnOther() throws Exception {
-        List list = mock(List.class);
-        Map map = mock(Map.class);
+        final List list = mock(List.class);
+        final Map map = mock(Map.class);
 
         list.add("one");
         list.add("one");
@@ -121,12 +126,12 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyZeroInteractions(map);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
-        verifyNoMoreInteractions((Object[])null);
+        verifyNoMoreInteractions((Object[]) null);
     }
 }
