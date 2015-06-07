@@ -4,7 +4,8 @@
  */
 package org.mockito.runners;
 
-import static org.mockitoutil.ExtraMatchers.*;
+import static org.mockitoutil.ExtraMatchers.clazz;
+import static org.mockitoutil.ExtraMatchers.contains;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.mockitoutil.TestBase;
 public class RunnersValidateFrameworkUsageTest extends TestBase {
     
     private Runner runner;
-    private RunNotifierStub notifier = new RunNotifierStub();
+    private final RunNotifierStub notifier = new RunNotifierStub();
     
     public static class DummyTest extends TestBase {
         @Test public void dummy() throws Exception {}
@@ -28,10 +29,10 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
 
     public class RunNotifierStub extends RunNotifier {
 
-        private List<RunListener> addedListeners = new LinkedList<RunListener>();
+        private final List<RunListener> addedListeners = new LinkedList<RunListener>();
 
         @Override
-        public void addListener(RunListener listener) {
+        public void addListener(final RunListener listener) {
             addedListeners.add(listener);
         }
     }

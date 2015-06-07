@@ -5,6 +5,19 @@
 
 package org.mockitousage.stubbing;
 
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,12 +28,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
-
-import java.io.IOException;
-
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings("serial")
 public class StubbingUsingDoReturnTest extends TestBase {
@@ -57,7 +64,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch (FooRuntimeException e) {}
+        } catch (final FooRuntimeException e) {}
     }
     
     @Test
@@ -67,7 +74,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             mock.throwsIOException(0);
             fail();
-        } catch (IOException e) {}
+        } catch (final IOException e) {}
     }
     
     class FooCheckedException extends Exception {}
@@ -77,7 +84,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertContains("Checked exception is invalid", e.getMessage());
         }
     }
@@ -87,7 +94,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doReturn("foo").when(mock).voidMethod();
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertContains("void method", e.getMessage());
             assertContains("cannot", e.getMessage());
         }
@@ -98,7 +105,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doReturn("foo").when("foo").toString();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertContains("Argument passed to when() is not a mock", e.getMessage());
         }
     }
@@ -108,7 +115,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doReturn("foo").when((Object) null).toString();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertContains("Argument passed to when() is null", e.getMessage());
         }
     }    
@@ -124,7 +131,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         
         assertEquals("bar", mock.simpleMethod());
         assertEquals("bar", mock.simpleMethod());
@@ -132,7 +139,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
 
     @Test
     public void shouldAllowDoCallRealMethodInChainedStubbing() throws Exception {
-        MethodsImpl methods = mock(MethodsImpl.class);
+        final MethodsImpl methods = mock(MethodsImpl.class);
         doReturn("A").doCallRealMethod()
                 .when(methods).simpleMethod();
 
@@ -160,17 +167,17 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
         try {
             mock.voidMethod();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
     }
     
     @Test
     public void shouldStubWithGenericAnswer() {
         doAnswer(new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(final InvocationOnMock invocation) throws Throwable {
                 return "foo";
             }
         })
@@ -184,7 +191,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doNothing().when(mock).simpleMethod();
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertContains("Only void methods can doNothing()", e.getMessage());
         }
     }
@@ -196,7 +203,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -220,7 +227,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertContains("String cannot be returned by booleanObjectReturningMethod()" +
                     "\n" +
                     "booleanObjectReturningMethod() should return Boolean",
@@ -233,7 +240,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
         try {
             doReturn(null).when(mock).intReturningMethod();
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertContains("null cannot be returned by intReturningMethod", e.getMessage());
         }
     }

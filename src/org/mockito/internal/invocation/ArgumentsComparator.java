@@ -11,6 +11,7 @@ import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 
+@SuppressWarnings("rawtypes")
 public class ArgumentsComparator {
     public boolean argumentsMatch(final InvocationMatcher invocationMatcher, final Invocation actual) {
         final Object[] actualArgs = actual.getArguments();

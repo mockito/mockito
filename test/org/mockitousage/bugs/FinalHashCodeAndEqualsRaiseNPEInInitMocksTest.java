@@ -4,14 +4,15 @@
  */
 package org.mockitousage.bugs;
 
+import java.nio.charset.Charset;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.nio.charset.Charset;
-
 // issue 327
+@SuppressWarnings("unused")
 public class FinalHashCodeAndEqualsRaiseNPEInInitMocksTest {
     @Mock private Charset charset;
     @InjectMocks private FieldCharsetHolder fieldCharsetHolder;
@@ -27,7 +28,7 @@ public class FinalHashCodeAndEqualsRaiseNPEInInitMocksTest {
     }
 
     private static class ConstructorCharsetHolder {
-        public ConstructorCharsetHolder(Charset charset) {
+        public ConstructorCharsetHolder(final Charset charset) {
         }
     }
 }

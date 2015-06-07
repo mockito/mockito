@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 import org.mockito.mock.MockName;
 
+@SuppressWarnings("rawtypes")
 public class MockNameImpl implements MockName, Serializable {
     
     private static final long serialVersionUID = 8014974700844306925L;

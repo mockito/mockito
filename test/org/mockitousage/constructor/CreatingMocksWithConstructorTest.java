@@ -14,6 +14,7 @@ import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("rawtypes")
 public class CreatingMocksWithConstructorTest extends TestBase {
 
     abstract static class AbstractMessage {

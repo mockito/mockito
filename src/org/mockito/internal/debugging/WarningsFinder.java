@@ -11,7 +11,7 @@ import java.util.List;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class WarningsFinder {
     private final List<Invocation> baseUnusedStubs;
     private final List<InvocationMatcher> baseAllInvocations;

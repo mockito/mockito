@@ -38,6 +38,7 @@ import org.mockito.Mockito;
  * 
  * See examples in javadoc for {@link Mockito}
  */
+@SuppressWarnings("rawtypes")
 public interface Stubber {
 
     /**

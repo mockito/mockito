@@ -15,19 +15,20 @@ import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
+@SuppressWarnings("rawtypes")
 public class NoMoreInteractions implements VerificationMode, VerificationInOrderMode {
 
     @SuppressWarnings("unchecked")
-    public void verify(VerificationData data) {
-        Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());
+    public void verify(final VerificationData data) {
+        final Invocation unverified = new InvocationsFinder().findFirstUnverified(data.getAllInvocations());
         if (unverified != null) {
             new Reporter().noMoreInteractionsWanted(unverified, (List) data.getAllInvocations());
         }
     }
 
-    public void verifyInOrder(VerificationDataInOrder data) {
-        List<Invocation> invocations = data.getAllInvocations();
-        Invocation unverified = new InvocationsFinder().findFirstUnverifiedInOrder(data.getOrderingContext(), invocations);
+    public void verifyInOrder(final VerificationDataInOrder data) {
+        final List<Invocation> invocations = data.getAllInvocations();
+        final Invocation unverified = new InvocationsFinder().findFirstUnverifiedInOrder(data.getOrderingContext(), invocations);
         
         if (unverified != null) {
             new Reporter().noMoreInteractionsWantedInOrder(unverified);

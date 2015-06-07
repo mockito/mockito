@@ -15,7 +15,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.verification.VerificationMode;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MockingProgressImpl implements MockingProgress {
     
     private final Reporter reporter = new Reporter();
@@ -26,17 +26,17 @@ public class MockingProgressImpl implements MockingProgress {
     private Location stubbingInProgress = null;
     private MockingProgressListener listener;
 
-    public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
+    public void reportOngoingStubbing(final IOngoingStubbing iOngoingStubbing) {
         this.iOngoingStubbing = iOngoingStubbing;
     }
 
     public IOngoingStubbing pullOngoingStubbing() {
-        IOngoingStubbing temp = iOngoingStubbing;
+        final IOngoingStubbing temp = iOngoingStubbing;
         iOngoingStubbing = null;
         return temp;
     }
     
-    public void verificationStarted(VerificationMode verify) {
+    public void verificationStarted(final VerificationMode verify) {
         validateState();
         resetOngoingStubbing();
         verificationMode = new Localized(verify);
@@ -54,7 +54,7 @@ public class MockingProgressImpl implements MockingProgress {
             return null;
         }
         
-        VerificationMode temp = verificationMode.getObject();
+        final VerificationMode temp = verificationMode.getObject();
         verificationMode = null;
         return temp;
     }
@@ -69,7 +69,7 @@ public class MockingProgressImpl implements MockingProgress {
         
         //validate stubbing:
         if (stubbingInProgress != null) {
-            Location temp = stubbingInProgress;
+            final Location temp = stubbingInProgress;
             stubbingInProgress = null;
             reporter.unfinishedStubbing(temp);
         }
@@ -81,7 +81,7 @@ public class MockingProgressImpl implements MockingProgress {
         GlobalConfiguration.validate();
 
         if (verificationMode != null) {
-            Location location = verificationMode.getLocation();
+            final Location location = verificationMode.getLocation();
             verificationMode = null;
             reporter.unfinishedVerificationException(location);
         }
@@ -89,7 +89,7 @@ public class MockingProgressImpl implements MockingProgress {
         getArgumentMatcherStorage().validateState();
     }
 
-    public void stubbingCompleted(Invocation invocation) {
+    public void stubbingCompleted(final Invocation invocation) {
         stubbingInProgress = null;
     }
     
@@ -109,14 +109,14 @@ public class MockingProgressImpl implements MockingProgress {
         return argumentMatcherStorage;
     }
 
-    public void mockingStarted(Object mock, Class classToMock) {
+    public void mockingStarted(final Object mock, final Class classToMock) {
         if (listener instanceof MockingStartedListener) {
             ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
         }
         validateMostStuff();
     }
 
-    public void setListener(MockingProgressListener listener) {
+    public void setListener(final MockingProgressListener listener) {
         this.listener = listener;
     }
 }

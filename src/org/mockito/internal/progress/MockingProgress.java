@@ -9,6 +9,7 @@ import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
+@SuppressWarnings("rawtypes")
 public interface MockingProgress {
     
     void reportOngoingStubbing(final IOngoingStubbing iOngoingStubbing);

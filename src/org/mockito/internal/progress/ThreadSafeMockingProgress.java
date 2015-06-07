@@ -11,16 +11,17 @@ import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
+@SuppressWarnings("rawtypes")
 public class ThreadSafeMockingProgress implements MockingProgress, Serializable {
     
     private static final long serialVersionUID = 6839454041642082618L;
-    private static final ThreadLocal<MockingProgress> mockingProgress = new ThreadLocal<MockingProgress>();
+    private static final ThreadLocal<MockingProgress> MOCKING_PROGRESS = new ThreadLocal<MockingProgress>();
 
     static MockingProgress threadSafely() {
-        if (mockingProgress.get() == null) {
-            mockingProgress.set(new MockingProgressImpl());
+        if (MOCKING_PROGRESS.get() == null) {
+            MOCKING_PROGRESS.set(new MockingProgressImpl());
         }
-        return mockingProgress.get();
+        return MOCKING_PROGRESS.get();
     }
     
     public void reportOngoingStubbing(final IOngoingStubbing iOngoingStubbing) {

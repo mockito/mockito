@@ -5,7 +5,8 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,7 +23,7 @@ public class ShouldOnlyModeAllowCapturingArgumentsTest extends TestBase {
     public void shouldAllowCapturingArguments() {
         //given
         mock.simpleMethod("o");
-        ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
+        final ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
         
         //when
         verify(mock, only()).simpleMethod(arg.capture());

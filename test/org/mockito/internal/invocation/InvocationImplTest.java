@@ -5,6 +5,11 @@
 
 package org.mockito.internal.invocation;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -15,12 +20,7 @@ import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class InvocationImplTest extends TestBase {
 
     private Invocation invocation;
@@ -32,9 +32,9 @@ public class InvocationImplTest extends TestBase {
 
     @Test
     public void shouldKnowIfIsEqualTo() {
-        Invocation equal =                  new InvocationBuilder().args(" ").mock("mock").toInvocation();
-        Invocation nonEqual =               new InvocationBuilder().args("X").mock("mock").toInvocation();
-        Invocation withNewStringInstance =  new InvocationBuilder().args(new String(" ")).mock("mock").toInvocation();
+        final Invocation equal =                  new InvocationBuilder().args(" ").mock("mock").toInvocation();
+        final Invocation nonEqual =               new InvocationBuilder().args("X").mock("mock").toInvocation();
+        final Invocation withNewStringInstance =  new InvocationBuilder().args(new String(" ")).mock("mock").toInvocation();
 
         assertFalse(invocation.equals(null));
         assertFalse(invocation.equals(""));
@@ -45,7 +45,7 @@ public class InvocationImplTest extends TestBase {
     
     @Test
     public void shouldEqualToNotConsiderSequenceNumber() {
-        Invocation equal = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
+        final Invocation equal = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
         
         assertTrue(invocation.equals(equal));
         assertTrue(invocation.getSequenceNumber() != equal.getSequenceNumber());
@@ -53,7 +53,7 @@ public class InvocationImplTest extends TestBase {
     
     @Test
     public void shouldBeACitizenOfHashes() {
-        Map map = new HashMap();
+        final Map map = new HashMap();
         map.put(invocation, "one");
         assertEquals("one", map.get(invocation));
     }
@@ -90,7 +90,7 @@ public class InvocationImplTest extends TestBase {
     
     @Test
     public void shouldPrintNullIfArrayIsNull() throws Exception {
-        Method m = IMethods.class.getMethod("oneArray", Object[].class);
+        final Method m = IMethods.class.getMethod("oneArray", Object[].class);
         invocation = new InvocationBuilder().method(m).args((Object) null).toInvocation();
         assertThat(invocation.toString(), endsWith("oneArray(null);"));
     }
@@ -110,8 +110,8 @@ public class InvocationImplTest extends TestBase {
     
     @Test
     public void shouldTransformArgumentsToMatchers() throws Exception {
-        Invocation i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
-        List matchers = ArgumentsProcessor.argumentsToMatchers(i.getArguments());
+        final Invocation i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
+        final List matchers = ArgumentsProcessor.argumentsToMatchers(i.getArguments());
 
         assertEquals(2, matchers.size());
         assertEquals(Equals.class, matchers.get(0).getClass());
@@ -127,8 +127,8 @@ public class InvocationImplTest extends TestBase {
     @Test
     public void shouldBeAbleToCallRealMethod() throws Throwable {
         //when
-        Invocation invocation = invocationOf(Foo.class, "bark", new RealMethod() {
-            public Object invoke(Object target, Object[] arguments) throws Throwable {
+        final Invocation invocation = invocationOf(Foo.class, "bark", new RealMethod() {
+            public Object invoke(final Object target, final Object[] arguments) throws Throwable {
                 return new Foo().bark();
             }});
         //then
@@ -138,25 +138,25 @@ public class InvocationImplTest extends TestBase {
     @Test
     public void shouldScreamWhenCallingRealMethodOnInterface() throws Throwable {
         //given
-        Invocation invocationOnInterface = new InvocationBuilder().toInvocation();
+        final Invocation invocationOnInterface = new InvocationBuilder().toInvocation();
 
         try {
             //when
             invocationOnInterface.callRealMethod();
             //then
             fail();
-        } catch(MockitoException e) {}
+        } catch(final MockitoException e) {}
     }
     
     @Test
     public void shouldReturnCastedArgumentAt(){
         //given
-        int argument = 42;
-        Invocation invocationOnInterface = new InvocationBuilder().method("twoArgumentMethod").
+        final int argument = 42;
+        final Invocation invocationOnInterface = new InvocationBuilder().method("twoArgumentMethod").
             argTypes(int.class, int.class).args(1, argument).toInvocation();
 
         //when
-        int secondArgument = invocationOnInterface.getArgumentAt(1, int.class);
+        final int secondArgument = invocationOnInterface.getArgumentAt(1, int.class);
 
         //then
         assertTrue(secondArgument == argument);

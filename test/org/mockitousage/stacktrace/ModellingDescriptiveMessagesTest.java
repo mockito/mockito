@@ -5,8 +5,18 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.RETURNS_SMART_NULLS;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("rawtypes")
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class ModellingDescriptiveMessagesTest extends TestBase {
@@ -75,7 +86,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldSayWantedButNotInvokedInOrder() {
         mock.simpleMethod();
         mock.otherMethod();
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).otherMethod();
         inOrder.verify(mock).simpleMethod();
     }
@@ -86,7 +97,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         mock.otherMethod();
         mock.otherMethod();
 
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).simpleMethod();
         inOrder.verify(mock, times(3)).otherMethod();
     }
@@ -96,7 +107,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         mock.otherMethod();
         mock.otherMethod();
         
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock, times(1)).otherMethod();
     }
 
@@ -111,7 +122,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldSayTooLittleInvocationsInAtLeastModeInOrder() {
         mock.simpleMethod();
 
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock, atLeast(2)).simpleMethod();
     }
     
@@ -133,7 +144,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldSayUnstubbedMethodWasInvokedHere() {
         mock = mock(IMethods.class, RETURNS_SMART_NULLS);
         
-        IMethods m = mock.iMethodsReturningMethod();
+        final IMethods m = mock.iMethodsReturningMethod();
         
         m.simpleMethod();
     }
@@ -163,7 +174,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Test
     public void shouldShowExampleOfCorrectArgumentCapturing() {
-        ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+        final ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         argument.capture();
         argument.getValue();
     }
@@ -195,7 +206,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Test
     public void shouldMentionSpiesWhenVoidMethodIsToldToReturnValue() {
-        List list = mock(List.class);
+        final List list = mock(List.class);
         doReturn("foo").when(list).clear();
     }
 }

@@ -13,7 +13,7 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     @Test
     public void should_return_the_usual_default_values_for_primitives() throws Throwable {
-        Answer<Object> answer = new ReturnsSmartNulls();
+        final Answer<Object> answer = new ReturnsSmartNulls();
         assertEquals(false  ,   answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
         assertEquals((char) 0,  answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
         assertEquals((byte) 0,  answer.answer(invocationOf(HasPrimitiveMethods.class, "byteMethod")));
@@ -24,29 +24,28 @@ public class ReturnsSmartNullsTest extends TestBase {
         assertEquals(0d,        answer.answer(invocationOf(HasPrimitiveMethods.class, "doubleMethod")));
     }
 
-    @SuppressWarnings("unused")
     interface Foo {
         Foo get();
-        Foo withArgs(String oneArg, String otherArg);
+        Foo withArgs(final String oneArg, final String otherArg);
     }
 
     @Test
     public void should_return_an_object_that_fails_on_any_method_invocation_for_non_primitives() throws Throwable {
-        Answer<Object> answer = new ReturnsSmartNulls();
+        final Answer<Object> answer = new ReturnsSmartNulls();
 
-        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
+        final Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
 
         try {
             smartNull.get();
             fail();
-        } catch (SmartNullPointerException expected) {}
+        } catch (final SmartNullPointerException expected) {}
     }
 
     @Test
     public void should_return_an_object_that_allows_object_methods() throws Throwable {
-        Answer<Object> answer = new ReturnsSmartNulls();
+        final Answer<Object> answer = new ReturnsSmartNulls();
 
-        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
+        final Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
 
         assertContains("SmartNull returned by", smartNull + "");
         assertContains("foo.get()", smartNull + "");
@@ -54,9 +53,9 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     @Test
     public void should_print_the_parameters_when_calling_a_method_with_args() throws Throwable {
-        Answer<Object> answer = new ReturnsSmartNulls();
+        final Answer<Object> answer = new ReturnsSmartNulls();
 
-        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
+        final Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
         assertContains("foo.withArgs", smartNull + "");
         assertContains("oompa", smartNull + "");
@@ -65,14 +64,14 @@ public class ReturnsSmartNullsTest extends TestBase {
 
     @Test
     public void should_print_the_parameters_on_SmartNullPointerException_message() throws Throwable {
-        Answer<Object> answer = new ReturnsSmartNulls();
+        final Answer<Object> answer = new ReturnsSmartNulls();
 
-        Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
+        final Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
         try {
             smartNull.get();
             fail();
-        } catch (SmartNullPointerException e) {
+        } catch (final SmartNullPointerException e) {
             assertContains("oompa", e.getMessage());
             assertContains("lumpa", e.getMessage());
         }

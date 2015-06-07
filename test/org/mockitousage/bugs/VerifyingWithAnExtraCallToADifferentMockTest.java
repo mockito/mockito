@@ -5,7 +5,9 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,6 +34,6 @@ public class VerifyingWithAnExtraCallToADifferentMockTest extends TestBase {
         try {
             verify(mockTwo, never()).simpleMethod(mock.otherMethod());
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (final NeverWantedButInvoked e) {}
     }
 }

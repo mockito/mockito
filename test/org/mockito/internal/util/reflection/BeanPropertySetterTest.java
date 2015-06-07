@@ -4,28 +4,31 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.fest.assertions.Assertions;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import org.fest.assertions.Assertions;
+import org.junit.Test;
 
-
+@SuppressWarnings("unused")
 public class BeanPropertySetterTest {
 
     @Test
     public void use_the_correct_setter_on_the_target() throws Exception {
         // given
-        SomeBean someBean = new SomeBean();
-        Field theField = someBean.getClass().getDeclaredField("theField");
-        File valueToInject = new File("path");
+        final SomeBean someBean = new SomeBean();
+        final Field theField = someBean.getClass().getDeclaredField("theField");
+        final File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        final boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -36,12 +39,12 @@ public class BeanPropertySetterTest {
     @Test
     public void use_the_setter_on_the_target_when_field_name_begins_by_at_least_2_caps() throws Exception {
         // given
-        BeanWithWeirdFields someBean = new BeanWithWeirdFields();
-        Field theField = someBean.getClass().getDeclaredField("UUID");
-        UUID valueToInject = new UUID(0L, 0L);
+        final BeanWithWeirdFields someBean = new BeanWithWeirdFields();
+        final Field theField = someBean.getClass().getDeclaredField("UUID");
+        final UUID valueToInject = new UUID(0L, 0L);
 
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        final boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -52,12 +55,12 @@ public class BeanPropertySetterTest {
     @Test
     public void should_not_fail_if_bean_class_declares_only_the_setter_for_the_property() throws Exception {
         // given
-        SomeBeanWithJustASetter someBean = new SomeBeanWithJustASetter();
-        Field theField = someBean.getClass().getDeclaredField("theField");
-        File valueToInject = new File("path");
+        final SomeBeanWithJustASetter someBean = new SomeBeanWithJustASetter();
+        final Field theField = someBean.getClass().getDeclaredField("theField");
+        final File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        final boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -67,15 +70,15 @@ public class BeanPropertySetterTest {
     @Test
     public void should_fail_if_matching_setter_cannot_be_found_and_if_report_failure_is_true() throws Exception {
         // given
-        SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
-        Field theField = bean.getClass().getDeclaredField("theField");
-        File valueToInject = new File("path");
+        final SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
+        final Field theField = bean.getClass().getDeclaredField("theField");
+        final File valueToInject = new File("path");
 
         try {
             // when
             new BeanPropertySetter(bean, theField, true).set(valueToInject);
             fail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // then
             Assertions.assertThat(e.getMessage()).contains("setter not found");
         }
@@ -84,12 +87,12 @@ public class BeanPropertySetterTest {
     @Test
     public void return_false_if_no_setter_was_found() throws Exception {
         // given
-        SomeBeanWithJustAGetter bean = new SomeBeanWithJustAGetter();
-        Field theField = bean.getClass().getDeclaredField("theField");
-        File valueToInject = new File("path");
+        final SomeBeanWithJustAGetter bean = new SomeBeanWithJustAGetter();
+        final Field theField = bean.getClass().getDeclaredField("theField");
+        final File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(bean, theField).set(valueToInject);
+        final boolean injected = new BeanPropertySetter(bean, theField).set(valueToInject);
 
         // then
         assertFalse(injected);
@@ -98,12 +101,12 @@ public class BeanPropertySetterTest {
     @Test
     public void return_false_if_no_setter_was_found_and_if_reportNoSetterFound_is_false() throws Exception {
         // given
-        SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
-        Field theField = bean.getClass().getDeclaredField("theField");
-        File valueToInject = new File("path");
+        final SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
+        final Field theField = bean.getClass().getDeclaredField("theField");
+        final File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(bean, theField, false).set(valueToInject);
+        final boolean injected = new BeanPropertySetter(bean, theField, false).set(valueToInject);
 
         // then
         assertFalse(injected);
@@ -153,9 +156,9 @@ public class BeanPropertySetterTest {
         private UUID UUID;
         boolean theFieldSetterWasUSed;
 
-        public void setUUID(UUID UUID) {
+        public void setUUID(final UUID uuid) {
             theFieldSetterWasUSed = true;
-            this.UUID = UUID;
+            this.UUID = uuid;
         }
     }
 

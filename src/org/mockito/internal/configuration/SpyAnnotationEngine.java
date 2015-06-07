@@ -41,17 +41,17 @@ import org.mockito.internal.util.MockUtil;
  * <p/>
  * <p>This engine will fail, if the field is also annotated with incompatible Mockito annotations.
  */
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class SpyAnnotationEngine implements AnnotationEngine {
 
-    public Object createMockFor(Annotation annotation, Field field) {
+    public Object createMockFor(final Annotation annotation, final Field field) {
         return null;
     }
 
     @SuppressWarnings("deprecation") // for MockitoAnnotations.Mock
-    public void process(Class<?> context, Object testInstance) {
-        Field[] fields = context.getDeclaredFields();
-        for (Field field : fields) {
+    public void process(final Class<?> context, final Object testInstance) {
+        final Field[] fields = context.getDeclaredFields();
+        for (final Field field : fields) {
             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
                 assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
                 field.setAccessible(true);

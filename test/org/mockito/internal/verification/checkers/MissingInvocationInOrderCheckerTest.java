@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.LinkedList;
 
@@ -30,7 +30,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     private InvocationMatcher wanted;
     private LinkedList<Invocation> invocations;
     private InvocationsFinderStub finderStub;
-    private InOrderContext context = new InOrderContextImpl();
+    private final InOrderContext context = new InOrderContextImpl();
     
     @Before
     public void setup() {
@@ -44,7 +44,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
 
     @Test
     public void shouldPassWhenMatchingInteractionFound() throws Exception {
-        Invocation actual = new InvocationBuilder().toInvocation();
+        final Invocation actual = new InvocationBuilder().toInvocation();
         finderStub.allMatchingUnverifiedChunksToReturn.add(actual);
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
@@ -63,7 +63,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         assertTrue(finderStub.findInvocations(invocations, wanted).isEmpty());
         finderStub.similarToReturn = new InvocationBuilder().toInvocation();
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
-        SmartPrinter printer = new SmartPrinter(wanted, finderStub.similarToReturn, 0);
+        final SmartPrinter printer = new SmartPrinter(wanted, finderStub.similarToReturn, 0);
         assertEquals(printer.getWanted(), reporterStub.wantedString);
         assertEquals(printer.getActual(), reporterStub.actual);
         assertEquals(finderStub.similarToReturn.getLocation(), reporterStub.actualLocation);
@@ -71,7 +71,7 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
     
     @Test
     public void shouldReportWantedDiffersFromActual() throws Exception {
-        Invocation previous = new InvocationBuilder().toInvocation();
+        final Invocation previous = new InvocationBuilder().toInvocation();
         finderStub.previousInOrderToReturn = previous;
         
         checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
@@ -87,16 +87,16 @@ public class MissingInvocationInOrderCheckerTest extends TestBase {
         private String actual;
         private Location actualLocation;
         
-        @Override public void wantedButNotInvokedInOrder(DescribedInvocation wanted, DescribedInvocation previous) {
+        @Override public void wantedButNotInvokedInOrder(final DescribedInvocation wanted, final DescribedInvocation previous) {
             this.wanted = wanted;
             this.previous = previous;
         }
         
-        @Override public void wantedButNotInvoked(DescribedInvocation wanted) {
+        @Override public void wantedButNotInvoked(final DescribedInvocation wanted) {
             this.wanted = wanted;
         }
 
-        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
+        @Override public void argumentsAreDifferent(final String wanted, final String actual, final Location actualLocation) {
             this.wantedString = wanted;
             this.actual = actual;
             this.actualLocation = actualLocation;

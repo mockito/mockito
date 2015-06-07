@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class SpyInjectionTest extends TestBase {
 
     @Spy List spy = new LinkedList();
@@ -20,7 +20,7 @@ public class SpyInjectionTest extends TestBase {
     
     static class HasSpy {
         private List spy;
-        public void setSpy(List spy) {
+        public void setSpy(final List spy) {
             this.spy = spy;
         }        
     }

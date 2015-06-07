@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-@SuppressWarnings("unused")
 interface HasPrimitiveMethods {
     boolean booleanMethod();
     char charMethod();

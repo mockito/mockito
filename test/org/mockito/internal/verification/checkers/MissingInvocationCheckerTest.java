@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -77,7 +77,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     @Test
     public void shouldReportWantedInvocationDiffersFromActual() {
         assertTrue(finderStub.actualToReturn.isEmpty());
-        Invocation actualInvocation = new InvocationBuilder().toInvocation();
+        final Invocation actualInvocation = new InvocationBuilder().toInvocation();
         finderStub.similarToReturn = actualInvocation;
         
         checker.check(invocations, wanted);
@@ -94,11 +94,11 @@ public class MissingInvocationCheckerTest extends TestBase {
         private Location actualLocation;
         
         @Override
-        public void wantedButNotInvoked(DescribedInvocation wanted, List<? extends DescribedInvocation> invocations) {
+        public void wantedButNotInvoked(final DescribedInvocation wanted, final List<? extends DescribedInvocation> invocations) {
             this.wanted = wanted;
         }
         
-        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
+        @Override public void argumentsAreDifferent(final String wanted, final String actual, final Location actualLocation) {
                     this.wanted = wanted;
                     this.actual = actual;
                     this.actualLocation = actualLocation;

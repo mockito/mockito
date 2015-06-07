@@ -15,6 +15,7 @@ import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.invocation.Invocation;
 
+@SuppressWarnings("rawtypes")
 public class WarningsCollector {
    
     List createdMocks;

@@ -4,6 +4,20 @@
  */
 package org.mockitousage.customization;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willAnswer;
+import static org.mockito.BDDMockito.willCallRealMethod;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
+import java.util.Set;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -16,10 +30,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
-
-import java.util.Set;
-
-import static org.mockito.BDDMockito.*;
 
 public class BDDMockitoTest extends TestBase {
     @Mock IMethods mock;
@@ -39,9 +49,10 @@ public class BDDMockitoTest extends TestBase {
         try {
             assertEquals("foo", mock.simpleMethod("foo"));
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void should_stub_with_throwable_class() throws Exception {
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class);
@@ -49,13 +60,13 @@ public class BDDMockitoTest extends TestBase {
         try {
             assertEquals("foo", mock.simpleMethod("foo"));
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
     @Test
     public void should_stub_with_answer() throws Exception {
         given(mock.simpleMethod(anyString())).willAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(final InvocationOnMock invocation) throws Throwable {
                 return (String) invocation.getArguments()[0];
             }});
 
@@ -65,7 +76,7 @@ public class BDDMockitoTest extends TestBase {
     @Test
     public void should_stub_with_will_answer_alias() throws Exception {
         given(mock.simpleMethod(anyString())).will(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(final InvocationOnMock invocation) throws Throwable {
                 return (String) invocation.getArguments()[0];
             }});
 
@@ -84,7 +95,7 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     public void should_stub_consecutively_with_call_real_method() throws Exception {
-        MethodsImpl mock = mock(MethodsImpl.class);
+        final MethodsImpl mock = mock(MethodsImpl.class);
         willReturn("foo").willCallRealMethod()
                 .given(mock).simpleMethod();
 
@@ -99,7 +110,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
     @Test
@@ -109,7 +120,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
     @Test
@@ -122,7 +133,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
     @Test
@@ -135,7 +146,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch(final SomethingWasWrong expected) {}
     }
 
     @Test
@@ -149,7 +160,7 @@ public class BDDMockitoTest extends TestBase {
     @Test
     public void should_stub_using_do_answer_style() throws Exception {
         willAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(final InvocationOnMock invocation) throws Throwable {
                 return (String) invocation.getArguments()[0];
             }})
                 .given(mock).simpleMethod(anyString());
@@ -160,7 +171,7 @@ public class BDDMockitoTest extends TestBase {
     @Test
     public void should_stub_by_delegating_to_real_method() throws Exception {
         //given
-        Dog dog = mock(Dog.class);
+        final Dog dog = mock(Dog.class);
         //when
         willCallRealMethod().given(dog).bark();
         //then
@@ -170,18 +181,19 @@ public class BDDMockitoTest extends TestBase {
     @Test
     public void should_stub_by_delegating_to_real_method_using_typical_stubbing_syntax() throws Exception {
         //given
-        Dog dog = mock(Dog.class);
+        final Dog dog = mock(Dog.class);
         //when
         given(dog.bark()).willCallRealMethod();
         //then
         assertEquals("woof", dog.bark());
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void should_all_stubbed_mock_reference_access() throws Exception {
-        Set expectedMock = mock(Set.class);
+        final Set expectedMock = mock(Set.class);
 
-        Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
+        final Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
 
         assertEquals(expectedMock, returnedMock);
     }
@@ -225,7 +237,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).shouldHaveZeroInteractions();
             fail("should have reported this interaction wasn't wanted");
-        } catch (NoInteractionsWanted expected) { }
+        } catch (final NoInteractionsWanted expected) { }
     }
 
     @Test
@@ -233,14 +245,14 @@ public class BDDMockitoTest extends TestBase {
         mock.booleanObjectReturningMethod();
         mock.arrayReturningMethod();
 
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         then(mock).should(inOrder).booleanObjectReturningMethod();
         then(mock).should(inOrder).arrayReturningMethod();
     }
 
     @Test
     public void should_fail_for_interactions_that_were_in_wrong_order() {
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
 
         mock.arrayReturningMethod();
         mock.booleanObjectReturningMethod();
@@ -249,7 +261,7 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).should(inOrder).arrayReturningMethod();
             fail("should have raise in order verification failure on second verify call");
-        } catch (VerificationInOrderFailure expected) { }
+        } catch (final VerificationInOrderFailure expected) { }
     }
 
     @Test(expected = WantedButNotInvoked.class)
@@ -259,9 +271,9 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     public void should_pass_fluent_bdd_scenario() {
-        Bike bike = new Bike();
-        Person person = mock(Person.class);
-        Police police = mock(Police.class);
+        final Bike bike = new Bike();
+        final Person person = mock(Person.class);
+        final Police police = mock(Police.class);
 
         person.ride(bike);
         person.ride(bike);
@@ -272,45 +284,45 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     public void should_pass_fluent_bdd_scenario_with_ordered_verification() {
-        Bike bike = new Bike();
-        Car car = new Car();
-        Person person = mock(Person.class);
+        final Bike bike = new Bike();
+        final Car car = new Car();
+        final Person person = mock(Person.class);
 
         person.drive(car);
         person.ride(bike);
         person.ride(bike);
 
-        InOrder inOrder = inOrder(person);
+        final InOrder inOrder = inOrder(person);
         then(person).should(inOrder).drive(car);
         then(person).should(inOrder, times(2)).ride(bike);
     }
 
     @Test
     public void should_pass_fluent_bdd_scenario_with_ordered_verification_for_two_mocks() {
-        Car car = new Car();
-        Person person = mock(Person.class);
-        Police police = mock(Police.class);
+        final Car car = new Car();
+        final Person person = mock(Person.class);
+        final Police police = mock(Police.class);
 
         person.drive(car);
         person.drive(car);
         police.chase(car);
 
-        InOrder inOrder = inOrder(person, police);
+        final InOrder inOrder = inOrder(person, police);
         then(person).should(inOrder, times(2)).drive(car);
         then(police).should(inOrder).chase(car);
     }
 
     static class Person {
 
-        void ride(Bike bike) {}
-        void drive(Car car) {}
+        void ride(final Bike bike) {}
+        void drive(final Car car) {}
     }
     static class Bike { }
 
     static class Car { }
     static class Police {
 
-        void chase(Car car) {}
+        void chase(final Car car) {}
     }
 
     class Dog {
@@ -319,5 +331,6 @@ public class BDDMockitoTest extends TestBase {
         }
     }
 
+    @SuppressWarnings("serial")
     private class SomethingWasWrong extends RuntimeException { }
 }

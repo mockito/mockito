@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.reporting;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.hamcrest.Matcher;
 import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -11,17 +15,14 @@ import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
+@SuppressWarnings("rawtypes")
 public class PrintSettings {
 
     public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
     private List<Integer> withTypeInfo = new LinkedList<Integer>();
 
-    public void setMultiline(boolean multiline) {
+    public void setMultiline(final boolean multiline) {
         this.multiline = multiline;
     }
 
@@ -29,24 +30,24 @@ public class PrintSettings {
         return multiline;
     }
 
-    public static PrintSettings verboseMatchers(Integer ... indexesOfMatchers) {
-        PrintSettings settings = new PrintSettings();
+    public static PrintSettings verboseMatchers(final Integer ... indexesOfMatchers) {
+        final PrintSettings settings = new PrintSettings();
         settings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchers);
         return settings;
     }
 
-    public boolean extraTypeInfoFor(int argumentIndex) {
+    public boolean extraTypeInfoFor(final int argumentIndex) {
         return withTypeInfo.contains(argumentIndex);
     }
 
-    public void setMatchersToBeDescribedWithExtraTypeInfo(Integer[] indexesOfMatchers) {
+    public void setMatchersToBeDescribedWithExtraTypeInfo(final Integer[] indexesOfMatchers) {
         this.withTypeInfo = Arrays.asList(indexesOfMatchers);
     }
 
-    public String print(List<Matcher> matchers, Invocation invocation) {
-        MatchersPrinter matchersPrinter = new MatchersPrinter();
-        String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
-        String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
+    public String print(final List<Matcher> matchers, final Invocation invocation) {
+        final MatchersPrinter matchersPrinter = new MatchersPrinter();
+        final String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
+        final String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
         if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH)) {
             return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, this);
         } else {
@@ -54,11 +55,11 @@ public class PrintSettings {
         }
     }
 
-    public String print(Invocation invocation) {
+    public String print(final Invocation invocation) {
         return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
     }
 
-    public String print(InvocationMatcher invocationMatcher) {
+    public String print(final InvocationMatcher invocationMatcher) {
         return print(invocationMatcher.getMatchers(), invocationMatcher.getInvocation());
     }
 }

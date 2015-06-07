@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.listeners;
 
-
+@SuppressWarnings("rawtypes")
 public interface MockingStartedListener extends MockingProgressListener {
     
     void mockingStarted(final Object mock, final Class classToMock);

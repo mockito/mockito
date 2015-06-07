@@ -22,8 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
-
-
+@SuppressWarnings("unused")
 public class FieldInitializerTest {
 
     private final StaticClass alreadyInstantiated = new StaticClass();

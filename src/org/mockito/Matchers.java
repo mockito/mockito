@@ -104,7 +104,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
  * For example, if custom argument matcher is not likely to be reused
  * or you just need it to assert on argument values to complete verification of behavior.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Matchers {
     
     private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import org.hamcrest.Description;
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Any extends ArgumentMatcher implements Serializable {
 
     private static final long serialVersionUID = -4062420125651019029L;
@@ -18,11 +18,11 @@ public class Any extends ArgumentMatcher implements Serializable {
     
     private Any() {}
     
-    public boolean matches(Object actual) {
+    public boolean matches(final Object actual) {
         return true;
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         description.appendText("<any>");
     }
 }

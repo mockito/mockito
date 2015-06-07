@@ -4,6 +4,13 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.calls;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,8 +21,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 public class VerificationInOrderWithCallsTest extends TestBase {
 
@@ -28,7 +33,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
     public void shouldFailWhenMethodNotCalled(){
         // Given
         mockOne.oneArg( 1 );
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
 
         exceptionRule.expect( VerificationInOrderFailure.class );
@@ -48,7 +53,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.oneArg( 2 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
 
         exceptionRule.expect( VerificationInOrderFailure.class );
@@ -69,7 +74,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.oneArg( 2 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 2 );
 
         exceptionRule.expect( VerificationInOrderFailure.class );
@@ -89,7 +94,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.voidMethod();
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).voidMethod();
 
         exceptionRule.expect( VerificationInOrderFailure.class );
@@ -109,7 +114,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.voidMethod();
         mockTwo.voidMethod();
 
-        InOrder verifier = inOrder( mockOne, mockTwo );
+        final InOrder verifier = inOrder( mockOne, mockTwo );
         verifier.verify( mockTwo, calls(1)).voidMethod();
 
         exceptionRule.expect( VerificationInOrderFailure.class );
@@ -132,7 +137,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -152,7 +157,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.voidMethod();
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -172,7 +177,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockTwo.voidMethod();
         mockOne.voidMethod();
 
-        InOrder verifier = inOrder( mockOne, mockTwo );
+        final InOrder verifier = inOrder( mockOne, mockTwo );
 
         // When
         verifier.verify( mockOne, calls(1)).voidMethod();
@@ -195,7 +200,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.oneArg( 2 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -214,7 +219,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
         verifier.verify( mockOne, calls(1)).oneArg( 2 );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -234,7 +239,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 2 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
         verifier.verify( mockOne, calls(1)).oneArg( 2 );
 
@@ -256,7 +261,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.voidMethod();
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -275,7 +280,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.voidMethod();
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
         verifier.verify( mockOne, calls(1)).voidMethod();
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -295,7 +300,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.voidMethod();
         mockOne.voidMethod();
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
         verifier.verify( mockOne, calls(1)).voidMethod();
 
@@ -317,7 +322,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.voidMethod();
         mockTwo.voidMethod();
 
-        InOrder verifier = inOrder( mockOne, mockTwo );
+        final InOrder verifier = inOrder( mockOne, mockTwo );
 
         // When
         verifier.verify( mockOne, calls(1)).voidMethod();
@@ -336,7 +341,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockTwo.voidMethod();
         mockOne.voidMethod();
 
-        InOrder verifier = inOrder( mockOne, mockTwo );
+        final InOrder verifier = inOrder( mockOne, mockTwo );
         verifier.verify( mockOne, calls(1)).voidMethod();
         verifier.verify( mockTwo, calls(1)).voidMethod();
         verifier.verify( mockOne, calls(1)).voidMethod();
@@ -356,7 +361,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockTwo.voidMethod();
         mockTwo.voidMethod();
 
-        InOrder verifier = inOrder( mockOne, mockTwo );
+        final InOrder verifier = inOrder( mockOne, mockTwo );
         verifier.verify( mockOne, calls(1)).voidMethod();
         verifier.verify( mockTwo, calls(1)).voidMethod();
 
@@ -377,7 +382,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, times(1)).oneArg( 1 );
@@ -394,7 +399,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 2 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, atLeast(1)).oneArg( 1 );
@@ -411,7 +416,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -429,7 +434,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 2 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -446,7 +451,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         mockOne.oneArg( 1 );
         mockOne.oneArg( 1 );
 
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
 
         // When
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
@@ -459,7 +464,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
     @Test
     public void shouldFailToCreateCallsWithZeroArgument(){
         // Given
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         exceptionRule.expect( MockitoException.class );
         exceptionRule.expectMessage( "Negative and zero values are not allowed here" );
 
@@ -472,7 +477,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
     @Test
     public void shouldFailToCreateCallsWithNegativeArgument(){
         // Given
-        InOrder verifier = inOrder( mockOne );
+        final InOrder verifier = inOrder( mockOne );
         exceptionRule.expect( MockitoException.class );
         exceptionRule.expectMessage( "Negative and zero values are not allowed here" );
 

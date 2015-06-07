@@ -13,6 +13,7 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+@SuppressWarnings("rawtypes")
 public class StubbedInvocationMatcher extends InvocationMatcher implements Answer, Serializable {
 
     private static final long serialVersionUID = 4919105134123672727L;

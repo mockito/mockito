@@ -41,6 +41,7 @@ import org.mockito.mock.MockCreationSettings;
  * @see org.mockito.invocation.MockHandler
  * @since 1.9.5
  */
+@SuppressWarnings("rawtypes")
 public interface MockMaker {
 
     /**
@@ -64,8 +65,8 @@ public interface MockMaker {
      * @since 1.9.5
      */
     <T> T createMock(
-            MockCreationSettings<T> settings,
-            MockHandler handler
+            final MockCreationSettings<T> settings,
+            final MockHandler handler
     );
 
     /**
@@ -78,7 +79,7 @@ public interface MockMaker {
      *   This means the passed object is not really a Mockito mock.
      * @since 1.9.5
      */
-    MockHandler getHandler(Object mock);
+    MockHandler getHandler(final Object mock);
 
     /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
@@ -95,8 +96,8 @@ public interface MockMaker {
      * @since 1.9.5
      */
     void resetMock(
-            Object mock,
-            MockHandler newHandler,
-            MockCreationSettings settings
+            final Object mock,
+            final MockHandler newHandler,
+            final MockCreationSettings settings
     );
 }

@@ -17,6 +17,7 @@ import org.mockitoutil.TestBase;
 /**
  * by Szczepan Faber, created at: 5/22/12
  */
+@SuppressWarnings("rawtypes")
 public class MockHandlerFactoryTest extends TestBase {
 
     IMethods mock = Mockito.mock(IMethods.class);
@@ -25,14 +26,14 @@ public class MockHandlerFactoryTest extends TestBase {
     //see issue 331
     public void handle_result_must_not_be_null_for_primitives() throws Throwable {
         //given:
-        MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(null));
-        InternalMockHandler handler = new MockHandlerFactory().create(settings);
+        final MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(null));
+        final InternalMockHandler handler = new MockHandlerFactory().create(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        final Invocation invocation = super.getLastInvocation();
 
         //when:
-        Object result = handler.handle(invocation);
+        final Object result = handler.handle(invocation);
 
         //then null value is not a valid result for a primitive
         assertNotNull(result);
@@ -43,14 +44,14 @@ public class MockHandlerFactoryTest extends TestBase {
     //see issue 331
     public void valid_handle_result_is_permitted() throws Throwable {
         //given:
-        MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(123));
-        InternalMockHandler handler = new MockHandlerFactory().create(settings);
+        final MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(123));
+        final InternalMockHandler handler = new MockHandlerFactory().create(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        final Invocation invocation = super.getLastInvocation();
 
         //when:
-        Object result = handler.handle(invocation);
+        final Object result = handler.handle(invocation);
 
         //then
         assertEquals(123, result);

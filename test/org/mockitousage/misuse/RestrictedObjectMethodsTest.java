@@ -5,7 +5,8 @@
 
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class RestrictedObjectMethodsTest extends TestBase {
 
     @Mock List mock;
@@ -31,7 +32,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
         try {
             verify(mock).toString();
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertContains("cannot verify", e.getMessage());
         }
     }
@@ -57,7 +58,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
         //because it leads to really wierd behavior sometimes
         //it's because cglib & my code can occasionelly call those methods
         // and when user has verification started at that time there will be a mess
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).equals(null);
     }       
 }

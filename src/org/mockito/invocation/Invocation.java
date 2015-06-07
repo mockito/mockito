@@ -14,6 +14,7 @@ package org.mockito.invocation;
  *
  * @since 1.9.5
  */
+@SuppressWarnings("rawtypes")
 public interface Invocation extends InvocationOnMock, DescribedInvocation {
 
     /**
@@ -66,7 +67,7 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      *
      * @param stubInfo the information about stubbing.
      */
-    void markStubbed(StubInfo stubInfo);
+    void markStubbed(final StubInfo stubInfo);
 
     /**
      * Informs if the invocation participates in verify-no-more-invocations or verification in order.

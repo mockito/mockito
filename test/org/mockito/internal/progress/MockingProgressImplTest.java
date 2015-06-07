@@ -5,21 +5,19 @@
 
 package org.mockito.internal.progress;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class MockingProgressImplTest extends TestBase {
 
@@ -34,7 +32,7 @@ public class MockingProgressImplTest extends TestBase {
     public void shouldStartVerificationAndPullVerificationMode() throws Exception {
         assertNull(mockingProgress.pullVerificationMode());
         
-        VerificationMode mode = VerificationModeFactory.times(19);
+        final VerificationMode mode = VerificationModeFactory.times(19);
         
         mockingProgress.verificationStarted(mode);
         
@@ -49,13 +47,13 @@ public class MockingProgressImplTest extends TestBase {
         try {
             mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
             fail();
-        } catch (MockitoException e) {}
+        } catch (final MockitoException e) {}
     }
 
     @Test
     public void shouldNotifyListenerWhenMockingStarted() throws Exception {
         //given
-        MockingStartedListener listener = mock(MockingStartedListener.class);
+        final MockingStartedListener listener = mock(MockingStartedListener.class);
         mockingProgress.setListener(listener);
 
         //when

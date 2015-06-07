@@ -4,7 +4,7 @@
  */
 package org.mockitousage.configuration;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockitousage.IMethods;

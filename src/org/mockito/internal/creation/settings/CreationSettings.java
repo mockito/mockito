@@ -4,21 +4,22 @@
  */
 package org.mockito.internal.creation.settings;
 
-import org.mockito.listeners.InvocationListener;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.MockName;
-import org.mockito.mock.SerializableMode;
-import org.mockito.stubbing.Answer;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.MockName;
+import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Answer;
+
 /**
  * by Szczepan Faber, created at: 4/9/12
  */
+@SuppressWarnings("rawtypes")
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
     private static final long serialVersionUID = -6789800638070123629L;
 
@@ -37,7 +38,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     public CreationSettings() {}
 
     @SuppressWarnings("unchecked")
-    public CreationSettings(CreationSettings copy) {
+    public CreationSettings(final CreationSettings copy) {
         this.typeToMock = copy.typeToMock;
         this.extraInterfaces = copy.extraInterfaces;
         this.name = copy.name;
@@ -55,7 +56,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return typeToMock;
     }
 
-    public CreationSettings<T> setTypeToMock(Class<T> typeToMock) {
+    public CreationSettings<T> setTypeToMock(final Class<T> typeToMock) {
         this.typeToMock = typeToMock;
         return this;
     }
@@ -64,7 +65,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return extraInterfaces;
     }
 
-    public CreationSettings<T> setExtraInterfaces(Set<Class> extraInterfaces) {
+    public CreationSettings<T> setExtraInterfaces(final Set<Class> extraInterfaces) {
         this.extraInterfaces = extraInterfaces;
         return this;
     }
@@ -85,7 +86,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return mockName;
     }
 
-    public CreationSettings<T> setMockName(MockName mockName) {
+    public CreationSettings<T> setMockName(final MockName mockName) {
         this.mockName = mockName;
         return this;
     }

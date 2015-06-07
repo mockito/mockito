@@ -5,7 +5,7 @@
 
 package org.mockitousage.packageprotected;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;

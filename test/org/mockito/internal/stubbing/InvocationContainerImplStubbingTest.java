@@ -18,6 +18,7 @@ import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("rawtypes")
 public class InvocationContainerImplStubbingTest extends TestBase {
 
     private InvocationContainerImpl invocationContainerImpl;
@@ -45,7 +46,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImpl.addAnswer(new ThrowsException(new Exception()));
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             state.validateState();
         }
     }
@@ -62,7 +63,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         invocationContainerImpl.addAnswer(new Returns("simpleMethod"));
 
-        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
+        final Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         invocationContainerImpl.addAnswer(new ThrowsException(new MyException()));
 
@@ -71,7 +72,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImpl.answerTo(differentMethod);
             fail();
-        } catch (MyException e) {}
+        } catch (final MyException e) {}
     }
 
     @Test
@@ -79,7 +80,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         invocationContainerImplStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
         invocationContainerImplStubOnly.addAnswer(new Returns("simpleMethod"));
 
-        Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
+        final Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
         invocationContainerImplStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
         invocationContainerImplStubOnly.addAnswer(new ThrowsException(new MyException()));
 
@@ -88,7 +89,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImplStubOnly.answerTo(differentMethod);
             fail();
-        } catch (MyException e) {}
+        } catch (final MyException e) {}
     }
 
     @Test
@@ -99,7 +100,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImpl.answerTo(simpleMethod);
             fail();
-        } catch (MyException e) {}
+        } catch (final MyException e) {}
     }
 
     @Test
@@ -109,7 +110,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImpl.setMethodForStubbing(new InvocationMatcher(simpleMethod));
             fail();
-        } catch (MockitoException e) {}
+        } catch (final MockitoException e) {}
     }
 
     @Test
@@ -117,7 +118,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
         try {
             invocationContainerImpl.addAnswer(new ThrowsException(null));
             fail();
-        } catch (MockitoException e) {}
+        } catch (final MockitoException e) {}
     }
 
     @SuppressWarnings("serial")

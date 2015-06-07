@@ -9,9 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.stubbing.answers.MethodInfo;
-import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -25,26 +22,26 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
 
     private Object delegatedObject = null;
 
-    public ForwardsInvocations(Object delegatedObject) {
+    public ForwardsInvocations(final Object delegatedObject) {
         this.delegatedObject = delegatedObject;
     }
 
-    public Object answer(InvocationOnMock invocation) throws Throwable {
-        Method mockMethod = invocation.getMethod();
+    public Object answer(final InvocationOnMock invocation) throws Throwable {
+        final Method mockMethod = invocation.getMethod();
         
         Object result = null;
         
         try {
-            Method delegateMethod = getDelegateMethod(mockMethod);
+            final Method delegateMethod = getDelegateMethod(mockMethod);
             
             if (!compatibleReturnTypes(mockMethod.getReturnType(), delegateMethod.getReturnType())) {
                 new Reporter().delegatedMethodHasWrongReturnType(mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }
             
             result = delegateMethod.invoke(delegatedObject, invocation.getArguments());
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             new Reporter().delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             // propagate the original exception from the delegate
             throw e.getCause();
         }
@@ -52,7 +49,7 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
         return result;
     }
 
-    private Method getDelegateMethod(Method mockMethod) throws NoSuchMethodException {
+    private Method getDelegateMethod(final Method mockMethod) throws NoSuchMethodException {
         if (mockMethod.getDeclaringClass().isAssignableFrom(delegatedObject.getClass())) {
             // Compatible class. Return original method.
             return mockMethod;
@@ -62,7 +59,7 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
         }
     }
 
-    private static boolean compatibleReturnTypes(Class<?> superType, Class<?> subType) {
+    private static boolean compatibleReturnTypes(final Class<?> superType, final Class<?> subType) {
         return superType.equals(subType) || superType.isAssignableFrom(subType);
     }
 }

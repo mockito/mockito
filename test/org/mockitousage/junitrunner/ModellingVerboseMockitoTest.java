@@ -4,7 +4,8 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,7 +35,7 @@ public class ModellingVerboseMockitoTest extends TestBase {
         when(mock.booleanObjectReturningMethod()).thenReturn(false);
 
         //TODO: stubbed with those args here -> stubbed with certain args here 
-        String ret = mock.simpleMethod(2);
+        final String ret = mock.simpleMethod(2);
 
         assertEquals("foo", ret);
         //TODO: should show message from actual failure not at the bottom but at least below 'the actual failure is ...'

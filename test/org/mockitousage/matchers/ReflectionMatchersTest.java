@@ -5,8 +5,9 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.refEq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,18 +18,18 @@ import org.mockitoutil.TestBase;
 public class ReflectionMatchersTest extends TestBase {
 
     class Parent {
-        private int parentField;
+        private final int parentField;
         protected String protectedParentField;
-        public Parent(int parentField, String protectedParentField) {
+        public Parent(final int parentField, final String protectedParentField) {
             this.parentField = parentField;
             this.protectedParentField = protectedParentField;
         }
     }
     
     class Child extends Parent {
-        private int childFieldOne;
-        private Object childFieldTwo;
-        public Child(int parentField, String protectedParentField, int childFieldOne, Object childFieldTwo) {
+        private final int childFieldOne;
+        private final Object childFieldTwo;
+        public Child(final int parentField, final String protectedParentField, final int childFieldOne, final Object childFieldTwo) {
             super(parentField, protectedParentField);
             this.childFieldOne = childFieldOne;
             this.childFieldTwo = childFieldTwo;
@@ -36,7 +37,7 @@ public class ReflectionMatchersTest extends TestBase {
     }
     
     interface MockMe {
-        void run(Child child);
+        void run(final Child child);
     }
     
     MockMe mock;
@@ -45,56 +46,56 @@ public class ReflectionMatchersTest extends TestBase {
     public void setup() {
         mock = mock(MockMe.class);
         
-        Child actual = new Child(1, "foo", 2, "bar");
+        final Child actual = new Child(1, "foo", 2, "bar");
         mock.run(actual);
     }
     
     @Test
     public void shouldMatchWhenFieldValuesEqual() throws Exception {
-        Child wanted = new Child(1, "foo", 2, "bar");
+        final Child wanted = new Child(1, "foo", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchWhenFieldValuesDiffer() throws Exception {
-        Child wanted = new Child(1, "foo", 2, "bar XXX");
+        final Child wanted = new Child(1, "foo", 2, "bar XXX");
         verify(mock).run(refEq(wanted));
     }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchAgain() throws Exception {
-        Child wanted = new Child(1, "foo", 999, "bar");
+        final Child wanted = new Child(1, "foo", 999, "bar");
         verify(mock).run(refEq(wanted));
     }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchYetAgain() throws Exception {
-        Child wanted = new Child(1, "XXXXX", 2, "bar");
+        final Child wanted = new Child(1, "XXXXX", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatch() throws Exception {
-        Child wanted = new Child(234234, "foo", 2, "bar");
+        final Child wanted = new Child(234234, "foo", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
 
     @Test
     public void shouldMatchWhenFieldValuesEqualWithOneFieldExcluded() throws Exception {
-        Child wanted = new Child(1, "foo", 2, "excluded");
+        final Child wanted = new Child(1, "foo", 2, "excluded");
         verify(mock).run(refEq(wanted, "childFieldTwo"));
     }
 
     @Test
     public void shouldMatchWhenFieldValuesEqualWithTwoFieldsExcluded() throws Exception {
-        Child wanted = new Child(234234, "foo", 2, "excluded");
+        final Child wanted = new Child(234234, "foo", 2, "excluded");
         verify(mock).run(refEq(wanted, "childFieldTwo", "parentField"));
         verify(mock).run(refEq(wanted, "parentField", "childFieldTwo"));
     }
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void shouldNotMatchWithFieldsExclusion() throws Exception {
-        Child wanted = new Child(234234, "foo", 2, "excluded");
+        final Child wanted = new Child(234234, "foo", 2, "excluded");
         verify(mock).run(refEq(wanted, "childFieldTwo"));
     }    
 }

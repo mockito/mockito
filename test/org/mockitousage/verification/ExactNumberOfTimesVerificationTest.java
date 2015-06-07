@@ -5,7 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 
@@ -19,7 +24,7 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ExactNumberOfTimesVerificationTest extends TestBase {
 
     private LinkedList mock;
@@ -38,7 +43,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (final TooLittleActualInvocations e) {
             assertContains("Wanted 100 times", e.getMessage());
             assertContains("was 2", e.getMessage());
         }
@@ -53,7 +58,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(1)).clear();
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (final TooManyActualInvocations e) {
             assertContains("Wanted 1 time", e.getMessage());
             assertContains("was 2 times", e.getMessage());
         }
@@ -65,7 +70,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(15)).clear();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (final WantedButNotInvoked e) {}
     }
 
     @Test
@@ -75,7 +80,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(0)).clear();
             fail();
-        } catch (NeverWantedButInvoked e) {
+        } catch (final NeverWantedButInvoked e) {
             assertContains("Never wanted here", e.getMessage());
         }
     }
@@ -107,7 +112,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, never()).add("one");
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (final NeverWantedButInvoked e) {}
     }
     
     @Test
@@ -115,7 +120,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         mock.add("one");
         mock.add("two");
 
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         
         inOrder.verify(mock, never()).add("xxx");
         inOrder.verify(mock).add("one");
@@ -124,6 +129,6 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             inOrder.verify(mock, never()).add("two");
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
 }

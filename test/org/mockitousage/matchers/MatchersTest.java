@@ -5,9 +5,39 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.AdditionalMatchers.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.AdditionalMatchers.and;
+import static org.mockito.AdditionalMatchers.aryEq;
+import static org.mockito.AdditionalMatchers.cmpEq;
+import static org.mockito.AdditionalMatchers.eq;
+import static org.mockito.AdditionalMatchers.find;
+import static org.mockito.AdditionalMatchers.geq;
+import static org.mockito.AdditionalMatchers.gt;
+import static org.mockito.AdditionalMatchers.leq;
+import static org.mockito.AdditionalMatchers.lt;
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyByte;
+import static org.mockito.Matchers.anyChar;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyShort;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Matchers.same;
+import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -23,7 +53,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MatchersTest extends TestBase {
     private IMethods mock;
 
@@ -39,7 +69,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(and(eq('a'), eq('a')))).thenReturn("2");
         when(mock.oneArg(and(eq((double) 1), eq((double) 1)))).thenReturn("3");
         when(mock.oneArg(and(eq((float) 1), eq((float) 1)))).thenReturn("4");
-        when(mock.oneArg(and(eq((int) 1), eq((int) 1)))).thenReturn("5");
+        when(mock.oneArg(and(eq(1), eq(1)))).thenReturn("5");
         when(mock.oneArg(and(eq((long) 1), eq((long) 1)))).thenReturn("6");
         when(mock.oneArg(and(eq((short) 1), eq((short) 1)))).thenReturn("7");
         when(mock.oneArg(and(Matchers.contains("a"), Matchers.contains("d")))).thenReturn("8");
@@ -52,7 +82,7 @@ public class MatchersTest extends TestBase {
         assertEquals("2", mock.oneArg('a'));
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("4", mock.oneArg((float) 1));
-        assertEquals("5", mock.oneArg((int) 1));
+        assertEquals("5", mock.oneArg(1));
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
 
@@ -69,7 +99,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(or(eq((char) 1), eq((char) 2)))).thenReturn("2");
         when(mock.oneArg(or(eq((double) 1), eq((double) 2)))).thenReturn("3");
         when(mock.oneArg(or(eq((float) 1), eq((float) 2)))).thenReturn("4");
-        when(mock.oneArg(or(eq((int) 1), eq((int) 2)))).thenReturn("5");
+        when(mock.oneArg(or(eq(1), eq(2)))).thenReturn("5");
         when(mock.oneArg(or(eq((long) 1), eq((long) 2)))).thenReturn("6");
         when(mock.oneArg(or(eq((short) 1), eq((short) 2)))).thenReturn("7");
         when(mock.oneArg(or(eq("asd"), eq("jkl")))).thenReturn("8");
@@ -82,7 +112,7 @@ public class MatchersTest extends TestBase {
         assertEquals("2", mock.oneArg((char) 1));
         assertEquals("3", mock.oneArg((double) 2));
         assertEquals("4", mock.oneArg((float) 1));
-        assertEquals("5", mock.oneArg((int) 2));
+        assertEquals("5", mock.oneArg(2));
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
 
@@ -101,7 +131,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(not(eq('a')))).thenReturn("2");
         when(mock.oneArg(not(eq((double) 1)))).thenReturn("3");
         when(mock.oneArg(not(eq((float) 1)))).thenReturn("4");
-        when(mock.oneArg(not(eq((int) 1)))).thenReturn("5");
+        when(mock.oneArg(not(eq(1)))).thenReturn("5");
         when(mock.oneArg(not(eq((long) 1)))).thenReturn("6");
         when(mock.oneArg(not(eq((short) 1)))).thenReturn("7");
         when(mock.oneArg(not(Matchers.contains("a")))).thenReturn("8");
@@ -114,7 +144,7 @@ public class MatchersTest extends TestBase {
         assertEquals("2", mock.oneArg('b'));
         assertEquals("3", mock.oneArg((double) 2));
         assertEquals("4", mock.oneArg((float) 2));
-        assertEquals("5", mock.oneArg((int) 2));
+        assertEquals("5", mock.oneArg(2));
         assertEquals("6", mock.oneArg((long) 2));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("8", mock.oneArg("bcde"));
@@ -128,7 +158,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(leq((byte) 1))).thenReturn("1");
         when(mock.oneArg(leq((double) 1))).thenReturn("3");
         when(mock.oneArg(leq((float) 1))).thenReturn("4");
-        when(mock.oneArg(leq((int) 1))).thenReturn("5");
+        when(mock.oneArg(leq(1))).thenReturn("5");
         when(mock.oneArg(leq((long) 1))).thenReturn("6");
         when(mock.oneArg(leq((short) 1))).thenReturn("7");
         when(mock.oneArg(leq(new BigDecimal("1")))).thenReturn("8");
@@ -139,7 +169,7 @@ public class MatchersTest extends TestBase {
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("7", mock.oneArg((short) 0));
         assertEquals("4", mock.oneArg((float) -5));
-        assertEquals("5", mock.oneArg((int) -2));
+        assertEquals("5", mock.oneArg(-2));
         assertEquals("6", mock.oneArg((long) -3));
 
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
@@ -151,7 +181,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(lt((byte) 1))).thenReturn("1");
         when(mock.oneArg(lt((double) 1))).thenReturn("3");
         when(mock.oneArg(lt((float) 1))).thenReturn("4");
-        when(mock.oneArg(lt((int) 1))).thenReturn("5");
+        when(mock.oneArg(lt(1))).thenReturn("5");
         when(mock.oneArg(lt((long) 1))).thenReturn("6");
         when(mock.oneArg(lt((short) 1))).thenReturn("7");
         when(mock.oneArg(lt(new BigDecimal("1")))).thenReturn("8");
@@ -162,7 +192,7 @@ public class MatchersTest extends TestBase {
         assertEquals("3", mock.oneArg((double) 0));
         assertEquals("7", mock.oneArg((short) 0));
         assertEquals("4", mock.oneArg((float) -4));
-        assertEquals("5", mock.oneArg((int) -34));
+        assertEquals("5", mock.oneArg(-34));
         assertEquals("6", mock.oneArg((long) -6));
 
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
@@ -174,7 +204,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(geq((byte) 1))).thenReturn("1");
         when(mock.oneArg(geq((double) 1))).thenReturn("3");
         when(mock.oneArg(geq((float) 1))).thenReturn("4");
-        when(mock.oneArg(geq((int) 1))).thenReturn("5");
+        when(mock.oneArg(geq(1))).thenReturn("5");
         when(mock.oneArg(geq((long) 1))).thenReturn("6");
         when(mock.oneArg(geq((short) 1))).thenReturn("7");
         when(mock.oneArg(geq(new BigDecimal("1")))).thenReturn("8");
@@ -185,7 +215,7 @@ public class MatchersTest extends TestBase {
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("4", mock.oneArg((float) 3));
-        assertEquals("5", mock.oneArg((int) 4));
+        assertEquals("5", mock.oneArg(4));
         assertEquals("6", mock.oneArg((long) 5));
 
         assertEquals("8", mock.oneArg(new BigDecimal("1.00")));
@@ -197,7 +227,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(gt((byte) 1))).thenReturn("1");
         when(mock.oneArg(gt((double) 1))).thenReturn("3");
         when(mock.oneArg(gt((float) 1))).thenReturn("4");
-        when(mock.oneArg(gt((int) 1))).thenReturn("5");
+        when(mock.oneArg(gt(1))).thenReturn("5");
         when(mock.oneArg(gt((long) 1))).thenReturn("6");
         when(mock.oneArg(gt((short) 1))).thenReturn("7");
         when(mock.oneArg(gt(new BigDecimal("1")))).thenReturn("8");
@@ -208,7 +238,7 @@ public class MatchersTest extends TestBase {
         assertEquals("3", mock.oneArg((double) 2));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("4", mock.oneArg((float) 3));
-        assertEquals("5", mock.oneArg((int) 2));
+        assertEquals("5", mock.oneArg(2));
         assertEquals("6", mock.oneArg((long) 5));
 
         assertEquals("8", mock.oneArg(new BigDecimal("1.5")));
@@ -262,7 +292,7 @@ public class MatchersTest extends TestBase {
         assertEquals("2", mock.oneArg((char) 1));
         assertEquals("3", mock.oneArg((double) 1));
         assertEquals("4", mock.oneArg((float) 889));
-        assertEquals("5", mock.oneArg((int) 1));
+        assertEquals("5", mock.oneArg(1));
         assertEquals("6", mock.oneArg((long) 1));
         assertEquals("7", mock.oneArg((short) 1));
         assertEquals("8", mock.oneArg("Test"));
@@ -273,7 +303,7 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void shouldArrayEqualsDealWithNullArray() throws Exception {
-        Object[] nullArray = null;
+        final Object[] nullArray = null;
         when(mock.oneArray(aryEq(nullArray))).thenReturn("null");
 
         assertEquals("null", mock.oneArray(nullArray));
@@ -283,7 +313,7 @@ public class MatchersTest extends TestBase {
         try {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("oneArray(null)", e.getMessage());
         }
     }
@@ -306,7 +336,7 @@ public class MatchersTest extends TestBase {
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void arrayEqualsShouldThrowArgumentsAreDifferentExceptionForNonMatchingArguments() {        
-        List list = Mockito.mock(List.class);
+        final List list = Mockito.mock(List.class);
         
         list.add("test"); // testing fix for issue 20
         list.contains(new Object[] {"1"});
@@ -500,16 +530,16 @@ public class MatchersTest extends TestBase {
         try {
             verify(mock).oneArg(eq(1.0D, 0.1D));
             fail();
-        } catch (WantedButNotInvoked e) {
+        } catch (final WantedButNotInvoked e) {
             assertContains("eq(1.0, 0.1)", e.getMessage());
         }
     }
     
     @Test
     public void sameMatcher() {
-        Object one = new String("1243");
-        Object two = new String("1243");
-        Object three = new String("1243");
+        final Object one = new String("1243");
+        final Object two = new String("1243");
+        final Object three = new String("1243");
 
         assertNotSame(one, two);
         assertEquals(one, two);
@@ -527,7 +557,7 @@ public class MatchersTest extends TestBase {
     public void eqMatcherAndNulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod((Object) eq(null));
+        verify(mock).simpleMethod(eq(null));
     }
 
     @Test

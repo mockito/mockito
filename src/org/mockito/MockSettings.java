@@ -36,6 +36,7 @@ import org.mockito.stubbing.Answer;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
+@SuppressWarnings("rawtypes")
 public interface MockSettings extends Serializable {
 
     /**
@@ -106,7 +107,7 @@ public interface MockSettings extends Serializable {
      * About stubbing for a partial mock, as it is a spy it will always call the real method, unless you use the
      * <code>doReturn</code>|<code>Throw</code>|<code>Answer</code>|<code>CallRealMethod</code> stubbing style. Example:
      *
-     * <pre class="code"><code class="java">
+     * <code class="java">
      *   List list = new LinkedList();
      *   List spy = spy(list);
      *

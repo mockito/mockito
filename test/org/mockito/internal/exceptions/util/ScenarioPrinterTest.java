@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.exceptions.util;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ScenarioPrinterTest extends TestBase {
 
     ScenarioPrinter sp = new ScenarioPrinter();
@@ -21,11 +21,11 @@ public class ScenarioPrinterTest extends TestBase {
     @Test
     public void shouldPrintInvocations() {
         //given
-        Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
-        Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
+        final Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
+        final Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
         
         //when
-        String out = sp.print((List) asList(verified, unverified));
+        final String out = sp.print((List) asList(verified, unverified));
         
         //then
         assertContains("1. -> at", out);
@@ -35,10 +35,10 @@ public class ScenarioPrinterTest extends TestBase {
     @Test
     public void shouldNotPrintInvocationsWhenSingleUnwanted() {
         //given
-        Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
+        final Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
         
         //when
-        String out = sp.print((List) asList(unverified));
+        final String out = sp.print((List) asList(unverified));
         
         //then
         assertContains("Actually, above is the only interaction with this mock.", out);

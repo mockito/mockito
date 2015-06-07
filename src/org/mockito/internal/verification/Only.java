@@ -14,6 +14,7 @@ import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
+@SuppressWarnings("rawtypes")
 public class Only implements VerificationMode {
 
     private final InvocationsFinder finder = new InvocationsFinder();
@@ -21,12 +22,12 @@ public class Only implements VerificationMode {
     private final Reporter reporter = new Reporter();
 
     @SuppressWarnings("unchecked")
-    public void verify(VerificationData data) {
-        InvocationMatcher wantedMatcher = data.getWanted();
-        List<Invocation> invocations = data.getAllInvocations();
-        List<Invocation> chunk = finder.findInvocations(invocations, wantedMatcher);
+    public void verify(final VerificationData data) {
+        final InvocationMatcher wantedMatcher = data.getWanted();
+        final List<Invocation> invocations = data.getAllInvocations();
+        final List<Invocation> chunk = finder.findInvocations(invocations, wantedMatcher);
         if (invocations.size() != 1 && chunk.size() > 0) {            
-            Invocation unverified = finder.findFirstUnverified(invocations);
+            final Invocation unverified = finder.findFirstUnverified(invocations);
             reporter.noMoreInteractionsWanted(unverified, (List) invocations);
         } else if (invocations.size() != 1 || chunk.size() == 0) {
             reporter.wantedButNotInvoked(wantedMatcher);

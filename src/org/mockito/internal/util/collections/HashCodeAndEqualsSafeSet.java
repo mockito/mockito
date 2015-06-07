@@ -29,6 +29,7 @@ import org.mockito.internal.util.Checks;
  *
  * @see HashCodeAndEqualsMockWrapper
  */
+@SuppressWarnings("unchecked")
 public class HashCodeAndEqualsSafeSet implements Set<Object> {
 
     private final HashSet<HashCodeAndEqualsMockWrapper> backingHashSet = new HashSet<HashCodeAndEqualsMockWrapper>();

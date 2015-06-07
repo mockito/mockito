@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
     
     class BaseClass {
@@ -25,7 +25,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
     @Test
     public void shouldInitSpiesInBaseClass() throws Exception {
         //given
-        SubClass subClass = new SubClass();
+        final SubClass subClass = new SubClass();
         //when
         MockitoAnnotations.initMocks(subClass);
         //then

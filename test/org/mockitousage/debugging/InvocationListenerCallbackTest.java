@@ -4,34 +4,39 @@
  */
 package org.mockitousage.debugging;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.*;
-
 
 /**
  * Ensures that custom listeners can be registered and will be called every time
  * a method on a mock is invoked.
  */
+@SuppressWarnings("serial")
 public class InvocationListenerCallbackTest {
 
     // Cannot use a mockito-mock here: during stubbing, the listener1 will be called
     // and mockito will confuse the mocks.
-    private RememberingListener listener1 = new RememberingListener();
-    private RememberingListener listener2 = new RememberingListener();
+    private final RememberingListener listener1 = new RememberingListener();
+    private final RememberingListener listener2 = new RememberingListener();
 
     @Test
     public void should_call_single_listener_when_mock_return_normally() throws Exception {
         // given
-        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1));
+        final Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1));
         willReturn("basil").given(foo).giveMeSomeString("herb");
 
         // when
@@ -44,7 +49,7 @@ public class InvocationListenerCallbackTest {
     @Test
     public void should_call_all_listener_when_mock_return_normally() throws Exception {
         // given
-        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
+        final Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
         given(foo.giveMeSomeString("herb")).willReturn("rosemary");
 
         // when
@@ -59,18 +64,18 @@ public class InvocationListenerCallbackTest {
     @Test
     public void should_call_all_listener_when_mock_throws_exception() throws Exception {
         // given
-        InvocationListener listener1 = mock(InvocationListener.class, "listener1");
-        InvocationListener listener2 = mock(InvocationListener.class, "listener2");
-        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
+        final InvocationListener listener1 = mock(InvocationListener.class, "listener1");
+        final InvocationListener listener2 = mock(InvocationListener.class, "listener2");
+        final Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
         doThrow(new OvenNotWorking()).when(foo).doSomething("cook");
 
         // when
         try {
             foo.doSomething("cook");
             fail("Exception expected.");
-        } catch (OvenNotWorking actualException) {
+        } catch (final OvenNotWorking actualException) {
             // then
-            InOrder orderedVerify = inOrder(listener1, listener2);
+            final InOrder orderedVerify = inOrder(listener1, listener2);
             orderedVerify.verify(listener1).reportInvocation(any(MethodInvocationReport.class));
             orderedVerify.verify(listener2).reportInvocation(any(MethodInvocationReport.class));
         }
@@ -78,7 +83,7 @@ public class InvocationListenerCallbackTest {
 
     static class OvenNotWorking extends RuntimeException { }
 
-    private void assertThatHasBeenNotified(RememberingListener listener, Object returned, String location) {
+    private void assertThatHasBeenNotified(final RememberingListener listener, final Object returned, final String location) {
         assertThat(listener.returnValue).isEqualTo(returned);
         assertThat(listener.invocation).isNotNull();
         assertThat(listener.locationOfStubbing).contains(getClass().getSimpleName());
@@ -89,7 +94,7 @@ public class InvocationListenerCallbackTest {
         Object returnValue;
         String locationOfStubbing;
 
-        public void reportInvocation(MethodInvocationReport mcr) {
+        public void reportInvocation(final MethodInvocationReport mcr) {
             this.invocation = mcr.getInvocation();
             this.returnValue = mcr.getReturnedValue();
             this.locationOfStubbing = mcr.getLocationOfStubbing();

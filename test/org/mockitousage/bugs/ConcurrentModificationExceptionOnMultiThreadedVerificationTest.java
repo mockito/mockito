@@ -8,10 +8,12 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -40,8 +42,8 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 
     @Test
     public void shouldSuccessfullyVerifyConcurrentInvocationsWithTimeout() throws Exception {
-        int potentialOverhead = 1000; // Leave 1000ms extra before timing out as leeway for test overheads
-        int expectedMaxTestLength = TIMES * INTERVAL_MILLIS + potentialOverhead;
+        final int potentialOverhead = 1000; // Leave 1000ms extra before timing out as leeway for test overheads
+        final int expectedMaxTestLength = TIMES * INTERVAL_MILLIS + potentialOverhead;
 
         reset(target);
         startInvocations();
@@ -62,7 +64,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
     public class TargetInvoker implements Callable<Object> {
         private final int seq;
 
-        TargetInvoker(int seq) {
+        TargetInvoker(final int seq) {
             this.seq = seq;
         }
         
@@ -71,7 +73,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
             for (int i = 0; i < TIMES; i++) {
                 Thread.yield();
                 target.targetMethod("arg");
-                Thread.sleep((long) INTERVAL_MILLIS);
+                Thread.sleep(INTERVAL_MILLIS);
             }
             System.err.println("finished" + seq);
             return seq;
@@ -80,7 +82,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
     }
     
     public interface ITarget {
-        public String targetMethod(String arg);
+        String targetMethod(final String arg);
     }
     
 }

@@ -5,6 +5,15 @@
 
 package org.mockito.internal.configuration.injection;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
+
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Observer;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,15 +22,7 @@ import org.mockito.Mock;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Observer;
-import java.util.Set;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
-
+@SuppressWarnings("unused")
 @RunWith(MockitoJUnitRunner.class)
 public class ConstructorInjectionTest {
 
@@ -40,23 +41,23 @@ public class ConstructorInjectionTest {
     public void should_do_the_trick_of_instantiating() throws Exception {
         given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[] { observer });
 
-        boolean result = underTest.process(field("whatever"), this, newSetOf(observer));
+        final boolean result = underTest.process(field("whatever"), this, newSetOf(observer));
 
         assertTrue(result);
         assertNotNull(whatever);
     }
 
-    private Set<Object> newSetOf(Object item) {
-        HashSet<Object> mocks = new HashSet<Object>();
+    private Set<Object> newSetOf(final Object item) {
+        final HashSet<Object> mocks = new HashSet<Object>();
         mocks.add(item);
         return mocks;
     }
 
-    private Field field(String fieldName) throws NoSuchFieldException {
+    private Field field(final String fieldName) throws NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
 
     private static class ArgConstructor {
-        ArgConstructor(Observer observer) {}
+        ArgConstructor(final Observer observer) {}
     }
 }

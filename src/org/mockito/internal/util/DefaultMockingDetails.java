@@ -14,6 +14,7 @@ import org.mockito.invocation.Invocation;
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
  * a wrapper for {@link org.mockito.internal.util.MockUtil}.
  */
+@SuppressWarnings("rawtypes")
 public class DefaultMockingDetails implements MockingDetails {
 
     private final Object toInspect;

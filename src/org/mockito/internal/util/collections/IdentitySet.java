@@ -6,13 +6,13 @@ package org.mockito.internal.util.collections;
 
 import java.util.LinkedList;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class IdentitySet {
 
     LinkedList list = new LinkedList();
     
-    public boolean contains(Object o) {
-        for(Object existing:list) {
+    public boolean contains(final Object o) {
+        for(final Object existing:list) {
             if (existing == o) {
                 return true;
             }
@@ -20,7 +20,7 @@ public class IdentitySet {
         return false;
     }
 
-    public void add(Object o) {
+    public void add(final Object o) {
         list.add(o);        
     }
 }

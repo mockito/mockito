@@ -4,9 +4,11 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.mockitousage.junitrunner.Filters.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.verify;
+import static org.mockitousage.junitrunner.Filters.methodNameContains;
 
 import java.util.List;
 
@@ -17,10 +19,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class JUnit45RunnerTest {
 
-    @InjectMocks private ListDependent listDependent = new ListDependent();
+    @InjectMocks private final ListDependent listDependent = new ListDependent();
     @Mock private List list;
 
     @Test
@@ -37,7 +39,7 @@ public class JUnit45RunnerTest {
 
     @Test
     public void shouldFilterTestMethodsCorrectly() throws Exception{
-        MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
+        final MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
 
         runner.filter(methodNameContains("shouldInitMocksUsingRunner"));
 

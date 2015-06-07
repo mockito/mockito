@@ -7,17 +7,8 @@ package org.mockito.internal.configuration.plugins;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.Collections;
-import static org.mockito.Mockito.*;
 
-import junit.framework.Assert;
 import org.junit.Test;
-import org.mockito.internal.configuration.ClassPathLoader;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class PluginFileReaderTest extends TestBase {
@@ -38,7 +29,7 @@ public class PluginFileReaderTest extends TestBase {
         assertNull(reader.readPluginClass(impl("  \n # foo \n # foo \n ")));
     }
 
-    private InputStream impl(String s) {
+    private InputStream impl(final String s) {
         return new ByteArrayInputStream(s.getBytes());
     }
 

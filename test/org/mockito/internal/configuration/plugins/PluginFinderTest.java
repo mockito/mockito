@@ -15,94 +15,111 @@ import org.mockito.internal.util.io.IOUtil;
 import org.mockito.plugins.PluginSwitch;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class PluginFinderTest extends TestBase {
 
     @Mock
     PluginSwitch switcher;
-    @InjectMocks PluginFinder finder;
-    @Rule public TemporaryFolder tmp = new TemporaryFolder();
+    @InjectMocks
+    PluginFinder finder;
+    @Rule
+    public TemporaryFolder tmp = new TemporaryFolder();
 
-    @Test public void empty_resources() {
+    @Test
+    public void empty_resources() {
         assertNull(finder.findPluginClass((Iterable) asList()));
     }
 
-    @Test public void no_valid_impl() throws Exception {
+    @Test
+    public void no_valid_impl() throws Exception {
         final File f = tmp.newFile();
 
-        //when
+        // when
         IOUtil.writeText("  \n  ", f);
 
-        //then
+        // then
         assertNull(finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
-    @Test public void single_implementation() throws Exception {
+    @Test
+    public void single_implementation() throws Exception {
         final File f = tmp.newFile();
         when(switcher.isEnabled("foo.Foo")).thenReturn(true);
 
-        //when
+        // when
         IOUtil.writeText("  foo.Foo  ", f);
 
-        //then
+        // then
         assertEquals("foo.Foo", finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
-    @Test public void single_implementation_disabled() throws Exception {
+    @Test
+    public void single_implementation_disabled() throws Exception {
         final File f = tmp.newFile();
         when(switcher.isEnabled("foo.Foo")).thenReturn(false);
 
-        //when
+        // when
         IOUtil.writeText("  foo.Foo  ", f);
 
-        //then
+        // then
         assertEquals(null, finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
-    @Test public void multiple_implementations_only_one_enabled() throws Exception {
-        final File f1 = tmp.newFile(); final File f2 = tmp.newFile();
+    @Test
+    public void multiple_implementations_only_one_enabled() throws Exception {
+        final File f1 = tmp.newFile();
+        final File f2 = tmp.newFile();
 
         when(switcher.isEnabled("Bar")).thenReturn(true);
 
-        //when
-        IOUtil.writeText("Foo", f1); IOUtil.writeText("Bar", f2);
+        // when
+        IOUtil.writeText("Foo", f1);
+        IOUtil.writeText("Bar", f2);
 
-        //then
+        // then
         assertEquals("Bar", finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
-    @Test public void multiple_implementations_only_one_useful() throws Exception {
-        final File f1 = tmp.newFile(); final File f2 = tmp.newFile();
+    @Test
+    public void multiple_implementations_only_one_useful() throws Exception {
+        final File f1 = tmp.newFile();
+        final File f2 = tmp.newFile();
 
         when(switcher.isEnabled(anyString())).thenReturn(true);
 
-        //when
-        IOUtil.writeText("   ", f1); IOUtil.writeText("X", f2);
+        // when
+        IOUtil.writeText("   ", f1);
+        IOUtil.writeText("X", f2);
 
-        //then
+        // then
         assertEquals("X", finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
-    @Test public void multiple_empty_implementations() throws Exception {
-        final File f1 = tmp.newFile(); final File f2 = tmp.newFile();
+    @Test
+    public void multiple_empty_implementations() throws Exception {
+        final File f1 = tmp.newFile();
+        final File f2 = tmp.newFile();
 
         when(switcher.isEnabled(anyString())).thenReturn(true);
 
-        //when
-        IOUtil.writeText("   ", f1); IOUtil.writeText("\n", f2);
+        // when
+        IOUtil.writeText("   ", f1);
+        IOUtil.writeText("\n", f2);
 
-        //then
+        // then
         assertEquals(null, finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
-    @Test public void problems_loading_impl() throws Exception {
+    @Test
+    public void problems_loading_impl() throws Exception {
         when(switcher.isEnabled(anyString())).thenThrow(new RuntimeException("Boo!"));
 
         try {
-            //when
+            // when
             finder.findPluginClass(asList(new File("xxx").toURI().toURL()));
-            //then
+            // then
             fail();
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             assertContains("xxx", e.getMessage());
             e.getCause().getMessage().equals("Boo!");
         }

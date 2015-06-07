@@ -4,7 +4,10 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -30,7 +33,7 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
     @Test
     public void shouldResetOngoingStubbingOnInOrder() {
         mock.booleanReturningMethod();
-        InOrder inOrder = inOrder(mock);
+        final InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).booleanReturningMethod();
         assertOngoingStubbingIsReset();
     }
@@ -48,6 +51,6 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
             //I'm modelling it with null
             when(null).thenReturn("anything");
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (final MissingMethodInvocationException e) {}
     }
 }

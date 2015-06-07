@@ -76,7 +76,7 @@ import org.mockito.verification.VerificationMode;
  *
  * @since 1.8.0
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class BDDMockito extends Mockito {
 
     /**
@@ -89,37 +89,37 @@ public class BDDMockito extends Mockito {
          * See original {@link OngoingStubbing#thenAnswer(Answer)}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willAnswer(Answer<?> answer);
+        BDDMyOngoingStubbing<T> willAnswer(final Answer<?> answer);
 
         /**
          * See original {@link OngoingStubbing#then(Answer)}
          * @since 1.9.0
          */
-        BDDMyOngoingStubbing<T> will(Answer<?> answer);
+        BDDMyOngoingStubbing<T> will(final Answer<?> answer);
 
         /**
          * See original {@link OngoingStubbing#thenReturn(Object)}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willReturn(T value);
+        BDDMyOngoingStubbing<T> willReturn(final T value);
 
         /**
          * See original {@link OngoingStubbing#thenReturn(Object, Object[])}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willReturn(T value, T... values);
+        BDDMyOngoingStubbing<T> willReturn(final T value, final T... values);
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Throwable...)}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willThrow(Throwable... throwables);
+        BDDMyOngoingStubbing<T> willThrow(final Throwable... throwables);
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Class[])}
          * @since 1.9.0
          */
-        BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable>... throwableClasses);
+        BDDMyOngoingStubbing<T> willThrow(final Class<? extends Throwable>... throwableClasses);
 
         /**
          * See original {@link OngoingStubbing#thenCallRealMethod()}
@@ -142,31 +142,31 @@ public class BDDMockito extends Mockito {
 
         private final OngoingStubbing<T> mockitoOngoingStubbing;
 
-        public BDDOngoingStubbingImpl(OngoingStubbing<T> ongoingStubbing) {
+        public BDDOngoingStubbingImpl(final OngoingStubbing<T> ongoingStubbing) {
             this.mockitoOngoingStubbing = ongoingStubbing;
         }
 
-        public BDDMyOngoingStubbing<T> willAnswer(Answer<?> answer) {
+        public BDDMyOngoingStubbing<T> willAnswer(final Answer<?> answer) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenAnswer(answer));
         }
 
-        public BDDMyOngoingStubbing<T> will(Answer<?> answer) {
+        public BDDMyOngoingStubbing<T> will(final Answer<?> answer) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.then(answer));
         }
 
-        public BDDMyOngoingStubbing<T> willReturn(T value) {
+        public BDDMyOngoingStubbing<T> willReturn(final T value) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value));
         }
 
-        public BDDMyOngoingStubbing<T> willReturn(T value, T... values) {
+        public BDDMyOngoingStubbing<T> willReturn(final T value, final T... values) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value, values));
         }
 
-        public BDDMyOngoingStubbing<T> willThrow(Throwable... throwables) {
+        public BDDMyOngoingStubbing<T> willThrow(final Throwable... throwables) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwables));
         }
 
-        public BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable>... throwableClasses) {
+        public BDDMyOngoingStubbing<T> willThrow(final Class<? extends Throwable>... throwableClasses) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwableClasses));
         }
 
@@ -183,7 +183,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#when(Object)}
      * @since 1.8.0
      */
-    public static <T> BDDMyOngoingStubbing<T> given(T methodCall) {
+    public static <T> BDDMyOngoingStubbing<T> given(final T methodCall) {
         return new BDDOngoingStubbingImpl<T>(Mockito.when(methodCall));
     }
 
@@ -201,7 +201,7 @@ public class BDDMockito extends Mockito {
      * @see #verify(Object, VerificationMode)
      * @since 1.10.0
      */
-    public static <T> Then<T> then(T mock) {
+    public static <T> Then<T> then(final T mock) {
         return new ThenImpl<T>(mock);
     }
 
@@ -224,19 +224,19 @@ public class BDDMockito extends Mockito {
          * @see #verify(Object, VerificationMode)
          * @since 1.10.5
          */
-        T should(VerificationMode mode);
+        T should(final VerificationMode mode);
 
         /**
          * @see InOrder#verify(Object)
          * @since 2.0
          */
-        T should(InOrder inOrder);
+        T should(final InOrder inOrder);
 
         /**
          * @see InOrder#verify(Object, VerificationMode)
          * @since 2.0
          */
-        T should(InOrder inOrder, VerificationMode mode);
+        T should(final InOrder inOrder, final VerificationMode mode);
 
         /**
          * @see #verifyZeroInteractions(Object...)
@@ -253,7 +253,7 @@ public class BDDMockito extends Mockito {
 
         private final T mock;
 
-        ThenImpl(T mock) {
+        ThenImpl(final T mock) {
             this.mock = mock;
         }
 
@@ -269,7 +269,7 @@ public class BDDMockito extends Mockito {
          * @see #verify(Object, VerificationMode)
          * @since 1.10.5
          */
-        public T should(VerificationMode mode) {
+        public T should(final VerificationMode mode) {
             return verify(mock, mode);
         }
 
@@ -277,7 +277,7 @@ public class BDDMockito extends Mockito {
          * @see InOrder#verify(Object)
          * @since 2.0
          */
-        public T should(InOrder inOrder) {
+        public T should(final InOrder inOrder) {
             return inOrder.verify(mock);
         }
 
@@ -285,7 +285,7 @@ public class BDDMockito extends Mockito {
          * @see InOrder#verify(Object, VerificationMode)
          * @since 2.0
          */
-        public T should(InOrder inOrder, VerificationMode mode) {
+        public T should(final InOrder inOrder, final VerificationMode mode) {
             return inOrder.verify(mock, mode);
         }
 
@@ -307,7 +307,7 @@ public class BDDMockito extends Mockito {
          * See original {@link Stubber#doAnswer(Answer)}
          * @since 1.8.0
          */
-        BDDStubber willAnswer(Answer answer);
+        BDDStubber willAnswer(final Answer answer);
 
         /**
          * See original {@link Stubber#doNothing()}
@@ -319,19 +319,19 @@ public class BDDMockito extends Mockito {
          * See original {@link Stubber#doReturn(Object)}
          * @since 1.8.0
          */
-        BDDStubber willReturn(Object toBeReturned);
+        BDDStubber willReturn(final Object toBeReturned);
 
         /**
          * See original {@link Stubber#doThrow(Throwable)}
          * @since 1.8.0
          */
-        BDDStubber willThrow(Throwable toBeThrown);
+        BDDStubber willThrow(final Throwable toBeThrown);
 
         /**
          * See original {@link Stubber#doThrow(Class)}
          * @since 1.9.0
          */
-        BDDStubber willThrow(Class<? extends Throwable> toBeThrown);
+        BDDStubber willThrow(final Class<? extends Throwable> toBeThrown);
 
         /**
          * See original {@link Stubber#doCallRealMethod()}
@@ -343,7 +343,7 @@ public class BDDMockito extends Mockito {
          * See original {@link Stubber#when(Object)}
          * @since 1.8.0
          */
-        <T> T given(T mock);
+        <T> T given(final T mock);
     }
 
     /**
@@ -354,15 +354,15 @@ public class BDDMockito extends Mockito {
 
         private final Stubber mockitoStubber;
 
-        public BDDStubberImpl(Stubber mockitoStubber) {
+        public BDDStubberImpl(final Stubber mockitoStubber) {
             this.mockitoStubber = mockitoStubber;
         }
 
-        public <T> T given(T mock) {
+        public <T> T given(final T mock) {
             return mockitoStubber.when(mock);
         }
 
-        public BDDStubber willAnswer(Answer answer) {
+        public BDDStubber willAnswer(final Answer answer) {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
@@ -370,15 +370,15 @@ public class BDDMockito extends Mockito {
             return new BDDStubberImpl(mockitoStubber.doNothing());
         }
 
-        public BDDStubber willReturn(Object toBeReturned) {
+        public BDDStubber willReturn(final Object toBeReturned) {
             return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned));
         }
 
-        public BDDStubber willThrow(Throwable toBeThrown) {
+        public BDDStubber willThrow(final Throwable toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        public BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
+        public BDDStubber willThrow(final Class<? extends Throwable> toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
@@ -391,7 +391,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Throwable)}
      * @since 1.8.0
      */
-    public static BDDStubber willThrow(Throwable toBeThrown) {
+    public static BDDStubber willThrow(final Throwable toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
     }
 
@@ -399,7 +399,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Throwable)}
      * @since 1.9.0
      */
-    public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
+    public static BDDStubber willThrow(final Class<? extends Throwable> toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
     }
 
@@ -407,7 +407,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doAnswer(Answer)}
      * @since 1.8.0
      */
-    public static BDDStubber willAnswer(Answer answer) {
+    public static BDDStubber willAnswer(final Answer answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
     }
 
@@ -423,7 +423,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doReturn(Object)}
      * @since 1.8.0
      */
-    public static BDDStubber willReturn(Object toBeReturned) {
+    public static BDDStubber willReturn(final Object toBeReturned) {
         return new BDDStubberImpl(Mockito.doReturn(toBeReturned));
     }
 

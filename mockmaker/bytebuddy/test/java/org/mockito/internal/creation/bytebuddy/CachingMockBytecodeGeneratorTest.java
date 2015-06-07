@@ -5,14 +5,17 @@ import static org.junit.Assume.assumeTrue;
 import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
 import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
 import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
+
 import java.lang.management.ManagementFactory;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
+@SuppressWarnings("rawtypes")
 public class CachingMockBytecodeGeneratorTest {
 
     @Before
@@ -27,7 +30,8 @@ public class CachingMockBytecodeGeneratorTest {
                 .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
                 .build();
 
-        CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
+        final CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
+        @SuppressWarnings("unused")
         Class<?> the_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
                         classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                         Collections.<Class>emptySet(),
@@ -50,7 +54,7 @@ public class CachingMockBytecodeGeneratorTest {
     @Test
     public void validate_simple_code_idea_where_weakhashmap_with_classloader_as_key_get_GCed_when_no_more_references() throws Exception {
         // given
-        WeakHashMap<ClassLoader, Object> cache = new WeakHashMap<ClassLoader, Object>();
+        final WeakHashMap<ClassLoader, Object> cache = new WeakHashMap<ClassLoader, Object>();
         ClassLoader short_lived_classloader = inMemoryClassLoader()
                 .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
                 .build();
@@ -72,7 +76,7 @@ public class CachingMockBytecodeGeneratorTest {
     static class HoldingAReference {
         final WeakReference<Class> a;
 
-        HoldingAReference(WeakReference<Class> a) {
+        HoldingAReference(final WeakReference<Class> a) {
             this.a = a;
         }
     }
@@ -83,8 +87,8 @@ public class CachingMockBytecodeGeneratorTest {
     }
 
     private static boolean explicitGCEnabled() {
-        List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
-        for (String inputArgument : inputArguments) {
+        final List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        for (final String inputArgument : inputArguments) {
             if (inputArgument.contains("-XX:+DisableExplicitGC")) {
                 return false;
             }

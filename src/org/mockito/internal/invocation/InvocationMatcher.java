@@ -22,6 +22,7 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
+@SuppressWarnings("rawtypes")
 public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
 
     private static final long serialVersionUID = -3047126096857467610L;

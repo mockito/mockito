@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
-import org.mockito.invocation.Invocation;
-
 import java.util.Collection;
 import java.util.Set;
+
+import org.mockito.invocation.Invocation;
 
 /**
  * Provides mocking information.
@@ -15,6 +15,7 @@ import java.util.Set;
  *
  * @since 1.9.5
  */
+@SuppressWarnings("rawtypes")
 public interface MockingDetails {
     
     /**

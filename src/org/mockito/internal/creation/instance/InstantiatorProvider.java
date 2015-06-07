@@ -2,6 +2,7 @@ package org.mockito.internal.creation.instance;
 
 import org.mockito.mock.MockCreationSettings;
 
+@SuppressWarnings("rawtypes")
 public class InstantiatorProvider {
 
     private static final Instantiator INSTANCE = new ObjenesisInstantiator();

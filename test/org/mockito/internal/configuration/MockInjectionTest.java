@@ -5,19 +5,19 @@
 
 package org.mockito.internal.configuration;
 
-import org.junit.After;
-import org.junit.Test;
-import org.mockito.internal.configuration.injection.MockInjection;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Observer;
 import java.util.Set;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import org.junit.After;
+import org.junit.Test;
+import org.mockito.internal.configuration.injection.MockInjection;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MockInjectionTest {
 
     private AnObjectWithConstructor withConstructor;
@@ -86,14 +86,14 @@ public class MockInjectionTest {
         return Collections.singleton(mock(Observer.class));
     }
 
-    private Field field(String field) throws NoSuchFieldException {
+    private Field field(final String field) throws NoSuchFieldException {
         return getClass().getDeclaredField(field);
     }
 
 
     public static class AnObjectWithConstructor {
         public boolean initializedWithConstructor = false;
-        public AnObjectWithConstructor(Set<String> strings) {
+        public AnObjectWithConstructor(final Set<String> strings) {
             initializedWithConstructor = true;
         }
     }

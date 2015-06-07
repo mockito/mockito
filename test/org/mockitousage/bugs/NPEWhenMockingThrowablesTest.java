@@ -5,7 +5,7 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -28,6 +28,6 @@ public class NPEWhenMockingThrowablesTest extends TestBase {
         try {
             mock.simpleMethod();
             fail();
-        } catch(DummyException e) {}
+        } catch(final DummyException e) {}
     }
 }

@@ -5,6 +5,18 @@
 
 package org.mockitousage.stubbing;
 
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
@@ -12,9 +24,6 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.*;
 
 public class BasicStubbingTest extends TestBase {
 
@@ -44,12 +53,12 @@ public class BasicStubbingTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
     public void should_allow_stubbing_to_string() throws Exception {
-        IMethods mockTwo = mock(IMethods.class);
+        final IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         
         assertContains("Mock for IMethods", mock.toString());
@@ -70,7 +79,7 @@ public class BasicStubbingTest extends TestBase {
         try {
             when("").thenReturn("");
             fail(); 
-        } catch (MissingMethodInvocationException e) {}
+        } catch (final MissingMethodInvocationException e) {}
 
         //anything that can cause state validation
         verifyZeroInteractions(mock);
@@ -78,8 +87,8 @@ public class BasicStubbingTest extends TestBase {
     
     @Test
     public void should_to_string_mock_name() {
-        IMethods mock = mock(IMethods.class, "mockie");
-        IMethods mockTwo = mock(IMethods.class);
+        final IMethods mock = mock(IMethods.class, "mockie");
+        final IMethods mockTwo = mock(IMethods.class);
         
         assertContains("Mock for IMethods", "" + mockTwo);
         assertEquals("mockie", "" + mock);
@@ -98,7 +107,7 @@ public class BasicStubbingTest extends TestBase {
 
     @Test
     public void test_stub_only_not_verifiable() throws Exception {
-        IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
+        final IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
 
         when(localMock.objectReturningMethod(isA(Integer.class))).thenReturn(100);
         when(localMock.objectReturningMethod(200)).thenReturn(200);
@@ -110,6 +119,6 @@ public class BasicStubbingTest extends TestBase {
         try {
             verify(localMock, atLeastOnce()).objectReturningMethod(eq(200));
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {}
+        } catch (final CannotVerifyStubOnlyMock e) {}
     }
 }

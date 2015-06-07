@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import org.hamcrest.Matcher;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public interface MatcherDecorator extends Serializable {
     Matcher getActualMatcher();
 }

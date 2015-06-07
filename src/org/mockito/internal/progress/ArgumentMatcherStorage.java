@@ -9,6 +9,7 @@ import java.util.List;
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.LocalizedMatcher;
 
+@SuppressWarnings("rawtypes")
 public interface ArgumentMatcherStorage {
 
     HandyReturnValues reportMatcher(final Matcher matcher);

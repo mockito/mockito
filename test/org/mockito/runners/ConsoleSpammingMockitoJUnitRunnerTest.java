@@ -19,6 +19,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     
     private ConsoleSpammingMockitoJUnitRunner runner;
     private MockitoLoggerStub loggerStub;
+    @SuppressWarnings("unused")
     private RunNotifier notifier;
 
     @Before
@@ -40,7 +41,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         });
         
         //when
-        Description description = runner.getDescription();
+        final Description description = runner.getDescription();
         
         //then
         assertEquals(expectedDescription, description);
@@ -50,7 +51,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         
         StringBuilder loggedInfo = new StringBuilder();
         
-        public void log(Object what) {
+        public void log(final Object what) {
             super.log(what);
             loggedInfo.append(what);
         }
@@ -66,9 +67,9 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
             return null;
         }
 
-        public void run(RunNotifier notifier) {}
+        public void run(final RunNotifier notifier) {}
 
-        public void filter(Filter filter) throws NoTestsRemainException {}
+        public void filter(final Filter filter) throws NoTestsRemainException {}
 
     }
 }

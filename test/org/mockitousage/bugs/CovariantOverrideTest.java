@@ -5,10 +5,12 @@
 
 package org.mockitousage.bugs;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 //see issue 101
 public class CovariantOverrideTest extends TestBase {
@@ -24,30 +26,30 @@ public class CovariantOverrideTest extends TestBase {
 
     @Test 
     public void returnFoo1() {
-        ReturnsObject mock = mock(ReturnsObject.class);
+        final ReturnsObject mock = mock(ReturnsObject.class);
         when(mock.callMe()).thenReturn("foo");
         assertEquals("foo", mock.callMe()); // Passes
     }
 
     @Test 
     public void returnFoo2() {
-        ReturnsString mock = mock(ReturnsString.class);
+        final ReturnsString mock = mock(ReturnsString.class);
         when(mock.callMe()).thenReturn("foo");
         assertEquals("foo", mock.callMe()); // Passes
     }
 
     @Test 
     public void returnFoo3() {
-        ReturnsObject mock = mock(ReturnsString.class);
+        final ReturnsObject mock = mock(ReturnsString.class);
         when(mock.callMe()).thenReturn("foo");
         assertEquals("foo", mock.callMe()); // Passes
     }
 
     @Test 
     public void returnFoo4() {
-        ReturnsString mock = mock(ReturnsString.class);
+        final ReturnsString mock = mock(ReturnsString.class);
         mock.callMe(); // covariant override not generated
-        ReturnsObject mock2 = mock; // Switch to base type to call covariant override
+        final ReturnsObject mock2 = mock; // Switch to base type to call covariant override
         verify(mock2).callMe(); // Fails: java.lang.AssertionError: expected:<foo> but was:<null>
     }
 }

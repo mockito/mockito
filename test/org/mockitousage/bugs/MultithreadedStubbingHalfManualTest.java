@@ -4,9 +4,10 @@
  */
 package org.mockitousage.bugs;
 
-import static java.util.Collections.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static java.util.Collections.synchronizedList;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,15 +20,16 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class MultithreadedStubbingHalfManualTest {
 
     /**
      * Class with two methods, one of them is repeatedly mocked while another is repeatedly called.
      */
     public interface ToMock {
-        public Integer getValue(Integer param);
+        Integer getValue(final Integer param);
 
-        public List<Integer> getValues(Integer param);
+        List<Integer> getValues(final Integer param);
     }
 
     /**
@@ -35,7 +37,7 @@ public class MultithreadedStubbingHalfManualTest {
      */
     private Executor executor;
 
-    private List exceptions = synchronizedList(new LinkedList());
+    private final List exceptions = synchronizedList(new LinkedList());
 
     @Before
     public void setUp() {
@@ -54,7 +56,7 @@ public class MultithreadedStubbingHalfManualTest {
                 while (true) {
                     try {
                         Thread.sleep((long) (Math.random() * 10));
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                     }
                     if (!toMock.getValues(0).isEmpty()) {
                         fail("Shouldn't happen, were just making sure it wasn't optimized away...");
@@ -69,9 +71,9 @@ public class MultithreadedStubbingHalfManualTest {
     //it is not strictly a bug because Mockito does not support simultanous stubbing (see FAQ)
     //however I decided to synchronize some calls in order to make the exceptions nicer 
     public void tryToRevealTheProblem() {
-        ToMock toMock = mock(ToMock.class);
+        final ToMock toMock = mock(ToMock.class);
         for (int i = 0; i < 100; i++) {
-            int j = i % 11;
+            final int j = i % 11;
 
             // Repeated mocking
             when(toMock.getValue(i)).thenReturn(j);
@@ -83,14 +85,14 @@ public class MultithreadedStubbingHalfManualTest {
                     // Scheduling invocation
                     this.executor.execute(getConflictingRunnable(toMock));
                     break;
-                } catch (RejectedExecutionException ex) {
+                } catch (final RejectedExecutionException ex) {
                     fail();
                 }
             }
 
             try {
                 Thread.sleep(10 / ((i % 10) + 1)); //NOPMD
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
         }
     }

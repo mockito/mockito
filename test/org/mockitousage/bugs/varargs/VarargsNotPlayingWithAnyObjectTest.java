@@ -5,8 +5,13 @@
 
 package org.mockitousage.bugs.varargs;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,7 +21,7 @@ import org.mockitoutil.TestBase;
 public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
 
     interface VarargMethod {
-        Object run(String... args);
+        Object run(final String... args);
     }
     
     @Mock VarargMethod mock;
@@ -43,7 +48,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
         try {
             verify(mock).run((String[]) anyObject());
             fail();
-        } catch (AssertionError e) {}
+        } catch (final AssertionError e) {}
     }
 
     @Test

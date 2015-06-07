@@ -5,8 +5,17 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.booleanThat;
+import static org.mockito.Matchers.byteThat;
+import static org.mockito.Matchers.charThat;
+import static org.mockito.Matchers.doubleThat;
+import static org.mockito.Matchers.floatThat;
+import static org.mockito.Matchers.intThat;
+import static org.mockito.Matchers.longThat;
+import static org.mockito.Matchers.shortThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,27 +27,27 @@ import org.mockitoutil.TestBase;
 public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo extends ArgumentMatcher<String> {
-        public boolean matches(Object arg) {
+        public boolean matches(final Object arg) {
             return ((String) arg).contains("foo");
         }
     }
 
     private final class IsAnyBoolean extends ArgumentMatcher<Boolean> {
-        public boolean matches(Object arg) {
+        public boolean matches(final Object arg) {
             return true;
         }
     }
     
     private final class IsSorZ extends ArgumentMatcher<Character> {
-        public boolean matches(Object arg) {
-            Character character = (Character) arg;
+        public boolean matches(final Object arg) {
+            final Character character = (Character) arg;
             return character.equals('s') || character.equals('z');
         }
     }
 
     private final class IsZeroOrOne<T extends Number> extends ArgumentMatcher<T> {
-        public boolean matches(Object arg) {
-            Number number = (Number) arg;
+        public boolean matches(final Object arg) {
+            final Number number = (Number) arg;
             if (number.intValue() == 0 || number.intValue() == 1) {
                 return true;
             }
@@ -74,10 +83,10 @@ public class CustomMatchersTest extends TestBase {
     
     class Article {
         
-        private int pageNumber;
-        private String headline;
+        private final int pageNumber;
+        private final String headline;
         
-        public Article(int pageNumber, String headline) {
+        public Article(final int pageNumber, final String headline) {
             super();
             this.pageNumber = pageNumber;
             this.headline = headline;
@@ -127,7 +136,7 @@ public class CustomMatchersTest extends TestBase {
         try {
             verify(mock).simpleMethod(containsTest());
             fail();
-        } catch (AssertionError e) {
+        } catch (final AssertionError e) {
             assertContains("<String that contains xxx>", e.getMessage());
         }
     }
@@ -137,8 +146,8 @@ public class CustomMatchersTest extends TestBase {
     }
     
     private final class StringThatContainsXxx extends ArgumentMatcher<String> {
-        public boolean matches(Object argument) {
-            String arg = (String) argument;
+        public boolean matches(final Object argument) {
+            final String arg = (String) argument;
             return arg.contains("xxx");
         }
     }
@@ -149,11 +158,11 @@ public class CustomMatchersTest extends TestBase {
 
         try {
             verify(mock).simpleMethod((String) argThat(new ArgumentMatcher<Object>() {
-                @Override public boolean matches(Object argument) {
+                @Override public boolean matches(final Object argument) {
                     return false;
                 }}));
             fail();
-        } catch (AssertionError e) {
+        } catch (final AssertionError e) {
             assertContains("<custom argument matcher>", e.getMessage());
             assertContains("foo", e.getMessage());
         }

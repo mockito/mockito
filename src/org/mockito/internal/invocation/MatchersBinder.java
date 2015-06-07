@@ -13,7 +13,7 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.invocation.Invocation;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MatchersBinder implements Serializable {
 
     private static final long serialVersionUID = -311433939339443463L;

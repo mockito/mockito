@@ -25,7 +25,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
                                            final Object injectee) {
         if (mocks.size() == 1
                 && anotherCandidateMatchesMockName(mocks, candidateFieldToBeInjected, allRemainingCandidateFields)) {
-            return OngoingInjector.nop;
+            return OngoingInjector.NOOP;
         }
 
         return next.filterCandidate(tooMany(mocks) ? selectMatchingName(mocks, candidateFieldToBeInjected) : mocks,

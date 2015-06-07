@@ -5,8 +5,8 @@
 
 package org.mockitousage.stubbing;
 
-import static java.util.Arrays.*;
-import static org.mockito.Mockito.*;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import org.mockito.stubbing.answers.ReturnsElementsOf;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+
 public class StubbingWithExtraAnswersTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -24,7 +25,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     @Test
     public void shouldWorkAsStandardMockito() throws Exception {
         //when
-        List<Integer> list = asList(1, 2, 3);
+        final List<Integer> list = asList(1, 2, 3);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(new ReturnsElementsOf(list));
         
         //then
@@ -39,7 +40,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     @Test
     public void shouldReturnNullIfNecessary() throws Exception {
         //when
-        List<Integer> list = asList(1, null);
+        final List<Integer> list = asList(1, null);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(new ReturnsElementsOf(list));
         
         //then
@@ -55,6 +56,6 @@ public class StubbingWithExtraAnswersTest extends TestBase {
             new ReturnsElementsOf(null);
             //then
             fail();
-        } catch (MockitoException e) {}
+        } catch (final MockitoException e) {}
     }
 }

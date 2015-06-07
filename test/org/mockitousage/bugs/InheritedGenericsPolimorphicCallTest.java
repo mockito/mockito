@@ -5,7 +5,7 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -19,12 +19,12 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 //see issue 200
 public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     protected interface MyIterable<T> extends Iterable<T> {
-        public MyIterator<T> iterator();
+        MyIterator<T> iterator();
     }
 
     protected interface MyIterator<T> extends Iterator<T> {
@@ -53,8 +53,8 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
     public void shouldWorkExactlyAsJavaProxyWould() {
         //given
         final List<Method> methods = new LinkedList<Method>();
-        InvocationHandler handler = new InvocationHandler() {
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        final InvocationHandler handler = new InvocationHandler() {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             methods.add(method);
             return null;
         }};

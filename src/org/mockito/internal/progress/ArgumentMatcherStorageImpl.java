@@ -5,6 +5,12 @@
 
 package org.mockito.internal.progress;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+
 import org.hamcrest.Matcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.And;
@@ -12,13 +18,7 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
     public static final int TWO_SUB_MATCHERS = 2;
@@ -28,7 +28,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportMatcher(org.hamcrest.Matcher)
      */
-    public HandyReturnValues reportMatcher(Matcher matcher) {
+    public HandyReturnValues reportMatcher(final Matcher matcher) {
         matcherStack.push(new LocalizedMatcher(matcher));
         return new HandyReturnValues();
     }
@@ -41,9 +41,9 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
             return Collections.emptyList();
         }
         
-        List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
+        final List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
         matcherStack.clear();
-        return (List) matchers;
+        return matchers;
     }
 
     /* (non-Javadoc)
@@ -51,7 +51,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     */
     public HandyReturnValues reportAnd() {
         assertStateFor("And(?)", TWO_SUB_MATCHERS);
-        And and = new And(popLastArgumentMatchers(TWO_SUB_MATCHERS));
+        final And and = new And(popLastArgumentMatchers(TWO_SUB_MATCHERS));
         matcherStack.push(new LocalizedMatcher(and));
         return new HandyReturnValues();
     }
@@ -61,7 +61,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
      */
     public HandyReturnValues reportOr() {
         assertStateFor("Or(?)", TWO_SUB_MATCHERS);
-        Or or = new Or(popLastArgumentMatchers(TWO_SUB_MATCHERS));
+        final Or or = new Or(popLastArgumentMatchers(TWO_SUB_MATCHERS));
         matcherStack.push(new LocalizedMatcher(or));
         return new HandyReturnValues();
     }
@@ -71,18 +71,18 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
      */
     public HandyReturnValues reportNot() {
         assertStateFor("Not(?)", ONE_SUB_MATCHER);
-        Not not = new Not(popLastArgumentMatchers(ONE_SUB_MATCHER).get(0));
+        final Not not = new Not(popLastArgumentMatchers(ONE_SUB_MATCHER).get(0));
         matcherStack.push(new LocalizedMatcher(not));
         return new HandyReturnValues();
     }
 
-    private void assertStateFor(String additionalMatcherName, int subMatchersCount) {
+    private void assertStateFor(final String additionalMatcherName, final int subMatchersCount) {
         assertMatchersFoundFor(additionalMatcherName);
         assertIncorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount);
     }
 
-    private List<Matcher> popLastArgumentMatchers(int count) {
-        List<Matcher> result = new LinkedList<Matcher>();
+    private List<Matcher> popLastArgumentMatchers(final int count) {
+        final List<Matcher> result = new LinkedList<Matcher>();
         result.addAll(matcherStack.subList(matcherStack.size() - count, matcherStack.size()));
         for (int i = 0; i < count; i++) {
             matcherStack.pop();
@@ -90,16 +90,16 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         return result;
     }
 
-    private void assertMatchersFoundFor(String additionalMatcherName) {
+    private void assertMatchersFoundFor(final String additionalMatcherName) {
         if (matcherStack.isEmpty()) {
             matcherStack.clear();
             new Reporter().reportNoSubMatchersFound(additionalMatcherName);
         }
     }
 
-    private void assertIncorrectUseOfAdditionalMatchers(String additionalMatcherName, int count) {
+    private void assertIncorrectUseOfAdditionalMatchers(final String additionalMatcherName, final int count) {
         if(matcherStack.size() < count) {
-            ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+            final ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
             matcherStack.clear();
             new Reporter().incorrectUseOfAdditionalMatchers(additionalMatcherName, count, lastMatchers);
         }
@@ -110,7 +110,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
      */
     public void validateState() {
         if (!matcherStack.isEmpty()) {
-            ArrayList lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+            final ArrayList lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
             matcherStack.clear();
             new Reporter().misplacedArgumentMatcher(lastMatchers);
         }

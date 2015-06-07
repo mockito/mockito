@@ -23,6 +23,7 @@ import org.mockito.stubbing.VoidMethodStubbable;
  *
  * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
 
     private static final long serialVersionUID = -4146835657113951837L;
@@ -70,11 +71,11 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
         return mockHandler.getMockSettings();
     }
 
-    public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
+    public VoidMethodStubbable<T> voidMethodStubbable(final T mock) {
         return mockHandler.voidMethodStubbable(mock);
     }
 
-    public void setAnswersForStubbing(List<Answer> answers) {
+    public void setAnswersForStubbing(final List<Answer> answers) {
         mockHandler.setAnswersForStubbing(answers);
     }
 

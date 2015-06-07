@@ -7,6 +7,7 @@ package org.mockito.internal.util.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+@SuppressWarnings("rawtypes")
 public class LenientCopyTool {
 
     FieldCopier fieldCopier = new FieldCopier();

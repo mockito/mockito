@@ -8,7 +8,9 @@ package org.mockitousage.configuration;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+
 import java.util.concurrent.Callable;
+
 import org.fest.assertions.Condition;
 import org.junit.Assume;
 import org.junit.Test;
@@ -17,11 +19,11 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ClassCacheVersusClassReloadingTest {
     // TODO refactor to use ClassLoaders
 
-    private SimplePerRealmReloadingClassLoader testMethodClassLoaderRealm = new SimplePerRealmReloadingClassLoader(reloadMockito());
+    private final SimplePerRealmReloadingClassLoader testMethodClassLoaderRealm = new SimplePerRealmReloadingClassLoader(reloadMockito());
 
     @Test
     public void should_throw_ClassCastException_on_second_call() throws Exception {
@@ -32,7 +34,7 @@ public class ClassCacheVersusClassReloadingTest {
         try {
             doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
             fail("should have raised a ClassCastException when Objenesis Cache is enabled");
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("classloading")
                     .containsIgnoringCase("objenesis")
@@ -54,9 +56,9 @@ public class ClassCacheVersusClassReloadingTest {
     private Condition<Throwable> thatCceIsThrownFrom(final String stacktraceElementDescription) {
         return new Condition<Throwable>() {
             @Override
-            public boolean matches(Throwable throwable) {
-                StackTraceElement[] stackTrace = throwable.getStackTrace();
-                for (StackTraceElement stackTraceElement : stackTrace) {
+            public boolean matches(final Throwable throwable) {
+                final StackTraceElement[] stackTrace = throwable.getStackTrace();
+                for (final StackTraceElement stackTraceElement : stackTrace) {
                     if (stackTraceElement.toString().contains(stacktraceElementDescription)) {
                         return true;
                     }
@@ -69,19 +71,21 @@ public class ClassCacheVersusClassReloadingTest {
 
     public static class DoTheMocking implements Callable {
         public Object call() throws Exception {
-            Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
+            final Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
             return mock(clazz);
         }
     }
 
 
-    private static void doInNewChildRealm(ClassLoader parentRealm, String callableCalledInClassLoaderRealm) throws Exception {
-        new SimplePerRealmReloadingClassLoader(parentRealm, reloadScope()).doInRealm(callableCalledInClassLoaderRealm);
+    private static void doInNewChildRealm(final ClassLoader parentRealm, final String callableCalledInClassLoaderRealm) throws Exception {
+        final SimplePerRealmReloadingClassLoader simplePerRealmReloadingClassLoader = new SimplePerRealmReloadingClassLoader(parentRealm, reloadScope());
+        simplePerRealmReloadingClassLoader.doInRealm(callableCalledInClassLoaderRealm);
+        simplePerRealmReloadingClassLoader.close();
     }
 
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadScope() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
-            public boolean acceptReloadOf(String qualifiedName) {
+            public boolean acceptReloadOf(final String qualifiedName) {
                 return "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking".equals(qualifiedName)
                     || "org.mockitousage.configuration.ClassToBeMocked".equals(qualifiedName);
             }
@@ -102,7 +106,7 @@ public class ClassCacheVersusClassReloadingTest {
 
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
-            public boolean acceptReloadOf(String qualifiedName) {
+            public boolean acceptReloadOf(final String qualifiedName) {
                 return (!qualifiedName.contains("net.bytebuddy") && qualifiedName.contains("org.mockito"));
             }
         };

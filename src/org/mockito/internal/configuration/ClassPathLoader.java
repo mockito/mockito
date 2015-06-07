@@ -44,6 +44,7 @@ import org.mockito.plugins.MockMaker;
  * </ul>
  * </p>
  */
+@SuppressWarnings("rawtypes")
 public class ClassPathLoader {
 
     public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";

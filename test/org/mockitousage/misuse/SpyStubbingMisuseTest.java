@@ -4,25 +4,27 @@
  */
 package org.mockitousage.misuse;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
-
-import static org.junit.Assert.fail;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class SpyStubbingMisuseTest {
 
     @Test
     public void nestedWhenTest() {
-        Strategy mfoo = mock(Strategy.class);
-        Sampler mpoo = mock(Sampler.class);
-        Producer out = spy(new Producer(mfoo));
+        final Strategy mfoo = mock(Strategy.class);
+        final Sampler mpoo = mock(Sampler.class);
+        final Producer out = spy(new Producer(mfoo));
 
         try {
             when(out.produce()).thenReturn(mpoo);
             fail();
-        } catch (WrongTypeOfReturnValue e) {
+        } catch (final WrongTypeOfReturnValue e) {
             assertThat(e.getMessage()).contains("spy").contains("syntax").contains("doReturn|Throw");
         }
     }
@@ -37,14 +39,14 @@ public class SpyStubbingMisuseTest {
 
     public class Sampler {
         Sample sample;
-        Sampler(Strategy f) {
+        Sampler(final Strategy f) {
             sample = f.getSample();
         }
     }
 
     public class Producer {
         Strategy strategy;
-        Producer(Strategy f) {
+        Producer(final Strategy f) {
             strategy = f;
         }
         Sampler produce() {

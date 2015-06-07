@@ -4,6 +4,14 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
+import java.util.ArrayList;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
@@ -11,26 +19,18 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 
-import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
-import java.util.ArrayList;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class AnswersValidatorTest {
 
-    private AnswersValidator validator = new AnswersValidator();
-    private Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
+    private final AnswersValidator validator = new AnswersValidator();
+    private final Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
 
     @Test
     public void should_validate_null_throwable() throws Throwable {
         try {
             validator.validate(new ThrowsException(null), new InvocationBuilder().toInvocation());
             fail();
-        } catch (MockitoException expected) {}
+        } catch (final MockitoException expected) {}
     }
 
     @Test
@@ -94,21 +94,21 @@ public class AnswersValidatorTest {
     @Test
     public void should_fail_when_calling_real_method_on_interface() throws Throwable {
         //given
-        Invocation invocationOnInterface = new InvocationBuilder().method("simpleMethod").toInvocation();
+        final Invocation invocationOnInterface = new InvocationBuilder().method("simpleMethod").toInvocation();
         try {
             //when
             validator.validate(new CallsRealMethods(), invocationOnInterface);
             //then
             fail();
-        } catch (MockitoException expected) {}
+        } catch (final MockitoException expected) {}
     }
 
     @Test
     public void should_be_OK_when_calling_real_method_on_concrete_class() throws Throwable {
         //given
-        ArrayList mock = mock(ArrayList.class);
+        final ArrayList mock = mock(ArrayList.class);
         mock.clear();
-        Invocation invocationOnClass = new MockitoCore().getLastInvocation();
+        final Invocation invocationOnClass = new MockitoCore().getLastInvocation();
         //when
         validator.validate(new CallsRealMethods(), invocationOnClass);
         //then no exception is thrown
@@ -145,7 +145,7 @@ public class AnswersValidatorTest {
         try {
             validator.validate(new ReturnsArgumentAt(30), new InvocationBuilder().method("oneArg").arg("A").toInvocation());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("invalid argument index")
                     .containsIgnoringCase("iMethods.oneArg")
@@ -163,7 +163,7 @@ public class AnswersValidatorTest {
                     new InvocationBuilder().simpleMethod().toInvocation()
             );
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("invalid argument index")
                     .containsIgnoringCase("iMethods.simpleMethod")
@@ -183,7 +183,7 @@ public class AnswersValidatorTest {
                                            .toInvocation()
             );
             fail();
-        } catch (WrongTypeOfReturnValue e) {
+        } catch (final WrongTypeOfReturnValue e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("argument of type")
                     .containsIgnoringCase("Object")
@@ -202,7 +202,7 @@ public class AnswersValidatorTest {
                     AWrongType.WRONG_TYPE
             );
             fail();
-        } catch (WrongTypeOfReturnValue e) {
+        } catch (final WrongTypeOfReturnValue e) {
             assertThat(e.getMessage())
                     .containsIgnoringCase("Default answer returned a result with the wrong type")
                     .containsIgnoringCase("AWrongType cannot be returned by toString()")

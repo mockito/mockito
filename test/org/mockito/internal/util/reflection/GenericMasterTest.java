@@ -4,18 +4,23 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
+@SuppressWarnings("rawtypes")
 public class GenericMasterTest {
-    
+
     GenericMaster m = new GenericMaster();
-    
+
     List<String> one;
     Set<Integer> two;
     Map<Double, String> map;
@@ -23,16 +28,32 @@ public class GenericMasterTest {
     List<Set<String>> nested;
     List<Set<Collection<String>>> multiNested;
 
-    public interface ListSet extends List<Set> {}
-    public interface MapNumberString extends Map<Number, String> {}
-    public class HashMapNumberString<K extends Number> extends HashMap<K, String> {}
+    public interface ListSet extends List<Set> {
+    }
 
-    public List<Number> numberList() { return null; }
-    public Comparable<Number> numberComparable() { return null; }
-    public List rawList() { return null; }
-    public List<? extends Type> typeList() { return null; }
+    public interface MapNumberString extends Map<Number, String> {
+    }
 
+    public class HashMapNumberString<K extends Number> extends HashMap<K, String> {
 
+        private static final long serialVersionUID = -4267582335384921708L;
+    }
+
+    public List<Number> numberList() {
+        return null;
+    }
+
+    public Comparable<Number> numberComparable() {
+        return null;
+    }
+
+    public List rawList() {
+        return null;
+    }
+
+    public List<? extends Type> typeList() {
+        return null;
+    }
 
     @Test
     public void should_find_generic_class() throws Exception {
@@ -40,19 +61,19 @@ public class GenericMasterTest {
         assertEquals(Integer.class, m.getGenericType(field("two")));
         assertEquals(Double.class, m.getGenericType(field("map")));
     }
-    
+
     @Test
     public void should_get_object_for_non_generic() throws Exception {
         assertEquals(Object.class, m.getGenericType(field("nonGeneric")));
     }
-    
+
     @Test
     public void should_deal_with_nested_generics() throws Exception {
         assertEquals(Set.class, m.getGenericType(field("nested")));
         assertEquals(Set.class, m.getGenericType(field("multiNested")));
     }
 
-    private Field field(String fieldName) throws SecurityException, NoSuchFieldException {
+    private Field field(final String fieldName) throws SecurityException, NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
 

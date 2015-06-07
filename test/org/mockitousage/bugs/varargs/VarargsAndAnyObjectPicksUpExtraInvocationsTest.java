@@ -5,8 +5,11 @@
 
 package org.mockitousage.bugs.varargs;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,7 +17,7 @@ import org.mockitoutil.TestBase;
 
 public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
     public interface TableBuilder {
-        void newRow(String trAttributes, String... cells);
+        void newRow(final String trAttributes, final String... cells);
     }
 
     @Mock

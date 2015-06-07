@@ -18,7 +18,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 import org.mockitoutil.SimpleSerializationUtil;
 
-
+@SuppressWarnings("rawtypes")
 public class AcrossClassLoaderSerializationTest {
 
     public IMethods mock;
@@ -32,23 +32,28 @@ public class AcrossClassLoaderSerializationTest {
     public void check_that_mock_can_be_serialized_in_a_classloader_and_deserialized_in_another() throws Exception {
         final byte[] bytes = create_mock_and_serialize_it_in_class_loader_A();
 
-        final Object the_deserialized_mock = read_stream_and_deserialize_it_in_class_loader_B(bytes);
+        read_stream_and_deserialize_it_in_class_loader_B(bytes);
     }
 
     private Object read_stream_and_deserialize_it_in_class_loader_B(final byte[] bytes) throws Exception {
-        return new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes())
+        final SimplePerRealmReloadingClassLoader simplePerRealmReloadingClassLoader = new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes());
+        final Object doInRealm = simplePerRealmReloadingClassLoader
                 .doInRealm(
                         "org.mockitousage.serialization.AcrossClassLoaderSerializationTest$ReadStreamAndDeserializeIt",
-                        new Class[]{ byte[].class },
-                        new Object[]{ bytes }
+                        new Class[] { byte[].class },
+                        new Object[] { bytes }
                 );
+        simplePerRealmReloadingClassLoader.close();
+        return doInRealm;
     }
 
     private byte[] create_mock_and_serialize_it_in_class_loader_A() throws Exception {
-        return (byte[]) new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes())
+        final SimplePerRealmReloadingClassLoader simplePerRealmReloadingClassLoader = new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes());
+        final byte[] doInRealm = (byte[]) simplePerRealmReloadingClassLoader
                 .doInRealm("org.mockitousage.serialization.AcrossClassLoaderSerializationTest$CreateMockAndSerializeIt");
+        simplePerRealmReloadingClassLoader.close();
+        return doInRealm;
     }
-
 
     private SimplePerRealmReloadingClassLoader.ReloadClassPredicate isolating_test_classes() {
         return new SimplePerRealmReloadingClassLoader.ReloadClassPredicate() {
@@ -59,14 +64,13 @@ public class AcrossClassLoaderSerializationTest {
         };
     }
 
-
     // see create_mock_and_serialize_it_in_class_loader_A
     public static class CreateMockAndSerializeIt implements Callable<byte[]> {
         public byte[] call() throws Exception {
             final AClassToBeMockedInThisTestOnlyAndInCallablesOnly mock = Mockito.mock(
                     AClassToBeMockedInThisTestOnlyAndInCallablesOnly.class,
                     Mockito.withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS)
-            );
+                    );
             // use MethodProxy before
             mock.returningSomething();
 
@@ -87,12 +91,13 @@ public class AcrossClassLoaderSerializationTest {
             return SimpleSerializationUtil.deserializeMock(
                     to_unserialize,
                     AClassToBeMockedInThisTestOnlyAndInCallablesOnly.class
-            );
+                    );
         }
     }
 
-
     public static class AClassToBeMockedInThisTestOnlyAndInCallablesOnly {
-        List returningSomething() { return Collections.emptyList(); }
+        List returningSomething() {
+            return Collections.emptyList();
+        }
     }
 }

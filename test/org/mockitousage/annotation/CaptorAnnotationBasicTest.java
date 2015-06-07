@@ -5,7 +5,7 @@
 
 package org.mockitousage.annotation;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,14 +17,14 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class CaptorAnnotationBasicTest extends TestBase {
 
     public class Person {
         private final String name;
         private final String surname;
 
-        public Person(String name, String surname) {
+        public Person(final String name, final String surname) {
             this.name = name;
             this.surname = surname;
         }
@@ -39,12 +39,12 @@ public class CaptorAnnotationBasicTest extends TestBase {
     }
 
     public interface PeopleRepository {
-        public void save(Person capture);
+        void save(final Person capture);
     }
     
     @Mock PeopleRepository peopleRepository;           
     
-    private void createPerson(String name, String surname) {
+    private void createPerson(final String name, final String surname) {
         peopleRepository.save(new Person(name, surname));
     }      
     
@@ -54,7 +54,7 @@ public class CaptorAnnotationBasicTest extends TestBase {
         createPerson("Wes", "Williams");
         
         //then
-        ArgumentCaptor<Person> captor = ArgumentCaptor.forClass(Person.class);
+        final ArgumentCaptor<Person> captor = ArgumentCaptor.forClass(Person.class);
         verify(peopleRepository).save(captor.capture());
         assertEquals("Wes", captor.getValue().getName());
         assertEquals("Williams", captor.getValue().getSurname());
@@ -92,7 +92,7 @@ public class CaptorAnnotationBasicTest extends TestBase {
     @Test
     public void shouldCaptureGenericList() {
         //given
-        List<String> list = new LinkedList<String>();
+        final List<String> list = new LinkedList<String>();
         mock.listArgMethod(list);
                 
         //when

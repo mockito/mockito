@@ -5,8 +5,15 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +51,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             three.simpleMethod("test three again");
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
     }
     
     @SuppressWarnings("deprecation")
@@ -56,7 +63,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             one.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (final RuntimeException e) {}
 
         one.simpleMethod(100);
         two.simpleMethod("test Mockito");
@@ -75,6 +82,6 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (final WantedButNotInvoked e) {}
     }
 }

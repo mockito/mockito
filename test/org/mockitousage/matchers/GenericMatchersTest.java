@@ -5,8 +5,9 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
@@ -18,8 +19,8 @@ import org.mockitoutil.TestBase;
 public class GenericMatchersTest extends TestBase {
     
     private interface Foo {
-        List<String> sort(List<String> otherList);
-        String convertDate(Date date);
+        List<String> sort(final List<String> otherList);
+        String convertDate(final Date date);
     }
     
     @Mock Foo sorter;

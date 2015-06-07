@@ -6,6 +6,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import static org.mockito.Mockito.mock;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,11 +22,12 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ReturnsEmptyValuesTest extends TestBase {
 
     ReturnsEmptyValues values = new ReturnsEmptyValues();
@@ -70,25 +72,25 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     @Test public void should_return_non_zero_for_compareTo_method() {
         //given
-        Date d = mock(Date.class);
+        final Date d = mock(Date.class);
         d.compareTo(new Date());
-        Invocation compareTo = this.getLastInvocation();
+        final Invocation compareTo = this.getLastInvocation();
 
         //when
-        Object result = values.answer(compareTo);
+        final Object result = values.answer(compareTo);
         
         //then
-        assertTrue(result != (Object) 0);
+        assertNotEquals(0, result);
     }
 
     @Test public void should_return_zero_if_mock_is_compared_to_itself() {
         //given
-        Date d = mock(Date.class);
+        final Date d = mock(Date.class);
         d.compareTo(d);
-        Invocation compareTo = this.getLastInvocation();
+        final Invocation compareTo = this.getLastInvocation();
 
         //when
-        Object result = values.answer(compareTo);
+        final Object result = values.answer(compareTo);
 
         //then
         assertEquals(0, result);

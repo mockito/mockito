@@ -14,32 +14,32 @@ import org.mockito.stubbing.OngoingStubbing;
 public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
 
     //TODO why we need this method? The other thenReturn covers it.
-    public OngoingStubbing<T> thenReturn(T value) {
+    public OngoingStubbing<T> thenReturn(final T value) {
         return thenAnswer(new Returns(value));
     }
 
-    public OngoingStubbing<T> thenReturn(T value, T... values) {
+    public OngoingStubbing<T> thenReturn(final T value, final T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);            
         if (values == null) {
             //TODO below does not seem right
             return stubbing.thenReturn(null);
         }
-        for (T v: values) {
+        for (final T v: values) {
             stubbing = stubbing.thenReturn(v);
         }
         return stubbing;
     }
 
-    private OngoingStubbing<T> thenThrow(Throwable throwable) {
+    private OngoingStubbing<T> thenThrow(final Throwable throwable) {
         return thenAnswer(new ThrowsException(throwable));
     }
 
-    public OngoingStubbing<T> thenThrow(Throwable... throwables) {
+    public OngoingStubbing<T> thenThrow(final Throwable... throwables) {
         if (throwables == null) {
             thenThrow((Throwable) null);
         }
         OngoingStubbing<T> stubbing = null;
-        for (Throwable t: throwables) {
+        for (final Throwable t: throwables) {
             if (stubbing == null) {
                 stubbing = thenThrow(t);                    
             } else {
@@ -49,16 +49,17 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
         return stubbing;
     }        
 
-    private OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableClass) {
+    private OngoingStubbing<T> thenThrow(final Class<? extends Throwable> throwableClass) {
         return thenAnswer(new ThrowsExceptionClass(throwableClass));
     }
 
-    public OngoingStubbing<T> thenThrow(Class<? extends Throwable>... throwableClasses) {
+    @SuppressWarnings("unchecked")
+    public OngoingStubbing<T> thenThrow(final Class<? extends Throwable>... throwableClasses) {
         if (throwableClasses == null) {
             thenThrow((Throwable) null);
         }
         OngoingStubbing<T> stubbing = null;
-        for (Class<? extends Throwable> t: throwableClasses) {
+        for (final Class<? extends Throwable> t: throwableClasses) {
             if (stubbing == null) {
                 stubbing = thenThrow(t);
             } else {
@@ -72,11 +73,11 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
         return thenAnswer(new CallsRealMethods());
     }
 
-    public DeprecatedOngoingStubbing<T> toReturn(T value) {
+    public DeprecatedOngoingStubbing<T> toReturn(final T value) {
         return toAnswer(new Returns(value));
     }
 
-    public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
+    public DeprecatedOngoingStubbing<T> toThrow(final Throwable throwable) {
         return toAnswer(new ThrowsException(throwable));
     }
 }

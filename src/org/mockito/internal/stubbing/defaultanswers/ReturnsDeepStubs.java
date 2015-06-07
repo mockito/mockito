@@ -40,6 +40,7 @@ import org.mockito.stubbing.Answer;
  * @see org.mockito.Mockito#RETURNS_DEEP_STUBS
  * @see org.mockito.Answers#RETURNS_DEEP_STUBS
  */
+@SuppressWarnings("rawtypes")
 public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = -7105341425736035847L;

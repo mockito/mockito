@@ -16,6 +16,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
+@SuppressWarnings("rawtypes")
 class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 475027563923510472L;

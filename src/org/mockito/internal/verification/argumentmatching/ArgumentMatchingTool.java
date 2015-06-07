@@ -11,6 +11,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.internal.matchers.ContainsExtraTypeInformation;
 
+@SuppressWarnings("rawtypes")
 public class ArgumentMatchingTool {
 
     /**

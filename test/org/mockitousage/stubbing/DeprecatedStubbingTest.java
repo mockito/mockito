@@ -5,8 +5,12 @@
 
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
+import static org.mockito.Mockito.stubVoid;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,12 +48,12 @@ public class DeprecatedStubbingTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
     public void shouldAllowStubbingToString() throws Exception {
-        IMethods mockTwo = mock(IMethods.class);
+        final IMethods mockTwo = mock(IMethods.class);
         stub(mockTwo.toString()).toReturn("test");
         
         assertContains("Mock for IMethods", mock.toString());

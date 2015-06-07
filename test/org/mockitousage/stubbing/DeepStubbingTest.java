@@ -17,11 +17,14 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Locale;
+
 import javax.net.SocketFactory;
+
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -38,7 +41,7 @@ public class DeepStubbingTest extends TestBase {
             return address;
         }
         
-        public Address getAddress(String addressName) {
+        public Address getAddress(final String addressName) {
             return address;
         }
         
@@ -54,7 +57,7 @@ public class DeepStubbingTest extends TestBase {
             return street;
         }
 
-        public Street getStreet(Locale locale) {
+        public Street getStreet(final Locale locale) {
             return street;
         }
     }
@@ -75,15 +78,15 @@ public class DeepStubbingTest extends TestBase {
     
     @Test
     public void myTest() throws Exception {
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket(anyString(), eq(80))).thenReturn(null);
         sf.createSocket("what", 80);
     }
 
     @Test
     public void simpleCase() throws Exception {
-        OutputStream out = new ByteArrayOutputStream();
-        Socket socket = mock(Socket.class);
+        final OutputStream out = new ByteArrayOutputStream();
+        final Socket socket = mock(Socket.class);
         when(socket.getOutputStream()).thenReturn(out);
 
         assertSame(out, socket.getOutputStream());
@@ -94,9 +97,9 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void oneLevelDeep() throws Exception {
-        OutputStream out = new ByteArrayOutputStream();
+        final OutputStream out = new ByteArrayOutputStream();
 
-        SocketFactory socketFactory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory socketFactory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(socketFactory.createSocket().getOutputStream()).thenReturn(out);
 
         assertSame(out, socketFactory.createSocket().getOutputStream());
@@ -107,13 +110,13 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void interactions() throws Exception {
-        OutputStream out1 = new ByteArrayOutputStream();
-        OutputStream out2 = new ByteArrayOutputStream();
+        final OutputStream out1 = new ByteArrayOutputStream();
+        final OutputStream out2 = new ByteArrayOutputStream();
 
-        SocketFactory sf1 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf1 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf1.createSocket().getOutputStream()).thenReturn(out1);
 
-        SocketFactory sf2 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf2 = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf2.createSocket().getOutputStream()).thenReturn(out2);
 
         assertSame(out1, sf1.createSocket().getOutputStream());
@@ -125,11 +128,11 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void withArguments() throws Exception {
-        OutputStream out1 = new ByteArrayOutputStream();
-        OutputStream out2 = new ByteArrayOutputStream();
-        OutputStream out3 = new ByteArrayOutputStream();
+        final OutputStream out1 = new ByteArrayOutputStream();
+        final OutputStream out2 = new ByteArrayOutputStream();
+        final OutputStream out3 = new ByteArrayOutputStream();
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket().getOutputStream()).thenReturn(out1);
         when(sf.createSocket("google.com", 80).getOutputStream()).thenReturn(out2);
         when(sf.createSocket("stackoverflow.com", 80).getOutputStream()).thenReturn(out3);
@@ -144,10 +147,10 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void withAnyPatternArguments() throws Exception {
-        OutputStream out = new ByteArrayOutputStream();
+        final OutputStream out = new ByteArrayOutputStream();
 
         //TODO: should not use javax in case it changes
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket(anyString(), anyInt()).getOutputStream()).thenReturn(out);
 
         assertSame(out, sf.createSocket("google.com", 80).getOutputStream());
@@ -159,10 +162,10 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void withComplexPatternArguments() throws Exception {
-        OutputStream out1 = new ByteArrayOutputStream();
-        OutputStream out2 = new ByteArrayOutputStream();
+        final OutputStream out1 = new ByteArrayOutputStream();
+        final OutputStream out2 = new ByteArrayOutputStream();
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket(anyString(), eq(80)).getOutputStream()).thenReturn(out1);
         when(sf.createSocket(anyString(), eq(8080)).getOutputStream()).thenReturn(out2);
 
@@ -177,9 +180,9 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void withSimplePrimitive() throws Exception {
-        int a = 32;
+        final int a = 32;
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket().getPort()).thenReturn(a);
 
         assertEquals(a, sf.createSocket().getPort());
@@ -191,9 +194,9 @@ public class DeepStubbingTest extends TestBase {
      */
     @Test
     public void withPatternPrimitive() throws Exception {
-        int a = 12, b = 23, c = 34;
+        final int a = 12, b = 23, c = 34;
 
-        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        final SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
         when(sf.createSocket(eq("stackoverflow.com"), eq(80)).getPort()).thenReturn(a);
         when(sf.createSocket(eq("google.com"), anyInt()).getPort()).thenReturn(b);
         when(sf.createSocket(eq("stackoverflow.com"), eq(8080)).getPort()).thenReturn(c);
@@ -211,7 +214,7 @@ public class DeepStubbingTest extends TestBase {
         given(person.getAddress().getStreet().getName()).willReturn("Norymberska");
         
         //when
-        String street = person.getAddress().getStreet().getName();
+        final String street = person.getAddress().getStreet().getName();
         
         //then
         assertEquals("Norymberska", street);
@@ -277,7 +280,7 @@ public class DeepStubbingTest extends TestBase {
         person.getAddress("the docks").getStreet(Locale.ITALIAN).getName();
         person.getAddress("the docks").getStreet(Locale.CHINESE).getName();
 
-        InOrder inOrder = inOrder(
+        final InOrder inOrder = inOrder(
                 person.getAddress("the docks").getStreet(),
                 person.getAddress("the docks").getStreet(Locale.CHINESE),
                 person.getAddress("the docks").getStreet(Locale.ITALIAN)
@@ -302,7 +305,7 @@ public class DeepStubbingTest extends TestBase {
         try {
             verify(person.getAddress("the docks"), times(1)).getStreet();
             fail();
-        } catch (TooManyActualInvocations e) {
+        } catch (final TooManyActualInvocations e) {
             Assertions.assertThat(e.getMessage())
                     .contains("Wanted 1 time")
                     .contains("But was 3 times");
@@ -312,7 +315,7 @@ public class DeepStubbingTest extends TestBase {
     @Test
     public void shouldFailGracefullyWhenClassIsFinal() throws Exception {
         //when        
-        FinalClass value = new FinalClass();
+        final FinalClass value = new FinalClass();
         given(person.getFinalClass()).willReturn(value);
         
         //then

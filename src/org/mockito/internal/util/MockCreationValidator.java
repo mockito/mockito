@@ -11,6 +11,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.reflection.Constructors;
 import org.mockito.mock.SerializableMode;
 
+@SuppressWarnings("rawtypes")
 public class MockCreationValidator {
 
     private final MockUtil mockUtil = new MockUtil();

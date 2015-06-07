@@ -72,8 +72,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. (new) BDD style verification (Since 1.10.0)</a><br/>
  *      <a href="#30">30. (new) Spying or mocking abstract classes (Since 1.10.12)</a><br/>
- *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
- *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3>
+ *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a>
+ *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a>
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  * </b>
@@ -1077,7 +1077,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Mockito extends Matchers {
 
     static final MockitoCore MOCKITO_CORE = new MockitoCore();

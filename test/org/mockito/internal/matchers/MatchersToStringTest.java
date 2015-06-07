@@ -12,7 +12,7 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class MatchersToStringTest extends TestBase {
 
     @Test
@@ -43,7 +43,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void sameToStringWithObject() {
-        Object o = new Object() {
+        final Object o = new Object() {
             @Override
             public String toString() {
                 return "X";
@@ -65,7 +65,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void equalsToStringWithObject() {
-        Object o = new Object() {
+        final Object o = new Object() {
             @Override
             public String toString() {
                 return "X";
@@ -76,7 +76,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void orToString() {
-        List<Matcher> matchers = new ArrayList<Matcher>();
+        final List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         assertEquals("or(1, 2)", describe(new Or(matchers)));
@@ -89,7 +89,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void andToString() {
-        List<Matcher> matchers = new ArrayList<Matcher>();
+        final List<Matcher> matchers = new ArrayList<Matcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         assertEquals("and(1, 2)", describe(new And(matchers)));

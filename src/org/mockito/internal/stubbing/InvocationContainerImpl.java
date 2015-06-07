@@ -20,6 +20,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
+@SuppressWarnings("rawtypes")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
 
     private static final long serialVersionUID = -5334301962749537177L;
@@ -30,7 +31,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private InvocationMatcher invocationForStubbing;
 
-    public InvocationContainerImpl(final MockingProgress mockingProgress, final MockCreationSettings mockSettings) {
+    public InvocationContainerImpl(final MockingProgress mockingProgress, final MockCreationSettings<?> mockSettings) {
         this.mockingProgress = mockingProgress;
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
     }
@@ -44,16 +45,16 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         this.invocationForStubbing = invocationMatcher;
     }
 
-    public void addAnswer(final Answer answer) {
+    public void addAnswer(final Answer<?> answer) {
         registeredInvocations.removeLast();
         addAnswer(answer, false);
     }
 
-    public void addConsecutiveAnswer(final Answer answer) {
+    public void addConsecutiveAnswer(final Answer<?> answer) {
         addAnswer(answer, true);
     }
 
-    public void addAnswer(final Answer answer, final boolean isConsecutive) {
+    public void addAnswer(final Answer<?> answer, final boolean isConsecutive) {
         final Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress.stubbingCompleted(invocation);
         final AnswersValidator answersValidator = new AnswersValidator();
@@ -86,7 +87,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return null;
     }
 
-    public void addAnswerForVoidMethod(final Answer answer) {
+    public void addAnswerForVoidMethod(final Answer<?> answer) {
         answersForStubbing.add(answer);
     }
 
@@ -132,7 +133,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return invocationForStubbing;
     }
 
-    private RegisteredInvocations createRegisteredInvocations(final MockCreationSettings mockSettings) {
+    private RegisteredInvocations createRegisteredInvocations(final MockCreationSettings<?> mockSettings) {
         return mockSettings.isStubOnly()
           ? new SingleRegisteredInvocation()
           : new DefaultRegisteredInvocations();

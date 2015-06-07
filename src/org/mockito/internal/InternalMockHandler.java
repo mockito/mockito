@@ -12,6 +12,7 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 
+@SuppressWarnings("rawtypes")
 public interface InternalMockHandler<T> extends MockHandler {
 
     MockCreationSettings getMockSettings();

@@ -4,22 +4,22 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Location;
 
-import java.io.Serializable;
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, CapturesArguments, MatcherDecorator, Serializable {
 
     private static final long serialVersionUID = 6748641229659825725L;
     private final Matcher actualMatcher;
     private final Location location;
 
-    public LocalizedMatcher(Matcher actualMatcher) {
+    public LocalizedMatcher(final Matcher actualMatcher) {
         this.actualMatcher = actualMatcher;
         this.location = new LocationImpl();
     }
@@ -28,11 +28,11 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         // yeah right
     }
 
-    public boolean matches(Object item) {
+    public boolean matches(final Object item) {
         return actualMatcher.matches(item);
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(final Description description) {
         actualMatcher.describeTo(description);
     }
 
@@ -53,12 +53,12 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
         }
     }
 
-    public boolean typeMatches(Object object) {
+    public boolean typeMatches(final Object object) {
         return actualMatcher instanceof ContainsExtraTypeInformation
                 && ((ContainsExtraTypeInformation) actualMatcher).typeMatches(object);
     }
 
-    public void captureFrom(Object argument) {
+    public void captureFrom(final Object argument) {
         if (actualMatcher instanceof CapturesArguments) {
             ((CapturesArguments) actualMatcher).captureFrom(argument);
         }

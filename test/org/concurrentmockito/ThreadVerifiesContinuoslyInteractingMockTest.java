@@ -5,7 +5,8 @@
 
 package org.concurrentmockito;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -34,7 +35,7 @@ public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {
                 public void run() {
                     try {
                         Thread.sleep(x * 10);
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     mock.simpleMethod();

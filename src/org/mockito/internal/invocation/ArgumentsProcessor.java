@@ -4,17 +4,18 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hamcrest.Matcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.util.collections.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * by Szczepan Faber, created at: 3/31/12
  */
+@SuppressWarnings("rawtypes")
 public class ArgumentsProcessor {
     // expands array varArgs that are given by runtime (1, [a, b]) into true
     // varArgs (1, a, b);
@@ -32,15 +33,15 @@ public class ArgumentsProcessor {
             varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
         }
         final int varArgsCount = varArgs.length;
-        Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
+        final Object[] newArgs = new Object[nonVarArgsCount + varArgsCount];
         System.arraycopy(args, 0, newArgs, 0, nonVarArgsCount);
         System.arraycopy(varArgs, 0, newArgs, nonVarArgsCount, varArgsCount);
         return newArgs;
     }
 
-    public static List<Matcher> argumentsToMatchers(Object[] arguments) {
-        List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
-        for (Object arg : arguments) {
+    public static List<Matcher> argumentsToMatchers(final Object[] arguments) {
+        final List<Matcher> matchers = new ArrayList<Matcher>(arguments.length);
+        for (final Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));
             } else {

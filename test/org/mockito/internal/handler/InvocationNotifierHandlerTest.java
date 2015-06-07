@@ -4,6 +4,18 @@
  */
 package org.mockito.internal.handler;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,34 +31,25 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 public class InvocationNotifierHandlerTest {
     private static final String SOME_LOCATION = "some location";
     private static final RuntimeException SOME_EXCEPTION = new RuntimeException();
     private static final OutOfMemoryError SOME_ERROR = new OutOfMemoryError();
     private static final Answer SOME_ANSWER = mock(Answer.class);
 
+    @Mock
+    private InvocationListener listener1;
+    @Mock
+    private InvocationListener listener2;
+    @Spy
+    private CustomListener customListener;
 
-    @Mock private InvocationListener listener1;
-    @Mock private InvocationListener listener2;
-    @Spy private CustomListener customListener;
-
-    @Mock private Invocation invocation;
-    @Mock private MockHandlerImpl mockHandler;
+    @Mock
+    private Invocation invocation;
+    @Mock
+    private MockHandlerImpl mockHandler;
 
     private InvocationNotifierHandler notifier;
 
@@ -55,7 +58,7 @@ public class InvocationNotifierHandlerTest {
         notifier = new InvocationNotifierHandler(
                 mockHandler,
                 (MockSettingsImpl) new MockSettingsImpl().invocationListeners(customListener, listener1, listener2)
-        );
+                );
     }
 
     @Test
@@ -74,7 +77,7 @@ public class InvocationNotifierHandlerTest {
     @Test
     public void should_notify_all_listeners_when_called_delegate_handler_returns_ex() throws Throwable {
         // given
-        Exception computedException = new Exception("computed");
+        final Exception computedException = new Exception("computed");
         given(mockHandler.handle(invocation)).willReturn(computedException);
 
         // when
@@ -88,7 +91,7 @@ public class InvocationNotifierHandlerTest {
     @Test(expected = ParseException.class)
     public void should_notify_all_listeners_when_called_delegate_handler_throws_exception_and_rethrow_it() throws Throwable {
         // given
-        ParseException parseException = new ParseException("", 0);
+        final ParseException parseException = new ParseException("", 0);
         given(mockHandler.handle(invocation)).willThrow(parseException);
 
         // when
@@ -109,7 +112,7 @@ public class InvocationNotifierHandlerTest {
         try {
             notifier.handle(invocation);
             fail();
-        } catch (MockitoException me) {
+        } catch (final MockitoException me) {
             assertThat(me.getMessage())
                     .contains("invocation listener")
                     .contains("CustomListener")
@@ -132,7 +135,7 @@ public class InvocationNotifierHandlerTest {
     }
 
     private static class CustomListener implements InvocationListener {
-        public void reportInvocation(MethodInvocationReport methodInvocationReport) {
+        public void reportInvocation(final MethodInvocationReport methodInvocationReport) {
             // nop
         }
     }

@@ -20,7 +20,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase {
 
     ImportManager importManager;
@@ -36,46 +36,46 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
 
     @Test
     public void shouldIncludeInitialLog() {
-        //given
-        int importType = 0;
-        Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
+        // given
+        final int importType = 0;
+        final Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
 
-        ImportLogBean initialLog = new ImportLogBean(currentDate, importType);
+        final ImportLogBean initialLog = new ImportLogBean(currentDate, importType);
         initialLog.setStatus(1);
 
         given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate)).willReturn(false);
         willAnswer(byCheckingLogEquals(initialLog)).given(importLogDao).include(any(ImportLogBean.class));
 
-        //when
+        // when
         importManager.startImportProcess(importType, currentDate);
 
-        //then
+        // then
         verify(importLogDao).include(any(ImportLogBean.class));
     }
 
     @Test
     public void shouldAlterFinalLog() {
-        //given
-        int importType = 0;
-        Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
+        // given
+        final int importType = 0;
+        final Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
 
-        ImportLogBean finalLog = new ImportLogBean(currentDate, importType);
+        final ImportLogBean finalLog = new ImportLogBean(currentDate, importType);
         finalLog.setStatus(9);
 
         given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate)).willReturn(false);
         willAnswer(byCheckingLogEquals(finalLog)).given(importLogDao).alter(any(ImportLogBean.class));
 
-        //when
+        // when
         importManager.startImportProcess(importType, currentDate);
 
-        //then
+        // then
         verify(importLogDao).alter(any(ImportLogBean.class));
     }
 
     private Answer byCheckingLogEquals(final ImportLogBean status) {
         return new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ImportLogBean bean = (ImportLogBean) invocation.getArguments()[0];
+            public Object answer(final InvocationOnMock invocation) throws Throwable {
+                final ImportLogBean bean = (ImportLogBean) invocation.getArguments()[0];
                 assertEquals(status, bean);
                 return null;
             }
@@ -84,45 +84,46 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
 
     public class ImportManager {
 
-        public ImportManager(ImportLogDao pImportLogDao) {
+        public ImportManager(final ImportLogDao pImportLogDao) {
             super();
             importLogDao = pImportLogDao;
         }
 
         private ImportLogDao importLogDao = null;
 
-        public void startImportProcess(int importType, Date date) {
+        public void startImportProcess(final int importType, final Date date) {
             ImportLogBean importLogBean = null;
 
             try {
                 importLogBean = createResume(importType, date);
                 if (isOkToImport(importType, date)) {
                     // get the right handler
-                    //importLogBean = ImportHandlerFactory.singleton().getImportHandler(importType).processImport(importLogBean);
+                    // importLogBean =
+                    // ImportHandlerFactory.singleton().getImportHandler(importType).processImport(importLogBean);
                     // 2 = ok
                     importLogBean.setStatus(2);
                 } else {
                     // 5 = failed - is there a running process
                     importLogBean.setStatus(9);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // 9 = failed - exception
                 if (importLogBean != null) {
-					importLogBean.setStatus(9);
-				}
+                    importLogBean.setStatus(9);
+                }
             } finally {
                 if (importLogBean != null) {
-					finalizeResume(importLogBean);
-				}
+                    finalizeResume(importLogBean);
+                }
             }
         }
 
-        private boolean isOkToImport(int importType, Date date) {
+        private boolean isOkToImport(final int importType, final Date date) {
             return importLogDao.anyImportRunningOrRunnedToday(importType, date);
         }
 
-        private ImportLogBean createResume(int importType, Date date) {
-            ImportLogBean importLogBean = new ImportLogBean(date,
+        private ImportLogBean createResume(final int importType, final Date date) {
+            final ImportLogBean importLogBean = new ImportLogBean(date,
                     importType);
             // 1 = running
             importLogBean.setStatus(1);
@@ -130,46 +131,56 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
             return importLogBean;
         }
 
-        private void finalizeResume(ImportLogBean importLogBean) {
+        private void finalizeResume(final ImportLogBean importLogBean) {
             importLogDao.alter(importLogBean);
         }
     }
 
     private interface ImportLogDao {
-        public boolean anyImportRunningOrRunnedToday(int importType, Date currentDate);
+        boolean anyImportRunningOrRunnedToday(final int importType, final Date currentDate);
 
-        void include(ImportLogBean importLogBean);
+        void include(final ImportLogBean importLogBean);
 
-        void alter(ImportLogBean importLogBean);
+        void alter(final ImportLogBean importLogBean);
     }
 
     private class IImportHandler {
     }
 
     private class ImportLogBean {
-        private Date currentDate;
-        private int importType;
+        private final Date currentDate;
+        private final int importType;
         private int status;
 
-        public ImportLogBean(Date currentDate, int importType) {
+        public ImportLogBean(final Date currentDate, final int importType) {
             this.currentDate = currentDate;
             this.importType = importType;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(final int status) {
             this.status = status;
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ImportLogBean)) return false;
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof ImportLogBean)) {
+                return false;
+            }
 
-            ImportLogBean that = (ImportLogBean) o;
+            final ImportLogBean that = (ImportLogBean) o;
 
-            if (importType != that.importType) return false;
-            if (status != that.status) return false;
-            if (currentDate != null ? !currentDate.equals(that.currentDate) : that.currentDate != null) return false;
+            if (importType != that.importType) {
+                return false;
+            }
+            if (status != that.status) {
+                return false;
+            }
+            if (currentDate != null ? !currentDate.equals(that.currentDate) : that.currentDate != null) {
+                return false;
+            }
 
             return true;
         }

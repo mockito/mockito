@@ -37,6 +37,7 @@ import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgument
  */
 public class ConstructorInjection extends MockInjectionStrategy {
 
+    @SuppressWarnings("unused")
     private ConstructorArgumentResolver argResolver;
 
     public ConstructorInjection() { }
@@ -85,7 +86,7 @@ public class ConstructorInjection extends MockInjectionStrategy {
             for (final Object object : objects) {
                 if(argType.isAssignableFrom(object.getClass())) {
                     return object;
-				}
+                }
             }
             return null;
         }

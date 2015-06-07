@@ -4,28 +4,29 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 import org.mockito.internal.invocation.AbstractAwareMethod;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.Invocation;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 /**
  * by Szczepan Faber, created at: 3/31/12
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MethodInfo implements AbstractAwareMethod {
 
     private final Method method;
 
-    public MethodInfo(Invocation theInvocation) {
+    public MethodInfo(final Invocation theInvocation) {
         this.method = theInvocation.getMethod();
     }
 
-    public boolean isValidException(Throwable throwable) {
-        Class<?>[] exceptions = method.getExceptionTypes();
-        Class<?> throwableClass = throwable.getClass();
-        for (Class<?> exception : exceptions) {
+    public boolean isValidException(final Throwable throwable) {
+        final Class<?>[] exceptions = method.getExceptionTypes();
+        final Class<?> throwableClass = throwable.getClass();
+        for (final Class<?> exception : exceptions) {
             if (exception.isAssignableFrom(throwableClass)) {
                 return true;
             }
@@ -34,7 +35,7 @@ public class MethodInfo implements AbstractAwareMethod {
         return false;
     }
 
-    public boolean isValidReturnType(Class clazz) {
+    public boolean isValidReturnType(final Class clazz) {
         if (method.getReturnType().isPrimitive() || clazz.isPrimitive()) {
             return Primitives.primitiveTypeOf(clazz) == Primitives.primitiveTypeOf(method.getReturnType());
         } else {

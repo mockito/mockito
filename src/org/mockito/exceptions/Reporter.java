@@ -60,6 +60,7 @@ import org.mockito.mock.SerializableMode;
  * Generally, exception messages are full of line breaks to make them easy to
  * read (xunit plugins take only fraction of screen on modern IDEs).
  */
+@SuppressWarnings("rawtypes")
 public class Reporter {
 
     public void checkedExceptionInvalid(final Throwable t) {

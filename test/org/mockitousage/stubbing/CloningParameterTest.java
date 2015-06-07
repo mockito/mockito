@@ -5,7 +5,9 @@
 
 package org.mockitousage.stubbing;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class CloningParameterTest extends TestBase {
     public void shouldVerifyEvenIfArgumentsWereMutated() throws Exception {
 
         // given
-        EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
+        final EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
 
         // when
         businessLogic(emailSender);
@@ -28,8 +30,8 @@ public class CloningParameterTest extends TestBase {
         verify(emailSender).sendEmail(1, new Person("Wes"));
     }
 
-    private void businessLogic(EmailSender emailSender) {
-        Person person = new Person("Wes");
+    private void businessLogic(final EmailSender emailSender) {
+        final Person person = new Person("Wes");
         emailSender.sendEmail(1, person);
         person.emailSent();
     }
@@ -38,11 +40,11 @@ public class CloningParameterTest extends TestBase {
     public void shouldReturnDefaultValueWithCloningAnswer() throws Exception {
 
         // given
-        EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
+        final EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
         when(emailSender.getAllEmails(new Person("Wes"))).thenAnswer(new ClonesArguments());
 
         // when
-        List<?> emails = emailSender.getAllEmails(new Person("Wes"));
+        final List<?> emails = emailSender.getAllEmails(new Person("Wes"));
 
         // then
         assertNotNull(emails);
@@ -53,7 +55,7 @@ public class CloningParameterTest extends TestBase {
         private final String name;
         private boolean emailSent;
 
-        public Person(String name) {
+        public Person(final String name) {
             this.name = name;
         }
 
@@ -72,23 +74,30 @@ public class CloningParameterTest extends TestBase {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
+        public boolean equals(final Object obj) {
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()) {
                 return false;
-            Person other = (Person) obj;
-            if (!getOuterType().equals(other.getOuterType()))
+            }
+            final Person other = (Person) obj;
+            if (!getOuterType().equals(other.getOuterType())) {
                 return false;
-            if (emailSent != other.emailSent)
+            }
+            if (emailSent != other.emailSent) {
                 return false;
+            }
             if (name == null) {
-                if (other.name != null)
+                if (other.name != null) {
                     return false;
-            } else if (!name.equals(other.name))
+                }
+            } else if (!name.equals(other.name)) {
                 return false;
+            }
             return true;
         }
 
@@ -100,9 +109,9 @@ public class CloningParameterTest extends TestBase {
 
     public interface EmailSender {
 
-        void sendEmail(int i, Person person);
+        void sendEmail(final int i, final Person person);
 
-        List<?> getAllEmails(Person person);
+        List<?> getAllEmails(final Person person);
 
     }
 }

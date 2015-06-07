@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.util;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.Date;
-
+@SuppressWarnings("rawtypes")
 public class ObjectMethodsGuruTest extends TestBase {
 
     ObjectMethodsGuru guru = new ObjectMethodsGuru();
@@ -37,14 +38,14 @@ public class ObjectMethodsGuruTest extends TestBase {
     }
 
     interface HasCompareToButDoesNotImplementComparable {
-        public int compareTo(HasCompareToButDoesNotImplementComparable other);
+        int compareTo(final HasCompareToButDoesNotImplementComparable other);
     }
 
     interface HasCompare extends Comparable {
-        public int foo(HasCompare other);
-        public int compareTo(HasCompare other, String redHerring);
-        public int compareTo(String redHerring);
-        public int compareTo(HasCompare redHerring);
+        int foo(final HasCompare other);
+        int compareTo(final HasCompare other, final String redHerring);
+        int compareTo(final String redHerring);
+        int compareTo(final HasCompare redHerring);
     }
 
     @Test

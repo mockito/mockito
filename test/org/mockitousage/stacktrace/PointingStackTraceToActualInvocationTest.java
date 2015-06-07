@@ -5,7 +5,8 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock, times(0)).simpleMethod(1);
             fail();
-        } catch (NeverWantedButInvoked e) {
+        } catch (final NeverWantedButInvoked e) {
             assertContains("first(", e.getMessage());
         }
     }   
@@ -60,7 +61,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         try {
             verify(mock, times(0)).simpleMethod(1);
             fail();
-        } catch (NeverWantedButInvoked e) {
+        } catch (final NeverWantedButInvoked e) {
             assertNotContains(".runners.", e.getMessage());
         }
     }   

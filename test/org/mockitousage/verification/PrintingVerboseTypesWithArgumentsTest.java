@@ -5,8 +5,10 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
@@ -16,24 +18,24 @@ import org.mockitoutil.TestBase;
 public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
 
     class Boo {
-        public void withLong(long x) {
+        public void withLong(final long x) {
         }
         
-        public void withLongAndInt(long x, int y) {
+        public void withLongAndInt(final long x, final int y) {
         }
     }
     
     @Test
     public void shouldNotReportArgumentTypesWhenToStringIsTheSame() throws Exception {
         //given
-        Boo boo = mock(Boo.class);
+        final Boo boo = mock(Boo.class);
         boo.withLong(100);
         
         try {
             //when
             verify(boo).withLong(eq(100));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             //then
             assertContains("withLong((Integer) 100);", e.getMessage());
             assertContains("withLong((Long) 100);", e.getMessage());
@@ -43,14 +45,14 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     @Test
     public void shouldShowTheTypeOfOnlyTheArgumentThatDoesntMatch() throws Exception {
         //given
-        Boo boo = mock(Boo.class);
+        final Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
         
         try {
             //when
             verify(boo).withLongAndInt(eq(100), eq(200));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             //then
             assertContains("withLongAndInt((Integer) 100, 200)", e.getMessage());
             assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
@@ -60,14 +62,14 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     @Test
     public void shouldShowTheTypeOfTheMismatchingArgumentWhenOutputDescriptionsForInvocationsAreDifferent() throws Exception {
         //given
-        Boo boo = mock(Boo.class);
+        final Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
         
         try {
             //when
             verify(boo).withLongAndInt(eq(100), any(Integer.class));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             //then
             assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
             assertContains("withLongAndInt((Integer) 100, <any>", e.getMessage());
@@ -77,14 +79,14 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     @Test
     public void shouldNotShowTypesWhenArgumentValueIsDifferent() throws Exception {
         //given
-        Boo boo = mock(Boo.class);
+        final Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
         
         try {
             //when
             verify(boo).withLongAndInt(eq(100L), eq(230));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             //then
             assertContains("withLongAndInt(100, 200)", e.getMessage());
             assertContains("withLongAndInt(100, 230)", e.getMessage());
@@ -95,11 +97,11 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         
         private final int x;
 
-        public Foo(int x) {
+        public Foo(final int x) {
             this.x = x;
         }
         
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             return x == ((Foo) obj).x;
         }
         
@@ -115,14 +117,14 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     @Test
     public void shouldNotShowTypesWhenTypesAreTheSameEvenIfToStringGivesTheSameResult() throws Exception {
         //given
-        IMethods mock = mock(IMethods.class);
+        final IMethods mock = mock(IMethods.class);
         mock.simpleMethod(new Foo(10));
         
         try {
             //when
             verify(mock).simpleMethod(new Foo(20));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             //then
             assertContains("simpleMethod(foo)", e.getMessage());
         }

@@ -5,8 +5,9 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -19,11 +20,11 @@ import org.mockitoutil.TestBase;
 public class HamcrestMatchersTest extends TestBase {
     
     private final class ContainsX extends BaseMatcher<String> {
-        public boolean matches(Object o) {
+        public boolean matches(final Object o) {
             return ((String) o).contains("X");
         }
 
-        public void describeTo(Description d) {
+        public void describeTo(final Description d) {
             d.appendText("contains 'X'");
         }
     }
@@ -44,7 +45,7 @@ public class HamcrestMatchersTest extends TestBase {
         try {
             verify(mock).simpleMethod(argThat(new ContainsX()));
             fail();
-        } catch (ArgumentsAreDifferent e) {
+        } catch (final ArgumentsAreDifferent e) {
             assertContains("contains 'X'", e.getMessage());
         }
     }

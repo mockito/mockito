@@ -16,6 +16,7 @@ import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.listeners.InvocationListener;
 import org.mockitoutil.TestBase;
 
+@SuppressWarnings("rawtypes")
 public class MockSettingsImplTest extends TestBase {
 
     private final MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();

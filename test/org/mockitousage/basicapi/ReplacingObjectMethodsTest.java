@@ -5,7 +5,8 @@
 
 package org.mockitousage.basicapi;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -18,16 +19,16 @@ public class ReplacingObjectMethodsTest extends TestBase {
     
     @Test
     public void shouldProvideMockyImplementationOfToString() {
-        DummyClass dummyClass = Mockito.mock(DummyClass.class);
+        final DummyClass dummyClass = Mockito.mock(DummyClass.class);
         assertEquals("Mock for DummyClass, hashCode: " + dummyClass.hashCode(), dummyClass.toString());
-        DummyInterface dummyInterface = Mockito.mock(DummyInterface.class);
+        final DummyInterface dummyInterface = Mockito.mock(DummyInterface.class);
         assertEquals("Mock for DummyInterface, hashCode: " + dummyInterface.hashCode(), dummyInterface.toString());
     }
     
     @Test 
     public void shouldReplaceObjectMethods() {
-        Object mock = Mockito.mock(ObjectMethodsOverridden.class);
-        Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
+        final Object mock = Mockito.mock(ObjectMethodsOverridden.class);
+        final Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
         
         assertThat(mock, equalTo(mock));
         assertThat(mock, not(equalTo(otherMock)));
@@ -39,8 +40,8 @@ public class ReplacingObjectMethodsTest extends TestBase {
     
     @Test 
     public void shouldReplaceObjectMethodsWhenOverridden() {
-        Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
-        Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
+        final Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
+        final Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         
         assertThat(mock, equalTo(mock));
         assertThat(mock, not(equalTo(otherMock)));
@@ -51,7 +52,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
     }
     
     public static class ObjectMethodsOverridden {
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
         }
         public int hashCode() {

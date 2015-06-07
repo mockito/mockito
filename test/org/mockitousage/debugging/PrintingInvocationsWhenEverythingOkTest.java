@@ -4,7 +4,8 @@
  */
 package org.mockitousage.debugging;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import org.junit.After;
 import org.junit.Test;
@@ -30,18 +31,18 @@ public class PrintingInvocationsWhenEverythingOkTest extends TestBase {
         given(mock.giveMeSomeString("arg")).willReturn("foo");
     }
 
-    private void businessLogicWithAsking(String name) {
-        String out = mock.giveMeSomeString(name);
+    private void businessLogicWithAsking(final String name) {
+        final String out = mock.giveMeSomeString(name);
         businessLogicWithTelling(out);
     }
 
-    private void businessLogicWithTelling(String out) {
+    private void businessLogicWithTelling(final String out) {
         mockTwo.doSomething(out);
     }
 
     @After
     public void printInvocations() {
-        String log = NewMockito.debug().printInvocations(mock, mockTwo);
+        final String log = NewMockito.debug().printInvocations(mock, mockTwo);
         //asking
         assertContains("giveMeSomeString(\"arg\")", log);
         assertContains(".businessLogicWithAsking(", log);

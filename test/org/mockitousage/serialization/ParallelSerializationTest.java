@@ -5,32 +5,38 @@
 
 package org.mockitousage.serialization;
 
-import org.junit.Test;
-import org.mockitousage.IMethods;
-import org.mockitoutil.SimpleSerializationUtil;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
+import org.junit.Test;
+import org.mockitousage.IMethods;
+import org.mockitoutil.SimpleSerializationUtil;
 
+@SuppressWarnings("rawtypes")
 public class ParallelSerializationTest {
 
     @Test
     public void single_mock_being_serialized_in_different_classloaders_by_multiple_threads() throws ExecutionException, InterruptedException {
         // given
-        int iterations = 2;
-        int threadingFactor = 200;
+        final int iterations = 2;
+        final int threadingFactor = 200;
         final ExecutorService executorService = Executors.newFixedThreadPool(threadingFactor);
         final IMethods iMethods_that_store_invocations = mock(IMethods.class, withSettings().serializable());
 
         // when
         for (int i = 0; i <= iterations; i++) {
-            List<Future> futures = new ArrayList<Future>(threadingFactor);
+            final List<Future> futures = new ArrayList<Future>(threadingFactor);
             final CyclicBarrier barrier_that_will_wait_until_threads_are_ready = new CyclicBarrier(threadingFactor);
 
             // prepare all threads by submitting a callable
@@ -58,14 +64,14 @@ public class ParallelSerializationTest {
             }
 
             // ensure we are getting the futures
-            for (Future future : futures) {
+            for (final Future future : futures) {
                 future.get();
             }
         }
     }
 
-    private void randomCallOn(IMethods iMethods) throws CharacterCodingException {
-        int random = new Random().nextInt(10);
+    private void randomCallOn(final IMethods iMethods) throws CharacterCodingException {
+        final int random = new Random().nextInt(10);
         switch (random) {
             case 0 : iMethods.arrayReturningMethod(); break;
             case 1 : iMethods.longObjectReturningMethod(); break;

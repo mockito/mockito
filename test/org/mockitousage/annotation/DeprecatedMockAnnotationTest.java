@@ -6,14 +6,14 @@
 package org.mockitousage.annotation;
 
 
+import static org.junit.Assert.assertNotNull;
+
+import java.awt.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-
-import java.awt.*;
-
-import static org.junit.Assert.assertNotNull;
 
 public class DeprecatedMockAnnotationTest {
 

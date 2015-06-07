@@ -4,20 +4,20 @@
  */
 package org.mockito.internal.util;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
+import static java.util.Arrays.asList;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Observer;
 
-import static java.util.Arrays.asList;
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MockCreationValidatorTest {
 
     final class FinalClass {}
@@ -29,7 +29,7 @@ public class MockCreationValidatorTest {
             //when
             validator.validateExtraInterfaces(IMethods.class, (Collection) asList(IMethods.class));
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             //then
             assertThat(e.getMessage()).contains("You mocked following type: IMethods");
         }
@@ -61,13 +61,13 @@ public class MockCreationValidatorTest {
     @Test(expected = MockitoException.class)
     public void should_not_allow_serializable_with_Object_that_dont_implement_Serializable() {
         class NonSerializableInnerClassThatHaveAHiddenOneArgConstructor {}
-        boolean serializable = true;
+        final boolean serializable = true;
         validator.validateSerializable(NonSerializableInnerClassThatHaveAHiddenOneArgConstructor.class, serializable);
     }
 
     @Test
     public void should_allow_serializable_with_interfaces_or_Serializable_objects() {
-        boolean serializable = true;
+        final boolean serializable = true;
         validator.validateSerializable(Observer.class, serializable);
         validator.validateSerializable(Integer.class, serializable);
     }

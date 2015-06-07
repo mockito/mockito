@@ -5,6 +5,16 @@
 
 package org.mockitousage.annotation;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.TextListener;
@@ -21,16 +31,10 @@ import org.mockitousage.examples.use.ArticleCalculator;
 import org.mockitousage.examples.use.ArticleDatabase;
 import org.mockitousage.examples.use.ArticleManager;
 
-import java.util.List;
-import java.util.Set;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
-
+@SuppressWarnings("rawtypes")
 @RunWith(MockitoJUnitRunner.class)
 public class MockInjectionUsingConstructorTest {
-    private MockUtil mockUtil = new MockUtil();
+    private final MockUtil mockUtil = new MockUtil();
 
     @Mock private ArticleCalculator calculator;
     @Mock private ArticleDatabase database;
@@ -61,7 +65,7 @@ public class MockInjectionUsingConstructorTest {
     @Test
     public void constructor_is_called_for_each_test_in_test_class() throws Exception {
         // given
-        JUnitCore jUnitCore = new JUnitCore();
+        final JUnitCore jUnitCore = new JUnitCore();
         jUnitCore.addListener(new TextListener(System.out));
 
         // when
@@ -83,7 +87,7 @@ public class MockInjectionUsingConstructorTest {
         try {
             MockitoAnnotations.initMocks(new ATest());
             fail();
-        } catch (MockitoException e) {
+        } catch (final MockitoException e) {
             assertThat(e.getMessage()).contains("failingConstructor").contains("constructor").contains("threw an exception");
             assertThat(e.getCause()).isInstanceOf(IllegalStateException.class);
         }
@@ -101,15 +105,17 @@ public class MockInjectionUsingConstructorTest {
         @Test public void test_2() { }
         @Test public void test_3() { }
 
+        @SuppressWarnings("unused")
         private static class some_class_with_parametered_constructor {
-            public some_class_with_parametered_constructor(List collaborator) {
+            public some_class_with_parametered_constructor(final List collaborator) {
                 constructor_instantiation++;
             }
         }
     }
 
+    @SuppressWarnings("unused")
     private static class FailingConstructor {
-        FailingConstructor(Set set) {
+        FailingConstructor(final Set set) {
             throw new IllegalStateException("always fail");
         }
     }

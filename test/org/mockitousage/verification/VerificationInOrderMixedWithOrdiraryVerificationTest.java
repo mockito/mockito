@@ -5,7 +5,12 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -82,7 +87,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -94,7 +99,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (final NoInteractionsWanted e) {}
     }
     
     @Test
@@ -115,7 +120,7 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (final VerificationInOrderFailure e) {}
     }
     
     @Test(expected=MockitoException.class)
@@ -127,8 +132,8 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
     public void shouldUseEqualsToVerifyMethodArguments() {
         mockOne = mock(IMethods.class);
         
-        String textOne = "test";
-        String textTwo = new String(textOne);
+        final String textOne = "test";
+        final String textTwo = new String(textOne);
         
         assertEquals(textOne, textTwo);
         assertNotSame(textOne, textTwo);
@@ -146,8 +151,8 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
     public void shouldUseEqualsToVerifyMethodVarargs() {
         mockOne = mock(IMethods.class);
         
-        String textOne = "test";
-        String textTwo = new String(textOne);
+        final String textOne = "test";
+        final String textTwo = new String(textOne);
         
         assertEquals(textOne, textTwo);
         assertNotSame(textOne, textTwo);

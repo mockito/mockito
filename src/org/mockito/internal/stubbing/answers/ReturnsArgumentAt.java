@@ -19,6 +19,7 @@ import org.mockito.stubbing.Answer;
  * @see org.mockito.AdditionalAnswers
  * @since 1.9.5
  */
+@SuppressWarnings("rawtypes")
 public class ReturnsArgumentAt implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = -589315085166295101L;
