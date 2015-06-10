@@ -22,4 +22,9 @@ public class MyMockMaker extends ByteBuddyMockMaker {
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         super.resetMock(mock, newHandler, settings);
     }
+
+    @Override
+    public boolean isTypeMockable(Class<?> type) {
+        return super.isTypeMockable(type);
+    }
 }

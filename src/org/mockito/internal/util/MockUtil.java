@@ -16,15 +16,13 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 
-import java.lang.reflect.Modifier;
-
 @SuppressWarnings("unchecked")
 public class MockUtil {
 
     private static final MockMaker mockMaker = Plugins.getMockMaker();
 
     public boolean isTypeMockable(Class<?> type) {
-      return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+      return mockMaker.isTypeMockable(type);
     }
 
     public <T> T createMock(MockCreationSettings<T> settings) {
