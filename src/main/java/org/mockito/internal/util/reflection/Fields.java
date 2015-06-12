@@ -61,6 +61,7 @@ public abstract class Fields {
      * @param annotations Annotation types to check.
      * @return The filter.
      */
+    @SuppressWarnings({"unchecked", "vararg"})
     public static Filter<InstanceField> annotatedBy(final Class<? extends Annotation>... annotations) {
         return new Filter<InstanceField>() {
             public boolean isOut(InstanceField instanceField) {
