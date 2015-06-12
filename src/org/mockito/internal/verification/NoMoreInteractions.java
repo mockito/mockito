@@ -33,4 +33,9 @@ public class NoMoreInteractions implements VerificationMode, VerificationInOrder
             new Reporter().noMoreInteractionsWantedInOrder(unverified);
         }
     }
+
+    @Override
+    public VerificationMode description(String description) {
+        return VerificationModeFactory.description(this, description);
+    }
 }
