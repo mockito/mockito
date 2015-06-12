@@ -6,6 +6,7 @@ package org.mockito.verification;
 
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.Timer;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 /**
  * See the javadoc for {@link VerificationWithTimeout}
@@ -56,5 +57,10 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
     public VerificationMode never() {
         new Reporter().atMostAndNeverShouldNotBeUsedWithTimeout();
         return null;
+    }
+
+    @Override
+    public VerificationMode description(String description) {
+        return VerificationModeFactory.description(this, description);
     }
 }

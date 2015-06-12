@@ -33,4 +33,9 @@ public class Only implements VerificationMode {
         }
         marker.markVerified(chunk.get(0), wantedMatcher);
     }
+
+    @Override
+    public VerificationMode description(String description) {
+        return VerificationModeFactory.description(this, description);
+    }
 }

@@ -62,6 +62,7 @@ import org.mockito.junit.*;
  *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3>
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
+ *      <a href="#35">35. (new) Custom verification failure message (Since 2.0.0)</a><br/>
  * </b>
  *
  * <p>
@@ -1058,7 +1059,20 @@ import org.mockito.junit.*;
  * More information here {@link org.mockito.plugins.PluginSwitch}.
  *
  *
+ * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification">Custom verification failure message</a> (Since 2.0.0)</h3>
+ * <p>
+ * Allows specifying a custom message to be printed if verification fails.
+ * <p>
+ * Examples:
+ * <p>
+ * <pre class="code"><code class="java">
  *
+ * // will print a custom message on verification failure 
+ * verify(mock, description("This will print on failure")).someMethod();
+ * 
+ * // will work with any verification mode 
+ * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
+ * </code></pre>
  *
  *
  *
@@ -2378,6 +2392,19 @@ public class Mockito extends Matchers {
      */
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
+    }
+    
+    /**
+     * Adds a description to be printed if verification fails.
+     * <pre class="code"><code class="java">
+     * verify(mock, description("This will print on failure")).someMethod("some arg");
+     * </code></pre>
+     * @param description The description to print on failure.
+     * @return verification mode
+     * @since 2.0.0
+     */
+    public static VerificationMode description(String description) {
+        return times(1).description(description);
     }
 
     /**

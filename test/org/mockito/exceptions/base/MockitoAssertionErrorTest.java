@@ -23,4 +23,11 @@ public class MockitoAssertionErrorTest extends TestBase {
             assertEquals("throwIt", e.getUnfilteredStackTrace()[0].getMethodName());
         }
     }
+    
+    @Test
+    public void should_prepend_message_to_original() {
+        MockitoAssertionError original = new MockitoAssertionError("original message");
+        MockitoAssertionError errorWithPrependedMessage = new MockitoAssertionError(original, "new message");
+        assertEquals("new message\noriginal message", errorWithPrependedMessage.getMessage());
+    }
 }
