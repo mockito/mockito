@@ -1,3 +1,30 @@
+### 2.0.14-beta (2015-06-12 20:18 UTC)
+
+* Authors: 7
+* Commits: 32
+  * 21: Brice Dutheil
+  * 6: Lukasz Szewc
+  * 1: Michal Kordas
+  * 1: Geoff Schoeman
+  * 1: Tim van der Lippe
+  * 1: Eugene Ivakhno
+  * 1: alberskib
+* Improvements: 14
+  * Fixes #228: fixed a verify() call example in @Captor javadoc [(#229)](https://github.com/mockito/mockito/pull/229)
+  * @Captor javadoc contains a wrong call example [(#228)](https://github.com/mockito/mockito/issues/228)
+  * [#206] Fix issue related to windows path [(#223)](https://github.com/mockito/mockito/pull/223)
+  * Fixes #203 : Introduce BDD InOrder verification [(#222)](https://github.com/mockito/mockito/pull/222)
+  * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+  * Improves InjectMocks behavior when injectee has multiple fields of the same type [(#215)](https://github.com/mockito/mockito/pull/215)
+  * ArgumentCaptor no longer working for varargs [(#211)](https://github.com/mockito/mockito/pull/211)
+  * NoJUnitDependenciesTest is failing on Windows machine. [(#206)](https://github.com/mockito/mockito/issues/206)
+  * InjectMocks injects mock into wrong field [(#205)](https://github.com/mockito/mockito/issues/205)
+  * mockito spy lost annotations from the spied instance class [(#204)](https://github.com/mockito/mockito/issues/204)
+  * Introduce BDD InOrder verification [(#203)](https://github.com/mockito/mockito/issues/203)
+  * ArgumentCaptor no longer working for varargs [(#188)](https://github.com/mockito/mockito/issues/188)
+  * Replace CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
+  * Added custom failure message to Mockito.verify. Issue 482 [(#68)](https://github.com/mockito/mockito/pull/68)
+
 ### 2.0.12-beta (2015-06-04 17:01 UTC)
 
 * Authors: 3
