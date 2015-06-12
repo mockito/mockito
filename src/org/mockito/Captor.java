@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *
  *    &#64;Test public void shouldDoSomethingUseful() {
  *       //...
- *       verify(mock.doStuff(captor.capture()));
+ *       verify(mock).doStuff(captor.capture());
  *       assertEquals("foo", captor.getValue());
  *    }
  * }
