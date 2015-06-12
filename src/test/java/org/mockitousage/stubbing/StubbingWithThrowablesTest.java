@@ -7,7 +7,6 @@ package org.mockitousage.stubbing;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -109,21 +108,26 @@ public class StubbingWithThrowablesTest extends TestBase {
         }
     }
 
+    @Test(expected = MockitoException.class)
+    public void shouldNotAllowNullExceptionType() {
+        when(mock.add(null)).thenThrow((Exception) null);
+    }
 
-    @Test(expected = IllegalArgumentException.class)
+
+    @Test(expected = NaughtyException.class)
     public void shouldInstantiateExceptionClassOnInteraction() {
-        when(mock.add(null)).thenThrow(IllegalArgumentException.class);
+        when(mock.add(null)).thenThrow(NaughtyException.class);
 
         mock.add(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NaughtyException.class)
     public void shouldInstantiateExceptionClassWithOngoingStubbingOnInteraction() {
-        Mockito.doThrow(IllegalArgumentException.class).when(mock).add(null);
+        doThrow(NaughtyException.class).when(mock).add(null);
 
         mock.add(null);
     }
-    
+
     @Test(expected=MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
         when(mock.add("monkey island")).thenThrow(new Exception());
@@ -138,7 +142,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     public void shouldNotAllowSettingNullThrowableArray() throws Exception {
         when(mock.add("monkey island")).thenThrow((Throwable[]) null);
     }
-    
+
     @Test
     public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());

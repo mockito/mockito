@@ -5,6 +5,7 @@
 
 package org.mockito.internal.stubbing.answers;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -18,7 +19,14 @@ public class ThrowsExceptionClass implements Answer<Object>, Serializable {
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
     public ThrowsExceptionClass(Class<? extends Throwable> throwableClass) {
-        this.throwableClass = throwableClass;
+        this.throwableClass = checkNonNullThrowable(throwableClass);
+    }
+
+    private Class<? extends Throwable> checkNonNullThrowable(Class<? extends Throwable> throwableClass) {
+        if(throwableClass == null || !Throwable.class.isAssignableFrom(throwableClass)) {
+            new Reporter().notAnException();
+        }
+        return throwableClass;
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
