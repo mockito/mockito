@@ -7,3 +7,9 @@ dependencies {
 
     testCompile ("junit:junit:4.12")
 }
+
+configurations.all {
+    //TODO SF enable when #154 is implemented
+    //let's make those tests not use hamcrest
+    //exclude group: 'org.hamcrest', module: 'hamcrest-core'
+}
