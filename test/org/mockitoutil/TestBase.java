@@ -6,8 +6,6 @@
 package org.mockitoutil;
 
 import junit.framework.Assert;
-import org.fest.assertions.Assertions;
-import org.fest.assertions.Condition;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
@@ -165,17 +163,13 @@ public class TestBase extends Assert {
     }
 
     protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
-        Assertions.assertThat(list).satisfies(new Condition<Collection<?>>() {
-            @Override
-            public boolean matches(Collection<?> objects) {
-                for (Object object : objects) {
-                    if (clazz.isAssignableFrom(object.getClass())) {
-                        return true;
-                    }
-                }
-                return false;
+        for (Object o : list) {
+            if (clazz.isAssignableFrom(o.getClass())) {
+                return;
             }
-        });
+        }
+        throw new AssertionError("Input list does not contain any element of type: '" + clazz + "'. " +
+            "Inspected following elements: " + list);
     }
 
     protected String getStackTrace(Throwable e) {
