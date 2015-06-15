@@ -31,7 +31,11 @@ public class LocalizedMatcher implements Matcher, ContainsExtraTypeInformation, 
     public boolean matches(Object item) {
         return actualMatcher.matches(item);
     }
-
+    
+    public void describeMismatch(Object item, Description description) {
+        actualMatcher.describeMismatch(item, description);
+    }
+    
     public void describeTo(Description description) {
         actualMatcher.describeTo(description);
     }
