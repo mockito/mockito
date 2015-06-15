@@ -1,0 +1,5 @@
+pick 9bab8bf In progress of decoupling Mockito from hamcrest
+pick 1daa963 Removed commented out code
+pick a813d42 Deprecated the current ArgumentMatcher
+pick f2b3655 Made the current API delegate to the new api
+pick ed20c0e Added a TODO regarding javadoc
