@@ -1,3 +1,13 @@
+### 2.0.15-beta (2015-06-18 16:49 UTC)
+
+* Authors: 2
+* Commits: 5
+  * 3: Brice Dutheil
+  * 2: Szczepan Faber
+* Improvements: 2
+  * Cannot instantiate type with public method of a public parent class having a non public types in signature [(#234)](https://github.com/mockito/mockito/pull/234)
+  * mockito 2.0.14 fails to mock jetty httpclient [(#233)](https://github.com/mockito/mockito/issues/233)
+
 ### 2.0.14-beta (2015-06-12 20:18 UTC)
 
 * Authors: 7
