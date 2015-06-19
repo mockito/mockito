@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.mockito.internal.matchers.ContainsExtraTypeInformation;
+import org.mockito.internal.matchers.MatchersPrinter;
 
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
@@ -45,6 +45,6 @@ public class ArgumentMatchingTool {
     }
 
     private boolean toStringEquals(Matcher m, Object arg) {
-        return StringDescription.toString(m).equals(arg == null? "null" : arg.toString());
+        return new MatchersPrinter().print(m).equals(arg == null? "null" : arg.toString());
     }
 }

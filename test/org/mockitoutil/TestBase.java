@@ -18,6 +18,7 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
+import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
@@ -155,7 +156,7 @@ public class TestBase extends Assert {
     }
 
     protected static String describe(SelfDescribing m) {
-        return StringDescription.toString(m);
+        return new MatchersPrinter().print(m);
     }
 
     protected boolean isMock(Object o) {

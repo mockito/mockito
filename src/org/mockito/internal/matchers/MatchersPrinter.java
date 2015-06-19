@@ -15,6 +15,10 @@ import org.mockito.internal.reporting.PrintSettings;
 
 @SuppressWarnings("unchecked")
 public class MatchersPrinter {
+
+    public String print(SelfDescribing matcher) {
+        return StringDescription.toString(matcher);
+    }
     
     public String getArgumentsLine(List<Matcher> matchers, PrintSettings printSettings) {
         Description result = new StringDescription();
