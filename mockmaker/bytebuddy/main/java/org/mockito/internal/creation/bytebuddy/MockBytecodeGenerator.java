@@ -12,9 +12,9 @@ import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 import net.bytebuddy.implementation.bind.annotation.FieldProxy;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.InterceptionDispatcher;
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.InterceptionDispatcher.FieldGetter;
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.InterceptionDispatcher.FieldSetter;
+import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
+import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod.FieldGetter;
+import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod.FieldSetter;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
 import org.mockito.internal.creation.util.SearchingClassLoader;
 
@@ -24,21 +24,24 @@ import static net.bytebuddy.description.modifier.FieldManifestation.FINAL;
 import static net.bytebuddy.description.modifier.Ownership.STATIC;
 import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
 import static net.bytebuddy.implementation.MethodDelegation.to;
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.any;
+import static net.bytebuddy.matcher.ElementMatchers.isEquals;
+import static net.bytebuddy.matcher.ElementMatchers.isHashCode;
 
 class MockBytecodeGenerator {
     private final ByteBuddy byteBuddy;
     private final Random random;
-    private final Implementation delegation;
+    private final Implementation toDispatcher;
 
     public MockBytecodeGenerator() {
         byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V5)
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
 
-        delegation = MethodDelegation.to(InterceptionDispatcher.class)
-                                     .appendParameterBinder(FieldProxy.Binder.install(FieldGetter.class,
-                                                                                      FieldSetter.class));
+        // Necessary for ConstructorInstantiator
+        toDispatcher = MethodDelegation.to(DispatcherDefaultingToRealMethod.class)
+                                       .appendParameterBinder(FieldProxy.Binder.install(FieldGetter.class,
+                                                                                        FieldSetter.class));
         random = new Random();
     }
 
@@ -47,7 +50,7 @@ class MockBytecodeGenerator {
                 byteBuddy.subclass(features.mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
                          .name(nameFor(features.mockedType))
                          .implement(features.interfaces.toArray(new Class<?>[features.interfaces.size()]))
-                         .method(any()).intercept(delegation)
+                         .method(any()).intercept(toDispatcher)
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                          .implement(MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
                          .method(isHashCode()).intercept(to(MockMethodInterceptor.ForHashCode.class))

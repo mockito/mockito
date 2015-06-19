@@ -121,7 +121,7 @@ public class MockMethodInterceptor implements Serializable {
         void setMockitoInterceptor(MockMethodInterceptor mockMethodInterceptor);
     }
 
-    public static class InterceptionDispatcher {
+    public static class DispatcherDefaultingToRealMethod {
         public interface FieldGetter<T> {
             T getValue();
         }
@@ -138,7 +138,7 @@ public class MockMethodInterceptor implements Serializable {
                                                     @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
             MockMethodInterceptor interceptor = fieldGetter.getValue();
             if (interceptor == null) {
-                return null;
+                return superCall.call();
             }
             return interceptor.doIntercept(
                     mock,
