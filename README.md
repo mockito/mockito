@@ -13,7 +13,7 @@ See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/
 
 ## Versioning
 
-Mockito has an automated release system, which imposed some change how the version numbers. While this is similar to semver, there's some differences. Let's look at at both versions `1.10.19` and `2.0.5-beta` they follow this scheme :
+Mockito has an automated release system, which imposed some change how the version numbers. While this is similar to [_semver_](http://semver.org/), there's some differences. Let's look at the following versions `1.10.19` and `2.0.5-beta` and `2.0.0` (not yet released) they follow this scheme :
 
 ```
 major.minor.build-tag
@@ -25,6 +25,12 @@ major.minor.build-tag
 | minor  | minor version, important enough change to bump this number                            |
 | build  | a released build number incremented automatically a pull request is merged            |
 | tag    | will probably be `-beta` or just nothing (during beta, breaking changes are expected) |
+
+That means : 
+ 
+ * `2.0.0` and `2.0.5-beta` are binary incompatible with `1.10.19`.
+ * `2.0.5-beta` is the fifth release beta of version `2.0.0`.
+ * `2.0.5-beta` is a work in progress, api may change and may not be graduated in version `2.0.0`
 
 ## Looking for support
 
