@@ -3,6 +3,7 @@
 *.ipr
 *.iws
 .idea
+*.eml
 
 # Eclipse
 .classpath
