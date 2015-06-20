@@ -20,6 +20,7 @@ import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.matchers.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.text.HamcrestPrinter;
 import org.mockito.invocation.Invocation;
 
 import java.io.ByteArrayOutputStream;
@@ -156,7 +157,7 @@ public class TestBase extends Assert {
     }
 
     protected static String describe(SelfDescribing m) {
-        return new MatchersPrinter().print(m);
+        return HamcrestPrinter.print(m);
     }
 
     protected boolean isMock(Object o) {

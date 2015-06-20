@@ -14,7 +14,7 @@ public class LocalizedMatcherTest extends TestBase {
     @Test
     public void shouldMatchTypesWhenActualMatcherHasCorrectType() throws Exception {
         //when
-        ContainsExtraTypeInformation equals10 = new Equals(10);
+        ContainsTypedDescription equals10 = new Equals(10);
         LocalizedMatcher m = new LocalizedMatcher((Matcher) equals10);
         
         //then
@@ -34,21 +34,21 @@ public class LocalizedMatcherTest extends TestBase {
     @Test
     public void shouldDescribeWithTypeInfoWhenActualMatcherHasCorrectType() throws Exception {
         //when
-        ContainsExtraTypeInformation equals10 = new Equals(10);
+        ContainsTypedDescription equals10 = new Equals(10);
         LocalizedMatcher m = new LocalizedMatcher((Matcher) equals10);
         
         //then
-        assertEquals("(Integer) 10", describe(m.withExtraTypeInfo()));
+        assertEquals("(Integer) 10", m.getTypedDescription());
     }
 
     @Test
     public void shouldDescribeStringWithType() throws Exception {
         //when
-        ContainsExtraTypeInformation e = new Equals("x");
+        ContainsTypedDescription e = new Equals("x");
         LocalizedMatcher m = new LocalizedMatcher((Matcher) e);
 
         //then
-        assertEquals("\"(String) x\"", describe(m.withExtraTypeInfo()));
+        assertEquals("(String) \"x\"", m.getTypedDescription());
     }
     
     @Test
@@ -57,7 +57,7 @@ public class LocalizedMatcherTest extends TestBase {
         LocalizedMatcher m = new LocalizedMatcher(Any.ANY);
         
         //then
-        assertSame(m, m.withExtraTypeInfo());
+        assertEquals(describe(m), m.getTypedDescription());
     }
     
     @Test

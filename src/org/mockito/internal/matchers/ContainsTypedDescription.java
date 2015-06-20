@@ -6,10 +6,8 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
-import org.hamcrest.SelfDescribing;
-
-public interface ContainsExtraTypeInformation extends Serializable {
-    SelfDescribing withExtraTypeInfo();
+public interface ContainsTypedDescription extends Serializable {
+    String getTypedDescription();
 
     boolean typeMatches(Object object);
 }

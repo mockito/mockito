@@ -28,14 +28,14 @@ public class EqualsTest extends TestBase {
     
     @Test
     public void shouldDescribeWithExtraTypeInfo() throws Exception {
-        String descStr = describe(new Equals(100).withExtraTypeInfo());
+        String descStr = new Equals(100).getTypedDescription();
         
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
     public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
-        String descStr = describe(new Equals(100L).withExtraTypeInfo());
+        String descStr = new Equals(100L).getTypedDescription();
         
         assertEquals("(Long) 100", descStr);
     }
@@ -71,7 +71,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypes() throws Exception {
         //when
-        ContainsExtraTypeInformation equals = new Equals(10);
+        ContainsTypedDescription equals = new Equals(10);
         
         //then
         assertTrue(equals.typeMatches(10));
@@ -81,7 +81,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypesSafelyWhenActualIsNull() throws Exception {
         //when
-        ContainsExtraTypeInformation equals = new Equals(null);
+        ContainsTypedDescription equals = new Equals(null);
         
         //then
         assertFalse(equals.typeMatches(10));
@@ -90,7 +90,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypesSafelyWhenGivenIsNull() throws Exception {
         //when
-        ContainsExtraTypeInformation equals = new Equals(10);
+        ContainsTypedDescription equals = new Equals(10);
         
         //then
         assertFalse(equals.typeMatches(null));

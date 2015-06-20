@@ -41,7 +41,7 @@ public class MatchersPrinterTest extends TestBase {
         //when
         String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), new Equals("x")), PrintSettings.verboseMatchers(1));
         //then
-        assertEquals("(1, \"(String) x\");", line); //TODO SF this is awkward, it should be: (String) "x"
+        assertEquals("(1, (String) \"x\");", line);
     }
 
     @Test
