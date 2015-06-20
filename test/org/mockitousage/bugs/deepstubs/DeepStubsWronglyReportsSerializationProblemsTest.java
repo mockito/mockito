@@ -1,4 +1,4 @@
-package org.mockitousage.bugs;
+package org.mockitousage.bugs.deepstubs;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.mockitousage.bugs;
+package org.mockitousage.bugs.injection;
 
 
 import org.junit.Test;

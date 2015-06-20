@@ -4,11 +4,6 @@
  */
 package org.mockitousage.bugs;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.List;
 import org.fest.assertions.Assertions;
 import org.junit.Assume;
 import org.junit.Before;
@@ -21,8 +16,15 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.exceptions.MockitoLimitations;
 import org.mockitoutil.TestBase;
 
+import java.util.List;
+
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
- * See bug 212
+ * See google code bug 212
  *
  * Mocking methods that are declared on a non-public parent is not supported.
  * We cannot really fail fast during mock creation because one might mock a method that is not declared on a parent - this would be valid.

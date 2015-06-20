@@ -3,11 +3,14 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockitousage.bugs;
+package org.mockitousage.bugs.varargs;
 
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
 

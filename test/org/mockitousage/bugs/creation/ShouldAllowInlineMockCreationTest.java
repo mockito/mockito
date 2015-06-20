@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockitousage.bugs;
+package org.mockitousage.bugs.creation;
 
 import org.fest.assertions.Assertions;
 import org.junit.Test;
