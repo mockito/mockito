@@ -37,6 +37,14 @@ public class MatchersPrinterTest extends TestBase {
     }
 
     @Test
+    public void shouldDescribeStringMatcher() {
+        //when
+        String line = printer.getArgumentsLine((List) Arrays.asList(new Equals(1L), new Equals("x")), PrintSettings.verboseMatchers(1));
+        //then
+        assertEquals("(1, \"(String) x\");", line); //TODO SF this is awkward, it should be: (String) "x"
+    }
+
+    @Test
     public void shouldGetVerboseArgumentsInBlock() {
         //when
         String line = printer.getArgumentsBlock((List) Arrays.asList(new Equals(1L), new Equals(2)), PrintSettings.verboseMatchers(0, 1));

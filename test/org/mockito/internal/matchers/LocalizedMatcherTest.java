@@ -40,6 +40,16 @@ public class LocalizedMatcherTest extends TestBase {
         //then
         assertEquals("(Integer) 10", describe(m.withExtraTypeInfo()));
     }
+
+    @Test
+    public void shouldDescribeStringWithType() throws Exception {
+        //when
+        ContainsExtraTypeInformation e = new Equals("x");
+        LocalizedMatcher m = new LocalizedMatcher((Matcher) e);
+
+        //then
+        assertEquals("\"(String) x\"", describe(m.withExtraTypeInfo()));
+    }
     
     @Test
     public void shouldNotDescribeWithTypeInfoWhenActualMatcherDoesNotHaveCorrectType() throws Exception {
