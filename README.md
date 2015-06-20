@@ -1,5 +1,9 @@
-![Mockito](https://raw.githubusercontent.com/mockito/mockito/master/javadoc/org/mockito/logo.png)
-  
+<a href="http://site.mockito.org">
+<img src="https://raw.githubusercontent.com/mockito/mockito/master/javadoc/org/mockito/logo.png"
+     srcset="https://raw.githubusercontent.com/mockito/mockito/master/javadoc/org/mockito/logo@2x.png 2x"
+     alt="Mockito" />
+</a>
+
 Tasty mocking framework for unit tests in Java
 
 ![build status](https://img.shields.io/badge/build-info =>-yellow.svg) [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://coveralls.io/repos/mockito/mockito/badge.svg)](https://coveralls.io/r/mockito/mockito)
