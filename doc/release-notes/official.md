@@ -1,3 +1,12 @@
+### 2.0.17-beta (2015-06-20 20:39 UTC)
+
+* Authors: 2
+* Commits: 6
+  * 4: Szczepan Faber
+  * 2: Brice Dutheil
+* Improvements: 1
+  * nicer textual printing of typed parameters [(#236)](https://github.com/mockito/mockito/issues/236)
+
 ### 2.0.16-beta (2015-06-20 00:09 UTC)
 
 * Authors: 1
