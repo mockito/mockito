@@ -39,6 +39,13 @@ public class EqualsTest extends TestBase {
         
         assertEquals("(Long) 100", descStr);
     }
+
+    @Test
+    public void shouldDescribeWithTypeOfString() throws Exception {
+        String descStr = new Equals("x").getTypedDescription();
+
+        assertEquals("(String) \"x\"", descStr);
+    }
     
     @Test
     public void shouldAppendQuotingForString() {
