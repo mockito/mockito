@@ -1,3 +1,12 @@
+### 2.0.16-beta (2015-06-20 00:09 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Brice Dutheil
+* Improvements: 2
+  * Fixes #220 constructor invoking methods raise NPE [(#235)](https://github.com/mockito/mockito/pull/235)
+  * 2.0.8-beta -> 2.0.9-beta 'Unable to initialize @Spy annotated field [(#220)](https://github.com/mockito/mockito/issues/220)
+
 ### 2.0.15-beta (2015-06-18 16:49 UTC)
 
 * Authors: 2
