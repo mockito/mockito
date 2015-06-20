@@ -1,14 +1,16 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.mockito.internal.util.StringJoiner.join;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
 import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.creation.instance.InstantiatorProvider;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
+
+import static org.mockito.internal.util.StringJoiner.join;
 
 public class ByteBuddyMockMaker implements MockMaker {
 
@@ -25,7 +27,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         T mockInstance = null;
         try {
             mockInstance = instantiator.newInstance(mockedProxyType);
-            MockMethodInterceptor.MockAccess mockAccess = (MockMethodInterceptor.MockAccess) mockInstance;
+            MockAccess mockAccess = (MockAccess) mockInstance;
             mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
 
             return ensureMockIsAssignableToMockedType(settings, mockInstance);
@@ -75,14 +77,14 @@ public class ByteBuddyMockMaker implements MockMaker {
     }
 
     public MockHandler getHandler(Object mock) {
-        if (!(mock instanceof MockMethodInterceptor.MockAccess)) {
+        if (!(mock instanceof MockAccess)) {
             return null;
         }
-        return ((MockMethodInterceptor.MockAccess) mock).getMockitoInterceptor().getMockHandler();
+        return ((MockAccess) mock).getMockitoInterceptor().getMockHandler();
     }
 
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
-        ((MockMethodInterceptor.MockAccess) mock).setMockitoInterceptor(
+        ((MockAccess) mock).setMockitoInterceptor(
                 new MockMethodInterceptor(asInternalMockHandler(newHandler), settings)
         );
     }
