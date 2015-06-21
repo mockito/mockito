@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 
 import java.io.Serializable;
 
-public class NotNull extends MockitoMatcher<Object> implements Serializable {
+public class NotNull implements MockitoMatcher<Object>, Serializable {
 
     public static final NotNull NOT_NULL = new NotNull();
 
@@ -20,7 +20,7 @@ public class NotNull extends MockitoMatcher<Object> implements Serializable {
         return actual != null;
     }
 
-    public String describe() {
+    public String toString() {
         return "notNull()";
     }
 }

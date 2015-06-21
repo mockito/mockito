@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class VarargCapturingMatcher<T> extends MockitoMatcher<T> implements CapturesArguments, VarargMatcher, Serializable {
+public class VarargCapturingMatcher<T> implements MockitoMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
     private final LinkedList<List<T>> arguments = new LinkedList<List<T>>();
 
@@ -19,7 +19,7 @@ public class VarargCapturingMatcher<T> extends MockitoMatcher<T> implements Capt
         return true;
     }
 
-    public String describe() {
+    public String toString() {
         return "<Capturing variable argument>";
     }
 

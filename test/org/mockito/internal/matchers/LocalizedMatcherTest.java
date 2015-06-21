@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.matchers;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockito.MockitoMatcher;
 import org.mockitoutil.TestBase;
@@ -15,7 +14,7 @@ public class LocalizedMatcherTest extends TestBase {
     @Test
     public void shouldMatchTypesWhenActualMatcherHasCorrectType() throws Exception {
         //when
-        ContainsTypedDescription equals10 = new Equals(10);
+        ContainsExtraTypeInfo equals10 = new Equals(10);
         LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) equals10);
         
         //then
@@ -35,21 +34,21 @@ public class LocalizedMatcherTest extends TestBase {
     @Test
     public void shouldDescribeWithTypeInfoWhenActualMatcherHasCorrectType() throws Exception {
         //when
-        ContainsTypedDescription equals10 = new Equals(10);
+        ContainsExtraTypeInfo equals10 = new Equals(10);
         LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) equals10);
         
         //then
-        assertEquals("(Integer) 10", m.getTypedDescription());
+        assertEquals("(Integer) 10", m.toStringWithType());
     }
 
     @Test
     public void shouldDescribeStringWithType() throws Exception {
         //when
-        ContainsTypedDescription e = new Equals("x");
+        ContainsExtraTypeInfo e = new Equals("x");
         LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) e);
 
         //then
-        assertEquals("(String) \"x\"", m.getTypedDescription());
+        assertEquals("(String) \"x\"", m.toStringWithType());
     }
     
     @Test
@@ -58,7 +57,7 @@ public class LocalizedMatcherTest extends TestBase {
         LocalizedMatcher m = new LocalizedMatcher(Any.ANY);
         
         //then
-        assertEquals(m.describe(), m.getTypedDescription());
+        assertEquals(m.toString(), m.toStringWithType());
     }
     
     @Test

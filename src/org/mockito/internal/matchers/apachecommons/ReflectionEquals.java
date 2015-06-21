@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 
 import java.io.Serializable;
 
-public class ReflectionEquals extends MockitoMatcher<Object> implements Serializable {
+public class ReflectionEquals implements MockitoMatcher<Object>, Serializable {
 
     private final Object wanted;
     private final String[] excludeFields;
@@ -23,7 +23,7 @@ public class ReflectionEquals extends MockitoMatcher<Object> implements Serializ
         return EqualsBuilder.reflectionEquals(wanted, actual, excludeFields);
     }
 
-    public String describe() {
+    public String toString() {
         return "refEq(" + wanted + ")";
     }
 }

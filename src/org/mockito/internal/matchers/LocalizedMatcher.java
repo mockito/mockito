@@ -11,7 +11,7 @@ import org.mockito.invocation.Location;
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class LocalizedMatcher extends MockitoMatcher implements ContainsTypedDescription, CapturesArguments, MatcherDecorator, Serializable {
+public class LocalizedMatcher implements MockitoMatcher, ContainsExtraTypeInfo, CapturesArguments, MatcherDecorator, Serializable {
 
     private final MockitoMatcher actualMatcher;
     private final Location location;
@@ -26,30 +26,25 @@ public class LocalizedMatcher extends MockitoMatcher implements ContainsTypedDes
         return actualMatcher.matches(item);
     }
 
-    public String describe() {
-        return actualMatcher.describe();
+    public String toString() {
+        return actualMatcher.toString();
     }
 
     public Location getLocation() {
         return location;
     }
     
-    @Override
-    public String toString() {
-        return "Localized: " + this.actualMatcher;
-    }
-
-    public String getTypedDescription() {
-        if (actualMatcher instanceof ContainsTypedDescription) {
-            return ((ContainsTypedDescription) actualMatcher).getTypedDescription();
+    public String toStringWithType() {
+        if (actualMatcher instanceof ContainsExtraTypeInfo) {
+            return ((ContainsExtraTypeInfo) actualMatcher).toStringWithType();
         } else {
-            return actualMatcher.describe();
+            return actualMatcher.toString();
         }
     }
 
-    public boolean typeMatches(Object object) {
-        return actualMatcher instanceof ContainsTypedDescription
-                && ((ContainsTypedDescription) actualMatcher).typeMatches(object);
+    public boolean typeMatches(Object target) {
+        return actualMatcher instanceof ContainsExtraTypeInfo
+                && ((ContainsExtraTypeInfo) actualMatcher).typeMatches(target);
     }
 
     public void captureFrom(Object argument) {

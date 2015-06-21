@@ -10,7 +10,7 @@ import org.mockito.MockitoMatcher;
 import java.io.Serializable;
 
 
-public class Contains extends MockitoMatcher<String> implements Serializable {
+public class Contains implements MockitoMatcher<String>, Serializable {
 
     private final String substring;
 
@@ -22,7 +22,7 @@ public class Contains extends MockitoMatcher<String> implements Serializable {
         return actual != null && ((String) actual).contains(substring);
     }
 
-    public String describe() {
+    public String toString() {
         return "contains(\"" + substring + "\")";
     }
 }

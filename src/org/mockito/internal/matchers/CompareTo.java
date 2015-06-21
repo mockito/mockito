@@ -7,8 +7,10 @@ package org.mockito.internal.matchers;
 
 import org.mockito.MockitoMatcher;
 
+import java.io.Serializable;
 
-public abstract class CompareTo<T extends Comparable<T>> extends MockitoMatcher<T> {
+
+public abstract class CompareTo<T extends Comparable<T>> implements MockitoMatcher<T>, Serializable {
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {
@@ -24,7 +26,7 @@ public abstract class CompareTo<T extends Comparable<T>> extends MockitoMatcher<
         return matchResult(((Comparable) actual).compareTo(wanted));
     }
 
-    public String describe() {
+    public String toString() {
         return getName() + "(" + wanted + ")";
     }
     

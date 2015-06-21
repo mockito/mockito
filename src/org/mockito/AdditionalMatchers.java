@@ -430,7 +430,7 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static String find(String regex) {
-        return reportMatcher(new Find(regex)).<String>returnNull();
+        return reportMatcher(new Find(regex)).returnNull();
     }
 
     /**

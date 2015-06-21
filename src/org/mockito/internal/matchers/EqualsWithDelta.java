@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 
 import java.io.Serializable;
 
-public class EqualsWithDelta extends MockitoMatcher<Number> implements Serializable {
+public class EqualsWithDelta implements MockitoMatcher<Number>, Serializable {
 
     private final Number wanted;
     private final Number delta;
@@ -34,7 +34,7 @@ public class EqualsWithDelta extends MockitoMatcher<Number> implements Serializa
                         + delta.doubleValue();
     }
 
-    public String describe() {
+    public String toString() {
         return "eq(" + wanted + ", " + delta + ")";
     }
 }

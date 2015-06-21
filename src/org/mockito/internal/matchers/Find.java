@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import org.mockito.MockitoMatcher;
 
-public class Find extends MockitoMatcher<String> implements Serializable {
+public class Find implements MockitoMatcher<String>, Serializable {
 
     private final String regex;
 
@@ -22,7 +22,7 @@ public class Find extends MockitoMatcher<String> implements Serializable {
         return actual != null && Pattern.compile(regex).matcher((String) actual).find();
     }
 
-    public String describe() {
+    public String toString() {
         return "find(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")";
     }
 }

@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 
 import java.io.Serializable;
 
-public class StartsWith extends MockitoMatcher<String> implements Serializable {
+public class StartsWith implements MockitoMatcher<String>, Serializable {
 
     private final String prefix;
 
@@ -21,7 +21,7 @@ public class StartsWith extends MockitoMatcher<String> implements Serializable {
         return actual != null && ((String) actual).startsWith(prefix);
     }
 
-    public String describe() {
+    public String toString() {
         return "startsWith(\"" + prefix + "\")";
     }
 }

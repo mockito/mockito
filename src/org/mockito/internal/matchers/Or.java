@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class Or extends MockitoMatcher implements Serializable {
+public class Or implements MockitoMatcher, Serializable {
 
     private final List<MockitoMatcher> matchers;
 
@@ -29,11 +29,11 @@ public class Or extends MockitoMatcher implements Serializable {
         return false;
     }
 
-    public String describe() {
+    public String toString() {
         //TODO SF here and in other places we should reuse ValuePrinter
         StringBuilder sb = new StringBuilder("or(");
         for (Iterator<MockitoMatcher> it = matchers.iterator(); it.hasNext();) {
-            sb.append(it.next().describe());
+            sb.append(it.next().toString());
             if (it.hasNext()) {
                 sb.append(", ");
             }

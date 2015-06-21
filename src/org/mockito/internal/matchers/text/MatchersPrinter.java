@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers.text;
 
 import org.mockito.MockitoMatcher;
-import org.mockito.internal.matchers.ContainsTypedDescription;
+import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 import org.mockito.internal.reporting.PrintSettings;
 
 import java.util.Iterator;
@@ -31,10 +31,10 @@ public class MatchersPrinter {
         List out = new LinkedList();
         int i = 0;
         for (final MockitoMatcher matcher : matchers) {
-            if (matcher instanceof ContainsTypedDescription && printSettings.extraTypeInfoFor(i)) {
-                out.add(new FormattedText(((ContainsTypedDescription) matcher).getTypedDescription()));
+            if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {
+                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType()));
             } else {
-                out.add(new FormattedText(matcher.describe()));
+                out.add(new FormattedText(matcher.toString()));
             }
             i++;
         }

@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class AnyVararg extends MockitoMatcher implements VarargMatcher, Serializable {
+public class AnyVararg implements MockitoMatcher, VarargMatcher, Serializable {
 
     public static final MockitoMatcher ANY_VARARG = new AnyVararg();
 
@@ -17,7 +17,7 @@ public class AnyVararg extends MockitoMatcher implements VarargMatcher, Serializ
         return true;
     }
 
-    public String describe() {
+    public String toString() {
         return "<any>";
     }
 }

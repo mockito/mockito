@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class And extends MockitoMatcher implements Serializable {
+public class And implements MockitoMatcher, Serializable {
 
     private final List<MockitoMatcher> matchers;
 
@@ -29,11 +29,11 @@ public class And extends MockitoMatcher implements Serializable {
         return true;
     }
 
-    public String describe() {
+    public String toString() {
         StringBuilder out = new StringBuilder();
         out.append("and(");
         for (Iterator<MockitoMatcher> it = matchers.iterator(); it.hasNext();) {
-            out.append(it.next().describe());
+            out.append(it.next().toString());
             if (it.hasNext()) {
                 out.append(", ");
             }

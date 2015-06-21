@@ -48,6 +48,6 @@ public class ComparableMatchersTest extends TestBase {
         assertEquals(equals, compareTo.matches("b"));
         assertEquals(higher, compareTo.matches("c"));
 
-        assertEquals(name + "(b)", compareTo.describe());
+        assertEquals(name + "(b)", compareTo.toString());
     }
 }

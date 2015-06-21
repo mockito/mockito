@@ -10,7 +10,7 @@ import org.mockito.internal.matchers.text.ValuePrinter;
 
 import java.io.Serializable;
 
-public class Same extends MockitoMatcher<Object> implements Serializable {
+public class Same implements MockitoMatcher<Object>, Serializable {
 
     private final Object wanted;
 
@@ -22,8 +22,7 @@ public class Same extends MockitoMatcher<Object> implements Serializable {
         return wanted == actual;
     }
 
-    public String describe() {
-        //TODO SF we should consider passing some kind of Formatter to the describe() method
+    public String toString() {
         return "same(" + new ValuePrinter().appendValue(wanted).toString() + ")";
     }
 }

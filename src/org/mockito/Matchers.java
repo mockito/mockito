@@ -61,7 +61,7 @@ import java.util.Set;
  * Example:
  * 
  * <pre class="code"><code class="java">
- *   class ListOfTwoElements extends MockitoMatcher&lt;List&gt; {
+ *   class ListOfTwoElements implements MockitoMatcher&lt;List&gt; {
  *      public boolean matches(Object list) {
  *          return ((List) list).size() == 2;
  *      }

@@ -6,10 +6,11 @@
 package org.mockito.internal.matchers;
 
 import org.mockito.MockitoMatcher;
+import org.mockito.internal.matchers.text.ValuePrinter;
 
 import java.io.Serializable;
 
-public class Equals extends MockitoMatcher<Object> implements ContainsTypedDescription, Serializable {
+public class Equals implements MockitoMatcher<Object>, ContainsExtraTypeInfo, Serializable {
 
     private final Object wanted;
 
@@ -21,22 +22,12 @@ public class Equals extends MockitoMatcher<Object> implements ContainsTypedDescr
         return Equality.areEqual(this.wanted, actual);
     }
 
-    public String describe() {
+    public String toString() {
         return describe(wanted);
     }
 
-    public String describe(Object object) {
-        return quoting() + object + quoting();
-    }
-
-    private String quoting() {
-        if (wanted instanceof String) {
-            return "\"";
-        } else if (wanted instanceof Character) {
-            return "'";
-        } else {
-            return "";
-        }
+    private String describe(Object object) {
+        return new ValuePrinter().appendValue(object).toString();
     }
 
     protected final Object getWanted() {
@@ -57,11 +48,11 @@ public class Equals extends MockitoMatcher<Object> implements ContainsTypedDescr
         return 1;
     }
 
-    public String getTypedDescription() {
+    public String toStringWithType() {
         return "("+ wanted.getClass().getSimpleName() +") " + describe(wanted);
     }
 
-    public boolean typeMatches(Object object) {
-        return wanted != null && object != null && object.getClass() == wanted.getClass();
+    public boolean typeMatches(Object target) {
+        return wanted != null && target != null && target.getClass() == wanted.getClass();
     }
 }

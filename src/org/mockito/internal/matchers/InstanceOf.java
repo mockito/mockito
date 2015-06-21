@@ -10,7 +10,7 @@ import org.mockito.MockitoMatcher;
 import java.io.Serializable;
 
 
-public class InstanceOf extends MockitoMatcher<Object> implements Serializable {
+public class InstanceOf implements MockitoMatcher<Object>, Serializable {
 
     private final Class<?> clazz;
 
@@ -22,7 +22,7 @@ public class InstanceOf extends MockitoMatcher<Object> implements Serializable {
         return (actual != null) && clazz.isAssignableFrom(actual.getClass());
     }
 
-    public String describe() {
+    public String toString() {
         return "isA(" + clazz.getName() + ")";
     }
 }

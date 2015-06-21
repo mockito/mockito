@@ -60,7 +60,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {
         //given
         Equals matcherWithBadDescription = new Equals(20) {
-            public String describe() {
+            public String toString() {
                 return "10";
             }
         };

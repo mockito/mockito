@@ -10,7 +10,7 @@ import org.mockito.MockitoMatcher;
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class Not extends MockitoMatcher implements Serializable {
+public class Not implements MockitoMatcher, Serializable {
 
     private final MockitoMatcher first;
 
@@ -22,7 +22,7 @@ public class Not extends MockitoMatcher implements Serializable {
         return !first.matches(actual);
     }
 
-    public String describe() {
-        return "not(" + first.describe() + ")";
+    public String toString() {
+        return "not(" + first.toString() + ")";
     }
 }

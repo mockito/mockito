@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class CapturingMatcher<T> extends MockitoMatcher<T> implements CapturesArguments, VarargMatcher, Serializable {
+public class CapturingMatcher<T> implements MockitoMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
     
     private final LinkedList<Object> arguments = new LinkedList<Object>();
 
@@ -20,7 +20,7 @@ public class CapturingMatcher<T> extends MockitoMatcher<T> implements CapturesAr
         return true;
     }    
 
-    public String describe() {
+    public String toString() {
         return "<Capturing argument>";
     }
 

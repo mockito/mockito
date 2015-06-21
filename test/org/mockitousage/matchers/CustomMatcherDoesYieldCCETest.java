@@ -33,7 +33,6 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
 
     private MockitoMatcher<String> isStringWithTextFoo() {
         return new MockitoMatcher<String>() {
-            @Override
             public boolean matches(Object argument) {
                 // casting that should not be thrown:
                 String str = (String) argument;

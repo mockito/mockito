@@ -9,7 +9,7 @@ import org.mockito.MockitoMatcher;
 
 import java.io.Serializable;
 
-public class Matches extends MockitoMatcher<Object> implements Serializable {
+public class Matches implements MockitoMatcher<Object>, Serializable {
 
     private final String regex;
 
@@ -21,7 +21,7 @@ public class Matches extends MockitoMatcher<Object> implements Serializable {
         return (actual instanceof String) && ((String) actual).matches(regex);
     }
 
-    public String describe() {
+    public String toString() {
         return "matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")";
     }
 }

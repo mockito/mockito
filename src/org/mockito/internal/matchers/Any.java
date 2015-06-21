@@ -10,7 +10,7 @@ import java.io.Serializable;
 import org.mockito.MockitoMatcher;
 
 @SuppressWarnings("unchecked")
-public class Any extends MockitoMatcher implements Serializable {
+public class Any implements MockitoMatcher, Serializable {
 
     public static final Any ANY = new Any();
 
@@ -21,7 +21,7 @@ public class Any extends MockitoMatcher implements Serializable {
         return true;
     }
 
-    public String describe() {
+    public String toString() {
         return "<any>";
     }
 }

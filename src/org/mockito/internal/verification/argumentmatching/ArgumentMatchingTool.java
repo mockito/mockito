@@ -5,7 +5,7 @@
 package org.mockito.internal.verification.argumentmatching;
 
 import org.mockito.MockitoMatcher;
-import org.mockito.internal.matchers.ContainsTypedDescription;
+import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,10 +24,10 @@ public class ArgumentMatchingTool {
         List<Integer> suspicious = new LinkedList<Integer>();
         int i = 0;
         for (MockitoMatcher m : matchers) {
-            if (m instanceof ContainsTypedDescription
+            if (m instanceof ContainsExtraTypeInfo
                     && !safelyMatches(m, arguments[i]) 
                     && toStringEquals(m, arguments[i])
-                    && !((ContainsTypedDescription) m).typeMatches(arguments[i])) {
+                    && !((ContainsExtraTypeInfo) m).typeMatches(arguments[i])) {
                 suspicious.add(i);
             }
             i++;
@@ -44,6 +44,6 @@ public class ArgumentMatchingTool {
     }
 
     private boolean toStringEquals(MockitoMatcher m, Object arg) {
-        return m.describe().equals(arg == null ? "null" : arg.toString());
+        return m.toString().equals(arg == null ? "null" : arg.toString());
     }
 }

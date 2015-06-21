@@ -40,18 +40,19 @@ public class ArrayEquals extends Equals {
         return false;
     }
 
-    public String describe() {
+    public String toString() {
         if (getWanted() != null && getWanted().getClass().isArray()) {
             return appendArray(createObjectArray(getWanted()));
         } else {
-            return super.describe();
+            return super.toString();
         }
     }
 
     private String appendArray(Object[] array) {
+        //TODO SF overlap with ValuePrinter
         StringBuilder out = new StringBuilder("[");
         for (int i = 0; i < array.length; i++) {
-            out.append(new Equals(array[i]).describe());
+            out.append(new Equals(array[i]).toString());
             if (i != array.length - 1) {
                 out.append(", ");
             }

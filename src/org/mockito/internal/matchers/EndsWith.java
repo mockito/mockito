@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import org.mockito.MockitoMatcher;
 
-public class EndsWith extends MockitoMatcher<String> implements Serializable {
+public class EndsWith implements MockitoMatcher<String>, Serializable {
 
     private final String suffix;
 
@@ -21,7 +21,7 @@ public class EndsWith extends MockitoMatcher<String> implements Serializable {
         return actual != null && ((String) actual).endsWith(suffix);
     }
 
-    public String describe() {
+    public String toString() {
         return "endsWith(\"" + suffix + "\")";
     }
 }

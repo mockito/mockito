@@ -28,49 +28,49 @@ public class EqualsTest extends TestBase {
     
     @Test
     public void shouldDescribeWithExtraTypeInfo() throws Exception {
-        String descStr = new Equals(100).getTypedDescription();
+        String descStr = new Equals(100).toStringWithType();
         
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
     public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
-        String descStr = new Equals(100L).getTypedDescription();
+        String descStr = new Equals(100L).toStringWithType();
         
         assertEquals("(Long) 100", descStr);
     }
 
     @Test
     public void shouldDescribeWithTypeOfString() throws Exception {
-        String descStr = new Equals("x").getTypedDescription();
+        String descStr = new Equals("x").toStringWithType();
 
         assertEquals("(String) \"x\"", descStr);
     }
     
     @Test
     public void shouldAppendQuotingForString() {
-        String descStr = new Equals("str").describe();
+        String descStr = new Equals("str").toString();
         
         assertEquals("\"str\"", descStr);
     }
 
     @Test
     public void shouldAppendQuotingForChar() {
-        String descStr = new Equals('s').describe();
+        String descStr = new Equals('s').toString();
         
         assertEquals("'s'", descStr);
     }
     
     @Test
     public void shouldDescribeUsingToString() {
-        String descStr = new Equals(100).describe();
+        String descStr = new Equals(100).toString();
         
         assertEquals("100", descStr);
     }
 
     @Test
     public void shouldDescribeNull() {
-        String descStr = new Equals(null).describe();
+        String descStr = new Equals(null).toString();
         
         assertEquals("null", descStr);
     }
@@ -78,7 +78,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypes() throws Exception {
         //when
-        ContainsTypedDescription equals = new Equals(10);
+        ContainsExtraTypeInfo equals = new Equals(10);
         
         //then
         assertTrue(equals.typeMatches(10));
@@ -88,7 +88,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypesSafelyWhenActualIsNull() throws Exception {
         //when
-        ContainsTypedDescription equals = new Equals(null);
+        ContainsExtraTypeInfo equals = new Equals(null);
         
         //then
         assertFalse(equals.typeMatches(10));
@@ -97,7 +97,7 @@ public class EqualsTest extends TestBase {
     @Test
     public void shouldMatchTypesSafelyWhenGivenIsNull() throws Exception {
         //when
-        ContainsTypedDescription equals = new Equals(10);
+        ContainsExtraTypeInfo equals = new Equals(10);
         
         //then
         assertFalse(equals.typeMatches(null));
