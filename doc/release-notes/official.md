@@ -1,3 +1,11 @@
+### 2.0.19-beta (2015-06-21 18:06 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Test error after upgrading Mockito from 2.0.14-beta to 2.0.15-beta [(#237)](https://github.com/mockito/mockito/issues/237)
+
 ### 2.0.18-beta (2015-06-21 18:00 UTC)
 
 * Authors: 1
