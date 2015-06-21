@@ -4,14 +4,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coveralls plugin depends on cobertura plugin
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.6.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 
     configurations.classpath.exclude group: 'com.android.tools.build', module: 'gradle'
 }
+
+plugins {
+    id 'net.saliman.cobertura' version '2.2.7'
+    id "com.github.kt3k.coveralls" version "2.4.0"
+}
+
 
 apply plugin: 'maven-publish'
 
@@ -67,7 +71,9 @@ dependencies {
 
     testCompile 'org.ow2.asm:asm:5.0.4'
     testCompile fileTree("lib/test")
+
     testRuntime configurations.provided
+    testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
 
     testUtil sourceSets.test.output
 }

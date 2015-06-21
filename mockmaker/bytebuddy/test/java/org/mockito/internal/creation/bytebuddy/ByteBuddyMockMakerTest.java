@@ -1,8 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import java.util.List;
+import net.bytebuddy.ByteBuddy;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,7 +15,12 @@ import org.mockito.plugins.MockMaker;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.ObjenesisStd;
-import net.bytebuddy.ByteBuddy;
+
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class ByteBuddyMockMakerTest {
 
@@ -95,6 +98,7 @@ public class ByteBuddyMockMakerTest {
         // given
         ClassLoader classpath_without_objenesis = ClassLoaders.excludingClassLoader()
                 .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
+                .withCodeSourceUrlOf(coverageTool())
                 .without("org.objenesis")
                 .build();
         boolean initialize_class = true;
@@ -122,6 +126,7 @@ public class ByteBuddyMockMakerTest {
         // given
         ClassLoader classpath_with_objenesis = ClassLoaders.excludingClassLoader()
                 .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
+                .withCodeSourceUrlOf(coverageTool())
                 .build();
         boolean initialize_class = true;
 
