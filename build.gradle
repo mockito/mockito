@@ -7,15 +7,12 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
-
-    configurations.classpath.exclude group: 'com.android.tools.build', module: 'gradle'
 }
-
-plugins {
-    id 'net.saliman.cobertura' version '2.2.7'
-    id "com.github.kt3k.coveralls" version "2.4.0"
-}
-
+apply plugin: 'java'
+group = 'org.mockito'
+description = 'Core API and implementation.'
+sourceCompatibility = 1.5
+targetCompatibility = 1.5
 
 apply plugin: 'maven-publish'
 
@@ -28,11 +25,6 @@ allprojects {
         jcenter()
     }
 }
-
-group = 'org.mockito'
-description = 'Core API and implementation.'
-sourceCompatibility = 1.5
-targetCompatibility = 1.5
 
 configurations {
     provided
@@ -73,7 +65,6 @@ dependencies {
     testCompile fileTree("lib/test")
 
     testRuntime configurations.provided
-    testRuntime 'org.slf4j:slf4j-nop:1.7.12' // for cobertura
 
     testUtil sourceSets.test.output
 }
@@ -104,6 +95,8 @@ task javadocJar(type: Jar) {
     with licenseFiles
     from mockitoJavadoc
 }
+
+task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
 
 def antCommand = "ant"
 

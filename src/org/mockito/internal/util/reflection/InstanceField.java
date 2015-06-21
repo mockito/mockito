@@ -71,6 +71,15 @@ public class InstanceField {
     }
 
     /**
+     * Check if the field is synthetic.
+     *
+     * @return <code>true</code> if the field is synthetic, else <code>false</code>.
+     */
+    public boolean isSynthetic() {
+        return field.isSynthetic();
+    }
+
+    /**
      * Returns the annotation instance for the given annotation type.
      *
      * @param annotationClass Tha annotation type to retrieve.
@@ -104,6 +113,11 @@ public class InstanceField {
      */
     public String name() {
         return field.getName();
+    }
+
+    @Override
+    public String toString() {
+        return name();
     }
 
     @Override
