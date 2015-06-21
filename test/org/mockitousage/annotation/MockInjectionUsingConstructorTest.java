@@ -25,7 +25,10 @@ import java.util.List;
 import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,6 +64,7 @@ public class MockInjectionUsingConstructorTest {
     @Test
     public void constructor_is_called_for_each_test_in_test_class() throws Exception {
         // given
+        junit_test_with_3_tests_methods.constructor_instantiation = 0;
         JUnitCore jUnitCore = new JUnitCore();
         jUnitCore.addListener(new TextListener(System.out));
 
