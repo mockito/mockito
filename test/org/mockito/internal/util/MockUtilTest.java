@@ -5,15 +5,17 @@
 
 package org.mockito.internal.util;
 
-import static org.mockito.Mockito.withSettings;
-import java.util.ArrayList;
-import java.util.List;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
@@ -80,11 +82,11 @@ public class MockUtilTest extends TestBase {
     interface SomeInterface {}
 
     @Test
-    public void should_konw_if_type_is_mockable() throws Exception {
-        assertFalse(mockUtil.isTypeMockable(FinalClass.class));
-        assertFalse(mockUtil.isTypeMockable(int.class));
+    public void should_know_if_type_is_mockable() throws Exception {
+        assertFalse(mockUtil.typeMockabilityOf(FinalClass.class).mockable());
+        assertFalse(mockUtil.typeMockabilityOf(int.class).mockable());
 
-        assertTrue(mockUtil.isTypeMockable(SomeClass.class));
-        assertTrue(mockUtil.isTypeMockable(SomeInterface.class));
+        assertTrue(mockUtil.typeMockabilityOf(SomeClass.class).mockable());
+        assertTrue(mockUtil.typeMockabilityOf(SomeInterface.class).mockable());
     }
 }

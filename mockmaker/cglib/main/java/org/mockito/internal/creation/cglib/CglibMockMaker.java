@@ -56,7 +56,23 @@ public class CglibMockMaker implements MockMaker {
     }
 
     @Override
-    public boolean isTypeMockable(Class<?> type) {
-        return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+    public TypeMockability isTypeMockable(final Class<?> type) {
+        return new TypeMockability() {
+            @Override
+            public boolean mockable() {
+                return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+            }
+
+            @Override
+            public String nonMockableReason() {
+                if(type.isPrimitive()) {
+                    return "primitive type";
+                }
+                if(Modifier.isFinal(type.getModifiers())) {
+                    return "final or anonymous class";
+                }
+                return join("not handled type");
+            }
+        };
     }
 }

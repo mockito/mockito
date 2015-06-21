@@ -20,7 +20,6 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("unchecked")
 public class MockCreationValidatorTest {
 
-    final class FinalClass {}
     MockCreationValidator validator = new MockCreationValidator();
 
     @Test
@@ -70,5 +69,14 @@ public class MockCreationValidatorTest {
         boolean serializable = true;
         validator.validateSerializable(Observer.class, serializable);
         validator.validateSerializable(Integer.class, serializable);
+    }
+
+    @Test
+    public void should_fail_when_type_not_mockable() throws Exception {
+        try {
+            validator.validateType(long.class);
+        } catch (MockitoException ex) {
+            assertThat(ex.getMessage()).contains("primitive");
+        }
     }
 }

@@ -24,7 +24,7 @@ public class MyMockMaker extends ByteBuddyMockMaker {
     }
 
     @Override
-    public boolean isTypeMockable(Class<?> type) {
+    public TypeMockability isTypeMockable(Class<?> type) {
         return super.isTypeMockable(type);
     }
 }

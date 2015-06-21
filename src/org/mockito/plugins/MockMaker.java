@@ -4,6 +4,7 @@
  */
 package org.mockito.plugins;
 
+import org.mockito.Incubating;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
@@ -110,5 +111,12 @@ public interface MockMaker {
      * @param type The type that may be mocked.
      * @return <code>true</code> if mockable, <code>false</code> otherwise.
      */
-    boolean isTypeMockable(Class<?> type);
+    @Incubating
+    TypeMockability isTypeMockable(Class<?> type);
+
+    @Incubating
+    interface TypeMockability {
+        boolean mockable();
+        String nonMockableReason();
+    }
 }

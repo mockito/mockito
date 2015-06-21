@@ -7,6 +7,7 @@ package org.mockito.internal.util;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.reflection.Constructors;
 import org.mockito.mock.SerializableMode;
+import org.mockito.plugins.MockMaker.TypeMockability;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,8 +18,9 @@ public class MockCreationValidator {
     private final MockUtil mockUtil = new MockUtil();
 
     public void validateType(Class classToMock) {
-        if (!mockUtil.isTypeMockable(classToMock)) {
-            new Reporter().cannotMockFinalClass(classToMock);
+        TypeMockability typeMockability = mockUtil.typeMockabilityOf(classToMock);
+        if (!typeMockability.mockable()) {
+            new Reporter().cannotMockClass(classToMock, typeMockability.nonMockableReason());
         }
     }
 
