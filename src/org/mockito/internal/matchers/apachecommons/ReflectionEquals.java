@@ -5,13 +5,12 @@
 
 package org.mockito.internal.matchers.apachecommons;
 
+import org.mockito.MockitoMatcher;
+
 import java.io.Serializable;
 
-import org.hamcrest.Description;
-import org.mockito.ArgumentMatcher;
+public class ReflectionEquals extends MockitoMatcher<Object> implements Serializable {
 
-public class ReflectionEquals extends ArgumentMatcher<Object> implements Serializable {
-    private static final long serialVersionUID = 2022780425116330014L;
     private final Object wanted;
     private final String[] excludeFields;
 
@@ -24,7 +23,7 @@ public class ReflectionEquals extends ArgumentMatcher<Object> implements Seriali
         return EqualsBuilder.reflectionEquals(wanted, actual, excludeFields);
     }
 
-    public void describeTo(Description description) {
-        description.appendText("refEq(" + wanted + ")");
+    public String describe() {
+        return "refEq(" + wanted + ")";
     }
 }

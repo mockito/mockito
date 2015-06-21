@@ -21,7 +21,7 @@ import org.mockito.internal.util.Decamelizer;
  * Use {@link Matchers#argThat} method and pass an instance of hamcrest {@link Matcher}, e.g:
  * 
  * <pre class="code"><code class="java">
- * class IsListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
+ * class ListOfTwoElements extends ArgumentMatcher&lt;List&gt; {
  *     public boolean matches(Object list) {
  *         return ((List) list).size() == 2;
  *     }
@@ -29,11 +29,11 @@ import org.mockito.internal.util.Decamelizer;
  * 
  * List mock = mock(List.class);
  * 
- * when(mock.addAll(argThat(new IsListOfTwoElements()))).thenReturn(true);
+ * when(mock.addAll(argThat(new IsListOfTwoElements))).thenReturn(true);
  * 
  * mock.addAll(Arrays.asList(&quot;one&quot;, &quot;two&quot;));
  * 
- * verify(mock).addAll(argThat(new IsListOfTwoElements()));
+ * verify(mock).addAll(argThat(new IsLiListOfTwoElements;
  * </code></pre>
  * 
  * To keep it readable you may want to extract method, e.g:
@@ -58,8 +58,6 @@ import org.mockito.internal.util.Decamelizer;
  * @param <T> type of argument
  */
 public abstract class ArgumentMatcher<T> extends BaseMatcher<T> {
-
-    private static final long serialVersionUID = -2145234737829370369L;
 
     /**
      * Returns whether this matcher accepts the given argument.

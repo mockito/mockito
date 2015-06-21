@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.hamcrest.Matcher;
+import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
@@ -39,17 +39,17 @@ public class ArgumentsComparator {
 
         //we must use raw arguments, not arguments...
         Object[] rawArgs = actual.getRawArguments();
-        List<Matcher> matchers = invocationMatcher.getMatchers();
+        List<MockitoMatcher> matchers = invocationMatcher.getMatchers();
 
         if (rawArgs.length != matchers.size()) {
             return false;
         }
 
         for (int i = 0; i < rawArgs.length; i++) {
-            Matcher m = matchers.get(i);
+            MockitoMatcher m = matchers.get(i);
             //it's a vararg because it's the last array in the arg list
             if (rawArgs[i] != null && rawArgs[i].getClass().isArray() && i == rawArgs.length-1) {
-                Matcher actualMatcher;
+                MockitoMatcher actualMatcher;
                 //this is necessary as the framework often decorates matchers
                 if (m instanceof MatcherDecorator) {
                     actualMatcher = ((MatcherDecorator)m).getActualMatcher();

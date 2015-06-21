@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.internal.matchers.text.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockitoutil.TestBase;
 

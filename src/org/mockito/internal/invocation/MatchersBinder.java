@@ -5,7 +5,7 @@
 
 package org.mockito.internal.invocation;
 
-import org.hamcrest.Matcher;
+import org.mockito.MockitoMatcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
@@ -17,13 +17,11 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class MatchersBinder implements Serializable {
 
-    private static final long serialVersionUID = -311433939339443463L;
-
     public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<Matcher>)(List) lastMatchers);
+        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<MockitoMatcher>)(List) lastMatchers);
         return invocationWithMatchers;
     }
 

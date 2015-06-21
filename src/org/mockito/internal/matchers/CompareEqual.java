@@ -9,8 +9,6 @@ import java.io.Serializable;
 
 public class CompareEqual<T extends Comparable<T>> extends CompareTo<T> implements Serializable {
 
-    private static final long serialVersionUID = 2998586260452920429L;
-
     public CompareEqual(Comparable<T> value) {
         super(value);
     }

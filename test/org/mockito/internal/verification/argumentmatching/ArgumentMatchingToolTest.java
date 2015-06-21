@@ -4,15 +4,13 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings({"unchecked","serial"})
 public class ArgumentMatchingToolTest extends TestBase {
@@ -22,7 +20,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldNotFindAnySuspiciousMatchersWhenNumberOfArgumentsDoesntMatch() {
         //given
-        List<Matcher> matchers = (List) Arrays.asList(new Equals(1));
+        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(1));
 
         //when
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
@@ -34,7 +32,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldNotFindAnySuspiciousMatchersWhenArgumentsMatch() {
         //given
-        List<Matcher> matchers = (List) Arrays.asList(new Equals(10), new Equals(20));
+        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(10), new Equals(20));
         
         //when
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
@@ -50,7 +48,7 @@ public class ArgumentMatchingToolTest extends TestBase {
         Long longPretendingAnInt = new Long(20);
         
         //when
-        List<Matcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);
+        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, longPretendingAnInt});
         
         //then
@@ -62,9 +60,8 @@ public class ArgumentMatchingToolTest extends TestBase {
     public void shouldNotFindSuspiciousMatchersWhenTypesAreTheSame() {
         //given
         Equals matcherWithBadDescription = new Equals(20) {
-            public void describeTo(Description desc) {
-                //let's pretend we have the same description as the toString() of the argument
-                desc.appendText("10");
+            public String describe() {
+                return "10";
             }
         };
         Integer argument = 10;
@@ -88,13 +85,11 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldUseMatchersSafely() {
         //given
-        List<Matcher> matchers = (List) Arrays.asList(new BaseMatcher() {
+        List<MockitoMatcher> matchers = (List) Arrays.asList(new MockitoMatcher() {
             public boolean matches(Object item) {
                 throw new ClassCastException("nasty matcher");
             }
-
-            public void describeTo(Description description) {
-            }});
+        });
         
         //when
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10});

@@ -6,6 +6,7 @@ package org.mockito.internal.matchers;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.mockito.MockitoMatcher;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -15,7 +16,7 @@ public class LocalizedMatcherTest extends TestBase {
     public void shouldMatchTypesWhenActualMatcherHasCorrectType() throws Exception {
         //when
         ContainsTypedDescription equals10 = new Equals(10);
-        LocalizedMatcher m = new LocalizedMatcher((Matcher) equals10);
+        LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) equals10);
         
         //then
         assertTrue(m.typeMatches(10));
@@ -35,7 +36,7 @@ public class LocalizedMatcherTest extends TestBase {
     public void shouldDescribeWithTypeInfoWhenActualMatcherHasCorrectType() throws Exception {
         //when
         ContainsTypedDescription equals10 = new Equals(10);
-        LocalizedMatcher m = new LocalizedMatcher((Matcher) equals10);
+        LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) equals10);
         
         //then
         assertEquals("(Integer) 10", m.getTypedDescription());
@@ -45,7 +46,7 @@ public class LocalizedMatcherTest extends TestBase {
     public void shouldDescribeStringWithType() throws Exception {
         //when
         ContainsTypedDescription e = new Equals("x");
-        LocalizedMatcher m = new LocalizedMatcher((Matcher) e);
+        LocalizedMatcher m = new LocalizedMatcher((MockitoMatcher) e);
 
         //then
         assertEquals("(String) \"x\"", m.getTypedDescription());
@@ -57,7 +58,7 @@ public class LocalizedMatcherTest extends TestBase {
         LocalizedMatcher m = new LocalizedMatcher(Any.ANY);
         
         //then
-        assertEquals(describe(m), m.getTypedDescription());
+        assertEquals(m.describe(), m.getTypedDescription());
     }
     
     @Test

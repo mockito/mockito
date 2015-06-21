@@ -4,36 +4,30 @@
  */
 package org.mockito.internal.matchers;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import org.mockito.MockitoMatcher;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.util.text.HamcrestPrinter;
 import org.mockito.invocation.Location;
 
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class LocalizedMatcher implements Matcher, ContainsTypedDescription, CapturesArguments, MatcherDecorator, Serializable {
+public class LocalizedMatcher extends MockitoMatcher implements ContainsTypedDescription, CapturesArguments, MatcherDecorator, Serializable {
 
-    private static final long serialVersionUID = 6748641229659825725L;
-    private final Matcher actualMatcher;
+    private final MockitoMatcher actualMatcher;
     private final Location location;
 
-    public LocalizedMatcher(Matcher actualMatcher) {
+    //TODO SF why does it extend the MockitoMatcher and yet implement MatcherDecorator?
+    public LocalizedMatcher(MockitoMatcher actualMatcher) {
         this.actualMatcher = actualMatcher;
         this.location = new LocationImpl();
-    }
-
-    public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-        // yeah right
     }
 
     public boolean matches(Object item) {
         return actualMatcher.matches(item);
     }
 
-    public void describeTo(Description description) {
-        actualMatcher.describeTo(description);
+    public String describe() {
+        return actualMatcher.describe();
     }
 
     public Location getLocation() {
@@ -49,7 +43,7 @@ public class LocalizedMatcher implements Matcher, ContainsTypedDescription, Capt
         if (actualMatcher instanceof ContainsTypedDescription) {
             return ((ContainsTypedDescription) actualMatcher).getTypedDescription();
         } else {
-            return HamcrestPrinter.print(actualMatcher);
+            return actualMatcher.describe();
         }
     }
 
@@ -65,7 +59,7 @@ public class LocalizedMatcher implements Matcher, ContainsTypedDescription, Capt
     }
 
     //TODO: refactor other 'delegated interfaces' to use the MatcherDecorator feature
-    public Matcher getActualMatcher() {
+    public MockitoMatcher getActualMatcher() {
         return actualMatcher;
     }
 }

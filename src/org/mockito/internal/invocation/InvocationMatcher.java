@@ -5,7 +5,7 @@
 
 package org.mockito.internal.invocation;
 
-import org.hamcrest.Matcher;
+import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.reporting.PrintSettings;
@@ -21,11 +21,10 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
 
-    private static final long serialVersionUID = -3047126096857467610L;
     private final Invocation invocation;
-    private final List<Matcher> matchers;
+    private final List<MockitoMatcher> matchers;
 
-    public InvocationMatcher(Invocation invocation, List<Matcher> matchers) {
+    public InvocationMatcher(Invocation invocation, List<MockitoMatcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
             this.matchers = ArgumentsProcessor.argumentsToMatchers(invocation.getArguments());
@@ -35,7 +34,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
     }
 
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<Matcher>emptyList());
+        this(invocation, Collections.<MockitoMatcher>emptyList());
     }
 
     public Method getMethod() {
@@ -46,7 +45,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         return this.invocation;
     }
 
-    public List<Matcher> getMatchers() {
+    public List<MockitoMatcher> getMatchers() {
         return this.matchers;
     }
 
@@ -122,7 +121,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
 
     private void captureRegularArguments(Invocation invocation) {
         for (int position = 0; position < regularArgumentsSize(invocation); position++) {
-            Matcher m = matchers.get(position);
+            MockitoMatcher m = matchers.get(position);
             if (m instanceof CapturesArguments) {
                 ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
             }
@@ -134,7 +133,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
             return;
         }
         int indexOfVararg = invocation.getRawArguments().length - 1;
-        for (Matcher m : uniqueMatcherSet(indexOfVararg)) {
+        for (MockitoMatcher m : uniqueMatcherSet(indexOfVararg)) {
             if (m instanceof CapturesArguments) {
                 Object rawArgument = invocation.getRawArguments()[indexOfVararg];
                 for (int i = 0; i < Array.getLength(rawArgument); i++) {
@@ -150,10 +149,10 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
                 : matchers.size();
     }
 
-    private Set<Matcher> uniqueMatcherSet(int indexOfVararg) {
-        HashSet<Matcher> set = new HashSet<Matcher>();
+    private Set<MockitoMatcher> uniqueMatcherSet(int indexOfVararg) {
+        HashSet<MockitoMatcher> set = new HashSet<MockitoMatcher>();
         for (int position = indexOfVararg; position < matchers.size(); position++) {
-            Matcher matcher = matchers.get(position);
+            MockitoMatcher matcher = matchers.get(position);
             if (matcher instanceof MatcherDecorator) {
                 set.add(((MatcherDecorator) matcher).getActualMatcher());
             } else {

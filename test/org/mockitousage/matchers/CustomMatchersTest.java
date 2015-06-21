@@ -12,31 +12,32 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
+import org.mockito.MockitoMatcher;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class CustomMatchersTest extends TestBase {
     
-    private final class ContainsFoo extends ArgumentMatcher<String> {
+    private final class ContainsFoo extends MockitoMatcher<String> {
         public boolean matches(Object arg) {
             return ((String) arg).contains("foo");
         }
     }
 
-    private final class IsAnyBoolean extends ArgumentMatcher<Boolean> {
+    private final class IsAnyBoolean extends MockitoMatcher<Boolean> {
         public boolean matches(Object arg) {
             return true;
         }
     }
     
-    private final class IsSorZ extends ArgumentMatcher<Character> {
+    private final class IsSorZ extends MockitoMatcher<Character> {
         public boolean matches(Object arg) {
             Character character = (Character) arg;
             return character.equals('s') || character.equals('z');
         }
     }
 
-    private final class IsZeroOrOne<T extends Number> extends ArgumentMatcher<T> {
+    private final class IsZeroOrOne<T extends Number> extends MockitoMatcher<T> {
         public boolean matches(Object arg) {
             Number number = (Number) arg;
             if (number.intValue() == 0 || number.intValue() == 1) {
@@ -136,7 +137,7 @@ public class CustomMatchersTest extends TestBase {
         return argThat(new StringThatContainsXxx());
     }
     
-    private final class StringThatContainsXxx extends ArgumentMatcher<String> {
+    private final class StringThatContainsXxx extends MockitoMatcher<String> {
         public boolean matches(Object argument) {
             String arg = (String) argument;
             return arg.contains("xxx");
@@ -148,7 +149,7 @@ public class CustomMatchersTest extends TestBase {
         mock.simpleMethod("foo");
 
         try {
-            verify(mock).simpleMethod((String) argThat(new ArgumentMatcher<Object>() {
+            verify(mock).simpleMethod((String) argThat(new MockitoMatcher<Object>() {
                 @Override public boolean matches(Object argument) {
                     return false;
                 }}));

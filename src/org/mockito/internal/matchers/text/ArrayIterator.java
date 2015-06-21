@@ -1,4 +1,4 @@
-package org.mockito.internal.util.text;
+package org.mockito.internal.matchers.text;
 
 import java.lang.reflect.Array;
 import java.util.Iterator;

@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
-import java.io.Serializable;
+import org.mockito.MockitoMatcher;
 
-import org.hamcrest.Matcher;
+import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
 public interface MatcherDecorator extends Serializable {
-    Matcher getActualMatcher();
+    MockitoMatcher getActualMatcher();
 }

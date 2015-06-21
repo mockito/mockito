@@ -38,20 +38,18 @@ import java.util.List;
  * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
  *
  * <p>
- * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
+ * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link MockitoMatcher} class).
  * Both techniques can be used for making sure certain arguments where passed to mocks. 
  * However, ArgumentCaptor may be a better fit if:
  * <ul>  
  * <li>custom argument matcher is not likely to be reused</li>
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
- * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
+ * Custom argument matchers via {@link MockitoMatcher} are usually better for stubbing.
  *
  * <p>
  * This utility class <strong>*don't do any type checks*</strong>, the generic signatures are only there to avoid casting
- * in your code. If you want specific types, then you should do that the captured values.
- * This behavior might change (type checks could be added) in a
- * future major release.
+ * in your code.
  * <p>
  * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
  * <p>
@@ -94,7 +92,7 @@ public class ArgumentCaptor<T> {
     /**
      * Use it to capture the argument. This method <b>must be used inside of verification</b>.
      * <p>
-     * Internally, this method registers a special implementation of an {@link ArgumentMatcher}.
+     * Internally, this method registers a special implementation of an {@link MockitoMatcher}.
      * This argument matcher stores the argument value so that you can use it later to perform assertions.  
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.

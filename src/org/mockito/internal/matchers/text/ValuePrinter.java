@@ -1,6 +1,4 @@
-package org.mockito.internal.util.text;
-
-import org.hamcrest.SelfDescribing;
+package org.mockito.internal.matchers.text;
 
 import java.util.Iterator;
 
@@ -24,36 +22,23 @@ public class ValuePrinter {
         append(text);
         return this;
     }
-    
+
+    //TODO builder API doesn't make sense. Let's just have static or non-static functions.
     public ValuePrinter appendValue(Object value) {
         if (value == null) {
             append("null");
         } else if (value instanceof String) {
             toJavaSyntax((String) value);
         } else if (value instanceof Character) {
-            append('"');
+            append('\'');
             toJavaSyntax((Character) value);
-            append('"');
-        } else if (value instanceof Short) {
-            append('<');
-            append(descriptionOf(value));
-            append("s>");
-        } else if (value instanceof Long) {
-            append('<');
-            append(descriptionOf(value));
-            append("L>");
-        } else if (value instanceof Float) {
-            append('<');
-            append(descriptionOf(value));
-            append("F>");
+            append('\'');
         } else if (value.getClass().isArray()) {
-            appendList("[", ", ", "]", new org.mockito.internal.util.text.ArrayIterator(value));
-        } else if (value instanceof SelfDescribing) {
-            append(HamcrestPrinter.print((SelfDescribing) value));
+            appendList("[", ", ", "]", new org.mockito.internal.matchers.text.ArrayIterator(value));
+        } else if (value instanceof FormattedText) {
+            append(((FormattedText) value).getText());
         } else {
-            append('<');
             append(descriptionOf(value));
-            append('>');
         }
         return this;
     }

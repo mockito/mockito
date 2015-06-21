@@ -7,22 +7,21 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
-import org.hamcrest.Description;
-import org.mockito.ArgumentMatcher;
+import org.mockito.MockitoMatcher;
 
 @SuppressWarnings("unchecked")
-public class Any extends ArgumentMatcher implements Serializable {
+public class Any extends MockitoMatcher implements Serializable {
 
-    private static final long serialVersionUID = -4062420125651019029L;
     public static final Any ANY = new Any();
-    
-    private Any() {}
-    
+
+    private Any() {
+    }
+
     public boolean matches(Object actual) {
         return true;
     }
 
-    public void describeTo(Description description) {
-        description.appendText("<any>");
+    public String describe() {
+        return "<any>";
     }
 }

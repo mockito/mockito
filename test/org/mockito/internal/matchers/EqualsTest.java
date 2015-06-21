@@ -49,28 +49,28 @@ public class EqualsTest extends TestBase {
     
     @Test
     public void shouldAppendQuotingForString() {
-        String descStr = describe(new Equals("str"));
+        String descStr = new Equals("str").describe();
         
         assertEquals("\"str\"", descStr);
     }
 
     @Test
     public void shouldAppendQuotingForChar() {
-        String descStr = describe(new Equals('s'));
+        String descStr = new Equals('s').describe();
         
         assertEquals("'s'", descStr);
     }
     
     @Test
     public void shouldDescribeUsingToString() {
-        String descStr = describe(new Equals(100));
+        String descStr = new Equals(100).describe();
         
         assertEquals("100", descStr);
     }
 
     @Test
     public void shouldDescribeNull() {
-        String descStr = describe(new Equals(null));
+        String descStr = new Equals(null).describe();
         
         assertEquals("null", descStr);
     }

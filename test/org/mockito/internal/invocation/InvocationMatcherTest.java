@@ -10,6 +10,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.*;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
@@ -56,9 +57,9 @@ public class InvocationMatcherTest extends TestBase {
 
     @Test
     public void should_to_string_with_matchers() throws Exception {
-        Matcher m = NotNull.NOT_NULL;
+        MockitoMatcher m = NotNull.NOT_NULL;
         InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
-        Matcher mTwo = new Equals('x');
+        MockitoMatcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertContains("simpleMethod(notNull())", notNull.toString());

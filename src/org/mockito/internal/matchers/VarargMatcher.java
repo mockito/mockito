@@ -6,5 +6,9 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
+/**
+ * Informs Mockito that the matcher is intended to capture varargs.
+ * TODO SF remove this class from public API
+ */
 public interface VarargMatcher extends Serializable {
 }

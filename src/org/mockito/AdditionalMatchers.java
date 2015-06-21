@@ -986,7 +986,7 @@ public class AdditionalMatchers {
         return reportMatcher(new EqualsWithDelta(value, delta)).returnZero();
     }
     
-    private static HandyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
+    private static HandyReturnValues reportMatcher(MockitoMatcher<?> matcher) {
         return MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

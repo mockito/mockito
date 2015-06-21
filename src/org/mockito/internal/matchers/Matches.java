@@ -5,15 +5,12 @@
 
 package org.mockito.internal.matchers;
 
+import org.mockito.MockitoMatcher;
+
 import java.io.Serializable;
 
-import org.hamcrest.Description;
-import org.mockito.ArgumentMatcher;
+public class Matches extends MockitoMatcher<Object> implements Serializable {
 
-
-public class Matches extends ArgumentMatcher<Object> implements Serializable {
-
-    private static final long serialVersionUID = 8787704593379472029L;
     private final String regex;
 
     public Matches(String regex) {
@@ -24,8 +21,7 @@ public class Matches extends ArgumentMatcher<Object> implements Serializable {
         return (actual instanceof String) && ((String) actual).matches(regex);
     }
 
-    public void describeTo(Description description) {
-        description.appendText("matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\")
-                + "\")");
+    public String describe() {
+        return "matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")";
     }
 }
