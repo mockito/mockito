@@ -442,13 +442,11 @@ public class Reporter {
         ));
     }
 
-    public void cannotMockFinalClass(Class<?> clazz) {
+    public void cannotMockClass(Class<?> clazz, String reason) {
         throw new MockitoException(join(
                 "Cannot mock/spy " + clazz.toString(),
-                "Mockito cannot mock/spy following:",
-                "  - final classes",
-                "  - anonymous classes",
-                "  - primitive types"
+                "Mockito cannot mock/spy because :",
+                " - " + reason
         ));
     }
 

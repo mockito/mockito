@@ -32,8 +32,8 @@ public abstract class ClassLoaders {
         return new InMemoryClassLoaderBuilder();
     }
 
-    public static ReachableClassesFinder in(ClassLoader classLoader_without_jUnit) {
-        return new ReachableClassesFinder(classLoader_without_jUnit);
+    public static ReachableClassesFinder in(ClassLoader classLoader) {
+        return new ReachableClassesFinder(classLoader);
     }
 
     public static ClassLoader jdkClassLoader() {

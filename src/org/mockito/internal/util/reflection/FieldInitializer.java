@@ -228,7 +228,7 @@ public class FieldInitializer {
             private int countMockableParams(Constructor<?> constructor) {
                 int constructorMockableParamsSize = 0;
                 for (Class<?> aClass : constructor.getParameterTypes()) {
-                    if(mockUtil.isTypeMockable(aClass)){
+                    if(mockUtil.typeMockabilityOf(aClass).mockable()){
                         constructorMockableParamsSize++;
                     }
                 }

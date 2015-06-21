@@ -13,11 +13,15 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 
+import java.lang.reflect.Modifier;
+
+
 /**
  * A MockMaker that uses cglib to generate mocks on a JVM.
  */
 public class CglibMockMaker implements MockMaker {
 
+    @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         InternalMockHandler mockitoHandler = cast(handler);
         new AcrossJVMSerializationFeature().enableSerializationAcrossJVM(settings);
@@ -33,10 +37,12 @@ public class CglibMockMaker implements MockMaker {
         return (InternalMockHandler) handler;
     }
 
+    @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         ((Factory) mock).setCallback(0, new MethodInterceptorFilter(cast(newHandler), settings));
     }
 
+    @Override
     public MockHandler getHandler(Object mock) {
         if (!(mock instanceof Factory)) {
             return null;
@@ -47,5 +53,26 @@ public class CglibMockMaker implements MockMaker {
             return null;
         }
         return ((MethodInterceptorFilter) callback).getHandler();
+    }
+
+    @Override
+    public TypeMockability isTypeMockable(final Class<?> type) {
+        return new TypeMockability() {
+            @Override
+            public boolean mockable() {
+                return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+            }
+
+            @Override
+            public String nonMockableReason() {
+                if(type.isPrimitive()) {
+                    return "primitive type";
+                }
+                if(Modifier.isFinal(type.getModifiers())) {
+                    return "final or anonymous class";
+                }
+                return join("not handled type");
+            }
+        };
     }
 }
