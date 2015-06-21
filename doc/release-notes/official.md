@@ -1,3 +1,11 @@
+### 2.0.18-beta (2015-06-21 18:00 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 1
+  * Moves responsibility of isTypeMockable to MockMaker [(#238)](https://github.com/mockito/mockito/pull/238)
+
 ### 2.0.17-beta (2015-06-20 20:39 UTC)
 
 * Authors: 2
