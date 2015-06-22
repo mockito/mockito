@@ -17,6 +17,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +147,7 @@ public class InvocationMatcherTest extends TestBase {
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
         CapturingMatcher m = new CapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals(1), new LocalizedMatcher(m)));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, Arrays.<MockitoMatcher>asList(new Equals(1), m));
 
         //when
         invocationMatcher.captureArgumentsFrom(invocation);
@@ -162,7 +163,7 @@ public class InvocationMatcherTest extends TestBase {
         Invocation invocation = getLastInvocation();
 
         //when
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, asList(AnyVararg.ANY_VARARG));
 
         //then
         invocationMatcher.captureArgumentsFrom(invocation);

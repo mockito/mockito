@@ -7,7 +7,6 @@ package org.mockito.internal.invocation;
 
 import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.CapturesArguments;
-import org.mockito.internal.matchers.MatcherDecorator;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
@@ -153,11 +152,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         HashSet<MockitoMatcher> set = new HashSet<MockitoMatcher>();
         for (int position = indexOfVararg; position < matchers.size(); position++) {
             MockitoMatcher matcher = matchers.get(position);
-            if (matcher instanceof MatcherDecorator) {
-                set.add(((MatcherDecorator) matcher).getActualMatcher());
-            } else {
-                set.add(matcher);
-            }
+            set.add(matcher);
         }
         return set;
     }

@@ -72,10 +72,9 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     }
 
     private List<MockitoMatcher> popLastArgumentMatchers(int count) {
-        List<MockitoMatcher> result = new LinkedList<MockitoMatcher>();
-        result.addAll(matcherStack.subList(matcherStack.size() - count, matcherStack.size()));
+        LinkedList<MockitoMatcher> result = new LinkedList<MockitoMatcher>();
         for (int i = 0; i < count; i++) {
-            matcherStack.pop();
+            result.addFirst(matcherStack.pop().getMatcher());
         }
         return result;
     }

@@ -9,9 +9,11 @@ import org.mockito.MockitoMatcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
+import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -21,8 +23,11 @@ public class MatchersBinder implements Serializable {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        InvocationMatcher invocationWithMatchers = new InvocationMatcher(invocation, (List<MockitoMatcher>)(List) lastMatchers);
-        return invocationWithMatchers;
+        List<MockitoMatcher> matchers = new LinkedList<MockitoMatcher>();
+        for (LocalizedMatcher m : lastMatchers) {
+            matchers.add(m.getMatcher());
+        }
+        return new InvocationMatcher(invocation, matchers);
     }
 
     private void validateMatchers(Invocation invocation, List<LocalizedMatcher> lastMatchers) {

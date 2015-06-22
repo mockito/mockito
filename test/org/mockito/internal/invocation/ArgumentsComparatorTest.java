@@ -203,7 +203,7 @@ public class ArgumentsComparatorTest extends TestBase {
         //given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new LocalizedMatcher(AnyVararg.ANY_VARARG)));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, asList(AnyVararg.ANY_VARARG));
 
         //when
         boolean match = comparator.argumentsMatch(invocationMatcher, invocation);
