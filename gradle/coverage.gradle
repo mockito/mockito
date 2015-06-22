@@ -1,3 +1,17 @@
-cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
-//cobertura.coverageIgnoreTrivial = true
-coveralls.sourceDirs = ['src']  //workaround for https://github.com/stevesaliman/gradle-cobertura-plugin/issues/53
+apply plugin: 'jacoco'
+
+task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
+    executionData files("${buildDir}/jacoco/test.exec")
+
+    sourceSets sourceSets.main
+
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+
+    doLast {
+        println "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
+    }
+}
+

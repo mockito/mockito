@@ -19,9 +19,12 @@ branches:
   except:
   - /^v\d/
 install:
-- true
+ - true
 script:
-- ./gradlew ciBuild
+  - ./gradlew ciBuild
 after_success:
-- ./gradlew release
-- ./gradlew --stacktrace cobertura coveralls
+  - ./gradlew release
+#  - ./gradlew --stacktrace cobertura coveralls
+  - ./gradlew --stacktrace coverageReport
+  - "cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml"
+  - bash <(curl -s https://codecov.io/bash)

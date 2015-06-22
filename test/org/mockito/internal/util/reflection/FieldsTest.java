@@ -9,30 +9,31 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.internal.util.reflection.Fields.syntheticField;
 
 public class FieldsTest {
 
     @Test
     public void fields_should_return_all_declared_fields_in_hierarchy() throws Exception {
-        assertThat(Fields.allDeclaredFieldsOf(new HierarchyOfClasses()).names())
+        assertThat(Fields.allDeclaredFieldsOf(new HierarchyOfClasses()).filter(syntheticField()).names())
                 .containsOnly("a", "b", "static_a", "static_b");
     }
 
     @Test
     public void fields_should_return_declared_fields() throws Exception {
-        assertThat(Fields.declaredFieldsOf(new HierarchyOfClasses()).names())
+        assertThat(Fields.declaredFieldsOf(new HierarchyOfClasses()).filter(syntheticField()).names())
                 .containsOnly("b", "static_b");
     }
 
     @Test
     public void can_filter_not_null_fields() throws Exception {
-        assertThat(Fields.declaredFieldsOf(new NullOrNotNullFields()).notNull().names())
+        assertThat(Fields.declaredFieldsOf(new NullOrNotNullFields()).notNull().filter(syntheticField()).names())
                 .containsOnly("c");
     }
 
     @Test
     public void can_get_values_of_instance_fields() throws Exception {
-        assertThat(Fields.declaredFieldsOf(new ValuedFields()).assignedValues())
+        assertThat(Fields.declaredFieldsOf(new ValuedFields()).filter(syntheticField()).assignedValues())
                 .containsOnly("a", "b");
     }
 
@@ -41,7 +42,7 @@ public class FieldsTest {
     public void can_get_list_of_InstanceField() throws Exception {
         ValuedFields instance = new ValuedFields();
 
-        assertThat(Fields.declaredFieldsOf(instance).instanceFields())
+        assertThat(Fields.declaredFieldsOf(instance).filter(syntheticField()).instanceFields())
                 .containsOnly(new InstanceField(field("a", instance), instance),
                               new InstanceField(field("b", instance), instance)
                 );
