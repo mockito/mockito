@@ -8,6 +8,7 @@ package org.mockito.internal.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO SF move to matchers.text
 public class Decamelizer {
 
 private static final Pattern CAPS = Pattern.compile("([A-Z\\d][^A-Z\\d]*)");

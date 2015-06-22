@@ -12,8 +12,6 @@ import java.lang.reflect.Method;
 
 public class ObjectMethodsGuru implements Serializable {
 
-    private static final long serialVersionUID = -1286718569065470494L;
-
     public boolean isToString(Method method) {
         return isToString(new DelegatingMethod(method));
     }

@@ -34,7 +34,7 @@ public class MatchersPrinter {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {
                 out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType()));
             } else {
-                out.add(new FormattedText(matcher.toString()));
+                out.add(new FormattedText(MatcherToString.toString(matcher)));
             }
             i++;
         }
