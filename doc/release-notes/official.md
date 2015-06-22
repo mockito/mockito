@@ -1,3 +1,12 @@
+### 2.0.20-beta (2015-06-22 00:21 UTC)
+
+* Authors: 1
+* Commits: 6
+  * 6: Brice Dutheil
+* Improvements: 2
+  * Replaces cobertura/coveralls by jacoco/codecov [(#241)](https://github.com/mockito/mockito/pull/241)
+  * Fixes coverage reports [(#240)](https://github.com/mockito/mockito/pull/240)
+
 ### 2.0.19-beta (2015-06-21 18:06 UTC)
 
 * Authors: 1
