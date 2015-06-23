@@ -1,3 +1,12 @@
+### 2.0.21-beta (2015-06-23 13:19 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Rafael Winterhalter
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Upgraded to Byte Buddy 0.6.11 and took improved features in use. [(#242)](https://github.com/mockito/mockito/pull/242)
+
 ### 2.0.20-beta (2015-06-22 00:21 UTC)
 
 * Authors: 1
