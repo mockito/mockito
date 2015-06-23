@@ -21,7 +21,7 @@ afterEvaluate {
 
             instruction 'Import-Package',
                     '!org.mockito.asm.signature',
-                    'net.bytebuddy.*;version=0.2.1',
+                    'net.bytebuddy.*;version=0.6.11',
                     'junit.*;resolution:=optional',
                     'org.junit.*;resolution:=optional',
                     'org.apache.tools.ant.*;resolution:=optional',

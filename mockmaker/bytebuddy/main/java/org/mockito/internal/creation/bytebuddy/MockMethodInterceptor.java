@@ -29,46 +29,6 @@ public class MockMethodInterceptor implements Serializable {
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
     }
 
-    @RuntimeType
-    @BindingPriority(BindingPriority.DEFAULT * 3)
-    public Object interceptSuperCallable(@This Object mock,
-                                         @Origin(cache = true) Method invokedMethod,
-                                         @AllArguments Object[] arguments,
-                                         @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
-        return doIntercept(
-                mock,
-                invokedMethod,
-                arguments,
-                new InterceptedInvocation.SuperMethod.FromCallable(superCall)
-        );
-    }
-
-    @RuntimeType
-    @BindingPriority(BindingPriority.DEFAULT * 2)
-    public Object interceptDefaultCallable(@This Object mock,
-                                           @Origin(cache = true) Method invokedMethod,
-                                           @AllArguments Object[] arguments,
-                                           @DefaultCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
-        return doIntercept(
-                mock,
-                invokedMethod,
-                arguments,
-                new InterceptedInvocation.SuperMethod.FromCallable(superCall)
-        );
-    }
-
-    @RuntimeType
-    public Object interceptAbstract(@This Object mock,
-                                    @Origin(cache = true) Method invokedMethod,
-                                    @AllArguments Object[] arguments) throws Throwable {
-        return doIntercept(
-                mock,
-                invokedMethod,
-                arguments,
-                InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE
-        );
-    }
-
     private Object doIntercept(Object mock,
                                Method invokedMethod,
                                Object[] arguments,
@@ -122,21 +82,14 @@ public class MockMethodInterceptor implements Serializable {
     }
 
     public static class DispatcherDefaultingToRealMethod {
-        public interface FieldGetter<T> {
-            T getValue();
-        }
-        public interface FieldSetter<T> {
-            void setValue(T value);
-        }
 
         @RuntimeType
         @BindingPriority(BindingPriority.DEFAULT * 2)
         public static Object interceptSuperCallable(@This Object mock,
-                                                    @FieldProxy("mockitoInterceptor") FieldGetter<MockMethodInterceptor> fieldGetter,
+                                                    @FieldValue("mockitoInterceptor") MockMethodInterceptor interceptor,
                                                     @Origin Method invokedMethod,
                                                     @AllArguments Object[] arguments,
                                                     @SuperCall(serializableProxy = true) Callable<?> superCall) throws Throwable {
-            MockMethodInterceptor interceptor = fieldGetter.getValue();
             if (interceptor == null) {
                 return superCall.call();
             }
@@ -150,12 +103,12 @@ public class MockMethodInterceptor implements Serializable {
 
         @RuntimeType
         public static Object interceptAbstract(@This Object mock,
-                                               @FieldProxy("mockitoInterceptor") FieldGetter<MockMethodInterceptor> fieldGetter,
-                                               @Origin(cache = true) Method invokedMethod,
+                                               @FieldValue("mockitoInterceptor") MockMethodInterceptor interceptor,
+                                               @StubValue Object stubValue,
+                                               @Origin Method invokedMethod,
                                                @AllArguments Object[] arguments) throws Throwable {
-            MockMethodInterceptor interceptor = fieldGetter.getValue();
             if (interceptor == null) {
-                return null;
+                return stubValue;
             }
             return interceptor.doIntercept(
                     mock,

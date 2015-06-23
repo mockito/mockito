@@ -99,7 +99,7 @@ class CachingMockBytecodeGenerator {
             private final String mockedType;
             private final Set<String> types = new HashSet<String>();
 
-            private MockKey(Class<T> mockedType, Set<Class> interfaces) {
+            private MockKey(Class<T> mockedType, Set<Class<?>> interfaces) {
                 this.mockedType = mockedType.getName();
                 for (Class anInterface : interfaces) {
                     types.add(anInterface.getName());
@@ -127,7 +127,7 @@ class CachingMockBytecodeGenerator {
                 return result;
             }
 
-            public static <T> MockKey of(Class<T> mockedType, Set<Class> interfaces) {
+            public static <T> MockKey of(Class<T> mockedType, Set<Class<?>> interfaces) {
                 return new MockKey<T>(mockedType, interfaces);
             }
         }
