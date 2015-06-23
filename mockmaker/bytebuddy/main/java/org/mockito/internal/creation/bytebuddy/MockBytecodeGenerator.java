@@ -27,7 +27,7 @@ class MockBytecodeGenerator {
     private final Random random;
 
     public MockBytecodeGenerator() {
-        byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V5)
+        byteBuddy = new ByteBuddy()
                 .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
                 .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
         random = new Random();
