@@ -21,8 +21,6 @@ public class HamcrestArgumentMatcher<T> implements MockitoMatcher<T> {
 
     public String toString() {
         //TODO SF add unit tests and integ test coverage for describeTo()
-        StringDescription s = new StringDescription();
-        this.matcher.describeTo(s);
-        return s.toString();
+        return StringDescription.toString(matcher);
     }
 }
