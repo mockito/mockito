@@ -166,7 +166,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private static final long serialVersionUID = -7600267929109286514L;
         private final byte[] serializedMock;
         private final Class typeToMock;
-        private final Set<Class> extraInterfaces;
+        private final Set<Class<?>> extraInterfaces;
 
         /**
          * Creates the wrapper that be used in the serialization stream.
@@ -246,9 +246,9 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
      */
     public static class MockitoMockObjectInputStream extends ObjectInputStream {
         private final Class typeToMock;
-        private final Set<Class> extraInterfaces;
+        private final Set<Class<?>> extraInterfaces;
 
-        public MockitoMockObjectInputStream(InputStream in, Class typeToMock, Set<Class> extraInterfaces) throws IOException {
+        public MockitoMockObjectInputStream(InputStream in, Class typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
             super(in);
             this.typeToMock = typeToMock;
             this.extraInterfaces = extraInterfaces;

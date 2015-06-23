@@ -39,12 +39,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    public MockSettings extraInterfaces(Class... extraInterfaces) {
+    public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
             new Reporter().extraInterfacesRequiresAtLeastOneInterface();
         }
 
-        for (Class i : extraInterfaces) {
+        for (Class<?> i : extraInterfaces) {
             if (i == null) {
                 new Reporter().extraInterfacesDoesNotAcceptNullParameters();
             } else if (!i.isInterface()) {
@@ -59,7 +59,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return mockName;
     }
 
-    public Set<Class> getExtraInterfaces() {
+    public Set<Class<?>> getExtraInterfaces() {
         return extraInterfaces;
     }
 
@@ -182,8 +182,8 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return settings;
     }
 
-    private static Set<Class> prepareExtraInterfaces(CreationSettings settings) {
-        Set<Class> interfaces = new HashSet<Class>(settings.getExtraInterfaces());
+    private static Set<Class<?>> prepareExtraInterfaces(CreationSettings settings) {
+        Set<Class<?>> interfaces = new HashSet<Class<?>>(settings.getExtraInterfaces());
         if(settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }

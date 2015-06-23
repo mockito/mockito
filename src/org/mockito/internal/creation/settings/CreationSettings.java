@@ -23,7 +23,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private static final long serialVersionUID = -6789800638070123629L;
 
     protected Class<T> typeToMock;
-    protected Set<Class> extraInterfaces = new LinkedHashSet<Class>();
+    protected Set<Class<?>> extraInterfaces = new LinkedHashSet<Class<?>>();
     protected String name;
     protected Object spiedInstance;
     protected Answer<Object> defaultAnswer;
@@ -60,11 +60,11 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return this;
     }
 
-    public Set<Class> getExtraInterfaces() {
+    public Set<Class<?>> getExtraInterfaces() {
         return extraInterfaces;
     }
 
-    public CreationSettings<T> setExtraInterfaces(Set<Class> extraInterfaces) {
+    public CreationSettings<T> setExtraInterfaces(Set<Class<?>> extraInterfaces) {
         this.extraInterfaces = extraInterfaces;
         return this;
     }

@@ -30,7 +30,7 @@ public class CachingMockBytecodeGeneratorTest {
         CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
         Class<?> the_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
                         classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
-                        Collections.<Class>emptySet(),
+                        Collections.<Class<?>>emptySet(),
                         false
                 ));
 

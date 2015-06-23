@@ -4,6 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -12,7 +13,6 @@ import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
-import org.mockito.internal.creation.util.SearchingClassLoader;
 
 import java.util.Random;
 
@@ -49,16 +49,14 @@ class MockBytecodeGenerator {
                              .intercept(to(MockMethodInterceptor.ForWriteReplace.class));
         }
         return builder.make()
-                      .load(SearchingClassLoader.combineLoadersOf(allMockedTypes(features)), ClassLoadingStrategy.Default.INJECTION)
+                      .load(new MultipleParentClassLoader.Builder()
+                              .append(features.mockedType)
+                              .append(features.interfaces)
+                              .append(MultipleParentClassLoader.class.getClassLoader())
+                              .append(Thread.currentThread().getContextClassLoader())
+                              .filter(isBootstrapClassLoader())
+                              .build(), ClassLoadingStrategy.Default.INJECTION)
                       .getLoaded();
-    }
-
-    private <T> Class<?>[] allMockedTypes(MockFeatures<T> features) {
-        Class<?>[] allMockedTypes = new Class<?>[features.interfaces.size() + 1];
-        allMockedTypes[0] = features.mockedType;
-        System.arraycopy(features.interfaces.toArray(), 0,
-                         (Object[]) allMockedTypes, 1, features.interfaces.size());
-        return allMockedTypes;
     }
 
     // TODO inspect naming strategy (for OSGI, signed package, java.* (and bootstrap classes), etc...)
