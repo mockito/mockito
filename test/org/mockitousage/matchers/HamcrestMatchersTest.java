@@ -5,13 +5,19 @@
 
 package org.mockitousage.matchers;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
 public class HamcrestMatchersTest extends TestBase {
 
-    //TODO SF integrate with hamcrest
-
-    /*
     private final class ContainsX extends BaseMatcher<String> {
         public boolean matches(Object o) {
             return ((String) o).contains("X");
@@ -22,7 +28,17 @@ public class HamcrestMatchersTest extends TestBase {
         }
     }
 
-    @Mock private IMethods mock;
+    private final class PrimitiveMatcher extends BaseMatcher<Integer> {
+
+        public boolean matches(Object o) {
+            return true;
+        }
+
+        public void describeTo(Description description) {}
+    }
+
+    @Mock
+    private IMethods mock;
 
     @Test
     public void shouldAcceptHamcrestMatcher() {
@@ -42,5 +58,10 @@ public class HamcrestMatchersTest extends TestBase {
             assertContains("contains 'X'", e.getMessage());
         }
     }
-    */
+
+    @Test
+    public void shouldMatchPrimitives() {
+        when(mock.intArgumentReturningInt(argThat(new PrimitiveMatcher()))).thenReturn(5);
+        assertEquals(5, mock.intArgumentReturningInt(10));
+    }
 }
