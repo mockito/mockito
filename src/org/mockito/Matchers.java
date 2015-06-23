@@ -50,47 +50,11 @@ import java.util.Set;
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  *
  * <h1>Custom Argument Matchers</h1>
- * 
- * Use {@link Matchers#argThat} method and pass an instance of {@link MockitoMatcher}.
- * <p>
- * Before you start implementing your own custom argument matcher, make sure you check out {@link ArgumentCaptor} api.
- * <p>
- * So, how to implement your own argument matcher?
- * First, you might want to subclass {@link MockitoMatcher}.
- * <p>
- * Example:
- * 
- * <pre class="code"><code class="java">
- *   class ListOfTwoElements implements MockitoMatcher&lt;List&gt; {
- *      public boolean matches(Object list) {
- *          return ((List) list).size() == 2;
- *      }
- *   }
- *   
- *   List mock = mock(List.class);
- *   
- *   when(mock.addAll(argThat(new ListOfTwoElements()))).thenReturn(true);
- *   
- *   mock.addAll(Arrays.asList("one", "two"));
- *   
- *   verify(mock).addAll(argThat(new ListOfTwoElements()));
- * </code></pre>
- * 
- * To keep it readable you may want to extract method, e.g:
- * <pre class="code"><code class="java">
- *   verify(mock).addAll(<b>argThat(new ListOfTwoElements())</b>);
- *   //becomes
- *   verify(mock).addAll(<b>listOfTwoElements()</b>);
- * </code></pre>
  *
- * <b>Warning:</b> Be reasonable with using complicated argument matching, especially custom argument matchers, as it can make the test less readable. 
- * Sometimes it's better to implement equals() for arguments that are passed to mocks 
- * (Mockito naturally uses equals() for argument matching). 
- * This can make the test cleaner. 
- * <p>
- * Also, <b>sometimes {@link ArgumentCaptor} may be a better fit</b> than custom matcher. 
- * For example, if custom argument matcher is not likely to be reused
- * or you just need it to assert on argument values to complete verification of behavior.
+ * It is important to understand the use cases and available options for dealing with non-trivial arguments
+ * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
+ * for given scenario and produce highest quality test (clean and maintainable).
+ * Please read on in the javadoc for {@link MockitoMatcher} to learn about approaches and see the examples.
  */
 @SuppressWarnings("unchecked")
 public class Matchers {
@@ -695,10 +659,15 @@ public class Matchers {
     /**
      * Allows creating custom argument matchers.
      * <p>
+     * It is important to understand the use cases and available options for dealing with non-trivial arguments
+     * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
+     * for given scenario and produce highest quality test (clean and maintainable).
+     * Please read the documentation for {@link MockitoMatcher} to learn about approaches and see the examples.
+     * <p>
      * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
      * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
      * <p>
-     * See examples in javadoc for {@link Matchers} class
+     * See examples in javadoc for {@link MockitoMatcher} class
      * 
      * @param matcher decides whether argument matches
      * @return <code>null</code>.

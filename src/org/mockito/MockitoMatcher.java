@@ -76,6 +76,8 @@ public interface MockitoMatcher<T> {
      * The argument is not using generic type in order to force explicit casting in the implementation.
      * This way it is easier to debug when incompatible arguments are passed to the matchers.
      * You have to trust us on this one.
+     * <p>
+     * See the example in the top level javadoc for {@link MockitoMatcher}
      *
      * @param argument
      *            the argument
