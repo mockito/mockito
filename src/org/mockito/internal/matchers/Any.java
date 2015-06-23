@@ -7,10 +7,10 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
-public class Any implements MockitoMatcher, Serializable {
+public class Any implements ArgumentMatcher, Serializable {
 
     public static final Any ANY = new Any();
 

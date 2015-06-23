@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class AnyVararg implements MockitoMatcher, VarargMatcher, Serializable {
+public class AnyVararg implements ArgumentMatcher, VarargMatcher, Serializable {
 
-    public static final MockitoMatcher ANY_VARARG = new AnyVararg();
+    public static final ArgumentMatcher ANY_VARARG = new AnyVararg();
 
     public boolean matches(Object arg) {
         return true;

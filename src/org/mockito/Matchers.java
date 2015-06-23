@@ -54,7 +54,7 @@ import java.util.Set;
  * It is important to understand the use cases and available options for dealing with non-trivial arguments
  * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
  * for given scenario and produce highest quality test (clean and maintainable).
- * Please read on in the javadoc for {@link MockitoMatcher} to learn about approaches and see the examples.
+ * Please read on in the javadoc for {@link ArgumentMatcher} to learn about approaches and see the examples.
  */
 @SuppressWarnings("unchecked")
 public class Matchers {
@@ -662,17 +662,17 @@ public class Matchers {
      * It is important to understand the use cases and available options for dealing with non-trivial arguments
      * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
      * for given scenario and produce highest quality test (clean and maintainable).
-     * Please read the documentation for {@link MockitoMatcher} to learn about approaches and see the examples.
+     * Please read the documentation for {@link ArgumentMatcher} to learn about approaches and see the examples.
      * <p>
      * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
      * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
      * <p>
-     * See examples in javadoc for {@link MockitoMatcher} class
+     * See examples in javadoc for {@link ArgumentMatcher} class
      * 
      * @param matcher decides whether argument matches
      * @return <code>null</code>.
      */
-    public static <T> T argThat(MockitoMatcher<T> matcher) {
+    public static <T> T argThat(ArgumentMatcher<T> matcher) {
         return reportMatcher(matcher).<T>returnNull();
     }
     
@@ -684,7 +684,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static char charThat(MockitoMatcher<Character> matcher) {
+    public static char charThat(ArgumentMatcher<Character> matcher) {
         return reportMatcher(matcher).returnChar();
     }
     
@@ -696,7 +696,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>false</code>.
      */
-    public static boolean booleanThat(MockitoMatcher<Boolean> matcher) {
+    public static boolean booleanThat(ArgumentMatcher<Boolean> matcher) {
         return reportMatcher(matcher).returnFalse();
     }
     
@@ -708,7 +708,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static byte byteThat(MockitoMatcher<Byte> matcher) {
+    public static byte byteThat(ArgumentMatcher<Byte> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -720,7 +720,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static short shortThat(MockitoMatcher<Short> matcher) {
+    public static short shortThat(ArgumentMatcher<Short> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -732,7 +732,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static int intThat(MockitoMatcher<Integer> matcher) {
+    public static int intThat(ArgumentMatcher<Integer> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
@@ -744,7 +744,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static long longThat(MockitoMatcher<Long> matcher) {
+    public static long longThat(ArgumentMatcher<Long> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -756,7 +756,7 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static float floatThat(MockitoMatcher<Float> matcher) {
+    public static float floatThat(ArgumentMatcher<Float> matcher) {
         return reportMatcher(matcher).returnZero();
     }
     
@@ -768,11 +768,11 @@ public class Matchers {
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
      */
-    public static double doubleThat(MockitoMatcher<Double> matcher) {
+    public static double doubleThat(ArgumentMatcher<Double> matcher) {
         return reportMatcher(matcher).returnZero();
     }
 
-    private static HandyReturnValues reportMatcher(MockitoMatcher<?> matcher) {
+    private static HandyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
         return MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

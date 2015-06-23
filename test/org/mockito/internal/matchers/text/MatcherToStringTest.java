@@ -1,18 +1,18 @@
 package org.mockito.internal.matchers.text;
 
 import org.junit.Test;
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
 public class MatcherToStringTest extends TestBase {
 
-    static class MatcherWithoutDescription implements MockitoMatcher<Object> {
+    static class MatcherWithoutDescription implements ArgumentMatcher<Object> {
         public boolean matches(Object argument) {
             return false;
         }
     }
 
-    static class MatcherWithDescription implements MockitoMatcher<Object> {
+    static class MatcherWithDescription implements ArgumentMatcher<Object> {
         public boolean matches(Object argument) {
             return false;
         }

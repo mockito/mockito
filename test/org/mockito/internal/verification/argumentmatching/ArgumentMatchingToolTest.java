@@ -5,7 +5,7 @@
 package org.mockito.internal.verification.argumentmatching;
 
 import org.junit.Test;
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
 
@@ -20,7 +20,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldNotFindAnySuspiciousMatchersWhenNumberOfArgumentsDoesntMatch() {
         //given
-        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(1));
+        List<ArgumentMatcher> matchers = (List) Arrays.asList(new Equals(1));
 
         //when
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
@@ -32,7 +32,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldNotFindAnySuspiciousMatchersWhenArgumentsMatch() {
         //given
-        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(10), new Equals(20));
+        List<ArgumentMatcher> matchers = (List) Arrays.asList(new Equals(10), new Equals(20));
         
         //when
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, 20});
@@ -48,7 +48,7 @@ public class ArgumentMatchingToolTest extends TestBase {
         Long longPretendingAnInt = new Long(20);
         
         //when
-        List<MockitoMatcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);
+        List<ArgumentMatcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);
         Integer[] suspicious = tool.getSuspiciouslyNotMatchingArgsIndexes(matchers, new Object[] {10, longPretendingAnInt});
         
         //then
@@ -85,7 +85,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     @Test
     public void shouldUseMatchersSafely() {
         //given
-        List<MockitoMatcher> matchers = (List) Arrays.asList(new MockitoMatcher() {
+        List<ArgumentMatcher> matchers = (List) Arrays.asList(new ArgumentMatcher() {
             public boolean matches(Object item) {
                 throw new ClassCastException("nasty matcher");
             }

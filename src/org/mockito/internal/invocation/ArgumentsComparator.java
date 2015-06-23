@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 
@@ -38,14 +38,14 @@ public class ArgumentsComparator {
 
         //we must use raw arguments, not arguments...
         Object[] rawArgs = actual.getRawArguments();
-        List<MockitoMatcher> matchers = invocationMatcher.getMatchers();
+        List<ArgumentMatcher> matchers = invocationMatcher.getMatchers();
 
         if (rawArgs.length != matchers.size()) {
             return false;
         }
 
         for (int i = 0; i < rawArgs.length; i++) {
-            MockitoMatcher m = matchers.get(i);
+            ArgumentMatcher m = matchers.get(i);
             //it's a vararg because it's the last array in the arg list
             if (rawArgs[i] != null && rawArgs[i].getClass().isArray() && i == rawArgs.length-1) {
                 //this is very important to only allow VarargMatchers here. If you're not sure why remove it and run all tests.

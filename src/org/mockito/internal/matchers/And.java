@@ -5,23 +5,23 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class And implements MockitoMatcher, Serializable {
+public class And implements ArgumentMatcher, Serializable {
 
-    private final List<MockitoMatcher> matchers;
+    private final List<ArgumentMatcher> matchers;
 
-    public And(List<MockitoMatcher> matchers) {
+    public And(List<ArgumentMatcher> matchers) {
         this.matchers = matchers;
     }
 
     public boolean matches(Object actual) {
-        for (MockitoMatcher matcher : matchers) {
+        for (ArgumentMatcher matcher : matchers) {
             if (!matcher.matches(actual)) {
                 return false;
             }
@@ -32,7 +32,7 @@ public class And implements MockitoMatcher, Serializable {
     public String toString() {
         StringBuilder out = new StringBuilder();
         out.append("and(");
-        for (Iterator<MockitoMatcher> it = matchers.iterator(); it.hasNext();) {
+        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
             out.append(it.next().toString());
             if (it.hasNext()) {
                 out.append(", ");

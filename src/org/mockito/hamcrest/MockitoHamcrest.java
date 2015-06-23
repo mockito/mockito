@@ -31,6 +31,7 @@ public class MockitoHamcrest {
     }
 
     /*
+    TODO SF not implemented yet
     private static Class grabClass(Matcher matcher) {
         if (matcher.getClass().getGenericSuperclass() instanceof ParameterizedType) {
             Type[] genericTypes = ((ParameterizedType) matcher.getClass().getGenericSuperclass()).getActualTypeArguments();

@@ -5,11 +5,11 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-public class Matches implements MockitoMatcher<Object>, Serializable {
+public class Matches implements ArgumentMatcher<Object>, Serializable {
 
     private final String regex;
 

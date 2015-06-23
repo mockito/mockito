@@ -5,11 +5,11 @@
 
 package org.mockito.internal.matchers.apachecommons;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-public class ReflectionEquals implements MockitoMatcher<Object>, Serializable {
+public class ReflectionEquals implements ArgumentMatcher<Object>, Serializable {
 
     private final Object wanted;
     private final String[] excludeFields;

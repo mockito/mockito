@@ -5,12 +5,12 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
 
-public abstract class CompareTo<T extends Comparable<T>> implements MockitoMatcher<T>, Serializable {
+public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T>, Serializable {
     private final Comparable<T> wanted;
 
     public CompareTo(Comparable<T> value) {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -75,7 +75,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void orToString() {
-        List<MockitoMatcher> matchers = new ArrayList<MockitoMatcher>();
+        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         assertEquals("or(1, 2)", new Or(matchers).toString());
@@ -88,7 +88,7 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void andToString() {
-        List<MockitoMatcher> matchers = new ArrayList<MockitoMatcher>();
+        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
         matchers.add(new Equals(1));
         matchers.add(new Equals(2));
         assertEquals("and(1, 2)", new And(matchers).toString());

@@ -5,11 +5,11 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-public class EqualsWithDelta implements MockitoMatcher<Number>, Serializable {
+public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
 
     private final Number wanted;
     private final Number delta;

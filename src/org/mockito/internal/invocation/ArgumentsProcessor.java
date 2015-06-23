@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.util.collections.ArrayUtils;
@@ -38,8 +38,8 @@ public class ArgumentsProcessor {
         return newArgs;
     }
 
-    public static List<MockitoMatcher> argumentsToMatchers(Object[] arguments) {
-        List<MockitoMatcher> matchers = new ArrayList<MockitoMatcher>(arguments.length);
+    public static List<ArgumentMatcher> argumentsToMatchers(Object[] arguments) {
+        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));

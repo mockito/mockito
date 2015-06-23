@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.reporting;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.matchers.text.MatchersPrinter;
@@ -43,7 +43,7 @@ public class PrintSettings {
         this.withTypeInfo = Arrays.asList(indexesOfMatchers);
     }
 
-    public String print(List<MockitoMatcher> matchers, Invocation invocation) {
+    public String print(List<ArgumentMatcher> matchers, Invocation invocation) {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
         String qualifiedName = new MockUtil().getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
         String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);

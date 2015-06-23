@@ -23,7 +23,7 @@ package org.mockito;
  *     Useful when you need to verify the arguments. Captor is not useful if you need argument matching for stubbing.
  *     Many times, this option leads to clean and readable tests with fine-grained validation of arguments.
  *     </ul>
- *     <ul>use customized argument matchers by implementing {@link MockitoMatcher} interface
+ *     <ul>use customized argument matchers by implementing {@link ArgumentMatcher} interface
  *     and passing the implementation to the {@link Mockito#argThat} method.
  *     This option is useful if custom matcher is needed for stubbing and can be reused a lot
  *     </ul>
@@ -37,7 +37,7 @@ package org.mockito;
  * Implementations of this interface can be used with {@link Matchers#argThat} method:
  *
  * <pre class="code"><code class="java">
- * class ListOfTwoElements implements MockitoMatcher&lt;List&gt; {
+ * class ListOfTwoElements implements ArgumentMatcher&lt;List&gt; {
  *     public boolean matches(Object list) {
  *         return ((List) list).size() == 2;
  *     }
@@ -65,7 +65,7 @@ package org.mockito;
  *
  * @param <T> type of argument
  */
-public interface MockitoMatcher<T> {
+public interface ArgumentMatcher<T> {
 
     /**
      * Informs if this matcher accepts the given argument.
@@ -76,8 +76,9 @@ public interface MockitoMatcher<T> {
      * The argument is not using generic type in order to force explicit casting in the implementation.
      * This way it is easier to debug when incompatible arguments are passed to the matchers.
      * You have to trust us on this one.
+     * //TODO SF make sure it makes sense to receive an Object here instead of T and document it.
      * <p>
-     * See the example in the top level javadoc for {@link MockitoMatcher}
+     * See the example in the top level javadoc for {@link ArgumentMatcher}
      *
      * @param argument
      *            the argument

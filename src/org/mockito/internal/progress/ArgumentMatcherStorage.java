@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.progress;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.LocalizedMatcher;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
-    HandyReturnValues reportMatcher(MockitoMatcher matcher);
+    HandyReturnValues reportMatcher(ArgumentMatcher matcher);
 
     List<LocalizedMatcher> pullLocalizedMatchers();
 

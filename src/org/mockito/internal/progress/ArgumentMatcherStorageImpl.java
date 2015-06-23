@@ -5,7 +5,7 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.LocalizedMatcher;
@@ -21,7 +21,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     public static final int ONE_SUB_MATCHER = 1;
     private final Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
     
-    public HandyReturnValues reportMatcher(MockitoMatcher matcher) {
+    public HandyReturnValues reportMatcher(ArgumentMatcher matcher) {
         matcherStack.push(new LocalizedMatcher(matcher));
         return new HandyReturnValues();
     }
@@ -71,8 +71,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         assertIncorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount);
     }
 
-    private List<MockitoMatcher> popLastArgumentMatchers(int count) {
-        LinkedList<MockitoMatcher> result = new LinkedList<MockitoMatcher>();
+    private List<ArgumentMatcher> popLastArgumentMatchers(int count) {
+        LinkedList<ArgumentMatcher> result = new LinkedList<ArgumentMatcher>();
         for (int i = 0; i < count; i++) {
             result.addFirst(matcherStack.pop().getMatcher());
         }

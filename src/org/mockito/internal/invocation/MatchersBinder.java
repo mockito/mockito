@@ -5,11 +5,10 @@
 
 package org.mockito.internal.invocation;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
-import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ public class MatchersBinder implements Serializable {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        List<MockitoMatcher> matchers = new LinkedList<MockitoMatcher>();
+        List<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
         for (LocalizedMatcher m : lastMatchers) {
             matchers.add(m.getMatcher());
         }

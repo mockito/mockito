@@ -5,12 +5,12 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
 
-public class InstanceOf implements MockitoMatcher<Object>, Serializable {
+public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
 
     private final Class<?> clazz;
 

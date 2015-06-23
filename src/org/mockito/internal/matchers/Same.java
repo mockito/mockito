@@ -5,12 +5,12 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.text.ValuePrinter;
 
 import java.io.Serializable;
 
-public class Same implements MockitoMatcher<Object>, Serializable {
+public class Same implements ArgumentMatcher<Object>, Serializable {
 
     private final Object wanted;
 

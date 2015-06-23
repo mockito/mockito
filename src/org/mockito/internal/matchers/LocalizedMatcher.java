@@ -4,19 +4,17 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Location;
-
-import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
 public class LocalizedMatcher {
 
-    private final MockitoMatcher matcher;
+    private final ArgumentMatcher matcher;
     private final Location location;
 
-    public LocalizedMatcher(MockitoMatcher matcher) {
+    public LocalizedMatcher(ArgumentMatcher matcher) {
         this.matcher = matcher;
         this.location = new LocationImpl();
     }
@@ -25,7 +23,7 @@ public class LocalizedMatcher {
         return location;
     }
 
-    public MockitoMatcher getMatcher() {
+    public ArgumentMatcher getMatcher() {
         return matcher;
     }
 }

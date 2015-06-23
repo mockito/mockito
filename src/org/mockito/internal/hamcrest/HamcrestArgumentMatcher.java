@@ -2,12 +2,12 @@ package org.mockito.internal.hamcrest;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 /**
  * Created by sfaber on 6/22/15.
  */
-public class HamcrestArgumentMatcher<T> implements MockitoMatcher<T> {
+public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
 
     private final Matcher matcher;
 

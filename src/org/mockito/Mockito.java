@@ -168,7 +168,7 @@ import org.mockito.junit.*;
  * {@link Matchers Click here to see} more built-in matchers
  * and examples of <b>custom argument matchers / hamcrest matchers</b>.
  * <p>
- * For information solely on <b>custom argument matchers</b> check out javadoc for {@link MockitoMatcher} class.
+ * For information solely on <b>custom argument matchers</b> check out javadoc for {@link ArgumentMatcher} class.
  * <p>
  * Be reasonable with using complicated argument matching.
  * The natural matching style using <code>equals()</code> with occasional <code>anyX()</code> matchers tend to give clean & simple tests.
@@ -598,14 +598,14 @@ import org.mockito.junit.*;
  * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
  * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
  * <p>
- * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link MockitoMatcher} class).
+ * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
  * Both techniques can be used for making sure certain arguments where passed to mocks.
  * However, ArgumentCaptor may be a better fit if:
  * <ul>
  * <li>custom argument matcher is not likely to be reused</li>
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
- * Custom argument matchers via {@link MockitoMatcher} are usually better for stubbing.
+ * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  *
  *
  *
@@ -1643,7 +1643,7 @@ public class Mockito extends Matchers {
      * </code></pre>
      * <p>
      * Arguments passed are compared using <code>equals()</code> method.
-     * Read about {@link ArgumentCaptor} or {@link MockitoMatcher} to find out other ways of matching / asserting arguments passed.
+     * Read about {@link ArgumentCaptor} or {@link ArgumentMatcher} to find out other ways of matching / asserting arguments passed.
      * <p>
      * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
      * Let's say you've stubbed <code>foo.bar()</code>.
@@ -1675,7 +1675,7 @@ public class Mockito extends Matchers {
      * <b>times(1) is the default</b> and can be omitted
      * <p>
      * Arguments passed are compared using <code>equals()</code> method.
-     * Read about {@link ArgumentCaptor} or {@link MockitoMatcher} to find out other ways of matching / asserting arguments passed.
+     * Read about {@link ArgumentCaptor} or {@link ArgumentMatcher} to find out other ways of matching / asserting arguments passed.
      * <p>
      *
      * @param mock to be verified

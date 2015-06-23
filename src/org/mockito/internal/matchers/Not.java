@@ -5,16 +5,16 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
 @SuppressWarnings("unchecked")
-public class Not implements MockitoMatcher, Serializable {
+public class Not implements ArgumentMatcher, Serializable {
 
-    private final MockitoMatcher first;
+    private final ArgumentMatcher first;
 
-    public Not(MockitoMatcher first) {
+    public Not(ArgumentMatcher first) {
         this.first = first;
     }
 

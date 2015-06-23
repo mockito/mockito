@@ -5,11 +5,11 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-public class NotNull implements MockitoMatcher<Object>, Serializable {
+public class NotNull implements ArgumentMatcher<Object>, Serializable {
 
     public static final NotNull NOT_NULL = new NotNull();
 

@@ -1,6 +1,6 @@
 package org.mockito.internal.matchers.text;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.util.Decamelizer;
 import org.mockito.internal.util.ObjectMethodsGuru;
 
@@ -21,7 +21,7 @@ class MatcherToString {
      * @param matcher
      * @return
      */
-    static String toString(MockitoMatcher matcher) {
+    static String toString(ArgumentMatcher matcher) {
         ObjectMethodsGuru guru = new ObjectMethodsGuru();
         Class cls = matcher.getClass();
         while(cls != Object.class) {

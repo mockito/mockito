@@ -7,9 +7,9 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
-public class EndsWith implements MockitoMatcher<String>, Serializable {
+public class EndsWith implements ArgumentMatcher<String>, Serializable {
 
     private final String suffix;
 

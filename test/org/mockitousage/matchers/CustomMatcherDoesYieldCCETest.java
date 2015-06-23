@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.MockitoMatcher;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -31,8 +30,8 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
         } catch (ArgumentsAreDifferent e) {}
     }
 
-    private MockitoMatcher<String> isStringWithTextFoo() {
-        return new MockitoMatcher<String>() {
+    private ArgumentMatcher<String> isStringWithTextFoo() {
+        return new ArgumentMatcher<String>() {
             public boolean matches(Object argument) {
                 // casting that should not be thrown:
                 String str = (String) argument;

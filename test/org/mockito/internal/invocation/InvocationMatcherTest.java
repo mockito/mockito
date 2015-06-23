@@ -6,11 +6,10 @@
 package org.mockito.internal.invocation;
 
 import org.fest.assertions.Assertions;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.MockitoMatcher;
 import org.mockito.internal.matchers.*;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
@@ -58,9 +57,9 @@ public class InvocationMatcherTest extends TestBase {
 
     @Test
     public void should_to_string_with_matchers() throws Exception {
-        MockitoMatcher m = NotNull.NOT_NULL;
+        ArgumentMatcher m = NotNull.NOT_NULL;
         InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
-        MockitoMatcher mTwo = new Equals('x');
+        ArgumentMatcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertContains("simpleMethod(notNull())", notNull.toString());
@@ -147,7 +146,7 @@ public class InvocationMatcherTest extends TestBase {
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
         CapturingMatcher m = new CapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, Arrays.<MockitoMatcher>asList(new Equals(1), m));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
 
         //when
         invocationMatcher.captureArgumentsFrom(invocation);

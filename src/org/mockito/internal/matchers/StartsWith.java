@@ -5,11 +5,11 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.MockitoMatcher;
+import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-public class StartsWith implements MockitoMatcher<String>, Serializable {
+public class StartsWith implements ArgumentMatcher<String>, Serializable {
 
     private final String prefix;
 
