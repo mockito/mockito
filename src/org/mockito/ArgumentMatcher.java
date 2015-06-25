@@ -2,7 +2,8 @@ package org.mockito;
 
 /**
  * Allows creating customized argument matchers.
- * This API was changed in Mockito 2.*
+ * This API was changed in Mockito 2.* in an effort to decouple Mockito from Hamcrest
+ * and reduce the risk of version incompatibility.
  * <p>
  * For non-trivial method arguments used in stubbing or verification, you have following options
  * (in no particular order):
@@ -28,7 +29,7 @@ package org.mockito;
  *     This option is useful if custom matcher is needed for stubbing and can be reused a lot
  *     </ul>
  *     <ul>use an instance of hamcrest matcher and pass it to
- *     TODO
+ *     {@link org.mockito.hamcrest.MockitoHamcrest#argThat(org.hamcrest.Matcher)}
  *     Useful if you already have a hamcrest matcher. Reuse and win!
  *     </ul>
  * </li>

@@ -28,27 +28,18 @@ public class HamcrestMatchersTest extends TestBase {
         }
     }
 
-    private final class PrimitiveMatcher extends BaseMatcher<Integer> {
-
-        public boolean matches(Object o) {
-            return true;
-        }
-
-        public void describeTo(Description description) {}
-    }
-
     @Mock
     private IMethods mock;
 
     @Test
-    public void shouldAcceptHamcrestMatcher() {
+    public void stubs_with_hamcrest_matcher() {
         when(mock.simpleMethod(argThat(new ContainsX()))).thenReturn("X");
         assertNull(mock.simpleMethod("blah"));
         assertEquals("X", mock.simpleMethod("blah X blah"));
     }
     
     @Test
-    public void shouldVerifyUsingHamcrestMatcher() {
+    public void verifies_with_hamcrest_matcher() {
         mock.simpleMethod("blah");
         
         try {
@@ -59,9 +50,34 @@ public class HamcrestMatchersTest extends TestBase {
         }
     }
 
-    //@Test TODO SF not implemented yet
-    public void shouldMatchPrimitives() {
-        when(mock.intArgumentReturningInt(argThat(new PrimitiveMatcher()))).thenReturn(5);
+    private class IntMatcher extends BaseMatcher<Integer> {
+        public boolean matches(Object o) {
+            return true;
+        }
+        public void describeTo(Description description) {}
+    }
+
+    @Test
+    public void supports_primitive_matchers() {
+        when(mock.intArgumentReturningInt(argThat(new IntMatcher()))).thenReturn(5);
         assertEquals(5, mock.intArgumentReturningInt(10));
+    }
+
+    private class NonGenericMatcher extends BaseMatcher {
+        public boolean matches(Object o) {
+            return true;
+        }
+        public void describeTo(Description description) {}
+    }
+
+    @Test
+    public void supports_non_generic_matchers() {
+        when(mock.intArgumentReturningInt(nonGenericMatcher())).thenReturn(5);
+        assertEquals(5, mock.intArgumentReturningInt(10));
+    }
+
+    private int nonGenericMatcher() {
+        argThat(new NonGenericMatcher());
+        return 0;
     }
 }

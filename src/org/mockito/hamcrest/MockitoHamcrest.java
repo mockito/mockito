@@ -4,9 +4,34 @@ import org.hamcrest.Matcher;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.ArgumentMatcher;
 
 /**
- * TODO: javadoc
+ * Allows matching arguments with hamcrest matchers.
+ * <p>
+ * Before implementing or reusing an existing hamcrest matcher please read
+ * how to deal with sophisticated argument matching in {@link ArgumentMatcher}.
+ * <p>
+ * Mockito 2.0 was decoupled from Hamcrest to avoid version incompatibilities
+ * that have impacted our users in past. Mockito offers a dedicated API to match arguments
+ * via {@link ArgumentMatcher}.
+ * Hamcrest integration is provided so that users can take advantage of existing Hamcrest matchers.
+ * <p>
+ * TODO, perhaps instead of duplicated argThat method we should provide a method that adapts existing matcher into
+ * ArgumentMatcher???
+ *
+ * Example:
+ * <pre>
+ *     import static org.mockito.hamcrest.MockitoHamcrest.argThat;
+ *
+ *     //stubbing
+ *     when(mock.giveMe(argThat(new MyHamcrestMatcher())));
+ *
+ *     //verification
+ *     verify(mock).giveMe(argThat(new MyHamcrestMatcher()));
+ * </pre>
+ *
+ * @since 2.0
  */
 public class MockitoHamcrest {
 
@@ -15,31 +40,17 @@ public class MockitoHamcrest {
     /**
      * Allows matching arguments with hamcrest matchers.
      * <p>
-     * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
-     * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
-     * <p>
      * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
      *
-     * @return <code>null</code>.
+     * @return <code>null</code> or default value for primitive (0, false, etc.)
+     *
+     * @since 2.0
      */
     public static <T> T argThat(Matcher<T> matcher) {
         return (T) MOCKING_PROGRESS.getArgumentMatcherStorage()
                 .reportMatcher(new HamcrestArgumentMatcher(matcher))
-                .returnNull();
+                .returnFor(MatcherGenericTypeExtractor.genericTypeOfMatcher(matcher.getClass()));
     }
-
-    /*
-    TODO SF not implemented yet
-    private static Class grabClass(Matcher matcher) {
-        if (matcher.getClass().getGenericSuperclass() instanceof ParameterizedType) {
-            Type[] genericTypes = ((ParameterizedType) matcher.getClass().getGenericSuperclass()).getActualTypeArguments();
-            if (genericTypes.length > 0) {
-                return  (Class) genericTypes[0];
-            }
-        }
-        return Object.class;
-    }
-    */
 }
