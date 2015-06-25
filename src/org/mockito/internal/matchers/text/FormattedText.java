@@ -1,7 +1,8 @@
 package org.mockito.internal.matchers.text;
 
 /**
- * Contains text that has already been formatted.
+ * Contains text that has already been formatted
+ * and hence it does not need any formatting (like quotes around string, etc.)
  */
 class FormattedText {
 
