@@ -1,3 +1,10 @@
+### 2.0.22-beta (2015-06-25 14:35 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.0.21-beta (2015-06-23 13:19 UTC)
 
 * Authors: 2
