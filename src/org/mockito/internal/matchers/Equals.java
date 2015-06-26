@@ -27,7 +27,7 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     }
 
     private String describe(Object object) {
-        return new ValuePrinter().appendValue(object).toString();
+        return ValuePrinter.print(object);
     }
 
     protected final Object getWanted() {

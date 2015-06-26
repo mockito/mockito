@@ -23,6 +23,6 @@ public class Same implements ArgumentMatcher<Object>, Serializable {
     }
 
     public String toString() {
-        return "same(" + new ValuePrinter().appendValue(wanted).toString() + ")";
+        return "same(" + ValuePrinter.print(wanted) + ")";
     }
 }

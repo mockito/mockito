@@ -6,44 +6,76 @@ import static java.lang.String.valueOf;
 
 /**
  * Prints a Java object value in a way humans can read it neatly.
- * Inspired on hamcrest. The implementation needs to safely depend on hamcrest.
- *
- * TODO add specific unit tests instead of relying on higher level unit tests.
+ * Inspired on hamcrest. Used for printing arguments in verification errors.
  */
 public class ValuePrinter {
 
-    private final StringBuilder content = new StringBuilder();
-
-    public String toString() {
-        return content.toString();
-    }
-
-    public ValuePrinter appendText(String text) {
-        append(text);
-        return this;
-    }
-
-    //TODO builder API doesn't make sense. Let's just have static or non-static functions.
-    public ValuePrinter appendValue(Object value) {
+    /**
+     * Prints given value so that it is neatly readable by humans.
+     * Handles explosive toString() implementations.
+     */
+    public static String print(Object value) {
         if (value == null) {
-            append("null");
+            return "null";
         } else if (value instanceof String) {
-            toJavaSyntax((String) value);
+            return "\"" + value + "\"";
         } else if (value instanceof Character) {
-            append('\'');
-            toJavaSyntax((Character) value);
-            append('\'');
+            return printChar((Character) value);
         } else if (value.getClass().isArray()) {
-            appendList("[", ", ", "]", new org.mockito.internal.matchers.text.ArrayIterator(value));
+            return printValues("[", ", ", "]", new org.mockito.internal.matchers.text.ArrayIterator(value));
         } else if (value instanceof FormattedText) {
-            append(((FormattedText) value).getText());
-        } else {
-            append(descriptionOf(value));
+            return (((FormattedText) value).getText());
         }
-        return this;
+
+        return descriptionOf(value);
     }
 
-    private String descriptionOf(Object value) {
+    /**
+     * Print values in a nice format, e.g. (1, 2, 3)
+     *
+     * @param start the beginning of the values, e.g. "("
+     * @param separator the separator of values, e.g. ", "
+     * @param end the end of the values, e.g. ")"
+     * @param values the values to print
+     *
+     * @return neatly formatted value list
+     */
+    public static String printValues(String start, String separator, String end, Iterator values) {
+        //TODO SF null check
+        StringBuilder sb = new StringBuilder(start);
+        while(values.hasNext()) {
+            sb.append(print(values.next()));
+            if (values.hasNext()) {
+                sb.append(separator);
+            }
+        }
+        return sb.append(end).toString();
+    }
+
+    private static String printChar(char value) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('\'');
+        switch (value) {
+            case '"':
+                sb.append("\\\"");
+                break;
+            case '\n':
+                sb.append("\\n");
+                break;
+            case '\r':
+                sb.append("\\r");
+                break;
+            case '\t':
+                sb.append("\\t");
+                break;
+            default:
+                sb.append(value);
+        }
+        sb.append('\'');
+        return sb.toString();
+    }
+
+    private static String descriptionOf(Object value) {
         try {
             return valueOf(value);
         }
@@ -51,62 +83,4 @@ public class ValuePrinter {
             return value.getClass().getName() + "@" + Integer.toHexString(value.hashCode());
         }
     }
-
-    public ValuePrinter appendList(String start, String separator, String end, Iterator i) {
-        boolean separate = false;
-        
-        append(start);
-        while (i.hasNext()) {
-            if (separate) append(separator);
-            appendValue(i.next());
-            separate = true;
-        }
-        append(end);
-        
-        return this;
-    }
-
-    /**
-     * Append the String <var>str</var> to the content.
-     */
-    protected void append(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            append(str.charAt(i));
-        }
-    }
-    
-    /**
-     * Append the char <var>c</var> to the content.
-     */
-    protected void append(char c) {
-        content.append(c);
-    }
-
-    private void toJavaSyntax(String unformatted) {
-        append('"');
-        for (int i = 0; i < unformatted.length(); i++) {
-            toJavaSyntax(unformatted.charAt(i));
-        }
-        append('"');
-    }
-
-    private void toJavaSyntax(char ch) {
-        switch (ch) {
-            case '"':
-                append("\\\"");
-                break;
-            case '\n':
-                append("\\n");
-                break;
-            case '\r':
-                append("\\r");
-                break;
-            case '\t':
-                append("\\t");
-                break;
-            default:
-                append(ch);
-        }
-    }
-
 }

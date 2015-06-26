@@ -16,15 +16,13 @@ import java.util.List;
 public class MatchersPrinter {
 
     public String getArgumentsLine(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
-        ValuePrinter printer = new ValuePrinter();
-        printer.appendList("(", ", ", ");", applyPrintSettings(matchers, printSettings));
-        return printer.toString();
+        Iterator args = applyPrintSettings(matchers, printSettings);
+        return ValuePrinter.printValues("(", ", ", ");", args);
     }
 
     public String getArgumentsBlock(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
-        ValuePrinter printer = new ValuePrinter();
-        printer.appendList("(\n    ", ",\n    ", "\n);", applyPrintSettings(matchers, printSettings));
-        return printer.toString();
+        Iterator args = applyPrintSettings(matchers, printSettings);
+        return ValuePrinter.printValues("(\n    ", ",\n    ", "\n);", args);
     }
 
     private Iterator applyPrintSettings(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
