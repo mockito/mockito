@@ -77,7 +77,6 @@ public interface ArgumentMatcher<T> {
      * The argument is not using generic type in order to force explicit casting in the implementation.
      * This way it is easier to debug when incompatible arguments are passed to the matchers.
      * You have to trust us on this one.
-     * //TODO SF make sure it makes sense to receive an Object here instead of T and document it.
      * <p>
      * See the example in the top level javadoc for {@link ArgumentMatcher}
      *
