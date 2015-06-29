@@ -81,9 +81,21 @@ public interface ArgumentMatcher<T> {
      * The method should <b>never</b> assert if the argument doesn't match. It
      * should only return false.
      * <p>
-     * The argument is not using generic type in order to force explicit casting in the implementation.
+     * The argument is not using the generic type in order to force explicit casting in the implementation.
      * This way it is easier to debug when incompatible arguments are passed to the matchers.
-     * You have to trust us on this one.
+     * You have to trust us on this one. If we used parametrized type then <code>ClassCastException</code>
+     * would be thrown in certain scenarios.
+     * For example:
+     *
+     * <pre class="code"><code class="java">
+     *   //test, method accepts Collection argument and ArgumentMatcher&lt;List&gt; is used
+     *   when(mock.useCollection(someListMatcher())).thenDoNothing();
+     *
+     *   //production code, yields confusing ClassCastException
+     *   //although Set extends Collection but is not compatible with ArgumentMatcher&lt;List&gt;
+     *   mock.useCollection(new HashSet());
+     * </pre>
+     *
      * <p>
      * See the example in the top level javadoc for {@link ArgumentMatcher}
      *
