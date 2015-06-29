@@ -7,40 +7,46 @@ package org.mockito;
  * <p>
  * For non-trivial method arguments used in stubbing or verification, you have following options
  * (in no particular order):
- * <li>
- *     <ul>refactor the code so that the interactions with collaborators are easier to test with mocks.
+ * <ul>
+ *     <li>refactor the code so that the interactions with collaborators are easier to test with mocks.
  *     Perhaps it is possible to pass a different argument to the method so that mocking is easier?
- *     If stuff is hard to test it usually indicates the design could be better, so refactor for testability.
- *     </ul>
- *     <ul>don't match the argument strictly, just use one of the lenient argument matchers like
+ *     If stuff is hard to test it usually indicates the design could be better, so do refactor for testability!
+ *     </li>
+ *     <li>don't match the argument strictly, just use one of the lenient argument matchers like
  *     {@link Mockito#notNull()}. Some times it is better to have a simple test that works than
  *     a complicated test that seem to work.
- *     </ul>
- *     <ul>implement equals() method in the objects that are used as arguments to mocks.
+ *     </li>
+ *     <li>implement equals() method in the objects that are used as arguments to mocks.
  *     Mockito naturally uses equals() for argument matching.
  *     Many times, this is option is clean and simple.
- *     </ul>
- *     <ul>use {@link ArgumentCaptor} to capture the arguments and perform assertions on their state.
+ *     </li>
+ *     <li>use {@link ArgumentCaptor} to capture the arguments and perform assertions on their state.
  *     Useful when you need to verify the arguments. Captor is not useful if you need argument matching for stubbing.
  *     Many times, this option leads to clean and readable tests with fine-grained validation of arguments.
- *     </ul>
- *     <ul>use customized argument matchers by implementing {@link ArgumentMatcher} interface
+ *     </li>
+ *     <li>use customized argument matchers by implementing {@link ArgumentMatcher} interface
  *     and passing the implementation to the {@link Mockito#argThat} method.
  *     This option is useful if custom matcher is needed for stubbing and can be reused a lot
- *     </ul>
- *     <ul>use an instance of hamcrest matcher and pass it to
+ *     </li>
+ *     <li>use an instance of hamcrest matcher and pass it to
  *     {@link org.mockito.hamcrest.MockitoHamcrest#argThat(org.hamcrest.Matcher)}
  *     Useful if you already have a hamcrest matcher. Reuse and win!
- *     </ul>
- * </li>
+ *     </li>
+ * </ul>
  *
  * <p>
- * Implementations of this interface can be used with {@link Matchers#argThat} method:
+ * Implementations of this interface can be used with {@link Matchers#argThat} method.
+ * Use <code>toString()</code> method for description of the matcher
+ * - it is printed in verification errors.
  *
  * <pre class="code"><code class="java">
  * class ListOfTwoElements implements ArgumentMatcher&lt;List&gt; {
  *     public boolean matches(Object list) {
  *         return ((List) list).size() == 2;
+ *     }
+ *     public String toString() {
+ *         //printed in verification errors
+ *         return "[list of 2 elements]";
  *     }
  * }
  *
@@ -65,6 +71,7 @@ package org.mockito;
  * Read more about other matchers in javadoc for {@link Matchers} class
  *
  * @param <T> type of argument
+ * @since 2.0
  */
 public interface ArgumentMatcher<T> {
 

@@ -16,9 +16,6 @@ import org.mockito.ArgumentMatcher;
  * that have impacted our users in past. Mockito offers a dedicated API to match arguments
  * via {@link ArgumentMatcher}.
  * Hamcrest integration is provided so that users can take advantage of existing Hamcrest matchers.
- * <p>
- * TODO, perhaps instead of duplicated argThat method we should provide a method that adapts existing matcher into
- * ArgumentMatcher???
  *
  * Example:
  * <pre>
