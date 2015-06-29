@@ -658,6 +658,7 @@ public class Matchers {
 
     /**
      * Allows creating custom argument matchers.
+     * This API has changed in 2.0, please read {@link ArgumentMatcher} for rationale and migration guide.
      * <p>
      * It is important to understand the use cases and available options for dealing with non-trivial arguments
      * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach

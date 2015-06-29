@@ -23,11 +23,14 @@ import org.mockito.junit.*;
  * <p>
  * This javadoc content is also available on the <a href="http://mockito.org">http://mockito.org</a> web page.
  * All documentation is kept in javadocs because it guarantees consistency between what's on the web and what's in the source code.
- * Also, it makes possible to access documentation straight from the IDE even if you work offline.
+ * It allows to access documentation straight from the IDE even if you work offline.
+ * It motivates Mockito developers to keep documentation up-to-date with the code that they write,
+ * every day, with every commit.
  *
  * <h1>Contents</h1>
  *
  * <b>
+ *      <a href="#0">0. Migrating to 2.0</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -65,10 +68,25 @@ import org.mockito.junit.*;
  *      <a href="#35">35. (new) Custom verification failure message (Since 2.0.0)</a><br/>
  * </b>
  *
+ * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0</a></h3>
+ *
+ * In order to continue improving Mockito and further improve unit testing experience we want you to upgrade to 2.0.
+ * Mockito follows <a href="http://semver.org/">semantic versioning</a>
+ * and contains breaking changes only on major version upgrades.
+ * In a lifecycle of a library breaking changes are necessary
+ * to roll out a set of brand new features that alter the existing behavior or even change the API.
+ * We hope that you enjoy Mockito 2.0!
+ * <p>
+ * List of breaking changes:
+ * <ul>
+ *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
+ *     for rationale and migration guide</li>.
+ * </ul>
+ *
  * <p>
  * Following examples mock a List, because everyone knows its interface (methods
  * like <code>add()</code>, <code>get()</code>, <code>clear()</code> will be used). <br>
- * You probably wouldn't mock List class 'in real'.
+ * Don't mock List class 'in real'. Use a real instance instead.
  *
  *
  *

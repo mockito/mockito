@@ -4,6 +4,7 @@ package org.mockito;
  * Allows creating customized argument matchers.
  * This API was changed in Mockito 2.* in an effort to decouple Mockito from Hamcrest
  * and reduce the risk of version incompatibility.
+ * Migration guide is included close to the bottom of this javadoc.
  * <p>
  * For non-trivial method arguments used in stubbing or verification, you have following options
  * (in no particular order):
@@ -68,7 +69,25 @@ package org.mockito;
  * </code></pre>
  *
  * <p>
- * Read more about other matchers in javadoc for {@link Matchers} class
+ * Read more about other matchers in javadoc for {@link Matchers} class.
+ * <h2>2.0 migration guide</h2>
+ *
+ * All existing custom implementations of <code>ArgumentMatcher</code> will no longer compile.
+ * All locations where hamcrest matchers are passed to <code>argThat()</code> will no longer compile.
+ * There are 2 approaches to fix the problems:
+ * <ul>
+ * <li>a) Refactor the hamcrest matcher to Mockito matcher:
+ * Use "implements ArgumentMatcher" instead of "extends ArgumentMatcher".
+ * Then refactor <code>describeTo()</code> method into <code>toString()</code> method.
+ * </li>
+ * <li>
+ * b) Use <code>org.mockito.hamcrest.MockitoHamcrest.argThat()</code> instead of <code>Mockito.argThat()</code>
+ * </li>
+ * </ul>
+ * What option is right for you? If you don't mind compile dependency to hamcrest
+ * then option b) is probably right for you.
+ * Your choice should not have big impact and is fully reversible -
+ * you can choose different option in future (and refactor the code)
  *
  * @param <T> type of argument
  * @since 2.0
