@@ -110,12 +110,15 @@ public interface MockMaker {
      *
      * @param type The type inspected for mockability.
      * @return object that carries the information about mockability of given type.
+     * @since 2.0
      */
     @Incubating
     TypeMockability isTypeMockable(Class<?> type);
 
     /**
      * Carries the mockability information
+     *
+     * @since 2.0
      */
     @Incubating
     static interface TypeMockability {
