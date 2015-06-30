@@ -58,8 +58,8 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile 'net.bytebuddy:byte-buddy:0.6.11'
 
-    provided "junit:junit:4.10"
-    compile "org.hamcrest:hamcrest-core:1.1", "org.objenesis:objenesis:2.1"
+    provided "junit:junit:4.10", "org.hamcrest:hamcrest-core:1.3"
+    compile "org.objenesis:objenesis:2.1"
 
     testCompile 'org.ow2.asm:asm:5.0.4'
     testCompile fileTree("lib/test")
