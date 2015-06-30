@@ -13,6 +13,9 @@ import java.util.List;
  * Inspired on jMock (thanks jMock guys!!!)
  */
 public class SearchingClassLoader extends ClassLoader {
+
+    //TODO SF potentially not needed
+
     private final ClassLoader nextToSearch;
     
     public SearchingClassLoader(ClassLoader parent, ClassLoader nextToSearch) {

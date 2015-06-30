@@ -115,7 +115,7 @@ public interface MockMaker {
     TypeMockability isTypeMockable(Class<?> type);
 
     @Incubating
-    interface TypeMockability {
+    static interface TypeMockability {
         boolean mockable();
         String nonMockableReason();
     }
