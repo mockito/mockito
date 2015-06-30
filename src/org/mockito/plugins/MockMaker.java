@@ -108,15 +108,25 @@ public interface MockMaker {
      * Mockito 1.x's internal mockmaker cannot mock final types. Other implementations, may
      * have different limitations.</p>
      *
-     * @param type The type that may be mocked.
-     * @return <code>true</code> if mockable, <code>false</code> otherwise.
+     * @param type The type inspected for mockability.
+     * @return object that carries the information about mockability of given type.
      */
     @Incubating
     TypeMockability isTypeMockable(Class<?> type);
 
+    /**
+     * Carries the mockability information
+     */
     @Incubating
     static interface TypeMockability {
+        /**
+         * informs if type is mockable
+         */
         boolean mockable();
+
+        /**
+         * informs why type is not mockable
+         */
         String nonMockableReason();
     }
 }
