@@ -81,7 +81,9 @@ package org.mockito;
  * Then refactor <code>describeTo()</code> method into <code>toString()</code> method.
  * </li>
  * <li>
- * b) Use <code>org.mockito.hamcrest.MockitoHamcrest.argThat()</code> instead of <code>Mockito.argThat()</code>
+ * b) Use <code>org.mockito.hamcrest.MockitoHamcrest.argThat()</code> instead of <code>Mockito.argThat()</code>.
+ * Ensure that there is <a href="http://hamcrest.org/JavaHamcrest/">hamcrest</a> dependency on classpath
+ * (Mockito does not depend on hamcrest any more).
  * </li>
  * </ul>
  * What option is right for you? If you don't mind compile dependency to hamcrest

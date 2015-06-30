@@ -8,6 +8,8 @@ import org.mockito.ArgumentMatcher;
 
 /**
  * Allows matching arguments with hamcrest matchers.
+ * <b>Requires</b> <a href="http://hamcrest.org/JavaHamcrest/">hamcrest</a> on classpath,
+ * Mockito <b>does not</b> depend on hamcrest!
  * <p>
  * Before implementing or reusing an existing hamcrest matcher please read
  * how to deal with sophisticated argument matching in {@link ArgumentMatcher}.
