@@ -104,6 +104,7 @@ public class ByteBuddyMockMaker implements MockMaker {
 
             @Override
             public String nonMockableReason() {
+                //TODO SF does not seem to have test coverage. What is the expected value when type mockable
                 if(type.isPrimitive()) {
                     return "primitive type";
                 }
