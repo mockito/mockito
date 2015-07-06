@@ -23,7 +23,7 @@ bintray {
         name = 'mockito'
         desc = 'Mockito library'
         websiteUrl = 'http://mockito.org'
-        issueTrackerUrl = 'https://code.google.com/p/mockito/issues/list'
+        issueTrackerUrl = 'https://github.com/mockito/mockito/issues'
         vcsUrl = 'https://github.com/mockito/mockito.git'
         licenses = ['MIT']
         labels = ['mocks', 'tdd', 'unit tests']
