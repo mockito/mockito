@@ -1,7 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
@@ -14,6 +13,9 @@ import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializ
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Random;
 
 import static net.bytebuddy.description.modifier.FieldManifestation.FINAL;
@@ -38,12 +40,15 @@ class MockBytecodeGenerator {
                 byteBuddy.subclass(features.mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
                          .name(nameFor(features.mockedType))
                          .implement(features.interfaces.toArray(new Class<?>[features.interfaces.size()]))
-                         .method(any()).intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class))
+                         .method(not(isSynchronized())).intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class))
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                          .implement(MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
                          .method(isHashCode()).intercept(to(MockMethodInterceptor.ForHashCode.class))
                          .method(isEquals()).intercept(to(MockMethodInterceptor.ForEquals.class))
                          .defineField("serialVersionUID", long.class, STATIC, PRIVATE, FINAL).value(42L);
+
+        builder = generateNonSynchronizedInterceptors(features.mockedType, builder);
+
         if (features.crossClassLoaderSerializable) {
             builder = builder.implement(CrossClassLoaderSerializableMock.class)
                              .intercept(to(MockMethodInterceptor.ForWriteReplace.class));
@@ -57,6 +62,27 @@ class MockBytecodeGenerator {
                               .filter(isBootstrapClassLoader())
                               .build(), ClassLoadingStrategy.Default.INJECTION)
                       .getLoaded();
+    }
+
+    private <T> DynamicType.Builder<T> generateNonSynchronizedInterceptors(Class<T> mockedType, DynamicType.Builder<T> builder) {
+        for (Method method : mockedType.getDeclaredMethods()) {
+            if (isOverridableSynchronizedMethod(method)) {
+                builder = builder.defineMethod(
+                        method.getName(),
+                        method.getReturnType(),
+                        Arrays.asList(method.getParameterTypes()),
+                        method.getModifiers() - Modifier.SYNCHRONIZED)
+                        .intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class));
+            }
+        }
+        return builder;
+    }
+
+    private boolean isOverridableSynchronizedMethod(Method method) {
+        return  Modifier.isSynchronized(method.getModifiers())
+                && !Modifier.isStatic(method.getModifiers())
+                && !Modifier.isPrivate(method.getModifiers())
+                && !Modifier.isFinal(method.getModifiers());
     }
 
     // TODO inspect naming strategy (for OSGI, signed package, java.* (and bootstrap classes), etc...)

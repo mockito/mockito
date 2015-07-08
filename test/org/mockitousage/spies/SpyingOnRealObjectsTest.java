@@ -188,4 +188,29 @@ public class SpyingOnRealObjectsTest extends TestBase {
             assertContains("Most likely it is a private class that is not visible by Mockito", e.getMessage());
         }
     }
+
+    @Test
+    public void shouldSynchronizedMethodWorkWithSpy() throws InterruptedException {
+        final Synchronized spy = spy(new Synchronized());
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                spy.method();
+            }
+        }.start();
+
+        verify(spy, timeout(3000)).method();
+    }
+
+    class Synchronized {
+        synchronized void method() {
+            System.err.println("Synchronize me!");
+        }
+    }
 }
