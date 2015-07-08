@@ -19,6 +19,7 @@ apply plugin: 'maven-publish'
 apply from: 'gradle/version.gradle'
 apply from: "gradle/ide.gradle"
 apply from: 'gradle/coverage.gradle'
+apply from: 'gradle/osgi.gradle'
 
 allprojects {
     repositories {
@@ -97,21 +98,6 @@ task javadocJar(type: Jar) {
 }
 
 task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
-
-def antCommand = "ant"
-
-if (System.getProperty("os.name").startsWith("Windows")) {
-    antCommand += ".bat"
-}
-
-jar { task ->
-    task.rootSpec.exclude "MANIFEST.MF" //hack to avoid problems with bnd
-    doLast {
-        project.exec {
-            commandLine antCommand, '-f', 'build-ant.xml', "osgify.$task.baseName", "-Dversion=$project.version"
-        }
-    }
-}
 
 artifacts {
     archives sourcesJar
