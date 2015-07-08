@@ -24,6 +24,10 @@ allprojects {
     repositories {
         jcenter()
     }
+    tasks.withType(JavaCompile) {
+        //I don't believe those warnings add value given modern IDEs
+        options.warnings = false
+    }
 }
 
 configurations {
@@ -48,10 +52,6 @@ test {
         exceptionFormat 'full'
         showCauses true
     }
-}
-
-tasks.withType(JavaCompile) {
-    options.warnings = false
 }
 
 //TODO we should remove all dependencies to checked-in jars
