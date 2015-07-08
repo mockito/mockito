@@ -30,12 +30,6 @@ public class MockitoSerializationIssue extends ObjectStreamException {
         filterStackTrace();
     }
 
-    @Override
-    public StackTraceElement[] getStackTrace() {
-        filterStackTrace();
-        return super.getStackTrace();
-    }
-
     private void filterStackTrace() {
         unfilteredStackTrace = super.getStackTrace();
 
