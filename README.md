@@ -43,7 +43,16 @@ That means :
 
 ## How to build?
 
-./gradlew build
+To build locally:
+
+     ./gradlew build
+
+To develop in IDE you can use built-in Gradle import wizard in IDEA.
+Alternatively generate the importable IDE metadata files using:
+
+     ./gradlew idea
+
+Then, _open_ the generated *.ipr file in IDEA.
 
 ## More information
 
