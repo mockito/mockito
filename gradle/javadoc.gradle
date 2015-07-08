@@ -52,6 +52,7 @@ task mockitoJavadoc(type: Javadoc) {
 
     doLast {
         copy {
+            //TODO SF move 'javadoc' to src and make 'src' -> 'src/main/java'
             from "javadoc"
             into "$buildDir/javadoc"
         }
