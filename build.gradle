@@ -72,8 +72,7 @@ dependencies {
 
 def licenseFiles = copySpec {
     //mockito license
-    from(".") { include 'LICENSE', 'NOTICE' }
-    //repackaged license
+    from(".") { include 'LICENSE' }
 }
 
 task sourcesJar(type: Jar) {

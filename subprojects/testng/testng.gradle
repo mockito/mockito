@@ -19,7 +19,6 @@ jar {
 
     from("${rootProject.projectDir}") {
         include "LICENSE"
-        include "NOTICE"
         into "META-INF"
         expand(copyright: new Date().format("yyyy"), version: project.version)
     }
