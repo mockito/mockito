@@ -22,7 +22,7 @@ import org.mockitousage.IMethods;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;

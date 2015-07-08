@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Locale;
 import javax.net.SocketFactory;
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.TooManyActualInvocations;

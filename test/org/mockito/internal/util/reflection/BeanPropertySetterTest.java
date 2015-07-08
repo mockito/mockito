@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.File;

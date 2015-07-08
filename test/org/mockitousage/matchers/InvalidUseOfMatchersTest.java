@@ -14,7 +14,7 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;

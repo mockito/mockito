@@ -5,11 +5,11 @@
 package org.mockitousage.configuration;
 
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import java.util.concurrent.Callable;
-import org.fest.assertions.Condition;
+import org.assertj.core.api.Condition;
 import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -38,8 +38,8 @@ public class ClassCacheVersusClassReloadingTest {
                     .containsIgnoringCase("objenesis")
                     .containsIgnoringCase("MockitoConfiguration");
             assertThat(e.getCause())
-                    .satisfies(thatCceIsThrownFrom("java.lang.Class.cast"))
-                    .satisfies(thatCceIsThrownFrom("org.mockito.internal.creation.cglib.ClassImposterizer.imposterise"));
+                    .has(cceIsThrownFrom("java.lang.Class.cast"))
+                    .has(cceIsThrownFrom("org.mockito.internal.creation.cglib.ClassImposterizer.imposterise"));
         }
     }
 
@@ -51,7 +51,7 @@ public class ClassCacheVersusClassReloadingTest {
         doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
     }
 
-    private Condition<Throwable> thatCceIsThrownFrom(final String stacktraceElementDescription) {
+    private Condition<Throwable> cceIsThrownFrom(final String stacktraceElementDescription) {
         return new Condition<Throwable>() {
             @Override
             public boolean matches(Throwable throwable) {
