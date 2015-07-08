@@ -1,6 +1,5 @@
 apply plugin: 'osgi'
 
-/* TODO use Gradle osgi plugin at some point */
 afterEvaluate {
     tasks.matching { it.name == 'jar' }.all { jar ->
         jar.manifest {
@@ -20,14 +19,11 @@ afterEvaluate {
                     "org.mockito.*;version=${project.version}"
 
             instruction 'Import-Package',
-                    '!org.mockito.asm.signature',
                     'net.bytebuddy.*;version=0.6.11',
                     'junit.*;resolution:=optional',
                     'org.junit.*;resolution:=optional',
-                    'org.apache.tools.ant.*;resolution:=optional',
                     'org.hamcrest;version="[1.0,2.0)"',
                     'org.objenesis;version="[2.1,3.0)"',
-                    'org.mockito.asm.signature;resolution:=optional',
                     'org.mockito.*'
 
             instruction 'Private-Package',
