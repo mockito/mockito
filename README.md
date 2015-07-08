@@ -41,6 +41,10 @@ That means :
 * Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
 * Search / Ask question on [stackoverflow](http://stackoverflow.com)
 
+## How to build?
+
+./gradlew build
+
 ## More information
 
 All you want to know about Mockito is hosted at [The Mockito Site](http://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
