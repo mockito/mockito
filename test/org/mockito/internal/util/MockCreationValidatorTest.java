@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Observer;
 
 import static java.util.Arrays.asList;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 @SuppressWarnings("unchecked")

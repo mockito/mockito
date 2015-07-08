@@ -5,7 +5,7 @@
 
 package org.mockitousage.bugs;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;

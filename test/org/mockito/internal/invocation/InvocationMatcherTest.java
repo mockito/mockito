@@ -5,7 +5,7 @@
 
 package org.mockito.internal.invocation;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;

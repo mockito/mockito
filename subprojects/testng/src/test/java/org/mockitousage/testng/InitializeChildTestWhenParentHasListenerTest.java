@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.fail;
 
 public class InitializeChildTestWhenParentHasListenerTest extends ParentTest {

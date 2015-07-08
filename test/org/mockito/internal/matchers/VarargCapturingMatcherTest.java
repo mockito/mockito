@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 
 import static java.util.Arrays.asList;
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 public class VarargCapturingMatcherTest {

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.EqualsWithDelta;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EqualsWithDeltaTest {
 

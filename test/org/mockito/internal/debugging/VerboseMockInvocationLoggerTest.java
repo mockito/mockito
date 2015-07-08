@@ -16,7 +16,7 @@ import org.mockito.invocation.Invocation;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class VerboseMockInvocationLoggerTest {
 

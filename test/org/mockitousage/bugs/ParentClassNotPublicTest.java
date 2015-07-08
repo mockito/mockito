@@ -4,7 +4,7 @@
  */
 package org.mockitousage.bugs;
 
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;

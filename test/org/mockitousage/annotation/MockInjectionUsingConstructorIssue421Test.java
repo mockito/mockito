@@ -5,7 +5,7 @@
 
 package org.mockitousage.annotation;
 
-import static org.fest.assertions.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
