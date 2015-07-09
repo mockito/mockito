@@ -1,4 +1,6 @@
-//TODO generate to different dir, disable vanilla javadoc task
+//vanilla javadoc task does not work for us and it actually fails on java8
+tasks.javadoc.enabled = false
+
 task mockitoJavadoc(type: Javadoc) {
     description "Creates javadoc html for Mockito API."
     // For more details on the format
@@ -52,8 +54,7 @@ task mockitoJavadoc(type: Javadoc) {
 
     doLast {
         copy {
-            //TODO SF move 'javadoc' to src and make 'src' -> 'src/main/java'
-            from "javadoc"
+            from "src/javadoc"
             into "$buildDir/javadoc"
         }
     }
