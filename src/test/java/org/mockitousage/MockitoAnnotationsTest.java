@@ -6,6 +6,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,27 +20,32 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 public class MockitoAnnotationsTest {
 
+    @Before
+    public void setUp() {
+         GlobalConfiguration.removeIt();
+    }
+    
+    @After
+    public void tearDown() {
+         GlobalConfiguration.removeIt();
+    }
+
     @Test
     public void should_process_the_testcase_using_default_annotation_engine() throws Exception {
-        GlobalConfiguration.removeIt();
         NoMockitoPluginAnnotationTestClass noMockitoPluginAnnotationTestClass = new NoMockitoPluginAnnotationTestClass(); 
 
         MockitoAnnotations.initMocks(noMockitoPluginAnnotationTestClass);
         assertThat(isMock(noMockitoPluginAnnotationTestClass.someMock), is(true));
     }
-    
 
     @Test
     public void should_process_the_testcase_using_MyAnnotationEngine() throws Exception {
-        GlobalConfiguration.removeIt();
-        
         MockitoPluginAnnotationTestClass mockitoPluginAnnotationTestClass = new MockitoPluginAnnotationTestClass(); 
 
         MockitoAnnotations.initMocks(mockitoPluginAnnotationTestClass);
         
         MyAnnotationEngine annotationEngine = (MyAnnotationEngine) new GlobalConfiguration().getAnnotationEngine();
         assertThat(annotationEngine.processInvoked, is(true));
-        
     }
     
     @RunWith(MockitoJUnitRunner.class)
