@@ -114,12 +114,8 @@ public class MockitoAnnotations {
     }
 
     private static MockitoPlugin getAnnotationForMockitoPlugin(Object testClass) {
-        MockitoPlugin[] mockitoPluginAnnotations = testClass.getClass().getAnnotationsByType(MockitoPlugin.class);
-        MockitoPlugin mockitoPluginAnnotation = null;
-        if(mockitoPluginAnnotations.length > 0) {
-            mockitoPluginAnnotation = mockitoPluginAnnotations[0];
-        }
-        return mockitoPluginAnnotation;
+        Class<? extends Object> $class = testClass.getClass();
+        return $class.isAnnotationPresent(MockitoPlugin.class) ? $class.getAnnotation(MockitoPlugin.class) : null;
     }
 
     static void scanDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Class<?> clazz) {
