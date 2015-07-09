@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.MockitoPlugin;
 import org.mockito.ReturnValues;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
@@ -25,11 +26,21 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     IMockitoConfiguration getIt() {
         return GLOBAL_CONFIGURATION.get();
     }
+    //back door for testing
+    public static void removeIt() {
+        GLOBAL_CONFIGURATION.remove();
+    }
 
     public GlobalConfiguration() {
         //Configuration should be loaded only once but I cannot really test it
         if (GLOBAL_CONFIGURATION.get() == null) {
             GLOBAL_CONFIGURATION.set(createConfig());
+        }
+    }
+
+    public GlobalConfiguration(MockitoPlugin mockitoPlugin) {
+        if (GLOBAL_CONFIGURATION.get() == null) {
+            GLOBAL_CONFIGURATION.set(createConfig(mockitoPlugin));
         }
     }
 
@@ -66,4 +77,9 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public Answer<Object> getDefaultAnswer() {
         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }
+    
+    private IMockitoConfiguration createConfig(MockitoPlugin mockitoPlugin) {
+        return new DefaultMockitoConfiguration(mockitoPlugin);
+    }
+
 }

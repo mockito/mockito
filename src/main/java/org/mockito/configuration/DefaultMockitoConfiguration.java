@@ -4,7 +4,9 @@
  */
 package org.mockito.configuration;
 
+import org.mockito.MockitoPlugin;
 import org.mockito.ReturnValues;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
@@ -19,6 +21,25 @@ import org.mockito.stubbing.Answer;
 @SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     
+    private AnnotationEngine annotationEngine;
+    private ReturnsEmptyValues returnsEmptyValues = new ReturnsEmptyValues();
+
+    public DefaultMockitoConfiguration() {
+        annotationEngine = new InjectingAnnotationEngine();
+    }
+
+    public DefaultMockitoConfiguration(MockitoPlugin mockitoPlugin) {
+        if(mockitoPlugin == null) {
+            throw new MockitoException("mockitoPlugin is null");
+        }
+
+        try {
+            annotationEngine = (AnnotationEngine) mockitoPlugin.annotationEngine().newInstance();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unable to instantiate the specified annotation engine in the mockito plugin", e);
+        }
+    }
+
     /* (non-Javadoc)
      * @see org.mockito.IMockitoConfiguration#getReturnValues()
      */
@@ -29,14 +50,14 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     }
 
     public Answer<Object> getDefaultAnswer() {
-        return new ReturnsEmptyValues();
+        return returnsEmptyValues;
     }
     
     /* (non-Javadoc)
      * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
      */
     public AnnotationEngine getAnnotationEngine() {
-        return new InjectingAnnotationEngine();
+        return annotationEngine;
     }
 
     /* (non-Javadoc)
