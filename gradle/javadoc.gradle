@@ -3,6 +3,8 @@ tasks.javadoc.enabled = false
 
 task mockitoJavadoc(type: Javadoc) {
     description "Creates javadoc html for Mockito API."
+    tasks.javadoc.dependsOn it //so that when the user invokes 'javadoc' right things happen
+
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
 
