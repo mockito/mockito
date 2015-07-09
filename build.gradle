@@ -38,11 +38,9 @@ configurations {
 
 sourceSets {
     main {
-        java.srcDirs 'src', 'mockmaker/bytebuddy/main/java'
         compileClasspath = compileClasspath + configurations.provided
     }
     test {
-        java.srcDirs 'test', 'mockmaker/bytebuddy/test/java'
         compileClasspath = compileClasspath + configurations.provided
     }
 }
