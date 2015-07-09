@@ -91,11 +91,16 @@ public class MockitoAnnotations {
             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
 
-        AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
+        MockitoPlugin mockitoPluginAnnotation = getAnnotationForMockitoPlugin(testClass);
+        GlobalConfiguration globalConfiguration = mockitoPluginAnnotation == null ?
+                new GlobalConfiguration() : new GlobalConfiguration(mockitoPluginAnnotation);
+        
+        AnnotationEngine annotationEngine = globalConfiguration.getAnnotationEngine();
         Class<?> clazz = testClass.getClass();
 
         //below can be removed later, when we get read rid of deprecated stuff
-        if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass()) {
+        if (annotationEngine.getClass() != new DefaultMockitoConfiguration().getAnnotationEngine().getClass() 
+                && mockitoPluginAnnotation == null) {
             //this means user has his own annotation engine and we have to respect that.
             //we will do annotation processing the old way so that we are backwards compatible
             while (clazz != Object.class) {
@@ -106,6 +111,11 @@ public class MockitoAnnotations {
 
         //anyway act 'the new' way
         annotationEngine.process(testClass.getClass(), testClass);
+    }
+
+    private static MockitoPlugin getAnnotationForMockitoPlugin(Object testClass) {
+        Class<? extends Object> $class = testClass.getClass();
+        return $class.isAnnotationPresent(MockitoPlugin.class) ? $class.getAnnotation(MockitoPlugin.class) : null;
     }
 
     static void scanDeprecatedWay(AnnotationEngine annotationEngine, Object testClass, Class<?> clazz) {
