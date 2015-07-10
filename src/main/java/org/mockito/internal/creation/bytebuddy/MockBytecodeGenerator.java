@@ -3,11 +3,13 @@ package org.mockito.internal.creation.bytebuddy;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.ModifierResolver;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.attribute.AnnotationAppender;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.implementation.attribute.TypeAttributeAppender;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -28,8 +30,8 @@ class MockBytecodeGenerator {
 
     public MockBytecodeGenerator() {
         byteBuddy = new ByteBuddy()
-                .withDefaultMethodAttributeAppender(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
-                .withAttribute(TypeAttributeAppender.ForSuperType.INSTANCE);
+                .withDefaultMethodAttributeAppender(new MethodAttributeAppender.ForInstrumentedMethod(AnnotationAppender.ValueFilter.AppendDefaults.INSTANCE))
+                .withAttribute(new TypeAttributeAppender.ForSuperType(AnnotationAppender.ValueFilter.AppendDefaults.INSTANCE));
         random = new Random();
     }
 
@@ -38,7 +40,7 @@ class MockBytecodeGenerator {
                 byteBuddy.subclass(features.mockedType, ConstructorStrategy.Default.IMITATE_SUPER_TYPE)
                          .name(nameFor(features.mockedType))
                          .implement(features.interfaces.toArray(new Class<?>[features.interfaces.size()]))
-                         .method(any()).intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class))
+                         .method(any()).intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class), ModifierResolver.Desynchronizing.INSTANCE)
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                          .implement(MockAccess.class).intercept(FieldAccessor.ofBeanProperty())
                          .method(isHashCode()).intercept(to(MockMethodInterceptor.ForHashCode.class))
