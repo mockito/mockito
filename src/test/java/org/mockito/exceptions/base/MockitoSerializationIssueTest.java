@@ -7,14 +7,15 @@ package org.mockito.exceptions.base;
 
 import org.junit.Test;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
 
-public class MockitoSerializationIssueTest extends TestBase {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class MockitoSerializationIssueTest {
 
     @Test
-    public void shouldFilterOutTestClassFromStacktraceWhenCleanFlagIsTrue() {
+    public void should_filter_out_test_class_from_stacktrace_when_clean_flag_is_true() {
         // given
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
 
@@ -22,12 +23,12 @@ public class MockitoSerializationIssueTest extends TestBase {
         MockitoSerializationIssue issue = new MockitoSerializationIssue("msg", new Exception("cause"));
 
         // then
-        assertContains("MockitoSerializationIssueTest", Arrays.toString(issue.getUnfilteredStackTrace()));
-        assertNotContains("MockitoSerializationIssueTest", Arrays.toString(issue.getStackTrace()));
+        assertThat(Arrays.toString(issue.getUnfilteredStackTrace())).contains("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getStackTrace())).doesNotContain("MockitoSerializationIssueTest");
     }
 
     @Test
-    public void shouldKeepExecutingClassInStacktraceWhenCleanFlagIsFalse() {
+    public void should_keep_executing_class_in_stacktrace_when_clean_flag_is_false() {
         // given
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
 
@@ -35,7 +36,7 @@ public class MockitoSerializationIssueTest extends TestBase {
         MockitoSerializationIssue issue = new MockitoSerializationIssue("msg", new Exception("cause"));
 
         // then
-        assertContains("MockitoSerializationIssueTest", Arrays.toString(issue.getUnfilteredStackTrace()));
-        assertContains("MockitoSerializationIssueTest", Arrays.toString(issue.getStackTrace()));
+        assertThat(Arrays.toString(issue.getUnfilteredStackTrace())).contains("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getStackTrace())).contains("MockitoSerializationIssueTest");
     }
 }
