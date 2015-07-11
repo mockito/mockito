@@ -1,4 +1,4 @@
-package org.mockitousage.verification;
+package org.mockito.internal.verification;
 
 import java.util.List;
 import static junit.framework.Assert.assertTrue;
