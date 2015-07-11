@@ -31,25 +31,7 @@ task mockitoJavadoc(type: Javadoc) {
     options.links('http://docs.oracle.com/javase/8/docs/api/')
     options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
-    options.bottom("""
-        <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
-        <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
-        <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
-        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
-
-        <script type="text/javascript">
-          var usingOldIE = \$.browser.msie && parseInt(\$.browser.version) < 9;
-          if(!usingOldIE) {
-              \$("head").append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")
-              \$("head", window.parent.document).append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")
-              hljs.initHighlightingOnLoad();
-              \$("pre.code").css("font-size", "0.9em");
-              injectProjectVersionForJavadocJDK6("Mockito ${project.version} API",
-                                                 "em#mockito-version-header-javadoc7-header",
-                                                 "em#mockito-version-header-javadoc7-footer");
-          }
-        </script>
-    """)
+    options.bottom("""        <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>        <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>        <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>        <script type="text/javascript">          var usingOldIE = \$.browser.msie && parseInt(\$.browser.version) < 9;          if(!usingOldIE) {              \$("head").append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")              \$("head", window.parent.document).append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")              hljs.initHighlightingOnLoad();              \$("pre.code").css("font-size", "0.9em");              injectProjectVersionForJavadocJDK6("Mockito ${project.version} API",                                                 "em#mockito-version-header-javadoc7-header",                                                 "em#mockito-version-header-javadoc7-footer");          }        </script>    """)
 //    options.stylesheetFile file("src/javadoc/stylesheet.css")
 //    options.addStringOption('top', 'some html')
     if (JavaVersion.current().isJava8Compatible()) {
