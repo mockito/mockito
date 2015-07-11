@@ -20,15 +20,11 @@ import java.io.Serializable;
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
     
-    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
+    static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing
     IMockitoConfiguration getIt() {
         return GLOBAL_CONFIGURATION.get();
-    }
-    //back door for testing
-    public static void removeIt() {
-        GLOBAL_CONFIGURATION.remove();
     }
 
     public GlobalConfiguration() {
@@ -39,9 +35,7 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     }
 
     public GlobalConfiguration(MockitoPlugin mockitoPlugin) {
-        if (GLOBAL_CONFIGURATION.get() == null) {
-            GLOBAL_CONFIGURATION.set(createConfig(mockitoPlugin));
-        }
+        GLOBAL_CONFIGURATION.set(createConfig(mockitoPlugin));
     }
 
     private IMockitoConfiguration createConfig() {

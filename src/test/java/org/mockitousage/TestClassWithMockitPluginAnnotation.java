@@ -1,9 +1,10 @@
 package org.mockitousage;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,7 @@ public class TestClassWithMockitPluginAnnotation {
     
     @Test
     public void ensure_class_is_instantiated_with_a_mock() throws Exception {
-        Assert.assertNull("has not been handled by MyAnnotationEngine", classToBeInjectedWithMocks);
+        assertThat(classToBeInjectedWithMocks).isNull();
     }
     
     public static class MyAnnotationEngine implements AnnotationEngine {

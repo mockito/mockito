@@ -56,6 +56,10 @@ import org.mockito.internal.configuration.InjectingAnnotationEngine;
  * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
  * {@link org.mockito.runners.MockitoJUnitRunner}.
  * </p>
+ * 
+ * <p>
+ * Please note that the annotation engine will not work well in combination with using MockitoConfiguration, 
+ * as the GlobalConfiguration will be replaced for each &#064;MockitoPlugin annotation found. 
  *
  * @see MockitoAnnotations#initMocks(Object)
  * @see org.mockito.runners.MockitoJUnitRunner

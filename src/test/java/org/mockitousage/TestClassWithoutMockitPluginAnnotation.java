@@ -1,5 +1,7 @@
 package org.mockitousage;
 
+
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,7 +16,7 @@ public class TestClassWithoutMockitPluginAnnotation extends TestBase {
     
     @Test
     public void ensure_class_is_instantiated_with_a_real_instance() throws Exception {
-        assertTrue(classToBeInjectedWithMocks.getClass().equals(ClassToBeInjectedWithMocks.class));
+        Assertions.assertThat(classToBeInjectedWithMocks).isInstanceOf(ClassToBeInjectedWithMocks.class);
     }
     
     static class ClassToBeInjectedWithMocks {
