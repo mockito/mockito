@@ -1051,7 +1051,7 @@ import org.mockito.junit.*;
  * such as <code>&#064;{@link Mock}</code>, <code>&#064;{@link Spy}</code>, <code>&#064;{@link InjectMocks}</code>, etc.
  *
  * <ul>
- *     <li>Annotating the JUnit test class with a <code>&#064;{@link org.junit.runner.RunWith}(&#064;{@link MockitoJUnitRunner}.class)</code></li>
+ *     <li>Annotating the JUnit test class with a <code>&#064;{@link org.junit.runner.RunWith}({@link MockitoJUnitRunner}.class)</code></li>
  *     <li>Invoking <code>{@link MockitoAnnotations#initMocks(Object)}</code> in the <code>&#064;{@link org.junit.Before}</code> method</li>
  * </ul>
  *
