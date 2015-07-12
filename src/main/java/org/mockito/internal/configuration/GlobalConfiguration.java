@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.MockitoPlugin;
 import org.mockito.ReturnValues;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
@@ -19,7 +20,7 @@ import java.io.Serializable;
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
     
-    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
+    static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing
     IMockitoConfiguration getIt() {
@@ -31,6 +32,10 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
         if (GLOBAL_CONFIGURATION.get() == null) {
             GLOBAL_CONFIGURATION.set(createConfig());
         }
+    }
+
+    public GlobalConfiguration(MockitoPlugin mockitoPlugin) {
+        GLOBAL_CONFIGURATION.set(createConfig(mockitoPlugin));
     }
 
     private IMockitoConfiguration createConfig() {
@@ -66,4 +71,9 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public Answer<Object> getDefaultAnswer() {
         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }
+    
+    private IMockitoConfiguration createConfig(MockitoPlugin mockitoPlugin) {
+        return new DefaultMockitoConfiguration(mockitoPlugin);
+    }
+
 }
