@@ -1,11 +1,15 @@
-/*
-TROUBLESHOOTING
+def troubleshootingInfo = """
+Mockito artifacts are about to be published!
 
 In case the release process from Travis CI fails, please try:
-  - push dummy commit
-  - update version.properties manually and push (can be done in the browser via GitHub gui)
-  - delete top release notes paragraph(s) so that they are recreated
-*/
+  1. push dummy commit
+    - useful when the build fails for random reason, let's say a flaky test
+  2. update version.properties manually and push (can be done in the browser via GitHub gui)
+    - useful when artifact was published but some later release step has failed
+    preventing version.properties to be bumped.
+  3. delete top release notes paragraph(s) so that they are recreated
+    - useful for recreating/merging release notes
+"""
 
 import org.mockito.release.version.*
 
@@ -62,6 +66,7 @@ bintrayUpload {
     dependsOn releaseNeeded
     onlyIf { releaseNeeded.needed }
     doFirst {
+        logger.lifecycle troubleshootingInfo
         if (dryRun) {
             logger.lifecycle "Dry-running the release"
         }
