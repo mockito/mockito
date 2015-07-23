@@ -200,17 +200,33 @@ public abstract class GenericMetadataSupport {
         Type genericReturnType = method.getGenericReturnType();
         // logger.log("Method '" + method.toGenericString() + "' has return type : " + genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " + genericReturnType);
 
-        if (genericReturnType instanceof Class) {
-            return new NotGenericReturnTypeSupport(genericReturnType);
-        }
-        if (genericReturnType instanceof ParameterizedType) {
-            return new ParameterizedReturnType(this, method.getTypeParameters(), (ParameterizedType) method.getGenericReturnType());
-        }
-        if (genericReturnType instanceof TypeVariable) {
-            return new TypeVariableReturnType(this, method.getTypeParameters(), (TypeVariable) genericReturnType);
+        int arity = 0;
+        while(genericReturnType instanceof GenericArrayType) {
+            arity++;
+            genericReturnType = ((GenericArrayType) genericReturnType).getGenericComponentType();
         }
 
-        throw new MockitoException("Ouch, it shouldn't happen, type '" + genericReturnType.getClass().getCanonicalName() + "' on method : '" + method.toGenericString() + "' is not supported : " + genericReturnType);
+        GenericMetadataSupport genericMetadataSupport = resolveGenericType(genericReturnType, method);
+        if (arity == 0) {
+            return genericMetadataSupport;
+        } else {
+            return new GenericArrayReturnType(genericMetadataSupport, arity);
+        }
+    }
+
+    private GenericMetadataSupport resolveGenericType(Type type, Method method) {
+
+        if (type instanceof Class) {
+            return new NotGenericReturnTypeSupport(type);
+        }
+        if (type instanceof ParameterizedType) {
+            return new ParameterizedReturnType(this, method.getTypeParameters(), (ParameterizedType) type);
+        }
+        if (type instanceof TypeVariable) {
+            return new TypeVariableReturnType(this, method.getTypeParameters(), (TypeVariable) type);
+        }
+
+        throw new MockitoException("Ouch, it shouldn't happen, type '" + type.getClass().getCanonicalName() + "' on method : '" + method.toGenericString() + "' is not supported : " + type);
     }
 
     /**
@@ -459,7 +475,31 @@ public abstract class GenericMetadataSupport {
         }
     }
 
+    private static class GenericArrayReturnType extends GenericMetadataSupport {
 
+        private final GenericMetadataSupport genericArrayType;
+
+        private final int arity;
+
+        public GenericArrayReturnType(GenericMetadataSupport genericArrayType, int arity) {
+            this.genericArrayType = genericArrayType;
+            this.arity = arity;
+        }
+
+        @Override
+        public Class<?> rawType() {
+            Class<?> rawComponentType = genericArrayType.rawType();
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < arity; i++) {
+                stringBuilder.append("[");
+            }
+            try {
+                return Class.forName(stringBuilder.append("L").append(rawComponentType.getName()).append(";").toString(), false, rawComponentType.getClassLoader());
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException("This was not supposed to happend", e);
+            }
+        }
+    }
 
     /**
      * Non-Generic metadata for {@link Class} returned via {@link Method#getGenericReturnType()}.
