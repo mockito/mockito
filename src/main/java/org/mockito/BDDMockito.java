@@ -323,6 +323,12 @@ public class BDDMockito extends Mockito {
         BDDStubber willAnswer(Answer answer);
 
         /**
+         * See original {@link Stubber#doAnswer(Answer)}
+         * @since 1.8.0
+         */
+        BDDStubber will(Answer answer);
+
+        /**
          * See original {@link Stubber#doNothing()}
          * @since 1.8.0
          */
@@ -393,6 +399,10 @@ public class BDDMockito extends Mockito {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
+        public BDDStubber will(Answer answer) {
+            return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
+        }
+
         public BDDStubber willNothing() {
             return new BDDStubberImpl(mockitoStubber.doNothing());
         }
@@ -451,6 +461,14 @@ public class BDDMockito extends Mockito {
      * @since 1.8.0
      */
     public static BDDStubber willAnswer(Answer answer) {
+        return new BDDStubberImpl(Mockito.doAnswer(answer));
+    }
+
+    /**
+     * see original {@link Mockito#doAnswer(Answer)}
+     * @since 2.0.0
+     */
+    public static BDDStubber will(Answer answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
     }
 
