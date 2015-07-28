@@ -4,6 +4,7 @@
  */
 package org.mockitousage.customization;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -28,8 +29,8 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub() throws Exception {
         given(mock.simpleMethod("foo")).willReturn("bar");
 
-        assertEquals("bar", mock.simpleMethod("foo"));
-        assertEquals(null, mock.simpleMethod("whatever"));
+        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("bar");
+        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo(null);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class BDDMockitoTest extends TestBase {
         given(mock.simpleMethod("foo")).willThrow(new SomethingWasWrong());
 
         try {
-            assertEquals("foo", mock.simpleMethod("foo"));
+            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
         } catch(SomethingWasWrong expected) {}
     }
@@ -47,7 +48,18 @@ public class BDDMockitoTest extends TestBase {
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class);
 
         try {
-            assertEquals("foo", mock.simpleMethod("foo"));
+            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+            fail();
+        } catch(SomethingWasWrong expected) {}
+    }
+
+    @Test
+    public void should_stub_with_throwable_classes() throws Exception {
+        // unavoidable 'unchecked generic array creation' warning (from JDK7 onward)
+        given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class);
+
+        try {
+            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
         } catch(SomethingWasWrong expected) {}
     }
@@ -59,7 +71,7 @@ public class BDDMockitoTest extends TestBase {
                 return (String) invocation.getArguments()[0];
             }});
 
-        assertEquals("foo", mock.simpleMethod("foo"));
+        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
@@ -67,9 +79,10 @@ public class BDDMockitoTest extends TestBase {
         given(mock.simpleMethod(anyString())).will(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
                 return (String) invocation.getArguments()[0];
-            }});
+            }
+        });
 
-        assertEquals("foo", mock.simpleMethod("foo"));
+        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
@@ -78,8 +91,19 @@ public class BDDMockitoTest extends TestBase {
                 .willReturn("foo")
                 .willReturn("bar");
 
-        assertEquals("foo", mock.simpleMethod("whatever"));
-        assertEquals("bar", mock.simpleMethod("whatever"));
+        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo("foo");
+        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo("bar");
+    }
+
+    @Test
+    public void should_return_consecutively() throws Exception {
+        given(mock.objectReturningMethodNoArgs())
+                .willReturn("foo", "bar", 12L, new byte[0]);
+
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("foo");
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("bar");
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(12L);
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(new byte[0]);
     }
 
     @Test
@@ -88,8 +112,8 @@ public class BDDMockitoTest extends TestBase {
         willReturn("foo").willCallRealMethod()
                 .given(mock).simpleMethod();
 
-       assertEquals("foo", mock.simpleMethod());
-       assertEquals(null, mock.simpleMethod());
+       Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
+       Assertions.assertThat(mock.simpleMethod()).isEqualTo(null);
     }
 
     @Test
@@ -105,6 +129,16 @@ public class BDDMockitoTest extends TestBase {
     @Test
     public void should_stub_void_with_exception_class() throws Exception {
         willThrow(SomethingWasWrong.class).given(mock).voidMethod();
+
+        try {
+            mock.voidMethod();
+            fail();
+        } catch(SomethingWasWrong expected) {}
+    }
+
+    @Test
+    public void should_stub_void_with_exception_classes() throws Exception {
+        willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class).given(mock).voidMethod();
 
         try {
             mock.voidMethod();
@@ -142,8 +176,8 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_using_do_return_style() throws Exception {
         willReturn("foo").given(mock).simpleMethod("bar");
 
-        assertEquals(null, mock.simpleMethod("boooo"));
-        assertEquals("foo", mock.simpleMethod("bar"));
+        Assertions.assertThat(mock.simpleMethod("boooo")).isEqualTo(null);
+        Assertions.assertThat(mock.simpleMethod("bar")).isEqualTo("foo");
     }
 
     @Test
@@ -151,10 +185,11 @@ public class BDDMockitoTest extends TestBase {
         willAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
                 return (String) invocation.getArguments()[0];
-            }})
+            }
+        })
                 .given(mock).simpleMethod(anyString());
 
-        assertEquals("foo", mock.simpleMethod("foo"));
+        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
@@ -164,7 +199,7 @@ public class BDDMockitoTest extends TestBase {
         //when
         willCallRealMethod().given(dog).bark();
         //then
-        assertEquals("woof", dog.bark());
+        Assertions.assertThat(dog.bark()).isEqualTo("woof");
     }
 
     @Test
@@ -174,7 +209,7 @@ public class BDDMockitoTest extends TestBase {
         //when
         given(dog.bark()).willCallRealMethod();
         //then
-        assertEquals("woof", dog.bark());
+        Assertions.assertThat(dog.bark()).isEqualTo("woof");
     }
 
     @Test
@@ -183,7 +218,7 @@ public class BDDMockitoTest extends TestBase {
 
         Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
 
-        assertEquals(expectedMock, returnedMock);
+        Assertions.assertThat(returnedMock).isEqualTo(expectedMock);
     }
 
     @Test(expected = NotAMockException.class)
@@ -320,4 +355,5 @@ public class BDDMockitoTest extends TestBase {
     }
 
     private class SomethingWasWrong extends RuntimeException { }
+    private class AnotherThingWasWrong extends RuntimeException { }
 }

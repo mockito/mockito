@@ -81,6 +81,8 @@ import org.mockito.junit.*;
  * <ul>
  *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
  *     for rationale and migration guide</li>.
+ *     <li>Stubbing API has been tweaked to avoid unavoidable compilation warnings that appeared on JDK7+ platform.
+ *     This will only affect binary compatibility, compilation compatibility remains unaffected.</li>
  * </ul>
  *
  * <p>
@@ -270,7 +272,7 @@ import org.mockito.junit.*;
  * Read more about doThrow|doAnswer family of methods in paragraph 12.
  * <p>
  * Initially, {@link Mockito#stubVoid(Object)} was used for stubbing voids.
- * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable)}.
+ * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable...)}.
  * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods.
  *
  *
@@ -469,7 +471,7 @@ import org.mockito.junit.*;
  * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not
  * like void methods inside brackets...
  * <p>
- * {@link Mockito#doThrow(Throwable)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
+ * {@link Mockito#doThrow(Throwable...)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
  * The main reason is improved readability and consistency with the family of <code>doAnswer()</code> methods.
  * <p>
  * Use <code>doThrow()</code> when you want to stub a void method with an exception:
@@ -495,7 +497,7 @@ import org.mockito.junit.*;
  * <p>
  * {@link Mockito#doReturn(Object)}
  * <p>
- * {@link Mockito#doThrow(Throwable)}
+ * {@link Mockito#doThrow(Throwable...)}
  * <p>
  * {@link Mockito#doThrow(Class)}
  * <p>
@@ -1556,7 +1558,7 @@ public class Mockito extends Matchers {
      *   //You can do:
      *   when(mock.count()).thenReturn(10);
      * </code></pre>
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable...)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -1620,7 +1622,7 @@ public class Mockito extends Matchers {
      *
      * </code></pre>
      *
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable)}
+     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable...)}
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
@@ -1826,7 +1828,7 @@ public class Mockito extends Matchers {
      *
      * See examples in javadoc for {@link Mockito} class
      *
-     * @deprecated Use {@link Mockito#doThrow(Throwable)} method for stubbing voids
+     * @deprecated Use {@link Mockito#doThrow(Throwable...)} method for stubbing voids
      *
      * @param mock
      *            to stub
@@ -1839,7 +1841,8 @@ public class Mockito extends Matchers {
     /**
      * Use <code>doThrow()</code> when you want to stub the void method with an exception.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler
+     * does not like void methods inside brackets...
      * <p>
      * Example:
      *
@@ -1850,16 +1853,17 @@ public class Mockito extends Matchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    public static Stubber doThrow(Throwable toBeThrown) {
-        return MOCKITO_CORE.doAnswer(new ThrowsException(toBeThrown));
+    public static Stubber doThrow(Throwable... toBeThrown) {
+        return MOCKITO_CORE.stubber().doThrow(toBeThrown);
     }
 
     /**
-     * Use <code>doThrow()</code> when you want to stub the void method to throw exception of specified class.
+     * Use <code>doThrow()</code> when you want to stub the void method with an exception.
      * <p>
      * A new exception instance will be created for each method invocation.
      * <p>
-     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler does not like void methods inside brackets...
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler
+     * does not like void methods inside brackets...
      * <p>
      * Example:
      *
@@ -1869,10 +1873,36 @@ public class Mockito extends Matchers {
      *
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
-     * @since 1.9.0
+     * @since 2.0.0
      */
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
-        return MOCKITO_CORE.doAnswer(new ThrowsExceptionClass(toBeThrown));
+        return MOCKITO_CORE.stubber().doThrow(toBeThrown);
+    }
+
+    /**
+     * Same as {@link #doThrow(Class)} but sets consecutive exception classes to be thrown. Remember to use
+     * <code>doThrow()</code> when you want to stub the void method to throw several exception of specified class.
+     * <p>
+     * A new exception instance will be created for each method invocation.
+     * <p>
+     * Stubbing voids requires different approach from {@link Mockito#when(Object)} because the compiler
+     * does not like void methods inside brackets...
+     * <p>
+     * Example:
+     *
+     * <pre class="code"><code class="java">
+     *   doThrow(RuntimeException.class, BigFailure.class).when(mock).someVoidMethod();
+     * </code></pre>
+     *
+     * @param toBeThrown to be thrown when the stubbed method is called
+     * @param toBeThrownNext next to be thrown when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     * @since 2.0.0
+     */
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
+    @SuppressWarnings ({"unchecked", "varargs"})
+    public static Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
+        return MOCKITO_CORE.stubber().doThrow(toBeThrown, toBeThrownNext);
     }
 
 
@@ -1908,7 +1938,7 @@ public class Mockito extends Matchers {
      * @since 1.9.5
      */
     public static Stubber doCallRealMethod() {
-        return MOCKITO_CORE.doAnswer(new CallsRealMethods());
+        return MOCKITO_CORE.stubber().doCallRealMethod();
     }
 
     /**
@@ -1934,7 +1964,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doAnswer(Answer answer) {
-        return MOCKITO_CORE.doAnswer(answer);
+        return MOCKITO_CORE.stubber().doAnswer(answer);
     }
 
     /**
@@ -1976,7 +2006,7 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doNothing() {
-        return MOCKITO_CORE.doAnswer(new DoesNothing());
+        return MOCKITO_CORE.stubber().doNothing();
     }
 
     /**
@@ -2026,7 +2056,61 @@ public class Mockito extends Matchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doReturn(Object toBeReturned) {
-        return MOCKITO_CORE.doAnswer(new Returns(toBeReturned));
+        return MOCKITO_CORE.stubber().doReturn(toBeReturned);
+    }
+
+    /**
+     * Same as {@link #doReturn(Object)} but sets consecutive values to be returned. Remember to use
+     * <code>doReturn()</code> in those rare occasions when you cannot use {@link Mockito#when(Object)}.
+     * <p>
+     * <b>Beware that {@link Mockito#when(Object)} is always recommended for stubbing because it is argument type-safe
+     * and more readable</b> (especially when stubbing consecutive calls).
+     * <p>
+     * Here are those rare occasions when doReturn() comes handy:
+     * <p>
+     *
+     * <ol>
+     * <li>When spying real objects and calling real methods on a spy brings side effects
+     *
+     * <pre class="code"><code class="java">
+     *   List list = new LinkedList();
+     *   List spy = spy(list);
+     *
+     *   //Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
+     *   when(spy.get(0)).thenReturn("foo", "bar", "qix");
+     *
+     *   //You have to use doReturn() for stubbing:
+     *   doReturn("foo", "bar", "qix").when(spy).get(0);
+     * </code></pre>
+     * </li>
+     *
+     * <li>Overriding a previous exception-stubbing:
+     * <pre class="code"><code class="java">
+     *   when(mock.foo()).thenThrow(new RuntimeException());
+     *
+     *   //Impossible: the exception-stubbed foo() method is called so RuntimeException is thrown.
+     *   when(mock.foo()).thenReturn("bar", "foo", "qix");
+     *
+     *   //You have to use doReturn() for stubbing:
+     *   doReturn("bar", "foo", "qix").when(mock).foo();
+     * </code></pre>
+     * </li>
+     * </ol>
+     *
+     * Above scenarios shows a trade-off of Mockito's elegant syntax. Note that the scenarios are very rare, though.
+     * Spying should be sporadic and overriding exception-stubbing is very rare. Not to mention that in general
+     * overridding stubbing is a potential code smell that points out too much stubbing.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param toBeReturned to be returned when the stubbed method is called
+     * @param toBeReturnedNext to be returned in consecutive calls when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     * @since 2.0.0
+     */
+    @SuppressWarnings({"unchecked", "varargs"})
+    public static Stubber doReturn(Object toBeReturned, Object... toBeReturnedNext) {
+        return MOCKITO_CORE.stubber().doReturn(toBeReturned, toBeReturnedNext);
     }
 
     /**

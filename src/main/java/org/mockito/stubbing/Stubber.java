@@ -27,7 +27,7 @@ import org.mockito.Mockito;
  * 
  * Read more about those methods:
  * <p>
- * {@link Mockito#doThrow(Throwable)}
+ * {@link Mockito#doThrow(Throwable[])}
  * <p>
  * {@link Mockito#doAnswer(Answer)}
  * <p>
@@ -55,7 +55,7 @@ public interface Stubber {
      * 
      * Read more about those methods:
      * <p>
-     * {@link Mockito#doThrow(Throwable)}
+     * {@link Mockito#doThrow(Throwable[])}
      * <p>
      * {@link Mockito#doAnswer(Answer)}
      * <p>
@@ -64,7 +64,7 @@ public interface Stubber {
      * {@link Mockito#doReturn(Object)}
      * <p>
      * 
-     *  See examples in javadoc for {@link Mockito}
+     * See examples in javadoc for {@link Mockito}
      * 
      * @param mock The mock
      * @return select method for stubbing
@@ -72,39 +72,60 @@ public interface Stubber {
     <T> T when(T mock);
 
     /**
-     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Throwable)} style:
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Throwable[])} style:
      * <pre class="code"><code class="java">
      *   doThrow(new RuntimeException("one")).
      *   doThrow(new RuntimeException("two"))
-     *   .when(mock).someVoidMethod();
+     *       .when(mock).someVoidMethod();
      * </code></pre>
-     * See javadoc for {@link Mockito#doThrow(Throwable)}
+     * See javadoc for {@link Mockito#doThrow(Throwable[])}
      * 
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    Stubber doThrow(Throwable toBeThrown);
+    Stubber doThrow(Throwable... toBeThrown);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class)} style:
      * <pre class="code"><code class="java">
      *   doThrow(RuntimeException.class).
      *   doThrow(IllegalArgumentException.class)
-     *   .when(mock).someVoidMethod();
+     *       .when(mock).someVoidMethod();
      * </code></pre>
      * See javadoc for {@link Mockito#doThrow(Class)}
      *
      * @param toBeThrown exception class to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
+     *
+     * @since 2.0.0
      */
     Stubber doThrow(Class<? extends Throwable> toBeThrown);
+
+    /**
+     * Use it for stubbing consecutive calls in {@link Mockito#doThrow(Class)} style:
+     * <pre class="code"><code class="java">
+     *   doThrow(RuntimeException.class).
+     *   doThrow(IllegalArgumentException.class)
+     *       .when(mock).someVoidMethod();
+     * </code></pre>
+     * See javadoc for {@link Mockito#doThrow(Class)}
+     *
+     * @param toBeThrown exception class to be thrown when the stubbed method is called
+     * @param nextToBeThrown exception class next to be thrown when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     *
+     * @since 2.0.0
+     */
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
+    @SuppressWarnings ({"unchecked", "varargs"})
+    Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer)} style:
      * <pre class="code"><code class="java">
      *   doAnswer(answerOne).
      *   doAnswer(answerTwo)
-     *   .when(mock).someVoidMethod();
+     *       .when(mock).someVoidMethod();
      * </code></pre>
      * See javadoc for {@link Mockito#doAnswer(Answer)}
      * 
@@ -118,7 +139,7 @@ public interface Stubber {
      * <pre class="code"><code class="java">
      *   doNothing().
      *   doThrow(new RuntimeException("two"))
-     *   .when(mock).someVoidMethod();
+     *       .when(mock).someVoidMethod();
      * </code></pre>
      * See javadoc for {@link Mockito#doNothing()}
      * 
@@ -135,6 +156,18 @@ public interface Stubber {
      * @return stubber - to select a method for stubbing
      */
     Stubber doReturn(Object toBeReturned);
+
+    /**
+     * Use it for stubbing consecutive calls in {@link Mockito#doReturn(Object)} style.
+     * <p>
+     * See javadoc for {@link Mockito#doReturn(Object, Object...)}
+     *
+     * @param toBeReturned to be returned when the stubbed method is called
+     * @param nextToBeReturned to be returned in consecutive calls when the stubbed method is called
+     * @return stubber - to select a method for stubbing
+     */
+    @SuppressWarnings({"unchecked", "varargs"})
+    Stubber doReturn(Object toBeReturned, Object... nextToBeReturned);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doCallRealMethod()} style.

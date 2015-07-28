@@ -43,6 +43,7 @@ public class MockitoBeforeTestNGMethod {
         markAsInitialized(testResult.getInstance());
     }
 
+    @SuppressWarnings("unchecked")
     private void initializeCaptors(Object instance) {
         List<InstanceField> instanceFields = Fields.allDeclaredFieldsOf(instance).filter(annotatedBy(Captor.class)).instanceFields();
         for (InstanceField instanceField : instanceFields) {

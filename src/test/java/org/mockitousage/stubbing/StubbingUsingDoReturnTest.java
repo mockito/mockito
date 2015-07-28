@@ -5,6 +5,7 @@
 
 package org.mockitousage.stubbing;
 
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,54 +27,54 @@ import static org.mockito.Mockito.*;
 public class StubbingUsingDoReturnTest extends TestBase {
 
     @Mock private IMethods mock;
-    
-    @After public void resetState() {
+
+    @After public void reset_state() {
         super.resetState();
     }
 
     @Test
-    public void shouldStub() throws Exception {
+    public void should_stub() throws Exception {
         doReturn("foo").when(mock).simpleMethod();
         doReturn("bar").when(mock).simpleMethod();
-        
-        assertEquals("bar", mock.simpleMethod());
+
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("bar");
     }
-    
+
     @Test
-    public void shouldStubWithArgs() throws Exception {
+    public void should_stub_with_args() throws Exception {
         doReturn("foo").when(mock).simpleMethod("foo");
         doReturn("bar").when(mock).simpleMethod(eq("one"), anyInt());
-        
-        assertEquals("foo", mock.simpleMethod("foo"));
-        assertEquals("bar", mock.simpleMethod("one", 234));
-        assertEquals(null, mock.simpleMethod("xxx", 234));
+
+        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+        Assertions.assertThat(mock.simpleMethod("one", 234)).isEqualTo("bar");
+        Assertions.assertThat(mock.simpleMethod("xxx", 234)).isEqualTo(null);
     }
-    
+
     class FooRuntimeException extends RuntimeException {}
-    
+
     @Test
-    public void shouldStubWithThrowable() throws Exception {
+    public void should_stub_with_throwable() throws Exception {
         doThrow(new FooRuntimeException()).when(mock).voidMethod();
         try {
             mock.voidMethod();
             fail();
         } catch (FooRuntimeException e) {}
     }
-    
+
     @Test
-    public void shouldAllowSettingValidCheckedException() throws Exception {
+    public void should_allow_setting_valid_checked_exception() throws Exception {
         doThrow(new IOException()).when(mock).throwsIOException(0);
-        
+
         try {
             mock.throwsIOException(0);
             fail();
         } catch (IOException e) {}
     }
-    
+
     class FooCheckedException extends Exception {}
-    
+
     @Test
-    public void shouldDetectInvalidCheckedException() throws Exception {
+    public void should_detect_invalid_checked_exception() throws Exception {
         try {
             doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
             fail();
@@ -81,9 +82,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             assertContains("Checked exception is invalid", e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldScreamWhenReturnSetForVoid() throws Exception {
+    public void should_scream_when_return_set_for_void() throws Exception {
         try {
             doReturn("foo").when(mock).voidMethod();
             fail();
@@ -92,9 +93,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             assertContains("cannot", e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldScreamWhenNotAMockPassed() throws Exception {
+    public void should_scream_when_not_a_mock_passed() throws Exception {
         try {
             doReturn("foo").when("foo").toString();
             fail();
@@ -102,59 +103,79 @@ public class StubbingUsingDoReturnTest extends TestBase {
             assertContains("Argument passed to when() is not a mock", e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldScreamWhenNullPassed() throws Exception {
+    public void should_scream_when_null_passed() throws Exception {
         try {
             doReturn("foo").when((Object) null).toString();
             fail();
         } catch (Exception e) {
             assertContains("Argument passed to when() is null", e.getMessage());
         }
-    }    
-    
-    @Test
-    public void shouldAllowChainedStubbing() {
-        doReturn("foo").
-        doThrow(new RuntimeException()).
-        doReturn("bar")
-        .when(mock).simpleMethod();
-        
-        assertEquals("foo", mock.simpleMethod());
-        try {
-            mock.simpleMethod();
-            fail();
-        } catch (RuntimeException e) {}
-        
-        assertEquals("bar", mock.simpleMethod());
-        assertEquals("bar", mock.simpleMethod());
     }
 
     @Test
-    public void shouldAllowDoCallRealMethodInChainedStubbing() throws Exception {
+    public void should_allow_chained_stubbing() {
+        doReturn("foo")
+                .doThrow(new RuntimeException())
+                .doReturn("bar")
+                .when(mock).simpleMethod();
+
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
+        try {
+            mock.simpleMethod();
+            fail();
+        } catch (RuntimeException expected) { }
+
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("bar");
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("bar");
+    }
+
+    @Test
+    public void should_allow_consecutive_return_values() {
+        doReturn("foo", "bar")
+                .doThrow(new RuntimeException())
+                .doReturn(430L, new byte[0], "qix")
+                .when(mock).objectReturningMethodNoArgs();
+
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("foo");
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("bar");
+        try {
+            mock.objectReturningMethodNoArgs();
+            fail("exception not raised");
+        } catch (RuntimeException expected) { }
+
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(430L);
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(new byte[0]);
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("qix");
+        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("qix");
+    }
+
+    @Test
+    public void should_allow_do_call_real_method_in_chained_stubbing() throws Exception {
         MethodsImpl methods = mock(MethodsImpl.class);
         doReturn("A").doCallRealMethod()
                 .when(methods).simpleMethod();
 
-        assertEquals("A", methods.simpleMethod());
-        assertEquals(null, methods.simpleMethod());
+        Assertions.assertThat(methods.simpleMethod()).isEqualTo("A");
+        Assertions.assertThat(methods.simpleMethod()).isEqualTo(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldAllowChainedStubbingWithExceptionClass() throws Exception {
+    public void should_allow_chained_stubbing_with_exception_class() throws Exception {
         doReturn("whatever").doThrow(IllegalArgumentException.class).when(mock).simpleMethod();
 
-        assertEquals("whatever", mock.simpleMethod());
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("whatever");
         mock.simpleMethod();
     }
 
     @Test
-    public void shouldAllowChainedStubbingOnVoidMethods() {
-        doNothing().
-        doNothing().
-        doThrow(new RuntimeException())
-        .when(mock).voidMethod();
-        
+    public void should_allow_chained_stubbing_on_void_methods() {
+        doNothing()
+                .doNothing()
+                .doThrow(new RuntimeException())
+                .when(mock).voidMethod();
+
         mock.voidMethod();
         mock.voidMethod();
         try {
@@ -166,21 +187,21 @@ public class StubbingUsingDoReturnTest extends TestBase {
             fail();
         } catch (RuntimeException e) {}
     }
-    
+
     @Test
-    public void shouldStubWithGenericAnswer() {
+    public void should_stub_with_generic_answer() {
         doAnswer(new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return "foo";
             }
         })
         .when(mock).simpleMethod();
-        
-        assertEquals("foo", mock.simpleMethod());
+
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
     }
-    
+
     @Test
-    public void shouldNotAllowDoNothingOnNonVoids() {
+    public void should_not_allow_do_nothing_on_non_voids() {
         try {
             doNothing().when(mock).simpleMethod();
             fail();
@@ -188,9 +209,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             assertContains("Only void methods can doNothing()", e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldStubbingBeTreatedAsInteraction() throws Exception {
+    public void should_stubbing_be_treated_as_interaction() throws Exception {
         doReturn("foo").when(mock).simpleMethod();
         mock.simpleMethod();
         try {
@@ -198,25 +219,25 @@ public class StubbingUsingDoReturnTest extends TestBase {
             fail();
         } catch (NoInteractionsWanted e) {}
     }
-    
+
     @Test
-    public void shouldVerifyStubbedCall() throws Exception {
+    public void should_verify_stubbed_call() throws Exception {
         doReturn("foo").when(mock).simpleMethod();
         mock.simpleMethod();
         mock.simpleMethod();
-        
+
         verify(mock, times(2)).simpleMethod();
         verifyNoMoreInteractions(mock);
     }
-    
+
     @Test
-    public void shouldAllowStubbingToString() throws Exception {
+    public void should_allow_stubbing_to_string() throws Exception {
         doReturn("test").when(mock).toString();
-        assertEquals("test", mock.toString());
+        Assertions.assertThat(mock.toString()).isEqualTo("test");
     }
- 
+
     @Test
-    public void shouldDetectInvalidReturnType() throws Exception {
+    public void should_detect_invalid_return_type() throws Exception {
         try {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
@@ -227,9 +248,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
                     e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldDetectWhenNullAssignedToBoolean() throws Exception {
+    public void should_detect_when_null_assigned_to_boolean() throws Exception {
         try {
             doReturn(null).when(mock).intReturningMethod();
             fail();
@@ -237,12 +258,12 @@ public class StubbingUsingDoReturnTest extends TestBase {
             assertContains("null cannot be returned by intReturningMethod", e.getMessage());
         }
     }
-    
+
     @Test
-    public void shouldAllowStubbingWhenTypesMatchSignature() throws Exception {
+    public void should_allow_stubbing_when_types_match_signature() throws Exception {
         doReturn("foo").when(mock).objectReturningMethodNoArgs();
         doReturn("foo").when(mock).simpleMethod();
         doReturn(1).when(mock).intReturningMethod();
-        doReturn(new Integer(2)).when(mock).intReturningMethod();
+        doReturn(2).when(mock).intReturningMethod();
     }
 }

@@ -823,6 +823,12 @@ public class Reporter {
                 ""));
     }
 
+    public void notAnException() {
+        throw new MockitoException(join(
+                "Exception type cannot be null.",
+                "This may happen with doThrow(Class)|thenThrow(Class) family of methods if passing null parameter."));
+    }
+
     private MockName safelyGetMockName(Object mock) {
         return new MockUtil().getMockName(mock);
     }
