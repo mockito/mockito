@@ -25,14 +25,14 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
 
     @Test
     public void shouldAcceptNullsInAnyMatcher() {
-        when(mock.oneArg(any())).thenReturn("matched");
+        when(mock.oneArg((Object) any())).thenReturn("matched");
 
         assertEquals(null, mock.forObject(null));
     }
 
     @Test
     public void shouldAcceptNullsInAnyObjectMatcher() {
-        when(mock.oneArg(anyObject())).thenReturn("matched");
+        when(mock.oneArg((Object) anyObject())).thenReturn("matched");
 
         assertEquals(null, mock.forObject(null));
     }

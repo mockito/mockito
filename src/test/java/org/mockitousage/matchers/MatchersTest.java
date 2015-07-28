@@ -253,7 +253,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(anyLong())).thenReturn("6");
         when(mock.oneArg(anyShort())).thenReturn("7");
         when(mock.oneArg((String) anyObject())).thenReturn("8");
-        when(mock.oneArg(anyObject())).thenReturn("9");
+        when(mock.oneArg((Object) anyObject())).thenReturn("9");
         
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
@@ -534,6 +534,6 @@ public class MatchersTest extends TestBase {
     public void sameMatcherAndNulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(same(null));
+        verify(mock).simpleMethod((Object) same(null));
     }
 }
