@@ -2353,7 +2353,17 @@ public class Mockito extends Matchers {
     /**
      * Allows counting of number of invocations. E.g:
      * <pre class="code"><code class="java">
-     *   verify(mock, countInvocations(2)).someMethod("some arg");
+     *   AtomicInteger counter = new AtomicInteger();
+     *   verify(mock, countInvocations(counter)).someMethod("some arg");
+     *   verify(otherMock, times(counter)).someMethodThatShouldAlsoHaveBeenCalled();
+     * </code></pre>
+     *
+     * or by directly asserting the counter:
+     *
+     * <pre class="code"><code class="java">
+     *   AtomicInteger counter = new AtomicInteger();
+     *   verify(mock, countInvocations(counter)).someMethod("some arg");
+     *   assertEquals(2, counter.get());
      * </code></pre>
      *
      * @param wantedNumberOfInvocations wanted number of invocations

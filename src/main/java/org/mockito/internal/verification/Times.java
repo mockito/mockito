@@ -6,7 +6,6 @@
 package org.mockito.internal.verification;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -29,10 +28,6 @@ public class Times implements VerificationInOrderMode, VerificationMode {
             throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedCount = wantedNumberOfInvocations;
-    }
-
-    public Times(AtomicInteger wantedNumberOfInvocations) {
-        this.wantedCount = wantedNumberOfInvocations.get();
     }
     
     public void verify(VerificationData data) {
