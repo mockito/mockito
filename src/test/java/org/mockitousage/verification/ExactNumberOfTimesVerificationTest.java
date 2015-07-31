@@ -8,6 +8,7 @@ package org.mockitousage.verification;
 import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -125,5 +126,49 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             inOrder.verify(mock, never()).add("two");
             fail();
         } catch (VerificationInOrderFailure e) {}
+    }
+
+    @Test
+    public void should_invoke_method_same_number_of_times() {
+        Invokable invokable = mock(Invokable.class);
+        Invoker invoker = spy(new Invoker(invokable));
+
+        AtomicInteger counter = new AtomicInteger();
+
+        invoker.invokesOtherMethod();
+
+        verify(invoker, countInvocations(counter)).invokesOtherMethod();
+        verify(invokable, times(counter)).invokableMethod();
+    }
+
+    @Test
+    public void should_count_number_of_invocations() {
+        Invokable invokable = mock(Invokable.class);
+
+        AtomicInteger counter = new AtomicInteger();
+
+        invokable.invokableMethod();
+        invokable.invokableMethod();
+
+        verify(invokable, countInvocations(counter)).invokableMethod();
+        assertEquals(2, counter.get());
+    }
+
+    public class Invokable {
+
+        public void invokableMethod() {}
+    }
+
+    public class Invoker {
+
+        private Invokable invokable;
+
+        public Invoker(Invokable invokable) {
+            this.invokable = invokable;
+        }
+
+        public void invokesOtherMethod() {
+            this.invokable.invokableMethod();
+        }
     }
 }
