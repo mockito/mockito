@@ -8,9 +8,6 @@ import org.mockito.verification.VerificationMode;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by tim on 31-7-15.
- */
 public class CountInvocations implements VerificationMode {
 
     private AtomicInteger invocationsCounter;

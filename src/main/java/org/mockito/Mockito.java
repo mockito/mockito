@@ -2327,7 +2327,7 @@ public class Mockito extends Matchers {
      * @return  verification mode
      */
     public static VerificationMode calls( int wantedNumberOfInvocations ){
-        return VerificationModeFactory.calls(wantedNumberOfInvocations);
+        return VerificationModeFactory.calls( wantedNumberOfInvocations );
     }
 
     /**
@@ -2351,7 +2351,7 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Allows countin of number of invocations. E.g:
+     * Allows counting of number of invocations. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, countInvocations(2)).someMethod("some arg");
      * </code></pre>
