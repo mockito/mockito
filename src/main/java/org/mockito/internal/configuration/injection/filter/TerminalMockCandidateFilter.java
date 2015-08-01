@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration.injection.filter;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.internal.configuration.injection.RealObject;
 import org.mockito.internal.util.reflection.BeanPropertySetter;
 import org.mockito.internal.util.reflection.FieldSetter;
 
@@ -26,7 +27,13 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                                            final List<Field> allRemainingCandidateFields,
                                            final Object injectee) {
         if(mocks.size() == 1) {
-            final Object matchingMock = mocks.iterator().next();
+            Object nextMock = mocks.iterator().next();
+
+            if (nextMock instanceof RealObject) {
+                nextMock = ((RealObject) nextMock).getValue();
+            }
+
+            final Object matchingMock = nextMock;
 
             return new OngoingInjector() {
                 public Object thenInject() {

@@ -7,10 +7,7 @@ package org.mockitousage.annotation;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
@@ -20,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
@@ -43,6 +42,13 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Mock private Set histogram1;
     @Mock private Set histogram2;
     @Mock private IMethods candidate2;
+
+    @InjectMocks private HasRealObject hasRealObject = new HasRealObject();
+    @Real private String realString = "a real string";
+
+    @InjectMocks private HasRealAndMockObject hasRealAndMockObject;
+    @Real private String eventName = "PLAYER_ADDED_EVENT";
+    @Mock private Notifier notifier;
 
     @Spy private TreeSet searchTree = new TreeSet();
     private MockUtil mockUtil = new MockUtil();
@@ -126,6 +132,19 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     }
 
     @Test
+    public void should_inject_real_object_into_field() {
+        MockitoAnnotations.initMocks(this);
+        assertSame(realString, hasRealObject.realString);
+    }
+
+    @Test
+    public void should_inject_real_object_and_mock_into_correct_fields() {
+        MockitoAnnotations.initMocks(this);
+        hasRealAndMockObject.sendEvent("PLAYER_ADDED_EVENT", "My message");
+        verify(notifier).notify("My message");
+    }
+
+    @Test
     public void should_report_nicely() throws Exception {
         Object failing = new Object() {
             @InjectMocks ThrowingConstructor failingConstructor;
@@ -172,5 +191,31 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     static class HasTwoFieldsWithSameType {
         private IMethods candidate1;
         private IMethods candidate2;
+    }
+
+    static class HasRealObject {
+        private String realString;
+    }
+
+    static class HasRealAndMockObject {
+        private String eventName;
+
+        private Notifier notifier;
+
+        public HasRealAndMockObject(String eventName, Notifier notifier) {
+            this.eventName = eventName;
+            this.notifier = notifier;
+        }
+
+        public void sendEvent(String event, String message) {
+            if (eventName.equals(event)) {
+                notifier.notify(message);
+            }
+        }
+    }
+
+    static class Notifier {
+
+        public void notify(String message) {}
     }
 }

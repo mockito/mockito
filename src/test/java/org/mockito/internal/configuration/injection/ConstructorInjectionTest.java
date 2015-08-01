@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.mockito.internal.util.collections.Sets;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -40,7 +41,7 @@ public class ConstructorInjectionTest {
     public void should_do_the_trick_of_instantiating() throws Exception {
         given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[] { observer });
 
-        boolean result = underTest.process(field("whatever"), this, newSetOf(observer));
+        boolean result = underTest.process(field("whatever"), this, newSetOf(observer), Sets.newSet());
 
         assertTrue(result);
         assertNotNull(whatever);

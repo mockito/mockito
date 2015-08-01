@@ -16,9 +16,10 @@ import java.util.Set;
  */
 public class DefaultInjectionEngine {
 
-    public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object testClassInstance) {
+    public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Set<Object> realObjects, Object testClassInstance) {
         MockInjection.onFields(needingInjection, testClassInstance)
                 .withMocks(mocks)
+                .withRealObjects(realObjects)
                 .tryConstructorInjection()
                 .tryPropertyOrFieldInjection()
                 .handleSpyAnnotation()

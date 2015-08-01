@@ -28,7 +28,7 @@ import static org.mockito.Mockito.withSettings;
 public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
 
     @Override
-    protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+    protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates, Set<Object> realObjects) {
         FieldReader fieldReader = new FieldReader(fieldOwner, field);
 
         // TODO refoctor : code duplicated in SpyAnnotationEngine
