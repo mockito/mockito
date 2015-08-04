@@ -11,20 +11,23 @@ import java.lang.reflect.Field;
  */
 public class RealObjectScanner extends FieldScanner<Object> {
 
+    private Object objectInstance;
+
     public RealObjectScanner(Object testClassInstance, Class<?> clazz) {
         super(testClassInstance, clazz);
     }
 
     @Override
     protected boolean hasCorrectAnnotation(Field field) {
-        return field.getAnnotation(Real.class) != null;
+        this.objectInstance = new FieldReader(this.testClassInstance, field).read();
+
+        return null != objectInstance
+            && field.getAnnotation(Real.class) != null;
     }
 
     @Override
     protected Object getObjectToAdd(Field field) {
         assertNoAnnotations(Real.class, field, Mock.class, MockitoAnnotations.Mock.class, Spy.class);
-        return new RealObject(
-                new FieldReader(this.testClassInstance, field).read(),
-                field.getName());
+        return new RealObject(objectInstance, field.getName());
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -46,12 +47,23 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @InjectMocks private HasRealObject hasRealObject = new HasRealObject();
     @Real private String realString = "a real string";
 
+    @InjectMocks private HasRealObjectNull hasRealObjectNull = new HasRealObjectNull();
+    @Real private String nullString = null;
+
     @InjectMocks private HasRealAndMockObject hasRealAndMockObject;
     @Real private String eventName = "PLAYER_ADDED_EVENT";
     @Mock private Notifier notifier;
 
     @Spy private TreeSet searchTree = new TreeSet();
     private MockUtil mockUtil = new MockUtil();
+
+    /*
+        Tests dependency of injectmocks with mock in sub-dependencies.
+     */
+    @Mock private Notifier endMockedDependency;
+    @Real @InjectMocks private DependencyA dependencyA = new DependencyA();
+    @Real @InjectMocks private DependencyB dependencyB = new DependencyB();
+    @InjectMocks private DependencyC dependencyC = new DependencyC();
 
     @Before
     public void enforces_new_instances() {
@@ -138,10 +150,25 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     }
 
     @Test
+    public void should_inject_null_object_into_field() {
+        MockitoAnnotations.initMocks(this);
+        assertSame(nullString, hasRealObjectNull.nullString);
+    }
+
+    @Test
     public void should_inject_real_object_and_mock_into_correct_fields() {
         MockitoAnnotations.initMocks(this);
         hasRealAndMockObject.sendEvent("PLAYER_ADDED_EVENT", "My message");
         verify(notifier).notify("My message");
+    }
+
+    @Test
+    public void should_inject_sub_mock_dependency_in_other_dependency() {
+        MockitoAnnotations.initMocks(this);
+
+        dependencyC.invokeBoth();
+
+        verify(endMockedDependency, times(2)).notify("DependencyA calls");
     }
 
     @Test
@@ -197,6 +224,10 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
         private String realString;
     }
 
+    static class HasRealObjectNull {
+        private String nullString;
+    }
+
     static class HasRealAndMockObject {
         private String eventName;
 
@@ -217,5 +248,31 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     static class Notifier {
 
         public void notify(String message) {}
+    }
+
+    static class DependencyA {
+        private Notifier endMockedDependency;
+
+        public void AcallsNotifier() {
+            endMockedDependency.notify("DependencyA calls");
+        }
+    }
+
+    static class DependencyB {
+        private DependencyA dependencyA;
+
+        public void BcallsA() {
+            dependencyA.AcallsNotifier();
+        }
+    }
+
+    static class DependencyC {
+        private DependencyA dependencyA;
+        private DependencyB dependencyB;
+
+        public void invokeBoth() {
+            dependencyA.AcallsNotifier();
+            dependencyB.BcallsA();
+        }
     }
 }
