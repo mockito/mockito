@@ -1,5 +1,7 @@
 package org.mockito.internal.configuration.injection.fieldscanner;
 
+import org.mockito.exceptions.Reporter;
+
 import java.lang.reflect.Field;
 import java.util.Collection;
 
@@ -46,6 +48,21 @@ public abstract class FieldScanner<T> {
         for (Field field : clazz.getDeclaredFields()) {
             if (hasCorrectAnnotation(field)) {
                 collection.add(getObjectToAdd(field));
+            }
+        }
+    }
+
+    /**
+     * Assert that the clashingAnnotation is not present on the field where one of the annotation is also present.
+     *
+     * @param clashingAnnotation The annotation that should be on the field.
+     * @param field The field that has the annotations.
+     * @param annotations The annotations that should not be on the field.
+     */
+    protected void assertNoAnnotations(final Class clashingAnnotation, final Field field, final Class... annotations) {
+        for (Class annotation : annotations) {
+            if (field.isAnnotationPresent(annotation)) {
+                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), clashingAnnotation.getSimpleName());
             }
         }
     }

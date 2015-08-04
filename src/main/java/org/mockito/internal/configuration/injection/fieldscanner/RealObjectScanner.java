@@ -1,6 +1,6 @@
 package org.mockito.internal.configuration.injection.fieldscanner;
 
-import org.mockito.Real;
+import org.mockito.*;
 import org.mockito.internal.configuration.injection.RealObject;
 import org.mockito.internal.util.reflection.FieldReader;
 
@@ -22,6 +22,7 @@ public class RealObjectScanner extends FieldScanner<Object> {
 
     @Override
     protected Object getObjectToAdd(Field field) {
+        assertNoAnnotations(Real.class, field, Mock.class, MockitoAnnotations.Mock.class, Spy.class);
         return new RealObject(
                 new FieldReader(this.testClassInstance, field).read(),
                 field.getName());

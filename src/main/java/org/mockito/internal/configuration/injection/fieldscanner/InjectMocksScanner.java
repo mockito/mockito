@@ -29,15 +29,7 @@ public class InjectMocksScanner extends FieldScanner<Field> {
 
     @Override
     protected Field getObjectToAdd(Field field) {
-        assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
+        assertNoAnnotations(InjectMocks.class, field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
         return field;
-    }
-
-    private void assertNoAnnotations(final Field field, final Class... annotations) {
-        for (Class annotation : annotations) {
-            if (field.isAnnotationPresent(annotation)) {
-                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
-            }
-        }
     }
 }
