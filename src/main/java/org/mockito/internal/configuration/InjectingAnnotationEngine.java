@@ -54,15 +54,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      */
     public void process(Class<?> clazz, Object testInstance) {
         processIndependentAnnotations(testInstance.getClass(), testInstance);
-        processInjectMocks(testInstance.getClass(), testInstance);
-    }
-
-    private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
-        Class<?> classContext = clazz;
-        while (classContext != Object.class) {
-            injectMocks(testInstance);
-            classContext = classContext.getSuperclass();
-        }
+        injectMocks(testInstance);
     }
 
     private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
@@ -76,7 +68,6 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
             classContext = classContext.getSuperclass();
         }
     }
-
 
     /**
      * Initializes mock/spies dependencies for objects annotated with
