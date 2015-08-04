@@ -6,9 +6,9 @@ package org.mockito.internal.configuration;
 
 import org.mockito.*;
 import org.mockito.configuration.AnnotationEngine;
-import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
-import org.mockito.internal.configuration.injection.scanner.MockScanner;
-import org.mockito.internal.configuration.injection.scanner.RealObjectScanner;
+import org.mockito.internal.configuration.injection.fieldscanner.InjectMocksScanner;
+import org.mockito.internal.configuration.injection.fieldscanner.MockScanner;
+import org.mockito.internal.configuration.injection.fieldscanner.RealObjectScanner;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -94,9 +94,9 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         Set<Object> realObjects = new HashSet<Object>();
 
         while (clazz != Object.class) {
-            new InjectMocksScanner(clazz).addTo(mockDependentFields);
-            new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
-            new RealObjectScanner(testClassInstance, clazz).addRealObjects(realObjects);
+            new InjectMocksScanner(testClassInstance).addTo(mockDependentFields);
+            new MockScanner(testClassInstance, clazz).addTo(mocks);
+            new RealObjectScanner(testClassInstance, clazz).addTo(realObjects);
             clazz = clazz.getSuperclass();
         }
         
