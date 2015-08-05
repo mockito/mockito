@@ -1328,41 +1328,6 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * <b>Deprecated : Please use mock(Foo.class, defaultAnswer);</b>
-     * <p>
-     * See {@link Mockito#mock(Class, Answer)}
-     * <p>
-     * Why it is deprecated? ReturnValues is being replaced by Answer
-     * for better consistency & interoperability of the framework.
-     * Answer interface has been in Mockito for a while and it has the same responsibility as ReturnValues.
-     * There's no point in mainting exactly the same interfaces.
-     * <p>
-     * Creates mock with a specified strategy for its return values.
-     * It's quite advanced feature and typically you don't need it to write decent tests.
-     * However it can be helpful when working with legacy systems.
-     * <p>
-     * Obviously return values are used only when you don't stub the method call.
-     *
-     * <pre class="code"><code class="java">
-     *   Foo mock = mock(Foo.class, Mockito.RETURNS_SMART_NULLS);
-     *   Foo mockTwo = mock(Foo.class, new YourOwnReturnValues());
-     * </code></pre>
-     *
-     * <p>See examples in javadoc for {@link Mockito} class</p>
-     *
-     * @param classToMock class or interface to mock
-     * @param returnValues default return values for unstubbed methods
-     *
-     * @return mock object
-     *
-     * @deprecated <b>Please use mock(Foo.class, defaultAnswer);</b>
-     */
-    @Deprecated
-    public static <T> T mock(Class<T> classToMock, ReturnValues returnValues) {
-        return mock(classToMock, withSettings().defaultAnswer(new AnswerReturnValuesAdapter(returnValues)));
-    }
-
-    /**
      * Creates mock with a specified strategy for its answers to interactions.
      * It's quite advanced feature and typically you don't need it to write decent tests.
      * However it can be helpful when working with legacy systems.
