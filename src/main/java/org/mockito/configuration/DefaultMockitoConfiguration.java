@@ -15,7 +15,6 @@ import org.mockito.stubbing.Answer;
  * <p>
  * See javadocs for {@link IMockitoConfiguration} on info how to configure Mockito
  */
-@SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
 
     public Answer<Object> getDefaultAnswer() {
