@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.ReturnValues;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
@@ -45,10 +44,6 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
 
     public static void validate() {
         new GlobalConfiguration();
-    }
-
-    public ReturnValues getReturnValues() {
-        return GLOBAL_CONFIGURATION.get().getReturnValues();
     }
 
     public AnnotationEngine getAnnotationEngine() {

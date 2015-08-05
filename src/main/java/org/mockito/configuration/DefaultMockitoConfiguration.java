@@ -4,7 +4,6 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.ReturnValues;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
@@ -18,15 +17,6 @@ import org.mockito.stubbing.Answer;
  */
 @SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
-    
-    /* (non-Javadoc)
-     * @see org.mockito.IMockitoConfiguration#getReturnValues()
-     */
-    @Deprecated
-    public ReturnValues getReturnValues() {
-        throw new RuntimeException("\n" + "This method should not be used by the framework because it was deprecated"
-                + "\n" + "Please report the failure to the Mockito mailing list");
-    }
 
     public Answer<Object> getDefaultAnswer() {
         return new ReturnsEmptyValues();
