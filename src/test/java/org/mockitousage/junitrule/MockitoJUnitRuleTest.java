@@ -28,11 +28,9 @@ public class MockitoJUnitRuleTest {
         assertEquals("A injected into B", injected, injectInto.getInjected());
     }
 
-    public static class Injected {
-    }
+    public static class Injected { }
 
     public static class InjectInto {
-
         private Injected injected;
 
         public Injected getInjected() {
