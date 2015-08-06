@@ -70,7 +70,7 @@ public class MockUtil {
     }
 
     private <T> boolean isMockitoMock(T mock) {
-        return mockMaker.getHandler(mock) != null;
+        return mock != null && mockMaker.getHandler(mock) != null;
     }
 
     public MockName getMockName(Object mock) {
