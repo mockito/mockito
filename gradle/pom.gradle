@@ -6,7 +6,7 @@ publishing.publications.all {
         def root = asNode()
         root.appendNode('name', 'Mockito')
         root.appendNode('packaging', 'jar')
-        root.appendNode('url', 'http://www.mockito.org')
+        root.appendNode('url', 'http://mockito.org')
         root.appendNode('description', 'Mock objects library for java')
 
         def license = root.appendNode('licenses').appendNode('license')
