@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.injection.fieldscanner;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -45,7 +46,8 @@ public class MockScanner extends FieldScanner<Object> {
     }
 
     private boolean isAnnotatedByMockOrSpy(Field field) {
-        return null != field.getAnnotation(Spy.class)
+        // When a @Spy is also @Injectmocks, it is a real object. Therefore it is treated as @Real.
+        return (null != field.getAnnotation(Spy.class) && null == field.getAnnotation(InjectMocks.class))
                 || null != field.getAnnotation(Mock.class)
                 || null != field.getAnnotation(MockitoAnnotations.Mock.class);
     }

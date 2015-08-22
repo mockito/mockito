@@ -22,12 +22,16 @@ public class RealObjectScanner extends FieldScanner<Object> {
         this.objectInstance = new FieldReader(this.testClassInstance, field).read();
 
         return null != objectInstance
-            && field.getAnnotation(Real.class) != null;
+            && (field.getAnnotation(Real.class) != null
+                || field.getAnnotation(InjectMocks.class) != null);
     }
 
     @Override
     protected Object getObjectToAdd(Field field) {
-        assertNoAnnotations(Real.class, field, Mock.class, MockitoAnnotations.Mock.class, Spy.class);
+        if (null != field.getAnnotation(Real.class)) {
+            assertNoAnnotations(Real.class, field, Mock.class, MockitoAnnotations.Mock.class, Spy.class);
+        }
+
         return new RealObject(objectInstance, field.getName());
     }
 }
