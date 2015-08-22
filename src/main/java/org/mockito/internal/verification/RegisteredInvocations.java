@@ -21,6 +21,8 @@ public interface RegisteredInvocations {
 
     List<Invocation> getAll();
 
+    void clear();
+
     boolean isEmpty();
 
 }

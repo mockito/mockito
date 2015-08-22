@@ -1704,6 +1704,21 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Use this method in order to only clear invocations, when stubbing is non-trivial. Use-cases can be:
+     * <ul>
+     *     <li>You are using a dependency injection framework to inject your mocks.</li>
+     *     <li>The mock is used in a stateful scenario. For example a class is Singleton which depends on your mock.</li>
+     * </ul>
+     *
+     * <b>Try to avoid this method at all costs. Only clear invocations if you are unable to efficiently test your program.</b>
+     * @param <T> The type of the mocks
+     * @param mocks The mocks to clear the invocations for
+     */
+    public static <T> void clearInvocations(T ... mocks) {
+        MOCKITO_CORE.clearInvocations(mocks);
+    }
+
+    /**
      * Checks if any of given mocks has any unverified interaction.
      * <p>
      * You can use this method after you verified your mocks - to make sure that nothing

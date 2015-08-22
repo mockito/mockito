@@ -44,6 +44,12 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
         return ListUtil.filter(copiedList, new RemoveToString());
     }
 
+    public void clear() {
+        synchronized (invocations) {
+            invocations.clear();
+        }
+    }
+
     public boolean isEmpty() {
         synchronized (invocations) {
             return invocations.isEmpty();
