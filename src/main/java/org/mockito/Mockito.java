@@ -1087,10 +1087,10 @@ import org.mockito.junit.*;
  * <p>
  * <pre class="code"><code class="java">
  *
- * // will print a custom message on verification failure 
+ * // will print a custom message on verification failure
  * verify(mock, description("This will print on failure")).someMethod();
- * 
- * // will work with any verification mode 
+ *
+ * // will work with any verification mode
  * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
  * </code></pre>
  *
@@ -1130,7 +1130,7 @@ public class Mockito extends Matchers {
      * <p>
      * Example:
      * <pre class="code"><code class="java">
-     *   Foo mock = (Foo.class, RETURNS_SMART_NULLS);
+     *   Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
      *
      *   //calling unstubbed method here:
      *   Stuff stuff = mock.getStuff();
@@ -1278,6 +1278,78 @@ public class Mockito extends Matchers {
      * </code></pre>
      */
     public static final Answer<Object> CALLS_REAL_METHODS = Answers.CALLS_REAL_METHODS;
+
+    /**
+     * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}.
+     *
+     * Allows Builder mocks to return itself whenever a method is invoked that returns a Type equal
+     * to the class or a superclass.
+     *
+     * <p><b>Keep in mind this answer uses the return type of a method.
+     * If this type is assignable to the class of the mock, it will return the mock.
+     * Therefore if you have a method returning a superclass (for example {@code Object}) it will match and return the mock.</b></p>
+     *
+     * Consider a HttpBuilder used in a HttpRequesterWithHeaders.
+     *
+     * <pre class="code"><code class="java">
+     * public class HttpRequesterWithHeaders {
+     *
+     *      private HttpBuilder builder;
+     *
+     *      public HttpRequesterWithHeaders(HttpBuilder builder) {
+     *          this.builder = builder;
+     *      }
+     *
+     *      public String request(String uri) {
+     *          return builder.withUrl(uri)
+     *                  .withHeader("Content-type: application/json")
+     *                  .withHeader("Authorization: Bearer")
+     *                  .request();
+     *      }
+     *  }
+     *
+     *  private static class HttpBuilder {
+     *
+     *      private String uri;
+     *      private List&lt;String&gt; headers;
+     *
+     *      public HttpBuilder() {
+     *          this.headers = new ArrayList&lt;String&gt;();
+     *      }
+     *
+     *       public HttpBuilder withUrl(String uri) {
+     *           this.uri = uri;
+     *           return this;
+     *       }
+     *
+     *       public HttpBuilder withHeader(String header) {
+     *           this.headers.add(header);
+     *           return this;
+     *       }
+     *
+     *       public String request() {
+     *          return uri + headers.toString();
+     *       }
+     *  }
+     * </code></pre>
+     *
+     * The following test will succeed
+     *
+     * <pre><code>
+     * &#064;Test
+     *  public void use_full_builder_with_terminating_method() {
+     *      HttpBuilder builder = mock(HttpBuilder.class, RETURNS_SELF);
+     *      HttpRequesterWithHeaders requester = new HttpRequesterWithHeaders(builder);
+     *      String response = "StatusCode: 200";
+     *
+     *      when(builder.request()).thenReturn(response);
+     *
+     *      assertThat(requester.request("URI")).isEqualTo(response);
+     *  }
+     * </code></pre>
+     */
+    public static final Answer<Object> RETURNS_SELF = Answers.RETURNS_SELF;
+
     /**
      * Creates mock object of given class or interface.
      * <p>
@@ -2475,7 +2547,7 @@ public class Mockito extends Matchers {
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
     }
-    
+
     /**
      * Adds a description to be printed if verification fails.
      * <pre class="code"><code class="java">
