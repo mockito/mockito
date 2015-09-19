@@ -1,34 +1,16 @@
+import org.mockito.release.version.Version
+
 assert project == rootProject
 
-File versionFile = project.rootProject.file("version.properties")
-project.ext.loadVersion = {
-    Properties props = new Properties()
-    props.load(new FileInputStream(versionFile))
-    props.version
-}
-
-project.version = project.ext.loadVersion()
+def v = Version.versionFile(project.file("version.properties"))
+project.version = v.version
+project.ext.versionFile = v
 
 logger.lifecycle "Version: $project.version"
 
 task incrementVersion {
     description "Increments version in 'version.properties' file."
     doLast {
-        incrementVersion()
-    }
-}
-
-ext.incrementVersion = {
-    try {
-        List numbers = project.version.split('\\.')
-        int micro = numbers.pop() as Integer
-        numbers << micro + 1
-        def newVersion = numbers.join('.')
-        def updatedContent = versionFile.text.replaceAll("(?s)version=(.*?)\n", "version=$newVersion\n")
-        versionFile.text = updatedContent
-        logger.lifecycle("Current content of '{}':\n----------\n{}\n----------", versionFile.name, updatedContent)
-        return newVersion
-    } catch (Exception e) {
-        throw new GradleException("Unable to increment minor version.", e)
+        v.incrementVersion()
     }
 }

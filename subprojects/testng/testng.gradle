@@ -19,7 +19,6 @@ jar {
 
     from("${rootProject.projectDir}") {
         include "LICENSE"
-        include "NOTICE"
         into "META-INF"
         expand(copyright: new Date().format("yyyy"), version: project.version)
     }
@@ -47,7 +46,7 @@ uploadArchives {
 dependencies {
     compile project.rootProject
     compile 'org.testng:testng:6.3.1'
-    testCompile 'org.easytesting:fest-assert:1.4'
+    testCompile 'org.assertj:assertj-core:2.1.0'
 }
 
 test {

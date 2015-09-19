@@ -1,3 +1,315 @@
+### 2.0.26-beta (2015-06-30 05:20 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.25-beta (2015-06-30 05:12 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.24-beta (2015-06-29 05:50 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.23-beta (2015-06-26 04:57 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.22-beta (2015-06-25 14:35 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.21-beta (2015-06-23 13:19 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Rafael Winterhalter
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Upgraded to Byte Buddy 0.6.11 and took improved features in use. [(#242)](https://github.com/mockito/mockito/pull/242)
+
+### 2.0.20-beta (2015-06-22 00:21 UTC)
+
+* Authors: 1
+* Commits: 6
+  * 6: Brice Dutheil
+* Improvements: 2
+  * Replaces cobertura/coveralls by jacoco/codecov [(#241)](https://github.com/mockito/mockito/pull/241)
+  * Fixes coverage reports [(#240)](https://github.com/mockito/mockito/pull/240)
+
+### 2.0.19-beta (2015-06-21 18:06 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Test error after upgrading Mockito from 2.0.14-beta to 2.0.15-beta [(#237)](https://github.com/mockito/mockito/issues/237)
+
+### 2.0.18-beta (2015-06-21 18:00 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 1
+  * Moves responsibility of isTypeMockable to MockMaker [(#238)](https://github.com/mockito/mockito/pull/238)
+
+### 2.0.17-beta (2015-06-20 20:39 UTC)
+
+* Authors: 2
+* Commits: 6
+  * 4: Szczepan Faber
+  * 2: Brice Dutheil
+* Improvements: 1
+  * nicer textual printing of typed parameters [(#236)](https://github.com/mockito/mockito/issues/236)
+
+### 2.0.16-beta (2015-06-20 00:09 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Brice Dutheil
+* Improvements: 2
+  * Fixes #220 constructor invoking methods raise NPE [(#235)](https://github.com/mockito/mockito/pull/235)
+  * 2.0.8-beta -> 2.0.9-beta 'Unable to initialize @Spy annotated field [(#220)](https://github.com/mockito/mockito/issues/220)
+
+### 2.0.15-beta (2015-06-18 16:49 UTC)
+
+* Authors: 2
+* Commits: 5
+  * 3: Brice Dutheil
+  * 2: Szczepan Faber
+* Improvements: 2
+  * Cannot instantiate type with public method of a public parent class having a non public types in signature [(#234)](https://github.com/mockito/mockito/pull/234)
+  * mockito 2.0.14 fails to mock jetty httpclient [(#233)](https://github.com/mockito/mockito/issues/233)
+
+### 2.0.14-beta (2015-06-12 20:18 UTC)
+
+* Authors: 7
+* Commits: 32
+  * 21: Brice Dutheil
+  * 6: Lukasz Szewc
+  * 1: Michal Kordas
+  * 1: Geoff Schoeman
+  * 1: Tim van der Lippe
+  * 1: Eugene Ivakhno
+  * 1: alberskib
+* Improvements: 14
+  * Fixes #228: fixed a verify() call example in @Captor javadoc [(#229)](https://github.com/mockito/mockito/pull/229)
+  * @Captor javadoc contains a wrong call example [(#228)](https://github.com/mockito/mockito/issues/228)
+  * [#206] Fix issue related to windows path [(#223)](https://github.com/mockito/mockito/pull/223)
+  * Fixes #203 : Introduce BDD InOrder verification [(#222)](https://github.com/mockito/mockito/pull/222)
+  * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+  * Improves InjectMocks behavior when injectee has multiple fields of the same type [(#215)](https://github.com/mockito/mockito/pull/215)
+  * ArgumentCaptor no longer working for varargs [(#211)](https://github.com/mockito/mockito/pull/211)
+  * NoJUnitDependenciesTest is failing on Windows machine. [(#206)](https://github.com/mockito/mockito/issues/206)
+  * InjectMocks injects mock into wrong field [(#205)](https://github.com/mockito/mockito/issues/205)
+  * mockito spy lost annotations from the spied instance class [(#204)](https://github.com/mockito/mockito/issues/204)
+  * Introduce BDD InOrder verification [(#203)](https://github.com/mockito/mockito/issues/203)
+  * ArgumentCaptor no longer working for varargs [(#188)](https://github.com/mockito/mockito/issues/188)
+  * Replace CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
+  * Added custom failure message to Mockito.verify. Issue 482 [(#68)](https://github.com/mockito/mockito/pull/68)
+
+### 2.0.12-beta (2015-06-04 17:01 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Brice Dutheil
+  * 1: Michal Kordas
+  * 1: Simen Bekkhus
+* Improvements: 3
+  * Fixes #212 : Add shouldHaveZeroInteractions as BDD version of verifyZeroInteractions [(#221)](https://github.com/mockito/mockito/pull/221)
+  * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+  * Add BDD version of verifyZeroInteractions() [(#212)](https://github.com/mockito/mockito/issues/212)
+
+### 2.0.11-beta (2015-06-03 23:57 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Brice Dutheil
+* Improvements: 1
+  * Empty values can return an empty iterable [(#210)](https://github.com/mockito/mockito/pull/210)
+* Fixes: 1
+  * Mockito could not mock types in signed jars [(#218)](https://github.com/mockito/mockito/pull/218)
+
+### 2.0.10-beta (2015-06-03 12:37 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Brice Dutheil
+* No notable improvements. See the commits for detailed changes.
+
+### 2.0.9-beta (2015-06-02 19:54 UTC)
+
+* Authors: 2
+* Commits: 40
+  * 25: Brice Dutheil
+  * 15: rafwin
+* Refactorings: 1
+  * Replace Internal CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
+
+### 2.0.8-beta (2015-05-13 15:05 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Lukasz Szewc
+  * 1: Brice Dutheil
+* Improvements: 2
+  * Fixes #197 : Blocks ability to use negative value for timeout() and after() method. [(#207)](https://github.com/mockito/mockito/pull/207)
+  * Mockito.after() method accepts negative time periods and subsequent verifications always pass [(#197)](https://github.com/mockito/mockito/issues/197)
+
+### 2.0.7-beta (2015-04-19 18:47 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 2
+  * Better protection against incompatible returned value of default answer, and get safely mock name [(#202)](https://github.com/mockito/mockito/pull/202)
+  * java.lang.ClassCastException: java.lang.Class cannot be cast to java.lang.String [(#187)](https://github.com/mockito/mockito/issues/187)
+
+### 2.0.6-beta (2015-04-17 09:55 UTC)
+
+* Authors: 3
+* Commits: 9
+  * 7: Brice Dutheil
+  * 1: bruce
+  * 1: Hans Joachim Desserud
+* Improvements: 3
+  * Fixes #200 : ArgumentCaptor.forClass is more friendly with generic types [(#201)](https://github.com/mockito/mockito/pull/201)
+  * ArgumentCaptor.fromClass's return type should match a parameterized type [(#200)](https://github.com/mockito/mockito/issues/200)
+  * Fixes typo [(#184)](https://github.com/mockito/mockito/pull/184)
+
+### 2.0.5-beta (2015-02-26 22:31 UTC)
+
+* Authors: 2
+* Commits: 7
+  * 4: Joseph Walton
+  * 3: Brice Dutheil
+* Improvements: 2
+  * Make PropertyAndSetterInjection field sorting consistent [(#176)](https://github.com/mockito/mockito/pull/176)
+  * Internal Comparator violates its general contract [(#155)](https://github.com/mockito/mockito/issues/155)
+
+### 2.0.4-beta (2015-02-15 19:37 UTC)
+
+* Authors: 2
+* Commits: 13
+  * 11: Brice Dutheil
+  * 2: Clark Brewer
+* Improvements: 2
+  * GitHubIssues fetcher is now aware of GitHub pagination [(#163)](https://github.com/mockito/mockito/pull/163)
+  * Excluded missing transitive dependency of the coveralls gradle plugin to fix failing build. [(#161)](https://github.com/mockito/mockito/pull/161)
+
+### 2.0.3-beta (2015-01-20 20:35 UTC)
+
+* Authors: 2
+* Commits: 8
+  * 6: Brice Dutheil
+  * 2: Szczepan Faber
+* Improvements: 2
+  * stop producing mockito-all [(#153)](https://github.com/mockito/mockito/issues/153)
+  * Mockito 1.10.x timeout verification needs JUnit classes (VerifyError, NoClassDefFoundError) [(#152)](https://github.com/mockito/mockito/issues/152)
+
+### 2.0.2-beta (2015-01-02 16:25 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Christian Schwarz
+  * 1: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 2
+  * enum Answers now implements Answer<Object> [(#144)](https://github.com/mockito/mockito/pull/144)
+  * `Mockito.after` now takes a `long`.
+
+### 2.0.1-beta (2015-01-02 15:02 UTC)
+
+* Authors: 3
+* Commits: 19
+  * 8: Szczepan Faber
+  * 6: Brice Dutheil
+  * 5: pimterry
+* Improvements: 1
+  * Argument matcher anyXxx() (i.e. anyString(), anyList()) should not match nulls [(#134)](https://github.com/mockito/mockito/issues/134)
+
+---------------------------------
+
+## Latest 1.x stable version
+
+### 1.10.19 (2014-12-31 17:04 UTC)
+
+* Authors: 4
+* Commits: 10
+  * 6: pbielicki
+  * 2: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Radim Kubacki
+* Improvements: 2
+  * Deep stubbing with generic responses in the call chain is not working [(#128)](https://github.com/mockito/mockito/issues/128)
+  * Make org.mockito.asm.signature package optional in Import-Packages. [(#125)](https://github.com/mockito/mockito/pull/125)
+
+### 1.10.18 (2014-12-30 09:45 UTC)
+
+* Authors: 4
+* Commits: 14
+  * 11: Szczepan Faber
+  * 1: pbielicki
+  * 1: Brice Dutheil
+  * 1: Matthew Dean
+* Improvements: 2
+  * Fix grammar issues in the javadoc documentation [(#149)](https://github.com/mockito/mockito/pull/149)
+  * 1.10 regression (StackOverflowError) with interface where generic type has itself as upper bound [(#114)](https://github.com/mockito/mockito/issues/114)
+
+### 1.10.17 (2014-12-16 09:38 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 8: Szczepan Faber
+  * 3: jerzykrlk
+* Improvements: 2
+  * Make Mockito JUnit rule easier to use [(#140)](https://github.com/mockito/mockito/issues/140)
+  * Tidy-up public API of Mockito JUnit rule [(#139)](https://github.com/mockito/mockito/issues/139)
+
+### 1.10.16 (2014-12-14 23:56 UTC)
+
+* Authors: 1
+* Commits: 15
+  * 15: Szczepan Faber
+* Improvements: 2
+  * Promote incubating features [(#137)](https://github.com/mockito/mockito/issues/137)
+  * Automate maven central sync [(#136)](https://github.com/mockito/mockito/issues/136)
+
+### 1.10.15 (2014-12-12 23:42 UTC)
+
+* Authors: 3
+* Commits: 27
+  * 24: Szczepan Faber
+  * 2: Lovro Pandzic
+  * 1: Dhruv Arora
+* Improvements: 2
+  * Introduce PluginSwitch extension point [(#135)](https://github.com/mockito/mockito/issues/135)
+  * bdd mockito cleanup [(#100)](https://github.com/mockito/mockito/pull/100)
+
+### 1.10.14 (2014-12-02 10:01 UTC)
+
+* Authors: 3
+* Commits: 23
+  * 16: Szczepan Faber
+  * 5: Werner Beroux
+  * 2: fluentfuture
+* Improvements: 1
+  * @Spy annotation supports abstract classes [(#126)](https://github.com/mockito/mockito/pull/126)
+
 ### 1.10.13 (2014-11-22 21:28 UTC)
 
 * Authors: 2

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright (c) 2007 Mockito contributors 
+ This program is made available under the terms of the MIT License.
+-->
+<ruleset name="Mockito" xmlns="http://pmd.sf.net/ruleset/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+  xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <rule name="MissingFailInExceptionTestingCode"
+        message="Don't miss fail() in test code that asserts exceptions"
+        class="net.sourceforge.pmd.rules.XPathRule">
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //MethodDeclaration[../Annotation//Name[@Image='Test']]//TryStatement/Block/BlockStatement[position()=last() and Statement//PrimaryPrefix/Name[@Image!='fail']]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+                try {
+                    //code
+                    fail() // - don't miss that
+                } catch (Exception e) {
+                    //some assertion code if needed
+                }                   
+            ]]>
+        </example>
+    </rule>
+    
+    <!-- rule name="TestClassShouldExtendTestBase"
+        message="Test Class should extend TestBase to detect invalid state problems quickly"
+        class="net.sourceforge.pmd.rules.XPathRule">
+
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        /TypeDeclaration/ClassOrInterfaceDeclaration[
+                            not(starts-with(../../PackageDeclaration/Name/@Image, 'org.mockitousage.examples')) 
+                            and ends-with(@Image, 'Test') 
+                            and not(contains(ExtendsList/ClassOrInterfaceType/@Image, 'TestBase'))
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+                //good:
+                public class BasicVerificationTest extends TestBase {
+                
+                //bad:
+                public class BasicVerificationTest {             
+            ]]>
+        </example>
+    </rule -->   
+    
+</ruleset>

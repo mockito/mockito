@@ -1,12 +1,12 @@
 publishing.publications.all {
     //TODO github profile?
-    def devs = ["szczepiq:Szczepan Faber"]
+    def devs = ["szczepiq:Szczepan Faber", "bric3:Brice Dutheil"]
 
     pom.withXml {
         def root = asNode()
         root.appendNode('name', 'Mockito')
         root.appendNode('packaging', 'jar')
-        root.appendNode('url', 'http://www.mockito.org')
+        root.appendNode('url', 'http://mockito.org')
         root.appendNode('description', 'Mock objects library for java')
 
         def license = root.appendNode('licenses').appendNode('license')

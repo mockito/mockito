@@ -1,0 +1,35 @@
+apply plugin: 'osgi'
+
+afterEvaluate {
+    tasks.matching { it.name == 'jar' }.all { jar ->
+        jar.manifest {
+            classpath = project.configurations.runtime
+
+            instruction '-versionpolicy', '[${version;==;${@}},${version;+;${@}})'
+
+            name = 'Mockito Mock Library for Java. Core bundle requires Hamcrest-core and Objenesis.'
+            symbolicName = 'org.mockito.mockito-core'
+            version = project.version
+
+            instruction 'Export-Package',
+                    '!org.mockito.asm.*',
+                    '!org.mockito.cglib.*',
+                    '!org.mockito.internal.*',
+                    'org.objenesis;version=2.1',
+                    "org.mockito.*;version=${project.version}"
+
+            instruction 'Import-Package',
+                    'net.bytebuddy.*;version=0.6.11',
+                    'junit.*;resolution:=optional',
+                    'org.junit.*;resolution:=optional',
+                    'org.hamcrest;version="[1.0,2.0)"',
+                    'org.objenesis;version="[2.1,3.0)"',
+                    'org.mockito.*'
+
+            instruction 'Private-Package',
+                    'org.mockito.*'
+
+            instruction '-removeheaders', 'Private-Package'
+        }
+    }
+}
