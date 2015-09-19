@@ -171,7 +171,6 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         //TODO SF - add this validation and also add missing coverage
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
 
-        validator.validateSerializable(typeToMock, source.isSerializable());
         validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
 
         //TODO SF - I don't think we really need CreationSettings type
