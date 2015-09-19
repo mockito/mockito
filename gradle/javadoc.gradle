@@ -1,86 +1,64 @@
-//Until I fix the bug in Gradle (GRADLE-3099) related to line breaks in the javadoc options file,
-// we need to stick with ant task for javadoc generation
+//vanilla javadoc task does not work for us and it actually fails on java8
+tasks.javadoc.enabled = false
 
-//TODO generate to different dir, disable vanilla javadoc task
-
-task mockitoJavadoc {
+task mockitoJavadoc(type: Javadoc) {
     description "Creates javadoc html for Mockito API."
+    tasks.javadoc.dependsOn it //so that when the user invokes 'javadoc' right things happen
 
-    inputs.files sourceSets.main.compileClasspath
-    inputs.dir "javadoc"
-    outputs.dir "$buildDir/javadoc"
+    // For more details on the format
+    // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
+
+    classpath = configurations.runtime + configurations.provided
+    source = sourceSets.main.allJava
+    destinationDir = file("$buildDir/javadoc")
+    title = "Mockito ${project.version} API"
+    def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
+
+    options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
+    options.windowTitle = "Mockito ${project.version} API"
+    options.group("Main package", ["org.mockito"])
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.use = true
+    options.splitIndex = true
+    options.noDeprecated = false
+    options.noDeprecatedList = false
+    options.noIndex = false
+    options.noNavBar = false
+    options.noTree = false
+    options.links('http://docs.oracle.com/javase/8/docs/api/')
+    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
+    options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
+    options.bottom("""
+        <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
+        <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
+        <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
+
+        <script type="text/javascript">
+          var usingOldIE = \$.browser.msie && parseInt(\$.browser.version) < 9;
+          if(!usingOldIE) {
+              \$("head").append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")
+              \$("head", window.parent.document).append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">")
+              hljs.initHighlightingOnLoad();
+              \$("pre.code").css("font-size", "0.9em");
+              injectProjectVersionForJavadocJDK6("Mockito ${project.version} API",
+                                                 "em#mockito-version-header-javadoc7-header",
+                                                 "em#mockito-version-header-javadoc7-footer");
+          }
+        </script>
+    """)
+//    options.stylesheetFile file("src/javadoc/stylesheet.css")
+//    options.addStringOption('top', 'some html')
+    if (JavaVersion.current().isJava8Compatible()) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 
     doLast {
-        def mockitoVersion = project.version
-        ant.javadoc(
-                sourcepath: "src",
-                destdir: "$buildDir/javadoc",
-                author: "true",
-                version: "true",
-                use: "true",
-                windowtitle: "Mockito ${mockitoVersion} API",
-                doctitle: """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${mockitoVersion} API.</h1>""") {
-            group(title: "Main package", packages: "org.mockito")
-            classpath {
-                sourceSets.main.compileClasspath.addToAntBuilder(ant, "resources")
-            }
-            header """
-          <!-- Note there is a weird javadoc task bug if using the double quote char \\" that causes an 'illegal package name' error -->
-          <em id="mockito-version-header-javadoc7"><strong>Mockito ${mockitoVersion} API</strong></em>
-
-          <!-- using the beautify plugin for jQuery from https://bitbucket.org/larscorneliussen/beautyofcode/ -->
-          <script type="text/javascript">
-              var shBaseURL = '{@docRoot}/js/sh-2.1.382/';
-          </script>
-          <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
-          <script type="text/javascript" src="{@docRoot}/js/jquery.beautyOfCode-min.js"></script>
-
-          <script type="text/javascript">
-              /* Apply beautification of code */
-              var usingOldIE = false;
-              if(\$.browser.msie && parseInt(\$.browser.version) < 9) usingOldIE = true;
-
-              if(!usingOldIE) {
-                  \$.beautyOfCode.init({
-                    theme : 'Eclipse',
-                    brushes: ['Java']
-                  });
-
-                  var version = '${mockitoVersion}';
-
-                  jQuery.fn.removeAttributes = function() {
-                    return this.each(function() {
-                      var attributes = \$.map(this.attributes, function(item) {
-                        return item.name;
-                      });
-                      var img = \$(this);
-                      \$.each(attributes, function(i, item) {
-                        img.removeAttr(item);
-                      });
-                    });
-                  };
-
-                  \$(function() {
-                    /* Add name & version to header for Javadoc 1.6 */
-                    \$('td.NavBarCell1[colspan=2]').each(function(index, element) {
-                      var jqueryTD = \$(element);
-                      jqueryTD.after(
-                        \$('<td><em><strong>Mockito ${mockitoVersion} API</strong></em></td>').attr('class','NavBarCell1').attr('id','mockito-version-header-javadoc6')
-                      );
-                      jqueryTD.removeAttr('colspan');
-                    });
-                    /* Cleans up mess with Javadoc 1.7 */
-                    \$('body > h1').removeAttributes().attr('class', 'bar').attr('title', 'Mockito ${mockitoVersion} API');
-                    /* Cleans up mess with Javadoc 1.7 with Javadoc 1.6 */
-                    \$('td em#mockito-version-header-javadoc7').remove();
-                  });
-              }
-          </script>
-"""
-        }
-
         copy {
-            from "javadoc"
+            from "src/javadoc"
             into "$buildDir/javadoc"
         }
     }

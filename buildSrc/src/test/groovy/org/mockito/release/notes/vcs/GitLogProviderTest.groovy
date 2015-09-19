@@ -1,6 +1,6 @@
 package org.mockito.release.notes.vcs
 
-import org.mockito.release.notes.exec.ProcessRunner
+import org.mockito.release.exec.ProcessRunner
 import spock.lang.Specification
 import spock.lang.Subject
 

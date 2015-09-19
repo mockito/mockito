@@ -22,4 +22,8 @@ class DefaultImprovements implements ImprovementSet {
     public void add(Improvement improvement) {
         improvements.add(improvement);
     }
+
+    public void addAll(List<Improvement> improvements) {
+        this.improvements.addAll(improvements);
+    }
 }
