@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.ReturnValues;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
@@ -15,7 +14,6 @@ import java.io.Serializable;
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
  */
-@SuppressWarnings("deprecation")//suppressed until ReturnValues are removed
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
     
@@ -45,10 +43,6 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
 
     public static void validate() {
         new GlobalConfiguration();
-    }
-
-    public ReturnValues getReturnValues() {
-        return GLOBAL_CONFIGURATION.get().getReturnValues();
     }
 
     public AnnotationEngine getAnnotationEngine() {
