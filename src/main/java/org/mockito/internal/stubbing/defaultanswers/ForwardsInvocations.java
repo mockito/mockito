@@ -9,9 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.stubbing.answers.MethodInfo;
-import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
