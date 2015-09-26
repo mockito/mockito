@@ -39,7 +39,7 @@ That means :
 ## Looking for support
 
 * Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
-* Search / Ask question on [stackoverflow](http://stackoverflow.com)
+* Search / Ask question on [stackoverflow](http://stackoverflow.com/questions/tagged/mockito)
 
 ## How to build?
 
