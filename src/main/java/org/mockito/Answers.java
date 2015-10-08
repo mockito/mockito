@@ -73,7 +73,7 @@ public enum Answers implements Answer<Object>{
 
     private final Answer<Object> implementation;
 
-    private Answers(Answer<Object> implementation) {
+    Answers(Answer<Object> implementation) {
         this.implementation = implementation;
     }
 

@@ -36,7 +36,7 @@ public class ThreadsStubSharedMockTest extends TestBase {
                         .thenReturn(getId() + "")
                         .thenReturn("foo")
                         .thenReturn("bar");
-                        
+
                     stubVoid(mock)
                         .toThrow(new RuntimeException(getId() + ""))
                         .toReturn()
@@ -46,8 +46,8 @@ public class ThreadsStubSharedMockTest extends TestBase {
             };
             listeners[i].start();
         }
-        for (int i = 0; i < listeners.length; i++) {
-            listeners[i].join();
+        for (Thread listener : listeners) {
+            listener.join();
         }
     }
 }

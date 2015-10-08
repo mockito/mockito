@@ -41,7 +41,19 @@ public class ValuePrinter {
      * @return neatly formatted value list
      */
     public static String printValues(String start, String separator, String end, Iterator values) {
-        //TODO SF null check
+        if(start == null){
+            start = "(";
+        }
+        if (separator == null){
+            separator = ",";
+        }
+        if (end == null){
+            end = ")";
+        }
+        if (values == null){
+            values = new ArrayIterator(new String[]{""});
+        }
+
         StringBuilder sb = new StringBuilder(start);
         while(values.hasNext()) {
             sb.append(print(values.next()));

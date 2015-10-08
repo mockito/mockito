@@ -5,17 +5,9 @@
 package org.mockito.internal.configuration;
 
 import org.mockito.configuration.IMockitoConfiguration;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.StackTraceCleanerProvider;
 
-import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
 /**
  * Loads configuration or extension points available in the classpath.

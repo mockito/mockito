@@ -170,7 +170,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
         boolean failed = false;
         for (AllTestsRunner t : threads) {
             t.join();
-            failed = failed ? true : t.isFailed();
+            failed |= t.isFailed();
         }
 
         return failed;
