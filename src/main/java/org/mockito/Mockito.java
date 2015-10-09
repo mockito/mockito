@@ -66,6 +66,7 @@ import org.mockito.junit.*;
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  *      <a href="#35">35. (new) Custom verification failure message (Since 2.0.0)</a><br/>
+ *      <a href="#36">36. (new) Support for user-written Answer Classes when using @Mock</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0</a></h3>
@@ -1092,6 +1093,41 @@ import org.mockito.junit.*;
  * 
  * // will work with any verification mode 
  * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
+ * </code></pre>
+ *
+ * <h3 id="36">36. <a class="meaningful_link" href="#User_written_answer_classes">Support for user-written Answer Classes when using @Mock</a> (Since 2.0.0)</h3>
+ * <p>
+ * Allows specifying a customer Answer beyond those provided in org.mockito.Answers. This is in line with the functionality
+ * provided by org.mockito.Mockito.mock(Object.class, someCustomAnswer)
+ * <p>
+ * Examples:
+ * <p>
+ * <pre class="code"><code class="java">
+ *
+ * class MyAnswerClass implements Answer<MyObject> {
+ *   @Override
+ *   public MyObject answer(InvocationOnMock invocation) throws Throwable {
+ *     return buildObjectBasedOnInvocation(invocation);
+ *   }
+ *
+ *   public MyObject buildObjectBasedOnInvocation(InvocationOnMock invocation) {...}
+ * }
+ *
+ * @Mock(answerClass=MyAnswerClass.class)
+ * private MyObject myMockedObject;
+ *
+ * @Before
+ * public void setUp() {
+ *     initMocks(this);
+ *     when(myMockedObject.someMethod()).thenReturn(mockedResponse);
+ * }
+ *
+ * @Test
+ * public void test() {
+ *     myMockedObject.someMethod(); // returns mockedResponse
+ *     myMockedObject.someOtherMethod(); // returns based on MyAnswerClass.answer(invocation)
+ * }
+ *
  * </code></pre>
  *
  * TODO rework the documentation, write about hamcrest.
