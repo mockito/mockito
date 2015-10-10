@@ -357,26 +357,6 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
 
 
-    static class NotSerializableAndNoDefaultConstructor {
-        NotSerializableAndNoDefaultConstructor(Observable o) { super(); }
-    }
-
-    @Test
-    public void should_fail_when_serializable_used_with_type_that_dont_implements_Serializable_and_dont_declare_a_no_arg_constructor() throws Exception {
-        try {
-            serializeAndBack(mock(NotSerializableAndNoDefaultConstructor.class, withSettings().serializable()));
-            fail("should have thrown an exception to say the object is not serializable");
-        } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage())
-                    .contains(NotSerializableAndNoDefaultConstructor.class.getSimpleName())
-                    .contains("serializable()")
-                    .contains("implement Serializable")
-                    .contains("no-arg constructor");
-        }
-    }
-
-
-
     static class SerializableAndNoDefaultConstructor implements Serializable {
         SerializableAndNoDefaultConstructor(Observable o) { super(); }
     }

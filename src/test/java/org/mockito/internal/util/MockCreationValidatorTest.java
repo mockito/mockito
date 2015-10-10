@@ -57,20 +57,6 @@ public class MockCreationValidatorTest {
         //then no exception is thrown
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_not_allow_serializable_with_Object_that_dont_implement_Serializable() {
-        class NonSerializableInnerClassThatHaveAHiddenOneArgConstructor {}
-        boolean serializable = true;
-        validator.validateSerializable(NonSerializableInnerClassThatHaveAHiddenOneArgConstructor.class, serializable);
-    }
-
-    @Test
-    public void should_allow_serializable_with_interfaces_or_Serializable_objects() {
-        boolean serializable = true;
-        validator.validateSerializable(Observer.class, serializable);
-        validator.validateSerializable(Integer.class, serializable);
-    }
-
     @Test
     public void should_fail_when_type_not_mockable() throws Exception {
         try {
