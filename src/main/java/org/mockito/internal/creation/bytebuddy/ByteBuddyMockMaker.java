@@ -2,9 +2,9 @@ package org.mockito.internal.creation.bytebuddy;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
 import org.mockito.internal.creation.instance.Instantiator;
-import org.mockito.internal.creation.instance.InstantiatorProvider;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -26,7 +26,7 @@ public class ByteBuddyMockMaker implements MockMaker {
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         Class<T> mockedProxyType = createProxyClass(mockWithFeaturesFrom(settings));
 
-        Instantiator instantiator = new InstantiatorProvider().getInstantiator(settings);
+        Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         T mockInstance = null;
         try {
             mockInstance = instantiator.newInstance(mockedProxyType);

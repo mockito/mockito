@@ -1,5 +1,6 @@
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
@@ -14,6 +15,9 @@ class PluginRegistry {
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider
             = new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+
+    private final InstantiatorProvider instantiatorProvider
+            = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
 
     /**
      * The implementation of the stack trace cleaner
@@ -31,5 +35,15 @@ class PluginRegistry {
      */
     MockMaker getMockMaker() {
         return mockMaker;
+    }
+
+    /**
+     * Returns the instantiator provider available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.creation.instance.DefaultInstantiatorProvider} if no
+     * {@link org.mockito.plugins.InstantiatorProvider} extension exists or is visible in the current classpath.</p>
+     */
+    InstantiatorProvider getInstantiatorProvider() {
+      return instantiatorProvider;
     }
 }
