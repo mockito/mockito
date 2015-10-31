@@ -246,6 +246,7 @@ public class BDDMockitoTest extends TestBase {
         mock.booleanObjectReturningMethod();
 
         then(mock).should().booleanObjectReturningMethod();
+        then(mock).shouldHaveNoMoreInteractions();
     }
 
     @Test
@@ -260,6 +261,18 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).shouldHaveZeroInteractions();
             fail("should have reported this interaction wasn't wanted");
+        } catch (NoInteractionsWanted expected) { }
+    }
+
+    @Test
+    public void should_fail_when_mock_had_more_interactions_than_expected() {
+        mock.booleanObjectReturningMethod();
+        mock.byteObjectReturningMethod();
+
+        then(mock).should().booleanObjectReturningMethod();
+        try {
+            then(mock).shouldHaveNoMoreInteractions();
+            fail("should have reported that no more interactions were wanted");
         } catch (NoInteractionsWanted expected) { }
     }
 

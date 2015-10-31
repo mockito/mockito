@@ -57,6 +57,7 @@ import org.mockito.verification.VerificationMode;
  *   person.ride(bike);
  *
  *   then(person).should(times(2)).ride(bike);
+ *   then(person).shouldHaveNoMoreInteractions();
  *   then(police).shouldHaveZeroInteractions();
  * </code></pre>
  * <p>
@@ -256,6 +257,12 @@ public class BDDMockito extends Mockito {
          * @since 2.0
          */
         void shouldHaveZeroInteractions();
+
+        /**
+         * @see #verifyNoMoreInteractions(Object...)
+         * @since 2.0
+         */
+        void shouldHaveNoMoreInteractions();
     }
 
     /**
@@ -308,6 +315,14 @@ public class BDDMockito extends Mockito {
          */
         public void shouldHaveZeroInteractions() {
             verifyZeroInteractions(mock);
+        }
+
+        /**
+         * @see #verifyNoMoreInteractions(Object...)
+         * @since 2.0
+         */
+        public void shouldHaveNoMoreInteractions() {
+            verifyNoMoreInteractions(mock);
         }
     }
 
