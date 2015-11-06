@@ -40,7 +40,7 @@ public class StackTraceFilterTest extends TestBase {
     }
     
     @Test
-    public void shouldFilterOutTracesMiddleBadTraces() {
+    public void shouldNotFilterOutTracesMiddleGoodTraces() {
         StackTraceElement[] t = new TraceBuilder().classes(
                 "org.test.MockitoSampleTest",
                 "org.test.TestSupport",
@@ -51,7 +51,7 @@ public class StackTraceFilterTest extends TestBase {
         
         StackTraceElement[] filtered = filter.filter(t, false);
         
-        assertThat(filtered, hasOnlyThoseClasses("org.test.TestSupport", "org.test.MockitoSampleTest"));
+        assertThat(filtered, hasOnlyThoseClasses("org.test.TestSupport", "org.test.TestSupport", "org.test.MockitoSampleTest"));
     }
     
     @Test
