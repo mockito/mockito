@@ -54,7 +54,7 @@ test {
 }
 
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:0.6.15'
+    compile 'net.bytebuddy:byte-buddy:0.7'
 
     provided "junit:junit:4.10", "org.hamcrest:hamcrest-core:1.3"
     compile "org.objenesis:objenesis:2.1"
