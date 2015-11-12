@@ -5,18 +5,19 @@
 
 package org.mockitousage.bugs;
 
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockitoutil.TestBase;
+
+import java.io.Serializable;
 
 import static org.mockito.Mockito.*;
 
 //see issue 101
 public class BridgeMethodsHitAgainTest extends TestBase {
-   
+
   public interface Factory {}
   public interface ExtendedFactory extends Factory {}
 
@@ -26,6 +27,15 @@ public class BridgeMethodsHitAgainTest extends TestBase {
 
   public interface SomeSubInterface extends SomeInterface {
     ExtendedFactory factory();
+  }
+
+  public interface Base<T extends Serializable> {
+    int test(T value);
+  }
+
+  public interface Extended extends Base<String> {
+    @Override
+    int test(String value);
   }
 
   @Mock SomeSubInterface someSubInterface;
@@ -44,4 +54,15 @@ public class BridgeMethodsHitAgainTest extends TestBase {
     SomeInterface si = someSubInterface;
     assertTrue(si.factory() != null);
   }
+
+
+    @Test
+    @Ignore("Mockito does not resolve bridge methods as their actual method and can therefore not verify its invocation")
+    public void testBridgeInvocationIsRecordedForInterceptedMethod() {
+        Extended ext = mock(Extended.class);
+        ext.test("123");
+        verify(ext).test("123");
+        ((Base<String>) ext).test("456");
+        verify(ext).test("456");
+    }
 }
