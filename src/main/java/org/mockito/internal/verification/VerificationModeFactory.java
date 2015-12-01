@@ -7,6 +7,8 @@ package org.mockito.internal.verification;
 
 import org.mockito.verification.VerificationMode;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class VerificationModeFactory {
     
     public static VerificationMode atLeastOnce() {
@@ -35,6 +37,10 @@ public class VerificationModeFactory {
 
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return new AtMost(maxNumberOfInvocations);
+    }
+
+    public static VerificationMode countInvocations(AtomicInteger wantedNumberOfInvocations) {
+        return new CountInvocations(wantedNumberOfInvocations);
     }
     
     /**

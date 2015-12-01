@@ -17,6 +17,8 @@ import org.mockito.stubbing.*;
 import org.mockito.verification.*;
 import org.mockito.junit.*;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
  * The Mockito library enables mock creation, verification and stubbing.
@@ -2193,6 +2195,22 @@ public class Mockito extends Matchers {
     }
 
     /**
+     * Allows verifying exact number of invocations. E.g:
+     * <pre class="code"><code class="java">
+     *   AtomicInteger counter = new AtomicInteger();
+     *   counter.set(2);
+     *   verify(mock, times(counter)).someMethod("some arg");
+     * </code></pre>
+     *
+     * @param wantedNumberOfInvocations wanted number of invocations
+     *
+     * @return verification mode
+     */
+    public static VerificationMode times(AtomicInteger wantedNumberOfInvocations) {
+        return VerificationModeFactory.times(wantedNumberOfInvocations.get());
+    }
+
+    /**
      * Alias to <code>times(0)</code>, see {@link Mockito#times(int)}
      * <p>
      * Verifies that interaction did not happen. E.g:
@@ -2295,6 +2313,30 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode only() {
         return VerificationModeFactory.only();
+    }
+
+    /**
+     * Allows counting of number of invocations. E.g:
+     * <pre class="code"><code class="java">
+     *   AtomicInteger counter = new AtomicInteger();
+     *   verify(mock, countInvocations(counter)).someMethod("some arg");
+     *   verify(otherMock, times(counter)).someMethodThatShouldAlsoHaveBeenCalled();
+     * </code></pre>
+     *
+     * or by directly asserting the counter:
+     *
+     * <pre class="code"><code class="java">
+     *   AtomicInteger counter = new AtomicInteger();
+     *   verify(mock, countInvocations(counter)).someMethod("some arg");
+     *   assertEquals(2, counter.get());
+     * </code></pre>
+     *
+     * @param wantedNumberOfInvocations wanted number of invocations
+     *
+     * @return verification mode
+     */
+    public static VerificationMode countInvocations(AtomicInteger wantedNumberOfInvocations) {
+        return VerificationModeFactory.countInvocations(wantedNumberOfInvocations);
     }
 
     /**
