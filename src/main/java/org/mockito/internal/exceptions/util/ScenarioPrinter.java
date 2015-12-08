@@ -20,14 +20,13 @@ public class ScenarioPrinter {
         
         int counter = 0;
         for (VerificationAwareInvocation i : invocations) {
-            sb.append(++counter + ". ");
+            sb.append(++counter).append(". ");
             if (!i.isVerified()) {
                 sb.append("[?]");
             }
-            sb.append(i.getLocation() + "\n");
+            sb.append(i.getLocation()).append("\n");
         }
-        String scenario = sb.toString();
-        return scenario;
+        return sb.toString();
     }
 
 }

@@ -12,7 +12,7 @@ class ReleaseNotesExtension {
     final static String EXT_NAME = "notes"
 
     File notesFile;
-    String authToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"; //read-only token
+    final String authToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"; //read-only token
 
     private final File workDir;
     private final String version;

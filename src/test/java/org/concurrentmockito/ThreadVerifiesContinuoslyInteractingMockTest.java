@@ -44,9 +44,9 @@ public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {
         }
         
         verify(mock, atLeastOnce()).simpleMethod();
-        
-        for (int i = 0; i < listeners.length; i++) {
-            listeners[i].join();
+
+        for (Thread listener : listeners) {
+            listener.join();
         }
     }
 }
