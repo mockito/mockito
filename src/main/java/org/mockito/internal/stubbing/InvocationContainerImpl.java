@@ -121,6 +121,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return registeredInvocations.getAll();
     }
 
+    public void clearInvocations() {
+        registeredInvocations.clear();
+    }
+
     public List<StubbedInvocationMatcher> getStubbedInvocations() {
         return stubbed;
     }

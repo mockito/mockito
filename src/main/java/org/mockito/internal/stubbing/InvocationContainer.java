@@ -12,5 +12,7 @@ import java.util.List;
 public interface InvocationContainer {
     List<Invocation> getInvocations();
 
+    void clearInvocations();
+
     List<StubbedInvocationMatcher> getStubbedInvocations();
 }

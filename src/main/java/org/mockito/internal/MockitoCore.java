@@ -95,6 +95,16 @@ public class MockitoCore {
             mockUtil.resetMock(m);
         }
     }
+
+    public <T> void clearInvocations(T ... mocks) {
+        mockingProgress.validateState();
+        mockingProgress.reset();
+        mockingProgress.resetOngoingStubbing();
+
+        for (T m : mocks) {
+            mockUtil.getMockHandler(m).getInvocationContainer().clearInvocations();
+        }
+    }
     
     public void verifyNoMoreInteractions(Object... mocks) {
         assertMocksNotEmpty(mocks);
@@ -182,4 +192,5 @@ public class MockitoCore {
     public MockingDetails mockingDetails(Object toInspect) {
         return new DefaultMockingDetails(toInspect, new MockUtil());
     }
+
 }
