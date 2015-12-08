@@ -16,4 +16,14 @@ public class MockitoJUnit {
     public static MockitoRule rule() {
         return new MockitoJUnitRule();
     }
+
+    /**
+     * Creates a rule instance that can perform lazy verifications.
+     *
+     * @see VerificationCollector
+     * @return the rule instance
+     */
+    public static VerificationCollector collector() {
+        return new VerificationCollectorImpl();
+    }
 }
