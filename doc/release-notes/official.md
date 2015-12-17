@@ -1,3 +1,57 @@
+### 2.0.32-beta (2015-12-17 07:50 UTC)
+
+* Authors: 16
+* Commits: 78
+  * 26: Szczepan Faber
+  * 23: Brice Dutheil
+  * 14: Rafael Winterhalter
+  * 2: Tim van der Lippe
+  * 2: Carlos Aguayo
+  * 1: Ariel-isaacm
+  * 1: Marcin Zajaczkowski
+  * 1: Bartosz Miller
+  * 1: Shaun Abram
+  * 1: Lukasz Szewc
+  * 1: fluentfuture
+  * 1: Scott Markwell
+  * 1: Tom Ball
+  * 1: Michal Kordas
+  * 1: Christian Persson
+  * 1: Tim van der Lippe
+* Improvements: 32
+  * Add shouldHaveNoMoreInteractions() to BDDMockito [(#314)](https://github.com/mockito/mockito/pull/314)
+  * Minor formatting, typo and clarification fixes in README [(#313)](https://github.com/mockito/mockito/pull/313)
+  * Add BDD version of verifyNoMoreInteractions() [(#311)](https://github.com/mockito/mockito/issues/311)
+  * Tweaks to the main Mockito javadocs to aid readability [(#309)](https://github.com/mockito/mockito/pull/309)
+  * Eliminate direct dependency on ObjenesisInstantiator [(#306)](https://github.com/mockito/mockito/pull/306)
+  * Refactor some utilities and TODO done [(#301)](https://github.com/mockito/mockito/pull/301)
+  * Update StackOverflow link to Mockito tag [(#296)](https://github.com/mockito/mockito/pull/296)
+  * Removed deprecated ReturnValues and all it's occurrences [(#294)](https://github.com/mockito/mockito/pull/294)
+  * Remove validateSerializable() [(#293)](https://github.com/mockito/mockito/pull/293)
+  * Implement VerificationCollector which can collect multiple verifications. [(#287)](https://github.com/mockito/mockito/pull/287)
+  * Add new API method to reset invocations of a mock, while maintaining all existing stubbing [(#286)](https://github.com/mockito/mockito/pull/286)
+  * Correcting public website url in Maven POM [(#281)](https://github.com/mockito/mockito/pull/281)
+  * Reintroduce null check on MockUtil.isMock() [(#280)](https://github.com/mockito/mockito/pull/280)
+  * Get rid of ReturnValues [(#273)](https://github.com/mockito/mockito/issues/273)
+  * Issue #268: Added support for generic arrays as return types. [(#270)](https://github.com/mockito/mockito/pull/270)
+  * RETURN_DEEP_STUBS and toArray(T[]) stops working with versions > 1.9.5 [(#268)](https://github.com/mockito/mockito/issues/268)
+  * Ignore Groovy meta methods when instrumenting. [(#266)](https://github.com/mockito/mockito/pull/266)
+  * Fix typo in docs, missing breaklines. [(#264)](https://github.com/mockito/mockito/pull/264)
+  * Fixes #260: Typo in documentation [(#261)](https://github.com/mockito/mockito/pull/261)
+  * Typo in documentation [(#260)](https://github.com/mockito/mockito/issues/260)
+  * Minify the JS file [(#258)](https://github.com/mockito/mockito/pull/258)
+  * Upgraded to Byte Buddy 0.6.12.  [(#257)](https://github.com/mockito/mockito/pull/257)
+  * [#251] Migrate Fest Assert code to AssertJ [(#252)](https://github.com/mockito/mockito/pull/252)
+  * Unit tests improvements: migrate from legacy FEST Assert code to AssertJ [(#251)](https://github.com/mockito/mockito/issues/251)
+  * no jars in source code [(#250)](https://github.com/mockito/mockito/issues/250)
+  * use Gradle built-in osgi plugin [(#249)](https://github.com/mockito/mockito/issues/249)
+  * push cglib into a separate jar [(#248)](https://github.com/mockito/mockito/issues/248)
+  * Serializable check is too harsh [(#245)](https://github.com/mockito/mockito/issues/245)
+  * MockUtil.isMock() no longer checks null [(#243)](https://github.com/mockito/mockito/issues/243)
+  * Rework stubbing api with consecutive vararg to avoid JDK7+ warnings [(#239)](https://github.com/mockito/mockito/pull/239)
+  * Deep stubbing with generic responses in the call chain is not working [(#128)](https://github.com/mockito/mockito/issues/128)
+  * Concise way to collect multiple verify failures, ideally with JUnitCollector or  derivative [(#124)](https://github.com/mockito/mockito/issues/124)
+
 ### 2.0.26-beta (2015-06-30 05:20 UTC)
 
 * Authors: 1
