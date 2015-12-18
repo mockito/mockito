@@ -1,3 +1,12 @@
+### 2.0.33-beta (2015-12-18 08:03 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Rafael Winterhalter
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * Add optional answer to support mocked Builders [(#288)](https://github.com/mockito/mockito/pull/288)
+
 ### 2.0.32-beta (2015-12-17 07:50 UTC)
 
 * Authors: 16
