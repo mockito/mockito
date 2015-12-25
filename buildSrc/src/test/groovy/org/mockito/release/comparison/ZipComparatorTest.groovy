@@ -2,7 +2,6 @@ package org.mockito.release.comparison
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class ZipComparatorTest extends Specification {
@@ -14,14 +13,14 @@ class ZipComparatorTest extends Specification {
         def f1 = tmp.newFile()
         def f2 = tmp.newFile()
 
-        when: def result = new ZipComparator(compare).setPair({ f1 }, { f2 }).compareFiles()
+        when: def result = new ZipComparator({f1}, {f2}, compare).compareFiles()
 
         then:
         1 * compare.compareZips(f1.absolutePath, f2.absolutePath) >> true
         0 * _
 
         and:
-        result.areEqual()
+        result.equal
     }
 
     def "detects not equal zips"() {
@@ -29,7 +28,7 @@ class ZipComparatorTest extends Specification {
         def f2 = tmp.newFile() << "asdf\n"
 
         when:
-        def result = new ZipComparator(compare).setPair({ f1 }, { f2 }).compareFiles()
+        def result = new ZipComparator({f1}, {f2}, compare).compareFiles()
 
         then:
         result.file1.absolutePath == f1.absolutePath
@@ -37,6 +36,6 @@ class ZipComparatorTest extends Specification {
 
         and:
         1 * compare.compareZips(f1.absolutePath, f2.absolutePath) >> false
-        !result.areEqual()
+        !result.equal
     }
 }
