@@ -54,15 +54,15 @@ class PomComparatorTest extends Specification {
 </project>"""
 
         expect:
-        new PomComparator().setPair({pom}, {pom}).areEqual()
-        new PomComparator().setPair({pom}, {differentVersion}).areEqual()
-        !new PomComparator().setPair({pom}, {differentDependencyVersion}).areEqual()
+        new PomComparator({pom}, {pom}).areEqual()
+        new PomComparator({pom}, {differentVersion}).areEqual()
+        !new PomComparator({pom}, {differentDependencyVersion}).areEqual()
     }
 
     def "does not allow null content"() {
         when:
-        new PomComparator().setPair({null}, {null}).areEqual()
+        new PomComparator({null}, {null}).areEqual()
         then:
-        thrown(IllegalArgumentException)
+        thrown(IllegalStateException)
     }
 }

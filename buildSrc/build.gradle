@@ -1,13 +1,35 @@
+buildscript {
+    ext.kotlinVersion = "1.0.0-beta-4583" //ensuring consistent version for kotlin gradle plugin and kotlin runtime
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: 'kotlin'
 
-repositories { jcenter() }
+//Making sure that our kotlin code is visible to our groovy/java code
+// 1) kotlin bytes in  drop kotlin code compilation result onto the compile classpath
+// (I don't see any public API that exposes kotlin's compiler output directory)
+sourceSets.main.compileClasspath += project.files("$buildDir/kotlin-classes/main")
+// 2) ensure that kotlin compilation task runs before groovy joint compiler
+compileGroovy.dependsOn compileKotlin
+//We won't need this when we move everything to kotlin :)
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     compile gradleApi()
     //TODO SF use jcabi to edit issues after the release so that they have the milestone attached
     //compile "com.jcabi:jcabi-github:0.17"
     compile "com.googlecode.json-simple:json-simple:1.1.1@jar"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
         exclude module: "groovy-all"
     }

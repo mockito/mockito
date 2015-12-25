@@ -9,7 +9,7 @@ import java.io.File;
 public class PublicationsComparatorTask extends DefaultTask implements PublicationsComparator {
 
     private ZipComparator zipComparator = new ZipComparator(new ZipCompare());
-    private PomComparator pomComparator = new PomComparator();
+    private PomComparator pomComparator;
     private Boolean publicationsEqual;
 
     public void compareBinaries(Closure<File> left, Closure<File> right) {
@@ -17,7 +17,7 @@ public class PublicationsComparatorTask extends DefaultTask implements Publicati
     }
 
     public void comparePoms(Closure<String> left, Closure<String> right) {
-        pomComparator.setPair(left, right);
+        pomComparator = new PomComparator(left, right);
     }
 
     public boolean isPublicationsEqual() {
