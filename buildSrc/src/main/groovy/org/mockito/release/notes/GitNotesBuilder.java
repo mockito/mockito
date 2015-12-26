@@ -32,7 +32,7 @@ class GitNotesBuilder implements NotesBuilder {
     public String buildNotes(String version, String fromRevision, String toRevision) {
         LOG.info("Getting release notes between {} and {}", fromRevision, toRevision);
 
-        ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.getProcessRunner(workDir));
+        ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.INSTANCE.getProcessRunner(workDir));
         ContributionSet contributions = contributionsProvider.getContributionsBetween(fromRevision, toRevision);
 
         ImprovementsProvider improvementsProvider = Improvements.getGitHubProvider(authTokenEnvVar);
