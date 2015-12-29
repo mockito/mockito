@@ -1,4 +1,4 @@
-package org.mockito.hamcrest;
+package org.mockito.internal.hamcrest;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Matcher;
@@ -8,13 +8,13 @@ import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericT
 /**
  * Extracts generic type of matcher
  */
-class MatcherGenericTypeExtractor {
+public class MatcherGenericTypeExtractor {
 
     /**
      * Gets the generic type of given matcher. For example,
      * for matcher class that extends BaseMatcher[Integer] this method returns Integer
      */
-    static Class genericTypeOfMatcher(Class matcherClass) {
+    public static Class genericTypeOfMatcher(Class matcherClass) {
         return genericTypeOf(matcherClass, BaseMatcher.class, Matcher.class);
     }
 }

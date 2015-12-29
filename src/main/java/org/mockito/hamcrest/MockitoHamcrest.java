@@ -2,6 +2,7 @@ package org.mockito.hamcrest;
 
 import org.hamcrest.Matcher;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
+import org.mockito.internal.hamcrest.MatcherGenericTypeExtractor;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.ArgumentMatcher;

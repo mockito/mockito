@@ -1,4 +1,4 @@
-package org.mockito.hamcrest;
+package org.mockito.internal.hamcrest;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -9,7 +9,7 @@ import org.mockitoutil.TestBase;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import static org.mockito.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
+import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
 
 public class MatcherGenericTypeExtractorTest extends TestBase {
 
