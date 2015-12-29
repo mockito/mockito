@@ -21,9 +21,8 @@ branches:
 install:
  - true
 script:
-  - ./gradlew ciBuild
+  - ./gradlew ciBuild release
 after_success:
-  - ./gradlew release
 #  - ./gradlew --stacktrace cobertura coveralls
   - ./gradlew --stacktrace coverageReport
   - "cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml"
