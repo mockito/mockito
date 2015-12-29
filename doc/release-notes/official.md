@@ -1,3 +1,13 @@
+### 2.0.34-beta (2015-12-29 04:00 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 3
+  * Improve the custom argument matching documentation [(#334)](https://github.com/mockito/mockito/issues/334)
+  * Ensure CI build fails when release task breaks [(#333)](https://github.com/mockito/mockito/issues/333)
+  * Move build and release automation logic to Kotlin [(#331)](https://github.com/mockito/mockito/issues/331)
+
 ### 2.0.33-beta (2015-12-18 08:03 UTC)
 
 * Authors: 2
