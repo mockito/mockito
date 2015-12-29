@@ -27,11 +27,13 @@ package org.mockito;
  *     </li>
  *     <li>use customized argument matchers by implementing {@link ArgumentMatcher} interface
  *     and passing the implementation to the {@link Mockito#argThat} method.
- *     This option is useful if custom matcher is needed for stubbing and can be reused a lot
+ *     This option is useful if custom matcher is needed for stubbing and can be reused a lot.
+ *     Note that {@link Mockito#argThat} demonstrates <b>NullPointerException</b> auto-unboxing caveat.
  *     </li>
  *     <li>use an instance of hamcrest matcher and pass it to
  *     {@link org.mockito.hamcrest.MockitoHamcrest#argThat(org.hamcrest.Matcher)}
  *     Useful if you already have a hamcrest matcher. Reuse and win!
+ *     Note that {@link org.mockito.hamcrest.MockitoHamcrest#argThat(org.hamcrest.Matcher)} demonstrates <b>NullPointerException</b> auto-unboxing caveat.
  *     </li>
  * </ul>
  *

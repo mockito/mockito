@@ -659,14 +659,19 @@ public class Matchers {
     /**
      * Allows creating custom argument matchers.
      * This API has changed in 2.0, please read {@link ArgumentMatcher} for rationale and migration guide.
+     * <b>NullPointerException</b> auto-unboxing caveat is described below.
      * <p>
      * It is important to understand the use cases and available options for dealing with non-trivial arguments
      * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
      * for given scenario and produce highest quality test (clean and maintainable).
      * Please read the documentation for {@link ArgumentMatcher} to learn about approaches and see the examples.
      * <p>
+     * <b>NullPointerException</b> auto-unboxing caveat.
      * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
      * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
+     * Due to how java works we don't really have a clean way of detecting this scenario and protecting the user from the pitfall.
+     * Hopefully, the javadoc describes the problem and solution well.
+     * If you have an idea how to fix the caveat, let us know via the mailing list or issue tracker.
      * <p>
      * See examples in javadoc for {@link ArgumentMatcher} class
      * 
