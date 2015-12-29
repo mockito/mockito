@@ -1,9 +1,9 @@
-package org.mockito.release.exec
+package org.mockito.release.exec;
 
 /**
  * Provides ways to execute external processes
  */
-interface ProcessRunner {
+public interface ProcessRunner {
 
     /**
      * Executes given command line and returns the output.
@@ -11,5 +11,5 @@ interface ProcessRunner {
      * @param commandLine to execute
      * @return combined error and standard output.
      */
-    fun run(vararg commandLine: String): String
+    String run(String ... commandLine);
 }

@@ -9,7 +9,7 @@ import org.mockito.release.steps.Steps
 class ReleasePlugin implements Plugin<Project> {
   void apply(Project project) {
     def steps = Steps.newSteps()
-    def gitTool = Git.gitTool(Exec.INSTANCE.getProcessRunner(project.getProjectDir()))
+    def gitTool = Git.gitTool(Exec.getProcessRunner(project.getProjectDir()))
     project.extensions.create("releaseSteps", ReleaseExtension, steps, gitTool)
     def task = project.tasks.create("release")
     task.doLast { steps.perform() }
