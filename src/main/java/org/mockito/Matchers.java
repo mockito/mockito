@@ -667,11 +667,11 @@ public class Matchers {
      * Please read the documentation for {@link ArgumentMatcher} to learn about approaches and see the examples.
      * <p>
      * <b>NullPointerException</b> auto-unboxing caveat.
-     * In rare cases when the parameter is a primitive then you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
+     * In rare cases when matching primitive parameter types you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
      * This way you will avoid <code>NullPointerException</code> during auto-unboxing.
-     * Due to how java works we don't really have a clean way of detecting this scenario and protecting the user from the pitfall.
+     * Due to how java works we don't really have a clean way of detecting this scenario and protecting the user from this problem.
      * Hopefully, the javadoc describes the problem and solution well.
-     * If you have an idea how to fix the caveat, let us know via the mailing list or issue tracker.
+     * If you have an idea how to fix the problem, let us know via the mailing list or the issue tracker.
      * <p>
      * See examples in javadoc for {@link ArgumentMatcher} class
      * 
