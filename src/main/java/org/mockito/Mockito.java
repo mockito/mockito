@@ -181,6 +181,10 @@ import org.mockito.junit.*;
  *
  * //<b>you can also verify using an argument matcher</b>
  * verify(mockedList).get(anyInt());
+ *
+ * //<b>argument matchers can also be written as Java 8 Lambdas</b>
+ * verify(mockedList).add(someString -> someString.length() > 5);
+ *
  * </code></pre>
  *
  * <p>

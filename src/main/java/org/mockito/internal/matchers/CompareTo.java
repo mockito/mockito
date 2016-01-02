@@ -18,12 +18,8 @@ public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatc
     }
 
     @SuppressWarnings("unchecked")
-    public boolean matches(Object actual) {
-        if(!(actual instanceof Comparable)) {
-            return false;
-        }
-        
-        return matchResult(((Comparable) actual).compareTo(wanted));
+    public boolean matches(T actual) {
+        return matchResult(((Comparable)actual).compareTo(wanted));
     }
 
     public String toString() {

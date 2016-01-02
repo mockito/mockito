@@ -18,27 +18,25 @@ import org.mockitoutil.TestBase;
 public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo implements ArgumentMatcher<String> {
-        public boolean matches(Object arg) {
-            return ((String) arg).contains("foo");
+        public boolean matches(String arg) {
+            return arg.contains("foo");
         }
     }
 
     private final class IsAnyBoolean implements ArgumentMatcher<Boolean> {
-        public boolean matches(Object arg) {
+        public boolean matches(Boolean arg) {
             return true;
         }
     }
     
     private final class IsSorZ implements ArgumentMatcher<Character> {
-        public boolean matches(Object arg) {
-            Character character = (Character) arg;
+        public boolean matches(Character character) {
             return character.equals('s') || character.equals('z');
         }
     }
 
     private final class IsZeroOrOne<T extends Number> implements ArgumentMatcher<T> {
-        public boolean matches(Object arg) {
-            Number number = (Number) arg;
+        public boolean matches(T number) {
             if (number.intValue() == 0 || number.intValue() == 1) {
                 return true;
             }
@@ -137,8 +135,7 @@ public class CustomMatchersTest extends TestBase {
     }
     
     private final class StringThatContainsXxx implements ArgumentMatcher<String> {
-        public boolean matches(Object argument) {
-            String arg = (String) argument;
+        public boolean matches(String arg) {
             return arg.contains("xxx");
         }
     }
