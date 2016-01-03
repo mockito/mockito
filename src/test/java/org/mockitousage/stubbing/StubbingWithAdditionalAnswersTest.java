@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.times;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -151,11 +152,45 @@ public class StubbingWithAdditionalAnswersTest {
 
         // expect the answer to write correctly to "target"
         verify(target, times(1)).threeArgumentMethodWithStrings(1, "string1", "string2");
-        verify(target, times(1)).threeArgumentMethodWithStrings(1, "string1", "string2");
     }
 
     @Test
-    public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
+        public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
+        final IMethods target = mock(IMethods.class);
+        given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
+                .will(answer(new AnswerFunctionalInterfaces.Answer4<String, Integer, String, String, boolean[]>() {
+                    public String answer(Integer i, String s1, String s2, boolean[] a) {
+                        target.fourArgumentMethod(i, s1, s2, a);
+                        return "answered";
+                    }
+                }));
+
+        boolean[] booleanArray = { true, false };
+        assertThat(iMethods.fourArgumentMethod(1, "string1", "string2", booleanArray)).isEqualTo("answered");
+        verify(target, times(1)).fourArgumentMethod(1, "string1", "string2", booleanArray);
+    }
+
+    @Test
+    public void will_execute_a_void_based_on_strongly_typed_four_parameter_function() throws Exception {
+        final IMethods target = mock(IMethods.class);
+
+        given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
+                .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer4<Integer, String, String, boolean[]>() {
+                    public void answer(Integer i, String s1, String s2, boolean[] a) {
+                        target.fourArgumentMethod(i, s1, s2, a);
+                    }
+                }));
+
+        // invoke on iMethods
+        boolean[] booleanArray = { true, false };
+        iMethods.fourArgumentMethod(1, "string1", "string2", booleanArray);
+
+        // expect the answer to write correctly to "target"
+        verify(target, times(1)).fourArgumentMethod(1, "string1", "string2", booleanArray);
+    }
+
+    @Test
+    public void can_return_based_on_strongly_typed_five_parameter_function() throws Exception {
         final IMethods target = mock(IMethods.class);
         given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt()))
                 .will(answer(new AnswerFunctionalInterfaces.Answer5<String, String, Integer, Integer, Integer, Integer>() {
