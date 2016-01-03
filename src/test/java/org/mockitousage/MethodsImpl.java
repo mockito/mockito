@@ -249,6 +249,14 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    public String threeArgumentMethodWithStrings(int valueOne, String valueTwo, String valueThree) {
+        return null;
+    }
+
+    public String fourArgumentMethod(int valueOne, String valueTwo, String valueThree, boolean[] array) {
+        return null;
+    }
+
     public void twoArgumentMethod(int one, int two) {
       
     }

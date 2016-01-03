@@ -1092,6 +1092,91 @@ import org.mockito.junit.*;
  * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
  * </code></pre>
  *
+ * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.0.0)</h3>
+ * <p>
+ * You can use Java 8 lambda expressions with {@link ArgumentMatcher} to reduce the dependency on {@link ArgumentCaptor}
+ * The argument will be passed to the ArgumentMatcher as a strongly typed object, so it is possible
+ * to do anything with it.
+ * <p>
+ * Examples:
+ * <p>
+ * <pre class="code"><code class="java">
+ *
+ * // verify a list only had strings of a certain length added to it
+ * // note - this will only compile under Java 8
+ * verify(list, times(2)).add(string -> string.length() < 5);
+ *
+ * // Java 7 equivalent
+ * verify(list, times(2)).add(new ArgumentMatcher<String>(){
+ *     boolean matches(String arg) {
+ *         return arg.length() < 5;
+ *     }
+ * });
+ *
+ * // more complex Java 8 example - where you can specify complex verification behaviour functionally
+ * verify(target, times(1)).receiveComplexObject(obj -> obj.getSubObject().get(0).equals("expected"));
+ * </code></pre>
+ *
+ * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.0.0)</h3>
+ * <p>
+ * For convenience it is possible to write custom answers/actions as Java 8 lambdas. Even in Java 7 and lower
+ * these custom answers based on a typed interface can reduce boilerplate. In particular, this approach will
+ * make it easier to test functions which use a callback.
+ *
+ * The functions answer and answerVoid can be found in {@link AdditionalAnswers} to create the answer object
+ * using the interfaces in {@link AnswerFunctionalInterfaces} support is provided for functions with up to 5 parameters
+ *
+ * <p>
+ * Examples:
+ * <p>
+ * <pre class="code"><code class="java">
+ *
+ * // Example interface to be mocked has a function like:
+ * void execute(String operand, Callback callback);
+ *
+ * // the example callback has a function and the class under test
+ * // will depend on the callback being invoked
+ * void receive(String item);
+ *
+ * // Java 8 - style 1
+ * doAnswer(AdditionalAnswers.<String,Callback>answerVoid((operand, callback) -> callback.receive("dummy"))
+ *     .when(mock).execute(anyString(), any(Callback.class));
+ *
+ * // Java 8 - style 2 - assuming static import of AdditionalAnswers
+ * doAnswer(answerVoid((String operand, Callback callback) -> callback.receive("dummy"))
+ *     .when(mock).execute(anyString(), any(Callback.class));
+ *
+ * // Java 8 - style 3 - where mocking function to is a static member of test class
+ * private static void dummyCallbackImpl(String operation, Callback callback) {
+ *     callback.receive("dummy");
+ * }
+ *
+ * doAnswer(answerVoid(TestClass::dummyCallbackImpl)
+ *     .when(mock).execute(anyString(), any(Callback.class));
+ *
+ * // Java 7
+ * doAnswer(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer2<String, Callback>() {
+ *     public void answer(String operation, Callback callback) {
+ *         callback.receive("dummy");
+ *     }})).when(mock).execute(anyString(), any(Callback.class));
+ *
+ * // returning a value is possible with the answer() function
+ * // and the non-void version of the functional interfaces
+ * // so if the mock interface had a method like
+ * String process(String input1, String input2);
+ *
+ * // this could be mocked
+ * // Java 8
+ * doAnswer(AdditionalAnswers.<String,String,String>answer((input1, input2) -> input1 + input2)))
+ *     .when(mock).execute(anyString(), anyString());
+ *
+ * // Java 7
+ * doAnswer(answer(new AnswerFunctionalInterfaces.Answer2<String, String, String>() {
+ *     public String answer(String input1, String input2) {
+ *         return input1 + input2;
+ *     }})).when(mock).execute(anyString(), anyString());
+ * </code></pre>
+ *
  * TODO rework the documentation, write about hamcrest.
  *
  */
