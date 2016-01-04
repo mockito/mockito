@@ -66,6 +66,9 @@ import org.mockito.junit.*;
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  *      <a href="#35">35. (new) Custom verification failure message (Since 2.0.0)</a><br/>
+ *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.0.0)</a><br/>
+ *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.0.0)</a><br/>
+ *
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0</a></h3>
@@ -1119,9 +1122,28 @@ import org.mockito.junit.*;
  *
  * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.0.0)</h3>
  * <p>
- * For convenience it is possible to write custom answers/actions as Java 8 lambdas. Even in Java 7 and lower
- * these custom answers based on a typed interface can reduce boilerplate. In particular, this approach will
- * make it easier to test functions which use a callback.
+ * As the {@link Answer} interface has just one method it is already possible to implement it in Java 8 using
+ * a lambda expression for very simple situations. The more you need to use the parameters of the method call,
+ * the more you need to typecast the arguments from {@link org.mockito.invocation.InvocationOnMock}.
+ *
+ * <p>
+ * Examples:
+ * <p>
+ * <pre class="code"><code class="java">
+ * // answer by returning 12 every time
+ * doAnswer(invocation -> {return 12;})
+ *     .when(mock).doSomething();
+ *
+ * // answer by using one of the parameters - converting into the right
+ * // type as your go - in this case, returning the length of a string parameter
+ * // as the answer
+ * doAnswer(invocation -> invocation.getArgumentAt(2, String.class).length())
+ *     .when(mock).doSomething(anyString(), anyString(), anyString());
+ * </code></pre>
+ *
+ * For convenience it is possible to write custom answers/actions, which use the parameters to the method call,
+ * as Java 8 lambdas. Even in Java 7 and lower these custom answers based on a typed interface can reduce boilerplate.
+ * In particular, this approach will make it easier to test functions which use callbacks.
  *
  * The functions answer and answerVoid can be found in {@link AdditionalAnswers} to create the answer object
  * using the interfaces in {@link AnswerFunctionalInterfaces} support is provided for functions with up to 5 parameters
