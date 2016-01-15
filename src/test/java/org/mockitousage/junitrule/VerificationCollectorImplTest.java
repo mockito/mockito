@@ -99,7 +99,7 @@ public class VerificationCollectorImplTest {
         assertThat(result.getFailures().get(0).getMessage()).contains("1. Wanted but not invoked:");
     }
 
-    @Ignore("Test is supposed to be by another test.")
+    // This class is picked up when running a test suite using an IDE. It fails on purpose.
     public static class VerificationCollectorRuleInner {
 
         @Rule
