@@ -7,6 +7,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.MethodTransformer;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
@@ -29,7 +30,7 @@ class MockBytecodeGenerator {
     private final Random random;
 
     public MockBytecodeGenerator() {
-        byteBuddy = new ByteBuddy();
+        byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
         random = new Random();
     }
 
