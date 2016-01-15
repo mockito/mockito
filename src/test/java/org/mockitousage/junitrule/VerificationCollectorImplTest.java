@@ -1,5 +1,6 @@
 package org.mockitousage.junitrule;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -98,6 +99,7 @@ public class VerificationCollectorImplTest {
         assertThat(result.getFailures().get(0).getMessage()).contains("1. Wanted but not invoked:");
     }
 
+    @Ignore("Test is supposed to be by another test.")
     public static class VerificationCollectorRuleInner {
 
         @Rule
