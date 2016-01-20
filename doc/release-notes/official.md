@@ -1,3 +1,15 @@
+### 2.0.40-beta (2016-01-20 21:06 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Rafael Winterhalter
+  * 1: Michael Pinnegar
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * Fixes #256 :Alternative fix to #259, windows build [(#342)](https://github.com/mockito/mockito/pull/342)
+  * Removing new line in bottom script. it seems that javadoc… [(#259)](https://github.com/mockito/mockito/pull/259)
+  * task mockitoJavadoc fails when compiling in windows [(#256)](https://github.com/mockito/mockito/issues/256)
+
 ### 2.0.39-beta (2016-01-18 20:57 UTC)
 
 * Authors: 1
