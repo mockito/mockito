@@ -44,7 +44,7 @@ class MockBytecodeGenerator {
                          .method(any())
                            .intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class))
                            .transform(MethodTransformer.Simple.withModifiers(SynchronizationState.PLAIN))
-                           .attribute(MethodAttributeAppender.ForInstrumentedMethod.INSTANCE)
+                           .attribute(MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER)
                          .serialVersionUid(42L)
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                          .implement(MockAccess.class)
