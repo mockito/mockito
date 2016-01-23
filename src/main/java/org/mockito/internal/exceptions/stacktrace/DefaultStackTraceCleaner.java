@@ -12,6 +12,8 @@ public class DefaultStackTraceCleaner implements StackTraceCleaner {
         boolean fromOrgMockito = e.getClassName().startsWith("org.mockito.");
         boolean isRunner = e.getClassName().startsWith("org.mockito.runners.");
         boolean isInternalRunner = e.getClassName().startsWith("org.mockito.internal.runners.");
-        return (fromMockObject || fromByteBuddyMockObject || fromOrgMockito) && !isRunner && !isInternalRunner;
+        boolean isJUnitRule = e.getClassName().startsWith("org.mockito.internal.junit.JUnitRule");
+        return (fromMockObject || fromByteBuddyMockObject || fromOrgMockito)
+                && !isRunner && !isInternalRunner && !isJUnitRule;
     }
 }

@@ -67,6 +67,22 @@ public class StackTraceFilterTest extends TestBase {
         
         assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner"));
     }
+
+    @Test
+    public void shouldNotFilterElementsAboveMockitoJUnitRule() {
+        StackTraceElement[] t = new TraceBuilder().classes(
+                "org.mockito.internal.junit.JUnitRule$1.evaluate(JUnitRule.java:16)",
+                "org.mockito.runners.Runner",
+                "junit.stuff",
+                "org.test.MockitoSampleTest",
+                "org.mockito.internal.MockitoCore.verifyNoMoreInteractions",
+                "org.mockito.internal.debugging.LocationImpl"
+        ).toTraceArray();
+
+        StackTraceElement[] filtered = filter.filter(t, false);
+
+        assertThat(filtered, hasOnlyThoseClasses("org.test.MockitoSampleTest", "junit.stuff", "org.mockito.runners.Runner","org.mockito.internal.junit.JUnitRule$1.evaluate(JUnitRule.java:16)"));
+    }
     
     @Test
     public void shouldKeepInternalRunners() {
