@@ -26,7 +26,20 @@ public class StackTraceFilterTest extends TestBase {
         
         assertThat(filtered, hasOnlyThoseClasses("MockitoExampleTest"));
     }
-    
+
+    @Test
+    public void shouldFilterOutByteBuddyGarbage() {
+        StackTraceElement[] t = new TraceBuilder().classes(
+                "MockitoExampleTest",
+                "org.testcase.MockedClass$MockitoMock$1882975947.doSomething(Unknown Source)"
+        ).toTraceArray();
+
+        StackTraceElement[] filtered = filter.filter(t, false);
+
+        assertThat(filtered, hasOnlyThoseClasses("MockitoExampleTest"));
+    }
+
+
     @Test
     public void shouldFilterOutMockitoPackage() {
         StackTraceElement[] t = new TraceBuilder().classes(
