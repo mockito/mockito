@@ -1,3 +1,12 @@
+### 2.0.41-beta (2016-01-26 22:52 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Urs Metz
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Show correct location of unwanted interaction with mock when using MockitoJUnitRule [(#344)](https://github.com/mockito/mockito/pull/344)
+
 ### 2.0.40-beta (2016-01-20 21:06 UTC)
 
 * Authors: 3
