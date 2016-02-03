@@ -5,6 +5,7 @@
 
 package org.mockito.internal.verification;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
@@ -38,12 +39,22 @@ public class AtMost implements VerificationMode {
         if (foundSize > maxNumberOfInvocations) {
             new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
-        
+
+        removeAlreadyVerified(found);
         invocationMarker.markVerified(found, wanted);
     }
 
     @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
+    }
+
+    private void removeAlreadyVerified(List<Invocation> invocations) {
+        for (Iterator<Invocation> iterator = invocations.iterator(); iterator.hasNext(); ) {
+            Invocation i = iterator.next();
+            if (i.isVerified()) {
+                iterator.remove();
+            }
+        }
     }
 }
