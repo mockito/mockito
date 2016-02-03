@@ -15,6 +15,8 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
@@ -28,6 +30,9 @@ public class VerificationAfterDelayTest extends TestBase {
     private List<String> mock;
 
     private List<Exception> exceptions = new LinkedList<Exception>();
+
+    @Captor
+    private ArgumentCaptor<String> stringArgumentCaptor;
 
     @After
     public void teardown() {
@@ -104,6 +109,31 @@ public class VerificationAfterDelayTest extends TestBase {
         // then
         expected.expect(MockitoAssertionError.class);
         verify(mock, after(10000).never()).clear();
+    }
+
+    /**
+     * Test for issue #345.
+     */
+    @Test
+    public void shouldReturnListOfArgumentsWithSameSizeAsGivenInAtMostVerification() {
+        // given
+        int n = 3;
+
+        // when
+        exerciseMockNTimes(n);
+
+        // then
+        verify(mock, after(200).atMost(n)).add(stringArgumentCaptor.capture());
+        assertEquals(n, stringArgumentCaptor.getAllValues().size());
+        assertEquals("0", stringArgumentCaptor.getAllValues().get(0));
+        assertEquals("1", stringArgumentCaptor.getAllValues().get(1));
+        assertEquals("2", stringArgumentCaptor.getAllValues().get(2));
+    }
+
+    private void exerciseMockNTimes(int n) {
+        for (int i = 0; i < n; i++) {
+            mock.add(String.valueOf(i));
+        }
     }
 
     private Thread waitAndExerciseMock(final int sleep) {
