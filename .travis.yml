@@ -24,6 +24,6 @@ script:
   - ./gradlew ciBuild release
 after_success:
 #  - ./gradlew --stacktrace cobertura coveralls
-  - ./gradlew --stacktrace coverageReport
-  - "cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml"
-  - bash <(curl -s https://codecov.io/bash)
+#  - ./gradlew --stacktrace coverageReport
+#  - "cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml"
+#  - bash <(curl -s https://codecov.io/bash)
