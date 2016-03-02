@@ -114,7 +114,12 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     @Override
     @SuppressWarnings("unchecked")
+    @Deprecated
     public <T> T getArgumentAt(int index, Class<T> clazz) {
+        return getArgument(index);
+    }
+
+    public <T> T getArgument(int index) {
         return (T) arguments[index];
     }
 
