@@ -28,7 +28,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     public void shouldAnswer() throws Exception {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                String arg = (String) invocation.getArgument(0);
+                String arg = invocation.getArgument(0);
 
                 return invocation.getMethod().getName() + "-" + arg;
             }
