@@ -1,0 +1,2 @@
+org.mockito.internal.configuration.plugins.PluginImpl
+# Used for test : org.mockito.internal.configuration.plugins.PluginLoaderTest
