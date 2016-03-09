@@ -20,6 +20,7 @@ apply from: 'gradle/version.gradle'
 apply from: "gradle/ide.gradle"
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/osgi.gradle'
+apply from: 'gradle/gradle-fix.gradle'
 
 allprojects {
     repositories {
