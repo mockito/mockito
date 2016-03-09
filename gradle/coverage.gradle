@@ -1,5 +1,11 @@
 apply plugin: 'jacoco'
 
+// TODO later include subprojects, possible ideas https://gist.github.com/aalmiray/e6f54aa4b3803be0bcac
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+}
+
 task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
     executionData files("${buildDir}/jacoco/test.exec")
 
