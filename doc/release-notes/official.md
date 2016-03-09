@@ -1,3 +1,15 @@
+### 2.0.44-beta (2016-03-09 14:16 UTC)
+
+* Authors: 3
+* Commits: 8
+  * 5: Brice Dutheil
+  * 2: Jan Tarnowski
+  * 1: Evgeny Astafev
+* Improvements: 3
+  * Use the new issue/pr templates [(#361)](https://github.com/mockito/mockito/pull/361)
+  * Issue #345 : Removes previously verified invocations when capturing argument is combined with after and atMost verifiers [(#349)](https://github.com/mockito/mockito/pull/349)
+  * Modify StackTraceFilter to not exclude "good" stack trace elements [(#317)](https://github.com/mockito/mockito/pull/317)
+
 ### 2.0.43-beta (2016-02-23 14:04 UTC)
 
 * Authors: 2
