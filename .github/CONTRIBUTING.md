@@ -5,8 +5,8 @@
 
 **If looking for support**
 
-* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
 * Search / Ask question on [stackoverflow](http://stackoverflow.com)
+* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
 * Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on stackoverflow.com)
 
 # Contributing to Mockito
