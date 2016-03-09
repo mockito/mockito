@@ -13,6 +13,9 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")
 public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
@@ -20,7 +23,8 @@ public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
     @Test
     public void ensure_the_test_runner_breaks() throws Exception {
         JUnitCore runner = new JUnitCore();
-        runner.addListener(new TextListener(System.out));
+//        runner.addListener(new TextListener(System.out));
+        runner.addListener(new TextListener(DevNull.out));
 
         Result result = runner.run(TestClassWithoutTestMethod.class);
 
@@ -33,4 +37,14 @@ public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
         public void notATestMethod() { }
     }
 
+    public static final class DevNull {
+        public final static PrintStream out = new PrintStream(new OutputStream() {
+            public void close() {}
+            public void flush() {}
+            public void write(byte[] b) {}
+            public void write(byte[] b, int off, int len) {}
+            public void write(int b) {}
+
+        } );
+    }
 }

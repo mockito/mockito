@@ -1,10 +1,18 @@
 # More details on how to configure the Travis build
 # http://docs.travis-ci.com/user/build-configuration/
 
-# Enabling container based infrastructure hoping it will help the build speed
-# see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+# Speed up build by leversging travis caches
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
-sudo: false
+# Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
+# see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: true
+
 language: java
 jdk:
 - oraclejdk7
@@ -12,6 +20,7 @@ env:
   matrix:
   - TERM=dumb
   global:
+  - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
   - secure: ZjU6SpkLzTAJr9qmxKDSI0uA8eJ/r5n58/equD6ifDlCBUasxPxOwaIARuNjhH45UCFOQDO9HMmvD7IWufyYl0OpACMM6MZ/0JX5Qsd+vhmBGirl6H3rRbVpvyoSI1J2xqJXy9/yTU54IYMDv3R7suinvmKXYHCqJ3h7ke+m4Ik=
   - secure: SDwSEK8W+GU78fVLi+P0k+v5eYK1fevz1Z0Htsjta2PRr0DicL6CMTNLxi48c3vXT+GHL6W8uojmfRwnHd8yyRZu2nW4Hda5rWB3de6Nz64lOZFYUbvoZfj9TdCgDYn+u2jUkm6+C76ZlPtfQhS97uZCb9iCDSdm1JErpng5e6g=
   - secure: aRk3elhhgDvXc2RyKAOcn9UF4w5U2zgFqUEEwdZ/r5DLrlKlA0aDE3pBZhST479nHIVEjF3w/SjePmfc9K/JPp2cLE12qHBT5mp4F2MZhNkBDay4vsXLwkhWsyQLz85VrvR/QkeCbLXSQBCZsy/KI8PwwMIrcEH6rAoo+1MYTos=
@@ -23,7 +32,5 @@ install:
 script:
   - ./gradlew ciBuild release
 after_success:
-#  - ./gradlew --stacktrace cobertura coveralls
-#  - ./gradlew --stacktrace coverageReport
-#  - "cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml"
-#  - bash <(curl -s https://codecov.io/bash)
+  - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
+  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
