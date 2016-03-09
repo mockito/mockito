@@ -20,3 +20,4 @@ check list
  - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/master/.github/CONTRIBUTING.md)
  - [ ] Mention `Fixes #<issue number>` in the description _if relevant_
  - [ ] At least one commit should mention `Fixes #<issue number>` _if relevant_
+
