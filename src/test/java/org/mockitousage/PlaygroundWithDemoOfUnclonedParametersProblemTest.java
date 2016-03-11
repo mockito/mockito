@@ -75,7 +75,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
     private Answer byCheckingLogEquals(final ImportLogBean status) {
         return new Answer() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ImportLogBean bean = (ImportLogBean) invocation.getArguments()[0];
+                ImportLogBean bean =  invocation.getArgument(0);
                 assertEquals(status, bean);
                 return null;
             }

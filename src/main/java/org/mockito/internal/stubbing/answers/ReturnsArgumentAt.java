@@ -39,7 +39,7 @@ public class ReturnsArgumentAt implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         validateIndexWithinInvocationRange(invocation);
-        return invocation.getArguments()[actualArgumentPosition(invocation)];
+        return invocation.getArgument(actualArgumentPosition(invocation));
     }
 
 

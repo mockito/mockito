@@ -68,7 +68,7 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_with_answer() throws Exception {
         given(mock.simpleMethod(anyString())).willAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return (String) invocation.getArguments()[0];
+                return  invocation.getArgument(0);
             }});
 
         Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
@@ -78,7 +78,7 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_with_will_answer_alias() throws Exception {
         given(mock.simpleMethod(anyString())).will(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return (String) invocation.getArguments()[0];
+                return  invocation.getArgument(0);
             }
         });
 
@@ -184,7 +184,7 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_using_do_answer_style() throws Exception {
         willAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return (String) invocation.getArguments()[0];
+                return  invocation.getArgument(0);
             }
         })
                 .given(mock).simpleMethod(anyString());

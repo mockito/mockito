@@ -54,6 +54,6 @@ public class AllInvocationsFinderTest extends TestBase {
     }
 
     private void assertArgumentEquals(Object argumentValue, Invocation invocation) {
-        assertEquals(argumentValue, invocation.getArguments()[0]);
+        assertEquals(argumentValue, invocation.getArgument(0));
     }
 }
