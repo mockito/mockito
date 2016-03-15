@@ -13,15 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.matchers.Any.ANY;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.AnyVararg;
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.NotNull;
@@ -120,16 +124,17 @@ public class InvocationMatcherTest extends TestBase {
     @Test
     public void should_capture_arguments_from_invocation() throws Exception {
         //given
+        List<Integer> capturedArguments = new ArrayList<Integer>();
         Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
-        CapturingMatcher capturingMatcher = new CapturingMatcher();
+        CapturingMatcher capturingMatcher = new CapturingMatcher(ArgumentMatchers.any(), capturedArguments);
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
 
         //when
         invocationMatcher.captureArgumentsFrom(invocation);
 
         //then
-        assertEquals(1, capturingMatcher.getAllValues().size());
-        assertEquals(100, capturingMatcher.getLastValue());
+        assertEquals(1, capturedArguments.size());
+        assertEquals(true, capturedArguments.contains(100));
     }
 
     @Test
@@ -150,15 +155,16 @@ public class InvocationMatcherTest extends TestBase {
     public void should_capture_varargs_as_vararg() throws Exception {
         //given
         mock.mixedVarargs(1, "a", "b");
+        List<String> capturedArguments = new ArrayList<String>();
         Invocation invocation = getLastInvocation();
-        CapturingMatcher m = new CapturingMatcher();
+        CapturingMatcher m = new CapturingMatcher(ArgumentMatchers.any(), capturedArguments);
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
 
         //when
         invocationMatcher.captureArgumentsFrom(invocation);
 
         //then
-        Assertions.assertThat(m.getAllValues()).containsExactly("a", "b");
+        Assertions.assertThat(capturedArguments).containsExactly("a", "b");
     }
 
     @Test  // like using several time the captor in the vararg
@@ -168,7 +174,7 @@ public class InvocationMatcherTest extends TestBase {
         Invocation invocation = getLastInvocation();
 
         //when
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation,(List) asList(ANY));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, asList(AnyVararg.ANY_VARARG));
 
         //then
         invocationMatcher.captureArgumentsFrom(invocation);

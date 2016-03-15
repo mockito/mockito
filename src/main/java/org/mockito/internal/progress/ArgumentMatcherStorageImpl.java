@@ -5,18 +5,21 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.And;
-import org.mockito.internal.matchers.LocalizedMatcher;
-import org.mockito.internal.matchers.Not;
-import org.mockito.internal.matchers.Or;
-
 import static java.util.Collections.emptyList;
 import static org.mockito.internal.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
 import static org.mockito.internal.exceptions.Reporter.misplacedArgumentMatcher;
 import static org.mockito.internal.exceptions.Reporter.reportNoSubMatchersFound;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
+
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.And;
+import org.mockito.internal.matchers.LocalizedMatcher;
+import org.mockito.internal.matchers.Not;
+import org.mockito.internal.matchers.Or;
 
 public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
@@ -43,7 +46,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         ArgumentMatcher<?> m1 = popMatcher();
         ArgumentMatcher<?> m2 = popMatcher();
 
-        reportMatcher(new And(m1, m2));
+        reportMatcher((ArgumentMatcher) new And(Arrays.asList((ArgumentMatcher) m1, (ArgumentMatcher) m2)));
     }
 
     public void reportOr() {
@@ -52,7 +55,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         ArgumentMatcher<?> m1 = popMatcher();
         ArgumentMatcher<?> m2 = popMatcher();
 
-        reportMatcher(new Or(m1, m2));
+        reportMatcher((ArgumentMatcher) new Or(Arrays.asList((ArgumentMatcher) m1, (ArgumentMatcher) m2)));
     }
 
     public void reportNot() {

@@ -4,41 +4,39 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
-import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCaptured;
-
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
-public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
+import org.mockito.ArgumentMatcher;
 
-    private final LinkedList<Object> arguments = new LinkedList<Object>();
+public class CapturingMatcher<T> 
+            implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
-    public boolean matches(Object argument) {
-        return true;
+
+    private final List<T> arguments;
+    private final ArgumentMatcher<T> matcher;
+
+    public CapturingMatcher(ArgumentMatcher<T> matcher, List<T> arguments) {
+        this.matcher = matcher;
+        this.arguments = arguments;
     }
 
     public String toString() {
         return "<Capturing argument>";
     }
 
-    public T getLastValue() {
-        if (arguments.isEmpty()) {
-            throw noArgumentValueWasCaptured();
-        }
-
-        return (T) arguments.getLast();
-
-    }
-
-    public List<T> getAllValues() {
-        return (List) arguments;
-    }
-
     public void captureFrom(Object argument) {
-        this.arguments.add(argument);
+        if (matcher.matches((T)argument)) {
+            this.arguments.add((T) argument);
+        }
+    }
+
+    @Override
+    public boolean matches(Object argument) {
+        // vararg arguments will be filtered out when adding to arguments
+        if (argument != null && argument.getClass().isArray()) {
+            return true;
+        }
+        return matcher.matches((T)argument);
     }
 }
