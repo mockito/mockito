@@ -4,11 +4,18 @@
  */
 package org.mockito;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.or;
+import static org.mockito.exceptions.Reporter.noArgumentValueWasCaptured;
 import static org.mockito.internal.util.Primitives.defaultValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.util.Primitives;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -60,13 +67,14 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * @since 1.8.0
  */
 public class ArgumentCaptor<T> {
-    
 
-    private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
+    private List<T> arguments;
     private final Class<? extends T> clazz;
 
     private ArgumentCaptor(Class<? extends T> clazz) {
-        this.clazz = clazz;
+        Class<? extends T> wrapperTypeOf = Primitives.wrapperTypeOf(clazz);
+        this.clazz = wrapperTypeOf == null ? clazz : wrapperTypeOf;
+        this.arguments = new ArrayList<T>();
     }
 
     /**
@@ -80,12 +88,44 @@ public class ArgumentCaptor<T> {
      * @return null or default values
      */
     public T capture() {
-        Mockito.argThat(capturingMatcher);
+        if (clazz == null) {
+            return captureIf(any());
+        }
+        return captureIf(or(isNull(), isA(clazz)));
+    }
+
+    /**
+     * Use it to capture the argument that satisfies the matcher. This method <b>must be used inside of verification</b>.
+     * <p>
+     * Internally, this method registers a special implementation of an {@link ArgumentMatchers}.
+     * This argument matcher stores the argument value that satisfies the matcher so that you can use it later to perform assertions.  
+     * <p>
+     * 
+     * Example using captureIf:
+     * <pre class="code"><code class="java">
+     *   mock.add(new ArrayList<>());
+     *   mock.add(new HashSet<>());
+     *   mock.add(LinkedList<>()):
+     *
+     *   ArgumentCaptor&lt;List&gt; listCaptor = ArgumentCaptor.forClass(List.class);
+     *
+     *   verify(mock, times(2)).add(peopleCaptor.captureIf(isA(List.class));
+     *
+     *   List<List> expected = asList(ArrayList<>(), LinkedList<>());
+     *   assertThat(expected.containsAll(peopleCaptor.getAllValues()), is(true));
+     * </pre>
+     * 
+     * @param matcher a matcher that will filter the values. See {@link ArgumentMatchers}
+     * @return null or default values
+     */
+    public T captureIf(ArgumentMatcher<T> matcher) {
+        Mockito.argThat(new CapturingMatcher(matcher, arguments));
         return defaultValue(clazz);
     }
 
     /**
      * Returns the captured value of the argument. When capturing varargs use {@link #getAllValues()}.
+     * If the captor is called with a argumentMatcher, this will return the captured value that satisfied the matcher.
      * <p>
      * If verified method was called multiple times then this method it returns the latest captured value.
      * <p>
@@ -94,12 +134,16 @@ public class ArgumentCaptor<T> {
      * @return captured argument value
      */
     public T getValue() {
-        return this.capturingMatcher.getLastValue();
+        if (arguments.isEmpty()) {
+            throw noArgumentValueWasCaptured();
+        }
+        return arguments.get(arguments.size() - 1);
     }
 
     /**
      * Returns all captured values. Use it when capturing varargs or when the verified method was called multiple times.
      * When varargs method was called multiple times, this method returns merged list of all values from all invocations.
+     * If the captor was called with a matcher, this will return the values that statisfy the matcher
      * <p>
      * Example: 
      * <pre class="code"><code class="java">
@@ -125,12 +169,26 @@ public class ArgumentCaptor<T> {
      *   List expected = asList(new Person("John"), new Person("Jane"));
      *   assertEquals(expected, peopleCaptor.getAllValues());
      * </code></pre>
+     *
+     * Example using custom matcher:
+     * <pre class="code"><code class="java">
+     *   mock.add(new ArrayList<>());
+     *   mock.add(new HashSet<>());
+     *   mock.add(LinkedList<>()):
+     *
+     *   ArgumentCaptor&lt;List&gt; listCaptor = ArgumentCaptor.forClass(List.class);
+     *
+     *   verify(mock, times(2)).add(peopleCaptor.captureIf(isA(List.class));
+     *
+     *   List expected = asList(ArrayList<>(), LinkedList<>());
+     *   assertThat(expected.containsAll(peopleCaptor.getAllValues()), is(true));
+     * </pre>
      * See more examples in javadoc for {@link ArgumentCaptor} class.
      * 
      * @return captured argument value
      */
     public List<T> getAllValues() {
-        return this.capturingMatcher.getAllValues();
+        return arguments;
     }
 
     /**

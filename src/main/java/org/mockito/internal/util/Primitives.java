@@ -6,6 +6,7 @@ package org.mockito.internal.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 @SuppressWarnings("unchecked")
 public class Primitives {
@@ -31,6 +32,33 @@ public class Primitives {
         }
         return (Class<T>) PRIMITIVE_TYPES.get(clazz);
     }
+
+    /**
+     * Returns the wrapper type of the given class.
+     * <p/>
+     * The passed class can be any class : <code>boolean.class</code>, <code>Integer.class</code>
+     * in witch case this method will return <code>Boolean.class</code>, even <code>SomeObject.class</code>
+     * in which case <code>null</code> will be returned.
+     *
+     * @param clazz The class from which wrapper type has to be retrieved
+     * @param <T>   The type
+     * @return The wrapper type if relevant, otherwise <code>null</code>
+     */
+    public static <T> Class<T> wrapperTypeOf(Class<T> clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        if (!clazz.isPrimitive()) {
+            return clazz;
+        }
+        for (Entry<Class<?>, Class<?>> entry: PRIMITIVE_TYPES.entrySet()) {
+            if (entry.getValue().equals(clazz)) {
+                return (Class<T>)entry.getKey();
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Indicates if the given class is primitive type or a primitive wrapper.

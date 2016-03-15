@@ -5,25 +5,43 @@
 
 package org.mockitousage.matchers;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.lt;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
-
 public class CapturingArgumentsTest extends TestBase {
 
-    class Person {
+    private static final String TEST_VALUE_1 = "bar";
+    private static final String TEST_VALUE_2 = "foo";
+
+	class Person {
 
         private final Integer age;
 
@@ -164,11 +182,11 @@ public class CapturingArgumentsTest extends TestBase {
         when(mock.simpleMethod(argument.capture(), eq(2))).thenReturn("blah");
         
         //when
-        mock.simpleMethod("foo", 200);
-        mock.simpleMethod("bar", 2);
+        mock.simpleMethod(TEST_VALUE_2, 200);
+        mock.simpleMethod(TEST_VALUE_1, 2);
         
         //then
-        Assertions.assertThat(argument.getAllValues()).containsOnly("bar");
+        Assertions.assertThat(argument.getAllValues()).containsOnly(TEST_VALUE_1);
     }
     
     @Test
@@ -186,13 +204,13 @@ public class CapturingArgumentsTest extends TestBase {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
         //when
-        mock.simpleMethod("foo", 1);
-        mock.simpleMethod("bar", 2);
+        mock.simpleMethod(TEST_VALUE_2, 1);
+        mock.simpleMethod(TEST_VALUE_1, 2);
 
         //then
         verify(mock).simpleMethod(captor.capture(), eq(1));
         assertEquals(1, captor.getAllValues().size());
-        assertEquals("foo", captor.getValue());
+        assertEquals(TEST_VALUE_2, captor.getValue());
     }
     
     @Test
@@ -315,5 +333,95 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock).varargs(eq(42), argumentCaptor.capture());
         Assertions.assertThat(argumentCaptor.getValue()).contains("capturedValue");
+    }
+
+    @Test
+    public void should_capture_only_list_instances() throws Exception {
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+
+        mock.forCollection(new ArrayList<String>());
+        mock.forCollection(new HashSet<String>());
+        mock.forCollection(new LinkedList<String>());
+
+        verify(mock, times(2)).forCollection(captor.captureIf(ArgumentMatchers.isA(List.class)));
+        assertThat(2, is(equalTo(captor.getAllValues().size())));
+    }
+
+    @Test
+    public void should_capture_when_value_is_equal_to_a_certain_value() throws Exception {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        mock.simpleMethod(TEST_VALUE_2, 1);
+        mock.simpleMethod(TEST_VALUE_1, 2);
+
+        verify(mock).simpleMethod(captor.captureIf(ArgumentMatchers.eq(TEST_VALUE_2)), anyInt());
+        assertThat(1, is(equalTo(captor.getAllValues().size())));
+        assertThat(TEST_VALUE_2, is(equalTo(captor.getValue())));
+    }
+
+    @Test
+    public void should_capture_when_value_is_less_then() {
+        ArgumentCaptor<Integer> captor = ArgumentCaptor.forClass(Integer.class);
+
+        mock.simpleMethod(TEST_VALUE_2, 1);
+        mock.simpleMethod(TEST_VALUE_1, 2);
+        mock.simpleMethod(TEST_VALUE_2, 3);
+        mock.simpleMethod(TEST_VALUE_1, 4);
+        
+        mock.simpleMethod(TEST_VALUE_2, 5);
+
+        verify(mock, times(2)).simpleMethod(anyString(), captor.captureIf(lt(3)));
+        assertThat(2, is(equalTo(captor.getAllValues().size())));
+        assertThat(Arrays.asList(new Integer[] {1, 2}), is(equalTo(captor.getAllValues())));
+    }
+
+    @Test
+    public void should_capture_when_only_by_argument_type() {
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+
+        mock.forCollection(new ArrayList<String>());
+        mock.forCollection(new HashSet<String>());
+        mock.forCollection(new LinkedList<String>());
+        
+        verify(mock, times(2)).forCollection(captor.capture());
+        assertThat(2, is(equalTo(captor.getAllValues().size())));
+    }
+
+    @Test
+    public void should_capture_all_arguments_ignoring_type() {
+        ArgumentCaptor<List<String>> captor = ArgumentCaptor.forClass(null);
+
+        mock.forCollection(new ArrayList<String>());
+        mock.forCollection(new HashSet<String>());
+        mock.forCollection(new LinkedList<String>());
+        
+        verify(mock, times(3)).forCollection(captor.capture());
+        assertThat(3, is(equalTo(captor.getAllValues().size())));
+    }
+
+    @Test
+    public void captures_correctly_when_the_same_type_used_multiple_times() throws Exception {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a", "b", "c");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.captureIf(isA(String.class)), argumentCaptor.captureIf(isA(String.class)), argumentCaptor.captureIf(isA(String.class)));
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
+    }
+
+    @Test
+    public void captures_correctly_when_capture_and_captureIf_is_used() throws Exception {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a", "b", "c");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.captureIf(isA(String.class)), argumentCaptor.capture(), argumentCaptor.captureIf(isA(String.class)));
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
     }
 }

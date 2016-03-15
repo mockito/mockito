@@ -4,52 +4,31 @@
  */
 package org.mockito.internal.matchers;
 
+import static junit.framework.TestCase.assertEquals;
+
+import java.util.ArrayList;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.fail;
 
 public class CapturingMatcherTest extends TestBase {
 
     @Test
     public void should_capture_arguments() throws Exception {
-        //given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
+        CapturingMatcher m = new CapturingMatcher(Any.ANY, new ArrayList<String>());
         
-        //when
-        m.captureFrom("foo");
-        m.captureFrom("bar");
-        
-        //then
-        Assertions.assertThat(m.getAllValues()).containsSequence("foo", "bar");
+        Assertions.assertThat(m.toString()).containsSequence("<Capturing argument>");
     }
     
     @Test
     public void should_know_last_captured_value() throws Exception {
-        //given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
+        ArrayList<String> arguments = new ArrayList<String>();
+        CapturingMatcher<String> m = new CapturingMatcher<String>(Any.ANY, arguments);
         
-        //when
         m.captureFrom("foo");
         m.captureFrom("bar");
         
-        //then
-        assertEquals("bar", m.getLastValue());
-    }
-    
-    @Test
-    public void should_scream_when_nothing_yet_captured() throws Exception {
-        //given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
-
-        try {
-            //when
-            m.getLastValue();
-            //then
-            fail();
-        } catch (MockitoException e) {}
+        assertEquals("bar", arguments.get(1));
     }
 }
