@@ -4,6 +4,10 @@
 
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +20,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 public class VerificationAfterDelayTest extends TestBase {
     
