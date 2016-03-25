@@ -4,10 +4,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +16,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.*;
 
 public class VerificationAfterDelayTest extends TestBase {
     
@@ -124,6 +122,38 @@ public class VerificationAfterDelayTest extends TestBase {
 
         // then
         verify(mock, after(200).atMost(n)).add(stringArgumentCaptor.capture());
+        assertEquals(n, stringArgumentCaptor.getAllValues().size());
+        assertEquals("0", stringArgumentCaptor.getAllValues().get(0));
+        assertEquals("1", stringArgumentCaptor.getAllValues().get(1));
+        assertEquals("2", stringArgumentCaptor.getAllValues().get(2));
+    }
+
+    @Test
+    public void shouldReturnListOfArgumentsWithSameSizeAsGivenInTimesVerification() {
+        // given
+        int n = 3;
+
+        // when
+        exerciseMockNTimes(n);
+
+        //Then
+        verify(mock, after(200).times(n)).add(stringArgumentCaptor.capture());
+        assertEquals(n, stringArgumentCaptor.getAllValues().size());
+        assertEquals("0", stringArgumentCaptor.getAllValues().get(0));
+        assertEquals("1", stringArgumentCaptor.getAllValues().get(1));
+        assertEquals("2", stringArgumentCaptor.getAllValues().get(2));
+    }
+
+    @Test
+    public void shouldReturnListOfArgumentsWithSameSizeAsGivenInAtLeastVerification() {
+        // given
+        int n = 3;
+
+        // when
+        exerciseMockNTimes(n);
+
+        //Then
+        verify(mock, after(200).atLeast(n)).add(stringArgumentCaptor.capture());
         assertEquals(n, stringArgumentCaptor.getAllValues().size());
         assertEquals("0", stringArgumentCaptor.getAllValues().get(0));
         assertEquals("1", stringArgumentCaptor.getAllValues().get(1));

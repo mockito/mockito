@@ -5,6 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
@@ -44,7 +45,17 @@ public class NumberOfInvocationsChecker {
             Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
             reporter.tooManyActualInvocations(wantedCount, actualCount, wanted, firstUndesired);
         }
-        
+
+        removeAlreadyVerified(actualInvocations);
         invocationMarker.markVerified(actualInvocations, wanted);
+    }
+
+    private void removeAlreadyVerified(List<Invocation> invocations) {
+        for (Iterator<Invocation> iterator = invocations.iterator(); iterator.hasNext(); ) {
+            Invocation i = iterator.next();
+            if (i.isVerified()) {
+                iterator.remove();
+            }
+        }
     }
 }
