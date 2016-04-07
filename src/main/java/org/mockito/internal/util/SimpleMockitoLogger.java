@@ -4,13 +4,11 @@
  */
 package org.mockito.internal.util;
 
-public class SimpleMockitoLogger extends ConsoleMockitoLogger {
+public class SimpleMockitoLogger implements MockitoLogger {
 
     StringBuilder loggedInfo = new StringBuilder();
 
     public void log(Object what) {
-//            can be uncommented when debugging this test
-//            super.log(what);
         loggedInfo.append(what);
     }
 
