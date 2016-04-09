@@ -63,7 +63,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_allow_assertions_on_captured_argument() {
         //given
-        ArgumentCaptor<Person> argument = new ArgumentCaptor<Person>();
+        ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 
         //when
         bulkEmailService.email(12);
