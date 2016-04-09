@@ -15,7 +15,6 @@ afterEvaluate {
                     '!org.mockito.asm.*',
                     '!org.mockito.cglib.*',
                     '!org.mockito.internal.*',
-                    'org.objenesis;version=2.1',
                     "org.mockito.*;version=${version}"
 
             instruction 'Import-Package',
