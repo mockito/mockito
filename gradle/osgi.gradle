@@ -9,14 +9,14 @@ afterEvaluate {
 
             name = 'Mockito Mock Library for Java. Core bundle requires Hamcrest-core and Objenesis.'
             symbolicName = 'org.mockito.mockito-core'
-            version = project.version
+            version = project.version.replace('-', '.')
 
             instruction 'Export-Package',
                     '!org.mockito.asm.*',
                     '!org.mockito.cglib.*',
                     '!org.mockito.internal.*',
                     'org.objenesis;version=2.1',
-                    "org.mockito.*;version=${project.version}"
+                    "org.mockito.*;version=${version}"
 
             instruction 'Import-Package',
                     'net.bytebuddy.*;version=1.2.3',
