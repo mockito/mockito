@@ -40,7 +40,7 @@ public class Whitebox {
             throw new RuntimeException(
                     "You want me to get this field: '" + field +
                     "' on this class: '" + clazz.getSimpleName() + 
-                    "' but this field is not declared withing hierarchy of this class!");
+                    "' but this field is not declared within the hierarchy of this class!");
         }
         return f;
     }
