@@ -25,7 +25,6 @@ public class MockAwareVerificationMode implements VerificationMode {
         return mock;
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

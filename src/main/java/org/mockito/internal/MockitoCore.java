@@ -72,7 +72,8 @@ public class MockitoCore {
         } else if (!mockUtil.isMock(mock)) {
             reporter.notAMockPassedToVerify(mock.getClass());
         }
-        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, mode));
+        VerificationMode actualMode = this.mockingProgress.maybeVerifyLazily(mode);
+        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode));
         return mock;
     }
     
@@ -182,5 +183,4 @@ public class MockitoCore {
     public MockingDetails mockingDetails(Object toInspect) {
         return new DefaultMockingDetails(toInspect, new MockUtil());
     }
-
 }
