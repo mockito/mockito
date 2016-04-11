@@ -59,7 +59,7 @@ public class DeprecatedStubbingTest extends TestBase {
     @Test
     public void shouldStubbingNotBeTreatedAsInteraction() {
         stub(mock.simpleMethod("one")).toThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().simpleMethod("two");
+        doThrow(new RuntimeException()).when(mock).simpleMethod("two");
         
         verifyZeroInteractions(mock);
     }

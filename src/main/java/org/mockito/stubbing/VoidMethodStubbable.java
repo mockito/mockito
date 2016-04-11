@@ -20,7 +20,6 @@ import org.mockito.Mockito;
  *  .on().someMethod();
  * </code></pre>
  *
- * See examples in javadoc for {@link Mockito#stubVoid}
  */
 public interface VoidMethodStubbable<T> {
 
@@ -34,7 +33,6 @@ public interface VoidMethodStubbable<T> {
      * If throwable is a checked exception then it has to
      * match one of the checked exceptions of method signature.
      *
-     * See examples in javadoc for {@link Mockito#stubVoid}
      *
      * @param throwable to be thrown on method invocation
      *
@@ -59,8 +57,6 @@ public interface VoidMethodStubbable<T> {
      * <li>second time foo(10) is called the mock will throw RuntimeException</li>
      * <li>every consecutive time foo(10) is called the mock will throw RuntimeException</li>
      * </ul>
-     * <p>
-     * See examples in javadoc for {@link Mockito#stubVoid}
      *
      * @return VoidMethodStubbable - typically to choose void method and finish stubbing
      */
@@ -96,7 +92,6 @@ public interface VoidMethodStubbable<T> {
      * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod("some arg");
      * </code></pre>
      *
-     * See examples in javadoc for {@link Mockito#stubVoid}
      *
      * @return mock object itself
      */

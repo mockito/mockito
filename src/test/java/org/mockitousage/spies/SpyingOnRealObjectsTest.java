@@ -70,10 +70,9 @@ public class SpyingOnRealObjectsTest extends TestBase {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldStubVoid() {
-        stubVoid(spy)
-            .toReturn()
-            .toThrow(new RuntimeException())
-            .on().clear();
+        doNothing()
+        .doThrow(new RuntimeException())
+        .when(spy).clear();
 
         spy.add("one");
         spy.clear();

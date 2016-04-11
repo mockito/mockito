@@ -15,9 +15,7 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stubVoid;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public class StubbingWithCustomAnswerTest extends TestBase {
@@ -72,7 +70,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     public void shoudAnswerVoidMethod() throws Exception {
         RecordCall recordCall = new RecordCall();
 
-        stubVoid(mock).toAnswer(recordCall).on().voidMethod();
+        doAnswer(recordCall).when(mock).voidMethod();
 
         mock.voidMethod();
         assertTrue(recordCall.isCalled());
@@ -83,10 +81,10 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         RecordCall call1 = new RecordCall();
         RecordCall call2 = new RecordCall();
 
-        stubVoid(mock).toAnswer(call1)
-                .toThrow(new UnsupportedOperationException())
-                .toAnswer(call2)
-                .on().voidMethod();
+        doAnswer(call1)
+                .doThrow(new UnsupportedOperationException())
+                .doAnswer(call2)
+                .when(mock).voidMethod();
 
         mock.voidMethod();
         assertTrue(call1.isCalled());
