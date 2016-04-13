@@ -1,3 +1,12 @@
+### 2.0.45-beta (2016-04-13 03:40 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 8: Brice Dutheil
+  * 3: Szczepan Faber
+* Improvements: 1
+  * Travis / CI improvements [(#369)](https://github.com/mockito/mockito/pull/369)
+
 ### 2.0.44-beta (2016-03-09 14:16 UTC)
 
 * Authors: 3
