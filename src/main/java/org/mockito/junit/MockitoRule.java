@@ -13,7 +13,9 @@ import org.junit.rules.MethodRule;
  *      so that explicit usage of {@link org.mockito.MockitoAnnotations#initMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
- *      validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.
+ *      Validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.
+ *   <li>
+ *      Since 2.*, on test failure, stubbing warnings are printed to System output. They might be useful for debugging.
  * </ul>
  * Example use:
  * <pre class="code"><code class="java">
