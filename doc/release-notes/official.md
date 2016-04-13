@@ -1,3 +1,12 @@
+### 2.0.46-beta (2016-04-13 04:10 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Vineet Kumar
+  * 1: Szczepan Faber
+* Improvements: 1
+  * Fix typo in example in javadoc. [(#376)](https://github.com/mockito/mockito/pull/376)
+
 ### 2.0.45-beta (2016-04-13 03:40 UTC)
 
 * Authors: 2
