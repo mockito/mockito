@@ -7,13 +7,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
-import org.mockito.internal.junit.JUnitRule;
+import org.mockito.internal.util.SimpleMockitoLogger;
+import org.mockitousage.IMethods;
 
 import static org.junit.Assert.*;
 
 public class JUnitRuleTest {
 
-    private JUnitRule jUnitRule = new JUnitRule();
+    private SimpleMockitoLogger logger = new SimpleMockitoLogger();
+    private JUnitRule jUnitRule = new JUnitRule(logger);
     private InjectTestCase injectTestCase = new InjectTestCase();
 
     @Test
@@ -41,6 +43,35 @@ public class JUnitRuleTest {
             fail("Should detect invalid Mockito usage");
         } catch (UnfinishedStubbingException e) {
         }
+    }
+
+    @Test
+    public void shouldWarnAboutUnusedStubsWhenFailed() throws Throwable {
+        try {
+            jUnitRule.apply(new Statement() {
+                public void evaluate() throws Throwable {
+                    IMethods mock = Mockito.mock(IMethods.class);
+                    Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
+                    throw new AssertionError("x");
+                }
+            }, injectTestCase).evaluate();
+            fail();
+        } catch (AssertionError e) {
+            assertEquals("x", e.getMessage());
+            assertTrue(logger.getLoggedInfo().startsWith("This stubbing was never used"));
+        }
+    }
+
+    @Test
+    public void shouldNotWarnAboutUnusedStubsWhenPassed() throws Throwable {
+        jUnitRule.apply(new Statement() {
+            public void evaluate() throws Throwable {
+                IMethods mock = Mockito.mock(IMethods.class);
+                Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
+            }
+        }, injectTestCase).evaluate();
+
+        assertEquals("", logger.getLoggedInfo());
     }
 
     private static class DummyStatement extends Statement {

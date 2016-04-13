@@ -4,6 +4,8 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.internal.junit.JUnitRule;
+import org.mockito.internal.util.ConsoleMockitoLogger;
+import org.mockito.internal.util.MockitoLogger;
 
 
 /**
@@ -24,7 +26,16 @@ public class MockitoJUnitRule implements MethodRule, MockitoRule {
      */
     @Deprecated
     public MockitoJUnitRule() {
-        this.jUnitRule = new JUnitRule();
+        this.jUnitRule = new JUnitRule(new ConsoleMockitoLogger());
+    }
+
+    /**
+     * Please use {@link MockitoJUnit#rule()}.
+     * The reason of the deprecation is that we want to avoid concrete classes in the public api.
+     */
+    @Deprecated
+    public MockitoJUnitRule(MockitoLogger logger) {
+        this.jUnitRule = new JUnitRule(logger);
     }
 
     /**
