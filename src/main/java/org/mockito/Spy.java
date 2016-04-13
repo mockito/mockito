@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
  *
  * <pre class="code"><code class="java">
  * Foo spyOnFoo = Mockito.spy(new Foo("argument"));
- * Bar spyOnFoo = Mockito.spy(new Bar());
+ * Bar spyOnBar = Mockito.spy(new Bar());
  * </code></pre>
  *
  * <p>
