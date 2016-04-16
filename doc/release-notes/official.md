@@ -1,3 +1,12 @@
+### 2.0.47-beta (2016-04-16 18:10 UTC)
+
+* Authors: 2
+* Commits: 9
+  * 8: david
+  * 1: Szczepan Faber
+* Improvements: 1
+  * Remove deprecated code [(#386)](https://github.com/mockito/mockito/pull/386)
+
 ### 2.0.46-beta (2016-04-13 04:10 UTC)
 
 * Authors: 2
