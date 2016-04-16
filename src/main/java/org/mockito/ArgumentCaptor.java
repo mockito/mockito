@@ -65,26 +65,6 @@ public class ArgumentCaptor<T> {
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<? extends T> clazz;
 
-    /**
-     * @deprecated
-     * 
-     * <b>Please use factory method {@link ArgumentCaptor#forClass(Class)} to create captors</b>
-     * <p>
-     * This is required to avoid NullPointerExceptions when autoUnboxing primitive types.
-     * See issue 99.
-     * <p>
-     * Example:
-     * <pre class="code"><code class="java">
-     *   ArgumentCaptor&lt;Person&gt; argument = ArgumentCaptor.forClass(Person.class);
-     *   verify(mock).doSomething(argument.capture());
-     *   assertEquals("John", argument.getValue().getName());
-     * </code></pre>
-     */
-    @Deprecated
-    public ArgumentCaptor() {
-        this.clazz = null;
-    }
-
     private ArgumentCaptor(Class<? extends T> clazz) {
         this.clazz = clazz;
     }

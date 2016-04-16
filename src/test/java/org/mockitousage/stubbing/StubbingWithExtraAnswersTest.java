@@ -11,9 +11,9 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.stubbing.answers.ReturnsElementsOf;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -25,7 +25,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     public void shouldWorkAsStandardMockito() throws Exception {
         //when
         List<Integer> list = asList(1, 2, 3);
-        when(mock.objectReturningMethodNoArgs()).thenAnswer(new ReturnsElementsOf(list));
+        when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
         
         //then
         assertEquals(1, mock.objectReturningMethodNoArgs());
@@ -40,7 +40,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     public void shouldReturnNullIfNecessary() throws Exception {
         //when
         List<Integer> list = asList(1, null);
-        when(mock.objectReturningMethodNoArgs()).thenAnswer(new ReturnsElementsOf(list));
+        when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
         
         //then
         assertEquals(1, mock.objectReturningMethodNoArgs());
@@ -52,7 +52,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     public void shouldScreamWhenNullPassed() throws Exception {
         try {
             //when
-            new ReturnsElementsOf(null);
+            AdditionalAnswers.returnsElementsOf(null);
             //then
             fail();
         } catch (MockitoException e) {}

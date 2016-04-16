@@ -87,15 +87,6 @@ public enum Answers implements Answer<Object>{
         this.implementation = implementation;
     }
 
-    /**
-     * @deprecated Use the enum-constant directly, instead of this getter. This method will be removed in a future release<br> 
-     * E.g. instead of <code>Answers.CALLS_REAL_METHODS.get()</code> use <code>Answers.CALLS_REAL_METHODS</code> .
-     */
-    @Deprecated
-    public Answer<Object> get() {
-        return this;
-    }
-
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return implementation.answer(invocation);
     }
