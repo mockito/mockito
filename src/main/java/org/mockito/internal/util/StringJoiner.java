@@ -5,15 +5,28 @@
 
 package org.mockito.internal.util;
 
+import static java.util.Arrays.asList;
+
+/**
+ * Joins Strings together producing yet another String
+ */
 public class StringJoiner {
 
+    //TODO where's the unit test?
+
+    /**
+     * Joins Strings with EOL character
+     */
     public static String join(Object ... linesToBreak) {
-        StringBuilder out = new StringBuilder("\n");
-        return join(out, linesToBreak);
+        return join(asList(linesToBreak));
     }
 
-    private static String join(StringBuilder out, Object[] linesToBreak) {
-        for (Object line : linesToBreak) {
+    /**
+     * Joins Strings with EOL character
+     */
+    public static String join(Iterable<String> lines) {
+        StringBuilder out = new StringBuilder("\n");
+        for (Object line : lines) {
             out.append(line.toString()).append("\n");
         }
         int lastBreak = out.lastIndexOf("\n");
