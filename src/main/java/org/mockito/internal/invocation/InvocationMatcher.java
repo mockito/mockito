@@ -18,6 +18,12 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
+/**
+ * In addition to all content of the invocation, the invocation matcher contains the argument matchers.
+ * Invocation matcher is used during verification and stubbing.
+ * In those cases, the user can provide argument matchers instead of 'raw' arguments.
+ * Raw arguments are converted to 'equals' matchers anyway.
+ */
 public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
 
     private final Invocation invocation;
