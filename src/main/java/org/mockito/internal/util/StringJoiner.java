@@ -15,17 +15,19 @@ public class StringJoiner {
     //TODO where's the unit test?
 
     /**
-     * Joins Strings with EOL character
+     * Joins Strings with line break character. It adds line break in front, too.
+     * This makes it something like 'format' no really 'join'.
+     * TODO Rename to 'format', remove the confusing start String.
      */
     public static String join(Object ... linesToBreak) {
-        return join(asList(linesToBreak));
+        return join("\n", (Iterable) asList(linesToBreak));
     }
 
     /**
      * Joins Strings with EOL character
      */
-    public static String join(Iterable<String> lines) {
-        StringBuilder out = new StringBuilder("\n");
+    public static String join(String start, Iterable<String> lines) {
+        StringBuilder out = new StringBuilder(start);
         for (Object line : lines) {
             out.append(line.toString()).append("\n");
         }
