@@ -50,9 +50,9 @@ public class LoggingListener implements FindingsListener {
 
         List<String> lines = new LinkedList<String>();
         lines.add("[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
-        lines.add("[Mockito]");
 
         if (!argMismatchStubs.isEmpty()) {
+            lines.add("[Mockito]");
             lines.add("[Mockito] Unused stubbing due to argument mismatch (is stubbing correct in the test?):");
             lines.add("[Mockito]");
             for (String info : argMismatchStubs) {
@@ -61,6 +61,7 @@ public class LoggingListener implements FindingsListener {
         }
 
         if (!unusedStubs.isEmpty()) {
+            lines.add("[Mockito]");
             lines.add("[Mockito] Unused stubbing (perhaps can be removed from the test?):");
             lines.add("[Mockito]");
             for (String info : unusedStubs) {
@@ -69,6 +70,7 @@ public class LoggingListener implements FindingsListener {
         }
 
         if (!unstubbedCalls.isEmpty()) {
+            lines.add("[Mockito]");
             lines.add("[Mockito] Unstubbed method calls (perhaps missing stubbing in the test?):");
             lines.add("[Mockito]");
             for (String info : unstubbedCalls) {

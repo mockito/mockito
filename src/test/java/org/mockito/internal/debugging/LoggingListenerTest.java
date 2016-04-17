@@ -61,6 +61,34 @@ public class LoggingListenerTest extends TestBase {
     }
 
     @Test
+    public void informs_about_various_kinds_of_stubs() {
+        //given
+        LoggingListener listener = new LoggingListener(true);
+
+        //when
+        listener.foundUnusedStub(invocationAt("at com.FooTest:30"));
+        listener.foundStubCalledWithDifferentArgs(invocationAt("at com.FooTest:20"), invocationMatcherAt("at com.Foo:100"));
+        listener.foundUnstubbed(invocationMatcherAt("at com.Foo:96"));
+
+        //then
+        assertEquals(
+            "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
+            "[Mockito]\n" +
+            "[Mockito] Unused stubbing due to argument mismatch (is stubbing correct in the test?):\n" +
+            "[Mockito]\n" +
+            "[Mockito] stubbed with those args here   at com.FooTest:20\n" +
+            "[Mockito] BUT called with different args at com.Foo:100\n" +
+            "[Mockito]\n" +
+            "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
+            "[Mockito]\n" +
+            "[Mockito] This stubbing was never used   at com.FooTest:30\n" +
+            "[Mockito]\n" +
+            "[Mockito] Unstubbed method calls (perhaps missing stubbing in the test?):\n" +
+            "[Mockito]\n" +
+            "[Mockito] unstubbed method at com.Foo:96", listener.getStubbingInfo());
+    }
+
+    @Test
     public void hides_unstubbed() {
         //given
         LoggingListener listener = new LoggingListener(false);
