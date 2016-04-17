@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
@@ -144,12 +145,12 @@ public class TestBase extends Assert {
             types[i] = args[i].getClass();
         }
         return new InvocationImpl(mock(type), new SerializableMethod(type.getMethod(methodName,
-                types)), args, 1, null);
+                types)), args, 1, null, new LocationImpl());
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
-                new Class[0])), new Object[0], 1, realMethod);
+                new Class[0])), new Object[0], 1, realMethod, new LocationImpl());
     }
 
     protected boolean isMock(Object o) {

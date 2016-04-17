@@ -40,14 +40,15 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
     final RealMethod realMethod;
     private StubInfo stubInfo;
 
-    public InvocationImpl(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber, RealMethod realMethod) {
+    public InvocationImpl(Object mock, MockitoMethod mockitoMethod, Object[] args, int sequenceNumber,
+                          RealMethod realMethod, Location location) {
         this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
         this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
-        this.location = new LocationImpl();
+        this.location = location;
     }
 
     public Object getMock() {

@@ -6,7 +6,9 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 
 import java.lang.reflect.Method;
@@ -28,6 +30,7 @@ public class InvocationBuilder {
     private Method method;
     private boolean verified;
     private List<Class<?>> argTypes;
+    private Location location;
 
     /**
      * Build the invocation
@@ -56,7 +59,8 @@ public class InvocationBuilder {
             }
         }
         
-        Invocation i = new InvocationImpl(mock, new SerializableMethod(method), args, sequenceNumber, null);
+        Invocation i = new InvocationImpl(mock, new SerializableMethod(method), args, sequenceNumber, null,
+                location == null? new LocationImpl() : location);
         if (verified) {
             i.markVerified();
         }
@@ -112,6 +116,15 @@ public class InvocationBuilder {
 
     public InvocationBuilder argTypes(Class<?>... argTypes) {
         this.argTypes = asList(argTypes);
+        return this;
+    }
+
+    public InvocationBuilder location(final String location) {
+        this.location = new Location() {
+            public String toString() {
+                return location;
+            }
+        };
         return this;
     }
 }
