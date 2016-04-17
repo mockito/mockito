@@ -5,8 +5,6 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.util.MockitoLogger;
-import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.invocation.Invocation;
 
 import java.util.List;
@@ -24,14 +22,10 @@ public class WarningsPrinterImpl {
         this.warnAboutUnstubbed = warnAboutUnstubbed;
         this.finder = finder;
     }
-    
-    public void print(final MockitoLogger logger) {
-        finder.find(new LoggingListener(warnAboutUnstubbed, logger));
-    }
 
     public String print() {
-        SimpleMockitoLogger logger = new SimpleMockitoLogger();
-        this.print(logger);
-        return logger.getLoggedInfo();
+        LoggingListener listener = new LoggingListener(warnAboutUnstubbed);
+        finder.find(listener);
+        return listener.getStubbingInfo();
     }
 }

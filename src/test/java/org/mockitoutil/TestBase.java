@@ -14,7 +14,9 @@ import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationImpl;
+import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.util.MockUtil;
@@ -151,6 +153,14 @@ public class TestBase extends Assert {
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
                 new Class[0])), new Object[0], 1, realMethod, new LocationImpl());
+    }
+
+    protected static Invocation invocationAt(String location) {
+        return new InvocationBuilder().location(location).toInvocation();
+    }
+
+    protected static InvocationMatcher invocationMatcherAt(String location) {
+        return new InvocationBuilder().location(location).toInvocationMatcher();
     }
 
     protected boolean isMock(Object o) {

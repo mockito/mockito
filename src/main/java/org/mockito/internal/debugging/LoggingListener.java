@@ -5,48 +5,76 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.util.MockitoLogger;
 import org.mockito.invocation.Invocation;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.mockito.internal.util.StringJoiner.join;
 
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;
-    private final MockitoLogger logger;
 
-    public LoggingListener(boolean warnAboutUnstubbed, MockitoLogger logger) {
+    private List<String> argMismatchStubs = new LinkedList<String>();
+    private List<String> unusedStubs = new LinkedList<String>();
+    private List<String> unstubbedCalls = new LinkedList<String>();
+
+    public LoggingListener(boolean warnAboutUnstubbed) {
         this.warnAboutUnstubbed = warnAboutUnstubbed;
-        this.logger = logger;
     }
 
     public void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed) {
-        logger.log(join(
-                " *** Stubbing warnings from Mockito: *** ",
-                "",
-                "stubbed with those args here   " + unused.getLocation(),
-                "BUT called with different args " + unstubbed.getInvocation().getLocation(),
-                ""));
+        //TODO there is not good reason we should get Invocation and InvocationMatcher here
+        // we should pass 2 InvocationMatchers and testing is easier
+        // it's also confusing that unstubbed invocation is passed as InvocationMatcher (should be rather Invocation)
+
+        //this information comes in pairs
+        argMismatchStubs.add("[Mockito] stubbed with those args here   " + unused.getLocation());
+        argMismatchStubs.add("[Mockito] BUT called with different args " + unstubbed.getInvocation().getLocation());
     }
 
     public void foundUnusedStub(Invocation unused) {
-        logger.log("This stubbing was never used   " + unused.getLocation() + "\n");
+        unusedStubs.add("[Mockito] This stubbing was never used   " + unused.getLocation());
     }
 
     public void foundUnstubbed(InvocationMatcher unstubbed) {
         if (warnAboutUnstubbed) {
-            logger.log(join(
-                    "This method was not stubbed ",
-                    unstubbed,
-                    unstubbed.getInvocation().getLocation(),
-                    ""));
+            unstubbedCalls.add("[Mockito] unstubbed method " + unstubbed.getInvocation().getLocation());
         }
     }
 
-    public boolean isWarnAboutUnstubbed() {
-        return warnAboutUnstubbed;
-    }
+    public String getStubbingInfo() {
+        if (argMismatchStubs.isEmpty() && unusedStubs.isEmpty() && unstubbedCalls.isEmpty()) {
+            return "";
+        }
 
-    public MockitoLogger getLogger() {
-        return logger;
+        List<String> lines = new LinkedList<String>();
+        lines.add("[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
+        lines.add("[Mockito]");
+
+        if (!argMismatchStubs.isEmpty()) {
+            lines.add("[Mockito] Unused stubbing due to argument mismatch (is stubbing correct in the test?):");
+            lines.add("[Mockito]");
+            for (String info : argMismatchStubs) {
+                lines.add(info);
+            }
+        }
+
+        if (!unusedStubs.isEmpty()) {
+            lines.add("[Mockito] Unused stubbing (perhaps can be removed from the test?):");
+            lines.add("[Mockito]");
+            for (String info : unusedStubs) {
+                lines.add(info);
+            }
+        }
+
+        if (!unstubbedCalls.isEmpty()) {
+            lines.add("[Mockito] Unstubbed method calls (perhaps missing stubbing in the test?):");
+            lines.add("[Mockito]");
+            for (String info : unstubbedCalls) {
+                lines.add(info);
+            }
+        }
+        return join("", lines);
     }
 }

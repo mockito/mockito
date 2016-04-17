@@ -4,64 +4,88 @@
  */
 package org.mockito.internal.debugging;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.util.MockitoLogger;
 import org.mockitoutil.TestBase;
 
 public class LoggingListenerTest extends TestBase {
 
-    @Mock private MockitoLogger logger;
-
     @Test
-    public void shouldLogUnusedStub() {
+    public void may_not_have_any_information() {
         //given
-        LoggingListener listener = new LoggingListener(false, logger);
+        LoggingListener listener = new LoggingListener(true);
 
-        //when
-        listener.foundUnusedStub(new InvocationBuilder().toInvocation());
-
-        //then
-        verify(logger).log(notNull());
+        //expect
+        assertEquals("", listener.getStubbingInfo());
     }
 
     @Test
-    public void shouldLogUnstubbed() {
+    public void informs_about_unused_stubs() {
         //given
-        LoggingListener listener = new LoggingListener(true, logger);
+        LoggingListener listener = new LoggingListener(false);
+
+        //when
+        listener.foundUnusedStub(invocationAt("at com.FooTest:30"));
+        listener.foundUnusedStub(invocationAt("at com.FooTest:32"));
+
+        //then
+        assertEquals(
+                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
+                "[Mockito]\n" +
+                "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
+                "[Mockito]\n" +
+                "[Mockito] This stubbing was never used   at com.FooTest:30\n" +
+                "[Mockito] This stubbing was never used   at com.FooTest:32", listener.getStubbingInfo());
+    }
+
+    @Test
+    public void informs_about_unused_stubs_due_arg_mismatch() {
+        //given
+        LoggingListener listener = new LoggingListener(false);
+
+        //when
+        listener.foundStubCalledWithDifferentArgs(invocationAt("at com.FooTest:20"), invocationMatcherAt("at com.Foo:100"));
+        listener.foundStubCalledWithDifferentArgs(invocationAt("at com.FooTest:21"), invocationMatcherAt("at com.Foo:120"));
+
+        //then
+        assertEquals(
+                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
+                "[Mockito]\n" +
+                "[Mockito] Unused stubbing due to argument mismatch (is stubbing correct in the test?):\n" +
+                "[Mockito]\n" +
+                "[Mockito] stubbed with those args here   at com.FooTest:20\n" +
+                "[Mockito] BUT called with different args at com.Foo:100\n" +
+                "[Mockito] stubbed with those args here   at com.FooTest:21\n" +
+                "[Mockito] BUT called with different args at com.Foo:120", listener.getStubbingInfo());
+    }
+
+    @Test
+    public void hides_unstubbed() {
+        //given
+        LoggingListener listener = new LoggingListener(false);
 
         //when
         listener.foundUnstubbed(new InvocationBuilder().toInvocationMatcher());
 
         //then
-        verify(logger).log(notNull());
+        assertEquals("", listener.getStubbingInfo());
     }
 
     @Test
-    public void shouldNotLogUnstubbed() {
+    public void informs_about_unstubbed() {
         //given
-        LoggingListener listener = new LoggingListener(false, logger);
+        LoggingListener listener = new LoggingListener(true);
 
         //when
-        listener.foundUnstubbed(new InvocationBuilder().toInvocationMatcher());
+        listener.foundUnstubbed(invocationMatcherAt("com.Foo:20"));
 
         //then
-        verify(logger, never()).log(notNull());
-    }
-
-    @Test
-    public void shouldLogDifferentArgs() {
-        //given
-        LoggingListener listener = new LoggingListener(true, logger);
-
-        //when
-        listener.foundStubCalledWithDifferentArgs(new InvocationBuilder().toInvocation(), new InvocationBuilder().toInvocationMatcher());
-
-        //then
-        verify(logger).log(notNull());
+        assertEquals("" +
+                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
+                "[Mockito]\n" +
+                "[Mockito] Unstubbed method calls (perhaps missing stubbing in the test?):\n" +
+                "[Mockito]\n" +
+                "[Mockito] unstubbed method com.Foo:20", listener.getStubbingInfo());
     }
 }
