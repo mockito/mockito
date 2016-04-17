@@ -58,7 +58,7 @@ public class JUnitRuleTest {
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            assertTrue(logger.getLoggedInfo().startsWith("This stubbing was never used"));
+            assertTrue(logger.getLoggedInfo().contains("This stubbing was never used"));
         }
     }
 
