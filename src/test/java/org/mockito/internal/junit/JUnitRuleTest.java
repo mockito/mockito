@@ -51,14 +51,14 @@ public class JUnitRuleTest {
             jUnitRule.apply(new Statement() {
                 public void evaluate() throws Throwable {
                     IMethods mock = Mockito.mock(IMethods.class);
-                    Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
+                    declareUnusedStub(mock);
                     throw new AssertionError("x");
                 }
             }, injectTestCase).evaluate();
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            assertTrue(logger.getLoggedInfo().contains("This stubbing was never used"));
+            assertTrue(logger.getLoggedInfo().contains("declareUnusedStub"));
         }
     }
 
@@ -67,11 +67,15 @@ public class JUnitRuleTest {
         jUnitRule.apply(new Statement() {
             public void evaluate() throws Throwable {
                 IMethods mock = Mockito.mock(IMethods.class);
-                Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
+                declareUnusedStub(mock);
             }
         }, injectTestCase).evaluate();
 
         assertEquals("", logger.getLoggedInfo());
+    }
+
+    private static void declareUnusedStub(IMethods mock) {
+        Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
     }
 
     private static class DummyStatement extends Statement {
