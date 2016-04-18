@@ -58,9 +58,29 @@ public class JUnitRuleTest {
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            System.out.println(logger.getLoggedInfo()); //for debugging
-            assertTrue(logger.getLoggedInfo().contains("declareUnusedStub"));
+            assertEquals(removeLineNo(logger.getLoggedInfo()), removeLineNo(
+                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
+                "[Mockito]\n" +
+                "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
+                "[Mockito]\n" +
+                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)")
+            );
         }
+    }
+
+    private String removeLineNo(String text) {
+        //This handy method is useful for making the tests stable
+        //we can change this class and the assertions will still work correctly
+        //otherwise, changing the class will change line numbers and some assertons would fail
+        String name = this.getClass().getSimpleName();
+        return text.replaceAll(name + "\\.java:(\\d)+", name + ".java:100");
+    }
+
+    @Test
+    public void can_remove_line_numbers() throws Throwable {
+        assertEquals(
+                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:100)",
+                removeLineNo("[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)"));
     }
 
     @Test
