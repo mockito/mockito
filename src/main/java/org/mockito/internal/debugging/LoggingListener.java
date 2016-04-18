@@ -29,17 +29,24 @@ public class LoggingListener implements FindingsListener {
         // it's also confusing that unstubbed invocation is passed as InvocationMatcher (should be rather Invocation)
 
         //this information comes in pairs
-        argMismatchStubs.add("[Mockito] stubbed with those args here   " + unused.getLocation());
-        argMismatchStubs.add("[Mockito] BUT called with different args " + unstubbed.getInvocation().getLocation());
+        String index = Integer.toString(indexOfNextPair(argMismatchStubs.size()));
+        //making sure indentation is correct
+        String padding = index.replaceAll("\\d", " ");
+        argMismatchStubs.add(index +   ". Stubbed " + unused.getLocation());
+        argMismatchStubs.add(padding + "  Invoked " + unstubbed.getInvocation().getLocation());
+    }
+
+    static int indexOfNextPair(int collectionSize) {
+        return (collectionSize / 2) + 1;
     }
 
     public void foundUnusedStub(Invocation unused) {
-        unusedStubs.add("[Mockito] This stubbing was never used   " + unused.getLocation());
+        unusedStubs.add((unusedStubs.size() + 1) + ". " + unused.getLocation());
     }
 
     public void foundUnstubbed(InvocationMatcher unstubbed) {
         if (warnAboutUnstubbed) {
-            unstubbedCalls.add("[Mockito] unstubbed method " + unstubbed.getInvocation().getLocation());
+            unstubbedCalls.add((unstubbedCalls.size() + 1) + ". " + unstubbed.getInvocation().getLocation());
         }
     }
 
@@ -53,30 +60,30 @@ public class LoggingListener implements FindingsListener {
 
         if (!argMismatchStubs.isEmpty()) {
             lines.add("[Mockito]");
-            lines.add("[Mockito] Unused stubbing due to argument mismatch (is stubbing correct in the test?):");
+            lines.add("[Mockito] Argument mismatch between stubbing and actual invocation (is stubbing correct in the test?):");
             lines.add("[Mockito]");
-            for (String info : argMismatchStubs) {
-                lines.add(info);
-            }
+            addOrderedList(lines, argMismatchStubs);
         }
 
         if (!unusedStubs.isEmpty()) {
             lines.add("[Mockito]");
             lines.add("[Mockito] Unused stubbing (perhaps can be removed from the test?):");
             lines.add("[Mockito]");
-            for (String info : unusedStubs) {
-                lines.add(info);
-            }
+            addOrderedList(lines, unusedStubs);
         }
 
         if (!unstubbedCalls.isEmpty()) {
             lines.add("[Mockito]");
-            lines.add("[Mockito] Unstubbed method calls (perhaps missing stubbing in the test?):");
+            lines.add("[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):");
             lines.add("[Mockito]");
-            for (String info : unstubbedCalls) {
-                lines.add(info);
-            }
+            addOrderedList(lines, unstubbedCalls);
         }
         return join("", lines);
+    }
+
+    private void addOrderedList(List<String> target, List<String> additions) {
+        for (String a : additions) {
+            target.add("[Mockito] " + a);
+        }
     }
 }

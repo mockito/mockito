@@ -58,6 +58,7 @@ public class JUnitRuleTest {
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
+            System.out.println(logger.getLoggedInfo()); //for debugging
             assertTrue(logger.getLoggedInfo().contains("declareUnusedStub"));
         }
     }
