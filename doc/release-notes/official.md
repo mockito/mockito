@@ -1,3 +1,12 @@
+### 2.0.48-beta (2016-04-18 00:52 UTC)
+
+* Authors: 2
+* Commits: 18
+  * 16: Szczepan Faber
+  * 2: Roland Hauser
+* Improvements: 1
+  * Fixed OSGi metadata generation [(#388)](https://github.com/mockito/mockito/pull/388)
+
 ### 2.0.47-beta (2016-04-16 18:10 UTC)
 
 * Authors: 2
