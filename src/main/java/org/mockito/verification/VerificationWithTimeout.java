@@ -108,7 +108,7 @@ public interface VerificationWithTimeout extends VerificationMode {
      *   verify(mock, only()).someMethod();
      *   //above is a shorthand for following 2 lines of code:
      *   verify(mock).someMethod();
-     *   verifyNoMoreInvocations(mock);
+     *   verifyNoMoreInteractions(mock);
      * </code></pre>
      * 
      * <p>
