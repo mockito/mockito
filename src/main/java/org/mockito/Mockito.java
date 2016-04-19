@@ -885,7 +885,7 @@ import org.mockito.junit.*;
  * verify(mockTwo).bar();
  *
  * //ignores all stubbed methods:
- * verifyNoMoreInvocations(ignoreStubs(mock, mockTwo));
+ * verifyNoMoreInteractions(ignoreStubs(mock, mockTwo));
  *
  * //creates InOrder that will ignore stubbed
  * InOrder inOrder = inOrder(ignoreStubs(mock, mockTwo));
@@ -2184,7 +2184,7 @@ public class Mockito extends Matchers {
      * if you want to find out more search for 'greedy' on the Mockito
      * <a href="http://code.google.com/p/mockito/w/list">wiki pages</a>.
      * <p>
-     * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
+     * As of Mockito 1.8.4 you can verifyNoMoreInteractions() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2370,7 +2370,7 @@ public class Mockito extends Matchers {
      *   verify(mock, only()).someMethod();
      *   //above is a shorthand for following 2 lines of code:
      *   verify(mock).someMethod();
-     *   verifyNoMoreInvocations(mock);
+     *   verifyNoMoreInteractions(mock);
      * </code></pre>
      *
      * <p>
