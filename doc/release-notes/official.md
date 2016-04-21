@@ -1,3 +1,11 @@
+### 2.0.50-beta (2016-04-21 09:30 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * Mocking Class that inherits from Abstract class in a different JAR doesn't override methods [(#398)](https://github.com/mockito/mockito/issues/398)
+
 ### 2.0.49-beta (2016-04-20 06:15 UTC)
 
 * Authors: 1
