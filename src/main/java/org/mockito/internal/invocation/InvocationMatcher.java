@@ -128,7 +128,7 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         for (int position = 0; position < regularArgumentsSize(invocation); position++) {
             ArgumentMatcher m = matchers.get(position);
             if (m instanceof CapturesArguments) {
-                ((CapturesArguments) m).captureFrom(invocation.getArgumentAt(position, Object.class));
+                ((CapturesArguments) m).captureFrom(invocation.getArgument(position));
             }
         }
     }
