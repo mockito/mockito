@@ -1,3 +1,15 @@
+### 2.0.51-beta (2016-04-22 12:38 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Rafael Winterhalter
+  * 1: Vineet Kumar
+  * 1: Christian Schwarz
+* Improvements: 3
+  * Remove duplication. [(#377)](https://github.com/mockito/mockito/pull/377)
+  * Fixes #365 Simplify the InvocationOnMock-API to get a casted argument [(#373)](https://github.com/mockito/mockito/pull/373)
+  * Simplify the InvocationOnMock-API to get a casted argument [(#365)](https://github.com/mockito/mockito/issues/365)
+
 ### 2.0.50-beta (2016-04-21 09:30 UTC)
 
 * Authors: 1
