@@ -62,7 +62,7 @@ public class MocksCreationTest extends TestBase {
         //then
         assertContains("great mockie", name);
         //and
-        assertThat(mock, is(List.class));
+        assertTrue(mock instanceof List);
     }
     
     @Test

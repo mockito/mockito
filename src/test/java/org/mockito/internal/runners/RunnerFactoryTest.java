@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.runners;
 
-import static org.hamcrest.CoreMatchers.*;
-
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
 import org.mockito.exceptions.base.MockitoException;
@@ -37,7 +35,7 @@ public class RunnerFactoryTest extends TestBase {
         RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(JUnit44RunnerImpl.class));
+        assertTrue(runner instanceof JUnit44RunnerImpl);
     }
     
     @Test
@@ -54,7 +52,7 @@ public class RunnerFactoryTest extends TestBase {
         RunnerImpl runner = factory.create(RunnerFactoryTest.class);
         
         //then
-        assertThat(runner, is(JUnit45AndHigherRunnerImpl.class));
+        assertTrue(runner instanceof JUnit45AndHigherRunnerImpl);
     }
     
     @Test

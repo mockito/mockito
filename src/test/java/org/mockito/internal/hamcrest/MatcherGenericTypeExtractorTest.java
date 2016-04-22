@@ -50,6 +50,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+        public void describeMismatch(Object item, Description mismatchDescription) {}
         public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
@@ -59,6 +60,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+        public void describeMismatch(Object item, Description mismatchDescription) {}
         public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
@@ -68,6 +70,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+        public void describeMismatch(Object item, Description mismatchDescription) {}
         public void _dont_implement_Matcher___instead_extend_BaseMatcher_() { }
         public void describeTo(Description description) {}
     }
@@ -79,7 +82,8 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() { }
+        public void describeMismatch(Object item, Description mismatchDescription) {}
+        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
 
@@ -111,6 +115,9 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
 
             public boolean matches(Object o) {
                 return false;
+            }
+
+            public void describeMismatch(Object item, Description mismatchDescription) {
             }
 
             public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {

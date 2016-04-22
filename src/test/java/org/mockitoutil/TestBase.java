@@ -69,9 +69,9 @@ public class TestBase extends Assert {
     protected static <T> void assertThat(T o, Assertor<T> a) {
         a.assertValue(o);
     }
-    
-    protected static <T> void assertThat(T actual, Matcher<T> m) {
-        org.junit.Assert.assertThat(actual, m);
+
+    protected static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+        org.junit.Assert.assertThat(actual, matcher);
     }
     
     protected static <T> void assertThat(String message, T actual, Matcher<T> m) {
