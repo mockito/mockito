@@ -1,3 +1,11 @@
+### 2.0.52-beta (2016-04-23 01:33 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Szczepan Faber
+* Improvements: 1
+  * Bump JUnit to 4.12 [(#400)](https://github.com/mockito/mockito/issues/400)
+
 ### 2.0.51-beta (2016-04-22 12:38 UTC)
 
 * Authors: 3
