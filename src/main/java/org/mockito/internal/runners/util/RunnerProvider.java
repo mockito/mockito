@@ -11,21 +11,6 @@ import org.mockito.internal.runners.RunnerImpl;
 
 public class RunnerProvider {
 
-    private static boolean hasJUnit45OrHigher; 
-
-    static {
-        try {
-            Class.forName("org.junit.runners.BlockJUnit4ClassRunner");
-            hasJUnit45OrHigher = true;
-        } catch (Throwable t) {
-            hasJUnit45OrHigher = false;
-        }
-    }
-    
-    public boolean isJUnit45OrHigherAvailable() {
-        return hasJUnit45OrHigher;
-    }
-
     public RunnerImpl newInstance(String runnerClassName, Class<?> constructorParam) throws Exception {
         Constructor<?> constructor;
         try {

@@ -24,11 +24,8 @@ public class RunnerFactory {
 
     public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
         try {
-            if (runnerProvider.isJUnit45OrHigherAvailable()) {
-                return runnerProvider.newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
-            } else {
-                return runnerProvider.newInstance("org.mockito.internal.runners.JUnit44RunnerImpl", klass);
-            }
+            //TODO invoke with regular exception
+            return runnerProvider.newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
         } catch (InvocationTargetException e) {
             if (!new TestMethodsFinder().hasTestMethods(klass)) {
                 throw new MockitoException(
@@ -43,10 +40,10 @@ public class RunnerFactory {
             throw new MockitoException(
                     "\n" +
                     "\n" +
-                    "MockitoRunner can only be used with JUnit 4.4 or higher.\n" +
+                    "MockitoRunner can only be used with JUnit 4.5 or higher.\n" +
                     "You can upgrade your JUnit version or write your own Runner (please consider contributing your runner to the Mockito community).\n" +
                     "Bear in mind that you can still enjoy all features of the framework without using runners (they are completely optional).\n" +
-                    "If you get this error despite using JUnit 4.4 or higher then please report this error to the mockito mailing list.\n"
+                    "If you get this error despite using JUnit 4.5 or higher then please report this error to the mockito mailing list.\n"
                     , t);
         }
     }
