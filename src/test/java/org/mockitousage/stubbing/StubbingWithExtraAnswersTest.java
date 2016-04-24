@@ -5,15 +5,15 @@
 
 package org.mockitousage.stubbing;
 
-import static java.util.Arrays.*;
-import static org.mockito.Mockito.*;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.stubbing.answers.ReturnsElementsOf;
+import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
