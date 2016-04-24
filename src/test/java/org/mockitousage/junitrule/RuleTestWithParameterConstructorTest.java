@@ -1,18 +1,19 @@
 package org.mockitousage.junitrule;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRule;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 public class RuleTestWithParameterConstructorTest {
 
-    @Rule
-    public MockitoJUnitRule mockitoJUnitRule = new MockitoJUnitRule(this);
+	 @Rule
+	 public MockitoRule mockitoJUnitRule = MockitoJUnit.rule();
 
     @Mock
     private Injected injected;

@@ -1,5 +1,7 @@
 package org.mockito.junit;
 
+import org.mockito.internal.junit.JUnitRule;
+
 /**
  * The JUnit rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}. See {@link MockitoRule}.
  *
@@ -14,7 +16,7 @@ public class MockitoJUnit {
      * @return the rule instance
      */
     public static MockitoRule rule() {
-        return new MockitoJUnitRule();
+        return new JUnitRule();
     }
 
     /**
