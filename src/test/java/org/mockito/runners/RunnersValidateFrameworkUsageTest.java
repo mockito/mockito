@@ -16,7 +16,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "deprecation"})
+@SuppressWarnings({"unchecked"})
 public class RunnersValidateFrameworkUsageTest extends TestBase {
     
     private Runner runner;
@@ -49,9 +49,9 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
     }
     
     @Test
-    public void shouldValidateWithD44Runner() throws Exception {
+    public void shouldValidateWithRunner() throws Exception {
         //given
-        runner = new MockitoJUnit44Runner(DummyTest.class);
+        runner = new MockitoJUnitRunner(DummyTest.class);
 
         //when
         runner.run(notifier);
