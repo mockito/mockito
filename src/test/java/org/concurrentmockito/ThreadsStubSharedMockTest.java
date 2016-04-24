@@ -37,11 +37,11 @@ public class ThreadsStubSharedMockTest extends TestBase {
                         .thenReturn("foo")
                         .thenReturn("bar");
 
-                    stubVoid(mock)
-                        .toThrow(new RuntimeException(getId() + ""))
-                        .toReturn()
-                        .toThrow(new RuntimeException())
-                        .on().differentMethod();
+
+                    doThrow(new RuntimeException(getId() + ""))
+                        .doNothing()
+                        .doThrow(new RuntimeException())
+                        .when(mock).differentMethod();
                 }
             };
             listeners[i].start();

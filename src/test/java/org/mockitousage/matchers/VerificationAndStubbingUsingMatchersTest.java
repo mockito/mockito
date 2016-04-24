@@ -50,7 +50,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldVerifyUsingMatchers() {
-        stubVoid(one).toThrow(new RuntimeException()).on().oneArg(true);
+        doThrow(new RuntimeException()).when(one).oneArg(true);
         when(three.varargsObject(5, "first arg", "second arg")).thenReturn("stubbed");
 
         try {
