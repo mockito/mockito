@@ -76,6 +76,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
                 if (s.matches(invocation)) {
+                    mockingProgress().getStubbingListener().usedStubbing(s.getInvocation(), invocation);
                     s.markStubUsed(invocation);
                     invocation.markStubbed(new StubInfoImpl(s));
                     return s;

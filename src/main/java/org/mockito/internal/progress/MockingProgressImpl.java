@@ -16,6 +16,7 @@ import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
@@ -41,6 +42,7 @@ public class MockingProgressImpl implements MockingProgress {
             }
         };
     }
+    private StubbingListener stubbingListener;
 
     public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
         this.ongoingStubbing = iOngoingStubbing;
@@ -107,6 +109,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingCompleted(Invocation invocation) {
         stubbingInProgress = null;
+        getStubbingListener().newStubbing(invocation);
     }
     
     public String toString() {
@@ -142,5 +145,19 @@ public class MockingProgressImpl implements MockingProgress {
 
     public VerificationMode maybeVerifyLazily(VerificationMode mode) {
         return this.verificationStrategy.maybeVerifyLazily(mode);
+    }
+
+    public void setStubbingListener(StubbingListener stubbingListener) {
+        this.stubbingListener = stubbingListener;
+    }
+
+    public StubbingListener getStubbingListener() {
+        if (this.stubbingListener == null) {
+            return new StubbingListener() {
+                public void newStubbing(Invocation stubbing) {}
+                public void usedStubbing(Invocation stubbing, Invocation actual) {}
+            };
+        }
+        return this.stubbingListener;
     }
 }

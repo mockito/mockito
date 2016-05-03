@@ -8,6 +8,7 @@ package org.mockito.internal.progress;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
@@ -44,4 +45,8 @@ public interface MockingProgress {
     void setVerificationStrategy(VerificationStrategy strategy);
 
     VerificationMode maybeVerifyLazily(VerificationMode mode);
+
+    void setStubbingListener(StubbingListener stubbingListener);
+
+    StubbingListener getStubbingListener();
 }

@@ -23,7 +23,7 @@ public class ThreadSafeMockingProgress {
      * Returns the {@link MockingProgress} for the current Thread.
      * <p>
      * <b>IMPORTANT</b>: Never assign and access the returned {@link MockingProgress} to an instance or static field. Thread safety can not be guaranteed in this case, cause the Thread that wrote the field might not be the same that read it. In other words multiple threads will access the same {@link MockingProgress}.
-     * 
+     *
      * @return never <code>null</code>
      */
     public final static MockingProgress mockingProgress() {
