@@ -5,9 +5,9 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.MockSettings;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -40,4 +40,8 @@ public interface MockingProgress {
     void mockingStarted(Object mock, Class classToMock);
 
     void setListener(MockingProgressListener listener);
+
+    void setStubbingListener(StubbingListener stubbingListener);
+
+    StubbingListener getStubbingListener();
 }
