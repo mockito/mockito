@@ -38,8 +38,6 @@ public class ConstructorInjectionTest {
 
     @Test
     public void should_do_the_trick_of_instantiating() throws Exception {
-        given(resolver.resolveTypeInstances(Matchers.<Class<?>[]>anyVararg())).willReturn(new Object[] { observer });
-
         boolean result = underTest.process(field("whatever"), this, newSetOf(observer));
 
         assertTrue(result);
