@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
@@ -46,7 +47,7 @@ public class MockitoJUnitRunnerTest {
     }
 
     @RunWith(MockitoJUnitRunner.class)
-    public static class StubbingInConstructorUsed extends StubbingInConstructorUnused{
+    public static class StubbingInConstructorUsed extends StubbingInConstructorUnused {
         @Test public void test() {
             assertEquals("1", mock.simpleMethod(1));
         }
@@ -67,9 +68,9 @@ public class MockitoJUnitRunnerTest {
 
     @RunWith(MockitoJUnitRunner.class)
     public static class StubbingInBeforeUnused {
-        IMethods mock;
+        @Mock IMethods mock;
         @Before public void before() {
-            mock = when(mock(IMethods.class).simpleMethod(1)).thenReturn("1").getMock();
+            when(mock.simpleMethod(1)).thenReturn("1");
         }
         @Test public void dummy() {}
     }
@@ -77,7 +78,8 @@ public class MockitoJUnitRunnerTest {
     @RunWith(MockitoJUnitRunner.class)
     public static class StubbingInTestUsed {
         @Test public void test() {
-            IMethods mock = when(mock(IMethods.class).simpleMethod(1)).thenReturn("1").getMock();
+            IMethods mock = mock(IMethods.class);
+            when(mock.simpleMethod(1)).thenReturn("1");
             assertEquals("1", mock.simpleMethod(1));
         }
     }
@@ -85,7 +87,9 @@ public class MockitoJUnitRunnerTest {
     @RunWith(MockitoJUnitRunner.class)
     public static class StubbingInTestUnused {
         @Test public void test() {
-            when(mock(IMethods.class).simpleMethod(1)).thenReturn("1");
+            IMethods mock = mock(IMethods.class);
+            when(mock.simpleMethod(1)).thenReturn("1");
+            mock.simpleMethod(2); //different arg
         }
     }
 }
