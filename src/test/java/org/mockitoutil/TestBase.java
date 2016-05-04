@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.Result;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
@@ -184,5 +185,12 @@ public class TestBase extends Assert {
             out.close();
         } catch (IOException ex) {}
         return out.toString();
+    }
+
+    /**
+     * Clean assertions for JUnit's result object
+     */
+    protected JUnitResultAssert assertThat(Result result) {
+        return new JUnitResultAssert(result);
     }
 }
