@@ -1,7 +1,6 @@
 package org.mockitousage.junitrunner;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -9,16 +8,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by sfaber on 4/22/16.
  */
-public class MockitoJUnitRunnerTest {
+public class MockitoJUnitRunnerTest extends TestBase {
 
     @Test public void succeeds_when_all_stubs_were_used() {
         JUnitCore runner = new JUnitCore();
@@ -29,10 +27,9 @@ public class MockitoJUnitRunnerTest {
                 StubbingInTestUsed.class
         );
         //then
-        assertTrue(result.wasSuccessful());
+        assertThat(result).isSuccessful();
     }
 
-    @Ignore
     @Test public void fails_when_stubs_were_not_used() {
         JUnitCore runner = new JUnitCore();
         Class<?>[] tests = {StubbingInConstructorUnused.class,
@@ -60,7 +57,7 @@ public class MockitoJUnitRunnerTest {
     }
 
     @RunWith(MockitoJUnitRunner.class)
-    public static class StubbingInBeforeUsed extends StubbingInBeforeUnused{
+    public static class StubbingInBeforeUsed extends StubbingInBeforeUnused {
         @Test public void test() {
             assertEquals("1", mock.simpleMethod(1));
         }
