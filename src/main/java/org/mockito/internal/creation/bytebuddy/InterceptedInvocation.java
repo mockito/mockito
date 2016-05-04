@@ -129,6 +129,7 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     @Override
     public int hashCode() {
+        //TODO SF we need to provide hash code implementation so that there are no unexpected, slight perf issues
         return 1;
     }
 
