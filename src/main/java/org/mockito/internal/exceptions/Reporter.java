@@ -854,7 +854,7 @@ public class Reporter {
                 "Unnecessary stubbings detected in test class: " + testClass.getSimpleName(),
                 "To keep the tests clean it is important to remove unnecessary code.",
                 "Following stubbings are declared in test but not realized during test execution:" + stubbings,
-                "For more information see javadoc for UnnecessaryStubbingException class."
+                "Please remove unnecessary stubbings. More info: javadoc for UnnecessaryStubbingException class."
         ));
     }
 }
