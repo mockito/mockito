@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by sfaber on 4/22/16.
  */
-public class MockitoJUnitRunnerTest extends TestBase {
+public class InternalJUnitRunnerTest extends TestBase {
 
     @Test public void succeeds_when_all_stubs_were_used() {
         JUnitCore runner = new JUnitCore();

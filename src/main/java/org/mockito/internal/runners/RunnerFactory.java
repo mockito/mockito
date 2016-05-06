@@ -17,7 +17,7 @@ public class RunnerFactory {
 
     public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
         try {
-            return new RunnerProvider().newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
+            return new RunnerProvider().newInstance("org.mockito.internal.runners.InternalJUnitRunner", klass);
         } catch (InvocationTargetException e) {
             if (!new TestMethodsFinder().hasTestMethods(klass)) {
                 throw new MockitoException(
