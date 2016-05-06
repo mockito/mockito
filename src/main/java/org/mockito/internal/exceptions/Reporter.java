@@ -843,4 +843,18 @@ public class Reporter {
     private static MockName safelyGetMockName(Object mock) {
         return new MockUtil().getMockName(mock);
     }
+
+    public UnnecessaryStubbingException formatUnncessaryStubbingException(Class<?> testClass, Collection<Invocation> unnecessaryStubbings) {
+        StringBuilder stubbings = new StringBuilder();
+        int count = 1;
+        for (Invocation u : unnecessaryStubbings) {
+            stubbings.append("\n  ").append(count++).append(". ").append(u.getLocation());
+        }
+        return new UnnecessaryStubbingException(join(
+                "Unnecessary stubbings detected in test class: " + testClass.getSimpleName(),
+                "To keep the tests clean it is important to remove unnecessary code.",
+                "Following stubbings are declared in test but not realized during test execution:" + stubbings,
+                "For more information see javadoc for UnnecessaryStubbingException class."
+        ));
+    }
 }

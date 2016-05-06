@@ -15,7 +15,7 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoFramework;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
@@ -45,6 +45,8 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
     public void run(final RunNotifier notifier) {
         final Map<String, Invocation> stubbings = new HashMap<String, Invocation>();
         final Set<String> used = new HashSet<String>();
+        //TODO need to be able to opt out from this new feature
+        //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
         MockitoFramework.setStubbingListener(new StubbingListener() {
             public void newStubbing(Invocation stubbing) {
                 //We compare stubbings by the location of stubbing
@@ -87,7 +89,7 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
 
         //Oups, there are unused stubbings
         notifier.fireTestFailure(new Failure(Description.createSuiteDescription(testClass),
-                new UnnecessaryStubbingException("Unnecessary stubbings: \n" + stubbings)));
+                new Reporter().formatUnncessaryStubbingException(testClass, stubbings.values())));
     }
 
     public Description getDescription() {
