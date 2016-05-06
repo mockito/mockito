@@ -11,12 +11,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.VerboseMockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
-@RunWith(VerboseMockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @Ignore
 public class ModellingVerboseMockitoTest extends TestBase {
     
@@ -40,7 +40,6 @@ public class ModellingVerboseMockitoTest extends TestBase {
         //TODO: should show message from actual failure not at the bottom but at least below 'the actual failure is ...'
     }
        
-
     @Test
     public void shouldNotLogAnythingWhenNoWarnings() throws Exception {
         //stub
