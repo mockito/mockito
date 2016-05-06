@@ -10,22 +10,14 @@ import org.mockito.internal.runners.util.TestMethodsFinder;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Creates instances of Mockito JUnit Runner in a safe way, e.g. detecting inadequate version of JUnit, etc.
+ */
 public class RunnerFactory {
-
-    private final RunnerProvider runnerProvider;
-
-    RunnerFactory(RunnerProvider runnerProvider) {
-        this.runnerProvider = runnerProvider;
-    }
-
-    public RunnerFactory() {
-        this(new RunnerProvider());
-    }
 
     public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
         try {
-            //TODO invoke with regular exception
-            return runnerProvider.newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
+            return new RunnerProvider().newInstance("org.mockito.internal.runners.JUnit45AndHigherRunnerImpl", klass);
         } catch (InvocationTargetException e) {
             if (!new TestMethodsFinder().hasTestMethods(klass)) {
                 throw new MockitoException(
