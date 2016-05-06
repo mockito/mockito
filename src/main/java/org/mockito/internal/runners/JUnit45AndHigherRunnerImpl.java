@@ -17,18 +17,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoFramework;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
-import org.mockito.invocation.Invocation;
-import org.mockito.listeners.StubbingListener;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
 
     private final BlockJUnit4ClassRunner runner;
     private final Class<?> testClass;
+    private boolean filterRequested;
 
     public JUnit45AndHigherRunnerImpl(Class<?> testClass) throws InitializationError {
         this.testClass = testClass;
@@ -43,26 +37,10 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
     }
 
     public void run(final RunNotifier notifier) {
-        final Map<String, Invocation> stubbings = new HashMap<String, Invocation>();
-        final Set<String> used = new HashSet<String>();
         //TODO need to be able to opt out from this new feature
         //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
-        MockitoFramework.setStubbingListener(new StubbingListener() {
-            public void newStubbing(Invocation stubbing) {
-                //We compare stubbings by the location of stubbing
-                //so that a stubbing in @Before is considered used when at least one test method uses it
-                //but not necessarily all test methods need to trigger 'using' it
-                stubbings.put(stubbing.getLocation().toString(), stubbing);
-            }
-
-            public void usedStubbing(Invocation stubbing, Invocation actual) {
-                String location = stubbing.getLocation().toString();
-                used.add(location);
-
-                //perf tweak - attempting an early remove to keep the stubbings collection short
-                stubbings.remove(location);
-            }
-        });
+        UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
+        MockitoFramework.setStubbingListener(reporter);
 
         try {
             // add listener that validates framework usage at the end of each test
@@ -72,24 +50,12 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
             MockitoFramework.setStubbingListener(null);
         }
 
-        if (stubbings.isEmpty()) {
-            //perf tweak, bailing out early to avoid extra computation
-            return;
-        }
-
-        //removing all used stubbings accounting for possible constructor / @Before stubbings
-        // that were used only in specific test methods (e.g. not all test methods)
-        for (String u : used) {
-            stubbings.remove(u);
-        }
-
-        if (stubbings.isEmpty()) {
-            return;
-        }
-
         //Oups, there are unused stubbings
-        notifier.fireTestFailure(new Failure(Description.createSuiteDescription(testClass),
-                new Reporter().formatUnncessaryStubbingException(testClass, stubbings.values())));
+        if (!filterRequested) {
+            //We only want to fire test failure if all tests from given test have ran
+            //Otherwise we would report unnecessary stubs even if the user runs just single test from the class
+            reporter.report(testClass, notifier);
+        }
     }
 
     public Description getDescription() {
@@ -97,6 +63,8 @@ public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
     }
 
     public void filter(Filter filter) throws NoTestsRemainException {
+        filterRequested = true;
         runner.filter(filter);
     }
+
 }
