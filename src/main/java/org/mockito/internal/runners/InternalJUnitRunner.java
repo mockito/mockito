@@ -15,16 +15,15 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoFramework;
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-public class JUnit45AndHigherRunnerImpl implements RunnerImpl {
+public class InternalJUnitRunner implements RunnerImpl {
 
     private final BlockJUnit4ClassRunner runner;
     private final Class<?> testClass;
     private boolean filterRequested;
 
-    public JUnit45AndHigherRunnerImpl(Class<?> testClass) throws InitializationError {
+    public InternalJUnitRunner(Class<?> testClass) throws InitializationError {
         this.testClass = testClass;
         runner = new BlockJUnit4ClassRunner(testClass) {
             protected Statement withBefores(FrameworkMethod method, Object target,

@@ -3,7 +3,7 @@ package org.mockito.internal.runners;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
-import org.mockito.exceptions.Reporter;
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
 
@@ -53,6 +53,6 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
 
         Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
         notifier.fireTestFailure(new Failure(unnecessaryStubbings,
-                new Reporter().formatUnncessaryStubbingException(testClass, stubbings.values())));
+                Reporter.formatUnncessaryStubbingException(testClass, stubbings.values())));
     }
 }
