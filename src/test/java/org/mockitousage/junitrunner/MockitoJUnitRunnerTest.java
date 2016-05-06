@@ -6,6 +6,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -38,9 +39,9 @@ public class MockitoJUnitRunnerTest extends TestBase {
 
         //when
         Result result = runner.run(tests);
-        System.out.println(result.getFailures());
+
         //then
-        assertEquals(tests.length, result.getFailureCount());
+        assertThat(result).fails(3, UnnecessaryStubbingException.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)
