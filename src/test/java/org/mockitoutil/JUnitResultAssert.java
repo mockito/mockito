@@ -35,7 +35,7 @@ public class JUnitResultAssert {
      */
     public void fails(int expectedFailureCount, Class expectedException) {
         if (result.getFailures().size() != expectedFailureCount) {
-            throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + expectedFailureCount + "\n" +
+            throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + result.getFailures().size() + "\n" +
                     formatFailures(result.getFailures()));
         }
         for (Failure f : result.getFailures()) {
