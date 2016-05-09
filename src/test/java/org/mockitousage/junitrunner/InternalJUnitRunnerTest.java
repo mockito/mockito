@@ -20,8 +20,9 @@ import static org.mockito.Mockito.when;
  */
 public class InternalJUnitRunnerTest extends TestBase {
 
+    JUnitCore runner = new JUnitCore();
+
     @Test public void succeeds_when_all_stubs_were_used() {
-        JUnitCore runner = new JUnitCore();
         //when
         Result result = runner.run(
                 StubbingInConstructorUsed.class,
@@ -34,7 +35,7 @@ public class InternalJUnitRunnerTest extends TestBase {
 
     @Test public void fails_when_stubs_were_not_used() {
         JUnitCore runner = new JUnitCore();
-        Class<?>[] tests = {StubbingInConstructorUnused.class,
+        Class[] tests = {StubbingInConstructorUnused.class,
                 StubbingInBeforeUnused.class,
                 StubbingInTestUnused.class};
 
@@ -43,6 +44,14 @@ public class InternalJUnitRunnerTest extends TestBase {
 
         //then
         assertThat(result).fails(3, UnnecessaryStubbingException.class);
+    }
+
+    @Test public void succeeds_when_different_failure_is_present() {
+        //when
+        Result result = runner.run(WithUnrelatedAssertionFailure.class);
+
+        //then
+        assertThat(result).fails(1, MyAssertionError.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -89,6 +98,28 @@ public class InternalJUnitRunnerTest extends TestBase {
             IMethods mock = mock(IMethods.class);
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(2); //different arg
+        }
+    }
+
+    private static class MyAssertionError extends AssertionError {}
+
+    @RunWith(MockitoJUnitRunner.class)
+    public static class WithUnrelatedAssertionFailure {
+
+        IMethods mock = mock(IMethods.class);
+        IMethods mock2 = mock(IMethods.class);
+
+        @Before public void before() {
+            when(mock2.simpleMethod("unused stubbing")).thenReturn("");
+        }
+
+        @Test public void passing_test() {
+            when(mock.simpleMethod(1)).thenReturn("1");
+            assertEquals("1", mock.simpleMethod(1));
+        }
+
+        @Test public void failing_test() {
+            throw new MyAssertionError();
         }
     }
 }

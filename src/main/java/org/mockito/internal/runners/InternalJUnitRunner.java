@@ -7,7 +7,6 @@ package org.mockito.internal.runners;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
-import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -15,7 +14,7 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoFramework;
-import org.mockito.internal.runners.util.FrameworkUsageValidator;
+import org.mockito.internal.runners.util.MockitoJUnitListener;
 
 public class InternalJUnitRunner implements RunnerImpl {
 
@@ -39,20 +38,22 @@ public class InternalJUnitRunner implements RunnerImpl {
         //TODO need to be able to opt out from this new feature
         //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
-        MockitoFramework.setStubbingListener(reporter);
+        MockitoJUnitListener listener = new MockitoJUnitListener(notifier);
 
+        MockitoFramework.setStubbingListener(reporter);
         try {
             // add listener that validates framework usage at the end of each test
-            notifier.addListener(new FrameworkUsageValidator(notifier));
+            notifier.addListener(listener);
             runner.run(notifier);
         } finally {
             MockitoFramework.setStubbingListener(null);
         }
 
-        //Oups, there are unused stubbings
-        if (!filterRequested) {
-            //We only want to fire test failure if all tests from given test have ran
-            //Otherwise we would report unnecessary stubs even if the user runs just single test from the class
+        if (!filterRequested && listener.isSussessful()) {
+            //only report when:
+            //1. if all tests from given test have ran
+            //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
+            //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
             reporter.report(testClass, notifier);
         }
     }
@@ -65,5 +66,4 @@ public class InternalJUnitRunner implements RunnerImpl {
         filterRequested = true;
         runner.filter(filter);
     }
-
 }

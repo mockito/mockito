@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
-import org.mockito.internal.runners.util.FrameworkUsageValidator;
+import org.mockito.internal.runners.util.MockitoJUnitListener;
 import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
@@ -47,7 +47,7 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
         runner.run(notifier);
         
         //then
-        assertThat(notifier.addedListeners, contains(clazz(FrameworkUsageValidator.class)));
+        assertThat(notifier.addedListeners, contains(clazz(MockitoJUnitListener.class)));
     }
     
     @Test
@@ -59,7 +59,7 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
         runner.run(notifier);
         
         //then
-        assertThat(notifier.addedListeners, contains(clazz(FrameworkUsageValidator.class)));
+        assertThat(notifier.addedListeners, contains(clazz(MockitoJUnitListener.class)));
     }
     
     @Test
@@ -72,6 +72,6 @@ public class RunnersValidateFrameworkUsageTest extends TestBase {
         
         //then
         assertEquals(2, notifier.addedListeners.size());
-        assertThat(notifier.addedListeners, contains(clazz(FrameworkUsageValidator.class)));
+        assertThat(notifier.addedListeners, contains(clazz(MockitoJUnitListener.class)));
     }
 }

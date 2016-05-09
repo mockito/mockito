@@ -51,6 +51,7 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
             return;
         }
 
+        //Oups, there are unused stubbings
         Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
         notifier.fireTestFailure(new Failure(unnecessaryStubbings,
                 Reporter.formatUnncessaryStubbingException(testClass, stubbings.values())));
