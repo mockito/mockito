@@ -6,6 +6,8 @@ import org.mockito.listeners.StubbingListener;
 /**
  * New incubating API, mainly for other tools that integrate with Mockito.
  *
+ * TODO turn into an interface and let it hang off Mockito.framework()
+ *
  * @since 2.0.0
  */
 @Incubating
