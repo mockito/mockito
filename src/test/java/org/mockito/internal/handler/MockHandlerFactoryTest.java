@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
@@ -26,7 +28,7 @@ public class MockHandlerFactoryTest extends TestBase {
     public void handle_result_must_not_be_null_for_primitives() throws Throwable {
         //given:
         MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(null));
-        InternalMockHandler handler = new MockHandlerFactory().create(settings);
+		InternalMockHandler handler = createMockHandler(settings);
 
         mock.intReturningMethod();
         Invocation invocation = super.getLastInvocation();
@@ -44,7 +46,7 @@ public class MockHandlerFactoryTest extends TestBase {
     public void valid_handle_result_is_permitted() throws Throwable {
         //given:
         MockCreationSettings settings = (MockCreationSettings) new MockSettingsImpl().defaultAnswer(new Returns(123));
-        InternalMockHandler handler = new MockHandlerFactory().create(settings);
+        InternalMockHandler handler =  createMockHandler(settings);
 
         mock.intReturningMethod();
         Invocation invocation = super.getLastInvocation();

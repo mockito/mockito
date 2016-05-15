@@ -20,6 +20,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
@@ -107,7 +108,7 @@ public class MockitoAnnotations {
                 throwIfAlreadyAssigned(field, alreadyAssigned);
                 alreadyAssigned = true;                
                 try {
-                    new FieldSetter(testClass, field).set(mock);
+                    setField(testClass, field,mock);
                 } catch (Exception e) {
                     throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                             + annotation, e);

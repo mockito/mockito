@@ -7,6 +7,8 @@ package org.mockito.internal.util.reflection;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -180,7 +182,7 @@ public class FieldInitializer {
 
                 final Object[] noArg = new Object[0];
                 Object newFieldInstance = constructor.newInstance(noArg);
-                new FieldSetter(testClass, field).set(newFieldInstance);
+                setField(testClass, field,newFieldInstance);
 
                 return new FieldInitializationReport(field.get(testClass), true, false);
             } catch (NoSuchMethodException e) {
@@ -255,7 +257,7 @@ public class FieldInitializer {
 
                 final Object[] args = argResolver.resolveTypeInstances(constructor.getParameterTypes());
                 Object newFieldInstance = constructor.newInstance(args);
-                new FieldSetter(testClass, field).set(newFieldInstance);
+                setField(testClass, field,newFieldInstance);
 
                 return new FieldInitializationReport(field.get(testClass), false, true);
             } catch (IllegalArgumentException e) {

@@ -6,6 +6,8 @@ package org.mockito.internal.util.reflection;
 
 import org.mockito.internal.util.Checks;
 
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
@@ -48,7 +50,7 @@ public class InstanceField {
      * @see FieldSetter
      */
     public void set(Object value) {
-        new FieldSetter(instance, field).set(value);
+        setField(instance, field,value);
     }
 
     /**

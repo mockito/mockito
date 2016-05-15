@@ -12,6 +12,8 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldSetter;
 
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
                     throwIfAlreadyAssigned(field, alreadyAssigned);                    
                     alreadyAssigned = true;                    
                     try {
-                        new FieldSetter(testInstance, field).set(mock);
+                        setField(testInstance, field,mock);
                     } catch (Exception e) {
                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                                 + annotation, e);

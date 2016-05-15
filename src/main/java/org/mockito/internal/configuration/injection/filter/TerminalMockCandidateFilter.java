@@ -4,13 +4,14 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import org.mockito.exceptions.Reporter;
-import org.mockito.internal.util.reflection.BeanPropertySetter;
-import org.mockito.internal.util.reflection.FieldSetter;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+
+import org.mockito.exceptions.Reporter;
+import org.mockito.internal.util.reflection.BeanPropertySetter;
 
 /**
  * This node returns an actual injecter which will be either :
@@ -32,7 +33,7 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                 public Object thenInject() {
                     try {
                         if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected).set(matchingMock)) {
-                            new FieldSetter(injectee, candidateFieldToBeInjected).set(matchingMock);
+                            setField(injectee, candidateFieldToBeInjected,matchingMock);
                         }
                     } catch (RuntimeException e) {
                         new Reporter().cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);

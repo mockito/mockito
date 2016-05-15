@@ -8,6 +8,8 @@ package org.mockito.internal.creation.bytebuddy;
 import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
 import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.*;
 import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -305,7 +307,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass descInstance, Class<?> proxyClass) throws ObjectStreamException {
             try {
                 Field classNameField = descInstance.getClass().getDeclaredField("name");
-                new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
+                setField(descInstance, classNameField,proxyClass.getCanonicalName());
             } catch (NoSuchFieldException nsfe) {
                 throw new MockitoSerializationIssue(join(
                         "Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name',",
