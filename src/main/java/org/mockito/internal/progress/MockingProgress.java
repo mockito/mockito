@@ -5,17 +5,16 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.MockSettings;
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 
-@SuppressWarnings("unchecked")
 public interface MockingProgress {
     
-    void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing);
+    void reportOngoingStubbing(OngoingStubbing ongoingStubbing);
 
-    IOngoingStubbing pullOngoingStubbing();
+    OngoingStubbing pullOngoingStubbing();
 
     void verificationStarted(VerificationMode verificationMode);
 

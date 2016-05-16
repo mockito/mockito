@@ -49,7 +49,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     public void shouldSetThrowableToVoidMethod() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         
-        stubVoid(mock).toThrow(expected).on().clear();
+        doThrow(expected).when(mock).clear();
         try {
             mock.clear();
             fail();
@@ -60,8 +60,8 @@ public class StubbingWithThrowablesTest extends TestBase {
     
     @Test
     public void shouldLastStubbingVoidBeImportant() throws Exception {
-        stubVoid(mock).toThrow(new ExceptionOne()).on().clear();
-        stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
+        doThrow(new ExceptionOne()).when(mock).clear();
+        doThrow(new ExceptionTwo()).when(mock).clear();
         
         try {
             mock.clear();
@@ -147,9 +147,9 @@ public class StubbingWithThrowablesTest extends TestBase {
     public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
         when(mock.getLast()).thenReturn("last");
-        stubVoid(mock).toThrow(new ExceptionTwo()).on().clear();
+        doThrow(new ExceptionTwo()).when(mock).clear();
         
-        stubVoid(mockTwo).toThrow(new ExceptionThree()).on().clear();
+        doThrow(new ExceptionThree()).when(mockTwo).clear();
         when(mockTwo.containsValue("ExceptionFour")).thenThrow(new ExceptionFour());
         when(mockTwo.get("Are you there?")).thenReturn("Yes!");
 
@@ -180,7 +180,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     @Test
     public void shouldStubbingWithThrowableBeVerifiable() {
         when(mock.size()).thenThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().clone();
+        doThrow(new RuntimeException()).when(mock).clone();
         
         try {
             mock.size();
@@ -200,7 +200,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     @Test
     public void shouldStubbingWithThrowableFailVerification() {
         when(mock.size()).thenThrow(new RuntimeException());
-        stubVoid(mock).toThrow(new RuntimeException()).on().clone();
+        doThrow(new RuntimeException()).when(mock).clone();
         
         verifyZeroInteractions(mock);
         

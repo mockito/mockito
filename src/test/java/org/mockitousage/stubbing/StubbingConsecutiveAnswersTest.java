@@ -5,16 +5,16 @@
 
 package org.mockitousage.stubbing;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.stubVoid;
-import static org.mockito.Mockito.when;
-
-@SuppressWarnings("deprecation")
 public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Mock
@@ -210,11 +210,10 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Test
     public void should_stub_void_method_and_continue_throwing() throws Exception {
-        stubVoid(mock)
-                .toThrow(new IllegalArgumentException())
-                .toReturn()
-                .toThrow(new NullPointerException())
-                .on().voidMethod();
+        doThrow(new IllegalArgumentException())
+        .doNothing()
+        .doThrow(new NullPointerException())
+        .when(mock).voidMethod();
 
         try {
             mock.voidMethod();
@@ -236,10 +235,11 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Test
     public void should_stub_void_method() throws Exception {
-        stubVoid(mock).toReturn()
-                      .toThrow(new NullPointerException())
-                      .toReturn()
-                      .on().voidMethod();
+        doNothing()
+        .doThrow(new NullPointerException())
+        .doNothing()
+        .when(mock)
+        .voidMethod();
 
         mock.voidMethod();
 
@@ -254,8 +254,9 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_validate_consecutive_exception_for_void_method() throws Exception {
-        stubVoid(mock).toReturn()
-                      .toThrow(new Exception())
-                      .on().voidMethod();
+        doNothing()
+        .doThrow(new Exception())
+        .when(mock)
+        .voidMethod();
     }
 }

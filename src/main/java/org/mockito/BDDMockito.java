@@ -144,11 +144,7 @@ public class BDDMockito extends Mockito {
         <M> M getMock();
     }
 
-    /**
-     * @deprecated not part of the public API, use {@link BDDMyOngoingStubbing} instead.
-     */
-    @Deprecated
-    public static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
+    private static class BDDOngoingStubbingImpl<T> implements BDDMyOngoingStubbing<T> {
 
         private final OngoingStubbing<T> mockitoOngoingStubbing;
 
@@ -265,11 +261,7 @@ public class BDDMockito extends Mockito {
         void shouldHaveNoMoreInteractions();
     }
 
-    /**
-     * @deprecated not part of the public API, use {@link Then} instead.
-     */
-    @Deprecated
-    static class ThenImpl<T> implements Then<T> {
+    private static class ThenImpl<T> implements Then<T> {
 
         private final T mock;
 
@@ -394,11 +386,7 @@ public class BDDMockito extends Mockito {
         <T> T given(T mock);
     }
 
-    /**
-     * @deprecated not part of the public API, use {@link BDDStubber} instead.
-     */
-    @Deprecated
-    public static class BDDStubberImpl implements BDDStubber {
+    private static class BDDStubberImpl implements BDDStubber {
 
         private final Stubber mockitoStubber;
 

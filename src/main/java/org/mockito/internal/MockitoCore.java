@@ -11,7 +11,6 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
-import org.mockito.internal.progress.IOngoingStubbing;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.InvocationContainer;
@@ -56,24 +55,15 @@ public class MockitoCore {
         mockingProgress.mockingStarted(mock, typeToMock);
         return mock;
     }
-    
-    public IOngoingStubbing stub() {
-        IOngoingStubbing stubbing = mockingProgress.pullOngoingStubbing();
+
+    public <T> OngoingStubbing<T> when(T methodCall) {
+        mockingProgress.stubbingStarted();
+        OngoingStubbing<T> stubbing = mockingProgress.pullOngoingStubbing();
         if (stubbing == null) {
             mockingProgress.reset();
             reporter.missingMethodInvocation();
         }
         return stubbing;
-    }
-
-    public <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
-        mockingProgress.stubbingStarted();
-        return (DeprecatedOngoingStubbing) stub();
-    }
-
-    public <T> OngoingStubbing<T> when(T methodCall) {
-        mockingProgress.stubbingStarted();
-        return (OngoingStubbing) stub();
     }
     
     public <T> T verify(T mock, VerificationMode mode) {

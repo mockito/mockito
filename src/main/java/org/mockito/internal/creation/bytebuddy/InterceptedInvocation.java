@@ -113,12 +113,6 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
     }
 
     @Override
-    @Deprecated
-    public <T> T getArgumentAt(int index, Class<T> clazz) {
-        return (T) getArgument(index);
-    }
-
-    @Override
     public <T> T getArgument(int index) {
         return (T)arguments[index];
     }

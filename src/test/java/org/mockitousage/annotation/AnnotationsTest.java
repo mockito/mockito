@@ -34,8 +34,7 @@ public class AnnotationsTest extends TestBase {
         
     @NotAMock Set notAMock;
 
-    @SuppressWarnings("deprecation")
-    @MockitoAnnotations.Mock List listTwo;
+    @Mock List listTwo;
 
     @Before
     public void setup() {

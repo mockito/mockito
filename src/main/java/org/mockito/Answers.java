@@ -89,7 +89,5 @@ public enum Answers implements Answer<Object>{
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return implementation.answer(invocation);
-    }
-
-   
+    } 
 }

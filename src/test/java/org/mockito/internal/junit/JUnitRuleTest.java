@@ -20,7 +20,7 @@ public class JUnitRuleTest {
 
     @Test
     public void shouldInjectIntoTestCase() throws Throwable {
-        jUnitRule.apply(new DummyStatement(), injectTestCase).evaluate();
+        jUnitRule.apply(new DummyStatement(),null, injectTestCase).evaluate();
         assertNotNull("@Mock mock object created", injectTestCase.getInjected());
         assertNotNull("@InjectMocks object created", injectTestCase.getInjectInto());
         assertNotNull("Mock injected into the object", injectTestCase.getInjectInto().getInjected());
@@ -29,7 +29,7 @@ public class JUnitRuleTest {
     @Test
     public void shouldRethrowException() throws Throwable {
         try {
-            jUnitRule.apply(new ExceptionStatement(), injectTestCase).evaluate();
+            jUnitRule.apply(new ExceptionStatement(), null,injectTestCase).evaluate();
             fail("Should throw exception");
         } catch (RuntimeException e) {
             assertEquals("Correct message", "Statement exception", e.getMessage());
@@ -39,7 +39,7 @@ public class JUnitRuleTest {
     @Test
     public void shouldDetectUnfinishedStubbing() throws Throwable {
         try {
-            jUnitRule.apply(new UnfinishedStubbingStatement(), injectTestCase).evaluate();
+            jUnitRule.apply(new UnfinishedStubbingStatement(),null, injectTestCase).evaluate();
             fail("Should detect invalid Mockito usage");
         } catch (UnfinishedStubbingException e) {
         }
@@ -54,7 +54,7 @@ public class JUnitRuleTest {
                     declareUnusedStub(mock);
                     throw new AssertionError("x");
                 }
-            }, injectTestCase).evaluate();
+            },null, injectTestCase).evaluate();
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
@@ -90,7 +90,7 @@ public class JUnitRuleTest {
                 IMethods mock = Mockito.mock(IMethods.class);
                 declareUnusedStub(mock);
             }
-        }, injectTestCase).evaluate();
+        },null, injectTestCase).evaluate();
 
         assertEquals("", logger.getLoggedInfo());
     }

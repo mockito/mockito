@@ -5,7 +5,6 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
-import org.mockito.internal.progress.IOngoingStubbing;
 
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
@@ -32,7 +31,7 @@ import org.mockito.internal.progress.IOngoingStubbing;
  *
  * See examples in javadoc for {@link Mockito#when}
  */
-public interface OngoingStubbing<T> extends IOngoingStubbing {
+public interface OngoingStubbing<T> {
 
     /**
      * Sets a return value to be returned when the method is called. E.g:

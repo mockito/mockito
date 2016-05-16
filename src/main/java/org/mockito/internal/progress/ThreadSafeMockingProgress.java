@@ -7,6 +7,7 @@ package org.mockito.internal.progress;
 
 import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 
 import java.io.Serializable;
@@ -24,11 +25,11 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
         return mockingProgress.get();
     }
     
-    public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
+    public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
         threadSafely().reportOngoingStubbing(iOngoingStubbing);
     }
 
-    public IOngoingStubbing pullOngoingStubbing() {
+    public OngoingStubbing pullOngoingStubbing() {
         return threadSafely().pullOngoingStubbing();
     }
     

@@ -31,14 +31,12 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
 
     public DefaultAnnotationEngine() {
         registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
-        registerAnnotationProcessor(MockitoAnnotations.Mock.class, new MockitoAnnotationsMockAnnotationProcessor());
         registerAnnotationProcessor(Captor.class, new CaptorAnnotationProcessor());
     }
 
     /* (non-Javadoc)
     * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
     */
-    @SuppressWarnings("deprecation")
     public Object createMockFor(Annotation annotation, Field field) {
         return forAnnotation(annotation).process(annotation, field);
     }
