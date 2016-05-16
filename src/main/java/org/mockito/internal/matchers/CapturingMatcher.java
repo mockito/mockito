@@ -13,12 +13,25 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
-    
+
     private final LinkedList<Object> arguments = new LinkedList<Object>();
+    private final ArgumentMatcher<T> argumentMatcher;
+
+    public CapturingMatcher() {
+        this(new ArgumentMatcher<T>() {
+            public boolean matches(Object argument) {
+                return true;
+            }
+        });
+    }
+
+    public CapturingMatcher(ArgumentMatcher<T> argumentMatcher) {
+        this.argumentMatcher = argumentMatcher;
+    }
 
     public boolean matches(Object argument) {
-        return true;
-    }    
+        return argumentMatcher.matches(argument);
+    }
 
     public String toString() {
         return "<Capturing argument>";
