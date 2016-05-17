@@ -1,3 +1,14 @@
+### 2.0.53-beta (2016-05-17 20:34 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Tim van der Lippe
+  * 1: Pascal Schumacher
+  * 1: Krzysztof Wolny
+* Improvements: 2
+  * Fixed method name to verifyNoMoreInteractions [(#413)](https://github.com/mockito/mockito/pull/413)
+  * correct package declaration of VerificationWithDescriptionTest [(#382)](https://github.com/mockito/mockito/pull/382)
+
 ### 2.0.52-beta (2016-04-23 01:33 UTC)
 
 * Authors: 1
