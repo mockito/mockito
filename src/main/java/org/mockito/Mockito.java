@@ -885,7 +885,7 @@ import org.mockito.junit.*;
  * verify(mockTwo).bar();
  *
  * //ignores all stubbed methods:
- * verifyNoMoreInvocations(ignoreStubs(mock, mockTwo));
+ * verifyNoMoreInteractions(ignoreStubs(mock, mockTwo));
  *
  * //creates InOrder that will ignore stubbed
  * InOrder inOrder = inOrder(ignoreStubs(mock, mockTwo));
