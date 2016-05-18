@@ -7,7 +7,6 @@ import org.mockito.internal.verification.VerificationModeFactory;
  * See the javadoc for {@link VerificationAfterDelay}
  * <p>
  * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
- * See javadoc for {@link VerificationWithTimeout}
  */  
 public class After extends VerificationWrapper<VerificationAfterDelayImpl> implements VerificationAfterDelay {
     
@@ -24,7 +23,6 @@ public class After extends VerificationWrapper<VerificationAfterDelayImpl> imple
         return new After(wrappedVerification.copyWithVerificationMode(verificationMode));
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

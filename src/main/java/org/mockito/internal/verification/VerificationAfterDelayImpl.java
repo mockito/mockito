@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.verification;
 
+import org.mockito.exceptions.Reporter;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
@@ -29,10 +30,12 @@ public class VerificationAfterDelayImpl implements VerificationMode {
 	 *            to
 	 */
 	public VerificationAfterDelayImpl(long delayMillis, VerificationMode delegate) {
+		checkNotNegative(delayMillis);
 		this.delayMillis = delayMillis;
 		this.delegate = delegate;
 	}
 
+	
 	/**
 	 * Verify the given ongoing verification data, and confirm that it satisfies
 	 * the delegate verification mode after a given delay.
@@ -47,12 +50,18 @@ public class VerificationAfterDelayImpl implements VerificationMode {
 
 	}
 
+	public VerificationMode description(String description) {
+		return VerificationModeFactory.description(this, description);
+	}
+	
 	public VerificationAfterDelayImpl copyWithVerificationMode(VerificationMode verificationMode) {
 		return new VerificationAfterDelayImpl(delayMillis,  verificationMode);
 	}
 
-	@Override
-	public VerificationMode description(String description) {
-		return VerificationModeFactory.description(this, description);
+
+	private static void checkNotNegative(long delayMillis) {
+		if (delayMillis<0)
+			new Reporter().cannotCreateTimerWithNegativeDurationTime(delayMillis);
 	}
+
 }
