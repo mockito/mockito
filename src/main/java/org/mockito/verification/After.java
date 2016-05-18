@@ -23,6 +23,7 @@ public class After extends VerificationWrapper<VerificationAfterDelayImpl> imple
         return new After(wrappedVerification.copyWithVerificationMode(verificationMode));
     }
 
+    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

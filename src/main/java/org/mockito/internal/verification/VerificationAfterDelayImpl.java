@@ -4,6 +4,14 @@
  */
 package org.mockito.internal.verification;
 
+import static java.lang.Math.max;
+import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.currentThread;
+import static java.lang.Thread.sleep;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import java.util.concurrent.TimeUnit;
+
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
@@ -16,7 +24,6 @@ public class VerificationAfterDelayImpl implements VerificationMode {
 
 	private final long delayMillis;
 	private final VerificationMode delegate;
-	
 
 	/**
 	 * Create this verification mode, to be used to verify invocation ongoing
@@ -35,32 +42,46 @@ public class VerificationAfterDelayImpl implements VerificationMode {
 		this.delegate = delegate;
 	}
 
-	
 	/**
 	 * Verify the given ongoing verification data, and confirm that it satisfies
 	 * the delegate verification mode after a given delay.
 	 */
 	public void verify(VerificationData data) {
-		try {
-			Thread.sleep(delayMillis);
-			delegate.verify(data);
-		} catch (InterruptedException e) {
-			throw new RuntimeException("Thread sleep has been interrupted", e);
-		}
+		boolean interrupted = false;
+	    try {
+	      long remainingMillis = delayMillis;
+	      long end = System.currentTimeMillis() + remainingMillis;
+
+	      while (true) {
+	        try {
+	          Thread.sleep(remainingMillis);
+	          break;
+	        } catch (InterruptedException e) {
+	          interrupted = true;
+	          remainingMillis = end - System.currentTimeMillis();
+	        }
+	      }
+	      delegate.verify(data);
+	    } finally {
+	      if (interrupted) {
+	        currentThread().interrupt();
+	      }
+	    }
+
+		
 
 	}
 
 	public VerificationMode description(String description) {
 		return VerificationModeFactory.description(this, description);
 	}
-	
+
 	public VerificationAfterDelayImpl copyWithVerificationMode(VerificationMode verificationMode) {
-		return new VerificationAfterDelayImpl(delayMillis,  verificationMode);
+		return new VerificationAfterDelayImpl(delayMillis, verificationMode);
 	}
 
-
 	private static void checkNotNegative(long delayMillis) {
-		if (delayMillis<0)
+		if (delayMillis < 0)
 			new Reporter().cannotCreateTimerWithNegativeDurationTime(delayMillis);
 	}
 

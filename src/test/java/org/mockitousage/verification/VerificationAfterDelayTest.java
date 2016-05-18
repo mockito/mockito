@@ -5,6 +5,7 @@
 package org.mockitousage.verification;
 
 import static java.lang.System.currentTimeMillis;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -50,7 +51,6 @@ public class VerificationAfterDelayTest {
 		assertNoAsyncExceptionWereThrown();
 	}
 
-	
 	@Test
 	public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
 		clearAsyncAfter(1, MILLISECONDS);
@@ -68,8 +68,6 @@ public class VerificationAfterDelayTest {
 	@Test
 	public void shouldFailVerificationWithWrongTimes() throws Exception {
 		clearAsyncAfter(10, MILLISECONDS);
-
-		
 
 		expected.expect(MockitoAssertionError.class);
 		verify(mock, after(50).times(2)).clear();
@@ -90,7 +88,22 @@ public class VerificationAfterDelayTest {
 		assertThat(currentTimeMillis() - startTime).isGreaterThanOrEqualTo(50);
 	}
 
-	@Ignore
+	@Test
+	public void shouldWaitTheFullTimeEvenIfInterrupted() throws Exception {
+
+		interruptCurrentThreadAfter(30, MILLISECONDS);
+
+		long startTime = currentTimeMillis();
+
+		try {
+			verify(mock, after(50).never()).clear();
+		} catch (MockitoAssertionError e) {
+		}
+
+		assertThat(currentTimeMillis() - startTime).isGreaterThanOrEqualTo(50);
+	}
+
+	@Ignore("This test case is wrong! Mockito.after() must not stop if the verification fails, that is only true for Mockito.timeout().")
 	@Test(timeout = 100)
 	public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
 		clearAsyncAfter(1, MILLISECONDS);
@@ -137,24 +150,44 @@ public class VerificationAfterDelayTest {
 		}
 	}
 
+	/**
+	 * Calls mock.clear() with an other Thread after the given delay.
+	 */
 	private void clearAsyncAfter(final int delay, TimeUnit unit) {
 		ScheduledExecutorService e = Executors.newSingleThreadScheduledExecutor();
 		f = e.schedule(new Runnable() {
 
-			@Override
 			public void run() {
 				mock.clear();
 			}
 		}, delay, unit);
 	}
-	
+
 	private void assertNoAsyncExceptionWereThrown() throws InterruptedException, ExecutionException {
-		if (f==null)
+		if (f == null)
 			return;
 		f.cancel(true);
 		try {
 			f.get();
 		} catch (CancellationException ignored) {
 		}
+	}
+
+	/**
+	 * Interrupts the current Thread after the given delay.
+	 */
+	private void interruptCurrentThreadAfter(int delay, TimeUnit unit) {
+		final Thread testThread = Thread.currentThread();
+
+		final ScheduledExecutorService e = newSingleThreadScheduledExecutor();
+		e.schedule(new Runnable() {
+			public void run() {
+				try {
+					testThread.interrupt();
+				} finally {
+					e.shutdownNow();
+				}
+			}
+		}, delay, unit);
 	}
 }
