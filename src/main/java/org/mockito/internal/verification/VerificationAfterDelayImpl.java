@@ -52,7 +52,7 @@ public class VerificationAfterDelayImpl implements VerificationMode {
 	      long remainingMillis = delayMillis;
 	      long end = System.currentTimeMillis() + remainingMillis;
 
-	      while (true) {
+	      while (remainingMillis>0) {
 	        try {
 	          Thread.sleep(remainingMillis);
 	          break;
