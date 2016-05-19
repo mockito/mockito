@@ -7,15 +7,15 @@ package org.mockito;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
-import org.mockito.internal.stubbing.answers.*;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.*;
 import org.mockito.verification.*;
-import org.mockito.junit.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -250,6 +250,11 @@ import org.mockito.junit.*;
  * verify(mockedList, atLeastOnce()).add("three times");
  * verify(mockedList, atLeast(2)).add("five times");
  * verify(mockedList, atMost(5)).add("three times");
+ *
+ * //verification using withinRange()
+ * verify(mockedList, withinRange(1, 3)).add("once")
+ * verify(mockedList, withinRange(1, 3)).add("twice");
+ * verify(mockedList, withinRange(1, 3)).add("three times");
  *
  * </code></pre>
  *
@@ -2345,6 +2350,25 @@ public class Mockito extends Matchers {
      */
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
+    }
+
+    /**
+     * Allows verifying number of invocations within range. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, withinRange(1, 3)).someMethod("some arg");
+     * </code></pre>
+     *
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param minNumberOfInvocations minimum number of invocations
+     * @param maxNumberOfInvocations max number of invocations
+     *
+     * @return verification mode
+     *
+     * @since 2.0.0
+     */
+    public static VerificationMode withinRange(int minNumberOfInvocations, int maxNumberOfInvocations) {
+        return VerificationModeFactory.withinRange(minNumberOfInvocations, maxNumberOfInvocations);
     }
 
     /**

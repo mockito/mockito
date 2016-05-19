@@ -54,6 +54,11 @@ public interface VerificationAfterDelay extends VerificationMode {
      * unless too many invocations occur (in which case there will be an immediate failure)
      */
     public VerificationMode atMost(int maxNumberOfInvocations);
+
+    /**
+     * Verifies that there are invocations within range during the given period. This will wait the full period given.
+     */
+    public VerificationMode withinRange(int minNumberOfInvocations, int maxNumberOfInvocations);
     
     /**
      * Verifies that there the given method is invoked and is the only method invoked. This will wait the full 

@@ -4,13 +4,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +13,11 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 public class VerificationAfterDelayTest extends TestBase {
     
@@ -62,6 +60,18 @@ public class VerificationAfterDelayTest extends TestBase {
 
         // then
         verify(mock, after(100).atLeast(1)).clear();
+    }
+
+    @Test
+    public void shouldVerifyNormallyWithWithinRange() throws Exception {
+        // given
+        Thread t = waitAndExerciseMock(20);
+
+        // when
+        t.start();
+
+        // then
+        verify(mock, after(100).withinRange(1, 3)).clear();
     }
 
     @Test

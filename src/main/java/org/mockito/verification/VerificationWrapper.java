@@ -37,6 +37,10 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
         return copySelfWithNewVerificationMode(VerificationModeFactory.atMost(maxNumberOfInvocations));
     }
 
+    public VerificationMode withinRange(int minNumberOfInvocations, int maxNumberOfInvocations) {
+        return copySelfWithNewVerificationMode(VerificationModeFactory.withinRange(minNumberOfInvocations, maxNumberOfInvocations));
+    }
+
     public VerificationMode only() {
         return copySelfWithNewVerificationMode(VerificationModeFactory.only());
     }

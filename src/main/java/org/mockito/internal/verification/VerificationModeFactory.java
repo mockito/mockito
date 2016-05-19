@@ -36,6 +36,10 @@ public class VerificationModeFactory {
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return new AtMost(maxNumberOfInvocations);
     }
+
+    public static VerificationMode withinRange(int minNumberOfInvocations, int maxNumberOfInvocations) {
+        return new WithinRange(minNumberOfInvocations, maxNumberOfInvocations);
+    }
     
     /**
      * Verification mode will prepend the specified failure message if verification fails with the given implementation.
