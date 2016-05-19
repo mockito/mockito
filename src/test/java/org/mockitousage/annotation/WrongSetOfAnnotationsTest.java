@@ -7,12 +7,7 @@ package org.mockitousage.annotation;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
@@ -77,6 +72,20 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     public void should_not_allow_Captor_and_InjectMocks() throws Exception {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMocks @Captor ArgumentCaptor captor;
+        });
+    }
+
+    @Test(expected=MockitoException.class)
+    public void should_not_allow_Real_and_Mock() throws Exception {
+        MockitoAnnotations.initMocks(new Object() {
+            @Real @Mock List list;
+        });
+    }
+
+    @Test(expected=MockitoException.class)
+    public void should_not_allow_Real_and_Spy() throws Exception {
+        MockitoAnnotations.initMocks(new Object() {
+            @Real @Spy List list;
         });
     }
 }

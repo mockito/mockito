@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
+import org.mockito.Real;
+import org.mockito.internal.configuration.injection.RealObject;
 import org.mockito.internal.util.MockUtil;
 
 import java.lang.reflect.Field;
@@ -41,7 +43,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
     private List<Object> selectMatchingName(Collection<Object> mocks, Field candidateFieldToBeInjected) {
         List<Object> mockNameMatches = new ArrayList<Object>();
         for (Object mock : mocks) {
-            if (candidateFieldToBeInjected.getName().equals(mockUtil.getMockName(mock).toString())) {
+            if (candidateFieldToBeInjected.getName().equals(getInjectableName(mock))) {
                 mockNameMatches.add(mock);
             }
         }
@@ -60,7 +62,8 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
     private boolean anotherCandidateMatchesMockName(final Collection<Object> mocks,
                                                     final Field candidateFieldToBeInjected,
                                                     final List<Field> allRemainingCandidateFields) {
-        String mockName = mockUtil.getMockName(mocks.iterator().next()).toString();
+        Object injectable = mocks.iterator().next();
+        String mockName = getInjectableName(injectable);
 
         for (Field otherCandidateField : allRemainingCandidateFields) {
             if (!otherCandidateField.equals(candidateFieldToBeInjected)
@@ -70,5 +73,13 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
             }
         }
         return false;
+    }
+
+    private String getInjectableName(Object injectable) {
+        if (injectable instanceof RealObject) {
+            return ((RealObject) injectable).getName();
+        }
+
+        return mockUtil.getMockName(injectable).toString();
     }
 }

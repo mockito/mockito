@@ -54,6 +54,7 @@ public class MockInjection {
     public static class OngoingMockInjection {
         private final Set<Field> fields = new HashSet<Field>();
         private final Set<Object> mocks = newMockSafeHashSet();
+        private final Set<Object> realObjects = new HashSet<Object>();
         private final Object fieldOwner;
         private final MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
         private final MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();
@@ -69,6 +70,11 @@ public class MockInjection {
 
         public OngoingMockInjection withMocks(Set<Object> mocks) {
             this.mocks.addAll(checkNotNull(mocks, "mocks"));
+            return this;
+        }
+
+        public OngoingMockInjection withRealObjects(Set<Object> realObjects) {
+            this.realObjects.addAll(checkNotNull(realObjects, "realObjects"));
             return this;
         }
 
@@ -89,9 +95,10 @@ public class MockInjection {
 
         public void apply() {
             for (Field field : fields) {
-                injectionStrategies.process(field, fieldOwner, mocks);
-                postInjectionStrategies.process(field, fieldOwner, mocks);
+                injectionStrategies.process(field, fieldOwner, mocks, realObjects);
+                postInjectionStrategies.process(field, fieldOwner, mocks, realObjects);
             }
         }
+
     }
 }

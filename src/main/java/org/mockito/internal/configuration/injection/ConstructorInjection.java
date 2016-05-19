@@ -46,7 +46,7 @@ public class ConstructorInjection extends MockInjectionStrategy {
         this.argResolver = argResolver;
     }
 
-    public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+    public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates, Set<Object> realObjects) {
         try {
             SimpleArgumentResolver simpleArgumentResolver = new SimpleArgumentResolver(mockCandidates);
             FieldInitializationReport report = new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
