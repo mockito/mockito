@@ -346,8 +346,16 @@ public class BDDMockito extends Mockito {
         /**
          * See original {@link Stubber#doNothing()}
          * @since 1.8.0
+         * @deprecated please use {@link #willDoNothing()} instead
          */
+        @Deprecated
         BDDStubber willNothing();
+
+        /**
+         * See original {@link Stubber#doNothing()}
+         * @since 1.10.20
+         */
+        BDDStubber willDoNothing();
 
         /**
          * See original {@link Stubber#doReturn(Object)}
@@ -418,7 +426,15 @@ public class BDDMockito extends Mockito {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
+        /**
+         * @deprecated please use {@link #willDoNothing()} instead
+         */
+        @Deprecated
         public BDDStubber willNothing() {
+            return willDoNothing();
+        }
+
+        public BDDStubber willDoNothing() {
             return new BDDStubberImpl(mockitoStubber.doNothing());
         }
 
