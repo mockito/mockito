@@ -7,7 +7,6 @@ package org.mockito.internal.stubbing;
 import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
@@ -31,11 +30,6 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
     public OngoingStubbing<T> then(Answer<?> answer) {
         return thenAnswer(answer);
-    }
-
-    public DeprecatedOngoingStubbing<T> toAnswer(Answer<?> answer) {
-        invocationContainerImpl.addAnswer(answer);
-        return new ConsecutiveStubbing<T>(invocationContainerImpl);
     }
 
     public List<Invocation> getRegisteredInvocations() {

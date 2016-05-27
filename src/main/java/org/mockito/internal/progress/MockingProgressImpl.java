@@ -13,6 +13,7 @@ import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -21,18 +22,18 @@ public class MockingProgressImpl implements MockingProgress {
     private final Reporter reporter = new Reporter();
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
-    IOngoingStubbing iOngoingStubbing;
+    OngoingStubbing ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private MockingProgressListener listener;
 
-    public void reportOngoingStubbing(IOngoingStubbing iOngoingStubbing) {
-        this.iOngoingStubbing = iOngoingStubbing;
+    public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
+        this.ongoingStubbing = iOngoingStubbing;
     }
 
-    public IOngoingStubbing pullOngoingStubbing() {
-        IOngoingStubbing temp = iOngoingStubbing;
-        iOngoingStubbing = null;
+    public OngoingStubbing pullOngoingStubbing() {
+        OngoingStubbing temp = ongoingStubbing;
+        ongoingStubbing = null;
         return temp;
     }
     
@@ -46,7 +47,7 @@ public class MockingProgressImpl implements MockingProgress {
      * @see org.mockito.internal.progress.MockingProgress#resetOngoingStubbing()
      */
     public void resetOngoingStubbing() {
-        iOngoingStubbing = null;
+        ongoingStubbing = null;
     }
 
     public VerificationMode pullVerificationMode() {
@@ -94,7 +95,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
     
     public String toString() {
-        return  "iOngoingStubbing: " + iOngoingStubbing + 
+        return  "iOngoingStubbing: " + ongoingStubbing + 
         ", verificationMode: " + verificationMode +
         ", stubbingInProgress: " + stubbingInProgress;
     }

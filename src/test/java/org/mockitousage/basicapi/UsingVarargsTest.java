@@ -29,14 +29,13 @@ public class UsingVarargsTest extends TestBase {
     
     @Mock IVarArgs mock;
 
-    @SuppressWarnings("deprecation")
     @Test
     public void shouldStubStringVarargs() {
         when(mock.withStringVarargsReturningString(1)).thenReturn("1");
         when(mock.withStringVarargsReturningString(2, "1", "2", "3")).thenReturn("2");
         
         RuntimeException expected = new RuntimeException();
-        stubVoid(mock).toThrow(expected).on().withStringVarargs(3, "1", "2", "3", "4");
+        doThrow(expected).when(mock).withStringVarargs(3, "1", "2", "3", "4");
 
         assertEquals("1", mock.withStringVarargsReturningString(1));
         assertEquals(null, mock.withStringVarargsReturningString(2));

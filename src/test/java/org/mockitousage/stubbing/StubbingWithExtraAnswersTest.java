@@ -35,7 +35,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
         assertEquals(3, mock.objectReturningMethodNoArgs());
         assertEquals(3, mock.objectReturningMethodNoArgs());
     }
-    
+
     @Test
     public void shouldReturnNullIfNecessary() throws Exception {
         //when

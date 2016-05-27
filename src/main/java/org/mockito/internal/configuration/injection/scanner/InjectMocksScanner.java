@@ -50,7 +50,7 @@ public class InjectMocksScanner {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {
-                assertNoAnnotations(field, Mock.class, MockitoAnnotations.Mock.class, Captor.class);
+                assertNoAnnotations(field, Mock.class, Captor.class);
                 mockDependentFields.add(field);
             }
         }

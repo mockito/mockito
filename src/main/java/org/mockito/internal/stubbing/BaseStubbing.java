@@ -8,10 +8,9 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
-import org.mockito.stubbing.DeprecatedOngoingStubbing;
 import org.mockito.stubbing.OngoingStubbing;
 
-public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedOngoingStubbing<T> {
+public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
     public OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
@@ -67,13 +66,5 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T>, DeprecatedO
 
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
-    }
-
-    public DeprecatedOngoingStubbing<T> toReturn(T value) {
-        return toAnswer(new Returns(value));
-    }
-
-    public DeprecatedOngoingStubbing<T> toThrow(Throwable throwable) {
-        return toAnswer(new ThrowsException(throwable));
     }
 }

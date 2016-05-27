@@ -271,12 +271,6 @@ import org.mockito.junit.*;
  *
  * Read more about doThrow|doAnswer family of methods in paragraph 12.
  * <p>
- * Initially, {@link Mockito#stubVoid(Object)} was used for stubbing voids.
- * Currently <code>stubVoid()</code> is deprecated in favor of {@link Mockito#doThrow(Throwable...)}.
- * This is because of improved readability and consistency with the family of {@link Mockito#doAnswer(Answer)} methods.
- *
- *
- *
  *
  * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification">Verification in order</a></h3>
  *
@@ -1569,64 +1563,10 @@ public class Mockito extends Matchers {
     }
 
     /**
-     * Stubs a method call with return value or an exception. E.g:
-     *
-     * <pre class="code"><code class="java">
-     * stub(mock.someMethod()).toReturn(10);
-     *
-     * //you can use flexible argument matchers, e.g:
-     * stub(mock.someMethod(<b>anyString()</b>)).toReturn(10);
-     *
-     * //setting exception to be thrown:
-     * stub(mock.someMethod("some arg")).toThrow(new RuntimeException());
-     *
-     * //you can stub with different behavior for consecutive method calls.
-     * //Last stubbing (e.g: toReturn("foo")) determines the behavior for further consecutive calls.
-     * stub(mock.someMethod("some arg"))
-     *  .toThrow(new RuntimeException())
-     *  .toReturn("foo");
-     * </code></pre>
-     * <p>
-     * Some users find stub() confusing therefore {@link Mockito#when(Object)} is recommended over stub()
-     * <pre class="code"><code class="java">
-     *   //Instead of:
-     *   stub(mock.count()).toReturn(10);
-     *
-     *   //You can do:
-     *   when(mock.count()).thenReturn(10);
-     * </code></pre>
-     * For stubbing void methods with throwables see: {@link Mockito#doThrow(Throwable...)}
-     * <p>
-     * Stubbing can be overridden: for example common stubbing can go to fixture
-     * setup but the test methods can override it.
-     * Please note that overridding stubbing is a potential code smell that points out too much stubbing.
-     * <p>
-     * Once stubbed, the method will always return stubbed value regardless
-     * of how many times it is called.
-     * <p>
-     * Last stubbing is more important - when you stubbed the same method with
-     * the same arguments many times.
-     * <p>
-     * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
-     * Let's say you've stubbed foo.bar().
-     * If your code cares what foo.bar() returns then something else breaks(often before even verify() gets executed).
-     * If your code doesn't care what get(0) returns then it should not be stubbed.
-     * Not convinced? See <a href="http://monkeyisland.pl/2008/04/26/asking-and-telling">here</a>.
-     *
-     * @param methodCall
-     *            method call
-     * @return DeprecatedOngoingStubbing object to set stubbed value/exception
-     */
-    public static <T> DeprecatedOngoingStubbing<T> stub(T methodCall) {
-        return MOCKITO_CORE.stub(methodCall);
-    }
-
-    /**
      * Enables stubbing methods. Use it when you want the mock to return particular value when particular method is called.
      * <p>
      * Simply put: "<b>When</b> the x method is called <b>then</b> return y".
-     * <p>
-     * <b>when() is a successor of deprecated {@link Mockito#stub(Object)}</b>
+     *
      * <p>
      * Examples:
      *
@@ -1852,42 +1792,6 @@ public class Mockito extends Matchers {
      */
     public static void verifyZeroInteractions(Object... mocks) {
         MOCKITO_CORE.verifyNoMoreInteractions(mocks);
-    }
-
-    /**
-     * <pre class="code"><code class="java">
-     *   //Instead of:
-     *   stubVoid(mock).toThrow(e).on().someVoidMethod();
-     *
-     *   //Please do:
-     *   doThrow(e).when(mock).someVoidMethod();
-     * </code></pre>
-     *
-     * doThrow() replaces stubVoid() because of improved readability and consistency with the family of doAnswer() methods.
-     * <p>
-     * Originally, <code>stubVoid()</code> was used for stubbing void methods with exceptions. E.g:
-     *
-     * <pre class="code"><code class="java">
-     * stubVoid(mock).toThrow(new RuntimeException()).on().someMethod();
-     *
-     * //you can stub with different behavior for consecutive calls.
-     * //Last stubbing (e.g. toReturn()) determines the behavior for further consecutive calls.
-     * stubVoid(mock)
-     *   .toThrow(new RuntimeException())
-     *   .toReturn()
-     *   .on().someMethod();
-     * </code></pre>
-     *
-     * See examples in javadoc for {@link Mockito} class
-     *
-     * @deprecated Use {@link Mockito#doThrow(Throwable...)} method for stubbing voids
-     *
-     * @param mock
-     *            to stub
-     * @return stubbable object that allows stubbing with throwable
-     */
-    public static <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        return MOCKITO_CORE.stubVoid(mock);
     }
 
     /**

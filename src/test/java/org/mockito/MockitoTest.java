@@ -46,12 +46,6 @@ public class MockitoTest extends TestBase {
         Mockito.verifyZeroInteractions("notMock");
     }
     
-    @SuppressWarnings("deprecation")
-    @Test(expected=NotAMockException.class)
-    public void shouldValidateMockWhenStubbingVoid() {
-        Mockito.stubVoid("notMock");
-    }
-    
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenCreatingInOrderObject() {
         Mockito.inOrder("notMock");

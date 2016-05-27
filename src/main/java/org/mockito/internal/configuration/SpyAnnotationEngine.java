@@ -43,12 +43,11 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         return null;
     }
 
-    @SuppressWarnings("deprecation") // for MockitoAnnotations.Mock
     public void process(Class<?> context, Object testInstance) {
         Field[] fields = context.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
-                assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, org.mockito.MockitoAnnotations.Mock.class, Captor.class);
+                assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, Captor.class);
                 field.setAccessible(true);
                 Object instance;
                 try {
