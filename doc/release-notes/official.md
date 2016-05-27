@@ -1,3 +1,12 @@
+### 2.0.54-beta (2016-05-27 18:52 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Fixes #374 Removed deprecated classes and methods [(#404)](https://github.com/mockito/mockito/pull/404)
+  * Remove deprecated API from Mockito 2  [(#374)](https://github.com/mockito/mockito/issues/374)
+
 ### 2.0.53-beta (2016-05-17 20:34 UTC)
 
 * Authors: 3
