@@ -4,11 +4,18 @@
  */
 package org.mockito.internal.configuration;
 
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
+import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.stubbing.Answer;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Instantiates a mock on a field annotated by {@link Mock}
@@ -29,7 +36,37 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         }
 
         // see @Mock answer default value
-        mockSettings.defaultAnswer(annotation.answer());
-        return Mockito.mock(field.getType(), mockSettings);
+        mockSettings.defaultAnswer(getDefaultAnswer(annotation.answerClass(), annotation.answer(), field));
+        return mock(field.getType(), mockSettings);
+    }
+
+    private Answer<?> getDefaultAnswer(Class<? extends Answer> answerClass, Answers defaultAnswer, Field field) {
+        if (hasAnswerClassDefined(answerClass)) {
+            validateAnswerClassUse(defaultAnswer, field);
+            return instantiateAnswerClass(answerClass);
+        }
+        return defaultAnswer.get();
+    }
+
+    private Answer<?> instantiateAnswerClass(Class<? extends Answer> answerClass) {
+        if (answerClass.getConstructors().length == 0) {
+            throw new MockitoException("Custom answer cannot be instantiated",null);
+        }
+        try {
+            Constructor<?> constructor = answerClass.getConstructor();
+            return (Answer<?>) constructor.newInstance();
+        } catch (Exception e) {
+            throw new MockitoException("Custom answer cannot be instantiated",e);
+        }
+    }
+
+    private void validateAnswerClassUse(Answers defaultAnswer, Field field) {
+        if (defaultAnswer != Answers.RETURNS_DEFAULTS) {
+            new Reporter().answerAndCustomAnswerInMockAnnotationNotAllowed(field.getName());
+        }
+    }
+
+    private boolean hasAnswerClassDefined(Class<? extends Answer> answerClass) {
+        return !answerClass.equals(Answer.class);
     }
 }

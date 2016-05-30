@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import org.mockito.stubbing.Answer;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -28,11 +30,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *       &#064;Mock(name = "database") private ArticleDatabase dbMock;
  *       &#064;Mock(answer = RETURNS_MOCKS) private UserProvider userProvider;
  *       &#064;Mock(extraInterfaces = {Queue.class, Observer.class}) private  articleMonitor;
+ *       &#064;Mock(answerClass = CustomAnswerClass.class) private StateHandler handler
  *
  *       private ArticleManager manager;
  *
  *       &#064;Before public void setup() {
- *           manager = new ArticleManager(userProvider, database, calculator, articleMonitor);
+ *           manager = new ArticleManager(userProvider, database, calculator, articleMonitor, handler);
  *       }
  *   }
  *
@@ -70,4 +73,6 @@ public @interface Mock {
     Class<?>[] extraInterfaces() default {};
     
     boolean serializable() default false;
+
+    Class<? extends Answer> answerClass() default Answer.class;
 }

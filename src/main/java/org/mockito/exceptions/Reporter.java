@@ -829,6 +829,11 @@ public class Reporter {
                 "This may happen with doThrow(Class)|thenThrow(Class) family of methods if passing null parameter."));
     }
 
+    public void answerAndCustomAnswerInMockAnnotationNotAllowed(String fieldName) {
+        throw new MockitoException("You cannot define answer and customAnswer at the same time for field " + fieldName);
+
+    }
+
     private MockName safelyGetMockName(Object mock) {
         return new MockUtil().getMockName(mock);
     }
