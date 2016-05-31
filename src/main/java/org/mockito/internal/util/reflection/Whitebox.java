@@ -9,36 +9,38 @@ import java.lang.reflect.Modifier;
 
 public class Whitebox {
 
-    public static Object getInternalState(Object target, String field) {
-        Class<?> c;
-        if(target instanceof Class){
-            c = (Class<?>) target;
-            target = null;
-        } else {
-            c = target.getClass();
-        }
+    public static Object getInternalState(Object targetInstance, String fieldName) {
+        return getInternalState(targetInstance.getClass(), targetInstance, fieldName);
+    }
+
+    public static Object getInternalState(Class targetClass, String fieldName) {
+        return getInternalState(targetClass, null, fieldName);
+    }
+
+    private static Object getInternalState(Class<?> targetClass, Object targetInstance, String fieldName) {
         try {
-            Field f = getFieldFromHierarchy(c, field);
+            Field f = getFieldFromHierarchy(targetClass, fieldName);
             f.setAccessible(true);
-            return f.get(target);
+            return f.get(targetInstance);
         } catch (Exception e) {
             throw new RuntimeException("Unable to get internal state on a private field. Please report to mockito mailing list.", e);
         }
     }
 
-    public static void setInternalState(Object target, String field, Object value) {
-        Class<?> c;
-        if(target instanceof Class){
-            c = (Class<?>) target;
-            target = null;
-        } else {
-            c = target.getClass();
-        }
+    public static void setInternalState(Object targetInstance, String fieldName, Object value) {
+        setInternalState(targetInstance.getClass(), targetInstance, fieldName, value);
+    }
+
+    public static void setInternalState(Class targetClass, String fieldName, Object value) {
+        setInternalState(targetClass, null, fieldName, value);
+    }
+
+    private static void setInternalState(Class targetClass, Object targetInstance, String fieldName, Object value) {
         try {
-            Field f = getFieldFromHierarchy(c, field);
+            Field f = getFieldFromHierarchy(targetClass, fieldName);
             f.setAccessible(true);
             removeFinalModifierIfPresent(f);
-            f.set(target, value);
+            f.set(targetInstance, value);
         } catch (Exception e) {
             throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
         }
