@@ -124,4 +124,20 @@ public class VerificationOverTimeImpl implements VerificationMode {
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }
+
+    public boolean isReturnOnSuccess() {
+        return returnOnSuccess;
+    }
+
+    public long getPollingPeriodMillis() {
+        return pollingPeriodMillis;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public VerificationMode getDelegate() {
+        return delegate;
+    }
 }
