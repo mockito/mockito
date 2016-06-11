@@ -28,9 +28,9 @@ public class StackTraceFilter implements Serializable {
     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
         //TODO: profile
         final List<StackTraceElement> filtered = new ArrayList<StackTraceElement>();
-        for (StackTraceElement aTarget : target) {
-            if (!CLEANER.isOut(aTarget)) {
-                filtered.add(aTarget);
+        for (StackTraceElement element : target) {
+            if (CLEANER.apply(element)) {
+                filtered.add(element);
             }
         }
         StackTraceElement[] result = new StackTraceElement[filtered.size()];

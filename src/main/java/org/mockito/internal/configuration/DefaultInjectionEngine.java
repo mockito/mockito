@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.internal.configuration.injection.MockInjection;
-
 import java.lang.reflect.Field;
 import java.util.Set;
+
+import org.mockito.internal.configuration.injection.MockInjection;
 
 /**
  * Inject mock/spies dependencies for fields annotated with &#064;InjectMocks

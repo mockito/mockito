@@ -5,6 +5,10 @@
 
 package org.mockito.internal.verification.checkers;
 
+import static org.mockito.exceptions.Reporter.argumentsAreDifferent;
+import static org.mockito.exceptions.Reporter.wantedButNotInvoked;
+import static org.mockito.exceptions.Reporter.wantedButNotInvokedInOrder;
+
 import java.util.List;
 
 import org.mockito.exceptions.Reporter;
@@ -18,17 +22,7 @@ import org.mockito.verification.VerificationMode;
 
 public class MissingInvocationInOrderChecker {
     
-    private final Reporter reporter;
-    private final InvocationsFinder finder;
-    
-    public MissingInvocationInOrderChecker() {
-        this(new InvocationsFinder(), new Reporter());
-    }
-    
-    MissingInvocationInOrderChecker(InvocationsFinder finder, Reporter reporter) {
-        this.finder = finder;
-        this.reporter = reporter;
-    }
+    private final InvocationsFinder finder=new InvocationsFinder();
     
     public void check(List<Invocation> invocations, InvocationMatcher wanted, VerificationMode mode, InOrderContext context) {
         List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, context);
@@ -54,13 +48,13 @@ public class MissingInvocationInOrderChecker {
                              new ArgumentMatchingTool().getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(),
                                      similar.getArguments());
                      SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indicesOfSimilarMatchingArguments);
-                     reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
-                 } else {
-                     reporter.wantedButNotInvoked(wanted);
-                 }
+                     throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
+                 } 
+                 throw wantedButNotInvoked(wanted);
+                 
              }
         } else {
-            reporter.wantedButNotInvokedInOrder(wanted, previousInOrder);
+            throw wantedButNotInvokedInOrder(wanted, previousInOrder);
         }
     }
 }

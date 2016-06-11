@@ -9,6 +9,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static org.mockito.exceptions.Reporter.incorrectUseOfApi;
+
 import java.util.List;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
@@ -21,7 +23,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
         if(!invocationContainerImpl.hasInvocationForPotentialStubbing()) {
-            new Reporter().incorrectUseOfApi();
+            throw incorrectUseOfApi();
         }
 
         invocationContainerImpl.addAnswer(answer);

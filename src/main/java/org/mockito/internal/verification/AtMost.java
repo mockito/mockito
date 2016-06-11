@@ -5,6 +5,8 @@
 
 package org.mockito.internal.verification;
 
+import static org.mockito.exceptions.Reporter.wantedAtMostX;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class AtMost implements VerificationMode {
         List<Invocation> found = finder.findInvocations(invocations, wanted);
         int foundSize = found.size();
         if (foundSize > maxNumberOfInvocations) {
-            new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
+            throw wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
 
         removeAlreadyVerified(found);

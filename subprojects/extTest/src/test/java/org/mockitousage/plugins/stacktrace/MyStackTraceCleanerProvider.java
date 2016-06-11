@@ -12,12 +12,13 @@ public class MyStackTraceCleanerProvider implements StackTraceCleanerProvider {
 
     public StackTraceCleaner getStackTraceCleaner(final StackTraceCleaner defaultCleaner) {
         return new StackTraceCleaner() {
-            public boolean isOut(StackTraceElement candidate) {
-                if (ENABLED && candidate.getMethodName().contains("excludeMe")) {
-                    return true;
+			@Override
+			public boolean apply(StackTraceElement candidate) {
+				if (ENABLED && candidate.getMethodName().contains("excludeMe")) {
+                    return false;
                 }
-                return defaultCleaner.isOut(candidate);
-            }
+                return defaultCleaner.apply(candidate);
+			}
         };
     }
 }

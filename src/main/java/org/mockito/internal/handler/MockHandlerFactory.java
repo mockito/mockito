@@ -12,7 +12,7 @@ import org.mockito.mock.MockCreationSettings;
  */
 public class MockHandlerFactory {
 
-    public InternalMockHandler create(MockCreationSettings settings) {
+    public static InternalMockHandler createMockHandler(MockCreationSettings settings) {
         InternalMockHandler handler = new MockHandlerImpl(settings);
         InternalMockHandler nullResultGuardian = new NullResultGuardian(handler);
 

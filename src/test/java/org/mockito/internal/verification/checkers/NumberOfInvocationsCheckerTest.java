@@ -5,140 +5,150 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.exceptions.Reporter;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
-import org.mockitoutil.TestBase;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.mockitousage.IMethods;
 
-public class NumberOfInvocationsCheckerTest extends TestBase {
+@RunWith(MockitoJUnitRunner.class)
+public class NumberOfInvocationsCheckerTest {
 
-    private NumberOfInvocationsChecker checker;
-    private ReporterStub reporterStub;
-    private InvocationMatcher wanted;
-    private LinkedList<Invocation> invocations;
-    private InvocationsFinderStub finderStub;
-    
-    @Before
-    public void setup() {
-        reporterStub = new ReporterStub();
-        finderStub = new InvocationsFinderStub();
-        checker = new NumberOfInvocationsChecker(reporterStub, finderStub);
-        
-        wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));
-    }
+	private NumberOfInvocationsChecker checker;
 
-    @Test
-    public void shouldReportTooLittleActual() throws Exception {
-        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        
-        checker.check(invocations, wanted, 100);
-        
-        assertEquals(1, reporterStub.actualCount);
-        assertEquals(100, reporterStub.wantedCount);
-        assertEquals(wanted, reporterStub.wanted);
-    }
+	private InvocationMatcher wanted;
+	private List<Invocation> invocations;
 
-    @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
-        
-        finderStub.actualToReturn.addAll(asList(first, second));
-        
-        checker.check(invocations, wanted, 100);
-        
-        assertSame(second.getLocation(), reporterStub.location);
-    }
-    
-    @Test
-    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
-        assertTrue(finderStub.actualToReturn.isEmpty());
-        
-        checker.check(invocations, wanted, 100);
-        
-        assertNull(reporterStub.location);
-    }
-    
-    @Test
-    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
-        Invocation first = new InvocationBuilder().toInvocation();
-        Invocation second = new InvocationBuilder().toInvocation();
-        Invocation third = new InvocationBuilder().toInvocation();
-        
-        finderStub.actualToReturn.addAll(asList(first, second, third));
-        
-        checker.check(invocations, wanted, 2);
-        
-        assertSame(third.getLocation(), reporterStub.location);
-    }
-    
-    @Test
-    public void shouldReportTooManyActual() throws Exception {
-        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        
-        checker.check(invocations, wanted, 1);
-        
-        assertEquals(2, reporterStub.actualCount);
-        assertEquals(1, reporterStub.wantedCount);
-        assertEquals(wanted, reporterStub.wanted);
-    }
-    
-    @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
-        finderStub.actualToReturn.add(invocation);
-        
-        checker.check(invocations, wanted, 0);
-        
-        assertEquals(wanted, reporterStub.wanted);
-        assertEquals(invocation.getLocation(), reporterStub.location);
-    }
-    
-    @Test
-    public void shouldMarkInvocationsAsVerified() throws Exception {
-        Invocation invocation = new InvocationBuilder().toInvocation();
-        finderStub.actualToReturn.add(invocation);
-        assertFalse(invocation.isVerified());
-        
-        checker.check(invocations, wanted, 1);
-        
-        assertTrue(invocation.isVerified());
-    }
-    
-    class ReporterStub extends Reporter {
-        private int wantedCount;
-        private int actualCount;
-        private DescribedInvocation wanted;
-        private Location location;
-        @Override public void tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {
-                    this.wantedCount = discrepancy.getWantedCount();
-                    this.actualCount = discrepancy.getActualCount();
-                    this.wanted = wanted;
-                    this.location = lastActualLocation;
-        }
-        
-        @Override public void tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, Location firstUndesired) {
-                    this.wantedCount = wantedCount;
-                    this.actualCount = actualCount;
-                    this.wanted = wanted;
-                    this.location = firstUndesired;
-        }
-        
-        @Override
-        public void neverWantedButInvoked(DescribedInvocation wanted, Location firstUndesired) {
-            this.wanted = wanted;
-            this.location = firstUndesired;
-        }
-    }
+	@Mock
+	private IMethods mock;
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
+	@Rule
+	public TestName testName = new TestName();
+
+	@Before
+	public void setup() {
+		checker = new NumberOfInvocationsChecker();
+
+	}
+
+	@Test
+	public void shouldReportTooLittleActual() throws Exception {
+		wanted = buildSimpleMethod().toInvocationMatcher();
+		invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+
+		exception.expect(TooLittleActualInvocations.class);
+		exception.expectMessage("mock.simpleMethod()");
+		exception.expectMessage("Wanted 100 times");
+		exception.expectMessage("But was 2 times");
+
+		checker.check(invocations, wanted, 100);
+	}
+
+	@Test
+	public void shouldReportWithLastInvocationStackTrace() throws Exception {
+		wanted = buildSimpleMethod().toInvocationMatcher();
+		invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+
+		exception.expect(TooLittleActualInvocations.class);
+		exception.expectMessage("mock.simpleMethod()");
+		exception.expectMessage("Wanted 100 times");
+		exception.expectMessage("But was 2 times");
+
+		checker.check(invocations, wanted, 100);
+	}
+
+	@Test
+	public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
+		invocations = emptyList();
+		wanted = buildSimpleMethod().toInvocationMatcher();
+
+		exception.expect(TooLittleActualInvocations.class);
+		exception.expectMessage("mock.simpleMethod()");
+		exception.expectMessage("Wanted 100 times:");
+		exception.expectMessage("-> at " + getClass().getName() + "." + testName.getMethodName());
+
+		checker.check(invocations, wanted, 100);
+
+	}
+
+	@Test
+	public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
+		Invocation first = buildSimpleMethod().toInvocation();
+		Invocation second = buildSimpleMethod().toInvocation();
+		Invocation third = buildSimpleMethod().toInvocation();
+
+		invocations = asList(first, second, third);
+		wanted = buildSimpleMethod().toInvocationMatcher();
+
+		exception.expect(TooManyActualInvocations.class);
+		exception.expectMessage("" + third.getLocation());
+		checker.check(invocations, wanted, 2);
+
+	}
+
+	@Test
+	public void shouldReportTooManyActual() throws Exception {
+		Invocation first = buildSimpleMethod().toInvocation();
+		Invocation second = buildSimpleMethod().toInvocation();
+
+		invocations = asList(first, second);
+		wanted = buildSimpleMethod().toInvocationMatcher();
+
+		exception.expectMessage("Wanted 1 time");
+		exception.expectMessage("But was 2 times");
+
+		checker.check(invocations, wanted, 1);
+	}
+
+	@Test
+	public void shouldReportNeverWantedButInvoked() throws Exception {
+		Invocation first = buildSimpleMethod().toInvocation();
+
+		invocations = asList(first);
+		wanted = buildSimpleMethod().toInvocationMatcher();
+
+		exception.expect(NeverWantedButInvoked.class);
+		exception.expectMessage("Never wanted here");
+		exception.expectMessage("But invoked here");
+		exception.expectMessage("" + first.getLocation());
+
+		checker.check(invocations, wanted, 0);
+	}
+
+	@Test
+	public void shouldMarkInvocationsAsVerified() throws Exception {
+		Invocation invocation = new InvocationBuilder().toInvocation();
+		assertThat(invocation.isVerified()).isFalse();
+
+		invocations = asList(invocation);
+		wanted = new InvocationBuilder().toInvocationMatcher();
+		
+		checker.check(invocations, wanted, 1);
+
+		assertThat(invocation.isVerified()).isTrue();
+	}
+
+	
+	private InvocationBuilder buildSimpleMethod() {
+		return new InvocationBuilder().mock(mock).simpleMethod();
+	}
 }

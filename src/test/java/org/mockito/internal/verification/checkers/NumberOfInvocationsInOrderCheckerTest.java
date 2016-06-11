@@ -32,9 +32,8 @@ public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
     
     @Before
     public void setup() {
-        reporter = new Reporter();
         finderStub = new InvocationsFinderStub();
-        checker = new NumberOfInvocationsInOrderChecker(finderStub, reporter);
+        checker = new NumberOfInvocationsInOrderChecker(finderStub);
         
         wanted = new InvocationBuilder().toInvocationMatcher();
         invocations = new LinkedList<Invocation>(asList(new InvocationBuilder().toInvocation()));

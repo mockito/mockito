@@ -3,6 +3,8 @@ package org.mockito.internal.matchers;
 import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.Reporter;
 
+import static org.mockito.exceptions.Reporter.noArgumentValueWasCaptured;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -23,14 +25,12 @@ public class VarargCapturingMatcher<T> implements ArgumentMatcher<T>, CapturesAr
         return "<Capturing variable argument>";
     }
 
-    public List<T> getLastVarargs() {
-        if (arguments.isEmpty()) {
-            new Reporter().noArgumentValueWasCaptured();
-            return null;
-        } else {
-            return arguments.getLast();
-        }
-    }
+	public List<T> getLastVarargs() {
+		if (arguments.isEmpty()) {
+			throw noArgumentValueWasCaptured();
+		}
+		return arguments.getLast();
+	}
 
     public List<List<T>> getAllVarargs() {
         return arguments;

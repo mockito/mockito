@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.exceptions.Reporter.invocationListenerThrewException;
+
 import java.util.List;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.InternalMockHandler;
@@ -49,7 +51,7 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
             } catch(Throwable listenerThrowable) {
-                new Reporter().invocationListenerThrewException(listener, listenerThrowable);
+                throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
     }
@@ -59,7 +61,7 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
             try {
                 listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, exception));
             } catch(Throwable listenerThrowable) {
-                new Reporter().invocationListenerThrewException(listener, listenerThrowable);
+                throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
     }

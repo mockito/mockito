@@ -11,6 +11,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
+import static org.mockito.exceptions.Reporter.cannotCallAbstractRealMethod;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -120,7 +122,7 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
     @Override
     public Object callRealMethod() throws Throwable {
         if (!superMethod.isInvokable()) {
-            new Reporter().cannotCallAbstractRealMethod();
+            throw cannotCallAbstractRealMethod();
         }
         return superMethod.invoke();
     }

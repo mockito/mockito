@@ -20,6 +20,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static org.mockito.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
@@ -107,7 +109,7 @@ public class MockitoAnnotations {
                 throwIfAlreadyAssigned(field, alreadyAssigned);
                 alreadyAssigned = true;                
                 try {
-                    new FieldSetter(testClass, field).set(mock);
+                    setField(testClass, field,mock);
                 } catch (Exception e) {
                     throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                             + annotation, e);
@@ -118,7 +120,7 @@ public class MockitoAnnotations {
 
     static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
         if (alreadyAssigned) {
-            new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
+            throw moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
 }

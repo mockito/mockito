@@ -6,6 +6,8 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 import org.mockito.exceptions.Reporter;
+
+import static org.mockito.exceptions.Reporter.*;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockCreationValidator;
@@ -41,14 +43,14 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
-            new Reporter().extraInterfacesRequiresAtLeastOneInterface();
+            throw extraInterfacesRequiresAtLeastOneInterface();
         }
 
         for (Class<?> i : extraInterfaces) {
             if (i == null) {
-                new Reporter().extraInterfacesDoesNotAcceptNullParameters();
+                throw extraInterfacesDoesNotAcceptNullParameters();
             } else if (!i.isInterface()) {
-                new Reporter().extraInterfacesAcceptsOnlyInterfaces(i);
+                throw extraInterfacesAcceptsOnlyInterfaces(i);
             }
         }
         this.extraInterfaces = newSet(extraInterfaces);
@@ -80,7 +82,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     public MockSettings defaultAnswer(Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
         if (defaultAnswer == null) {
-            new Reporter().defaultAnswerDoesNotAcceptNullParameter();
+            throw defaultAnswerDoesNotAcceptNullParameter();
         }
         return this;
     }
@@ -125,11 +127,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public MockSettings invocationListeners(InvocationListener... listeners) {
         if (listeners == null || listeners.length == 0) {
-            new Reporter().invocationListenersRequiresAtLeastOneListener();
+            throw invocationListenersRequiresAtLeastOneListener();
         }
         for (InvocationListener listener : listeners) {
             if (listener == null) {
-                new Reporter().invocationListenerDoesNotAcceptNullParameters();
+                throw invocationListenerDoesNotAcceptNullParameters();
             }
             this.invocationListeners.add(listener);
         }

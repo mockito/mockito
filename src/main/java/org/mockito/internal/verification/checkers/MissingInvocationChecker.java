@@ -5,9 +5,11 @@
 
 package org.mockito.internal.verification.checkers;
 
+import static org.mockito.exceptions.Reporter.argumentsAreDifferent;
+import static org.mockito.exceptions.Reporter.wantedButNotInvoked;
+
 import java.util.List;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.SmartPrinter;
@@ -16,16 +18,14 @@ import org.mockito.invocation.Invocation;
 
 public class MissingInvocationChecker {
     
-    private final Reporter reporter;
     private final InvocationsFinder finder;
     
     public MissingInvocationChecker() {
-        this(new InvocationsFinder(), new Reporter());
+        this(new InvocationsFinder());
     }
     
-    MissingInvocationChecker(InvocationsFinder finder, Reporter reporter) {
+    MissingInvocationChecker(InvocationsFinder finder) {
         this.finder = finder;
-        this.reporter = reporter;
     }
     
     public void check(List<Invocation> invocations, InvocationMatcher wanted) {
@@ -37,10 +37,11 @@ public class MissingInvocationChecker {
                 ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
                 Integer[] indexesOfSuspiciousArgs = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
                 SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indexesOfSuspiciousArgs);
-                reporter.argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
-            } else {
-                reporter.wantedButNotInvoked(wanted, invocations);
-            }
+                throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
+            } 
+            
+            throw wantedButNotInvoked(wanted, invocations);
+            
         }
     }
 }

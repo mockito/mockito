@@ -4,31 +4,36 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.exceptions.Reporter;
-import org.mockito.internal.stubbing.answers.*;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.Stubber;
+import static org.mockito.exceptions.Reporter.notAMockPassedToWhenMethod;
+import static org.mockito.exceptions.Reporter.nullPassedToWhenMethod;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.answers.DoesNothing;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubber;
 
 @SuppressWarnings("unchecked")
 public class StubberImpl implements Stubber {
 
     final List<Answer> answers = new LinkedList<Answer>();
-    private final Reporter reporter = new Reporter();
 
     public <T> T when(T mock) {
         MockUtil mockUtil = new MockUtil();
         
         if (mock == null) {
-            reporter.nullPassedToWhenMethod();
-        } else {
-            if (!mockUtil.isMock(mock)) {
-                reporter.notAMockPassedToWhenMethod();
-            }
-        }
+            throw nullPassedToWhenMethod();
+        } 
+        
+		if (!mockUtil.isMock(mock)) {
+			throw notAMockPassedToWhenMethod();
+		}
         
         mockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
         return mock;
@@ -53,7 +58,6 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
-    @Override
     public Stubber doThrow(Throwable... toBeThrown) {
         if(toBeThrown == null) {
             answers.add(new ThrowsException(null));
@@ -65,12 +69,10 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
-    @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
         return doThrowClasses(toBeThrown);
     }
 
-    @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         return doThrowClasses(toBeThrown).doThrowClasses(nextToBeThrown);
     }

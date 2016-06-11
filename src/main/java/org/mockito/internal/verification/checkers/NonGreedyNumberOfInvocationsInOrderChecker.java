@@ -14,21 +14,21 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
+import static org.mockito.exceptions.Reporter.tooLittleActualInvocationsInOrder;
+
 import java.util.List;
 
 public class NonGreedyNumberOfInvocationsInOrderChecker {
 
     private final InvocationsFinder finder;
-    private final Reporter reporter;
     private final InvocationMarker marker;
 
     public NonGreedyNumberOfInvocationsInOrderChecker() {
-        this(new InvocationsFinder(), new Reporter(), new InvocationMarker());
+        this(new InvocationsFinder(), new InvocationMarker());
     }
 
-    NonGreedyNumberOfInvocationsInOrderChecker(InvocationsFinder finder, Reporter reporter, InvocationMarker marker ) {
+    NonGreedyNumberOfInvocationsInOrderChecker(InvocationsFinder finder, InvocationMarker marker ) {
         this.finder = finder;
-        this.reporter = reporter;
         this.marker = marker;
     }
     
@@ -38,7 +38,7 @@ public class NonGreedyNumberOfInvocationsInOrderChecker {
         while( actualCount < wantedCount ){
             Invocation next = finder.findFirstMatchingUnverifiedInvocation( invocations, wanted, context );
             if( next == null ){
-                reporter.tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastLocation );
+                throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastLocation );
             }
             marker.markVerified( next, wanted );
             context.markVerified( next );
