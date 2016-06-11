@@ -5,15 +5,18 @@
 
 package org.mockito.internal.invocation;
 
+
+import static org.mockito.exceptions.Reporter.invalidUseOfMatchers;
+
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.invocation.Invocation;
-
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class MatchersBinder implements Serializable {
@@ -34,7 +37,7 @@ public class MatchersBinder implements Serializable {
             int recordedMatchersSize = lastMatchers.size();
             int expectedMatchersSize = invocation.getArguments().length;
             if (expectedMatchersSize != recordedMatchersSize) {
-                new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
+                throw invalidUseOfMatchers(expectedMatchersSize, lastMatchers);
             }
         }
     }

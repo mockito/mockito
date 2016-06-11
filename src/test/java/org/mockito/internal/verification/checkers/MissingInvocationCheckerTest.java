@@ -5,103 +5,86 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.exceptions.Reporter;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class MissingInvocationCheckerTest extends TestBase {
 
-    private MissingInvocationChecker checker;
-    
-    private InvocationsFinderStub finderStub;
-    private ReporterStub reporterStub;
-    
-    private InvocationMatcher wanted;
-    private List<Invocation> invocations;
+	private MissingInvocationChecker checker;
+	private InvocationMatcher wanted;
+	private List<Invocation> invocations;
 
-    @Before
-    public void setup() {
-        reporterStub = new ReporterStub();
-        finderStub = new InvocationsFinderStub();
-        checker = new MissingInvocationChecker(finderStub, reporterStub);
-        
-        wanted = new InvocationBuilder().toInvocationMatcher();
-        invocations = asList(new InvocationBuilder().toInvocation());
-    }
-    
-    @Test
-    public void shouldAskFinderForActualInvocations() {
-        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        checker.check(invocations, wanted);
-        
-        assertSame(invocations, finderStub.invocations);
-    }
-    
-    @Test
-    public void shouldPassBecauseActualInvocationFound() {
-        finderStub.actualToReturn.add(new InvocationBuilder().toInvocation());
-        checker.check(invocations, wanted);
-    }
-    
-    @Test
-    public void shouldAskAnalyzerForSimilarInvocation() {
-        checker.check(invocations, wanted);
-        
-        assertSame(invocations, finderStub.invocations);
-    }
-    
-    @Test
-    public void shouldReportWantedButNotInvoked() {
-        //given          
-        assertTrue(finderStub.actualToReturn.isEmpty());
-        finderStub.similarToReturn = null;
-        
-        //when
-        checker.check(invocations, wanted);
-        
-        //then
-        assertEquals(wanted, reporterStub.wanted);
-        assertNull(reporterStub.actualLocation);
-    }
-    
-    @Test
-    public void shouldReportWantedInvocationDiffersFromActual() {
-        assertTrue(finderStub.actualToReturn.isEmpty());
-        Invocation actualInvocation = new InvocationBuilder().toInvocation();
-        finderStub.similarToReturn = actualInvocation;
-        
-        checker.check(invocations, wanted);
-        
-        assertNotNull(reporterStub.wanted);
-        assertNotNull(reporterStub.actual);
-        
-        assertSame(actualInvocation.getLocation(), reporterStub.actualLocation);
-    }
-    
-    class ReporterStub extends Reporter {
-        private Object wanted;
-        private String actual;
-        private Location actualLocation;
-        
-        @Override
-        public void wantedButNotInvoked(DescribedInvocation wanted, List<? extends DescribedInvocation> invocations) {
-            this.wanted = wanted;
-        }
-        
-        @Override public void argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
-                    this.wanted = wanted;
-                    this.actual = actual;
-                    this.actualLocation = actualLocation;
-        }
-    }
+	@Mock
+	private IMethods mock;
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
+	@Before
+	public void setup() {
+		checker = new MissingInvocationChecker();
+	}
+
+	@Test
+	public void shouldPassBecauseActualInvocationFound() {
+		wanted = buildSimpleMethod().toInvocationMatcher();
+		invocations = asList(buildSimpleMethod().toInvocation());
+
+		checker.check(invocations, wanted);
+	}
+
+	@Test
+	public void shouldReportWantedButNotInvoked() {
+		wanted = buildSimpleMethod().toInvocationMatcher();
+		invocations = asList(buildDifferentMethod().toInvocation());
+
+		exception.expect(WantedButNotInvoked.class);
+		exception.expectMessage("Wanted but not invoked:");
+		exception.expectMessage("mock.simpleMethod()");
+		exception.expectMessage("However, there were other interactions with this mock:");
+		exception.expectMessage("mock.differentMethod();");
+
+		checker.check(invocations, wanted);
+	}
+
+	@Test
+	public void shouldReportWantedInvocationDiffersFromActual() {
+		wanted = buildIntArgMethod().arg(2222).toInvocationMatcher();
+		invocations = asList(buildIntArgMethod().arg(1111).toInvocation());
+
+		exception.expect(ArgumentsAreDifferent.class);
+
+		exception.expectMessage("Argument(s) are different! Wanted:");
+		exception.expectMessage("mock.intArgumentMethod(2222);");
+		exception.expectMessage("Actual invocation has different arguments:");
+		exception.expectMessage("mock.intArgumentMethod(1111);");
+
+		checker.check(invocations, wanted);
+	}
+
+	private InvocationBuilder buildIntArgMethod() {
+		return new InvocationBuilder().mock(mock).method("intArgumentMethod").argTypes(int.class);
+	}
+
+	private InvocationBuilder buildSimpleMethod() {
+		return new InvocationBuilder().mock(mock).simpleMethod();
+	}
+
+	private InvocationBuilder buildDifferentMethod() {
+		return new InvocationBuilder().mock(mock).differentMethod();
+	}
 }

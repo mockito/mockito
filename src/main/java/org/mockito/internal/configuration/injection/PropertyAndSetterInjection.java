@@ -5,23 +5,27 @@
 
 package org.mockito.internal.configuration.injection;
 
-import org.mockito.exceptions.Reporter;
+import static org.mockito.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
+import static org.mockito.exceptions.Reporter.fieldInitialisationThrewException;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.injection.filter.TerminalMockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.TerminalMockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 import org.mockito.internal.util.reflection.SuperTypesLastSorter;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.*;
-
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * Inject mocks using first setters then fields, if no setters available.
@@ -91,10 +95,9 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         } catch (MockitoException e) {
             if(e.getCause() instanceof InvocationTargetException) {
                 Throwable realCause = e.getCause().getCause();
-                new Reporter().fieldInitialisationThrewException(field, realCause);
+                throw fieldInitialisationThrewException(field, realCause);
             }
-            new Reporter().cannotInitializeForInjectMocksAnnotation(field.getName(), e);
-            throw new IllegalStateException("never thrown");
+            throw cannotInitializeForInjectMocksAnnotation(field.getName(), e);
         }
     }
 

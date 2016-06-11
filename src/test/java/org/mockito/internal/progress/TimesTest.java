@@ -5,20 +5,23 @@
 
 package org.mockito.internal.progress;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockitoutil.TestBase;
 
-public class TimesTest extends TestBase {
+
+public class TimesTest  {
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {
-        try {
-            VerificationModeFactory.times(-50);
-            fail();
-        } catch (MockitoException e) {
-            assertEquals("Negative value is not allowed here", e.getMessage());
-        }
+       
+    	exception.expect(MockitoException.class);
+    	exception.expectMessage("Negative value is not allowed here");
+        
+    	VerificationModeFactory.times(-50);
     }
 }

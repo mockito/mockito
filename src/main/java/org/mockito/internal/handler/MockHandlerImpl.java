@@ -24,6 +24,8 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
+import static org.mockito.exceptions.Reporter.stubPassedToVerify;
+
 import java.util.List;
 
 /**
@@ -126,7 +128,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     private VerificationDataImpl createVerificationData(InvocationContainerImpl invocationContainerImpl, InvocationMatcher invocationMatcher) {
         if (mockSettings.isStubOnly()) {
-            new Reporter().stubPassedToVerify();     // this throws an exception
+            throw stubPassedToVerify();     // this throws an exception
         }
 
         return new VerificationDataImpl(invocationContainerImpl, invocationMatcher);

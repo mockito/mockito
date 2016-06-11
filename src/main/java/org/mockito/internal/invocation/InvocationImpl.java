@@ -12,6 +12,8 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.*;
 
+import static org.mockito.exceptions.Reporter.cannotCallAbstractRealMethod;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -114,7 +116,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
 
     public Object callRealMethod() throws Throwable {
         if (method.isAbstract()) {
-            new Reporter().cannotCallAbstractRealMethod();
+            throw cannotCallAbstractRealMethod();
         }
         return realMethod.invoke(mock, rawArguments);
     }

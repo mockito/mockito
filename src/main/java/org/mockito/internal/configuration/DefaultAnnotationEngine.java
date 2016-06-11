@@ -12,6 +12,7 @@ import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldSetter;
 
+import static org.mockito.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.annotation.Annotation;
@@ -80,7 +81,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
     
     void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
         if (alreadyAssigned) {
-            new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
+            throw moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
 

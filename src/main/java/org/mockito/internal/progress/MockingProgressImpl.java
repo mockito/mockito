@@ -5,7 +5,9 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.exceptions.Reporter;
+import static org.mockito.exceptions.Reporter.unfinishedStubbing;
+import static org.mockito.exceptions.Reporter.unfinishedVerificationException;
+
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
@@ -19,7 +21,6 @@ import org.mockito.verification.VerificationMode;
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
     
-    private final Reporter reporter = new Reporter();
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
     OngoingStubbing ongoingStubbing;
@@ -72,7 +73,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (stubbingInProgress != null) {
             Location temp = stubbingInProgress;
             stubbingInProgress = null;
-            reporter.unfinishedStubbing(temp);
+            throw unfinishedStubbing(temp);
         }
     }
 
@@ -84,7 +85,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (verificationMode != null) {
             Location location = verificationMode.getLocation();
             verificationMode = null;
-            reporter.unfinishedVerificationException(location);
+            throw unfinishedVerificationException(location);
         }
 
         getArgumentMatcherStorage().validateState();

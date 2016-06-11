@@ -11,6 +11,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.objenesis.ObjenesisHelper;
 
+import static org.mockito.exceptions.Reporter.notAnException;
+
 import java.io.Serializable;
 
 public class ThrowsExceptionClass implements Answer<Object>, Serializable {
@@ -24,7 +26,7 @@ public class ThrowsExceptionClass implements Answer<Object>, Serializable {
 
     private Class<? extends Throwable> checkNonNullThrowable(Class<? extends Throwable> throwableClass) {
         if(throwableClass == null || !Throwable.class.isAssignableFrom(throwableClass)) {
-            new Reporter().notAnException();
+            throw notAnException();
         }
         return throwableClass;
     }

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
+import static org.mockito.exceptions.Reporter.cannotInjectDependency;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.reflect.Field;
@@ -36,7 +37,7 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                             setField(injectee, candidateFieldToBeInjected,matchingMock);
                         }
                     } catch (RuntimeException e) {
-                        new Reporter().cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
+                        throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
                     }
                     return matchingMock;
                 }

@@ -12,6 +12,10 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
+import static org.mockito.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
+import static org.mockito.exceptions.Reporter.misplacedArgumentMatcher;
+import static org.mockito.exceptions.Reporter.reportNoSubMatchersFound;
+
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -82,7 +86,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     private void assertMatchersFoundFor(String additionalMatcherName) {
         if (matcherStack.isEmpty()) {
             matcherStack.clear();
-            new Reporter().reportNoSubMatchersFound(additionalMatcherName);
+            throw reportNoSubMatchersFound(additionalMatcherName);
         }
     }
 
@@ -90,7 +94,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         if(matcherStack.size() < count) {
             ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
             matcherStack.clear();
-            new Reporter().incorrectUseOfAdditionalMatchers(additionalMatcherName, count, lastMatchers);
+            throw incorrectUseOfAdditionalMatchers(additionalMatcherName, count, lastMatchers);
         }
     }
 
@@ -101,7 +105,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         if (!matcherStack.isEmpty()) {
             ArrayList lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
             matcherStack.clear();
-            new Reporter().misplacedArgumentMatcher(lastMatchers);
+            throw misplacedArgumentMatcher(lastMatchers);
         }
     }
 

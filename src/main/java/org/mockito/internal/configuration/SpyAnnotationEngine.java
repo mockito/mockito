@@ -4,11 +4,8 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.*;
-import org.mockito.configuration.AnnotationEngine;
-import org.mockito.exceptions.Reporter;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.MockUtil;
+import static org.mockito.Mockito.withSettings;
+import static org.mockito.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -16,7 +13,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
-import static org.mockito.Mockito.withSettings;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.configuration.AnnotationEngine;
+import org.mockito.exceptions.Reporter;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
 
 /**
  * Process fields annotated with &#64;Spy.
@@ -121,7 +127,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     void assertNoIncompatibleAnnotations(Class annotation, Field field, Class... undesiredAnnotations) {
         for (Class u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
-                new Reporter().unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotation.getClass().getSimpleName());
+                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotation.getClass().getSimpleName());
             }
         }
     }

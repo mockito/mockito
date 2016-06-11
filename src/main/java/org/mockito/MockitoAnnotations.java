@@ -20,6 +20,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static org.mockito.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
@@ -119,7 +120,7 @@ public class MockitoAnnotations {
 
     static void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
         if (alreadyAssigned) {
-            new Reporter().moreThanOneAnnotationNotAllowed(field.getName());
+            throw moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
 }
