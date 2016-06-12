@@ -9,7 +9,7 @@ public class DefaultStackTraceCleaner implements StackTraceCleaner {
     
 
 	@Override
-	public boolean apply(StackTraceElement candidate) {
+	public boolean isOut(StackTraceElement candidate) {
 		String className = candidate.getClassName();
 		
 		if (isFromMockitoRunner(className))

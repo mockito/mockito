@@ -2,7 +2,6 @@ package org.mockito.exceptions.stacktrace;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner;
@@ -34,11 +33,11 @@ public class StackTraceCleanerTest {
 	}
 
 	private void assertAccepted(String className) {
-		assertThat(cleaner.apply(type(className))).describedAs("Must be accepted %s", className).isTrue();
+		assertThat(cleaner.isOut(type(className))).describedAs("Must be accepted %s", className).isTrue();
 	}
 
 	private void assertRejected(String className) {
-		assertThat(cleaner.apply(type(className))).describedAs("Must be rejected %s", className).isFalse();
+		assertThat(cleaner.isOut(type(className))).describedAs("Must be rejected %s", className).isFalse();
 	}
 
 	private StackTraceElement type(String className) {

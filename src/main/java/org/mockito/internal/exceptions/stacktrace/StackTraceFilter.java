@@ -29,7 +29,7 @@ public class StackTraceFilter implements Serializable {
         //TODO: profile
         final List<StackTraceElement> filtered = new ArrayList<StackTraceElement>();
         for (StackTraceElement element : target) {
-            if (CLEANER.apply(element)) {
+            if (CLEANER.isOut(element)) {
                 filtered.add(element);
             }
         }

@@ -22,5 +22,5 @@ public interface StackTraceCleaner {
      * @param candidate element of the actual stack trace
      * @return whether the element should be excluded from cleaned stack trace.
      */
-    boolean apply(StackTraceElement candidate);
+    boolean isOut(StackTraceElement candidate);
 }

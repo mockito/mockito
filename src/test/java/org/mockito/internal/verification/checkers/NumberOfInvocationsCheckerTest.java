@@ -136,11 +136,11 @@ public class NumberOfInvocationsCheckerTest {
 
 	@Test
 	public void shouldMarkInvocationsAsVerified() throws Exception {
-		Invocation invocation = new InvocationBuilder().toInvocation();
+		Invocation invocation = buildSimpleMethod().toInvocation();
 		assertThat(invocation.isVerified()).isFalse();
 
 		invocations = asList(invocation);
-		wanted = new InvocationBuilder().toInvocationMatcher();
+		wanted = buildSimpleMethod().toInvocationMatcher();
 		
 		checker.check(invocations, wanted, 1);
 
