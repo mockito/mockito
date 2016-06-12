@@ -6,47 +6,31 @@ import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 * This predicate is used to filter "good" {@link StackTraceElement}. Good 
 */
 public class DefaultStackTraceCleaner implements StackTraceCleaner {
-    
 
 	@Override
-	public boolean isOut(StackTraceElement candidate) {
-		String className = candidate.getClassName();
-		
-		if (isFromMockitoRunner(className))
+	public boolean isOut(StackTraceElement e) {
+		if (isFromMockitoRunner(e.getClassName()) || isFromMockitoRule(e.getClassName())) {
+			return false;
+		} else if (isMockDispatcher(e.getClassName()) || isFromMockito(e.getClassName())) {
 			return true;
-		
-		if (isFromMockitoRule(className))
-			return true;
-		
-	    if (isFromMockito(className)){
-	    	if (isTest(className))
-	    		return true;
-	    	return false;
-	    }
-	   
-	    if (isMock(className))
-	    	return false;
-	    
-	    return true;
+		} else {
+			return false;
+		}
 	}
 
-	private boolean isTest(String className) {
-		return className.endsWith("Test");
-	}
-
-	private boolean isMock(String className) {
+	private static boolean isMockDispatcher(String className) {
 		return  (className.contains("$$EnhancerByMockitoWithCGLIB$$")|| className.contains("$MockitoMock$"));
 	}
 
-	private boolean isFromMockito(String className) {
+	private static boolean isFromMockito(String className) {
 		return className.startsWith("org.mockito.");
 	}
 
-	private boolean isFromMockitoRule(String className) {
+	private static boolean isFromMockitoRule(String className) {
 		return className.startsWith("org.mockito.internal.junit.JUnitRule");
 	}
 
-	private boolean isFromMockitoRunner(String className) {
+	private static boolean isFromMockitoRunner(String className) {
 		return className.startsWith("org.mockito.internal.runners.") || className.startsWith("org.mockito.runners.");
 	}
 }

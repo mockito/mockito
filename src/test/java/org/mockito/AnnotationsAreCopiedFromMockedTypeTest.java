@@ -28,16 +28,6 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
     }
 
     @Test
-    @Ignore("fields are not copied in the byte buddy mock, this is currently expected")
-    public void mock_should_have_annotations_copied_from_mocked_type_on_fields() {
-        AnnotationWithDefaultValue onClassDefaultValue = field("field", mock(OnField.class)).getAnnotation(AnnotationWithDefaultValue.class);
-        AnnotationWithCustomValue onClassCustomValue = field("field", mock(OnField.class)).getAnnotation(AnnotationWithCustomValue.class);
-
-        Assertions.assertThat(onClassDefaultValue.value()).isEqualTo("yup");
-        Assertions.assertThat(onClassCustomValue.value()).isEqualTo("yay");
-    }
-
-    @Test
     public void mock_should_have_annotations_copied_from_mocked_type_on_methods() {
         AnnotationWithDefaultValue onClassDefaultValue = method("method", mock(OnMethod.class)).getAnnotation(AnnotationWithDefaultValue.class);
         AnnotationWithCustomValue onClassCustomValue = method("method", mock(OnMethod.class)).getAnnotation(AnnotationWithCustomValue.class);
@@ -118,12 +108,6 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
                 @AnnotationWithCustomValue("yay")
                 String ignored
         ) { return ""; }
-    }
-
-    public class OnField {
-        @AnnotationWithDefaultValue
-        @AnnotationWithCustomValue("yay")
-        public String field;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

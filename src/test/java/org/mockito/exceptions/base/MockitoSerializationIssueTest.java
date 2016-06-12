@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MockitoSerializationIssueTest {
 
     @Test
-    @Ignore("This test fails cause the DefaultStackTraceCleaner ")
     public void should_filter_out_test_class_from_stacktrace_when_clean_flag_is_true() {
         // given
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);

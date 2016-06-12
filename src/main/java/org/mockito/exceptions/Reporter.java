@@ -400,9 +400,9 @@ public class Reporter {
 
         String message = join(
                 wanted.toString(),
-                "Wanted " + discrepancy.getPluralizedWantedCount() + ":",
+                "Wanted " + discrepancy.getPluralizedWantedCount() + (discrepancy.getWantedCount() == 0 ? "." : ":"),
                 new LocationImpl(),
-                "But was " + discrepancy.getPluralizedActualCount() + ":",
+                "But was " + discrepancy.getPluralizedActualCount() + (discrepancy.getActualCount() == 0 ? "." : ":"),
                 ending
         );
         return message;

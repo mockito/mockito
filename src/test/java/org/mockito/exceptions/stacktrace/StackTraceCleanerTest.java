@@ -33,11 +33,11 @@ public class StackTraceCleanerTest {
 	}
 
 	private void assertAccepted(String className) {
-		assertThat(cleaner.isOut(type(className))).describedAs("Must be accepted %s", className).isTrue();
+		assertThat(cleaner.isOut(type(className))).describedAs("Must be accepted %s", className).isFalse();
 	}
 
 	private void assertRejected(String className) {
-		assertThat(cleaner.isOut(type(className))).describedAs("Must be rejected %s", className).isFalse();
+		assertThat(cleaner.isOut(type(className))).describedAs("Must be rejected %s", className).isTrue();
 	}
 
 	private StackTraceElement type(String className) {
