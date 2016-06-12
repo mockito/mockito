@@ -1,3 +1,14 @@
+### 2.0.55-beta (2016-06-12 23:41 UTC)
+
+* Authors: 3
+* Commits: 7
+  * 4: Rafael Winterhalter
+  * 2: Christian Schwarz
+  * 1: Philipp Jardas
+* Improvements: 2
+  * Refactored class Reporter to a static utillity [(#427)](https://github.com/mockito/mockito/pull/427)
+  * Mock returning java.util.Optional should return Optional.empty() by default (Java 8) [(#191)](https://github.com/mockito/mockito/issues/191)
+
 ### 2.0.54-beta (2016-05-27 18:52 UTC)
 
 * Authors: 1
