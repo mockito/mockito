@@ -1,3 +1,12 @@
+### 2.0.57-beta (2016-06-13 22:01 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Philipp Jardas
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Added default answer for java.util.stream.Stream [(#429)](https://github.com/mockito/mockito/pull/429)
+
 ### 2.0.56-beta (2016-06-13 07:26 UTC)
 
 * Authors: 1
