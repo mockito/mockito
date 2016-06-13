@@ -40,4 +40,24 @@ public final class JavaEightUtil {
             throw new InstantiationException("Could not create java.util.Optional#empty(): " + e, e);
         }
     }
+
+    /**
+     * Creates an empty Stream using reflection to stay backwards-compatible with older
+     * JDKs.
+     *
+     * @return an empty Stream.
+     */
+    public static Object emptyStream() {
+        // note: the empty stream can not be stored as a singleton.
+        try {
+            final Class<?> optionalClass = Class.forName("java.util.stream.Stream");
+            final Method emptyMethod = optionalClass.getMethod("empty");
+
+            return emptyMethod.invoke(null);
+            // any exception is really unexpected since the type name has
+            // already been verified
+        } catch (Exception e) {
+            throw new InstantiationException("Could not create java.util.stream.Stream#empty(): " + e, e);
+        }
+    }
 }
