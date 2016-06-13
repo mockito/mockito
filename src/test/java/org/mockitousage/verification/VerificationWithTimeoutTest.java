@@ -121,7 +121,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         verify(mock, timeout(40).only()).clear();
     }
 
-    @Test
+    @Test(expected=NoInteractionsWanted.class)
     public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
         //given
         Thread t1 = waitAndExerciseMock(20);
@@ -130,12 +130,15 @@ public class VerificationWithTimeoutTest extends TestBase {
         t1.start();
         mock.add("foo");
 
-        //then
+        //then at first "clear" hasn't been called
         verify(mock, never()).clear();
-        try {
-            verify(mock, timeout(50).only()).clear();
-            fail();
-        } catch (NoInteractionsWanted e) {}
+
+        // expect to have received the "clear" but
+        // for the call on "add" to break the "only" part
+        // of the verification
+        verify(mock, timeout(50).only()).clear();
+
+        // the test should end with an exception
     }
 
     /**
