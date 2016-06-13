@@ -5,11 +5,11 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
+import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 import static org.mockito.Mockito.mock;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 @SuppressWarnings("unchecked")
 public class ReturnsEmptyValuesTest extends TestBase {
 
-    ReturnsEmptyValues values = new ReturnsEmptyValues();
+    private final ReturnsEmptyValues values = new ReturnsEmptyValues();
 
     @Test
     public void should_return_empty_collections_or_null_for_non_collections() {
@@ -90,13 +90,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     @Test
     public void should_return_empty_optional() throws Exception {
-
-        Class<?> streamType;
-        try {
-            streamType = Class.forName("java.util.stream.Stream");
-        } catch (ClassNotFoundException e) {
-            return; // Does not apply to current VM version, optional is not available.
-        }
+        Class<?> streamType = getClassOrSkipTest("java.util.stream.Stream");
 
         //given
         Object stream = mock(streamType);
@@ -111,6 +105,31 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
         //then
         assertEquals(optional, result);
+    }
+
+    @Test
+    public void should_return_empty_stream() throws Exception {
+        // given
+        Class<?> streamType = getClassOrSkipTest("java.util.stream.Stream");
+
+        // when
+        Object stream = values.returnValueFor(streamType);
+        long count = (Long) streamType.getMethod("count").invoke(stream);
+
+        // then
+        assertEquals("count of empty Stream", 0L, count);
+    }
+
+    /**
+     * Tries to load the given class. If the class is not found, the complete test is skipped.
+     */
+    private Class<?> getClassOrSkipTest(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            Assume.assumeNoException("JVM does not support " + className, e);
+            return null;
+        }
     }
 
 }

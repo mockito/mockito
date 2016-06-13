@@ -105,6 +105,8 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new LinkedHashMap<Object, Object>();
         } else if ("java.util.Optional".equals(type.getName())) {
             return JavaEightUtil.emptyOptional();
+        } else if ("java.util.stream.Stream".equals(type.getName())) {
+            return JavaEightUtil.emptyStream();
         }
 
         //Let's not care about the rest of collections.
