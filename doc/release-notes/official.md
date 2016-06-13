@@ -1,3 +1,12 @@
+### 2.0.56-beta (2016-06-13 07:26 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: lloydjm77
+* Improvements: 2
+  * Fixes #312.  Added documentation in OngoingStubbing.thenThrow(). [(#381)](https://github.com/mockito/mockito/pull/381)
+  * ThrowsExceptionClass is urealiable - exception doesn't containt stack trace [(#312)](https://github.com/mockito/mockito/issues/312)
+
 ### 2.0.55-beta (2016-06-12 23:41 UTC)
 
 * Authors: 3
