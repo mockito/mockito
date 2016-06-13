@@ -4,10 +4,11 @@
  */
 package org.mockito;
 
-import org.mockito.internal.matchers.CapturingMatcher;
-import org.mockito.internal.progress.HandyReturnValues;
+import static org.mockito.internal.util.Primitives.defaultValue;
 
 import java.util.List;
+
+import org.mockito.internal.matchers.CapturingMatcher;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -60,7 +61,6 @@ import java.util.List;
  */
 public class ArgumentCaptor<T> {
     
-    HandyReturnValues handyReturnValues = new HandyReturnValues();
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<? extends T> clazz;
@@ -81,7 +81,7 @@ public class ArgumentCaptor<T> {
      */
     public T capture() {
         Mockito.argThat(capturingMatcher);
-        return handyReturnValues.returnFor(clazz);
+        return defaultValue(clazz);
     }
 
     /**

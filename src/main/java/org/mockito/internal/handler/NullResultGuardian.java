@@ -4,14 +4,15 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.internal.util.Primitives.defaultValue;
+
+import java.util.List;
+
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.VoidMethodStubbable;
-
-import java.util.List;
 
 /**
  * Protects the results from delegate MockHandler. Makes sure the results are valid.
@@ -30,11 +31,10 @@ class NullResultGuardian implements InternalMockHandler {
         Class<?> returnType = invocation.getMethod().getReturnType();
         if(result == null && returnType.isPrimitive()) {
             //primitive values cannot be null
-            return new HandyReturnValues().returnFor(returnType);
-        } else {
-            return result;
-        }
-    }
+            return defaultValue(returnType);
+        }  
+        return result;
+     }
 
     //boring delegation:
 

@@ -6,11 +6,16 @@ package org.mockito;
 
 import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.progress.HandyReturnValues;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.internal.util.Primitives;
+
+import static org.mockito.internal.util.Primitives.defaultValue;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,7 +74,8 @@ public class Matchers {
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
-        return reportMatcher(new InstanceOf(Boolean.class)).returnFalse();
+        reportMatcher(new InstanceOf(Boolean.class)); 
+        return false;
     }
 
     /**
@@ -80,7 +86,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static byte anyByte() {
-        return reportMatcher(new InstanceOf(Byte.class)).returnZero();
+        reportMatcher(new InstanceOf(Byte.class));
+        return 0;
     }
 
     /**
@@ -91,7 +98,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static char anyChar() {
-        return reportMatcher(new InstanceOf(Character.class)).returnChar();
+        reportMatcher(new InstanceOf(Character.class));
+        return 0;
     }
 
     /**
@@ -102,7 +110,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static int anyInt() {
-        return reportMatcher(new InstanceOf(Integer.class)).returnZero();
+        reportMatcher(new InstanceOf(Integer.class));
+        return 0;
     }
 
     /**
@@ -113,7 +122,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static long anyLong() {
-        return reportMatcher(new InstanceOf(Long.class)).returnZero();
+        reportMatcher(new InstanceOf(Long.class));
+        return 0;
     }
 
     /**
@@ -124,7 +134,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float anyFloat() {
-        return reportMatcher(new InstanceOf(Float.class)).returnZero();
+        reportMatcher(new InstanceOf(Float.class));
+        return 0;
     }
 
     /**
@@ -135,7 +146,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double anyDouble() {
-        return reportMatcher(new InstanceOf(Double.class)).returnZero();
+        reportMatcher(new InstanceOf(Double.class));
+        return 0;
     }
 
     /**
@@ -146,7 +158,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static short anyShort() {
-        return reportMatcher(new InstanceOf(Short.class)).returnZero();
+        reportMatcher(new InstanceOf(Short.class));
+        return 0;
     }
 
     /**
@@ -159,7 +172,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T anyObject() {
-        return (T) reportMatcher(Any.ANY).returnNull();
+        reportMatcher(Any.ANY);
+        return null;
     }
 
     /**
@@ -186,7 +200,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T anyVararg() {
-        return (T) reportMatcher(AnyVararg.ANY_VARARG).returnNull();
+        reportMatcher(AnyVararg.ANY_VARARG);
+        return null;
     }
     
     /**
@@ -203,7 +218,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T any(Class<T> clazz) {
-        return (T) reportMatcher(Any.ANY).returnFor(clazz);
+        reportMatcher(Any.ANY);
+        return defaultValue(clazz);
     }
     
     /**
@@ -229,7 +245,8 @@ public class Matchers {
      * @return empty String ("")
      */
     public static String anyString() {
-        return reportMatcher(new InstanceOf(String.class)).returnString();
+        reportMatcher(new InstanceOf(String.class));
+        return "";
     }
     
     /**
@@ -239,8 +256,9 @@ public class Matchers {
      * 
      * @return empty List.
      */
-    public static List anyList() {
-        return reportMatcher(new InstanceOf(List.class)).returnList();
+    public static  List anyList() {
+        reportMatcher(new InstanceOf(List.class));
+        return new LinkedList();
     }
     
     /**
@@ -269,8 +287,9 @@ public class Matchers {
      *
      * @return empty Set
      */
-    public static Set anySet() {
-        return reportMatcher(new InstanceOf(Set.class)).returnSet();
+    public static  Set anySet() {
+        reportMatcher(new InstanceOf(Set.class));
+        return new HashSet();
     }
     
     /**
@@ -300,7 +319,8 @@ public class Matchers {
      * @return empty Map.
      */
     public static Map anyMap() {
-        return reportMatcher(new InstanceOf(Map.class)).returnMap();
+        reportMatcher(new InstanceOf(Map.class));
+        return new HashMap();
     }
 
     /**
@@ -331,7 +351,8 @@ public class Matchers {
      * @return empty Collection.
      */
     public static Collection anyCollection() {
-        return reportMatcher(new InstanceOf(Collection.class)).returnList();
+        reportMatcher(new InstanceOf(Collection.class));
+        return new LinkedList();
     }    
     
     /**
@@ -359,13 +380,15 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param <T>
-     *            the accepted type.
-     * @param clazz
-     *            the class of the accepted type.
+     *           the accepted type.
+     * @param type
+     *           the class of the accepted type.
      * @return <code>null</code>.
      */
-    public static <T> T isA(Class<T> clazz) {
-        return reportMatcher(new InstanceOf(clazz)).<T>returnFor(clazz);
+    public static <T> T isA(Class<T> type) {
+        reportMatcher(new InstanceOf(type));
+        
+        return defaultValue(type);
     }
 
     /**
@@ -374,11 +397,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static boolean eq(boolean value) {
-        return reportMatcher(new Equals(value)).returnFalse();
+        reportMatcher(new Equals(value)); 
+        return false;
     }
 
     /**
@@ -387,11 +411,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static byte eq(byte value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -400,11 +425,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static char eq(char value) {
-        return reportMatcher(new Equals(value)).returnChar();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -413,11 +439,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static double eq(double value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -426,11 +453,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static float eq(float value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
     
     /**
@@ -439,11 +467,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static int eq(int value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -452,11 +481,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static long eq(long value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -465,11 +495,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>0</code>.
      */
     public static short eq(short value) {
-        return reportMatcher(new Equals(value)).returnZero();
+        reportMatcher(new Equals(value));
+        return 0;
     }
 
     /**
@@ -478,11 +509,14 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>null</code>.
      */
     public static <T> T eq(T value) {
-        return (T) reportMatcher(new Equals(value)).<T>returnFor(value);
+        reportMatcher(new Equals(value));
+        if (value==null)
+        	return null;
+        return (T) Primitives.defaultValue(value.getClass());
     }
 
     /**
@@ -500,13 +534,13 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param value
-     *            the given value.
+     *           the given value.
      * @param excludeFields
-     *            fields to exclude, if field does not exist it is ignored.
+     *           fields to exclude, if field does not exist it is ignored.
      * @return <code>null</code>.
      */
     public static <T> T refEq(T value, String... excludeFields) {
-        return reportMatcher(new ReflectionEquals(value, excludeFields)).<T>returnNull();
+        reportMatcher(new ReflectionEquals(value, excludeFields));return null;
     }
     
     /**
@@ -515,13 +549,16 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param <T>
-     *            the type of the object, it is passed through to prevent casts.
+     *           the type of the object, it is passed through to prevent casts.
      * @param value
-     *            the given value.
+     *           the given value.
      * @return <code>null</code>.
      */
     public static <T> T same(T value) {
-        return (T) reportMatcher(new Same(value)).<T>returnFor(value);
+        reportMatcher(new Same(value));
+        if (value==null)
+        	return null;
+        return (T) Primitives.defaultValue(value.getClass());
     }
 
     /**
@@ -532,7 +569,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Object isNull() {
-        return reportMatcher(Null.NULL).returnNull();
+        reportMatcher(Null.NULL);
+        return null;
     }
 
     /**
@@ -545,7 +583,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T isNull(Class<T> clazz) {
-        return (T) reportMatcher(Null.NULL).returnNull();
+        reportMatcher(Null.NULL);
+        return null;
     }
 
     /**
@@ -558,7 +597,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static Object notNull() {
-        return reportMatcher(NotNull.NOT_NULL).returnNull();
+        reportMatcher(NotNull.NOT_NULL);
+        return null;
     }
 
     /**
@@ -573,7 +613,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T notNull(Class<T> clazz) {
-        return (T) reportMatcher(NotNull.NOT_NULL).returnNull();
+        reportMatcher(NotNull.NOT_NULL);
+        return null;
     }
     
     /**
@@ -610,11 +651,11 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param substring
-     *            the substring.
+     *           the substring.
      * @return empty String ("").
      */
     public static String contains(String substring) {
-        return reportMatcher(new Contains(substring)).returnString();
+        reportMatcher(new Contains(substring));return "";
     }
 
     /**
@@ -623,11 +664,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param regex
-     *            the regular expression.
+     *           the regular expression.
      * @return empty String ("").
      */
     public static String matches(String regex) {
-        return reportMatcher(new Matches(regex)).returnString();
+        reportMatcher(new Matches(regex));
+        return "";
     }
 
     /**
@@ -636,11 +678,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param suffix
-     *            the suffix.
+     *           the suffix.
      * @return empty String ("").
      */
     public static String endsWith(String suffix) {
-        return reportMatcher(new EndsWith(suffix)).returnString();
+        reportMatcher(new EndsWith(suffix));
+        return "";
     }
 
     /**
@@ -649,11 +692,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      * 
      * @param prefix
-     *            the prefix.
+     *           the prefix.
      * @return empty String ("").
      */
     public static String startsWith(String prefix) {
-        return reportMatcher(new StartsWith(prefix)).returnString();
+        reportMatcher(new StartsWith(prefix));
+        return "";
     }
 
     /**
@@ -679,7 +723,8 @@ public class Matchers {
      * @return <code>null</code>.
      */
     public static <T> T argThat(ArgumentMatcher<T> matcher) {
-        return reportMatcher(matcher).<T>returnNull();
+        reportMatcher(matcher);
+        return null;
     }
     
     /**
@@ -692,7 +737,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static char charThat(ArgumentMatcher<Character> matcher) {
-        return reportMatcher(matcher).returnChar();
+        reportMatcher(matcher);
+        return 0;
     }
     
     /**
@@ -705,7 +751,8 @@ public class Matchers {
      * @return <code>false</code>.
      */
     public static boolean booleanThat(ArgumentMatcher<Boolean> matcher) {
-        return reportMatcher(matcher).returnFalse();
+        reportMatcher(matcher); 
+        return false;
     }
     
     /**
@@ -718,7 +765,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static byte byteThat(ArgumentMatcher<Byte> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
     
     /**
@@ -731,7 +779,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static short shortThat(ArgumentMatcher<Short> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
     
     /**
@@ -744,7 +793,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static int intThat(ArgumentMatcher<Integer> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
 
     /**
@@ -757,7 +807,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static long longThat(ArgumentMatcher<Long> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
     
     /**
@@ -770,7 +821,8 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static float floatThat(ArgumentMatcher<Float> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
     
     /**
@@ -783,10 +835,11 @@ public class Matchers {
      * @return <code>0</code>.
      */
     public static double doubleThat(ArgumentMatcher<Double> matcher) {
-        return reportMatcher(matcher).returnZero();
+        reportMatcher(matcher);
+        return 0;
     }
 
-    private static HandyReturnValues reportMatcher(ArgumentMatcher<?> matcher) {
-        return MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
+    private static void reportMatcher(ArgumentMatcher<?> matcher) {
+        MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }

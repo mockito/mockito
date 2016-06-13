@@ -70,7 +70,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     Object returnValueFor(Class<?> type) {
         if (Primitives.isPrimitiveOrWrapper(type)) {
-            return Primitives.defaultValueForPrimitiveOrWrapper(type);
+            return Primitives.defaultValue(type);
             //new instances are used instead of Collections.emptyList(), etc.
             //to avoid UnsupportedOperationException if code under test modifies returned collection
         } else if (type == Iterable.class) {

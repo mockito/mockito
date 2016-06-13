@@ -7,6 +7,7 @@ package org.mockito.internal.verification.checkers;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -106,7 +107,6 @@ public class NumberOfInvocationsCheckerTest {
         exception.expect(TooManyActualInvocations.class);
         exception.expectMessage("" + third.getLocation());
         checker.check(invocations, wanted, 2);
-
     }
 
     @Test
@@ -138,19 +138,16 @@ public class NumberOfInvocationsCheckerTest {
         checker.check(invocations, wanted, 0);
     }
 
-    @Test
-    public void shouldMarkInvocationsAsVerified() throws Exception {
-        Invocation invocation = buildSimpleMethod().toInvocation();
-        assertThat(invocation.isVerified()).isFalse();
+	@Test
+	public void shouldMarkInvocationsAsVerified() throws Exception {
+		Invocation invocation = buildSimpleMethod().toInvocation();
+		assertThat(invocation.isVerified()).isFalse();
 
-        invocations = asList(invocation);
-        wanted = buildSimpleMethod().toInvocationMatcher();
-
-        checker.check(invocations, wanted, 1);
-
-        assertThat(invocation.isVerified()).isTrue();
-    }
-
+		invocations = asList(invocation);
+		wanted = buildSimpleMethod().toInvocationMatcher();
+		checker.check(invocations, wanted, 1);
+		assertThat(invocation.isVerified()).isTrue();
+	}
 
     private InvocationBuilder buildSimpleMethod() {
         return new InvocationBuilder().mock(mock).simpleMethod();
@@ -160,7 +157,7 @@ public class NumberOfInvocationsCheckerTest {
         return new StringContainsNumberMatcher(value, amount);
     }
 
-    private static class StringContainsNumberMatcher extends BaseMatcher<String> {
+    private static class StringContainsNumberMatcher extends TypeSafeMatcher<String> {
 
         private final String expected;
 
@@ -171,8 +168,7 @@ public class NumberOfInvocationsCheckerTest {
             this.amount = amount;
         }
 
-        public boolean matches(Object item) {
-            String text = (String) item;
+        public boolean matchesSafely(String text) {
             int lastIndex = 0;
             int count = 0;
             while (lastIndex != -1) {
@@ -188,5 +184,6 @@ public class NumberOfInvocationsCheckerTest {
         public void describeTo(Description description) {
             description.appendText("containing '" + expected + "' exactly " + amount + " times");
         }
+
     }
 }
