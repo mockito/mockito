@@ -133,7 +133,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         //then
         verify(mock, never()).clear();
         try {
-            verify(mock, timeout(40).only()).clear();
+            verify(mock, timeout(50).only()).clear();
             fail();
         } catch (NoInteractionsWanted e) {}
     }
