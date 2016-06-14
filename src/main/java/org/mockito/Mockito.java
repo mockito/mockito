@@ -1097,8 +1097,12 @@ import org.mockito.junit.*;
  *
  * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.0.0)</h3>
  * <p>
- * You can use Java 8 lambda expressions with {@link ArgumentMatcher} to reduce the dependency on {@link ArgumentCaptor}
- * The argument will be passed to the ArgumentMatcher as a strongly typed object, so it is possible
+ * You can use Java 8 lambda expressions with {@link ArgumentMatcher} to reduce the dependency on {@link ArgumentCaptor}.
+ * If you need to verify that the input to a function call on a mock was correct, then you would normally
+ * use the {@link ArgumentCaptor} to find the operands used and then do subsequent assertions on them. While
+ * for complex examples this can be useful, it's also long-winded.<p>
+ * Writing a lambda to express the match is quite easy. The argument to your function, when used in conjunction
+ * with argThat, will be passed to the ArgumentMatcher as a strongly typed object, so it is possible
  * to do anything with it.
  * <p>
  * Examples:
@@ -1107,17 +1111,21 @@ import org.mockito.junit.*;
  *
  * // verify a list only had strings of a certain length added to it
  * // note - this will only compile under Java 8
- * verify(list, times(2)).add(string -> string.length() < 5);
+ * verify(list, times(2)).add(argThat(string -> string.length() < 5));
  *
- * // Java 7 equivalent
- * verify(list, times(2)).add(new ArgumentMatcher<String>(){
- *     boolean matches(String arg) {
+ * // Java 7 equivalent - not as neat
+ * verify(list, times(2)).add(argThat(new ArgumentMatcher<String>(){
+ *     public boolean matches(String arg) {
  *         return arg.length() < 5;
  *     }
- * });
+ * }));
  *
  * // more complex Java 8 example - where you can specify complex verification behaviour functionally
- * verify(target, times(1)).receiveComplexObject(obj -> obj.getSubObject().get(0).equals("expected"));
+ * verify(target, times(1)).receiveComplexObject(argThat(obj -> obj.getSubObject().get(0).equals("expected")));
+ *
+ * // this can also be used when defining the behaviour of a mock under different inputs
+ * // in this case if the input list was fewer than 3 items the mock returns null
+ * when(mock.someMethod(argThat(list -> list.size()<3))).willReturn(null);
  * </code></pre>
  *
  * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.0.0)</h3>
@@ -1131,13 +1139,12 @@ import org.mockito.junit.*;
  * <p>
  * <pre class="code"><code class="java">
  * // answer by returning 12 every time
- * doAnswer(invocation -> {return 12;})
- *     .when(mock).doSomething();
+ * doAnswer(invocation -> 12).when(mock).doSomething();
  *
  * // answer by using one of the parameters - converting into the right
- * // type as your go - in this case, returning the length of a string parameter
- * // as the answer
- * doAnswer(invocation -> invocation.getArgumentAt(2, String.class).length())
+ * // type as your go - in this case, returning the length of the second string parameter
+ * // as the answer. This gets long-winded quickly, with casting of parameters.
+ * doAnswer(invocation -> ((String)invocation.getArgument(1)).length())
  *     .when(mock).doSomething(anyString(), anyString(), anyString());
  * </code></pre>
  *
