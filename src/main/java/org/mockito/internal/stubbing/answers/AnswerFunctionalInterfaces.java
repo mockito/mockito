@@ -18,8 +18,7 @@ public class AnswerFunctionalInterfaces {
         return new Answer<T>() {
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
-                return answer.answer(
-                        (A)invocation.getArguments()[0]);
+                return answer.answer((A)invocation.getArgument(0));
             }
         };
     }
@@ -34,8 +33,7 @@ public class AnswerFunctionalInterfaces {
         return new Answer<Void>() {
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
-                answer.answer(
-                        (A)invocation.getArguments()[0]);
+                answer.answer((A)invocation.getArgument(0));
                 return null;
             }
         };
@@ -54,8 +52,8 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1));
             }
         };
     }
@@ -72,8 +70,8 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1));
                 return null;
             }
         };
@@ -93,9 +91,9 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2));
             }
         };
     }
@@ -113,9 +111,9 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2));
                 return null;
             }
         };
@@ -136,10 +134,10 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2],
-                        (D)invocation.getArguments()[3]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3));
             }
         };
     }
@@ -158,11 +156,10 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2],
-                        (D)invocation.getArguments()[3]
-                        );
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3));
                 return null;
             }
         };
@@ -184,17 +181,17 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2],
-                        (D)invocation.getArguments()[3],
-                        (E)invocation.getArguments()[4]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3),
+                        (E)invocation.getArgument(4));
             }
         };
     }
 
     /**
-     * Construct an answer from a three parameter answer interface
+     * Construct an answer from a five parameter answer interface
      * @param answer answer interface
      * @param <A> input parameter 1 type
      * @param <B> input parameter 2 type
@@ -208,11 +205,11 @@ public class AnswerFunctionalInterfaces {
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
-                        (A)invocation.getArguments()[0],
-                        (B)invocation.getArguments()[1],
-                        (C)invocation.getArguments()[2],
-                        (D)invocation.getArguments()[3],
-                        (E)invocation.getArguments()[4]);
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3),
+                        (E)invocation.getArgument(4));
                 return null;
             }
         };
