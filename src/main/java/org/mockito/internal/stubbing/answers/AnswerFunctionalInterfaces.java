@@ -7,6 +7,12 @@ import org.mockito.stubbing.Answer;
  * Functional interfaces to make it easy to implement answers in Java 8
  */
 public class AnswerFunctionalInterfaces {
+	/**
+     * Hide constructor to avoid instantiation of class with only static methods
+     */
+    private AnswerFunctionalInterfaces() {
+    }
+
     /**
      * Construct an answer from a two parameter answer interface
      * @param answer answer interface
