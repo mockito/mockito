@@ -8,13 +8,13 @@ import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 public class DefaultStackTraceCleaner implements StackTraceCleaner {
 
 	@Override
-	public boolean isOut(StackTraceElement e) {
+	public boolean isIn(StackTraceElement e) {
 		if (isFromMockitoRunner(e.getClassName()) || isFromMockitoRule(e.getClassName())) {
-			return false;
-		} else if (isMockDispatcher(e.getClassName()) || isFromMockito(e.getClassName())) {
 			return true;
-		} else {
+		} else if (isMockDispatcher(e.getClassName()) || isFromMockito(e.getClassName())) {
 			return false;
+		} else {
+			return true;
 		}
 	}
 

@@ -30,7 +30,7 @@ public class StackTraceFilter implements Serializable {
         //TODO: investigate "keepTop" commit history - no effect!
         final List<StackTraceElement> filtered = new ArrayList<StackTraceElement>();
         for (StackTraceElement element : target) {
-            if (!CLEANER.isOut(element)) {
+            if (CLEANER.isIn(element)) {
                 filtered.add(element);
             }
         }
