@@ -52,4 +52,21 @@ public class StringMatchersTest {
 	public void nullContainsNothing() {
 		assertFalse(new Contains("mockito").matches(null));
 	}
+
+	@Test
+	public void matchesRegex() {
+		assertTrue(new Find("eleph.nt").matches("the elephant in the room"));
+		assertTrue(new Find("eleph.nt").matches("the elephInt in the room"));
+	}
+
+	@Test
+	public void doesNotMatchRegex() {
+		assertFalse(new Find("eleph.nt").matches("the otter in the room"));
+	}
+
+	@Test
+	public void nullDoesNotMatchRegex() {
+		assertFalse(new Find("eleph.nt").matches(null));
+	}
+
 }
