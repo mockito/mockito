@@ -1,3 +1,11 @@
+### 2.0.58-beta (2016-06-15 23:41 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Roi Atalla
+* Improvements: 1
+  * Very tiny typo. [(#434)](https://github.com/mockito/mockito/pull/434)
+
 ### 2.0.57-beta (2016-06-13 22:01 UTC)
 
 * Authors: 2
