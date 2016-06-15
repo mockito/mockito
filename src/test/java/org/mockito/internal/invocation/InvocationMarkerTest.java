@@ -17,13 +17,12 @@ public class InvocationMarkerTest extends TestBase {
     @Test
     public void shouldMarkInvocationAsVerified() {
         //given
-        InvocationMarker marker = new InvocationMarker();
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(i.isVerified());
         
         //when
-        marker.markVerified(Arrays.asList(i), im);
+        InvocationMarker.markVerified(Arrays.asList(i), im);
         
         //then
         assertTrue(i.isVerified());
@@ -32,7 +31,6 @@ public class InvocationMarkerTest extends TestBase {
     @Test
     public void shouldCaptureArguments() {
         //given
-        InvocationMarker marker = new InvocationMarker();
         Invocation i = new InvocationBuilder().toInvocation();
         final ObjectBox box = new ObjectBox();
         CapturesArgumentsFromInvocation c = new CapturesArgumentsFromInvocation() {
@@ -41,7 +39,7 @@ public class InvocationMarkerTest extends TestBase {
             }};
         
         //when
-        marker.markVerified(Arrays.asList(i), c);
+        InvocationMarker.markVerified(Arrays.asList(i), c);
         
         //then
         assertEquals(i, box.getObject());
@@ -51,14 +49,14 @@ public class InvocationMarkerTest extends TestBase {
     public void shouldMarkInvocationsAsVerifiedInOrder() {
         //given
         InOrderContextImpl context = new InOrderContextImpl();
-        InvocationMarker marker = new InvocationMarker();
+        
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(context.isVerified(i));
         assertFalse(i.isVerified());
         
         //when
-        marker.markVerifiedInOrder(Arrays.asList(i), im, context);
+        InvocationMarker.markVerifiedInOrder(Arrays.asList(i), im, context);
         
         //then
         assertTrue(context.isVerified(i));
