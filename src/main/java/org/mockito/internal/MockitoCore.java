@@ -58,7 +58,7 @@ public class MockitoCore {
         if (!MockSettingsImpl.class.isInstance(settings)) {
             throw new IllegalArgumentException(
                     "Unexpected implementation of '" + settings.getClass().getCanonicalName() + "'\n"
-                    + "At the moment, you cannot provide your own implementations that class.");
+                    + "At the moment, you cannot provide your own implementations of that class.");
         }
         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
         MockCreationSettings<T> creationSettings = impl.confirm(typeToMock);
