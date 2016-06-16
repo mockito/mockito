@@ -1,3 +1,11 @@
+### 2.0.59-beta (2016-06-16 12:20 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Fixes #426 Refactored InvocationMarker to a static utility class [(#432)](https://github.com/mockito/mockito/pull/432)
+
 ### 2.0.58-beta (2016-06-15 23:41 UTC)
 
 * Authors: 1
