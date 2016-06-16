@@ -7,10 +7,10 @@ package org.mockito.internal.verification.checkers;
 
 import static org.mockito.exceptions.Reporter.tooLittleActualInvocationsInOrder;
 import static org.mockito.exceptions.Reporter.tooManyActualInvocationsInOrder;
+import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrder;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationMarker;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.Discrepancy;
@@ -19,10 +19,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
 public class NumberOfInvocationsInOrderChecker {
-    
   
     private final InvocationsFinder finder;
-    private final InvocationMarker invocationMarker = new InvocationMarker();
     
     public NumberOfInvocationsInOrderChecker() {
         this(new InvocationsFinder());
@@ -30,7 +28,6 @@ public class NumberOfInvocationsInOrderChecker {
     
     NumberOfInvocationsInOrderChecker(InvocationsFinder finder) {
         this.finder = finder;
-       
     }
     
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
@@ -47,6 +44,6 @@ public class NumberOfInvocationsInOrderChecker {
             throw tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
         
-        invocationMarker.markVerifiedInOrder(chunk, wanted, context);
+        markVerifiedInOrder(chunk, wanted, context);
     }
 }
