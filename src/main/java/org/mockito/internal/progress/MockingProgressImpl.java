@@ -17,6 +17,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationStrategy;
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
@@ -27,6 +28,19 @@ public class MockingProgressImpl implements MockingProgress {
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private MockingProgressListener listener;
+    private VerificationStrategy verificationStrategy;
+
+    public MockingProgressImpl() {
+        this.verificationStrategy = getDefaultVerificationStrategy();
+    }
+
+    public static VerificationStrategy getDefaultVerificationStrategy() {
+        return new VerificationStrategy() {
+            public VerificationMode maybeVerifyLazily(VerificationMode mode) {
+                return mode;
+            }
+        };
+    }
 
     public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
         this.ongoingStubbing = iOngoingStubbing;
@@ -120,5 +134,13 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void setListener(MockingProgressListener listener) {
         this.listener = listener;
+    }
+
+    public void setVerificationStrategy(VerificationStrategy strategy) {
+        this.verificationStrategy = strategy;
+    }
+
+    public VerificationMode maybeVerifyLazily(VerificationMode mode) {
+        return this.verificationStrategy.maybeVerifyLazily(mode);
     }
 }

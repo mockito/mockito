@@ -9,6 +9,7 @@ import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationStrategy;
 
 import java.io.Serializable;
 
@@ -75,5 +76,13 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
 
     public void setListener(MockingProgressListener listener) {
         threadSafely().setListener(listener);
+    }
+
+    public void setVerificationStrategy(VerificationStrategy strategy) {
+        threadSafely().setVerificationStrategy(strategy);
+    }
+
+    public VerificationMode maybeVerifyLazily(VerificationMode mode) {
+        return threadSafely().maybeVerifyLazily(mode);
     }
 }

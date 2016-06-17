@@ -19,8 +19,8 @@ import org.mockito.verification.VerificationMode;
  *   public void should_fail() {
  *       IMethods methods = mock(IMethods.class);
  *
- *       collector.verify(methods).byteReturningMethod();
- *       collector.verify(methods).simpleMethod();
+ *       verify(methods).byteReturningMethod();
+ *       verify(methods).simpleMethod();
  *   }
  * </code></pre>
  *
@@ -30,33 +30,22 @@ import org.mockito.verification.VerificationMode;
 public interface VerificationCollector extends TestRule {
 
     /**
-     * Lazily verify certain behaviour happened once.
-     *
-     * @see org.mockito.Mockito#verify(Object)
-     *
-     * @param <T> The type of the mock
-     * @param mock to be verified
-     * @return mock object itself
-     */
-    <T> T verify(T mock);
-
-    /**
-     * Lazily verify certain behaviour happened at least once / exact number of times / never.
-     *
-     * @see org.mockito.Mockito#verify(Object, VerificationMode)
-     *
-     * @param mock to be verified
-     * @param mode times(x), atLeastOnce() or never()
-     * @param <T> The type of the mock
-     * @return mock object itself
-     */
-    <T> T verify(T mock, VerificationMode mode);
-
-    /**
      * Collect all lazily verified behaviour. If there were failed verifications, it will
      * throw a MockitoAssertionError containing all messages indicating the failed verifications.
      *
      * @throws MockitoAssertionError If there were failed verifications
      */
     void collectAndReport() throws MockitoAssertionError;
+
+    /**
+     * Enforce all verifications are performed lazily. This method is automatically called when
+     * used as JUnitRule.
+     *
+     * You should only use this method if you are using a VerificationCollector
+     * inside a method where only this method should be verified lazily. The other methods can
+     * still be verified directly.
+     *
+     * @return this
+     */
+    VerificationCollector assertLazily();
 }

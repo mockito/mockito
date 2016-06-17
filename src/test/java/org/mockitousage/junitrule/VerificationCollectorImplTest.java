@@ -14,38 +14,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 public class VerificationCollectorImplTest {
 
     @Test
     public void should_not_throw_any_exceptions_when_verifications_are_succesful() {
-        VerificationCollector collector = MockitoJUnit.collector();
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
         methods.simpleMethod();
 
-        collector.verify(methods).simpleMethod();
+        verify(methods).simpleMethod();
         collector.collectAndReport();
     }
 
     @Test(expected = MockitoAssertionError.class)
     public void should_collect_verification_failures() {
-        VerificationCollector collector = MockitoJUnit.collector();
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
 
-        collector.verify(methods).simpleMethod();
+        verify(methods).simpleMethod();
         collector.collectAndReport();
     }
 
     @Test
     public void should_collect_multiple_verification_failures() {
-        VerificationCollector collector = MockitoJUnit.collector();
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
 
-        collector.verify(methods).simpleMethod();
-        collector.verify(methods).byteReturningMethod();
+        verify(methods).simpleMethod();
+        verify(methods).byteReturningMethod();
         try {
             collector.collectAndReport();
             fail();
@@ -57,25 +58,25 @@ public class VerificationCollectorImplTest {
 
     @Test
     public void should_only_collect_failures_ignore_succesful_verifications() {
-        VerificationCollector collector = MockitoJUnit.collector();
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
 
-        collector.verify(methods, never()).simpleMethod();
-        collector.verify(methods).byteReturningMethod();
+        verify(methods, never()).simpleMethod();
+        verify(methods).byteReturningMethod();
 
         this.assertAtLeastOneFailure(collector);
     }
 
     @Test
     public void should_continue_collecting_after_failing_verification() {
-        VerificationCollector collector = MockitoJUnit.collector();
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
         methods.simpleMethod();
 
-        collector.verify(methods).byteReturningMethod();
-        collector.verify(methods).simpleMethod();
+        verify(methods).byteReturningMethod();
+        verify(methods).simpleMethod();
 
         this.assertAtLeastOneFailure(collector);
     }
@@ -109,7 +110,7 @@ public class VerificationCollectorImplTest {
         public void should_fail() {
             IMethods methods = mock(IMethods.class);
 
-            collector.verify(methods).simpleMethod();
+            verify(methods).simpleMethod();
         }
 
         @Test
@@ -117,7 +118,7 @@ public class VerificationCollectorImplTest {
             IMethods methods = mock(IMethods.class);
             methods.simpleMethod();
 
-            collector.verify(methods).simpleMethod();
+            verify(methods).simpleMethod();
         }
     }
 }

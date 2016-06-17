@@ -1,26 +1,26 @@
 package org.mockito.junit;
 
-import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.MockitoCore;
+import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.progress.MockingProgressImpl;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
+import org.mockito.verification.VerificationStrategy;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
-
-import static org.mockito.Mockito.times;
 
 /**
  * Mockito implementation of VerificationCollector.
  */
 class VerificationCollectorImpl implements VerificationCollector {
 
-    private static final MockitoCore MOCKITO_CORE = new MockitoCore();
+    private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     private StringBuilder builder;
     private int numberOfFailures;
 
-    public VerificationCollectorImpl() {
+    VerificationCollectorImpl() {
         this.resetBuilder();
     }
 
@@ -28,21 +28,22 @@ class VerificationCollectorImpl implements VerificationCollector {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                base.evaluate();
-                VerificationCollectorImpl.this.collectAndReport();
+                try {
+                    VerificationCollectorImpl.this.assertLazily();
+                    base.evaluate();
+                    VerificationCollectorImpl.this.collectAndReport();
+                } finally {
+                    // If base.evaluate() throws an error, we must explicitly reset the VerificationStrategy
+                    // to prevent subsequent tests to be assert lazily
+                    mockingProgress.setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
+                }
             }
         };
     }
 
-    public <T> T verify(T mock) {
-        return MOCKITO_CORE.verify(mock, new VerificationWrapper(times(1)));
-    }
-
-    public <T> T verify(T mock, VerificationMode mode) {
-        return MOCKITO_CORE.verify(mock, new VerificationWrapper(mode));
-    }
-
     public void collectAndReport() throws MockitoAssertionError {
+        mockingProgress.setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
+
         if (this.numberOfFailures > 0) {
             String error = this.builder.toString();
 
@@ -50,6 +51,15 @@ class VerificationCollectorImpl implements VerificationCollector {
 
             throw new MockitoAssertionError(error);
         }
+    }
+
+    public VerificationCollector assertLazily() {
+        mockingProgress.setVerificationStrategy(new VerificationStrategy() {
+            public VerificationMode maybeVerifyLazily(VerificationMode mode) {
+                return new VerificationWrapper(mode);
+            }
+        });
+        return this;
     }
 
     private void resetBuilder() {
