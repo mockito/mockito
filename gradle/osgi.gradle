@@ -18,7 +18,7 @@ afterEvaluate {
                     "org.mockito.*;version=${version}"
 
             instruction 'Import-Package',
-                    'net.bytebuddy.*;version=1.4.2',
+                    'net.bytebuddy.*;version=1.4.3',
                     'junit.*;resolution:=optional',
                     'org.junit.*;resolution:=optional',
                     'org.hamcrest;version="[1.0,2.0)"',

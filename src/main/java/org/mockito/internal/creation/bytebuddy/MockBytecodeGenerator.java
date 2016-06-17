@@ -63,7 +63,6 @@ class MockBytecodeGenerator {
                               .append(features.interfaces)
                               .append(MultipleParentClassLoader.class.getClassLoader())
                               .append(Thread.currentThread().getContextClassLoader())
-                              .filter(isBootstrapClassLoader())
                               .build(), ClassLoadingStrategy.Default.INJECTION)
                       .getLoaded();
     }
