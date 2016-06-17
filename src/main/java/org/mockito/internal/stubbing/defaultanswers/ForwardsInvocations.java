@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.mockito.exceptions.Reporter;
+import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -40,8 +41,9 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
             if (!compatibleReturnTypes(mockMethod.getReturnType(), delegateMethod.getReturnType())) {
                 throw delegatedMethodHasWrongReturnType(mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }
-            
-            result = delegateMethod.invoke(delegatedObject, invocation.getArguments());
+
+            Object[] rawArguments = ((Invocation) invocation).getRawArguments();
+            result = delegateMethod.invoke(delegatedObject, rawArguments);
         } catch (NoSuchMethodException e) {
             throw delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);
         } catch (InvocationTargetException e) {
