@@ -12,15 +12,15 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
-    HandyReturnValues reportMatcher(ArgumentMatcher matcher);
+    void reportMatcher(ArgumentMatcher matcher);
 
     List<LocalizedMatcher> pullLocalizedMatchers();
 
-    HandyReturnValues reportAnd();
+    void reportAnd();
 
-    HandyReturnValues reportNot();
+    void reportNot();
 
-    HandyReturnValues reportOr();
+    void reportOr();
 
     void validateState();
 

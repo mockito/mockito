@@ -25,9 +25,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     public static final int ONE_SUB_MATCHER = 1;
     private final Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
     
-    public HandyReturnValues reportMatcher(ArgumentMatcher matcher) {
+    public void reportMatcher(ArgumentMatcher matcher) {
         matcherStack.push(new LocalizedMatcher(matcher));
-        return new HandyReturnValues();
     }
 
     public List<LocalizedMatcher> pullLocalizedMatchers() {
@@ -43,31 +42,28 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     /* (non-Javadoc)
     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
     */
-    public HandyReturnValues reportAnd() {
+    public void reportAnd() {
         assertStateFor("And(?)", TWO_SUB_MATCHERS);
         And and = new And(popLastArgumentMatchers(TWO_SUB_MATCHERS));
         matcherStack.push(new LocalizedMatcher(and));
-        return new HandyReturnValues();
     }
 
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportOr()
      */
-    public HandyReturnValues reportOr() {
+    public void reportOr() {
         assertStateFor("Or(?)", TWO_SUB_MATCHERS);
         Or or = new Or(popLastArgumentMatchers(TWO_SUB_MATCHERS));
         matcherStack.push(new LocalizedMatcher(or));
-        return new HandyReturnValues();
     }
 
     /* (non-Javadoc)
      * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportNot()
      */
-    public HandyReturnValues reportNot() {
+    public void reportNot() {
         assertStateFor("Not(?)", ONE_SUB_MATCHER);
         Not not = new Not(popLastArgumentMatchers(ONE_SUB_MATCHER).get(0));
         matcherStack.push(new LocalizedMatcher(not));
-        return new HandyReturnValues();
     }
 
     private void assertStateFor(String additionalMatcherName, int subMatchersCount) {
