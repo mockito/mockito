@@ -1,3 +1,13 @@
+### 2.0.60-beta (2016-06-17 09:47 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Rafael Winterhalter
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Fixes #426 Dropped class HandyReturnValues [(#431)](https://github.com/mockito/mockito/pull/431)
+  * Refactor instance based utility classes to static utility classes [(#426)](https://github.com/mockito/mockito/issues/426)
+
 ### 2.0.59-beta (2016-06-16 12:20 UTC)
 
 * Authors: 1
