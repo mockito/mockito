@@ -1,3 +1,15 @@
+### 2.0.61-beta (2016-06-17 11:19 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Andrey
+  * 1: Rafael Winterhalter
+  * 1: Tim van der Lippe
+* Improvements: 3
+  * Fixed #407 Vararg method call on mock object fails [(#412)](https://github.com/mockito/mockito/pull/412)
+  * Vararg method call on mock object fails when used org.mockito.AdditionalAnswers#delegatesTo [(#407)](https://github.com/mockito/mockito/issues/407)
+  * Lazily verify without calling collector.verify() [(#389)](https://github.com/mockito/mockito/pull/389)
+
 ### 2.0.60-beta (2016-06-17 09:47 UTC)
 
 * Authors: 2
