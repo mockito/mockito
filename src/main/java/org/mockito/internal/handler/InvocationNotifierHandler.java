@@ -16,7 +16,6 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.VoidMethodStubbable;
 
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it
@@ -68,10 +67,6 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
 
     public MockCreationSettings getMockSettings() {
         return mockHandler.getMockSettings();
-    }
-
-    public VoidMethodStubbable<T> voidMethodStubbable(T mock) {
-        return mockHandler.voidMethodStubbable(mock);
     }
 
     public void setAnswersForStubbing(List<Answer> answers) {

@@ -12,7 +12,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
-import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.ObjenesisStd;
 
@@ -162,7 +161,6 @@ public class ByteBuddyMockMakerTest {
     private static class DummyMockHandler implements InternalMockHandler {
         public Object handle(Invocation invocation) throws Throwable { return null; }
         public MockCreationSettings getMockSettings() { return null; }
-        public VoidMethodStubbable voidMethodStubbable(Object mock) { return null; }
         public InvocationContainer getInvocationContainer() { return null; }
         public void setAnswersForStubbing(List list) { }
     }
