@@ -1,3 +1,10 @@
+### 2.0.68-beta (2016-06-19 22:21 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.0.67-beta (2016-06-19 21:59 UTC)
 
 * Authors: 2
