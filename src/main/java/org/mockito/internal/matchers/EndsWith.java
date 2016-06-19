@@ -17,8 +17,8 @@ public class EndsWith implements ArgumentMatcher<String>, Serializable {
         this.suffix = suffix;
     }
 
-    public boolean matches(Object actual) {
-        return actual != null && ((String) actual).endsWith(suffix);
+    public boolean matches(String actual) {
+        return actual != null && actual.endsWith(suffix);
     }
 
     public String toString() {

@@ -18,8 +18,8 @@ public class Find implements ArgumentMatcher<String>, Serializable {
         this.regex = regex;
     }
 
-    public boolean matches(Object actual) {
-        return actual != null && Pattern.compile(regex).matcher((String) actual).find();
+    public boolean matches(String actual) {
+        return actual != null && Pattern.compile(regex).matcher(actual).find();
     }
 
     public String toString() {

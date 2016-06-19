@@ -19,8 +19,7 @@ public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
         this.delta = delta;
     }
 
-    public boolean matches(Object object) {
-        Number actual = (Number) object;
+    public boolean matches(Number actual) {
         if (wanted == null ^ actual == null) {
             return false;
         }

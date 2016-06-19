@@ -32,7 +32,7 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
 
     private ArgumentMatcher<String> isStringWithTextFoo() {
         return new ArgumentMatcher<String>() {
-            public boolean matches(Object argument) {
+            public boolean matches(String argument) {
                 // casting that should not be thrown:
                 String str = (String) argument;
                 return str.equals("foo");

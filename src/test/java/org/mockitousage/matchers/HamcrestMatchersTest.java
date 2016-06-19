@@ -107,7 +107,7 @@ public class HamcrestMatchersTest extends TestBase {
     @Test
     public void coexists_with_mockito_matcher() {
         when(mock.simpleMethod(Mockito.argThat(new ArgumentMatcher<String>() {
-            public boolean matches(Object argument) {
+            public boolean matches(String argument) {
                 return true;
             }
         }))).thenReturn("x");
