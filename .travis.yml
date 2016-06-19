@@ -15,7 +15,7 @@ sudo: true
 
 language: java
 jdk:
-- openjdk6
+- oraclejdk7 # OpenJDK 6 triggers a VM bug (no longer supported publicly)
 env:
   matrix:
   - TERM=dumb
