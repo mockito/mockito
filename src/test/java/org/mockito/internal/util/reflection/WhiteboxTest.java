@@ -5,9 +5,15 @@
 package org.mockito.internal.util.reflection;
 
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
+import java.util.logging.Logger;
+
 public class WhiteboxTest extends TestBase {
+
+    @Mock
+    Logger mockLogger;
 
     @Test
     public void private_state() {
@@ -18,5 +24,14 @@ public class WhiteboxTest extends TestBase {
         //then
         Object internalState = Whitebox.getInternalState(dummy, "somePrivateField");
         assertEquals("cool!", internalState);
+    }
+
+    @Test
+    public void private_static_final_state() {
+        //when
+        Whitebox.setInternalState(DummyParentClassForTests.class, "LOG", mockLogger);
+        //then
+        Object internalState = Whitebox.getInternalState(DummyParentClassForTests.class, "LOG");
+        assertEquals(mockLogger, internalState);
     }
 }

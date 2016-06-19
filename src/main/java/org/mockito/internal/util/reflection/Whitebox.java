@@ -5,28 +5,55 @@
 package org.mockito.internal.util.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class Whitebox {
 
-    public static Object getInternalState(Object target, String field) {
-        Class<?> c = target.getClass();
+    public static Object getInternalState(Object targetInstance, String fieldName) {
+        return getInternalState(targetInstance.getClass(), targetInstance, fieldName);
+    }
+
+    public static Object getInternalState(Class targetClass, String fieldName) {
+        return getInternalState(targetClass, null, fieldName);
+    }
+
+    private static Object getInternalState(Class<?> targetClass, Object targetInstance, String fieldName) {
         try {
-            Field f = getFieldFromHierarchy(c, field);
+            Field f = getFieldFromHierarchy(targetClass, fieldName);
             f.setAccessible(true);
-            return f.get(target);
+            return f.get(targetInstance);
         } catch (Exception e) {
             throw new RuntimeException("Unable to get internal state on a private field. Please report to mockito mailing list.", e);
         }
     }
 
-    public static void setInternalState(Object target, String field, Object value) {
-        Class<?> c = target.getClass();
+    public static void setInternalState(Object targetInstance, String fieldName, Object value) {
+        setInternalState(targetInstance.getClass(), targetInstance, fieldName, value);
+    }
+
+    public static void setInternalState(Class targetClass, String fieldName, Object value) {
+        setInternalState(targetClass, null, fieldName, value);
+    }
+
+    private static void setInternalState(Class targetClass, Object targetInstance, String fieldName, Object value) {
         try {
-            Field f = getFieldFromHierarchy(c, field);
+            Field f = getFieldFromHierarchy(targetClass, fieldName);
             f.setAccessible(true);
-            f.set(target, value);
+            removeFinalModifierIfPresent(f);
+            f.set(targetInstance, value);
         } catch (Exception e) {
             throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
+        }
+    }
+
+    private static void removeFinalModifierIfPresent(Field fieldToRemoveFinalFrom) throws IllegalAccessException, NoSuchFieldException {
+        int fieldModifiersMask = fieldToRemoveFinalFrom.getModifiers();
+        boolean isFinalModifierPresent = (fieldModifiersMask & Modifier.FINAL) == Modifier.FINAL;
+        if (isFinalModifierPresent) {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            int fieldModifiersMaskWithoutFinal = fieldModifiersMask & ~Modifier.FINAL;
+            modifiersField.setInt(fieldToRemoveFinalFrom, fieldModifiersMaskWithoutFinal);
         }
     }
 
