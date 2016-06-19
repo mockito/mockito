@@ -7,8 +7,6 @@ package org.mockito.internal.handler;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.mock.MockCreationSettings;
 
-import static javafx.scene.input.KeyCode.T;
-
 /**
  * by Szczepan Faber, created at: 5/21/12
  */
