@@ -5,16 +5,13 @@
 package org.mockitousage.configuration;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+
 import java.util.concurrent.Callable;
+
 import org.assertj.core.api.Condition;
-import org.junit.Assume;
 import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
 @SuppressWarnings("unchecked")
@@ -22,26 +19,6 @@ public class ClassCacheVersusClassReloadingTest {
     // TODO refactor to use ClassLoaders
 
     private SimplePerRealmReloadingClassLoader testMethodClassLoaderRealm = new SimplePerRealmReloadingClassLoader(reloadMockito());
-
-    @Test
-    public void should_throw_ClassCastException_on_second_call() throws Exception {
-        Assume.assumeTrue("CglibMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
-
-        doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
-
-        try {
-            doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
-            fail("should have raised a ClassCastException when Objenesis Cache is enabled");
-        } catch (MockitoException e) {
-            assertThat(e.getMessage())
-                    .containsIgnoringCase("classloading")
-                    .containsIgnoringCase("objenesis")
-                    .containsIgnoringCase("MockitoConfiguration");
-            assertThat(e.getCause())
-                    .has(cceIsThrownFrom("java.lang.Class.cast"))
-                    .has(cceIsThrownFrom("org.mockito.internal.creation.cglib.ClassImposterizer.imposterise"));
-        }
-    }
 
     @Test
     public void should_not_throw_ClassCastException_when_objenesis_cache_disabled() throws Exception {
