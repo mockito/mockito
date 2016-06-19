@@ -1,3 +1,23 @@
+### 2.0.64-beta (2016-06-19 16:54 UTC)
+
+* Authors: 4
+* Commits: 17
+  * 9: Rafael Winterhalter
+  * 5: Pascal Schumacher
+  * 2: Tim van der Lippe
+  * 1: Jazzepi
+* Improvements: 10
+  * update objenesis version to 2.4 [(#447)](https://github.com/mockito/mockito/pull/447)
+  * Make tests which test for timeouts with Thread#sleep more lenient. [(#446)](https://github.com/mockito/mockito/pull/446)
+  * Add PARAMETER ElementType to @Mock [(#444)](https://github.com/mockito/mockito/pull/444)
+  * downgrade assertj-core version to 1.7.1 because this version is java … [(#443)](https://github.com/mockito/mockito/pull/443)
+  * enable some ignored tests of BridgeMethodsHitAgainTest and DetectingF… [(#442)](https://github.com/mockito/mockito/pull/442)
+  * delete ignored cglib related tests [(#441)](https://github.com/mockito/mockito/pull/441)
+  * PluginStackTraceFilteringTest failing locally [(#435)](https://github.com/mockito/mockito/issues/435)
+  * Inorder timeouts [(#424)](https://github.com/mockito/mockito/pull/424)
+  * Functional interfaces for Java 8 support in Mockito 2 [(#338)](https://github.com/mockito/mockito/pull/338)
+  * Introduce functional interfaces to improve Java 8 utilisation of Mockito 2 [(#337)](https://github.com/mockito/mockito/issues/337)
+
 ### 2.0.62-beta (2016-06-17 12:26 UTC)
 
 * Authors: 1
