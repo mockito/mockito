@@ -30,7 +30,6 @@ public class Description implements VerificationMode {
      * Prepends the custom failure message if verification fails.
      * @param data 
      */
-    @Override
     public void verify(VerificationData data) {
         try {
             verification.verify(data);
@@ -40,7 +39,6 @@ public class Description implements VerificationMode {
         }
     } 
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

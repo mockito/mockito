@@ -102,7 +102,6 @@ public class CompilationWarningsTest {
 
     private static Answer<?> ignore() {
         return new Answer<Object>() {
-            @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return null;
             }

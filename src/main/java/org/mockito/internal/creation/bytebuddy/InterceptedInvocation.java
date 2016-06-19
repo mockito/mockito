@@ -49,77 +49,62 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
         location = new LocationImpl();
     }
 
-    @Override
     public boolean isVerified() {
         return verified || isIgnoredForVerification;
     }
 
-    @Override
     public int getSequenceNumber() {
         return sequenceNumber;
     }
 
-    @Override
     public Location getLocation() {
         return location;
     }
 
-    @Override
     public Object[] getRawArguments() {
         return rawArguments;
     }
 
-    @Override
     public Class getRawReturnType() {
         return mockitoMethod.getReturnType();
     }
 
-    @Override
     public void markVerified() {
         verified = true;
     }
 
-    @Override
     public StubInfo stubInfo() {
         return stubInfo;
     }
 
-    @Override
     public void markStubbed(StubInfo stubInfo) {
         this.stubInfo = stubInfo;
     }
 
-    @Override
     public boolean isIgnoredForVerification() {
         return isIgnoredForVerification;
     }
 
-    @Override
     public void ignoreForVerification() {
         isIgnoredForVerification = true;
     }
 
-    @Override
     public Object getMock() {
         return mock;
     }
 
-    @Override
     public Method getMethod() {
         return mockitoMethod.getJavaMethod();
     }
 
-    @Override
     public Object[] getArguments() {
         return arguments;
     }
 
-    @Override
     public <T> T getArgument(int index) {
         return (T)arguments[index];
     }
 
-    @Override
     public Object callRealMethod() throws Throwable {
         if (!superMethod.isInvokable()) {
             throw cannotCallAbstractRealMethod();
@@ -158,12 +143,10 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
             INSTANCE;
 
-            @Override
             public boolean isInvokable() {
                 return false;
             }
 
-            @Override
             public Object invoke() {
                 throw new IllegalStateException();
             }
@@ -179,12 +162,10 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
                 this.callable = callable;
             }
 
-            @Override
             public boolean isInvokable() {
                 return true;
             }
 
-            @Override
             public Object invoke() throws Throwable {
                 try {
                     return callable.call();

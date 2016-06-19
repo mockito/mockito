@@ -34,7 +34,6 @@ public class BridgeMethodsHitAgainTest extends TestBase {
   }
 
   public interface Extended extends Base<String> {
-    @Override
     int test(String value);
   }
 

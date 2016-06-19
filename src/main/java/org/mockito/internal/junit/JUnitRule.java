@@ -18,7 +18,7 @@ public class JUnitRule implements MockitoRule {
 	public JUnitRule(MockitoLogger logger) {
 		this.logger = logger;
 	}
-	@Override
+
 	public Statement apply(final Statement base, FrameworkMethod method, final Object target) {
 		return new Statement() {
             @Override

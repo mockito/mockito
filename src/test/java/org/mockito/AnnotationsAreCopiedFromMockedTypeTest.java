@@ -49,12 +49,10 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
         final Annotation[] firstParamAnnotations = method.getParameterAnnotations()[0];
 
         return new AnnotatedElement() {
-            @Override
             public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
                 return getAnnotation(annotationClass) != null;
             }
 
-            @Override
             @SuppressWarnings("unchecked")
             public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
                 for (Annotation firstParamAnnotation : firstParamAnnotations) {
@@ -65,12 +63,10 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
                 return null;
             }
 
-            @Override
             public Annotation[] getAnnotations() {
                 return firstParamAnnotations;
             }
 
-            @Override
             public Annotation[] getDeclaredAnnotations() {
                 return firstParamAnnotations;
             }

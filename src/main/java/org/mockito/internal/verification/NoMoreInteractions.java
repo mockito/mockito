@@ -37,7 +37,6 @@ public class NoMoreInteractions implements VerificationMode, VerificationInOrder
         }
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

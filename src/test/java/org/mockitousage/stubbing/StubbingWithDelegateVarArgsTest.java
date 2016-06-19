@@ -15,7 +15,6 @@ public class StubbingWithDelegateVarArgsTest {
 
     private static final class FooImpl implements Foo {
 
-        @Override
         public int bar(String baz, Object... args) {
             return args != null ? args.length : -1; // simple return argument count
         }

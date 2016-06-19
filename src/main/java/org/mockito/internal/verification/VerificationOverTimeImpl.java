@@ -120,7 +120,6 @@ public class VerificationOverTimeImpl implements VerificationMode {
         }
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }
