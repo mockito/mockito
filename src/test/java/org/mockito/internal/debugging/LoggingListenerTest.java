@@ -5,6 +5,8 @@
 package org.mockito.internal.debugging;
 
 
+import static org.junit.Assume.assumeFalse;
+
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
@@ -22,6 +24,9 @@ public class LoggingListenerTest extends TestBase {
 
     @Test
     public void informs_about_unused_stubs() {
+        // line numbers are missing when running on java 6, but work on java 7+
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+
         //given
         LoggingListener listener = new LoggingListener(false);
 
@@ -49,6 +54,9 @@ public class LoggingListenerTest extends TestBase {
 
     @Test
     public void informs_about_unused_stubs_due_arg_mismatch() {
+        // line numbers are missing when running on java 6, but work on java 7+
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+
         //given
         LoggingListener listener = new LoggingListener(false);
 
@@ -70,6 +78,9 @@ public class LoggingListenerTest extends TestBase {
 
     @Test
     public void informs_about_various_kinds_of_stubs() {
+        // line numbers are missing when running on java 6, but work on java 7+
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+
         //given
         LoggingListener listener = new LoggingListener(true);
 
@@ -110,6 +121,9 @@ public class LoggingListenerTest extends TestBase {
 
     @Test
     public void informs_about_unstubbed() {
+        // line numbers are missing when running on java 6 
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+
         //given
         LoggingListener listener = new LoggingListener(true);
 

@@ -13,9 +13,16 @@ cache:
 # see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: true
 
+# workaround for https://github.com/travis-ci/travis-ci/issues/5227
+before_install:
+  - cat /etc/hosts # optionally check the content *before*
+  - sudo hostname "$(hostname | cut -c1-63)"
+  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+  - cat /etc/hosts # optionally check the content *after*
+
 language: java
 jdk:
-- oraclejdk7
+  - openjdk6
 env:
   matrix:
   - TERM=dumb

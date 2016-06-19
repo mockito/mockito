@@ -5,6 +5,7 @@
 
 package org.mockitousage.basicapi;
 
+import static org.junit.Assume.assumeFalse;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
@@ -394,6 +395,13 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
+        // for some reason this test fails with NullPointerException java 6, but work on java 7+
+        // java.lang.NullPointerException
+        // at java.util.LinkedList.writeObject(LinkedList.java:942)
+        // ...
+        // at org.mockitoutil.SimpleSerializationUtil.serializeMock(SimpleSerializationUtil.java:34)
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+      
         IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
 
         when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);

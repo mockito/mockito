@@ -43,7 +43,7 @@ public class NoJUnitDependenciesTest {
         try {
             Class.forName(pureMockitoAPIClass, true, classLoader_without_JUnit);
         } catch (Throwable e) {
-            throw new AssertionError(String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass), e);
+            throw new AssertionError(String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass));
         }
     }
 }

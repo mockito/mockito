@@ -20,13 +20,13 @@ public class StringJoiner {
      * TODO Rename to 'format', remove the confusing start String.
      */
     public static String join(Object ... linesToBreak) {
-        return join("\n", (Iterable) asList(linesToBreak));
+        return join("\n", asList(linesToBreak));
     }
 
     /**
      * Joins Strings with EOL character
      */
-    public static String join(String start, Iterable<String> lines) {
+    public static String join(String start, Iterable<?> lines) {
         StringBuilder out = new StringBuilder(start);
         for (Object line : lines) {
             out.append(line.toString()).append("\n");

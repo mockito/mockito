@@ -11,6 +11,7 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
 
 public class JUnitRuleTest {
 
@@ -47,6 +48,9 @@ public class JUnitRuleTest {
 
     @Test
     public void shouldWarnAboutUnusedStubsWhenFailed() throws Throwable {
+        // line numbers are missing when running on java 6, but work on java 7+
+        assumeFalse(System.getProperty("java.version").startsWith("1.6"));
+
         try {
             jUnitRule.apply(new Statement() {
                 public void evaluate() throws Throwable {
