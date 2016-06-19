@@ -1,3 +1,13 @@
+### 2.0.63-beta (2016-06-19 11:44 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Pascal Schumacher
+  * 1: Jazzepi
+* Improvements: 2
+  * delete ignored cglib related tests [(#441)](https://github.com/mockito/mockito/pull/441)
+  * Inorder timeouts [(#424)](https://github.com/mockito/mockito/pull/424)
+
 ### 2.0.62-beta (2016-06-17 12:26 UTC)
 
 * Authors: 1
