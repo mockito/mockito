@@ -14,8 +14,17 @@ cache:
 sudo: true
 
 language: java
+
+# workaround for https://github.com/travis-ci/travis-ci/issues/5227
+before_install:
+  - cat /etc/hosts # optionally check the content *before*
+  - sudo hostname "$(hostname | cut -c1-63)"
+  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
+  - cat /etc/hosts # optionally check the content *after*
+
 jdk:
-- oraclejdk7 # OpenJDK 6 triggers a VM bug (no longer supported publicly)
+  - openjdk6
+
 env:
   matrix:
   - TERM=dumb
