@@ -11,10 +11,10 @@ import org.mockito.invocation.Location;
 @SuppressWarnings("unchecked")
 public class LocalizedMatcher {
 
-    private final ArgumentMatcher matcher;
+    private final ArgumentMatcher<?> matcher;
     private final Location location;
 
-    public LocalizedMatcher(ArgumentMatcher matcher) {
+    public LocalizedMatcher(ArgumentMatcher<?> matcher) {
         this.matcher = matcher;
         this.location = new LocationImpl();
     }
@@ -23,7 +23,7 @@ public class LocalizedMatcher {
         return location;
     }
 
-    public ArgumentMatcher getMatcher() {
+    public ArgumentMatcher<?> getMatcher() {
         return matcher;
     }
 }

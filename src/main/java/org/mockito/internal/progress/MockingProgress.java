@@ -13,9 +13,9 @@ import org.mockito.verification.VerificationStrategy;
 
 public interface MockingProgress {
     
-    void reportOngoingStubbing(OngoingStubbing ongoingStubbing);
+    void reportOngoingStubbing(OngoingStubbing<?> ongoingStubbing);
 
-    OngoingStubbing pullOngoingStubbing();
+    OngoingStubbing<?> pullOngoingStubbing();
 
     void verificationStarted(VerificationMode verificationMode);
 
@@ -37,7 +37,7 @@ public interface MockingProgress {
 
     ArgumentMatcherStorage getArgumentMatcherStorage();
     
-    void mockingStarted(Object mock, Class classToMock);
+    void mockingStarted(Object mock, Class<?> classToMock);
 
     void setListener(MockingProgressListener listener);
 

@@ -12,7 +12,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
 
-    void reportMatcher(ArgumentMatcher matcher);
+    void reportMatcher(ArgumentMatcher<?> matcher);
 
     List<LocalizedMatcher> pullLocalizedMatchers();
 

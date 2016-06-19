@@ -68,7 +68,8 @@ public class MockitoCore {
 
     public <T> OngoingStubbing<T> when(T methodCall) {
         mockingProgress.stubbingStarted();
-        OngoingStubbing<T> stubbing = mockingProgress.pullOngoingStubbing();
+        @SuppressWarnings("unchecked")
+        OngoingStubbing<T> stubbing = (OngoingStubbing<T>) mockingProgress.pullOngoingStubbing();
         if (stubbing == null) {
             mockingProgress.reset();
             throw missingMethodInvocation();

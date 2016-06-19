@@ -24,7 +24,7 @@ public class MockingProgressImpl implements MockingProgress {
     
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
-    OngoingStubbing ongoingStubbing;
+    private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private MockingProgressListener listener;
@@ -46,8 +46,8 @@ public class MockingProgressImpl implements MockingProgress {
         this.ongoingStubbing = iOngoingStubbing;
     }
 
-    public OngoingStubbing pullOngoingStubbing() {
-        OngoingStubbing temp = ongoingStubbing;
+    public OngoingStubbing<?> pullOngoingStubbing() {
+        OngoingStubbing<?> temp = ongoingStubbing;
         ongoingStubbing = null;
         return temp;
     }
@@ -125,7 +125,7 @@ public class MockingProgressImpl implements MockingProgress {
         return argumentMatcherStorage;
     }
 
-    public void mockingStarted(Object mock, Class classToMock) {
+    public void mockingStarted(Object mock, Class<?> classToMock) {
         if (listener instanceof MockingStartedListener) {
             ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
         }

@@ -9,13 +9,13 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class CollectCreatedMocks implements MockingStartedListener {
     
-    private final List toBeFilled;
+    private final List<Object> toBeFilled;
 
-    public CollectCreatedMocks(List toBeFilled) {
+    public CollectCreatedMocks(List<Object> toBeFilled) {
         this.toBeFilled = toBeFilled;
     }
 
-    public void mockingStarted(Object mock, Class classToMock) {
+    public void mockingStarted(Object mock, Class<?> classToMock) {
         toBeFilled.add(mock);
     }
 }

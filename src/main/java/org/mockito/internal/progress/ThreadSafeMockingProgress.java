@@ -26,11 +26,11 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
         return mockingProgress.get();
     }
     
-    public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
+    public void reportOngoingStubbing(OngoingStubbing<?> iOngoingStubbing) {
         threadSafely().reportOngoingStubbing(iOngoingStubbing);
     }
 
-    public OngoingStubbing pullOngoingStubbing() {
+    public OngoingStubbing<?> pullOngoingStubbing() {
         return threadSafely().pullOngoingStubbing();
     }
     
@@ -70,7 +70,7 @@ public class ThreadSafeMockingProgress implements MockingProgress, Serializable 
         return threadSafely().getArgumentMatcherStorage();
     }
     
-    public void mockingStarted(Object mock, Class classToMock) {
+    public void mockingStarted(Object mock, Class<?> classToMock) {
         threadSafely().mockingStarted(mock, classToMock);
     }
 
