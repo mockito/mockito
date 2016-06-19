@@ -5,7 +5,6 @@
 
 package org.mockitousage.bugs;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -55,9 +54,7 @@ public class BridgeMethodsHitAgainTest extends TestBase {
     assertTrue(si.factory() != null);
   }
 
-
     @Test
-    @Ignore("Mockito does not resolve bridge methods as their actual method and can therefore not verify its invocation")
     public void testBridgeInvocationIsRecordedForInterceptedMethod() {
         Extended ext = mock(Extended.class);
         ext.test("123");

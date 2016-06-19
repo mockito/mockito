@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.misuse;
-import org.junit.Ignore;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
@@ -33,7 +33,6 @@ public class DetectingFinalMethodsTest extends TestBase {
     }
 
     @Test
-    @Ignore("Failed on check out")
     public void shouldFailWithUnfinishedStubbing() {
         withFinal = mock(WithFinal.class);
         try {
