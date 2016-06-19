@@ -70,6 +70,13 @@ package org.mockito;
  *   verify(mock).addAll(<b>listOfTwoElements()</b>);
  * </code></pre>
  *
+ * In Java 8 you can treat ArgumentMatcher as a functional interface
+ * and use a lambda, e.g.:
+ *
+ * <pre class="code"><code class="java">
+ *   verify(mock).addAll(<b>argThat(list -> list.size() == 2)</b>);
+ * </code></pre>
+ *
  * <p>
  * Read more about other matchers in javadoc for {@link Matchers} class.
  * <h2>2.0 migration guide</h2>
@@ -126,5 +133,5 @@ public interface ArgumentMatcher<T> {
      *            the argument
      * @return true if this matcher accepts the given argument.
      */
-    public boolean matches(Object argument);
+    public boolean matches(T argument);
 }

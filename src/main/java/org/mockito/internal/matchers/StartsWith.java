@@ -17,8 +17,8 @@ public class StartsWith implements ArgumentMatcher<String>, Serializable {
         this.prefix = prefix;
     }
 
-    public boolean matches(Object actual) {
-        return actual != null && ((String) actual).startsWith(prefix);
+    public boolean matches(String actual) {
+        return actual != null && actual.startsWith(prefix);
     }
 
     public String toString() {

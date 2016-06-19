@@ -132,6 +132,10 @@ public interface IMethods {
 
     Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree);
 
+    String threeArgumentMethodWithStrings(int valueOne, String valueTwo, String valueThree);
+
+    String fourArgumentMethod(int valueOne, String valueTwo, String valueThree, boolean[] array);
+
     void twoArgumentMethod(int one, int two);
 
     void arrayMethod(String[] strings);
