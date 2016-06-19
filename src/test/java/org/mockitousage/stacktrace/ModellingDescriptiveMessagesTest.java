@@ -190,7 +190,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     
     @Test
     public void shouldScreamWhenExtraInterfacesIsANullArray() {
-        mock(IMethods.class, withSettings().extraInterfaces((Class[]) null));
+        mock(IMethods.class, withSettings().extraInterfaces((Class<?>[]) null));
     }
 
     @Test

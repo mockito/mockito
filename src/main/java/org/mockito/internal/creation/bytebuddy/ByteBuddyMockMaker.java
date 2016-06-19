@@ -71,7 +71,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         return typeToMock.cast(mock);
     }
 
-    private static String describeClass(Class type) {
+    private static String describeClass(Class<?> type) {
         return type == null ? "null" : "'" + type.getCanonicalName() + "', loaded by classloader : '" + type.getClassLoader() + "'";
     }
 

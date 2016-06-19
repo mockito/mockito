@@ -102,7 +102,7 @@ class CachingMockBytecodeGenerator {
 
             private MockKey(Class<T> mockedType, Set<Class<?>> interfaces) {
                 this.mockedType = mockedType.getName();
-                for (Class anInterface : interfaces) {
+                for (Class<?> anInterface : interfaces) {
                     types.add(anInterface.getName());
                 }
                 types.add(this.mockedType);

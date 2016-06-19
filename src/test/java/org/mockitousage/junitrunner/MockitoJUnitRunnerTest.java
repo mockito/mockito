@@ -34,7 +34,7 @@ public class MockitoJUnitRunnerTest {
     @Ignore
     @Test public void fails_when_stubs_were_not_used() {
         JUnitCore runner = new JUnitCore();
-        Class[] tests = {StubbingInConstructorUnused.class,
+        Class<?>[] tests = {StubbingInConstructorUnused.class,
                 StubbingInBeforeUnused.class,
                 StubbingInTestUnused.class};
 

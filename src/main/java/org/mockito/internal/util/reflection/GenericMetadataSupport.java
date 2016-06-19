@@ -270,21 +270,20 @@ public abstract class GenericMetadataSupport {
         public FromClassGenericMetadataSupport(Class<?> clazz) {
             this.clazz = clazz;
 
-            for (Class currentExploredClass = clazz;
+            for (Class<?> currentExploredClass = clazz;
                  currentExploredClass != null && currentExploredClass != Object.class;
-                 currentExploredClass = superClassOf(currentExploredClass)
-                ) {
+                 currentExploredClass = superClassOf(currentExploredClass)) {
                 readActualTypeParametersOnDeclaringClass(currentExploredClass);
             }
         }
 
-        private Class superClassOf(Class currentExploredClass) {
+        private Class superClassOf(Class<?> currentExploredClass) {
             Type genericSuperclass = currentExploredClass.getGenericSuperclass();
             if (genericSuperclass instanceof ParameterizedType) {
                 Type rawType = ((ParameterizedType) genericSuperclass).getRawType();
-                return (Class) rawType;
+                return (Class<?>) rawType;
             }
-            return (Class) genericSuperclass;
+            return (Class<?>) genericSuperclass;
         }
 
         private void readActualTypeParametersOnDeclaringClass(Class<?> clazz) {

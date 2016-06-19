@@ -39,7 +39,7 @@ public class AcrossClassLoaderSerializationTest {
         return new SimplePerRealmReloadingClassLoader(this.getClass().getClassLoader(), isolating_test_classes())
                 .doInRealm(
                         "org.mockitousage.serialization.AcrossClassLoaderSerializationTest$ReadStreamAndDeserializeIt",
-                        new Class[]{ byte[].class },
+                        new Class<?>[]{ byte[].class },
                         new Object[]{ bytes }
                 );
     }

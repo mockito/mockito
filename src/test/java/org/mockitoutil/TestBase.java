@@ -143,7 +143,7 @@ public class TestBase {
     }
     
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
-        Class[] types = new Class[args.length];
+        Class<?>[] types = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
@@ -153,7 +153,7 @@ public class TestBase {
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
-                new Class[0])), new Object[0], 1, realMethod, new LocationImpl());
+                new Class<?>[0])), new Object[0], 1, realMethod, new LocationImpl());
     }
 
     protected static Invocation invocationAt(String location) {

@@ -132,7 +132,7 @@ public class Reporter {
         return exception;
     }
 
-    public static MockitoException notAMockPassedToVerify(Class type) {
+    public static MockitoException notAMockPassedToVerify(Class<?> type) {
         return new NotAMockException(join(
                 "Argument passed to verify() is of type " + type.getSimpleName() + " and is not a mock!",
                 "Make sure you place the parenthesis correctly!",
@@ -698,7 +698,7 @@ public class Reporter {
         return details.getCause().getMessage();
     }
 
-    public static MockitoException mockedTypeIsInconsistentWithDelegatedInstanceType(Class mockedType, Object delegatedInstance) {
+    public static MockitoException mockedTypeIsInconsistentWithDelegatedInstanceType(Class<?> mockedType, Object delegatedInstance) {
         return new MockitoException(join(
                 "Mocked type must be the same as the type of your delegated instance.",
                 "Mocked type must be: " + delegatedInstance.getClass().getSimpleName() + ", but is: " + mockedType.getSimpleName(),
@@ -780,7 +780,7 @@ public class Reporter {
         return new MockitoException("defaultAnswer() does not accept null parameter");
     }
 
-    public static MockitoException serializableWontWorkForObjectsThatDontImplementSerializable(Class classToMock) {
+    public static MockitoException serializableWontWorkForObjectsThatDontImplementSerializable(Class<?> classToMock) {
         return new MockitoException(join(
                 "You are using the setting 'withSettings().serializable()' however the type you are trying to mock '" + classToMock.getSimpleName() + "'",
                 "do not implement Serializable AND do not have a no-arg constructor.",

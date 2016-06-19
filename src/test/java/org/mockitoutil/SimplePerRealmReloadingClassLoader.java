@@ -95,7 +95,7 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
     }
 
 
-    public Object doInRealm(String callableCalledInClassLoaderRealm, Class[] argTypes, Object[] args) throws Exception {
+    public Object doInRealm(String callableCalledInClassLoaderRealm, Class<?>[] argTypes, Object[] args) throws Exception {
         ClassLoader current = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this);

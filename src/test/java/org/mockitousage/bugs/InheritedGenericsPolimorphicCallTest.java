@@ -62,7 +62,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
             
         iterable = (MyIterable) Proxy.newProxyInstance(
                 this.getClass().getClassLoader(),
-                new Class[] { MyIterable.class },
+                new Class<?>[] { MyIterable.class },
                 handler);
 
         //when

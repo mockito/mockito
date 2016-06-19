@@ -32,7 +32,7 @@ public class MockCreationValidator {
             return;
         }
 
-        for (Class i : extraInterfaces) {
+        for (Class<?> i : extraInterfaces) {
             if (classToMock == i) {
                 throw extraInterfacesCannotContainMockedType(classToMock);
             }

@@ -121,8 +121,8 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     }
 
     //TODO duplicated elsewhere
-    void assertNoIncompatibleAnnotations(Class annotation, Field field, Class... undesiredAnnotations) {
-        for (Class u : undesiredAnnotations) {
+    private void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation, Field field, Class<? extends Annotation>... undesiredAnnotations) {
+        for (Class<? extends Annotation> u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
                 throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotation.getClass().getSimpleName());
             }
