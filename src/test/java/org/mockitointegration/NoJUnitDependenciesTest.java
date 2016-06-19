@@ -1,6 +1,7 @@
 package org.mockitointegration;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.jar.asm.ClassVisitor;
 import org.hamcrest.Matcher;
 import org.junit.Assume;
 import org.junit.Ignore;
@@ -17,7 +18,6 @@ import static org.mockitoutil.ClassLoaders.coverageTool;
 public class NoJUnitDependenciesTest {
 
     @Test
-    @Ignore("Strange dependency to ASM that cannot be resolved")
     public void pure_mockito_should_not_depend_JUnit___ByteBuddy() throws Exception {
         Assume.assumeTrue("ByteBuddyMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
 
