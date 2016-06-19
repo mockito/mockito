@@ -1,3 +1,13 @@
+### 2.0.67-beta (2016-06-19 21:59 UTC)
+
+* Authors: 2
+* Commits: 13
+  * 11: Rafael Winterhalter
+  * 2: Pascal Schumacher
+* Improvements: 2
+  * javadoc: improve grammar of some sentences [(#452)](https://github.com/mockito/mockito/pull/452)
+  * speedup travis build a bit by downloading gradle-bin instead of gradl… [(#371)](https://github.com/mockito/mockito/pull/371)
+
 ### 2.0.65-beta (2016-06-19 19:52 UTC)
 
 * Authors: 2
