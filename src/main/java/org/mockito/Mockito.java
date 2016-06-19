@@ -1150,7 +1150,8 @@ import org.mockito.junit.*;
  * In particular, this approach will make it easier to test functions which use callbacks.
  *
  * The functions answer and answerVoid can be found in {@link AdditionalAnswers} to create the answer object
- * using the interfaces in {@link AnswerFunctionalInterfaces} support is provided for functions with up to 5 parameters
+ * using the interfaces in {@link org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces} support is provided
+ * for functions with up to 5 parameters
  *
  * <p>
  * Examples:
