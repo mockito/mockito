@@ -802,7 +802,7 @@ import org.mockito.junit.*;
  * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
  * conditions.
  * <p>
- * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system.
+ * This feature should be used rarely - figure out a better way of testing your multi-threaded system.
  * <p>
  * Not yet implemented to work with InOrder verification.
  * <p>
@@ -2415,7 +2415,7 @@ public class Mockito extends Matchers {
      * and then later fail. In that case, timeout would pass as soon as times(2) passes, whereas after would run until
      * times(2) failed, and then fail.
      * <p>
-     * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
+     * This feature should be used rarely - figure out a better way of testing your multi-threaded system.
      * <pre class="code"><code class="java">
      *   //passes when someMethod() is called within given time span
      *   verify(mock, timeout(100)).someMethod();
@@ -2453,7 +2453,7 @@ public class Mockito extends Matchers {
      * which can pass and then later fail. In that case, timeout would pass as soon as times(2) passes, whereas after would
      * run the full time, which point it will fail, as times(2) has failed.
      * <p>
-     * It feels this feature should be used rarely - figure out a better way of testing your multi-threaded system
+     * This feature should be used rarely - figure out a better way of testing your multi-threaded system.
      * <p>
      * Not yet implemented to work with InOrder verification.
      * <pre class="code"><code class="java">
