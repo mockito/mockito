@@ -47,7 +47,7 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      *
      * @return unprocessed arguments, exactly as provided to this invocation.
      */
-    Class getRawReturnType();
+    Class<?> getRawReturnType();
 
     /**
      * Marks this invocation as verified so that it will not cause verification error at

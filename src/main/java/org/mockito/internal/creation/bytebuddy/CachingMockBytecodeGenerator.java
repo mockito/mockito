@@ -46,25 +46,25 @@ class CachingMockBytecodeGenerator {
     }
 
     private static class CachedBytecodeGenerator {
-        private ConcurrentHashMap<MockKey, WeakReference<Class>> generatedClassCache =
-                new ConcurrentHashMap<MockKey, WeakReference<Class>>();
+        private ConcurrentHashMap<MockKey, WeakReference<Class<?>>> generatedClassCache =
+                new ConcurrentHashMap<MockKey, WeakReference<Class<?>>>();
         private final MockBytecodeGenerator generator;
 
         private CachedBytecodeGenerator(MockBytecodeGenerator generator) {
             this.generator = generator;
         }
 
-        public <T> Class getOrGenerateMockClass(MockFeatures<T> features) {
-            MockKey mockKey = MockKey.of(features.mockedType, features.interfaces);
-            Class generatedMockClass = null;
-            WeakReference<Class> classWeakReference = generatedClassCache.get(mockKey);
+        public <T> Class<?> getOrGenerateMockClass(MockFeatures<T> features) {
+            MockKey<?> mockKey = MockKey.of(features.mockedType, features.interfaces);
+            Class<?> generatedMockClass = null;
+            WeakReference<Class<?>> classWeakReference = generatedClassCache.get(mockKey);
             if(classWeakReference != null) {
                 generatedMockClass = classWeakReference.get();
             }
             if(generatedMockClass == null) {
                 generatedMockClass = generate(features);
             }
-            generatedClassCache.put(mockKey, new WeakReference<Class>(generatedMockClass));
+            generatedClassCache.put(mockKey, new WeakReference<Class<?>>(generatedMockClass));
             return generatedMockClass;
         }
 
@@ -128,7 +128,7 @@ class CachingMockBytecodeGenerator {
                 return result;
             }
 
-            public static <T> MockKey of(Class<T> mockedType, Set<Class<?>> interfaces) {
+            public static <T> MockKey<T> of(Class<T> mockedType, Set<Class<?>> interfaces) {
                 return new MockKey<T>(mockedType, interfaces);
             }
         }

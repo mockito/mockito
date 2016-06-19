@@ -754,7 +754,7 @@ public class Reporter {
         return stringBuilder;
     }
 
-    public static MockitoException wrongTypeOfArgumentToReturn(InvocationOnMock invocation, String expectedType, Class actualType, int argumentIndex) {
+    public static MockitoException wrongTypeOfArgumentToReturn(InvocationOnMock invocation, String expectedType, Class<?> actualType, int argumentIndex) {
         return new WrongTypeOfReturnValue(join(
                 "The argument of type '" + actualType.getSimpleName() + "' cannot be returned because the following ",
                 "method should return the type '" + expectedType + "'",

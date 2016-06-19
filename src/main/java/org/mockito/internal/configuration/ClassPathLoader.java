@@ -54,10 +54,10 @@ public class ClassPathLoader {
      */
     @SuppressWarnings({"unchecked"})
     public IMockitoConfiguration loadConfiguration() {
-        //Trying to get config from classpath
-        Class configClass;
+        // Trying to get config from classpath
+        Class<?> configClass;
         try {
-            configClass = (Class) Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
+            configClass = Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
         } catch (ClassNotFoundException e) {
             //that's ok, it means there is no global config, using default one.
             return null;

@@ -70,7 +70,7 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
     }
 
     @Override
-    public Class getRawReturnType() {
+    public Class<?> getRawReturnType() {
         return mockitoMethod.getReturnType();
     }
 

@@ -95,7 +95,7 @@ public class ReturnsArgumentAt implements Answer<Object>, Serializable {
         return true;
     }
 
-    public Class returnedTypeOnSignature(InvocationOnMock invocation) {
+    public Class<?> returnedTypeOnSignature(InvocationOnMock invocation) {
         int actualArgumentPosition = actualArgumentPosition(invocation);
 
         if(!invocation.getMethod().isVarArgs()) {

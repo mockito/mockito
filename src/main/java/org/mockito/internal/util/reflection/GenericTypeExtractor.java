@@ -30,9 +30,9 @@ public class GenericTypeExtractor {
      *                            it will be used for generic type extraction
      * @return generic interface if found, Object.class if not found.
      */
-    public static Class genericTypeOf(Class rootClass, Class targetBaseClass, Class targetBaseInterface) {
+    public static Class<?> genericTypeOf(Class<?> rootClass, Class<?> targetBaseClass, Class<?> targetBaseInterface) {
         //looking for candidates in the hierarchy of rootClass
-        Class match = rootClass;
+        Class<?> match = rootClass;
         while(match != Object.class) {
             //check the super class first
             if (match.getSuperclass() == targetBaseClass) {
@@ -53,9 +53,9 @@ public class GenericTypeExtractor {
      * Finds generic interface implementation based on the source class and the target interface.
      * Returns null if not found. Recurses the interface hierarchy.
      */
-    private static Type findGenericInteface(Class sourceClass, Class targetBaseInterface) {
+    private static Type findGenericInteface(Class<?> sourceClass, Class<?> targetBaseInterface) {
         for (int i = 0; i < sourceClass.getInterfaces().length; i++) {
-            Class inter = sourceClass.getInterfaces()[i];
+            Class<?> inter = sourceClass.getInterfaces()[i];
             if (inter == targetBaseInterface) {
                 return sourceClass.getGenericInterfaces()[0];
             } else {
@@ -72,11 +72,11 @@ public class GenericTypeExtractor {
      * Attempts to extract generic parameter type of given type.
      * If there is no generic parameter it returns Object.class
      */
-    private static Class extractGeneric(Type type) {
+    private static Class<?> extractGeneric(Type type) {
         if (type instanceof ParameterizedType) {
             Type[] genericTypes = ((ParameterizedType) type).getActualTypeArguments();
             if (genericTypes.length > 0 && genericTypes[0] instanceof Class) {
-                return (Class) genericTypes[0];
+                return (Class<?>) genericTypes[0];
             }
         }
         return Object.class;

@@ -250,7 +250,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private final Class<?> typeToMock;
         private final Set<Class<?>> extraInterfaces;
 
-        public MockitoMockObjectInputStream(InputStream in, Class typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
+        public MockitoMockObjectInputStream(InputStream in, Class<?> typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
             super(in);
             this.typeToMock = typeToMock;
             this.extraInterfaces = extraInterfaces;

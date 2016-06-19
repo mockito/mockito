@@ -69,8 +69,6 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         return (T)arguments[index];
     }
 
-
-
     public boolean isVerified() {
         return verified || isIgnoredForVerification;
     }

@@ -221,7 +221,7 @@ public class InvalidStateDetectionTest extends TestBase {
         }
     }
     
-    private void detectsAndCleansUp(DetectsInvalidState detector, Class expected) {
+    private void detectsAndCleansUp(DetectsInvalidState detector, Class<?> expected) {
         try {
             detector.detect(mock);
             fail("Should throw an exception");

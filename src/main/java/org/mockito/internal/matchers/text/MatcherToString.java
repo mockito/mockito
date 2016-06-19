@@ -21,9 +21,9 @@ class MatcherToString {
      * @param matcher
      * @return
      */
-    static String toString(ArgumentMatcher matcher) {
+    static String toString(ArgumentMatcher<?> matcher) {
         ObjectMethodsGuru guru = new ObjectMethodsGuru();
-        Class cls = matcher.getClass();
+        Class<?> cls = matcher.getClass();
         while(cls != Object.class) {
             Method[] methods = cls.getDeclaredMethods();
             for (Method m : methods) {
