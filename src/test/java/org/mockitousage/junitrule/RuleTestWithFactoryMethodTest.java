@@ -2,7 +2,6 @@ package org.mockitousage.junitrule;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.MethodRule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;

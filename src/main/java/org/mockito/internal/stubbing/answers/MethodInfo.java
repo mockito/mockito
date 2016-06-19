@@ -34,7 +34,7 @@ public class MethodInfo implements AbstractAwareMethod {
         return false;
     }
 
-    public boolean isValidReturnType(Class clazz) {
+    public boolean isValidReturnType(Class<?> clazz) {
         if (method.getReturnType().isPrimitive() || clazz.isPrimitive()) {
             return Primitives.primitiveTypeOf(clazz) == Primitives.primitiveTypeOf(method.getReturnType());
         } else {

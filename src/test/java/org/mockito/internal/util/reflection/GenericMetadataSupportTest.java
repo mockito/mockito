@@ -4,22 +4,17 @@
  */
 package org.mockito.internal.util.reflection;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
+import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 public class GenericMetadataSupportTest {
   

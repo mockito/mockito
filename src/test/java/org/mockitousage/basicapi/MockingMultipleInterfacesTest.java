@@ -5,15 +5,16 @@
 
 package org.mockitousage.basicapi;
 
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
 import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
 
 // See issue 453
 public class MockingMultipleInterfacesTest {

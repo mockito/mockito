@@ -10,9 +10,10 @@ import static org.testng.Assert.fail;
 
 public class InitializeChildTestWhenParentHasListenerTest extends ParentTest {
 
-    @Mock Map childMockField;
+    @Mock Map<?, ?> childMockField;
 
     @Test
+    @SuppressWarnings("unchecked")
     public void verify_mocks_are_initialized() throws Exception {
         assertThat(childMockField).isNotNull();
         assertThat(parentMockField).isNotNull();

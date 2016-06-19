@@ -12,7 +12,9 @@ import org.mockitoutil.TestBase;
 
 import java.io.Serializable;
 
-import static org.mockito.Mockito.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 //see issue 101
 public class BridgeMethodsHitAgainTest extends TestBase {

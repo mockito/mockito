@@ -28,7 +28,7 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
     private final List<InvocationListener> invocationListeners;
     private final InternalMockHandler<T> mockHandler;
 
-    public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings settings) {
+    public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings<?> settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }
@@ -69,7 +69,7 @@ class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T
         return mockHandler.getMockSettings();
     }
 
-    public void setAnswersForStubbing(List<Answer> answers) {
+    public void setAnswersForStubbing(List<Answer<?>> answers) {
         mockHandler.setAnswersForStubbing(answers);
     }
 

@@ -5,17 +5,18 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 
 public class OnlyVerificationTest extends TestBase {
 

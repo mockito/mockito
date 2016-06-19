@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.progress;
 
+import org.junit.Test;
+import org.mockito.internal.util.Primitives;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-
-import org.junit.Test;
-import org.mockito.internal.util.Primitives;
 
 
 public class PrimitivesTest {

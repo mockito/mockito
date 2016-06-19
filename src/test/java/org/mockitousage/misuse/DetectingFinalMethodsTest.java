@@ -10,6 +10,7 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 public class DetectingFinalMethodsTest extends TestBase {

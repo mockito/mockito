@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.exceptions.util;
 
-import static java.util.Arrays.*;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @SuppressWarnings("unchecked")
 public class ScenarioPrinterTest extends TestBase {

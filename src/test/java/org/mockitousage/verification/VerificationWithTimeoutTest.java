@@ -19,6 +19,8 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 

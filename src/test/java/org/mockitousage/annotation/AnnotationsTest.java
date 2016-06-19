@@ -5,15 +5,6 @@
 
 package org.mockitousage.annotation;
 
-import static org.mockito.Mockito.*;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
@@ -22,6 +13,16 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")
 public class AnnotationsTest extends TestBase {

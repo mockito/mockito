@@ -55,6 +55,7 @@ public class MockitoHamcrest {
      * @return <code>null</code> or default value for primitive (0, false, etc.)
      * @since 2.0
      */
+    @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);
         return  (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
@@ -173,6 +174,6 @@ public class MockitoHamcrest {
     }
 
     private static <T> void reportMatcher(Matcher<T> matcher) {
-        MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(new HamcrestArgumentMatcher(matcher));
+        MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
     }
 }

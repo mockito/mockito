@@ -2,7 +2,6 @@ package org.mockito.internal.util.reflection;
 
 import org.junit.Test;
 import org.mockito.Answers;
-import org.mockito.Mockito;
 
 import java.util.Set;
 

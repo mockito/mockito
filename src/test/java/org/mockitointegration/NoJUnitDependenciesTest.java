@@ -1,10 +1,8 @@
 package org.mockitointegration;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.jar.asm.ClassVisitor;
 import org.hamcrest.Matcher;
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -43,7 +41,8 @@ public class NoJUnitDependenciesTest {
         try {
             Class.forName(pureMockitoAPIClass, true, classLoader_without_JUnit);
         } catch (Throwable e) {
-            throw new AssertionError(String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass), e);
+            e.printStackTrace();
+            throw new AssertionError(String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass));
         }
     }
 }

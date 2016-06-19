@@ -95,6 +95,7 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return unwrapTo(new Object[size()]);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T[] unwrapTo(T[] array) {
         Iterator<Object> iterator = iterator();
         for (int i = 0, objectsLength = array.length; i < objectsLength; i++) {
@@ -105,10 +106,9 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return array;
     }
 
-
+    @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] typedArray) {
-        T[] array = typedArray.length >= size() ? typedArray :
-                (T[]) newInstance(typedArray.getClass().getComponentType(), size());
+        T[] array = typedArray.length >= size() ? typedArray : (T[]) newInstance(typedArray.getClass().getComponentType(), size());
         return unwrapTo(array);
     }
 

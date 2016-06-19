@@ -37,10 +37,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         registerAnnotationProcessor(Captor.class, new CaptorAnnotationProcessor());
     }
 
-    /* (non-Javadoc)
-    * @see org.mockito.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
-    */
-    public Object createMockFor(Annotation annotation, Field field) {
+    private Object createMockFor(Annotation annotation, Field field) {
         return forAnnotation(annotation).process(annotation, field);
     }
 
@@ -59,6 +56,7 @@ public class DefaultAnnotationEngine implements AnnotationEngine {
         annotationProcessorMap.put(annotationClass, fieldAnnotationProcessor);
     }
 
+    @Override
     public void process(Class<?> clazz, Object testInstance) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {

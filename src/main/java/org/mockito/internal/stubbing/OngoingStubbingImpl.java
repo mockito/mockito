@@ -39,6 +39,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return invocationContainerImpl.getInvocations();
     }
 
+    @SuppressWarnings("unchecked")
     public <M> M getMock() {
         return (M) invocationContainerImpl.invokedMock();
     }

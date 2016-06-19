@@ -10,8 +10,11 @@ import org.mockito.plugins.PluginSwitch;
 import org.mockitoutil.TestBase;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Collections;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +26,7 @@ public class PluginFinderTest extends TestBase {
     public @Rule TemporaryFolder tmp = new TemporaryFolder();
 
     @Test public void empty_resources() {
-        assertNull(finder.findPluginClass((Iterable) asList()));
+        assertNull(finder.findPluginClass(Collections.<URL>emptyList()));
     }
 
     @Test public void no_valid_impl() throws Exception {
@@ -33,7 +36,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("  \n  ", f);
 
         //then
-        assertNull(finder.findPluginClass((Iterable) asList(f.toURI().toURL())));
+        assertNull(finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
     @Test public void single_implementation() throws Exception {
@@ -44,7 +47,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("  foo.Foo  ", f);
 
         //then
-        assertEquals("foo.Foo", finder.findPluginClass((Iterable) asList(f.toURI().toURL())));
+        assertEquals("foo.Foo", finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
     @Test public void single_implementation_disabled() throws Exception {
@@ -55,7 +58,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("  foo.Foo  ", f);
 
         //then
-        assertEquals(null, finder.findPluginClass((Iterable) asList(f.toURI().toURL())));
+        assertEquals(null, finder.findPluginClass(asList(f.toURI().toURL())));
     }
 
     @Test public void multiple_implementations_only_one_enabled() throws Exception {
@@ -67,7 +70,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("Foo", f1); IOUtil.writeText("Bar", f2);
 
         //then
-        assertEquals("Bar", finder.findPluginClass((Iterable) asList(f1.toURI().toURL(), f2.toURI().toURL())));
+        assertEquals("Bar", finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
     @Test public void multiple_implementations_only_one_useful() throws Exception {
@@ -79,7 +82,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("   ", f1); IOUtil.writeText("X", f2);
 
         //then
-        assertEquals("X", finder.findPluginClass((Iterable) asList(f1.toURI().toURL(), f2.toURI().toURL())));
+        assertEquals("X", finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
     @Test public void multiple_empty_implementations() throws Exception {
@@ -91,7 +94,7 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("   ", f1); IOUtil.writeText("\n", f2);
 
         //then
-        assertEquals(null, finder.findPluginClass((Iterable) asList(f1.toURI().toURL(), f2.toURI().toURL())));
+        assertEquals(null, finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
     @Test public void problems_loading_impl() throws Exception {
@@ -99,7 +102,7 @@ public class PluginFinderTest extends TestBase {
 
         try {
             //when
-            finder.findPluginClass((Iterable) asList(new File("xxx").toURI().toURL()));
+            finder.findPluginClass(asList(new File("xxx").toURI().toURL()));
             //then
             fail();
         } catch(Exception e) {

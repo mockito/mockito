@@ -16,6 +16,9 @@ import org.mockitoutil.TestBase;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+
 
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")
 public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {

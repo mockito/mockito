@@ -4,14 +4,17 @@
  */
 package org.mockito.internal.util.reflection;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class LenientCopyToolTest extends TestBase {

@@ -20,6 +20,8 @@ public class IOOBExceptionShouldNotBeThrownWhenNotCodingFluentlyTest {
 
     @Test
     public void second_stubbing_throws_IndexOutOfBoundsException() throws Exception {
+
+        @SuppressWarnings("unchecked")
         Map<String, String> map = mock(Map.class);
 
         OngoingStubbing<String> mapOngoingStubbing = when(map.get(anyString()));

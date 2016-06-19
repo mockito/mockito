@@ -4,15 +4,6 @@
  */
 package org.mockitousage.annotation;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,6 +13,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
+
+import java.util.*;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {

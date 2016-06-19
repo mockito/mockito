@@ -14,10 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestWithoutListenerShouldNotInitializeAnnotatedFieldsTest {
 
-    @Mock List list;
-    @Spy Map map;
+    @Mock List<?> list;
+    @Spy Map<?, ?> map;
     @InjectMocks SomeType someType;
-    @Captor ArgumentCaptor<List> captor;
+    @Captor ArgumentCaptor<List<?>> captor;
 
     @Test
     public void test_not_annotated_by_MockitoTestNGListener_should_not_touch_annotated_fields() throws Exception {

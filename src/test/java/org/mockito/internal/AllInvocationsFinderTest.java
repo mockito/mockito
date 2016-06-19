@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class AllInvocationsFinderTest extends TestBase {

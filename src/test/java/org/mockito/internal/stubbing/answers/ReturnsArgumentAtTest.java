@@ -4,11 +4,12 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.InvocationOnMock;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class ReturnsArgumentAtTest {
     @Test

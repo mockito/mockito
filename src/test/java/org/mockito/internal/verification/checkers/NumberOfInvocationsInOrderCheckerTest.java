@@ -5,21 +5,21 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.*;
-
-import java.util.LinkedList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+
+import static java.util.Arrays.asList;
+import static junit.framework.TestCase.*;
 
 public class NumberOfInvocationsInOrderCheckerTest extends TestBase {
 

@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static junit.framework.TestCase.*;
+
 @SuppressWarnings({"unchecked", "unused"})
 public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 

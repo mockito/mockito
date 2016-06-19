@@ -17,19 +17,6 @@ import java.lang.reflect.Field;
 public interface AnnotationEngine {
 
     /**
-     * @deprecated
-     * Please use {@link AnnotationEngine#process(Class, Object)} method instead that is more robust
-     * <p>
-     * Creates mock, ArgumentCaptor or wraps field instance in spy object.
-     * Only if of correct annotation type.
-     *
-     * @param annotation Annotation
-     * @param field Field details
-     */
-    @Deprecated
-    Object createMockFor(Annotation annotation, Field field);
-
-    /**
      * Allows extending the interface to perform action on specific fields on the test class.
      * <p>
      * See the implementation of this method to figure out what is it for.

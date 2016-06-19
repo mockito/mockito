@@ -4,8 +4,6 @@
  */
 package org.mockitousage.junitrunner;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +12,11 @@ import org.mockito.Mock;
 import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(VerboseMockitoJUnitRunner.class)
@@ -52,17 +55,4 @@ public class ModellingVerboseMockitoTest extends TestBase {
         //should be no warnings:
         fail();
     }
-
-//    @After
-//    public void checkStubs() {
-////        stubsUsedIn(mock);
-//    }
-//
-//    private void stubsUsed(Object ... mocks) {
-//
-//    }
-//
-//    private void stubsUsed(Object testCaseOrMock) {
-//
-//    }
 }

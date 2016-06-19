@@ -17,10 +17,10 @@ public class StringJoiner {
     /**
      * Joins Strings with line break character. It adds line break in front, too.
      * This makes it something like 'format' no really 'join'.
-     * TODO Rename to 'format', remove the confusing start String.
      */
+    @SuppressWarnings("unchecked")
     public static String join(Object ... linesToBreak) {
-        return join("\n", (Iterable) asList(linesToBreak));
+        return join("\n", (Iterable<String>) (Object) asList(linesToBreak));
     }
 
     /**

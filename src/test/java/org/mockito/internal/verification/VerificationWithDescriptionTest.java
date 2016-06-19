@@ -1,15 +1,17 @@
 package org.mockito.internal.verification;
 
-import java.util.List;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import static org.mockito.Mockito.description;
-import static org.mockito.Mockito.verify;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoAssertionError;
+
+import java.util.List;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.description;
+import static org.mockito.Mockito.verify;
 
 public class VerificationWithDescriptionTest {
     

@@ -5,11 +5,13 @@
 
 package org.mockitousage.basicapi;
 
-import static org.hamcrest.CoreMatchers.*;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 
 public class ReplacingObjectMethodsTest extends TestBase {
 

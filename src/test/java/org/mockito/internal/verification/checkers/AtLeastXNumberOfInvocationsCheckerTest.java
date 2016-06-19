@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AtLeastXNumberOfInvocationsCheckerTest   {
 

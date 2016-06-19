@@ -5,7 +5,8 @@
 
 package org.mockitoutil;
 
-import static org.junit.Assert.*;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -13,8 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
@@ -133,8 +133,8 @@ public class ExtraMatchers {
         };
     }
     
-    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
-        return CoreMatchers.is((Class) type);
+    public static org.hamcrest.Matcher<Object> clazz(Class<?> type) {
+        return CoreMatchers.instanceOf(type);
     }
 
     public static Assertor hasMethodsInStackTrace(final String ... methods) {

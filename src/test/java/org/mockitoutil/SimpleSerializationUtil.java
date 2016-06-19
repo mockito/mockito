@@ -1,17 +1,13 @@
 package org.mockitoutil;
 
-import junit.framework.Assert;
+import java.io.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import static junit.framework.TestCase.assertNotNull;
 
 public abstract class SimpleSerializationUtil {
 
     //TODO use widely
+    @SuppressWarnings("unchecked")
     public static <T> T serializeAndBack(T obj) throws Exception {
         ByteArrayOutputStream os = serializeMock(obj);
         return (T) deserializeMock(os, Object.class);
@@ -25,7 +21,7 @@ public abstract class SimpleSerializationUtil {
 
     public static <T> T deserializeMock(InputStream unserialize, Class<T> type) throws IOException, ClassNotFoundException {
         Object readObject = new ObjectInputStream(unserialize).readObject();
-        Assert.assertNotNull(readObject);
+        assertNotNull(readObject);
         return type.cast(readObject);
     }
 

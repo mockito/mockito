@@ -1,8 +1,9 @@
 package org.mockito.internal.matchers;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the Matchers that operate over strings

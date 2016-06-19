@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
@@ -54,7 +55,7 @@ public class MockUtilTest extends TestBase {
     public void should_validate_spy() {
         assertFalse(mockUtil.isSpy("i mock a mock"));
         assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
-        assertFalse(mockUtil.isSpy((Class) null));
+        assertFalse(mockUtil.isSpy(null));
 
         assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
         assertTrue(mockUtil.isSpy(Mockito.spy(ArrayList.class)));

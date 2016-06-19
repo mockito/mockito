@@ -4,20 +4,22 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.AdditionalAnswers.delegatesTo;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static junit.framework.Assert.assertEquals;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.AdditionalAnswers.delegatesTo;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithDelegateTest {
@@ -29,9 +31,8 @@ public class StubbingWithDelegateTest {
         }
 
         public T set(int i, T value) {
-            T oldValue = value;
             this.value = value;
-            return oldValue;
+            return value;
         }
 
         public int size() {

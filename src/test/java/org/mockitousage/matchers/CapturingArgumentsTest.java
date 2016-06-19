@@ -16,6 +16,7 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -131,6 +132,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way()  {
         //the test passes if this expression compiles
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
         assertNotNull(argument);
     }

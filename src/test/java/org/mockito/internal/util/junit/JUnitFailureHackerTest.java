@@ -11,6 +11,8 @@ import org.junit.runner.notification.Failure;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class JUnitFailureHackerTest extends TestBase {
     
     JUnitFailureHacker hacker = new JUnitFailureHacker();
@@ -73,6 +75,6 @@ public class JUnitFailureHackerTest extends TestBase {
         hacker.appendWarnings(failure, "unused stubbing blah");
         
         //then
-        System.out.println(failure.getException());        
+        System.out.println(failure.getException());
     }
 }

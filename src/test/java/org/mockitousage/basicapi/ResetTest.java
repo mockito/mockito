@@ -4,9 +4,6 @@
  */
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
@@ -15,11 +12,18 @@ import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.*;
+
 public class ResetTest extends TestBase {
 
-    @Mock private IMethods mock;
-    @Mock private IMethods mockTwo;
-    
+    @Mock
+    private IMethods mock;
+
+    @Mock
+    private IMethods mockTwo;
+
     @Test
     public void shouldResetOngoingStubbingSoThatMoreMeaningfulExceptionsAreRaised() {
         mock(IMethods.class);
@@ -39,7 +43,7 @@ public class ResetTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void resettingNullIsSafe() {
-        reset(new Object[] {null});
+        reset(new Object[]{null});
     }
 
     @Test
@@ -82,7 +86,7 @@ public class ResetTest extends TestBase {
         assertContains("Mock for IMethods", "" + mockTwo);
         assertEquals("mockie", "" + mock);
     }
-    
+
     @Test
     public void shouldResetMultipleMocks() {
         mock.simpleMethod();
@@ -90,18 +94,19 @@ public class ResetTest extends TestBase {
         reset(mock, mockTwo);
         verifyNoMoreInteractions(mock, mockTwo);
     }
-    
+
     @Test
     public void shouldValidateStateWhenResetting() {
         //invalid verify:
         verify(mock);
-        
+
         try {
             reset(mockTwo);
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
     }
-    
+
     @Test
     public void shouldMaintainPreviousDefaultAnswer() {
         //given

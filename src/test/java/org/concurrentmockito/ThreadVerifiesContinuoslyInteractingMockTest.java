@@ -5,12 +5,13 @@
 
 package org.concurrentmockito;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
 //this test exposes the problem most of the time
 public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {

@@ -5,17 +5,19 @@
 
 package org.mockitousage.stubbing;
 
-import static java.util.Arrays.*;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.when;
 
 public class StubbingWithExtraAnswersTest extends TestBase {
 

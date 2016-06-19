@@ -12,6 +12,7 @@ import org.mockito.exceptions.Reporter;
 
 import static org.mockito.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,6 @@ import java.util.Set;
 /**
  * Scan field for injection.
  */
-@SuppressWarnings("deprecation")
 public class InjectMocksScanner {
     private final Class<?> clazz;
 
@@ -47,6 +47,7 @@ public class InjectMocksScanner {
      *
      * @return Fields that depends on Mock
      */
+    @SuppressWarnings("unchecked")
     private Set<Field> scan() {
         Set<Field> mockDependentFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
@@ -60,8 +61,8 @@ public class InjectMocksScanner {
         return mockDependentFields;
     }
 
-    void assertNoAnnotations(final Field field, final Class... annotations) {
-        for (Class annotation : annotations) {
+    private static void assertNoAnnotations(Field field, Class<? extends Annotation>... annotations) {
+        for (Class<? extends Annotation> annotation : annotations) {
             if (field.isAnnotationPresent(annotation)) {
                 throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
             }

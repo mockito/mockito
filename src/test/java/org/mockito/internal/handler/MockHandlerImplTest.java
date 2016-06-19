@@ -26,6 +26,8 @@ import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;

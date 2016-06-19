@@ -5,17 +5,19 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockitoutil.TestBase;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockitoutil.TestBase;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {

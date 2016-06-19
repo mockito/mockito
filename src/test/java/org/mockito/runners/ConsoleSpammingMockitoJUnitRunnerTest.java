@@ -15,10 +15,14 @@ import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
-    
+
     private ConsoleSpammingMockitoJUnitRunner runner;
+
     private MockitoLoggerStub loggerStub;
+
     private RunNotifier notifier;
 
     @Before
@@ -28,7 +32,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     }
 
     //TODO add sensible tests
-       
+
     @Test
     public void shouldDelegateToGetDescription() throws Exception {
         //given
@@ -38,18 +42,18 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
                 return expectedDescription;
             }
         });
-        
+
         //when
         Description description = runner.getDescription();
-        
+
         //then
         assertEquals(expectedDescription, description);
     }
 
     public class MockitoLoggerStub extends ConsoleMockitoLogger {
-        
+
         StringBuilder loggedInfo = new StringBuilder();
-        
+
         public void log(Object what) {
             super.log(what);
             loggedInfo.append(what);
@@ -59,16 +63,18 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
             return loggedInfo.toString();
         }
     }
-    
+
     static class RunnerImplStub implements RunnerImpl {
 
         public Description getDescription() {
             return null;
         }
 
-        public void run(RunNotifier notifier) {}
+        public void run(RunNotifier notifier) {
+        }
 
-        public void filter(Filter filter) throws NoTestsRemainException {}
+        public void filter(Filter filter) throws NoTestsRemainException {
+        }
 
     }
 }

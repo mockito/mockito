@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Listeners(MockitoTestNGListener.class)
 public class AnnotatedFieldsShouldBeInitializedByMockitoTestNGListenerTest {
 
-    @Mock List list;
-    @Spy HashMap map;
+    @Mock List<?> list;
+    @Spy HashMap<?, ?> map;
     @InjectMocks SomeType someType;
-    @Captor ArgumentCaptor<List> captor;
+    @Captor ArgumentCaptor<List<?>> captor;
 
     @Test
     public void ensure_annotated_fields_are_instantiated() throws Exception {

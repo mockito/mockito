@@ -4,21 +4,19 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Method;
-import java.util.Set;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked"})
 public class StubbingWithCustomAnswerTest extends TestBase {
@@ -41,7 +39,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     @Test
     public void shouldAnswerWithThenAnswerAlias() throws Exception {
         RecordCall recordCall = new RecordCall();
-        Set mockedSet = when(mock(Set.class).isEmpty()).then(recordCall).getMock();
+        Set<?> mockedSet = (Set<?>) when(mock(Set.class).isEmpty()).then(recordCall).getMock();
 
         mockedSet.isEmpty();
 

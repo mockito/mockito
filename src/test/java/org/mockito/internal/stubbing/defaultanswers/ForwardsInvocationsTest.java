@@ -3,6 +3,8 @@ package org.mockito.internal.stubbing.defaultanswers;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class ForwardsInvocationsTest extends TestBase {
 
     interface Foo {

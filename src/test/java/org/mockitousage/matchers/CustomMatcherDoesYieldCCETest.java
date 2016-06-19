@@ -4,9 +4,6 @@
  */
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
@@ -14,9 +11,14 @@ import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.verify;
+
 public class CustomMatcherDoesYieldCCETest extends TestBase {
 
-    @Mock private IMethods mock;
+    @Mock
+    private IMethods mock;
 
     @Test
     public void shouldNotThrowCCE() {
@@ -27,7 +29,8 @@ public class CustomMatcherDoesYieldCCETest extends TestBase {
             // different type
             verify(mock).simpleMethod(argThat(isStringWithTextFoo()));
             fail();
-        } catch (ArgumentsAreDifferent e) {}
+        } catch (ArgumentsAreDifferent e) {
+        }
     }
 
     private ArgumentMatcher<String> isStringWithTextFoo() {

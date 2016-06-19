@@ -16,7 +16,8 @@ import static org.mockito.Mockito.when;
 public class CompilationWarningsTest {
 
     @Before
-    public void pay_attention_to_compilation_warnings_and_JDK_version() { }
+    public void pay_attention_to_compilation_warnings_and_JDK_version() {
+    }
 
     @Test
     public void no_warnings_for_most_common_api() throws Exception {
@@ -78,6 +79,7 @@ public class CompilationWarningsTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void heap_pollution_JDK7plus_warning_avoided_BUT_now_unchecked_generic_array_creation_warnings_ON_JDK5plus_environment() throws Exception {
         doThrow(NullPointerException.class, IllegalArgumentException.class).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         when(mock(IMethods.class).objectReturningMethodNoArgs()).thenThrow(NullPointerException.class, IllegalArgumentException.class);
@@ -90,14 +92,14 @@ public class CompilationWarningsTest {
 
     @Test
     public void unchecked_confusing_null_argument_warnings() throws Exception {
-        doReturn(null, null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
-        doAnswer(ignore()).doReturn(null, null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
-        when(mock(IMethods.class).objectReturningMethodNoArgs()).thenReturn(null, null);
-        when(mock(IMethods.class).objectReturningMethodNoArgs()).then(ignore()).thenReturn(null, null);
-        willReturn(null, null).given(mock(IMethods.class)).objectReturningMethodNoArgs();
-        given(mock(IMethods.class).objectReturningMethodNoArgs()).willReturn(null, null);
-        willAnswer(ignore()).willReturn(null, null).given(mock(IMethods.class)).objectReturningMethodNoArgs();
-        given(mock(IMethods.class).objectReturningMethodNoArgs()).will(ignore()).willReturn(null, null);
+        doReturn(null, (Object[]) null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
+        doAnswer(ignore()).doReturn(null, (Object[]) null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
+        when(mock(IMethods.class).objectReturningMethodNoArgs()).thenReturn(null, (Object[]) null);
+        when(mock(IMethods.class).objectReturningMethodNoArgs()).then(ignore()).thenReturn(null, (Object[]) null);
+        willReturn(null, (Object[]) null).given(mock(IMethods.class)).objectReturningMethodNoArgs();
+        given(mock(IMethods.class).objectReturningMethodNoArgs()).willReturn(null, (Object[]) null);
+        willAnswer(ignore()).willReturn(null, (Object[]) null).given(mock(IMethods.class)).objectReturningMethodNoArgs();
+        given(mock(IMethods.class).objectReturningMethodNoArgs()).will(ignore()).willReturn(null, (Object[]) null);
     }
 
     private static Answer<?> ignore() {

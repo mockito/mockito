@@ -22,7 +22,7 @@ public class CaptorAnnotationProcessor implements FieldAnnotationProcessor<Capto
                + field.getName() + "' has wrong type\n"
                + "For info how to use @Captor annotations see examples in javadoc for MockitoAnnotations class.");
         }
-        Class cls = new GenericMaster().getGenericType(field);
+        Class<?> cls = new GenericMaster().getGenericType(field);
         return ArgumentCaptor.forClass(cls);
     }
 }

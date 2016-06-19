@@ -4,19 +4,22 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
 public class CallingRealMethodTest extends TestBase {
-    
-    @Mock TestedObject mock;
+
+    @Mock
+    TestedObject mock;
 
     static class TestedObject {
+
         String value;
 
         void setValue(String value) {
@@ -26,17 +29,17 @@ public class CallingRealMethodTest extends TestBase {
         String getValue() {
             return "HARD_CODED_RETURN_VALUE";
         }
-        
+
         String callInternalMethod() {
             return getValue();
         }
     }
-    
+
     @Test
     public void shouldAllowCallingInternalMethod() {
         when(mock.getValue()).thenReturn("foo");
         when(mock.callInternalMethod()).thenCallRealMethod();
-        
+
         assertEquals("foo", mock.callInternalMethod());
     }
 

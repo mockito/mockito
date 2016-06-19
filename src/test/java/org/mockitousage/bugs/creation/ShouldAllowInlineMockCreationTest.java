@@ -5,17 +5,16 @@
 
 package org.mockitousage.bugs.creation;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 //see issue 191
 public class ShouldAllowInlineMockCreationTest extends TestBase {

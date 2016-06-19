@@ -4,11 +4,11 @@
  */
 package org.mockitousage.debugging;
 
-import static org.mockito.BDDMockito.*;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.BDDMockito.given;
 
 public class PrintingInvocationsDetectsUnusedStubTest extends TestBase {
 

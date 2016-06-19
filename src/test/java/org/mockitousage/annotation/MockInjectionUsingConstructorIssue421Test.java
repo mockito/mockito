@@ -5,8 +5,6 @@
 
 package org.mockitousage.annotation;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.examples.use.ArticleCalculator;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MockInjectionUsingConstructorIssue421Test {

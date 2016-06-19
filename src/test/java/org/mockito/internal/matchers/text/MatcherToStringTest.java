@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class MatcherToStringTest extends TestBase {
 
     static class MatcherWithoutDescription implements ArgumentMatcher<Object> {

@@ -12,6 +12,8 @@ import org.mockitoutil.TestBase;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+
 @SuppressWarnings({"unchecked","serial"})
 public class ArgumentMatchingToolTest extends TestBase {
 
@@ -45,7 +47,7 @@ public class ArgumentMatchingToolTest extends TestBase {
     public void shouldFindSuspiciousMatchers() {
         //given
         Equals matcherInt20 = new Equals(20);
-        Long longPretendingAnInt = new Long(20);
+        Long longPretendingAnInt = 20L;
         
         //when
         List<ArgumentMatcher> matchers = (List) Arrays.asList(new Equals(10), matcherInt20);

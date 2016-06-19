@@ -20,10 +20,13 @@ import org.mockitoutil.TestBase;
 
 import java.util.Set;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.BDDMockito.*;
 
 public class BDDMockitoTest extends TestBase {
-    @Mock IMethods mock;
+
+    @Mock
+    IMethods mock;
 
     @Test
     public void should_stub() throws Exception {
@@ -40,7 +43,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
@@ -50,10 +54,12 @@ public class BDDMockitoTest extends TestBase {
         try {
             Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_stub_with_throwable_classes() throws Exception {
         // unavoidable 'unchecked generic array creation' warning (from JDK7 onward)
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class);
@@ -61,15 +67,17 @@ public class BDDMockitoTest extends TestBase {
         try {
             Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
     public void should_stub_with_answer() throws Exception {
         given(mock.simpleMethod(anyString())).willAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return  invocation.getArgument(0);
-            }});
+                return invocation.getArgument(0);
+            }
+        });
 
         Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
@@ -78,7 +86,7 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_with_will_answer_alias() throws Exception {
         given(mock.simpleMethod(anyString())).will(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return  invocation.getArgument(0);
+                return invocation.getArgument(0);
             }
         });
 
@@ -112,8 +120,8 @@ public class BDDMockitoTest extends TestBase {
         willReturn("foo").willCallRealMethod()
                 .given(mock).simpleMethod();
 
-       Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
-       Assertions.assertThat(mock.simpleMethod()).isEqualTo(null);
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
+        Assertions.assertThat(mock.simpleMethod()).isEqualTo(null);
     }
 
     @Test
@@ -123,7 +131,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
@@ -133,17 +142,20 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_stub_void_with_exception_classes() throws Exception {
         willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class).given(mock).voidMethod();
 
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
@@ -156,7 +168,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
@@ -169,7 +182,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             mock.voidMethod();
             fail();
-        } catch(SomethingWasWrong expected) {}
+        } catch (SomethingWasWrong expected) {
+        }
     }
 
     @Test
@@ -184,7 +198,7 @@ public class BDDMockitoTest extends TestBase {
     public void should_stub_using_do_answer_style() throws Exception {
         willAnswer(new Answer<String>() {
             public String answer(InvocationOnMock invocation) throws Throwable {
-                return  invocation.getArgument(0);
+                return invocation.getArgument(0);
             }
         })
                 .given(mock).simpleMethod(anyString());
@@ -213,6 +227,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_all_stubbed_mock_reference_access() throws Exception {
         Set expectedMock = mock(Set.class);
 
@@ -261,7 +276,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).shouldHaveZeroInteractions();
             fail("should have reported this interaction wasn't wanted");
-        } catch (NoInteractionsWanted expected) { }
+        } catch (NoInteractionsWanted expected) {
+        }
     }
 
     @Test
@@ -273,7 +289,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).shouldHaveNoMoreInteractions();
             fail("should have reported that no more interactions were wanted");
-        } catch (NoInteractionsWanted expected) { }
+        } catch (NoInteractionsWanted expected) {
+        }
     }
 
     @Test
@@ -297,7 +314,8 @@ public class BDDMockitoTest extends TestBase {
         try {
             then(mock).should(inOrder).arrayReturningMethod();
             fail("should have raise in order verification failure on second verify call");
-        } catch (VerificationInOrderFailure expected) { }
+        } catch (VerificationInOrderFailure expected) {
+        }
     }
 
     @Test(expected = WantedButNotInvoked.class)
@@ -350,23 +368,39 @@ public class BDDMockitoTest extends TestBase {
 
     static class Person {
 
-        void ride(Bike bike) {}
-        void drive(Car car) {}
-    }
-    static class Bike { }
+        void ride(Bike bike) {
+        }
 
-    static class Car { }
+        void drive(Car car) {
+        }
+    }
+
+    static class Bike {
+
+    }
+
+    static class Car {
+
+    }
+
     static class Police {
 
-        void chase(Car car) {}
+        void chase(Car car) {
+        }
     }
 
     class Dog {
+
         public String bark() {
             return "woof";
         }
     }
 
-    private class SomethingWasWrong extends RuntimeException { }
-    private class AnotherThingWasWrong extends RuntimeException { }
+    private class SomethingWasWrong extends RuntimeException {
+
+    }
+
+    private class AnotherThingWasWrong extends RuntimeException {
+
+    }
 }

@@ -5,17 +5,18 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest extends TestBase {

@@ -13,6 +13,8 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 

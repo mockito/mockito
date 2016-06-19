@@ -5,9 +5,6 @@
 
 package org.mockitousage.stacktrace;
 
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.ExtraMatchers.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +17,10 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.ExtraMatchers.hasFirstMethodInStackTrace;
+
 public class StackTraceFilteringTest extends TestBase {
     
     @Mock private IMethods mock;
@@ -31,7 +32,7 @@ public class StackTraceFilteringTest extends TestBase {
     
     @Before
     public void setup() {
-        super.makeStackTracesClean();
+        makeStackTracesClean();
     }
     
     @Test

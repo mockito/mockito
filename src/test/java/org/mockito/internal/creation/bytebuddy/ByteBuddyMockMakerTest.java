@@ -12,6 +12,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
+import org.mockito.stubbing.Answer;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.ObjenesisStd;
 
@@ -127,11 +128,10 @@ public class ByteBuddyMockMakerTest {
                 .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
                 .withCodeSourceUrlOf(coverageTool())
                 .build();
-        boolean initialize_class = true;
 
         Class<?> mock_maker_class_loaded_fine_until = Class.forName(
                 "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker",
-                initialize_class,
+                true,
                 classpath_with_objenesis
         );
 
@@ -158,10 +158,10 @@ public class ByteBuddyMockMakerTest {
         return new DummyMockHandler();
     }
 
-    private static class DummyMockHandler implements InternalMockHandler {
+    private static class DummyMockHandler implements InternalMockHandler<Object> {
         public Object handle(Invocation invocation) throws Throwable { return null; }
         public MockCreationSettings getMockSettings() { return null; }
         public InvocationContainer getInvocationContainer() { return null; }
-        public void setAnswersForStubbing(List list) { }
+        public void setAnswersForStubbing(List<Answer<?>> list) { }
     }
 }

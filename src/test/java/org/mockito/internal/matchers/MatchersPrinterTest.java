@@ -4,18 +4,20 @@
  */
 package org.mockito.internal.matchers;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.internal.matchers.text.MatchersPrinter;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockitoutil.TestBase;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+
 @SuppressWarnings("unchecked")
 public class MatchersPrinterTest extends TestBase {
 
-    MatchersPrinter printer = new MatchersPrinter();
+    private final MatchersPrinter printer = new MatchersPrinter();
 
     @Test
     public void shouldGetArgumentsLine() {

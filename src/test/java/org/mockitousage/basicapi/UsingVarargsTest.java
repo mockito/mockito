@@ -5,17 +5,19 @@
 
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Mockito.*;
 
 public class UsingVarargsTest extends TestBase {
 

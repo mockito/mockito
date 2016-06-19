@@ -4,19 +4,19 @@
  */
 package org.mockito.internal.debugging;
 
-import static java.util.Arrays.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.Arrays;
+
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 
 public class WarningsFinderTest extends TestBase {
 

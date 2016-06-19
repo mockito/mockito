@@ -5,15 +5,19 @@
 
 package org.mockitousage.stubbing;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class ReturningDefaultValuesTest extends TestBase {
@@ -66,19 +70,19 @@ public class ReturningDefaultValuesTest extends TestBase {
     }
     
     private class CollectionsServer {
-        List list() {
+        List<?> list() {
             return null;
         }
 
-        LinkedList linkedList() {
+        LinkedList<?> linkedList() {
             return null;
         }
 
-        Map map() {
+        Map<?, ?> map() {
             return null;
         }
 
-        java.util.HashSet hashSet() {
+        HashSet<?> hashSet() {
             return null;
         }
     }

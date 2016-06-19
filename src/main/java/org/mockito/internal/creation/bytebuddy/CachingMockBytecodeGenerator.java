@@ -19,16 +19,17 @@ class CachingMockBytecodeGenerator {
 
     private final MockBytecodeGenerator mockBytecodeGenerator = new MockBytecodeGenerator();
 
+    @SuppressWarnings("unchecked")
     public <T> Class<T> get(MockFeatures<T> params) {
         // TODO improves locking behavior with ReentrantReadWriteLock ?
         avoidingClassLeakCacheLock.lock();
         try {
 
-            Class generatedMockClass = mockCachePerClassLoaderOf(params.mockedType).getOrGenerateMockClass(
+            Class<?> generatedMockClass = mockCachePerClassLoaderOf(params.mockedType).getOrGenerateMockClass(
                     params
             );
 
-            return generatedMockClass;
+            return (Class<T>) generatedMockClass;
         } finally {
           avoidingClassLeakCacheLock.unlock();
         }

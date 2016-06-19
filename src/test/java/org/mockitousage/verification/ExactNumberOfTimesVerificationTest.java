@@ -5,19 +5,16 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
-
-import java.util.LinkedList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.*;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest extends TestBase {

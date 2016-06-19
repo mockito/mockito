@@ -22,7 +22,8 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
     public OngoingStubbing<T> then(Answer<?> answer) {
         return thenAnswer(answer);
     }
-    
+
+    @SuppressWarnings("unchecked")
     public <M> M getMock() {
         return (M) invocationContainerImpl.invokedMock();
     }

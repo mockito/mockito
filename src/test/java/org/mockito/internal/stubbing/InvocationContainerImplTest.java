@@ -5,16 +5,13 @@
 package org.mockito.internal.stubbing;
 
 import org.junit.Test;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.invocation.Invocation;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.mock.MockCreationSettings;
 
 import java.util.LinkedList;

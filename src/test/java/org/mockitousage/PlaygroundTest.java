@@ -5,9 +5,6 @@
 
 package org.mockitousage;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;

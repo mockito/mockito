@@ -113,7 +113,7 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public void setAnswersForStubbing(List<Answer> answers) {
+    public void setAnswersForStubbing(List<Answer<?>> answers) {
         invocationContainerImpl.setAnswersForStubbing(answers);
     }
 

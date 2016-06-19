@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.verification;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class OnlyTest {
 

@@ -5,7 +5,6 @@
 
 package org.mockito.exceptions.base;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.configuration.ConfigurationAccess;
 

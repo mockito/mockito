@@ -16,6 +16,8 @@ import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.configuration.DefaultAnnotationEngine;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.*;
+
 public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     @After

@@ -5,37 +5,30 @@
 
 package org.mockitousage.basicapi;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-import static org.mockitoutil.SimpleSerializationUtil.deserializeMock;
-import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
-import static org.mockitoutil.SimpleSerializationUtil.serializeMock;
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Observable;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Observable;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.*;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationForAnnotationTest extends TestBase implements Serializable {

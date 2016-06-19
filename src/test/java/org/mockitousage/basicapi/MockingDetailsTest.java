@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class MockingDetailsTest extends TestBase {

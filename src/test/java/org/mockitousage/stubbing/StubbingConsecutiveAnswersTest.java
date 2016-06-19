@@ -5,15 +5,14 @@
 
 package org.mockitousage.stubbing;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.*;
 
 public class StubbingConsecutiveAnswersTest extends TestBase {
 
@@ -36,7 +35,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Test
     public void should_return_consecutive_values_for_two_nulls() throws Exception {
-        when(mock.simpleMethod()).thenReturn(null, null);
+        when(mock.simpleMethod()).thenReturn(null, (String[]) null);
 
         assertNull(mock.simpleMethod());
         assertNull(mock.simpleMethod());
@@ -150,6 +149,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void should_throw_consecutively_classes_set_by_shorten_then_throw_method() throws Exception {
         // Unavoidable JDK7+ 'unchecked generic array creation' warning
         when(mock.simpleMethod()).thenThrow(RuntimeException.class,

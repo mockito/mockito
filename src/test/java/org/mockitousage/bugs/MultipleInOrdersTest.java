@@ -4,13 +4,14 @@
  */
 package org.mockitousage.bugs;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockito.InOrder;
 
 import java.util.List;
 
-import org.junit.Test;
-import org.mockito.InOrder;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
 public class MultipleInOrdersTest {

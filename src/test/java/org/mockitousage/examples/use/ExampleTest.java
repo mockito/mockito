@@ -4,10 +4,6 @@
  */
 
 package org.mockitousage.examples.use;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +12,12 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
+
+import java.util.Arrays;
+
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExampleTest extends TestBase {

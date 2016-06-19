@@ -5,15 +5,16 @@
 
 package org.mockitousage.performance;
 
-import static org.mockito.Mockito.*;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class LoadsOfMocksTest extends TestBase {

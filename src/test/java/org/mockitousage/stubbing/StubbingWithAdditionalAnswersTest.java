@@ -12,16 +12,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalAnswers.returnsArgAt;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.AdditionalAnswers.returnsLastArg;
-import static org.mockito.AdditionalAnswers.returnsSecondArg;
-import static org.mockito.AdditionalAnswers.answer;
-import static org.mockito.AdditionalAnswers.answerVoid;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.BDDMockito.verify;
-import static org.mockito.BDDMockito.times;
+import static org.mockito.AdditionalAnswers.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;

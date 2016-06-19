@@ -4,17 +4,19 @@
  */
 package org.mockito.runners;
 
-import static org.mockitoutil.ExtraMatchers.*;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockitoutil.ExtraMatchers.clazz;
+import static org.mockitoutil.ExtraMatchers.contains;
 
 @SuppressWarnings({"unchecked"})
 public class RunnersValidateFrameworkUsageTest extends TestBase {

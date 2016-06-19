@@ -4,13 +4,13 @@
  */
 package org.mockitousage.annotation;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class SpyInjectionTest extends TestBase {

@@ -9,7 +9,6 @@ import org.mockito.configuration.AnnotationEngine;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,17 +22,6 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 public class InjectingAnnotationEngine implements AnnotationEngine {
     private final AnnotationEngine delegate = new DefaultAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
-
-    /***
-     * Create a mock using {@link DefaultAnnotationEngine}
-     *
-     * @see org.mockito.internal.configuration.DefaultAnnotationEngine
-     * @see org.mockito.configuration.AnnotationEngine#createMockFor(java.lang.annotation.Annotation, java.lang.reflect.Field)
-     */
-    @Deprecated
-    public Object createMockFor(Annotation annotation, Field field) {
-        return delegate.createMockFor(annotation, field);
-    }
 
     /**
      * Process the fields of the test instance and create Mocks, Spies, Captors and inject them on fields
@@ -94,10 +82,15 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
         while (clazz != Object.class) {
             new InjectMocksScanner(clazz).addTo(mockDependentFields);
             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
+            onInjection(testClassInstance, clazz, mockDependentFields, mocks);
             clazz = clazz.getSuperclass();
         }
         
         new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+    }
+
+    protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {
+
     }
 
 }

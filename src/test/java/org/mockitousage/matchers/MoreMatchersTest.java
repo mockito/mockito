@@ -12,6 +12,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.*;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ public class MoreMatchersTest extends TestBase {
     public void shouldAnyBeActualAliasToAnyObject() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod((Object) anyObject());
+        verify(mock).simpleMethod(anyObject());
         verify(mock).simpleMethod(any(Object.class));
     }
 

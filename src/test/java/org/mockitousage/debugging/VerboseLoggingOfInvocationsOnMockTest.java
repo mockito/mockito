@@ -4,14 +4,6 @@
  */
 package org.mockitousage.debugging;
 
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the verbose logging of invocation on mock methods.

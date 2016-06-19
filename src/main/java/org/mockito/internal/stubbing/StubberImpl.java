@@ -22,7 +22,7 @@ import org.mockito.stubbing.Stubber;
 @SuppressWarnings("unchecked")
 public class StubberImpl implements Stubber {
 
-    final List<Answer> answers = new LinkedList<Answer>();
+    private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
 
     public <T> T when(T mock) {
         MockUtil mockUtil = new MockUtil();

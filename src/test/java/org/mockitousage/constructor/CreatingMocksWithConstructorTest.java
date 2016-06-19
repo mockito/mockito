@@ -1,16 +1,15 @@
 package org.mockitousage.constructor;
 
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-import java.util.List;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.*;
 
 public class CreatingMocksWithConstructorTest extends TestBase {
 

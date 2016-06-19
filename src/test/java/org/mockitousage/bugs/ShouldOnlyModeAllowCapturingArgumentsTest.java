@@ -5,13 +5,15 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 
 //bug 197
 public class ShouldOnlyModeAllowCapturingArgumentsTest extends TestBase {

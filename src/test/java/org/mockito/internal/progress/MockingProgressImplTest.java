@@ -8,7 +8,6 @@ package org.mockito.internal.progress;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.verification.VerificationMode;
@@ -16,8 +15,8 @@ import org.mockitoutil.TestBase;
 
 import java.util.List;
 
+import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

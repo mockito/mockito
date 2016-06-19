@@ -1,16 +1,17 @@
 package org.mockito.internal.verification;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class DescriptionTest {
     

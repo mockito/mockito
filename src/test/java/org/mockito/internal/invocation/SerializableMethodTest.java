@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.*;
 
 
 public class SerializableMethodTest extends TestBase {

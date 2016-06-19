@@ -4,19 +4,23 @@
  */
 package org.mockito.configuration;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import org.mockito.Mockito;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.configuration.SmartMock;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Set;
+
 public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
     private Answer<Object> overriddenDefaultAnswer = null;
+
     private boolean cleansStackTrace;
+
     private AnnotationEngine overriddenEngine;
+
     private boolean enableClassCache = true;
 
     //for testing purposes, allow to override the configuration
@@ -55,16 +59,21 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
         }
         return new InjectingAnnotationEngine() {
             @Override
-            public Object createMockFor(Annotation annotation, Field field) {
-                if (annotation instanceof SmartMock) {
-                    return Mockito.mock(field.getType(), Mockito.RETURNS_SMART_NULLS);
-                } else {
-                    return super.createMockFor(annotation, field);
+            protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {
+                for (Field field : clazz.getDeclaredFields()) {
+                    if (field.isAnnotationPresent(SmartMock.class)) {
+                        field.setAccessible(true);
+                        try {
+                            field.set(Modifier.isStatic(field.getModifiers()) ? null : testClassInstance, Mockito.mock(field.getType(), Mockito.RETURNS_SMART_NULLS));
+                        } catch (Exception exception) {
+                            throw new AssertionError(exception.getMessage());
+                        }
+                    }
                 }
             }
         };
     }
-    
+
     @Override
     public boolean cleansStackTrace() {
         return cleansStackTrace;

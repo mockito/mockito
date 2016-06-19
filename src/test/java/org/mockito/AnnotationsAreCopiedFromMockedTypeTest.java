@@ -1,7 +1,6 @@
 package org.mockito;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;

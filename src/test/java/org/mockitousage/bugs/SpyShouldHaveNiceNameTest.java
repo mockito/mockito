@@ -13,12 +13,13 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.verify;
 
 //see issue 216
 public class SpyShouldHaveNiceNameTest extends TestBase {
 
-    @Spy List veryCoolSpy = new LinkedList();
+    @Spy List<Integer> veryCoolSpy = new LinkedList<Integer>();
 
     @Test
     public void shouldPrintNiceName() {

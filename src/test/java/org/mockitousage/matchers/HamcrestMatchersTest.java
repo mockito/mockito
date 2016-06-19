@@ -15,6 +15,7 @@ import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,6 +87,7 @@ public class HamcrestMatchersTest extends TestBase {
         verify(mock).oneArg(floatThat(is(6.0F)));
     }
 
+    @SuppressWarnings("raw")
     private class NonGenericMatcher extends BaseMatcher {
         public boolean matches(Object o) {
             return true;
@@ -99,6 +101,7 @@ public class HamcrestMatchersTest extends TestBase {
         assertEquals(5, mock.intArgumentReturningInt(10));
     }
 
+    @SuppressWarnings("unchecked")
     private int nonGenericMatcher() {
         argThat(new NonGenericMatcher());
         return 0;

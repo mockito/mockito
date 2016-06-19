@@ -5,12 +5,14 @@
 
 package org.mockito.internal.matchers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
 
 @SuppressWarnings("unchecked")
 public class MatchersToStringTest extends TestBase {

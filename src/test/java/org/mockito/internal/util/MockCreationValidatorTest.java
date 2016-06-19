@@ -11,7 +11,6 @@ import org.mockitousage.IMethods;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Observer;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;

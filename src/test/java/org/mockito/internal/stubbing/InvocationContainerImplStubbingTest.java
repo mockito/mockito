@@ -18,6 +18,9 @@ import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 public class InvocationContainerImplStubbingTest extends TestBase {
 
     private InvocationContainerImpl invocationContainerImpl;

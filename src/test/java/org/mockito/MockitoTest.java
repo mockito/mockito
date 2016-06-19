@@ -5,20 +5,15 @@
 
 package org.mockito;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.validateMockitoUsage;
-
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest {

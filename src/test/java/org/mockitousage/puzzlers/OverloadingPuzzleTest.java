@@ -4,11 +4,13 @@
  */
 package org.mockitousage.puzzlers;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class OverloadingPuzzleTest extends TestBase {
 

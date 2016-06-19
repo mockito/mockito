@@ -5,14 +5,14 @@
 package org.mockitousage.configuration;
 
 
-import static org.mockito.Mockito.mock;
-
-import java.util.concurrent.Callable;
-
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
+
+import java.util.concurrent.Callable;
+
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")
 public class ClassCacheVersusClassReloadingTest {

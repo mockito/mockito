@@ -19,6 +19,7 @@ import org.mockitoutil.TestBase;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;

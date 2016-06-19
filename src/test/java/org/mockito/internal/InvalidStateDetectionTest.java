@@ -5,9 +5,6 @@
 
 package org.mockito.internal;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,6 +14,11 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 /**
  * invalid state happens if:

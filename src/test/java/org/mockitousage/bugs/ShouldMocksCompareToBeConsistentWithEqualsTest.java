@@ -6,14 +6,13 @@
 package org.mockitousage.bugs;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
 //see issue 184

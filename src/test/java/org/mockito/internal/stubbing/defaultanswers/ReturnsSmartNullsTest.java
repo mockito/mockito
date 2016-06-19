@@ -9,6 +9,9 @@ import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 public class ReturnsSmartNullsTest extends TestBase {
 
     @Test

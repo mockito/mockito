@@ -10,7 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.*;
+import org.mockito.internal.matchers.AnyVararg;
+import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.NotNull;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.*;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {

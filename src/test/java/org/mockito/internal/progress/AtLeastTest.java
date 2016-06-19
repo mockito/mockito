@@ -9,6 +9,9 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 public class AtLeastTest extends TestBase {
 
     @Test

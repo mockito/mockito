@@ -16,38 +16,46 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.TestCase.*;
+
 public class MockSettingsImplTest extends TestBase {
 
-    private MockSettingsImpl mockSettingsImpl = new MockSettingsImpl();
+    private MockSettingsImpl<?> mockSettingsImpl = new MockSettingsImpl<Object>();
     
     @Mock private InvocationListener invocationListener;
 
     @Test(expected=MockitoException.class)
+    @SuppressWarnings("unchecked")
     public void shouldNotAllowSettingNullInterface() {
         mockSettingsImpl.extraInterfaces(List.class, null);
     }
-    
+
     @Test(expected=MockitoException.class)
+    @SuppressWarnings("unchecked")
     public void shouldNotAllowNonInterfaces() {
         mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
     }
-    
+
     @Test(expected=MockitoException.class)
+    @SuppressWarnings("unchecked")
     public void shouldNotAllowUsingTheSameInterfaceAsExtra() {
         mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
     }
-    
+
     @Test(expected=MockitoException.class)
+    @SuppressWarnings("unchecked")
     public void shouldNotAllowEmptyExtraInterfaces() {
         mockSettingsImpl.extraInterfaces();
     }
-    
+
     @Test(expected=MockitoException.class)
+    @SuppressWarnings("unchecked")
     public void shouldNotAllowNullArrayOfExtraInterfaces() {
-        mockSettingsImpl.extraInterfaces((Class[]) null);
+        mockSettingsImpl.extraInterfaces((Class<?>[]) null);
     }
-    
+
     @Test
+    @SuppressWarnings("unchecked")
     public void shouldAllowMultipleInterfaces() {
         //when
         mockSettingsImpl.extraInterfaces(List.class, Set.class);
@@ -103,25 +111,27 @@ public class MockSettingsImplTest extends TestBase {
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     @Test(expected=MockitoException.class)
     public void shouldNotAllowNullListener() {
         mockSettingsImpl.invocationListeners((InvocationListener[])null);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void shouldAddInvocationListener() {
         //given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
-        
+
         //when
         mockSettingsImpl.invocationListeners(invocationListener);
-        
+
         //then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
     }
-    
+
     @Test
+    @SuppressWarnings("unchecked")
     public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
         //given
         assertFalse(mockSettingsImpl.hasInvocationListeners());

@@ -4,13 +4,14 @@
  */
 package org.mockitousage.internal.invocation.realmethod;
 
-import static org.mockitoutil.ExtraMatchers.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.invocation.realmethod.CleanTraceRealMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.fail;
+import static org.mockitoutil.ExtraMatchers.hasMethodInStackTraceAt;
 
 public class CleanTraceRealMethodTest extends TestBase {
 
@@ -18,21 +19,23 @@ public class CleanTraceRealMethodTest extends TestBase {
     public void keepStackTracesClean() {
         makeStackTracesClean();
     }
-    
+
     class Foo {
+
         public String throwSomething() {
             throw new RuntimeException();
         }
     }
-    
+
     @Test
     public void shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows() throws Throwable {
         //given
         CleanTraceRealMethod realMethod = new CleanTraceRealMethod(new RealMethod() {
             public Object invoke(Object target, Object[] arguments) throws Throwable {
                 return new Foo().throwSomething();
-            }});
-        
+            }
+        });
+
         //when
         try {
             realMethod.invoke(null, null);

@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.is;
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")

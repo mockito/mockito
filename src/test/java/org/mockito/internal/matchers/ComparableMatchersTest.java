@@ -10,6 +10,9 @@ import org.mockitoutil.TestBase;
 
 import java.math.BigDecimal;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+
 public class ComparableMatchersTest extends TestBase {
 
     @Test

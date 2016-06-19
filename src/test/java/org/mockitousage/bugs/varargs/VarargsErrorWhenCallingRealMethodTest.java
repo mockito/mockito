@@ -8,9 +8,8 @@ package org.mockitousage.bugs.varargs;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
 

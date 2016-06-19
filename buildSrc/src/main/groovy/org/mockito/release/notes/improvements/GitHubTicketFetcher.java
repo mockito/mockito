@@ -150,6 +150,7 @@ class GitHubTicketFetcher {
 
             String content = IOUtil.readFully(response);
             LOG.info("GitHub API responded successfully.");
+            @SuppressWarnings("unchecked")
             List<JSONObject> issues = (List<JSONObject>) JSONValue.parse(content);
             LOG.info("GitHub API returned {} issues.", issues.size());
             return issues;

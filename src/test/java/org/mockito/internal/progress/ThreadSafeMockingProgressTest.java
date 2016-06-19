@@ -11,6 +11,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.List;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

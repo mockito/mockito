@@ -4,15 +4,21 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.invocation.Invocation;
-import org.mockitoutil.TestBase;
 import org.junit.Test;
-import org.mockito.internal.matchers.*;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Any;
+import org.mockito.internal.matchers.AnyVararg;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 import java.util.List;
+
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class ArgumentsComparatorTest extends TestBase {

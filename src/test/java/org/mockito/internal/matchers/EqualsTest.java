@@ -8,6 +8,8 @@ package org.mockito.internal.matchers;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.*;
+
 
 public class EqualsTest extends TestBase {
 

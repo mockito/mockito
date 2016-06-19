@@ -10,6 +10,8 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.fail;
+
 public class VerificationDataImplTest extends TestBase {
 
     @Test

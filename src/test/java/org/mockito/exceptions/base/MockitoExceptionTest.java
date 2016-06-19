@@ -8,6 +8,9 @@ package org.mockito.exceptions.base;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 public class MockitoExceptionTest extends TestBase {
 
     private void throwIt() {

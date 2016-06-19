@@ -1,6 +1,5 @@
 package org.mockitousage.junitrule;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -12,9 +11,7 @@ import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class VerificationCollectorImplTest {
 

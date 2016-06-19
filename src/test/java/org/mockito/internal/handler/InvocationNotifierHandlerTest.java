@@ -17,7 +17,6 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.mockitousage.IMethods;
 
 import java.text.ParseException;
 import java.util.ArrayList;

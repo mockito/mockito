@@ -5,15 +5,18 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CustomMatchersTest extends TestBase {
     
@@ -37,10 +40,7 @@ public class CustomMatchersTest extends TestBase {
 
     private final class IsZeroOrOne<T extends Number> implements ArgumentMatcher<T> {
         public boolean matches(T number) {
-            if (number.intValue() == 0 || number.intValue() == 1) {
-                return true;
-            }
-            return false;
+            return number.intValue() == 0 || number.intValue() == 1;
         }
     }
 

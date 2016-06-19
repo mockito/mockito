@@ -5,10 +5,7 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.currentClassLoader;
-import static org.mockitoutil.ClassLoaders.excludingClassLoader;
-import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
-import static org.mockitoutil.ClassLoaders.jdkClassLoader;
+import static org.mockitoutil.ClassLoaders.*;
 
 public class ClassLoadersTest {
 

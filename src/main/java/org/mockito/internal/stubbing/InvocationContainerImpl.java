@@ -26,7 +26,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private static final long serialVersionUID = -5334301962749537177L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
     private final MockingProgress mockingProgress;
-    private final List<Answer> answersForStubbing = new ArrayList<Answer>();
+    private final List<Answer<?>> answersForStubbing = new ArrayList<Answer<?>>();
     private final RegisteredInvocations registeredInvocations;
 
     private InvocationMatcher invocationForStubbing;
@@ -91,7 +91,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         answersForStubbing.add(answer);
     }
 
-    public void setAnswersForStubbing(List<Answer> answers) {
+    public void setAnswersForStubbing(List<Answer<?>> answers) {
         answersForStubbing.addAll(answers);
     }
 

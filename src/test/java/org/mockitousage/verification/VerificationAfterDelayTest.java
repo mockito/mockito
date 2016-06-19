@@ -4,13 +4,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +13,12 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.Mockito.*;
 
 public class VerificationAfterDelayTest extends TestBase {
     
@@ -137,7 +136,7 @@ public class VerificationAfterDelayTest extends TestBase {
     }
 
     private Thread waitAndExerciseMock(final int sleep) {
-        Thread t = new Thread() {
+        return new Thread() {
 
             @Override
             public void run() {
@@ -150,6 +149,5 @@ public class VerificationAfterDelayTest extends TestBase {
                 mock.clear();
             }
         };
-        return t;
     }
 }

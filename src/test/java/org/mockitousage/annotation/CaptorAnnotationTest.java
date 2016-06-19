@@ -5,21 +5,19 @@
 
 package org.mockitousage.annotation;
 
+import org.junit.Test;
+import org.mockito.*;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static junit.framework.TestCase.*;
 
 @SuppressWarnings("unchecked")
 public class CaptorAnnotationTest extends TestBase {

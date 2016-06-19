@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static junit.framework.TestCase.*;
+
 @SuppressWarnings({"unchecked"})
 public class InvocationImplTest extends TestBase {
 

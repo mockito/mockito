@@ -5,13 +5,6 @@
 
 package org.mockito.internal.invocation;
 
-import static org.mockitoutil.ExtraMatchers.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,6 +15,14 @@ import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import static junit.framework.TestCase.*;
+import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
+
 
 public class InvocationsFinderTest extends TestBase {
     
@@ -30,7 +31,8 @@ public class InvocationsFinderTest extends TestBase {
     private Invocation simpleMethodInvocationTwo;
     private Invocation differentMethodInvocation;
     private InvocationsFinder finder;
-    InOrderContext context = new InOrderContextImpl();
+
+    private final InOrderContext context = new InOrderContextImpl();
     
     @Mock private IMethods mock;
 

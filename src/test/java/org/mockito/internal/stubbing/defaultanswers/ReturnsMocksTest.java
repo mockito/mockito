@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.*;
+
 public class ReturnsMocksTest extends TestBase {
     private ReturnsMocks values = new ReturnsMocks();
 

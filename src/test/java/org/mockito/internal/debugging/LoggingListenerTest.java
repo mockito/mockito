@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class LoggingListenerTest extends TestBase {
 
     @Test

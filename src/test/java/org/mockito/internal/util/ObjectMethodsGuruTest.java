@@ -10,9 +10,12 @@ import org.mockitoutil.TestBase;
 
 import java.util.Date;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 public class ObjectMethodsGuruTest extends TestBase {
 
-    ObjectMethodsGuru guru = new ObjectMethodsGuru();
+    private final ObjectMethodsGuru guru = new ObjectMethodsGuru();
     
     @Test
     public void shouldKnowToStringMethod() throws Exception {
@@ -37,14 +40,14 @@ public class ObjectMethodsGuruTest extends TestBase {
     }
 
     interface HasCompareToButDoesNotImplementComparable {
-        public int compareTo(HasCompareToButDoesNotImplementComparable other);
+        int compareTo(HasCompareToButDoesNotImplementComparable other);
     }
 
     interface HasCompare extends Comparable {
-        public int foo(HasCompare other);
-        public int compareTo(HasCompare other, String redHerring);
-        public int compareTo(String redHerring);
-        public int compareTo(HasCompare redHerring);
+        int foo(HasCompare other);
+        int compareTo(HasCompare other, String redHerring);
+        int compareTo(String redHerring);
+        int compareTo(HasCompare redHerring);
     }
 
     @Test

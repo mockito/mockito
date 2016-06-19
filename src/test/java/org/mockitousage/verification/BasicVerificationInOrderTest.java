@@ -5,8 +5,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -17,6 +15,9 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
 
 public class BasicVerificationInOrderTest extends TestBase {
 

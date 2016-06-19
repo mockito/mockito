@@ -5,14 +5,6 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.AdditionalMatchers.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -21,6 +13,34 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+
+import static junit.framework.TestCase.*;
+import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.AdditionalMatchers.eq;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyByte;
+import static org.mockito.Matchers.anyChar;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyShort;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Matchers.isNull;
+import static org.mockito.Matchers.matches;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Matchers.same;
+import static org.mockito.Matchers.startsWith;
+import static org.mockito.Mockito.*;
 
 
 @SuppressWarnings("unchecked")

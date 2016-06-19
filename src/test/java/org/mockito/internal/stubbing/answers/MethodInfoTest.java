@@ -10,7 +10,8 @@ import org.mockito.invocation.Invocation;
 
 import java.nio.charset.CharacterCodingException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * by Szczepan Faber, created at: 3/31/12

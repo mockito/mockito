@@ -5,7 +5,6 @@
 
 package org.mockitoutil;
 
-import junit.framework.Assert;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +26,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.mock;
  * valid state for all tests.
  */
 @SuppressWarnings("unchecked")
-public class TestBase extends Assert {
+public class TestBase {
 
     @After
     public void cleanUpConfigInAnyCase() {

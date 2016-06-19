@@ -4,14 +4,15 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
 
 public class CleaningUpPotentialStubbingTest extends TestBase {
 

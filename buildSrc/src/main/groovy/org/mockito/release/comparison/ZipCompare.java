@@ -40,18 +40,17 @@ class ZipCompare {
 
         LOG.info("Comparing " + filePath1 + " with " + filePath2);
 
-        Set set1 = new LinkedHashSet();
+        Set<String> set1 = new LinkedHashSet<String>();
         for (Enumeration e = file1.entries(); e.hasMoreElements(); )
             set1.add(((ZipEntry) e.nextElement()).getName());
 
-        Set set2 = new LinkedHashSet();
+        Set<String> set2 = new LinkedHashSet<String>();
         for (Enumeration e = file2.entries(); e.hasMoreElements(); )
             set2.add(((ZipEntry) e.nextElement()).getName());
 
         int errcount = 0;
         int filecount = 0;
-        for (Iterator i = set1.iterator(); i.hasNext(); ) {
-            String name = (String) i.next();
+        for (String name : set1) {
             if (!set2.contains(name)) {
                 LOG.info(name + " not found in " + filePath2);
                 errcount += 1;
@@ -70,8 +69,7 @@ class ZipCompare {
             }
             filecount += 1;
         }
-        for (Iterator i = set2.iterator(); i.hasNext(); ) {
-            String name = (String) i.next();
+        for (String name : set2) {
             LOG.info(name + " not found in " + filePath1);
             errcount += 1;
         }

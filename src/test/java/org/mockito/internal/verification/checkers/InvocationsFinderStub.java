@@ -5,13 +5,13 @@
 
 package org.mockito.internal.verification.checkers;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+
+import java.util.LinkedList;
+import java.util.List;
 
 class InvocationsFinderStub extends InvocationsFinder {
     

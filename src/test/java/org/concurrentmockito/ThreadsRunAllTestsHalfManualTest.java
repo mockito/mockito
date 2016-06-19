@@ -4,8 +4,6 @@
  */
 package org.concurrentmockito;
 
-import java.util.LinkedList;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -52,21 +50,13 @@ import org.mockitousage.stacktrace.StackTraceFilteringTest;
 import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
-import org.mockitousage.verification.AtMostXVerificationTest;
-import org.mockitousage.verification.BasicVerificationInOrderTest;
-import org.mockitousage.verification.BasicVerificationTest;
-import org.mockitousage.verification.DescriptiveMessagesOnVerificationInOrderErrorsTest;
-import org.mockitousage.verification.DescriptiveMessagesWhenTimesXVerificationFailsTest;
-import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
-import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
-import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
-import org.mockitousage.verification.RelaxedVerificationInOrderTest;
-import org.mockitousage.verification.SelectedMocksInOrderVerificationTest;
-import org.mockitousage.verification.VerificationInOrderMixedWithOrdiraryVerificationTest;
-import org.mockitousage.verification.VerificationInOrderTest;
-import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
-import org.mockitousage.verification.VerificationUsingMatchersTest;
+import org.mockitousage.verification.*;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertFalse;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 

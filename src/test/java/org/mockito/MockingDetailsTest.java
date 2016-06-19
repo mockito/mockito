@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
 
 public class MockingDetailsTest extends TestBase {
@@ -20,7 +21,8 @@ public class MockingDetailsTest extends TestBase {
             add("remove");
             add("clear");
         }};
-        
+
+        @SuppressWarnings("unchecked")
         List<String> mockedList = (List<String>) mock(List.class);
         
         mockedList.add("one");

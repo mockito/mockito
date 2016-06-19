@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 @SuppressWarnings("unchecked")
 public class CapturingMatcherTest extends TestBase {
 

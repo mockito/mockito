@@ -7,6 +7,8 @@ package org.mockito.internal.util.reflection;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class WhiteboxTest extends TestBase {
 
     @Test

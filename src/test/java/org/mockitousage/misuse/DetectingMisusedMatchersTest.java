@@ -4,13 +4,6 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.validateMockitoUsage;
-import static org.mockito.Mockito.verify;
-import java.util.Observer;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,6 +11,14 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.Observer;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.*;
 
 public class DetectingMisusedMatchersTest extends TestBase {
 

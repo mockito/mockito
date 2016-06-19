@@ -7,6 +7,9 @@ package org.mockito.internal.runners.util;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 public class TestMethodsFinderTest extends TestBase {
 
     public static class HasTests {

@@ -5,15 +5,17 @@
 
 package org.mockitousage.spies;
 
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings({"unchecked"})
 public class SpyingOnInterfacesTest extends TestBase {

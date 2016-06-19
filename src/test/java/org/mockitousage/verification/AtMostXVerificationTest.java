@@ -5,11 +5,6 @@
 
 package org.mockitousage.verification;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -17,6 +12,13 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class AtMostXVerificationTest extends TestBase {

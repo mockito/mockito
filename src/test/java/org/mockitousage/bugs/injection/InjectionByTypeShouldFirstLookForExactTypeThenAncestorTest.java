@@ -12,9 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.lang.reflect.Field;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {

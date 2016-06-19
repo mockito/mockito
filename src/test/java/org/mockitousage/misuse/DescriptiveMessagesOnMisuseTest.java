@@ -5,8 +5,6 @@
 
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
@@ -14,6 +12,8 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesOnMisuseTest extends TestBase {
     

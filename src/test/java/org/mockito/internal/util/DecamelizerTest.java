@@ -5,10 +5,11 @@
 
 package org.mockito.internal.util;
 
-import static org.mockito.internal.util.Decamelizer.*;
-
 import org.junit.Test;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.internal.util.Decamelizer.decamelizeMatcher;
 
 public class DecamelizerTest extends TestBase {
     

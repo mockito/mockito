@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 
 @SuppressWarnings("unchecked")

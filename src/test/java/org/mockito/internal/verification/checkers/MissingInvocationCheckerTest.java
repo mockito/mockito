@@ -5,10 +5,6 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.asList;
-
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +17,10 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class MissingInvocationCheckerTest extends TestBase {
 

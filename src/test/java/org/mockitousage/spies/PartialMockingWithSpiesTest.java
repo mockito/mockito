@@ -5,12 +5,14 @@
 
 package org.mockitousage.spies;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockitoutil.ExtraMatchers;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {

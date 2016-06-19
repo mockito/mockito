@@ -7,6 +7,9 @@ package org.mockito.internal.util.reflection;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 @SuppressWarnings("unused")
 public class FieldReaderTest extends TestBase {
 

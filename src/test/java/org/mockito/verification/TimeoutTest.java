@@ -12,15 +12,19 @@ import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 public class TimeoutTest extends TestBase {
     
-    @Mock VerificationMode mode;
-    @Mock VerificationDataImpl data;
+    @Mock
+    VerificationMode mode;
+    @Mock
+    VerificationDataImpl data;
     @Mock
     Timer timer;
-    MockitoAssertionError error = new MockitoAssertionError(""); 
+
+    private final MockitoAssertionError error = new MockitoAssertionError("");
 
     @Test
     public void should_pass_when_verification_passes() {

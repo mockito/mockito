@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertNotNull;
+
 
 public class RunnerProviderTest extends TestBase {
     

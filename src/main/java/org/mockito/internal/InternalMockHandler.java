@@ -16,7 +16,7 @@ public interface InternalMockHandler<T> extends MockHandler {
 
     MockCreationSettings getMockSettings();
 
-    void setAnswersForStubbing(List<Answer> answers);
+    void setAnswersForStubbing(List<Answer<?>> answers);
 
     InvocationContainer getInvocationContainer();
 

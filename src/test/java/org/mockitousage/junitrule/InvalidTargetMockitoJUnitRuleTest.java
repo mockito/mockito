@@ -1,13 +1,13 @@
 package org.mockitousage.junitrule;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import static org.junit.Assert.assertNotNull;
 
 public class InvalidTargetMockitoJUnitRuleTest {
 

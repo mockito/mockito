@@ -1,10 +1,8 @@
 package org.mockitoutil;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.V1_6;
 import org.objectweb.asm.ClassWriter;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public class SimpleClassGenerator {
 

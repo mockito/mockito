@@ -5,13 +5,15 @@
 
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 //see issue 188
 public class CaptorAnnotationAutoboxingTest extends TestBase {
@@ -31,7 +33,7 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
         
         //then
         verify(fun).doFun(captor.capture());
-        assertEquals((Double) 1.0, captor.getValue());
+        assertEquals(1.0, captor.getValue());
     }
 
     @Captor ArgumentCaptor<Integer> intCaptor;

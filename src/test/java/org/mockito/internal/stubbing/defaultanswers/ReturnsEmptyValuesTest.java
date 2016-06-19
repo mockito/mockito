@@ -12,6 +12,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.*;
 
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("unchecked")

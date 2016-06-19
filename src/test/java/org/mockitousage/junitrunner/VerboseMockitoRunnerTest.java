@@ -16,6 +16,8 @@ import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
@@ -64,7 +66,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
     }    
     
     public void cleanStackTraces() {
-        super.makeStackTracesClean();
+        makeStackTracesClean();
     }
     
     @Test

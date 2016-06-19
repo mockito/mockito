@@ -9,6 +9,7 @@ import org.mockitoutil.TestBase;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
 
 public class MatcherGenericTypeExtractorTest extends TestBase {
@@ -46,44 +47,40 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
     }
 
     //Matcher interface implementation (instead of the BaseMatcher)
-    private class IntMatcherFromInterface implements Matcher<Integer> {
+    private class IntMatcherFromInterface extends BaseMatcher<Integer> {
         public boolean matches(Object o) {
             return true;
         }
         public void describeMismatch(Object item, Description mismatchDescription) {}
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
 
     //Static Matcher interface implementation (instead of the BaseMatcher)
-    private static class StaticIntMatcherFromInterface implements Matcher<Integer> {
+    private static class StaticIntMatcherFromInterface extends BaseMatcher<Integer> {
         public boolean matches(Object o) {
             return true;
         }
         public void describeMismatch(Object item, Description mismatchDescription) {}
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
 
     //non-generic matcher implementing the interface
-    private static class NonGenericMatcherFromInterface implements Matcher {
+    private static class NonGenericMatcherFromInterface extends BaseMatcher {
         public boolean matches(Object o) {
             return true;
         }
         public void describeMismatch(Object item, Description mismatchDescription) {}
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() { }
         public void describeTo(Description description) {}
     }
 
     private static interface IMatcher extends Matcher<Integer> {}
 
     //non-generic matcher implementing the interface
-    private static class SubclassGenericMatcherFromInterface implements Serializable, Cloneable, IMatcher {
+    private static class SubclassGenericMatcherFromInterface extends BaseMatcher<Integer> implements Serializable, Cloneable, IMatcher {
         public boolean matches(Object o) {
             return true;
         }
         public void describeMismatch(Object item, Description mismatchDescription) {}
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
         public void describeTo(Description description) {}
     }
 
@@ -109,7 +106,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
                 return false;
             }
         }.getClass()));
-        assertEquals(Integer.class, genericTypeOfMatcher(new Matcher<Integer>() {
+        assertEquals(Integer.class, genericTypeOfMatcher(new BaseMatcher<Integer>() {
             public void describeTo(Description description) {
             }
 
@@ -119,14 +116,11 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
 
             public void describeMismatch(Object item, Description mismatchDescription) {
             }
-
-            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
-            }
         }.getClass()));
 
         assertEquals(Object.class, genericTypeOfMatcher(Object.class));
         assertEquals(Object.class, genericTypeOfMatcher(String.class));
-        assertEquals(Object.class, genericTypeOfMatcher(new HashMap<String, String>().getClass()));
+        assertEquals(Object.class, genericTypeOfMatcher(HashMap.class));
         assertEquals(Object.class, genericTypeOfMatcher(new HashMap<String, String>() {
         }.getClass()));
         assertEquals(Object.class, genericTypeOfMatcher(NonGenericMatcher.class));
