@@ -15,7 +15,7 @@ public class MyStackTraceCleanerProvider implements StackTraceCleanerProvider {
 			@Override
 			public boolean isOut(StackTraceElement candidate) {
 				if (ENABLED && candidate.getMethodName().contains("excludeMe")) {
-                    return false;
+                    return true;
                 }
                 return defaultCleaner.isOut(candidate);
 			}
