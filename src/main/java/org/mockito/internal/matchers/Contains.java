@@ -18,8 +18,8 @@ public class Contains implements ArgumentMatcher<String>, Serializable {
         this.substring = substring;
     }
 
-    public boolean matches(Object actual) {
-        return actual != null && ((String) actual).contains(substring);
+    public boolean matches(String actual) {
+        return actual != null && actual.contains(substring);
     }
 
     public String toString() {

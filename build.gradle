@@ -62,7 +62,7 @@ dependencies {
 
     testCompile 'org.ow2.asm:asm:5.0.4'
 
-    testCompile 'org.assertj:assertj-core:2.1.0'
+    testCompile 'org.assertj:assertj-core:1.7.1'
 
     testRuntime configurations.provided
 
