@@ -131,15 +131,19 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way()  {
         //the test passes if this expression compiles
-        ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
-        assertNotNull(argument);
+        //compiles on java 7+, but does not compile on java 6
+        //TODO: uncomment when mockito uses java 7+
+//        ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
+//        assertNotNull(argument);
     }
 
     @Test
     public void should_allow_construction_of_captor_for_a_more_specific_type()  {
         //the test passes if this expression compiles
-        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(ArrayList.class);
-        assertNotNull(argument);
+        //compiles on java 7+, but does not compile on java 6
+        //TODO: uncomment when mockito uses java 7+
+//        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(ArrayList.class);
+//        assertNotNull(argument);
     }
     
     @Test

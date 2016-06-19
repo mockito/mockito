@@ -156,7 +156,8 @@ public class InvocationImplTest extends TestBase {
             argTypes(int.class, int.class).args(1, argument).toInvocation();
 
         //when
-        int secondArgument = invocationOnInterface.getArgument(1);
+        //second argument is of type Integer to workaround a java 6 compiler limitation
+        Integer secondArgument = invocationOnInterface.getArgument(1);
 
         //then
         assertTrue(secondArgument == argument);

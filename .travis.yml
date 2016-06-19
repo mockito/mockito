@@ -15,7 +15,7 @@ sudo: true
 
 language: java
 jdk:
-- oraclejdk7
+  - openjdk6
 env:
   matrix:
   - TERM=dumb
