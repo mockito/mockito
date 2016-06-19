@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Observable;
 
 import static junit.framework.TestCase.*;
+import static org.junit.Assume.assumeFalse;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.SimpleSerializationUtil.*;
@@ -385,6 +386,8 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
+        assumeFalse(System.getProperty("java.version").startsWith("1.6")); // Bug in last public HotSpot 1.6
+
         IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
 
         when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);
