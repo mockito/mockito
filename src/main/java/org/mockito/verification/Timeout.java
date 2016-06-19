@@ -59,7 +59,6 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
         throw atMostAndNeverShouldNotBeUsedWithTimeout();
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

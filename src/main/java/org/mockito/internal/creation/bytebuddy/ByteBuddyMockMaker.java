@@ -22,7 +22,6 @@ public class ByteBuddyMockMaker implements MockMaker {
         cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
     }
 
-    @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         Class<T> mockedProxyType = createProxyClass(mockWithFeaturesFrom(settings));
 
@@ -79,7 +78,6 @@ public class ByteBuddyMockMaker implements MockMaker {
         return instance == null ? "null" : describeClass(instance.getClass());
     }
 
-    @Override
     public MockHandler getHandler(Object mock) {
         if (!(mock instanceof MockAccess)) {
             return null;
@@ -87,22 +85,18 @@ public class ByteBuddyMockMaker implements MockMaker {
         return ((MockAccess) mock).getMockitoInterceptor().getMockHandler();
     }
 
-    @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         ((MockAccess) mock).setMockitoInterceptor(
                 new MockMethodInterceptor(asInternalMockHandler(newHandler), settings)
         );
     }
 
-    @Override
     public TypeMockability isTypeMockable(final Class<?> type) {
         return new TypeMockability() {
-            @Override
             public boolean mockable() {
                 return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
             }
 
-            @Override
             public String nonMockableReason() {
                 //TODO SF does not seem to have test coverage. What is the expected value when type mockable
                 if(type.isPrimitive()) {

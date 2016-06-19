@@ -56,7 +56,6 @@ public class Times implements VerificationInOrderMode, VerificationMode {
         return "Wanted invocations count: " + wantedCount;
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }

@@ -10,7 +10,6 @@ public class ForwardsInvocationsTest extends TestBase {
     }
 
     private static final class FooImpl implements Foo {
-        @Override
         public int bar(String baz, Object... args) {
             return baz.length() + args.length;
         }

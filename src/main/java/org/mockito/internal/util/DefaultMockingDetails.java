@@ -24,27 +24,22 @@ public class DefaultMockingDetails implements MockingDetails {
         this.delegate = delegate;
     }
 
-    @Override
     public boolean isMock(){
         return delegate.isMock(toInspect);
     }
 
-    @Override
     public boolean isSpy(){
         return delegate.isSpy(toInspect);
     }
 
-    @Override
     public Collection<Invocation> getInvocations() {
         return delegate.getMockHandler(toInspect).getInvocationContainer().getInvocations();
     }
 
-    @Override
     public Class<?> getMockedType() {
         return delegate.getMockHandler(toInspect).getMockSettings().getTypeToMock();
     }
 
-    @Override
     @SuppressWarnings("unchecked")
     public Set<Class> getExtraInterfaces() {
         return delegate.getMockHandler(toInspect).getMockSettings().getExtraInterfaces();

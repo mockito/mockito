@@ -30,7 +30,6 @@ public class InOrderWrapper implements VerificationMode {
         mode.verifyInOrder(dataInOrder);
     }
 
-    @Override
     public VerificationMode description(String description) {
         return VerificationModeFactory.description(this, description);
     }
