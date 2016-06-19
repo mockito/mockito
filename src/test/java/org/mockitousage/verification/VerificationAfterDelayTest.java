@@ -49,7 +49,7 @@ public class VerificationAfterDelayTest extends TestBase {
         t.start();
 
         // then
-        verify(mock, after(50).times(1)).clear();
+        verify(mock, after(500).times(1)).clear();
     }
 
     @Test
@@ -98,7 +98,7 @@ public class VerificationAfterDelayTest extends TestBase {
         assertTrue(System.currentTimeMillis() - startTime >= 100);
     }
     
-    @Test(timeout=100)
+    @Test(timeout=1000)
     public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
         // given
         Thread t = waitAndExerciseMock(50);
