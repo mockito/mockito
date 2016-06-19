@@ -41,7 +41,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidMethodStubbable;
 import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
@@ -158,12 +157,6 @@ public class MockitoCore {
         mockingProgress.stubbingStarted();
         mockingProgress.resetOngoingStubbing();
         return new StubberImpl();
-    }
-    
-    public <T> VoidMethodStubbable<T> stubVoid(T mock) {
-        InternalMockHandler<T> handler = mockUtil.getMockHandler(mock);
-        mockingProgress.stubbingStarted();
-        return handler.voidMethodStubbable(mock);
     }
 
     public void validateMockitoUsage() {

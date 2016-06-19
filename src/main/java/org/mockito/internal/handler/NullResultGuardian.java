@@ -12,7 +12,6 @@ import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.VoidMethodStubbable;
 
 /**
  * Protects the results from delegate MockHandler. Makes sure the results are valid.
@@ -40,10 +39,6 @@ class NullResultGuardian implements InternalMockHandler {
 
     public MockCreationSettings getMockSettings() {
         return delegate.getMockSettings();
-    }
-
-    public VoidMethodStubbable voidMethodStubbable(Object mock) {
-        return delegate.voidMethodStubbable(mock);
     }
 
     public void setAnswersForStubbing(List answers) {

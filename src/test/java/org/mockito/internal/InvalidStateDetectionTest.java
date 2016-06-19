@@ -22,7 +22,6 @@ import org.mockitoutil.TestBase;
  * invalid state happens if:
  * 
  *    -unfinished stubbing
- *    -unfinished stubVoid
  *    -unfinished doReturn()
  *    -stubbing without actual method call
  *    -verify without actual method call
@@ -35,7 +34,6 @@ import org.mockitoutil.TestBase;
  *    -on verifyNoMoreInteractions
  *    -on verify in order
  *    -on stub
- *    -on stubVoid
  */
 @SuppressWarnings({"unchecked", "deprecation"})
 public class InvalidStateDetectionTest extends TestBase {

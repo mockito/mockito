@@ -122,12 +122,10 @@ public class InvocationNotifierHandlerTest {
     public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() throws Exception {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
-        notifier.voidMethodStubbable(mock(IMethods.class));
         notifier.setAnswersForStubbing(new ArrayList<Answer>());
 
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
-        verify(mockHandler).voidMethodStubbable(any());
         verify(mockHandler).setAnswersForStubbing(anyList());
     }
 

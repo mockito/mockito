@@ -464,9 +464,6 @@ import org.mockito.junit.*;
  * Stubbing void methods requires a different approach from {@link Mockito#when(Object)} because the compiler does not
  * like void methods inside brackets...
  * <p>
- * {@link Mockito#doThrow(Throwable...)} replaces the {@link Mockito#stubVoid(Object)} method for stubbing voids.
- * The main reason is improved readability and consistency with the family of <code>doAnswer()</code> methods.
- * <p>
  * Use <code>doThrow()</code> when you want to stub a void method with an exception:
  * <pre class="code"><code class="java">
  *   doThrow(new RuntimeException()).when(mockedList).clear();
@@ -474,6 +471,7 @@ import org.mockito.junit.*;
  *   //following throws RuntimeException:
  *   mockedList.clear();
  * </code></pre>
+ * </p>
  *
  * <p>
  * You can use <code>doThrow()</code>, <code>doAnswer()</code>, <code>doNothing()</code>, <code>doReturn()</code>
