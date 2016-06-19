@@ -1,3 +1,12 @@
+### 2.0.66-beta (2016-06-19 21:53 UTC)
+
+* Authors: 2
+* Commits: 9
+  * 8: Rafael Winterhalter
+  * 1: Pascal Schumacher
+* Improvements: 1
+  * javadoc: improve grammar of some sentences [(#452)](https://github.com/mockito/mockito/pull/452)
+
 ### 2.0.65-beta (2016-06-19 19:52 UTC)
 
 * Authors: 2
