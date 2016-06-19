@@ -1,3 +1,12 @@
+### 2.0.65-beta (2016-06-19 19:52 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Rafael Winterhalter
+  * 1: Alberto Scotto
+* Improvements: 1
+  * BDDMockito: rename willNothing to willDoNothing [(#419)](https://github.com/mockito/mockito/pull/419)
+
 ### 2.0.64-beta (2016-06-19 16:54 UTC)
 
 * Authors: 4
