@@ -83,8 +83,8 @@ public class VerificationWithTimeoutTest extends TestBase {
         t2.start();
 
         //then
-        verify(mock, timeout(50).atLeast(1)).clear();
-        verify(mock, timeout(50).times(2)).clear();
+        verify(mock, timeout(500).atLeast(1)).clear();
+        verify(mock, timeout(500).times(2)).clear();
         verifyNoMoreInteractions(mock);
     }
 
@@ -99,7 +99,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         t2.start();
 
         //then
-        verify(mock, timeout(50).atLeast(1)).clear();
+        verify(mock, timeout(500).atLeast(1)).clear();
         try {
             verify(mock, timeout(100).times(3)).clear();
             fail();
@@ -116,7 +116,7 @@ public class VerificationWithTimeoutTest extends TestBase {
 
         //then
         verify(mock, never()).clear();
-        verify(mock, timeout(40).only()).clear();
+        verify(mock, timeout(500).only()).clear();
     }
 
     @Test(expected=NoInteractionsWanted.class)
@@ -134,7 +134,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         // expect to have received the "clear" but
         // for the call on "add" to break the "only" part
         // of the verification
-        verify(mock, timeout(50).only()).clear();
+        verify(mock, timeout(500).only()).clear();
 
         // the test should end with an exception
     }
@@ -184,7 +184,7 @@ public class VerificationWithTimeoutTest extends TestBase {
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).add(anyString());
         inOrder.verify(mock, never()).clear();
-        inOrder.verify(mock, timeout(40)).clear();
+        inOrder.verify(mock, timeout(500)).clear();
     }
 
     @Test(expected = MockitoException.class)
