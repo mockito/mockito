@@ -1,7 +1,5 @@
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.util.collections.Iterables;
 import org.mockito.plugins.PluginSwitch;
 
@@ -32,7 +30,7 @@ class PluginLoader {
             // Mockito and may not be available via the context ClassLoader.
             return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
         } catch (Exception e) {
-            throw new MockitoException("Internal problem occurred, please report it. " +
+            throw new IllegalStateException("Internal problem occurred, please report it. " +
                     "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
                     "Failed to load " + pluginType, e);
         }
@@ -42,7 +40,7 @@ class PluginLoader {
      * Equivalent to {@link java.util.ServiceLoader#load} but without requiring
      * Java 6 / Android 2.3 (Gingerbread).
      */
-    <T> T loadImpl(Class<T> service) {
+    private <T> T loadImpl(Class<T> service) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = ClassLoader.getSystemClassLoader();
@@ -51,7 +49,7 @@ class PluginLoader {
         try {
             resources = loader.getResources("mockito-extensions/" + service.getName());
         } catch (IOException e) {
-            throw new MockitoException("Failed to load " + service, e);
+            throw new IllegalStateException("Failed to load " + service, e);
         }
 
         try {
@@ -63,7 +61,7 @@ class PluginLoader {
             }
             return null;
         } catch (Exception e) {
-            throw new MockitoConfigurationException(
+            throw new IllegalStateException(
                     "Failed to load " + service + " implementation declared in " + resources, e);
         }
     }
