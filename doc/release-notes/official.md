@@ -1,3 +1,11 @@
+### 2.0.70-beta (2016-06-21 09:16 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: ashleyfrieze
+* Improvements: 1
+  * Modified JavaDoc for ArgumentMatcher [(#454)](https://github.com/mockito/mockito/pull/454)
+
 ### 2.0.69-beta (2016-06-19 22:57 UTC)
 
 * Authors: 1
