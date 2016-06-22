@@ -6,7 +6,6 @@
 package org.mockito.internal.progress;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
@@ -18,7 +17,6 @@ import static org.mockito.exceptions.Reporter.reportNoSubMatchersFound;
 
 import java.util.*;
 
-@SuppressWarnings("unchecked")
 public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
     public static final int TWO_SUB_MATCHERS = 2;
@@ -36,7 +34,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         
         List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
         matcherStack.clear();
-        return (List) matchers;
+        return matchers;
     }
 
     /* (non-Javadoc)
@@ -99,7 +97,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
      */
     public void validateState() {
         if (!matcherStack.isEmpty()) {
-            ArrayList lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+            ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
             matcherStack.clear();
             throw misplacedArgumentMatcher(lastMatchers);
         }

@@ -106,7 +106,7 @@ public class AnswersValidatorTest {
     @Test
     public void should_be_OK_when_calling_real_method_on_concrete_class() throws Throwable {
         //given
-        ArrayList mock = mock(ArrayList.class);
+        ArrayList<?> mock = mock(ArrayList.class);
         mock.clear();
         Invocation invocationOnClass = new MockitoCore().getLastInvocation();
         //when
