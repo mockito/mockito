@@ -19,9 +19,9 @@ import static org.mockito.junit.MockitoJUnit.rule;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -148,7 +148,6 @@ public class VerificationWithTimeoutTest {
         verify(mock, timeout(50)).oneArg('2');
     }
 
-    @Ignore("Timeout is not implemented to work with in InOrder")
     @Test
     public void shouldAllowTimeoutVerificationInOrder() throws Exception {
         callAsyncWithDelay(mock, '1', 30, MILLISECONDS);
