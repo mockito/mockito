@@ -7,18 +7,18 @@ package org.mockito.internal.verification.checkers;
 
 import static org.mockito.exceptions.Reporter.tooLittleActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrder;
+import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingUnverifiedChunks;
+import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
 
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
 public class AtLeastXNumberOfInvocationsInOrderChecker {
     
-    private final InvocationsFinder finder = new InvocationsFinder();
     private final InOrderContext orderingContext;
     
     public AtLeastXNumberOfInvocationsInOrderChecker(InOrderContext orderingContext) {
@@ -26,12 +26,12 @@ public class AtLeastXNumberOfInvocationsInOrderChecker {
     }
 
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> chunk = finder.findAllMatchingUnverifiedChunks(invocations, wanted, orderingContext);
+        List<Invocation> chunk = findAllMatchingUnverifiedChunks(invocations, wanted, orderingContext);
         
         int actualCount = chunk.size();
         
         if (wantedCount > actualCount) {
-            Location lastLocation = finder.getLastLocation(chunk);
+            Location lastLocation = getLastLocation(chunk);
             throw tooLittleActualInvocationsInOrder(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, lastLocation);
         }
         
