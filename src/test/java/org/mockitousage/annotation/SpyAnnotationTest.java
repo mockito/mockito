@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings({"unchecked", "unused"})
 public class SpyAnnotationTest extends TestBase {
 
-    @Spy final List spiedList = new ArrayList();
+    @Spy final List<String> spiedList = new ArrayList<String>();
 
     @Spy NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
 

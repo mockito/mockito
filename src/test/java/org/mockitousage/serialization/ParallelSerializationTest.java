@@ -30,7 +30,7 @@ public class ParallelSerializationTest {
 
         // when
         for (int i = 0; i <= iterations; i++) {
-            List<Future> futures = new ArrayList<Future>(threadingFactor);
+            List<Future<?>> futures = new ArrayList<Future<?>>(threadingFactor);
             final CyclicBarrier barrier_that_will_wait_until_threads_are_ready = new CyclicBarrier(threadingFactor);
 
             // prepare all threads by submitting a callable
@@ -58,7 +58,7 @@ public class ParallelSerializationTest {
             }
 
             // ensure we are getting the futures
-            for (Future future : futures) {
+            for (Future<?> future : futures) {
                 future.get();
             }
         }
