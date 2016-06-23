@@ -16,10 +16,9 @@ import static junit.framework.TestCase.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("unchecked")
 public class AtLeastXVerificationTest extends TestBase {
 
-    @Mock private List mock;
+    @Mock private List<String> mock;
 
     @Test
     public void shouldVerifyAtLeastXTimes() throws Exception {

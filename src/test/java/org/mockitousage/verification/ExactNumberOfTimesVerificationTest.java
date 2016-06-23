@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest extends TestBase {
 
-    private LinkedList mock;
+    private LinkedList<String> mock;
 
     @Before
     public void setup() {

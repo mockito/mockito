@@ -18,11 +18,10 @@ import java.util.List;
 import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("unchecked")
 public class BasicVerificationTest extends TestBase {
 
-    @Mock private List mock;
-    @Mock private List mockTwo;
+    @Mock private List<String> mock;
+    @Mock private List<String> mockTwo;
     
     @Test
     public void shouldVerify() throws Exception {
