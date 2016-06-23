@@ -5,7 +5,6 @@
 package org.mockitousage.configuration;
 
 
-import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
@@ -28,29 +27,12 @@ public class ClassCacheVersusClassReloadingTest {
         doInNewChildRealm(testMethodClassLoaderRealm, "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
     }
 
-    private Condition<Throwable> cceIsThrownFrom(final String stacktraceElementDescription) {
-        return new Condition<Throwable>() {
-            @Override
-            public boolean matches(Throwable throwable) {
-                StackTraceElement[] stackTrace = throwable.getStackTrace();
-                for (StackTraceElement stackTraceElement : stackTrace) {
-                    if (stackTraceElement.toString().contains(stacktraceElementDescription)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        };
-    }
-
-    public static class DoTheMocking implements Callable {
+    public static class DoTheMocking implements Callable<Object> {
         public Object call() throws Exception {
             Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
             return mock(clazz);
         }
     }
-
 
     private static void doInNewChildRealm(ClassLoader parentRealm, String callableCalledInClassLoaderRealm) throws Exception {
         new SimplePerRealmReloadingClassLoader(parentRealm, reloadScope()).doInRealm(callableCalledInClassLoaderRealm);
