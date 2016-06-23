@@ -16,6 +16,7 @@ import org.mockitoutil.TestBase;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,17 @@ public class AnnotationsTest extends TestBase {
         
         assertTrue(hasExtraInterfaces instanceof List);
         
-        assertEquals(0, noExtraConfig.intReturningMethod());        
+        assertEquals(0, noExtraConfig.intReturningMethod());
+    }
+
+    @Test
+    public void shouldBeAbleToUseMockAnnotationOnParameter() throws Exception {
+        Method method = getClass().getDeclaredMethod("methodWithMockAnnotatedParameter", String.class);
+
+        assertTrue(method.getParameterAnnotations()[0][0].annotationType().equals(Mock.class));
+    }
+
+    void methodWithMockAnnotatedParameter(@Mock String mocked) {
     }
 
     class SuperBase {
