@@ -87,7 +87,7 @@ public class HamcrestMatchersTest extends TestBase {
         verify(mock).oneArg(floatThat(is(6.0F)));
     }
 
-    @SuppressWarnings("raw")
+    @SuppressWarnings("rawtypes")
     private class NonGenericMatcher extends BaseMatcher {
         public boolean matches(Object o) {
             return true;

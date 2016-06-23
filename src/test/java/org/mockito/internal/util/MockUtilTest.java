@@ -25,7 +25,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_get_handler() {
-        List mock = Mockito.mock(List.class);
+        List<?> mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockHandler(mock));
     }
 
@@ -41,7 +41,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_get_mock_settings() {
-        List mock = Mockito.mock(List.class);
+        List<?> mock = Mockito.mock(List.class);
         assertNotNull(mockUtil.getMockSettings(mock));
     }
 
@@ -64,7 +64,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_redefine_MockName_if_default() {
-        List mock = Mockito.mock(List.class);
+        List<?> mock = Mockito.mock(List.class);
         mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("newName");
@@ -72,7 +72,7 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_not_redefine_MockName_if_default() {
-        List mock = Mockito.mock(List.class, "original");
+        List<?> mock = Mockito.mock(List.class, "original");
         mockUtil.maybeRedefineMockName(mock, "newName");
 
         Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");
