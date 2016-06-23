@@ -1,3 +1,15 @@
+### 2.0.71-beta (2016-06-23 09:28 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Pascal Schumacher
+  * 1: Christian Schwarz
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * fix some rawtype warnings [(#456)](https://github.com/mockito/mockito/pull/456)
+  * activate VerificationWithTimeoutTest#shouldAllowTimeoutVerificationIn… [(#455)](https://github.com/mockito/mockito/pull/455)
+  * Refactored Timeout and After concurrent test [(#451)](https://github.com/mockito/mockito/pull/451)
+
 ### 2.0.70-beta (2016-06-21 09:16 UTC)
 
 * Authors: 1
