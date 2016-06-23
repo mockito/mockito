@@ -39,6 +39,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
     }
 
     //non-generic
+    @SuppressWarnings("rawtypes")
     private static class NonGenericMatcher extends BaseMatcher {
         public boolean matches(Object o) {
             return true;
@@ -65,6 +66,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
     }
 
     //non-generic matcher implementing the interface
+    @SuppressWarnings("rawtypes")
     private static class NonGenericMatcherFromInterface extends BaseMatcher {
         public boolean matches(Object o) {
             return true;

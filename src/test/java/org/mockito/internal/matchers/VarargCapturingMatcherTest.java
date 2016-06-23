@@ -52,7 +52,7 @@ public class VarargCapturingMatcherTest {
     @Test
     public void should_scream_when_nothing_yet_captured() throws Exception {
         //given
-        VarargCapturingMatcher m = new VarargCapturingMatcher<Object>();
+        VarargCapturingMatcher<Object> m = new VarargCapturingMatcher<Object>();
 
         try {
             //when

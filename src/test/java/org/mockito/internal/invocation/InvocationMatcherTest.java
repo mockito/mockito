@@ -43,7 +43,7 @@ public class InvocationMatcherTest extends TestBase {
         Invocation invocation = new InvocationBuilder().toInvocation();
         Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
 
-        Map map = new HashMap();
+        Map<InvocationMatcher, String> map = new HashMap<InvocationMatcher, String>();
         map.put(new InvocationMatcher(invocation), "one");
         map.put(new InvocationMatcher(invocationTwo), "two");
 

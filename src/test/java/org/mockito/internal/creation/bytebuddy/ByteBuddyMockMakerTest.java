@@ -30,7 +30,7 @@ public class ByteBuddyMockMakerTest {
     public void should_create_mock_from_interface() throws Exception {
         SomeInterface proxy = mockMaker.createMock(settingsFor(SomeInterface.class), dummyH());
 
-        Class superClass = proxy.getClass().getSuperclass();
+        Class<?> superClass = proxy.getClass().getSuperclass();
         assertThat(superClass).isEqualTo(Object.class);
     }
 
@@ -39,7 +39,7 @@ public class ByteBuddyMockMakerTest {
     public void should_create_mock_from_class() throws Exception {
         ClassWithoutConstructor proxy = mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyH());
 
-        Class superClass = proxy.getClass().getSuperclass();
+        Class<?> superClass = proxy.getClass().getSuperclass();
         assertThat(superClass).isEqualTo(ClassWithoutConstructor.class);
     }
 
@@ -141,7 +141,7 @@ public class ByteBuddyMockMakerTest {
         // then everything went fine
     }
 
-    private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class... extraInterfaces) {
+    private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
         if(extraInterfaces.length > 0) mockSettings.extraInterfaces(extraInterfaces);

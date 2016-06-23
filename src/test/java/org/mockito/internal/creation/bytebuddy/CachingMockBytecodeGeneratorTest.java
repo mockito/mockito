@@ -57,7 +57,7 @@ public class CachingMockBytecodeGeneratorTest {
                 .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
                 .build();
 
-        cache.put(short_lived_classloader, new HoldingAReference(new WeakReference<Class>(short_lived_classloader.loadClass("foo.Bar"))));
+        cache.put(short_lived_classloader, new HoldingAReference(new WeakReference<Class<?>>(short_lived_classloader.loadClass("foo.Bar"))));
 
         assertThat(cache).hasSize(1);
 
@@ -72,9 +72,9 @@ public class CachingMockBytecodeGeneratorTest {
     }
 
     static class HoldingAReference {
-        final WeakReference<Class> a;
+        final WeakReference<Class<?>> a;
 
-        HoldingAReference(WeakReference<Class> a) {
+        HoldingAReference(WeakReference<Class<?>> a) {
             this.a = a;
         }
     }
