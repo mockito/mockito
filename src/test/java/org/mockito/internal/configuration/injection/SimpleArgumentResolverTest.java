@@ -18,7 +18,7 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_object_matching_given_types() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet(), new ByteArrayOutputStream(), new HashMap()));
+                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Long>(), new ByteArrayOutputStream(), new HashMap<String, String>()));
 
         Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
@@ -31,7 +31,7 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_null_when_match_is_not_possible_on_given_types() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet(), new ByteArrayOutputStream()));
+                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Float>(), new ByteArrayOutputStream()));
 
         Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
@@ -44,7 +44,7 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_null_when_types_are_primitives() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashMap(), new TreeSet()));
+                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashMap<Integer, String>(), new TreeSet<Integer>()));
 
         Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, Boolean.class);
 

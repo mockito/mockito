@@ -40,13 +40,13 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Spy @InjectMocks private SuperUnderTesting initializedSpy = new SuperUnderTesting();
     @Spy @InjectMocks private SuperUnderTesting notInitializedSpy;
 
-    @Mock private Map map;
-    @Mock private List list;
-    @Mock private Set histogram1;
-    @Mock private Set histogram2;
+    @Mock private Map<?, ?> map;
+    @Mock private List<?> list;
+    @Mock private Set<?> histogram1;
+    @Mock private Set<?> histogram2;
     @Mock private IMethods candidate2;
 
-    @Spy private TreeSet searchTree = new TreeSet();
+    @Spy private TreeSet<String> searchTree = new TreeSet<String>();
     private MockUtil mockUtil = new MockUtil();
 
     @Before
@@ -146,29 +146,29 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     }
 
     static class SuperUnderTesting {
-        private List aList;
+        private List<?> aList;
 
-        public List getAList() { return aList; }
+        public List<?> getAList() { return aList; }
     }
 
     static class BaseUnderTesting extends SuperUnderTesting {
-        private Map aMap;
+        private Map<?, ?> aMap;
 
-        public Map getAMap() { return aMap; }
+        public Map<?, ?> getAMap() { return aMap; }
     }
 
     static class OtherBaseUnderTesting extends SuperUnderTesting {
-        private TreeSet searchTree;
+        private TreeSet<?> searchTree;
 
-        public TreeSet getSearchTree() { return searchTree; }
+        public TreeSet<?> getSearchTree() { return searchTree; }
     }
 
     static class SubUnderTesting extends BaseUnderTesting {
-        private Set histogram1;
-        private Set histogram2;
+        private Set<?> histogram1;
+        private Set<?> histogram2;
 
-        public Set getHistogram1() { return histogram1; }
-        public Set getHistogram2() { return histogram2; }
+        public Set<?> getHistogram1() { return histogram1; }
+        public Set<?> getHistogram2() { return histogram2; }
     }
 
     static class HasTwoFieldsWithSameType {

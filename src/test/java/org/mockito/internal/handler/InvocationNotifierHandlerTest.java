@@ -37,7 +37,7 @@ public class InvocationNotifierHandlerTest {
     private static final String SOME_LOCATION = "some location";
     private static final RuntimeException SOME_EXCEPTION = new RuntimeException();
     private static final OutOfMemoryError SOME_ERROR = new OutOfMemoryError();
-    private static final Answer SOME_ANSWER = mock(Answer.class);
+    private static final Answer<?> SOME_ANSWER = mock(Answer.class);
 
 
     @Mock private InvocationListener listener1;
@@ -45,15 +45,15 @@ public class InvocationNotifierHandlerTest {
     @Spy private CustomListener customListener;
 
     @Mock private Invocation invocation;
-    @Mock private MockHandlerImpl mockHandler;
+    @Mock private MockHandlerImpl<ArrayList<Answer<?>>> mockHandler;
 
-    private InvocationNotifierHandler notifier;
+    private InvocationNotifierHandler<ArrayList<Answer<?>>> notifier;
 
     @Before
     public void setUp() throws Exception {
-        notifier = new InvocationNotifierHandler(
+        notifier = new InvocationNotifierHandler<ArrayList<Answer<?>>>(
                 mockHandler,
-                (MockSettingsImpl) new MockSettingsImpl().invocationListeners(customListener, listener1, listener2)
+                (MockSettingsImpl<?>) new MockSettingsImpl<ArrayList<Answer<?>>>().invocationListeners(customListener, listener1, listener2)
         );
     }
 
@@ -121,7 +121,7 @@ public class InvocationNotifierHandlerTest {
     public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() throws Exception {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
-        notifier.setAnswersForStubbing(new ArrayList<Answer>());
+        notifier.setAnswersForStubbing(new ArrayList<Answer<?>>());
 
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
