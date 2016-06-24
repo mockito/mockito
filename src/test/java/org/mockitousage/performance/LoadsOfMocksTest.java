@@ -16,13 +16,12 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("unchecked")
 public class LoadsOfMocksTest extends TestBase {
 
     @Ignore("Use it for performance checks")
     @Test
     public void testSomething() {
-        List mocks = new LinkedList();
+        List<IMethods> mocks = new LinkedList<IMethods>();
         for (int i = 0; i < 50000; i++) {
             System.out.println("Mock no: " + i);
             IMethods mock = mock(IMethods.class);

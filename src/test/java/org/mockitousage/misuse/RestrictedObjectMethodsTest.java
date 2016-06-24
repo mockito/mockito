@@ -18,10 +18,9 @@ import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings("unchecked")
 public class RestrictedObjectMethodsTest extends TestBase {
 
-    @Mock List mock;
+    @Mock List<?> mock;
 
     @After
     public void after() {

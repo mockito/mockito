@@ -22,11 +22,10 @@ import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("unchecked")
 public class SpyingOnRealObjectsTest extends TestBase {
 
-    List list = new LinkedList();
-    List spy = Mockito.spy(list);
+    List<String> list = new LinkedList<String>();
+    List<String> spy = Mockito.spy(list);
     
     @Test
     public void shouldVerify() {

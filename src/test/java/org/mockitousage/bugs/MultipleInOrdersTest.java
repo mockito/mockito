@@ -18,7 +18,7 @@ public class MultipleInOrdersTest {
     
     @Test
     public void inOrderTest(){
-        List list= mock(List.class);
+        List<String> list= mock(List.class);
         
         list.add("a");
         list.add("x");

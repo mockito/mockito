@@ -38,7 +38,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
     @Test
     public void shouldStubbingWork() {
         Mockito.when(iterable.iterator()).thenReturn(myIterator);
-        Assert.assertNotNull(((Iterable) iterable).iterator());
+        Assert.assertNotNull(((Iterable<String>) iterable).iterator());
         Assert.assertNotNull(iterable.iterator());
     }
     
@@ -47,7 +47,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
         iterable.iterator();
         
         verify(iterable).iterator();
-        verify((Iterable) iterable).iterator();
+        verify((Iterable<String>) iterable).iterator();
     }
     
     @Test
@@ -60,14 +60,14 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
             return null;
         }};
             
-        iterable = (MyIterable) Proxy.newProxyInstance(
+        iterable = (MyIterable<String>) Proxy.newProxyInstance(
                 this.getClass().getClassLoader(),
                 new Class<?>[] { MyIterable.class },
                 handler);
 
         //when
         iterable.iterator();
-        ((Iterable) iterable).iterator();
+        ((Iterable<String>) iterable).iterator();
         
         //then
         assertEquals(2, methods.size());

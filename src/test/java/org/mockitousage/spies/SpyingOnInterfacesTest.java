@@ -22,7 +22,7 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldFailFastWhenCallingRealMethodOnInterface() throws Exception {
-        List list = mock(List.class);
+        List<?> list = mock(List.class);
         try {
             //when
             when(list.get(0)).thenCallRealMethod();
@@ -34,9 +34,9 @@ public class SpyingOnInterfacesTest extends TestBase {
     @Test
     public void shouldFailInRuntimeWhenCallingRealMethodOnInterface() throws Exception {
         //given
-        List list = mock(List.class);
+        List<Object> list = mock(List.class);
         when(list.get(0)).thenAnswer(
-            new Answer() {
+            new Answer<Object>() {
                 public Object answer(InvocationOnMock invocation) throws Throwable {
                     return invocation.callRealMethod();
                 }

@@ -18,7 +18,6 @@ import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings({"unchecked"})
 public class StubbingWithCustomAnswerTest extends TestBase {
     @Mock
     private IMethods mock;
@@ -115,7 +114,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         assertEquals("assertions passed", mock.simpleMethod("test"));
     }
 
-    private static class RecordCall implements Answer {
+    private static class RecordCall implements Answer<Object> {
         private boolean called = false;
 
         public boolean isCalled() {
