@@ -1,7 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
@@ -89,35 +88,6 @@ public class ByteBuddyMockMakerTest {
     private class ClassWithDodgyConstructor {
         public ClassWithDodgyConstructor() {
             throw new RuntimeException();
-        }
-    }
-
-    @Test
-    @Ignore("missing objenesis reporting removed")
-    public void report_issue_when_trying_to_load_objenesis() throws Exception {
-        // given
-        ClassLoader classpath_without_objenesis = ClassLoaders.excludingClassLoader()
-                .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
-                .withCodeSourceUrlOf(coverageTool())
-                .without("org.objenesis")
-                .build();
-        boolean initialize_class = true;
-
-        Class<?> mock_maker_class_loaded_fine_until = Class.forName(
-                "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker",
-                initialize_class,
-                classpath_without_objenesis
-        );
-
-
-        // when
-        try {
-            mock_maker_class_loaded_fine_until.newInstance();
-            fail();
-        } catch (Throwable e) {
-            // then
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-            assertThat(e.getMessage()).containsIgnoringCase("objenesis").contains("missing");
         }
     }
 
