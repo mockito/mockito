@@ -227,11 +227,10 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void should_all_stubbed_mock_reference_access() throws Exception {
-        Set expectedMock = mock(Set.class);
+        Set<?> expectedMock = mock(Set.class);
 
-        Set returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
+        Set<?> returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
 
         Assertions.assertThat(returnedMock).isEqualTo(expectedMock);
     }

@@ -95,7 +95,7 @@ public class MockInjectionUsingConstructorTest {
     public static class junit_test_with_3_tests_methods {
         private static int constructor_instantiation = 0;
 
-        @Mock List some_collaborator;
+        @Mock List<?> some_collaborator;
         @InjectMocks some_class_with_parametered_constructor should_be_initialized_3_times;
 
         @Test public void test_1() { }
@@ -110,14 +110,14 @@ public class MockInjectionUsingConstructorTest {
     }
 
     private static class FailingConstructor {
-        FailingConstructor(Set set) {
+        FailingConstructor(Set<?> set) {
             throw new IllegalStateException("always fail");
         }
     }
 
     @Ignore("don't run this code in the test runner")
     private static class ATest {
-        @Mock Set set;
+        @Mock Set<?> set;
         @InjectMocks FailingConstructor failingConstructor;
     }
 

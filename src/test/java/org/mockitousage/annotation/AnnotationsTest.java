@@ -24,18 +24,17 @@ import java.util.Set;
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings("unchecked")
 public class AnnotationsTest extends TestBase {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface NotAMock {}
 
-    @Mock List list;
-    @Mock final Map map = new HashMap();
+    @Mock List<?> list;
+    @Mock final Map<Integer, String> map = new HashMap<Integer, String>();
         
-    @NotAMock Set notAMock;
+    @NotAMock Set<?> notAMock;
 
-    @Mock List listTwo;
+    @Mock List<?> listTwo;
 
     @Before
     public void setup() {
