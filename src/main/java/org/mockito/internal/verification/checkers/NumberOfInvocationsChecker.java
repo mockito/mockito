@@ -9,25 +9,24 @@ import static org.mockito.exceptions.Reporter.neverWantedButInvoked;
 import static org.mockito.exceptions.Reporter.tooLittleActualInvocations;
 import static org.mockito.exceptions.Reporter.tooManyActualInvocations;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
+import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
+import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
 
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.reporting.Discrepancy;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
 public class NumberOfInvocationsChecker {
     
-    private final InvocationsFinder finder=new InvocationsFinder();
-    
     public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
-        List<Invocation> actualInvocations = finder.findInvocations(invocations, wanted);
+        List<Invocation> actualInvocations = findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            Location lastInvocation = finder.getLastLocation(actualInvocations);
+            Location lastInvocation = getLastLocation(actualInvocations);
             throw tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
         } 
         if (wantedCount == 0 && actualCount > 0) {

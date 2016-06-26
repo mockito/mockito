@@ -7,13 +7,12 @@ package org.mockito.internal.verification;
 
 import static org.mockito.exceptions.Reporter.wantedAtMostX;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
+import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
@@ -33,8 +32,7 @@ public class AtMost implements VerificationMode {
         List<Invocation> invocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
-        InvocationsFinder finder = new InvocationsFinder();
-        List<Invocation> found = finder.findInvocations(invocations, wanted);
+        List<Invocation> found = findInvocations(invocations, wanted);
         int foundSize = found.size();
         if (foundSize > maxNumberOfInvocations) {
             throw wantedAtMostX(maxNumberOfInvocations, foundSize);
