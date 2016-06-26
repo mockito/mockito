@@ -19,7 +19,7 @@ public class ByteBuddyMockMaker implements MockMaker {
     private final CachingMockBytecodeGenerator cachingMockBytecodeGenerator;
 
     public ByteBuddyMockMaker() {
-        cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator();
+        cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator(false);
     }
 
     @Override
