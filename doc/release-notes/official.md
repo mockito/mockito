@@ -1,3 +1,12 @@
+### 2.0.73-beta (2016-06-26 22:16 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Christian Schwarz
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * refactored InvocationsFinder to static utility class [(#462)](https://github.com/mockito/mockito/pull/462)
+
 ### 2.0.72-beta (2016-06-26 16:00 UTC)
 
 * Authors: 2
