@@ -5,6 +5,8 @@ import org.mockito.stubbing.Answer;
 
 /**
  * Functional interfaces to make it easy to implement answers in Java 8
+ * 
+ * @since 2.0.0
  */
 public class AnswerFunctionalInterfaces {
 	/**

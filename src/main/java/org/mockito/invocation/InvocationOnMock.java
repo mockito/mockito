@@ -40,6 +40,7 @@ public interface InvocationOnMock extends Serializable {
      * Returns casted argument at the given index
      * @param index argument index
      * @return casted argument at the given index
+     * @since 2.0.0
      */
     <T> T getArgument(int index);
 
