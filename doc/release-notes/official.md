@@ -1,3 +1,19 @@
+### 2.0.72-beta (2016-06-26 16:00 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 7: Pascal Schumacher
+  * 4: Rafael Winterhalter
+* Improvements: 8
+  * fix some rawtype warnings in tests [(#469)](https://github.com/mockito/mockito/pull/469)
+  * add missing since javadoc tags for recently added methods and classes… [(#468)](https://github.com/mockito/mockito/pull/468)
+  * fix some rawtype warnings in tests [(#467)](https://github.com/mockito/mockito/pull/467)
+  * fix some rawtype warnings in tests [(#464)](https://github.com/mockito/mockito/pull/464)
+  * delete disabled test for removed objenesis missing reporting feature [(#460)](https://github.com/mockito/mockito/pull/460)
+  * fix some rawtype warnings in tests [(#459)](https://github.com/mockito/mockito/pull/459)
+  * remove dead code in ClassCacheVersusClassReloadingTest [(#458)](https://github.com/mockito/mockito/pull/458)
+  * Changes to InvocationOnMock API should include version info [(#420)](https://github.com/mockito/mockito/issues/420)
+
 ### 2.0.71-beta (2016-06-23 09:28 UTC)
 
 * Authors: 3
