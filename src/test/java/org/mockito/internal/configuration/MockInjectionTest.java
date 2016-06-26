@@ -99,6 +99,6 @@ public class MockInjectionTest {
     }
 
     public static class AnObjectWithoutConstructor {
-        private Set theSet;
+        private Set<?> theSet;
     }
 }

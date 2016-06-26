@@ -140,7 +140,7 @@ public class CapturingArgumentsTest extends TestBase {
     @Test
     public void should_allow_construction_of_captor_for_a_more_specific_type()  {
         //the test passes if this expression compiles
-        ArgumentCaptor<List> argument = ArgumentCaptor.forClass(ArrayList.class);
+        ArgumentCaptor<List<?>> argument = ArgumentCaptor.forClass(ArrayList.class);
         assertNotNull(argument);
     }
     

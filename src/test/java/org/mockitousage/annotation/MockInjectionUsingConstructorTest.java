@@ -103,7 +103,7 @@ public class MockInjectionUsingConstructorTest {
         @Test public void test_3() { }
 
         private static class some_class_with_parametered_constructor {
-            public some_class_with_parametered_constructor(List collaborator) {
+            public some_class_with_parametered_constructor(List<?> collaborator) {
                 constructor_instantiation++;
             }
         }

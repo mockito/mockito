@@ -16,10 +16,9 @@ import java.util.List;
 
 import static junit.framework.TestCase.fail;
 
-@SuppressWarnings("unchecked")
 public class CaptorAnnotationUnhappyPathTest extends TestBase {
     
-    @Captor List notACaptorField;
+    @Captor List<?> notACaptorField;
 
     @Before
     @Override

@@ -21,7 +21,6 @@ import static org.mockito.BDDMockito.willAnswer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings("unchecked")
 public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase {
 
     ImportManager importManager;
@@ -73,8 +72,8 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
         verify(importLogDao).alter(any(ImportLogBean.class));
     }
 
-    private Answer byCheckingLogEquals(final ImportLogBean status) {
-        return new Answer() {
+    private Answer<Object> byCheckingLogEquals(final ImportLogBean status) {
+        return new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 ImportLogBean bean =  invocation.getArgument(0);
                 assertEquals(status, bean);
