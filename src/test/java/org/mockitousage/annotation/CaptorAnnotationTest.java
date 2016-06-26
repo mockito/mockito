@@ -19,7 +19,6 @@ import java.util.Set;
 
 import static junit.framework.TestCase.*;
 
-@SuppressWarnings("unchecked")
 public class CaptorAnnotationTest extends TestBase {
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -32,6 +31,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Captor
     ArgumentCaptor<List<List<String>>> genericsCaptor;
 
+    @SuppressWarnings("rawtypes")
     @Captor
     ArgumentCaptor nonGenericCaptorIsAllowed;
 
@@ -39,7 +39,7 @@ public class CaptorAnnotationTest extends TestBase {
     MockInterface mockInterface;
 
     @NotAMock
-    Set notAMock;
+    Set<?> notAMock;
 
     public interface MockInterface {
         void testMe(String simple, List<List<String>> genericList);
@@ -71,7 +71,7 @@ public class CaptorAnnotationTest extends TestBase {
 
     public static class WrongType {
         @Captor
-        List wrongType;
+        List<?> wrongType;
     }
 
     @Test

@@ -75,6 +75,7 @@ public class CaptorAnnotationBasicTest extends TestBase {
         assertEquals("Williams", captor.getValue().getSurname());
     }
         
+    @SuppressWarnings("rawtypes")
     @Captor ArgumentCaptor genericLessCaptor;
     
     @Test

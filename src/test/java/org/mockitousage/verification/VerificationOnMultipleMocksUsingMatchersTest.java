@@ -24,8 +24,8 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
 
     @Test
     public void shouldVerifyUsingMatchers() throws Exception {
-        List list = Mockito.mock(List.class);
-        HashMap map = Mockito.mock(HashMap.class);
+        List<Object> list = Mockito.mock(List.class);
+        HashMap<Object, Object> map = Mockito.mock(HashMap.class);
         
         list.add("test");
         list.add(1, "test two");
@@ -44,9 +44,9 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
     
     @Test
     public void shouldVerifyMultipleMocks() throws Exception {
-        List list = mock(List.class);
-        Map map = mock(Map.class);
-        Set set = mock(Set.class);
+        List<String> list = mock(List.class);
+        Map<Object, Integer> map = mock(Map.class);
+        Set<?> set = mock(Set.class);
 
         list.add("one");
         list.add("one");

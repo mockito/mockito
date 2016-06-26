@@ -23,12 +23,13 @@ public class GenericMasterTest {
     List<Set<String>> nested;
     List<Set<Collection<String>>> multiNested;
 
-    public interface ListSet extends List<Set> {}
+    public interface ListSet extends List<Set<?>> {}
     public interface MapNumberString extends Map<Number, String> {}
     public class HashMapNumberString<K extends Number> extends HashMap<K, String> {}
 
     public List<Number> numberList() { return null; }
     public Comparable<Number> numberComparable() { return null; }
+    @SuppressWarnings("rawtypes")
     public List rawList() { return null; }
     public List<? extends Type> typeList() { return null; }
 

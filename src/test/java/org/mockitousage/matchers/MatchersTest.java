@@ -326,7 +326,7 @@ public class MatchersTest extends TestBase {
     
     @Test(expected=ArgumentsAreDifferent.class)
     public void arrayEqualsShouldThrowArgumentsAreDifferentExceptionForNonMatchingArguments() {        
-        List list = Mockito.mock(List.class);
+        List<Object> list = Mockito.mock(List.class);
         
         list.add("test"); // testing fix for issue 20
         list.contains(new Object[] {"1"});
