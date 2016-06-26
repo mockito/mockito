@@ -206,6 +206,7 @@ public class AdditionalAnswers {
      * @param <T> return type
      * @param <A> input parameter type 1
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <T, A, B> Answer<T> answer(AnswerFunctionalInterfaces.Answer1<T, A> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -217,6 +218,7 @@ public class AdditionalAnswers {
      * @param answer interface to the answer - a void method
      * @param <A> input parameter type 1
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <A, B> Answer<Void> answerVoid(AnswerFunctionalInterfaces.VoidAnswer1<A> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -230,6 +232,7 @@ public class AdditionalAnswers {
      * @param <A> input parameter type 1
      * @param <B> input parameter type 2
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <T, A, B> Answer<T> answer(AnswerFunctionalInterfaces.Answer2<T, A, B> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -242,6 +245,7 @@ public class AdditionalAnswers {
      * @param <A> input parameter type 1
      * @param <B> input parameter type 2
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <A, B> Answer<Void> answerVoid(AnswerFunctionalInterfaces.VoidAnswer2<A, B> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -256,6 +260,7 @@ public class AdditionalAnswers {
      * @param <B> input parameter type 2
      * @param <C> input parameter type 3
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <T, A, B, C> Answer<T> answer(AnswerFunctionalInterfaces.Answer3<T, A, B, C> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -269,6 +274,7 @@ public class AdditionalAnswers {
      * @param <B> input parameter type 2
      * @param <C> input parameter type 3
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <A, B, C> Answer<Void> answerVoid(AnswerFunctionalInterfaces.VoidAnswer3<A, B, C> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -284,6 +290,7 @@ public class AdditionalAnswers {
      * @param <C> input parameter type 3
      * @param <D> input parameter type 4
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <T, A, B, C, D> Answer<T> answer(AnswerFunctionalInterfaces.Answer4<T, A, B, C, D> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -298,6 +305,7 @@ public class AdditionalAnswers {
      * @param <C> input parameter type 3
      * @param <D> input parameter type 4
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <A, B, C, D> Answer<Void> answerVoid(AnswerFunctionalInterfaces.VoidAnswer4<A, B, C, D> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -314,6 +322,7 @@ public class AdditionalAnswers {
      * @param <D> input parameter type 4
      * @param <E> input parameter type 5
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <T, A, B, C, D, E> Answer<T> answer(AnswerFunctionalInterfaces.Answer5<T, A, B, C, D, E> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
@@ -330,6 +339,7 @@ public class AdditionalAnswers {
      * @param <D> input parameter type 4
      * @param <E> input parameter type 5
      * @return the answer object to use
+     * @since 2.0.0
      */
     public static <A, B, C, D, E> Answer<Void> answerVoid(AnswerFunctionalInterfaces.VoidAnswer5<A, B, C, D, E> answer) {
         return AnswerFunctionalInterfaces.toAnswer(answer);
