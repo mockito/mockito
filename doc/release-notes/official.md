@@ -1,3 +1,13 @@
+### 2.0.74-beta (2016-06-28 09:29 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Rafael Winterhalter
+* Improvements: 3
+  * Reference correct types for multiple parent class loader if user class and Mockito are loaded by different loaders (e.g. OSGi) [(#471)](https://github.com/mockito/mockito/pull/471)
+  * Refactored mock cache to be non-blocking. [(#470)](https://github.com/mockito/mockito/pull/470)
+  * OSGi metadata is incorrect [(#385)](https://github.com/mockito/mockito/issues/385)
+
 ### 2.0.73-beta (2016-06-26 22:16 UTC)
 
 * Authors: 2
