@@ -21,6 +21,7 @@ import org.mockitoutil.TestBase;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class NoMoreInteractionsTest extends TestBase {
 
@@ -90,7 +91,7 @@ public class NoMoreInteractionsTest extends TestBase {
         InvocationMatcher i = new InvocationBuilder().mock(mock).toInvocationMatcher();
 
         InvocationContainerImpl invocations =
-            new InvocationContainerImpl(new ThreadSafeMockingProgress(), new MockSettingsImpl());
+            new InvocationContainerImpl( new MockSettingsImpl());
         invocations.setInvocationForPotentialStubbing(i);
 
         try {

@@ -5,29 +5,24 @@
 
 package org.mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+import java.util.List;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest {
-
-	
-	
-	
 	
     @Test
     public void shouldRemoveStubbableFromProgressAfterStubbing() {
         List mock = Mockito.mock(List.class);
         Mockito.when(mock.add("test")).thenReturn(true);
         //TODO Consider to move to separate test
-        assertThat(new ThreadSafeMockingProgress().pullOngoingStubbing()).isNull();
+        assertThat(mockingProgress().pullOngoingStubbing()).isNull();
     }
     
     @Test(expected=NotAMockException.class)

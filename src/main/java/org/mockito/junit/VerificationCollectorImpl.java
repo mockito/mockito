@@ -1,21 +1,19 @@
 package org.mockito.junit;
 
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
-import org.mockito.verification.VerificationStrategy;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationStrategy;
 
 /**
  * Mockito implementation of VerificationCollector.
  */
 class VerificationCollectorImpl implements VerificationCollector {
-
-    private final MockingProgress mockingProgress = new ThreadSafeMockingProgress();
 
     private StringBuilder builder;
     private int numberOfFailures;
@@ -35,14 +33,14 @@ class VerificationCollectorImpl implements VerificationCollector {
                 } finally {
                     // If base.evaluate() throws an error, we must explicitly reset the VerificationStrategy
                     // to prevent subsequent tests to be assert lazily
-                    mockingProgress.setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
+                    mockingProgress().setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
                 }
             }
         };
     }
 
     public void collectAndReport() throws MockitoAssertionError {
-        mockingProgress.setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
+        mockingProgress().setVerificationStrategy(MockingProgressImpl.getDefaultVerificationStrategy());
 
         if (this.numberOfFailures > 0) {
             String error = this.builder.toString();
@@ -54,7 +52,7 @@ class VerificationCollectorImpl implements VerificationCollector {
     }
 
     public VerificationCollector assertLazily() {
-        mockingProgress.setVerificationStrategy(new VerificationStrategy() {
+        mockingProgress().setVerificationStrategy(new VerificationStrategy() {
             public VerificationMode maybeVerifyLazily(VerificationMode mode) {
                 return new VerificationWrapper(mode);
             }
