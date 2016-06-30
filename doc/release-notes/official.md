@@ -1,3 +1,12 @@
+### 2.0.77-beta (2016-06-30 15:55 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Krzysztof Wolny
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Typo fix [(#475)](https://github.com/mockito/mockito/pull/475)
+
 ### 2.0.76-beta (2016-06-28 09:39 UTC)
 
 * Authors: 1
