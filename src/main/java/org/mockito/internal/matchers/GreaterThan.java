@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class GreaterThan<T extends Comparable<T>> extends CompareTo<T> implements Serializable {
 
-    public GreaterThan(Comparable<T> value) {
+    public GreaterThan(T value) {
         super(value);
     }
 
