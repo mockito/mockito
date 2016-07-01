@@ -95,7 +95,6 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
     }
 
     public boolean hasSameMethod(Invocation candidate) {
-        // TODO: Resolve candidate parameter types for bridge methods.
         Method m1 = invocation.getMethod();
         Method m2 = candidate.getMethod();
 

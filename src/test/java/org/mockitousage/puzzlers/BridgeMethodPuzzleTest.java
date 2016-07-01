@@ -35,16 +35,6 @@ public class BridgeMethodPuzzleTest extends TestBase {
             return "Dummy says: " + t;
         }
     }
-
-    Super mock;
-    
-    private void setMockWithDownCast(Super mock) {
-        this.mock = mock;
-    }
-    
-    private void say(String string) {
-        mock.say(string);
-    }
     
     @Test
     public void shouldHaveBridgeMethod() throws Exception {
@@ -61,9 +51,20 @@ public class BridgeMethodPuzzleTest extends TestBase {
         //Super has following erasure: say(Object) which differs from Dummy.say(String)
         //mock has to detect it and do the super.say()
         Sub s = mock(Sub.class);
-        setMockWithDownCast(s);
-        say("Hello");
+        Super<String> s_down = s;
+        s_down.say("Hello");
         
         verify(s).say("Hello");
+    }
+
+    @Test
+    public void shouldVerifyCorrectlyWhenBridgeMethodVerified() throws Exception {
+        //Super has following erasure: say(Object) which differs from Dummy.say(String)
+        //mock has to detect it and do the super.say()
+        Sub s = mock(Sub.class);
+        Super<String> s_down = s;
+        s.say("Hello");
+
+        verify(s_down).say("Hello");
     }
 }
