@@ -5,8 +5,9 @@
 
 package org.mockito.internal.verification;
 
-import java.util.List;
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
+import java.util.List;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
@@ -14,7 +15,6 @@ import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker;
 import org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsInOrderChecker;
-import org.mockito.internal.verification.checkers.MissingInvocationChecker;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderChecker;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
@@ -30,16 +30,17 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         this.wantedCount = wantedNumberOfInvocations;
     }
     
+    @Override
     public void verify(VerificationData data) {
-        MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
         AtLeastXNumberOfInvocationsChecker numberOfInvocations = new AtLeastXNumberOfInvocationsChecker();
         
         if (wantedCount == 1) {
-            missingInvocation.check(data.getAllInvocations(), data.getWanted());
+             checkMissingInvocation(data.getAllInvocations(), data.getWanted());
         }
         numberOfInvocations.check(data.getAllInvocations(), data.getWanted(), wantedCount);
     }
     
+    @Override
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();

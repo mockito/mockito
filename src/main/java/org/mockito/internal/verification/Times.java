@@ -5,6 +5,8 @@
 
 package org.mockito.internal.verification;
 
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
+
 import java.util.List;
 
 import org.mockito.exceptions.base.MockitoException;
@@ -32,8 +34,7 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     
     public void verify(VerificationData data) {
         if (wantedCount > 0) {
-            MissingInvocationChecker missingInvocation = new MissingInvocationChecker();
-            missingInvocation.check(data.getAllInvocations(), data.getWanted());
+             checkMissingInvocation(data.getAllInvocations(), data.getWanted());
         }
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
         numberOfInvocations.check(data.getAllInvocations(), data.getWanted(), wantedCount);
