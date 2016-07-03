@@ -18,7 +18,10 @@ import org.mockito.invocation.Invocation;
 
 public class MissingInvocationChecker {
         
-    public void check(List<Invocation> invocations, InvocationMatcher wanted) {
+    private MissingInvocationChecker(){
+    }
+    
+    public static void checkMissingInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
         
         if (actualInvocations.isEmpty()) {

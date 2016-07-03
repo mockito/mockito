@@ -8,6 +8,7 @@ package org.mockito.internal.verification.checkers;
 import static org.mockito.exceptions.Reporter.wantedButNotInvokedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingUnverifiedChunks;
 import static org.mockito.internal.invocation.InvocationsFinder.findPreviousVerifiedInOrder;
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
 import java.util.List;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -29,6 +30,6 @@ public class MissingInvocationInOrderChecker {
             throw wantedButNotInvokedInOrder(wanted, previousInOrder);
         } 
         
-        new MissingInvocationChecker().check(invocations, wanted);
+        checkMissingInvocation(invocations, wanted);
     }
 }
