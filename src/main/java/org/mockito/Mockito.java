@@ -1047,7 +1047,7 @@ import org.mockito.junit.*;
  *
  * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">(new) Mockito JUnit rule (Since 1.10.17)</a></h3>
  *
- * Mockito now offers a JUnit rule. Until now in JUnit there was two ways to initialize fields annotated by Mockito annotations
+ * Mockito now offers a JUnit rule. Until now in JUnit there were two ways to initialize fields annotated by Mockito annotations
  * such as <code>&#064;{@link Mock}</code>, <code>&#064;{@link Spy}</code>, <code>&#064;{@link InjectMocks}</code>, etc.
  *
  * <ul>
