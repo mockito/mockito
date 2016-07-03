@@ -1,3 +1,11 @@
+### 2.0.79-beta (2016-07-03 21:19 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Pascal Schumacher
+* Improvements: 1
+  * fix grammar of sentence in Mockito javadoc [(#479)](https://github.com/mockito/mockito/pull/479)
+
 ### 2.0.78-beta (2016-07-01 15:21 UTC)
 
 * Authors: 1
