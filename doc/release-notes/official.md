@@ -1,3 +1,11 @@
+### 2.0.80-beta (2016-07-05 15:03 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * Stubbing with some AdditionalMatchers can NPE with null actuals [(#457)](https://github.com/mockito/mockito/issues/457)
+
 ### 2.0.79-beta (2016-07-03 21:19 UTC)
 
 * Authors: 1
