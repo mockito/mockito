@@ -9,24 +9,32 @@ import org.mockito.ArgumentMatcher;
 
 import java.io.Serializable;
 
-
 public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T>, Serializable {
-    private final Comparable<T> wanted;
+    private final T wanted;
 
-    public CompareTo(Comparable<T> value) {
+    public CompareTo(T value) {
         this.wanted = value;
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean matches(T actual) {
-        return matchResult(((Comparable)actual).compareTo(wanted));
+    @Override
+    public final boolean matches(T actual) {
+        if (actual == null) {
+            return false;
+        }
+        if (!actual.getClass().isInstance(wanted)){ 
+            return false;
+        }
+       
+        int result = actual.compareTo(wanted);
+        return matchResult(result);
     }
 
-    public String toString() {
+    @Override
+    public final String toString() {
         return getName() + "(" + wanted + ")";
     }
-    
+
     protected abstract String getName();
-    
+
     protected abstract boolean matchResult(int result);
 }

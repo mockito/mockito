@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class LessThan<T extends Comparable<T>> extends CompareTo<T> implements Serializable {
 
-    public LessThan(Comparable<T> value) {
+    public LessThan(T value) {
         super(value);
     }
 

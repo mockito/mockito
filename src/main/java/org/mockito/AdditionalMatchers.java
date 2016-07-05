@@ -51,7 +51,7 @@ public class AdditionalMatchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T extends Comparable<T>> T geq(Comparable<T> value) {
+    public static <T extends Comparable<T>> T geq(T value) {
         reportMatcher(new GreaterOrEqual<T>(value));
         return null;
     }
@@ -149,7 +149,7 @@ public class AdditionalMatchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T extends Comparable<T>> T leq(Comparable<T> value) {
+    public static <T extends Comparable<T>> T leq(T value) {
         reportMatcher(new LessOrEqual<T>(value));
         return null;
     }
@@ -247,7 +247,7 @@ public class AdditionalMatchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T extends Comparable<T>> T gt(Comparable<T> value) {
+    public static <T extends Comparable<T>> T gt(T value) {
         reportMatcher(new GreaterThan<T>(value));
         return null;
     }
@@ -345,7 +345,7 @@ public class AdditionalMatchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T extends Comparable<T>> T lt(Comparable<T> value) {
+    public static <T extends Comparable<T>> T lt(T value) {
         reportMatcher(new LessThan<T>(value));
         return null;
     }
@@ -444,7 +444,7 @@ public class AdditionalMatchers {
      *            the given value.
      * @return <code>null</code>.
      */
-    public static <T extends Comparable<T>> T cmpEq(Comparable<T> value) {
+    public static <T extends Comparable<T>> T cmpEq(T value) {
         reportMatcher(new CompareEqual<T>(value));
         return null;
     }

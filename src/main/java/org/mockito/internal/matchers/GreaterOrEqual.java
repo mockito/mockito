@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class GreaterOrEqual<T extends Comparable<T>> extends CompareTo<T> implements Serializable {
 
-    public GreaterOrEqual(Comparable<T> value) {
+    public GreaterOrEqual(T value) {
         super(value);
     }
 
