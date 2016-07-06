@@ -1,3 +1,12 @@
+### 2.0.81-beta (2016-07-06 20:41 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Rafael Winterhalter
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * Exclude mockito internal packages from the Javadoc [(#481)](https://github.com/mockito/mockito/pull/481)
+
 ### 2.0.80-beta (2016-07-05 15:03 UTC)
 
 * Authors: 1
