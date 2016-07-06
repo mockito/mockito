@@ -4,7 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.MethodTransformer;
+import net.bytebuddy.dynamic.Transformer;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
@@ -43,7 +43,7 @@ class MockBytecodeGenerator {
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(any())
                            .intercept(MethodDelegation.to(DispatcherDefaultingToRealMethod.class))
-                           .transform(MethodTransformer.Simple.withModifiers(SynchronizationState.PLAIN))
+                           .transform(Transformer.ForMethod.withModifiers(SynchronizationState.PLAIN))
                            .attribute(MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER)
                          .serialVersionUid(42L)
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
