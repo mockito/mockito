@@ -5,27 +5,28 @@
 
 package org.mockito.internal.invocation;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mock;
-import org.mockito.internal.matchers.AnyVararg;
-import org.mockito.internal.matchers.CapturingMatcher;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.NotNull;
-import org.mockito.invocation.Invocation;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static org.mockito.internal.matchers.Any.ANY;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Arrays.asList;
-import static junit.framework.TestCase.*;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mock;
+import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.Equals;
+import org.mockito.internal.matchers.NotNull;
+import org.mockito.invocation.Invocation;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class InvocationMatcherTest extends TestBase {
@@ -135,7 +136,7 @@ public class InvocationMatcherTest extends TestBase {
         //given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(AnyVararg.ANY_VARARG));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(ANY));
 
         //when
         boolean match = invocationMatcher.matches(invocation);
@@ -166,7 +167,7 @@ public class InvocationMatcherTest extends TestBase {
         Invocation invocation = getLastInvocation();
 
         //when
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, asList(AnyVararg.ANY_VARARG));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation,(List) asList(ANY));
 
         //then
         invocationMatcher.captureArgumentsFrom(invocation);
