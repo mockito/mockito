@@ -9,7 +9,7 @@ import org.mockito.plugins.StackTraceCleanerProvider;
  */
 public class Plugins {
 
-    private static PluginRegistry registry = new PluginRegistry();
+    private static final PluginRegistry registry = new PluginRegistry();
 
     /**
      * The implementation of the stack trace cleaner

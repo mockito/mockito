@@ -1,6 +1,7 @@
 package org.mockito.release.notes.util;
 
 import java.io.*;
+import java.util.Scanner;
 
 /**
  * IO utils. A bit of reinventing the wheel but we don't want extra dependencies at this stage and we want to be java.
@@ -44,8 +45,8 @@ public class IOUtil {
         }
     }
 
-    private static String readNow(InputStream is) throws IOException {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+    private static String readNow(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
         try {
             return s.hasNext() ? s.next() : "";
         } finally {

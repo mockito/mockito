@@ -53,7 +53,7 @@ import static org.mockito.internal.util.StringJoiner.join;
  */
 public class Reporter {
 
-	private Reporter(){};
+	private Reporter(){}
 	
     public static MockitoException checkedExceptionInvalid(Throwable t) {
         return new MockitoException(join(
@@ -116,7 +116,7 @@ public class Reporter {
     }
 
     public static MockitoException unfinishedVerificationException(Location location) {
-        UnfinishedVerificationException exception = new UnfinishedVerificationException(join(
+        return new UnfinishedVerificationException(join(
                 "Missing method call for verify(mock) here:",
                 location,
                 "",
@@ -128,8 +128,6 @@ public class Reporter {
                 MockitoLimitations.NON_PUBLIC_PARENT,
                 ""
         ));
-
-        return exception;
     }
 
     public static MockitoException notAMockPassedToVerify(Class<?> type) {
@@ -398,14 +396,13 @@ public class Reporter {
         String ending =
                 (lastActualInvocation != null) ? lastActualInvocation + "\n" : "\n";
 
-        String message = join(
+        return join(
                 wanted.toString(),
                 "Wanted " + discrepancy.getPluralizedWantedCount() + (discrepancy.getWantedCount() == 0 ? "." : ":"),
                 new LocationImpl(),
                 "But was " + discrepancy.getPluralizedActualCount() + (discrepancy.getActualCount() == 0 ? "." : ":"),
                 ending
         );
-        return message;
     }
 
     public static MockitoAssertionError tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, Location lastActualLocation) {

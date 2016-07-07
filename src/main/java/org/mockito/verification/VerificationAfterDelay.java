@@ -31,34 +31,34 @@ public interface VerificationAfterDelay extends VerificationMode {
     /**
      * Verifies that there are exactly N invocations during the given period. This will wait the full period given.
      */
-    public VerificationMode times(int wantedNumberOfInvocations);
+    VerificationMode times(int wantedNumberOfInvocations);
 
     /**
      * Allows verification that there are no invocations at any point during the given period. This will wait the 
      * full period given, unless an invocation occurs (in which case there will be immediate failure)
      */
-    public VerificationMode never();
+    VerificationMode never();
     
     /**
      * Verifies that there is at least 1 invocation during the given period. This will wait the full period given.
      */
-    public VerificationMode atLeastOnce();
+    VerificationMode atLeastOnce();
     
     /**
      * Verifies that there is are least N invocations during the given period. This will wait the full period given.
      */
-    public VerificationMode atLeast(int minNumberOfInvocations);
+    VerificationMode atLeast(int minNumberOfInvocations);
     
     /**
      * Verifies that there is are most N invocations during the given period. This will wait the full period given,
      * unless too many invocations occur (in which case there will be an immediate failure)
      */
-    public VerificationMode atMost(int maxNumberOfInvocations);
+    VerificationMode atMost(int maxNumberOfInvocations);
     
     /**
      * Verifies that there the given method is invoked and is the only method invoked. This will wait the full 
      * period given, unless another method is invoked (in which case there will be an immediate failure)
      */
-    public VerificationMode only();
+    VerificationMode only();
     
 }

@@ -52,7 +52,7 @@ public class SuperTypesLastSorter {
     }
 
 
-    private static Comparator<Field> compareFieldsByName = new Comparator<Field>() {
+    private static final Comparator<Field> compareFieldsByName = new Comparator<Field>() {
         public int compare(Field o1, Field o2) {
             return o1.getName().compareTo(o2.getName());
         }

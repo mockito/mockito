@@ -110,7 +110,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return new ReturnsDeepStubsSerializationFallback(returnTypeGenericMetadata);
     }
 
-    private Object recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) throws Throwable {
+    private Object recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) {
         container.addAnswer(new DeeplyStubbedAnswer(mock), false);
         return mock;
     }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 class DefaultProcessRunner implements ProcessRunner {
 
-    private static Logger LOG = LoggerFactory.getLogger(DefaultProcessRunner.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessRunner.class);
     private final File workDir;
 
     DefaultProcessRunner(File workDir) {

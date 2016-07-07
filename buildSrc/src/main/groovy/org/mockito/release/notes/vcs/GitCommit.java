@@ -8,7 +8,7 @@ class GitCommit implements Commit {
     private final String email;
     private final String author;
     private final String message;
-    private Set<String> tickets;
+    private final Set<String> tickets;
 
     public GitCommit(String email, String author, String message) {
         this.email = email;

@@ -1,8 +1,6 @@
 package org.mockito.release.notes.improvements;
 
-import java.net.URL;
 import java.util.Collection;
-import java.util.Set;
 
 class Improvement {
 

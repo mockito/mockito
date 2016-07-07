@@ -15,7 +15,6 @@ import org.mockito.invocation.Invocation;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 public class WarningsCollector {
    
     private final List<Object> createdMocks;

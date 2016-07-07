@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 class GitContributionsProvider implements ContributionsProvider {
 
-    private static Logger LOG = LoggerFactory.getLogger(GitContributionsProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitContributionsProvider.class);
     private final GitLogProvider logProvider;
     private final Predicate<Commit> ignoredCommit;
 

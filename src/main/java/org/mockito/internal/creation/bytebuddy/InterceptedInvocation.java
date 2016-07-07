@@ -1,6 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
@@ -153,9 +152,9 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
     }
 
 
-    public static interface SuperMethod extends Serializable {
+    public interface SuperMethod extends Serializable {
 
-        static enum IsIllegal implements SuperMethod {
+        enum IsIllegal implements SuperMethod {
 
             INSTANCE;
 
@@ -170,7 +169,7 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
             }
         }
 
-        static class FromCallable implements SuperMethod {
+        class FromCallable implements SuperMethod {
 
             private static final long serialVersionUID = 47957363950483625L;
 

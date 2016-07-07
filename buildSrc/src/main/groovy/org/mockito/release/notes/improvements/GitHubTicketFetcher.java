@@ -180,7 +180,7 @@ class GitHubTicketFetcher {
         }
 
         private static class GitHubIssuesBuilder {
-            private String authToken;
+            private final String authToken;
             private String state;
             private String filter;
             private String direction;

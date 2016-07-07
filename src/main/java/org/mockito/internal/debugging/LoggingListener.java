@@ -15,9 +15,9 @@ import static org.mockito.internal.util.StringJoiner.join;
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;
 
-    private List<String> argMismatchStubs = new LinkedList<String>();
-    private List<String> unusedStubs = new LinkedList<String>();
-    private List<String> unstubbedCalls = new LinkedList<String>();
+    private final List<String> argMismatchStubs = new LinkedList<String>();
+    private final List<String> unusedStubs = new LinkedList<String>();
+    private final List<String> unstubbedCalls = new LinkedList<String>();
 
     public LoggingListener(boolean warnAboutUnstubbed) {
         this.warnAboutUnstubbed = warnAboutUnstubbed;

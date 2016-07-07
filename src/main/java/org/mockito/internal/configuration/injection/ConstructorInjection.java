@@ -5,7 +5,6 @@
 
 package org.mockito.internal.configuration.injection;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
@@ -39,14 +38,7 @@ import java.util.Set;
  */
 public class ConstructorInjection extends MockInjectionStrategy {
 
-    private ConstructorArgumentResolver argResolver;
-
     public ConstructorInjection() { }
-
-    // visible for testing
-    ConstructorInjection(ConstructorArgumentResolver argResolver) {
-        this.argResolver = argResolver;
-    }
 
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         try {

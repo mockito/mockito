@@ -1,8 +1,6 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -12,7 +10,7 @@ public class TriesToReturnSelf implements Answer<Object>, Serializable{
 
     private final MockUtil mockUtil = new MockUtil();
 
-    private ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
+    private final ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> methodReturnType = invocation.getMethod().getReturnType();

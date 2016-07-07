@@ -13,7 +13,7 @@ public class Equality {
         if (o1 == o2 ) {
             return true;
     } else if (o1 == null || o2 == null) {
-            return o1 == null && o2 == null;
+            return false;
         } else if (isArray(o1)) {
             return isArray(o2) && areArraysEqual(o1, o2);
         } else {

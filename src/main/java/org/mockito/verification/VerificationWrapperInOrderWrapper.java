@@ -1,6 +1,5 @@
 package org.mockito.verification;
 
-import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InOrderImpl;
 import org.mockito.internal.verification.InOrderWrapper;

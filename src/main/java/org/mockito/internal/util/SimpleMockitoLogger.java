@@ -6,7 +6,7 @@ package org.mockito.internal.util;
 
 public class SimpleMockitoLogger implements MockitoLogger {
 
-    StringBuilder loggedInfo = new StringBuilder();
+    private final StringBuilder loggedInfo = new StringBuilder();
 
     public void log(Object what) {
         loggedInfo.append(what);

@@ -49,8 +49,8 @@ import org.testng.annotations.Listeners;
  */
 public class MockitoTestNGListener implements IInvokedMethodListener {
 
-    private MockitoBeforeTestNGMethod beforeTest = new MockitoBeforeTestNGMethod();
-    private MockitoAfterTestNGMethod afterTest = new MockitoAfterTestNGMethod();
+    private final MockitoBeforeTestNGMethod beforeTest = new MockitoBeforeTestNGMethod();
+    private final MockitoAfterTestNGMethod afterTest = new MockitoAfterTestNGMethod();
 
 
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {

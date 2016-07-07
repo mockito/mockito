@@ -10,6 +10,7 @@ import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingU
 import static org.mockito.internal.invocation.InvocationsFinder.findPreviousVerifiedInOrder;
 
 import java.util.List;
+
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;

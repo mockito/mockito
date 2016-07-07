@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
 import org.mockito.Mockito;
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.invocation.InvocationOnMock;

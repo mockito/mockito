@@ -38,6 +38,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
  * 
  * Scroll down to see all methods - full list of matchers.
  */
+@SuppressWarnings("ALL")
 public class AdditionalMatchers {
     
     private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();

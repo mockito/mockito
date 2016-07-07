@@ -16,7 +16,7 @@ public abstract class MockInjectionStrategy {
     /**
      * NOP Strategy that will always try the next strategy.
      */
-    public static final MockInjectionStrategy nop() {
+    public static MockInjectionStrategy nop() {
         return new MockInjectionStrategy() {
             protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
                 return false;

@@ -61,6 +61,7 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
     private static class CachedBytecodeGenerator {
 
         private ConcurrentHashMap<MockKey, Reference<Class<?>>> generatedClassCache = new ConcurrentHashMap<MockKey, Reference<Class<?>>>();
+
         private final MockBytecodeGenerator generator;
         private final boolean weak;
 

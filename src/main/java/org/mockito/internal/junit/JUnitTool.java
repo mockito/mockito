@@ -6,7 +6,7 @@ package org.mockito.internal.junit;
 
 public class JUnitTool {
 
-    private static JUnitDetecter detecter = new JUnitDetecter();
+    private static final JUnitDetecter detecter = new JUnitDetecter();
 
     public static boolean hasJUnit() {
         return detecter.hasJUnit();
