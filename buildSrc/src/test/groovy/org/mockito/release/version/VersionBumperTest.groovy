@@ -13,8 +13,9 @@ class VersionBumperTest extends Specification {
         v.incrementVersion("0.0.0") == "0.0.1"
         v.incrementVersion("1.10.15") == "1.10.16"
 
-        v.incrementVersion("1.0.0-beta") == "1.0.1-beta"
-        v.incrementVersion("1.10.15-beta") == "1.10.16-beta"
+        v.incrementVersion("1.0.0-beta.3") == "1.0.0-beta.4"
+        v.incrementVersion("1.10.15-beta.5") == "1.10.15-beta.6"
+        v.incrementVersion("2.0.0-RC.1") == "2.0.0-RC.2"
     }
 
     def "increments only 3 numbered versions"() {
@@ -25,6 +26,6 @@ class VersionBumperTest extends Specification {
         thrown(IllegalArgumentException)
 
         where:
-        unsupported << ["1.0", "2", "1.0.0.0", "1.0.1-beta.2"]
+        unsupported << ["1.0", "2", "1.0.0.0", "1.0.1-beta"]
     }
 }
