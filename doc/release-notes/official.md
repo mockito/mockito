@@ -1,3 +1,12 @@
+### 2.0.82-beta (2016-07-07 16:55 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Rafael Winterhalter
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * Clean up issues reported by IntelliJ [(#436)](https://github.com/mockito/mockito/pull/436)
+
 ### 2.0.81-beta (2016-07-06 20:41 UTC)
 
 * Authors: 2
