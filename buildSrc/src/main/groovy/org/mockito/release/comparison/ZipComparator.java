@@ -38,7 +38,7 @@ class ZipComparator {
         };
     }
 
-    static interface Result {
+    interface Result {
         boolean areEqual();
         File getFile1();
         File getFile2();

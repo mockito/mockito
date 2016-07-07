@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.internal.util.reflection.BeanPropertySetter;
 
 /**

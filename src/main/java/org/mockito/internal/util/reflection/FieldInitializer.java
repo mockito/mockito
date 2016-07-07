@@ -282,7 +282,7 @@ public class FieldInitializer {
         }
 
         private Constructor<?> biggestConstructor(Class<?> clazz) {
-            final List<Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
+            final List<? extends Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
             Collections.sort(constructors, byParameterNumber);
             
             Constructor<?> constructor = constructors.get(0);

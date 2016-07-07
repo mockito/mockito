@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
-    MockCandidateFilter next;
+    private final MockCandidateFilter next;
 
     public TypeBasedCandidateFilter(MockCandidateFilter next) {
         this.next = next;

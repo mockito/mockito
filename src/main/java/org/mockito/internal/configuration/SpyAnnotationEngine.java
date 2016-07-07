@@ -20,7 +20,6 @@ import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.configuration.AnnotationEngine;
-import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 

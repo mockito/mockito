@@ -1,7 +1,6 @@
 package org.mockito.internal.matchers;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.exceptions.Reporter;
 
 import static org.mockito.exceptions.Reporter.noArgumentValueWasCaptured;
 

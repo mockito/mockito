@@ -121,7 +121,7 @@ public interface MockMaker {
      * @since 2.0
      */
     @Incubating
-    static interface TypeMockability {
+    interface TypeMockability {
         /**
          * informs if type is mockable
          */

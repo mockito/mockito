@@ -8,8 +8,8 @@ import java.io.File;
 
 public class PublicationsComparatorTask extends DefaultTask implements PublicationsComparator {
 
-    private ZipComparator zipComparator = new ZipComparator(new ZipCompare());
-    private PomComparator pomComparator = new PomComparator();
+    private final ZipComparator zipComparator = new ZipComparator(new ZipCompare());
+    private final PomComparator pomComparator = new PomComparator();
     private Boolean publicationsEqual;
 
     public void compareBinaries(Closure<File> left, Closure<File> right) {

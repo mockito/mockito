@@ -28,7 +28,7 @@ public class Description implements VerificationMode {
     /**
      * Performs verification using the wrapped verification mode implementation.
      * Prepends the custom failure message if verification fails.
-     * @param data 
+     * @param data the data to be verified
      */
     @Override
     public void verify(VerificationData data) {

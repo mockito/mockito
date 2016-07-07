@@ -41,9 +41,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 1998191268711234347L;
 
-    ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
+    private final ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
 
-    MockUtil mockUtil = new MockUtil();
+    private final MockUtil mockUtil = new MockUtil();
 
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)

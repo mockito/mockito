@@ -4,14 +4,11 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.ArgumentMatcher;
 
-/**
- * Created by sfaber on 6/22/15.
- */
 public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
 
     private final Matcher matcher;
 
-    public <T> HamcrestArgumentMatcher(Matcher<T> matcher) {
+    public HamcrestArgumentMatcher(Matcher<T> matcher) {
         this.matcher = matcher;
     }
 

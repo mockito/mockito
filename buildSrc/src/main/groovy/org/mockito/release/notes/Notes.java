@@ -1,6 +1,5 @@
 package org.mockito.release.notes;
 
-import org.gradle.api.Project;
 import org.mockito.release.notes.versions.PreviousVersion;
 import org.mockito.release.notes.versions.Versions;
 

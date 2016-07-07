@@ -124,7 +124,7 @@ public class ByteBuddyMockMakerTest {
         return mockSettings;
     }
 
-    public static MockHandler dummyH() {
+    private static MockHandler dummyH() {
         return new DummyMockHandler();
     }
 

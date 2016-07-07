@@ -6,7 +6,7 @@ package org.mockito.internal.matchers.text;
  */
 class FormattedText {
 
-    private String text;
+    private final String text;
 
     public FormattedText(String text) {
         this.text = text;

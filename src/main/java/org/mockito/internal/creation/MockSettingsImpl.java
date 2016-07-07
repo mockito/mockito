@@ -5,7 +5,6 @@
 package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
-import org.mockito.exceptions.Reporter;
 
 import static org.mockito.exceptions.Reporter.*;
 import org.mockito.internal.creation.settings.CreationSettings;

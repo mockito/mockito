@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.mockito.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,8 +32,6 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Method mockMethod = invocation.getMethod();
         
-        Object result = null;
-        
         try {
             Method delegateMethod = getDelegateMethod(mockMethod);
             
@@ -43,15 +40,13 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
             }
 
             Object[] rawArguments = ((Invocation) invocation).getRawArguments();
-            result = delegateMethod.invoke(delegatedObject, rawArguments);
+            return delegateMethod.invoke(delegatedObject, rawArguments);
         } catch (NoSuchMethodException e) {
             throw delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);
         } catch (InvocationTargetException e) {
             // propagate the original exception from the delegate
             throw e.getCause();
         }
-        
-        return result;
     }
 
     private Method getDelegateMethod(Method mockMethod) throws NoSuchMethodException {

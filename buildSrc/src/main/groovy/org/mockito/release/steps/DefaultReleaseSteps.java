@@ -8,7 +8,7 @@ import java.util.List;
 
 class DefaultReleaseSteps implements ReleaseSteps {
 
-    private List<ReleaseStep> steps = new ArrayList<ReleaseStep>();
+    private final List<ReleaseStep> steps = new ArrayList<ReleaseStep>();
 
     public ConfigurableReleaseStep newStep(String description, Operation operation) {
         DefaultReleaseStep step = new DefaultReleaseStep(description, operation);

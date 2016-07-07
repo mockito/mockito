@@ -7,8 +7,6 @@ package org.mockito.internal.configuration.injection.scanner;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.exceptions.Reporter;
 
 import static org.mockito.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 

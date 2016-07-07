@@ -6,9 +6,6 @@ package org.mockito.configuration;
 
 import org.mockito.MockitoAnnotations;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 /**
  * Configures mock creation logic behind &#064;Mock, &#064;Captor and &#064;Spy annotations
  * <p>

@@ -15,7 +15,7 @@ import java.util.Date;
 
 class GitNotesBuilder implements NotesBuilder {
 
-    private static Logger LOG = LoggerFactory.getLogger(GitNotesBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GitNotesBuilder.class);
 
     private final File workDir;
     private final String authTokenEnvVar;
