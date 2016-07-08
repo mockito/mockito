@@ -5,17 +5,18 @@
 
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
-
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.*;
 
 @SuppressWarnings("unchecked")
 /**
@@ -135,13 +136,11 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         if (!invocation.getMethod().isVarArgs()) {
             return;
         }
-        int indexOfVararg = invocation.getRawArguments().length - 1;
-        for (ArgumentMatcher m : uniqueMatcherSet(indexOfVararg)) {
+        Object[] arguments = invocation.getArguments();
+        for (int i = 0; i < arguments.length; i++) {
+            ArgumentMatcher m = matchers.get(Math.min(matchers.size() - 1, i));
             if (m instanceof CapturesArguments) {
-                Object rawArgument = invocation.getRawArguments()[indexOfVararg];
-                for (int i = 0; i < Array.getLength(rawArgument); i++) {
-                    ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
-                }
+                ((CapturesArguments) m).captureFrom(arguments[i]);
             }
         }
     }
@@ -150,15 +149,6 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         return invocation.getMethod().isVarArgs() ?
                 invocation.getRawArguments().length - 1 // ignores vararg holder array
                 : matchers.size();
-    }
-
-    private Set<ArgumentMatcher> uniqueMatcherSet(int indexOfVararg) {
-        HashSet<ArgumentMatcher> set = new HashSet<ArgumentMatcher>();
-        for (int position = indexOfVararg; position < matchers.size(); position++) {
-            ArgumentMatcher matcher = matchers.get(position);
-            set.add(matcher);
-        }
-        return set;
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
