@@ -86,7 +86,7 @@ release {
 
 releaseSteps {
     String currentVersion = project.version //the version loaded when Gradle build has started
-    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip-release]"
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
     step("ensure good chunk of recent commits is pulled for release notes automation") {
