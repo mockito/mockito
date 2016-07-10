@@ -198,9 +198,12 @@ public class Matchers {
      * See examples in javadoc for {@link Matchers} class
      *
      * @return <code>null</code>.
+     * 
+     * @deprecated as of 2.0 use {@link #any()}
      */
+    @Deprecated
     public static <T> T anyVararg() {
-        reportMatcher(AnyVararg.ANY_VARARG);
+        any();
         return null;
     }
     
@@ -223,7 +226,7 @@ public class Matchers {
     }
     
     /**
-     * Matches anything, including nulls
+     * Matches anything, including nulls and varargs
      * <p>
      * Shorter alias to {@link Matchers#anyObject()}
      * <p>

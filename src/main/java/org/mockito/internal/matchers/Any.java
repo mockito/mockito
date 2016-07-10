@@ -9,8 +9,7 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings("unchecked")
-public class Any implements ArgumentMatcher, Serializable {
+public class Any implements ArgumentMatcher<Object>, VarargMatcher ,Serializable {
 
     public static final Any ANY = new Any();
 
