@@ -1,3 +1,12 @@
+### 2.0.84-beta (2016-07-11 15:08 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Christian Schwarz
+* Improvements: 1
+  * refactored ThreadSafeMockingProgress to a singleton [(#476)](https://github.com/mockito/mockito/pull/476)
+
 ### 2.0.83-beta (2016-07-11 13:21 UTC)
 
 * Authors: 3
