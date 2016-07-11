@@ -1,3 +1,14 @@
+### 2.0.83-beta (2016-07-11 13:21 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Christian Schwarz
+  * 1: Brice Dutheil
+  * 1: Tim van der Lippe
+* Improvements: 2
+  * Revert "Remove deprecated method" [(#492)](https://github.com/mockito/mockito/pull/492)
+  * Cleanup: removed dead/unnecessary classes [(#486)](https://github.com/mockito/mockito/pull/486)
+
 ### 2.0.82-beta (2016-07-07 16:55 UTC)
 
 * Authors: 2
