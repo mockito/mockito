@@ -191,7 +191,7 @@ import org.mockito.junit.*;
  *
  * <p>
  * Argument matchers allow flexible verification or stubbing.
- * {@link Matchers Click here to see} more built-in matchers
+ * {@link ArgumentMatchers Click here} {@link org.mockito.hamcrest.MockitoHamcrest or here} to see more built-in matchers
  * and examples of <b>custom argument matchers / hamcrest matchers</b>.
  * <p>
  * For information solely on <b>custom argument matchers</b> check out javadoc for {@link ArgumentMatcher} class.
@@ -1208,7 +1208,7 @@ import org.mockito.junit.*;
  *
  */
 @SuppressWarnings("unchecked")
-public class Mockito extends Matchers {
+public class Mockito extends ArgumentMatchers {
 
     static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
