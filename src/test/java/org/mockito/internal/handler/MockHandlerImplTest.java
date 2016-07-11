@@ -26,6 +26,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
 
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 import static org.mockito.BDDMockito.given;
@@ -46,7 +47,7 @@ public class MockHandlerImplTest extends TestBase {
         Invocation invocation = new InvocationBuilder().toInvocation();
         @SuppressWarnings("rawtypes")
         MockHandlerImpl<?> handler = new MockHandlerImpl(new MockSettingsImpl());
-        handler.mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
+        mockingProgress().verificationStarted(VerificationModeFactory.atLeastOnce());
         handler.matchersBinder = new MatchersBinder() {
             public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
                 throw new InvalidUseOfMatchersException();
@@ -62,7 +63,7 @@ public class MockHandlerImplTest extends TestBase {
         } catch (InvalidUseOfMatchersException ignored) {
         }
 
-        assertNull(handler.mockingProgress.pullVerificationMode());
+        assertNull(mockingProgress().pullVerificationMode());
     }
 
 

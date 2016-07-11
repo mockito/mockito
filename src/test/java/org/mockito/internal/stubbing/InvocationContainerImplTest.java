@@ -4,29 +4,30 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+import java.util.LinkedList;
+import java.util.concurrent.CountDownLatch;
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
-
-import java.util.LinkedList;
-import java.util.concurrent.CountDownLatch;
-
-import static org.junit.Assert.*;
 
 /**
  * Author: Szczepan Faber
  */
 public class InvocationContainerImplTest {
 
-    InvocationContainerImpl container = new InvocationContainerImpl(new ThreadSafeMockingProgress(), new MockSettingsImpl());
+    InvocationContainerImpl container = new InvocationContainerImpl( new MockSettingsImpl());
     InvocationContainerImpl containerStubOnly =
-      new InvocationContainerImpl(new ThreadSafeMockingProgress(), (MockCreationSettings) new MockSettingsImpl().stubOnly());
+      new InvocationContainerImpl( (MockCreationSettings) new MockSettingsImpl().stubOnly());
     Invocation invocation = new InvocationBuilder().toInvocation();
     LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
 

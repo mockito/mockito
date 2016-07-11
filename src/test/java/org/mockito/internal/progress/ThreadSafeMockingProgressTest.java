@@ -14,6 +14,7 @@ import java.util.List;
 import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class ThreadSafeMockingProgressTest extends TestBase {
 
@@ -25,11 +26,11 @@ public class ThreadSafeMockingProgressTest extends TestBase {
     @Test
     public void shouldShareState() throws Exception {
         //given
-        ThreadSafeMockingProgress p = new ThreadSafeMockingProgress();
+        MockingProgress p = mockingProgress();
         p.verificationStarted(new DummyVerificationMode());
 
         //then
-        p = new ThreadSafeMockingProgress();
+        p = mockingProgress();
         assertNotNull(p.pullVerificationMode());
     }
 
@@ -37,7 +38,7 @@ public class ThreadSafeMockingProgressTest extends TestBase {
     public void shouldKnowWhenVerificationHasStarted() throws Exception {
         //given
         verify(mock(List.class));
-        ThreadSafeMockingProgress p = new ThreadSafeMockingProgress();
+        MockingProgress p = mockingProgress();
 
         //then
         assertNotNull(p.pullVerificationMode());

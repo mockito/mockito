@@ -6,10 +6,10 @@ package org.mockito;
 
 import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.util.Primitives;
 
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.Primitives.defaultValue;
 
 import java.util.Collection;
@@ -64,8 +64,6 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class Matchers {
     
-    private static final MockingProgress MOCKING_PROGRESS = new ThreadSafeMockingProgress();
-
     /**
      * Any <code>boolean</code> or non-null <code>Boolean</code>
      * <p>
@@ -843,6 +841,6 @@ public class Matchers {
     }
 
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
-        MOCKING_PROGRESS.getArgumentMatcherStorage().reportMatcher(matcher);
+        mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }
 }
