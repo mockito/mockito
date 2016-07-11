@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static org.mockito.exceptions.Reporter.tooLittleActualInvocations;
+import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;

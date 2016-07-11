@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.exceptions;
+package org.mockito.internal.exceptions;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,7 +11,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.invocation.Invocation;

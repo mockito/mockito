@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.handler;
 
-import static org.mockito.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.util.List;

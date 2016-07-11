@@ -5,7 +5,7 @@
 package org.mockito.internal.configuration;
 
 import static org.mockito.Mockito.withSettings;
-import static org.mockito.exceptions.Reporter.unsupportedCombinationOfAnnotations;
+import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

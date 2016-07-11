@@ -8,7 +8,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static org.mockito.exceptions.Reporter.incorrectUseOfApi;
+import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
 
 import java.util.List;
 

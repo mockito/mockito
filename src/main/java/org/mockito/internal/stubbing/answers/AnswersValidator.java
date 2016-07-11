@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import static org.mockito.exceptions.Reporter.cannotCallAbstractRealMethod;
-import static org.mockito.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
-import static org.mockito.exceptions.Reporter.cannotStubWithNullThrowable;
-import static org.mockito.exceptions.Reporter.checkedExceptionInvalid;
-import static org.mockito.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
-import static org.mockito.exceptions.Reporter.wrongTypeOfArgumentToReturn;
-import static org.mockito.exceptions.Reporter.wrongTypeOfReturnValue;
-import static org.mockito.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
+import static org.mockito.internal.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
+import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
+import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
+import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
+import static org.mockito.internal.exceptions.Reporter.wrongTypeOfArgumentToReturn;
+import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
+import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
 
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Answer;

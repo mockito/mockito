@@ -5,8 +5,8 @@
 
 package org.mockito.internal.configuration.injection;
 
-import static org.mockito.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
-import static org.mockito.exceptions.Reporter.fieldInitialisationThrewException;
+import static org.mockito.internal.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
+import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewException;
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 import java.lang.reflect.Field;

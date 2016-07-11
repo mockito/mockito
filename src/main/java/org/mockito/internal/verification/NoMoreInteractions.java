@@ -5,8 +5,8 @@
 
 package org.mockito.internal.verification;
 
-import static org.mockito.exceptions.Reporter.noMoreInteractionsWanted;
-import static org.mockito.exceptions.Reporter.noMoreInteractionsWantedInOrder;
+import static org.mockito.internal.exceptions.Reporter.noMoreInteractionsWanted;
+import static org.mockito.internal.exceptions.Reporter.noMoreInteractionsWantedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findFirstUnverified;
 import static org.mockito.internal.invocation.InvocationsFinder.findFirstUnverifiedInOrder;
 

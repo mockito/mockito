@@ -5,8 +5,8 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static org.mockito.exceptions.Reporter.argumentsAreDifferent;
-import static org.mockito.exceptions.Reporter.wantedButNotInvoked;
+import static org.mockito.internal.exceptions.Reporter.argumentsAreDifferent;
+import static org.mockito.internal.exceptions.Reporter.wantedButNotInvoked;
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.findSimilarInvocation;
 

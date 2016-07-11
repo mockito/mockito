@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import static org.mockito.exceptions.Reporter.cannotInjectDependency;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
+import org.mockito.internal.util.reflection.BeanPropertySetter;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
-import org.mockito.internal.util.reflection.BeanPropertySetter;
+import static org.mockito.internal.exceptions.Reporter.cannotInjectDependency;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * This node returns an actual injecter which will be either :

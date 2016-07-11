@@ -5,8 +5,8 @@
 
 package org.mockito.internal.progress;
 
-import static org.mockito.exceptions.Reporter.unfinishedStubbing;
-import static org.mockito.exceptions.Reporter.unfinishedVerificationException;
+import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
+import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
 
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;

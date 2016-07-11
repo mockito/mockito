@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification;
 
-import static org.mockito.exceptions.Reporter.wantedAtMostX;
+import static org.mockito.internal.exceptions.Reporter.wantedAtMostX;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 

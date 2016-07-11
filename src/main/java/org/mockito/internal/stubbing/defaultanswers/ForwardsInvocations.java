@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import static org.mockito.exceptions.Reporter.delegatedMethodDoesNotExistOnDelegate;
-import static org.mockito.exceptions.Reporter.delegatedMethodHasWrongReturnType;
+import static org.mockito.internal.exceptions.Reporter.delegatedMethodDoesNotExistOnDelegate;
+import static org.mockito.internal.exceptions.Reporter.delegatedMethodHasWrongReturnType;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;

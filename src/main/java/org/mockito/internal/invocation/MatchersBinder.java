@@ -6,7 +6,7 @@
 package org.mockito.internal.invocation;
 
 
-import static org.mockito.exceptions.Reporter.invalidUseOfMatchers;
+import static org.mockito.internal.exceptions.Reporter.invalidUseOfMatchers;
 
 import java.io.Serializable;
 import java.util.LinkedList;

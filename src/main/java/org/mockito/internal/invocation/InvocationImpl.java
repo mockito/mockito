@@ -10,7 +10,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.*;
 
-import static org.mockito.exceptions.Reporter.cannotCallAbstractRealMethod;
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
