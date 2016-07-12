@@ -1,3 +1,11 @@
+### 2.0.86-beta (2016-07-12 11:59 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 1
+  * Moves Reporter friendly exception factory to internal package [(#495)](https://github.com/mockito/mockito/pull/495)
+
 ### 2.0.85-beta (2016-07-12 11:43 UTC)
 
 * Authors: 1
