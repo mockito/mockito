@@ -1,3 +1,11 @@
+### 2.0.85-beta (2016-07-12 11:43 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 1
+  * Renames Matchers to ArgumentMatchers to avoid name clash with Hamcrest Matchers class [(#496)](https://github.com/mockito/mockito/pull/496)
+
 ### 2.0.84-beta (2016-07-11 15:08 UTC)
 
 * Authors: 2
