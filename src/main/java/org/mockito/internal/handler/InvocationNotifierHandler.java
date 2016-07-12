@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.handler;
 
-import static org.mockito.exceptions.Reporter.invocationListenerThrewException;
+import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
 
 import java.util.List;
 import org.mockito.internal.InternalMockHandler;

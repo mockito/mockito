@@ -4,15 +4,15 @@
  */
 package org.mockito.internal;
 
-import static org.mockito.exceptions.Reporter.missingMethodInvocation;
-import static org.mockito.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
-import static org.mockito.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
-import static org.mockito.exceptions.Reporter.notAMockPassedToVerify;
-import static org.mockito.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
-import static org.mockito.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
-import static org.mockito.exceptions.Reporter.nullPassedToVerify;
-import static org.mockito.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
-import static org.mockito.exceptions.Reporter.nullPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 

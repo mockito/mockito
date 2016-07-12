@@ -11,9 +11,9 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
-import static org.mockito.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
-import static org.mockito.exceptions.Reporter.misplacedArgumentMatcher;
-import static org.mockito.exceptions.Reporter.reportNoSubMatchersFound;
+import static org.mockito.internal.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
+import static org.mockito.internal.exceptions.Reporter.misplacedArgumentMatcher;
+import static org.mockito.internal.exceptions.Reporter.reportNoSubMatchersFound;
 
 import java.util.*;
 

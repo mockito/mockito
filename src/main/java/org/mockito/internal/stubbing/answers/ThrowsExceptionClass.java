@@ -10,7 +10,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.objenesis.ObjenesisHelper;
 
-import static org.mockito.exceptions.Reporter.notAnException;
+import static org.mockito.internal.exceptions.Reporter.notAnException;
 
 import java.io.Serializable;
 

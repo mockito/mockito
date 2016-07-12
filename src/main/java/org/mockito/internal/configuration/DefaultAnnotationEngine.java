@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.base.MockitoException;
 
-import static org.mockito.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
+import static org.mockito.internal.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.annotation.Annotation;

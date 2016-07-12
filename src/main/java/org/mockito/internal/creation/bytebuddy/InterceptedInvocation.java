@@ -10,7 +10,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
-import static org.mockito.exceptions.Reporter.cannotCallAbstractRealMethod;
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;

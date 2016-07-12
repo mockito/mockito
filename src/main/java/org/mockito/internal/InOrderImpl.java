@@ -17,7 +17,7 @@ import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWrapper;
 import org.mockito.verification.VerificationWrapperInOrderWrapper;
 
-import static org.mockito.exceptions.Reporter.inOrderRequiresFamiliarMock;
+import static org.mockito.internal.exceptions.Reporter.inOrderRequiresFamiliarMock;
 
 import java.util.LinkedList;
 import java.util.List;

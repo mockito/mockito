@@ -9,7 +9,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.MockitoTest;
-import org.mockito.exceptions.ReporterTest;
+import org.mockito.internal.exceptions.ReporterTest;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;

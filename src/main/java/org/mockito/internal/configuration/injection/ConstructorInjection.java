@@ -10,7 +10,7 @@ import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
-import static org.mockito.exceptions.Reporter.fieldInitialisationThrewException;
+import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

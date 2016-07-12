@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.util;
 
-import static org.mockito.exceptions.Reporter.cannotMockClass;
-import static org.mockito.exceptions.Reporter.extraInterfacesCannotContainMockedType;
-import static org.mockito.exceptions.Reporter.mockedTypeIsInconsistentWithDelegatedInstanceType;
-import static org.mockito.exceptions.Reporter.mockedTypeIsInconsistentWithSpiedInstanceType;
-import static org.mockito.exceptions.Reporter.usingConstructorWithFancySerializable;
+import static org.mockito.internal.exceptions.Reporter.cannotMockClass;
+import static org.mockito.internal.exceptions.Reporter.extraInterfacesCannotContainMockedType;
+import static org.mockito.internal.exceptions.Reporter.mockedTypeIsInconsistentWithDelegatedInstanceType;
+import static org.mockito.internal.exceptions.Reporter.mockedTypeIsInconsistentWithSpiedInstanceType;
+import static org.mockito.internal.exceptions.Reporter.usingConstructorWithFancySerializable;
 
 import java.util.Collection;
 

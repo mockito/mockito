@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import static org.mockito.exceptions.Reporter.smartNullPointerException;
+import static org.mockito.internal.exceptions.Reporter.smartNullPointerException;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;

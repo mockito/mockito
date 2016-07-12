@@ -6,7 +6,7 @@ package org.mockito.internal.creation;
 
 import org.mockito.MockSettings;
 
-import static org.mockito.exceptions.Reporter.*;
+import static org.mockito.internal.exceptions.Reporter.*;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.MockCreationValidator;

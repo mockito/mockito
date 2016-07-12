@@ -5,8 +5,8 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static org.mockito.exceptions.Reporter.tooLittleActualInvocationsInOrder;
-import static org.mockito.exceptions.Reporter.tooManyActualInvocationsInOrder;
+import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocationsInOrder;
+import static org.mockito.internal.exceptions.Reporter.tooManyActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findMatchingChunk;
 import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;

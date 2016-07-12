@@ -7,8 +7,8 @@ package org.mockito.internal.stubbing.answers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static org.mockito.exceptions.Reporter.invalidArgumentPositionRangeAtInvocationTime;
-import static org.mockito.exceptions.Reporter.invalidArgumentRangeAtIdentityAnswerCreationTime;
+import static org.mockito.internal.exceptions.Reporter.invalidArgumentPositionRangeAtInvocationTime;
+import static org.mockito.internal.exceptions.Reporter.invalidArgumentRangeAtIdentityAnswerCreationTime;
 
 import java.io.Serializable;
 

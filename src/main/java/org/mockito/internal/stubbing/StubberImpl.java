@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.stubbing;
 
-import static org.mockito.exceptions.Reporter.notAMockPassedToWhenMethod;
-import static org.mockito.exceptions.Reporter.nullPassedToWhenMethod;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToWhenMethod;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
 
 import java.util.LinkedList;
 import java.util.List;

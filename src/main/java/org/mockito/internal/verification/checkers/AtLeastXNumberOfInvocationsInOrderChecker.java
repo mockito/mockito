@@ -5,7 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static org.mockito.exceptions.Reporter.tooLittleActualInvocationsInOrder;
+import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingUnverifiedChunks;
 import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;

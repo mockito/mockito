@@ -10,7 +10,7 @@ import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 
-import static org.mockito.exceptions.Reporter.cannotVerifyToString;
+import static org.mockito.internal.exceptions.Reporter.cannotVerifyToString;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@
  */
 package org.mockito.verification;
 
-import static org.mockito.exceptions.Reporter.atMostAndNeverShouldNotBeUsedWithTimeout;
+import static org.mockito.internal.exceptions.Reporter.atMostAndNeverShouldNotBeUsedWithTimeout;
 
 import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationModeFactory;

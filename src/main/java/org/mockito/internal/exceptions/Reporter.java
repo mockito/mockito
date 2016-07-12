@@ -3,11 +3,20 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.exceptions;
+package org.mockito.internal.exceptions;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.*;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
+import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.SmartNullPointerException;
@@ -16,8 +25,6 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.exceptions.MockitoLimitations;
-import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.JUnitTool;
 import org.mockito.internal.matchers.LocalizedMatcher;
@@ -53,8 +60,9 @@ import static org.mockito.internal.util.StringJoiner.join;
  */
 public class Reporter {
 
-	private Reporter(){}
-	
+    private Reporter() {
+    }
+
     public static MockitoException checkedExceptionInvalid(Throwable t) {
         return new MockitoException(join(
                 "Checked exception is invalid for this method!",
@@ -300,12 +308,12 @@ public class Reporter {
 
     public static AssertionError argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
         String message = join("Argument(s) are different! Wanted:",
-                wanted,
-                new LocationImpl(),
-                "Actual invocation has different arguments:",
-                actual,
-                actualLocation,
-                ""
+                              wanted,
+                              new LocationImpl(),
+                              "Actual invocation has different arguments:",
+                              actual,
+                              actualLocation,
+                              ""
         );
 
         return JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
@@ -323,9 +331,9 @@ public class Reporter {
             StringBuilder sb = new StringBuilder("\nHowever, there were other interactions with this mock:\n");
             for (DescribedInvocation i : invocations) {
                 sb.append(i.toString())
-                        .append("\n")
-                        .append(i.getLocation())
-                        .append("\n\n");
+                  .append("\n")
+                  .append(i.getLocation())
+                  .append("\n\n");
             }
             allInvocations = sb.toString();
         }
@@ -362,7 +370,7 @@ public class Reporter {
     }
 
     private static String createTooManyInvocationsMessage(int wantedCount, int actualCount, DescribedInvocation wanted,
-                                                   Location firstUndesired) {
+                                                          Location firstUndesired) {
         return join(
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + ":",
@@ -392,7 +400,7 @@ public class Reporter {
     }
 
     private static String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted,
-                                                     Location lastActualInvocation) {
+                                                            Location lastActualInvocation) {
         String ending =
                 (lastActualInvocation != null) ? lastActualInvocation + "\n" : "\n";
 
@@ -612,47 +620,47 @@ public class Reporter {
 
     public static MockitoException moreThanOneAnnotationNotAllowed(String fieldName) {
         return new MockitoException("You cannot have more than one Mockito annotation on a field!\n" +
-                "The field '" + fieldName + "' has multiple Mockito annotations.\n" +
-                "For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
+                                            "The field '" + fieldName + "' has multiple Mockito annotations.\n" +
+                                            "For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
     }
 
     public static MockitoException unsupportedCombinationOfAnnotations(String undesiredAnnotationOne, String undesiredAnnotationTwo) {
         return new MockitoException("This combination of annotations is not permitted on a single field:\n" +
-                "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);
+                                            "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);
     }
 
     public static MockitoException cannotInitializeForSpyAnnotation(String fieldName, Exception details) {
         return new MockitoException(join("Cannot instantiate a @Spy for '" + fieldName + "' field.",
-                "You haven't provided the instance for spying at field declaration so I tried to construct the instance.",
-                "However, I failed because: " + details.getMessage(),
-                "Examples of correct usage of @Spy:",
-                "   @Spy List mock = new LinkedList();",
-                "   @Spy Foo foo; //only if Foo has parameterless constructor",
-                "   //also, don't forget about MockitoAnnotations.initMocks();",
-                ""), details);
+                                         "You haven't provided the instance for spying at field declaration so I tried to construct the instance.",
+                                         "However, I failed because: " + details.getMessage(),
+                                         "Examples of correct usage of @Spy:",
+                                         "   @Spy List mock = new LinkedList();",
+                                         "   @Spy Foo foo; //only if Foo has parameterless constructor",
+                                         "   //also, don't forget about MockitoAnnotations.initMocks();",
+                                         ""), details);
     }
 
     public static MockitoException cannotInitializeForInjectMocksAnnotation(String fieldName, Exception details) {
         return new MockitoException(join("Cannot instantiate @InjectMocks field named '" + fieldName + "'.",
-                "You haven't provided the instance at field declaration so I tried to construct the instance.",
-                "However, I failed because: " + details.getMessage(),
-                "Examples of correct usage of @InjectMocks:",
-                "   @InjectMocks Service service = new Service();",
-                "   @InjectMocks Service service;",
-                "   //also, don't forget about MockitoAnnotations.initMocks();",
-                "   //and... don't forget about some @Mocks for injection :)",
-                ""), details);
+                                         "You haven't provided the instance at field declaration so I tried to construct the instance.",
+                                         "However, I failed because: " + details.getMessage(),
+                                         "Examples of correct usage of @InjectMocks:",
+                                         "   @InjectMocks Service service = new Service();",
+                                         "   @InjectMocks Service service;",
+                                         "   //also, don't forget about MockitoAnnotations.initMocks();",
+                                         "   //and... don't forget about some @Mocks for injection :)",
+                                         ""), details);
     }
 
     public static MockitoException atMostAndNeverShouldNotBeUsedWithTimeout() {
         return new FriendlyReminderException(join("",
-                "Don't panic! I'm just a friendly reminder!",
-                "timeout() should not be used with atMost() or never() because...",
-                "...it does not make much sense - the test would have passed immediately in concurency",
-                "We kept this method only to avoid compilation errors when upgrading Mockito.",
-                "In future release we will remove timeout(x).atMost(y) from the API.",
-                "If you want to find out more please refer to issue 235",
-                ""));
+                                                  "Don't panic! I'm just a friendly reminder!",
+                                                  "timeout() should not be used with atMost() or never() because...",
+                                                  "...it does not make much sense - the test would have passed immediately in concurency",
+                                                  "We kept this method only to avoid compilation errors when upgrading Mockito.",
+                                                  "In future release we will remove timeout(x).atMost(y) from the API.",
+                                                  "If you want to find out more please refer to issue 235",
+                                                  ""));
     }
 
     public static MockitoException fieldInitialisationThrewException(Field field, Throwable details) {
@@ -713,23 +721,25 @@ public class Reporter {
     }
 
     public static MockitoException invalidArgumentRangeAtIdentityAnswerCreationTime() {
-        return new MockitoException(join("Invalid argument index.",
+        return new MockitoException(join(
+                "Invalid argument index.",
                 "The index need to be a positive number that indicates the position of the argument to return.",
                 "However it is possible to use the -1 value to indicates that the last argument should be",
                 "returned."));
     }
 
     public static MockitoException invalidArgumentPositionRangeAtInvocationTime(InvocationOnMock invocation, boolean willReturnLastParameter, int argumentIndex) {
-        return new MockitoException(
-                join("Invalid argument index for the current invocation of method : ",
-                        " -> " + safelyGetMockName(invocation.getMock()) + "." + invocation.getMethod().getName() + "()",
-                        "",
-                        (willReturnLastParameter ?
-                                "Last parameter wanted" :
-                                "Wanted parameter at position " + argumentIndex) + " but " + possibleArgumentTypesOf(invocation),
-                        "The index need to be a positive number that indicates a valid position of the argument in the invocation.",
-                        "However it is possible to use the -1 value to indicates that the last argument should be returned.",
-                        ""));
+        return new MockitoException(join(
+                "Invalid argument index for the current invocation of method : ",
+                " -> " + safelyGetMockName(invocation.getMock()) + "." + invocation.getMethod().getName() + "()",
+                "",
+                (willReturnLastParameter ?
+                        "Last parameter wanted" :
+                        "Wanted parameter at position " + argumentIndex) + " but " + possibleArgumentTypesOf(invocation),
+                "The index need to be a positive number that indicates a valid position of the argument in the invocation.",
+                "However it is possible to use the -1 value to indicates that the last argument should be returned.",
+                ""
+        ));
     }
 
     private static StringBuilder possibleArgumentTypesOf(InvocationOnMock invocation) {
@@ -814,12 +824,14 @@ public class Reporter {
     }
 
     public static MockitoException cannotCreateTimerWithNegativeDurationTime(long durationMillis) {
-        return new FriendlyReminderException(join("",
+        return new FriendlyReminderException(join(
+                "",
                 "Don't panic! I'm just a friendly reminder!",
                 "It is impossible for time to go backward, therefore...",
-                "You cannot put negative value of duration: (" +  durationMillis +  ")",
+                "You cannot put negative value of duration: (" + durationMillis + ")",
                 "as argument of timer methods (after(), timeout())",
-                ""));
+                ""
+        ));
     }
 
     public static MockitoException notAnException() {
