@@ -1,6 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
 import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
