@@ -1,3 +1,11 @@
+### 2.0.87-beta (2016-07-18 20:28 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Pascal Schumacher
+* Improvements: 1
+  * remove unused imports [(#498)](https://github.com/mockito/mockito/pull/498)
+
 ### 2.0.86-beta (2016-07-12 11:59 UTC)
 
 * Authors: 1
