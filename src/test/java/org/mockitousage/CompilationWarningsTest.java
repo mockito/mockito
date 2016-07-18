@@ -7,10 +7,6 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.BDDMockito.doAnswer;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
 
 public class CompilationWarningsTest {

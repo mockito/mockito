@@ -11,7 +11,6 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
@@ -21,7 +20,6 @@ import org.mockitoutil.TestBase;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class NoMoreInteractionsTest extends TestBase {
 

@@ -7,7 +7,6 @@ package org.mockito.internal.stubbing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
