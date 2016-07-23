@@ -50,9 +50,9 @@ public class UnusedStubsExceptionMessageTest extends TestBase {
                         "Unnecessary stubbings detected in test class: HasUnnecessaryStubs\n" +
                         "To keep the tests clean it is important to remove unnecessary code.\n" +
                         "Following stubbings are declared in test but not realized during test execution:\n" +
-                        "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:27)\n" +
-                        "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:28)\n" +
+                        "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
+                        "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
                         "Please remove unnecessary stubbings. More info: javadoc for UnnecessaryStubbingException class.",
-                failure.getException().getMessage());
+                filterLineNo(failure.getException().getMessage()));
     }
 }

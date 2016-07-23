@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -186,6 +187,15 @@ public class TestBase {
             out.close();
         } catch (IOException ex) {}
         return out.toString();
+    }
+
+    /**
+     * Filters out unwanted line numbers from provided stack trace String.
+     * This is useful for writing assertions for exception messages that contain line numbers
+     */
+    protected String filterLineNo(String stackTrace) {
+        //(UnusedStubsExceptionMessageTest.java:27) into (UnusedStubsExceptionMessageTest.java:100)
+        return stackTrace.replaceAll("(\\((\\w+\\.java):(\\d)+\\))", "($2:0)");
     }
 
     /**

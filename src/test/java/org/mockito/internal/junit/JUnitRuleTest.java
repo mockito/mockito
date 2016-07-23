@@ -9,10 +9,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.*;
 
-public class JUnitRuleTest {
+public class JUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
     private JUnitRule jUnitRule = new JUnitRule(logger);
@@ -58,29 +59,21 @@ public class JUnitRuleTest {
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            assertEquals(removeLineNo(logger.getLoggedInfo()), removeLineNo(
+            assertEquals(filterLineNo(logger.getLoggedInfo()),
                 "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
                 "[Mockito]\n" +
                 "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
                 "[Mockito]\n" +
-                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)")
+                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:0)"
             );
         }
-    }
-
-    private String removeLineNo(String text) {
-        //This handy method is useful for making the tests stable
-        //we can change this class and the assertions will still work correctly
-        //otherwise, changing the class will change line numbers and some assertons would fail
-        String name = this.getClass().getSimpleName();
-        return text.replaceAll(name + "\\.java:(\\d)+", name + ".java:100");
     }
 
     @Test
     public void can_remove_line_numbers() throws Throwable {
         assertEquals(
-                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:100)",
-                removeLineNo("[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)"));
+                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:0)",
+                filterLineNo("[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)"));
     }
 
     @Test
