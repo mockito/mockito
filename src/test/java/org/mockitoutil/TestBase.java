@@ -191,10 +191,14 @@ public class TestBase {
 
     /**
      * Filters out unwanted line numbers from provided stack trace String.
-     * This is useful for writing assertions for exception messages that contain line numbers
+     * This is useful for writing assertions for exception messages that contain line numbers.
+     *
+     * For example it turns:
+     * blah blah (UnusedStubsExceptionMessageTest.java:27)
+     * into:
+     * blah blah (UnusedStubsExceptionMessageTest.java:0)
      */
     protected String filterLineNo(String stackTrace) {
-        //(UnusedStubsExceptionMessageTest.java:27) into (UnusedStubsExceptionMessageTest.java:100)
         return stackTrace.replaceAll("(\\((\\w+\\.java):(\\d)+\\))", "($2:0)");
     }
 
