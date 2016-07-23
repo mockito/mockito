@@ -6,9 +6,11 @@
 package org.mockitousage.matchers;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,8 +18,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-//TODO make this working with MockitoJUnitRunner with opt-out unnecessary stubs validation
-//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class InvalidUseOfMatchersTest {
 
     private IMethods mock = Mockito.mock(IMethods.class);
