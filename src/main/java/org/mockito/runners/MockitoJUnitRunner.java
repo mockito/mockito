@@ -15,6 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.StrictRunner;
+import org.mockito.internal.runners.VerboseRunner;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,6 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Compatible with <b>JUnit 4.4 and higher</b>, this runner adds following behavior:
  * <ul>
+ *   <li>
+ *       (new since Mockito 2.*) Detects unused stubs in the test code.
+ *       See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
  *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
@@ -51,10 +56,53 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class MockitoJUnitRunner extends Runner implements Filterable {
 
+    /**
+     * This Mockito JUnit Runner implementation ignores unused stubs
+     * (e.g. it remains 'silent' even if unused stubs are present).
+     * Using this implementation of the runner is not recommended.
+     * Engineers should care for removing unused stubbings because they are dead code,
+     * they add unnecessary details, potentially making the test code harder to comprehend.
+     * If you have good reasons to use the silent runner, let us know at the mailing list
+     * or raise an issue in our issue tracker.
+     *
+     * See also {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
+     *
+     * @since 2.*
+     */
+    public static class Silent extends MockitoJUnitRunner {
+        public Silent(Class<?> klass) throws InvocationTargetException {
+            super(new RunnerFactory().create(klass));
+        }
+    }
+
+    /**
+     * Detects unused stubs and reports them as failures.
+     * See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
+     *
+     * @since 2.*
+     */
+    public static class Strict extends MockitoJUnitRunner {
+        public Strict(Class<?> klass) throws InvocationTargetException {
+            super(new StrictRunner(new RunnerFactory().create(klass), klass));
+        }
+    }
+
+    //TODO implement
+    public static class Verbose extends MockitoJUnitRunner {
+        public Verbose(Class<?> klass) throws InvocationTargetException {
+            super(new VerboseRunner(new RunnerFactory().create(klass)));
+        }
+    }
+
     private final RunnerImpl runner;
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        runner = new RunnerFactory().create(klass);
+        //by default, StrictRunner is used. We can change that potentially based on feedback from users
+        this(new StrictRunner(new RunnerFactory().create(klass), klass));
+    }
+
+    MockitoJUnitRunner(RunnerImpl runner) throws InvocationTargetException {
+        this.runner = runner;
     }
 
     @Override
