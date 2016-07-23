@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by sfaber on 4/22/16.
  */
-public class JUnitRunnerExceptionMessageTest extends TestBase {
+public class UnusedStubsExceptionMessageTest extends TestBase {
 
     //Moving the code around this class is tricky and may cause the test to fail
     //We're asserting on full exception message which contains line numbers
@@ -50,8 +50,8 @@ public class JUnitRunnerExceptionMessageTest extends TestBase {
                         "Unnecessary stubbings detected in test class: HasUnnecessaryStubs\n" +
                         "To keep the tests clean it is important to remove unnecessary code.\n" +
                         "Following stubbings are declared in test but not realized during test execution:\n" +
-                        "  1. -> at org.mockitousage.junitrunner.JUnitRunnerExceptionMessageTest$HasUnnecessaryStubs.<init>(JUnitRunnerExceptionMessageTest.java:27)\n" +
-                        "  2. -> at org.mockitousage.junitrunner.JUnitRunnerExceptionMessageTest$HasUnnecessaryStubs.<init>(JUnitRunnerExceptionMessageTest.java:26)\n" +
+                        "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:27)\n" +
+                        "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:26)\n" +
                         "Please remove unnecessary stubbings. More info: javadoc for UnnecessaryStubbingException class.",
                 failure.getException().getMessage());
     }
