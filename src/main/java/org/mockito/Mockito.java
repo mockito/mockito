@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.internal.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -2585,5 +2586,15 @@ public class Mockito extends ArgumentMatchers {
     @Deprecated
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
+    }
+
+    /**
+     * For advanced users or framework integrators. See {@link MockitoFramework} class.
+     *
+     * @since 2.*
+     */
+    @Incubating
+    public static MockitoFramework framework() {
+        return new DefaultMockitoFramework();
     }
 }

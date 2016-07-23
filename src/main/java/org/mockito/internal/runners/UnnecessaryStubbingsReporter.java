@@ -27,6 +27,7 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
         stubbings.put(stubbing.getLocation().toString(), stubbing);
     }
 
+    //TODO make it thread safe so that users don't have to worry
     public void usedStubbing(Invocation stubbing, Invocation actual) {
         String location = stubbing.getLocation().toString();
         used.add(location);

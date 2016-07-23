@@ -1,29 +1,21 @@
 package org.mockito;
 
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.listeners.StubbingListener;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
 /**
- * New incubating API, mainly for other tools that integrate with Mockito.
+ * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
  *
- * TODO turn into an interface and let it hang off Mockito.framework()
- *
- * @since 2.0.0
+ * @since 2.*
  */
 @Incubating
-public class MockitoFramework {
+public interface MockitoFramework {
 
     /**
      * Sets new {@link StubbingListener}.
      * <code>null</code> is permitted and removes any previously set listener.
      * If you set the stubbing listener, ensure that you have cleared it afterwards.
      * See examples in Mockito codebase how {@link #setStubbingListener(StubbingListener)} is used.
-     *
-     * @since 2.0.0
      */
-    public static void setStubbingListener(StubbingListener listener) {
-        ThreadSafeMockingProgress.mockingProgress().setStubbingListener(listener);
-    }
+    @Incubating
+    void setStubbingListener(StubbingListener listener);
 }

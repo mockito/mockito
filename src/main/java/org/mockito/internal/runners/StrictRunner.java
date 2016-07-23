@@ -4,6 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
+import org.mockito.Mockito;
 import org.mockito.MockitoFramework;
 import org.mockito.internal.runners.util.FailureDetecter;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
@@ -31,13 +32,13 @@ public class StrictRunner implements RunnerImpl {
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
         FailureDetecter listener = new FailureDetecter();
 
-        MockitoFramework.setStubbingListener(reporter);
+        Mockito.framework().setStubbingListener(reporter);
         try {
             // add listener that detects test failures
             notifier.addListener(listener);
             runner.run(notifier);
         } finally {
-            MockitoFramework.setStubbingListener(null);
+            Mockito.framework().setStubbingListener(null);
         }
 
         if (!filterRequested && listener.isSussessful()) {
