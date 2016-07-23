@@ -16,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 import org.mockito.internal.runners.StrictRunner;
-import org.mockito.internal.runners.VerboseRunner;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -86,13 +85,6 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     public static class Strict extends MockitoJUnitRunner {
         public Strict(Class<?> klass) throws InvocationTargetException {
             super(new StrictRunner(new RunnerFactory().create(klass), klass));
-        }
-    }
-
-    //TODO implement
-    public static class Verbose extends MockitoJUnitRunner {
-        public Verbose(Class<?> klass) throws InvocationTargetException {
-            super(new VerboseRunner(new RunnerFactory().create(klass)));
         }
     }
 
