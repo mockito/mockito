@@ -5,7 +5,8 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.MockitoFramework;
-import org.mockito.internal.runners.util.MockitoJUnitListener;
+import org.mockito.internal.runners.util.FailureDetecter;
+import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 /**
  * Created by sfaber on 7/22/16.
@@ -28,11 +29,11 @@ public class StrictRunner implements RunnerImpl {
     public void run(RunNotifier notifier) {
         //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
-        MockitoJUnitListener listener = new MockitoJUnitListener(notifier);
+        FailureDetecter listener = new FailureDetecter();
 
         MockitoFramework.setStubbingListener(reporter);
         try {
-            // add listener that validates framework usage at the end of each test
+            // add listener that detects test failures
             notifier.addListener(listener);
             runner.run(notifier);
         } finally {

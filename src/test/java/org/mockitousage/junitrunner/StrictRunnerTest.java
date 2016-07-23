@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by sfaber on 4/22/16.
  */
-public class StrictJUnitRunnerTest extends TestBase {
+public class StrictRunnerTest extends TestBase {
 
     JUnitCore runner = new JUnitCore();
 

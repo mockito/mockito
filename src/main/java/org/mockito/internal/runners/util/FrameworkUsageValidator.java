@@ -10,12 +10,15 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
 
-public class MockitoJUnitListener extends RunListener {
+/**
+ * Implementation of JUnit run listener that validates Mockito usage after each test
+ */
+public class FrameworkUsageValidator extends RunListener {
     
     private final RunNotifier notifier;
     private boolean failed;
 
-    public MockitoJUnitListener(RunNotifier notifier) {
+    public FrameworkUsageValidator(RunNotifier notifier) {
         this.notifier = notifier;
     }
 

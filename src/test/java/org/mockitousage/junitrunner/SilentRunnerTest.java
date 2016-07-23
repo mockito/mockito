@@ -4,18 +4,85 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.Failure;
+import org.mockito.Mock;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 /**
  * Created by sfaber on 4/22/16.
  */
 public class SilentRunnerTest extends TestBase {
+
+    JUnitCore runner = new JUnitCore();
+
+    @Test public void passing_test() {
+        //when
+        Result result = runner.run(
+                SomeFeature.class
+        );
+        //then
+        assertThat(result).isSuccessful();
+    }
+
+    @Test public void failing_test() {
+        //when
+        Result result = runner.run(
+                SomeFailingFeature.class
+        );
+        //then
+        assertThat(result).fails(1, TooLittleActualInvocations.class);
+    }
+
+    @Test public void validates_framework_usage() {
+        //when
+        Result result = runner.run(
+                UsesFrameworkIncorrectly.class
+        );
+        //then
+        assertThat(result).fails(1, UnfinishedStubbingException.class);
+    }
+
+    @Test
+    public void ignores_unused_stubs() {
+        JUnitCore runner = new JUnitCore();
+        //when
+        Result result = runner.run(HasUnnecessaryStubs.class);
+        //then
+        assertThat(result).isSuccessful();
+    }
+
+    @RunWith(MockitoJUnitRunner.Silent.class)
+    public static class SomeFeature {
+        @Mock List list;
+        @Test public void some_behavior() {
+            when(list.get(0)).thenReturn("0");
+            assertEquals("0", list.get(0));
+        }
+    }
+
+    @RunWith(MockitoJUnitRunner.Silent.class)
+    public static class SomeFailingFeature {
+        @Mock List list;
+        @Test public void some_failing_behavior() {
+            list.clear();
+            verify(list, times(2)).clear();
+        }
+    }
+
+    @RunWith(MockitoJUnitRunner.Silent.class)
+    public static class UsesFrameworkIncorrectly {
+        @Mock List list;
+        @Test public void unfinished_stubbing() {
+            when(list.get(0)); //unfinished stubbing
+        }
+    }
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     /**
@@ -36,14 +103,5 @@ public class SilentRunnerTest extends TestBase {
             assertEquals(null, mock2.simpleMethod(200));
             assertEquals(null, mock3.simpleMethod(300));
         }
-    }
-
-    @Test
-    public void ignores_unused_stubs() {
-        JUnitCore runner = new JUnitCore();
-        //when
-        Result result = runner.run(HasUnnecessaryStubs.class);
-        //then
-        assertThat(result).isSuccessful();
     }
 }

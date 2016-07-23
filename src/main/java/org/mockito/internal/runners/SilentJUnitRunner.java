@@ -13,13 +13,14 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-public class InternalJUnitRunner implements RunnerImpl {
+public class SilentJUnitRunner implements RunnerImpl {
 
     private final BlockJUnit4ClassRunner runner;
     private final Class<?> testClass;
 
-    public InternalJUnitRunner(Class<?> testClass) throws InitializationError {
+    public SilentJUnitRunner(Class<?> testClass) throws InitializationError {
         this.testClass = testClass;
         runner = new BlockJUnit4ClassRunner(testClass) {
             protected Statement withBefores(FrameworkMethod method, Object target,
@@ -32,6 +33,9 @@ public class InternalJUnitRunner implements RunnerImpl {
     }
 
     public void run(final RunNotifier notifier) {
+        FrameworkUsageValidator listener = new FrameworkUsageValidator(notifier);
+        // add listener that validates framework usage at the end of each test
+        notifier.addListener(listener);
         runner.run(notifier);
     }
 
