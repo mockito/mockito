@@ -153,10 +153,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public StubbingListener getStubbingListener() {
         if (this.stubbingListener == null) {
-            return new StubbingListener() {
-                public void newStubbing(Invocation stubbing) {}
-                public void usedStubbing(Invocation stubbing, Invocation actual) {}
-            };
+            return NoOpStubbingListener.INSTANCE;
         }
         return this.stubbingListener;
     }
