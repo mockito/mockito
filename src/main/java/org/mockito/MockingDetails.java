@@ -60,5 +60,5 @@ public interface MockingDetails {
      * @return The extra-interfaces
      * @since 2.0.0
      */
-    Set<Class> getExtraInterfaces();
+    Set<Class<?>> getExtraInterfaces();
 }

@@ -130,7 +130,7 @@ public class ByteBuddyMockMakerTest {
 
     private static class DummyMockHandler implements InternalMockHandler<Object> {
         public Object handle(Invocation invocation) throws Throwable { return null; }
-        public MockCreationSettings getMockSettings() { return null; }
+        public MockCreationSettings<Object> getMockSettings() { return null; }
         public InvocationContainer getInvocationContainer() { return null; }
         public void setAnswersForStubbing(List<Answer<?>> list) { }
     }

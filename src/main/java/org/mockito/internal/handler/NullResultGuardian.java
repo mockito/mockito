@@ -39,7 +39,7 @@ class NullResultGuardian<T> implements InternalMockHandler<T> {
      }
 
     @Override
-    public MockCreationSettings getMockSettings() {
+    public MockCreationSettings<T> getMockSettings() {
         return delegate.getMockSettings();
     }
 

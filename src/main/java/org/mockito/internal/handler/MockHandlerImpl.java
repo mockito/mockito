@@ -36,9 +36,9 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     MatchersBinder matchersBinder = new MatchersBinder();
 
-    private final MockCreationSettings mockSettings;
+    private final MockCreationSettings<T> mockSettings;
 
-    public MockHandlerImpl(MockCreationSettings mockSettings) {
+    public MockHandlerImpl(MockCreationSettings<T> mockSettings) {
         this.mockSettings = mockSettings;
        
         this.matchersBinder = new MatchersBinder();
@@ -104,11 +104,10 @@ class MockHandlerImpl<T> implements InternalMockHandler<T> {
         }
     }
 
-    public MockCreationSettings getMockSettings() {
+    public MockCreationSettings<T> getMockSettings() {
         return mockSettings;
     }
 
-    @SuppressWarnings("unchecked")
     public void setAnswersForStubbing(List<Answer<?>> answers) {
         invocationContainerImpl.setAnswersForStubbing(answers);
     }

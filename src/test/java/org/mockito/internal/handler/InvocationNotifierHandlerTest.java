@@ -15,6 +15,7 @@ import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
@@ -53,7 +54,7 @@ public class InvocationNotifierHandlerTest {
     public void setUp() throws Exception {
         notifier = new InvocationNotifierHandler<ArrayList<Answer<?>>>(
                 mockHandler,
-                (MockSettingsImpl<?>) new MockSettingsImpl<ArrayList<Answer<?>>>().invocationListeners(customListener, listener1, listener2)
+                (MockCreationSettings<ArrayList<Answer<?>>>) new MockSettingsImpl<ArrayList<Answer<?>>>().invocationListeners(customListener, listener1, listener2)
         );
     }
 

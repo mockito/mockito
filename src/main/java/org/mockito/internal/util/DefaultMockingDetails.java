@@ -45,8 +45,7 @@ public class DefaultMockingDetails implements MockingDetails {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Set<Class> getExtraInterfaces() {
+    public Set<Class<?>> getExtraInterfaces() {
         return delegate.getMockHandler(toInspect).getMockSettings().getExtraInterfaces();
     }
 }
