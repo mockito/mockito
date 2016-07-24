@@ -1,3 +1,10 @@
+### 2.0.88-beta (2016-07-24 16:50 UTC)
+
+* Authors: 1
+* Commits: 54
+  * 54: Szczepan Faber
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.0.87-beta (2016-07-18 20:28 UTC)
 
 * Authors: 1
