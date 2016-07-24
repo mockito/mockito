@@ -35,7 +35,7 @@ public interface MockCreationSettings<T> {
     /**
      * the default answer for this mock, see {@link org.mockito.MockSettings#defaultAnswer}.
      */
-    Answer getDefaultAnswer();
+    Answer<?> getDefaultAnswer();
 
     /**
      * the spied instance - needed for spies.

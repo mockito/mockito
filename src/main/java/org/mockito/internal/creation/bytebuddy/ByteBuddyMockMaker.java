@@ -116,7 +116,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         };
     }
 
-    private static InternalMockHandler asInternalMockHandler(MockHandler handler) {
+    private static InternalMockHandler<?> asInternalMockHandler(MockHandler handler) {
         if (!(handler instanceof InternalMockHandler)) {
             throw new MockitoException(join(
                     "At the moment you cannot provide own implementations of MockHandler.",
@@ -124,7 +124,7 @@ public class ByteBuddyMockMaker implements MockMaker {
                     ""
             ));
         }
-        return (InternalMockHandler) handler;
+        return (InternalMockHandler<?>) handler;
     }
 
 }

@@ -90,7 +90,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return defaultAnswer;
     }
 
-    public MockSettingsImpl stubOnly() {
+    public MockSettingsImpl<T> stubOnly() {
         this.stubOnly = true;
         return this;
     }

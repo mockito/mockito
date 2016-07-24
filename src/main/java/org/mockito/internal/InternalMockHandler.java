@@ -11,10 +11,9 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
-@SuppressWarnings("unchecked")
 public interface InternalMockHandler<T> extends MockHandler {
 
-    MockCreationSettings getMockSettings();
+    MockCreationSettings<T> getMockSettings();
 
     void setAnswersForStubbing(List<Answer<?>> answers);
 
