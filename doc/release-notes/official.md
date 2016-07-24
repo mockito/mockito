@@ -1,3 +1,11 @@
+### 2.0.89-beta (2016-07-24 20:36 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Pascal Schumacher
+* Improvements: 1
+  * fixed some rawtype warnings [(#504)](https://github.com/mockito/mockito/pull/504)
+
 ### 2.0.88-beta (2016-07-24 16:50 UTC)
 
 * Authors: 1
