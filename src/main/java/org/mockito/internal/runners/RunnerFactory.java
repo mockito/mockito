@@ -6,9 +6,10 @@ package org.mockito.internal.runners;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.runners.util.RunnerProvider;
-import org.mockito.internal.runners.util.TestMethodsFinder;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static org.mockito.internal.runners.util.TestMethodsFinder.hasTestMethods;
 
 /**
  * Creates instances of Mockito JUnit Runner in a safe way, e.g. detecting inadequate version of JUnit, etc.
@@ -19,7 +20,7 @@ public class RunnerFactory {
         try {
             return new RunnerProvider().newInstance("org.mockito.internal.runners.SilentJUnitRunner", klass);
         } catch (InvocationTargetException e) {
-            if (!new TestMethodsFinder().hasTestMethods(klass)) {
+            if (!hasTestMethods(klass)) {
                 throw new MockitoException(
                     "\n" +
                     "\n" +
