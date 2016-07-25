@@ -55,7 +55,7 @@ public class MissingInvocationCheckerTest extends TestBase {
 		exception.expect(WantedButNotInvoked.class);
 		exception.expectMessage("Wanted but not invoked:");
 		exception.expectMessage("mock.simpleMethod()");
-		exception.expectMessage("However, there were other interactions with this mock:");
+		exception.expectMessage("However, there was exactly 1 interaction with this mock:");
 		exception.expectMessage("mock.differentMethod();");
 
 		checker.check(invocations, wanted);

@@ -8,13 +8,7 @@ package org.mockito.internal.exceptions;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.*;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.JUnitTool;
@@ -36,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
+import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
 import static org.mockito.internal.util.StringJoiner.join;
 
 /**
@@ -319,7 +314,8 @@ public class Reporter {
         if (invocations.isEmpty()) {
             allInvocations = "Actually, there were zero interactions with this mock.\n";
         } else {
-            StringBuilder sb = new StringBuilder("\nHowever, there were other interactions with this mock:\n");
+            StringBuilder sb = new StringBuilder(
+                    "\nHowever, there " + were_exactly_x_interactions(invocations.size()) + " with this mock:\n");
             for (DescribedInvocation i : invocations) {
                 sb.append(i.toString())
                   .append("\n")

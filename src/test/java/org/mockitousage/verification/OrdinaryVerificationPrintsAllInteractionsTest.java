@@ -21,14 +21,18 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
 
     @Test
     public void shouldShowAllInteractionsOnMockWhenOrdinaryVerificationFail() throws Exception {
+        //given
         firstInteraction();
         secondInteraction();
-        
+
+        verify(mock).otherMethod(); //verify 1st interaction
         try {
+            //when
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("However, there were other interactions with this mock", e.getMessage());
+            //then
+            assertContains("However, there were exactly 2 interactions with this mock", e.getMessage());
             assertContains("firstInteraction(", e.getMessage());
             assertContains("secondInteraction(", e.getMessage());
         }
