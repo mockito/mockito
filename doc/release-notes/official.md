@@ -1,3 +1,17 @@
+### 2.0.90-beta (2016-07-25 18:30 UTC)
+
+* Authors: 3
+* Commits: 8
+  * 4: Brice Dutheil
+  * 3: Pascal Schumacher
+  * 1: Szczepan Faber
+* Improvements: 5
+  * Improved exception message - fixes issue 506 [(#507)](https://github.com/mockito/mockito/pull/507)
+  * Improved exception message for wanted but not invoked [(#506)](https://github.com/mockito/mockito/issues/506)
+  * refactored NonGreedyNumberOfInvocationsInOrderChecker to a static uti… [(#503)](https://github.com/mockito/mockito/pull/503)
+  * refactored ArgumentsComparator to a static utility class (#426) [(#502)](https://github.com/mockito/mockito/pull/502)
+  * refactored TestMethodsFinder to a static utility class (#426) [(#501)](https://github.com/mockito/mockito/pull/501)
+
 ### 2.0.89-beta (2016-07-24 20:36 UTC)
 
 * Authors: 1
