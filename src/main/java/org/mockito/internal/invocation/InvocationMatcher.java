@@ -12,6 +12,8 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 
+import static org.mockito.internal.invocation.ArgumentsComparator.argumentsMatch;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -61,12 +63,12 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
     public boolean matches(Invocation actual) {
         return invocation.getMock().equals(actual.getMock())
                 && hasSameMethod(actual)
-                && new ArgumentsComparator().argumentsMatch(this, actual);
+                && argumentsMatch(this, actual);
     }
 
     private boolean safelyArgumentsMatch(Object[] actualArgs) {
         try {
-            return new ArgumentsComparator().argumentsMatch(this, actualArgs);
+            return argumentsMatch(this, actualArgs);
         } catch (Throwable t) {
             return false;
         }
