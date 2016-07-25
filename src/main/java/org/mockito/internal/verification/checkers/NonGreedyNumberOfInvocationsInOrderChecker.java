@@ -19,7 +19,9 @@ import org.mockito.invocation.Location;
 
 public class NonGreedyNumberOfInvocationsInOrderChecker {
 
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+    private NonGreedyNumberOfInvocationsInOrderChecker() {}
+
+    public static void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
         int actualCount = 0;
         Location lastLocation = null;
         while( actualCount < wantedCount ){
