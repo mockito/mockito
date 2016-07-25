@@ -22,7 +22,7 @@ public class TestMethodsFinderTest extends TestBase {
 
     @Test
     public void shouldKnowWhenClassHasTests() {
-        assertTrue(new TestMethodsFinder().hasTestMethods(HasTests.class));
-        assertFalse(new TestMethodsFinder().hasTestMethods(DoesNotHaveTests.class));
+        assertTrue(TestMethodsFinder.hasTestMethods(HasTests.class));
+        assertFalse(TestMethodsFinder.hasTestMethods(DoesNotHaveTests.class));
     }
 }
