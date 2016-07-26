@@ -18,26 +18,26 @@ public class ConfusedSignatureTest {
         assertThat(mock.getFoo()).isEqualTo("Hello");
     }
 
-    private class Super<T> {
+    public class Super<T> {
         private T value;
 
-        Super(T value) {
+        public Super(T value) {
             this.value = value;
         }
 
         public T getFoo() { return value; }
     }
 
-    private class Sub
+    public class Sub
             extends Super<String>
             implements iInterface {
 
-        Sub(String s) {
+        public Sub(String s) {
             super(s);
         }
     }
 
-    interface iInterface {
+    public interface iInterface {
         String getFoo();
     }
 }
