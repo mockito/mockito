@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("unchecked")
 public class MocksCreationTest extends TestBase {
 
-    private class HasPrivateConstructor {};
+    private class HasPrivateConstructor {}
     
     @Test
     public void shouldCreateMockWhenConstructorIsPrivate() {

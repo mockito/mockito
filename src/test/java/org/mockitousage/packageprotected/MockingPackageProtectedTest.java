@@ -12,9 +12,9 @@ import static org.mockito.Mockito.mock;
 
 public class MockingPackageProtectedTest extends TestBase {
 
-    static class Foo {};
+    static class Foo {}
     
-    class Bar {};
+    class Bar {}
     
     @Test
     public void shouldMockPackageProtectedClasses() {

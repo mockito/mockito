@@ -34,7 +34,7 @@ public class VerificationExcludingStubsTest extends TestBase {
         verify(mock).objectArgMethod("foo");
 
         //verifyNoMoreInteractions fails:
-        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {};
+        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {}
         
         //but it works when stubs are ignored:
         ignoreStubs(mock);

@@ -125,5 +125,5 @@ public class InvocationContainerImplStubbingTest extends TestBase {
     }
 
     @SuppressWarnings("serial")
-    class MyException extends RuntimeException {};
+    class MyException extends RuntimeException {}
 }
