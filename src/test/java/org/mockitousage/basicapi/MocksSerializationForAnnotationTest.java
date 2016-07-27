@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Observable;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.SimpleSerializationUtil.*;
 

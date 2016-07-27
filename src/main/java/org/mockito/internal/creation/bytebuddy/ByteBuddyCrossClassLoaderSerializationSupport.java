@@ -26,7 +26,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;

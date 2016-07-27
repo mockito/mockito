@@ -17,7 +17,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class AtMostXVerificationTest extends TestBase {

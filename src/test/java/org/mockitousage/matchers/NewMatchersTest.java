@@ -15,10 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Matchers.anyCollection;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anySet;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")

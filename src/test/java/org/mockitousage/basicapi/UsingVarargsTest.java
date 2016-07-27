@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
-import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.*;
 
 public class UsingVarargsTest extends TestBase {

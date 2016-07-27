@@ -6,7 +6,6 @@ package org.mockito.internal.runners.util;
 
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
-import org.junit.runner.notification.RunNotifier;
 
 /**
  * Implementation of JUnit run listener that knows when any of the tests failed

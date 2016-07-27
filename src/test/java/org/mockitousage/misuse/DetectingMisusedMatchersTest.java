@@ -15,9 +15,6 @@ import org.mockitoutil.TestBase;
 import java.util.Observer;
 
 import static junit.framework.TestCase.fail;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 public class DetectingMisusedMatchersTest extends TestBase {

@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 public class SpyingOnRealObjectsTest extends TestBase {
