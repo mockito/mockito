@@ -75,7 +75,7 @@ public class MatcherGenericTypeExtractorTest extends TestBase {
         public void describeTo(Description description) {}
     }
 
-    private static interface IMatcher extends Matcher<Integer> {}
+    private interface IMatcher extends Matcher<Integer> {}
 
     //non-generic matcher implementing the interface
     private static class SubclassGenericMatcherFromInterface extends BaseMatcher<Integer> implements Serializable, Cloneable, IMatcher {
