@@ -78,6 +78,137 @@ import static org.mockito.internal.util.Primitives.defaultValue;
 public class ArgumentMatchers {
 
     /**
+     * Matches <strong>anything</strong>, including nulls and varargs.
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     *
+     * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
+     * </p>
+     *
+     * <p>
+     * <strong>Notes : </strong><br/>
+     * <ul>
+     *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
+     *     <li>Since mockito 2.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     * </ul>
+     * </p>
+     *
+     * @return <code>null</code>.
+     *
+     * @see #any(Class)
+     * @see #anyObject()
+     * @see #anyVararg()
+     * @see #anyChar()
+     * @see #anyInt()
+     * @see #anyBoolean()
+     * @see #anyCollectionOf(Class)
+     */
+    public static <T> T any() {
+        return anyObject();
+    }
+
+    /**
+     * Matches anything, including <code>null</code>.
+     *
+     * <p>
+     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}.
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
+     *
+     * @return <code>null</code>.
+     * @see #any()
+     * @see #any(Class)
+     * @see #notNull()
+     */
+    public static <T> T anyObject() {
+        reportMatcher(Any.ANY);
+        return null;
+    }
+
+    /**
+     * Matches any object of given type, excluding nulls.
+     *
+     * <p>
+     * This matcher will perform a type check with the given type, thus excluding values.
+     *
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     *
+     * This is an alias of: {@link #isA(Class)}}
+     * </p>
+     *
+     * <p><strong>Notes : </strong><br/>
+     * <ul>
+     *     <li>For primitive types use {@link #anyChar()} family.</li>
+     *     <li>Since Mockito 2.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
+     *     <li>Since mockito 2.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
+     * </ul>
+     * </p>
+     *
+     * @return <code>null</code>.
+     * @see #any()
+     * @see #anyObject()
+     * @see #anyVararg()
+     * @see #isA(Class)
+     * @see #notNull()
+     */
+    public static <T> T any(Class<T> clazz) {
+        reportMatcher(Any.ANY);
+        return defaultValue(clazz);
+    }
+
+    /**
+     * <code>Object</code> argument that implements the given class.
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     *
+     * @param <T>  the accepted type.
+     * @param type the class of the accepted type.
+     * @return <code>null</code>.
+     */
+    public static <T> T isA(Class<T> type) {
+        reportMatcher(new InstanceOf(type));
+        return defaultValue(type);
+    }
+
+    /**
+     * Any vararg, meaning any number and values of arguments.
+     *
+     * <p>
+     * Example:
+     * <pre class="code"><code class="java">
+     * //verification:
+     * mock.foo(1, 2);
+     * mock.foo(1, 2, 3, 4);
+     *
+     * verify(mock, times(2)).foo(anyVararg());
+     *
+     * //stubbing:
+     * when(mock.foo(anyVararg()).thenReturn(100);
+     *
+     * //prints 100
+     * System.out.println(mock.foo(1, 2));
+     * //also prints 100
+     * System.out.println(mock.foo(1, 2, 3, 4));
+     * </code></pre>
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
+     *
+     * @return <code>null</code>.
+     * @see #any()
+     * @see #any(Class)
+     * @deprecated as of 2.0 use {@link #any()
+     */
+    @Deprecated
+    public static <T> T anyVararg() {
+        any();
+        return null;
+    }
+
+    /**
      * Any <code>boolean</code> or <strong>non-null</strong> <code>Boolean</code>
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -171,123 +302,6 @@ public class ArgumentMatchers {
     public static short anyShort() {
         reportMatcher(new InstanceOf(Short.class));
         return 0;
-    }
-
-    /**
-     * Matches anything, including <code>null</code>.
-     *
-     * <p>
-     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}.
-     * See examples in javadoc for {@link ArgumentMatchers} class.
-     * </p>
-     *
-     * @return <code>null</code>.
-     * @see #any()
-     * @see #any(Class)
-     * @see #notNull()
-     */
-    public static <T> T anyObject() {
-        reportMatcher(Any.ANY);
-        return null;
-    }
-
-    /**
-     * Any vararg, meaning any number and values of arguments.
-     *
-     * <p>
-     * Example:
-     * <pre class="code"><code class="java">
-     * //verification:
-     * mock.foo(1, 2);
-     * mock.foo(1, 2, 3, 4);
-     *
-     * verify(mock, times(2)).foo(anyVararg());
-     *
-     * //stubbing:
-     * when(mock.foo(anyVararg()).thenReturn(100);
-     *
-     * //prints 100
-     * System.out.println(mock.foo(1, 2));
-     * //also prints 100
-     * System.out.println(mock.foo(1, 2, 3, 4));
-     * </code></pre>
-     * </p>
-     *
-     * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class.
-     * </p>
-     *
-     * @return <code>null</code>.
-     * @see #any()
-     * @see #any(Class)
-     * @deprecated as of 2.0 use {@link #any()
-     */
-    @Deprecated
-    public static <T> T anyVararg() {
-        any();
-        return null;
-    }
-
-    /**
-     * Matches any object of given type, excluding nulls.
-     *
-     * <p>
-     * This matcher will perform a type check with the given type, thus excluding values.
-     *
-     * See examples in javadoc for {@link ArgumentMatchers} class.
-     *
-     * This is an alias of: {@link #isA(Class)}}
-     * </p>
-     *
-     * <p><strong>Notes : </strong><br/>
-     * <ul>
-     *     <li>For primitive types use {@link #anyChar()} family.</li>
-     *     <li>Since Mockito 2.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
-     *     <li>Since mockito 2.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
-     * </ul>
-     * </p>
-     *
-     * @return <code>null</code>.
-     * @see #any()
-     * @see #anyObject()
-     * @see #anyVararg()
-     * @see #isA(Class)
-     * @see #notNull()
-     */
-    public static <T> T any(Class<T> clazz) {
-        reportMatcher(Any.ANY);
-        return defaultValue(clazz);
-    }
-
-    /**
-     * Matches <strong>anything</strong>, including nulls and varargs.
-     *
-     * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
-     *
-     * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
-     * </p>
-     *
-     * <p>
-     * <strong>Notes : </strong><br/>
-     * <ul>
-     *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
-     *     <li>Since mockito 2.0 {@link #any(Class)} is not anymore an alias of this method.</li>
-     * </ul>
-     * </p>
-     *
-     * @return <code>null</code>.
-     *
-     * @see #any(Class)
-     * @see #anyObject()
-     * @see #anyVararg()
-     * @see #anyChar()
-     * @see #anyInt()
-     * @see #anyBoolean()
-     * @see #anyCollectionOf(Class)
-     */
-    public static <T> T any() {
-        return anyObject();
     }
 
     /**
@@ -453,21 +467,6 @@ public class ArgumentMatchers {
      */
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
         return anyCollection();
-    }
-
-    /**
-     * <code>Object</code> argument that implements the given class.
-     * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
-     *
-     * @param <T>  the accepted type.
-     * @param type the class of the accepted type.
-     * @return <code>null</code>.
-     */
-    public static <T> T isA(Class<T> type) {
-        reportMatcher(new InstanceOf(type));
-
-        return defaultValue(type);
     }
 
     /**
