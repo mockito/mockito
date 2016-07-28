@@ -152,9 +152,9 @@ public class ArgumentMatchers {
      * @see #isA(Class)
      * @see #notNull()
      */
-    public static <T> T any(Class<T> clazz) {
-        reportMatcher(Any.ANY);
-        return defaultValue(clazz);
+    public static <T> T any(Class<T> type) {
+        reportMatcher(new InstanceOf.VarArgAware(type, "<any " + type.getCanonicalName() + ">"));
+        return defaultValue(type);
     }
 
     /**

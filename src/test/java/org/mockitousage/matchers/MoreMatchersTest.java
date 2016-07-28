@@ -13,6 +13,7 @@ import org.mockitoutil.TestBase;
 import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,11 +30,30 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void should_any_be_actual_alias_to_any_object() {
+    public void any_should_be_actual_alias_to_anyObject() {
         mock.simpleMethod((Object) null);
 
+        verify(mock).simpleMethod(any());
         verify(mock).simpleMethod(anyObject());
-        verify(mock).simpleMethod(any(Object.class));
+    }
+
+    @Test
+    public void any_class_should_be_actual_alias_to_isA() {
+        mock.simpleMethod(new ArrayList());
+
+        verify(mock).simpleMethod(isA(List.class));
+        verify(mock).simpleMethod(any(List.class));
+
+
+        mock.simpleMethod((String) null);
+        try {
+            verify(mock).simpleMethod(isA(String.class));
+            fail();
+        } catch (AssertionError ignored) { }
+        try {
+            verify(mock).simpleMethod(any(String.class));
+            fail();
+        } catch (AssertionError ignored) { }
     }
 
     @Test

@@ -12,8 +12,6 @@ import static org.junit.Assert.assertNull;
 
 
 public class PrimitivesTest {
-
-
     @Test
     public void should_not_return_null_for_primitives_wrappers() throws Exception {
         assertNotNull(Primitives.defaultValue(Boolean.class));
@@ -67,5 +65,25 @@ public class PrimitivesTest {
         assertNull(Primitives.defaultValue(Object.class));
         assertNull(Primitives.defaultValue(String.class));
         assertNull(Primitives.defaultValue(null));
+    }
+
+    @Test
+    public void should_check_that_value_type_is_assignable_to_wrapper_reference() {
+        assertThat(Primitives.isAssignableFromWrapper(int.class, Integer.class));
+        assertThat(Primitives.isAssignableFromWrapper(Integer.class, Integer.class));
+        assertThat(Primitives.isAssignableFromWrapper(long.class, Long.class));
+        assertThat(Primitives.isAssignableFromWrapper(Long.class, Long.class));
+        assertThat(Primitives.isAssignableFromWrapper(double.class, Double.class));
+        assertThat(Primitives.isAssignableFromWrapper(Double.class, Double.class));
+        assertThat(Primitives.isAssignableFromWrapper(float.class, Float.class));
+        assertThat(Primitives.isAssignableFromWrapper(Float.class, Float.class));
+        assertThat(Primitives.isAssignableFromWrapper(char.class, Character.class));
+        assertThat(Primitives.isAssignableFromWrapper(Character.class, Character.class));
+        assertThat(Primitives.isAssignableFromWrapper(short.class, Short.class));
+        assertThat(Primitives.isAssignableFromWrapper(Short.class, Short.class));
+        assertThat(Primitives.isAssignableFromWrapper(byte.class, Byte.class));
+        assertThat(Primitives.isAssignableFromWrapper(Byte.class, Byte.class));
+        assertThat(Primitives.isAssignableFromWrapper(boolean.class, Boolean.class));
+        assertThat(Primitives.isAssignableFromWrapper(Boolean.class, Boolean.class));
     }
 }
