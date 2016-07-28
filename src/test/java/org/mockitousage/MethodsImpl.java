@@ -363,6 +363,10 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    public String forIterable(Iterable<String> iterable) {
+        return null;
+    }
+
     public Object[] arrayReturningMethod() {
         return new Object[0];
     }
@@ -384,6 +388,10 @@ public class MethodsImpl implements IMethods {
     }
 
     public Object collectionArgMethod(Collection<String> collection) {
+        return null;
+    }
+
+    public Object iterableArgMethod(Iterable<String> iterable) {
         return null;
     }
 

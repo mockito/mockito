@@ -70,4 +70,14 @@ public class NewMatchersTest extends TestBase {
 
         verify(mock, times(1)).forSet(anySet());
     }
+
+    @Test
+    public void shouldAllowAnyIterable() {
+        when(mock.forIterable(anyIterable())).thenReturn("matched");
+
+        assertEquals("matched", mock.forIterable(new HashSet<String>()));
+        assertEquals(null, mock.forIterable(null));
+
+        verify(mock, times(1)).forIterable(anyIterable());
+    }
 }

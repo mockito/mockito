@@ -470,6 +470,47 @@ public class ArgumentMatchers {
     }
 
     /**
+     * <code>Object</code> argument that implements the given class.
+     * Any <strong>non-null</strong> <code>Iterable</code>.
+    * <p>
+    * See examples in javadoc for {@link ArgumentMatchers} class
+    *
+    +     * @return empty Iterable.
+    +     * @see #anyIterableOf(Class)
+    +     */
+    public static Collection anyIterable() {
+        reportMatcher(new InstanceOf(Iterable.class));
+        return new ArrayList(0);
+    }
+
+    /**
+     * Any <strong>non-null</strong> <code>Collection</code>.
+     *
+     * <p>
+     * Generic friendly alias to {@link ArgumentMatchers#anyIterable()}.
+     * It's an alternative to <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
+     * </p>
+     *
+     * <p>
+     * This method doesn't do type checks of the iterable content with the given type parameter, it is only there
+     * to avoid casting in the code.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * @param clazz Type owned by the collection to avoid casting
+     * @return empty Iterable.
+     * @see #anyIterable()
+     */
+    public static <T> Iterable<T> anyIterableOf(Class<T> clazz) {
+        return anyIterable();
+    }
+
+
+
+    /**
      * <code>boolean</code> argument that is equal to the given value.
      *
      * <p>

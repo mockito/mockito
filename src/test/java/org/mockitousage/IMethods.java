@@ -190,6 +190,8 @@ public interface IMethods {
 
     String forCollection(Collection<String> collection);
 
+    String forIterable(Iterable<String> iterable);
+
     Object[] arrayReturningMethod();
 
     IMethods iMethodsReturningMethod();
@@ -201,6 +203,8 @@ public interface IMethods {
     Object listArgMethod(List<String> list);
 
     Object collectionArgMethod(Collection<String> collection);
+
+    Object iterableArgMethod(Iterable<String> collection);
 
     Object setArgMethod(Set<String> set);
 

@@ -90,10 +90,20 @@ public class MoreMatchersTest extends TestBase {
     public void should_help_out_with_unnecessary_casting_of_collections() {
         //Below yields compiler warning:
         //when(mock.setArgMethod(anySet())).thenReturn("set");
-        when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("col");
+        when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("collection");
 
-        assertEquals("col", mock.collectionArgMethod(new ArrayList<String>()));
-        assertEquals("col", mock.collectionArgMethod(Collections.<String>emptyList()));
+        assertEquals("collection", mock.collectionArgMethod(new ArrayList<String>()));
+        assertEquals("collection", mock.collectionArgMethod(Collections.<String>emptyList()));
+    }
+
+    @Test
+    public void should_help_out_with_unnecessary_casting_of_iterables() {
+        //Below yields compiler warning:
+        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        when(mock.iterableArgMethod(anyIterableOf(String.class))).thenReturn("iterable");
+
+        assertEquals("iterable", mock.iterableArgMethod(new ArrayList<String>()));
+        assertEquals("iterable", mock.iterableArgMethod(Collections.<String>emptyList()));
     }
 
     @Test
