@@ -216,7 +216,7 @@ public class ArgumentMatchers {
      * @return <code>false</code>.
      */
     public static boolean anyBoolean() {
-        reportMatcher(new InstanceOf(Boolean.class));
+        reportMatcher(new InstanceOf(Boolean.class, "<any boolean>"));
         return false;
     }
 
@@ -228,7 +228,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static byte anyByte() {
-        reportMatcher(new InstanceOf(Byte.class));
+        reportMatcher(new InstanceOf(Byte.class, "<any byte>"));
         return 0;
     }
 
@@ -240,7 +240,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static char anyChar() {
-        reportMatcher(new InstanceOf(Character.class));
+        reportMatcher(new InstanceOf(Character.class, "<any char>"));
         return 0;
     }
 
@@ -252,7 +252,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static int anyInt() {
-        reportMatcher(new InstanceOf(Integer.class));
+        reportMatcher(new InstanceOf(Integer.class, "<any integer>"));
         return 0;
     }
 
@@ -264,7 +264,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static long anyLong() {
-        reportMatcher(new InstanceOf(Long.class));
+        reportMatcher(new InstanceOf(Long.class, "<any long>"));
         return 0;
     }
 
@@ -276,7 +276,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static float anyFloat() {
-        reportMatcher(new InstanceOf(Float.class));
+        reportMatcher(new InstanceOf(Float.class, "<any float>"));
         return 0;
     }
 
@@ -288,7 +288,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static double anyDouble() {
-        reportMatcher(new InstanceOf(Double.class));
+        reportMatcher(new InstanceOf(Double.class, "<any double>"));
         return 0;
     }
 
@@ -300,7 +300,7 @@ public class ArgumentMatchers {
      * @return <code>0</code>.
      */
     public static short anyShort() {
-        reportMatcher(new InstanceOf(Short.class));
+        reportMatcher(new InstanceOf(Short.class, "<any short>"));
         return 0;
     }
 
@@ -314,7 +314,7 @@ public class ArgumentMatchers {
      * @return empty String ("")
      */
     public static String anyString() {
-        reportMatcher(new InstanceOf(String.class));
+        reportMatcher(new InstanceOf(String.class, "<any string>"));
         return "";
     }
 
@@ -327,7 +327,7 @@ public class ArgumentMatchers {
      * @see #anyListOf(Class)
      */
     public static List anyList() {
-        reportMatcher(new InstanceOf(List.class));
+        reportMatcher(new InstanceOf(List.class, "<any List>"));
         return new ArrayList(0);
     }
 
@@ -363,7 +363,7 @@ public class ArgumentMatchers {
      * @see #anySetOf(Class)
      */
     public static Set anySet() {
-        reportMatcher(new InstanceOf(Set.class));
+        reportMatcher(new InstanceOf(Set.class, "<any set>"));
         return new HashSet(0);
     }
 
@@ -401,7 +401,7 @@ public class ArgumentMatchers {
      * @see #anyMapOf(Class, Class)
      */
     public static Map anyMap() {
-        reportMatcher(new InstanceOf(Map.class));
+        reportMatcher(new InstanceOf(Map.class, "<any map>"));
         return new HashMap(0);
     }
 
@@ -440,7 +440,7 @@ public class ArgumentMatchers {
      * @see #anyCollectionOf(Class)
      */
     public static Collection anyCollection() {
-        reportMatcher(new InstanceOf(Collection.class));
+        reportMatcher(new InstanceOf(Collection.class, "<any collection>"));
         return new ArrayList(0);
     }
 
@@ -479,7 +479,7 @@ public class ArgumentMatchers {
     +     * @see #anyIterableOf(Class)
     +     */
     public static Collection anyIterable() {
-        reportMatcher(new InstanceOf(Iterable.class));
+        reportMatcher(new InstanceOf(Iterable.class, "<any iterable>"));
         return new ArrayList(0);
     }
 
