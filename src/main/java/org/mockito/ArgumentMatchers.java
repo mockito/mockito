@@ -13,10 +13,10 @@ import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.util.Primitives;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -314,7 +314,7 @@ public class ArgumentMatchers {
      */
     public static List anyList() {
         reportMatcher(new InstanceOf(List.class));
-        return new LinkedList();
+        return new ArrayList(0);
     }
 
     /**
@@ -350,7 +350,7 @@ public class ArgumentMatchers {
      */
     public static Set anySet() {
         reportMatcher(new InstanceOf(Set.class));
-        return new HashSet();
+        return new HashSet(0);
     }
 
     /**
@@ -388,7 +388,7 @@ public class ArgumentMatchers {
      */
     public static Map anyMap() {
         reportMatcher(new InstanceOf(Map.class));
-        return new HashMap();
+        return new HashMap(0);
     }
 
     /**
@@ -427,7 +427,7 @@ public class ArgumentMatchers {
      */
     public static Collection anyCollection() {
         reportMatcher(new InstanceOf(Collection.class));
-        return new LinkedList();
+        return new ArrayList(0);
     }
 
     /**
