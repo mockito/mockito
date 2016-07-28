@@ -26,50 +26,59 @@ import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
+ *
  * <p>
  * {@link Mockito} extends ArgumentMatchers so to get access to all matchers just import Mockito class statically.
+ *
  * <pre class="code"><code class="java">
  * //stubbing using anyInt() argument matcher
  * when(mockedList.get(anyInt())).thenReturn("element");
- * <p>
+ *
  * //following prints "element"
  * System.out.println(mockedList.get(999));
- * <p>
+ *
  * //you can also verify using argument matcher
  * verify(mockedList).get(anyInt());
  * </code></pre>
+ *
  * Scroll down to see all methods - full list of matchers.
+ *
  * <p>
- * <b>Warning:</b>
- * <p>
+ * <b>Warning:</b><br/>
+ *
  * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
- * <p>
+ *
  * E.g: (example shows verification but the same applies to stubbing):
+ * </p>
+ *
  * <pre class="code"><code class="java">
  * verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
  * //above is correct - eq() is also an argument matcher
- * <p>
+ *
  * verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
  * //above is incorrect - exception will be thrown because third argument is given without argument matcher.
  * </code></pre>
+ *
  * <p>
  * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
  * This implementation is due static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
- * <p>
+ * </p>
+ *
  * <h1>Custom Argument ArgumentMatchers</h1>
  * <p>
  * It is important to understand the use cases and available options for dealing with non-trivial arguments
  * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
  * for given scenario and produce highest quality test (clean and maintainable).
  * Please read on in the javadoc for {@link ArgumentMatcher} to learn about approaches and see the examples.
+ * </p>
  */
 @SuppressWarnings("unchecked")
 public class ArgumentMatchers {
 
     /**
-     * Any <code>boolean</code> or non-null <code>Boolean</code>
+     * Any <code>boolean</code> or <strong>non-null</strong> <code>Boolean</code>
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
@@ -81,8 +90,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>byte</code> or non-null <code>Byte</code>.
-     * <p>
+     * Any <code>byte</code> or <strong>non-null</strong> <code>Byte</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -93,8 +102,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>char</code> or non-null <code>Character</code>.
-     * <p>
+     * Any <code>char</code> or <strong>non-null</strong> <code>Character</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -105,7 +114,7 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any int or non-null Integer.
+     * Any int or <strong>non-null</strong> Integer.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
@@ -117,8 +126,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>long</code> or non-null <code>Long</code>.
-     * <p>
+     * Any <code>long</code> or <strong>non-null</strong> <code>Long</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -129,8 +138,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>float</code> or non-null <code>Float</code>.
-     * <p>
+     * Any <code>float</code> or <strong>non-null</strong> <code>Float</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -141,8 +150,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>double</code> or non-null <code>Double</code>.
-     * <p>
+     * Any <code>double</code> or <strong>non-null</strong> <code>Double</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -153,8 +162,8 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any <code>short</code> or non-null <code>Short</code>.
-     * <p>
+     * Any <code>short</code> or <strong>non-null</strong> <code>Short</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return <code>0</code>.
@@ -165,13 +174,17 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Matches anything, including null.
+     * Matches anything, including <code>null</code>.
+     *
      * <p>
-     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}
-     * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}.
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>null</code>.
+     * @see #any()
+     * @see #any(Class)
+     * @see #notNull()
      */
     public static <T> T anyObject() {
         reportMatcher(Any.ANY);
@@ -180,27 +193,34 @@ public class ArgumentMatchers {
 
     /**
      * Any vararg, meaning any number and values of arguments.
+     *
      * <p>
      * Example:
      * <pre class="code"><code class="java">
      * //verification:
      * mock.foo(1, 2);
      * mock.foo(1, 2, 3, 4);
-     * <p>
+     *
      * verify(mock, times(2)).foo(anyVararg());
-     * <p>
+     *
      * //stubbing:
      * when(mock.foo(anyVararg()).thenReturn(100);
-     * <p>
+     *
      * //prints 100
      * System.out.println(mock.foo(1, 2));
      * //also prints 100
      * System.out.println(mock.foo(1, 2, 3, 4));
      * </code></pre>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>null</code>.
-     * @deprecated as of 2.0 use {@link #any()}
+     * @see #any()
+     * @see #any(Class)
+     * @deprecated as of 2.0 use {@link #any()
      */
     @Deprecated
     public static <T> T anyVararg() {
@@ -209,18 +229,30 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Matches any object, including nulls
+     * Matches any object of given type, excluding nulls.
+     *
      * <p>
-     * This method doesn't do type checks with the given parameter, it is only there
-     * to avoid casting in your code. This might however change (type checks could
-     * be added) in a future major release.
-     * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
-     * <p>
-     * This is an alias of: {@link #any()} and {@link #anyObject()}
-     * <p>
+     * This matcher will perform a type check with the given type, thus excluding values.
+     *
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     *
+     * This is an alias of: {@link #isA(Class)}}
+     * </p>
+     *
+     * <p><strong>Notes : </strong><br/>
+     * <ul>
+     *     <li>For primitive types use {@link #anyChar()} family.</li>
+     *     <li>Since Mockito 2.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
+     *     <li>Since mockito 2.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
+     * </ul>
+     * </p>
      *
      * @return <code>null</code>.
+     * @see #any()
+     * @see #anyObject()
+     * @see #anyVararg()
+     * @see #isA(Class)
+     * @see #notNull()
      */
     public static <T> T any(Class<T> clazz) {
         reportMatcher(Any.ANY);
@@ -228,25 +260,42 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Matches anything, including nulls and varargs
-     * <p>
-     * Shorter alias to {@link ArgumentMatchers#anyObject()}
+     * Matches <strong>anything</strong>, including nulls and varargs.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
-     * <p>
+     *
      * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
+     * </p>
+     *
      * <p>
+     * <strong>Notes : </strong><br/>
+     * <ul>
+     *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
+     *     <li>Since mockito 2.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     * </ul>
+     * </p>
      *
      * @return <code>null</code>.
+     *
+     * @see #any(Class)
+     * @see #anyObject()
+     * @see #anyVararg()
+     * @see #anyChar()
+     * @see #anyInt()
+     * @see #anyBoolean()
+     * @see #anyCollectionOf(Class)
      */
     public static <T> T any() {
         return anyObject();
     }
 
     /**
-     * Any non-null <code>String</code>
+     * Any <strong>non-null</strong> <code>String</code>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @return empty String ("")
      */
@@ -256,11 +305,12 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any non-null <code>List</code>.
-     * <p>
+     * Any <strong>non-null</strong> <code>List</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return empty List.
+     * @see #anyListOf(Class)
      */
     public static List anyList() {
         reportMatcher(new InstanceOf(List.class));
@@ -268,30 +318,35 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Generic friendly alias to {@link ArgumentMatchers#anyList()}.
-     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * Any <strong>non-null</strong> <code>List</code>.
+     *
+     * Generic friendly alias to {@link ArgumentMatchers#anyList()}. It's an alternative to
+     * <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
+     *
      * <p>
-     * Any non-null <code>List</code>.
-     * <p>
-     * This method doesn't do type checks with the given parameter, it is only there
-     * to avoid casting in your code. This might however change (type checks could
-     * be added) in a future major release.
+     * This method doesn't do type checks of the list content with the given type parameter, it is only there
+     * to avoid casting in the code.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type owned by the list to avoid casting
      * @return empty List.
+     * @see #anyList()
      */
     public static <T> List<T> anyListOf(Class<T> clazz) {
         return anyList();
     }
 
     /**
-     * Any non-null <code>Set</code>.
-     * <p>
+     * Any <strong>non-null</strong> <code>Set</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return empty Set
+     * @see #anySetOf(Class)
      */
     public static Set anySet() {
         reportMatcher(new InstanceOf(Set.class));
@@ -299,30 +354,37 @@ public class ArgumentMatchers {
     }
 
     /**
+     * Any <strong>non-null</strong> <code>Set</code>.
+     *
+     * <p>
      * Generic friendly alias to {@link ArgumentMatchers#anySet()}.
-     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * It's an alternative to <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
+     * </p>
+     *
      * <p>
-     * Any non-null <code>Set</code>.
-     * <p>
-     * This method doesn't do type checks with the given parameter, it is only there
-     * to avoid casting in your code. This might however change (type checks could
-     * be added) in a future major release.
+     * This method doesn't do type checks of the set content with the given type parameter, it is only there
+     * to avoid casting in the code.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type owned by the Set to avoid casting
      * @return empty Set
+     * @see #anySet()
      */
     public static <T> Set<T> anySetOf(Class<T> clazz) {
         return anySet();
     }
 
     /**
-     * Any non-null <code>Map</code>.
-     * <p>
+     * Any <strong>non-null</strong> <code>Map</code>.
+     *
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return empty Map.
+     * @see #anyMapOf(Class, Class)
      */
     public static Map anyMap() {
         reportMatcher(new InstanceOf(Map.class));
@@ -330,31 +392,38 @@ public class ArgumentMatchers {
     }
 
     /**
+     * Any <strong>non-null</strong> <code>Map</code>.
+     *
+     * <p>
      * Generic friendly alias to {@link ArgumentMatchers#anyMap()}.
-     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * It's an alternative to <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
+     * </p>
+     *
      * <p>
-     * Any non-null <code>Map</code>.
-     * <p>
-     * This method doesn't do type checks with the given parameter, it is only there
-     * to avoid casting in your code. This might however change (type checks could
-     * be added) in a future major release.
+     * This method doesn't do type checks of the map content with the given type parameter, it is only there
+     * to avoid casting in the code.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param keyClazz   Type of the map key to avoid casting
      * @param valueClazz Type of the value to avoid casting
      * @return empty Map.
+     * @see #anyMap()
      */
     public static <K, V> Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
         return anyMap();
     }
 
     /**
-     * Any non-null <code>Collection</code>.
+     * Any <strong>non-null</strong> <code>Collection</code>.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @return empty Collection.
+     * @see #anyCollectionOf(Class)
      */
     public static Collection anyCollection() {
         reportMatcher(new InstanceOf(Collection.class));
@@ -362,19 +431,25 @@ public class ArgumentMatchers {
     }
 
     /**
+     * Any <strong>non-null</strong> <code>Collection</code>.
+     *
+     * <p>
      * Generic friendly alias to {@link ArgumentMatchers#anyCollection()}.
-     * It's an alternative to &#064;SuppressWarnings("unchecked") to keep code clean of compiler warnings.
+     * It's an alternative to <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
+     * </p>
+     *
      * <p>
-     * Any non-null <code>Collection</code>.
-     * <p>
-     * This method doesn't do type checks with the given parameter, it is only there
-     * to avoid casting in your code. This might however change (type checks could
-     * be added) in a future major release.
+     * This method doesn't do type checks of the collection content with the given type parameter, it is only there
+     * to avoid casting in the code.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type owned by the collection to avoid casting
      * @return empty Collection.
+     * @see #anyCollection()
      */
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
         return anyCollection();
@@ -397,8 +472,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>boolean</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -410,8 +487,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>byte</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -423,8 +502,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>char</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -436,8 +517,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>double</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -449,8 +532,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>float</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -462,8 +547,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>int</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -475,8 +562,10 @@ public class ArgumentMatchers {
 
     /**
      * <code>long</code> argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>0</code>.
@@ -501,8 +590,10 @@ public class ArgumentMatchers {
 
     /**
      * Object argument that is equal to the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value the given value.
      * @return <code>null</code>.
@@ -517,16 +608,22 @@ public class ArgumentMatchers {
     /**
      * Object argument that is reflection-equal to the given value with support for excluding
      * selected fields from a class.
+     *
      * <p>
      * This matcher can be used when equals() is not implemented on compared objects.
      * Matcher uses java reflection API to compare fields of wanted and actual object.
+     * </p>
+     *
      * <p>
-     * Works similarly to EqualsBuilder.reflectionEquals(this, other, exlucdeFields) from
+     * Works similarly to <code>EqualsBuilder.reflectionEquals(this, other, exlucdeFields)</code> from
      * apache commons library.
      * <p>
      * <b>Warning</b> The equality check is shallow!
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param value         the given value.
      * @param excludeFields fields to exclude, if field does not exist it is ignored.
@@ -539,8 +636,10 @@ public class ArgumentMatchers {
 
     /**
      * Object argument that is the same as the given value.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param <T>   the type of the object, it is passed through to prevent casts.
      * @param value the given value.
@@ -555,10 +654,15 @@ public class ArgumentMatchers {
 
     /**
      * <code>null</code> argument.
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @return <code>null</code>.
+     * @see #isNull(Class)
+     * @see #isNotNull()
+     * @see #isNotNull(Class)
      */
     public static Object isNull() {
         reportMatcher(Null.NULL);
@@ -567,12 +671,20 @@ public class ArgumentMatchers {
 
     /**
      * <code>null</code> argument.
+     *
+     * <p>
      * The class argument is provided to avoid casting.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
+     * @see #isNull()
+     * @see #isNotNull()
+     * @see #isNotNull(Class)
      */
     public static <T> T isNull(Class<T> clazz) {
         reportMatcher(Null.NULL);
@@ -581,10 +693,14 @@ public class ArgumentMatchers {
 
     /**
      * Not <code>null</code> argument.
+     *
      * <p>
-     * alias to {@link ArgumentMatchers#isNotNull()}
+     * Alias to {@link ArgumentMatchers#isNotNull()}
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @return <code>null</code>.
      */
@@ -595,14 +711,22 @@ public class ArgumentMatchers {
 
     /**
      * Not <code>null</code> argument, not necessary of the given class.
-     * The class argument is provided to avoid casting.
+     *
      * <p>
-     * alias to {@link ArgumentMatchers#isNotNull(Class)}
+     * The class argument is provided to avoid casting.
+     *
+     * Alias to {@link ArgumentMatchers#isNotNull(Class)}
+     * <p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
+     * @see #isNotNull()
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <T> T notNull(Class<T> clazz) {
         reportMatcher(NotNull.NOT_NULL);
@@ -611,12 +735,19 @@ public class ArgumentMatchers {
 
     /**
      * Not <code>null</code> argument.
+     *
      * <p>
-     * alias to {@link ArgumentMatchers#notNull()}
+     * Alias to {@link ArgumentMatchers#notNull()}
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @return <code>null</code>.
+     * @see #isNotNull(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static Object isNotNull() {
         return notNull();
@@ -624,11 +755,15 @@ public class ArgumentMatchers {
 
     /**
      * Not <code>null</code> argument, not necessary of the given class.
-     * The class argument is provided to avoid casting.
+     *
      * <p>
-     * alias to {@link ArgumentMatchers#notNull(Class)}
+     * The class argument is provided to avoid casting.
+     * Alias to {@link ArgumentMatchers#notNull(Class)}
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
      *
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
@@ -691,13 +826,19 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom argument matchers.
+     *
+     * <p>
      * This API has changed in 2.0, please read {@link ArgumentMatcher} for rationale and migration guide.
      * <b>NullPointerException</b> auto-unboxing caveat is described below.
+     * </p>
+     *
      * <p>
      * It is important to understand the use cases and available options for dealing with non-trivial arguments
      * <b>before</b> implementing custom argument matchers. This way, you can select the best possible approach
      * for given scenario and produce highest quality test (clean and maintainable).
      * Please read the documentation for {@link ArgumentMatcher} to learn about approaches and see the examples.
+     * </p>
+     *
      * <p>
      * <b>NullPointerException</b> auto-unboxing caveat.
      * In rare cases when matching primitive parameter types you <b>*must*</b> use relevant intThat(), floatThat(), etc. method.
@@ -705,8 +846,11 @@ public class ArgumentMatchers {
      * Due to how java works we don't really have a clean way of detecting this scenario and protecting the user from this problem.
      * Hopefully, the javadoc describes the problem and solution well.
      * If you have an idea how to fix the problem, let us know via the mailing list or the issue tracker.
+     * </p>
+     *
      * <p>
      * See examples in javadoc for {@link ArgumentMatcher} class
+     * </p>
      *
      * @param matcher decides whether argument matches
      * @return <code>null</code>.
@@ -718,6 +862,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>char</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>char</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -732,6 +877,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>boolean</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>boolean</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -746,6 +892,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>byte</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>byte</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -760,6 +907,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>short</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>short</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -774,6 +922,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>int</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>int</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -788,6 +937,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>long</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>long</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -802,6 +952,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>float</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>float</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -816,6 +967,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>double</code> argument matchers.
+     *
      * Note that {@link #argThat} will not work with primitive <code>double</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
