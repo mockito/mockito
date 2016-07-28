@@ -22,14 +22,14 @@ public class MoreMatchersTest extends TestBase {
     @Mock private IMethods mock;
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCasting() {
+    public void should_help_out_with_unnecessary_casting() {
         when(mock.objectArgMethod(any(String.class))).thenReturn("string");
 
         assertEquals("string", mock.objectArgMethod("foo"));
     }
 
     @Test
-    public void shouldAnyBeActualAliasToAnyObject() {
+    public void should_any_be_actual_alias_to_any_object() {
         mock.simpleMethod((Object) null);
 
         verify(mock).simpleMethod(anyObject());
@@ -37,7 +37,7 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCastingOfLists() {
+    public void should_help_out_with_unnecessary_casting_of_lists() {
         //Below yields compiler warning:
         //when(mock.listArgMethod(anyList())).thenReturn("list");
         when(mock.listArgMethod(anyListOf(String.class))).thenReturn("list");
@@ -47,7 +47,7 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCastingOfSets() {
+    public void should_help_out_with_unnecessary_casting_of_sets() {
         //Below yields compiler warning:
         //when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.setArgMethod(anySetOf(String.class))).thenReturn("set");
@@ -57,7 +57,7 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCastingOfMaps() {
+    public void should_help_out_with_unnecessary_casting_of_maps() {
         //Below yields compiler warning:
         //when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("map");
@@ -67,7 +67,7 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCastingOfCollections() {
+    public void should_help_out_with_unnecessary_casting_of_collections() {
         //Below yields compiler warning:
         //when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("col");
@@ -77,7 +77,7 @@ public class MoreMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldHelpOutWithUnnecessaryCastingOfNullityChecks() {
+    public void should_help_out_with_unnecessary_casting_of_nullity_checks() {
         when(mock.objectArgMethod(isNull(LinkedList.class))).thenReturn("string");
         when(mock.objectArgMethod(notNull(LinkedList.class))).thenReturn("string");
         when(mock.objectArgMethod(isNotNull(LinkedList.class))).thenReturn("string");

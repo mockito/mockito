@@ -27,7 +27,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldNotReportArgumentTypesWhenToStringIsTheSame() throws Exception {
+    public void should_not_report_argument_types_when_to_string_is_the_same() {
         //given
         Boo boo = mock(Boo.class);
         boo.withLong(100);
@@ -44,7 +44,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldShowTheTypeOfOnlyTheArgumentThatDoesntMatch() throws Exception {
+    public void should_show_the_type_of_only_the_argument_that_doesnt_match() {
         //given
         Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
@@ -61,7 +61,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldShowTheTypeOfTheMismatchingArgumentWhenOutputDescriptionsForInvocationsAreDifferent() throws Exception {
+    public void should_show_the_type_of_the_mismatching_argument_when_output_descriptions_for_invocations_are_different() {
         //given
         Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
@@ -78,7 +78,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldNotShowTypesWhenArgumentValueIsDifferent() throws Exception {
+    public void should_not_show_types_when_argument_value_is_different() {
         //given
         Boo boo = mock(Boo.class);
         boo.withLongAndInt(100, 200);
@@ -116,7 +116,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
     }
     
     @Test
-    public void shouldNotShowTypesWhenTypesAreTheSameEvenIfToStringGivesTheSameResult() throws Exception {
+    public void should_not_show_types_when_types_are_the_same_even_if_to_string_gives_the_same_result() {
         //given
         IMethods mock = mock(IMethods.class);
         mock.simpleMethod(new Foo(10));
