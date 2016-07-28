@@ -200,7 +200,7 @@ public class ArgumentMatchers {
      * @return <code>null</code>.
      * @see #any()
      * @see #any(Class)
-     * @deprecated as of 2.0 use {@link #any()
+     * @deprecated as of 2.0 use {@link #any()}
      */
     @Deprecated
     public static <T> T anyVararg() {

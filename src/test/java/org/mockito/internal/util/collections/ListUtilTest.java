@@ -5,6 +5,7 @@
 
 package org.mockito.internal.util.collections;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockitoutil.TestBase;
@@ -14,7 +15,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
-import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 
 public class ListUtilTest extends TestBase {
 
@@ -26,8 +26,8 @@ public class ListUtilTest extends TestBase {
                 return object == "x";
             }
         });
-        
-        assertThat(filtered, hasExactlyInOrder("one", "two", "three"));
+
+        Assertions.assertThat(filtered).containsSequence("one", "two", "three");
     }
     
     @Test
