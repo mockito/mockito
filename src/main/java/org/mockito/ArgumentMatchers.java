@@ -664,7 +664,7 @@ public class ArgumentMatchers {
      * @see #isNotNull()
      * @see #isNotNull(Class)
      */
-    public static Object isNull() {
+    public static <T> T isNull() {
         reportMatcher(Null.NULL);
         return null;
     }
@@ -704,7 +704,7 @@ public class ArgumentMatchers {
      *
      * @return <code>null</code>.
      */
-    public static Object notNull() {
+    public static <T> T notNull() {
         reportMatcher(NotNull.NOT_NULL);
         return null;
     }
@@ -749,7 +749,7 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      */
-    public static Object isNotNull() {
+    public static <T> T isNotNull() {
         return notNull();
     }
 
