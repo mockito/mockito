@@ -26,9 +26,9 @@ public class MultithreadedStubbingHalfManualTest {
      * Class with two methods, one of them is repeatedly mocked while another is repeatedly called.
      */
     public interface ToMock {
-        public Integer getValue(Integer param);
+        Integer getValue(Integer param);
 
-        public List<Integer> getValues(Integer param);
+        List<Integer> getValues(Integer param);
     }
 
     /**

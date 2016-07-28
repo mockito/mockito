@@ -50,8 +50,8 @@ public class DelegatingMethodTest extends TestBase {
 
     private interface Something {
 
-        public Object someMethod(Object param);
+        Object someMethod(Object param);
 
-        public Object otherMethod(Object param);
+        Object otherMethod(Object param);
     }
 }

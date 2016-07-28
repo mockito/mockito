@@ -13,7 +13,6 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class AtLeastXVerificationTest extends TestBase {

@@ -13,7 +13,6 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 
 public class ResetTest extends TestBase {

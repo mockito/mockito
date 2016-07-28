@@ -2,7 +2,6 @@ package org.mockitoutil;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 import java.util.List;
 

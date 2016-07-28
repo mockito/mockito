@@ -12,8 +12,6 @@ import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")

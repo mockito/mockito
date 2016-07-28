@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class CapturingArgumentsTest extends TestBase {

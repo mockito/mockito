@@ -134,7 +134,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
     }
 
     private interface ImportLogDao {
-        public boolean anyImportRunningOrRunnedToday(int importType, Date currentDate);
+        boolean anyImportRunningOrRunnedToday(int importType, Date currentDate);
 
         void include(ImportLogBean importLogBean);
 

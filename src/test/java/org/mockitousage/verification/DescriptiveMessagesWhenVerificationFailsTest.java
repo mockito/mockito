@@ -19,9 +19,6 @@ import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
 import static org.mockito.AdditionalMatchers.aryEq;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.matches;
 import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {

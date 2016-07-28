@@ -41,7 +41,7 @@ public class CaptorAnnotationBasicTest extends TestBase {
     }
 
     public interface PeopleRepository {
-        public void save(Person capture);
+        void save(Person capture);
     }
     
     @Mock PeopleRepository peopleRepository;           

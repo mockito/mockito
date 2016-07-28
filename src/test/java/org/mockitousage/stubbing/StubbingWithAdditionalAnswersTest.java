@@ -14,7 +14,6 @@ import org.mockitousage.IMethods;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.anyVararg;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StubbingWithAdditionalAnswersTest {

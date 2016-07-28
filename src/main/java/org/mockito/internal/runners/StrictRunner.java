@@ -5,9 +5,7 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
-import org.mockito.MockitoFramework;
 import org.mockito.internal.runners.util.FailureDetecter;
-import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 /**
  * Created by sfaber on 7/22/16.

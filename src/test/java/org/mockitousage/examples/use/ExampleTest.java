@@ -15,8 +15,6 @@ import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
