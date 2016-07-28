@@ -1,3 +1,11 @@
+### 2.0.91-beta (2016-07-28 01:59 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Mockito.when() fails when method could originate from superclass or interface  [(#508)](https://github.com/mockito/mockito/issues/508)
+
 ### 2.0.90-beta (2016-07-25 18:30 UTC)
 
 * Authors: 3
