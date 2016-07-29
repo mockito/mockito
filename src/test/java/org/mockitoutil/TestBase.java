@@ -80,17 +80,6 @@ public class TestBase {
                 , string.contains(sub));
     }
 
-    public static void assertNotContains(String sub, String string) {
-        assertFalse("\n" +
-                "This substring:" +
-                sub +
-                "\n" +
-                "should NOT be inside of:" +
-                string +
-                "\n"
-                , string.contains(sub));
-    }
-    
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
         Class<?>[] types = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {

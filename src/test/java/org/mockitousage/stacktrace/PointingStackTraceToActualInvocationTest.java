@@ -15,6 +15,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -62,7 +63,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
             verify(mock, times(0)).simpleMethod(1);
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertNotContains(".runners.", e.getMessage());
+            assertThat(e.getMessage()).doesNotContain(".runners.");
         }
     }   
 }
