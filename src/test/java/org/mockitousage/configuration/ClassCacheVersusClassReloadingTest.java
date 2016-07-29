@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings("unchecked")
 public class ClassCacheVersusClassReloadingTest {
     // TODO refactor to use ClassLoaders
 
@@ -29,7 +28,7 @@ public class ClassCacheVersusClassReloadingTest {
 
     public static class DoTheMocking implements Callable<Object> {
         public Object call() throws Exception {
-            Class clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
+            Class<?> clazz = this.getClass().getClassLoader().loadClass("org.mockitousage.configuration.ClassToBeMocked");
             return mock(clazz);
         }
     }
@@ -51,8 +50,8 @@ public class ClassCacheVersusClassReloadingTest {
         testMethodClassLoaderRealm.doInRealm("org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$PrepareMockito");
     }
 
-    public static class PrepareMockito implements Callable {
-        public Object call() throws Exception {
+    public static class PrepareMockito implements Callable<Boolean> {
+        public Boolean call() throws Exception {
             Class.forName("org.mockito.Mockito");
             ConfigurationAccess.getConfig().overrideEnableClassCache(false);
             return Boolean.TRUE;
