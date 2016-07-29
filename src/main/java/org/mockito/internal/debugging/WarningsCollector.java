@@ -25,7 +25,7 @@ public class WarningsCollector {
 
     public String getWarnings() {
         List<Invocation> unused = new UnusedStubsFinder().find(createdMocks);
-        List<Invocation> all = new AllInvocationsFinder().find(createdMocks);
+        List<Invocation> all = AllInvocationsFinder.find(createdMocks);
         List<InvocationMatcher> allInvocationMatchers = InvocationMatcher.createFrom(all);
 
         return new WarningsPrinterImpl(unused, allInvocationMatchers, false).print();

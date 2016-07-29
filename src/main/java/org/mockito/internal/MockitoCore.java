@@ -128,8 +128,7 @@ public class MockitoCore {
 
     public void verifyNoMoreInteractionsInOrder(List<Object> mocks, InOrderContext inOrderContext) {
         mockingProgress().validateState();
-        VerifiableInvocationsFinder finder = new VerifiableInvocationsFinder();
-        VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, finder.find(mocks), null);
+        VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, VerifiableInvocationsFinder.find(mocks), null);
         VerificationModeFactory.noMoreInteractions().verifyInOrder(data);
     }
 
