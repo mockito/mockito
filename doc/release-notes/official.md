@@ -1,3 +1,13 @@
+### 2.0.92-beta (2016-07-29 01:32 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Rafael Winterhalter
+  * 2: thesnowgoose
+  * 1: Hans Joachim Desserud
+* Improvements: 1
+  * Fix some warnings [(#511)](https://github.com/mockito/mockito/pull/511)
+
 ### 2.0.91-beta (2016-07-28 01:59 UTC)
 
 * Authors: 1
