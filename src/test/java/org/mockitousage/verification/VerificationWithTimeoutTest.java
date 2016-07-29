@@ -91,8 +91,8 @@ public class VerificationWithTimeoutTest {
         callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
 
         // then
-        verify(mock, timeout(50).atLeast(1)).oneArg('c');
-        verify(mock, timeout(50).times(2)).oneArg('c');
+        verify(mock, timeout(100).atLeast(1)).oneArg('c');
+        verify(mock, timeout(100).times(2)).oneArg('c');
         verifyNoMoreInteractions(mock);
     }
 
