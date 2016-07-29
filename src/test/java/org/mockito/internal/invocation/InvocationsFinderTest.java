@@ -5,6 +5,7 @@
 
 package org.mockito.internal.invocation;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -20,8 +21,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.*;
-import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertSame;
+import static junit.framework.TestCase.assertTrue;
 
 
 public class InvocationsFinderTest extends TestBase {
@@ -48,10 +50,10 @@ public class InvocationsFinderTest extends TestBase {
     @Test
     public void shouldFindActualInvocations() throws Exception {
         List<Invocation> actual = InvocationsFinder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
-        assertThat(actual, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+        Assertions.assertThat(actual).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
         
         actual = InvocationsFinder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation));
-        assertThat(actual, hasExactlyInOrder(differentMethodInvocation));
+        Assertions.assertThat(actual).containsSequence(differentMethodInvocation);
     }
     
     @Test
@@ -137,11 +139,11 @@ public class InvocationsFinderTest extends TestBase {
     @Test
     public void shouldFindAllMatchingUnverifiedChunks() throws Exception {
         List<Invocation> allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
-        assertThat(allMatching, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+        Assertions.assertThat(allMatching).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
         
         context.markVerified(simpleMethodInvocation);
         allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
-        assertThat(allMatching, hasExactlyInOrder(simpleMethodInvocationTwo));
+        Assertions.assertThat(allMatching).containsSequence(simpleMethodInvocationTwo);
         
         context.markVerified(simpleMethodInvocationTwo);
         allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
@@ -151,7 +153,7 @@ public class InvocationsFinderTest extends TestBase {
     @Test
     public void shouldFindMatchingChunk() throws Exception {
         List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
-        assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo));
+        Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
     }
     
     @Test
@@ -160,7 +162,7 @@ public class InvocationsFinderTest extends TestBase {
         invocations.add(simpleMethodInvocationThree);
         
         List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
-        assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
+        Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree);
     }
     
     @Test
@@ -169,7 +171,7 @@ public class InvocationsFinderTest extends TestBase {
         invocations.add(simpleMethodInvocationThree);
         
         List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
-        assertThat(chunk, hasExactlyInOrder(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree));
+        Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree);
     }
     
     @Test

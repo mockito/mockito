@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.exceptions.stacktrace;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.TraceBuilder;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.TestBase;
 
-import static org.mockitoutil.ExtraMatchers.hasOnlyThoseClassesInStackTrace;
+import static org.mockitoutil.Conditions.onlyThoseClassesInStackTrace;
 
 public class ConditionalStackTraceFilterTest extends TestBase {
     
@@ -26,7 +27,7 @@ public class ConditionalStackTraceFilterTest extends TestBase {
         
         filter.filter(t);
         
-        assertThat(t, hasOnlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
+        Assertions.assertThat(t).has(onlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
     }
 
     @Test
@@ -40,6 +41,6 @@ public class ConditionalStackTraceFilterTest extends TestBase {
         
         filter.filter(t);
         
-        assertThat(t, hasOnlyThoseClassesInStackTrace("org.test.MockitoSampleTest"));
+        Assertions.assertThat(t).has(onlyThoseClassesInStackTrace("org.test.MockitoSampleTest"));
     }
 }

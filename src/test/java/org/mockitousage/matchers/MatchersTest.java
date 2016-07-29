@@ -419,6 +419,27 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
+    public void nullMatcherForPrimitiveWrappers() {
+        when(mock.forBoolean(isNull(Boolean.class))).thenReturn("ok");
+        when(mock.forInteger(isNull(Integer.class))).thenReturn("ok");
+        when(mock.forLong(isNull(Long.class))).thenReturn("ok");
+        when(mock.forByte(isNull(Byte.class))).thenReturn("ok");
+        when(mock.forShort(isNull(Short.class))).thenReturn("ok");
+        when(mock.forCharacter(isNull(Character.class))).thenReturn("ok");
+        when(mock.forDouble(isNull(Double.class))).thenReturn("ok");
+        when(mock.forFloat(isNull(Float.class))).thenReturn("ok");
+
+        assertEquals("ok", mock.forBoolean(null));
+        assertEquals("ok", mock.forInteger(null));
+        assertEquals("ok", mock.forLong(null));
+        assertEquals("ok", mock.forByte(null));
+        assertEquals("ok", mock.forShort(null));
+        assertEquals("ok", mock.forCharacter(null));
+        assertEquals("ok", mock.forDouble(null));
+        assertEquals("ok", mock.forFloat(null));
+    }
+
+    @Test
     public void notNullMatcher() {
         when(mock.threeArgumentMethod(eq(1), notNull(), eq(""))).thenReturn("1");
         when(mock.threeArgumentMethod(eq(1), not(isNotNull()), eq(""))).thenReturn("2");

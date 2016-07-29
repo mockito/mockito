@@ -56,4 +56,11 @@ public class JUnitResultAssert {
         }
         return out.toString();
     }
+
+    /**
+     * Clean assertions for JUnit's result object
+     */
+    public static JUnitResultAssert assertThat(Result result) {
+        return new JUnitResultAssert(result);
+    }
 }

@@ -11,6 +11,7 @@ import net.bytebuddy.description.modifier.TypeManifestation;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
@@ -20,9 +21,11 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings({"unchecked"})
 public class SpyingOnInterfacesTest extends TestBase {
@@ -77,7 +80,7 @@ public class SpyingOnInterfacesTest extends TestBase {
         //when
         when(type.getMethod("foo").invoke(object)).thenCallRealMethod();
         //then
-        assertThat(type.getMethod("foo").invoke(object), is((Object) "bar"));
+        Assertions.assertThat(type.getMethod("foo").invoke(object)).isEqualTo((Object) "bar");
         type.getMethod("foo").invoke(verify(object));
     }
 
@@ -103,7 +106,7 @@ public class SpyingOnInterfacesTest extends TestBase {
         Object object = spy(impl.newInstance());
 
         //when
-        assertThat(impl.getMethod("foo").invoke(object), is((Object) "bar"));
+        Assertions.assertThat(impl.getMethod("foo").invoke(object)).isEqualTo((Object) "bar");
         //then
         impl.getMethod("foo").invoke(verify(object));
     }
