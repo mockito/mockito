@@ -1,3 +1,12 @@
+### 2.0.93-beta (2016-07-29 16:10 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Brice Dutheil
+* Improvements: 2
+  * Fixes #194 tweaks any matchers [(#510)](https://github.com/mockito/mockito/pull/510)
+  * Tweaks Matchers.any family matchers behavior [(#194)](https://github.com/mockito/mockito/issues/194)
+
 ### 2.0.92-beta (2016-07-29 01:32 UTC)
 
 * Authors: 3
