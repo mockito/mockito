@@ -21,61 +21,59 @@ import static org.mockito.Mockito.withSettings;
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {
 
-    private MockUtil mockUtil = new MockUtil();
-
     @Test
     public void should_get_handler() {
         List<?> mock = Mockito.mock(List.class);
-        assertNotNull(mockUtil.getMockHandler(mock));
+        assertNotNull(MockUtil.getMockHandler(mock));
     }
 
     @Test (expected=NotAMockException.class)
     public void should_scream_when_not_a_mock_passed() {
-        mockUtil.getMockHandler("");
+        MockUtil.getMockHandler("");
     }
 
     @Test (expected=MockitoException.class)
     public void should_scream_when_null_passed() {
-        mockUtil.getMockHandler(null);
+        MockUtil.getMockHandler(null);
     }
 
     @Test
     public void should_get_mock_settings() {
         List<?> mock = Mockito.mock(List.class);
-        assertNotNull(mockUtil.getMockSettings(mock));
+        assertNotNull(MockUtil.getMockSettings(mock));
     }
 
     @Test
     public void should_validate_mock() {
-        assertFalse(mockUtil.isMock("i mock a mock"));
-        assertTrue(mockUtil.isMock(Mockito.mock(List.class)));
+        assertFalse(MockUtil.isMock("i mock a mock"));
+        assertTrue(MockUtil.isMock(Mockito.mock(List.class)));
     }
 
     @Test
     public void should_validate_spy() {
-        assertFalse(mockUtil.isSpy("i mock a mock"));
-        assertFalse(mockUtil.isSpy(Mockito.mock(List.class)));
-        assertFalse(mockUtil.isSpy(null));
+        assertFalse(MockUtil.isSpy("i mock a mock"));
+        assertFalse(MockUtil.isSpy(Mockito.mock(List.class)));
+        assertFalse(MockUtil.isSpy(null));
 
-        assertTrue(mockUtil.isSpy(Mockito.spy(new ArrayList())));
-        assertTrue(mockUtil.isSpy(Mockito.spy(ArrayList.class)));
-        assertTrue(mockUtil.isSpy(Mockito.mock(ArrayList.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))));
+        assertTrue(MockUtil.isSpy(Mockito.spy(new ArrayList())));
+        assertTrue(MockUtil.isSpy(Mockito.spy(ArrayList.class)));
+        assertTrue(MockUtil.isSpy(Mockito.mock(ArrayList.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))));
     }
 
     @Test
     public void should_redefine_MockName_if_default() {
         List<?> mock = Mockito.mock(List.class);
-        mockUtil.maybeRedefineMockName(mock, "newName");
+        MockUtil.maybeRedefineMockName(mock, "newName");
 
-        Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("newName");
+        Assertions.assertThat(MockUtil.getMockName(mock).toString()).isEqualTo("newName");
     }
 
     @Test
     public void should_not_redefine_MockName_if_default() {
         List<?> mock = Mockito.mock(List.class, "original");
-        mockUtil.maybeRedefineMockName(mock, "newName");
+        MockUtil.maybeRedefineMockName(mock, "newName");
 
-        Assertions.assertThat(mockUtil.getMockName(mock).toString()).isEqualTo("original");
+        Assertions.assertThat(MockUtil.getMockName(mock).toString()).isEqualTo("original");
     }
 
     final class FinalClass {}
@@ -84,10 +82,10 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_know_if_type_is_mockable() throws Exception {
-        assertFalse(mockUtil.typeMockabilityOf(FinalClass.class).mockable());
-        assertFalse(mockUtil.typeMockabilityOf(int.class).mockable());
+        assertFalse(MockUtil.typeMockabilityOf(FinalClass.class).mockable());
+        assertFalse(MockUtil.typeMockabilityOf(int.class).mockable());
 
-        assertTrue(mockUtil.typeMockabilityOf(SomeClass.class).mockable());
-        assertTrue(mockUtil.typeMockabilityOf(SomeInterface.class).mockable());
+        assertTrue(MockUtil.typeMockabilityOf(SomeClass.class).mockable());
+        assertTrue(MockUtil.typeMockabilityOf(SomeInterface.class).mockable());
     }
 }

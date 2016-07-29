@@ -120,9 +120,8 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
 
             return new CrossClassLoaderSerializationProxy(mockitoMock);
         } catch (IOException ioe) {
-            MockUtil mockUtil = new MockUtil();
-            MockName mockName = mockUtil.getMockName(mockitoMock);
-            String mockedType = mockUtil.getMockSettings(mockitoMock).getTypeToMock().getCanonicalName();
+            MockName mockName = MockUtil.getMockName(mockitoMock);
+            String mockedType = MockUtil.getMockSettings(mockitoMock).getTypeToMock().getCanonicalName();
             throw new MockitoSerializationIssue(join(
                     "The mock '" + mockName + "' of type '" + mockedType + "'",
                     "The Java Standard Serialization reported an '" + ioe.getClass().getSimpleName() + "' saying :",
@@ -186,7 +185,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
             objectOutputStream.close();
             out.close();
 
-            MockCreationSettings<?> mockSettings = new MockUtil().getMockSettings(mockitoMock);
+            MockCreationSettings<?> mockSettings = MockUtil.getMockSettings(mockitoMock);
             this.serializedMock = out.toByteArray();
             this.typeToMock = mockSettings.getTypeToMock();
             this.extraInterfaces = mockSettings.getExtraInterfaces();

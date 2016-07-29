@@ -8,14 +8,12 @@ import java.io.Serializable;
 
 public class TriesToReturnSelf implements Answer<Object>, Serializable{
 
-    private final MockUtil mockUtil = new MockUtil();
-
     private final ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> methodReturnType = invocation.getMethod().getReturnType();
         Object mock = invocation.getMock();
-        Class<?> mockType = mockUtil.getMockHandler(mock).getMockSettings().getTypeToMock();
+        Class<?> mockType = MockUtil.getMockHandler(mock).getMockSettings().getTypeToMock();
 
         if (methodReturnType.isAssignableFrom(mockType)) {
             return invocation.getMock();

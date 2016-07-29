@@ -140,10 +140,6 @@ public class TestBase {
         return new InvocationBuilder().location(location).toInvocationMatcher();
     }
 
-    protected boolean isMock(Object o) {
-        return new MockUtil().isMock(o);
-    }
-
     protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
         for (Object o : list) {
             if (clazz.isAssignableFrom(o.getClass())) {

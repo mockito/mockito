@@ -47,7 +47,6 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Mock private IMethods candidate2;
 
     @Spy private TreeSet<String> searchTree = new TreeSet<String>();
-    private MockUtil mockUtil = new MockUtil();
 
     @Before
     public void enforces_new_instances() {
@@ -68,14 +67,14 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Test
     public void should_inject_mocks_in_spy() {
         assertNotNull(initializedSpy.getAList());
-        assertTrue(mockUtil.isMock(initializedSpy));
+        assertTrue(MockUtil.isMock(initializedSpy));
     }
 
     @Test
     public void should_initialize_spy_if_null_and_inject_mocks() {
         assertNotNull(notInitializedSpy);
         assertNotNull(notInitializedSpy.getAList());
-        assertTrue(mockUtil.isMock(notInitializedSpy));
+        assertTrue(MockUtil.isMock(notInitializedSpy));
     }
 
     @Test

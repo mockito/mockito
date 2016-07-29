@@ -43,17 +43,15 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     private final ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
 
-    private final MockUtil mockUtil = new MockUtil();
-
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) {
         if (methodsGuru.isToString(invocation.getMethod())) {
             Object mock = invocation.getMock();
-            MockName name = mockUtil.getMockName(mock);
+            MockName name = MockUtil.getMockName(mock);
             if (name.isDefault()) {
-                return "Mock for " + mockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
+                return "Mock for " + MockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
             } else {
                 return name.toString();
             }

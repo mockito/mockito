@@ -18,7 +18,6 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  * Scan mocks, and prepare them if needed.
  */
 public class MockScanner {
-    private final MockUtil mockUtil = new MockUtil();
     private final Object instance;
     private final Class<?> clazz;
 
@@ -70,7 +69,7 @@ public class MockScanner {
             return instance;
         } 
         if (isMockOrSpy(instance)) {
-            mockUtil.maybeRedefineMockName(instance, field.getName());
+            MockUtil.maybeRedefineMockName(instance, field.getName());
             return instance;
         }
         return null;
@@ -81,7 +80,7 @@ public class MockScanner {
     }
 
     private boolean isMockOrSpy(Object instance) {
-        return mockUtil.isMock(instance)
-                || mockUtil.isSpy(instance);
+        return MockUtil.isMock(instance)
+                || MockUtil.isSpy(instance);
     }
 }
