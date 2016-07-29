@@ -17,11 +17,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockitousage.junitrunner.Filters.methodNameContains;
 
 @RunWith(MockitoJUnitRunner.class)
-@SuppressWarnings("unchecked")
 public class JUnit45RunnerTest {
 
     @InjectMocks private ListDependent listDependent = new ListDependent();
-    @Mock private List list;
+    @Mock private List<String> list;
 
     @Test
     public void shouldInitMocksUsingRunner() {
@@ -45,9 +44,9 @@ public class JUnit45RunnerTest {
     }
 
     class ListDependent {
-        private List list;
+        private List<?> list;
 
-        public List getList() {
+        public List<?> getList() {
             return list;
         }
     }

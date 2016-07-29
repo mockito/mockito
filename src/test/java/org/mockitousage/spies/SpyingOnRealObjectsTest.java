@@ -178,7 +178,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
     
     @Test
     public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
-        List real = Arrays.asList("first", "second");
+        List<String> real = Arrays.asList("first", "second");
         try {
             spy(real);
             fail();

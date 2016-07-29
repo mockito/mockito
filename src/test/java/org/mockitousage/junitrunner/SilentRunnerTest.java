@@ -65,7 +65,7 @@ public class SilentRunnerTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class SomeFeature {
-        @Mock List list;
+        @Mock List<String> list;
         @Test public void some_behavior() {
             when(list.get(0)).thenReturn("0");
             assertEquals("0", list.get(0));
@@ -74,7 +74,7 @@ public class SilentRunnerTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class SomeFailingFeature {
-        @Mock List list;
+        @Mock List<String> list;
         @Test public void some_failing_behavior() {
             list.clear();
             verify(list, times(2)).clear();
@@ -83,7 +83,7 @@ public class SilentRunnerTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class UsesFrameworkIncorrectly {
-        @Mock List list;
+        @Mock List<?> list;
         @Test public void unfinished_stubbing() {
             when(list.get(0)); //unfinished stubbing
         }
